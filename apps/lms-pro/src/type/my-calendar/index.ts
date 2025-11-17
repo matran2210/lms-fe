@@ -3,7 +3,7 @@ import {
   EVENT_REPEAT_TYPES,
   FREQUENCY_UNITS,
   FREQUENCY_UNITS_OBJECT,
-} from 'src/constants'
+} from '@lms/core'
 
 export type RecurringScheduleType = keyof typeof EVENT_REPEAT_TYPES
 

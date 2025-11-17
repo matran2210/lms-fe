@@ -1,0 +1,213 @@
+export enum REPEAT_TYPE {
+  DOES_NOT_REPEAT = "DOES_NOT_REPEAT",
+  DAILY = "DAILY",
+  WEEKLY = "WEEKLY",
+  MONTHLY = "MONTHLY",
+  ANNUALLY = "ANNUALLY",
+  EVERY_WEEKDAY = "EVERY_WEEKDAY",
+  CUSTOM = "CUSTOM",
+  CHOSEN_PATTERN = "CHOSEN_PATTERN",
+}
+export enum REPEAT_FREQUENCY {
+  DAY = "DAYS",
+  WEEK = "WEEKS",
+  MONTH = "MONTHS",
+  YEAR = "YEARS",
+}
+export enum DRAWER_REQUEST_TYPE {
+  PERSONAL_SCHEDULE = "PERSONAL_SCHEDULE",
+  TIMEOFF = "TIMEOFF",
+}
+export enum E_REQUEST_TYPE {
+  TEACHING_MODE = "TEACHING_MODE",
+  TEACHER_SCHEDULE_BUSY = "TEACHER_SCHEDULE_BUSY",
+  TEACHER_SCHEDULE_TIME_OFF = "TEACHER_SCHEDULE_TIME_OFF",
+  TEACHER_OTHER = "TEACHER_OTHER",
+  TEACHER_WEEKLY_NORMS = "TEACHER_WEEKLY_NORMS",
+}
+
+export enum E_REQUEST_STATUS {
+  PENDING = "PENDING",
+  REJECT = "REJECT",
+  CANCEL = "CANCEL",
+  APPROVED = "APPROVED",
+}
+
+export enum PROGRAM {
+  "ACCA" = "ACCA",
+  "CMA" = "CMA",
+  "CFA" = "CFA",
+  "CD" = "Cert/Dip",
+}
+export enum CONSTRUCTION {
+  "OFFLINE" = "OFFLINE",
+  "BLENDED" = "BLENDED",
+  "ONLINE" = "ONLINE",
+  "LIVE_ONLINE" = "LIVE_ONLINE",
+}
+export enum CONSTRUCTION_MODE {
+  OFFLINE = "OFFLINE",
+  ONLINE = "ONLINE",
+}
+export enum TYPE_TEACHING_REQUEST {
+  TEACHING_MODE = "TEACHING_MODE",
+  TEACHER_SECTION = "TEACHER_SECTION",
+}
+export enum LOCAL_STORAGE_KEYS {
+  NOTIFICATION_COUNT = "notification-count",
+}
+
+
+export enum QUESTION_TYPES {
+  TRUE_FALSE = "TRUE_FALSE",
+  ONE_CHOICE = "ONE_CHOICE",
+  MULTIPLE_CHOICE = "MULTIPLE_CHOICE",
+  MATCHING = "MATCHING",
+  SELECT_WORD = "SELECT_WORD",
+  FILL_WORD = "FILL_WORD",
+  DRAG_DROP = "DRAG_DROP",
+  ESSAY = "ESSAY",
+}
+export enum TEST_TYPE {
+  QUIZ = "QUIZ",
+  MID_TERM_TEST = "MID_TERM_TEST",
+  FINAL_TEST = "FINAL_TEST",
+  MOCK_TEST = "MOCK_TEST",
+  ENTRANCE_TEST = "ENTRANCE_TEST",
+  // STORY = 'STORY',
+  TOPIC_TEST = "TOPIC_TEST",
+  CHAPTER_TEST = "CHAPTER_TEST",
+  PART_TEST = "PART_TEST",
+  EVENT_TEST = "EVENT_TEST",
+  ACTIVITY = "ACTIVITY",
+}
+
+export enum COURSE_TYPE {
+  FOUNDATION_COURSE = "FOUNDATION_COURSE",
+  NORMAL_COURSE = "NORMAL_COURSE",
+  PRACTICE_COURSE = "PRACTICE_COURSE",
+}
+
+export enum DISPLAY_TYPE {
+  VERTICAL = "VERTICAL",
+  HORIZONTAL = "HORIZONTAL",
+}
+export enum RESPONSE_OPTION {
+  WORD = "WORD",
+  SHEET = "SHEET",
+}
+export enum FREQUENCY_UNITS {
+  DAY = "days",
+  WEEK = "weeks",
+  MONTH = "months",
+  YEAR = "years",
+}
+export enum FREQUENCY_UNITS_LABEL {
+  days = "Day",
+  weeks = "Week",
+  months = "Month",
+  years = "Year",
+}
+
+export enum FREQUENCY_UNITS_LABEL_PLURAL {
+  days = "Days",
+  weeks = "Weeks",
+  months = "Months",
+  years = "Years",
+}
+
+export enum EXHIBIT_TEXT_REPLACE {
+  EXHIBIT = "Exhibit",
+  EXHIBIT_REPLACE = "Time Value Table",
+}
+export enum TEST_ATTEMPT_TYPE {
+  MID_TERM_TEST = "MID_TERM_TEST",
+  FINAL_TEST = "FINAL_TEST",
+  MOCK_TEST = "MOCK_TEST",
+  TOPIC_TEST = "TOPIC_TEST",
+  CHAPTER_TEST = "CHAPTER_TEST",
+  ENTRANCE_TEST = "ENTRANCE_TEST",
+}
+export enum CALENDAR_COLOR_TYPES {
+  BLUE_COLOR = "TEACHING", // màu xanh dương
+  RED_COLOR = "BUSY", // màu đỏ
+  YELLOW_COLOR = "HOLIDAY", // màu vàng
+  GREEN_COLOR = "OTHER", // màu xanh lá
+  PURPLE_COLOR = "LIVE_ONLINE", // màu xanh lá
+}
+
+export enum CALENDAR_FILTER_TYPE {
+  HOLIDAY = "HOLIDAY",
+  OVERDUE = "OVERDUE",
+  ONLINE = "ONLINE",
+  LIVE_ONLINE = "LIVE_ONLINE",
+  OFFLINE = "OFFLINE",
+  CASE_STUDY = "CASE_STUDY",
+  KEY_BEFORE_CONTENT = "KEY_BEFORE_CONTENT",
+  TEST = "TEST",
+}
+export enum QUIZ_ATTEMPT_STATUS {
+  SUBMITTED = "SUBMITTED",
+  UN_SUBMITTED = "UN_SUBMITTED",
+  IN_PROGRESS = "IN_PROGRESS",
+}
+
+export enum QUIZ_ATTEMPT_GRADING_STATUS {
+  DRAFT = "DRAFT",
+  FINISHED = "FINISHED",
+  UN_FINISHED = "UN_FINISHED",
+  AWAITING_GRADING = "AWAITING_GRADING",
+  FINISHED_GRADING = "FINISHED_GRADING",
+}
+
+export enum DATE_FORMAT {
+  DATE_TIME = "HH:mm | DD/MM/YYYY",
+  DATE_TIME_DASH = "HH:mm - DD/MM/YYYY",
+  DATE = "DD/MM/YYYY",
+}
+export enum TEST_TYPE_ENUM {
+  QUIZ = "QUIZ",
+  MID_TERM_TEST = "MID_TERM_TEST",
+  FINAL_TEST = "FINAL_TEST",
+  MOCK_TEST = "MOCK_TEST",
+  // ENTRANCE_TEST = 'ENTRANCE_TEST',
+  // STORY = 'STORY',
+  TOPIC_TEST = "TOPIC_TEST",
+  CHAPTER_TEST = "CHAPTER_TEST",
+  PART_TEST = "PART_TEST",
+  // EVENT_TEST = 'EVENT_TEST',
+  PART = "PART",
+  CHAPTER = "CHAPTER",
+  ACTIVITY = "ACTIVITY",
+}
+export enum COURSES_STATUS {
+  RECEIVED = "RECEIVED",
+  PROCESSING = "PROCESSING",
+  SUCCESS = "SUCCESS",
+  FAILURE = "FAILURE",
+  LEARNING = "LEARNING",
+  FINISH = "FINISH",
+}
+export enum GRADING_PREFERENCE {
+  AFTER_EACH_QUESTION = "AFTER_EACH_QUESTION",
+  AFTER_ALL_QUESTIONS = "AFTER_ALL_QUESTIONS",
+}
+export enum BADGE_TYPES {
+  error = "error",
+  warning = "warning",
+  info = "info",
+  success = "success",
+  default = "default",
+}
+export enum EAttemptStatus {
+  UN_SUBMITTED = "UN_SUBMITTED",
+  SUBMITTED = "SUBMITTED",
+  UN_FINISHED = "UN_FINISHED",
+  IN_PROGRESS = "IN_PROGRESS",
+}
+
+export * from "./Test";
+export * from "./Teacher";
+export * from "./socketEvents";
+export * from "./Course";
+

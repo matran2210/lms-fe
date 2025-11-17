@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { QUIZ_ATTEMPT_GRADING_STATUS, QUIZ_ATTEMPT_STATUS } from 'src/constants'
+import { QUIZ_ATTEMPT_GRADING_STATUS, QUIZ_ATTEMPT_STATUS } from '@lms/core'
 
 type Props = {
   dataColumn?: QUIZ_ATTEMPT_GRADING_STATUS | QUIZ_ATTEMPT_STATUS

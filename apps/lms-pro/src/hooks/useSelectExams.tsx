@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from 'react-query'
-import { DEFAULT_PAGE_NUMBER } from 'src/constants'
+import { DEFAULT_PAGE_NUMBER } from '@lms/core'
 import { ClassAPI } from 'src/pages/api/class'
 import { ClassKey } from 'src/pages/api/queryKey'
 

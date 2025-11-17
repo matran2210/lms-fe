@@ -14,7 +14,7 @@ import {
   ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
   PageLink,
-} from 'src/constants'
+} from '@lms/core'
 import { apiURL } from 'src/redux/services/httpService'
 import { deleteCookie, getCookie, setCookie } from '@utils/index'
 

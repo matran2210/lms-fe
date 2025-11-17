@@ -4,7 +4,7 @@ import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 import { Col, Row } from 'antd'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { PageLink } from 'src/constants'
+import { PageLink } from '@lms/core'
 import Marquee from 'react-fast-marquee'
 import clsx from 'clsx'
 

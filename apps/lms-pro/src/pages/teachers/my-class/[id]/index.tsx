@@ -7,7 +7,7 @@ import {
   DATE_FORMAT_HM,
   DATE_FORMAT_YMD,
   PageLink,
-} from 'src/constants'
+} from '@lms/core'
 import { useQuery } from 'react-query'
 import { TeacherAPI } from 'src/pages/api/teacher/index'
 import { useEffect, useState } from 'react'

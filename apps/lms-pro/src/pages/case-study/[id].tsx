@@ -34,7 +34,7 @@ import {
   PROGRAM,
   QUESTION_TYPES,
   RESPONSE_OPTION,
-} from 'src/constants'
+} from '@lms/core'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   clearFileEssay,
@@ -55,7 +55,7 @@ import DragDropQuestion, {
 } from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 import { Requirement } from 'src/type'
-import { defaultSheetData } from 'src/constants/attempt'
+import { defaultSheetData } from '@lms/core'
 import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
 import CaseStudyWrapper from '@components/case-study/layout/CaseStudyWrapper'

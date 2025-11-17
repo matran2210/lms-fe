@@ -5,11 +5,13 @@ import dayjs from 'dayjs'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 import {
   DATE_TIME_FORMAT,
+  E_REQUEST_STATUS,
+  E_REQUEST_TYPE,
   REQUEST_STATUS,
   REQUEST_TYPE,
   requestStatusToBadge,
   requestTypeToTitle,
-} from 'src/constants'
+} from '@lms/core'
 import { IUser } from 'src/redux/types/User/urser'
 import {
   IRequest,
@@ -54,12 +56,12 @@ const PersonalScheduleTable = ({
     {
       title: 'Request type',
       dataIndex: 'type',
-      render: (value: REQUEST_TYPE) => requestTypeToTitle[value],
+      render: (value: E_REQUEST_TYPE) => requestTypeToTitle[value],
     },
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (value: REQUEST_STATUS) => (
+      render: (value: E_REQUEST_STATUS) => (
         <SAPPBadge
           key={value}
           label={requestStatusToBadge[value].label}
@@ -216,11 +218,11 @@ const PersonalScheduleTable = ({
           ? item.teacher_weekly_norms
           : [],
       reason:
-        item.type === REQUEST_TYPE.TEACHER_SCHEDULE_BUSY
+        item.type === E_REQUEST_TYPE.TEACHER_SCHEDULE_BUSY
           ? item.teacher_schedules
           : [],
       note:
-        item.type === REQUEST_TYPE.TEACHER_WEEKLY_NORMS ? item.description : '',
+        item.type === E_REQUEST_TYPE.TEACHER_WEEKLY_NORMS ? item.description : '',
       method: item,
     }))
   }, [requests, current, pageSize])

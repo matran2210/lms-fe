@@ -1,6 +1,6 @@
 import { Slice, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { FieldValues } from 'react-hook-form'
-import { QUESTION_TYPES } from 'src/constants'
+import { QUESTION_TYPES } from '@lms/core'
 import { QuestionAPI } from 'src/pages/api/question'
 import { RootState } from 'src/redux/store'
 import { IRequirement } from 'src/type/case-study'

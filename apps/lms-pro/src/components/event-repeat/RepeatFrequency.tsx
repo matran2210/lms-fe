@@ -10,7 +10,7 @@ import {
   FREQUENCY_UNITS,
   FREQUENCY_UNITS_LIMIT,
   FREQUENCY_UNITS_OBJECT,
-} from 'src/constants'
+} from '@lms/core'
 import { IRepeatFrequency, IRepeatUnitOption } from 'src/type/my-calendar'
 
 interface IProps {

@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import NoData from 'src/common/NoData'
 import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
-import { ANIMATION, COURSE_TYPE, DATE_FORMAT } from 'src/constants'
+import { ANIMATION, COURSE_TYPE, DATE_FORMAT } from '@lms/core'
 import {
   IconEssentional,
   MatchFailIcon,

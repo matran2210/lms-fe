@@ -1,7 +1,7 @@
 import _, { uniqBy } from 'lodash'
 import dayjs from 'dayjs'
 import { round } from 'lodash'
-import { PageLink } from 'src/constants'
+import { PageLink } from '@lms/core'
 
 export function isMobile() {
   const toMatch = [

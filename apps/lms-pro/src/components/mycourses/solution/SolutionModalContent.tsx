@@ -1,6 +1,6 @@
 import React from 'react'
 import SolutionListAnswer from './SolutionListAnswer'
-import { MY_COURSES } from 'src/constants/lang'
+import { MY_COURSES } from '@lms/core'
 
 interface SolutionModalContentProps {
   topic: string

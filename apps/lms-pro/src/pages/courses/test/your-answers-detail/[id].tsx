@@ -1,13 +1,13 @@
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
-import { TEST_TYPE } from '@utils/constants'
+import { TEST_TYPE } from '@lms/core'
 import { useGetDataQuery } from '@utils/index'
 import { useRouter } from 'next/router'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from 'src/type'
 import TableQuestions from 'src/pages/courses/quiz/your-answers-detail/TableQuestions'
 import SappLoading from 'src/common/SappLoading'
-import { GRADE_STATUS } from 'src/constants'
+import { GRADE_STATUS } from '@lms/core'
 
 const TestResultDetail = () => {
   const router = useRouter()

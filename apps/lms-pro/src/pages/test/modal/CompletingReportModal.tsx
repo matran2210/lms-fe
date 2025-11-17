@@ -1,7 +1,7 @@
 import { ConfirmIcon } from '@assets/icons'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import React from 'react'
-import { FINISHED_TEST_TITLE } from 'src/constants'
+import { FINISHED_TEST_TITLE } from '@lms/core'
 
 interface IProps {
   open: boolean

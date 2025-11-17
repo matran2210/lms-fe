@@ -23,7 +23,7 @@ import {
   COURSE_TYPE,
   LEARNING_USER_STATUS,
   PROGRAM,
-} from 'src/constants'
+} from '@lms/core'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
 import PopupActive from './PopupActive'

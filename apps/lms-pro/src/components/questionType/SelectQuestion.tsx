@@ -11,7 +11,7 @@ import React, {
   useState,
 } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
-import { MY_COURSES } from 'src/constants/lang'
+import { MY_COURSES } from '@lms/core'
 import { useTooltipModal } from 'src/hooks/useTooltipModal'
 import { IExhibitData } from 'src/type/exhibit'
 import WarningSection from './WarningSection'

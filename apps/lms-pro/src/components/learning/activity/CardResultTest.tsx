@@ -9,8 +9,8 @@ import {
   GRADING_METHOD,
   QUIZ_ATTEMPT_GRADING_STATUS,
   QUIZ_ATTEMPT_STATUS,
-} from 'src/constants'
-import { EAttemptStatus } from 'src/constants/attempt'
+} from '@lms/core'
+import { EAttemptStatus } from '@lms/core'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { EDateTime } from 'src/type'
 

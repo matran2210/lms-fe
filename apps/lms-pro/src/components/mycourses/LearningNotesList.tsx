@@ -37,7 +37,7 @@ import ListFilterMobile from '@components/common/ListFilterMobile'
 import ActionCellV2 from '@components/base/action/ActionCellV2'
 import { userReducer } from 'src/redux/slice/User/User'
 import { UserType } from 'src/redux/types/User/urser'
-import { DEFAULT_PAGE_NUMBER, PageLink } from 'src/constants'
+import { DEFAULT_PAGE_NUMBER, PageLink } from '@lms/core'
 import clsx from 'clsx'
 
 const DEFAULT_PAGESIZE = 20

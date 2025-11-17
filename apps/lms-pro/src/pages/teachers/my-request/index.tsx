@@ -6,7 +6,7 @@ import ScheduleRequestTable from '@components/teacher/my-request/schedule-reques
 import { RequestProvider } from '@contexts/RequestContext'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { PageLink } from 'src/constants'
+import { PageLink } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { ITabs } from 'src/type'

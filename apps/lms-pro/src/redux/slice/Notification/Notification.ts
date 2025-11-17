@@ -1,5 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { LOCAL_STORAGE_KEYS } from 'src/constants'
+import { LOCAL_STORAGE_KEYS } from '@lms/core'
 import { NotificationAPI } from 'src/pages/api/notification'
 import { RootState } from 'src/redux/store'
 

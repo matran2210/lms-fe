@@ -1,13 +1,5 @@
-import { MY_COURSES } from './lang'
+import { COURSES_STATUS } from "../enums"
 
-export enum COURSES_STATUS {
-  RECEIVED = 'RECEIVED',
-  PROCESSING = 'PROCESSING',
-  SUCCESS = 'SUCCESS',
-  FAILURE = 'FAILURE',
-  LEARNING = 'LEARNING',
-  FINISH = 'FINISH',
-}
 export const COURSES_STATUS_BADGE = {
   [COURSES_STATUS.RECEIVED]: 'active',
   [COURSES_STATUS.PROCESSING]: 'pending',
@@ -40,10 +32,5 @@ export const ROUTES = {
 }
 
 export const DEFAULT_PAGESIZE = 18
-
-export enum GRADING_PREFERENCE {
-  AFTER_EACH_QUESTION = 'AFTER_EACH_QUESTION',
-  AFTER_ALL_QUESTIONS = 'AFTER_ALL_QUESTIONS',
-}
 
 export const QUIZ_MODAL_WIDTH = 560

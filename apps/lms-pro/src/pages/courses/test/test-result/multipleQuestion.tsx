@@ -3,10 +3,10 @@ import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-import { ANIMATION, GRADE_STATUS, PageLink } from 'src/constants'
+import { ANIMATION, GRADE_STATUS, PageLink } from '@lms/core'
 import { IAnswer } from 'src/type'
 import Recommendation from './Recommendation'
-import { COMMENTS } from 'src/constants/grade'
+import { COMMENTS } from '@lms/core'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 
 interface MultipleQuestionProps {

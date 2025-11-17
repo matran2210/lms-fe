@@ -14,7 +14,7 @@ import { SocketContext } from '@contexts/SocketContext'
 import { CourseProvider } from '@contexts/index'
 import '@fortune-sheet/react/dist/index.css'
 import '@styles/globals.scss'
-import { CERTIFICATE_DETAIL } from '@utils/constants'
+import { CERTIFICATE_DETAIL } from '@lms/core'
 import initializeGA from '@utils/google-analytics'
 import { pageview } from '@utils/index'
 import '@xyflow/react/dist/style.css'
@@ -36,7 +36,7 @@ import {
   ENTRANCE_TEST_TABLE_RESULT,
   LOCAL_STORAGE_KEYS,
   SOCKET_EVENTS,
-} from 'src/constants'
+} from '@lms/core'
 import { useAppDispatch } from 'src/redux/hook'
 import { injectStore } from 'src/redux/services/httpService'
 import {

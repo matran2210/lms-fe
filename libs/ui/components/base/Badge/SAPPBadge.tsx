@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { BADGE_TYPES } from 'src/constants'
+import { BADGE_TYPES } from '@lms/core'
 
 interface SAPPBadgeProps {
   label: string | React.ReactNode

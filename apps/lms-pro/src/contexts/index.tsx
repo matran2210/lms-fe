@@ -11,7 +11,7 @@ import {
   CERTIFICATE_DETAIL,
   ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
-} from 'src/constants'
+} from '@lms/core'
 import { EventTestAPI } from 'src/pages/api/event-test'
 
 // type for context

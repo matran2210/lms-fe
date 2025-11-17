@@ -48,8 +48,8 @@ import {
   UseFormWatch,
 } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { ANIMATION, QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
-import { DEFAULT_EDITOR_VALUE, defaultSheetData } from 'src/constants/attempt'
+import { ANIMATION, QUESTION_TYPES, RESPONSE_OPTION } from '@lms/core'
+import { DEFAULT_EDITOR_VALUE, defaultSheetData } from '@lms/core'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { useAppDispatch } from 'src/redux/hook'
 import {

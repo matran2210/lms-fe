@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { PageLink } from 'src/constants'
+import { PageLink } from '@lms/core'
 
 const LogoDefault = ({ className }: { className?: string }) => {
   const router = useRouter()

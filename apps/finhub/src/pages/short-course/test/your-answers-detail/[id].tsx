@@ -1,6 +1,6 @@
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
-import { TEST_TYPE } from '@utils/constants'
+import { TEST_TYPE } from '@lms/core'
 import { useGetDataQuery } from '@utils/index'
 import { useRouter } from 'next/router'
 import { CoursesAPI } from 'src/pages/api/courses'

@@ -36,7 +36,7 @@ import {
   PROGRAM,
   QUESTION_TYPES,
   TEST_TYPE,
-} from 'src/constants'
+} from '@lms/core'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import { IExhibit } from 'src/type/exhibit'
@@ -62,7 +62,7 @@ import DragDropQuestion, {
 import TestWrapper from '@components/test/layout/TestWrapper'
 import { QuestionAPI } from '@pages/api/question'
 import { TestAPI } from '@pages/api/test'
-import { GradingPreference } from '@utils/constants'
+import { GradingPreference } from '@lms/core'
 import { trackGAEvent } from '@utils/google-analytics'
 import { download } from '@utils/index'
 import { Tooltip } from 'antd'

@@ -33,7 +33,7 @@ import SortBy from '@components/common/SortBy'
 import ListFilterMobile from '@components/common/ListFilterMobile'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
 import Tooltip from 'src/common/Tooltip'
-import { PageLink } from 'src/constants'
+import { PageLink } from '@lms/core'
 interface IProps {
   open: boolean
   setOpenResource: Dispatch<SetStateAction<boolean>>

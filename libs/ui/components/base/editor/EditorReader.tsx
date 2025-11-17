@@ -6,7 +6,7 @@ import {
 import parseHTML, { Element } from 'html-react-parser'
 import { useEffect, useRef, useState } from 'react'
 import SappModalImage from '../modal/SappModalImage'
-import { video_url } from '@utils/constants'
+import { video_url } from '@lms/core'
 import 'src/utils/global.d.ts'
 import clsx from 'clsx'
 import SAPPVideo from '@components/base/video/SAPPVideo'

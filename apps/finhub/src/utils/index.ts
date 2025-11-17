@@ -12,7 +12,7 @@ import { isEmpty, isNull, isUndefined } from 'lodash'
 import { useQuery } from 'react-query'
 export * from './common'
 import utc from 'dayjs/plugin/utc'
-import { DATE_FORMAT } from 'src/constants'
+import { DATE_FORMAT } from '@lms/core'
 import { cleanParams } from './common'
 import { UploadAPI } from '@pages/api/short-course/upload'
 

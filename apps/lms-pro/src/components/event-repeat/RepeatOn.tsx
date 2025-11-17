@@ -1,7 +1,7 @@
 import { Checkbox } from 'antd'
 import clsx from 'clsx'
 import { memo, useCallback, useEffect, useState } from 'react'
-import { REPEAT_ON, REPEAT_ON_MAPPED } from 'src/constants'
+import { REPEAT_ON, REPEAT_ON_MAPPED } from '@lms/core'
 
 interface IProps {
   className?: string

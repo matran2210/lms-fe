@@ -3,7 +3,7 @@ import SappButton from '@components/base/button/SappButton'
 import SAPPTextFiled from '@components/base/textfield/SAPPTextFiled'
 import { useRouter } from 'next/router'
 import { createRef, useEffect, useState } from 'react'
-import { PageLink } from 'src/constants'
+import { PageLink } from '@lms/core'
 import useCountdown from './Countdown'
 import { AuthAPI } from '../../pages/api/profile/index'
 

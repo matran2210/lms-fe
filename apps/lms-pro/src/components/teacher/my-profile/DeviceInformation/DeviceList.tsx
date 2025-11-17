@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { MY_COURSES } from 'src/constants/lang'
+import { MY_COURSES } from '@lms/core'
 import UserApi from 'src/redux/services/User/user'
 import DeviceItem from './DeviceItem'
 import Icon from '@components/icons'

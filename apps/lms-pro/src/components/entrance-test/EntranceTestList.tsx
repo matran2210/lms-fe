@@ -2,7 +2,7 @@ import { isEmpty } from 'lodash'
 import React from 'react'
 import { IEntranceTest } from 'src/type/entrance-test'
 import EntranceTest from './EntranceTest'
-import { EAttemptStatus } from 'src/constants/attempt'
+import { EAttemptStatus } from '@lms/core'
 import NoCoursesAvailable from 'src/common/NoCoursesAvailable'
 
 interface EntranceTestListProps {

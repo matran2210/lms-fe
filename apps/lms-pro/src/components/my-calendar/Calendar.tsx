@@ -10,7 +10,7 @@ import {
   EVENT_TYPES,
   EVENT_TYPES_ARRAY,
   EVENT_TYPES_RESPONSE,
-} from 'src/constants'
+} from '@lms/core'
 import { SchedulesAPI } from 'src/pages/api/schedules'
 import { IResponseSchedule } from 'src/redux/types/Schedule/schedule'
 import CalendarHead from './CalendarHead'

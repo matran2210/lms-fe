@@ -1,4 +1,4 @@
-import { StatusRequestSchedule } from '@utils/constants/Teacher'
+import { StatusRequestSchedule } from '@lms/core'
 
 export interface RequestScheduleParams {
   page_index: number

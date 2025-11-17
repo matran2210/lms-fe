@@ -6,7 +6,7 @@ import {
   CLASS_USER_TYPES,
   COURSE_STATUS,
   BUTTON_STATUS,
-} from 'src/constants'
+} from '@lms/core'
 import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
 
 export const useCourseStatus = (course: ICourse) => {

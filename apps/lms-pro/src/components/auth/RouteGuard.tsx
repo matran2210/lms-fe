@@ -1,4 +1,4 @@
-import { CERTIFICATE_DETAIL } from '@utils/constants'
+import { CERTIFICATE_DETAIL } from '@lms/core'
 import { setCookie } from '@utils/index'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -6,7 +6,7 @@ import {
   COOKIE_INFO,
   ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
-} from 'src/constants'
+} from '@lms/core'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { getMe, userReducer } from 'src/redux/slice/User/User'
 

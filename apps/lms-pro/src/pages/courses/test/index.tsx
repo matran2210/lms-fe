@@ -1,7 +1,7 @@
 import { formatTime } from '@components/common/timer'
 import TestAnnouncementModal from '@components/mycourses/course-detail/TestAnnoucementModal'
 import PopupCanNotRetakeTest from '@components/mycourses/PogupCannotRetakeTest'
-import { TEST_TYPE } from '@utils/constants'
+import { TEST_TYPE } from '@lms/core'
 import { trackGAEvent } from '@utils/google-analytics'
 import dayjs from 'dayjs'
 import { isNull } from 'lodash'
@@ -10,7 +10,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ClassAPI } from 'src/pages/api/class'
 import { IQuizResultList } from 'src/type/quiz'
 import { Select } from 'antd'
-import { GRADING_METHOD, GRADE_STATUS } from 'src/constants'
+import { GRADING_METHOD, GRADE_STATUS } from '@lms/core'
 import { capitalizeFirstLetter } from '@utils/index'
 import { CoursesAPI } from '@pages/api/courses'
 import TestPopup from '@components/common/TestPopup'
@@ -24,7 +24,7 @@ import StatusTestQuizBadge, {
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import ModalNotMobileFriendly from '@components/base/modal/ModalNotMobileFriendly'
 import { ArrowDownIcon } from '@assets/icons/entranceTest'
-import { EAttemptStatus } from 'src/constants/attempt'
+import { EAttemptStatus } from '@lms/core'
 
 enum StatusQuizAttempt {
   Passed = 'PASSED',

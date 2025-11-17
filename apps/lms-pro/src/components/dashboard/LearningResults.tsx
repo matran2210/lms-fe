@@ -9,7 +9,7 @@ import NoData from 'src/common/NoData'
 import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
 
 import Tooltip from 'src/common/Tooltip'
-import { COURSE_TYPE, DATE_FORMAT, LABEL_MAX_LENGTH } from 'src/constants'
+import { COURSE_TYPE, DATE_FORMAT, LABEL_MAX_LENGTH } from '@lms/core'
 
 const LearningResults = () => {
   const router = useRouter()

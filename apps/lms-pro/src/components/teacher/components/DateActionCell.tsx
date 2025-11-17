@@ -1,6 +1,6 @@
 import { formatDateFromUTC } from '@utils/index'
 import { FC } from 'react'
-import { DATE_FORMAT } from 'src/constants'
+import { DATE_FORMAT } from '@lms/core'
 
 type Props = {
   dataColumn?: {

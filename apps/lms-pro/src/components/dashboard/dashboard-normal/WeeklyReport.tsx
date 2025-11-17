@@ -6,7 +6,7 @@ import { DashboardAPI } from '@pages/api/dashboard'
 import { IWeeklyReport } from 'src/type/dashboard'
 import dayjs from 'dayjs'
 import isoWeek from 'dayjs/plugin/isoWeek'
-import { DATE_FORMAT } from 'src/constants'
+import { DATE_FORMAT } from '@lms/core'
 import { BooksIcon, CheckMatchIcon, ClockIcon } from '@assets/icons/Dashboard'
 import {
   WeeklyReportSkeleton,

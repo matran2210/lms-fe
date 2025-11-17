@@ -5,7 +5,7 @@ import Image from 'next/image'
 import FooterMarketingInApp from '@components/marketing-in-app/FooterMarketingInApp'
 import SliderHome from '@components/marketing-in-app/SliderHome'
 import clsx from 'clsx'
-import { ValueSidebar } from 'src/constants'
+import { ValueSidebar } from '@lms/core'
 import SappLoading from 'src/common/SappLoading'
 
 type LayoutTeacherProps = {

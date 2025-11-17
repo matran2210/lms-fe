@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { defaultStatusDetail } from 'src/constants'
+import { defaultStatusDetail } from '@lms/core'
 import { useForm } from 'react-hook-form'
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import TotalResullt from 'src/common/TotalResullt'

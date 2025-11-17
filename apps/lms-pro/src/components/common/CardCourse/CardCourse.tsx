@@ -1,10 +1,10 @@
 import React, { forwardRef } from 'react'
-import { EAttemptStatus } from 'src/constants/attempt'
+import { EAttemptStatus } from '@lms/core'
 import Badge from '../Badge/Badge'
 import Tooltip from 'src/common/Tooltip'
 import { truncateString } from '@utils/index'
 import clsx from 'clsx'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION } from '@lms/core'
 import { LockClosedIcon } from '@assets/icons'
 
 const mappingBadgeFromStatus: Partial<

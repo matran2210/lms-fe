@@ -12,7 +12,7 @@ import {
 import dayjs from 'dayjs'
 import PrimaryInformation from 'src/components/teacher/my-request/schedule-request/PrimaryInformation'
 import { IScheduleRequestItem } from 'src/type/teachers/request-schedule.interface'
-import { StatusRequestSchedule } from '@utils/constants/Teacher'
+import { StatusRequestSchedule } from '@lms/core'
 import { useQuery } from 'react-query'
 import { TeacherAPI } from '@pages/api/teacher'
 import clsx from 'clsx'

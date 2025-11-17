@@ -1,5 +1,5 @@
 import React from 'react'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION } from '@lms/core'
 import { NoDataIconV2 } from '@components/icons'
 
 const NoData = ({ title = 'No data founded...' }: { title?: string }) => {

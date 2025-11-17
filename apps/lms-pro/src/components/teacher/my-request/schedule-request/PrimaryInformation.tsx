@@ -17,7 +17,7 @@ import { formatTimeOnlyHourMinute } from '@utils/helpers'
 import {
   CONSTRUCTION_MODE,
   TYPE_TEACHING_REQUEST,
-} from 'src/constants/my-request'
+} from '@lms/core'
 import { CollapseArrowIcon } from '@assets/icons'
 import Link from 'next/link'
 import Tooltip from 'src/common/Tooltip'

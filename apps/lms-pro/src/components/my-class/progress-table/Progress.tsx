@@ -14,7 +14,7 @@ import {
   CONSTRUCTION,
   OPTIONS_PROGRESS_CLASS,
   PROGRAM,
-} from '@utils/constants/Progress'
+} from '@lms/core'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'

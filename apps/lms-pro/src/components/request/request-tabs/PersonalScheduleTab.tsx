@@ -15,8 +15,8 @@ import { useForm } from 'react-hook-form'
 import {
   OPTIONS_PERSONAL_SCHEDULE_REQUEST_TYPE,
   OPTIONS_REQUEST_STATUS,
-  REQUEST_TYPE,
-} from 'src/constants/request'
+  E_REQUEST_TYPE,
+} from '@lms/core'
 import { IRequest, IRequestFilterForm } from 'src/type'
 import FormRequest from '../request-forms/FormRequest'
 import RequestDetail from '../request-forms/RequestDetail'
@@ -69,7 +69,7 @@ const PersonalScheduleTab = () => {
   ) => {
     otherParams['type'] = otherParams['type']
       ? [otherParams['type']]
-      : [REQUEST_TYPE.TEACHER_SCHEDULE_BUSY, REQUEST_TYPE.TEACHER_WEEKLY_NORMS]
+      : [E_REQUEST_TYPE.TEACHER_SCHEDULE_BUSY, E_REQUEST_TYPE.TEACHER_WEEKLY_NORMS]
 
     setIsLoading(true)
     try {

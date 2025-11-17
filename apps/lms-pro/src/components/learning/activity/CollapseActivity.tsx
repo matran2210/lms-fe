@@ -8,7 +8,7 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import useSappPaging from 'src/hooks/useSappPaging'
 import { CoursesAPI } from '@pages/api/courses'
 import router from 'next/router'
-import { GRADE_STATUS, GRADING_METHOD } from 'src/constants'
+import { GRADE_STATUS, GRADING_METHOD } from '@lms/core'
 
 interface CollapseActivityProps {
   resultData: Results

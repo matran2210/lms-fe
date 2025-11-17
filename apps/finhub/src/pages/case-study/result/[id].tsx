@@ -40,7 +40,7 @@ import {
   QUESTION_TYPES,
   RESPONSE_OPTION,
   ROUTES,
-} from 'src/constants'
+} from '@lms/core'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { useAppDispatch } from 'src/redux/hook'

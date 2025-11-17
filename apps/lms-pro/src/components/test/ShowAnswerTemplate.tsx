@@ -5,7 +5,7 @@ import { Tooltip } from 'antd'
 import clsx from 'clsx'
 import React, { useLayoutEffect, useState } from 'react'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
-import { RESPONSE_OPTION } from 'src/constants'
+import { RESPONSE_OPTION } from '@lms/core'
 import {
   Control,
   FieldValues,
@@ -13,7 +13,7 @@ import {
   UseFormGetValues,
   UseFormSetValue,
 } from 'react-hook-form'
-import { defaultSheetData } from 'src/constants/attempt'
+import { defaultSheetData } from '@lms/core'
 import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 import ButtonSecondaryV2 from '@components/base/button/ButtonSecondaryV2'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'

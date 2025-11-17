@@ -1,7 +1,7 @@
 import SappButton from '@components/base/button/SappButton'
-import { LAYOUT } from '@utils/constants'
+import { LAYOUT } from '@lms/core'
 import Link from 'next/link'
-import { PageLink } from 'src/constants'
+import { PageLink } from '@lms/core'
 import { useAppSelector } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
 

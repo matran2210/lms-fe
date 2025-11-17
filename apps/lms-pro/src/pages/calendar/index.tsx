@@ -16,7 +16,7 @@ import {
   CALENDAR_TYPE,
   PageLink,
   TitleSidebar,
-} from 'src/constants'
+} from '@lms/core'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { ICalendar, ICalendarList } from 'src/type/calendar'
 import clsx from 'clsx'

@@ -2,7 +2,7 @@ import type { TablePaginationConfig, TableProps } from 'antd'
 import { Table, Typography } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import React, { Dispatch, SetStateAction } from 'react'
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from 'src/constants'
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '@lms/core'
 import clsx from 'clsx'
 
 const { Title } = Typography

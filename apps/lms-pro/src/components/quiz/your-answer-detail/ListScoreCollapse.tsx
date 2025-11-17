@@ -7,7 +7,7 @@ import { htmlToRaw } from '@components/common/timer'
 import clsx from 'clsx'
 import { ArrowDownIcon } from '@components/courses/icons'
 import { IAnswer } from 'src/type'
-import type { QUESTION_TYPES } from 'src/constants'
+import type { QUESTION_TYPES } from '@lms/core'
 
 const ListScoreCollapse = ({
   data,

@@ -2,7 +2,7 @@ import { Skeleton } from 'antd'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
 import DynamicBundledEditor from '../../form/editor'
-import { DEFAULT_EDITOR_VALUE } from 'src/constants/attempt'
+import { DEFAULT_EDITOR_VALUE } from '@lms/core'
 import { SAPPEditorHandle } from 'src/type'
 
 interface Props {

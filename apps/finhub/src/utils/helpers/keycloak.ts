@@ -2,10 +2,10 @@
 import { UserApi } from '@pages/api/user'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { fetcher } from '@services/requestV2'
-import { CERTIFICATE } from '@utils/constants'
+import { CERTIFICATE } from '@lms/core'
 import { getMessagingToken } from '@utils/firebase'
 import Keycloak from 'keycloak-js'
-import { COOKIE_INFO } from 'src/constants'
+import { COOKIE_INFO } from '@lms/core'
 import { deleteCookie, getCookie, getSessionIdFromToken, setCookie } from '..'
 
 const handleFirebaseToken = async () => {

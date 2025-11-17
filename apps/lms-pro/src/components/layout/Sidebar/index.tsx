@@ -6,7 +6,7 @@ import clsx from 'clsx'
 import { Dispatch, SetStateAction } from 'react'
 import TourGuideNoti from 'src/assets/lotties/tour-guide-noti.json'
 import TourGuideSidebar from 'src/assets/lotties/tour-guide-sidebar.json'
-import { PageLink, UserGuide } from 'src/constants'
+import { PageLink, UserGuide } from '@lms/core'
 import { useAppSelector } from 'src/redux/hook'
 import {
   MENU_BOTTOM,

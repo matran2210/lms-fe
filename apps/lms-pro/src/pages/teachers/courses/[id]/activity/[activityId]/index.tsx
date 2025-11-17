@@ -35,7 +35,7 @@ import {
   EXHIBIT_TEXT_REPLACE,
   PageLink,
   PROGRAM,
-} from 'src/constants'
+} from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { UploadAPI } from 'src/pages/api/upload'

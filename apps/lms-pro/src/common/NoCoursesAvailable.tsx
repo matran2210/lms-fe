@@ -1,5 +1,5 @@
 import React from 'react'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION } from '@lms/core'
 import { NoCoursesAvailableIcon } from '@components/icons'
 
 const NoCoursesAvailable = () => {

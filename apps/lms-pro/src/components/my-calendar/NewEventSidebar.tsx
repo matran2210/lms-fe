@@ -5,7 +5,7 @@ import SappTeacherTextField from '@components/teacher/components/sapp-textfield/
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SchedulesAPI } from '@pages/api/schedules'
 import { handleDisableDate, handleDisableTime } from '@utils/calendar'
-import { REPEAT_TYPE } from '@utils/constants/repeat'
+import { REPEAT_TYPE } from '@lms/core'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { ConfigProvider, Drawer } from 'antd'
 import { Dayjs } from 'dayjs'
@@ -23,7 +23,7 @@ import {
   CONFIRM_CANCEL,
   EVENT_REPEAT_TYPES,
   EVENT_TYPES,
-} from 'src/constants'
+} from '@lms/core'
 import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import {

@@ -8,9 +8,9 @@ import {
   ANIMATION,
   CALENDAR_FILTER_TYPE,
   LEARNING_USER_STATUS,
-} from 'src/constants'
+} from '@lms/core'
 import { useRouter } from 'next/router'
-import { CourseSectionType, TEST_TYPE_ENUM } from '@utils/constants'
+import { CourseSectionType, TEST_TYPE_ENUM } from '@lms/core'
 import { LearningMode } from 'src/type/progress'
 import { buildQueryString } from '@utils/index'
 import getConfig from 'next/config'

@@ -13,7 +13,7 @@ import {
   FREQUENCY_UNITS,
   REPEAT_ON,
   REPEAT_ON_MAPPED_PAYLOAD,
-} from 'src/constants'
+} from '@lms/core'
 import { ISelect } from 'src/type/course'
 import {
   IEventRepeatFieldValues,
@@ -23,7 +23,7 @@ import {
 } from 'src/type/my-calendar'
 import RepeatFrequency from './RepeatFrequency'
 import RepeatOn from './RepeatOn'
-import { REPEAT_TYPE } from '@utils/constants/repeat'
+import { REPEAT_TYPE } from '@lms/core'
 import clsx from 'clsx'
 import utc from 'dayjs/plugin/utc'
 

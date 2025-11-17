@@ -1,5 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs'
-import { DAYS_IN_WEEK } from 'src/constants'
+import { DAYS_IN_WEEK } from '@lms/core'
 
 export const formatDate = (
   date: Dayjs | Date | string,

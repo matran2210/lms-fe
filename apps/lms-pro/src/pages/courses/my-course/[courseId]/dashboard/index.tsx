@@ -1,7 +1,7 @@
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { ANIMATION, COURSE_TYPE, PageLink } from 'src/constants'
+import { ANIMATION, COURSE_TYPE, PageLink } from '@lms/core'
 import Layout from '@components/layout'
 import CourseDashboard from '@components/dashboard/CourseDashboard'
 import ExamDashboard from '@components/dashboard/dashboard-exam/ExamDashboard'

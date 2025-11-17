@@ -9,7 +9,7 @@ import SappCollapse from '@components/collapse/SappCollapse'
 import AttempItem from './SubjectInformation/AttempItem'
 import { ISubjectItem, IUser } from 'src/redux/types/User/urser'
 import { UserApi } from '@pages/api/user'
-import { PROGRAM } from 'src/constants'
+import { PROGRAM } from '@lms/core'
 
 interface IProps {
   typeProgram: PROGRAM

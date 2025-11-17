@@ -1,7 +1,7 @@
 import { TestAPI } from '@pages/api/test'
 import dayjs from 'dayjs'
 import { FieldValues, UseFormGetValues } from 'react-hook-form'
-import { QUESTION_TYPES, TEST_TYPE } from 'src/constants'
+import { QUESTION_TYPES, TEST_TYPE } from '@lms/core'
 import { Sheet } from 'src/type/test'
 import crypto from 'crypto'
 import { IEntranceTest, IEntranceTestAttempt } from 'src/type/entrance-test'

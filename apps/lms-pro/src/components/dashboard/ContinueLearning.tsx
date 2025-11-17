@@ -2,7 +2,7 @@ import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/Pinned
 import React from 'react'
 import course_content from '@assets/images/course_content.svg'
 import Image from 'next/image'
-import { PageLink } from 'src/constants'
+import { PageLink } from '@lms/core'
 import { useRouter } from 'next/router'
 import { ArrowRightV2Icon } from '@assets/icons'
 

@@ -2,7 +2,7 @@ import { CoursesAPI } from '@pages/api/courses'
 import { ISection } from 'src/type'
 import { useRouter } from 'next/router'
 import { useRef, useState } from 'react'
-import { DEFAULT_PAGE_SIZE } from 'src/constants'
+import { DEFAULT_PAGE_SIZE } from '@lms/core'
 import { isEmpty } from 'lodash'
 
 export const useInitialSections = () => {

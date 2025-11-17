@@ -3,7 +3,7 @@ import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
 import EventTest from './EventTest'
 import { IEventTest } from 'src/type/event-test'
-// import { ANIMATION } from 'src/constants'
+// import { ANIMATION } from '@lms/core'
 
 const EventTestList = ({
   eventTestLists,

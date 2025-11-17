@@ -2,7 +2,7 @@ import { AlertIcon, LockIcon } from '@assets/icons'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { onLinkSocial } from '@utils/index'
 import { Dispatch, SetStateAction } from 'react'
-import { MY_COURSES } from 'src/constants/lang'
+import { MY_COURSES } from '@lms/core'
 
 interface IProps {
   open: boolean

@@ -5,7 +5,7 @@ import {
   MAX_UPLOAD_SIZE,
   MAX_UPLOAD_VIDEO_SIZE,
   VALID_UPLOAD_FILES,
-} from 'src/constants/upload'
+} from '@lms/core'
 export interface IResource {
   id: string
   created_at: string

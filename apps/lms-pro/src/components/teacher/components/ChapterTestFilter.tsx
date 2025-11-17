@@ -2,7 +2,7 @@ import { SearchIcon } from '@assets/icons'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import { Control } from 'react-hook-form'
-import { QUIZ_ATTEMPT_STATUS_AUTO } from 'src/constants'
+import { QUIZ_ATTEMPT_STATUS_AUTO } from '@lms/core'
 interface ChapterTestFilterProps {
   control: Control<any>
 }

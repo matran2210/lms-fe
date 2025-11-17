@@ -1,6 +1,6 @@
 import { LogoSappIcon } from '@assets/icons'
 import Link from 'next/link'
-import { PageLink } from 'src/constants'
+import { PageLink } from '@lms/core'
 
 const TeacherLogoFull = () => {
   return (

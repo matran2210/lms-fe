@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { Spin } from 'antd'
-import { VALID_UPLOAD_EDITOR } from 'src/constants'
+import { VALID_UPLOAD_EDITOR } from '@lms/core'
 import { useSappEditorImageUpload } from 'src/hooks/useSappEditorImageUpload'
 import { SAPPEditor } from 'sapp-common-package'
 import { SAPPEditorHandle } from 'src/type'

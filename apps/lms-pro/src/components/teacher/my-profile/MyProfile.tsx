@@ -6,7 +6,7 @@ import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import HookFormTextFieldV2 from '@components/base/textfield/HookFormTextFieldV2'
 import Icon from '@components/icons'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { USER_TYPE } from '@utils/constants/User'
+import { USER_TYPE } from '@lms/core'
 import { formatDate } from '@utils/helpers'
 import {
   VALIDATE_MAX,

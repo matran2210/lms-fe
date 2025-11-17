@@ -15,7 +15,7 @@ import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   PageLink,
-} from 'src/constants'
+} from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { ITabs, NOTIFICATION_STATUS } from 'src/type'

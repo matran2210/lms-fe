@@ -1,4 +1,4 @@
-import { ESSAY_TYPE, QUESTION_TYPES } from 'src/constants'
+import { ESSAY_TYPE, QUESTION_TYPES } from '@lms/core'
 
 interface IOneChoiceAnswer {
   question_id?: string

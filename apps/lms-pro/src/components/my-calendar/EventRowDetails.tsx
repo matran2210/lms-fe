@@ -5,7 +5,7 @@ import {
   EVENT_TYPES,
   EVENT_TYPES_LABEL,
   POPUP_EVENT_DETAILS,
-} from 'src/constants'
+} from '@lms/core'
 
 const EventRowDetails = ({ event }: { event: IEvent }) => {
   const getEventTime = useMemo(() => {

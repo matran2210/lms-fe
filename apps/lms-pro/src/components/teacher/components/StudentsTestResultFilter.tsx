@@ -3,7 +3,7 @@ import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import { Control } from 'react-hook-form'
 import { convertQuizType } from '@utils/index'
-import { QUIZ_GRADING_METHOD, TEST_TYPE_ENUM } from '@utils/constants'
+import { QUIZ_GRADING_METHOD, TEST_TYPE_ENUM } from '@lms/core'
 interface StudentsTestResultFilterProps {
   control: Control<any>
 }

@@ -1,4 +1,4 @@
-import { CERTIFICATE_DETAIL } from '@utils/constants'
+import { CERTIFICATE_DETAIL } from '@lms/core'
 import { convertUTCToLocalTime } from '@utils/helpers'
 import { getLocalStorageItem, setLocalStorageItem } from '@utils/index'
 import { useRouter } from 'next/router'
@@ -9,7 +9,7 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { ENTRANCE_TEST_RESULT, ENTRANCE_TEST_TABLE_RESULT } from 'src/constants'
+import { ENTRANCE_TEST_RESULT, ENTRANCE_TEST_TABLE_RESULT } from '@lms/core'
 import UserApi from 'src/redux/services/User/user'
 import { PinnedNotifications } from 'src/type'
 

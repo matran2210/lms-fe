@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form'
 import { IStudentClassDetail } from 'src/type/classes'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import _, { round } from 'lodash'
-import { FOUNDATION } from '@utils/constants'
+import { FOUNDATION } from '@lms/core'
 import useSappPaging from 'src/hooks/useSappPaging'
 import { StudentKey } from '@pages/api/queryKey'
 

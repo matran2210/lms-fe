@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import SappModal from '@components/base/modal/SappModal'
 import SAPPVideo from '@components/base/video/SAPPVideo'
 import { formatTime, htmlToRaw } from '@components/common/timer'
-import { video_url } from '@utils/constants'
+import { video_url } from '@lms/core'
 import { debounce } from '@utils/helpers'
 import {
   IActivityStateQuestion,
@@ -16,7 +16,7 @@ import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
 import clsx from 'clsx'
 import SappIcon from 'src/common/SappIcon'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION } from '@lms/core'
 
 type Props = {
   videos?: IVideo[]

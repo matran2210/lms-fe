@@ -1,6 +1,6 @@
 import { CloseIcon } from '@assets/icons'
 import Layout from '@components/layout'
-import { LAYOUT } from '@utils/constants'
+import { LAYOUT } from '@lms/core'
 import { useRouter } from 'next/router'
 import { QuizResultComponent } from 'quiz-result-package'
 import { IQuestionResultResponse } from 'quiz-result-package/dist/type'

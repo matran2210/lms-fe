@@ -20,7 +20,7 @@ import {
   GRADE_STATUS,
   PageLink,
   QUESTION_TYPES,
-} from 'src/constants'
+} from '@lms/core'
 import { IAnswer, IQuizAttempt, IQuizAttemptChartType } from 'src/type'
 import { CoursesAPI } from '../../../api/courses/index'
 import { CollapseArrowIcon } from '@assets/icons'

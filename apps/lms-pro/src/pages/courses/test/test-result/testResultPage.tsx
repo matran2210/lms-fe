@@ -1,9 +1,9 @@
 import Recommendation from '@components/test/Recommendation'
-import { F_LOW_CODES } from '@utils/constants'
+import { F_LOW_CODES } from '@lms/core'
 import { roundNumber } from '@utils/helpers'
 import { useMemo, useRef } from 'react'
 import SappLoading from 'src/common/SappLoading'
-import { GRADE_STATUS } from 'src/constants'
+import { GRADE_STATUS } from '@lms/core'
 import {
   IQuizAttempt,
   IQuizAttemptChartType,

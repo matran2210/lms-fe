@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { QUESTION_TYPES } from 'src/constants'
+import { QUESTION_TYPES } from '@lms/core'
 import { ArrowIconV2 } from '../pagination/ArrowIconV2'
 import PageLink from '../pagination/PageLink'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'

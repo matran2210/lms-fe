@@ -16,7 +16,7 @@ import {
 } from 'react'
 import { FieldValues, UseFormWatch } from 'react-hook-form'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
-import { MY_COURSES } from 'src/constants/lang'
+import { MY_COURSES } from '@lms/core'
 
 interface IProps {
   control: any

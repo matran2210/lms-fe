@@ -3,11 +3,11 @@ import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import { Tooltip } from 'antd'
 import SappTable from '@components/table/SappTable'
 import { StatusQuizTag } from '@components/teacher/components/StatusActionCell'
-import { QUIZ_ATTEMPT_GRADING_STATUS, QUIZ_ATTEMPT_STATUS } from 'src/constants'
+import { QUIZ_ATTEMPT_GRADING_STATUS, QUIZ_ATTEMPT_STATUS } from '@lms/core'
 import { getTimeFromInput } from '@utils/index'
 import dayjs from 'dayjs'
 import { EDateTime } from 'src/type'
-// import { GradingMethod } from '@utils/constants'
+// import { GradingMethod } from '@lms/core'
 import { Dispatch, SetStateAction } from 'react'
 
 interface TableListQuizInActivityProps {

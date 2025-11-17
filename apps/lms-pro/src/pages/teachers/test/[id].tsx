@@ -44,7 +44,7 @@ import {
   QUESTION_TYPES,
   RESPONSE_OPTION,
   TEST_TYPE,
-} from 'src/constants'
+} from '@lms/core'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
@@ -83,7 +83,7 @@ import TestScratchPads from 'src/pages/test/TestScratchPads'
 import useGetQuestionTabs from 'src/pages/test/custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from 'src/pages/test/custom-hook/useGetQuizDetail'
 import { TestAPI } from '@pages/api/test'
-import { DEFAULT_EDITOR_VALUE, defaultSheetData } from 'src/constants/attempt'
+import { DEFAULT_EDITOR_VALUE, defaultSheetData } from '@lms/core'
 import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'

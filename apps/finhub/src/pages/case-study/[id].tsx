@@ -44,7 +44,7 @@ import {
   QUESTION_TYPES,
   RESPONSE_OPTION,
   ROUTES,
-} from 'src/constants'
+} from '@lms/core'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {

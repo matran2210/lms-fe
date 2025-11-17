@@ -1,4 +1,4 @@
-import { FREQUENCY_UNITS, REPEAT_ON } from 'src/constants'
+import { FREQUENCY_UNITS, REPEAT_ON } from '@lms/core'
 import { RecurringScheduleType } from 'src/type/my-calendar'
 import { IRecurringSchedule } from 'src/type/my-request'
 

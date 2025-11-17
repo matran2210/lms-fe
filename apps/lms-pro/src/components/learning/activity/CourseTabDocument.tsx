@@ -9,15 +9,15 @@ import {
   IFocusQuiz,
   VideoStateClicked,
 } from '@pages/courses/[id]/activity/[activityId]'
-import { GradingPreference } from '@utils/constants'
+import { GradingPreference } from '@lms/core'
 import { trackGAEvent } from '@utils/google-analytics'
 import { truncateBySpace } from '@utils/index'
 import { Tabs, Tooltip } from 'antd'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import React, { useMemo, useRef } from 'react'
-import { ANIMATION } from 'src/constants'
-import { EAttemptStatus } from 'src/constants/attempt'
+import { ANIMATION } from '@lms/core'
+import { EAttemptStatus } from '@lms/core'
 import useQueryAction from 'src/hooks/useQueryAction'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {

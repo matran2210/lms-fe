@@ -1,9 +1,3 @@
-export enum EAttemptStatus {
-  UN_SUBMITTED = 'UN_SUBMITTED',
-  SUBMITTED = 'SUBMITTED',
-  UN_FINISHED = 'UN_FINISHED',
-  IN_PROGRESS = 'IN_PROGRESS',
-}
 
 // Generate unique ID for sheets
 export const generateSheetId = (): string => {

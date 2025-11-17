@@ -2,7 +2,7 @@ import { calculateTimeAgo } from '@utils/helpers'
 import { getCookie, getSessionIdFromToken } from '@utils/index'
 import clsx from 'clsx'
 import React, { Dispatch, SetStateAction, useMemo } from 'react'
-import { COOKIE_INFO } from 'src/constants'
+import { COOKIE_INFO } from '@lms/core'
 import { IDeviceItem } from 'src/type/Profile'
 
 interface IProps {

@@ -1,5 +1,5 @@
 import SinglePageLayout from '@components/layout/SinglePage'
-import { LAYOUT } from '@utils/constants'
+import { LAYOUT } from '@lms/core'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'

@@ -7,7 +7,7 @@ import { Select } from 'antd'
 import Icon from '@components/icons'
 import { CollapseArrowIcon } from '@assets/icons'
 import clsx from 'clsx'
-import { PROGRAM } from 'src/constants'
+import { PROGRAM } from '@lms/core'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 export interface SubjectOptionItem {

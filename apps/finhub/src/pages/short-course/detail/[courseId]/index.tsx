@@ -28,7 +28,7 @@ import {
   PageLink,
   ROUTES,
   TEST_TYPE,
-} from 'src/constants'
+} from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { useAppDispatch } from 'src/redux/hook'

@@ -1,5 +1,5 @@
 import styles from '@styles/components/SAPPVideo.module.scss'
-import { video_url } from '@utils/constants'
+import { video_url } from '@lms/core'
 import { useEffect, useRef, useState, ReactNode } from 'react'
 import Icon from '@components/icons'
 import {

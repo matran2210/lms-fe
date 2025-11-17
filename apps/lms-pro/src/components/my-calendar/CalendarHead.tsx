@@ -5,7 +5,7 @@ import SAPPSelect from '@components/base/select/SAPPSelect'
 import FilterGrid from '@components/layout/FilterGrid/FilterGrid'
 import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
-import { EVENT_TYPE_OPTIONS, EVENT_TYPES_ARRAY } from 'src/constants'
+import { EVENT_TYPE_OPTIONS, EVENT_TYPES_ARRAY } from '@lms/core'
 
 interface IProps {
   onSearch: ({

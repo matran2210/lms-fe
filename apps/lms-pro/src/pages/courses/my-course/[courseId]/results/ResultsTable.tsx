@@ -1,5 +1,5 @@
 import PaginationSappV2 from '@components/base/pagination/PaginationSappV2'
-import { GradingMethod } from '@utils/constants'
+import { GradingMethod } from '@lms/core'
 import { useRouter } from 'next/router'
 import {
   Dispatch,
@@ -11,14 +11,14 @@ import {
   useState,
 } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import { GRADE_STATUS, PageLink } from 'src/constants'
+import { GRADE_STATUS, PageLink } from '@lms/core'
 import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
 import { IResultsList, Results } from 'src/type/results'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { ConfirmIcon } from '@assets/icons'
-import { TEST_TYPE } from 'src/constants'
+import { TEST_TYPE } from '@lms/core'
 import FilterCourseSection from '@components/mycourses/FilterCourseSection'
 import CollapseActivity from '@components/learning/activity/CollapseActivity'
 import { isEmpty } from 'lodash'

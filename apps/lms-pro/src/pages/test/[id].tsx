@@ -49,7 +49,7 @@ import {
   QUESTION_TYPES,
   RESPONSE_OPTION,
   TEST_TYPE,
-} from 'src/constants'
+} from '@lms/core'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import { IExhibit } from 'src/type/exhibit'
@@ -76,7 +76,7 @@ import RequirementsTab from '@components/test/RequirementsTab'
 import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import TestWrapper from '@components/test/layout/TestWrapper'
 import { TestAPI } from '@pages/api/test'
-import { GradingPreference } from '@utils/constants'
+import { GradingPreference } from '@lms/core'
 import { trackGAEvent } from '@utils/google-analytics'
 import { TabsProps, Tooltip } from 'antd'
 import clsx from 'clsx'
@@ -109,7 +109,7 @@ import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 import DragDropQuestion, {
   SlotValue,
 } from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
-import { DEFAULT_EDITOR_VALUE, defaultSheetData } from 'src/constants/attempt'
+import { DEFAULT_EDITOR_VALUE, defaultSheetData } from '@lms/core'
 import { IQuestion } from 'src/type/course'
 import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'

@@ -2,7 +2,7 @@ import { UnstartedIcon } from '@assets/icons'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { formatDate } from '@utils/helpers'
 import { Dispatch, SetStateAction } from 'react'
-import { MY_COURSES } from 'src/constants/lang'
+import { MY_COURSES } from '@lms/core'
 
 interface IProps {
   open: boolean

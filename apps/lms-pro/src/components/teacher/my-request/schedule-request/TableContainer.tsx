@@ -1,6 +1,6 @@
 import SappTable from '@components/table/SappTable'
 import { TeacherAPI } from '@pages/api/teacher'
-import { StatusRequestSchedule } from '@utils/constants/Teacher'
+import { StatusRequestSchedule } from '@lms/core'
 import { TablePaginationConfig } from 'antd'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -10,7 +10,7 @@ import DetailRequestModal from 'src/components/teacher/my-request/schedule-reque
 import ReasonModal from 'src/components/teacher/my-request/schedule-request/ReasonModal'
 import SuccessModal from 'src/components/teacher/my-request/schedule-request/SuccessModal'
 import TableCell from 'src/components/teacher/my-request/schedule-request/TableCell'
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from 'src/constants'
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '@lms/core'
 import {
   FilterRequestScheduleParams,
   IScheduleRequestItem,

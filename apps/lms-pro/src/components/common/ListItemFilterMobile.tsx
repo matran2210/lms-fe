@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form'
 import {
   DEFAULT_SELECT_SECTION,
   DEFAULT_SELECT_SECTION_NAME,
-} from 'src/constants'
+} from '@lms/core'
 import {
   IOpenChooseItem,
   getTypeName,

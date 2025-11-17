@@ -1,3 +1,5 @@
+import { REPEAT_FREQUENCY } from "../../enums"
+
 export const WEEKDAYS = [
   'Monday',
   'Tuesday',
@@ -7,22 +9,7 @@ export const WEEKDAYS = [
   'Saturday',
   'Sunday',
 ]
-export enum REPEAT_TYPE {
-  DOES_NOT_REPEAT = 'DOES_NOT_REPEAT',
-  DAILY = 'DAILY',
-  WEEKLY = 'WEEKLY',
-  MONTHLY = 'MONTHLY',
-  ANNUALLY = 'ANNUALLY',
-  EVERY_WEEKDAY = 'EVERY_WEEKDAY',
-  CUSTOM = 'CUSTOM',
-  CHOSEN_PATTERN = 'CHOSEN_PATTERN',
-}
-export enum REPEAT_FREQUENCY {
-  DAY = 'DAYS',
-  WEEK = 'WEEKS',
-  MONTH = 'MONTHS',
-  YEAR = 'YEARS',
-}
+
 export const REPEAT_FREQUENCY_LABEL = {
   [REPEAT_FREQUENCY.DAY]: 'days',
   [REPEAT_FREQUENCY.WEEK]: 'weeks',

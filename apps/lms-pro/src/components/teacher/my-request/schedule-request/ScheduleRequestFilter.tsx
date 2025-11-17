@@ -4,7 +4,7 @@ import { TeacherAPI } from '@pages/api/teacher'
 import { useState } from 'react'
 import { isEmpty } from 'lodash'
 import HookFormDateRangePicker from '@components/base/date-range/HookFormDateRangePicker'
-import { StatusRequestSchedule } from '@utils/constants/Teacher'
+import { StatusRequestSchedule } from '@lms/core'
 import { Control, FieldValues } from 'react-hook-form'
 
 interface ScheduleRequestFilterProps {

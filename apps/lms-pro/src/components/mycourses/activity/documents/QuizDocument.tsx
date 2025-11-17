@@ -47,8 +47,8 @@ import {
   QUESTION_TYPES,
   RESPONSE_OPTION,
   SOCIAL_LINK,
-} from 'src/constants'
-import { DEFAULT_EDITOR_VALUE } from 'src/constants/attempt'
+} from '@lms/core'
+import { DEFAULT_EDITOR_VALUE } from '@lms/core'
 import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { IQuizSetting } from 'src/type'

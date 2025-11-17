@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect } from 'react'
 import { isEmpty } from 'lodash'
-import { DEFAULT_PAGE_SIZE } from 'src/constants'
+import { DEFAULT_PAGE_SIZE } from '@lms/core'
 import { ISection } from 'src/type'
 import { useInitialSections } from 'src/hooks/useInitialSections'
 import { useSectionData } from 'src/hooks/useSectionData'

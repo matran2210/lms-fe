@@ -8,7 +8,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import LayoutTeacher from '@components/layout/Teacher'
 import { ITabs } from 'src/type/common'
-import { PageLink, TitleSidebar } from 'src/constants'
+import { PageLink, TitleSidebar } from '@lms/core'
 
 const DEFAULT_PAGESIZE = 10
 

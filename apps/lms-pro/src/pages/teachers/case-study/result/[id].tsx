@@ -30,7 +30,7 @@ import {
   PageLink,
   PROGRAM,
   QUESTION_TYPES,
-} from 'src/constants'
+} from '@lms/core'
 import { useAppDispatch } from 'src/redux/hook'
 import { loadMoreQuestion } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
 import { IExhibit } from 'src/type/exhibit'

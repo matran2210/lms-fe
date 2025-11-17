@@ -1,6 +1,6 @@
 import { isPdfFile } from '@utils/helpers'
 import React from 'react'
-import { OFFICE_VIEWER_URL } from 'src/constants'
+import { OFFICE_VIEWER_URL } from '@lms/core'
 
 const FileViewer = ({
   fileName,

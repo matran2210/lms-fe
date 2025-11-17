@@ -3,14 +3,14 @@ import {
   MYPROFILE_TREE,
   PROFILE_PAGES,
   SECURITY_TREE,
-} from '@utils/constants/User'
+} from '@lms/core'
 import { trackGAEvent } from '@utils/google-analytics'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION } from '@lms/core'
 import { useAppDispatch } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import { NOTIFICATION_STATUS } from 'src/type'

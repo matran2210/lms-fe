@@ -1,3 +1,5 @@
+import { CALENDAR_FILTER_TYPE, FREQUENCY_UNITS, FREQUENCY_UNITS_LABEL, FREQUENCY_UNITS_LABEL_PLURAL } from "../enums";
+
 export const PageLink = {
   HOME: "/",
   COURSES: "/courses",
@@ -90,44 +92,6 @@ export const GUIDELINE_PASSWORD = [
   "Tối thiểu 8 ký tự, ít nhất 1 ký tự hoa, 1 ký tự số",
 ];
 
-export enum QUESTION_TYPES {
-  TRUE_FALSE = "TRUE_FALSE",
-  ONE_CHOICE = "ONE_CHOICE",
-  MULTIPLE_CHOICE = "MULTIPLE_CHOICE",
-  MATCHING = "MATCHING",
-  SELECT_WORD = "SELECT_WORD",
-  FILL_WORD = "FILL_WORD",
-  DRAG_DROP = "DRAG_DROP",
-  ESSAY = "ESSAY",
-}
-export enum TEST_TYPE {
-  QUIZ = "QUIZ",
-  MID_TERM_TEST = "MID_TERM_TEST",
-  FINAL_TEST = "FINAL_TEST",
-  MOCK_TEST = "MOCK_TEST",
-  ENTRANCE_TEST = "ENTRANCE_TEST",
-  // STORY = 'STORY',
-  TOPIC_TEST = "TOPIC_TEST",
-  CHAPTER_TEST = "CHAPTER_TEST",
-  PART_TEST = "PART_TEST",
-  EVENT_TEST = "EVENT_TEST",
-  ACTIVITY = "ACTIVITY",
-}
-
-export enum COURSE_TYPE {
-  FOUNDATION_COURSE = "FOUNDATION_COURSE",
-  NORMAL_COURSE = "NORMAL_COURSE",
-  PRACTICE_COURSE = "PRACTICE_COURSE",
-}
-
-export enum DISPLAY_TYPE {
-  VERTICAL = "VERTICAL",
-  HORIZONTAL = "HORIZONTAL",
-}
-export enum RESPONSE_OPTION {
-  WORD = "WORD",
-  SHEET = "SHEET",
-}
 export const MAX_UPLOAD_SIZE = 20 * 1024 * 1024;
 export const MAX_UPLOAD_VIDEO_SIZE = 20 * 1024 * 1024 * 1024;
 export const DEFAULT_PAGE_SIZE = 10;
@@ -403,27 +367,6 @@ export const EVENT_REPEAT_LABEL = {
   [EVENT_REPEAT_TYPES.ANNUALLY]: "Annually",
 };
 
-export enum FREQUENCY_UNITS {
-  DAY = "days",
-  WEEK = "weeks",
-  MONTH = "months",
-  YEAR = "years",
-}
-
-enum FREQUENCY_UNITS_LABEL {
-  days = "Day",
-  weeks = "Week",
-  months = "Month",
-  years = "Year",
-}
-
-enum FREQUENCY_UNITS_LABEL_PLURAL {
-  days = "Days",
-  weeks = "Weeks",
-  months = "Months",
-  years = "Years",
-}
-
 export const FREQUENCY_UNITS_OBJECT = {
   [FREQUENCY_UNITS.DAY]: {
     label: FREQUENCY_UNITS.DAY,
@@ -492,46 +435,10 @@ export const CONFIRM_DELETE = "Are you sure you want to delete?";
 export const CALENDAR_SIDEBAR_SAVE_BUTTON = "Save";
 export const CALENDAR_SIDEBAR_CANCEL_BUTTON = "Cancel";
 
-export enum PROGRAM {
-  ACCA = "ACCA",
-  CFA = "CFA",
-  CMA = "CMA",
-}
-
-export enum EXHIBIT_TEXT_REPLACE {
-  EXHIBIT = "Exhibit",
-  EXHIBIT_REPLACE = "Time Value Table",
-}
 
 export const ERROR_MESSAGE_TRIAL =
   "Sorry, you do not have access to this content";
 
-export enum TEST_ATTEMPT_TYPE {
-  MID_TERM_TEST = "MID_TERM_TEST",
-  FINAL_TEST = "FINAL_TEST",
-  MOCK_TEST = "MOCK_TEST",
-  TOPIC_TEST = "TOPIC_TEST",
-  CHAPTER_TEST = "CHAPTER_TEST",
-  ENTRANCE_TEST = "ENTRANCE_TEST",
-}
-export enum CALENDAR_COLOR_TYPES {
-  BLUE_COLOR = "TEACHING", // màu xanh dương
-  RED_COLOR = "BUSY", // màu đỏ
-  YELLOW_COLOR = "HOLIDAY", // màu vàng
-  GREEN_COLOR = "OTHER", // màu xanh lá
-  PURPLE_COLOR = "LIVE_ONLINE", // màu xanh lá
-}
-
-export enum CALENDAR_FILTER_TYPE {
-  HOLIDAY = "HOLIDAY",
-  OVERDUE = "OVERDUE",
-  ONLINE = "ONLINE",
-  LIVE_ONLINE = "LIVE_ONLINE",
-  OFFLINE = "OFFLINE",
-  CASE_STUDY = "CASE_STUDY",
-  KEY_BEFORE_CONTENT = "KEY_BEFORE_CONTENT",
-  TEST = "TEST",
-}
 
 export const CALENDAR_FILTER_TYPE_LABEL = {
   [CALENDAR_FILTER_TYPE.HOLIDAY]: "Holiday",
@@ -561,25 +468,7 @@ export const OFFICE_VIEWER_URL =
   "https://view.officeapps.live.com/op/embed.aspx";
 
 export * from "./common";
-export enum QUIZ_ATTEMPT_STATUS {
-  SUBMITTED = "SUBMITTED",
-  UN_SUBMITTED = "UN_SUBMITTED",
-  IN_PROGRESS = "IN_PROGRESS",
-}
 
-export enum QUIZ_ATTEMPT_GRADING_STATUS {
-  DRAFT = "DRAFT",
-  FINISHED = "FINISHED",
-  UN_FINISHED = "UN_FINISHED",
-  AWAITING_GRADING = "AWAITING_GRADING",
-  FINISHED_GRADING = "FINISHED_GRADING",
-}
-
-export enum DATE_FORMAT {
-  DATE_TIME = "HH:mm | DD/MM/YYYY",
-  DATE_TIME_DASH = "HH:mm - DD/MM/YYYY",
-  DATE = "DD/MM/YYYY",
-}
 
 export const COOKIE_INFO = {
   SESSION_ID: "sessionId",
@@ -618,21 +507,7 @@ export const LAYOUT = {
   SINGLE_PAGE_LAYOUT: "SINGLE_PAGE_LAYOUT",
 };
 
-export enum TEST_TYPE_ENUM {
-  QUIZ = "QUIZ",
-  MID_TERM_TEST = "MID_TERM_TEST",
-  FINAL_TEST = "FINAL_TEST",
-  MOCK_TEST = "MOCK_TEST",
-  // ENTRANCE_TEST = 'ENTRANCE_TEST',
-  // STORY = 'STORY',
-  TOPIC_TEST = "TOPIC_TEST",
-  CHAPTER_TEST = "CHAPTER_TEST",
-  PART_TEST = "PART_TEST",
-  // EVENT_TEST = 'EVENT_TEST',
-  PART = "PART",
-  CHAPTER = "CHAPTER",
-  ACTIVITY = "ACTIVITY",
-}
+
 export const QUIZ_GRADING_METHOD = [
   {
     label: "Yes",
@@ -659,13 +534,9 @@ export const video_url = process.env.NEXT_PUBLIC_VIDEO_URL;
 export const CERTIFICATE = "certificates";
 
 export * from './repeat/index'
-export * from "./Course";
 export * from "./Progress";
-export * from "./Test";
-export * from "./Teacher";
 export * from "./User";
 export * from "./ValidateRegex";
-
 export * from "./activity";
 export * from "./attempt";
 export * from "./common";
@@ -675,6 +546,5 @@ export * from "./lang";
 export * from "./localStorageKeys";
 export * from "./menu-items";
 export * from "./my-request";
-// export * from './request'
-export * from "./socketEvents";
+export * from './request'
 export * from "./upload";

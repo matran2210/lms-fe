@@ -8,9 +8,9 @@ import toast from 'react-hot-toast'
 import {
   CONFIRM_CANCEL,
   CONFIRM_DELETE,
-  REQUEST_STATUS,
-  REQUEST_TYPE,
-} from 'src/constants'
+  E_REQUEST_STATUS,
+  E_REQUEST_TYPE,
+} from '@lms/core'
 import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { IRequest } from 'src/type'
@@ -55,20 +55,20 @@ const RequestActionCell = ({ item, reloadPage }: Iprops) => {
     try {
       let res
       switch (item.type) {
-        case REQUEST_TYPE.TEACHER_SCHEDULE_BUSY:
+        case E_REQUEST_TYPE.TEACHER_SCHEDULE_BUSY:
           res = await MyRequestAPI.editBusySchedule(item.id, {
-            status: REQUEST_STATUS.CANCEL,
+            status: E_REQUEST_STATUS.CANCEL,
           })
 
           break
-        case REQUEST_TYPE.TEACHER_WEEKLY_NORMS:
+        case E_REQUEST_TYPE.TEACHER_WEEKLY_NORMS:
           res = await MyRequestAPI.editWeeklyNorm(item.id, {
-            status: REQUEST_STATUS.CANCEL,
+            status: E_REQUEST_STATUS.CANCEL,
           })
           break
-        case REQUEST_TYPE.TEACHER_SCHEDULE_TIME_OFF:
+        case E_REQUEST_TYPE.TEACHER_SCHEDULE_TIME_OFF:
           res = await MyRequestAPI.editTimeoffRequest(item.id, {
-            status: REQUEST_STATUS.CANCEL,
+            status: E_REQUEST_STATUS.CANCEL,
             scheduleAdjustments: item.teacher_schedules.map((item) => ({
               id: item.id,
               reason: item.request_reason || '',
@@ -94,15 +94,15 @@ const RequestActionCell = ({ item, reloadPage }: Iprops) => {
       <Link href={`${router.pathname}?id=${item.id}`}>
         <div onClick={() => setIsOpenViewModal(true)}>View</div>
       </Link>
-      {item.status === REQUEST_STATUS.PENDING && (
+      {item.status === E_REQUEST_STATUS.PENDING && (
         <Link href={`${router.pathname}?id=${item.id}`}>
           <div onClick={() => setOpenAddModal(true)}>Edit</div>
         </Link>
       )}
-      {item.status === REQUEST_STATUS.APPROVED && (
+      {item.status === E_REQUEST_STATUS.APPROVED && (
         <div onClick={handleCancel}>Cancel</div>
       )}
-      {item.status === REQUEST_STATUS.PENDING && (
+      {item.status === E_REQUEST_STATUS.PENDING && (
         <div onClick={handleDelete}>Delete</div>
       )}
     </SAPPDropdown>

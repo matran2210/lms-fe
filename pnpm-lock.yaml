@@ -78,6 +78,9 @@ importers:
       '@lms/assets':
         specifier: workspace:*
         version: link:../../libs/assets
+      '@lms/core':
+        specifier: workspace:*
+        version: link:../../libs/core
       '@lms/ui':
         specifier: workspace:*
         version: link:../../libs/ui
@@ -376,6 +379,9 @@ importers:
       '@lms/assets':
         specifier: workspace:*
         version: link:../../libs/assets
+      '@lms/core':
+        specifier: workspace:*
+        version: link:../../libs/core
       '@lms/ui':
         specifier: workspace:*
         version: link:../../libs/ui
@@ -693,9 +699,6 @@ importers:
       '@lms/assets':
         specifier: workspace:*
         version: link:../assets
-      '@lms/ui':
-        specifier: workspace:*
-        version: 'link:'
       '@lms/utils':
         specifier: workspace:*
         version: link:../utils

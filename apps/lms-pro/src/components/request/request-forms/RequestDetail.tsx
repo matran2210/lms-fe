@@ -11,13 +11,14 @@ import toast from 'react-hot-toast'
 import {
   DATE_FORMAT_DMY,
   DATE_TIME_FORMAT_DMY,
+  E_REQUEST_STATUS,
   EVENT_REPEAT_LABEL,
   EVENT_REPEAT_TYPES,
   REQUEST_STATUS,
   requestStatusToBadge,
   requestStatusToTitle,
-} from 'src/constants'
-import { REQUEST_TYPE } from 'src/constants/my-request'
+} from '@lms/core'
+import { REQUEST_TYPE } from '@lms/core'
 import { IBusyRequestDetailResponse, IWeeklyNorms } from 'src/type/my-request'
 import { RequestStatus } from 'src/type/my-request/enum'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
@@ -39,7 +40,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
   const dispatch = useAppDispatch()
   const [requestDetail, setRequestDetail] =
     useState<IBusyRequestDetailResponse>()
-  const displayStatus = (status: REQUEST_STATUS) => {
+  const displayStatus = (status: E_REQUEST_STATUS) => {
     return (
       <SAPPBadge
         label={requestStatusToBadge[status]?.label}
@@ -168,8 +169,8 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
   const hasActionButton = useMemo(
     () =>
       [
-        requestStatusToTitle[REQUEST_STATUS.APPROVED].toLowerCase(),
-        requestStatusToTitle[REQUEST_STATUS.PENDING].toLowerCase(),
+        requestStatusToTitle[E_REQUEST_STATUS.APPROVED].toLowerCase(),
+        requestStatusToTitle[E_REQUEST_STATUS.PENDING].toLowerCase(),
       ].includes(requestDetail?.status.toLowerCase() ?? ''),
     [requestDetail?.status],
   )
@@ -255,7 +256,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               <span className="font-medium text-[#c3c3c3]">Status:</span>
 
               {displayStatus(
-                REQUEST_STATUS[`${requestDetail?.status as REQUEST_STATUS}`],
+                E_REQUEST_STATUS[`${requestDetail?.status as E_REQUEST_STATUS}`],
               )}
             </div>
           </div>

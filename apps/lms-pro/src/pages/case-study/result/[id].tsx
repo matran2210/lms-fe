@@ -26,7 +26,7 @@ import {
   PROGRAM,
   QUESTION_TYPES,
   RESPONSE_OPTION,
-} from 'src/constants'
+} from '@lms/core'
 import { useAppDispatch } from 'src/redux/hook'
 import { loadMoreQuestion } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
 import { IExhibit } from 'src/type/exhibit'

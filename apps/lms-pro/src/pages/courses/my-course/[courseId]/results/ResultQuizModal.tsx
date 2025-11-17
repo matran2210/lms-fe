@@ -1,5 +1,5 @@
 import SappTable from '@components/base/SappTable'
-import { TEST_TYPE } from '@utils/constants'
+import { TEST_TYPE } from '@lms/core'
 import { getTimeFromInput } from '@utils/index'
 import clsx from 'clsx'
 import dayjs from 'dayjs'

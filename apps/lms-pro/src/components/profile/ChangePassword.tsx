@@ -1,7 +1,7 @@
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
+import { VALIDATE_PASSWORD } from '@lms/core'
 import {
   VALIDATE_MIN_LENGTH_PASSWORD,
   VALIDATE_PASSWORD_REGEX_MSG,

@@ -1,6 +1,6 @@
-import { REPEAT_TYPE } from '@utils/constants/repeat'
+import { E_REQUEST_STATUS, REPEAT_TYPE } from '@lms/core'
 import { Dayjs } from 'dayjs'
-import { REQUEST_STATUS } from 'src/constants'
+import { REQUEST_STATUS } from '@lms/core'
 
 export type RecurringScheduleType = keyof Omit<
   typeof REPEAT_TYPE,
@@ -97,7 +97,7 @@ export interface IBusyRequestDetailResponse {
   updated_at: string
   deleted_at: string | null
   type: string
-  status: REQUEST_STATUS
+  status: E_REQUEST_STATUS
   user_request: {
     id: string
     username: string

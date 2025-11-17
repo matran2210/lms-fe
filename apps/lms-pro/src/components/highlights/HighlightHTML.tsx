@@ -15,7 +15,7 @@ import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 import { CoursesAPI } from '@pages/api/courses'
 import { useCourseNoteContext } from '@contexts/CourseNoteContext'
-import { video_url } from '@utils/constants'
+import { video_url } from '@lms/core'
 import SappModalImage from '@components/base/modal/SappModalImage'
 import SAPPVideo from '@components/base/video/SAPPVideo'
 

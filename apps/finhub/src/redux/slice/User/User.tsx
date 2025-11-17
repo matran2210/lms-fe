@@ -1,5 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { USER_STATUS, USER_TYPE } from '@utils/constants/User'
+import { USER_STATUS, USER_TYPE } from '@lms/core'
 import toast from 'react-hot-toast'
 import UserApi from 'src/redux/services/User/user'
 import { RootState } from 'src/redux/store'

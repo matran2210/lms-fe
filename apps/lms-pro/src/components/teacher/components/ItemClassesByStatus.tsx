@@ -10,10 +10,10 @@ import {
   CLASS_USER_TYPES,
   COURSE_STATUS,
   PageLink,
-} from 'src/constants'
+} from '@lms/core'
 import { BookInClassIcon, ClockInClassIcon } from 'src/assets/icons/index'
 import { IMyClass } from 'src/type/classes'
-import { CLASS_TEACHER_STATUS, FLEXIBLE } from '@utils/constants'
+import { CLASS_TEACHER_STATUS, FLEXIBLE } from '@lms/core'
 import Tooltip from 'src/common/Tooltip'
 import { isEmpty } from 'lodash'
 

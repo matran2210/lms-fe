@@ -12,7 +12,7 @@ import { useRouter } from 'next/router'
 import React, { useRef } from 'react'
 import SappIcon from 'src/common/SappIcon'
 import Tooltip from 'src/common/Tooltip'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION } from '@lms/core'
 import { IActivity } from 'src/type/course/my-course/Activity'
 interface IProps {
   activity: IActivity

@@ -36,7 +36,7 @@ import {
   PageLink,
   PROGRAM,
   QUESTION_TYPES,
-} from 'src/constants'
+} from '@lms/core'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   clearFileEssay,

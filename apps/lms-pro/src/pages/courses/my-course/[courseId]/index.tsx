@@ -13,7 +13,7 @@ import {
   defaultStatusDetail,
   DELAY_TIME_DISPLAY_POPUP,
   PageLink,
-} from 'src/constants'
+} from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import FilterCourse from '@components/mycourses/FilterCourse'

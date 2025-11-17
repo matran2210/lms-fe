@@ -1,7 +1,7 @@
 import { Workbook } from '@fortune-sheet/react'
 import { isEmpty, isNull, isUndefined } from 'lodash'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { generateSheetId } from 'src/constants/attempt'
+import { generateSheetId } from '@lms/core'
 
 interface WorkbookFieldProps {
   index?: number
