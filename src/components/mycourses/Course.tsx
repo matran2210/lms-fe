@@ -475,13 +475,13 @@ const Course = ({
           key={index}
           ref={lastElementRef}
           disabledTitle={!enableCourse}
-          classNameTitle={`mb-4 max-h-12 md:max-h-[56px] md:h-[56px]`}
+          classNameTitle={`mb-4 line-clamp-2 sm:h-12 md:h-14`}
           hideBadge={true}
           badgeCode={{
             badge: category,
             className: 'bg-badge-200 text-badge-500 font-medium',
           }}
-          classNameCard="lg:min-h-[434px] min-h-[312px]"
+          classNameCard="lg:h-[434px] md:h-[390px] h-[312px]"
           onClick={() => {
             if (isActiveStudent) {
               courseAction()
@@ -546,7 +546,7 @@ const Course = ({
                   </div>
                 )}
               </div>
-              <div className="des my-4 line-clamp-3 h-[66px] text-ellipsis leading-snug md:mb-8 md:mt-6 md:line-clamp-5 md:h-[124px]">
+              <div className="des my-4 line-clamp-3 text-ellipsis leading-snug md:mb-8 md:mt-6 md:line-clamp-5">
                 {(course?.description as string)?.length > 250 ? (
                   <Tooltip
                     title={
@@ -577,8 +577,8 @@ const Course = ({
             </div>
             <div className="flex flex-col">
               {enableCourse && (
-                <div className="progress mb-6 h-8">
-                  <div className="info mb-2 flex items-center justify-between">
+                <div className="progress mb-6">
+                  <div className="info mb-1.5 flex items-center justify-between">
                     <div className="text flex items-center">
                       <Icon
                         type={enableCourse ? iconType : 'expired'}
@@ -615,12 +615,7 @@ const Course = ({
                 </div>
               )}
 
-              <div
-                className={clsx(
-                  'action flex items-center justify-end',
-                  !enableCourse && 'absolute bottom-8 right-8',
-                )}
-              >
+              <div className={clsx('action flex items-center justify-end')}>
                 {determineButtonToShow !== 'Disabled' && (
                   <ButtonSecondary
                     full
