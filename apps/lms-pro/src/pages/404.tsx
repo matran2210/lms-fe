@@ -1,4 +1,4 @@
-import SappButton from '@components/base/button/SappButton'
+import { SappButton } from '@lms/ui'
 import { LAYOUT } from '@lms/core'
 import Link from 'next/link'
 import { PageLink } from '@lms/core'

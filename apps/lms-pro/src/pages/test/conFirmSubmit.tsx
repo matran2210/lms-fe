@@ -1,9 +1,9 @@
 import { ConfirmIcon } from '@assets/icons'
 import BackIcon from '@assets/icons/BackIcon'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import ButtonText from '@components/base/button/ButtonText'
-import SappButtonIcon from '@components/base/button/SappButtonIcon'
-import SappModalV2 from '@components/base/modal/SappModalV2'
+import { ButtonPrimary } from '@lms/ui'
+import { ButtonText } from '@lms/ui'
+import { SappButtonIcon } from '@lms/ui'
+import { SappModalV2 } from '@lms/ui'
 import { trackGAEvent } from '@utils/google-analytics'
 
 interface IProps {

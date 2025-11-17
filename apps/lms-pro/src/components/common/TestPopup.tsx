@@ -1,5 +1,5 @@
 import RemainingTimeIcon from '@assets/icons/RemainingTimeIcon'
-import SappModalV3 from '@components/base/modal/SappModalV3'
+import { SappModalV3 } from '@lms/ui'
 import { TimeOutIcon } from '@components/icons'
 import { formatTime } from '@utils/common'
 import clsx from 'clsx'

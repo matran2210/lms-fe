@@ -17,7 +17,7 @@ import {
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import FilterCourse from '@components/mycourses/FilterCourse'
-import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import { SappBreadCrumbs } from '@lms/ui'
 import PinnedCompletedCourse from '@components/layout/PinnedNotifications/PinnedCompletedCourse'
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'

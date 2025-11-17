@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { EChartsOption } from 'echarts'
-import EChart from '@components/base/chart/Chart'
+import { EChart } from '@lms/ui'
 
 interface ProgressPieChartProps {
   completed: number

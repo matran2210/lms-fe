@@ -1,7 +1,7 @@
 import { PencilFillV2Icon, PencilV2Icon } from '@assets/icons'
 import { CheckCircleOutlineYellow } from '@assets/icons/test'
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import ProfileSkeleton from '@components/base/skeleton/ProfileSkeleton'
+import { ProfileSkeleton } from '@lms/ui'
 import { CloseIconV2 } from '@components/icons'
 import { Divider, Tag } from 'antd'
 import clsx from 'clsx'

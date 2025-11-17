@@ -1,20 +1,20 @@
-import SappModal from '@components/base/modal/SappModal'
-import dynamic from 'next/dynamic'
-import React, { memo } from 'react'
+import { SappModal } from "@lms/ui";
+import dynamic from "next/dynamic";
+import React, { memo } from "react";
 
 interface IProps {
-  open: boolean
-  setOpen: any
-  url: string
+  open: boolean;
+  setOpen: any;
+  url: string;
 }
 const PopupViewPdf = ({ open, setOpen, url }: IProps) => {
-  const PDFViewer = dynamic(() => import('../pdf/pdf-viewer'), {
+  const PDFViewer = dynamic(() => import("../pdf/pdf-viewer"), {
     ssr: false,
-  })
+  });
 
   const onCancel = () => {
-    setOpen({ status: false, url: undefined })
-  }
+    setOpen({ status: false, url: undefined });
+  };
   return (
     <SappModal
       open={open}
@@ -39,7 +39,7 @@ const PopupViewPdf = ({ open, setOpen, url }: IProps) => {
         <PDFViewer file={url} />
       </div>
     </SappModal>
-  )
-}
+  );
+};
 
-export default memo(PopupViewPdf)
+export default memo(PopupViewPdf);

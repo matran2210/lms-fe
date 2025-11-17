@@ -1,5 +1,5 @@
 import { AlertIcon } from '@assets/icons'
-import SappModalV3 from '@components/base/modal/SappModalV3'
+import { SappModalV3 } from '@lms/ui'
 import SappTeacherTextField from '@components/teacher/components/sapp-textfield/SappTeacherTextField'
 import React, { Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'

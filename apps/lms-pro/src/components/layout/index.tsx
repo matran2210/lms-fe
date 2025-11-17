@@ -1,4 +1,4 @@
-import ModalMobile from '@components/base/modal/ModalMobile'
+import { ModalMobile } from '@lms/ui'
 import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 import { useCourseContext } from '@contexts/index'
 import clsx from 'clsx'

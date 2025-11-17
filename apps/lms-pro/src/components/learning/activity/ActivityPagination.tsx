@@ -4,7 +4,7 @@ import {
   CollapseArrowIcon,
   LockClosedIcon,
 } from '@assets/icons'
-import ButtonText from '@components/base/button/ButtonText'
+import { ButtonText } from '@lms/ui'
 import { useCourseContext } from '@contexts/index'
 import { trackGAEvent } from '@utils/google-analytics'
 import { truncateString } from '@utils/index'

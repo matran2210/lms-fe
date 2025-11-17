@@ -1,4 +1,4 @@
-import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
+import { SappDrawerV3 } from '@lms/ui'
 import { ClassAPI } from '@pages/api/class'
 import { ClassKey } from '@pages/api/queryKey'
 import { useRouter } from 'next/router'

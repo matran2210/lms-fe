@@ -1,5 +1,5 @@
-import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
+import { SappHookFormSelect } from '@lms/ui'
+import { HookFormTextField } from '@lms/ui'
 import { listStatusMyClass } from 'src/pages/teachers/my-class/index'
 import { TeacherAPI } from '@pages/api/teacher'
 import { useState } from 'react'

@@ -5,8 +5,8 @@ const SlickSlider: ComponentType<Settings> =
   (require('react-slick') as { default?: ComponentType<Settings> }).default ??
   (require('react-slick') as ComponentType<Settings>)
 import Image from 'next/image'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import ButtonText from '@components/base/button/ButtonText'
+import { ButtonPrimary } from '@lms/ui'
+import { ButtonText } from '@lms/ui'
 import { Dispatch, SetStateAction } from 'react'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { linkCdnMktInApp } from '@pages/lms-pro-new-version'

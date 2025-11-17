@@ -7,7 +7,7 @@ import { ANIMATION, GRADE_STATUS, PageLink } from '@lms/core'
 import { IAnswer } from '@lms/core'
 import Recommendation from './Recommendation'
 import { COMMENTS } from '@lms/core'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import { ButtonPrimary } from '@lms/ui'
 
 interface MultipleQuestionProps {
   questions: any

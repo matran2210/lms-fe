@@ -1,4 +1,4 @@
-import SappButton from '@components/base/button/SappButton'
+import { SappButton } from '@lms/ui'
 import { LAYOUT } from '@lms/core'
 import SAPP_OOps from '@assets/images/Oops.svg'
 import Image from 'next/image'

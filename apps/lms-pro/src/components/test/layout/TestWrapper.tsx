@@ -11,7 +11,7 @@ import Countdown from '@pages/test/countdown'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange } from 'src/redux/slice/Login/Login'
 import dayjs from 'dayjs'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import { ButtonSecondary } from '@lms/ui'
 
 const { Header, Content, Footer } = Layout
 

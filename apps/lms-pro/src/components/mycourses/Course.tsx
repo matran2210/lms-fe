@@ -1,4 +1,4 @@
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import { ButtonSecondary } from '@lms/ui'
 import Icon, { CourseTimeIcon, GraduationCapIcon } from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
 import { useCourseContext } from '@contexts/index'

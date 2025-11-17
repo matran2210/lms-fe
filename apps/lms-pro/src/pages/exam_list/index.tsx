@@ -8,11 +8,11 @@ import { useCallback, useMemo, useRef, useState } from 'react'
 import { IExamInformation } from '@components/profile/ExamInformation/type'
 import { useInfiniteQuery, useQuery } from 'react-query'
 import { UserKey } from '@pages/api/queryKey'
-import PaginationSappV2 from '@components/base/pagination/PaginationSappV2'
+import { PaginationSappV2 } from '@lms/ui'
 import { isEmpty } from 'lodash'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { getDuration } from '@utils/index'
-import ActionCellV2 from '@components/base/action/ActionCellV2'
+import { ActionCellV2 } from '@lms/ui'
 import { PencilV2Icon } from '@assets/icons'
 import ExaminationInfo, {
   InfoItemProps,

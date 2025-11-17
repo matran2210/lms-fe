@@ -1,5 +1,5 @@
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import ButtonText from '@components/base/button/ButtonText'
+import { ButtonPrimary } from '@lms/ui'
+import { ButtonText } from '@lms/ui'
 import { RefObject } from 'react'
 import SappModal from 'src/components/base/modal/SappModal'
 import { HandShake } from 'src/components/icons'

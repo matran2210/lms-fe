@@ -1,5 +1,5 @@
 import React from 'react'
-import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
+import { SappDrawerV3 } from '@lms/ui'
 import NoData from 'src/common/NoData'
 import { IActivity } from '@lms/core'
 import clsx from 'clsx'

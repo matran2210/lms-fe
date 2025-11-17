@@ -14,10 +14,10 @@ import {
   UnHighLightIcon,
   WordIcon,
 } from '@assets/icons'
-import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
-import useClickOutside from '@components/base/clickoutside/HookClick'
-import EditorReader from '@components/base/editor/EditorReader'
-import TabSlide from '@components/base/tabSlide/TabSlide'
+import { HookFormCheckBoxGroup } from '@lms/ui'
+import { useClickOutside } from '@lms/ui'
+import { EditorReader } from '@lms/ui'
+import { TabSlide } from '@lms/ui'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
@@ -84,11 +84,10 @@ import useGetQuestionTabs from 'src/pages/test/custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from 'src/pages/test/custom-hook/useGetQuizDetail'
 import { TestAPI } from '@pages/api/test'
 import { DEFAULT_EDITOR_VALUE, defaultSheetData } from '@lms/core'
-import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
+import { ButtonPrimaryV2 } from '@lms/ui'
 import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
-import ButtonTextV2 from '@components/base/button/ButtonTextV2'
-
+import { ButtonTextV2 } from '@lms/ui'
 declare global {
   interface Window {
     userAgreed: any

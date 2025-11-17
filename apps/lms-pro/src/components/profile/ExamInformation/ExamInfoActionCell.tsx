@@ -1,4 +1,4 @@
-import useClickOutside from '@components/base/clickoutside/HookClick'
+import { useClickOutside } from '@lms/ui'
 import Icon from '@components/icons'
 import clsx from 'clsx'
 import React, { ReactNode, useRef, useState } from 'react'

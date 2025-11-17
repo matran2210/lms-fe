@@ -7,12 +7,11 @@ import {
   PulsingExclamation,
   ResizeIcon,
 } from '@assets/icons'
-import EditorReader from '@components/base/editor/EditorReader'
-import FileViewer from '@components/base/fileViewer/FileViewer'
-import ModalResizeable from '@components/base/modal/ModalResizeable'
-import Popover from '@components/base/poppover/Popover'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
-import MovableWindow from '@components/base/window'
+import { EditorReader } from '@lms/ui'
+import { FileViewer } from '@lms/ui'
+import { ModalResizeable } from '@lms/ui'
+import { HookFormTextArea } from '@lms/ui'
+import { MovableWindow } from '@lms/ui'
 import { Calculator } from '@lms/ui'
 import CaseStudyWrapper from '@components/casestudy/layout/CaseStudyWrapper'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
@@ -54,11 +53,13 @@ import {
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
-import { IRequirement, IExhibit} from '@lms/core'
+import { IRequirement } from 'src/type/case-study'
+import { IExhibit } from 'src/type/exhibit'
 import { CoursesAPI } from '../api/courses/index'
 import { TestAPI } from '../api/test'
 import ConFirmSubmit from '../short-course/test/conFirmSubmit'
 import LimitQuizModal from '../short-course/test/limitQuizModal'
+import { Popover } from 'antd'
 const CaseStudyDetail = ({ questions }: any) => {
   const editorRefs = useRef<any[]>([])
 

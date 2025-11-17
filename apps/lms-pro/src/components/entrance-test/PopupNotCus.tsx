@@ -1,5 +1,5 @@
 import { CloseIcon } from '@assets/icons'
-import SappModalV2 from '@components/base/modal/SappModalV2'
+import { SappModalV2 } from '@lms/ui'
 import { onLinkSocial } from '@utils/index'
 import React, { Dispatch, SetStateAction } from 'react'
 

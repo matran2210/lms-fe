@@ -1,7 +1,5 @@
 import { MenuDotsIcon } from '@assets/icons'
 import { CloseModalIcon } from '@assets/icons'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import ModalNotMobileFriendly from '@components/base/modal/ModalNotMobileFriendly'
 import { useGetDataQuery } from '@utils/index'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
@@ -12,6 +10,7 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import TestResultPage from '@components/v2/test-result/testResultPage'
 import { ResultAPI } from 'src/pages/api/short-course/test-result'
 import Layout from '@components/layout'
+import { ButtonSecondary, ModalNotMobileFriendly } from '@lms/ui'
 
 const TestResultDetail = () => {
   const router = useRouter()

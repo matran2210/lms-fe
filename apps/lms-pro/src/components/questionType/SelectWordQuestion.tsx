@@ -1,4 +1,4 @@
-import EditorReader from '@components/base/editor/EditorReader'
+import { EditorReader } from '@lms/ui'
 import clsx from 'clsx'
 import { replaceWhiteSpacePreWrapToNormal, runHighlight } from '@utils/index'
 import { isNull, isUndefined, uniqueId } from 'lodash'

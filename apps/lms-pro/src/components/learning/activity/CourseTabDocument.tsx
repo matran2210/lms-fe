@@ -1,5 +1,5 @@
 import { ArrowLeft, ArrowRight, PaginationDotIcon } from '@assets/icons'
-import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
+import { ActivitySkeleton } from '@lms/ui'
 import { HighlightableHTML } from '@components/highlights/HighlightHTML'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'

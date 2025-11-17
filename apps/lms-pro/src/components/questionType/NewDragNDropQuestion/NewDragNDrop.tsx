@@ -1,4 +1,4 @@
-import EditorReader from '@components/base/editor/EditorReader'
+import { EditorReader } from '@lms/ui'
 import SappDivider from '@components/common/Divider/Divider'
 import { DndContext, DragEndEvent, useDroppable } from '@dnd-kit/core'
 import parse, { Element } from 'html-react-parser'

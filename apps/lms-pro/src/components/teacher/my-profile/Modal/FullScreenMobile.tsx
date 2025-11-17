@@ -1,4 +1,4 @@
-import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
+import { SappDrawerV3 } from '@lms/ui'
 import Footer from '@components/layout/Footer'
 import React, { PropsWithChildren } from 'react'
 

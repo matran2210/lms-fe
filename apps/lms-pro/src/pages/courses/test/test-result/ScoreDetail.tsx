@@ -1,4 +1,4 @@
-import SappTable from '@components/base/SappTable'
+import { SappTable } from '@lms/ui'
 import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
 import { truncateString } from '@utils/index'
 

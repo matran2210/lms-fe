@@ -1,4 +1,4 @@
-import SappModalV3 from '@components/base/modal/SappModalV3'
+import { SappModalV3 } from '@lms/ui'
 import { Radio, RadioChangeEvent } from 'antd'
 import { Dispatch, ReactNode, SetStateAction, useState } from 'react'
 

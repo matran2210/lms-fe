@@ -146,6 +146,7 @@
 ## Package Structure Detail
 
 ### Apps Layer
+
 ```
 apps/
 ├── lms/                          # LMS Application (Full Features)
@@ -168,6 +169,7 @@ apps/
 ```
 
 ### Shared Packages Layer
+
 ```
 packages/shared/
 ├── types/         # TypeScript interfaces & types
@@ -181,6 +183,7 @@ packages/shared/
 ```
 
 ### State Management Layer
+
 ```
 packages/state/
 ├── redux/         # Redux store, slices, services
@@ -188,6 +191,7 @@ packages/state/
 ```
 
 ### Feature Packages Layer
+
 ```
 packages/features/
 ├── auth/          # Authentication & authorization
@@ -210,76 +214,80 @@ packages/features/
 
 ### Current → Monorepo Mapping
 
-| Current Path | Monorepo Package | Target Path | App |
-|-------------|------------------|-------------|-----|
-| `src/type/*` | `@lms/shared-types` | `packages/shared/types/src/*` |
-| `src/constants/*` | `@lms/shared-constants` | `packages/shared/constants/src/*` |
-| `src/utils/*` | `@lms/shared-utils` | `packages/shared/utils/src/*` |
-| `src/services/*` | `@lms/shared-api-client` | `packages/shared/api-client/src/*` |
-| `src/adapters/*` | `@lms/shared-api-client` | `packages/shared/api-client/src/adapters/*` |
-| `src/components/base/*` | `@lms/shared-ui` | `packages/shared/ui/src/components/base/*` |
-| `src/components/common/*` | `@lms/shared-ui` | `packages/shared/ui/src/components/common/*` |
-| `src/components/layout/*` | `@lms/shared-ui` | `packages/shared/ui/src/components/layout/*` |
-| `src/hooks/*` | `@lms/shared-hooks` | `packages/shared/hooks/src/*` |
-| `src/assets/*` | `@lms/shared-assets` | `packages/shared/assets/src/*` |
-| `src/styles/*` | `@lms/shared-styles` | `packages/shared/styles/src/*` |
-| `src/redux/store.ts` | `@lms/state-redux` | `packages/state/redux/src/store.ts` |
-| `src/redux/slice/*` | `@lms/state-redux` | `packages/state/redux/src/slice/*` |
-| `src/redux/services/*` | `@lms/state-redux` | `packages/state/redux/src/services/*` |
-| `src/contexts/*` | `@lms/state-contexts` | `packages/state/contexts/src/*` |
-| `src/components/auth/*` | `@lms/feature-auth` | `packages/features/auth/src/components/*` |
-| `src/components/mycourses/*` | `@lms/feature-courses` | `packages/features/courses/src/components/mycourses/*` |
-| `src/components/courses/*` | `@lms/feature-courses` | `packages/features/courses/src/components/courses/*` |
-| `src/components/test/*` | `@lms/feature-tests` | `packages/features/tests/src/components/test/*` |
-| `src/components/quiz/*` | `@lms/feature-tests` | `packages/features/tests/src/components/quiz/*` |
-| `src/components/calendar/*` | `@lms/feature-calendar` | `packages/features/calendar/src/components/calendar/*` |
-| `src/components/notification/*` | `@lms/feature-notifications` | `packages/features/notifications/src/components/*` |
-| `src/components/profile/*` | `@lms/feature-profile` | `packages/features/profile/src/components/*` |
-| `src/components/teacher/*` | `@lms/feature-teacher` | `packages/features/teacher/src/components/*` |
-| `src/components/request/*` | `@lms/feature-requests` | `packages/features/requests/src/components/*` |
-| `src/components/calculator/*` | `@lms/feature-calculator` | `packages/features/calculator/src/components/*` |
-| `src/components/entrance-test/*` | `@lms/feature-tests` | `packages/features/tests/src/components/entrance-test/*` |
-| `src/components/event-test/*` | `@lms/feature-event-test` | `packages/features/event-test/src/components/*` |
-| `src/components/case-study/*` | `@lms/feature-case-study` | `packages/features/case-study/src/components/*` |
-| `src/pages/courses/*` | `apps/lms` | `apps/lms/src/pages/courses/*` | LMS |
-| `src/pages/test/*` | `apps/lms` | `apps/lms/src/pages/test/*` | LMS |
-| `src/pages/entrance-test/*` | `apps/lms` | `apps/lms/src/pages/entrance-test/*` | LMS |
-| `src/pages/event-test/*` | `apps/lms` | `apps/lms/src/pages/event-test/*` | LMS |
-| `src/pages/calendar/*` | `apps/lms` | `apps/lms/src/pages/calendar/*` | LMS |
-| `src/pages/teachers/*` | `apps/lms` | `apps/lms/src/pages/teachers/*` | LMS |
-| Courses pages (simplified) | `apps/short-course` | `apps/short-course/src/pages/courses/*` | Short Course |
+| Current Path                     | Monorepo Package             | Target Path                                              | App          |
+| -------------------------------- | ---------------------------- | -------------------------------------------------------- | ------------ |
+| `src/type/*`                     | `@lms/shared-types`          | `packages/shared/types/src/*`                            |
+| `src/constants/*`                | `@lms/shared-constants`      | `packages/shared/constants/src/*`                        |
+| `src/utils/*`                    | `@lms/shared-utils`          | `packages/shared/utils/src/*`                            |
+| `src/services/*`                 | `@lms/shared-api-client`     | `packages/shared/api-client/src/*`                       |
+| `src/adapters/*`                 | `@lms/shared-api-client`     | `packages/shared/api-client/src/adapters/*`              |
+| `src/components/base/*`          | `@lms/shared-ui`             | `packages/shared/ui/src/components/base/*`               |
+| `src/components/common/*`        | `@lms/shared-ui`             | `packages/shared/ui/src/components/common/*`             |
+| `src/components/layout/*`        | `@lms/shared-ui`             | `packages/shared/ui/src/components/layout/*`             |
+| `src/hooks/*`                    | `@lms/shared-hooks`          | `packages/shared/hooks/src/*`                            |
+| `src/assets/*`                   | `@lms/shared-assets`         | `packages/shared/assets/src/*`                           |
+| `src/styles/*`                   | `@lms/shared-styles`         | `packages/shared/styles/src/*`                           |
+| `src/redux/store.ts`             | `@lms/state-redux`           | `packages/state/redux/src/store.ts`                      |
+| `src/redux/slice/*`              | `@lms/state-redux`           | `packages/state/redux/src/slice/*`                       |
+| `src/redux/services/*`           | `@lms/state-redux`           | `packages/state/redux/src/services/*`                    |
+| `src/contexts/*`                 | `@lms/state-contexts`        | `packages/state/contexts/src/*`                          |
+| `src/components/auth/*`          | `@lms/feature-auth`          | `packages/features/auth/src/components/*`                |
+| `src/components/mycourses/*`     | `@lms/feature-courses`       | `packages/features/courses/src/components/mycourses/*`   |
+| `src/components/courses/*`       | `@lms/feature-courses`       | `packages/features/courses/src/components/courses/*`     |
+| `src/components/test/*`          | `@lms/feature-tests`         | `packages/features/tests/src/components/test/*`          |
+| `src/components/quiz/*`          | `@lms/feature-tests`         | `packages/features/tests/src/components/quiz/*`          |
+| `src/components/calendar/*`      | `@lms/feature-calendar`      | `packages/features/calendar/src/components/calendar/*`   |
+| `src/components/notification/*`  | `@lms/feature-notifications` | `packages/features/notifications/src/components/*`       |
+| `src/components/profile/*`       | `@lms/feature-profile`       | `packages/features/profile/src/components/*`             |
+| `src/components/teacher/*`       | `@lms/feature-teacher`       | `packages/features/teacher/src/components/*`             |
+| `src/components/request/*`       | `@lms/feature-requests`      | `packages/features/requests/src/components/*`            |
+| `src/components/calculator/*`    | `@lms/feature-calculator`    | `packages/features/calculator/src/components/*`          |
+| `src/components/entrance-test/*` | `@lms/feature-tests`         | `packages/features/tests/src/components/entrance-test/*` |
+| `src/components/event-test/*`    | `@lms/feature-event-test`    | `packages/features/event-test/src/components/*`          |
+| `src/components/case-study/*`    | `@lms/feature-case-study`    | `packages/features/case-study/src/components/*`          |
+| `src/pages/courses/*`            | `apps/lms`                   | `apps/lms/src/pages/courses/*`                           | LMS          |
+| `src/pages/test/*`               | `apps/lms`                   | `apps/lms/src/pages/test/*`                              | LMS          |
+| `src/pages/entrance-test/*`      | `apps/lms`                   | `apps/lms/src/pages/entrance-test/*`                     | LMS          |
+| `src/pages/event-test/*`         | `apps/lms`                   | `apps/lms/src/pages/event-test/*`                        | LMS          |
+| `src/pages/calendar/*`           | `apps/lms`                   | `apps/lms/src/pages/calendar/*`                          | LMS          |
+| `src/pages/teachers/*`           | `apps/lms`                   | `apps/lms/src/pages/teachers/*`                          | LMS          |
+| Courses pages (simplified)       | `apps/short-course`          | `apps/short-course/src/pages/courses/*`                  | Short Course |
 
 ## Import Path Changes
 
 ### Before (Current)
+
 ```typescript
-import { Button } from '@components/base/button/ButtonPrimary'
-import { formatDate } from '@utils/common'
-import { IUser } from 'src/type/user'
-import { PageLink } from 'src/constants'
+import { Button } from "@lms/ui";
+import { formatDate } from "@utils/common";
+import { IUser } from "src/type/user";
+import { PageLink } from "src/constants";
 ```
 
 ### After (Monorepo) - Both Apps
+
 ```typescript
-import { Button } from '@lms/shared-ui'
-import { formatDate } from '@lms/shared-utils'
-import { IUser } from '@lms/shared-types'
-import { PageLink } from '@lms/shared-constants'
+import { Button } from "@lms/shared-ui";
+import { formatDate } from "@lms/shared-utils";
+import { IUser } from "@lms/shared-types";
+import { PageLink } from "@lms/shared-constants";
 ```
 
 ### LMS App Only Features
+
 ```typescript
 // apps/lms only
-import { TestComponent } from '@lms/feature-tests'
-import { EntranceTestComponent } from '@lms/feature-entrance-test'
-import { EventTestComponent } from '@lms/feature-event-test'
-import { CalendarComponent } from '@lms/feature-calendar'
+import { TestComponent } from "@lms/feature-tests";
+import { EntranceTestComponent } from "@lms/feature-entrance-test";
+import { EventTestComponent } from "@lms/feature-event-test";
+import { CalendarComponent } from "@lms/feature-calendar";
 ```
 
 ### Short Course App (Simplified)
+
 ```typescript
 // apps/short-course only
-import { CourseComponent } from '@lms/feature-courses'
+import { CourseComponent } from "@lms/feature-courses";
 // No tests, calendar, entrance-test, event-test imports
 ```
 
@@ -315,12 +323,14 @@ import { CourseComponent } from '@lms/feature-courses'
 ## Migration Priority
 
 ### Priority 1: Foundation
+
 - [x] Setup monorepo infrastructure
 - [ ] Extract shared-types
 - [ ] Extract shared-constants
 - [ ] Extract shared-utils
 
 ### Priority 2: Core Shared
+
 - [ ] Extract shared-api-client
 - [ ] Extract shared-ui
 - [ ] Extract shared-hooks
@@ -328,23 +338,28 @@ import { CourseComponent } from '@lms/feature-courses'
 - [ ] Extract shared-styles
 
 ### Priority 3: State Management
+
 - [ ] Extract state-redux
 - [ ] Extract state-contexts
 
 ### Priority 4: Independent Features
+
 - [ ] Extract feature-auth
 - [ ] Extract feature-calculator
 
 ### Priority 5: Core Features
+
 - [ ] Extract feature-user
 - [ ] Extract feature-dashboard
 - [ ] Extract feature-notifications
 
 ### Priority 6: Large Features
+
 - [ ] Extract feature-courses (LARGEST)
 - [ ] Extract feature-tests
 
 ### Priority 7: Remaining Features
+
 - [ ] Extract feature-calendar
 - [ ] Extract feature-profile
 - [ ] Extract feature-teacher
@@ -354,8 +369,8 @@ import { CourseComponent } from '@lms/feature-courses'
 - [ ] Extract feature-progress
 
 ### Priority 8: Finalization
+
 - [ ] Refactor apps/web
 - [ ] Update CI/CD
 - [ ] Documentation
 - [ ] Testing
-

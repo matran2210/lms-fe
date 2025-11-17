@@ -46,7 +46,7 @@ import { getLoginHistory, userReducer } from 'src/redux/slice/User/User'
 import UserApi from 'src/redux/services/User/user'
 import { useRouter } from 'next/router'
 import { useCourseContext } from '@contexts/index'
-import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import { SappBreadCrumbs } from '@lms/ui'
 import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
 
 interface IFullScreenMobile {

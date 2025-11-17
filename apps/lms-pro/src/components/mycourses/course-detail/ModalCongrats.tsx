@@ -1,5 +1,5 @@
 import { IconCongrats } from '@assets/icons'
-import SappModalV2 from '@components/base/modal/SappModalV2'
+import { SappModalV2 } from '@lms/ui'
 import { useCourseContext } from '@contexts/index'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'

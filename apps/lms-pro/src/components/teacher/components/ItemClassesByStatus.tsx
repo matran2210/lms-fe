@@ -1,4 +1,4 @@
-import ButtonIconSapp from '@components/base/button/ButtonIconSapp'
+import { ButtonIconSapp } from '@lms/ui'
 import Icon from '@components/icons'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { truncateString } from '@utils/index'

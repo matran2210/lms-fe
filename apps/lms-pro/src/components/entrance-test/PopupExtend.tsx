@@ -1,5 +1,5 @@
 import { AlertIcon } from '@assets/icons'
-import SappModalV2 from '@components/base/modal/SappModalV2'
+import { SappModalV2 } from '@lms/ui'
 import { trackGAEvent } from '@utils/google-analytics'
 import { onLinkSocial } from '@utils/index'
 import { Dispatch, SetStateAction } from 'react'

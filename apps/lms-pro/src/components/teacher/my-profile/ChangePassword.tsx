@@ -1,5 +1,5 @@
-import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
+import { ButtonCancelSubmit } from '@lms/ui'
+import { HookFormTextField } from '@lms/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { VALIDATE_PASSWORD } from '@lms/core'
 import {
@@ -13,8 +13,8 @@ import { useForm } from 'react-hook-form'
 import { AuthAPI } from 'src/pages/api/profile'
 import { z } from 'zod'
 import PasswordProfile from './PasswordProfile'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import { ButtonSecondary } from '@lms/ui'
+import { ButtonPrimary } from '@lms/ui'
 import exceptions from '../../../services/en.exceptions.json'
 export interface IChangePassword {
   password: string

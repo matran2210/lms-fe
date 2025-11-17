@@ -7,7 +7,7 @@ import { ITabs } from '@lms/core'
 import TableQuestions from 'src/pages/courses/quiz/your-answers-detail/TableQuestions'
 import SappLoading from 'src/common/SappLoading'
 import { PageLink } from '@lms/core'
-import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import { SappBreadCrumbs } from '@lms/ui'
 
 const TestResultDetail = () => {
   const router = useRouter()

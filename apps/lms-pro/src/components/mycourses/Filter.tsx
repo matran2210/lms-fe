@@ -1,6 +1,6 @@
 // components/SearchForm.tsx
 
-import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
+import { SappHookFormSelect } from '@lms/ui'
 import { getUserPrefix } from '@utils/helpers'
 import { buildQueryString } from '@utils/index'
 import clsx from 'clsx'

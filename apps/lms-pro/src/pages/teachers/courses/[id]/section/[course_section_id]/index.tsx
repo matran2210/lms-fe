@@ -1,5 +1,5 @@
-import SappDrawer from '@components/base/SappDrawer'
-import TextSkeleton from '@components/base/skeleton/TextSkeleton'
+import { SappDrawer } from '@lms/ui'
+import { TextSkeleton } from '@lms/ui'
 import { Alert } from 'antd'
 import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { DownloadIcon } from '@assets/icons'
-import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
+import { SappDrawerV3 } from '@lms/ui'
 import { formatBytes, cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'

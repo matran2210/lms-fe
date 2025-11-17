@@ -5,9 +5,9 @@ import {
   ResizeIcon,
   ScratchPadIconV2,
 } from '@assets/icons'
-import EditorReader from '@components/base/editor/EditorReader'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
-import MovableWindow from '@components/base/window'
+import { EditorReader } from '@lms/ui'
+import { HookFormTextArea } from '@lms/ui'
+import { MovableWindow } from '@lms/ui'
 import Calculator from '@components/calculator'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import AddWordPreview from '@components/questionType/FillText'
@@ -31,7 +31,7 @@ import { useAppDispatch } from 'src/redux/hook'
 import { loadMoreQuestion } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
 import { IExhibit } from '@lms/core'
 import { CoursesAPI } from 'src/pages/api/courses'
-import ModalResizeable from '@components/base/modal/ModalResizeable'
+import { ModalResizeable } from '@lms/ui'
 import {
   IAnswerResult,
   ICaseStudyResult,
@@ -41,7 +41,7 @@ import {
   ITopic,
 } from '@lms/core'
 import clsx from 'clsx'
-import FileViewer from '@components/base/fileViewer/FileViewer'
+import { FileViewer } from '@lms/ui'
 import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import DragDropQuestion, {
   SlotValue,

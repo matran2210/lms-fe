@@ -1,5 +1,5 @@
 import { NextIcon, PreviousIcon } from '@assets/icons'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import { ButtonSecondary } from '@lms/ui'
 import Icon, { CloseIconV2 } from '@components/icons'
 import { Layout } from 'antd'
 import clsx from 'clsx'

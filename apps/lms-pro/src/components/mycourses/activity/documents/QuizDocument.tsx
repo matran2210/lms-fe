@@ -21,9 +21,9 @@ import {
   MinimumContentIcon,
   RestartQuizIcon,
 } from '@assets/icons'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import SappButton from '@components/base/button/SappButton'
-import SappModalV3 from '@components/base/modal/SappModalV3'
+import { ButtonSecondary } from '@lms/ui'
+import { SappButton } from '@lms/ui'
+import { SappModalV3 } from '@lms/ui'
 import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
 import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import { IFocusQuiz } from '@pages/courses/[id]/activity/[activityId]'

@@ -1,6 +1,6 @@
 import { AltArrowIcon } from '@assets/icons'
-import ButtonText from '@components/base/button/ButtonText'
-import EditorReader from '@components/base/editor/EditorReader'
+import { ButtonText } from '@lms/ui'
+import { EditorReader } from '@lms/ui'
 import React, { useState } from 'react'
 import { IQuizAttempComment } from '@lms/core'
 import ModalRecomment from './ModalRecomment'

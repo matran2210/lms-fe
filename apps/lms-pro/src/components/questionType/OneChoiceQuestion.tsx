@@ -1,5 +1,5 @@
-import EditorReader from '@components/base/editor/EditorReader'
-import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
+import { EditorReader } from '@lms/ui'
+import { HookFormRadioGroup } from '@lms/ui'
 import SappDivider from '@components/common/Divider/Divider'
 import { getUppercaseByNumber, runHighlight } from '@utils/index'
 import clsx from 'clsx'

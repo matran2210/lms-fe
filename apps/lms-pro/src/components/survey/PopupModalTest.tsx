@@ -1,5 +1,5 @@
 import { IconBuildingModify } from '@assets/icons'
-import SappModalV3 from '@components/base/modal/SappModalV3'
+import { SappModalV3 } from '@lms/ui'
 import { CoursesAPI } from '@pages/api/courses'
 import { onLinkSocial } from '@utils/index'
 import { useRouter } from 'next/router'

@@ -1,6 +1,6 @@
 import { StyleProvider } from '@ant-design/cssinjs'
-import SAPPInput from '@components/base/Input/SAPPInput'
-import HookFormSelect from '@components/base/select/HookFormSelect'
+import { SAPPInput } from '@lms/ui'
+import { HookFormSelect } from '@lms/ui'
 import { Input } from 'antd'
 import clsx from 'clsx'
 import { memo, useEffect, useMemo, useState } from 'react'

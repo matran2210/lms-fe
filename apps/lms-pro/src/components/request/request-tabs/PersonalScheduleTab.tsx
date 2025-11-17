@@ -1,9 +1,9 @@
 import { Plus } from '@assets/icons'
 
-import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
-import SAPPInput from '@components/base/Input/SAPPInput'
-import SAPPRangePicker from '@components/base/RangePicker/SAPPRangePicker'
-import SAPPSelect from '@components/base/select/SAPPSelect'
+import { SAPPButtonV2 } from '@lms/ui'
+import { SAPPInput } from '@lms/ui'
+import { SAPPRangePicker } from '@lms/ui'
+import { SAPPSelect } from '@lms/ui'
 import FilterGrid from '@components/layout/FilterGrid/FilterGrid'
 import { useRequestContext } from '@contexts/RequestContext'
 import { RequestAPI } from '@pages/api/request'
@@ -69,7 +69,10 @@ const PersonalScheduleTab = () => {
   ) => {
     otherParams['type'] = otherParams['type']
       ? [otherParams['type']]
-      : [E_REQUEST_TYPE.TEACHER_SCHEDULE_BUSY, E_REQUEST_TYPE.TEACHER_WEEKLY_NORMS]
+      : [
+          E_REQUEST_TYPE.TEACHER_SCHEDULE_BUSY,
+          E_REQUEST_TYPE.TEACHER_WEEKLY_NORMS,
+        ]
 
     setIsLoading(true)
     try {

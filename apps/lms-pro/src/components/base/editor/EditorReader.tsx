@@ -9,8 +9,8 @@ import SappModalImage from '../modal/SappModalImage'
 import { video_url } from '@lms/core'
 import 'src/utils/global.d.ts'
 import clsx from 'clsx'
-import SAPPVideo from '@components/base/video/SAPPVideo'
 import React from 'react'
+import { SAPPVideo } from '@lms/ui'
 
 type Props = {
   text_editor_content: string | undefined

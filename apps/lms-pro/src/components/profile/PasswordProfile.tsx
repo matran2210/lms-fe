@@ -1,7 +1,7 @@
 import useCountdown from '@components/auth/Countdown'
-import ButtonText from '@components/base/button/ButtonText'
-import SappModalV2 from '@components/base/modal/SappModalV2'
-import SAPPTextFiled from '@components/base/textfield/SAPPTextFiled'
+import { ButtonText } from '@lms/ui'
+import { SappModalV2 } from '@lms/ui'
+import { SAPPTextFiled } from '@lms/ui'
 import Icon from '@components/icons'
 import React, {
   createRef,
@@ -16,7 +16,7 @@ import { AuthAPI } from 'src/pages/api/profile'
 import { useAppSelector } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
 import { IChangePassword } from './ChangePassword'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import { ButtonPrimary } from '@lms/ui'
 import type { GetProps } from 'antd'
 import { Input } from 'antd'
 

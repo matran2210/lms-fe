@@ -1,14 +1,14 @@
-import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
+import { SAPPSelectV2 } from '@lms/ui'
 import { useForm, useWatch } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { DefaultOptionType } from 'antd/es/select'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { CheckIconV2, FilterCourseIcon } from 'src/assets/icons'
-import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
+import { SappDrawerV3 } from '@lms/ui'
 import { Button, Divider } from 'antd'
 import clsx from 'clsx'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import { ButtonPrimary } from '@lms/ui'
 
 interface IFilters {
   [name: string]: React.Key | null | undefined

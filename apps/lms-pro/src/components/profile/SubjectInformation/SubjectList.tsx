@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import SubjectItem from './SubjectItem'
 import ProfileCard from '@components/card/ProfileCard'
-import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
+import { SappDrawerV2 } from '@lms/ui'
 import ProgramDetail from '../ProgramDetail'
 import { Select } from 'antd'
 import Icon from '@components/icons'

@@ -1,6 +1,6 @@
 import { ArrowDownIcon } from '@assets/icons/entranceTest'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import ButtonText from '@components/base/button/ButtonText'
+import { ButtonSecondary } from '@lms/ui'
+import { ButtonText } from '@lms/ui'
 import CardCourse from '@components/common/CardCourse/CardCourse'
 import { formatTime } from '@components/common/timer'
 import PopUpRemindEntrance from '@components/popUpRemindEntrance'

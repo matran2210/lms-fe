@@ -11,7 +11,7 @@ import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { IButtonColors } from '@lms/core'
 
 import { CloseIcon } from '@assets/icons'
-import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
+import { ButtonCancelSubmit } from '@lms/ui'
 
 interface IProps {
   open?: boolean

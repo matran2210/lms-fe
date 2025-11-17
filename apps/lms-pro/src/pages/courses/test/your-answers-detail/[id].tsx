@@ -1,4 +1,4 @@
-import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import { SappBreadCrumbs } from '@lms/ui'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { TEST_TYPE } from '@lms/core'
 import { useGetDataQuery } from '@utils/index'

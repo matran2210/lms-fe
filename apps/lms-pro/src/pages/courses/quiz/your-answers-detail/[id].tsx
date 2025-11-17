@@ -6,7 +6,7 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from '@lms/core'
 import TableQuestions from 'src/pages/courses/quiz/your-answers-detail/TableQuestions'
 import SappLoading from 'src/common/SappLoading'
-import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import { SappBreadCrumbs } from '@lms/ui'
 
 const TestResultDetail = () => {
   const router = useRouter()

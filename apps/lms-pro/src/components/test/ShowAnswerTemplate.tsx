@@ -1,5 +1,5 @@
 import { CircleCloseIcon, EyeIcon } from '@assets/icons'
-import ModalResizeable from '@components/base/modal/ModalResizeable'
+import { ModalResizeable } from '@lms/ui'
 import { Triangle } from '@components/icons/Triangle'
 import { Tooltip } from 'antd'
 import clsx from 'clsx'
@@ -14,9 +14,9 @@ import {
   UseFormSetValue,
 } from 'react-hook-form'
 import { defaultSheetData } from '@lms/core'
-import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
-import ButtonSecondaryV2 from '@components/base/button/ButtonSecondaryV2'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import { ButtonPrimaryV2 } from '@lms/ui'
+import { ButtonSecondaryV2 } from '@lms/ui'
+import { ButtonSecondary } from '@lms/ui'
 
 interface IProps {
   currentTabContent: any

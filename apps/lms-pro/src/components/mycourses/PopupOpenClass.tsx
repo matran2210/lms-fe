@@ -1,5 +1,5 @@
 import { UnstartedIcon } from '@assets/icons'
-import SappModalV3 from '@components/base/modal/SappModalV3'
+import { SappModalV3 } from '@lms/ui'
 import { formatDate } from '@utils/helpers'
 import { Dispatch, SetStateAction } from 'react'
 import { MY_COURSES } from '@lms/core'

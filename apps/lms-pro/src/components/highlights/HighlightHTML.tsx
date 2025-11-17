@@ -7,8 +7,8 @@ import {
 import parseHTML, { Element } from 'html-react-parser'
 import { PointerIcon, ShowCommentIcon } from '@assets/icons'
 import { doHighlight, optionsImpl } from '@funktechno/texthighlighter/lib'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import { ButtonSecondary } from '@lms/ui'
+import { ButtonPrimary } from '@lms/ui'
 import AvatarCard from '@components/card/AvatarCard'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
@@ -16,8 +16,8 @@ import toast from 'react-hot-toast'
 import { CoursesAPI } from '@pages/api/courses'
 import { useCourseNoteContext } from '@contexts/CourseNoteContext'
 import { video_url } from '@lms/core'
-import SappModalImage from '@components/base/modal/SappModalImage'
-import SAPPVideo from '@components/base/video/SAPPVideo'
+import { SappModalImage } from '@lms/ui'
+import { SAPPVideo } from '@lms/ui'
 
 const { TextArea } = Input
 const DEBOUNCE_DELAY = 100

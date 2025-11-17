@@ -7,8 +7,8 @@ import {
   getResolution,
   isMobileOrTablet,
 } from '@utils/helpers'
-import useClickOutside from '@components/base/clickoutside/HookClick'
-import ArrowIcon from '@components/base/pagination/ArrowIcon'
+import { useClickOutside } from '@lms/ui'
+import { ArrowIcon } from '@lms/ui'
 import Image from 'next/image'
 import { Thumbnail } from '@lms/core'
 import { Stream } from '@cloudflare/stream-react'

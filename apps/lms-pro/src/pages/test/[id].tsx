@@ -16,9 +16,9 @@ import {
   ShowLessIcon,
   ShowMoreIcon,
 } from '@assets/icons'
-import useClickOutside from '@components/base/clickoutside/HookClick'
-import EditorReader from '@components/base/editor/EditorReader'
-import TabSlide from '@components/base/tabSlide/TabSlide'
+import { useClickOutside } from '@lms/ui'
+import { EditorReader } from '@lms/ui'
+import { TabSlide } from '@lms/ui'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import NewFilltext from '@components/questionType/NewFillText'
@@ -63,7 +63,7 @@ import styles from './test.module.scss'
 import { CheckCircleOutlineYellow, FlagIconV2 } from '@assets/icons/test'
 import BackToTop from '@components/BackToTop'
 import Popover from '@components/Popover'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import { ButtonSecondary } from '@lms/ui'
 import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
 import { HighlightableHTML } from '@components/highlights/HighlightHTML'
 import Icon from '@components/icons'
@@ -112,11 +112,10 @@ import DragDropQuestion, {
 import { DEFAULT_EDITOR_VALUE, defaultSheetData } from '@lms/core'
 import { IQuestion } from '@lms/core'
 import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import ButtonText from '@components/base/button/ButtonText'
+import { ButtonPrimary } from '@lms/ui'
+import { ButtonText } from '@lms/ui'
 import { download } from '@components/learning/activity/ActivityResource'
-import ButtonTextV2 from '@components/base/button/ButtonTextV2'
-
+import { ButtonTextV2 } from '@lms/ui'
 declare global {
   interface Window {
     userAgreed: any

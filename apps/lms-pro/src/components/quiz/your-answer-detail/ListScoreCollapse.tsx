@@ -1,7 +1,7 @@
 import type { CollapseProps } from 'antd'
 import React, { Fragment } from 'react'
 import BaseCollapse from 'src/components/quiz/your-answer-detail/BaseCollapse'
-import ButtonText from '@components/base/button/ButtonText'
+import { ButtonText } from '@lms/ui'
 import { convertSecondsToMinutesSeconds } from '@utils/helpers'
 import { htmlToRaw } from '@components/common/timer'
 import clsx from 'clsx'

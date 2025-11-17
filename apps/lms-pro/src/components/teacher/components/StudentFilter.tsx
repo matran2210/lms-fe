@@ -1,5 +1,5 @@
 import { SearchIcon } from '@assets/icons'
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
+import { HookFormTextField } from '@lms/ui'
 import { Control } from 'react-hook-form'
 interface StudentFilterProps {
   control: Control<any>

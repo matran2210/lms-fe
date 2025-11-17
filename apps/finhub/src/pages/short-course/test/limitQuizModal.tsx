@@ -1,6 +1,5 @@
 import { AlertTriagle } from '@assets/icons'
-import SappModalV2 from '@components/base/modal/SappModalV2'
-import SappModalV3 from '@components/base/modal/SappModalV3'
+import { SappModalV3 } from '@lms/ui'
 
 interface IProps {
   open: boolean

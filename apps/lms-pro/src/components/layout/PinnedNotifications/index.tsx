@@ -1,5 +1,5 @@
 import { CloseIconNote, IconLoudSpeaker } from '@assets/icons'
-import EditorReader from '@components/base/editor/EditorReader'
+import { EditorReader } from '@lms/ui'
 import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 import { Col, Row } from 'antd'
 import { useRouter } from 'next/router'

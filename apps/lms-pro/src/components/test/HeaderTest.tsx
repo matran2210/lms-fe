@@ -1,4 +1,4 @@
-import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
+import { ButtonCancelSubmit } from '@lms/ui'
 import dayjs from 'dayjs'
 import React, { Dispatch, ForwardedRef, SetStateAction } from 'react'
 import Countdown from 'src/pages/test/countdown'

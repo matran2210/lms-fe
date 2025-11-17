@@ -1,4 +1,4 @@
-import SappModal from '@components/base/modal/SappModal'
+import { SappModal } from '@lms/ui'
 import Image from 'next/future/image'
 import React from 'react'
 

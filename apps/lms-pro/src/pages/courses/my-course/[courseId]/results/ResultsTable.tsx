@@ -1,4 +1,4 @@
-import PaginationSappV2 from '@components/base/pagination/PaginationSappV2'
+import { PaginationSappV2 } from '@lms/ui'
 import { GradingMethod } from '@lms/core'
 import { useRouter } from 'next/router'
 import {
@@ -16,7 +16,7 @@ import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
 import { IResultsList, Results } from '@lms/core'
-import SappModalV3 from '@components/base/modal/SappModalV3'
+import { SappModalV3 } from '@lms/ui'
 import { ConfirmIcon } from '@assets/icons'
 import { TEST_TYPE } from '@lms/core'
 import FilterCourseSection from '@components/mycourses/FilterCourseSection'
@@ -33,7 +33,7 @@ import {
   getTypeName,
 } from '@lms/core'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
-import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
+import { SappDrawerV3 } from '@lms/ui'
 import { FormProvider, useForm } from 'react-hook-form'
 import ListFilterMobile from '@components/common/ListFilterMobile'
 import NoCoursesAvailable from 'src/common/NoCoursesAvailable'

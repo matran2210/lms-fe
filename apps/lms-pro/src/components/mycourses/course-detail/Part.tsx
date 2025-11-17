@@ -1,4 +1,4 @@
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import { ButtonSecondary } from '@lms/ui'
 import CardCourse from '@components/common/CardCourse/CardCourse'
 import Icon from '@components/icons'
 import { useCourseContext } from '@contexts/index'

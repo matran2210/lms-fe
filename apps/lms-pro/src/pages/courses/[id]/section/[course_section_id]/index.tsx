@@ -1,5 +1,5 @@
-import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
-import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
+import { SappBreadCrumbs } from '@lms/ui'
+import { SappDrawerV3 } from '@lms/ui'
 import { StarCircleIcon } from '@components/icons'
 import {
   AlertInfoIcon,

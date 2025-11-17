@@ -23,7 +23,7 @@ import { IBusyRequestDetailResponse, IWeeklyNorms } from '@lms/core'
 import { RequestStatus } from '@lms/core/enum'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { useAppDispatch } from 'src/redux/hook'
-import SAPPBadge from '@components/base/Badge/SAPPBadge'
+import { SAPPBadge } from '@lms/ui'
 import { formatRecurringSchedule } from '@utils/request'
 
 export interface IProps {
@@ -256,7 +256,9 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               <span className="font-medium text-[#c3c3c3]">Status:</span>
 
               {displayStatus(
-                E_REQUEST_STATUS[`${requestDetail?.status as E_REQUEST_STATUS}`],
+                E_REQUEST_STATUS[
+                  `${requestDetail?.status as E_REQUEST_STATUS}`
+                ],
               )}
             </div>
           </div>

@@ -1,4 +1,4 @@
-import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import { SappBreadCrumbs } from '@lms/ui'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { ANIMATION, COURSE_TYPE, PageLink } from '@lms/core'

@@ -1,5 +1,5 @@
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import ButtonText from '@components/base/button/ButtonText'
+import { ButtonPrimary } from '@lms/ui'
+import { ButtonText } from '@lms/ui'
 import Lottie from 'lottie-react'
 import Image, { StaticImageData } from 'next/image'
 import { useRef } from 'react'

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react'
-import EChart from '@components/base/chart/Chart'
+import { EChart } from '@lms/ui'
 import { DashboardAPI } from '@pages/api/dashboard'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'

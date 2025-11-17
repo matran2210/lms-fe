@@ -6,9 +6,9 @@ import {
   ScratchPadIcon,
   UnHighLightIcon,
 } from '@assets/icons'
-import EditorReader from '@components/base/editor/EditorReader'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
-import MovableWindow from '@components/base/window'
+import { EditorReader } from '@lms/ui'
+import { HookFormTextArea } from '@lms/ui'
+import { MovableWindow } from '@lms/ui'
 import Calculator from '@components/calculator'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
@@ -34,9 +34,9 @@ import {
 import { useAppDispatch } from 'src/redux/hook'
 import { loadMoreQuestion } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
 import { IExhibit } from '@lms/core'
-import SappButton from '@components/base/button/SappButton'
+import { SappButton } from '@lms/ui'
 import { CoursesAPI } from 'src/pages/api/courses'
-import ModalResizeable from '@components/base/modal/ModalResizeable'
+import { ModalResizeable } from '@lms/ui'
 import {
   IAnswerResult,
   ICaseStudyResult,
@@ -49,7 +49,7 @@ import { IFile } from 'preview-activity/dist/shared/interfaces'
 import clsx from 'clsx'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
-import FileViewer from '@components/base/fileViewer/FileViewer'
+import { FileViewer } from '@lms/ui'
 
 const CaseStudyResultTeacher = () => {
   const router = useRouter()

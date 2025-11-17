@@ -4,7 +4,7 @@ import UserApi from 'src/redux/services/User/user'
 import DeviceItem from './DeviceItem'
 import Icon from '@components/icons'
 import { IDeviceItem } from '@lms/core'
-import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
+import { SappDrawerV2 } from '@lms/ui'
 import { calculateTimeAgo } from '@utils/helpers'
 import TeacherProfileCard from '@components/card/TeacherProfileCard'
 

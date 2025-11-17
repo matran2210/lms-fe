@@ -1,5 +1,5 @@
 import TeacherMenu from '@components/layout/MenuItemsList/TeacherMenu'
-import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import { SappBreadCrumbs } from '@lms/ui'
 import { Typography } from 'antd'
 import { ITabs } from '@lms/core'
 import { memo } from 'react'

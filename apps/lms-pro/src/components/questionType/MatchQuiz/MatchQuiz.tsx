@@ -1,4 +1,4 @@
-import EditorReader from '@components/base/editor/EditorReader'
+import { EditorReader } from '@lms/ui'
 import {
   ReactFlowProvider,
   addEdge,

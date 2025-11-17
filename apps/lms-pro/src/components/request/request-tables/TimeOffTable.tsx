@@ -1,4 +1,4 @@
-import SAPPBadge from '@components/base/Badge/SAPPBadge'
+import { SAPPBadge } from '@lms/ui'
 import { formatDate } from '@utils/common'
 import { Table, TablePaginationConfig } from 'antd'
 import { Dispatch, SetStateAction, useMemo } from 'react'

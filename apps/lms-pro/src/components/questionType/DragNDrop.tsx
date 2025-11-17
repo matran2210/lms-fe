@@ -1,4 +1,4 @@
-import EditorReader from '@components/base/editor/EditorReader'
+import { EditorReader } from '@lms/ui'
 import SappDivider from '@components/common/Divider/Divider'
 import { runHighlight } from '@utils/index'
 import { uniqueId } from 'lodash'

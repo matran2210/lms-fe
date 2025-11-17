@@ -1,11 +1,11 @@
-import SappModalV2 from '@components/base/modal/SappModalV2'
+import { SappModalV2 } from '@lms/ui'
 import { useRouter } from 'next/router'
 import { Dispatch, FC, SetStateAction, useEffect, useMemo } from 'react'
 import { useAppSelector } from 'src/redux/hook'
 import { entranceTestReducer } from 'src/redux/slice/EntranceTest/EntranceTest'
 import EntrancePopupContent from './EntrancePopupContent'
 import dayjs from 'dayjs'
-import SappModalV3 from '@components/base/modal/SappModalV3'
+import { SappModalV3 } from '@lms/ui'
 
 const calculateEndTime = (createdAt: Date, quizTimed: number): Date => {
   return dayjs(createdAt).add(quizTimed, 'minutes').toDate()

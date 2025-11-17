@@ -1,4 +1,4 @@
-import SappTable from '@components/base/SappTable'
+import { SappTable } from '@lms/ui'
 import { TEST_TYPE } from '@lms/core'
 import { getTimeFromInput } from '@utils/index'
 import clsx from 'clsx'

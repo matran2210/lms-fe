@@ -12,7 +12,6 @@ import {
   ShowLessIcon,
   ShowMoreIcon,
 } from '@assets/icons'
-import TabSlide from '@components/base/tabSlide/TabSlide'
 import SappLoading from '@components/common/SappLoading'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import NewFilltext from '@components/questionType/NewFillText'
@@ -39,7 +38,7 @@ import {
 } from '@lms/core'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
-import { IExhibit } from '@lms/core'
+import { IExhibit } from 'src/type/exhibit'
 import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
@@ -47,9 +46,6 @@ import styles from './test.module.scss'
 import { NotesOutline, PulsingExclamation } from '@assets/icons'
 import BackToTop from '@lms/ui/components/BackToTop'
 import Popover from '@components/Popover'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import ButtonText from '@components/base/button/ButtonText'
 import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
 import { HighlightableHTML } from '@components/highlights/HighlightHTML'
 import Icon from '@components/icons'
@@ -76,13 +72,14 @@ import {
   DragDropAnswerItem,
   ScratchPad,
   ScratchPadValue,
-} from '@lms/core'
-import { IRequirement } from '@lms/core'
+} from 'src/type'
+import { IRequirement } from 'src/type/case-study'
 import { checkTypeAndRenderTitle } from 'src/utils/helpers/quiz-test/helper'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
+import { ButtonPrimary, ButtonSecondary, ButtonText, TabSlide } from '@lms/ui'
 
 declare global {
   interface Window {

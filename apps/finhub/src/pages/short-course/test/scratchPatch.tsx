@@ -1,4 +1,4 @@
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
+import { HookFormTextArea } from '@lms/ui'
 import clsx from 'clsx'
 import { Control } from 'react-hook-form'
 

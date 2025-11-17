@@ -9,7 +9,7 @@ import {
   IProgressUser,
   LearningMode,
 } from '@lms/core'
-import SAPPDropdown from '@components/base/Dropdown/SAPPDropdown'
+import { SAPPDropdown } from '@lms/ui'
 import { TableColumn } from '@lms/core'
 import { round } from 'lodash'
 import { useSelector } from 'react-redux'

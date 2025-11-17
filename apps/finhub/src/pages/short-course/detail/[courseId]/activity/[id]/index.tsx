@@ -1,5 +1,4 @@
 import { CloseIcon, CloseModalIcon } from '@assets/icons'
-import MovableWindow from '@components/base/window'
 import {
   ActivityBar,
   ActivityResource,
@@ -49,6 +48,7 @@ import {
   IActivityResource,
   ISubSection,
 } from 'src/type/courses-3-level'
+import { MovableWindow } from '@lms/ui'
 
 interface VideoStateClicked {
   course_tab_document_id: string

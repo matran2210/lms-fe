@@ -1,4 +1,4 @@
-import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
+import { SAPPSelectV2 } from '@lms/ui'
 import { convertLocalWeekDaysToUTC, reverseDaysOfWeek } from '@utils/common'
 import { DatePicker } from 'antd'
 import dayjs from 'dayjs'

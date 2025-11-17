@@ -8,7 +8,7 @@ import { validateFile } from 'src/utils/upload'
 // import ButtonIconOnly from '../../button/ButtonIconOnly'
 // import ButtonPrimary from '../../button/ButtonPrimary'
 import { UPLOAD_TYPE } from './UploadFileInterface'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import { ButtonSecondary } from '@lms/ui'
 // import { ResourceAPI } from 'src/apis/resource-bank'
 
 type Props = {

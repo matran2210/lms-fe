@@ -1,7 +1,7 @@
 import { CloseIcon, UploadIcon } from '@assets/icons'
-import EditorReader from '@components/base/editor/EditorReader'
-import HookFormEditor from '@components/base/editor/HookFormEditorV2'
-import HookFormExcel from '@components/base/textfield/HookFormExcel'
+import { EditorReader } from '@lms/ui'
+import { HookFormEditor } from '@lms/ui'
+import { HookFormExcel } from '@lms/ui'
 import SappDivider from '@components/common/Divider/Divider'
 import { HighlightableHTML } from '@components/highlights/HighlightHTML'
 import { runHighlight } from '@utils/index'
@@ -20,11 +20,7 @@ import { Controller } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { DISPLAY_TYPE, RESPONSE_OPTION } from '@lms/core'
-import {
-  DEFAULT_EDITOR_VALUE,
-  generateSheetId,
-  SheetData,
-} from '@lms/core'
+import { DEFAULT_EDITOR_VALUE, generateSheetId, SheetData } from '@lms/core'
 import { MY_COURSES } from '@lms/core'
 import { UploadAPI } from 'src/pages/api/upload'
 import { useAppDispatch } from 'src/redux/hook'

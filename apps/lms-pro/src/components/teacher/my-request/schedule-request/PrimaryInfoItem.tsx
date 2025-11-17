@@ -1,5 +1,5 @@
-import ScheduleSkeleton from '@components/base/skeleton/ScheduleSkeleton'
-import TextSkeleton from '@components/base/skeleton/TextSkeleton'
+import { ScheduleSkeleton } from '@lms/ui'
+import { TextSkeleton } from '@lms/ui'
 import React from 'react'
 interface IProps {
   title: string | undefined

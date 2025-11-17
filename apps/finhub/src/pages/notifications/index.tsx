@@ -1,5 +1,3 @@
-import ActionCell from '@components/base/action/ActionCell'
-import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
 import Layout from '@components/layout'
 import SearchForm from '@components/mycourses/Search'
 import NotifyDetail from '@components/notification//NotifyDetail'
@@ -25,6 +23,7 @@ import {
   updateStatusAll,
 } from 'src/redux/slice/Notification/Notification'
 import { UserType } from 'src/redux/types/User/urser'
+import { ActionCell, SappDrawerV2 } from '@lms/ui'
 
 const Notifications = () => {
   const [openModel, setOpenModel] = useState<boolean>(false)
@@ -168,7 +167,7 @@ const Notifications = () => {
           Loading
         </div>
       )} */}
-      <div className="border-b border-default bg-white px-4 lg:px-20">
+      <div className="border-default border-b bg-white px-4 lg:px-20">
         <div className="mx-auto my-0 flex max-w-xxl py-4.5">
           <SearchForm
             placeholder={MY_COURSES.placeholderSearch}

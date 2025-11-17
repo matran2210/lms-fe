@@ -1,4 +1,4 @@
-import SappModal from '@components/base/modal/SappModal'
+import { SappModal } from '@lms/ui'
 import dynamic from 'next/dynamic'
 import React, { memo } from 'react'
 

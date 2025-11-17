@@ -1,5 +1,5 @@
 import infoIcon from '@assets/images/info-icon.svg'
-import EChart, { EChartsProps } from '@components/base/chart/Chart'
+import { EChart } from '@lms/ui'
 import { DashboardAPI } from '@pages/api/dashboard'
 import dayjs from 'dayjs'
 import Image from 'next/image'

@@ -1,5 +1,5 @@
 import { AlertTriagle } from '@assets/icons'
-import SappModalV2 from '@components/base/modal/SappModalV2'
+import { SappModalV2 } from '@lms/ui'
 import { trackGAEvent } from '@utils/google-analytics'
 import { Dispatch, SetStateAction } from 'react'
 

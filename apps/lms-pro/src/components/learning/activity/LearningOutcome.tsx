@@ -1,5 +1,5 @@
 import { CollapseArrowIcon, StarCircleIcon } from '@assets/icons'
-import EditorReader from '@components/base/editor/EditorReader'
+import { EditorReader } from '@lms/ui'
 import { Collapse } from 'antd'
 import clsx from 'clsx'
 import React from 'react'

@@ -7,7 +7,7 @@ import { Dispatch, SetStateAction } from 'react'
 import { COMMENTS } from '@lms/core'
 import { ClassAPI } from '@pages/api/class'
 import toast from 'react-hot-toast'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
+import { HookFormTextArea } from '@lms/ui'
 import router from 'next/router'
 interface IProps {
   classId: string

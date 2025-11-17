@@ -11,13 +11,10 @@ import {
   sappFormatDate,
   truncateString,
 } from '@utils/index'
-import ScheduleSkeleton from '@components/base/skeleton/ScheduleSkeleton'
+import { ScheduleSkeleton } from '@lms/ui'
 import PrimaryInfoItem from '@components/teacher/my-request/schedule-request/PrimaryInfoItem'
 import { formatTimeOnlyHourMinute } from '@utils/helpers'
-import {
-  CONSTRUCTION_MODE,
-  TYPE_TEACHING_REQUEST,
-} from '@lms/core'
+import { CONSTRUCTION_MODE, TYPE_TEACHING_REQUEST } from '@lms/core'
 import { CollapseArrowIcon } from '@assets/icons'
 import Link from 'next/link'
 import Tooltip from 'src/common/Tooltip'

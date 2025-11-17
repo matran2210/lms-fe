@@ -1,5 +1,5 @@
-import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
-import EditorReader from '@components/base/editor/EditorReader'
+import { HookFormCheckBoxGroup } from '@lms/ui'
+import { EditorReader } from '@lms/ui'
 import { getUppercaseByNumber, runHighlight } from '@utils/index'
 import { useEffect, useMemo } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'

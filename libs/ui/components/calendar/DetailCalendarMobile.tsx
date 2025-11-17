@@ -1,34 +1,34 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
-import { IEvent } from 'sapp-common-package/dist/types'
-import { ICalendarDetail } from '@lms/core'
-import CourseTree from './CourseTree'
-import SappIcon from 'src/common/SappIcon'
-import dayjs, { Dayjs } from 'dayjs'
-import { CALENDAR_FILTER_TYPE, LEARNING_USER_STATUS } from '@lms/core'
-import { useRouter } from 'next/router'
-import { CourseSectionType, TEST_TYPE_ENUM } from '@lms/core'
-import { LearningMode } from '@lms/core'
-import { buildQueryString } from '@utils/index'
-import getConfig from 'next/config'
-import { StatusDotIcon, ZoomIcon } from '@assets/icons/calendar'
-import { Divider } from 'antd'
-import clsx from 'clsx'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
-import { CollapseArrowIcon } from '@assets/icons'
-import { SpinIcon } from '@assets/icons'
-const { publicRuntimeConfig } = getConfig()
-export const { apiURL } = publicRuntimeConfig
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import { IEvent } from "sapp-common-package/dist/types";
+import { ICalendarDetail } from "@lms/core";
+import CourseTree from "./CourseTree";
+import SappIcon from "src/common/SappIcon";
+import dayjs, { Dayjs } from "dayjs";
+import { CALENDAR_FILTER_TYPE, LEARNING_USER_STATUS } from "@lms/core";
+import { useRouter } from "next/router";
+import { CourseSectionType, TEST_TYPE_ENUM } from "@lms/core";
+import { LearningMode } from "@lms/core";
+import { buildQueryString } from "@utils/index";
+import getConfig from "next/config";
+import { StatusDotIcon, ZoomIcon } from "@assets/icons/calendar";
+import { Divider } from "antd";
+import clsx from "clsx";
+import { ButtonPrimary } from "@lms/ui";
+import SappDrawerV3 from "@components/base/drawer/SappDrawerV3";
+import { CollapseArrowIcon } from "@assets/icons";
+import { SpinIcon } from "@assets/icons";
+const { publicRuntimeConfig } = getConfig();
+export const { apiURL } = publicRuntimeConfig;
 
 interface IProps {
-  open: { isOpen: boolean; data: IEvent | null }
-  setOpen: Dispatch<SetStateAction<{ isOpen: boolean; data: IEvent | null }>>
+  open: { isOpen: boolean; data: IEvent | null };
+  setOpen: Dispatch<SetStateAction<{ isOpen: boolean; data: IEvent | null }>>;
 }
 
 const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
-  const router = useRouter()
-  const [data, setData] = useState<ICalendarDetail>()
-  const [loading, setLoading] = useState<boolean>(false)
+  const router = useRouter();
+  const [data, setData] = useState<ICalendarDetail>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const getMode = () => {
     if (data?.schedule.is_holiday) {
@@ -37,38 +37,38 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
           <StatusDotIcon />
           Holiday
         </div>
-      )
+      );
     }
 
     const modeMap = {
-      [CALENDAR_FILTER_TYPE.OFFLINE]: { text: 'Offline', color: 'success' },
-      [CALENDAR_FILTER_TYPE.ONLINE]: { text: 'Online', color: 'info' },
+      [CALENDAR_FILTER_TYPE.OFFLINE]: { text: "Offline", color: "success" },
+      [CALENDAR_FILTER_TYPE.ONLINE]: { text: "Online", color: "info" },
       [CALENDAR_FILTER_TYPE.LIVE_ONLINE]: {
-        text: 'Live Online',
-        color: 'liveOnline',
+        text: "Live Online",
+        color: "liveOnline",
       },
-    } as const
+    } as const;
 
-    const mode = data?.mode as keyof typeof modeMap
+    const mode = data?.mode as keyof typeof modeMap;
 
-    if (!mode || !modeMap[mode]) return null
+    if (!mode || !modeMap[mode]) return null;
 
-    const { text, color } = modeMap[mode]
+    const { text, color } = modeMap[mode];
 
     return (
       <div
         className={clsx(
-          'max-w-fit',
+          "max-w-fit",
           `bg-${color}/5`,
           `text-${color}`,
-          'flex items-center gap-1 rounded-[100px] px-[12px] py-[2px] text-sm font-normal',
+          "flex items-center gap-1 rounded-[100px] px-[12px] py-[2px] text-sm font-normal",
         )}
       >
         <StatusDotIcon />
         {text}
       </div>
-    )
-  }
+    );
+  };
 
   const getKeyContent = () => {
     return data?.key_after_contents?.map((item) => {
@@ -79,16 +79,16 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
         >
           {item.name}
         </div>
-      )
-    })
-  }
+      );
+    });
+  };
 
   const handleRedirectZoom = () => {
-    const url = data?.class?.link_meeting
+    const url = data?.class?.link_meeting;
     if (url) {
-      window.open(url, '_blank')
+      window.open(url, "_blank");
     }
-  }
+  };
 
   const isOnlyMidTermOrFinalTest =
     data?.is_test &&
@@ -96,80 +96,80 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
       [TEST_TYPE_ENUM?.FINAL_TEST, TEST_TYPE_ENUM?.MID_TERM_TEST].includes(
         item?.course_section?.course_section_type as TEST_TYPE_ENUM,
       ),
-    )
+    );
 
   const renderTime = useMemo(() => {
     const start = dayjs(
       `${data?.schedule?.start_date}T${data?.schedule?.start_time}Z`,
-    )
+    );
     const end = dayjs(
       `${data?.schedule?.end_date}T${data?.schedule?.end_time}Z`,
-    )
+    );
     if (data?.schedule.is_holiday) {
       return (
         <>
           <div className="col-span-1">Lesson Date:</div>
           <div className="col-span-1 text-right font-semibold">
-            {start.format('MMM DD, YYYY')}
+            {start.format("MMM DD, YYYY")}
           </div>
         </>
-      )
+      );
     }
     if (data?.mode === LearningMode?.ONLINE) {
       return (
         <>
           <div className="col-span-1">Lesson Date:</div>
-          <div className="col-span-1 text-right font-semibold">{`${start.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
+          <div className="col-span-1 text-right font-semibold">{`${start.format("HH:mm")} | ${start.format("MMM DD YYYY")}`}</div>
           <div className="col-span-1">Deadline</div>
-          <div className="col-span-1 text-right font-semibold">{`${end.format('HH:mm')} | ${end.format('MMM DD YYYY')}`}</div>
+          <div className="col-span-1 text-right font-semibold">{`${end.format("HH:mm")} | ${end.format("MMM DD YYYY")}`}</div>
         </>
-      )
+      );
     }
     return (
       <>
         <div className="col-span-1">Lesson Date:</div>
-        <div className="col-span-1 text-right font-semibold">{`${start.format('HH:mm')} - ${end.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
+        <div className="col-span-1 text-right font-semibold">{`${start.format("HH:mm")} - ${end.format("HH:mm")} | ${start.format("MMM DD YYYY")}`}</div>
       </>
-    )
-  }, [data])
+    );
+  }, [data]);
 
   async function fetchData() {
-    setLoading(true)
+    setLoading(true);
     try {
-      if (!open?.data?.id) return
+      if (!open?.data?.id) return;
       const res = await (
-        await import('@pages/api/calendar')
-      ).default.getDetailEvent(open?.data?.id, open?.data?.type === 'HOLIDAY')
-      setData(res.data)
+        await import("@pages/api/calendar")
+      ).default.getDetailEvent(open?.data?.id, open?.data?.type === "HOLIDAY");
+      setData(res.data);
     } catch {
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
-  const dateNow = dayjs().add(7, 'hour')
+  const dateNow = dayjs().add(7, "hour");
   const dateOpenSection = data?.class?.opening_at
     ? dayjs(data?.class?.opening_at)
-    : dayjs(data?.class?.started_at)
+    : dayjs(data?.class?.started_at);
 
   useEffect(() => {
     if (open.isOpen) {
-      fetchData()
+      fetchData();
     }
-  }, [open])
+  }, [open]);
 
   const isOfflineOrLiveOnlineWithReview =
     [LearningMode.OFFLINE, LearningMode.LIVE_ONLINE].includes(
       data?.mode as LearningMode,
-    ) && data?.is_review_allowed
+    ) && data?.is_review_allowed;
 
   const isOnlineAndOpen =
-    data?.mode === LearningMode.ONLINE && dateOpenSection.isBefore(dateNow)
+    data?.mode === LearningMode.ONLINE && dateOpenSection.isBefore(dateNow);
 
   const renderFormattedDate = (date: Dayjs) => {
-    const day = date.date().toString()
-    const monthName = date.format('MMMM') // Tên tháng đầy đủ
-    const year = date.year()
+    const day = date.date().toString();
+    const monthName = date.format("MMMM"); // Tên tháng đầy đủ
+    const year = date.year();
 
     return (
       <div className="flex text-xl">
@@ -181,13 +181,13 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
         </div>
         <div className="font-normal">{year}</div>
       </div>
-    )
-  }
+    );
+  };
 
   const handleStartClick = () => {
     const deadline = dayjs(
       `${data?.schedule?.end_date}T${data?.schedule?.end_time}Z`,
-    )
+    );
 
     const listFilteredSections = data?.sections?.filter((item) =>
       [
@@ -195,53 +195,53 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
         TEST_TYPE_ENUM.FINAL_TEST,
         CourseSectionType.PART,
       ].includes(item?.course_section?.course_section_type as TEST_TYPE_ENUM),
-    )
+    );
     const listSectionIds = (listFilteredSections || []).map(
       (item) => item?.course_section_id || item?.course_section.id,
-    )
+    );
 
     const listFilteredSubSections = data?.sections?.filter((item) =>
       [CourseSectionType.CHAPTER].includes(
         item?.course_section?.course_section_type as CourseSectionType,
       ),
-    )
+    );
     const listSubSectionIds = (listFilteredSubSections || []).map(
       (item) => item?.course_section_id || item?.course_section.id,
-    )
+    );
 
     const listFilteredUnits = data?.sections?.filter((item) =>
       [CourseSectionType.UNIT].includes(
         item?.course_section?.course_section_type as CourseSectionType,
       ),
-    )
+    );
     const listUnitIds = (listFilteredUnits || []).map(
       (item) => item?.course_section_id || item?.course_section.id,
-    )
+    );
 
     const searchParams = buildQueryString({
-      focusSectionIds: listSectionIds.join(','),
-      focusSubSectionIds: listSubSectionIds.join(','),
-      focusUnitIds: listUnitIds.join(','),
-      deadline: deadline.format('YYYY-MM-DDTHH:mm:ssZ'),
-    })
+      focusSectionIds: listSectionIds.join(","),
+      focusSubSectionIds: listSubSectionIds.join(","),
+      focusUnitIds: listUnitIds.join(","),
+      deadline: deadline.format("YYYY-MM-DDTHH:mm:ssZ"),
+    });
     if (data?.link_study) {
-      router.push(`${data?.link_study}?${searchParams}`)
+      router.push(`${data?.link_study}?${searchParams}`);
     }
-  }
+  };
 
   return (
     <>
       <SappDrawerV3
         open={open.isOpen}
-        width={'100%'}
+        width={"100%"}
         closable={false}
         isShowHeader={false}
         closeIcon={null}
         mask={false}
         rootClassName={
-          'drawer-calendar__detail drawer-calendar__detail--mobile'
+          "drawer-calendar__detail drawer-calendar__detail--mobile"
         }
-        title={''}
+        title={""}
       >
         <div className="relative flex h-full flex-col bg-white !text-bw-13">
           <div className="mb-4 flex items-center gap-2">
@@ -264,8 +264,8 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                   <div className="grid grid-cols-2 gap-2 text-sm">
                     <div className="col-span-1">
                       {data?.schedule.is_holiday
-                        ? 'Event Name:'
-                        : 'Class Code:'}
+                        ? "Event Name:"
+                        : "Class Code:"}
                     </div>
                     <div className="col-span-1 text-right font-semibold">
                       {data?.schedule.is_holiday
@@ -273,7 +273,7 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                         : data?.class?.code}
                     </div>
                     <div className="col-span-1">
-                      {data?.schedule.is_holiday ? 'Type:' : 'Learning Mode:'}
+                      {data?.schedule.is_holiday ? "Type:" : "Learning Mode:"}
                     </div>
                     <div className="col-span-1 flex justify-end gap-x-2">
                       {getMode()}
@@ -286,7 +286,7 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                           LearningMode?.LIVE_ONLINE,
                         ]?.includes(data?.mode as LearningMode) && (
                           <div className="flex max-w-fit items-center gap-x-2 px-[19px] py-[4.5px]">
-                            <SappIcon icon={'warningIcon'} />
+                            <SappIcon icon={"warningIcon"} />
                             <div className="font-medium text-error">
                               Overdue
                             </div>
@@ -398,10 +398,10 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                   onClick={handleStartClick}
                 >
                   {LEARNING_USER_STATUS.READY_TO_LEARN === data?.status
-                    ? 'Start'
+                    ? "Start"
                     : LEARNING_USER_STATUS.IN_PROGRESS === data?.status
-                      ? 'Continue'
-                      : 'Review'}
+                      ? "Continue"
+                      : "Review"}
                 </ButtonPrimary>
               </div>
             </div>
@@ -409,7 +409,7 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
         </div>
       </SappDrawerV3>
     </>
-  )
-}
+  );
+};
 
-export default DetailCalendarMobile
+export default DetailCalendarMobile;

@@ -6,9 +6,9 @@ import {
   DownloadIcon,
   FileTextIcon,
 } from '@assets/icons'
-import useClickOutside from '@components/base/clickoutside/HookClick'
-import EditorReader from '@components/base/editor/EditorReader'
-import FileViewer from '@components/base/fileViewer/FileViewer'
+import { useClickOutside } from '@lms/ui'
+import { EditorReader } from '@lms/ui'
+import { FileViewer } from '@lms/ui'
 import { HighlightableHTML } from '@components/highlights/HighlightHTML'
 import { CloseIconV2 } from '@components/icons'
 import { NotesOutline } from '@components/icons/Notes'

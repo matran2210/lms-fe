@@ -1,4 +1,4 @@
-import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
+import { SappDrawerV3 } from '@lms/ui'
 import { formatTime, htmlToRaw } from '@components/common/timer'
 import React, { useRef, useState } from 'react'
 import NoData from 'src/common/NoData'

@@ -1,4 +1,4 @@
-import SappModalV3 from '@components/base/modal/SappModalV3'
+import { SappModalV3 } from '@lms/ui'
 import { CoursesAPI } from '@pages/api/courses'
 import React, { Dispatch, SetStateAction } from 'react'
 import { useRouter } from 'next/router'

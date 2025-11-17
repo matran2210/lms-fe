@@ -1,5 +1,4 @@
 import { InfoIcon } from '@assets/icons'
-import SappDrawer from '@components/base/SappDrawer'
 import getConfig from 'next/config'
 import React, { Dispatch, SetStateAction } from 'react'
 const { publicRuntimeConfig } = getConfig()
@@ -20,6 +19,7 @@ import { sappFormatDate } from '@utils/index'
 import InfoItem from './InfoItem'
 import StatusItem from './StatusItem'
 import { useRouter } from 'next/router'
+import { SappDrawer } from '@lms/ui'
 
 interface IProps {
   open: boolean

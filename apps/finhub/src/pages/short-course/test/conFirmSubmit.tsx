@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, ConfirmIcon } from '@assets/icons'
-import ShortCourseModal from '@components/base/modal/ShortCourseModal'
+import { SappModalV3 } from '@lms/ui'
 import { trackGAEvent } from '@utils/google-analytics'
 
 interface IProps {
@@ -27,7 +27,7 @@ const ConFirmSubmit = ({
   }
 
   return (
-    <ShortCourseModal
+    <SappModalV3
       open={open}
       cancelButtonCaption="Back to My Course"
       okButtonCaption="Submit"

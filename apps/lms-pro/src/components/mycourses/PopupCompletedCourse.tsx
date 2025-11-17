@@ -1,6 +1,6 @@
 import { IRibbon } from '@assets/icons'
-import EditorReader from '@components/base/editor/EditorReader'
-import SappModalV3 from '@components/base/modal/SappModalV3'
+import { EditorReader } from '@lms/ui'
+import { SappModalV3 } from '@lms/ui'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { hidePopup } from 'src/redux/slice/Popup/Result-test'
 

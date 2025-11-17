@@ -21,7 +21,7 @@ import {
 } from '@assets/icons/calendar'
 import { Divider } from 'antd'
 import clsx from 'clsx'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import { ButtonPrimary } from '@lms/ui'
 import { SpinIcon } from '@assets/icons'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig

@@ -1,5 +1,5 @@
 import { AwardIcon, IconEssentional } from '@assets/icons/Dashboard'
-import EChart from '@components/base/chart/Chart'
+import { EChart } from '@lms/ui'
 import {
   OverallProgressSkeleton,
   OvervallProgressSkeletonMobile,

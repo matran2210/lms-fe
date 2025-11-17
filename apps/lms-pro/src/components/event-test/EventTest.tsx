@@ -1,6 +1,6 @@
 import { AlertIcon, IconCongrats } from '@assets/icons'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import SappModalV3 from '@components/base/modal/SappModalV3'
+import { ButtonSecondary } from '@lms/ui'
+import { SappModalV3 } from '@lms/ui'
 import CardCourse from '@components/common/CardCourse/CardCourse'
 import { formatTime } from '@components/common/timer'
 import { useCourseContext } from '@contexts/index'

@@ -1,6 +1,6 @@
 import { LoginIcon } from '@assets/icons'
 import { AccessIcon } from '@assets/icons/entranceTest'
-import SappModalV3 from '@components/base/modal/SappModalV3'
+import { SappModalV3 } from '@lms/ui'
 import { Dispatch, SetStateAction } from 'react'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {

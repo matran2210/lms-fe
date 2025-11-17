@@ -1,6 +1,6 @@
 import { AlertTriagle } from '@assets/icons'
 import QuizIcon from '@assets/icons/QuitIcon'
-import SappModalV3 from '@components/base/modal/SappModalV3'
+import { SappModalV3 } from '@lms/ui'
 import { trackGAEvent } from '@utils/google-analytics'
 import { Dispatch, SetStateAction } from 'react'
 

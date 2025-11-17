@@ -1,8 +1,8 @@
 import { Plus } from '@assets/icons'
-import SAPPRangePicker from '@components/base/RangePicker/SAPPRangePicker'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import SAPPSelect from '@components/base/select/SAPPSelect'
+import { SAPPRangePicker } from '@lms/ui'
+import { ButtonPrimary } from '@lms/ui'
+import { ButtonSecondary } from '@lms/ui'
+import { SAPPSelect } from '@lms/ui'
 import FilterGrid from '@components/layout/FilterGrid/FilterGrid'
 import FormAddProgress from '@components/my-class/progress-form/FormAddProgress'
 import FormViewProgress from '@components/my-class/progress-form/FormViewProgress'
@@ -10,17 +10,13 @@ import ProgressTable from '@components/my-class/progress-table/ProgressTable'
 import { ProgressAPI } from '@pages/api/progress'
 import { ProgressKey } from '@pages/api/queryKey'
 import { cleanParams } from '@utils/common'
-import {
-  CONSTRUCTION,
-  OPTIONS_PROGRESS_CLASS,
-  PROGRAM,
-} from '@lms/core'
+import { CONSTRUCTION, OPTIONS_PROGRESS_CLASS, PROGRAM } from '@lms/core'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { IClassDetail, IProgressFilterForm } from '@lms/core'
 import useSappPaging from '../../../hooks/useSappPaging'
-import SAPPInput from '@components/base/Input/SAPPInput'
+import { SAPPInput } from '@lms/ui'
 
 interface FilterParams {
   progress?: string

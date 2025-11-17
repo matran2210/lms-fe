@@ -6,11 +6,11 @@ import {
   ResizeIcon,
   ScratchPadIconV2,
 } from '@assets/icons'
-import EditorReader from '@components/base/editor/EditorReader'
-import FileViewer from '@components/base/fileViewer/FileViewer'
-import ModalResizeable from '@components/base/modal/ModalResizeable'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
-import MovableWindow from '@components/base/window'
+import { EditorReader } from '@lms/ui'
+import { FileViewer } from '@lms/ui'
+import { ModalResizeable } from '@lms/ui'
+import { HookFormTextArea } from '@lms/ui'
+import { MovableWindow } from '@lms/ui'
 import Calculator from '@components/calculator'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import AddWordPreview from '@components/questionType/FillText'
@@ -53,7 +53,7 @@ import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import DragDropQuestion, {
   SlotValue,
 } from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
-import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
+import { ButtonPrimaryV2 } from '@lms/ui'
 import { Requirement } from '@lms/core'
 import { defaultSheetData } from '@lms/core'
 import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
@@ -67,8 +67,7 @@ import { Divider } from 'antd'
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import { Triangle } from '@components/icons/Triangle'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-import ButtonTextV2 from '@components/base/button/ButtonTextV2'
-const CaseStudyDetail = ({ questions }: any) => {
+import { ButtonTextV2 } from '@lms/ui'const CaseStudyDetail = ({ questions }: any) => {
   const editorRefs = useRef<any[]>([])
 
   const checkType = (

@@ -1,11 +1,6 @@
 import { CloseIcon, DownloadIcon, LinkIcon } from '@assets/icons'
-import SappButton from '@components/base/button/SappButton'
-import EditorReader from '@components/base/editor/EditorReader'
-import FileViewer from '@components/base/fileViewer/FileViewer'
-import ModalResizeable from '@components/base/modal/ModalResizeable'
-import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
-import MovableWindow from '@components/base/window'
-import Calculator from '@lms/ui/components/calculator/index'
+
+import { Calculator } from '@lms/ui'
 import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
 import Layout from '@components/layout'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
@@ -50,7 +45,15 @@ import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/Acti
 import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { UserType } from 'src/redux/types/User/urser'
-import { IActivity } from '@lms/core'
+import { IActivity } from 'src/type/course/my-course/Activity'
+import {
+  ActivitySkeleton,
+  EditorReader,
+  FileViewer,
+  ModalResizeable,
+  MovableWindow,
+  SappButton,
+} from '@lms/ui'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string

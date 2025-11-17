@@ -1,11 +1,9 @@
-import ButtonText from '@components/base/button/ButtonText'
-import SappButton from '@components/base/button/SappButton'
-import SAPPTextFiled from '@components/base/textfield/SAPPTextFiled'
+import { PageLink } from '@lms/core'
+import { ButtonText, SappButton, SAPPTextFiled } from '@lms/ui'
 import { useRouter } from 'next/router'
 import { createRef, useEffect, useState } from 'react'
-import { PageLink } from '@lms/core'
-import useCountdown from './Countdown'
 import { AuthAPI } from '../../pages/api/profile/index'
+import useCountdown from './Countdown'
 
 interface IInputCodeFormProps {
   error?: string

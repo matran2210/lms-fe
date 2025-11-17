@@ -1,4 +1,4 @@
-import EChart from '@components/base/chart/Chart'
+import { EChart } from '@lms/ui'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { DashboardAPI } from '@pages/api/dashboard'

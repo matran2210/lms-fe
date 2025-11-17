@@ -1,4 +1,4 @@
-import SAPPDropdown from '@components/base/Dropdown/SAPPDropdown'
+import { SAPPDropdown } from '@lms/ui'
 import { useRequestContext } from '@contexts/RequestContext'
 import { MyRequestAPI } from '@pages/api/my-request'
 import { RequestAPI } from '@pages/api/request'

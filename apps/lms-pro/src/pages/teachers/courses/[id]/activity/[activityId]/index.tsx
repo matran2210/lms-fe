@@ -1,10 +1,10 @@
 import { CloseIcon, DownloadIcon, LinkIcon } from '@assets/icons'
-import SappButton from '@components/base/button/SappButton'
-import EditorReader from '@components/base/editor/EditorReader'
-import FileViewer from '@components/base/fileViewer/FileViewer'
-import ModalResizeable from '@components/base/modal/ModalResizeable'
-import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
-import MovableWindow from '@components/base/window'
+import { SappButton } from '@lms/ui'
+import { EditorReader } from '@lms/ui'
+import { FileViewer } from '@lms/ui'
+import { ModalResizeable } from '@lms/ui'
+import { ActivitySkeleton } from '@lms/ui'
+import { MovableWindow } from '@lms/ui'
 import Calculator from '@components/calculator'
 import LayoutTeacher from '@components/layout/Teacher'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
@@ -30,12 +30,7 @@ import SAPPBorder from 'src/common/SAPPBorder'
 import SappIcon from 'src/common/SappIcon'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import Tooltip from 'src/common/Tooltip'
-import {
-  ANIMATION,
-  EXHIBIT_TEXT_REPLACE,
-  PageLink,
-  PROGRAM,
-} from '@lms/core'
+import { ANIMATION, EXHIBIT_TEXT_REPLACE, PageLink, PROGRAM } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { UploadAPI } from 'src/pages/api/upload'

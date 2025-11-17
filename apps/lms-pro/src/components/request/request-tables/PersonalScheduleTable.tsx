@@ -1,4 +1,4 @@
-import SAPPBadge from '@components/base/Badge/SAPPBadge'
+import { SAPPBadge } from '@lms/ui'
 import { formatDate, formatTime } from '@utils/common'
 import { Table, TablePaginationConfig } from 'antd'
 import dayjs from 'dayjs'
@@ -222,7 +222,9 @@ const PersonalScheduleTable = ({
           ? item.teacher_schedules
           : [],
       note:
-        item.type === E_REQUEST_TYPE.TEACHER_WEEKLY_NORMS ? item.description : '',
+        item.type === E_REQUEST_TYPE.TEACHER_WEEKLY_NORMS
+          ? item.description
+          : '',
       method: item,
     }))
   }, [requests, current, pageSize])

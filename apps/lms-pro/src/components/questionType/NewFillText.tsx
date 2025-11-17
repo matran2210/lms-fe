@@ -1,5 +1,5 @@
-import EditorReader from '@components/base/editor/EditorReader'
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
+import { EditorReader } from '@lms/ui'
+import { HookFormTextField } from '@lms/ui'
 import SappDivider from '@components/common/Divider/Divider'
 import { runHighlight } from '@utils/index'
 import { Divider } from 'antd'

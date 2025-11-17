@@ -8,14 +8,16 @@ import {
   ScratchPadIcon,
   UnHighLightIcon,
 } from '@assets/icons'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import ButtonText from '@components/base/button/ButtonText'
-import EditorReader from '@components/base/editor/EditorReader'
-import FileViewer from '@components/base/fileViewer/FileViewer'
-import ModalResizeable from '@components/base/modal/ModalResizeable'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
-import MovableWindow from '@components/base/window'
-import Calculator from '@lms/ui/components/calculator/index'
+
+import {
+  ButtonText,
+  Calculator,
+  EditorReader,
+  FileViewer,
+  HookFormTextArea,
+  ModalResizeable,
+  MovableWindow,
+} from '@lms/ui'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import AddWordPreview from '@components/questionType/FillText'
@@ -51,8 +53,9 @@ import {
   ICratchPad,
   IQuestionResult,
   IRequirement,
-  ITopic,IExhibit
-} from '@lms/core'
+  ITopic,
+} from 'src/type/case-study'
+import { IExhibit } from 'src/type/exhibit'
 import CaseStudyWrapper from '../../../components/casestudy/layout/CaseStudyWrapper'
 
 const CaseStudyResult = () => {
