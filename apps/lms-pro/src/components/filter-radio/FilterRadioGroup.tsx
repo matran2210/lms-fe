@@ -49,7 +49,8 @@ const FilterRadioGroup = ({
         return (
           <>
             <div
-              className={`_vertical flex flex-row lg:flex-col ${gap} ${
+              className={`_vertical flex flex-row lg:flex-col
+              ${gap} ${
                 justify === 'between'
                   ? 'justify-between'
                   : justify === 'center'
@@ -68,7 +69,7 @@ const FilterRadioGroup = ({
                     key={uniqueId('check')}
                     className={`${!!corrects && 'pointer-events-none'}`}
                   >
-                    <div className="flex">
+                    <div className="flex ">
                       <label
                         className={`flex items-center gap-2 ${
                           (

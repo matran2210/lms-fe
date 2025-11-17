@@ -132,7 +132,7 @@ const Page = () => {
         data-aos={ANIMATION.DATA_AOS}
       >
         <div className="relative flex h-full flex-col">
-          <div className="py-2 pt-4 sm:pt-4 md:pb-8 md:pt-8 lg:pb-8 lg:pt-10 xl:pb-6 xl:pt-4">
+          <div className="pb-4 pt-4 sm:pt-4 md:pb-8 md:pt-8 lg:pb-8 lg:pt-10 xl:pb-6 xl:pt-4">
             <HeaderMobile
               title={TitleSidebar.CALENDAR}
               showIcon={isTabletView || isMobileView}

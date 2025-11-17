@@ -1,84 +1,84 @@
-import React, { useEffect, useState } from 'react'
-import { calculate, isNumber } from './logic/calculate'
+import React, { useEffect, useState } from "react";
+import { calculate, isNumber } from "./logic/calculate";
 
-import ButtonsContainer from './ButtonsContainer'
-import Display from './display'
-import Warning from './warning'
-import clsx from 'clsx'
+import ButtonsContainer from "./ButtonsContainer";
+import Display from "./display";
+import Warning from "./warning";
+import clsx from "clsx";
 
 interface IProps {
-  isMobileCalc?: boolean
+  isMobileCalc?: boolean;
 }
 const Calculator = ({ isMobileCalc = false }: IProps) => {
-  const [lastExpression, setLastExpression] = useState('')
+  const [lastExpression, setLastExpression] = useState("");
   const [calc, setCalc] = useState({
     total: null,
     next: null,
     operation: null,
-  })
+  });
 
-  const [badDivision, setBadDivision] = useState(false)
+  const [badDivision, setBadDivision] = useState(false);
 
   useEffect(() => {
     if (badDivision) {
       setTimeout(() => {
-        setBadDivision(false)
-      }, 3000)
+        setBadDivision(false);
+      }, 3000);
     }
-  }, [badDivision])
+  }, [badDivision]);
 
-  const maxLength = 20
+  const maxLength = 20;
 
   const updateState = (obj: any, key: any) => {
     if (obj.next !== null && obj.next.length >= maxLength && isNumber(key)) {
-      return
+      return;
     }
 
     // Lưu biểu thức trước khi state bị xóa sau khi bấm "="
-    if (key === '=' && obj.total && obj.operation && obj.next) {
-      setLastExpression(`${obj.total} ${obj.operation} ${obj.next}`)
+    if (key === "=" && obj.total && obj.operation && obj.next) {
+      setLastExpression(`${obj.total} ${obj.operation} ${obj.next}`);
     }
-    if (key === 'AC') {
-      setLastExpression('')
+    if (key === "AC") {
+      setLastExpression("");
     }
 
-    const newObj = calculate(obj, key)
+    const newObj = calculate(obj, key);
 
-    if (newObj.total === 'Undefined') {
-      setBadDivision(true)
-      setCalc({ total: null, next: null, operation: null })
+    if (newObj.total === "Undefined") {
+      setBadDivision(true);
+      setCalc({ total: null, next: null, operation: null });
     } else {
-      setCalc((preObj: any) => ({ ...preObj, ...newObj }))
+      setCalc((preObj: any) => ({ ...preObj, ...newObj }));
     }
-  }
+  };
 
   const handleClick = (obj: any, e: React.MouseEvent) => {
-    const button = (e.target as HTMLElement).closest('button[data-name]')
-    if (!button) return
+    const button = (e.target as HTMLElement).closest("button[data-name]");
+    if (!button) return;
 
-    const value = button.getAttribute('data-name')
-    updateState(obj, value)
-  }
+    const value = button.getAttribute("data-name");
+    updateState(obj, value);
+  };
 
   const handleKeyDown = (e: any) => {
-    e.preventDefault()
-  }
+    e.preventDefault();
+  };
 
-  const { total, next, operation } = calc
+  const { total, next, operation } = calc;
 
   return (
     <div
-      className={clsx('calc', {
-        '!w-64': isMobileCalc,
+      className={clsx("calc", {
+        "!w-64": isMobileCalc,
       })}
       style={{
-        boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+        boxShadow: "0 0 10px rgba(0,0,0,0.1)",
       }}
     >
       <Display
-        total={total ?? ''}
-        next={next ?? ''}
-        operation={operation ?? ''}
+        total={total ?? ""}
+        next={next ?? ""}
+        operation={operation ?? ""}
         lastExpression={lastExpression}
       />
       <ButtonsContainer
@@ -88,7 +88,7 @@ const Calculator = ({ isMobileCalc = false }: IProps) => {
       />
       <Warning warning={badDivision} />
     </div>
-  )
-}
+  );
+};
 
-export default Calculator
+export default Calculator;

@@ -19,7 +19,7 @@ const ChartACCAScore = ({ data, loading }: IProps) => {
   const { events } = useDraggable(ref as React.MutableRefObject<HTMLElement>)
   return (
     <div className="relative block h-fit min-h-[152px] overflow-hidden rounded-xl bg-white p-4 pb-0 text-gray-800 shadow-small md:p-6">
-      <div className="mb-6 text-lg font-semibold md:mb-8">
+      <div className="mb-6 text-lg font-semibold md:mb-8 ">
         Multiple Choice Score by Part
       </div>
       <div

@@ -86,14 +86,14 @@ const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {
             <td
               className={clsx(
                 commonDataCellStyle,
-                'text-center text-[#050505]',
+                'text-center  text-[#050505]',
               )}
             >
               {row?.is_graded ? 'Yes' : 'No'}
             </td>
 
             {/* Status */}
-            <td className={clsx(commonDataCellStyle, 'text-[#050505]')}>
+            <td className={clsx(commonDataCellStyle, ' text-[#050505]')}>
               {row?.attempts.length > 0 ? row?.attempts?.[0]?.status : '-'}
             </td>
 
@@ -101,7 +101,7 @@ const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {
             <td
               className={clsx(
                 commonDataCellStyle,
-                'text-center text-[#050505]',
+                'text-center  text-[#050505]',
               )}
             >
               {row?.attempts[0]?.score ?? '-'}
@@ -119,7 +119,7 @@ const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {
 
             {/* Last Submission */}
             <td
-              className={clsx('!pr-0', commonDataCellStyle, 'text-[#050505]')}
+              className={clsx('!pr-0', commonDataCellStyle, ' text-[#050505]')}
             >
               {row?.attempts.length > 0
                 ? dayjs(row?.attempts[0]?.finished_at).format(

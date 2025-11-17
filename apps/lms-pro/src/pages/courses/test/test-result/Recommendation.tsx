@@ -48,7 +48,7 @@ const Recommendation = ({
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90"
           ref={certificateContentRef}
         >
-          <div className="left-0 top-0 h-96 w-1/4 bg-white shadow-xl">
+          <div className="left-0 top-0 h-96 w-1/4 bg-white shadow-xl ">
             <form
               className="flex h-full flex-col overflow-hidden"
               onSubmit={handleSubmit(async (data) => {
@@ -84,7 +84,7 @@ const Recommendation = ({
                 <div className="space-y-6">
                   <div className="w-full">
                     <HookFormTextArea
-                      className="h-52 w-full"
+                      className="h-52 w-full "
                       control={control}
                       name="comment"
                     />
@@ -96,7 +96,7 @@ const Recommendation = ({
               <div className="bg-gray-50 flex flex-shrink-0 items-center justify-between border-t px-6 py-4">
                 <button
                   type="button"
-                  className="focus:ring-2focus:ring-offset-2 inline-flex items-center px-4 py-2 text-sm font-medium transition-colors duration-200 focus:outline-none"
+                  className="focus:ring-2focus:ring-offset-2 inline-flex items-center px-4 py-2 text-sm font-medium transition-colors  duration-200 focus:outline-none"
                   onClick={() => {
                     reset()
                     setOpenRecomendation(false)
@@ -107,7 +107,7 @@ const Recommendation = ({
                 <ButtonPrimary
                   htmlType="submit"
                   title={COMMENTS?.SAVE}
-                  className="focus:ring-2focus:ring-offset-2 inline-flex items-center px-4 py-2 text-sm font-medium text-white transition-colors duration-200 focus:outline-none"
+                  className="focus:ring-2focus:ring-offset-2 inline-flex items-center px-4 py-2 text-sm font-medium text-white transition-colors  duration-200 focus:outline-none"
                 />
               </div>
             </form>

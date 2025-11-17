@@ -64,7 +64,7 @@ const HookFormTextFieldV2 = ({
                   className={`${className} ${
                     error
                       ? 'border-[#B90E0A] focus:border-[#B90E0A]'
-                      : 'border-[#DCDDDD] focus:border-[#141414]'
+                      : 'border-[#DCDDDD] focus:border-[#141414] '
                   }`}
                   placeholder={placeholder}
                   disabled={disabled}

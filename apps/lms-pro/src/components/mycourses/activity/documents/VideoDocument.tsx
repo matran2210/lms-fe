@@ -360,7 +360,7 @@ const VideoDocument = ({
               videos?.map((v, i) => {
                 return (
                   <label
-                    className="flex cursor-pointer select-none items-center gap-2"
+                    className=" flex cursor-pointer select-none items-center gap-2"
                     key={v?.file?.id ?? i}
                   >
                     {/* Radio button for video selection */}
@@ -374,7 +374,7 @@ const VideoDocument = ({
                       size={'small'}
                     ></SAPPRadio>
                     <span
-                      className={`radio-item-label ${
+                      className={`radio-item-label  ${
                         v?.file?.id === currentVideo?.file?.id
                           ? 'text-bw-1'
                           : 'text-gray-1'

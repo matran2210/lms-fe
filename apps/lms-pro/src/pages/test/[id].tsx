@@ -61,7 +61,7 @@ import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
 
 import { CheckCircleOutlineYellow, FlagIconV2 } from '@assets/icons/test'
-import BackToTop from '@lms/ui/components/BackToTop'
+import BackToTop from '@components/BackToTop'
 import Popover from '@components/Popover'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
@@ -3075,7 +3075,7 @@ const TestDetail = () => {
               <div className="hidden h-full w-[150px] items-center gap-1 lg:flex">
                 <Popover
                   content={
-                    <div className="flex items-center gap-2 px-2">
+                    <div className="flex items-center gap-2 px-2 ">
                       Scratch Pad
                     </div>
                   }
@@ -3099,7 +3099,7 @@ const TestDetail = () => {
                 </Popover>
                 <Popover
                   content={
-                    <div className="flex items-center gap-2 px-2">
+                    <div className="flex items-center gap-2 px-2 ">
                       Calculator
                     </div>
                   }
@@ -3608,7 +3608,7 @@ const TestDetail = () => {
         >
           <Popover
             content={
-              <div className="flex items-center gap-2 px-2">
+              <div className="flex items-center gap-2 px-2 ">
                 <NotesOutline className="h-4 w-4 text-white" />
                 <div className="text-sm">
                   {`${exhibitText} (${exhibitData?.length > 9 ? exhibitData?.length : `0${exhibitData?.length}`})`}

@@ -568,37 +568,40 @@ export default function MenuItem({
             (name === TitleSidebar.NEW_NOTE || name === TitleSidebar.CALCULATOR)
               ? 'hidden'
               : ''
-          } ${
-            !isInCourse &&
-            (name === TitleSidebar.COURSE_CONTENT ||
-              name === TitleSidebar.NOTES_LIST ||
-              name === TitleSidebar.RESOURCES ||
-              name === TitleSidebar.RESULTS ||
-              name === TitleSidebar.EXAM ||
-              name === TitleSidebar.DASHBOARD ||
-              Icon === 'stats-chart-sharp' ||
-              Icon === 'profile-detail')
-              ? 'hidden'
-              : ''
-          } ${
-            isInCourse &&
-            (name === TitleSidebar.COURSES ||
-              name === TitleSidebar.EXAM_LIST ||
-              name === TitleSidebar.ENTRANCE_TEST ||
-              // hidden when in course
-              name === TitleSidebar.CALENDAR ||
-              // hidden when in course
-              name === LANG_SIGNIN.eventTest ||
-              name === TitleSidebar.NOTIFICATION ||
-              Icon === 'avatar' ||
-              Icon === 'profile-detail' ||
-              checkIsHiddenDashboard(
-                JSON.parse(localStorage.getItem('courseInfo') as any),
-              ) ||
-              Icon === 'avatar')
-              ? 'hidden'
-              : ''
-          } `,
+          }
+        ${
+          !isInCourse &&
+          (name === TitleSidebar.COURSE_CONTENT ||
+            name === TitleSidebar.NOTES_LIST ||
+            name === TitleSidebar.RESOURCES ||
+            name === TitleSidebar.RESULTS ||
+            name === TitleSidebar.EXAM ||
+            name === TitleSidebar.DASHBOARD ||
+            Icon === 'stats-chart-sharp' ||
+            Icon === 'profile-detail')
+            ? 'hidden'
+            : ''
+        }
+        ${
+          isInCourse &&
+          (name === TitleSidebar.COURSES ||
+            name === TitleSidebar.EXAM_LIST ||
+            name === TitleSidebar.ENTRANCE_TEST ||
+            // hidden when in course
+            name === TitleSidebar.CALENDAR ||
+            // hidden when in course
+            name === LANG_SIGNIN.eventTest ||
+            name === TitleSidebar.NOTIFICATION ||
+            Icon === 'avatar' ||
+            Icon === 'profile-detail' ||
+            checkIsHiddenDashboard(
+              JSON.parse(localStorage.getItem('courseInfo') as any),
+            ) ||
+            Icon === 'avatar')
+            ? 'hidden'
+            : ''
+        }
+        `,
           {
             'hover:bg-gray-100': !selected,
           },

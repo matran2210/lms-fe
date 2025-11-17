@@ -15,7 +15,7 @@ import {
 } from '@assets/icons'
 import { onLinkSocial } from '@utils/index'
 import React, { Dispatch, PropsWithChildren, SetStateAction } from 'react'
-import { CloseIconV2 } from '@lms/ui/components/icons'
+import { CloseIconV2 } from './icons'
 interface IInfomation {
   icon: React.ReactNode
   onClick?: () => void

@@ -310,7 +310,9 @@ const SappModal: React.FC<IProps> = ({
             >
               <div
                 ref={confirmDialogRef}
-                className={`max-h-full w-fit max-w-full rounded-lg ${isContentFull ? 'w-full' : 'w-fit'} ${refClass} ${className}`}
+                className={`max-h-full w-fit max-w-full rounded-lg
+                ${isContentFull ? 'w-full' : 'w-fit'}
+                ${refClass} ${className}`}
               >
                 {showHeader &&
                   (customHeader || (

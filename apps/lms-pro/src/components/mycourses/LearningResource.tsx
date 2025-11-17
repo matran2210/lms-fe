@@ -294,6 +294,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         rootClassName={'responsive-drawer-base'}
         submitButtonClassName="w-full h-10"
         btnSubmitTile="Confirm"
+        titleClassName={isOpenFilter ? 'w-full pr-8 text-center' : ''}
         placement={!isAlwaysShowSidebar ? 'bottom' : 'right'}
       >
         <FormProvider {...methods}>

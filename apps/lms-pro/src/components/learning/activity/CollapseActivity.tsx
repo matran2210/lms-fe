@@ -70,7 +70,9 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
 
       if (attempt?.grading_status === GRADE_STATUS.FINISHED_GRADING) {
         // Case 3: Đã chấm xong - điều hướng đến quiz-result
-        router.push(`/courses/quiz/quiz-result/${attempt.id}`)
+        router.push(
+          `/courses/quiz/quiz-result/${attempt.id}?courseId=${courseId}`,
+        )
         return
       }
 

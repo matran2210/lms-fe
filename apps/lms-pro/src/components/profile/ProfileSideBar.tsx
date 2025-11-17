@@ -407,13 +407,13 @@ const ProfileSideBar = ({ page, children }: IProps) => {
                     </div>
                   )}
                   <div
-                    className={`hover-transition-font-weight relative top-px border-b border-[#F1F1F1]`}
+                    className={`hover-transition-font-weight relative top-px border-b border-[#F1F1F1] `}
                   />
                 </li>
               )
             })}
             <li
-              className="hover-transition-font-weight relative cursor-pointer p-5 font-normal text-[#A1A1A1] hover:bg-secondary hover:text-primary"
+              className="hover-transition-font-weight relative cursor-pointer p-5 font-normal text-[#A1A1A1]  hover:bg-secondary hover:text-primary"
               onClick={handleLogout}
             >
               <div className="absolute inset-0 bottom-0"></div>

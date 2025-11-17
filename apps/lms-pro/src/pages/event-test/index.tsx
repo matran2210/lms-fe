@@ -80,7 +80,7 @@ const EventTest = () => {
           ) : (
             <>
               <div
-                className="mb-8 flex overflow-hidden rounded-xl bg-white p-3 shadow-medium md:p-6 lg:px-8 lg:py-6"
+                className="mb-8 flex overflow-hidden rounded-xl bg-white p-3  shadow-medium md:p-6 lg:px-8 lg:py-6"
                 data-aos={ANIMATION.DATA_AOS}
               >
                 <Heading

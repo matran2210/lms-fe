@@ -143,7 +143,7 @@ const CourseDashboard = ({
               loading={loading}
             />
           </div>
-          <div className="mt-6 rounded-2xl bg-white shadow-small xl:mt-0">
+          <div className="mt-4 rounded-2xl bg-white shadow-small md:mt-6 xl:mt-0">
             <WeeklyReport />
           </div>
         </div>
@@ -217,7 +217,7 @@ const CourseDashboard = ({
           <div className="order-2 lg:order-1 lg:w-[60%]">
             <TopicProgress setInfoCourse={setInfoCourse} />
           </div>
-          <div className="order-1 mb-6 flex h-auto rounded-2xl bg-white shadow-small lg:order-2 lg:my-0 lg:w-[40%]">
+          <div className="order-1 mb-4 flex h-auto rounded-2xl bg-white shadow-small md:mb-6 lg:order-2 lg:my-0 lg:w-[40%]">
             <LearningResult />
           </div>
         </div>

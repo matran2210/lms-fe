@@ -34,7 +34,7 @@ const ChartCMAScore = ({
             ref={ref}
             {...events}
           >
-            <div className="-ml-6 mb-11 text-xl font-semibold xl:font-medium">
+            <div className="-ml-6 mb-11 text-xl font-semibold">
               Multiple Choice Score by Part
             </div>
             <div className="">
@@ -48,7 +48,7 @@ const ChartCMAScore = ({
                 <div>
                   {isGraded && (
                     <div
-                      className={`absolute left-3 z-10 flex h-0 items-center border-t border-dotted border-gray-300 group-hover:border-info`}
+                      className={`absolute left-3 z-10 flex h-0 items-center border-t border-dotted border-info`}
                       style={{
                         bottom: passingScore + '%',
                         width: data?.length * 150 - 12 + 'px',
@@ -59,7 +59,7 @@ const ChartCMAScore = ({
                       >
                         <span className="relative">{passingScore}</span>
                       </div>
-                      <p className="sticky right-0 mb-7 ml-auto hidden text-xs text-info group-hover:block md:text-sm">
+                      <p className="sticky right-0 mb-7 ml-auto text-xs text-info md:text-sm">
                         Passing Score
                       </p>
                     </div>

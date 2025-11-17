@@ -267,11 +267,13 @@ const TableCaseStudyResultTeacher = () => {
                         </div>
                       </td>
                       <td
-                        className={`m-6 pr-1 text-start ${
-                          e?.is_correct || e?.active === 'SUBMITED'
-                            ? 'text-state-success'
-                            : 'text-state-error'
-                        } `}
+                        className={`m-6 pr-1 text-start
+                      ${
+                        e?.is_correct || e?.active === 'SUBMITED'
+                          ? ' text-state-success'
+                          : ' text-state-error'
+                      }
+                    `}
                       >
                         {e?.question?.qType !== 'ESSAY' ? (
                           <>{e?.is_correct ? 'Correct' : 'Incorrect'}</>

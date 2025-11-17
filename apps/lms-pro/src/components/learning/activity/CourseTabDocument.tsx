@@ -86,6 +86,14 @@ const CourseTabDocument = ({
   const handleChangeTab = (courseId: string, id: string) => {
     try {
       dispatch(getCourseActivityTapById({ courseId, id }))
+      router.replace(
+        {
+          pathname: router.pathname,
+          query: { ...router.query, tabId: id },
+        },
+        undefined,
+        { shallow: true },
+      )
       //   setActiveButtonId(id)
     } catch (error) {}
   }

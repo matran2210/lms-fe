@@ -111,7 +111,7 @@ const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
     if (data?.schedule.is_holiday) {
       return (
         <>
-          <div className="col-span-1">Lesson Date:</div>
+          <div className="col-span-1 ">Lesson Date:</div>
           <div className="col-span-1 text-right font-semibold">
             {start.format('MMM DD, YYYY')}
           </div>
@@ -121,16 +121,16 @@ const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
     if (data?.mode === LearningMode?.ONLINE) {
       return (
         <>
-          <div className="col-span-1">Lesson Date:</div>
+          <div className="col-span-1 ">Lesson Date:</div>
           <div className="col-span-1 font-semibold">{`${start.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
-          <div className="col-span-1">Deadline</div>
+          <div className="col-span-1 ">Deadline</div>
           <div className="col-span-1 font-semibold">{`${end.format('HH:mm')} | ${end.format('MMM DD YYYY')}`}</div>
         </>
       )
     }
     return (
       <>
-        <div className="col-span-1">Lesson Date:</div>
+        <div className="col-span-1 ">Lesson Date:</div>
         <div className="col-span-1 font-semibold">{`${start.format('HH:mm')} - ${end.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
       </>
     )
@@ -268,13 +268,13 @@ const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
                   <div>Primary Information</div>
                 </div>
                 <div className="grid grid-cols-2 gap-4 text-base">
-                  <div className="col-span-1">
+                  <div className="col-span-1 ">
                     {data?.schedule.is_holiday ? 'Event Name:' : 'Class Code:'}
                   </div>
                   <div className="col-span-1 text-right font-semibold">
                     {data?.schedule.is_holiday ? data?.name : data?.class?.code}
                   </div>
-                  <div className="col-span-1">
+                  <div className="col-span-1 ">
                     {data?.schedule.is_holiday ? 'Type:' : 'Learning Mode:'}
                   </div>
                   <div className="col-span-1 flex justify-end gap-x-2">
@@ -296,7 +296,7 @@ const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
                   {renderTime}
                   {data?.is_test && isOnlyMidTermOrFinalTest && (
                     <>
-                      <div className="col-span-1">Test Name:</div>
+                      <div className="col-span-1 ">Test Name:</div>
                       <div className="col-span-1 break-words text-right font-semibold">
                         {data?.name}
                       </div>
@@ -386,7 +386,7 @@ const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
         )}
         {/* Fixed Start button at bottom */}
         {(isOfflineOrLiveOnlineWithReview || isOnlineAndOpen) && (
-          <div className="absolute -bottom-[2px] left-0 right-0 bg-white">
+          <div className="absolute -bottom-[2px] left-0 right-0  bg-white">
             <div className="flex justify-end">
               <ButtonPrimary
                 size="medium"
