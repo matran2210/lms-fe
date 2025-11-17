@@ -44,6 +44,7 @@
   .ant-card-head {
     @apply hidden border-b-0 p-0 md:block;
     .ant-card-head-wrapper {
+      @apply items-start;
       .ant-card-head-title {
         @apply text-xl font-bold text-secondary;
       }

@@ -25,6 +25,7 @@ import DragDropQuestion, {
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
+import { checkSheetAnswered } from '@utils/helpers/quiz-test/helper'
 import { isEmptyParagraph } from '@utils/index'
 import { Alert, Collapse, CollapseProps, Divider, Modal, Tabs } from 'antd'
 import clsx from 'clsx'
@@ -231,7 +232,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         await new Promise((resolve) => setTimeout(resolve, 10))
       } else if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
         onResetFormatEssay(name, defaultValue ?? defaultSheetData)
-        refEditor?.current?.resetSheet()
+        // refEditor?.current?.resetSheet()
+        if (refEditor?.current?.clear) {
+          refEditor.current.clear(defaultValue ?? defaultSheetData)
+        }
       }
     }
 
@@ -296,36 +300,29 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             return (
               getValues?.(name) ||
               answer?.short_answer ||
-              requirement?.answer_template ||
-              activeQuestion?.myAnswers?.[0]?.short_answer ||
-              activeQuestion?.answer_template
+              requirement?.answer_template
             )
           case RESPONSE_OPTION.SHEET:
             const answerSheet = activeQuestion?.myAnswers?.find(
               (ans: IEssayAnswer) => {
-                if (
-                  ans.requirement_id ===
-                  activeQuestion?.requirements?.[data.index - 1]?.id
-                ) {
+                if (ans.requirement_id === id) {
                   return ans
                 }
               },
             )
-
             const requirementSheet =
               activeQuestion?.requirements?.[data.index - 1]
+
             return (
-              getValues?.(name) ||
-              answerSheet?.short_answer ||
-              requirementSheet?.answer_template ||
-              activeQuestion?.myAnswers?.[0]?.short_answer ||
-              activeQuestion?.answer_template
+              // getValues?.(name) ||
+              answerSheet?.short_answer || requirementSheet?.answer_template
             )
         }
       }
       const defaultValue = getDefaultValue(data.id)
-      setValue?.(name, defaultValue)
-      handleResetEssay(name, defaultValue)
+
+      // setValue?.(name, defaultValue)
+      // handleResetEssay(name, defaultValue)
       essayDataRef.current = {
         req: data,
         index: data.index - 1,
@@ -493,31 +490,48 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             active = 'SUBMITED'
           }
           if (activeQuestion?.requirements?.length) {
-            const answers = activeQuestion?.requirements?.map((req, i) => {
+            let answers: IEssayAnswer[] = []
+            activeQuestion?.requirements?.forEach((req, i) => {
               const fieldName = `${activeQuestion?.id}_${req.id}_essay`
               const savedData = activeQuestion?.myAnswers?.find(
                 (ans: IEssayAnswer) => ans?.requirement_id === req?.id,
               )
               let answer = getValues?.(fieldName) || savedData?.short_answer
-              return {
-                question_id: activeQuestion?.id,
-                answer_file: req?.answer_file,
-                short_answer:
-                  !isUndefined(answer) && !isEmpty(answer)
-                    ? String(answer).trim()
-                    : '',
-                response_option: activeQuestion?.response_option
-                  ? activeQuestion?.response_option
-                  : 'WORD',
+              if (!!answer) {
+                answers.push({
+                  question_id: activeQuestion?.id || '',
+                  answer_file: req?.answer_file,
+                  short_answer:
+                    !isUndefined(answer) && !isEmpty(answer)
+                      ? String(answer).trim()
+                      : '',
+                  response_option: activeQuestion?.response_option
+                    ? activeQuestion?.response_option
+                    : 'WORD',
 
-                requirement_id: req?.id,
-                active,
+                  requirement_id: req?.id,
+                  active,
+                })
               }
+              // return {
+              //   question_id: activeQuestion?.id,
+              //   answer_file: req?.answer_file,
+              //   short_answer:
+              //     !isUndefined(answer) && !isEmpty(answer)
+              //       ? String(answer).trim()
+              //       : '',
+              //   response_option: activeQuestion?.response_option
+              //     ? activeQuestion?.response_option
+              //     : 'WORD',
+
+              //   requirement_id: req?.id,
+              //   active,
+              // }
             })
             return answers
           } else {
             const answer = getValues?.(
-              `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? showRequirement?.id : document_id}_essay`,
+              `${activeQuestion?.id}_${document_id}_essay`,
             )
             return [
               {
@@ -763,36 +777,31 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 switch (activeQuestion?.response_option) {
                   case RESPONSE_OPTION.WORD:
                     return (
-                      watch?.(`${activeQuestion?.id}_e?.id_essay`) ??
+                      getValues?.(`${activeQuestion?.id}_${e?.id}_essay`) ||
                       activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
                         if (ans.requirement_id === e?.id) {
                           return ans
                         }
-                      })?.short_answer ??
-                      activeQuestion?.myAnswers?.[0]?.short_answer
+                      })?.short_answer ||
+                      e?.answer_template
                     )
                     break
                   case RESPONSE_OPTION.SHEET:
-                    if (isGetToVerify) {
-                      return activeQuestion?.myAnswers?.find(
-                        (ans: IEssayAnswer) => {
-                          if (ans.requirement_id === e?.id) {
-                            return ans
-                          }
-                        },
-                      )?.short_answer
-                    }
-
-                    return (
-                      // getValues(
-                      //   `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`,
-                      // ) ??
-                      activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
+                    const answerSheet = activeQuestion?.myAnswers?.find(
+                      (ans: IEssayAnswer) => {
                         if (ans.requirement_id === e?.id) {
                           return ans
                         }
-                      })?.short_answer ??
-                      activeQuestion?.myAnswers?.[0]?.short_answer
+                      },
+                    )
+                    if (isGetToVerify) {
+                      return answerSheet?.short_answer || e?.answer_template
+                    }
+
+                    return (
+                      getValues?.(`${activeQuestion?.id}_${e?.id}_essay`) ||
+                      answerSheet?.short_answer ||
+                      e.answer_template
                     )
                     break
                 }
@@ -812,13 +821,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 ) {
                   const currentValue = getDefaultValue(true)
 
-                  if (currentValue && currentValue !== defaultSheetData) {
-                    try {
-                      return currentValue
-                    } catch {
-                      return false
-                    }
-                  }
+                  return !!(
+                    currentValue &&
+                    currentValue !== defaultSheetData &&
+                    checkSheetAnswered(currentValue)
+                  )
                 }
                 return false
               })()
@@ -857,17 +864,15 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       editorClassName="learning-act-editor"
                       explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
                       defaultValue={getDefaultValue()}
-                      data={
-                        activeQuestion?.requirements?.[essayData?.index ?? 0]
-                      }
+                      data={e}
                       question_content={activeQuestion?.question_content}
-                      index={essayData?.index}
+                      index={i}
                       question_data={activeQuestion}
                       control={controlAnswer}
                       setValue={setValue}
                       handleSaveHighLight={() => {}}
                       forCaseStudy={true}
-                      name={`${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`}
+                      name={`${activeQuestion?.id}_${e?.id}_essay`}
                       fullData={{
                         data: { ...activeQuestion },
                         solution: activeQuestion?.solution ?? '',

@@ -6,11 +6,15 @@ import { useEffect } from 'react'
 import ErrorMessage from 'src/common/ErrorMessage'
 import { RcFile } from 'antd/es/upload'
 import { message, Upload, UploadProps } from 'antd'
+import { ArrowDownIcon } from '@components/icons'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 interface IProps {
   classId: string
   remainingChanges?: number
   currentValue?: string
   isOpen: boolean
+  setIsOpenSelectExam: React.Dispatch<React.SetStateAction<boolean>>
+  setDirection: React.Dispatch<React.SetStateAction<1 | -1>>
 }
 
 const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg']
@@ -20,9 +24,12 @@ const ChangExamDate = ({
   currentValue,
   remainingChanges,
   isOpen,
+  setIsOpenSelectExam,
+  setDirection,
 }: IProps) => {
   const { control, reset, setValue, clearErrors } = useFormContext()
   const { exams, hasNextPage, fetchNextPage, refetch } = useSelectExams(classId)
+  const { isMobileView } = useTailwindBreakpoint()
 
   const options = exams?.data
     ?.map((exam) => ({
@@ -69,9 +76,14 @@ const ChangExamDate = ({
         options={options ?? []}
         required
         placeholder="Choose one option"
-        onMenuScrollToBottom={hasNextPage && fetchNextPage}
+        suffixIcon={<ArrowDownIcon className="rotate-[-90deg]" />}
+        onDropdownVisibleChange={() => {
+          setIsOpenSelectExam(true)
+          setDirection(1)
+        }}
+        isOpen={isMobileView ? false : undefined}
       />
-      <div className="flex justify-between">
+      <div className="flex flex-col">
         <div className="mt-2 text-sm font-normal italic leading-snug text-gray-600">
           You can only change the exam date up to two times.
         </div>

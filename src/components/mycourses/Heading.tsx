@@ -46,7 +46,7 @@ const Heading = ({
         </div>
       </div>
       {des && (
-        <div className="hidden w-full md:flex">
+        <div className="fex w-full">
           <div className="w-full text-sm text-gray-800">{des}</div>
         </div>
       )}

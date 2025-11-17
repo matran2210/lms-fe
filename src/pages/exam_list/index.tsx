@@ -215,11 +215,14 @@ const ExamInformation = () => {
                 value={getDuration(item?.started_at, item?.finished_at)}
               />
             </div>
-            <div className="flex items-end gap-2">
+            <div
+              className="mt-4 flex cursor-pointer items-end gap-2"
+              onClick={() => handleEdit(item)}
+            >
               <div className="text-sm font-medium text-gray-800 underline">
                 Edit
               </div>
-              <div onClick={() => handleEdit(item)}>
+              <div>
                 <PencilV2Icon />
               </div>
             </div>
@@ -230,7 +233,7 @@ const ExamInformation = () => {
   }
   return (
     <Layout title={TitleSidebar.EXAM_LIST} showSidebar={isAlwaysShowSidebar}>
-      <div className="mt-4">
+      <div className="mb-4 mt-4 md:mb-0">
         <HeaderMobile
           title={TitleSidebar.EXAM_LIST}
           showIcon={isTabletView || isMobileView}

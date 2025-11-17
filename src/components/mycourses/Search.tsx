@@ -32,9 +32,9 @@ const SearchForm = ({
 
   useEffect(() => {
     if (!isTeacher) {
-      if (!isFocused && watch('name')?.trim()?.length) {
-        handleSubmit?.()
-      }
+      // if (!isFocused && watch('name')?.trim()?.length) {
+      //   handleSubmit?.()
+      // }
       if (!isFocused && !watch('name')?.trim()?.length && isCoursePage) {
         push(PageLink.COURSES)
       }

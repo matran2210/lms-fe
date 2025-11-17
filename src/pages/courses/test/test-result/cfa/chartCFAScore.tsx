@@ -34,7 +34,7 @@ const ChartCFAScore = ({ data }: IProps) => {
         Multiple Choice Score by Topic
       </div>
       <div className="relative mb-4 flex w-full">
-        <div className="absolute left-[-42px] top-[43%] shrink-0 -translate-y-1/2 -rotate-90 text-xs font-normal md:text-sm">
+        <div className="absolute -left-9 top-[43%] shrink-0 -translate-y-1/2 -rotate-90 text-xs font-normal md:left-[-42px] md:text-sm">
           Available Points
         </div>
         <div className="absolute left-[108px] top-1/2 h-full w-0.5 -translate-y-1/2 border-r border-gray-300" />

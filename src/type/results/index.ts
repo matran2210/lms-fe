@@ -35,6 +35,7 @@ export interface QuizActivity {
   attempts: Attempt[]
   quiz_path?: string
   activity_id?: string
+  tab_id?: string
 }
 
 export interface Quiz {

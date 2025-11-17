@@ -4,6 +4,7 @@ import {
   CollapseArrowIcon,
   LockClosedIcon,
 } from '@assets/icons'
+import ButtonText from '@components/base/button/ButtonText'
 import { useCourseContext } from '@contexts/index'
 import { trackGAEvent } from '@utils/google-analytics'
 import { truncateString } from '@utils/index'
@@ -71,7 +72,9 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
     }
 
     // Trả về biểu tượng tương ứng nếu tìm thấy, nếu không trả về null
-    return iconMap[type] ? <SappIcon icon={iconMap[type]} /> : null
+    return iconMap[type] ? (
+      <SappIcon icon={iconMap[type]} colorIcon="#6b7280" />
+    ) : null
   }
   return (
     <div>
@@ -88,8 +91,11 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
             className={`flex flex-nowrap gap-5 justify-${activity?.previous_activity?.id ? 'between' : 'end'}`}
           >
             {activity?.previous_activity?.id && (
-              <div className={clsx('w-1/2')}>
-                <div
+              <div className="flex w-1/2 flex-col items-start">
+                <ButtonText
+                  title="Previous Activity"
+                  className="mb-3"
+                  startIcon={<ArrowLeft />}
                   onClick={() =>
                     handleActivityNavigation(
                       activity?.previous_activity?.is_preview_locked || false,
@@ -97,10 +103,7 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
                       'Click Button Previous Activity',
                     )
                   }
-                  className="mb-3 flex cursor-pointer select-none items-center gap-2 rounded-lg py-2 text-sm font-semibold text-bw-1 underline transition-all duration-200 ease-in-out hover:bg-secondary-600 hover:px-4 hover:text-white hover:no-underline md:p-0 md:hover:bg-transparent md:hover:p-0 md:hover:text-primary md:hover:underline"
-                >
-                  <ArrowLeft /> Previous Activity
-                </div>
+                />
                 <div
                   className={clsx(
                     'hidden items-center gap-2 text-sm text-[#6b7280] md:flex',
@@ -133,8 +136,11 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
             )}
             {!activity?.previous_activity?.id && <></>}
             {activity?.next_activity?.id && (
-              <div className="w-1/2">
-                <div
+              <div className="flex w-1/2 flex-col items-end">
+                <ButtonText
+                  title="Next Activity"
+                  className="mb-3"
+                  endIcon={<ArrowRight />}
                   onClick={() =>
                     handleActivityNavigation(
                       activity?.next_activity?.is_preview_locked,
@@ -142,10 +148,7 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
                       'Click Button Next Activity',
                     )
                   }
-                  className="mb-3 flex cursor-pointer select-none items-center justify-end gap-2 rounded-lg py-2 text-sm font-semibold text-bw-1 underline transition-all duration-200 ease-in-out hover:bg-secondary-600 hover:px-4 hover:text-white hover:no-underline md:p-0 md:hover:bg-transparent md:hover:p-0 md:hover:text-primary md:hover:underline"
-                >
-                  Next Activity <ArrowRight />
-                </div>
+                />
                 <div className="hidden items-center justify-end gap-2 text-sm text-[#6b7280] md:flex">
                   {getCourseIcon(activity?.next_activity?.display_icon, false)}
                   <Tooltip

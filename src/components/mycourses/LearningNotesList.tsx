@@ -29,7 +29,7 @@ import {
   ICourseSectionNoteItem,
   INotesListResponse,
 } from 'src/type/course/activity'
-import NoDataV2 from 'src/common/NodataV2'
+import NoData from 'src/common/NoData'
 import SortBy from '@components/common/SortBy'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
@@ -43,6 +43,7 @@ import clsx from 'clsx'
 const DEFAULT_PAGESIZE = 20
 
 const LearningNotesList = () => {
+  const router = useRouter()
   const { isMobileView, isAlwaysShowSidebar } = useTailwindBreakpoint()
   const notesListStatus = useAppSelector(
     (state) => state.notesListReducer?.status,
@@ -57,6 +58,10 @@ const LearningNotesList = () => {
     name: '',
     params: '',
   })
+  const isNotBottomDrawer =
+    router.pathname === '/courses/[id]/section/[course_section_id]' ||
+    (router.pathname === '/courses/[id]/activity/[activityId]' && !isMobileView)
+
   const userType = useAppSelector(userReducer).user.type
 
   const [listSection, setListSection] = useState<ISection[]>([])
@@ -77,7 +82,6 @@ const LearningNotesList = () => {
     INotesListResponse | undefined
   >()
 
-  const router = useRouter()
   //Tạo các biến để lấy id trên thanh url
   const isCourseDetail = PageLink.COURSE_DETAIL === router.pathname
   const isCoursePartDetail = router.pathname.includes('/section')
@@ -321,7 +325,7 @@ const LearningNotesList = () => {
       : 'Note List'
     : openChooseItem.name
   const classNameHeader = openChooseItem.isOpen
-    ? 'pb-4 border-b border-gray-200 '
+    ? 'pb-4 border-b border-gray-200'
     : 'mb-6'
 
   const handleBack = () => {
@@ -368,11 +372,14 @@ const LearningNotesList = () => {
       isShowFooter={isOpenFilter}
       handleSubmit={handleSubmit}
       classNameHeader={classNameHeader}
-      rootClassName={'responsive-drawer-center'}
+      rootClassName={clsx('responsive-drawer-base', {
+        'drawer-bottom-0': !isNotBottomDrawer && !isAlwaysShowSidebar,
+      })}
       submitButtonClassName="w-full h-10"
       btnSubmitTile="Confirm"
-      closable={isAlwaysShowSidebar}
-      placement={isMobileView ? 'bottom' : 'right'}
+      placement={!isAlwaysShowSidebar ? 'bottom' : 'right'}
+      titleClassName={isOpenFilter ? 'w-full pr-8 text-center' : ''}
+      closable
     >
       <FormProvider {...methods}>
         {!isOpenFilter ? (
@@ -390,7 +397,7 @@ const LearningNotesList = () => {
             <div
               ref={scrollRef}
               className={clsx(
-                'result-scroll flex h-[250px] flex-col gap-6 md:mt-4 md:h-[510px] md:gap-0 lg:h-[700px]',
+                'result-scroll mt-6 flex h-[250px] flex-col gap-6 md:mt-4 md:h-[510px] md:gap-0 lg:h-[700px]',
                 {
                   'overflow-y-auto': !isEmpty(notesListData?.notes),
                 },
@@ -531,14 +538,24 @@ const LearningNotesList = () => {
                   )}
                 </>
               ) : (
-                <div className="flex min-h-[calc(100vh-42rem)] items-center justify-center lg:min-h-[calc(100vh-12rem)]">
-                  <NoDataV2 />
+                <div className="flex min-h-[200px] items-center justify-center md:min-h-[385px] lg:min-h-[calc(100vh-20rem)]">
+                  <NoData />
                 </div>
               )}
             </div>
           </>
         ) : !openChooseItem.isOpen ? (
-          <ListFilterMobile setOpenChooseItem={setOpenChooseItem} />
+          <ListFilterMobile
+            setOpenChooseItem={setOpenChooseItem}
+            listSection={listSection}
+            listSubsection={listSubsection}
+            listUnit={listUnit}
+            listActivity={listActivity}
+            setListSection={setListSection}
+            setListSubsection={setListSubsection}
+            setListUnit={setListUnit}
+            setListActivity={setListActivity}
+          />
         ) : (
           <ListItemFilterMobile
             setOpenChooseItem={setOpenChooseItem}

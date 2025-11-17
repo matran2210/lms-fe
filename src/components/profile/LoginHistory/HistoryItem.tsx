@@ -21,7 +21,9 @@ const HistoryItem = ({ data }: any) => {
       </div>
       <div className="flex items-center gap-2 text-xs text-secondary-100 md:text-sm">
         <div>{formattedTime}</div>
-        {data.location && <div className="h-[4px] w-[4px] rounded-full"></div>}
+        {data.location && (
+          <div className="mx-1 size-1 rounded-full bg-secondary-100"></div>
+        )}
         <div>{data.location || ''}</div>
       </div>
     </div>

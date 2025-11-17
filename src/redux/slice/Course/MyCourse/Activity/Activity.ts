@@ -159,8 +159,10 @@ export const courseActivitySlice = createSlice({
         ...state,
         ...action.payload,
         tabs: action?.payload?.tabs,
-        currentTabId: action.payload?.tabs?.[0]?.id,
       }
+    },
+    setCurrentTabId: (state, action: PayloadAction<string>) => {
+      state.currentTabId = action.payload
     },
     resetActivity: () => {
       return {

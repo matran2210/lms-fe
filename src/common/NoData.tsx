@@ -1,12 +1,14 @@
 import React from 'react'
-import SappIcon from './SappIcon'
 import { ANIMATION } from 'src/constants'
+import { NoDataIconV2 } from '@components/icons'
 
-const NoData = () => {
+const NoData = ({ title = 'No data founded...' }: { title?: string }) => {
   return (
-    <div data-aos={ANIMATION.DATA_AOS}>
-      <SappIcon icon="nodata" />
-      <div className="text-base font-light text-gray-1">No Data Found</div>
+    <div data-aos={ANIMATION.DATA_AOS} className="flex flex-col items-center">
+      <NoDataIconV2 className="size-[150px] md:size-[203px]" />
+      <div className="justify-start text-sm font-medium text-gray md:text-lg">
+        {title}
+      </div>
     </div>
   )
 }

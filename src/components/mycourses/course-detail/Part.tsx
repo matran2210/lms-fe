@@ -187,26 +187,24 @@ const Part = ({
             </div>
           </div>
           <div className="action flex items-center justify-end">
-            <div className="w-[84px]">
-              <ButtonSecondary
-                size="small"
-                full
-                title={
-                  course?.cta_status === 'PREVIEW'
-                    ? 'Preview'
-                    : percentProgress === 0
-                      ? 'Begin'
-                      : percentProgress === 100
-                        ? 'Review'
-                        : 'Resume'
-                }
-                className="w-full"
-                onClick={() => {
-                  handleRouterPartDetail()
-                  trackGAEventBasedOnProgress(percentProgress)
-                }}
-              />
-            </div>
+            <ButtonSecondary
+              size="small"
+              full
+              title={
+                course?.cta_status === 'PREVIEW'
+                  ? 'Preview'
+                  : percentProgress === 0
+                    ? 'Begin'
+                    : percentProgress === 100
+                      ? 'Review'
+                      : 'Resume'
+              }
+              className="w-full md:w-[84px]"
+              onClick={() => {
+                handleRouterPartDetail()
+                trackGAEventBasedOnProgress(percentProgress)
+              }}
+            />
           </div>
         </div>
       </div>
