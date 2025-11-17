@@ -193,12 +193,26 @@ img.Wirisformula {
     color: #1f2937 !important;
   }
 }
+
 .editor-wrap:has(table) {
   @apply overflow-x-auto;
 }
 
+.editor-wrap:has(table)::-webkit-scrollbar {
+  @apply hidden;
+}
+
 .editor-wrap {
   @apply font-sans;
+
+  &.editor-wrap--draggable table {
+    cursor: move;
+  }
+
+  &.editor-wrap--dragging {
+    user-select: none;
+  }
+
   hr {
     @apply hidden;
   }
@@ -1001,7 +1015,7 @@ p a {
 }
 
 #floating-button {
-  @apply fixed h-[48px] w-[48px] cursor-pointer rounded-full bg-white;
+  @apply fixed h-[60px] w-[60px] cursor-pointer rounded-full bg-white;
   box-shadow:
     rgba(0, 0, 0, 0.1) 0px 1px 4px,
     rgba(0, 0, 0, 0.2) 0px 2px 12px;
@@ -1010,8 +1024,12 @@ p a {
   justify-content: center;
 }
 
+#floating-btn-divider {
+  @apply fixed bottom-[160px] right-[31px] hidden  h-[1px] w-[30px] items-center justify-center bg-gray-300 md:flex;
+}
+
 #floating-button-mkt-in-app {
-  @apply fixed flex h-12 w-12 cursor-pointer items-center justify-center 
+  @apply fixed flex h-[60px] w-[60px] cursor-pointer items-center justify-center 
     rounded-xl bg-gray-800 p-2 
     shadow-strong;
 }

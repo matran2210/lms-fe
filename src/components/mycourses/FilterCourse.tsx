@@ -92,11 +92,11 @@ const FilterCourse = ({
           </div>
         </>
       ) : (
-        <div className="flex items-center md:gap-2 lg:gap-4">
-          <div className="text-sm font-normal text-gray-800">
+        <div className="flex shrink-0 items-center gap-4">
+          <div className="shrink-0 text-sm font-normal text-gray-800">
             {totalResult} Results
           </div>
-          <div className="flex md:gap-2 lg:gap-4">
+          <div className="flex gap-2">
             {listFilter?.map((item, index) => (
               <SAPPSelectV2
                 key={index}
@@ -118,61 +118,55 @@ const FilterCourse = ({
         <SappDrawerV3
           open={openMobileFilter}
           handleCancel={onCloseMobileFilter}
-          title={<span className="text-xl">Filter</span>}
+          title="Filter"
           rootClassName={'responsive-drawer-base drawer-bottom-0'}
           isShowBtnClose
           closable
           classNameHeader="mb-4"
           placement="bottom"
+          handleSubmit={onConfirm}
+          submitButtonClassName="w-full"
+          btnSubmitTile="Confirm"
+          isShowFooter
         >
-          <div className="relative flex h-full flex-col justify-between">
-            <div>
-              {listFilter?.map((item, index) => (
-                <div key={index}>
-                  <div>
-                    <div className="mb-2 text-base font-semibold text-gray-800">
-                      {item.placeholder}
-                    </div>
-                    <div>
-                      {(item.options ?? []).map((el) => {
-                        const isSelected = filters?.[item.name] === el.value
-                        const defaultSelected =
-                          !filters?.[item.name] && !el.value
-                        return (
-                          <div
-                            key={el.id}
-                            className="flex items-center justify-between py-2"
-                            onClick={() => handleSelect(el, item.name)}
-                          >
-                            <div
-                              className={clsx(
-                                'text-sm text-gray-800',
-                                (isSelected || defaultSelected) &&
-                                  'text-primary',
-                              )}
-                            >
-                              {el.label}
-                            </div>
-                            <div>
-                              {(isSelected || defaultSelected) && (
-                                <CheckIconV2 />
-                              )}
-                            </div>
-                          </div>
-                        )
-                      })}
-                    </div>
+          <div className="flex h-full max-h-[260px] flex-col justify-between overflow-y-auto">
+            {listFilter?.map((item, index) => (
+              <div key={index}>
+                <div>
+                  <div className="mb-2 text-base font-semibold text-gray-800">
+                    {item.placeholder}
                   </div>
-                  {index < listFilter.length - 1 && (
-                    <Divider className="my-4 bg-gray-200" />
-                  )}
+                  <div>
+                    {(item.options ?? []).map((el) => {
+                      const isSelected = filters?.[item.name] === el.value
+                      const defaultSelected = !filters?.[item.name] && !el.value
+                      return (
+                        <div
+                          key={el.id}
+                          className="flex items-center justify-between py-2"
+                          onClick={() => handleSelect(el, item.name)}
+                        >
+                          <div
+                            className={clsx(
+                              'text-sm text-gray-800',
+                              (isSelected || defaultSelected) && 'text-primary',
+                            )}
+                          >
+                            {el.label}
+                          </div>
+                          <div>
+                            {(isSelected || defaultSelected) && <CheckIconV2 />}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
                 </div>
-              ))}
-            </div>
-
-            <div className="sticky bottom-0 bg-white py-4">
-              <ButtonPrimary title="Confirm" full onClick={onConfirm} />
-            </div>
+                {index < listFilter.length - 1 && (
+                  <Divider className="my-4 bg-gray-200" />
+                )}
+              </div>
+            ))}
           </div>
         </SappDrawerV3>
       )}

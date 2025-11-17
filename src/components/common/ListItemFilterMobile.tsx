@@ -1,10 +1,8 @@
 import { CheckIconV2 } from '@assets/icons'
 import clsx from 'clsx'
-import { isEmpty } from 'lodash'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import {
-  DEFAULT_PAGE_SIZE,
   DEFAULT_SELECT_SECTION,
   DEFAULT_SELECT_SECTION_NAME,
 } from 'src/constants'
@@ -16,8 +14,7 @@ import {
   allTypes,
   ISection,
 } from 'src/type'
-import { useInitialSections } from 'src/hooks/useInitialSections'
-import { useSectionData } from 'src/hooks/useSectionData'
+import { useCourseSectionsData } from 'src/hooks/useCourseSectionsData'
 
 interface IProps {
   setOpenChooseItem: Dispatch<SetStateAction<any>>
@@ -44,16 +41,18 @@ const ListItemFilterMobile = ({
   setListUnit,
   setListActivity,
 }: IProps) => {
-  const { watch, setValue } = useFormContext()
-  const selected = {
-    section: watch('section'),
-    subsection: watch('subsection'),
-    unit: watch('unit'),
-    activity: watch('activity'),
-  }
-
+  const { setValue } = useFormContext()
   const [list, setList] = useState<ISection[]>([])
-
+  const { isLoading, selected } = useCourseSectionsData({
+    listSection,
+    listSubsection,
+    listUnit,
+    listActivity,
+    setListSection,
+    setListSubsection,
+    setListUnit,
+    setListActivity,
+  })
   const resetFormFields = (fields: SectionField[]) => {
     fields.forEach((field) => setValue(field, null))
   }
@@ -106,58 +105,6 @@ const ListItemFilterMobile = ({
     })
   }
 
-  // SECTION FETCHING HOOKS
-  const { sections, fetchInitialSections, isLoading } = useInitialSections()
-  const subsectionData = useSectionData(selected.section, 'CHAPTER')
-  const unitData = useSectionData(selected.subsection, 'UNIT')
-  const activityData = useSectionData(selected.subsection, 'ACTIVITY')
-
-  // FETCH section on mount
-  useEffect(() => {
-    if (isEmpty(listSection)) {
-      fetchInitialSections(DEFAULT_PAGE_SIZE)
-    }
-  }, [])
-
-  // FETCH dynamic based on selection
-  useEffect(() => {
-    if (selected.section && isEmpty(listSubsection)) {
-      subsectionData.fetchSections(DEFAULT_PAGE_SIZE)
-    }
-  }, [selected.section])
-
-  useEffect(() => {
-    if (selected.subsection && isEmpty(listUnit)) {
-      unitData.fetchSections(DEFAULT_PAGE_SIZE)
-    }
-  }, [selected.subsection])
-
-  useEffect(() => {
-    if (selected.subsection && isEmpty(listActivity)) {
-      //Đạt check
-      activityData.fetchSections(DEFAULT_PAGE_SIZE)
-    }
-  }, [selected.subsection])
-
-  // SET list after fetch
-  useEffect(() => {
-    if (!isEmpty(sections)) setListSection(sections)
-  }, [sections])
-
-  useEffect(() => {
-    if (!isEmpty(subsectionData.sections))
-      setListSubsection(subsectionData.sections)
-  }, [subsectionData.sections])
-
-  useEffect(() => {
-    if (!isEmpty(unitData.sections))
-      setListUnit && setListUnit(unitData.sections)
-  }, [unitData.sections])
-
-  useEffect(() => {
-    if (!isEmpty(activityData.sections)) setListActivity(activityData.sections)
-  }, [activityData.sections])
-
   // SELECT list to render
   useEffect(() => {
     const map: Record<string, ISection[]> = {
@@ -174,13 +121,12 @@ const ListItemFilterMobile = ({
   const hasSelectedOption = Object.values(selected).some((value) => !!value)
 
   // COMBINED loading check
-  const isAnyLoading =
-    isLoading || subsectionData.isLoading || activityData.isLoading
+  const isAnyLoading = isLoading
 
   if (isAnyLoading) return null
 
   return (
-    <div className="flex min-h-1 flex-1 flex-col">
+    <div className="flex max-h-[230px] min-h-1 flex-1 flex-col overflow-y-auto">
       {list?.map((item) => {
         const isSelectedValue =
           selected.section === item.id ||

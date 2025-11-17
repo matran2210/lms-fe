@@ -36,7 +36,7 @@ import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { FormProvider, useForm } from 'react-hook-form'
 import ListFilterMobile from '@components/common/ListFilterMobile'
-import NoDataV2 from 'src/common/NodataV2'
+import NoCoursesAvailable from 'src/common/NoCoursesAvailable'
 
 const ResultsTable = ({
   openFilter,
@@ -205,7 +205,7 @@ const ResultsTable = ({
       {/* Empty state */}
       {!isLoading && isEmpty(flatData) && !openFilter && (
         <div className="flex h-[calc(100vh-12rem)] flex-col items-center justify-center md:h-[calc(100vh-18rem)]">
-          <NoDataV2 />
+          <NoCoursesAvailable />
         </div>
       )}
 
@@ -259,12 +259,23 @@ const ResultsTable = ({
         handleBack={handleBack}
         handleSubmit={handleSubmit}
         classNameHeader="pb-4 border-b border-gray-200"
-        rootClassName="responsive-drawer-base"
+        rootClassName="responsive-drawer-base drawer-bottom-0"
         submitButtonClassName="w-full h-10"
         btnSubmitTile="Confirm"
+        placement="bottom"
       >
         {openFilter && !openChooseItem.isOpen ? (
-          <ListFilterMobile setOpenChooseItem={setOpenChooseItem} />
+          <ListFilterMobile
+            setOpenChooseItem={setOpenChooseItem}
+            listSection={listSection}
+            listSubsection={listSubsection}
+            listUnit={listUnit}
+            listActivity={listActivity}
+            setListSection={setListSection}
+            setListSubsection={setListSubsection}
+            setListUnit={setListUnit}
+            setListActivity={setListActivity}
+          />
         ) : (
           <ListItemFilterMobile
             setOpenChooseItem={setOpenChooseItem}

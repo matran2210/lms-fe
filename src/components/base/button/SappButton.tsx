@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Tooltip from 'src/common/Tooltip'
 import { IButtonProps } from 'src/type'
+import LoadingBtnAnimation from '@assets/icons/LoadingBtnAnimation'
 
 const SIZES = {
   small: 'text-[0.875rem] leading-4',
@@ -106,20 +107,7 @@ const SappButton = ({
     ${isDisabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}
   `.trim()
 
-  const loadingIndicator = (
-    <div className={`flex items-center justify-center ${classNameLoading}`}>
-      <span className="sr-only">Loading...</span>
-      <div
-        className={`h-2 w-2 animate-bounce rounded-full [animation-delay:-0.3s] ${COLOR_LOADING[color]}`}
-      ></div>
-      <div
-        className={`h-2 w-2 animate-bounce rounded-full [animation-delay:-0.15s] ${COLOR_LOADING[color]}`}
-      ></div>
-      <div
-        className={`h-2 w-2 animate-bounce rounded-full ${COLOR_LOADING[color]}`}
-      ></div>
-    </div>
-  )
+  const loadingIndicator = <LoadingBtnAnimation className="!size-[18px]" />
 
   const buttonContent = (
     <Tooltip title={toolTipTitle} showTooltip={showTooltip}>

@@ -578,7 +578,7 @@ const CoursePartDetail = () => {
         </div>
       ) : null}
 
-      <div className="mt-4 min-h-[calc(100vh-3rem)] md:min-h-[calc(100vh-5rem)]">
+      <div className="mb-24 mt-4 min-h-[calc(100vh-3rem)] md:min-h-[calc(100vh-5rem)]">
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (
@@ -725,12 +725,10 @@ const CoursePartDetail = () => {
             is_passed_course={isPassedCourse}
           />
         )}
-        {openResource && (
-          <LearningResource
-            open={openResource}
-            setOpenResource={setOpenResource}
-          />
-        )}
+        <LearningResource
+          open={openResource}
+          setOpenResource={setOpenResource}
+        />
       </div>
       <div className="sticky inset-x-0 bottom-4 z-50 hidden md:block">
         <div className="w-full">

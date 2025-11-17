@@ -247,6 +247,9 @@ const ActivityPage = () => {
       CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION = {}
       try {
         dispatch(courseActivityAction.setActivityState(activity))
+        dispatch(
+          courseActivityAction.setCurrentTabId(router.query?.tabId as string),
+        )
         dispatch(getDiscussion({ id: router.query?.id, sectionId: sectionId }))
       } catch (error) {}
     }
@@ -529,10 +532,13 @@ const ActivityPage = () => {
         childClassName={focusOnlyDiscussion ? 'h-full' : ''}
       >
         <div
-          className={clsx('h-full', {
-            'my-0 md:mt-6 lg:mt-0': !focusOnlyDiscussion,
-            'py-2': focusOnlyDiscussion,
-          })}
+          className={clsx(
+            'min-h-[calc(100vh-3rem)] md:min-h-[calc(100vh-5rem)]',
+            {
+              'my-0 md:mt-6 lg:mt-0': !focusOnlyDiscussion,
+              'py-2': focusOnlyDiscussion,
+            },
+          )}
         >
           {/* Breadcrumbs */}
           <div
@@ -681,7 +687,10 @@ const ActivityPage = () => {
               <Discussion class_id={(router.query?.id as string) || ''} />
             </div>
           </div>
-          <AssistiveTouch className="md:hidden" menuItems={listAssistive} />
+          <AssistiveTouch
+            className={clsx('md:hidden', { hidden: focusOnlyDiscussion })}
+            menuItems={listAssistive}
+          />
           <BottomMenu
             className={focusOnlyDiscussion ? 'hidden' : 'hidden md:flex'}
           >
@@ -868,12 +877,7 @@ const ActivityPage = () => {
         />
       </Layout>
 
-      {openResource && (
-        <LearningResource
-          open={openResource}
-          setOpenResource={setOpenResource}
-        />
-      )}
+      <LearningResource open={openResource} setOpenResource={setOpenResource} />
 
       {openVideoTimeline && (
         <VideoTimelineMobile
@@ -882,14 +886,12 @@ const ActivityPage = () => {
           currentVideo={currentVideo}
         />
       )}
-      {openActivityResource && (
-        <ActivityResourceMobile
-          open={openActivityResource}
-          onClose={onCloseActivityResource}
-          activity={activity}
-          handleOpenScratchPad={handleOpenScratchPad}
-        />
-      )}
+      <ActivityResourceMobile
+        open={openActivityResource}
+        onClose={onCloseActivityResource}
+        activity={activity}
+        handleOpenScratchPad={handleOpenScratchPad}
+      />
     </SappLoadingGlobal>
   )
 }

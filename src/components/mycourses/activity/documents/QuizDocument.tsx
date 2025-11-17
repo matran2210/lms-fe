@@ -579,12 +579,20 @@ const QuizDocument = ({
             setOpenGradedReport(true)
             return
           } else {
-            const searchParams =
-              is_limited && limit_count && number_of_attempts
-                ? `attempt=${number_of_attempts + 1}/${limit_count}`
-                : ''
+            const searchParams: string[] = []
+            if (is_limited && limit_count && number_of_attempts) {
+              searchParams.push(
+                `attempt=${number_of_attempts + 1}/${limit_count}`,
+              )
+            }
+            if (tabId) {
+              searchParams.push(`tabId=${tabId}`)
+            }
+            const queryString = searchParams.join('&')
             router.replace(
-              `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/quiz-result/${e.quizAttemptId}?${searchParams}`,
+              `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/quiz-result/${e.quizAttemptId}${
+                queryString ? `?${queryString}` : ''
+              }`,
             )
           }
           // dispatch(
@@ -792,13 +800,13 @@ const QuizDocument = ({
     switch (status) {
       case GRADE_STATUS.FINISHED_GRADING:
         return (
-          <div className="rounded bg-[#3978391A] px-2 font-medium text-[#166534]">
+          <div className="rounded bg-[#3978391A] px-2 py-[2px] font-medium text-[#166534]">
             Finished Grading
           </div>
         )
       case GRADE_STATUS.AWAITING_GRADING:
         return (
-          <div className="text-amber-400  rounded bg-[#FFB8001A] px-2 font-medium">
+          <div className="rounded bg-warning-50 px-2 py-[2px] font-medium text-warning">
             Awaiting Grading
           </div>
         )
@@ -892,8 +900,15 @@ const QuizDocument = ({
         return
       }
       if (gradeStatus === GRADE_STATUS.FINISHED_GRADING) {
+        const searchParams: string[] = []
+        if (tabId) {
+          searchParams.push(`tabId=${tabId}`)
+        }
+        const queryString = searchParams.join('&')
         router.replace(
-          `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/quiz-result/${resultId}`,
+          `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/quiz-result/${resultId}${
+            queryString ? `?${queryString}` : ''
+          }`,
         )
         return
       }

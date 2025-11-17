@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import BaseButton from './BaseButton'
 import { IButtonBaseProps } from 'src/type'
+import LoadingBtnAnimation from '@assets/icons/LoadingBtnAnimation'
 
 const ButtonPrimary = ({
   title,
@@ -12,6 +13,7 @@ const ButtonPrimary = ({
   startIcon,
   endIcon,
   full = false,
+  loading,
   children,
   ...props
 }: IButtonBaseProps) => {
@@ -53,9 +55,15 @@ const ButtonPrimary = ({
       {...props}
     >
       <div className="flex items-center gap-2.5">
-        {startIcon && <div className="w-full">{startIcon}</div>}
-        <div className="w-full">{title || children}</div>
-        {endIcon && <div className="w-full">{endIcon}</div>}
+        {loading ? (
+          <LoadingBtnAnimation />
+        ) : (
+          <>
+            {startIcon && <div className="w-full">{startIcon}</div>}
+            <div className="w-full">{title || children}</div>
+            {endIcon && <div className="w-full">{endIcon}</div>}
+          </>
+        )}
       </div>
     </BaseButton>
   )

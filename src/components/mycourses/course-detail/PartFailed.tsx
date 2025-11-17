@@ -15,6 +15,7 @@ import { useCourseContext } from '@contexts/index'
 import ButtonText from '@components/base/button/ButtonText'
 import CardCourse from '@components/common/CardCourse/CardCourse'
 import { EAttemptStatus } from 'src/constants/attempt'
+import clsx from 'clsx'
 
 const PartFailed = ({
   coursePart,
@@ -23,6 +24,7 @@ const PartFailed = ({
   isLock = false,
   lastElementRef,
   isTeacher,
+  hasCertificate = false,
 }: {
   coursePart: IMyCourseDetail
   class_user_id?: string
@@ -30,6 +32,7 @@ const PartFailed = ({
   isLock?: boolean
   lastElementRef: (node: HTMLDivElement) => void
   isTeacher: boolean
+  hasCertificate?: boolean
 }) => {
   const noOfAttempts = `${coursePart?.quiz?.attempt?.number_of_attempts || 0}/${
     coursePart?.quiz?.is_limited ? coursePart?.quiz?.limit_count : 'Unlimited'
@@ -101,6 +104,7 @@ const PartFailed = ({
   const selectedAttemptNumber = selectedResult?.label?.split('/')[0]
 
   const isShowButtonAction = () => {
+    if (hasCertificate) return false
     // if (Number(currentAttemptNumber) > Number(selectedAttemptNumber))
     //   return false
     // if (Number(labelResult) > Number(selectedResult?.label)) return false
@@ -183,7 +187,10 @@ const PartFailed = ({
     } else {
       router.push({
         pathname: `${userPrefix}/courses/test/test-result/${selectedResult?.value}`,
-        query: { attempt: selectedResult?.label },
+        query: {
+          attempt: selectedResult?.label,
+          ...(hasCertificate && { hasCertificate }),
+        },
       })
     }
     trackGAEvent(`Click Button Result ${showTitleFinalTest}`)
@@ -223,7 +230,7 @@ const PartFailed = ({
       return coursePart?.quiz?.attempt?.status
     }
   }
-
+  const isRetake = renderOkButtonCaption() === 'Retake'
   return (
     <>
       <CardCourse
@@ -303,37 +310,35 @@ const PartFailed = ({
               (coursePart?.quiz?.attempt?.number_of_attempts !==
                 coursePart?.quiz?.limit_count &&
                 isRunoutAttemp) ? (
-                <div className="w-[84px]">
-                  <ButtonSecondary
-                    size="small"
-                    disabled={
-                      coursePart?.quiz?.is_limited &&
-                      coursePart?.quiz?.attempt?.number_of_attempts ===
-                        coursePart?.quiz?.limit_count
+                <ButtonSecondary
+                  size="small"
+                  disabled={
+                    coursePart?.quiz?.is_limited &&
+                    coursePart?.quiz?.attempt?.number_of_attempts ===
+                      coursePart?.quiz?.limit_count
+                  }
+                  title={`Start`}
+                  className={`${
+                    coursePart?.quiz?.attempt?.number_of_attempts !==
+                      coursePart?.quiz?.limit_count && ''
+                  } ml-auto w-full md:w-[84px]`}
+                  onClick={() => {
+                    if (
+                      coursePart?.course_section_link_parents?.[0]
+                        ?.is_preview_locked
+                    ) {
+                      setOpenPopupCTA({
+                        lockSection: true,
+                        ctaUpgrade: false,
+                        thankYou: false,
+                        thankYouLater: false,
+                      })
+                    } else {
+                      setOpen(true)
                     }
-                    title={`Start`}
-                    className={`${
-                      coursePart?.quiz?.attempt?.number_of_attempts !==
-                        coursePart?.quiz?.limit_count && ''
-                    } ml-auto w-full`}
-                    onClick={() => {
-                      if (
-                        coursePart?.course_section_link_parents?.[0]
-                          ?.is_preview_locked
-                      ) {
-                        setOpenPopupCTA({
-                          lockSection: true,
-                          ctaUpgrade: false,
-                          thankYou: false,
-                          thankYouLater: false,
-                        })
-                      } else {
-                        setOpen(true)
-                      }
-                      trackGAEvent(`Click Button Start ${showTitleFinalTest}`)
-                    }}
-                  />
-                </div>
+                    trackGAEvent(`Click Button Start ${showTitleFinalTest}`)
+                  }}
+                />
               ) : (
                 <></>
               )
@@ -351,31 +356,29 @@ const PartFailed = ({
                   )}
 
                 {isShowButtonAction() && (
-                  <div className="w-[84px]">
-                    <ButtonSecondary
-                      className="w-full"
-                      size="small"
-                      title={renderOkButtonCaption()}
-                      onClick={() => {
-                        if (
-                          coursePart?.course_section_link_parents?.[0]
-                            ?.is_preview_locked
-                        ) {
-                          setOpenPopupCTA({
-                            lockSection: true,
-                            ctaUpgrade: false,
-                            thankYou: false,
-                            thankYouLater: false,
-                          })
-                        } else {
-                          setOpen(true)
-                        }
-                        trackGAEvent(
-                          `Click Button Retake ${showTitleFinalTest}`,
-                        )
-                      }}
-                    />
-                  </div>
+                  <ButtonSecondary
+                    className={clsx(
+                      isRetake ? 'w-[84px]' : ' w-full md:w-[84px]',
+                    )}
+                    size="small"
+                    title={renderOkButtonCaption()}
+                    onClick={() => {
+                      if (
+                        coursePart?.course_section_link_parents?.[0]
+                          ?.is_preview_locked
+                      ) {
+                        setOpenPopupCTA({
+                          lockSection: true,
+                          ctaUpgrade: false,
+                          thankYou: false,
+                          thankYouLater: false,
+                        })
+                      } else {
+                        setOpen(true)
+                      }
+                      trackGAEvent(`Click Button Retake ${showTitleFinalTest}`)
+                    }}
+                  />
                 )}
               </div>
             )}
