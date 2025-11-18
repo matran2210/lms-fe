@@ -1,10 +1,11 @@
+import { useEffect, useMemo, useState } from 'react'
 import { round } from 'lodash'
-import { useMemo } from 'react'
+import { convertHourToDayLeft, convertLocalTimeToUTC } from '@lms/utils'
 import {
-  BUTTON_STATUS,
   CLASS_STATUS,
   CLASS_USER_TYPES,
   COURSE_STATUS,
+  BUTTON_STATUS,
 } from '@lms/core'
 import { CLASS_USER_STATUS, ICourse } from '@lms/core'
 
@@ -12,6 +13,24 @@ export const useCourseStatus = (course: ICourse) => {
   const student = course?.classes?.[0]?.class_user_instances?.[0]
   const classInstance = course?.classes?.[0]
   const currentDate = useMemo(() => new Date(), [])
+  const [daysDifference, setDaysDifference] = useState(0)
+
+  useEffect(() => {
+    if (student?.finished_at) {
+      const currentLocalDate = new Date()
+      const currentUTCDate = convertLocalTimeToUTC(currentLocalDate)
+      const finishDate = new Date(student?.finished_at)
+      const finishUTCDate = convertLocalTimeToUTC(finishDate)
+
+      const currentTime = currentUTCDate.getTime()
+      const finishTime = finishUTCDate.getTime()
+
+      const theRestHours = (finishTime - currentTime) / 3600000
+      const dayLefts = convertHourToDayLeft(theRestHours)
+
+      setDaysDifference(dayLefts)
+    }
+  }, [course, student?.finished_at])
 
   const percentProgress =
     round(
@@ -38,7 +57,9 @@ export const useCourseStatus = (course: ICourse) => {
     const studentStatus = student?.status
     const startedAt = student?.started_at
     const finishedAt = student?.finished_at
+
     const formattedDate = new Date()
+
     if (
       courseStatus === COURSE_STATUS.PUBLISH ||
       courseStatus === COURSE_STATUS.LOCK
@@ -57,38 +78,42 @@ export const useCourseStatus = (course: ICourse) => {
         if (course?.course_type === 'TRIAL_COURSE' && !student) {
           if (classInstance?.duration_type === 'FLEXIBLE')
             return BUTTON_STATUS.Active
+
           if (
             classInstance?.duration_type === 'FIXED' &&
             classInstance?.finished_at
           ) {
-            const classFinish = new Date(classInstance?.finished_at as any)
+            const classFinish = new Date(classInstance?.finished_at as Date)
             if (classFinish <= formattedDate) return BUTTON_STATUS.Extend
             if (classFinish > formattedDate) return BUTTON_STATUS.Active
           }
         }
+
+        if (!startedAt && !finishedAt) {
+          if (classInstance?.duration_type === 'FLEXIBLE')
+            return BUTTON_STATUS.Active
+          else return BUTTON_STATUS.Disabled
+        }
+
         if (startedAt && finishedAt) {
-          const finishedAtDate = new Date(student?.finished_at as any)
+          const finishedAtDate = new Date(student?.finished_at as Date)
+
           if (
             course?.course_type === 'TRIAL_COURSE' &&
             finishedAtDate <= formattedDate
           )
             return BUTTON_STATUS.Extend
+
           if (finishedAtDate <= formattedDate) return BUTTON_STATUS.Disabled
+
           if (finishedAtDate > formattedDate) {
-            if (studentStatus === 'READY_TO_LEARN') return BUTTON_STATUS.Begin
-            if (studentStatus === 'IN_PROGRESS') return BUTTON_STATUS.Resume
-            if (studentStatus === 'COMPLETED') return BUTTON_STATUS.Review
+            if (studentStatus === CLASS_USER_STATUS.READY_TO_LEARN)
+              return BUTTON_STATUS.Begin
+            if (studentStatus === CLASS_USER_STATUS.IN_PROGRESS)
+              return BUTTON_STATUS.Resume
+            if (studentStatus === CLASS_USER_STATUS.COMPLETED)
+              return BUTTON_STATUS.Review
           } else return BUTTON_STATUS.Disabled
-        }
-        if (!startedAt) {
-          return BUTTON_STATUS.Active
-        } else {
-          if (studentStatus === CLASS_USER_STATUS.READY_TO_LEARN)
-            return BUTTON_STATUS.Begin
-          if (studentStatus === CLASS_USER_STATUS.IN_PROGRESS)
-            return BUTTON_STATUS.Resume
-          if (studentStatus === CLASS_USER_STATUS.COMPLETED)
-            return BUTTON_STATUS.Review
         }
 
         return BUTTON_STATUS.Disabled
@@ -131,6 +156,7 @@ export const useCourseStatus = (course: ICourse) => {
   return {
     student,
     classInstance,
+    daysDifference,
     percentProgress,
     determineButtonToShow,
     isActiveStudent,
