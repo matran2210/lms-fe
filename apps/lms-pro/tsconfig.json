@@ -35,7 +35,8 @@
     "public/locales/vi/common.json",
     "src/components/base/checkbox/HookFormCheckBox.tsx_",
     "src/components/base/radiobutton/HookFormRadioGroup.tsx_",
-    "src/components/base/radiobutton/HookFormRadioTextFieldGroup.tsx_"
+    "src/components/base/radiobutton/HookFormRadioTextFieldGroup.tsx_",
+    "../../features/test/src/components/PopupSelectRetakeOrContinueAttempt.tsx"
   ],
   "exclude": ["node_modules"]
 }

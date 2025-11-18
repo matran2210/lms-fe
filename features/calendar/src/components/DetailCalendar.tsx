@@ -18,7 +18,7 @@ import { CloseDetailIcon, StatusDotIcon, ZoomIcon } from "@lms/assets";
 import { Divider } from "antd";
 import clsx from "clsx";
 import { ButtonPrimary } from "@lms/ui";
-import { SpinIcon } from "@assets/icons";
+import { SpinIcon } from "@lms/assets";
 const { publicRuntimeConfig } = getConfig();
 export const { apiURL } = publicRuntimeConfig;
 

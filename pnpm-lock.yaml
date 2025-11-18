@@ -81,9 +81,6 @@ importers:
       '@lms/core':
         specifier: workspace:*
         version: link:../../libs/core
-      '@lms/hooks':
-        specifier: workspace:*
-        version: link:../../libs/hooks
       '@lms/feature-auth':
         specifier: workspace:*
         version: link:../../features/auth
@@ -102,6 +99,9 @@ importers:
       '@lms/feature-user':
         specifier: workspace:*
         version: link:../../features/user
+      '@lms/hooks':
+        specifier: workspace:*
+        version: link:../../libs/hooks
       '@lms/ui':
         specifier: workspace:*
         version: link:../../libs/ui
@@ -767,6 +767,9 @@ importers:
       '@lms/core':
         specifier: workspace:*
         version: link:../../libs/core
+      '@lms/hooks':
+        specifier: workspace:*
+        version: link:../../libs/hooks
       '@lms/ui':
         specifier: workspace:*
         version: link:../../libs/ui
@@ -797,6 +800,24 @@ importers:
       '@lms/core':
         specifier: workspace:*
         version: link:../../libs/core
+      '@lms/ui':
+        specifier: workspace:*
+        version: link:../../libs/ui
+      '@lms/utils':
+        specifier: workspace:*
+        version: link:../../libs/utils
+
+  features/test:
+    dependencies:
+      '@lms/assets':
+        specifier: workspace:*
+        version: link:../../libs/assets
+      '@lms/core':
+        specifier: workspace:*
+        version: link:../../libs/core
+      '@lms/hooks':
+        specifier: workspace:*
+        version: link:../../libs/hooks
       '@lms/ui':
         specifier: workspace:*
         version: link:../../libs/ui
@@ -837,9 +858,6 @@ importers:
       '@lms/assets':
         specifier: workspace:*
         version: link:../assets
-      '@lms/core':
-        specifier: workspace:*
-        version: link:../core
       '@lms/core':
         specifier: workspace:*
         version: link:../core

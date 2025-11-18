@@ -1,15 +1,15 @@
-import { CollapseArrowIcon } from '@assets/icons'
-import clsx from 'clsx'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
-import { useCourseSectionsData } from 'src/hooks/useCourseSectionsData'
-import { getTypeName, ISection, SectionField } from '@lms/core'
+import { CollapseArrowIcon } from "@lms/assets";
+import clsx from "clsx";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
+import { useCourseSectionsData } from "@lms/hooks";
+import { getTypeName, ISection, SectionField } from "@lms/core";
 
 interface IList {
-  id: number
-  name: string
-  isDisabled: boolean
-  type: SectionField
+  id: number;
+  name: string;
+  isDisabled: boolean;
+  type: SectionField;
 }
 
 const ListFilterMobile = ({
@@ -23,18 +23,18 @@ const ListFilterMobile = ({
   setListUnit,
   setListActivity,
 }: {
-  setOpenChooseItem: Dispatch<SetStateAction<any>>
-  listSection: ISection[]
-  listSubsection: ISection[]
-  listUnit?: ISection[]
-  listActivity: ISection[]
-  setListSection: Dispatch<SetStateAction<ISection[]>>
-  setListSubsection: Dispatch<SetStateAction<ISection[]>>
-  setListUnit?: Dispatch<SetStateAction<ISection[]>>
-  setListActivity: Dispatch<SetStateAction<ISection[]>>
+  setOpenChooseItem: Dispatch<SetStateAction<any>>;
+  listSection: ISection[];
+  listSubsection: ISection[];
+  listUnit?: ISection[];
+  listActivity: ISection[];
+  setListSection: Dispatch<SetStateAction<ISection[]>>;
+  setListSubsection: Dispatch<SetStateAction<ISection[]>>;
+  setListUnit?: Dispatch<SetStateAction<ISection[]>>;
+  setListActivity: Dispatch<SetStateAction<ISection[]>>;
 }) => {
-  const { watch } = useFormContext()
-  const [list, setList] = useState<IList[]>([])
+  const { watch } = useFormContext();
+  const [list, setList] = useState<IList[]>([]);
   const { selected } = useCourseSectionsData({
     listSection,
     listSubsection,
@@ -44,63 +44,63 @@ const ListFilterMobile = ({
     setListSubsection,
     setListUnit,
     setListActivity,
-  })
+  });
   const sectionNameSection = listSection?.find(
     (item) => item?.id === selected.section,
-  )?.name
+  )?.name;
   const sectionNameSubsection = listSubsection?.find(
     (item) => item?.id === selected.subsection,
-  )?.name
+  )?.name;
   const sectionNameUnit = listUnit?.find(
     (item) => item?.id === selected.unit,
-  )?.name
+  )?.name;
   const sectionNameActivity = listActivity?.find(
     (item) => item?.id === selected.activity,
-  )?.name
+  )?.name;
 
   const handleClick = (item: IList) => {
-    if (item.isDisabled) return
-    const name = getTypeName[item.type]
+    if (item.isDisabled) return;
+    const name = getTypeName[item.type];
     setOpenChooseItem({
       isOpen: true,
       type: item.type as SectionField,
       name,
-    })
-  }
+    });
+  };
 
   useEffect(() => {
     setList([
       {
         id: 1,
-        name: sectionNameSection || 'Section',
+        name: sectionNameSection || "Section",
         isDisabled: false,
-        type: 'section',
+        type: "section",
       },
       {
         id: 2,
-        name: sectionNameSubsection || 'Subsection',
-        isDisabled: !watch('section'),
-        type: 'subsection',
+        name: sectionNameSubsection || "Subsection",
+        isDisabled: !watch("section"),
+        type: "subsection",
       },
       {
         id: 3,
-        name: sectionNameUnit || 'Unit',
-        isDisabled: !watch('subsection'),
-        type: 'unit',
+        name: sectionNameUnit || "Unit",
+        isDisabled: !watch("subsection"),
+        type: "unit",
       },
       {
         id: 4,
-        name: sectionNameActivity || 'Activity',
-        isDisabled: !watch('unit'),
-        type: 'activity',
+        name: sectionNameActivity || "Activity",
+        isDisabled: !watch("unit"),
+        type: "activity",
       },
-    ])
+    ]);
   }, [
     sectionNameSection,
     sectionNameSubsection,
     sectionNameUnit,
     sectionNameActivity,
-  ])
+  ]);
 
   return (
     <div className="flex flex-1 flex-col">
@@ -108,8 +108,8 @@ const ListFilterMobile = ({
         <div
           key={item.id}
           className={clsx(
-            'flex items-center justify-between py-2',
-            item.isDisabled ? 'text-gray-400' : 'text-gray-800',
+            "flex items-center justify-between py-2",
+            item.isDisabled ? "text-gray-400" : "text-gray-800",
           )}
           onClick={() => handleClick(item)}
         >
@@ -120,7 +120,7 @@ const ListFilterMobile = ({
         </div>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default ListFilterMobile
+export default ListFilterMobile;

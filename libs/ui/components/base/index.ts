@@ -33,3 +33,4 @@ export * from "./video/index";
 export { default as MovableWindow } from "./window/index";
 export * from "./datetime/index";
 export * from "./collapse/index";
+export * from "./divider/index";

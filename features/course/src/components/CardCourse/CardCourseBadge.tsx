@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 const Badge = ({ badge, className }: { badge: string; className: string }) => {
   return (
@@ -7,7 +7,7 @@ const Badge = ({ badge, className }: { badge: string; className: string }) => {
     >
       {badge}
     </div>
-  )
-}
+  );
+};
 
-export default Badge
+export default Badge;
