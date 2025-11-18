@@ -1,14 +1,13 @@
+import LayoutTeacher from '@components/layout/Teacher'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { CoursesAPI } from 'src/pages/api/courses'
-import ResultsTable from 'src/pages/courses/my-course/[courseId]/results/ResultsTable'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
-import LayoutTeacher from '@components/layout/Teacher'
-import { ITabs } from 'src/type/common'
 import { PageLink, TitleSidebar } from 'src/constants'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { CoursesAPI } from 'src/pages/api/courses'
+import { UserType } from 'src/redux/types/User/urser'
+import { ITabs } from 'src/type/common'
 
 const DEFAULT_PAGESIZE = 10
 

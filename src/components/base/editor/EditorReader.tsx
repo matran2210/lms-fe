@@ -60,6 +60,8 @@ const EditorReader = ({
   }, [text_editor_content])
 
   const convertMathToImage = async (element: any) => {
+    if (typeof com === 'undefined') return
+
     const viewer = com?.wiris?.js?.JsPluginViewer
 
     if (element && viewer) {

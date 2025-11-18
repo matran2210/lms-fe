@@ -909,6 +909,8 @@ export const HighlightableHTML: React.FC<Props> = ({
   }
 
   const convertMathToImage = async (element: any) => {
+    if (typeof com === 'undefined') return
+
     const viewer = com?.wiris?.js?.JsPluginViewer
 
     if (element && viewer) {
