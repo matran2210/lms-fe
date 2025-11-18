@@ -28,8 +28,8 @@ import DragDropQuestion, {
 } from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectQuestion'
-import useMousePosition from '@utils/hookMouseMove'
-import { runHighlight } from '@utils/index'
+import {useMousePosition} from '@lms/hooks'
+import { runHighlight } from '@lms/utils'
 import clsx from 'clsx'
 import { isNull, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
@@ -53,9 +53,8 @@ import {
   ICratchPad,
   IQuestionResult,
   IRequirement,
-  ITopic,
-} from 'src/type/case-study'
-import { IExhibit } from 'src/type/exhibit'
+  ITopic,IExhibit
+} from '@lms/core'
 import CaseStudyWrapper from '../../../components/casestudy/layout/CaseStudyWrapper'
 
 const CaseStudyResult = () => {

@@ -1,5 +1,5 @@
 {
-"name": "@lms/utils",
+"name": "@lms/hooks",
 "version": "1.0.0",
 "private": true,
 "main": "./index.ts", 
@@ -11,9 +11,6 @@
 },
 "dependencies": {
     "@lms/core": "workspace:*",
-    "@funktechno/texthighlighter": "^2.1.2",
-    "dompurify": "^3.1.6",
-    "lodash": "^4.17.21",
-    "react-query": "^3.39.3"
+    "@lms/utils": "workspace:*"
 }
 }

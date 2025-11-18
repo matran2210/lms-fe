@@ -1,12 +1,12 @@
 import dayjs from 'dayjs'
 import { UseFormGetValues } from 'react-hook-form'
 import { E_REQUEST_STATUS, E_REQUEST_TYPE, REQUEST_STATUS, REQUEST_TYPE } from '@lms/core'
-import { IRecurringSchedule } from '@lms/core'
+import { IRecurringSchedule } from 'src/type/my-request'
 import {
   convertLocalWeekDaysToUTC,
   getDayIndex,
   reverseDaysOfWeek,
-} from './common'
+} from '@lms/utils'
 import {
   REPEAT_FREQUENCY,
   REPEAT_FREQUENCY_LABEL,

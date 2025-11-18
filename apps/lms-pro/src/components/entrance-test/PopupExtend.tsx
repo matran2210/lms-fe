@@ -1,7 +1,6 @@
 import { AlertIcon } from '@assets/icons'
 import { SappModalV2 } from '@lms/ui'
-import { trackGAEvent } from '@utils/google-analytics'
-import { onLinkSocial } from '@utils/index'
+import { trackGAEvent, onLinkSocial} from '@lms/utils'
 import { Dispatch, SetStateAction } from 'react'
 
 interface IProps {

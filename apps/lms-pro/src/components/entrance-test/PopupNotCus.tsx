@@ -1,6 +1,6 @@
 import { CloseIcon } from '@assets/icons'
 import { SappModalV2 } from '@lms/ui'
-import { onLinkSocial } from '@utils/index'
+import { onLinkSocial } from '@lms/utils'
 import React, { Dispatch, SetStateAction } from 'react'
 
 interface IProps {

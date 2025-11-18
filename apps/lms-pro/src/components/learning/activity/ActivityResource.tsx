@@ -1,7 +1,7 @@
 import { CollapseArrowIcon, DownloadIcon } from '@assets/icons'
 import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
 import { UploadAPI } from '@pages/api/upload'
-import { trackGAEvent } from '@utils/google-analytics'
+import { trackGAEvent } from '@lms/utils'
 import { Collapse } from 'antd'
 import clsx from 'clsx'
 import React from 'react'

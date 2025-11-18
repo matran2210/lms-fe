@@ -13,7 +13,7 @@ import {
   VALIDATE_MIN,
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
-import { convertHumanReadableToSnakeCase } from '@utils/index'
+import { convertHumanReadableToSnakeCase } from '@lms/utils'
 import clsx from 'clsx'
 import { StaticImageData } from 'next/image'
 import { Dispatch, SetStateAction, useState } from 'react'

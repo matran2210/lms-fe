@@ -4,7 +4,7 @@ import SappDrawer from '../../base/SappDrawer'
 import CollapseBox from '@components/layout/CollapseBox'
 import CollapseItem from '@components/layout/CollapseBox/CollapseItem'
 import { MyRequestAPI } from '@pages/api/my-request'
-import { capitalizeFirstLetter, formatDateTimeWithTimeZone } from '@utils/index'
+import { capitalizeFirstLetter, formatDateTimeWithTimeZone } from '@lms/utils'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
@@ -18,13 +18,15 @@ import {
   requestStatusToBadge,
   requestStatusToTitle,
 } from '@lms/core'
+
+
 import { REQUEST_TYPE } from '@lms/core'
-import { IBusyRequestDetailResponse, IWeeklyNorms } from '@lms/core'
-import { RequestStatus } from '@lms/core/enum'
+import { IBusyRequestDetailResponse, IWeeklyNorms } from 'src/type/my-request'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { useAppDispatch } from 'src/redux/hook'
 import { SAPPBadge } from '@lms/ui'
 import { formatRecurringSchedule } from '@utils/request'
+import { RequestStatus } from 'src/type/my-request/enum'
 
 export interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>

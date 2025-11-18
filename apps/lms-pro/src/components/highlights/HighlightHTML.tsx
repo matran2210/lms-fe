@@ -3,7 +3,7 @@ import { Button, Divider, Input, Modal, Popover } from 'antd'
 import {
   replaceTextAlignCenterToWebKitCenter,
   replaceWhiteSpacePreWrapToNormal,
-} from '@utils/index'
+} from '@lms/utils'
 import parseHTML, { Element } from 'html-react-parser'
 import { PointerIcon, ShowCommentIcon } from '@assets/icons'
 import { doHighlight, optionsImpl } from '@funktechno/texthighlighter/lib'

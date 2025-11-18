@@ -15,7 +15,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { ITabs } from '@lms/core'
 import { FormProvider, useForm } from 'react-hook-form'
-import { buildQueryString } from '@utils/index'
+import { buildQueryString } from '@lms/utils'
 
 const DEFAULT_PAGESIZE = 9
 const breadcrumbs: ITabs[] = [

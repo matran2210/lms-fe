@@ -1,6 +1,6 @@
 import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from '@assets/icons'
 import { SappBreadcrumbNotLink } from '@lms/ui'
-import { cleanParamsAPI } from '@utils/index'
+import { cleanParamsAPI } from '@lms/utils'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'

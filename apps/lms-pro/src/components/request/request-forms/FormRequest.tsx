@@ -9,7 +9,7 @@ import { MyRequestAPI } from '@pages/api/my-request'
 import { REPEAT_TYPE } from '@lms/core'
 import { getSelectOptions } from '@utils/helpers'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
-import { capitalizeFirstLetter, formatDateTimeWithTimeZone } from '@utils/index'
+import { capitalizeFirstLetter, formatDateTimeWithTimeZone } from '@lms/utils'
 import { formatRecurringSchedule, getRecurringSchedule } from '@utils/request'
 import { requestValidationSchema } from '@utils/validation/my-request-validation'
 import { ConfigProvider, Drawer } from 'antd'
@@ -29,7 +29,9 @@ import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { getUserInformation, userReducer } from 'src/redux/slice/User/User'
 import { IResponse } from 'src/redux/types'
 import { ISelect } from '@lms/core'
-import { IRecurringSchedule, IRequest, IWeeklyNorm } from '@lms/core'
+import { IRequest } from '@lms/core'
+import { IRecurringSchedule, IWeeklyNorm } from 'src/type/my-request'
+
 
 export interface IProps {
   open: boolean

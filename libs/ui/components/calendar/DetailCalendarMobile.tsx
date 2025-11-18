@@ -1,24 +1,24 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
-import { IEvent } from "sapp-common-package/dist/types";
-import { ICalendarDetail } from "@lms/core";
-import CourseTree from "./CourseTree";
-import SappIcon from "src/common/SappIcon";
-import dayjs, { Dayjs } from "dayjs";
-import { CALENDAR_FILTER_TYPE, LEARNING_USER_STATUS } from "@lms/core";
-import { useRouter } from "next/router";
-import { CourseSectionType, TEST_TYPE_ENUM } from "@lms/core";
-import { LearningMode } from "@lms/core";
-import { buildQueryString } from "@utils/index";
-import getConfig from "next/config";
-import { StatusDotIcon, ZoomIcon } from "@assets/icons/calendar";
-import { Divider } from "antd";
-import clsx from "clsx";
-import { ButtonPrimary } from "@lms/ui";
-import SappDrawerV3 from "@components/base/drawer/SappDrawerV3";
-import { CollapseArrowIcon } from "@assets/icons";
-import { SpinIcon } from "@assets/icons";
-const { publicRuntimeConfig } = getConfig();
-export const { apiURL } = publicRuntimeConfig;
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
+import { IEvent } from 'sapp-common-package/dist/types'
+import { ICalendarDetail } from '@lms/core'
+import CourseTree from './CourseTree'
+import SappIcon from 'src/common/SappIcon'
+import dayjs, { Dayjs } from 'dayjs'
+import { CALENDAR_FILTER_TYPE, LEARNING_USER_STATUS } from '@lms/core'
+import { useRouter } from 'next/router'
+import { CourseSectionType, TEST_TYPE_ENUM } from '@lms/core'
+import { LearningMode } from '@lms/core'
+import { buildQueryString } from '@lms/utils'
+import getConfig from 'next/config'
+import { StatusDotIcon, ZoomIcon } from '@assets/icons/calendar'
+import { Divider } from 'antd'
+import clsx from 'clsx'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
+import { CollapseArrowIcon } from '@assets/icons'
+import { SpinIcon } from '@assets/icons'
+const { publicRuntimeConfig } = getConfig()
+export const { apiURL } = publicRuntimeConfig
 
 interface IProps {
   open: { isOpen: boolean; data: IEvent | null };

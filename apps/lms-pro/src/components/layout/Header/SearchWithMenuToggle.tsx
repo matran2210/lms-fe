@@ -9,7 +9,7 @@ import TourGuideStart from 'src/assets/lotties/tour-guide-start.json'
 import clsx from 'clsx'
 import { CloseIconV2 } from '@components/icons'
 import { FormProvider, useForm } from 'react-hook-form'
-import { buildQueryString } from '@utils/index'
+import { buildQueryString } from '@lms/utils'
 import { useRouter } from 'next/router'
 
 interface IProps {

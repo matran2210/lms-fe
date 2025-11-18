@@ -25,6 +25,7 @@
       "@lms/ui": ["libs/ui/index.ts"],
       "@lms/utils": ["libs/utils/index.ts"],
       "@lms/core": ["libs/core/index.ts"],
+      "@lms/hooks": ["libs/hooks/index.ts"]
     }
   },
   "exclude": ["node_modules", "dist", ".next"]

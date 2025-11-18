@@ -6,7 +6,7 @@ import { Divider, Table, TableProps } from 'antd'
 import Icon from '@components/icons'
 import useDownloadImage from 'src/hooks/useDownloadImage'
 import Image from 'next/image'
-import { sappFormatDate } from '@utils/index'
+import { sappFormatDate } from '@lms/utils'
 import clsx from 'clsx'
 import { NoCertificationIcon } from '@assets/icons'
 

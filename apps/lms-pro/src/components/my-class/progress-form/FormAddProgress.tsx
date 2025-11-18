@@ -22,7 +22,7 @@ import {
 } from '@lms/core'
 import { z } from 'zod'
 import TreeProgress from './TreeProgress'
-import { sortSectionsByPosition } from '@utils/teacher-progress'
+import { sortSectionsByPosition } from '@lms/utils'
 
 const defaultValues = {
   lesson: undefined,

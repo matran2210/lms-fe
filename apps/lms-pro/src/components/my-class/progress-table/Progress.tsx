@@ -9,7 +9,7 @@ import FormViewProgress from '@components/my-class/progress-form/FormViewProgres
 import ProgressTable from '@components/my-class/progress-table/ProgressTable'
 import { ProgressAPI } from '@pages/api/progress'
 import { ProgressKey } from '@pages/api/queryKey'
-import { cleanParams } from '@utils/common'
+import { cleanParams } from '@lms/utils'
 import { CONSTRUCTION, OPTIONS_PROGRESS_CLASS, PROGRAM } from '@lms/core'
 import { useRouter } from 'next/router'
 import { useState } from 'react'

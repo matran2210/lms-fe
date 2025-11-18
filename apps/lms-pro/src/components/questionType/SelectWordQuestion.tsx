@@ -1,6 +1,6 @@
 import { EditorReader } from '@lms/ui'
 import clsx from 'clsx'
-import { replaceWhiteSpacePreWrapToNormal, runHighlight } from '@utils/index'
+import { replaceWhiteSpacePreWrapToNormal, runHighlight } from '@lms/utils'
 import { isNull, isUndefined, uniqueId } from 'lodash'
 import React, {
   ForwardedRef,

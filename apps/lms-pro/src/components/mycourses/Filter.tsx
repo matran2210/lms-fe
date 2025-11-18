@@ -2,7 +2,7 @@
 
 import { SappHookFormSelect } from '@lms/ui'
 import { getUserPrefix } from '@utils/helpers'
-import { buildQueryString } from '@utils/index'
+import { buildQueryString } from '@lms/utils'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'

@@ -1,6 +1,6 @@
 import { EditorReader } from '@lms/ui'
 import SappDivider from '@components/common/Divider/Divider'
-import { runHighlight } from '@utils/index'
+import { runHighlight } from '@lms/utils'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'

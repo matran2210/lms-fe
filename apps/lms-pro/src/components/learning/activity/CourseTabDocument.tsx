@@ -10,8 +10,7 @@ import {
   VideoStateClicked,
 } from '@pages/courses/[id]/activity/[activityId]'
 import { GradingPreference } from '@lms/core'
-import { trackGAEvent } from '@utils/google-analytics'
-import { truncateBySpace } from '@utils/index'
+import { trackGAEvent, truncateBySpace} from '@lms/utils'
 import { Tabs, Tooltip } from 'antd'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'

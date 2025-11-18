@@ -16,7 +16,7 @@ import {
   PageLink,
 } from '@lms/core'
 import { apiURL } from 'src/redux/services/httpService'
-import { deleteCookie, getCookie, setCookie } from '@utils/index'
+import { deleteCookie, getCookie, setCookie } from '@lms/utils'
 
 export const getBaseUrl = () => {
   if (typeof window !== 'undefined') {

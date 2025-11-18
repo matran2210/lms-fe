@@ -7,8 +7,8 @@ import { ANIMATION } from '@lms/core'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
-import { trackGAEvent } from '@utils/google-analytics'
-import { containsKeyword, formatNotificationHTML } from 'src/utils/index'
+import { trackGAEvent } from '@lms/utils'
+import { containsKeyword, formatNotificationHTML } from '@lms/utils'
 
 interface IProps {
   notifyLists: any[]

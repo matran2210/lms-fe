@@ -4,16 +4,13 @@ import {
   PROFILE_PAGES,
   SECURITY_TREE,
 } from '@lms/core'
-import { trackGAEvent } from '@utils/google-analytics'
+import { trackGAEvent } from '@lms/utils'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
-import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { ANIMATION } from '@lms/core'
 import { useAppDispatch } from 'src/redux/hook'
-import { getLogoutUser } from 'src/redux/slice/Login/Login'
-import { NOTIFICATION_STATUS } from '@lms/core'
 import { IProfilePages } from '@lms/core'
 
 interface IProps {

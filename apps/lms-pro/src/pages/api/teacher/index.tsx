@@ -1,5 +1,5 @@
 import { fetcher } from '@services/requestV2'
-import { buildQueryString } from '@utils/index'
+import { buildQueryString } from '@lms/utils'
 import {
   APIDetailScheduleRequestResponse,
   APIListScheduleRequestResponse,

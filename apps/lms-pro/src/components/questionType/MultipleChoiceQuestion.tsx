@@ -1,6 +1,6 @@
 import { HookFormCheckBoxGroup } from '@lms/ui'
 import { EditorReader } from '@lms/ui'
-import { getUppercaseByNumber, runHighlight } from '@utils/index'
+import { getUppercaseByNumber, runHighlight } from '@lms/utils'
 import { useEffect, useMemo } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { CircleInfoIcon } from '@assets/icons'

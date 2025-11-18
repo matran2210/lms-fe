@@ -13,7 +13,7 @@ import {
   OutgoingCallIcon,
   SearchIcon,
 } from '@assets/icons'
-import { onLinkSocial } from '@utils/index'
+import { onLinkSocial } from '@lms/utils'
 import React, { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { CloseIconV2 } from './icons'
 interface IInfomation {

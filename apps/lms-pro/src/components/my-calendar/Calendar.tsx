@@ -16,7 +16,7 @@ import { IResponseSchedule } from 'src/redux/types/Schedule/schedule'
 import CalendarHead from './CalendarHead'
 import { pick } from 'lodash'
 import { formatRecurringSchedule } from '@utils/request'
-import { formatDateTimeWithTimeZone } from '@utils/common'
+import { formatDateTimeWithTimeZone } from '@lms/utils'
 
 interface IProps {
   onOpenDetail: (date: Date, events: IEvent[]) => void

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { trackGAEvent } from '@utils/google-analytics'
+import { trackGAEvent } from '@lms/utils'
 
 interface Tab {
   label: string

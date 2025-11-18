@@ -1,7 +1,7 @@
 import RemainingTimeIcon from '@assets/icons/RemainingTimeIcon'
 import { SappModalV3 } from '@lms/ui'
 import { TimeOutIcon } from '@components/icons'
-import { formatTime } from '@utils/common'
+import { formatTime } from '@lms/utils'
 import clsx from 'clsx'
 import { Dayjs } from 'dayjs'
 import { Dispatch, ReactNode, SetStateAction } from 'react'

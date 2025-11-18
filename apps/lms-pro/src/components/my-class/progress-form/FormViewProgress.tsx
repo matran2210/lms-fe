@@ -6,7 +6,7 @@ import CollapseBox from '@components/layout/CollapseBox'
 import CollapseItem from '@components/layout/CollapseBox/CollapseItem'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ProgressAPI } from '@pages/api/progress'
-import { formatDate } from '@utils/common'
+import { formatDate } from '@lms/utils'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { Drawer } from 'antd'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
@@ -26,7 +26,7 @@ import {
 import { z } from 'zod'
 import TreeProgress from './TreeProgress'
 import { round } from 'lodash'
-import { sortSectionsByPosition } from '@utils/teacher-progress'
+import { sortSectionsByPosition } from '@lms/utils'
 import { useRouter } from 'next/router'
 
 export interface IProps {

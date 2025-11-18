@@ -1,6 +1,6 @@
 import { MenuDotsIcon } from '@assets/icons'
 import { CloseModalIcon } from '@assets/icons'
-import { useGetDataQuery } from '@utils/index'
+import { useGetDataQuery } from '@lms/utils'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useState } from 'react'

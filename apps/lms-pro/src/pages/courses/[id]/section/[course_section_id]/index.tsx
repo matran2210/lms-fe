@@ -10,7 +10,7 @@ import {
 } from '@assets/icons'
 import Layout from '@components/layout'
 import { useCourseContext } from '@contexts/index'
-import { buildQueryString, formatDate } from '@utils/index'
+import { buildQueryString, formatDate } from '@lms/utils'
 import { Alert, Skeleton } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'

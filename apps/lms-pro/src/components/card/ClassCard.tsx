@@ -3,7 +3,7 @@ import SappTabs from 'src/components/tabs/SappTabs'
 import { ITabsTeacher } from '@lms/core'
 import { Typography } from 'antd'
 import { GeoLocationIcon, CalendarIcon } from '@assets/icons'
-import { formatDateFromUTC } from '@utils/index'
+import { formatDateFromUTC } from '@lms/utils'
 import { IClassCard } from '@lms/core'
 import {
   StatusTag,

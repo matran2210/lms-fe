@@ -1,4 +1,4 @@
-import { truncateString } from '@utils/index'
+import { truncateString } from '@lms/utils'
 import clsx from 'clsx'
 import React from 'react'
 import Tooltip from 'src/common/Tooltip'

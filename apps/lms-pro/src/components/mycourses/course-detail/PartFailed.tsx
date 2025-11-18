@@ -1,6 +1,6 @@
 import { ButtonSecondary } from '@lms/ui'
 import { formatTime } from '@components/common/timer'
-import { trackGAEvent } from '@utils/google-analytics'
+import { trackGAEvent } from '@lms/utils'
 import { getUserPrefix, roundNumber } from '@utils/helpers'
 import { useEffect, useMemo, useState } from 'react'
 import router from 'next/router'

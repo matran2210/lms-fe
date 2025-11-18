@@ -1,5 +1,5 @@
 import { CERTIFICATE_DETAIL } from '@lms/core'
-import { setCookie } from '@utils/index'
+import { setCookie } from '@lms/utils'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import {

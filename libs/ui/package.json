@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "@lms/assets": "workspace:*",
-    "@lms/utils": "workspace:*"
+    "@lms/utils": "workspace:*",
+    "@lms/core": "workspace:*"
   },
   "peerDependencies": {
     "react": "*",

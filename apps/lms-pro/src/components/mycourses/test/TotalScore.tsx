@@ -1,5 +1,5 @@
 import GlobalAverage from '@pages/courses/test/test-result/GlobalAverage'
-import { formatNumber } from '@utils/formatNumber'
+import { formatNumber } from '@lms/utils'
 import { isNull, isUndefined } from 'lodash'
 interface IProps {
   score?: number

@@ -1,6 +1,6 @@
 import { CERTIFICATE_DETAIL } from '@lms/core'
 import { convertUTCToLocalTime } from '@utils/helpers'
-import { getLocalStorageItem, setLocalStorageItem } from '@utils/index'
+import { getLocalStorageItem, setLocalStorageItem } from '@lms/utils'
 import { useRouter } from 'next/router'
 import {
   PropsWithChildren,

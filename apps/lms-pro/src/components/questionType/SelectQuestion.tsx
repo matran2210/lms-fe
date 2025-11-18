@@ -1,6 +1,6 @@
 import { EditorReader } from '@lms/ui'
 import SappDivider from '@components/common/Divider/Divider'
-import { replaceWhiteSpacePreWrapToNormal, runHighlight } from '@utils/index'
+import { replaceWhiteSpacePreWrapToNormal, runHighlight } from '@lms/utils'
 import { uniqueId } from 'lodash'
 import React, {
   ForwardedRef,

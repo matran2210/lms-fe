@@ -23,7 +23,7 @@ import {
   convertSlugToTitle,
   getLocalStorageItem,
   removeLocalStorageItem,
-} from '@utils/index'
+} from '@lms/utils'
 
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 

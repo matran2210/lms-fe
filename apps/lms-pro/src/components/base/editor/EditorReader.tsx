@@ -2,7 +2,7 @@ import {
   DeserializeHighlight,
   replaceTextAlignCenterToWebKitCenter,
   replaceWhiteSpacePreWrapToNormal,
-} from '@utils/index'
+} from '@lms/utils'
 import parseHTML, { Element } from 'html-react-parser'
 import { useEffect, useRef, useState } from 'react'
 import SappModalImage from '../modal/SappModalImage'

@@ -4,7 +4,7 @@ import NoData from 'src/common/NoData'
 import { IActivity } from '@lms/core'
 import clsx from 'clsx'
 import { download } from '../ActivityResource'
-import { trackGAEvent } from '@utils/google-analytics'
+import { trackGAEvent } from '@lms/utils'
 import { DocumentTextIcon, DownloadIcon } from '@assets/icons'
 
 interface IProps {

@@ -1,7 +1,7 @@
 import { EditorReader } from '@lms/ui'
 import { HookFormRadioGroup } from '@lms/ui'
 import SappDivider from '@components/common/Divider/Divider'
-import { getUppercaseByNumber, runHighlight } from '@utils/index'
+import { getUppercaseByNumber, runHighlight } from '@lms/utils'
 import clsx from 'clsx'
 import { useEffect, useMemo } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'

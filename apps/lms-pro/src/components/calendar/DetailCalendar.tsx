@@ -12,7 +12,7 @@ import {
 import { useRouter } from 'next/router'
 import { CourseSectionType, TEST_TYPE_ENUM } from '@lms/core'
 import { LearningMode } from '@lms/core'
-import { buildQueryString } from '@utils/index'
+import { buildQueryString } from '@lms/utils'
 import getConfig from 'next/config'
 import {
   CloseDetailIcon,

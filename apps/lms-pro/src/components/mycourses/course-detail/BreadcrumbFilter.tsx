@@ -1,5 +1,4 @@
-import { trackGAEvent } from '@utils/google-analytics'
-import { truncateString } from '@utils/index'
+import { trackGAEvent, truncateString} from '@lms/utils'
 import clsx from 'clsx'
 import Link from 'next/link'
 import Tooltip from 'src/common/Tooltip'

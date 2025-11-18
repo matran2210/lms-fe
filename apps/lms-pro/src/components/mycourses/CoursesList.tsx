@@ -1,7 +1,7 @@
 import { ButtonSecondary } from '@lms/ui'
 import CardCourse from '@components/common/CardCourse/CardCourse'
 import Icon, { CourseTimeIcon, GraduationCapIcon } from '@components/icons'
-import { clearStylesHtml } from '@utils/index'
+import { clearStylesHtml } from '@lms/utils'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
 import React from 'react'

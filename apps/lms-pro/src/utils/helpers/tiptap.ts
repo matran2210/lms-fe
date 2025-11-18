@@ -1,7 +1,7 @@
 import { UploadAPI } from '@pages/api/upload'
 import axios from 'axios'
 import toast from 'react-hot-toast'
-import { convertHumanReadableToSnakeCase } from 'src/utils/index'
+import { convertHumanReadableToSnakeCase } from '@lms/utils'
 // Hàm chuyển base64 thành File
 export function base64ToFile(
   base64String: string,

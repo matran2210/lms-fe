@@ -1,5 +1,5 @@
 import { SAPPBadge } from '@lms/ui'
-import { formatDate } from '@utils/common'
+import { formatDate } from '@lms/utils'
 import { Table, TablePaginationConfig } from 'antd'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 import {

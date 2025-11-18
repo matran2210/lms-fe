@@ -4,7 +4,7 @@ import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatFie
 import SappTeacherTextField from '@components/teacher/components/sapp-textfield/SappTeacherTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SchedulesAPI } from '@pages/api/schedules'
-import { handleDisableDate, handleDisableTime } from '@utils/calendar'
+import { handleDisableDate, handleDisableTime } from '@lms/utils'
 import { REPEAT_TYPE } from '@lms/core'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { ConfigProvider, Drawer } from 'antd'

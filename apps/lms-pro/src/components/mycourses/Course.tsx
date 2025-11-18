@@ -2,13 +2,13 @@ import { ButtonSecondary } from '@lms/ui'
 import Icon, { CourseTimeIcon, GraduationCapIcon } from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
 import { useCourseContext } from '@contexts/index'
-import { trackGAEvent } from '@utils/google-analytics'
+import { trackGAEvent } from '@lms/utils'
 import {
   convertHourToDayLeft,
   convertLocalTimeToUTC,
   getUserPrefix,
 } from '@utils/helpers'
-import { clearStylesHtml, truncateString } from '@utils/index'
+import { clearStylesHtml, truncateString } from '@lms/utils'
 import { differenceInDays, parseISO, startOfDay } from 'date-fns'
 import { isNull, round } from 'lodash'
 import { useRouter } from 'next/router'

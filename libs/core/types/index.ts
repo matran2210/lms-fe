@@ -144,7 +144,19 @@ export interface OptionType {
   label: string
   value: string | number
 }
-
+export type SheetData = {
+  name: string;
+  id: string;
+  status: number;
+  data: (string | number | null)[][];
+  celldata: {
+    r: number;
+    c: number;
+    v: { v: string; ct: { fa: string; t: string }; m: string };
+  }[];
+  row?: number;
+  column?: number;
+};
 export * from "./common"
 export * from "./Icon"
 export * from "./api-response"

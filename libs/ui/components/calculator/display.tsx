@@ -4,7 +4,6 @@ import displayLogic, {
   formatResult,
 } from "./logic/displayLogic";
 import { isEmpty } from "lodash";
-import { formatNumber } from "@utils/formatNumber";
 
 interface IProps {
   total?: string;

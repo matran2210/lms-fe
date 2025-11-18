@@ -2,6 +2,7 @@ import { Dayjs } from 'dayjs'
 import { IMetaData, IUser } from '.'
 import { ISelect } from './course'
 import { REQUEST_STATUS, REQUEST_TYPE } from '../constants'
+import { E_REQUEST_TYPE } from '../enums'
 
 export type RequestType = keyof typeof REQUEST_TYPE
 
@@ -15,7 +16,7 @@ export interface IRequestList {
 export interface IRequest {
   id: string
   name: string
-  type: RequestType
+  type: E_REQUEST_TYPE
   status: RequestStatus
   teacher_schedules: ITeacherSchedule[]
   teacher_weekly_norms: ITeacherWeeklyNorm[]

@@ -1,6 +1,6 @@
 import { AlertIcon, LockIcon } from '@assets/icons'
 import { SappModalV3 } from '@lms/ui'
-import { onLinkSocial } from '@utils/index'
+import { onLinkSocial } from '@lms/utils'
 import { Dispatch, SetStateAction } from 'react'
 import { MY_COURSES } from '@lms/core'
 

@@ -1,6 +1,6 @@
 import { ArrowRight } from '@assets/icons'
 import { StatusQuizTag } from '@components/teacher/components/StatusActionCell'
-import { getTimeFromInput } from '@utils/index'
+import { getTimeFromInput } from '@lms/utils'
 import dayjs from 'dayjs'
 import router from 'next/router'
 import Tooltip from 'src/common/Tooltip'

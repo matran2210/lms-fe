@@ -1,6 +1,6 @@
 import { FREQUENCY_UNITS, REPEAT_ON } from '@lms/core'
-import { RecurringScheduleType } from '@lms/core'
-import { IRecurringSchedule } from '@lms/core'
+import { RecurringScheduleType } from 'src/type/my-calendar'
+import { IRecurringSchedule } from 'src/type/my-request'
 
 export interface ICreateScheduleForm {
   event_name: string

@@ -1,6 +1,6 @@
 import { ArrowLeftIcon, ConfirmIcon } from '@assets/icons'
 import { SappModalV3 } from '@lms/ui'
-import { trackGAEvent } from '@utils/google-analytics'
+import { trackGAEvent } from '@lms/utils'
 
 interface IProps {
   open: boolean

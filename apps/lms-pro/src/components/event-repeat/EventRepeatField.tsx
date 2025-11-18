@@ -1,5 +1,5 @@
 import { SAPPSelectV2 } from '@lms/ui'
-import { convertLocalWeekDaysToUTC, reverseDaysOfWeek } from '@utils/common'
+import { convertLocalWeekDaysToUTC, reverseDaysOfWeek } from '@lms/utils'
 import { DatePicker } from 'antd'
 import dayjs from 'dayjs'
 import localeData from 'dayjs/plugin/localeData'
@@ -16,16 +16,16 @@ import {
 } from '@lms/core'
 import { ISelect } from '@lms/core'
 import {
-  IEventRepeatFieldValues,
   IRecurringSchedule,
-  IRepeatFrequency,
-  RecurringScheduleType,
-} from '@lms/core'
+  RecurringScheduleType
+} from 'src/type/my-request'
+
 import RepeatFrequency from './RepeatFrequency'
 import RepeatOn from './RepeatOn'
 import { REPEAT_TYPE } from '@lms/core'
 import clsx from 'clsx'
 import utc from 'dayjs/plugin/utc'
+import { IEventRepeatFieldValues, IRepeatFrequency } from 'src/type/my-calendar'
 
 const DEFAULT_END_DATE_HOUR_OFFSET = 1
 const MAX_END_DATE_YEAR_RANGE = 2

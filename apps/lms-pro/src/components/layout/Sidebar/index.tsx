@@ -1,7 +1,7 @@
 import ExaminationInfo from '@components/mycourses/course-detail/ExaminationInfo'
 import LearningResource from '@components/mycourses/LearningResource'
 import PopupStep from '@components/user-guide/PopupStep'
-import { trackGAEvent } from '@utils/google-analytics'
+import { trackGAEvent } from '@lms/utils'
 import clsx from 'clsx'
 import { Dispatch, SetStateAction } from 'react'
 import TourGuideNoti from 'src/assets/lotties/tour-guide-noti.json'
@@ -12,7 +12,7 @@ import {
   MENU_BOTTOM,
   MENU_ITEMS,
   MENU_ITEMS_EVENT,
-} from '../../../constants/menu-items'
+} from '@lms/core'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
 

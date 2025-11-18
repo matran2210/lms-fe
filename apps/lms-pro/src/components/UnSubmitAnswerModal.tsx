@@ -1,6 +1,6 @@
 import { AlertTriagle } from '@assets/icons'
 import { SappModalV2 } from '@lms/ui'
-import { trackGAEvent } from '@utils/google-analytics'
+import { trackGAEvent } from '@lms/utils'
 import { Dispatch, SetStateAction } from 'react'
 
 interface IProps {
