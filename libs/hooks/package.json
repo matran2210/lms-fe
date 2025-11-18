@@ -11,6 +11,7 @@
 },
 "dependencies": {
     "@lms/core": "workspace:*",
-    "@lms/utils": "workspace:*"
+    "@lms/utils": "workspace:*",
+    "react-query": "^3.39.3"
 }
 }

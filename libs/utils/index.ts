@@ -8,3 +8,4 @@ export * from './firebase';
 export * from './google-analytics';
 export * from "./linkedin"
 export * from "./teacher-progress"
+export * from "./helpers"
