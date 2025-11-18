@@ -17,3 +17,4 @@ export * from "./icons/Dashboard";
 export * from "./icons/LoadingBtnAnimation";
 export * from "./icons/NotificationIcon";
 export * from "./icons/QuitIcon";
+export * from "./icons/index";

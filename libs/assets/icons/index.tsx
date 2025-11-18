@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { ISVG } from '@lms/core';
+import { ISVG } from "@lms/core";
 interface IProps {
   color?: string;
   size?: number;
@@ -2679,7 +2679,7 @@ export const SwitcherClosed = () => {
     </svg>
   );
 };
-export const ClockIcon = ({ color = "black", size = 24 }: IProps) => {
+export const ClockIconV1 = ({ color = "black", size = 24 }: IProps) => {
   return (
     <svg
       fill={"currentColor"}
@@ -4077,7 +4077,7 @@ export const OutlineVideo = () => (
   </svg>
 );
 
-export const CheckCircleOutlineYellow = ({
+export const CheckCircleOutlineYellowV1 = ({
   className,
 }: {
   className?: string;
