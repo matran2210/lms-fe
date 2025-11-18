@@ -25,7 +25,13 @@
       "@lms/ui": ["libs/ui/index.ts"],
       "@lms/utils": ["libs/utils/index.ts"],
       "@lms/core": ["libs/core/index.ts"],
-      "@lms/hooks": ["libs/hooks/index.ts"]
+      "@lms/hooks": ["libs/hooks/index.ts"],
+      "@lms/feature-user": ["features/user/index.ts"],
+      "@lms/feature-auth": ["features/auth/index.ts"],
+      "@lms/feature-class": ["features/class/index.ts"],
+      "@lms/feature-teacher": ["features/teacher/index.ts"],
+      "@lms/feature-course": ["features/course/index.ts"],
+      "@lms/feature-notifications": ["features/notifications/index.ts"]
     }
   },
   "exclude": ["node_modules", "dist", ".next"]

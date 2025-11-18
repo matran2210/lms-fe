@@ -1,23 +1,25 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Button, Divider, Input, Modal, Popover } from 'antd'
+import { PointerIcon, ShowCommentIcon } from '@assets/icons'
+import { useCourseNoteContext } from '@contexts/CourseNoteContext'
+import { doHighlight, optionsImpl } from '@funktechno/texthighlighter/lib'
+import { video_url } from '@lms/core'
+import {
+  AvatarCard,
+  ButtonPrimary,
+  ButtonSecondary,
+  SappModalImage,
+  SAPPVideo,
+} from '@lms/ui'
+import { CoursesAPI } from '@pages/api/courses'
 import {
   replaceTextAlignCenterToWebKitCenter,
   replaceWhiteSpacePreWrapToNormal,
 } from '@lms/utils'
-import parseHTML, { Element } from 'html-react-parser'
-import { PointerIcon, ShowCommentIcon } from '@assets/icons'
-import { doHighlight, optionsImpl } from '@funktechno/texthighlighter/lib'
-import { ButtonSecondary } from '@lms/ui'
-import { ButtonPrimary } from '@lms/ui'
-import AvatarCard from '@components/card/AvatarCard'
+import { Button, Divider, Input, Modal, Popover } from 'antd'
 import dayjs from 'dayjs'
+import parseHTML, { Element } from 'html-react-parser'
 import { useRouter } from 'next/router'
+import React, { useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
-import { CoursesAPI } from '@pages/api/courses'
-import { useCourseNoteContext } from '@contexts/CourseNoteContext'
-import { video_url } from '@lms/core'
-import { SappModalImage } from '@lms/ui'
-import { SAPPVideo } from '@lms/ui'
 
 const { TextArea } = Input
 const DEBOUNCE_DELAY = 100

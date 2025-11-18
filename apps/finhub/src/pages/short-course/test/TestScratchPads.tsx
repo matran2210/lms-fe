@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { ScratchPadValue } from '@lms/core'
 import { IExhibit } from '@lms/core'
 import ScratchPatch from './scratchPatch'
-import MovableWindow from '@lms/ui/components/base/window'
+import { MovableWindow } from '@lms/ui'
 import { EditorReader, FileViewer, ModalResizeable } from '@lms/ui'
 interface IProps {
   openScratchPad: any[]

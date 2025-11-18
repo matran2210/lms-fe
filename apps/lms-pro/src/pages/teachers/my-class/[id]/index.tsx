@@ -1,13 +1,8 @@
 import LayoutTeacher from '@components/layout/Teacher'
 import { useRouter } from 'next/router'
-import ClassCard from '@components/card/ClassCard'
+import { ClassCard } from '@lms/ui'
 import { ITabs, NumberToDayOfWeekMap } from '@lms/core'
-import {
-  ANIMATION,
-  DATE_FORMAT_HM,
-  DATE_FORMAT_YMD,
-  PageLink,
-} from '@lms/core'
+import { ANIMATION, DATE_FORMAT_HM, DATE_FORMAT_YMD, PageLink } from '@lms/core'
 import { useQuery } from 'react-query'
 import { TeacherAPI } from 'src/pages/api/teacher/index'
 import { useEffect, useState } from 'react'
