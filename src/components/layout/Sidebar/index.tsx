@@ -142,7 +142,9 @@ export default function Sidebar({
           )}
         </div>
         {guideStatus && (guideStep === 2 || guideStep === 3) && (
-          <div className="absolute inset-0 z-40 animate-fade-in-overlay rounded-xl bg-black opacity-[.55] transition-opacity" />
+          <div
+            className={`absolute inset-0 z-40 animate-fade-in-overlay rounded-xl bg-black opacity-[.55] transition-opacity`}
+          />
         )}
       </div>
       <div

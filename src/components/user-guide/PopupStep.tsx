@@ -56,7 +56,7 @@ const PopupStep = ({
     <>
       <div
         ref={confirmDialogRef}
-        className={`fixed z-50 animate-jump-in rounded-xl bg-white p-4 md:absolute ${className} w-[315px] text-gray-800`}
+        className={`absolute z-50 animate-jump-in rounded-xl bg-white p-4 ${className} w-[315px] text-gray-800`}
       >
         <div>
           <div className={imgSrc && `mb-4`}>
