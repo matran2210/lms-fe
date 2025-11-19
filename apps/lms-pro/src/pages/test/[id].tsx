@@ -114,7 +114,7 @@ import { IQuestion } from '@lms/core'
 import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
 import { ButtonPrimary } from '@lms/ui'
 import { ButtonText } from '@lms/ui'
-import { download } from '@components/learning/activity/ActivityResource'
+import { download } from '../../../../../features/course/src/components/learning/activity/ActivityResource'
 import { ButtonTextV2 } from '@lms/ui'
 declare global {
   interface Window {

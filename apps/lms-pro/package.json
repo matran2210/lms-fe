@@ -18,9 +18,16 @@
     "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
+    "@lms/feature-test": "workspace:*",
+    "@lms/feature-calendar": "workspace:*",
+    "@lms/feature-auth": "workspace:*",
+    "@lms/feature-class": "workspace:*",
+    "@lms/feature-notifications": "workspace:*",
+    "@lms/feature-user": "workspace:*",
+    "@lms/feature-course": "workspace:*",
     "@lms/assets": "workspace:*",
     "@lms/ui": "workspace:*",
-    "@lms/utils": "workspace:*" ,
+    "@lms/utils": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/hooks": "workspace:*",
     "@cloudflare/stream-react": "^1.8.0",

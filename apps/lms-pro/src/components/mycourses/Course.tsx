@@ -1,6 +1,6 @@
 import { ButtonSecondary } from '@lms/ui'
 import Icon, { CourseTimeIcon, GraduationCapIcon } from '@components/icons'
-import ResultRowsModal from '@components/learning/ResultRowsModal'
+import ResultRowsModal from '../../../../../features/course/src/components/learning/ResultRowsModal'
 import { useCourseContext } from '@contexts/index'
 import { trackGAEvent } from '@lms/utils'
 import {

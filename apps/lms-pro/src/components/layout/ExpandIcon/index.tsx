@@ -10,7 +10,7 @@ import {
   CourseContent,
   NoteList,
   Union,
-} from '@components/courses/icons'
+} from '../../../../../../libs/assets/icons/course'
 
 type ExpandIconPros = {
   isExpanded?: boolean

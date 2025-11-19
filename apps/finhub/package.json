@@ -25,7 +25,6 @@
     "@lms/hooks": "workspace:*",
     "@lms/feature-user": "workspace:*",
     "@lms/feature-auth": "workspace:*",
-    "@lms/feature-teacher": "workspace:*",
     "@lms/feature-class": "workspace:*",
     "@lms/feature-notifications": "workspace:*",
     "@lms/feature-course": "workspace:*",
