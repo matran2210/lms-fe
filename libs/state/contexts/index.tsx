@@ -1,5 +1,3 @@
-import { IPopupFormState } from '@components/mycourses/hubspot/PopupLockContent'
-import { useRouter } from 'next/router'
 import React, {
   PropsWithChildren,
   createContext,
@@ -10,9 +8,8 @@ import React, {
 import {
   CERTIFICATE_DETAIL,
   ENTRANCE_TEST_RESULT,
-  ENTRANCE_TEST_TABLE_RESULT,
+  ENTRANCE_TEST_TABLE_RESULT,IPopupFormState
 } from '@lms/core'
-import { EventTestAPI } from 'src/pages/api/event-test'
 
 // type for context
 type Context = {
@@ -61,7 +58,13 @@ const initContext: Context = {
 
 const CourseContext = createContext<Context>(initContext)
 
-export function CourseProvider(props: PropsWithChildren<{}>) {
+export function CourseProvider(props: PropsWithChildren<{
+  router: any
+  api: {
+    get: (params: Object) => Promise<any>
+  }
+}>) {
+  const { router, api } = props
   /**
    * @description state này để xác định mở popup khi làm xong bài Final Test
    */
@@ -109,10 +112,9 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
   /**
    * @description state này bằng true khi hiển thị form hubspot
    */
-  const router = useRouter()
 
   async function fetchEventTest() {
-    const res = await EventTestAPI.get({})
+    const res = await api.get({})
     if (res.success) {
       localStorage.setItem('countEvent', res?.data?.length)
     }

@@ -157,6 +157,13 @@ export type SheetData = {
   row?: number;
   column?: number;
 };
+export interface IPopupFormState {
+  lockSection: boolean;
+  ctaUpgrade: boolean;
+  thankYou: boolean;
+  thankYouLater: boolean;
+}
+
 export * from "./common"
 export * from "./Icon"
 export * from "./api-response"
@@ -180,4 +187,5 @@ export * from "./test"
 export * from "./user"
 export * from "./v2"
 export * from "./exam-infomation"
+export * from "./services"
 
