@@ -29,7 +29,7 @@ import clsx from 'clsx'
 import { HookFormTextArea } from '@lms/ui'
 import ActionDiscussion from './ActionDiscussion'
 import SendComment from './SendComment'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 import NoData from 'src/common/NoData'
 
 type Props = {

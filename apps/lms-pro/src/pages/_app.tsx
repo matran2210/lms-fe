@@ -2,21 +2,17 @@ import BackToTop from '@lms/ui/components/BackToTop'
 import Help from '@components/Help'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import { RouteGuard } from '@components/auth/RouteGuard'
+import { RouteGuard } from '@lms/feature-auth'
 import { AntConfigProvider } from '@lms/ui'
 import { SappConfirmDialogContainer } from '@lms/ui'
 import Metadata from '@components/common/Metadata'
-import PinnedNotifications from '@components/layout/PinnedNotifications'
-import LearningNotesList from '@components/mycourses/LearningNotesList'
-import PopupCompletedCourse from '@components/mycourses/PopupCompletedCourse'
 import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
 import { SocketContext } from '@contexts/SocketContext'
 import { CourseProvider } from '@contexts/index'
 import '@fortune-sheet/react/dist/index.css'
 import '@styles/globals.scss'
 import { CERTIFICATE_DETAIL } from '@lms/core'
-import initializeGA from '@utils/google-analytics'
-import { pageview } from '@utils/index'
+import {pageview, initializeGA} from '@lms/utils'
 import '@xyflow/react/dist/style.css'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
@@ -43,7 +39,7 @@ import {
   getCountUnRead,
   showNotification,
 } from 'src/redux/slice/Notification/Notification'
-import { onMessageListener } from 'src/utils/firebase'
+import { onMessageListener } from '@lms/utils'
 import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
@@ -58,8 +54,8 @@ import ErrorRedirectPage from './error-redirect'
 import { CourseNoteProvider } from '@contexts/CourseNoteContext'
 import { PreviousSectionRouteProvider } from '@contexts/PreviousSectionRouteContext'
 import MKTInApp from '@components/MKTInApp'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-
+import { useTailwindBreakpoint } from '@lms/hooks'
+// import { LearningNotesList } from '@lms/feature-courses'
 export const excludedPathsHelp = [
   '/test/[id]',
   '/case-study/[id]',
@@ -338,15 +334,15 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                       <RouteGuard>
                         <>
                           <div className="relative">
-                            <PinnedNotifications />
+                            {/* <PinnedNotifications /> */}
                             <Component {...pageProps} />
                           </div>
                           {showBackToTop && <BackToTop />}
                           <MKTInApp showMKTInApp={showMKTInApp} />
                           <div id="floating-btn-divider" />
                           <Help showHelp={showHelp} />
-                          <LearningNotesList />
-                          <PopupCompletedCourse />
+                          {/* <LearningNotesList /> */}
+                          {/* <PopupCompletedCourse /> */}
                         </>
                       </RouteGuard>
                     </PreviousSectionRouteProvider>

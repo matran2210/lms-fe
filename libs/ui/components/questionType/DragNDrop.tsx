@@ -1,5 +1,5 @@
 import { EditorReader } from '@lms/ui'
-import SappDivider from '@components/common/Divider/Divider'
+import {SappDivider} from '@lms/ui'
 import { runHighlight } from '@lms/utils'
 import { uniqueId } from 'lodash'
 import {

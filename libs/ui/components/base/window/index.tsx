@@ -1,4 +1,4 @@
-import { moveAndResizeElement } from '@utils/dragandresize'
+import { moveAndResizeElement } from '@lms/utils'
 import { useEffect, useRef } from 'react'
 
 interface IProps {

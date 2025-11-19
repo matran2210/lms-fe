@@ -54,7 +54,7 @@ import { download } from '../../../../../../features/course/src/components/learn
 import { NotesOutline } from '@components/icons/Notes'
 import PulsingExclamation from '@components/icons/PulsingExclamation'
 import { Divider } from 'antd'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])

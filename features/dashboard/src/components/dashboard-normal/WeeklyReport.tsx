@@ -12,7 +12,7 @@ import {
   WeeklyReportSkeleton,
   WeeklyReportSkeletonMobile,
 } from '@components/skeleton/WeeklyReportSkeleton'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 
 dayjs.extend(isoWeek)
 

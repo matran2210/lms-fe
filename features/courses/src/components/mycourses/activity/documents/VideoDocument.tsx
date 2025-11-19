@@ -15,7 +15,7 @@ import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import { SAPPRadio } from '@lms/ui'
 import clsx from 'clsx'
 import SappIcon from 'src/common/SappIcon'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 import { ANIMATION } from '@lms/core'
 
 type Props = {

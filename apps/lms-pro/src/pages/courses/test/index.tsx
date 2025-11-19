@@ -21,7 +21,7 @@ import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
 import StatusTestQuizBadge, {
   STATUS_QUIZ_TEST,
 } from '@components/StatusTestQuizBadge'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 import { ModalNotMobileFriendly } from '@lms/ui'
 import { ArrowDownIcon } from '@assets/icons/entranceTest'
 import { EAttemptStatus } from '@lms/core'

@@ -1,6 +1,6 @@
 import { EditorReader } from '@lms/ui'
 import { HookFormRadioGroup } from '@lms/ui'
-import SappDivider from '@components/common/Divider/Divider'
+import {SappDivider} from '@lms/ui'
 import { getUppercaseByNumber, runHighlight } from '@lms/utils'
 import clsx from 'clsx'
 import { useEffect, useMemo } from 'react'
@@ -8,7 +8,7 @@ import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from '@lms/core'
 import { IExhibitData } from '@lms/core'
 import WarningSection from './WarningSection'
-import { HighlightableHTML } from '@components/highlights/HighlightHTML'
+import { HighlightableHTML } from '@lms/ui'
 import { useRouter } from 'next/router'
 export type IPreviewProp = {
   data: any

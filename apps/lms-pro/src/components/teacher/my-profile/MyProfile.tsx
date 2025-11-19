@@ -28,7 +28,7 @@ import {
 } from 'src/redux/slice/User/User'
 import { z } from 'zod'
 import FullScreenMobile from './Modal/FullScreenMobile'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 import TeacherProfileCard from '@components/card/TeacherProfileCard'
 import { Tag } from 'antd'
 

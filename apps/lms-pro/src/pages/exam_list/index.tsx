@@ -1,23 +1,23 @@
 import { ColumnsType } from 'antd/es/table'
 import SappTable from '@components/table/SappTable'
 import Layout from '@components/layout'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 import { PageLink, TitleSidebar } from '@lms/core'
 import { UserApi } from '@pages/api/user'
 import { useCallback, useMemo, useRef, useState } from 'react'
-import { IExamInformation } from '@components/profile/ExamInformation/type'
+import { IExamInformation } from '@lms/core'
 import { useInfiniteQuery, useQuery } from 'react-query'
 import { UserKey } from '@pages/api/queryKey'
 import { PaginationSappV2 } from '@lms/ui'
 import { isEmpty } from 'lodash'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
-import { getDuration } from '@utils/index'
+import { getDuration } from '@lms/utils'
 import { ActionCellV2 } from '@lms/ui'
 import { PencilV2Icon } from '@assets/icons'
-import ExaminationInfo, {
-  InfoItemProps,
-} from '@components/mycourses/course-detail/ExaminationInfo'
-import HeaderMobile from '@components/layout/Header/HeaderMobile'
+// import {
+//   ExaminationInfo, InfoItemProps,
+// } from '@lms/feature-courses' lỗi monorepo đừng xóa
+import {HeaderMobile} from '@lms/ui'
 import { useRouter } from 'next/router'
 
 const ExamInformation = () => {

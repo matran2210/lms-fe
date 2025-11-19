@@ -12,7 +12,7 @@ import {
   markAllNotifications,
   updateStatusAll,
 } from 'src/redux/slice/Notification/Notification'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 export const useNotification = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()

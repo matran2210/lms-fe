@@ -16,7 +16,7 @@ import clsx from "clsx";
 import { ButtonPrimary } from "@lms/ui";
 import { SappDrawerV3 } from "@lms/ui";
 import FloatingCloseIcon from "./FloatingCloseIcon";
-import { useTailwindBreakpoint } from "src/hooks/useTailwindBreakpoint";
+import { useTailwindBreakpoint } from "@lms/hooks";
 import { SpinIcon } from "@lms/assets";
 const { publicRuntimeConfig } = getConfig();
 export const { apiURL } = publicRuntimeConfig;

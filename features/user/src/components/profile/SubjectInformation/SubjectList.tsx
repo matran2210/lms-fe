@@ -8,7 +8,7 @@ import Icon from '@components/icons'
 import { CollapseArrowIcon } from '@assets/icons'
 import clsx from 'clsx'
 import { PROGRAM } from '@lms/core'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 
 export interface SubjectOptionItem {
   course_category_name: 'CMA' | 'CFA' | 'ACCA'

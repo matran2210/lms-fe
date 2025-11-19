@@ -3,6 +3,7 @@ import {
   ICreateDiscussionResReact,
   ICreateDiscussionUploadRequest,
 } from "../../state/redux/types/Course/MyCourse/Activity/activity";
+import { ChangePasswordReq, SendEmailReq, VerifyOtpReq } from "../../state/redux/types/Login/login";
 import { IResponse } from "./api-response";
 import { IQuestion } from "./course";
 import { IAnswerQuizLastestAttempt } from "./quiz";
@@ -59,5 +60,31 @@ export interface IQuestionAPI {
   getQuestionDetail: (
     questionId: string,
     query?: QuestionDetailQueryDTO,
-  ) => Promise<IResponse<IQuestion>>
+  ) => Promise<IResponse<IQuestion>>;
+}
+
+export interface INotificationAPI {
+  getCountUnRead: () => Promise<any>;
+  getNotification: (params: Object) => Promise<any>;
+  getDetail: (id: string) => Promise<any>;
+  markAll: () => Promise<any>;
+  markById: (ids: string[], markRead: boolean) => Promise<any>;
+}
+
+export interface IAuthAPI {
+  sendEmail: (request: SendEmailReq) => Promise<any>;
+  verifyOtp: (data: VerifyOtpReq) => Promise<any>;
+  changePassword: (data: ChangePasswordReq) => Promise<any>;
+  updateUser: (
+    full_name: string,
+    avatar?: { [key: string]: string } | null,
+  ) => Promise<IResponse<{ message: string }>>;
+  makeContactDefault: (id: string) => Promise<any>;
+  removeDevice: (session_id: string) => Promise<any>;
+  changeUserPassword: (current_password: string) => Promise<any>;
+  verifyOTPPassword: (
+    current_password: string,
+    new_password: string,
+    otp_code: string,
+  ) => Promise<any>;
 }

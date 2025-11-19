@@ -24,7 +24,7 @@ import CollapseActivity from '../../../../../../../../features/course/src/compon
 import { isEmpty } from 'lodash'
 import CardResultTest from '../../../../../../../../features/course/src/components/learning/activity/CardResultTest'
 import { Avatar, List, Skeleton } from 'antd'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   IOpenChooseItem,
   ISection,

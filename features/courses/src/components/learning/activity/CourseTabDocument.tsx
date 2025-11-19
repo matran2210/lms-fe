@@ -1,6 +1,6 @@
 import { ArrowLeft, ArrowRight, PaginationDotIcon } from '@assets/icons'
 import { ActivitySkeleton } from '@lms/ui'
-import { HighlightableHTML } from '@components/highlights/HighlightHTML'
+import { HighlightableHTML } from '@lms/ui'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'

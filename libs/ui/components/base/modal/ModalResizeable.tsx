@@ -1,5 +1,5 @@
 import { CloseIcon } from '@assets/icons'
-import styles from '@styles/components/ModalResizeable.module.scss'
+// import styles from '@styles/components/ModalResizeable.module.scss'
 import clsx from 'clsx'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'

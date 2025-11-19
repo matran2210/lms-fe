@@ -7,7 +7,7 @@ import PopupSupportCenter from './PopupSupportCenter'
 import { useRouter } from 'next/router'
 import { excludedPathsHelp } from '@pages/_app'
 import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 const Help = ({ showHelp }: { showHelp: boolean }) => {
   // All hooks need to be at the top level, before any conditional returns
   const [visible, setVisible] = useState(false)

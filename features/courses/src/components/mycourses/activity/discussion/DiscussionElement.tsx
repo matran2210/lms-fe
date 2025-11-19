@@ -38,7 +38,7 @@ import SendComment from './SendComment'
 import { Popover } from 'antd'
 import { CoursesAPI } from '@pages/api/courses'
 import { isEmpty } from 'lodash'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 
 type Props = {
   rank?: number

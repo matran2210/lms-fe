@@ -8,8 +8,8 @@ import WarningSection from './WarningSection'
 import clsx from 'clsx'
 import { IPreviewProp } from './OneChoiceQuestion'
 import { MY_COURSES } from '@lms/core'
-import SappDivider from '@components/common/Divider/Divider'
-import { HighlightableHTML } from '@components/highlights/HighlightHTML'
+import {SappDivider} from '@lms/ui'
+import { HighlightableHTML } from '@lms/ui'
 import { useRouter } from 'next/router'
 
 interface IDataAnswer {

@@ -1,6 +1,6 @@
-import Pagination from 'src/components/base/pagination/Pagination'
 import { Dispatch, SetStateAction, ReactNode } from 'react'
 import clsx from 'clsx'
+import { Pagination } from '.'
 
 interface IProps {
   currentPage: number

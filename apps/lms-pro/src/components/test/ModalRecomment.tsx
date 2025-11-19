@@ -1,7 +1,7 @@
 import { EditorReader } from '@lms/ui'
 import { CloseIconV2 } from '@components/icons'
 import { Modal } from 'antd'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 
 interface IProps {
   isOpen: boolean

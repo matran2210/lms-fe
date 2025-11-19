@@ -1,17 +1,17 @@
-import { PageLink } from '@lms/core'
+import { IAuthAPI, PageLink } from '@lms/core'
 import { ButtonText, SappButton, SAPPTextFiled } from '@lms/ui'
 import { useRouter } from 'next/router'
 import { createRef, useEffect, useState } from 'react'
-import { AuthAPI } from '../../pages/api/profile/index'
 import useCountdown from './Countdown'
 
 interface IInputCodeFormProps {
   error?: string
   email: string
   token: string
+  api: IAuthAPI
 }
 
-const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
+const InputCodeForm = ({ error = '', email, token, api }: IInputCodeFormProps) => {
   const router = useRouter()
   const [code, setCode] = useState(Array(6).join('.').split('.'))
   const [canResend, setCanResend] = useState(false)
@@ -64,7 +64,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
   const onResendCode = async () => {
     setLoading(true)
     try {
-      const response = await AuthAPI.sendEmail({ email })
+      const response = await api.sendEmail({ email })
       if (!response.success) {
         setErrorMessage('Resend code failed. Please try again')
         return
@@ -92,7 +92,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
   const handleVerifyCode = async () => {
     try {
       setLoading(true)
-      const response = await AuthAPI.verifyOtp({
+      const response = await api.verifyOtp({
         code: code?.join(''),
         token: currentToken,
       })

@@ -35,7 +35,7 @@ import dayjs from 'dayjs'
 import CardCourse from '@components/common/CardCourse/CardCourse'
 import clsx from 'clsx'
 import { Grid } from 'antd'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 const { useBreakpoint } = Grid
 
 const Course = ({

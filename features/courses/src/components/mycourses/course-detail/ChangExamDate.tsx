@@ -7,7 +7,7 @@ import ErrorMessage from 'src/common/ErrorMessage'
 import { RcFile } from 'antd/es/upload'
 import { message, Upload, UploadProps } from 'antd'
 import { ArrowDownIcon } from '@components/icons'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 interface IProps {
   classId: string
   remainingChanges?: number

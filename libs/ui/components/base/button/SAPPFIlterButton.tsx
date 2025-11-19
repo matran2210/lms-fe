@@ -1,6 +1,6 @@
 import React from 'react'
-import ButtonPrimary from 'src/components/base/button/ButtonPrimary'
-import ButtonSecondary from 'src/components/base/button/ButtonSecondary'
+import ButtonSecondary from './ButtonSecondary'
+import ButtonPrimary from './ButtonPrimary'
 
 interface IProps {
   titleReset: string

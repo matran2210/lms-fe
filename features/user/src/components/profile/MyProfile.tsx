@@ -28,7 +28,7 @@ import {
 } from "src/redux/slice/User/User";
 import { z } from "zod";
 import FullScreenMobile from "@lms/ui/components/base/modal/Modal/FullScreenMobile";
-import { useTailwindBreakpoint } from "src/hooks/useTailwindBreakpoint";
+import { useTailwindBreakpoint } from "@lms/hooks";
 import { ProfileSkeleton } from "@lms/ui";
 import TabLayout from "./TabLayout";
 import { IUserContact } from "src/redux/types/User/urser";

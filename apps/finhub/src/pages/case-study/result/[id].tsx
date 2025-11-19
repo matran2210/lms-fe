@@ -43,7 +43,7 @@ import {
   RESPONSE_OPTION,
   ROUTES,
 } from '@lms/core'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { useAppDispatch } from 'src/redux/hook'
 import { loadMoreQuestion } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'

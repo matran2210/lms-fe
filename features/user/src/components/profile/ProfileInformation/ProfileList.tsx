@@ -11,7 +11,7 @@ import { Divider, Select, Switch } from 'antd'
 import { IUserContact } from 'src/redux/types/User/urser'
 import { CollapseArrowIcon } from '@assets/icons'
 import clsx from 'clsx'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 interface ProfileOptionItem {
   label: string
   value: string

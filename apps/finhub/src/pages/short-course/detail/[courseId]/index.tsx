@@ -30,7 +30,7 @@ import {
   TEST_TYPE,
 } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 import { useAppDispatch } from 'src/redux/hook'
 import { activeNotesList } from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
 import { UserType } from 'src/redux/types/User/urser'

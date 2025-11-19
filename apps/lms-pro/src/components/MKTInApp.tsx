@@ -3,7 +3,7 @@ import { Tooltip } from 'antd'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import ModalMarketingInApp from './marketing-in-app/ModalMarketingInApp'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 
 const MKTInApp = ({ showMKTInApp }: { showMKTInApp: boolean }) => {
   const [openModalMarketingInApp, setOpenModalMarketingInApp] = useState(false)

@@ -24,7 +24,7 @@ import {
 import { IAnswer, IQuizAttempt, IQuizAttemptChartType } from '@lms/core'
 import { CoursesAPI } from '../../../api/courses/index'
 import { CollapseArrowIcon } from '@assets/icons'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 
 const commonHeaderClass = 'font-medium leading-6 text-gray py-2 pb-4 md:pb-6'
 
