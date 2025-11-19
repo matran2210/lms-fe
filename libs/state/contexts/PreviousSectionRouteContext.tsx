@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import { useRouter } from 'next/router'
 
 const sectionPath = '/courses/[id]/section/[course_section_id]'
 interface PreviousSectionRouteContextProps {
@@ -13,8 +12,8 @@ const PreviousSectionRouteContext =
 
 export const PreviousSectionRouteProvider: React.FC<{
   children: React.ReactNode
-}> = ({ children }) => {
-  const router = useRouter()
+  router: any
+}> = ({ children, router }) => {
   const previousSectionPathRef = useRef<string | null>(null)
   const [previousSection, setPreviousSectionPath] = useState<string | null>(
     null,

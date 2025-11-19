@@ -12,8 +12,7 @@
   "dependencies": {
     "@lms/assets": "workspace:*",
     "@lms/utils": "workspace:*",
-    "@lms/core": "workspace:*",
-    "@lms/ui": "workspace:*"
+    "@lms/core": "workspace:*"
   },
   "peerDependencies": {
     "react": "*",

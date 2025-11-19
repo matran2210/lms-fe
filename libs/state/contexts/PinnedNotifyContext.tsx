@@ -1,7 +1,5 @@
 import { CERTIFICATE_DETAIL } from "@lms/core";
-import { convertUTCToLocalTime } from "@utils/helpers";
-import { getLocalStorageItem, setLocalStorageItem } from "@utils/index";
-import { useRouter } from "next/router";
+import { getLocalStorageItem, setLocalStorageItem, convertUTCToLocalTime } from "@lms/utils";
 import {
   PropsWithChildren,
   createContext,
@@ -10,7 +8,6 @@ import {
   useState,
 } from "react";
 import { ENTRANCE_TEST_RESULT, ENTRANCE_TEST_TABLE_RESULT } from "@lms/core";
-import UserApi from "src/redux/services/User/user";
 import { PinnedNotifications } from "@lms/core";
 
 // type for context
@@ -48,7 +45,14 @@ const initContext: Context = {
 
 const PinnedNotifyContext = createContext<Context>(initContext);
 
-export function PinnedNotifyProvider(props: PropsWithChildren<{}>) {
+export function PinnedNotifyProvider(props: PropsWithChildren<{
+  router: any
+  api: {
+    getPinnedNotifications: () => Promise<PinnedNotifications>
+  }
+}>) {
+  const { api, router } = props
+
   const [openPinned, setOpenPinned] = useState(true);
   const [pinnedNotifications, setPinnedNotifications] =
     useState<PinnedNotifications>({
@@ -71,7 +75,7 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{}>) {
     });
 
   const getPinnedData = async () => {
-    const res: PinnedNotifications = await UserApi.getPinnedNotifications();
+    const res: PinnedNotifications = await api.getPinnedNotifications();
     const oldPinnedId = getLocalStorageItem("pinnedId");
     const oldPinnedFlag = getLocalStorageItem("openPinned");
 
@@ -103,7 +107,6 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{}>) {
     }
   };
 
-  const router = useRouter();
   useEffect(() => {
     if (
       ![

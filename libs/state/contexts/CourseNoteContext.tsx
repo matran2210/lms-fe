@@ -1,5 +1,3 @@
-import { CoursesAPI } from '@pages/api/courses'
-import { useRouter } from 'next/router'
 import {
   PropsWithChildren,
   createContext,
@@ -43,8 +41,13 @@ const initContext: Context = {
 
 const CourseNoteContext = createContext<Context>(initContext)
 
-export function CourseNoteProvider(props: PropsWithChildren<{}>) {
-  const router = useRouter()
+export function CourseNoteProvider(props: PropsWithChildren<{
+  router: any
+  api: {
+    getNoteDetail: (course_section_id: string | number, course_id?: string | number | undefined) => Promise<any>
+  }
+}>) {
+  const { api, router } = props
   const activityId = router.query.activityId
   const [openNote, setOpenNote] = useState(false)
   const [noteData, setNoteData] = useState<ICourseSectionNoteItem | undefined>(
@@ -64,7 +67,7 @@ export function CourseNoteProvider(props: PropsWithChildren<{}>) {
   const refetchNotesList = async () => {
     if (!activityId) return
     try {
-      const res = await CoursesAPI.getNoteDetail(activityId as string)
+      const res = await api.getNoteDetail(activityId as string)
       setNotesListData(res.data)
     } catch (error) {}
   }
