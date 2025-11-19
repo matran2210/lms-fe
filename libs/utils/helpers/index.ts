@@ -17,3 +17,5 @@ export const convertHourToDayLeft = (hours: number) => {
   const days = Math.ceil(hours / 24);
   return days;
 };
+
+export * from "./timer";

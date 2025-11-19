@@ -36,7 +36,8 @@
     "src/components/base/checkbox/HookFormCheckBox.tsx_",
     "src/components/base/radiobutton/HookFormRadioGroup.tsx_",
     "src/components/base/radiobutton/HookFormRadioTextFieldGroup.tsx_",
-    "../../features/test/src/components/PopupSelectRetakeOrContinueAttempt.tsx"
+    "../../features/test/src/components/PopupSelectRetakeOrContinueAttempt.tsx",
+    "../../libs/utils/helpers/timer.ts"
   ],
   "exclude": ["node_modules"]
 }

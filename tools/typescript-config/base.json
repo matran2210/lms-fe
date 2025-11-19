@@ -21,6 +21,9 @@
     "noEmit": true,
 
     "paths": {
+      "@lms/feature-dashboard": ["features/dashboard/index.ts"],
+      "@lms/feature-test": ["features/test/index.ts"],
+      "@lms/feature-calendar": ["features/calendar/index.ts"],
       "@lms/contexts": ["libs/contexts/index.ts"],
       "@lms/assets": ["libs/assets/index.ts"],
       "@lms/ui": ["libs/ui/index.ts"],
@@ -30,7 +33,6 @@
       "@lms/feature-user": ["features/user/index.ts"],
       "@lms/feature-auth": ["features/auth/index.ts"],
       "@lms/feature-class": ["features/class/index.ts"],
-      "@lms/feature-teacher": ["features/teacher/index.ts"],
       "@lms/feature-course": ["features/course/index.ts"],
       "@lms/feature-notifications": ["features/notifications/index.ts"]
     }

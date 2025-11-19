@@ -26,7 +26,6 @@ export * from "./radiobutton/index";
 export * from "./resizable/ResizableComponent";
 export * from "./select/index";
 export * from "./skeleton/index";
-export { default as TabSlide } from "./tabSlide/TabSlide";
 export { default as YourAnswer } from "./tags/YourAnswer";
 export * from "./textfield/index";
 export * from "./video/index";

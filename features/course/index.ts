@@ -1,1 +1,1 @@
-export * from "./src/components/CardCourse/index";
+export * from "./src/components/index";

@@ -93,9 +93,6 @@ importers:
       '@lms/feature-notifications':
         specifier: workspace:*
         version: link:../../features/notifications
-      '@lms/feature-teacher':
-        specifier: workspace:*
-        version: link:../../features/teacher
       '@lms/feature-user':
         specifier: workspace:*
         version: link:../../features/user
@@ -403,6 +400,27 @@ importers:
       '@lms/core':
         specifier: workspace:*
         version: link:../../libs/core
+      '@lms/feature-auth':
+        specifier: workspace:*
+        version: link:../../features/auth
+      '@lms/feature-calendar':
+        specifier: workspace:*
+        version: link:../../features/calendar
+      '@lms/feature-class':
+        specifier: workspace:*
+        version: link:../../features/class
+      '@lms/feature-course':
+        specifier: workspace:*
+        version: link:../../features/course
+      '@lms/feature-notifications':
+        specifier: workspace:*
+        version: link:../../features/notifications
+      '@lms/feature-test':
+        specifier: workspace:*
+        version: link:../../features/test
+      '@lms/feature-user':
+        specifier: workspace:*
+        version: link:../../features/user
       '@lms/hooks':
         specifier: workspace:*
         version: link:../../libs/hooks
@@ -778,21 +796,6 @@ importers:
         version: link:../../libs/utils
 
   features/notifications:
-    dependencies:
-      '@lms/assets':
-        specifier: workspace:*
-        version: link:../../libs/assets
-      '@lms/core':
-        specifier: workspace:*
-        version: link:../../libs/core
-      '@lms/ui':
-        specifier: workspace:*
-        version: link:../../libs/ui
-      '@lms/utils':
-        specifier: workspace:*
-        version: link:../../libs/utils
-
-  features/teacher:
     dependencies:
       '@lms/assets':
         specifier: workspace:*
@@ -10648,7 +10651,7 @@ snapshots:
       '@types/node': 20.5.1
       chalk: 4.1.2
       cosmiconfig: 8.3.6(typescript@5.8.2)
-      cosmiconfig-typescript-loader: 4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@5.8.2))(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.8.2))(typescript@5.8.2)
+      cosmiconfig-typescript-loader: 4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@5.8.2))(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.8.2))(typescript@5.8.2)
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
@@ -14565,7 +14568,7 @@ snapshots:
 
   core-util-is@1.0.3: {}
 
-  cosmiconfig-typescript-loader@4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@5.8.2))(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.8.2))(typescript@5.8.2):
+  cosmiconfig-typescript-loader@4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@5.8.2))(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.8.2))(typescript@5.8.2):
     dependencies:
       '@types/node': 20.5.1
       cosmiconfig: 8.3.6(typescript@5.8.2)

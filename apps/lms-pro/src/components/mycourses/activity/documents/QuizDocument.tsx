@@ -800,13 +800,13 @@ const QuizDocument = ({
     switch (status) {
       case GRADE_STATUS.FINISHED_GRADING:
         return (
-          <div className="rounded bg-[#3978391A] px-2 font-medium text-[#166534]">
+          <div className="rounded bg-[#3978391A] px-2 py-[2px] font-medium text-[#166534]">
             Finished Grading
           </div>
         )
       case GRADE_STATUS.AWAITING_GRADING:
         return (
-          <div className="text-amber-400  rounded bg-[#FFB8001A] px-2 font-medium">
+          <div className="rounded bg-warning-50 px-2 py-[2px] font-medium text-warning">
             Awaiting Grading
           </div>
         )
