@@ -13,7 +13,9 @@
     "@lms/assets": "workspace:*",
     "@lms/utils": "workspace:*",
     "@lms/core": "workspace:*",
-    "@lms/ui": "workspace:*"
+    "@lms/ui": "workspace:*",
+    "@lms/hooks": "workspace:*",
+    "@lms/feature-courses": "workspace:*"
   },
   "peerDependencies": {
     "react": "*",

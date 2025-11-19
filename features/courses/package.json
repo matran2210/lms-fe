@@ -1,0 +1,19 @@
+{
+  "name": "@lms/feature-courses",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "peerDependencies": {},
+  "dependencies": {
+    "@lms/assets": "workspace:*",
+    "@lms/utils": "workspace:*",
+    "@lms/core": "workspace:*",
+    "@lms/ui": "workspace:*",
+    "@lms/hooks": "workspace:*"
+  }
+}

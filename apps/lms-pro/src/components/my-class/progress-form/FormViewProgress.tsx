@@ -1,33 +1,33 @@
-import { SAPPInput } from '@lms/ui'
-import { SAPPButtonV2 } from '@lms/ui'
-import { HookformTimePicker } from '@lms/ui'
-import { SAPPSelect } from '@lms/ui'
-import CollapseBox from '@components/layout/CollapseBox'
-import CollapseItem from '@components/layout/CollapseBox/CollapseItem'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ProgressAPI } from '@pages/api/progress'
-import { formatDate } from '@lms/utils'
-import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
-import { Drawer } from 'antd'
-import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import SappIcon from 'src/common/SappIcon'
-import { CONFIRM_CANCEL, DATE_TIME_FORMAT_DMY } from '@lms/core'
-import { useAppDispatch } from 'src/redux/hook'
-import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import {
+  DATE_TIME_FORMAT_DMY,
   IContentCompleted,
   IDefaultFormAddProgress,
   IProgress,
   IRequestCreateProgress,
   LearningMode,
 } from '@lms/core'
+import {
+  CollapseBox,
+  CollapseItem,
+  HookformTimePicker,
+  SAPPButtonV2,
+  SAPPInput,
+  SAPPSelect,
+} from '@lms/ui'
+import { formatDate, sortSectionsByPosition } from '@lms/utils'
+import { ProgressAPI } from '@pages/api/progress'
+import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
+import { Drawer } from 'antd'
+import { round } from 'lodash'
+import { useRouter } from 'next/router'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import SappIcon from 'src/common/SappIcon'
+import { useAppDispatch } from 'src/redux/hook'
 import { z } from 'zod'
 import TreeProgress from './TreeProgress'
-import { round } from 'lodash'
-import { sortSectionsByPosition } from '@lms/utils'
-import { useRouter } from 'next/router'
 
 export interface IProps {
   id: string | null

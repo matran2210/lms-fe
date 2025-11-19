@@ -27,7 +27,7 @@
     "@lms/feature-auth": "workspace:*",
     "@lms/feature-class": "workspace:*",
     "@lms/feature-notifications": "workspace:*",
-    "@lms/feature-course": "workspace:*",
+    "@lms/feature-courses": "workspace:*",
     "@cloudflare/stream-react": "^1.8.0",
     "@cyntler/react-doc-viewer": "1.17.0",
     "@dnd-kit/core": "^6.3.1",

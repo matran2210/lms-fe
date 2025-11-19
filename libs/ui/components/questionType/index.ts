@@ -1,0 +1,11 @@
+export * from "./MatchQuiz/index";
+export * from "./NewDragNDropQuestion/index";
+export { default as ConstructedQuestion } from "./ConstructedQuestion";
+export { default as DragNDropPreview } from "./ConstructedQuestion";
+export { default as AddWordPreview } from "./FillText";
+export { default as MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
+export { default as OneChoiceQuestion } from "./OneChoiceQuestion";
+export { default as SelectWord } from "./SelectQuestion";
+export { default as MatchingQuestion } from "./MatchingQuestion";
+export { default as NewFillText } from "./NewFillText";
+export { default as WarningSection } from "./WarningSection";

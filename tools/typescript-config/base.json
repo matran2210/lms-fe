@@ -33,7 +33,7 @@
       "@lms/feature-user": ["features/user/index.ts"],
       "@lms/feature-auth": ["features/auth/index.ts"],
       "@lms/feature-class": ["features/class/index.ts"],
-      "@lms/feature-course": ["features/course/index.ts"],
+      "@lms/feature-courses": ["features/courses/index.ts"],
       "@lms/feature-notifications": ["features/notifications/index.ts"]
     }
   },

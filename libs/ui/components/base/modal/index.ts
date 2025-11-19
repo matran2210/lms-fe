@@ -8,3 +8,4 @@ export { default as SappModalV3 } from "./SappModalV3";
 export { default as SappModalVideo } from "./SappModalVideo";
 export { default as SappModelSidebar } from "./SappModelSidebar";
 export { default as SappModalImage } from "./SappModalImage";
+export { default as FullScreenMobile } from "./FullScreenMobile";

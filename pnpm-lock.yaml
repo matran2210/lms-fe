@@ -87,9 +87,9 @@ importers:
       '@lms/feature-class':
         specifier: workspace:*
         version: link:../../features/class
-      '@lms/feature-course':
+      '@lms/feature-courses':
         specifier: workspace:*
-        version: link:../../features/course
+        version: link:../../features/courses
       '@lms/feature-notifications':
         specifier: workspace:*
         version: link:../../features/notifications
@@ -409,9 +409,9 @@ importers:
       '@lms/feature-class':
         specifier: workspace:*
         version: link:../../features/class
-      '@lms/feature-course':
+      '@lms/feature-courses':
         specifier: workspace:*
-        version: link:../../features/course
+        version: link:../../features/courses
       '@lms/feature-notifications':
         specifier: workspace:*
         version: link:../../features/notifications
@@ -777,7 +777,7 @@ importers:
         specifier: workspace:*
         version: link:../../libs/utils
 
-  features/course:
+  features/courses:
     dependencies:
       '@lms/assets':
         specifier: workspace:*
@@ -818,6 +818,9 @@ importers:
       '@lms/core':
         specifier: workspace:*
         version: link:../../libs/core
+      '@lms/feature-courses':
+        specifier: workspace:*
+        version: link:../courses
       '@lms/hooks':
         specifier: workspace:*
         version: link:../../libs/hooks
@@ -836,6 +839,9 @@ importers:
       '@lms/core':
         specifier: workspace:*
         version: link:../../libs/core
+      '@lms/hooks':
+        specifier: workspace:*
+        version: link:../../libs/hooks
       '@lms/ui':
         specifier: workspace:*
         version: link:../../libs/ui
@@ -843,7 +849,26 @@ importers:
         specifier: workspace:*
         version: link:../../libs/utils
 
-  libs/assets: {}
+  libs/assets:
+    dependencies:
+      '@lms/assets':
+        specifier: workspace:*
+        version: 'link:'
+      '@lms/core':
+        specifier: workspace:*
+        version: link:../core
+      '@lms/feature-courses':
+        specifier: workspace:*
+        version: link:../../features/courses
+      '@lms/hooks':
+        specifier: workspace:*
+        version: link:../hooks
+      '@lms/ui':
+        specifier: workspace:*
+        version: link:../ui
+      '@lms/utils':
+        specifier: workspace:*
+        version: link:../utils
 
   libs/core: {}
 
@@ -879,6 +904,12 @@ importers:
       '@lms/core':
         specifier: workspace:*
         version: link:../core
+      '@lms/feature-courses':
+        specifier: workspace:*
+        version: link:../../features/courses
+      '@lms/hooks':
+        specifier: workspace:*
+        version: link:../hooks
       '@lms/ui':
         specifier: workspace:*
         version: 'link:'
@@ -10670,7 +10701,7 @@ snapshots:
       '@types/node': 20.5.1
       chalk: 4.1.2
       cosmiconfig: 8.3.6(typescript@5.8.2)
-      cosmiconfig-typescript-loader: 4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@5.8.2))(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.8.2))(typescript@5.8.2)
+      cosmiconfig-typescript-loader: 4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@5.8.2))(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.8.2))(typescript@5.8.2)
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
@@ -14587,7 +14618,7 @@ snapshots:
 
   core-util-is@1.0.3: {}
 
-  cosmiconfig-typescript-loader@4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@5.8.2))(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.8.2))(typescript@5.8.2):
+  cosmiconfig-typescript-loader@4.4.0(@types/node@20.5.1)(cosmiconfig@8.3.6(typescript@5.8.2))(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.8.2))(typescript@5.8.2):
     dependencies:
       '@types/node': 20.5.1
       cosmiconfig: 8.3.6(typescript@5.8.2)

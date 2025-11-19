@@ -4,8 +4,8 @@
 export const AccessIcon = ({
   width = 88,
   height = 88,
-  fill = 'currentColor',
-  className = '',
+  fill = "currentColor",
+  className = "",
 }) => {
   return (
     <svg
@@ -25,10 +25,10 @@ export const AccessIcon = ({
         fill={fill}
       />
     </svg>
-  )
-}
+  );
+};
 
-export const ArrowDownIcon = () => (
+export const ArrowDownIconEntranceTest = () => (
   <svg
     width="24"
     height="24"
@@ -43,4 +43,4 @@ export const ArrowDownIcon = () => (
       fill="#1C274C"
     />
   </svg>
-)
+);

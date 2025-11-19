@@ -1,40 +1,38 @@
-import { ArrowDownIcon } from '@assets/icons/entranceTest'
-import { ButtonSecondary } from '@lms/ui'
-import { ButtonText } from '@lms/ui'
-import CardCourse from '@components/common/CardCourse/CardCourse'
-import { formatTime } from '@components/common/timer'
-import PopUpRemindEntrance from '@components/popUpRemindEntrance'
-import { CoursesAPI } from '@pages/api/courses'
-import { Select } from 'antd'
-import dayjs from 'dayjs'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { EAttemptStatus } from '@lms/core'
-import { IEntranceTest, IEntranceTestAttempt } from '@lms/core'
-import EntrancePopup from './EntrancePopup'
-import EntrancePopupContinue from './EntrancePopupContinue'
-import { getNoOfAttemptEntranceTest } from '@utils/helpers/quiz-test/helper'
+import { ArrowDownIcon } from "@assets/icons/entranceTest";
+import { EAttemptStatus, IEntranceTest, IEntranceTestAttempt } from "@lms/core";
+import { CardCourse } from "@lms/feature-courses";
+import { ButtonSecondary, ButtonText } from "@lms/ui";
+import { formatTime } from "@lms/utils";
+import { CoursesAPI } from "@pages/api/courses";
+import { getNoOfAttemptEntranceTest } from "@utils/helpers/quiz-test/helper";
+import { Select } from "antd";
+import dayjs from "dayjs";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import PopUpRemindEntrance from "../popUpRemindEntrance";
+import EntrancePopup from "./EntrancePopup";
+import EntrancePopupContinue from "./EntrancePopupContinue";
 
 interface EntranceTestProps {
   data: {
-    id: string
-    name: string
-    attempt_status?: EAttemptStatus
-    quiz_timed?: number
-    created_at?: string
-    quiz_attempt_id?: string
-    is_attempt?: boolean
-    total_attempt_time?: number
-    total_correct_answer?: number
-    total_question?: number
-    attempt_times?: number
-    is_limited?: boolean
-    attempts?: IEntranceTestAttempt[]
-    limit_count?: number
-  }
-  test_id_default?: any | undefined
-  onRefetch: () => void
-  isShowEntranceTestPopup: boolean
+    id: string;
+    name: string;
+    attempt_status?: EAttemptStatus;
+    quiz_timed?: number;
+    created_at?: string;
+    quiz_attempt_id?: string;
+    is_attempt?: boolean;
+    total_attempt_time?: number;
+    total_correct_answer?: number;
+    total_question?: number;
+    attempt_times?: number;
+    is_limited?: boolean;
+    attempts?: IEntranceTestAttempt[];
+    limit_count?: number;
+  };
+  test_id_default?: any | undefined;
+  onRefetch: () => void;
+  isShowEntranceTestPopup: boolean;
 }
 
 const EntranceTest = ({
@@ -43,53 +41,53 @@ const EntranceTest = ({
   onRefetch,
   isShowEntranceTestPopup,
 }: EntranceTestProps) => {
-  const [openFillForn, setOpenFillForm] = useState(false)
-  const router = useRouter()
-  const [open, setOpen] = useState<boolean>(false)
+  const [openFillForn, setOpenFillForm] = useState(false);
+  const router = useRouter();
+  const [open, setOpen] = useState<boolean>(false);
   const [isOpenPopupLastAttempt, setIsOpenPopupLastAttempt] =
-    useState<boolean>(false)
+    useState<boolean>(false);
   const [remainingTimeLastAttempt, setRemainingTimeLastAttempt] =
-    useState<number>(0)
+    useState<number>(0);
   const [currentAttempt, setCurrentAttempt] = useState<IEntranceTestAttempt>(
     data?.attempts?.[0] || ({} as IEntranceTestAttempt),
-  )
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (data) {
       if (
         data?.quiz_timed &&
-        currentAttempt?.status === EAttemptStatus['IN_PROGRESS']
+        currentAttempt?.status === EAttemptStatus["IN_PROGRESS"]
       ) {
         const calcTime = dayjs(
-          dayjs(currentAttempt?.started_at).add(data?.quiz_timed, 'minutes'),
-        ).diff(dayjs(), 'seconds')
+          dayjs(currentAttempt?.started_at).add(data?.quiz_timed, "minutes"),
+        ).diff(dayjs(), "seconds");
 
-        setRemainingTimeLastAttempt(calcTime >= 0 ? calcTime : 0)
+        setRemainingTimeLastAttempt(calcTime >= 0 ? calcTime : 0);
         const remainingTimeInterval = setInterval(() => {
           setRemainingTimeLastAttempt((prev) => {
             if (prev === 0) {
-              handleSubmitQuestion()
-              clearInterval(remainingTimeInterval)
-              return 0
+              handleSubmitQuestion();
+              clearInterval(remainingTimeInterval);
+              return 0;
             }
-            return prev - 1
-          })
-        }, 1000)
+            return prev - 1;
+          });
+        }, 1000);
 
         return () => {
-          clearInterval(remainingTimeInterval)
-        }
+          clearInterval(remainingTimeInterval);
+        };
       }
     }
-  }, [data, currentAttempt])
+  }, [data, currentAttempt]);
 
   const timeTakenFormatted = currentAttempt?.total_attempt_time
     ? formatTime(currentAttempt?.total_attempt_time)
-    : 0
+    : 0;
   const timeAllowFormatted = data?.quiz_timed
     ? formatTime(data?.quiz_timed * 60)
-    : 'Unlimited'
+    : "Unlimited";
 
   /**
    * @description state này để đóng mở popup nếu học viên làm 2 lần
@@ -109,9 +107,9 @@ const EntranceTest = ({
 
   const handleSubmitQuestion = async (redirectToResult: boolean = false) => {
     //to do: start test
-    localStorage.removeItem('quizAttempt')
+    localStorage.removeItem("quizAttempt");
     localStorage.setItem(
-      'quizAttempt',
+      "quizAttempt",
       JSON.stringify({
         id: currentAttempt?.id,
         number_of_attempts: data?.attempt_times,
@@ -119,36 +117,36 @@ const EntranceTest = ({
         quiz_timed: data?.quiz_timed,
         created_at: currentAttempt?.started_at,
       }),
-    )
+    );
     try {
       const res = await CoursesAPI.submitAllQuestion(
         currentAttempt?.id as string,
-      )
+      );
       if (res.success) {
         if (redirectToResult) {
           const searchParams = getNoOfAttemptEntranceTest({
             data: data as IEntranceTest,
             currentAttempt,
-          })
+          });
           router.push(
             `/entrance-test/test-result/${currentAttempt?.id}?${searchParams}`,
-          )
+          );
         } else {
-          await onRefetch()
+          await onRefetch();
         }
       }
     } catch (err) {
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleClickBegin = () => {
     //reset local storage
-    localStorage.removeItem('quizAttempt')
-    if (currentAttempt?.status === EAttemptStatus['IN_PROGRESS']) {
+    localStorage.removeItem("quizAttempt");
+    if (currentAttempt?.status === EAttemptStatus["IN_PROGRESS"]) {
       localStorage.setItem(
-        'quizAttempt',
+        "quizAttempt",
         JSON.stringify({
           id: currentAttempt?.id,
           number_of_attempts: data?.attempt_times,
@@ -156,12 +154,12 @@ const EntranceTest = ({
           quiz_timed: data?.quiz_timed,
           created_at: currentAttempt?.started_at,
         }),
-      )
-      setIsOpenPopupLastAttempt(true)
+      );
+      setIsOpenPopupLastAttempt(true);
     } else {
-      setOpen(true)
+      setOpen(true);
     }
-  }
+  };
 
   const renderButton = () => {
     if (!data?.attempts?.length) {
@@ -173,9 +171,9 @@ const EntranceTest = ({
           size="small"
           onClick={handleClickBegin}
         />
-      )
+      );
     }
-    if (currentAttempt?.status === EAttemptStatus['IN_PROGRESS']) {
+    if (currentAttempt?.status === EAttemptStatus["IN_PROGRESS"]) {
       return (
         <ButtonSecondary
           title="Resume"
@@ -183,7 +181,7 @@ const EntranceTest = ({
           className="ml-auto"
           onClick={handleClickBegin}
         />
-      )
+      );
     } else {
       return (
         <>
@@ -195,10 +193,10 @@ const EntranceTest = ({
                 const searchParams = getNoOfAttemptEntranceTest({
                   data: data as IEntranceTest,
                   currentAttempt,
-                })
+                });
                 router.push(
                   `/entrance-test/test-result/${currentAttempt?.id}?${searchParams}`,
-                )
+                );
               }}
             />
           </div>
@@ -208,41 +206,41 @@ const EntranceTest = ({
               className="ml-4"
               size="small"
               onClick={() => {
-                localStorage.removeItem('quizAttempt')
-                setOpen(true)
+                localStorage.removeItem("quizAttempt");
+                setOpen(true);
               }}
             />
           )}
         </>
-      )
+      );
     }
-  }
+  };
 
   const renderTimeContent = () => {
     if (data?.attempts && data?.attempts?.length > 0) {
       if (
-        currentAttempt?.status === EAttemptStatus['IN_PROGRESS'] &&
+        currentAttempt?.status === EAttemptStatus["IN_PROGRESS"] &&
         remainingTimeLastAttempt >= 0
       ) {
         return (
           <>
             <p>Time Remaining:</p>
             <p
-              className={`font-medium ${remainingTimeLastAttempt > 0 ? 'text-gray-800' : 'text-error'}`}
+              className={`font-medium ${remainingTimeLastAttempt > 0 ? "text-gray-800" : "text-error"}`}
             >
               {formatTime(
                 remainingTimeLastAttempt > 0 ? remainingTimeLastAttempt : 0,
               )}
             </p>
           </>
-        )
+        );
       } else {
         return (
           <>
             <p>Time taken:</p>
             <p className="font-medium text-gray-800">{timeTakenFormatted}</p>
           </>
-        )
+        );
       }
     } else {
       return (
@@ -250,21 +248,21 @@ const EntranceTest = ({
           <p>Time allowed: </p>
           <p className="font-medium text-gray-800">{timeAllowFormatted}</p>
         </>
-      )
+      );
     }
-  }
+  };
 
   const cardFooter = (
     <div className="action relative mt-auto flex items-center justify-end">
       {renderButton()}
     </div>
-  )
-  const hasOpened = localStorage.getItem('openModalMarketingInApp')
+  );
+  const hasOpened = localStorage.getItem("openModalMarketingInApp");
 
   return (
     <>
       <CardCourse
-        title={data?.name || ''}
+        title={data?.name || ""}
         attemptStatus={currentAttempt?.status as EAttemptStatus}
         footer={cardFooter}
       >
@@ -285,7 +283,7 @@ const EntranceTest = ({
                     </p>
                   )} */}
                   <p className="font-medium text-gray-800">
-                    {data.attempts.length + '/' + data?.limit_count}
+                    {data.attempts.length + "/" + data?.limit_count}
                   </p>
                 </>
               ) : (
@@ -297,7 +295,7 @@ const EntranceTest = ({
                 {data?.attempts?.length && data?.attempts?.length > 0 ? (
                   <>
                     <span
-                      className={`${data?.attempts?.length > 1 ? '' : 'text-gray'}`}
+                      className={`${data?.attempts?.length > 1 ? "" : "text-gray"}`}
                     >
                       Result of Attempts:
                     </span>
@@ -310,8 +308,8 @@ const EntranceTest = ({
                           }))
                           .reverse()}
                         classNames={{
-                          root: 'select-result-attempt',
-                          popup: { root: 'select-result-attempt-option' },
+                          root: "select-result-attempt",
+                          popup: { root: "select-result-attempt-option" },
                         }}
                         variant="borderless"
                         value={currentAttempt?.id}
@@ -319,7 +317,7 @@ const EntranceTest = ({
                           setCurrentAttempt(
                             data?.attempts?.find((item) => item.id === value) ||
                               ({} as IEntranceTestAttempt),
-                          )
+                          );
                         }}
                         suffixIcon={<ArrowDownIcon />}
                       />
@@ -335,7 +333,7 @@ const EntranceTest = ({
               </div>
               {data?.attempts?.length && data?.attempts?.length > 0 ? (
                 <>
-                  {currentAttempt?.status === EAttemptStatus['IN_PROGRESS'] ? (
+                  {currentAttempt?.status === EAttemptStatus["IN_PROGRESS"] ? (
                     <span className="text-gray-800">--</span>
                   ) : (
                     <p className="flex items-center font-medium text-info">
@@ -355,14 +353,14 @@ const EntranceTest = ({
         <PopUpRemindEntrance
           setOpenFillForm={setOpenFillForm}
           setOpenTest={
-            data?.attempt_status === EAttemptStatus['IN_PROGRESS']
+            data?.attempt_status === EAttemptStatus["IN_PROGRESS"]
               ? setIsOpenPopupLastAttempt
               : setOpen
           }
         />
       )}
 
-      {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
+      {data?.attempt_status === EAttemptStatus["IN_PROGRESS"] ? (
         <EntrancePopupContinue
           isOpenPopupLastAttempt={isOpenPopupLastAttempt}
           setIsOpenPopupLastAttempt={setIsOpenPopupLastAttempt}
@@ -384,7 +382,7 @@ const EntranceTest = ({
       )}
       {/* <PopupExtend open={openExpired} setOpen={setOpenExpired} /> */}
     </>
-  )
-}
+  );
+};
 
-export default EntranceTest
+export default EntranceTest;

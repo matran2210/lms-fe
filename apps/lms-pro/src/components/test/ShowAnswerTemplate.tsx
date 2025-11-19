@@ -4,7 +4,7 @@ import { Triangle } from '@components/icons/Triangle'
 import { Tooltip } from 'antd'
 import clsx from 'clsx'
 import React, { useLayoutEffect, useState } from 'react'
-import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
+import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
 import { RESPONSE_OPTION } from '@lms/core'
 import {
   Control,

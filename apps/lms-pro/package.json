@@ -24,7 +24,7 @@
     "@lms/feature-class": "workspace:*",
     "@lms/feature-notifications": "workspace:*",
     "@lms/feature-user": "workspace:*",
-    "@lms/feature-course": "workspace:*",
+    "@lms/feature-courses": "workspace:*",
     "@lms/assets": "workspace:*",
     "@lms/ui": "workspace:*",
     "@lms/utils": "workspace:*",

@@ -1,9 +1,9 @@
 import { AlertIcon, IconCongrats } from "@assets/icons";
-import { ButtonSecondary } from "@lms/ui";
-import { SappModalV3 } from "@lms/ui";
-import CardCourse from "@components/common/CardCourse/CardCourse";
-import { formatTime } from "@components/common/timer";
 import { useCourseContext } from "@contexts/index";
+import { EAttemptStatus, IEventTest, MY_COURSES } from "@lms/core";
+import { CardCourse } from "@lms/feature-courses";
+import { ButtonSecondary, SappModalV3 } from "@lms/ui";
+import { formatTime } from "@lms/utils";
 import { CoursesAPI } from "@pages/api/courses";
 import { formatDate } from "@utils/helpers";
 import { isQuizExpired } from "@utils/helpers/quiz-test/helper";
@@ -11,9 +11,6 @@ import { compareAsc } from "date-fns";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { EAttemptStatus } from "@lms/core";
-import { MY_COURSES } from "@lms/core";
-import { IEventTest } from "@lms/core";
 import ContentTestCongratution from "./ContentTestCongratution";
 
 const EventTest = ({
