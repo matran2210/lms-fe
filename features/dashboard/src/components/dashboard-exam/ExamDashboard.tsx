@@ -1,16 +1,16 @@
-import OverProgress from '@components/dashboard/dashboard-exam/OverProgress'
-import TopicProgress from '@components/dashboard/dashboard-exam/TopicProgress'
-import LearningResults from '@components/dashboard/dashboard-exam/LearningResults'
-import { Dispatch, SetStateAction } from 'react'
-import { ICourseInfo } from '@lms/core'
+import OverProgress from "@components/dashboard/dashboard-exam/OverProgress";
+import TopicProgress from "@components/dashboard/dashboard-exam/TopicProgress";
+import LearningResults from "@components/dashboard/dashboard-exam/LearningResults";
+import { Dispatch, SetStateAction } from "react";
+import { ICourseInfo } from "@lms/core";
 
 const ExamDashboard = ({
   setInfoCourse,
 }: {
-  setInfoCourse: Dispatch<SetStateAction<ICourseInfo>>
+  setInfoCourse: Dispatch<SetStateAction<ICourseInfo>>;
 }) => {
   return (
-    <div className="mx-auto max-w-[1954px] grow flex-col gap-4 bg-gray-canvas xl:flex-row 3xl:gap-6">
+    <div className="mx-auto w-full grow flex-col gap-4 bg-gray-canvas xl:flex-row 3xl:gap-6">
       <div className="flex w-full flex-col gap-4 3xl:gap-6">
         <LearningResults />
       </div>
@@ -21,7 +21,7 @@ const ExamDashboard = ({
         <OverProgress />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ExamDashboard
+export default ExamDashboard;

@@ -1,21 +1,21 @@
-import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/PinnedNotificationsV2'
-import React from 'react'
-import course_content from '@assets/images/course_content.svg'
-import Image from 'next/image'
-import { PageLink } from '@lms/core'
-import { useRouter } from 'next/router'
-import { ArrowRightV2Icon } from '@assets/icons'
+import PinnedNotificationsV2 from "@components/layout/PinnedNotifications/PinnedNotificationsV2";
+import React from "react";
+import continue_learning from "@assets/images/book-continue-learning.svg";
+import Image from "next/image";
+import { PageLink } from "@lms/core";
+import { useRouter } from "next/router";
+import { ArrowRightV2Icon } from "@assets/icons";
 
 const ContinueLearning = () => {
-  const router = useRouter()
+  const router = useRouter();
   const goToCourseContent = () => {
     router.push(
       PageLink.COURSE_DETAIL.replace(
-        '[courseId]',
+        "[courseId]",
         router.query.courseId as string,
       ),
-    )
-  }
+    );
+  };
 
   return (
     <div className="z-2 sticky inset-x-0 bottom-4">
@@ -28,8 +28,8 @@ const ContinueLearning = () => {
           {/* Nội dung chính bên trái */}
           <div className="flex items-center gap-2 md:gap-4">
             {/* Hình ảnh */}
-            <div className="h-6 w-6 md:block md:h-[54px] md:w-[54px]">
-              <Image src={course_content} alt="pinned-completed-course" />
+            <div className="h-6 w-6 md:size-10">
+              <Image src={continue_learning} alt="pinned-completed-course" />
             </div>
 
             {/* Text */}
@@ -39,7 +39,7 @@ const ContinueLearning = () => {
               </div>
 
               {/* Desktop text */}
-              <div className="hidden text-sm text-gray-800 md:block">
+              <div className="hidden text-base text-gray-800 md:block">
                 <InstructionText onClick={() => goToCourseContent()} />
               </div>
             </div>
@@ -63,17 +63,17 @@ const ContinueLearning = () => {
         </PinnedNotificationsV2>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const InstructionText = ({ onClick }: { onClick: () => void }) => (
   <>
-    <span className="font-normal">Click on</span>{' '}
+    <span className="font-normal">Click on</span>{" "}
     <span className="cursor-pointer font-semibold underline" onClick={onClick}>
       Course Content
-    </span>{' '}
+    </span>{" "}
     <span className="font-normal">to resume your lessons.</span>
   </>
-)
+);
 
-export default ContinueLearning
+export default ContinueLearning;

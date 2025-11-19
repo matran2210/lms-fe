@@ -102,7 +102,7 @@
     "react-slick": "^0.31.0",
     "react-use-draggable-scroll": "^0.4.7",
     "recharts": "^3.2.1",
-    "sapp-common-package": "^1.5.1",
+    "sapp-common-package": "^1.5.2",
     "sapp-notification": "^1.1.1",
     "sapp-preview-part-test": "1.4.7-test",
     "sass": "^1.53.0",

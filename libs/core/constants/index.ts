@@ -1,5 +1,9 @@
-
-import { CALENDAR_FILTER_TYPE, FREQUENCY_UNITS, FREQUENCY_UNITS_LABEL, FREQUENCY_UNITS_LABEL_PLURAL } from "../enums";
+import {
+  CALENDAR_FILTER_TYPE,
+  FREQUENCY_UNITS,
+  FREQUENCY_UNITS_LABEL,
+  FREQUENCY_UNITS_LABEL_PLURAL,
+} from "../enums";
 import { ISelectOption } from "../types/courses";
 
 export const PageLink = {
@@ -126,10 +130,8 @@ export const UserGuide = {
   CONTENT_STEP_4:
     "This is the welcome section! You will find information about your location here, and take a moment to familiarize yourself with the features and possibilities that await you on this page.",
   CONTENT_STEP_5:
-    "Here you can convert your courses to General Course or Master Finance depending on the study credit you have registered with SAPP.",
-  CONTENT_STEP_6:
     "This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.",
-  CONTENT_STEP_7:
+  CONTENT_STEP_6:
     "This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.",
 };
 
@@ -460,10 +462,8 @@ export const CONFIRM_DELETE = "Are you sure you want to delete?";
 export const CALENDAR_SIDEBAR_SAVE_BUTTON = "Save";
 export const CALENDAR_SIDEBAR_CANCEL_BUTTON = "Cancel";
 
-
 export const ERROR_MESSAGE_TRIAL =
   "Sorry, you do not have access to this content";
-
 
 export const CALENDAR_FILTER_TYPE_LABEL = {
   [CALENDAR_FILTER_TYPE.HOLIDAY]: "Holiday",
@@ -493,7 +493,6 @@ export const OFFICE_VIEWER_URL =
   "https://view.officeapps.live.com/op/embed.aspx";
 
 export * from "./common";
-
 
 export const COOKIE_INFO = {
   SESSION_ID: "sessionId",
@@ -536,7 +535,6 @@ export const LAYOUT = {
   SINGLE_PAGE_LAYOUT: "SINGLE_PAGE_LAYOUT",
 };
 
-
 export const QUIZ_GRADING_METHOD = [
   {
     label: "Yes",
@@ -576,6 +574,6 @@ export * from "./lang";
 export * from "./localStorageKeys";
 export * from "./menu-items";
 export * from "./my-request";
-export * from './request'
+export * from "./request";
 export * from "./upload";
-export * from "./form"
+export * from "./form";

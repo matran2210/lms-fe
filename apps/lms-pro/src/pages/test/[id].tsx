@@ -3618,8 +3618,8 @@ const TestDetail = () => {
             open={!isClickExhibitOpen ? undefined : false}
             placement="left"
           >
-            <div className="group fixed bottom-[242px] right-8 grid h-10 w-10 cursor-pointer place-items-center rounded-full bg-primary hover:bg-blend-overlay">
-              <NotesOutline className="h-7 w-7 text-white" />
+            <div className="group fixed bottom-[242px] right-8 grid cursor-pointer place-items-center rounded-full bg-primary p-2 hover:bg-blend-overlay">
+              <NotesOutline className="size-8 text-white" />
               <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
               {showWarning && (
                 <PulsingExclamation
@@ -3685,7 +3685,7 @@ const TestDetail = () => {
           >
             <div
               className={clsx(
-                'group grid h-10 w-10 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                'group grid cursor-pointer place-items-center rounded-full bg-primary p-2 text-white shadow-icon hover:bg-blend-overlay',
                 {
                   'top-[74px]':
                     (currentTabContent?.topicDescription?.qType ===
@@ -3701,7 +3701,7 @@ const TestDetail = () => {
                 },
               )}
             >
-              <FileTextIcon className="h-7 w-7" />
+              <FileTextIcon className="size-8" />
               <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
             </div>
           </Popover>
@@ -3713,11 +3713,11 @@ const TestDetail = () => {
           trackGAEvent('Click Button ScratchPad Test')
         }}
         className={clsx(
-          'group fixed bottom-[302px] right-8 grid h-10 w-10 cursor-pointer place-items-center rounded-full bg-white shadow-card lg:hidden',
+          'group fixed bottom-[302px] right-8 grid cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden',
           { '!bg-primary': isScatchPadEnabled },
         )}
       >
-        <ScratchPadIconV2 isActive={isScatchPadEnabled} className="h-7 w-7" />
+        <ScratchPadIconV2 isActive={isScatchPadEnabled} className="size-8" />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <div
@@ -3726,11 +3726,11 @@ const TestDetail = () => {
           trackGAEvent('Click Button Calculator Test')
         }}
         className={clsx(
-          'group fixed bottom-[362px] right-8 grid h-10 w-10 cursor-pointer place-items-center rounded-full bg-white shadow-card lg:hidden',
+          'group fixed bottom-[362px] right-8 grid cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden',
           { '!bg-primary': checkCalExist > -1 },
         )}
       >
-        <CalculatorIconV2 isActive={checkCalExist > -1} className="h-7 w-7" />
+        <CalculatorIconV2 isActive={checkCalExist > -1} className="size-8" />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <div
@@ -3738,16 +3738,16 @@ const TestDetail = () => {
           handleFlagQuestion(currentPage)
           trackGAEvent('Click Button Flag To Review Test')
         }}
-        className="group fixed bottom-[422px] right-8 grid h-10 w-10 cursor-pointer place-items-center rounded-full bg-white shadow-card lg:hidden"
+        className="group fixed bottom-[422px] right-8 grid cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden"
       >
-        <FlagIconV2 isActive={currentTabContent?.flag} className="h-7 w-7" />
+        <FlagIconV2 isActive={currentTabContent?.flag} className="size-8" />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <BackToTop
         scrollContainerRef={scrollRef}
         className="!right-8 bottom-[482px] lg:bottom-[302px]"
-        iconWrapperClassName={'w-10 h-10'}
-        iconClassName={'w-7 h-7'}
+        iconWrapperClassName={'size-12'}
+        iconClassName={'size-7'}
       />
     </Layout>
   )
