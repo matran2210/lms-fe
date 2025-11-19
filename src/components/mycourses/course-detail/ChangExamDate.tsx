@@ -21,7 +21,7 @@ const ChangExamDate = ({
   remainingChanges,
   isOpen,
 }: IProps) => {
-  const { control, reset, setValue } = useFormContext()
+  const { control, reset, setValue, clearErrors } = useFormContext()
   const { exams, hasNextPage, fetchNextPage, refetch } = useSelectExams(classId)
 
   const options = exams?.data
@@ -35,6 +35,7 @@ const ChangExamDate = ({
 
   const getUploadProps = (onChange: (file: RcFile[]) => void): UploadProps => ({
     beforeUpload: (file) => {
+      clearErrors('note')
       const isValidType = allowedTypes.includes(file.type)
 
       if (!isValidType) {
