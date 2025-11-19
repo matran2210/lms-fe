@@ -1,0 +1,12 @@
+{
+  "name": "@lms/contexts",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.ts",
+  "types": "index.ts",
+  "dependencies": {
+    "@lms/core": "workspace:*",
+    "@lms/utils": "workspace:*",
+    "react-query": "^3.39.3"
+  }
+}
