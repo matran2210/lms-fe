@@ -15,9 +15,9 @@ const CourseDetailSkeleton = forwardRef<
       <div className="space-y-3">
         <Skeleton.Input
           active
-          className="hidden !h-4 !w-[300px] !rounded-full lg:block"
+          className="!hidden !h-4 !w-[300px] !rounded-full lg:!block"
         />
-        <div className="flex items-center justify-between">
+        <div className="!flex !w-full items-center !justify-between">
           <Skeleton.Input
             active
             className="!h-8 !w-[300px] !rounded-xl md:!w-[400px] "
@@ -31,28 +31,28 @@ const CourseDetailSkeleton = forwardRef<
           .map((_, cardIndex) => (
             <div
               key={cardIndex}
-              className="flex h-[328px] flex-col gap-4 rounded-[28px] bg-white p-6 shadow-card md:h-[428px] lg:h-[456px]"
+              className="flex h-[328px] flex-col rounded-xl bg-white p-6 shadow-card md:h-[428px] lg:h-[456px]"
             >
-              <div className="flex flex-col gap-3">
+              <div className="space-y-3">
                 <Skeleton.Input active className="!h-5 !w-24 !rounded-full" />
-                <div className="flex flex-col gap-2">
+                <div className="space-y-2">
                   <Skeleton.Input
                     active
                     className="!h-6 !w-10/12 !rounded-lg"
                   />
-                  <Skeleton.Input active className="!h-5 !w-6/12 !rounded-lg" />
+                  <Skeleton.Input active className="!h-5 !w-9/12 !rounded-lg" />
+                  <Skeleton.Input active className="!h-5 !w-8/12 !rounded-lg" />
+                  <Skeleton.Input active className="!h-5 !w-7/12 !rounded-lg" />
                 </div>
               </div>
-              <div className="space-y-2">
-                <Skeleton.Input active className="!h-4 !w-full !rounded-full" />
-                <Skeleton.Input active className="!h-4 !w-9/12 !rounded-full" />
-                <Skeleton.Input active className="!h-4 !w-8/12 !rounded-full" />
-                <Skeleton.Input active className="!h-4 !w-7/12 !rounded-full" />
-              </div>
-              <Skeleton.Input active className="!h-4 !w-full !rounded-full" />
-              <div className="flex items-center justify-between">
-                <Skeleton.Input active className="!h-4 !w-4/12 !rounded-full" />
-                <Skeleton.Button active className="!h-9 !w-24 !rounded-2xl" />
+
+              <div className="flex-1" />
+
+              <div className="space-y-4">
+                <Skeleton.Input active className="!h-3 !w-full !rounded-full" />
+                <div className="flex items-center justify-end">
+                  <Skeleton.Button active className="!h-9 !w-24 !rounded-2xl" />
+                </div>
               </div>
             </div>
           ))}
