@@ -1,4 +1,4 @@
-export * from "./index";
+export * from "./layout";
 export * from "./BottomMenu/index";
 export * from "./CollapseBox/index";
 export { default as FilterGrid } from "./FilterGrid/FilterGrid";

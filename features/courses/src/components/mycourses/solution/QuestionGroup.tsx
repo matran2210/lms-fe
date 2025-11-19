@@ -1,10 +1,8 @@
 // components/SearchForm.tsx
-
-import React from 'react'
-import Icon from '@components/icons'
+import Icon from "@components/icons";
 
 interface QuestionGroupProps {
-  question: string
+  question: string;
 }
 
 const QuestionGroup = ({ question }: QuestionGroupProps) => {
@@ -19,7 +17,7 @@ const QuestionGroup = ({ question }: QuestionGroupProps) => {
         <Icon type="arrows" />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default QuestionGroup
+export default QuestionGroup;

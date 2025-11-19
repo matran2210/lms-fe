@@ -1,35 +1,42 @@
+import { CloseIconV2 } from "@components/icons";
+import { NotesOutline } from "@components/icons/Notes";
+import PulsingExclamation from "@components/icons/PulsingExclamation";
+import EssayQuestionPreview from "@components/questionType/ConstructedQuestion";
+import AddWordPreview from "@components/questionType/FillText";
+import MatchQuizComponent from "@components/questionType/MatchQuiz/MatchQuiz";
+import MultiChoiceQuestion from "@components/questionType/MultipleChoiceQuestion";
+import DragDropQuestion, {
+  SlotValue,
+} from "@components/questionType/NewDragNDropQuestion/NewDragNDrop";
+import OneChoiceQuestion from "@components/questionType/OneChoiceQuestion";
+import SelectWord from "@components/questionType/SelectQuestion";
+import ModalUploadFile from "@components/uploadFile/ModalUploadFile/ModalUploadFile";
 import {
-  AlertInfoIcon,
   CircleCheckIcon,
   CircleInfoIcon,
   CollapseArrowIcon,
   DownloadIcon,
   FileTextIcon,
-} from '@assets/icons'
-import { useClickOutside } from '@lms/ui'
-import { EditorReader } from '@lms/ui'
-import { FileViewer } from '@lms/ui'
-import { HighlightableHTML } from '@components/highlights/HighlightHTML'
-import { CloseIconV2 } from '@components/icons'
-import { NotesOutline } from '@components/icons/Notes'
-import PulsingExclamation from '@components/icons/PulsingExclamation'
-import { download } from '../../../../../../../features/course/src/components/learning/activity/ActivityResource'
-import Popover from '@components/Popover'
-import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
-import AddWordPreview from '@components/questionType/FillText'
-import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
-import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
-import DragDropQuestion, {
-  SlotValue,
-} from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
-import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
-import SelectWord from '@components/questionType/SelectQuestion'
-import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
-import { checkSheetAnswered } from '@utils/helpers/quiz-test/helper'
-import { isEmptyParagraph } from '@lms/utils'
-import { Alert, Collapse, CollapseProps, Divider, Modal, Tabs } from 'antd'
-import clsx from 'clsx'
-import { isEmpty, isUndefined } from 'lodash'
+} from "@lms/assets";
+import {
+  ANIMATION,
+  DEFAULT_EDITOR_VALUE,
+  QUESTION_TYPES,
+  RESPONSE_OPTION,
+  defaultSheetData,
+} from "@lms/core";
+import {
+  EditorReader,
+  FileViewer,
+  HighlightableHTML,
+  Popover,
+  useClickOutside,
+} from "@lms/ui";
+import { isEmptyParagraph } from "@lms/utils";
+import { checkSheetAnswered } from "@utils/helpers/quiz-test/helper";
+import { Collapse, CollapseProps, Divider, Modal, Tabs } from "antd";
+import clsx from "clsx";
+import { isEmpty, isUndefined } from "lodash";
 import React, {
   forwardRef,
   memo,
@@ -37,7 +44,7 @@ import React, {
   useImperativeHandle,
   useRef,
   useState,
-} from 'react'
+} from "react";
 import {
   Control,
   FieldValues,
@@ -46,37 +53,34 @@ import {
   UseFormResetField,
   UseFormSetValue,
   UseFormWatch,
-} from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { ANIMATION, QUESTION_TYPES, RESPONSE_OPTION } from '@lms/core'
-import { DEFAULT_EDITOR_VALUE, defaultSheetData } from '@lms/core'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-import { useAppDispatch } from 'src/redux/hook'
+} from "react-hook-form";
+import toast from "react-hot-toast";
+import { useTailwindBreakpoint } from "src/hooks/useTailwindBreakpoint";
+import { useAppDispatch } from "src/redux/hook";
 import {
   IActivityStateQuestion,
   clearFileEssay,
   confirmQuestion,
   saveFileEssay,
-} from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
-import { pushNotes } from 'src/redux/slice/Course/NotesList'
+} from "src/redux/slice/Course/MyCourse/Activity/ActivityQuiz";
+import { pushNotes } from "src/redux/slice/Course/NotesList";
+import { download } from "../../../../../../../features/course/src/components/learning/activity/ActivityResource";
 
-import { IEssayAnswer } from '@lms/core'
-import { IFile } from '@lms/core'
-import { IExhibit, IExhibitData } from '@lms/core'
-import { v4 as uuidv4 } from 'uuid'
+import { IEssayAnswer, IExhibit, IExhibitData, IFile } from "@lms/core";
+import { v4 as uuidv4 } from "uuid";
 
 interface IRequirement {
-  id: string
-  name: string
-  type?: 'TEXT' | 'FILE'
-  description: string
-  files?: IFile[]
+  id: string;
+  name: string;
+  type?: "TEXT" | "FILE";
+  description: string;
+  files?: IFile[];
   answer_file?: {
-    file_key: string
-    file_name: string
-  }
-  short_answer?: string
-  explanation?: string
+    file_key: string;
+    file_name: string;
+  };
+  short_answer?: string;
+  explanation?: string;
 }
 
 export type QuizComponentRef = {
@@ -89,63 +93,63 @@ export type QuizComponentRef = {
     onError,
     onFinally,
   }: {
-    activityId: string
-    tabId: string
-    quizId: string
-    time_spent?: number
-    then?: (e: any) => void
-    onError?: (e: any) => void
-    onFinally?: () => void
-  }) => void
-  reset: UseFormReset<FieldValues>
-  onSaveAnswer: (activeQuestion: IActivityStateQuestion) => void
+    activityId: string;
+    tabId: string;
+    quizId: string;
+    time_spent?: number;
+    then?: (e: any) => void;
+    onError?: (e: any) => void;
+    onFinally?: () => void;
+  }) => void;
+  reset: UseFormReset<FieldValues>;
+  onSaveAnswer: (activeQuestion: IActivityStateQuestion) => void;
   onResetWord: (
     name: string,
     response_option: RESPONSE_OPTION,
     defaultValue?: string | undefined,
-  ) => Promise<void>
-  onResetSheet: (response_option: RESPONSE_OPTION) => Promise<void>
-  watch: UseFormWatch<FieldValues>
-  getValues: UseFormGetValues<FieldValues>
-  onResetFormatEssay: (key: string, value: string) => void
+  ) => Promise<void>;
+  onResetSheet: (response_option: RESPONSE_OPTION) => Promise<void>;
+  watch: UseFormWatch<FieldValues>;
+  getValues: UseFormGetValues<FieldValues>;
+  onResetFormatEssay: (key: string, value: string) => void;
   onResetWordOnly: (
     response_option: RESPONSE_OPTION,
     defaultValue?: string | undefined,
-  ) => Promise<void>
-  onResetAnswerEssayToTemplate: () => void
+  ) => Promise<void>;
+  onResetAnswerEssayToTemplate: () => void;
   getEssayData: () =>
     | {
-        req?: IRequirement
-        index?: number
+        req?: IRequirement;
+        index?: number;
       }
-    | undefined
-}
+    | undefined;
+};
 
 type Props = {
-  activeQuestion?: IActivityStateQuestion
-  showCorrect?: boolean
-  document_id: string
-  activityId: string
-  tabId: string
-  quizId: string
+  activeQuestion?: IActivityStateQuestion;
+  showCorrect?: boolean;
+  document_id: string;
+  activityId: string;
+  tabId: string;
+  quizId: string;
   setOpenFile?: (
     data: IExhibitData,
     file?: string | null,
     fileName?: string | null,
     event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) => void
-  grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
-  showQuestionContent?: boolean
-  isHideExhibit?: boolean
-  saveAnswer?: () => void
-  exhibitText?: string
-  controlAnswer: Control<FieldValues, any>
-  setValue?: UseFormSetValue<FieldValues>
-  reset?: UseFormReset<FieldValues>
-  getValues?: UseFormGetValues<FieldValues>
-  watch?: UseFormWatch<FieldValues>
-  resetField?: UseFormResetField<FieldValues>
-}
+  ) => void;
+  grading_preference: "AFTER_EACH_QUESTION" | "AFTER_ALL_QUESTIONS";
+  showQuestionContent?: boolean;
+  isHideExhibit?: boolean;
+  saveAnswer?: () => void;
+  exhibitText?: string;
+  controlAnswer: Control<FieldValues, any>;
+  setValue?: UseFormSetValue<FieldValues>;
+  reset?: UseFormReset<FieldValues>;
+  getValues?: UseFormGetValues<FieldValues>;
+  watch?: UseFormWatch<FieldValues>;
+  resetField?: UseFormResetField<FieldValues>;
+};
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
   (
@@ -161,7 +165,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       showQuestionContent = true,
       isHideExhibit = true,
       saveAnswer,
-      exhibitText = 'Exhibit',
+      exhibitText = "Exhibit",
       controlAnswer,
       setValue,
       reset,
@@ -171,73 +175,73 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }: Props,
     ref,
   ) => {
-    const isAFTEREACHQUESTION = grading_preference === 'AFTER_EACH_QUESTION'
-    const questionRef = useRef<HTMLDivElement>(null)
+    const isAFTEREACHQUESTION = grading_preference === "AFTER_EACH_QUESTION";
+    const questionRef = useRef<HTMLDivElement>(null);
     const isShowIconButtonInBottom = [
       QUESTION_TYPES.FILL_WORD,
       QUESTION_TYPES.TRUE_FALSE,
       QUESTION_TYPES.ONE_CHOICE,
       QUESTION_TYPES.SELECT_WORD,
-    ].includes(activeQuestion?.qType as QUESTION_TYPES)
-    const dispatch = useAppDispatch()
-    const { isMobileView } = useTailwindBreakpoint()
+    ].includes(activeQuestion?.qType as QUESTION_TYPES);
+    const dispatch = useAppDispatch();
+    const { isMobileView } = useTailwindBreakpoint();
 
-    const DragDropRef = useRef(null) as any
-    const MatchQuizRef = useRef(null) as any
+    const DragDropRef = useRef(null) as any;
+    const MatchQuizRef = useRef(null) as any;
 
     const [showListRequirement, setShowListRequirement] =
-      useState<boolean>(false)
-    const listRequirementRef = useRef<HTMLDivElement>(null)
-    const [exhibitData, setExhibitData] = useState<IExhibit[]>()
+      useState<boolean>(false);
+    const listRequirementRef = useRef<HTMLDivElement>(null);
+    const [exhibitData, setExhibitData] = useState<IExhibit[]>();
 
-    const [isChange, setIsChange] = useState<boolean>(false)
-    const [isUploadFile, setIsUploadFile] = useState<boolean>(false)
+    const [isChange, setIsChange] = useState<boolean>(false);
+    const [isUploadFile, setIsUploadFile] = useState<boolean>(false);
     const [essayData, setEssayData] = useState<{
-      req?: IRequirement
-      index?: number
-    }>()
-    const [showWarning, setShowWarning] = useState(true)
+      req?: IRequirement;
+      index?: number;
+    }>();
+    const [showWarning, setShowWarning] = useState(true);
 
     useClickOutside({
       ref: listRequirementRef,
       callback: () => setShowListRequirement(false),
-    })
+    });
 
     const [showRequirement, setShowRequirement] = useState<{
-      id: string
-      description: string
-      index: number
-      name: string
-      files: any
-    } | null>()
+      id: string;
+      description: string;
+      index: number;
+      name: string;
+      files: any;
+    } | null>();
 
     const [openUpload, setOpenUpload] = useState<{
-      requirement_id?: string
-      question_id?: string
-      status: boolean
-    }>({ requirement_id: undefined, question_id: undefined, status: false })
+      requirement_id?: string;
+      question_id?: string;
+      status: boolean;
+    }>({ requirement_id: undefined, question_id: undefined, status: false });
 
-    const [openExhibitModal, setOpenExhibitModal] = useState(false)
-    const refEditor = useRef(null) as any
-    const essayDataRef = useRef(essayData)
+    const [openExhibitModal, setOpenExhibitModal] = useState(false);
+    const refEditor = useRef(null) as any;
+    const essayDataRef = useRef(essayData);
 
     const handleResetEssay = async (
       name: string,
       defaultValue?: string | null,
     ) => {
       if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
-        const content = defaultValue ?? ''
-        onResetFormatEssay(name, content)
-        refEditor?.current?.reset(content)
-        await new Promise((resolve) => setTimeout(resolve, 10))
+        const content = defaultValue ?? "";
+        onResetFormatEssay(name, content);
+        refEditor?.current?.reset(content);
+        await new Promise((resolve) => setTimeout(resolve, 10));
       } else if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
-        onResetFormatEssay(name, defaultValue ?? defaultSheetData)
+        onResetFormatEssay(name, defaultValue ?? defaultSheetData);
         // refEditor?.current?.resetSheet()
         if (refEditor?.current?.clear) {
-          refEditor.current.clear(defaultValue ?? defaultSheetData)
+          refEditor.current.clear(defaultValue ?? defaultSheetData);
         }
       }
-    }
+    };
 
     const onResetWord = async (
       name: string,
@@ -245,109 +249,109 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       defaultValue?: string,
     ) => {
       if (response_option === RESPONSE_OPTION.WORD) {
-        onResetFormatEssay(name, defaultValue ?? '')
-        refEditor?.current?.reset(defaultValue)
-        await new Promise((resolve) => setTimeout(resolve, 10))
+        onResetFormatEssay(name, defaultValue ?? "");
+        refEditor?.current?.reset(defaultValue);
+        await new Promise((resolve) => setTimeout(resolve, 10));
       }
-    }
+    };
     const onResetWordOnly = async (
       response_option: RESPONSE_OPTION,
       defaultValue?: string,
     ) => {
       if (response_option === RESPONSE_OPTION.WORD) {
-        refEditor?.current?.reset(defaultValue)
-        await new Promise((resolve) => setTimeout(resolve, 10))
+        refEditor?.current?.reset(defaultValue);
+        await new Promise((resolve) => setTimeout(resolve, 10));
       }
-    }
+    };
     const onResetSheet = async (response_option: RESPONSE_OPTION) => {
       if (response_option === RESPONSE_OPTION.SHEET) {
-        refEditor?.current?.resetSheet()
-        await new Promise((resolve) => setTimeout(resolve, 10))
+        refEditor?.current?.resetSheet();
+        await new Promise((resolve) => setTimeout(resolve, 10));
       }
-    }
+    };
 
     const onOpenExhibitModal = () => {
-      setOpenExhibitModal(true)
-      setShowWarning(false)
-    }
+      setOpenExhibitModal(true);
+      setShowWarning(false);
+    };
     const onCloseExhibitModal = () => {
-      setOpenExhibitModal(false)
-    }
+      setOpenExhibitModal(false);
+    };
 
     const handleShowRequirement = async (data: {
-      description: string
-      index: number
-      name: string
-      files: any
-      id: string
+      description: string;
+      index: number;
+      name: string;
+      files: any;
+      id: string;
     }) => {
-      saveAnswer && saveAnswer()
-      setShowListRequirement(false)
-      setShowRequirement(data)
-      const name = `${activeQuestion?.id}_${data?.id}_essay`
+      saveAnswer && saveAnswer();
+      setShowListRequirement(false);
+      setShowRequirement(data);
+      const name = `${activeQuestion?.id}_${data?.id}_essay`;
       const getDefaultValue = (id: string) => {
         switch (activeQuestion?.response_option) {
           case RESPONSE_OPTION.WORD:
             const answer = activeQuestion?.myAnswers?.find(
               (ans: IEssayAnswer) => {
                 if (ans.requirement_id === id) {
-                  return ans
+                  return ans;
                 }
               },
-            )
+            );
 
-            const requirement = activeQuestion?.requirements?.[data.index - 1]
+            const requirement = activeQuestion?.requirements?.[data.index - 1];
             return (
               getValues?.(name) ||
               answer?.short_answer ||
               requirement?.answer_template
-            )
+            );
           case RESPONSE_OPTION.SHEET:
             const answerSheet = activeQuestion?.myAnswers?.find(
               (ans: IEssayAnswer) => {
                 if (ans.requirement_id === id) {
-                  return ans
+                  return ans;
                 }
               },
-            )
+            );
             const requirementSheet =
-              activeQuestion?.requirements?.[data.index - 1]
+              activeQuestion?.requirements?.[data.index - 1];
 
             return (
               // getValues?.(name) ||
               answerSheet?.short_answer || requirementSheet?.answer_template
-            )
+            );
         }
-      }
-      const defaultValue = getDefaultValue(data.id)
+      };
+      const defaultValue = getDefaultValue(data.id);
 
       // setValue?.(name, defaultValue)
       // handleResetEssay(name, defaultValue)
       essayDataRef.current = {
         req: data,
         index: data.index - 1,
-      }
+      };
       setEssayData({
         req: data,
         index: data.index - 1,
-      })
-    }
+      });
+    };
 
     const getValueFillText = () => {
-      let value = []
+      let value = [];
       const inputs = questionRef?.current?.querySelectorAll(
         'input[stringHTML="true"]',
-      ) as any
+      ) as any;
       for (let e of inputs) {
-        value?.push(e?.value)
+        value?.push(e?.value);
       }
-      return value
-    }
+      return value;
+    };
 
     const getAnswerMatching = () => {
-      const value = MatchQuizRef?.current?.getMatchedPairs?.()
-      return value || []
-    }
+      const value = MatchQuizRef?.current?.getMatchedPairs?.();
+      return value || [];
+    };
 
     // const getAnswerDragNDrop = () => {
     //   let value = [] as any
@@ -364,7 +368,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     const handleResponseResults = () => {
       if (activeQuestion) {
         if (!activeQuestion?.confirmed && !activeQuestion.isDrafAnswer) {
-          return
+          return;
         }
         setTimeout(() => {
           switch (activeQuestion?.qType) {
@@ -374,9 +378,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 setValue(
                   `${activeQuestion?.id}_${document_id}_answer`,
                   activeQuestion?.defaultValue,
-                )
+                );
 
-              break
+              break;
             }
 
             case QUESTION_TYPES.MULTIPLE_CHOICE: {
@@ -384,43 +388,43 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 setValue(
                   `${activeQuestion?.id}_${document_id}_answer`,
                   activeQuestion?.defaultValue,
-                )
-              break
+                );
+              break;
             }
 
             case QUESTION_TYPES.ESSAY: {
               activeQuestion?.myAnswers?.map((ans: IEssayAnswer) => {
-                const fieldName = `${activeQuestion?.id}_${ans.requirement_id ?? document_id}_essay`
+                const fieldName = `${activeQuestion?.id}_${ans.requirement_id ?? document_id}_essay`;
 
-                if (activeQuestion?.response_option === 'SHEET') {
+                if (activeQuestion?.response_option === "SHEET") {
                   // Logic cho SHEET: luôn ưu tiên short_answer (user's changes)
                   if (ans?.short_answer) {
-                    setValue?.(fieldName, ans?.short_answer)
+                    setValue?.(fieldName, ans?.short_answer);
                   } else {
                     // Không có short_answer → lấy từ answer_template
                     const requirement = activeQuestion?.requirements?.find(
                       (req: any) => req?.id === ans?.requirement_id,
-                    )
+                    );
                     const templateValue =
                       requirement?.answer_template ||
-                      activeQuestion?.answer_template
+                      activeQuestion?.answer_template;
 
                     if (templateValue) {
-                      setValue?.(fieldName, templateValue)
+                      setValue?.(fieldName, templateValue);
                     }
                   }
                 } else {
                   // Logic cho WORD: giữ nguyên như cũ
                   if (ans?.short_answer) {
-                    setValue?.(fieldName, ans?.short_answer)
+                    setValue?.(fieldName, ans?.short_answer);
                   }
                 }
-              })
+              });
             }
           }
-        })
+        });
       }
-    }
+    };
 
     // Lift onSubmit using useImperativeHandle
     useImperativeHandle(ref, () => ({
@@ -435,83 +439,83 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       onResetWordOnly: onResetWordOnly,
       onResetAnswerEssayToTemplate,
       getEssayData: () => essayDataRef.current,
-    }))
+    }));
 
     const handleGetAnswer = (activeQuestion: IActivityStateQuestion) => {
       switch (activeQuestion?.qType as QUESTION_TYPES) {
         case QUESTION_TYPES.ONE_CHOICE:
         case QUESTION_TYPES.TRUE_FALSE:
-          return getValues?.(`${activeQuestion?.id}_${document_id}_answer`)
+          return getValues?.(`${activeQuestion?.id}_${document_id}_answer`);
         case QUESTION_TYPES.MULTIPLE_CHOICE:
-          return getValues?.(`${activeQuestion?.id}_${document_id}_answer`)
+          return getValues?.(`${activeQuestion?.id}_${document_id}_answer`);
         case QUESTION_TYPES.FILL_WORD:
-          return getValueFillText()
+          return getValueFillText();
         case QUESTION_TYPES.SELECT_WORD:
-          return getValues?.(`${activeQuestion?.id}_${document_id}_answer`)
+          return getValues?.(`${activeQuestion?.id}_${document_id}_answer`);
         case QUESTION_TYPES.MATCHING:
-          return getAnswerMatching()
+          return getAnswerMatching();
         case QUESTION_TYPES.DRAG_DROP:
-          return getValues?.(`${activeQuestion?.id}_${document_id}_answer`)
+          return getValues?.(`${activeQuestion?.id}_${document_id}_answer`);
         case QUESTION_TYPES.ESSAY:
           const value = getValues?.(
             `${activeQuestion?.id}_${document_id}_essay`,
-          )
+          );
           const isSubmitted = (() => {
             if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
               if (
                 isChange ||
-                (isUploadFile && grading_preference === 'AFTER_ALL_QUESTIONS')
+                (isUploadFile && grading_preference === "AFTER_ALL_QUESTIONS")
               ) {
-                return true
+                return true;
               } else if (value) {
-                const data = JSON.parse(value)
+                const data = JSON.parse(value);
                 for (let e of data) {
                   if (e?.celldata && e?.celldata?.length > 0) {
-                    return true
+                    return true;
                   }
                 }
               }
-              return false
+              return false;
             } else {
               if (
-                (value !== undefined && value !== '') ||
+                (value !== undefined && value !== "") ||
                 isChange ||
-                (isUploadFile && grading_preference === 'AFTER_ALL_QUESTIONS')
+                (isUploadFile && grading_preference === "AFTER_ALL_QUESTIONS")
               ) {
-                return true
+                return true;
               }
-              return false
+              return false;
             }
-          })()
+          })();
 
-          let active = 'UNFINISHED'
+          let active = "UNFINISHED";
 
           if (isSubmitted || activeQuestion?.answer_file) {
-            active = 'SUBMITED'
+            active = "SUBMITED";
           }
           if (activeQuestion?.requirements?.length) {
-            let answers: IEssayAnswer[] = []
+            let answers: IEssayAnswer[] = [];
             activeQuestion?.requirements?.forEach((req, i) => {
-              const fieldName = `${activeQuestion?.id}_${req.id}_essay`
+              const fieldName = `${activeQuestion?.id}_${req.id}_essay`;
               const savedData = activeQuestion?.myAnswers?.find(
                 (ans: IEssayAnswer) => ans?.requirement_id === req?.id,
-              )
-              let answer = getValues?.(fieldName) || savedData?.short_answer
+              );
+              let answer = getValues?.(fieldName) || savedData?.short_answer;
               if (!!answer) {
                 answers.push({
-                  question_id: activeQuestion?.id || '',
+                  question_id: activeQuestion?.id || "",
                   answer_file: req?.answer_file,
                   short_answer:
                     !isUndefined(answer) && !isEmpty(answer)
                       ? String(answer).trim()
-                      : '',
+                      : "",
                   response_option: activeQuestion?.response_option
                     ? activeQuestion?.response_option
-                    : 'WORD',
+                    : "WORD",
 
                   requirement_id: req?.id,
                   active,
-                })
+                });
               }
               // return {
               //   question_id: activeQuestion?.id,
@@ -527,12 +531,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               //   requirement_id: req?.id,
               //   active,
               // }
-            })
-            return answers
+            });
+            return answers;
           } else {
             const answer = getValues?.(
               `${activeQuestion?.id}_${document_id}_essay`,
-            )
+            );
             return [
               {
                 question_id: activeQuestion?.id,
@@ -540,20 +544,20 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 short_answer:
                   !isUndefined(answer) && !isEmpty(answer)
                     ? String(answer).trim()
-                    : '',
+                    : "",
                 response_option: activeQuestion?.response_option
                   ? activeQuestion?.response_option
-                  : 'WORD',
+                  : "WORD",
                 requirement_id: null,
                 active,
               },
-            ]
+            ];
           }
 
         default:
-          break
+          break;
       }
-    }
+    };
 
     const onSubmit = ({
       activityId,
@@ -564,16 +568,16 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       onError,
       onFinally: onFinally,
     }: {
-      activityId: string
-      tabId: string
-      quizId: string
-      time_spent?: number
-      then?: (e: any) => void
-      onError?: (e: any) => void
-      onFinally?: () => void
+      activityId: string;
+      tabId: string;
+      quizId: string;
+      time_spent?: number;
+      then?: (e: any) => void;
+      onError?: (e: any) => void;
+      onFinally?: () => void;
     }) => {
       if (activeQuestion) {
-        let myAnswers = handleGetAnswer(activeQuestion)
+        let myAnswers = handleGetAnswer(activeQuestion);
 
         // DragDropRef?.current?.handleReset()
         try {
@@ -582,27 +586,27 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
-              questionId: activeQuestion?.id || '',
+              questionId: activeQuestion?.id || "",
               myAnswers: myAnswers,
               time_spent: time_spent,
             }),
           )
             .unwrap()
             .then((e: any) => {
-              then && then(e)
+              then && then(e);
             })
             .catch((e) => {
-              toast.error('Có lỗi xảy ra xin vui lòng thử lại!')
-              onError && onError(e)
-            })
+              toast.error("Có lỗi xảy ra xin vui lòng thử lại!");
+              onError && onError(e);
+            });
         } catch (error) {
-          toast.error('Có lỗi xảy ra xin vui lòng thử lại!')
-          onError && onError(error)
+          toast.error("Có lỗi xảy ra xin vui lòng thử lại!");
+          onError && onError(error);
         } finally {
-          onFinally && onFinally()
+          onFinally && onFinally();
         }
       }
-    }
+    };
 
     const handleSaveFileEssay = (
       file: any,
@@ -628,17 +632,17 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     file_key: file.file_key,
                     file_name: file.name,
                   },
-                }
+                };
               }
-              return item
+              return item;
             }),
           }),
-        )
-        setIsUploadFile(true)
+        );
+        setIsUploadFile(true);
       } catch (error) {
-        toast.error('Có lỗi xảy ra xin vui lòng thử lại!')
+        toast.error("Có lỗi xảy ra xin vui lòng thử lại!");
       }
-    }
+    };
 
     const renderQuestion = () => {
       switch (activeQuestion?.qType) {
@@ -661,7 +665,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               }
               explainClassname="!mt-8 !p-0 !bg-transparent"
             />
-          )
+          );
 
         case QUESTION_TYPES.MULTIPLE_CHOICE:
           return (
@@ -684,7 +688,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               }
               explainClassname="!mt-8 !p-0 !bg-transparent"
             />
-          )
+          );
 
         case QUESTION_TYPES.MATCHING:
           return (
@@ -694,14 +698,14 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               defaultAnswer={activeQuestion?.defaultValue}
               corrects={showCorrect ? activeQuestion?.corrects : undefined}
               setOpenFile={setOpenFile}
-              uuid={'_' + uuidv4().replaceAll('-', '_')}
+              uuid={"_" + uuidv4().replaceAll("-", "_")}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
               ref={MatchQuizRef}
               explainClassname="!mt-0 !p-0 !bg-transparent"
               correctAnswerClass="!mt-0 !pt-0"
             />
-          )
+          );
 
         case QUESTION_TYPES.FILL_WORD:
           return (
@@ -716,7 +720,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               explainClassname="!mt-8 !p-0 !bg-transparent"
               correctAnswerClass="!mt-8 !pt-0"
             />
-          )
+          );
 
         case QUESTION_TYPES.DRAG_DROP:
           return (
@@ -738,21 +742,21 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               data={activeQuestion as any}
               defaultValue={activeQuestion?.defaultValue}
               onChange={(data: SlotValue[]) => {
-                setValue?.(`${activeQuestion?.id}_${document_id}_answer`, data)
+                setValue?.(`${activeQuestion?.id}_${document_id}_answer`, data);
               }}
               corrects={showCorrect ? activeQuestion.corrects : undefined}
               solution={activeQuestion?.solution}
               explainClassname="!mt-8 !p-0 !bg-transparent"
             />
-          )
+          );
 
         case QUESTION_TYPES.SELECT_WORD:
           return (
             <SelectWord
               onChange={(
                 value: Array<{
-                  answer_id: string
-                  answer_position: number
+                  answer_id: string;
+                  answer_position: number;
                 }>,
               ) =>
                 setValue?.(`${activeQuestion?.id}_${document_id}_answer`, value)
@@ -765,7 +769,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               exhibitText={exhibitText}
               isShowWarning={isAFTEREACHQUESTION}
             />
-          )
+          );
 
         case QUESTION_TYPES.ESSAY:
           const items =
@@ -780,61 +784,61 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       getValues?.(`${activeQuestion?.id}_${e?.id}_essay`) ||
                       activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
                         if (ans.requirement_id === e?.id) {
-                          return ans
+                          return ans;
                         }
                       })?.short_answer ||
                       e?.answer_template
-                    )
-                    break
+                    );
+                    break;
                   case RESPONSE_OPTION.SHEET:
                     const answerSheet = activeQuestion?.myAnswers?.find(
                       (ans: IEssayAnswer) => {
                         if (ans.requirement_id === e?.id) {
-                          return ans
+                          return ans;
                         }
                       },
-                    )
+                    );
                     if (isGetToVerify) {
-                      return answerSheet?.short_answer || e?.answer_template
+                      return answerSheet?.short_answer || e?.answer_template;
                     }
 
                     return (
                       getValues?.(`${activeQuestion?.id}_${e?.id}_essay`) ||
                       answerSheet?.short_answer ||
                       e.answer_template
-                    )
-                    break
+                    );
+                    break;
                 }
-              }
+              };
 
               const isMeaningData = (() => {
                 if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
-                  const currentValue = getDefaultValue(true)
+                  const currentValue = getDefaultValue(true);
                   return (
                     currentValue &&
                     currentValue !== DEFAULT_EDITOR_VALUE &&
-                    currentValue.trim() !== '' &&
+                    currentValue.trim() !== "" &&
                     !isEmptyParagraph(currentValue)
-                  )
+                  );
                 } else if (
                   activeQuestion?.response_option === RESPONSE_OPTION.SHEET
                 ) {
-                  const currentValue = getDefaultValue(true)
+                  const currentValue = getDefaultValue(true);
 
                   return !!(
                     currentValue &&
                     currentValue !== defaultSheetData &&
                     checkSheetAnswered(currentValue)
-                  )
+                  );
                 }
-                return false
-              })()
+                return false;
+              })();
 
               return {
                 key: e?.id,
                 label: (
                   <div className="learning-act-tab-label flex items-center gap-1 text-base font-normal capitalize">
-                    {`Requirement ${i + 1}`}{' '}
+                    {`Requirement ${i + 1}`}{" "}
                     {isMeaningData && (
                       <div className="text-primary">
                         <CircleCheckIcon />
@@ -875,7 +879,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       name={`${activeQuestion?.id}_${e?.id}_essay`}
                       fullData={{
                         data: { ...activeQuestion },
-                        solution: activeQuestion?.solution ?? '',
+                        solution: activeQuestion?.solution ?? "",
                       }}
                       openChooseFile={(e: any) =>
                         setOpenUpload({
@@ -895,76 +899,76 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                             requirements: activeQuestion?.requirements?.map(
                               (item: IRequirement) => {
                                 if (item?.id === showRequirement?.id) {
-                                  return { ...item, answer_file: null }
+                                  return { ...item, answer_file: null };
                                 }
-                                return item
+                                return item;
                               },
                             ),
                           }),
-                        )
+                        );
                       }}
                       handleChange={() => {
-                        !isChange && setIsChange(true)
+                        !isChange && setIsChange(true);
                       }}
                       isShowContent={showQuestionContent}
                       externalRef={refEditor}
                     />
                   </div>
                 ),
-              }
-            }) ?? []
+              };
+            }) ?? [];
 
           const getDefaultValue = () => {
             const currentReqId =
               showRequirement?.id ??
-              activeQuestion?.requirements?.[essayData?.index ?? 0]?.id
+              activeQuestion?.requirements?.[essayData?.index ?? 0]?.id;
             const currentReq = activeQuestion?.requirements?.find(
               (r: any) => r?.id === currentReqId,
-            )
+            );
             const hasRequirements =
               Array.isArray(activeQuestion?.requirements) &&
-              activeQuestion?.requirements?.length > 0
+              activeQuestion?.requirements?.length > 0;
             switch (activeQuestion?.response_option) {
               case RESPONSE_OPTION.WORD: {
                 if (!hasRequirements) {
-                  const answerAlone = activeQuestion?.myAnswers?.[0]
+                  const answerAlone = activeQuestion?.myAnswers?.[0];
                   return (
                     (answerAlone?.short_answer as any) ||
                     (activeQuestion?.answer_template as any) ||
-                    ''
-                  )
+                    ""
+                  );
                 } else {
                   const answer = activeQuestion?.myAnswers?.find(
                     (ans: IEssayAnswer) => ans.requirement_id === currentReqId,
-                  )
+                  );
                   return (
                     (answer?.short_answer as any) ||
                     (currentReq?.answer_template as any) ||
-                    ''
-                  )
+                    ""
+                  );
                 }
               }
               case RESPONSE_OPTION.SHEET: {
                 if (!hasRequirements) {
-                  const answerAlone = activeQuestion?.myAnswers?.[0]
+                  const answerAlone = activeQuestion?.myAnswers?.[0];
                   return (
                     (answerAlone?.short_answer as any) ||
                     (activeQuestion?.answer_template as any) ||
                     defaultSheetData
-                  )
+                  );
                 } else {
                   const answerSheet = activeQuestion?.myAnswers?.find(
                     (ans: IEssayAnswer) => ans.requirement_id === currentReqId,
-                  )
+                  );
                   return (
                     (answerSheet?.short_answer as any) ||
                     (currentReq?.answer_template as any) ||
                     defaultSheetData
-                  )
+                  );
                 }
               }
             }
-          }
+          };
           return (
             <>
               <div>
@@ -979,7 +983,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     <div className="mt-6 flex items-start gap-2 text-warning">
                       <CircleInfoIcon className="shrink-0" />
                       <div className="text-base font-normal">
-                        You must finished{' '}
+                        You must finished{" "}
                         {activeQuestion?.requirements?.length || 0} requirements
                         to complete this question (Your answer is auto save)
                       </div>
@@ -989,23 +993,23 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
                 {!!activeQuestion?.requirements?.length ? (
                   <Tabs
-                    className={clsx('learning-activity-tabs requirement-tab')}
+                    className={clsx("learning-activity-tabs requirement-tab")}
                     items={items}
                     onChange={(key: string) => {
                       const optionIndex =
                         activeQuestion?.requirements?.findIndex(
                           (item: IRequirement) => item?.id === key,
-                        )
+                        );
                       if (optionIndex !== -1) {
                         const option =
-                          activeQuestion?.requirements?.[optionIndex ?? 0]
+                          activeQuestion?.requirements?.[optionIndex ?? 0];
                         handleShowRequirement({
                           id: key,
-                          description: option?.description ?? '',
+                          description: option?.description ?? "",
                           index: (optionIndex ?? 0) + 1,
-                          name: option?.name ?? '',
+                          name: option?.name ?? "",
                           files: option?.files ?? [],
-                        })
+                        });
                       }
                     }}
                   />
@@ -1049,7 +1053,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       name={`${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`}
                       fullData={{
                         data: { ...activeQuestion },
-                        solution: activeQuestion?.solution ?? '',
+                        solution: activeQuestion?.solution ?? "",
                       }}
                       openChooseFile={(e: any) =>
                         setOpenUpload({
@@ -1069,16 +1073,16 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                             requirements: activeQuestion?.requirements?.map(
                               (item: IRequirement) => {
                                 if (item?.id === showRequirement?.id) {
-                                  return { ...item, answer_file: null }
+                                  return { ...item, answer_file: null };
                                 }
-                                return item
+                                return item;
                               },
                             ),
                           }),
-                        )
+                        );
                       }}
                       handleChange={() => {
-                        !isChange && setIsChange(true)
+                        !isChange && setIsChange(true);
                       }}
                       isShowContent={showQuestionContent}
                       externalRef={refEditor}
@@ -1087,15 +1091,15 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 )}
               </div>
             </>
-          )
+          );
 
         default:
-          return <div></div>
+          return <div></div>;
       }
-    }
+    };
 
     const handleDefaultRequirement = () => {
-      const defaultRequirement = activeQuestion?.requirements?.[0]
+      const defaultRequirement = activeQuestion?.requirements?.[0];
       if (defaultRequirement?.id) {
         setShowRequirement({
           name: defaultRequirement?.name,
@@ -1103,61 +1107,61 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           description: defaultRequirement?.description,
           files: defaultRequirement?.files,
           index: 1,
-        })
+        });
       } else {
-        setShowRequirement(null)
+        setShowRequirement(null);
       }
-    }
+    };
 
     const handleGetExhibit = () => {
       if (activeQuestion?.requirements) {
         essayDataRef.current = {
           req: activeQuestion?.requirements?.[0],
           index: 0,
-        }
+        };
         setEssayData({
           req: activeQuestion?.requirements?.[0],
           index: 0,
-        })
+        });
       }
-      let exhibitOption = []
+      let exhibitOption = [];
 
       if (
         activeQuestion?.exhibits?.length &&
         0 < activeQuestion?.exhibits?.length
       ) {
-        exhibitOption.push(...activeQuestion?.exhibits)
+        exhibitOption.push(...activeQuestion?.exhibits);
       }
 
       if (activeQuestion?.question_topic?.exhibits?.length) {
-        exhibitOption?.push(...activeQuestion?.question_topic?.exhibits)
+        exhibitOption?.push(...activeQuestion?.question_topic?.exhibits);
       }
 
-      setExhibitData(exhibitOption)
-    }
+      setExhibitData(exhibitOption);
+    };
     const onResetFormatEssay = (key: string, value: string) => {
       resetField?.(key, {
         defaultValue: value,
         keepDirty: false,
         keepTouched: false,
         keepError: false,
-      }) // reset riêng field đó
+      }); // reset riêng field đó
       setValue?.(key, value, {
         shouldDirty: false,
         shouldTouch: false,
         shouldValidate: true,
-      })
-    }
+      });
+    };
     const handleOpenExhibit = (
       event: React.MouseEvent<HTMLDivElement, MouseEvent>,
       e: IExhibitData,
       index: number,
     ) => {
-      setShowWarning(false)
+      setShowWarning(false);
       setOpenFile &&
         setOpenFile(
           {
-            type: 'exhibits',
+            type: "exhibits",
             description: e?.description,
             name: e?.name,
             index: index,
@@ -1166,77 +1170,77 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           null,
           null,
           event,
-        )
-    }
+        );
+    };
     const handleOpenFile = (e: IFile) => {
       setOpenFile &&
-        setOpenFile({ type: 'file' }, e?.resource?.url, e?.resource?.name)
-    }
+        setOpenFile({ type: "file" }, e?.resource?.url, e?.resource?.name);
+    };
     const handleAddNote = () => {
       const note = {
         uuid: uuidv4(),
-        id: '',
-        name: 'Note',
-        description: '',
-      }
-      dispatch(pushNotes(note))
-    }
+        id: "",
+        name: "Note",
+        description: "",
+      };
+      dispatch(pushNotes(note));
+    };
 
     const getTemplateValueForWord = () => {
       const requirement =
-        activeQuestion?.requirements?.[essayData?.index as number]
+        activeQuestion?.requirements?.[essayData?.index as number];
       if (requirement?.answer_template) {
-        return requirement.answer_template
+        return requirement.answer_template;
       }
-      return activeQuestion?.answer_template
-    }
+      return activeQuestion?.answer_template;
+    };
 
     const getTemplateValueForSheet = () => {
       const requirementSheet =
-        activeQuestion?.requirements?.[essayData?.index as number]
+        activeQuestion?.requirements?.[essayData?.index as number];
       if (requirementSheet?.answer_template) {
-        return requirementSheet.answer_template || defaultSheetData
+        return requirementSheet.answer_template || defaultSheetData;
       }
-      return activeQuestion?.answer_template || defaultSheetData
-    }
+      return activeQuestion?.answer_template || defaultSheetData;
+    };
     const onResetAnswerEssayToTemplate = () => {
-      const key = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`
-      const response_option = activeQuestion?.response_option
+      const key = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`;
+      const response_option = activeQuestion?.response_option;
 
       switch (response_option) {
         case RESPONSE_OPTION.WORD:
-          const templateValueWord = getTemplateValueForWord()
+          const templateValueWord = getTemplateValueForWord();
           // Reset form value
-          onResetFormatEssay(key, templateValueWord ?? '')
+          onResetFormatEssay(key, templateValueWord ?? "");
           // Reset component con
           if (refEditor?.current?.reset) {
-            refEditor.current.reset(templateValueWord)
+            refEditor.current.reset(templateValueWord);
           }
-          break
+          break;
         case RESPONSE_OPTION.SHEET:
-          const templateValue = getTemplateValueForSheet()
+          const templateValue = getTemplateValueForSheet();
           // Reset form value
-          onResetFormatEssay(key, templateValue)
+          onResetFormatEssay(key, templateValue);
           // Reset component con
           if (refEditor?.current?.clear) {
-            refEditor.current.clear(templateValue)
+            refEditor.current.clear(templateValue);
           }
-          break
+          break;
       }
-    }
+    };
 
     useEffect(() => {
-      handleDefaultRequirement()
-      handleGetExhibit()
+      handleDefaultRequirement();
+      handleGetExhibit();
       if (
         activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE ||
         activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
         activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE ||
         activeQuestion?.qType === QUESTION_TYPES.ESSAY
       ) {
-        handleResponseResults()
+        handleResponseResults();
       }
-    }, [activeQuestion?.id])
+    }, [activeQuestion?.id]);
 
     const exhibitButton = (
       <>
@@ -1246,15 +1250,15 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           <PulsingExclamation
             className="absolute -right-3 -top-4"
             style={{
-              animation: 'pulseAnim 1.2s infinite ease-in-out',
-              transformOrigin: 'center',
+              animation: "pulseAnim 1.2s infinite ease-in-out",
+              transformOrigin: "center",
             }}
           />
         )}
       </>
-    )
+    );
 
-    const exhibitItems: CollapseProps['items'] = exhibitData?.length
+    const exhibitItems: CollapseProps["items"] = exhibitData?.length
       ? exhibitData?.map((item: IExhibit, index) => ({
           key: item?.id,
           label: (
@@ -1278,13 +1282,13 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                         fileUrl={e?.resource?.url}
                       />
                     </div>
-                  )
+                  );
                 })}
             </div>
           ),
-          className: 'mb-2 p-2 !border-none !rounded-md bg-gray-100',
+          className: "mb-2 p-2 !border-none !rounded-md bg-gray-100",
         }))
-      : []
+      : [];
 
     return (
       <div data-aos={ANIMATION.DATA_AOS}>
@@ -1292,7 +1296,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           {!!activeQuestion?.question_topic?.description &&
             !isEmptyParagraph(activeQuestion?.question_topic?.description) && (
               <HighlightableHTML
-                initialHTML={activeQuestion?.question_topic?.description ?? ''}
+                initialHTML={activeQuestion?.question_topic?.description ?? ""}
                 storageKey={`quiz-${activityId}-${tabId}-${quizId}-question-topic-${activeQuestion?.id}`}
                 className="sapp-questions"
               />
@@ -1332,16 +1336,16 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   >
                     <div
                       className={clsx(
-                        'group/exhibit grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary shadow-icon hover:bg-blend-overlay',
+                        "group/exhibit grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary shadow-icon hover:bg-blend-overlay",
                         {
-                          'top-[12px]':
+                          "top-[12px]":
                             (activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
                               !activeQuestion?.requirements?.length) ||
                             !isShowIconButtonInBottom,
-                          'top-[142px]':
+                          "top-[142px]":
                             activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
                             !!activeQuestion?.requirements?.length,
-                          'bottom-[62px]': isShowIconButtonInBottom,
+                          "bottom-[62px]": isShowIconButtonInBottom,
                         },
                       )}
                     >
@@ -1351,7 +1355,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
                   <div
                     className={clsx(
-                      'group/exhibit grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary shadow-icon hover:bg-blend-overlay md:hidden',
+                      "group/exhibit grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary shadow-icon hover:bg-blend-overlay md:hidden",
                     )}
                     onClick={onOpenExhibitModal}
                   >
@@ -1401,16 +1405,16 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   >
                     <div
                       className={clsx(
-                        'group/file grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                        "group/file grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay",
                         {
-                          'top-[74px]':
+                          "top-[74px]":
                             (activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
                               !activeQuestion?.requirements?.length) ||
                             !isShowIconButtonInBottom,
-                          'top-[214px]':
+                          "top-[214px]":
                             activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
                             !!activeQuestion?.requirements?.length,
-                          'bottom-0': isShowIconButtonInBottom,
+                          "bottom-0": isShowIconButtonInBottom,
                         },
                       )}
                     >
@@ -1433,18 +1437,18 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 status: false,
                 question_id: undefined,
                 requirement_id: undefined,
-              })
+              });
             }}
             overlayClass="!h-screen"
             className="!overflow-auto"
-            fileType={'ESSAY'}
+            fileType={"ESSAY"}
             location={`question-answer/${openUpload.question_id}`}
             setSelectedFile={(e: any) =>
               handleSaveFileEssay(
                 e?.[0],
-                openUpload?.question_id ?? '',
-                '',
-                showRequirement?.id ?? '',
+                openUpload?.question_id ?? "",
+                "",
+                showRequirement?.id ?? "",
               )
             }
           />
@@ -1458,9 +1462,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             open={openExhibitModal}
             footer={null}
             classNames={{
-              content: '!p-4 !shadow-modal exhibit-modal-content',
-              header: '!mb-6',
-              wrapper: 'exhibit-modal-wrapper',
+              content: "!p-4 !shadow-modal exhibit-modal-content",
+              header: "!mb-6",
+              wrapper: "exhibit-modal-wrapper",
             }}
           >
             <div className="flex flex-col gap-2">
@@ -1486,9 +1490,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           </Modal>
         )}
       </div>
-    )
+    );
   },
-)
+);
 
-QuizComponent.displayName = 'QuizComponent'
-export default memo(QuizComponent)
+QuizComponent.displayName = "QuizComponent";
+export default memo(QuizComponent);

@@ -7,3 +7,4 @@ export * from "./common/index";
 export * from "./event-repeat/index";
 export * from "./form/index";
 export * from "./questionType/index";
+export * from "./highlights/index";
