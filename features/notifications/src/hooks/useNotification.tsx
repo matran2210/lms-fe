@@ -1,6 +1,4 @@
 import { useRef, useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
-import { NotificationAPI } from 'src/pages/api/notification'
 import { isEmpty } from 'lodash'
 import { LOCAL_STORAGE_KEYS } from '@lms/core'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -17,8 +15,13 @@ import {
 } from 'src/redux/slice/Notification/Notification'
 import { useTailwindBreakpoint } from '@lms/hooks'
 
-export const useNotification = () => {
-  const router = useRouter()
+export const useNotification = ({
+  markById,
+  router
+}: {
+markById: (ids: string[], markRead: boolean) => Promise<any>;
+router: any
+}) => {
   const dispatch = useAppDispatch()
   const notifyDetail = useAppSelector((state) => state.notificationReducer)
   const notifyLists = useAppSelector(
@@ -103,7 +106,7 @@ export const useNotification = () => {
 
   const handleMarkById = async (ids: string[], selectedTab: number) => {
     try {
-      const res = await NotificationAPI.markById(ids, true)
+      const res = await props.markById(ids, true)
       if (!res?.data) {
         return
       }
@@ -120,7 +123,7 @@ export const useNotification = () => {
 
   const handleUnMarkById = async (ids: string[], selectedTab: number) => {
     try {
-      const res = await NotificationAPI.markById(ids, false)
+      const res = await props.markById(ids, false)
       if (!res?.data) {
         return
       }
