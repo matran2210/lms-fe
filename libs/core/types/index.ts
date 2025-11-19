@@ -187,4 +187,5 @@ export * from "./test"
 export * from "./user"
 export * from "./v2"
 export * from "./exam-infomation"
+export * from "./services"
 
