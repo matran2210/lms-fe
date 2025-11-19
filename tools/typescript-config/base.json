@@ -21,6 +21,7 @@
     "noEmit": true,
 
     "paths": {
+      "@lms/contexts": ["libs/contexts/index.ts"],
       "@lms/assets": ["libs/assets/index.ts"],
       "@lms/ui": ["libs/ui/index.ts"],
       "@lms/utils": ["libs/utils/index.ts"],
