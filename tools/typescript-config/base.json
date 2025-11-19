@@ -24,6 +24,7 @@
       "@lms/feature-dashboard": ["features/dashboard/index.ts"],
       "@lms/feature-test": ["features/test/index.ts"],
       "@lms/feature-calendar": ["features/calendar/index.ts"],
+      "@lms/contexts": ["libs/contexts/index.ts"],
       "@lms/assets": ["libs/assets/index.ts"],
       "@lms/ui": ["libs/ui/index.ts"],
       "@lms/utils": ["libs/utils/index.ts"],
