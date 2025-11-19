@@ -1,6 +1,5 @@
 import Layout from '@components/layout'
 import CourseParts from '@components/mycourses/course-detail/CourseParts'
-import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import PopupModalTest from '@components/survey/PopupModalTest'
 import { useCourseContext } from '@contexts/index'
 import { CoursesAPI } from '@pages/api/courses'
