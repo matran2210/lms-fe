@@ -27,6 +27,7 @@ import HeaderMobile from '@components/layout/Header/HeaderMobile'
 import clsx from 'clsx'
 import SelectExamPopup from '@components/mycourses/course-detail/SelectExamPopup'
 import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
+import CourseDetailSkeleton from '@components/skeleton/CourseDetailSkeleton'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -238,16 +239,15 @@ const CourseDetail = () => {
       showSidebar={showSidebar || isAlwaysShowSidebar}
       handleToggleSidebar={handleCloseSidebar}
     >
-      <SearchWithMenuToggle
-        handleOpenSidebar={handleOpenSidebar}
-        isShowToggle
-        isCoursePage
-      />
-
       {isLoading ? (
-        <CourseSkeleton />
+        <CourseDetailSkeleton />
       ) : (
         <>
+          <SearchWithMenuToggle
+            handleOpenSidebar={handleOpenSidebar}
+            isShowToggle
+            isCoursePage
+          />
           <SappBreadCrumbs
             isTeacher={false}
             breadcrumbs={[
