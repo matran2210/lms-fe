@@ -1,4 +1,4 @@
-import Help from '@components/Help'
+import {Help} from '@lms/ui'
 import MKTInApp from '@components/MKTInApp'
 import Metadata from '@components/common/Metadata'
 import { CourseNoteProvider } from '@contexts/CourseNoteContext'
