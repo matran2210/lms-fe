@@ -102,6 +102,7 @@ const TestResultDetail = () => {
                   Retake
                 </span>
               }
+              rootClassName="my-retake-tooltip"
               className={clsx('block md:hidden', {
                 hidden: !isShowRetakeButton || hasCertificate,
               })}
