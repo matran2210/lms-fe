@@ -16,7 +16,7 @@
 deploy_staging_lms:
   extends: .deploy_staging_template
   only: 
-    - feature/sapp-sprint-39/sapp-17790
+    - staging
   script:
     - npm install -g vercel
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_V2
@@ -26,7 +26,7 @@ deploy_staging_lms:
 deploy_staging_finhub:
   extends: .deploy_staging_template
   only: 
-    - feature/sapp-sprint-39/sapp-17790
+    - staging
   script:
     - npm install -g vercel
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_FINHUB
