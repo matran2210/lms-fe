@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import EChart from '@components/base/chart/Chart'
-import { DashboardAPI } from '@pages/api/dashboard'
 import dayjs from 'dayjs'
-import { useRouter } from 'next/router'
 import NoData from 'src/common/NoData'
 import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
 import { ANIMATION, COURSE_TYPE, DATE_FORMAT } from 'src/constants'
@@ -21,12 +19,8 @@ interface CourseInfo {
   category: string
 }
 
-interface MockTestResponse {
-  success: boolean
-  data: {
-    reports: ILearningResult[]
-    mock_tests: Array<{ id: string }>
-  }
+interface LearningResultsProps {
+  mockTestResultsData: IMockTestResult | null
 }
 
 interface TooltipParams {
@@ -34,13 +28,8 @@ interface TooltipParams {
   name: string
 }
 
-const LearningResults = () => {
-  const router = useRouter()
-  const [results, setResults] = useState<ILearningResult[] | IMockTestResult[]>(
-    [],
-  )
-
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+const LearningResults = ({ mockTestResultsData }: LearningResultsProps) => {
+  const [results, setResults] = useState<ILearningResult[]>([])
   const [hasLearning, setHasLearning] = useState<boolean>(false)
   const [mockTestId, setMockTestId] = useState<string>('')
   const courseInfo = useMemo(
@@ -57,28 +46,17 @@ const LearningResults = () => {
   const { isMobile, isTablet } = useReponsive()
 
   useEffect(() => {
-    const getLearningResults = async (id: string) => {
-      try {
-        const res = (await DashboardAPI.getMockTestResults(
-          id,
-        )) as MockTestResponse
-        if (res && res.success) {
-          const data = res.data.reports
-          setResults(data)
-          setHasLearning(data.some((e: ILearningResult) => e.score))
-          if (!isNormal && res.data.mock_tests?.length === 1) {
-            setMockTestId(res.data.mock_tests[0].id)
-          }
-        }
-      } catch (error) {
-        setResults([])
-      } finally {
-        setIsLoading(false)
+    if (mockTestResultsData) {
+      const data = mockTestResultsData.reports || []
+      setResults(data)
+      setHasLearning(data.some((e: ILearningResult) => e.score))
+      if (!isNormal && mockTestResultsData.mock_tests?.length === 1) {
+        setMockTestId(mockTestResultsData.mock_tests[0].id)
       }
+    } else {
+      setResults([])
     }
-    if (router?.query?.courseId)
-      getLearningResults(router.query.courseId as string)
-  }, [router?.query?.courseId, isNormal])
+  }, [mockTestResultsData, isNormal])
 
   const option = useMemo(() => {
     if (!results || results.length === 0) return null
@@ -199,85 +177,71 @@ const LearningResults = () => {
           </div>
         </div>
         <div className="flex">
-          {isLoading ? (
-            <div className="w-full animate-pulse">
-              <div className="flex flex-col gap-6">
-                <div className="flex flex-col items-center justify-around gap-7 md:flex-row">
-                  <div className="h-[270px] w-[270px] rounded-full bg-skeleton"></div>
-                  <div className="flex w-full flex-col gap-3 md:w-[180px]">
-                    <div className="h-5 w-full rounded bg-skeleton"></div>
-                    <div className="h-5 w-full rounded bg-skeleton"></div>
+          <>
+            {option && (
+              <div className="flex grow flex-col gap-5 px-0 xl:flex-row xl:justify-evenly xl:px-5 2xl:pl-0 2xl:pr-12">
+                <div className="flex justify-center">
+                  {(() => {
+                    const chartHeight = isMobile
+                      ? '350px'
+                      : isTablet
+                        ? '450px'
+                        : '500px'
+                    const chartMinHeight = isMobile
+                      ? '350px'
+                      : isTablet
+                        ? '450px'
+                        : '500px'
+                    const chartWidth = isMobile
+                      ? '300px'
+                      : isTablet
+                        ? '500px'
+                        : '550px'
+                    return (
+                      <EChart
+                        option={option as EChartsOption}
+                        height={chartHeight}
+                        minHeight={chartMinHeight}
+                        width={chartWidth}
+                      />
+                    )
+                  })()}
+                </div>
+                <div className="flex flex-row items-start justify-center gap-5 xl:flex-col xl:gap-4">
+                  {!isNormal && (
+                    <div className="flex items-center justify-center gap-2.5 text-sm font-medium xl:text-base">
+                      <span className="min-h-3 min-w-3 rounded-full bg-dashboard-mock-test"></span>
+                      <Link
+                        href={
+                          mockTestId
+                            ? `${window.location.origin}/courses/test/test-result/${mockTestId}`
+                            : ''
+                        }
+                        target="_blank"
+                        className={`inline-block min-w-fit text-base font-bold text-gray-800 ${!mockTestId ? 'pointer-events-none' : 'hover:text-dashboard-learing'}`}
+                        rel="noreferrer"
+                      >
+                        Mock test results
+                      </Link>
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-center gap-2.5">
+                    <span className="min-h-3 min-w-3 rounded-full bg-dashboard-learing"></span>
+                    <span className="min-w-fit text-sm font-medium text-gray-800 xl:text-base">
+                      Learning results
+                    </span>
                   </div>
                 </div>
               </div>
-            </div>
-          ) : (
-            <>
-              {option && (
-                <div className="flex grow flex-col gap-5 px-0 xl:flex-row xl:justify-evenly xl:px-5 2xl:pl-0 2xl:pr-12">
-                  <div className="flex justify-center">
-                    {(() => {
-                      const chartHeight = isMobile
-                        ? '350px'
-                        : isTablet
-                          ? '450px'
-                          : '500px'
-                      const chartMinHeight = isMobile
-                        ? '350px'
-                        : isTablet
-                          ? '450px'
-                          : '500px'
-                      const chartWidth = isMobile
-                        ? '300px'
-                        : isTablet
-                          ? '500px'
-                          : '550px'
-                      return (
-                        <EChart
-                          option={option as EChartsOption}
-                          height={chartHeight}
-                          minHeight={chartMinHeight}
-                          width={chartWidth}
-                        />
-                      )
-                    })()}
-                  </div>
-                  <div className="flex flex-row items-start justify-center gap-5 xl:flex-col xl:gap-4">
-                    {!isNormal && (
-                      <div className="flex items-center justify-center gap-2.5 text-sm font-medium xl:text-base">
-                        <span className="min-h-3 min-w-3 rounded-full bg-dashboard-mock-test"></span>
-                        <Link
-                          href={
-                            mockTestId
-                              ? `${window.location.origin}/courses/test/test-result/${mockTestId}`
-                              : ''
-                          }
-                          target="_blank"
-                          className={`inline-block min-w-fit text-base font-bold text-gray-800 ${!mockTestId ? 'pointer-events-none' : 'hover:text-dashboard-learing'}`}
-                          rel="noreferrer"
-                        >
-                          Mock test results
-                        </Link>
-                      </div>
-                    )}
-
-                    <div className="flex items-center justify-center gap-2.5">
-                      <span className="min-h-3 min-w-3 rounded-full bg-dashboard-learing"></span>
-                      <span className="min-w-fit text-sm font-medium text-gray-800 xl:text-base">
-                        Learning results
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </>
-          )}
+            )}
+          </>
         </div>
       </div>
       <div className="w-full xl:w-[515px]">
         <LearningMockTest results={results as ILearningResult[]} />
       </div>
-      {!isLoading && !option && (
+      {mockTestResultsData && !option && (
         <div className="flex grow items-center justify-center">
           <NoData />
         </div>
