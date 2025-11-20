@@ -1,7 +1,7 @@
 import { TablePaginationConfig } from 'antd'
 import React, { Dispatch, SetStateAction } from 'react'
 import { calculateHoursDifference, formatDate} from '@lms/utils'
-import SappTable from '@components/table/SappTable'
+import {SappTable} from '@lms/ui'
 import {
   IProgress,
   IProgressList,

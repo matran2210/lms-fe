@@ -3,12 +3,10 @@ import { useEffect, useState } from 'react'
 import { ExplanationPackageV2 } from 'explanation-package'
 // import 'explanation-package/dist/index.css'
 import { AltArrowLeft } from '@assets/icons'
-import { UploadAPI } from 'src/pages/api/upload'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { ActivityAPI } from '../../../pages/api/activity/index'
 import { Modal } from 'antd'
 import {SappLoading } from '@lms/ui'
 import { CloseIconV2 } from '@components/icons'
+import { IActivityAPI, ICoursesAPI, IUploadAPI } from '@lms/core'
 
 export enum QUESTION_LEVELS {
   FUNDAMENTAL = 'FUNDAMENTAL',
@@ -31,11 +29,15 @@ const ModalExplanationPackage = ({
   open,
   setOpen,
   document_id = '',
+  activityApi, coursesApi, uploadApi,
 }: {
   quizAttemptsAnswerId: string
   open: boolean
   setOpen: () => void
   document_id?: string
+  activityApi: IActivityAPI
+    coursesApi: ICoursesAPI
+  uploadApi: IUploadAPI
 }) => {
   const [activeQuestion, setActiveQuestion] = useState<any>()
   const [loading, setLoading] = useState<boolean>(false)
@@ -43,8 +45,8 @@ const ModalExplanationPackage = ({
   const getActiveQuestion = async (id: string) => {
     setLoading(true)
     try {
-      const resultResponse = await ActivityAPI.getQuizAttemptsAnswer(id)
-      const topicDescription = await CoursesAPI.getTopicDescription(
+      const resultResponse = await activityApi.getQuizAttemptsAnswer(id)
+      const topicDescription = await coursesApi.getTopicDescription(
         resultResponse?.data?.answer?.question?.question_topic_id,
         resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
       )
@@ -117,7 +119,7 @@ const ModalExplanationPackage = ({
     files: { name: string; file_key: string }[]
   }) => {
     try {
-      await UploadAPI.downloadFile(data)
+      await uploadApi.downloadFile(data)
     } catch (error) {}
   }
 
