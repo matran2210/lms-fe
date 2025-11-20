@@ -1,6 +1,5 @@
-import ExaminationInfo from '@components/mycourses/course-detail/ExaminationInfo'
-import LearningResource from '@components/mycourses/LearningResource'
-import PopupStep from '@components/user-guide/PopupStep'
+import { ExaminationInfo, LearningResource} from '@lms/feature-courses'
+// import PopupStep from '@components/user-guide/PopupStep' lỗi monorepo dừng xóa
 import { trackGAEvent } from '@lms/utils'
 import clsx from 'clsx'
 import { Dispatch, SetStateAction } from 'react'
@@ -104,7 +103,7 @@ export default function Sidebar({
             closeSideBar={closeSideBar}
             setOpenExaminationInfo={setOpenExaminationInfo}
           />
-          {guideStatus && guideStep == 2 && (
+          {/* {guideStatus && guideStep == 2 && (
             <PopupStep
               title="Sidebar"
               content={UserGuide.CONTENT_STEP_2}
@@ -113,7 +112,7 @@ export default function Sidebar({
               total={6}
               imgSrc={TourGuideSidebar}
             />
-          )}
+          )} */}
         </div>
         <div
           className={`absolute bottom-0 w-full rounded-xl bg-white pb-6
@@ -130,7 +129,7 @@ export default function Sidebar({
             closeSideBar={closeSideBar}
             setOpenExaminationInfo={setOpenExaminationInfo}
           />
-          {guideStatus && guideStep == 3 && (
+          {/* {guideStatus && guideStep == 3 && (
             <PopupStep
               content={UserGuide.CONTENT_STEP_3}
               className="bottom-0 left-full ml-5"
@@ -139,7 +138,7 @@ export default function Sidebar({
               index={3}
               total={6}
             />
-          )}
+          )} */}
         </div>
         {guideStatus && (guideStep === 2 || guideStep === 3) && (
           <div

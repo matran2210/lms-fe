@@ -1,13 +1,13 @@
+import type { QUESTION_TYPES } from '@lms/core'
+import { IAnswer } from '@lms/core'
+import { ButtonText } from '@lms/ui'
+import { htmlToRaw } from '@lms/utils'
+import { convertSecondsToMinutesSeconds } from '@utils/helpers'
 import type { CollapseProps } from 'antd'
+import clsx from 'clsx'
 import React, { Fragment } from 'react'
 import BaseCollapse from 'src/components/quiz/your-answer-detail/BaseCollapse'
-import { ButtonText } from '@lms/ui'
-import { convertSecondsToMinutesSeconds } from '@utils/helpers'
-import { htmlToRaw } from '@components/common/timer'
-import clsx from 'clsx'
 import { ArrowDownIcon } from '../../../../../../libs/assets/icons/course'
-import { IAnswer } from '@lms/core'
-import type { QUESTION_TYPES } from '@lms/core'
 
 const ListScoreCollapse = ({
   data,

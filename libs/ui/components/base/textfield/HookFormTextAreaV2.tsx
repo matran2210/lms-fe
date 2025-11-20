@@ -1,7 +1,7 @@
 import { Skeleton } from 'antd'
 import React, { KeyboardEvent } from 'react'
 import { Control, Controller } from 'react-hook-form'
-import ErrorMessage from 'src/common/ErrorMessage'
+import { ErrorMessage } from '@lms/ui'
 import { Input } from 'antd'
 const { TextArea } = Input
 interface IProps {

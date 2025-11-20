@@ -1,4 +1,4 @@
-export * from "./layout";
+export { default as Layout } from "./layout";
 export * from "./BottomMenu/index";
 export * from "./CollapseBox/index";
 export { default as FilterGrid } from "./FilterGrid/FilterGrid";
@@ -12,6 +12,7 @@ export * from "./PinnedNotifications/index";
 export { default as SingleDialog } from "./SingleDialog/index";
 export { default as SinglePageLayout } from "./Singlepage/index";
 export { default as TeacherLayoutFilter } from "./TeacherFilter";
-export { default as TeacherLayout } from "./TeacherLayout";
 export { default as CaseStudyLayout } from "./CaseStudyLayout/CaseStudyWrapper";
 export { default as TestWrapper } from "./TestLayout/TestWrapper";
+export { default as LayoutTeacher } from "./TeacherLayout";
+export { default as TeacherMenu } from "./MenuItemsList/TeacherMenu";

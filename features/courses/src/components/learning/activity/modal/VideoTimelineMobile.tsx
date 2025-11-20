@@ -1,7 +1,6 @@
-import { SappDrawerV3 } from '@lms/ui'
-import { formatTime, htmlToRaw } from '@components/common/timer'
+import { NoDataIconV2, SappDrawerV3 } from '@lms/ui'
+import { formatTime, htmlToRaw } from '@lms/utils'
 import React, { useRef, useState } from 'react'
-import NoData from 'src/common/NoData'
 import { IVideo } from '@lms/core'
 
 interface IProps {
@@ -54,7 +53,7 @@ const VideoTimelineMobile = ({ open, onClose, currentVideo }: IProps) => {
           })
         ) : (
           <div className="text-center">
-            <NoData />
+            <NoDataIconV2 />
           </div>
         )}
       </div>

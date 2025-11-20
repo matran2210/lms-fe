@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Icon from '@components/icons'
-import { formatTime } from '@components/common/timer'
+import { formatTimeMinToHhMm } from '@lms/utils'
 
 interface ResultRowsProps {
   type: string
@@ -23,7 +23,7 @@ const ResultRow = ({
   statusIcon,
   time,
 }: ResultRowsProps) => {
-  const formattedTime = formatTime(time)
+  const formattedTime = formatTimeMinToHhMm(time || 0)
 
   return (
     <>

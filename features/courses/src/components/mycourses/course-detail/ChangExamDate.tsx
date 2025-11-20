@@ -1,13 +1,11 @@
-import { SAPPSelectV2 } from '@lms/ui'
-import { Controller, useFormContext } from 'react-hook-form'
-import useSelectExams from 'src/hooks/useSelectExams'
-import { UploadSingleFileV2 } from '@lms/ui'
-import { useEffect } from 'react'
-import ErrorMessage from 'src/common/ErrorMessage'
-import { RcFile } from 'antd/es/upload'
-import { message, Upload, UploadProps } from 'antd'
 import { ArrowDownIcon } from '@components/icons'
 import { useTailwindBreakpoint } from '@lms/hooks'
+import { ErrorMessage, SAPPSelectV2, UploadSingleFileV2 } from '@lms/ui'
+import { message, Upload, UploadProps } from 'antd'
+import { RcFile } from 'antd/es/upload'
+import { useEffect } from 'react'
+import { Controller, useFormContext } from 'react-hook-form'
+import useSelectExams from 'src/hooks/useSelectExams'
 interface IProps {
   classId: string
   remainingChanges?: number

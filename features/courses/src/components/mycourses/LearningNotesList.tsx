@@ -1,41 +1,37 @@
 import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from '@assets/icons'
-import { SappBreadcrumbNotLink } from '@lms/ui'
-import { cleanParamsAPI } from '@lms/utils'
-import getConfig from 'next/config'
-import { useRouter } from 'next/router'
-import React, { useEffect, useRef, useState } from 'react'
-import { CoursesAPI } from 'src/pages/api/courses'
+import { useCourseNoteContext } from '@contexts/CourseNoteContext'
 import {
   backTypeMap,
+  DEFAULT_PAGE_NUMBER,
+  getTypeName,
+  ICourseSectionNoteItem, INotesListResponse,
   IOpenChooseItem,
   ISection,
+  PageLink,
   SectionDropdownFormValues,
   SectionField,
 } from '@lms/core'
-import { getTypeName } from '@lms/core'
-const { publicRuntimeConfig } = getConfig()
-export const { apiURL } = publicRuntimeConfig
-import { useAppSelector, useAppDispatch } from 'src/redux/hook'
-import { resetNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
-import toast from 'react-hot-toast'
-import { format } from 'date-fns'
-import { v4 as uuidv4 } from 'uuid'
-import { isEmpty } from 'lodash'
-import { SappDrawerV3 } from '@lms/ui'
-import { FormProvider, useForm } from 'react-hook-form'
-import FilterCourseSection from '@components/mycourses/FilterCourseSection'
-import { useCourseNoteContext } from '@contexts/CourseNoteContext'
-import { ICourseSectionNoteItem, INotesListResponse } from '@lms/core'
-import NoData from 'src/common/NoData'
-import SortBy from '@components/common/SortBy'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
-import ListFilterMobile from '@components/common/ListFilterMobile'
-import { ActionCellV2 } from '@lms/ui'
+import { ActionCellV2, ListFilterMobile, ListItemFilterMobile, SappBreadcrumbNotLink, SappDrawerV3, SortBy } from '@lms/ui'
+import { cleanParamsAPI } from '@lms/utils'
+import clsx from 'clsx'
+import { format } from 'date-fns'
+import { isEmpty } from 'lodash'
+import getConfig from 'next/config'
+import { useRouter } from 'next/router'
+import { useEffect, useRef, useState } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import NoData from 'src/common/NoData'
+import { CoursesAPI } from 'src/pages/api/courses'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { pushNotes, resetNotesList } from 'src/redux/slice/Course/NotesList'
 import { userReducer } from 'src/redux/slice/User/User'
 import { UserType } from 'src/redux/types/User/urser'
-import { DEFAULT_PAGE_NUMBER, PageLink } from '@lms/core'
-import clsx from 'clsx'
+import { v4 as uuidv4 } from 'uuid'
+import FilterCourseSection from './FilterCourseSection'
+const { publicRuntimeConfig } = getConfig()
+export const { apiURL } = publicRuntimeConfig
 
 const DEFAULT_PAGESIZE = 20
 

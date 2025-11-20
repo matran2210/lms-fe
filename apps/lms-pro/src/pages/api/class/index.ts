@@ -1,4 +1,4 @@
-import { apiURL } from '@components/mycourses/LearningResource'
+import { apiURL } from '@lms/core'
 import { fetcher, fetchFormData } from '@services/requestV2'
 import { AxiosPromise } from 'axios'
 import { IResponse } from 'src/redux/types'

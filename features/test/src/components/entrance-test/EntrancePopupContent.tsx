@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import ResultRowsModal from "../../../../course/src/components/learning/ResultRowsModal";
-import { formatTime } from "@components/common/timer";
+import { formatTimeMinToHhMm } from "@lms/utils";
+import { ResultRowsModal } from "@lms/feature-courses";
 
 interface EntrancePopupContentProps {
   name: string;
@@ -19,7 +19,7 @@ const EntrancePopupContent = ({
 }: EntrancePopupContentProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const timeAllowFormatted = timeAllow
-    ? formatTime(timeAllow * 60)
+    ? formatTimeMinToHhMm(timeAllow * 60)
     : "Unlimited";
 
   return (

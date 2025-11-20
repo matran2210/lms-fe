@@ -1,6 +1,6 @@
 import React from 'react'
 import { Control, Controller } from 'react-hook-form'
-import ErrorMessage from 'src/common/ErrorMessage'
+import { ErrorMessage } from '@lms/ui'
 import SappTextFieldV2 from './SappTextFieldV2'
 import GuidelineFieldV2 from 'src/common/GuidelineFieldV2'
 

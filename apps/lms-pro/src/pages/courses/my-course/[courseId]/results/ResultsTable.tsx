@@ -1,30 +1,4 @@
-import { PaginationSappV2 } from '@lms/ui'
-import { GradingMethod } from '@lms/core'
-import { useRouter } from 'next/router'
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
-import { useInfiniteQuery } from 'react-query'
-import { GRADE_STATUS, PageLink } from '@lms/core'
-import useSelectFilter from 'src/hooks/useSelectFilter'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { CourseKey } from 'src/pages/api/queryKey'
-import { IResultsList, Results } from '@lms/core'
-import { SappModalV3 } from '@lms/ui'
 import { ConfirmIcon } from '@assets/icons'
-import { TEST_TYPE } from '@lms/core'
-import FilterCourseSection from '@components/mycourses/FilterCourseSection'
-import CollapseActivity from '../../../../../../../../features/course/src/components/learning/activity/CollapseActivity'
-import { isEmpty } from 'lodash'
-import CardResultTest from '../../../../../../../../features/course/src/components/learning/activity/CardResultTest'
-import { Avatar, List, Skeleton } from 'antd'
-import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   IOpenChooseItem,
   ISection,
@@ -32,11 +6,25 @@ import {
   backTypeMap,
   getTypeName,
 } from '@lms/core'
-import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
-import { SappDrawerV3 } from '@lms/ui'
+import { CardResultTest, CollapseActivity, FilterCourseSection } from '@lms/feature-courses'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { ListFilterMobile, ListItemFilterMobile, SappDrawerV3, SappModalV3 } from '@lms/ui'
+import { Avatar, List, Skeleton } from 'antd'
+import { isEmpty } from 'lodash'
+import { useRouter } from 'next/router'
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import ListFilterMobile from '@components/common/ListFilterMobile'
+import { useInfiniteQuery } from 'react-query'
 import NoCoursesAvailable from 'src/common/NoCoursesAvailable'
+import { CoursesAPI } from 'src/pages/api/courses'
+import { CourseKey } from 'src/pages/api/queryKey'
 
 const ResultsTable = ({
   openFilter,

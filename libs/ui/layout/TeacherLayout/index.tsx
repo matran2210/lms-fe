@@ -1,4 +1,4 @@
-import TeacherMenu from "@components/layout/MenuItemsList/TeacherMenu";
+import {TeacherMenu} from "@lms/ui";
 import { SappBreadCrumbs } from "@lms/ui";
 import { Typography } from "antd";
 import { ITabs } from "@lms/core";

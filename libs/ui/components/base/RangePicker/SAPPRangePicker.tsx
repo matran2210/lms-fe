@@ -3,7 +3,7 @@ import { ButtonSize } from 'antd/es/button'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { Control, Controller } from 'react-hook-form'
-import ErrorMessage from 'src/common/ErrorMessage'
+import { ErrorMessage } from '@lms/ui'
 import { IBaseFormFieldProps } from '@lms/core'
 
 export interface SAPPRangePickerProps extends IBaseFormFieldProps {

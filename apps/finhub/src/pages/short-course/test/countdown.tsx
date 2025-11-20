@@ -1,5 +1,5 @@
-import useCountdown from '@components/auth/Countdown'
-import { formatTime } from '@components/common/timer'
+import {useCountdown} from '@lms/feature-auth'
+import { formatTimeMinToHhMm } from '@lms/utils'
 import {
   ForwardedRef,
   forwardRef,
@@ -23,7 +23,7 @@ const CountDown = forwardRef(
     }, [time[2]])
     return (
       <div className="flex w-2/6 justify-center font-tech text-[21px] font-bold tracking-[2px] text-bw-1">
-        {formatTime(time[2])}
+        {formatTimeMinToHhMm(time[2])}
       </div>
     )
   },

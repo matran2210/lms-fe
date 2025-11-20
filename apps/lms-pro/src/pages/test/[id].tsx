@@ -77,7 +77,7 @@ import ShowAnswerTemplate from '@lms/feature-test/src/components/test/ShowAnswer
 import TestWrapper from '@lms/ui/layout/TestLayout/TestWrapper'
 import { TestAPI } from '@pages/api/test'
 import { GradingPreference } from '@lms/core'
-import { trackGAEvent } from '@utils/google-analytics'
+import { trackGAEvent } from '@lms/utils'
 import { TabsProps, Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'

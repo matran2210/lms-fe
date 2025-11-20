@@ -2,7 +2,7 @@ import { Skeleton } from 'antd'
 import clsx from 'clsx'
 import React, { KeyboardEvent } from 'react'
 import { Control, Controller } from 'react-hook-form'
-import ErrorMessage from 'src/common/ErrorMessage'
+import { ErrorMessage } from '@lms/ui'
 
 interface IProps {
   name: string

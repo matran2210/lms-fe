@@ -26,14 +26,12 @@ export const { apiURL } = publicRuntimeConfig
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
 import { UploadAPI } from 'src/pages/api/upload'
-import FilterCourseSection from '@components/mycourses/FilterCourseSection'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import SortBy from '@components/common/SortBy'
-import ListFilterMobile from '@components/common/ListFilterMobile'
-import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
+import { SortBy, ListFilterMobile, ListItemFilterMobile} from '@lms/ui'
 import Tooltip from 'src/common/Tooltip'
 import { PageLink } from '@lms/core'
+import FilterCourseSection from './FilterCourseSection'
 interface IProps {
   open: boolean
   setOpenResource: Dispatch<SetStateAction<boolean>>

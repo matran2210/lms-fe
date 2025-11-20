@@ -7,3 +7,4 @@ export { default as useSappPaging } from "./useSappPaging";
 export * from "./useScrollShadows";
 export * from "./useTailwindBreakpoint";
 export * from "./useTooltipModal"
+export { default as useQueryAction } from "./useQueryAction";
