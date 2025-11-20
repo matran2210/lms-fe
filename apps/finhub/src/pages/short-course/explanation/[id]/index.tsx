@@ -1,6 +1,6 @@
 import { CloseIcon } from '@assets/icons'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
+import {FullScreenLayout} from '@lms/ui'
 import { LAYOUT } from '@lms/core'
 import { ExplanationPackageV2 } from 'explanation-package'
 import { useRouter } from 'next/router'

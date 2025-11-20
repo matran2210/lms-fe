@@ -1,4 +1,4 @@
-import FullScreenLayout from '@components/layout/FullScreenLayout'
+import { FullScreenLayout, Layout } from '@lms/ui'
 import { LAYOUT } from '@lms/core'
 import { useRouter } from 'next/router'
 import { QuizResultComponent } from 'quiz-result-package'
@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react'
 import { PageLink } from '@lms/core'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ActivityInfo } from '@lms/core'
-import Layout from '@components/layout'
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
 
 const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {

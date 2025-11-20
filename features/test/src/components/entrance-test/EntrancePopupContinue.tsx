@@ -1,13 +1,13 @@
 import { ButtonPrimary } from '@lms/ui'
 import { ButtonSecondary } from '@lms/ui'
 import { ButtonText } from '@lms/ui'
-import TestPopup from '@components/common/TestPopup'
 import { trackGAEvent } from '@lms/utils'
 import { getNoOfAttemptEntranceTest } from '@utils/helpers/quiz-test/helper'
 import dayjs from 'dayjs'
 import router from 'next/router'
 import { Dispatch, SetStateAction } from 'react'
 import { IEntranceTest, IEntranceTestAttempt } from '@lms/core'
+import TestPopup from '../TestPopup'
 
 interface EntrancePopupContinueProps {
   currentAttempt: IEntranceTestAttempt

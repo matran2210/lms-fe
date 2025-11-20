@@ -1,32 +1,23 @@
-import Layout from '@components/layout'
-import CourseParts from '@components/mycourses/course-detail/CourseParts'
-import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import PopupModalTest from '@components/survey/PopupModalTest'
 import { useCourseContext } from '@contexts/index'
-import { CoursesAPI } from '@pages/api/courses'
-import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useInfiniteQuery } from 'react-query'
 import {
   ANIMATION,
   CLASS_TYPE,
   defaultStatusDetail,
   DELAY_TIME_DISPLAY_POPUP,
   PageLink,
+  RemindChoosingExam,
 } from '@lms/core'
+import { CourseParts, FilterCourse, PopupLockContent, SelectExamPopup } from '@lms/feature-courses'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { CtaTrial, HeaderMobile, Layout, PinnedCompletedCourse, SappBreadCrumbs, SearchWithMenuToggle, CourseSkeleton } from '@lms/ui'
+import { CoursesAPI } from '@pages/api/courses'
+import clsx from 'clsx'
+import { useRouter } from 'next/router'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useInfiniteQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
-import FilterCourse from '@components/mycourses/FilterCourse'
-import { SappBreadCrumbs } from '@lms/ui'
-import PinnedCompletedCourse from '@components/layout/PinnedNotifications/PinnedCompletedCourse'
-import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { RemindChoosingExam } from '@lms/core'
-import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
-import HeaderMobile from '@components/layout/Header/HeaderMobile'
-import clsx from 'clsx'
-import SelectExamPopup from '@components/mycourses/course-detail/SelectExamPopup'
-import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
 
 const DEFAULT_PAGESIZE = 18
 

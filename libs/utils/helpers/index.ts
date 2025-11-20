@@ -19,3 +19,4 @@ export const convertHourToDayLeft = (hours: number) => {
 };
 
 export * from "./timer";
+export * from "./quiz-test";
