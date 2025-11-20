@@ -58,8 +58,25 @@ import { download } from '../../../../../features/course/src/components/learning
 import { CoursesAPI } from '../api/courses/index'
 import { TestAPI } from '../api/test'
 import LimitQuizModal from '../test/limitQuizModal'
-
-const CaseStudyDetail = ({ questions }: any) => {
+import { showPopupCompletedCourse } from '@lms/contexts'
+import DragDropQuestion, {
+  SlotValue,
+} from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
+import { ButtonPrimaryV2 } from '@lms/ui'
+import { Requirement } from '@lms/core'
+import { defaultSheetData } from '@lms/core'
+import ShowAnswerTemplate from '@lms/feature-test/src/components/test/ShowAnswerTemplate'
+import ResetToAnswerTemplateModal from '@lms/feature-test/src/components/test/ResetToAnswerTemplateModal'
+import CaseStudyWrapper from '@components/case-study/layout/CaseStudyWrapper'
+import Popover from '@components/Popover'
+import { NotesOutline } from '@components/icons/Notes'
+import PulsingExclamation from '@components/icons/PulsingExclamation'
+import { download } from '../../../../../features/course/src/components/learning/activity/ActivityResource'
+import { Divider } from 'antd'
+import CloseModalIcon from '@assets/icons/CloseModalIcon'
+import { Triangle } from '@components/icons/Triangle'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { ButtonTextV2 } from '@lms/ui'const CaseStudyDetail = ({ questions }: any) => {
   const editorRefs = useRef<any[]>([])
 
   const checkType = (

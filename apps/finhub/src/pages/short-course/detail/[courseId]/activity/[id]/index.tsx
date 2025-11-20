@@ -41,7 +41,7 @@ import {
   courseActivityAction,
   shortCourseActivityReducer,
 } from 'src/redux/slice/Course/ShortCourse/Activity/Activity'
-import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
+import { showPopupCompletedCourse } from '@lms/contexts'
 import {
   ActivityFile,
   IActivity,

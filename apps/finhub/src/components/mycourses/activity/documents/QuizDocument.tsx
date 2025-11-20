@@ -29,7 +29,7 @@ import {
   SOCIAL_LINK,
 } from 'src/constants'
 import ConFirmSubmit from '@pages/short-course/test/conFirmSubmit'
-import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
+import { showPopupCompletedCourse } from '@lms/contexts'
 import { IQuizSetting } from 'src/type'
 import { IQuestion } from 'src/type/course/Question'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
