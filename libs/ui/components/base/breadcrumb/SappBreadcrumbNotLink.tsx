@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import Tooltip from 'src/common/Tooltip'
+import { Tooltip } from "@lms/ui";
 import { PageLink } from '@lms/core'
 
 type IProps = {

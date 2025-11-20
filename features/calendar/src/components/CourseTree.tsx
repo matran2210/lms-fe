@@ -1,6 +1,6 @@
 'use client'
 import { useState, useMemo } from 'react'
-import SappIcon from 'src/common/SappIcon'
+import {SappIcon} from '@lms/ui'
 
 interface CourseSection {
   id: string

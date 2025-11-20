@@ -27,3 +27,9 @@ export interface IResponseMeta<T, K extends string> {
   };
   error: IResponseError;
 }
+
+export * from './User/urser';
+export * from './Course';
+export * from './EntranceTest/EntranceTest';
+export * from "./Login/login";
+export * from "./Schedule/schedule";

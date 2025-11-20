@@ -1,10 +1,14 @@
+import { CameraIcon } from '@assets/icons'
 import blankAvatar from '@assets/images/blank_avatar.webp'
 import sappAvatar from '@assets/images/blank_avatar_notification.png'
+import { HookFormTextArea, NoData, SappButton, SappButtonIcon, SappModalImage } from '@lms/ui'
+import { Skeleton } from 'antd'
+import clsx from 'clsx'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import SappIcon from 'src/common/SappIcon'
+import toast from 'react-hot-toast'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   courseActivityReducer,
@@ -18,19 +22,10 @@ import {
   ICreateDiscussionResReact,
   IDiscussion,
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
-import DiscussionElement from './DiscussionElement'
-import { SappModalImage } from '@lms/ui'
-import toast from 'react-hot-toast'
-import { Skeleton } from 'antd'
-import { CameraIcon, IconSend } from '@assets/icons'
-import { SappButtonIcon } from '@lms/ui'
-import { SappButton } from '@lms/ui'
-import clsx from 'clsx'
-import { HookFormTextArea } from '@lms/ui'
 import ActionDiscussion from './ActionDiscussion'
+import DiscussionElement from './DiscussionElement'
 import SendComment from './SendComment'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import NoData from 'src/common/NoData'
+
 
 type Props = {
   class_id: string

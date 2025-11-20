@@ -782,6 +782,27 @@ importers:
       '@lms/assets':
         specifier: workspace:*
         version: link:../../libs/assets
+      '@lms/contexts':
+        specifier: workspace:*
+        version: link:../../libs/state
+      '@lms/core':
+        specifier: workspace:*
+        version: link:../../libs/core
+      '@lms/hooks':
+        specifier: workspace:*
+        version: link:../../libs/hooks
+      '@lms/ui':
+        specifier: workspace:*
+        version: link:../../libs/ui
+      '@lms/utils':
+        specifier: workspace:*
+        version: link:../../libs/utils
+
+  features/dashboard:
+    dependencies:
+      '@lms/assets':
+        specifier: workspace:*
+        version: link:../../libs/assets
       '@lms/core':
         specifier: workspace:*
         version: link:../../libs/core

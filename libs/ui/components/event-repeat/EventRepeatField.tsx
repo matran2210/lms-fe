@@ -6,7 +6,7 @@ import localeData from 'dayjs/plugin/localeData'
 import weekday from 'dayjs/plugin/weekday'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form'
-import SappIcon from 'src/common/SappIcon'
+import {SappIcon} from '@lms/ui'
 import {
   EVENT_REPEAT_LABEL,
   EVENT_REPEAT_TYPES,

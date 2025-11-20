@@ -3,7 +3,7 @@ import SappDivider from "../../base/divider/Divider";
 import { DndContext, DragEndEvent, useDroppable } from "@dnd-kit/core";
 import parse, { Element } from "html-react-parser";
 import React, { useEffect, useMemo, useState } from "react";
-import { SappTitleSolution } from "src/common/SappTitleSolution";
+import { SappTitleSolution } from "@lms/ui";
 import { MY_COURSES } from "@lms/core";
 import { QuestionTopic } from "@lms/core";
 import CorrectAnswer from "./CorrectAnswer";

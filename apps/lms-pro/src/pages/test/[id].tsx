@@ -38,7 +38,7 @@ import {
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import SappLoading from 'src/common/SappLoading'
+import {SappLoading } from '@lms/ui'
 import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
 import {
   DISPLAY_TYPE,

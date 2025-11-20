@@ -1,6 +1,6 @@
 import React from 'react'
 import { isEmpty } from 'lodash'
-import NoData from 'src/common/NoData'
+import { NoData } from '@lms/ui'
 import EventTest from './EventTest'
 import { IEventTest } from '@lms/core'
 // import { ANIMATION } from '@lms/core'

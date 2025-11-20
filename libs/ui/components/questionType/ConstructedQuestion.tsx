@@ -18,7 +18,7 @@ import React, {
 } from "react";
 import { Controller } from "react-hook-form";
 import toast from "react-hot-toast";
-import { SappTitleSolution } from "src/common/SappTitleSolution";
+import { SappTitleSolution } from "@lms/ui";
 import { DISPLAY_TYPE, RESPONSE_OPTION } from "@lms/core";
 import { DEFAULT_EDITOR_VALUE, generateSheetId, SheetData } from "@lms/core";
 import { MY_COURSES } from "@lms/core";

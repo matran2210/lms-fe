@@ -40,6 +40,19 @@ export interface ICoursesAPI {
     success: boolean;
     data: IAnswerQuizLastestAttempt;
   }>;
+  getCourseSubsectionList: (
+    page_size: number,
+    type: "CHAPTER" | "UNIT" | "ACTIVITY",
+    parentId?: string,
+    classId?: string,
+    page_index?: number,
+    params?: Object,
+  ) => Promise<any>;
+  getCourseSectionList: (
+    id: string | string[] | undefined,
+    page_size: number,
+    page_index?: number,
+  ) => Promise<any>;
 }
 export interface IActivityAPI {
   createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<any>;

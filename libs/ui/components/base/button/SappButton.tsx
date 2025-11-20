@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Tooltip from 'src/common/Tooltip'
+import { Tooltip } from "@lms/ui";
 import { IButtonProps } from '@lms/core'
 import LoadingBtnAnimation from '@assets/icons/LoadingBtnAnimation'
 

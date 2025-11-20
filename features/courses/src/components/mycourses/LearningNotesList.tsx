@@ -4,6 +4,7 @@ import {
   backTypeMap,
   DEFAULT_PAGE_NUMBER,
   getTypeName,
+  ICoursesAPI,
   ICourseSectionNoteItem, INotesListResponse,
   IOpenChooseItem,
   ISection,
@@ -12,7 +13,8 @@ import {
   SectionField,
 } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { ActionCellV2, ListFilterMobile, ListItemFilterMobile, SappBreadcrumbNotLink, SappDrawerV3, SortBy } from '@lms/ui'
+import { ActionCellV2, SappBreadcrumbNotLink, SappDrawerV3, SortBy, NoData} from '@lms/ui'
+
 import { cleanParamsAPI } from '@lms/utils'
 import clsx from 'clsx'
 import { format } from 'date-fns'
@@ -22,7 +24,6 @@ import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import NoData from 'src/common/NoData'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { pushNotes, resetNotesList } from 'src/redux/slice/Course/NotesList'
@@ -30,12 +31,16 @@ import { userReducer } from 'src/redux/slice/User/User'
 import { UserType } from 'src/redux/types/User/urser'
 import { v4 as uuidv4 } from 'uuid'
 import FilterCourseSection from './FilterCourseSection'
+import { ListFilterMobile, ListItemFilterMobile } from '../course'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 
 const DEFAULT_PAGESIZE = 20
 
-const LearningNotesList = () => {
+interface IProps {
+  api: ICoursesAPI
+}
+const LearningNotesList = ({api}: IProps) => {
   const router = useRouter()
   const { isMobileView, isAlwaysShowSidebar } = useTailwindBreakpoint()
   const notesListStatus = useAppSelector(
@@ -548,6 +553,7 @@ const LearningNotesList = () => {
             setListSubsection={setListSubsection}
             setListUnit={setListUnit}
             setListActivity={setListActivity}
+            api={api}
           />
         ) : (
           <ListItemFilterMobile
@@ -561,6 +567,7 @@ const LearningNotesList = () => {
             setListSubsection={setListSubsection}
             setListUnit={setListUnit}
             setListActivity={setListActivity}
+            api={api}
           />
         )}
       </FormProvider>

@@ -2,7 +2,7 @@ import { calculatePercentage, roundNumber } from '@utils/helpers'
 import { MutableRefObject, useRef } from 'react'
 import { useDraggable } from 'react-use-draggable-scroll'
 
-import Tooltip from 'src/common/Tooltip'
+import { Tooltip } from "@lms/ui";
 import { ChartDatum } from '@lms/core'
 
 interface IProps {

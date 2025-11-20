@@ -11,29 +11,27 @@ import blankAvatar from '@assets/images/blank_avatar.webp'
 import sappAvatar from '@assets/images/blank_avatar_notification.png'
 import { VerifiedIcon } from '@components/icons'
 import { trackGAEvent } from '@lms/utils'
-import { calculateTimeAgo } from '@utils/helpers'
+import { calculateTimeAgo } from '@lms/utils'
 import Image from 'next/image'
 import { SetStateAction, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import SappIcon from 'src/common/SappIcon'
 import { ActivityAPI } from 'src/pages/api/activity'
-import { useAppDispatch } from 'src/redux/hook'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
-import { getDiscussion } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
-import {
+import {useAppDispatch,
+  getDiscussion,
   ICreateDiscussionResReact,
   IDiscussion,
   IDiscussionFile,
-} from 'src/redux/types/Course/MyCourse/Activity/activity'
-import { IUser } from 'src/redux/types/User/urser'
+  IUser
+} from '@lms/contexts'
 import ModalDeleteComment from './ModalDeleteComment'
 import { SappButtonIcon } from '@lms/ui'
 import { SappButton } from '@lms/ui'
 import clsx from 'clsx'
 import { HookFormTextArea } from '@lms/ui'
 import ActionDiscussion from './ActionDiscussion'
-import SappDisplayText from 'src/common/SappDisplayText'
+import {SappDisplayText} from '@lms/ui'
 import SendComment from './SendComment'
 import { Popover } from 'antd'
 import { CoursesAPI } from '@pages/api/courses'

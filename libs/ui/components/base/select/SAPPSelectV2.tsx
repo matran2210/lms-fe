@@ -6,7 +6,7 @@ import clsx from 'clsx'
 import { Control, Controller } from 'react-hook-form'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ErrorMessage } from '@lms/ui'
-import Tooltip from 'src/common/Tooltip'
+import { Tooltip } from "@lms/ui";
 
 interface SAPPSelectProps {
   control: Control<any>
