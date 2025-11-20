@@ -1,9 +1,9 @@
+import { ErrorMessage } from '@lms/ui'
+import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { Control, Controller } from 'react-hook-form'
-import ErrorMessage from 'src/common/ErrorMessage'
 import YourAnswer from '../tags/YourAnswer'
 import SAPPCheckbox from './SAPPCheckbox'
-import clsx from 'clsx'
 
 interface IHookFormCheckBoxProps {
   name: string

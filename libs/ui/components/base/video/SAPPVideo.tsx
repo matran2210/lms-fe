@@ -1,4 +1,4 @@
-import styles from "@styles/components/SAPPVideo.module.scss";
+// import styles from "@styles/components/SAPPVideo.module.scss";
 import { video_url } from "@lms/core";
 import { useEffect, useRef, useState, ReactNode } from "react";
 import Icon from "@components/icons";
@@ -7,15 +7,14 @@ import {
   getResolution,
   isMobileOrTablet,
 } from "@utils/helpers";
-import { useClickOutside } from "@lms/ui";
-import ArrowIcon from "@components/base/pagination/ArrowIcon";
+import { ArrowIcon, useClickOutside } from "@lms/ui";
 import Image from "next/image";
 import { Thumbnail } from "@lms/core";
 import { Stream } from "@cloudflare/stream-react";
 import { fetcher } from "@services/requestV2";
 import { LoadingIcon, PiPIcon } from "@assets/icons";
 import { useRouter } from "next/router";
-import { useTailwindBreakpoint } from "src/hooks/useTailwindBreakpoint";
+import { useTailwindBreakpoint } from "@lms/hooks";
 
 interface IProp {
   options: any;

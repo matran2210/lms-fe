@@ -9,4 +9,4 @@ export { default as Part } from "./Part";
 export { default as PartFailed } from "./PartFailed";
 export { default as SelectExamDate } from "./SelectExamDate";
 export { default as SelectExamPopup } from "./SelectExamPopup";
-export { default as TestAnnoucementModal } from "./TestAnnoucementModal";
+export { default as TestAnnouncementModal } from "./TestAnnoucementModal";

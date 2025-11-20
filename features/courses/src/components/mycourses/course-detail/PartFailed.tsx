@@ -1,5 +1,5 @@
 import { ButtonSecondary } from '@lms/ui'
-import { formatTime } from '@components/common/timer'
+import { formatTimeMinToHhMm } from '@lms/utils'
 import { trackGAEvent } from '@lms/utils'
 import { getUserPrefix, roundNumber } from '@utils/helpers'
 import { useEffect, useMemo, useState } from 'react'
@@ -13,9 +13,9 @@ import { SappModalV3 } from '@lms/ui'
 import { ConfirmIcon } from '@assets/icons'
 import { useCourseContext } from '@contexts/index'
 import { ButtonText } from '@lms/ui'
-import CardCourse from '@components/common/CardCourse/CardCourse'
 import { EAttemptStatus } from '@lms/core'
 import clsx from 'clsx'
+import { CardCourse } from '../../course'
 
 const PartFailed = ({
   coursePart,
@@ -64,7 +64,7 @@ const PartFailed = ({
     quizAttempt?.grading_method === GRADING_METHOD.MANUAL &&
     quizAttempt?.attempt?.grading_status === GRADE_STATUS.AWAITING_GRADING
   const formattedTime = coursePart?.quiz?.quiz_timed
-    ? formatTime(coursePart?.quiz?.quiz_timed * 60)
+    ? formatTimeMinToHhMm(coursePart?.quiz?.quiz_timed * 60)
     : 'Unlimited'
 
   const checkFinished = useMemo(() => {
@@ -262,14 +262,14 @@ const PartFailed = ({
                   label="Time Spent:"
                   // value={
                   //   !!coursePart?.quiz?.attempt?.total_attempt_time
-                  //     ? formatTime(
+                  //     ? formatTimeMinToHhMm(
                   //       coursePart?.quiz?.attempt?.total_attempt_time,
                   //     )
                   //     : '--'
                   // }
                   value={
                     !!selectedResult?.total_attempt_time
-                      ? formatTime(selectedResult?.total_attempt_time)
+                      ? formatTimeMinToHhMm(selectedResult?.total_attempt_time)
                       : '--'
                   }
                 />

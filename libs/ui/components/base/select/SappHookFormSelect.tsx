@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import React, { ReactNode, useCallback, memo } from 'react'
 import { Control, Controller, FieldValues, Path } from 'react-hook-form'
 import Select, { SingleValue, MultiValue } from 'react-select'
-import ErrorMessage from 'src/common/ErrorMessage'
+import { ErrorMessage } from '@lms/ui'
 import { OptionType } from '@lms/core'
 
 interface IProps {

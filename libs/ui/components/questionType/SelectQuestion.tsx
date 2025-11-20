@@ -1,5 +1,5 @@
 import { EditorReader } from '@lms/ui'
-import SappDivider from '@components/common/Divider/Divider'
+import {SappDivider} from '@lms/ui'
 import { replaceWhiteSpacePreWrapToNormal, runHighlight } from '@lms/utils'
 import { uniqueId } from 'lodash'
 import React, {
@@ -12,7 +12,7 @@ import React, {
 } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from '@lms/core'
-import { useTooltipModal } from 'src/hooks/useTooltipModal'
+import { useTooltipModal } from '@lms/hooks'
 import { IExhibitData } from '@lms/core'
 import WarningSection from './WarningSection'
 

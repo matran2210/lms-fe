@@ -1,9 +1,6 @@
 import { ArrowLeft, ArrowRight, PaginationDotIcon } from '@assets/icons'
 import { ActivitySkeleton } from '@lms/ui'
-import { HighlightableHTML } from '@components/highlights/HighlightHTML'
-import Discussion from '@components/mycourses/activity/discussion/Discussion'
-import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
-import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
+import { HighlightableHTML } from '@lms/ui'
 import { CoursesAPI } from '@pages/api/courses'
 import {
   IFocusQuiz,
@@ -17,7 +14,7 @@ import { useRouter } from 'next/router'
 import React, { useMemo, useRef } from 'react'
 import { ANIMATION } from '@lms/core'
 import { EAttemptStatus } from '@lms/core'
-import useQueryAction from 'src/hooks/useQueryAction'
+import {useQueryAction} from '@lms/hooks'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   courseActivityReducer,
@@ -25,6 +22,7 @@ import {
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { IVideo } from '@lms/core'
 import { IActivity } from '@lms/core'
+import { Discussion, QuizDocument, VideoDocument } from '../../mycourses'
 
 interface IProps {
   activity: IActivity

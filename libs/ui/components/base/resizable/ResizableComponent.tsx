@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useRef } from 'react'
-import { moveAndResizeElement } from 'src/utils/dragandresize'
+import { moveAndResizeElement } from '@lms/utils'
 
 interface IProp {
   children: ReactNode

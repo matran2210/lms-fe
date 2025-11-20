@@ -1,6 +1,6 @@
 import { Skeleton } from 'antd'
 import { Control, Controller } from 'react-hook-form'
-import ErrorMessage from 'src/common/ErrorMessage'
+import { ErrorMessage } from '@lms/ui'
 import DynamicBundledEditor from '../../form/editor'
 import { DEFAULT_EDITOR_VALUE } from '@lms/core'
 import { SAPPEditorHandle } from '@lms/core'

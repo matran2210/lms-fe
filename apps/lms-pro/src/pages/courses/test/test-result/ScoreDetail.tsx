@@ -1,8 +1,17 @@
 import { SappTable } from '@lms/ui'
+import { truncateString } from '@lms/utils'
 import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
-import { truncateString } from '@utils/index'
 
-import { htmlToRaw } from '@components/common/timer'
+import { CollapseArrowIcon } from '@assets/icons'
+import {
+  ANIMATION,
+  COMMON_TEXT_ENUM,
+  GRADE_STATUS,
+  IAnswer, IQuizAttempt, IQuizAttemptChartType,
+  QUESTION_TYPES
+} from '@lms/core'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { htmlToRaw } from '@lms/utils'
 import { Collapse } from 'antd'
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
@@ -14,17 +23,7 @@ import React from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
 import Tooltip from 'src/common/Tooltip'
-import {
-  ANIMATION,
-  COMMON_TEXT_ENUM,
-  GRADE_STATUS,
-  PageLink,
-  QUESTION_TYPES,
-} from '@lms/core'
-import { IAnswer, IQuizAttempt, IQuizAttemptChartType } from '@lms/core'
 import { CoursesAPI } from '../../../api/courses/index'
-import { CollapseArrowIcon } from '@assets/icons'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const commonHeaderClass = 'font-medium leading-6 text-gray py-2 pb-4 md:pb-6'
 

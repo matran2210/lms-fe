@@ -15,7 +15,8 @@
     "@lms/core": "workspace:*",
     "@lms/ui": "workspace:*",
     "@lms/hooks": "workspace:*",
-    "@lms/feature-courses": "workspace:*"
+    "@lms/feature-courses": "workspace:*",
+    "@lms/contexts": "workspace:*"
   },
   "peerDependencies": {
     "react": "*",

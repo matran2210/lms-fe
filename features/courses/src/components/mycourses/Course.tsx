@@ -1,6 +1,5 @@
 import { ButtonSecondary } from '@lms/ui'
 import Icon, { CourseTimeIcon, GraduationCapIcon } from '@components/icons'
-import ResultRowsModal from '../../../../../features/course/src/components/learning/ResultRowsModal'
 import { useCourseContext } from '@contexts/index'
 import { trackGAEvent } from '@lms/utils'
 import {
@@ -14,7 +13,7 @@ import { isNull, round } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
-import Tooltip from 'src/common/Tooltip'
+// import {Tooltip} from '@lms/ui' lỗi monorepo
 import {
   BUTTON_STATUS,
   CLASS_STATUS,
@@ -32,10 +31,11 @@ import PopupLesson from './PopupLesson'
 import PopupOpenClass from './PopupOpenClass'
 import ModalFoundationCompleted from './ModalFoundationCompleted'
 import dayjs from 'dayjs'
-import CardCourse from '@components/common/CardCourse/CardCourse'
 import clsx from 'clsx'
-import { Grid } from 'antd'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { Grid, Tooltip } from 'antd'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { ResultRowsModal } from '../learning'
+import { CardCourse } from '../course'
 const { useBreakpoint } = Grid
 
 const Course = ({
@@ -503,9 +503,9 @@ const Course = ({
                   >
                     <Tooltip
                       title={course?.classes?.[0]?.code}
-                      showTooltip={
-                        course?.classes?.[0]?.code?.length > maxLengthTitle
-                      }
+                      // showTooltip={
+                      //   course?.classes?.[0]?.code?.length > maxLengthTitle
+                      // }
                     >
                       {truncateString(
                         course?.classes?.[0]?.code,

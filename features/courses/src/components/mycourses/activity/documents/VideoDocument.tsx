@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { SappModal } from '@lms/ui'
 import { SAPPVideo } from '@lms/ui'
-import { formatTime, htmlToRaw } from '@components/common/timer'
+import { formatTime, htmlToRaw } from '@lms/utils'
 import { video_url } from '@lms/core'
 import { debounce } from '@utils/helpers'
 import {
@@ -14,8 +14,7 @@ import { IQuestion, IVideo } from '@lms/core'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import { SAPPRadio } from '@lms/ui'
 import clsx from 'clsx'
-import SappIcon from 'src/common/SappIcon'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 import { ANIMATION } from '@lms/core'
 
 type Props = {
@@ -390,10 +389,11 @@ const VideoDocument = ({
             {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (
               <>
                 {/* Icon for course video timeline */}
-                <SappIcon
+                {/* lỗi monorepo dừng xóa */}
+                {/* <SappIcon
                   className="fill-bw-1 group-hover:text-primary"
                   icon="course_video_timeline"
-                ></SappIcon>
+                ></SappIcon> */}
                 <span className="ml-2 text-bw-1 group-hover:text-primary">
                   Timeline
                 </span>

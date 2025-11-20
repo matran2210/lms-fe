@@ -7,7 +7,7 @@ import { connect, ConnectedProps } from 'react-redux'
 import {
   confirmDialogActions,
   confirmDialogReducer,
-} from '../../../redux/slice/ConfirmDialog/ConfirmDialogSlice'
+} from '@lms/contexts'
 
 // component
 import SappConfirmDialog from './SappConfirmDialog'

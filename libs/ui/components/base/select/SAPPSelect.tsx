@@ -4,7 +4,7 @@ import { ButtonSize } from 'antd/es/button'
 import { DefaultOptionType } from 'antd/es/select'
 import clsx from 'clsx'
 import { Control, Controller } from 'react-hook-form'
-import ErrorMessage from 'src/common/ErrorMessage'
+import { ErrorMessage } from '@lms/ui'
 import SAPPLabel from '../Label/SAPPLabel'
 import { IBaseFormFieldProps } from '@lms/core'
 

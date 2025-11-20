@@ -17,7 +17,7 @@ import {
   PageLink,
   TitleSidebar,
 } from '@lms/core'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 import { ICalendar, ICalendarList } from '@lms/core'
 import clsx from 'clsx'
 const Page = () => {

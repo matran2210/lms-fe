@@ -15,7 +15,6 @@ import { MovableWindow } from '@lms/ui'
 import { Calculator } from '@lms/ui'
 import CaseStudyWrapper from '@components/casestudy/layout/CaseStudyWrapper'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
-import { HighlightableHTML } from '@components/highlights/HighlightHTML'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import AddWordPreview from '@components/questionType/FillText'
 import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
@@ -45,7 +44,7 @@ import {
   RESPONSE_OPTION,
   ROUTES,
 } from '@lms/core'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   clearFileEssay,

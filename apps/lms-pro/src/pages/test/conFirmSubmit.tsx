@@ -4,7 +4,7 @@ import { ButtonPrimary } from '@lms/ui'
 import { ButtonText } from '@lms/ui'
 import { SappButtonIcon } from '@lms/ui'
 import { SappModalV2 } from '@lms/ui'
-import { trackGAEvent } from '@utils/google-analytics'
+import { trackGAEvent } from '@lms/utils'
 
 interface IProps {
   open: boolean

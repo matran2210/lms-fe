@@ -2,7 +2,7 @@ import LayoutMarketingInApp from '@components/marketing-in-app/LayoutMarketingIn
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { TitleSidebar, ValueSidebar } from '@lms/core'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 
 export const linkCdnMktInApp = 'https://cdn.sapp.edu.vn/images/fe'
 

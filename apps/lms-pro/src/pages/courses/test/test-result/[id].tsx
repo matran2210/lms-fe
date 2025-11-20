@@ -9,7 +9,7 @@ import { useState } from 'react'
 import SappLoading from 'src/common/SappLoading'
 import Tooltip from 'src/common/Tooltip'
 import { GRADE_STATUS } from '@lms/core'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 import { CoursesAPI } from 'src/pages/api/courses'
 import TestResultPage from 'src/pages/courses/test/test-result/testResultPage'
 

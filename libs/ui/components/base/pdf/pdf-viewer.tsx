@@ -1,7 +1,7 @@
 /* eslint-disable */
 import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer'
 import { memo, useEffect, useState } from 'react'
-import '@cyntler/react-doc-viewer/dist/index.css'
+// import '@cyntler/react-doc-viewer/dist/index.css'
 
 const PDFViewer = ({ file }: { file: string }) => {
   const [fileSize, setFileSize] = useState<number>(0)

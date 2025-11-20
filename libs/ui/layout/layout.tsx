@@ -8,7 +8,7 @@ import { ReactElement, ReactNode, useState } from "react";
 import { PageLink } from "@lms/core";
 import { useAppSelector } from "src/redux/hook";
 import Sidebar from "./Sidebar";
-import { useTailwindBreakpoint } from "src/hooks/useTailwindBreakpoint";
+import { useTailwindBreakpoint } from "@lms/hooks";
 interface LayoutProps {
   children: ReactNode;
   title: string;

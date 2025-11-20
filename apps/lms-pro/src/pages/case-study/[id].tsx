@@ -66,7 +66,7 @@ import { download } from '../../../../../features/course/src/components/learning
 import { Divider } from 'antd'
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import { Triangle } from '@components/icons/Triangle'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 import { ButtonTextV2 } from '@lms/ui'const CaseStudyDetail = ({ questions }: any) => {
   const editorRefs = useRef<any[]>([])
 

@@ -1,7 +1,7 @@
 import { Control, Controller } from 'react-hook-form'
 import { TimePicker } from 'antd'
 import dayjs from 'dayjs'
-import ErrorMessage from 'src/common/ErrorMessage'
+import { ErrorMessage } from '@lms/ui'
 import { EDateTime } from '@lms/core'
 import SAPPLabel from '../Label/SAPPLabel'
 

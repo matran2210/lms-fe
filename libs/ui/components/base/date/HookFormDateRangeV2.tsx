@@ -1,10 +1,9 @@
+import { ErrorMessage, SappIcon } from '@lms/ui'
 import type { GetProps } from 'antd'
 import { DatePicker, Skeleton } from 'antd'
+import clsx from 'clsx'
 import dayjs, { Dayjs } from 'dayjs'
 import { Control, Controller } from 'react-hook-form'
-import ErrorMessage from 'src/common/ErrorMessage'
-import SappIcon from 'src/common/SappIcon'
-import clsx from 'clsx'
 
 type RangePickerProps = GetProps<typeof DatePicker.RangePicker>
 

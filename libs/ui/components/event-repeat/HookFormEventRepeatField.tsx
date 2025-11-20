@@ -1,5 +1,5 @@
 import { Control, Controller } from 'react-hook-form'
-import ErrorMessage from 'src/common/ErrorMessage'
+import { ErrorMessage } from '@lms/ui'
 import { ISelect } from '@lms/core'
 import { IEventRepeatFieldValues } from '@lms/core'
 import EventRepeatField from './EventRepeatField'

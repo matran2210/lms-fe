@@ -5,7 +5,10 @@ import {
   FREQUENCY_UNITS_LABEL_PLURAL,
 } from "../enums";
 import { ISelectOption } from "../types/courses";
+import getConfig from 'next/config'
 
+const { publicRuntimeConfig } = getConfig();
+export const { apiURL } = publicRuntimeConfig;
 export const PageLink = {
   HOME: "/",
   COURSES: "/courses",

@@ -5,7 +5,7 @@ import { DefaultOptionType } from 'antd/es/select'
 import clsx from 'clsx'
 import { Control, Controller } from 'react-hook-form'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import ErrorMessage from 'src/common/ErrorMessage'
+import { ErrorMessage } from '@lms/ui'
 import Tooltip from 'src/common/Tooltip'
 
 interface SAPPSelectProps {

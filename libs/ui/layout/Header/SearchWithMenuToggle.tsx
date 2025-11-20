@@ -1,10 +1,10 @@
 import { ArrowActionSearchIcon, HamburgerMenuLargeIcon } from "@lms/assets";
-import SearchForm from "@components/mycourses/Search";
-import PopupStep from "@components/user-guide/PopupStep";
+import {SearchForm} from "@lms/feature-courses";
+// import PopupStep from "@components/user-guide/PopupStep"; lỗi monorepo dừng xóa
 import React, { useEffect, useRef, useState } from "react";
 import { PageLink, UserGuide } from "@lms/core";
 import { MY_COURSES } from "@lms/core";
-import { useAppSelector } from "@lms/hooks";
+import { useAppSelector } from "@lms/contexts";
 import TourGuideStart from "src/assets/lotties/tour-guide-start.json";
 import clsx from "clsx";
 import { CloseIconV2 } from "@components/icons";
@@ -197,7 +197,7 @@ const SearchWithMenuToggle = ({
           )}
         </div>
       </FormProvider>
-      {isShowUserGuide && guideStatus && guideStep === 1 && (
+      {/* {isShowUserGuide && guideStatus && guideStep === 1 && (
         <PopupStep
           content={UserGuide.CONTENT_STEP_1}
           className="left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-0 md:top-[68px] md:-translate-x-0 md:-translate-y-0 lg:top-[78px]"
@@ -206,7 +206,7 @@ const SearchWithMenuToggle = ({
           total={6}
           imgSrc={TourGuideStart}
         />
-      )}
+      )} */}
     </>
   );
 };

@@ -2,7 +2,7 @@ import type { ComponentType } from 'react'
 import type { Settings } from 'react-slick'
 import { linkCdnMktInApp } from '@pages/lms-pro-new-version'
 import Image from 'next/image'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 // Use require to avoid type conflicts between react-slick types and React types
 const SlickSlider: ComponentType<Settings> =
   (require('react-slick') as { default?: ComponentType<Settings> }).default ??

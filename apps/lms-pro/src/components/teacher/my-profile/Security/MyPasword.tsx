@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 import FullScreenMobile from '../Modal/FullScreenMobile'
 import ChangePassword from '../ChangePassword'
 import TeacherProfileCard from '@components/card/TeacherProfileCard'

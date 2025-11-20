@@ -1,13 +1,13 @@
-import { CollapseArrowIcon, DownloadIcon } from "@assets/icons";
-import { SUFFIX_TYPE } from "@lms/core/types/file/UploadFileInterface";
-import { UploadAPI } from "@pages/api/upload";
-import { trackGAEvent } from "@lms/utils";
-import { Collapse } from "antd";
-import clsx from "clsx";
-import React from "react";
-import Tooltip from "src/common/Tooltip";
-import { useTailwindBreakpoint } from "src/hooks/useTailwindBreakpoint";
-import { IActivity } from "@lms/core";
+import { CollapseArrowIcon, DownloadIcon } from '@assets/icons'
+import { SUFFIX_TYPE } from '@lms/core'
+import { UploadAPI } from '@pages/api/upload'
+import { trackGAEvent } from '@lms/utils'
+import { Collapse } from 'antd'
+import clsx from 'clsx'
+import React from 'react'
+import {Tooltip} from '@lms/ui'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { IActivity } from '@lms/core'
 
 export const download = async (name: string, file_key: string) => {
   await UploadAPI.downloadFile({
