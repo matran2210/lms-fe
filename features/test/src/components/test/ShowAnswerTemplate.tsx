@@ -1,6 +1,6 @@
 import { CircleCloseIcon, EyeIcon } from '@assets/icons'
 import { ModalResizeable } from '@lms/ui'
-import { Triangle } from '@components/icons/Triangle'
+import { Triangle } from '@lms/assets/icons';
 import { Tooltip } from 'antd'
 import clsx from 'clsx'
 import React, { useLayoutEffect, useState } from 'react'

@@ -60,12 +60,12 @@ import ShowAnswerTemplate from '@lms/feature-test/src/components/test/ShowAnswer
 import ResetToAnswerTemplateModal from '@lms/feature-test/src/components/test/ResetToAnswerTemplateModal'
 import CaseStudyWrapper from '@components/case-study/layout/CaseStudyWrapper'
 import Popover from '@components/Popover'
-import { NotesOutline } from '@components/icons/Notes'
-import PulsingExclamation from '@components/icons/PulsingExclamation'
+import { NotesOutline } from '@lms/assets/icons'
+import { PulsingExclamation } from '@lms/assets/icons'
 import { download } from '../../../../../features/course/src/components/learning/activity/ActivityResource'
 import { Divider } from 'antd'
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
-import { Triangle } from '@components/icons/Triangle'
+import { Triangle } from '@lms/assets/icons';
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { ButtonTextV2 } from '@lms/ui'const CaseStudyDetail = ({ questions }: any) => {
   const editorRefs = useRef<any[]>([])

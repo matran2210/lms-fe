@@ -1,6 +1,6 @@
 import { SappBreadCrumbs } from '@lms/ui'
 import { SappDrawerV3 } from '@lms/ui'
-import { StarCircleIcon } from '@components/icons'
+import { StarCircleIcon } from '@lms/assets/icons'
 import {
   AlertInfoIcon,
   CloseIconPreview,
@@ -701,7 +701,7 @@ const CoursePartDetail = () => {
               {learningOutcome?.course_outcomes?.map((outcome, index) => (
                 <div key={outcome.id} className="flex items-start gap-2">
                   <div>
-                    <StarCircleIcon />
+                    <StarCircleIcon color="#1C274C" />
                   </div>
                   <div className="flex items-start text-sm font-normal leading-normal text-gray-800 md:text-base">
                     <div className="me-1">LO{index + 1}:</div>

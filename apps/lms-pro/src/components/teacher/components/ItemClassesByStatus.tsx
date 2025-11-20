@@ -1,5 +1,5 @@
 import { ButtonIconSapp } from '@lms/ui'
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets/icons'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { truncateString } from '@utils/index'
 import { useEffect, useState } from 'react'

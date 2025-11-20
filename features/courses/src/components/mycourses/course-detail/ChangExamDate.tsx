@@ -1,4 +1,4 @@
-import { ArrowDownIcon } from '@components/icons'
+import { ArrowDownIcon } from '@lms/assets/icons'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { ErrorMessage, SAPPSelectV2, UploadSingleFileV2 } from '@lms/ui'
 import { message, Upload, UploadProps } from 'antd'

@@ -1,9 +1,8 @@
 import { NextIcon, PreviousIcon } from "@lms/assets";
+import { CloseIconV2 } from "@lms/assets/icons";
 import { ButtonSecondary } from "@lms/ui";
-import Icon, { CloseIconV2 } from "@components/icons";
 import { Layout } from "antd";
 import clsx from "clsx";
-import { on } from "events";
 import React, { Dispatch, PropsWithChildren, SetStateAction } from "react";
 import { useAppDispatch } from "src/redux/hook";
 import { disableUnsavedChange } from "src/redux/slice/Login/Login";

@@ -1,5 +1,5 @@
 import { useClickOutside } from '@lms/ui'
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets/icons'
 import clsx from 'clsx'
 import React, { ReactNode, useRef, useState } from 'react'
 

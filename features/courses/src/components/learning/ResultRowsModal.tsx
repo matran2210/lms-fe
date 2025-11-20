@@ -3,7 +3,7 @@ import { SappTable } from '@lms/ui'
 import { SappModal } from '@lms/ui'
 import { Dispatch, FC, SetStateAction } from 'react'
 import ResultTableRows from './ResultTableRows'
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets/icons'
 import { trackGAEvent } from '@lms/utils'
 
 // define the props for the confirm dialog component

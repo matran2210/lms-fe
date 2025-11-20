@@ -1,6 +1,6 @@
 import SAPP_Logo from '@assets/images/sapp_logo.svg'
 import { ButtonPrimary } from '@lms/ui'
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets/icons'
 import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import { ICertificate } from '@pages/certificates/[id]'
 import Image from 'next/image'

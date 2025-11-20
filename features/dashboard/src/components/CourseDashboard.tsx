@@ -7,7 +7,7 @@ import { Dispatch, SetStateAction, memo, useState } from 'react'
 import { ANIMATION, COURSE_TYPE } from '@lms/core'
 import { ICourseInfo } from '@lms/core'
 import StatsSkeleton from '@components/skeleton/StatsSkeleton'
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets/icons'
 import { useRouter } from 'next/router'
 export interface IActivityProgress {
   completed: number

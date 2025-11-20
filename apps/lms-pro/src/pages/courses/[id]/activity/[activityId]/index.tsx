@@ -15,7 +15,7 @@ import { convertMinutesToHourFormat } from '@lms/utils'
 
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import BackToTop from '@components/BackToTop'
-import { Triangle } from '@components/icons/Triangle'
+import { Triangle } from '@lms/assets/icons';
 import BottomMenu from '@components/layout/BottomMenu'
 import AssistiveTouch from '@components/layout/BottomMenu/AssistiveTouch'
 import ExpandIcon from '@components/layout/ExpandIcon'

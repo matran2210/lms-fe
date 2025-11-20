@@ -1,6 +1,6 @@
 import { ButtonSecondary } from "@lms/ui";
 import { CardCourse } from "../course/index";
-import Icon, { CourseTimeIcon, GraduationCapIcon } from "@components/icons";
+import Icon, { CourseTimeIcon, GraduationCapIcon } from "@lms/assets/icons";
 import Tooltip from "src/common/Tooltip";
 import { clearStylesHtml } from "@lms/utils";
 import clsx from "clsx";

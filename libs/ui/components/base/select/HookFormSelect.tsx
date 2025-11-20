@@ -1,4 +1,4 @@
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets/icons'
 import React, { ReactNode } from 'react'
 import Select, { type DropdownIndicatorProps, components } from 'react-select'
 import { ISelect } from '@lms/core'

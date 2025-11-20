@@ -1,6 +1,6 @@
 import { RemainingTimeIcon } from "@lms/assets";
 import { SappModalV3 } from "@lms/ui";
-import { TimeOutIcon } from "@components/icons";
+import { TimeOutIcon } from "@lms/assets/icons";
 import { formatTime } from "@lms/utils";
 import clsx from "clsx";
 import { Dayjs } from "dayjs";

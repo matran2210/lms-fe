@@ -9,7 +9,7 @@ import {
 } from '@assets/icons'
 import blankAvatar from '@assets/images/blank_avatar.webp'
 import sappAvatar from '@assets/images/blank_avatar_notification.png'
-import { VerifiedIcon } from '@components/icons'
+import { VerifiedIcon } from '@lms/assets'
 import { trackGAEvent } from '@lms/utils'
 import { calculateTimeAgo } from '@utils/helpers'
 import Image from 'next/image'

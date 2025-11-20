@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useRef,
 } from 'react'
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets/icons'
 
 type Props = {
   open?: boolean

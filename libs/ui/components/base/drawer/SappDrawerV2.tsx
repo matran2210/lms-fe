@@ -1,5 +1,5 @@
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets/icons'
 import { Drawer, DrawerProps } from 'antd'
 import clsx from 'clsx'
 import React, { ReactNode } from 'react'

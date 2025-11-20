@@ -1,7 +1,7 @@
 // components/SearchForm.tsx
 
 import React from 'react'
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets/icons'
 
 interface IProps {
   question: string

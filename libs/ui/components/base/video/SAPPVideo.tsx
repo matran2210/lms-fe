@@ -1,7 +1,7 @@
 // import styles from "@styles/components/SAPPVideo.module.scss";
 import { video_url } from "@lms/core";
 import { useEffect, useRef, useState, ReactNode } from "react";
-import Icon from "@components/icons";
+import { Icon } from "@lms/assets/icons";
 import {
   formatTimeToHourMinuteSecond,
   getResolution,

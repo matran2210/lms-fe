@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets/icons'
 import { ReactNode } from 'react'
 import { Tooltip } from 'antd'
 import clsx from 'clsx'

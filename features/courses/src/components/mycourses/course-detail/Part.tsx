@@ -1,6 +1,6 @@
 import { ButtonSecondary } from '@lms/ui'
 import CardCourse from '@components/common/CardCourse/CardCourse'
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets/icons'
 import { useCourseContext } from '@contexts/index'
 import { trackGAEvent } from '@lms/utils'
 import { getUserPrefix } from '@utils/helpers'

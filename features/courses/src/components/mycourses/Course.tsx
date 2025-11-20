@@ -1,5 +1,5 @@
 import { ButtonSecondary } from '@lms/ui'
-import Icon, { CourseTimeIcon, GraduationCapIcon } from '@components/icons'
+import Icon, { CourseTimeIcon, GraduationCapIcon } from '@lms/assets/icons'
 import { useCourseContext } from '@contexts/index'
 import { trackGAEvent } from '@lms/utils'
 import {

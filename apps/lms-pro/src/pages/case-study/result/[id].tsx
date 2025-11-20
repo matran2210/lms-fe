@@ -47,12 +47,12 @@ import DragDropQuestion, {
   SlotValue,
 } from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
-import { Triangle } from '@components/icons/Triangle'
+import { Triangle } from '@lms/assets/icons';
 import CaseStudyWrapper from '@components/case-study/layout/CaseStudyWrapper'
 import Popover from '@components/Popover'
 import { download } from '../../../../../../features/course/src/components/learning/activity/ActivityResource'
-import { NotesOutline } from '@components/icons/Notes'
-import PulsingExclamation from '@components/icons/PulsingExclamation'
+import { NotesOutline } from '@lms/assets/icons'
+import { PulsingExclamation } from '@lms/assets/icons'
 import { Divider } from 'antd'
 import { useTailwindBreakpoint } from '@lms/hooks'
 

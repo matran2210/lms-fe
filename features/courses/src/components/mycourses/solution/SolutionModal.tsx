@@ -1,6 +1,6 @@
 import { SappModal } from '@lms/ui'
 import { Dispatch, FC, SetStateAction } from 'react'
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets/icons'
 import HeadingSolution from './HeadingSolution'
 import SolutionModalContent from './SolutionModalContent'
 

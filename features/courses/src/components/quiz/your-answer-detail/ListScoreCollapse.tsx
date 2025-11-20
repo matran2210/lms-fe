@@ -7,7 +7,7 @@ import type { CollapseProps } from 'antd'
 import clsx from 'clsx'
 import React, { Fragment } from 'react'
 import BaseCollapse from 'src/components/quiz/your-answer-detail/BaseCollapse'
-import { ArrowDownIcon } from '../../../../../../libs/assets/icons/course'
+import { ArrowDownIcon } from '@lms/assets/icons'
 
 const ListScoreCollapse = ({
   data,

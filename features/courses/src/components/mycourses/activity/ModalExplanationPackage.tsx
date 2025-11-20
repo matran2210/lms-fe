@@ -8,7 +8,7 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import { ActivityAPI } from '../../../pages/api/activity/index'
 import { Modal } from 'antd'
 import SappLoading from 'src/common/SappLoading'
-import { CloseIconV2 } from '@components/icons'
+import { CloseIconV2 } from '@lms/assets/icons'
 
 export enum QUESTION_LEVELS {
   FUNDAMENTAL = 'FUNDAMENTAL',

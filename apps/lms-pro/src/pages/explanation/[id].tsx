@@ -13,7 +13,7 @@ import { IRequirement } from '@lms/core'
 import { QUESTION_TYPES } from '@lms/core'
 import { IAtempt } from '@lms/core'
 import { CoursesAPI } from '../api/courses'
-import { CloseIconV2 } from '@components/icons'
+import { CloseIconV2 } from '@lms/assets/icons'
 import Tooltip from 'src/common/Tooltip'
 
 const Explanation = () => {

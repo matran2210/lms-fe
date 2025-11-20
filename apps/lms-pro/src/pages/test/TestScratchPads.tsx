@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form'
 import { ScratchPadValue } from '@lms/core'
 import { IExhibit } from '@lms/core'
 import ScratchPatch from './scratchPatch'
-import { Triangle } from '@components/icons/Triangle'
+import { Triangle } from '@lms/assets/icons';
 interface IProps {
   openScratchPad: any[]
   onFocusingPad: string
