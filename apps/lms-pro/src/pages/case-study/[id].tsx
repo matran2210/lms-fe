@@ -1,25 +1,44 @@
 import {
   CalculatorIconV2,
-  CircleCloseIcon,
   DownloadIcon,
   FileTextIcon,
   ResizeIcon,
-  ScratchPadIconV2,
+  ScratchPadIconV2
 } from '@assets/icons'
-import { EditorReader } from '@lms/ui'
-import { FileViewer } from '@lms/ui'
-import { ModalResizeable } from '@lms/ui'
-import { HookFormTextArea } from '@lms/ui'
-import { MovableWindow } from '@lms/ui'
+import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import Calculator from '@components/calculator'
+import CaseStudyWrapper from '@components/case-study/layout/CaseStudyWrapper'
+import Popover from '@components/Popover'
+import { NotesOutline, PulsingExclamation, Triangle } from '@lms/assets'
+import {
+  defaultSheetData,
+  ESSAY_TYPE,
+  EXHIBIT_TEXT_REPLACE,
+  IExhibit,
+  IRequirement,
+  PROGRAM,
+  QUESTION_TYPES,
+  RESPONSE_OPTION,
+} from '@lms/core'
+import ConFirmSubmit from '@lms/feature-test/src/components/test/conFirmSubmit'
+import QuitTestModal from '@lms/feature-test/src/components/test/modal/quit-test-modal'
+import ResetToAnswerTemplateModal from '@lms/feature-test/src/components/test/ResetToAnswerTemplateModal'
+import ShowAnswerTemplate from '@lms/feature-test/src/components/test/ShowAnswerTemplate'
+import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { ButtonTextV2, EditorReader, FileViewer, HookFormTextArea, ModalResizeable, MovableWindow } from '@lms/ui'
 import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
 import AddWordPreview from '@lms/ui/components/questionType/FillText'
 import MatchQuizComponent from '@lms/ui/components/questionType/MatchQuiz/MatchQuiz'
 import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
+import DragDropQuestion, {
+  SlotValue,
+} from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight } from '@utils/index'
+import { Divider } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
@@ -27,14 +46,6 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
-import {
-  ESSAY_TYPE,
-  EXHIBIT_TEXT_REPLACE,
-  PROGRAM,
-  QUESTION_TYPES,
-  RESPONSE_OPTION,
-} from '@lms/core'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   clearFileEssay,
@@ -42,32 +53,13 @@ import {
   loadMoreQuestion,
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
-import { IRequirement } from '@lms/core'
-import { IExhibit } from '@lms/core'
+import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
+import { download } from '../../../../../features/course/src/components/learning/activity/ActivityResource'
 import { CoursesAPI } from '../api/courses/index'
 import { TestAPI } from '../api/test'
-import QuitTestModal from '@lms/feature-test/src/components/test/modal/quit-test-modal'
-import ConFirmSubmit from '@lms/feature-test/src/components/test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
-import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
-import DragDropQuestion, {
-  SlotValue,
-} from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
-import { ButtonPrimaryV2 } from '@lms/ui'
-import { Requirement } from '@lms/core'
-import { defaultSheetData } from '@lms/core'
-import ShowAnswerTemplate from '@lms/feature-test/src/components/test/ShowAnswerTemplate'
-import ResetToAnswerTemplateModal from '@lms/feature-test/src/components/test/ResetToAnswerTemplateModal'
-import CaseStudyWrapper from '@components/case-study/layout/CaseStudyWrapper'
-import Popover from '@components/Popover'
-import { NotesOutline } from '@components/icons/Notes'
-import PulsingExclamation from '@components/icons/PulsingExclamation'
-import { download } from '../../../../../features/course/src/components/learning/activity/ActivityResource'
-import { Divider } from 'antd'
-import CloseModalIcon from '@assets/icons/CloseModalIcon'
-import { Triangle } from '@components/icons/Triangle'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { ButtonTextV2 } from '@lms/ui'const CaseStudyDetail = ({ questions }: any) => {
+
+const CaseStudyDetail = ({ questions }: any) => {
   const editorRefs = useRef<any[]>([])
 
   const checkType = (

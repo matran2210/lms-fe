@@ -2,7 +2,7 @@ import useCountdown from '@components/auth/Countdown'
 import { ButtonText } from '@lms/ui'
 import { SappModalV2 } from '@lms/ui'
 import { SAPPTextFiled } from '@lms/ui'
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets'
 import React, {
   createRef,
   Dispatch,

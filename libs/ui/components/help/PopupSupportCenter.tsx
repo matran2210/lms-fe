@@ -15,7 +15,7 @@ import {
 } from "@lms/assets";
 import { onLinkSocial } from "@lms/utils";
 import React, { Dispatch, PropsWithChildren, SetStateAction } from "react";
-// import { CloseIconV2 } from "../../../../apps/lms-pro/src/components/icons";
+import { CloseIconV2 } from '@lms/assets'
 interface IInfomation {
   icon: React.ReactNode;
   onClick?: () => void;
@@ -37,7 +37,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
           className="cursor-pointer transition-all duration-200 ease-in-out hover:scale-110"
           onClick={() => setVisible(!visible)}
         >
-          {/* <CloseIconV2 /> comment monorepo  */}
+          <CloseIconV2 />
         </div>
       </div>
 

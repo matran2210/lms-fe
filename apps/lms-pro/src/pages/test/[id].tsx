@@ -3,10 +3,6 @@ import {
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
 import {
-  ArrowUpIcon,
-  CalculatorIcon,
-  ExcelIcon,
-  ExhibitsIcon,
   CalculatorIconV2,
   DownloadIcon,
   FileTextIcon,
@@ -14,86 +10,79 @@ import {
   ResizeIcon,
   ScratchPadIconV2,
   ShowLessIcon,
-  ShowMoreIcon,
+  ShowMoreIcon
 } from '@assets/icons'
-import { useClickOutside } from '@lms/ui'
-import { EditorReader } from '@lms/ui'
-import { TabSlide } from '@lms/ui'
-import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
-import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
-import NewFilltext from '@lms/ui/components/questionType/NewFillText'
-import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
-import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CourseProvider, useCourseContext } from '@contexts/index'
-import { runHighlight } from '@utils/index'
-import {
-  cloneDeep,
-  debounce,
-  isEmpty,
-  isUndefined,
-  set,
-  uniqueId,
-} from 'lodash'
-import { useRouter } from 'next/router'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { SappLoading } from '@lms/ui'
-import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
 import {
   DISPLAY_TYPE,
   EXHIBIT_TEXT_REPLACE,
   GRADING_METHOD,
+  IExhibit,
   PageLink,
   PROGRAM,
   QUESTION_TYPES,
   RESPONSE_OPTION,
   TEST_TYPE,
 } from '@lms/core'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
-import { IExhibit } from '@lms/core'
-import { CoursesAPI } from '../api/courses'
+import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
+import ConFirmSubmit from '@lms/feature-test/src/components/test/conFirmSubmit'
 import QuitTestModal from '@lms/feature-test/src/components/test/modal/quit-test-modal'
 import TestTimeOutModal from '@lms/feature-test/src/components/test/modal/test-timeout'
-import ConFirmSubmit from '@lms/feature-test/src/components/test/conFirmSubmit'
+import { SappLoading, TabSlide, useClickOutside } from '@lms/ui'
+import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
+import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
+import NewFilltext from '@lms/ui/components/questionType/NewFillText'
+import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
+import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
+import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
+import { runHighlight } from '@utils/index'
+import {
+  cloneDeep,
+  debounce,
+  isEmpty,
+  isUndefined,
+  uniqueId
+} from 'lodash'
+import { useRouter } from 'next/router'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
+import { CoursesAPI } from '../api/courses'
 import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
 
 import { CheckCircleOutlineYellow, FlagIconV2 } from '@assets/icons/test'
 import BackToTop from '@components/BackToTop'
 import Popover from '@components/Popover'
-import { ButtonSecondary } from '@lms/ui'
 import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
-import { HighlightableHTML } from '@lms/ui'
-import Icon from '@components/icons'
-import { NotesOutline } from '@components/icons/Notes'
-import PulsingExclamation from '@components/icons/PulsingExclamation'
 import Layout from '@components/layout'
 import ButtonContent from '@components/mycourses/test/ButtonContent'
-import MatchQuizComponent from '@lms/ui/components/questionType/MatchQuiz/MatchQuiz'
+import { Icon, NotesOutline, PulsingExclamation } from '@lms/assets'
+import {
+  Answer,
+  AnswerItem,
+  AnswerList, DEFAULT_EDITOR_VALUE, defaultSheetData, DragDropAnswerItem, GradingPreference, IDataQuestion, IQuestion, IRequirement, Requirement,
+  RequirementItem,
+  ScratchPad,
+  ScratchPadValue
+} from '@lms/core'
 import RequirementsTab from '@lms/feature-test/src/components/test/RequirementsTab'
+import ResetToAnswerTemplateModal from '@lms/feature-test/src/components/test/ResetToAnswerTemplateModal'
 import ShowAnswerTemplate from '@lms/feature-test/src/components/test/ShowAnswerTemplate'
+import { ButtonPrimary, ButtonSecondary, ButtonText, ButtonTextV2, HighlightableHTML } from '@lms/ui'
+import MatchQuizComponent from '@lms/ui/components/questionType/MatchQuiz/MatchQuiz'
+import DragDropQuestion, {
+  SlotValue,
+} from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import TestWrapper from '@lms/ui/layout/TestLayout/TestWrapper'
-import { TestAPI } from '@pages/api/test'
-import { GradingPreference } from '@lms/core'
 import { trackGAEvent } from '@lms/utils'
+import { TestAPI } from '@pages/api/test'
 import { TabsProps, Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
-import {
-  Answer,
-  AnswerItem,
-  AnswerList,
-  DragDropAnswerItem,
-  IDataQuestion,
-  Requirement,
-  RequirementItem,
-  ScratchPad,
-  ScratchPadValue,
-} from '@lms/core'
-import { IRequirement } from '@lms/core'
+import { download } from '../../../../../features/course/src/components/learning/activity/ActivityResource'
 import {
   checkSheetAnswered,
   checkTypeAndRenderTitle,
@@ -106,16 +95,6 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import DragDropQuestion, {
-  SlotValue,
-} from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
-import { DEFAULT_EDITOR_VALUE, defaultSheetData } from '@lms/core'
-import { IQuestion } from '@lms/core'
-import ResetToAnswerTemplateModal from '@lms/feature-test/src/components/test/ResetToAnswerTemplateModal'
-import { ButtonPrimary } from '@lms/ui'
-import { ButtonText } from '@lms/ui'
-import { download } from '../../../../../features/course/src/components/learning/activity/ActivityResource'
-import { ButtonTextV2 } from '@lms/ui'
 declare global {
   interface Window {
     userAgreed: any

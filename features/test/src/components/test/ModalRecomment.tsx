@@ -1,5 +1,6 @@
+import React from 'react';
 import { EditorReader } from '@lms/ui'
-import { CloseIconV2 } from '@components/icons'
+import { CloseIconV2 } from '@lms/assets'
 import { Modal } from 'antd'
 import { useTailwindBreakpoint } from '@lms/hooks'
 

@@ -1,4 +1,5 @@
-// import { ArrowDownIcon } from '@components/icons' comment monorepo
+import { ArrowDownIcon } from "@lms/assets";
+import React from 'react';
 import { useTailwindBreakpoint } from "@lms/hooks";
 import { ErrorMessage, SAPPSelectV2, UploadSingleFileV2 } from "@lms/ui";
 import { message, Upload, UploadProps } from "antd";
@@ -75,7 +76,7 @@ const ChangExamDate = ({
         options={options ?? []}
         required
         placeholder="Choose one option"
-        // suffixIcon={<ArrowDownIcon className="rotate-[-90deg]" />}
+        suffixIcon={<ArrowDownIcon className="rotate-[-90deg]" />}
         onDropdownVisibleChange={() => {
           setIsOpenSelectExam(true);
           setDirection(1);

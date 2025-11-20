@@ -1,6 +1,7 @@
+import React from 'react'
 import { SappModal } from "@lms/ui";
 import { Dispatch, FC, SetStateAction } from "react";
-// import Icon from '@components/icons' comment monorepo
+import { Icon } from '@lms/assets'
 import HeadingSolution from "./HeadingSolution";
 import SolutionModalContent from "./SolutionModalContent";
 
@@ -58,7 +59,7 @@ const SolutionModal: FC<EntrancePopupProps> = ({ open, setOpen }) => {
             handleOnClick();
           }}
         >
-          {/* <Icon type="arrows" /> */}
+          <Icon type="arrows" />
         </div>
 
         {/* // Demo solution popup 1 column and 2 column */}

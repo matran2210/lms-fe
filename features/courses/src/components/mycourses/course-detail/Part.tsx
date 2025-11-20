@@ -1,5 +1,6 @@
+import React from 'react';
 import { ButtonSecondary } from "@lms/ui";
-// import Icon from "@components/icons"; comment monorepo
+import { Icon } from '@lms/assets'
 import { useCourseContext } from "@contexts/index";
 import { formatTimeMinToHhMm, trackGAEvent } from "@lms/utils";
 import { getUserPrefix } from "@utils/helpers";
@@ -165,7 +166,7 @@ const Part = ({
           <div className="progress mb-6">
             <div className="info mb-2 flex justify-between">
               <div className="text flex items-center">
-                {/* <Icon type={`${iconType}`} /> */}
+                <Icon type={`${iconType}`} />
                 <p className="ml-px pl-1 text-sm font-normal text-gray-800">
                   {showStatus}
                 </p>

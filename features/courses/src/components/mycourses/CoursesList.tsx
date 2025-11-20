@@ -1,6 +1,6 @@
 import { ButtonSecondary } from "@lms/ui";
 import { CardCourse } from "../course/index";
-// import Icon, { CourseTimeIcon, GraduationCapIcon } from "@components/icons"; comment monorepo
+import { Icon, CourseTimeIcon, GraduationCapIcon } from "@lms/assets/icons";
 import { clearStylesHtml } from "@lms/utils";
 import clsx from "clsx";
 import { isEmpty } from "lodash";
@@ -93,7 +93,7 @@ const CoursesList: React.FC<CoursesProps> = ({
                 <div className="flex flex-col">
                   <div className="flex justify-between">
                     <div className="flex items-center gap-2">
-                      {/* <GraduationCapIcon className="h-5 w-5 md:h-[1.25rem] md:w-[1.25rem]" /> */}
+                      <GraduationCapIcon className="h-5 w-5 md:h-[1.25rem] md:w-[1.25rem]" />
                       <div className="text-xs font-semibold text-icon md:text-sm">
                         <Tooltip title="CMA342023" showTooltip={false}>
                           CMA342023
@@ -102,7 +102,7 @@ const CoursesList: React.FC<CoursesProps> = ({
                     </div>
                     <div className="flex items-center gap-1">
                       <div className="mr-1 text-icon">
-                        {/* <CourseTimeIcon className="h-5 w-5 md:h-[1.25rem] md:w-[1.25rem]" /> */}
+                        <CourseTimeIcon className="h-5 w-5 md:h-[1.25rem] md:w-[1.25rem]" />
                       </div>
                       <div className="text-xs font-medium text-icon md:text-sm">
                         30
@@ -127,7 +127,7 @@ const CoursesList: React.FC<CoursesProps> = ({
                   <div className="progress mb-6">
                     <div className="info mb-1.5 flex items-center justify-between">
                       <div className="text flex items-center">
-                        {/* <Icon type="like" className="relative text-[#050505]" /> */}
+                        <Icon type="like" className="relative text-[#050505]" />
                         <p className="ml-px pl-2 text-sm font-normal text-gray-800">
                           Ready to learn
                         </p>

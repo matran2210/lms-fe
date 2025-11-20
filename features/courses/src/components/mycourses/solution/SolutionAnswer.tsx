@@ -1,5 +1,5 @@
 import React from "react";
-// import Icon from '@components/icons' comment monorepo
+import { Icon } from '@lms/assets'
 interface SolutionAnswerProps {
   message: string;
   isYourAnswer: boolean;
@@ -23,9 +23,9 @@ const SolutionAnswer = ({
         className={`mb-4 flex items-center gap-x-3 text-base ${classParent}`}
       >
         {isYourAnswer ? (
-          <>{/* <Icon type="group-fill" className="h-[18px] w-[18px]" /> */}</>
+          <><Icon type="group-fill" className="h-[18px] w-[18px]" /></>
         ) : (
-          <>{/* <Icon type="group-empty" className="h-[18px] w-[18px]" /> */}</>
+          <><Icon type="group-empty" className="h-[18px] w-[18px]" /></>
         )}
         <div className="w-fit">
           {message}

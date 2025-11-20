@@ -1,4 +1,4 @@
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets'
 import { ANIMATION, ICourseInfo } from '@lms/core'
 import { isUndefined } from 'lodash'
 import { useRouter } from 'next/router'

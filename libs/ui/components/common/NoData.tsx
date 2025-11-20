@@ -1,6 +1,6 @@
 import React from 'react'
 import { ANIMATION } from '@lms/core'
-import { NoDataIconV2 } from '../icons'
+import { NoDataIconV2 } from '@lms/assets'
 
 const NoData = ({ title = 'No data founded...' }: { title?: string }) => {
   return (

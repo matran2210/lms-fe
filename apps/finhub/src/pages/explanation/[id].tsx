@@ -1,6 +1,6 @@
 import { MenuDotsIcon } from '@assets/icons'
 import { AltArrowLeft } from '@components/courses/icons/AltArrowLeft'
-import { CloseIconV2 } from '@components/icons'
+import { CloseIconV2 } from '@lms/assets'
 import { FullScreenLayout, SappLoadingGlobal, Tooltip, } from '@lms/ui'
 import { LAYOUT } from '@lms/core'
 import { ExplanationPackageV2 } from 'explanation-package'

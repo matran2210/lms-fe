@@ -1,13 +1,12 @@
+import React from 'react'
 import { useEffect, useState } from "react";
-
 import { ExplanationPackageV2 } from "explanation-package";
 // import 'explanation-package/dist/index.css'
-import { AltArrowLeft } from "@lms/assets";
+import { AltArrowLeft, CloseIconV2 } from "@lms/assets";
 import { UploadAPI } from "src/pages/api/upload";
 import { CoursesAPI } from "src/pages/api/courses";
 import { Modal } from "antd";
 import { SappLoading } from "@lms/ui";
-// import { CloseIconV2 } from "@components/icons"; comment monorepo
 
 export enum QUESTION_LEVELS {
   FUNDAMENTAL = "FUNDAMENTAL",
@@ -158,7 +157,7 @@ const ModalExplanationPackage = ({
             <AltArrowLeft />
           </div>
           <div className="rounded-md bg-gray-200 p-2 transition-all duration-300 ease-in-out hover:bg-gray-300 md:hidden">
-            {/* <CloseIconV2 className="h-[18px] w-[18px]" /> */}
+            <CloseIconV2 className="h-[18px] w-[18px]" />
           </div>
         </div>
         <div className="mx-auto">

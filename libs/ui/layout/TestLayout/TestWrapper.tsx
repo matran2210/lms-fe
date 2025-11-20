@@ -6,7 +6,7 @@ import React, {
 } from 'react'
 import { Layout } from 'antd'
 import clsx from 'clsx'
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets'
 import Countdown from '@pages/test/countdown'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange } from 'src/redux/slice/Login/Login'

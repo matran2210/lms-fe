@@ -1,3 +1,4 @@
+import React from 'react';
 import blankAvatar from "@assets/images/blank_avatar.webp";
 import sappAvatar from "@assets/images/blank_avatar_notification.png";
 import {
@@ -6,8 +7,8 @@ import {
   DeleteMessageIcon,
   EditMessageIcon,
   ReplyMessageIcon,
+  VerifiedIcon
 } from "@lms/assets";
-// import { VerifiedIcon } from "@components/icons"; comment monorepo
 import {
   getDiscussion,
   ICreateDiscussionResReact,

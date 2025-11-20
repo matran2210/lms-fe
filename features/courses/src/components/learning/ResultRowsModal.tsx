@@ -1,9 +1,9 @@
 // ConfirmDialog.tsx
-import { SappTable } from "@lms/ui";
-import { SappModal } from "@lms/ui";
+import React from 'react';
+import { SappTable, SappModal } from "@lms/ui";
 import { Dispatch, FC, SetStateAction } from "react";
 import ResultTableRows from "./ResultTableRows";
-// import Icon from '@components/icons' comment monorepo
+import { Icon } from '@lms/assets'
 import { trackGAEvent } from "@lms/utils";
 
 // define the props for the confirm dialog component
@@ -230,7 +230,7 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
             trackGAEvent("Click Icon Close Your Score Details");
           }}
         >
-          {/* <Icon type="cross" />  */}
+          <Icon type="cross" /> 
         </div>
         <SappTable
           headers={headers}

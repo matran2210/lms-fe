@@ -1,5 +1,5 @@
 import ProfileCard from '@components/card/ProfileCard'
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets'
 import React, { useState } from 'react'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import FullScreenMobile from '../Modal/FullScreenMobile'

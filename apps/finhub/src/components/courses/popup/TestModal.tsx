@@ -20,7 +20,7 @@ import ButtonText from '@components/base/button/ButtonText'
 import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import ModalNotMobileFriendly from '@components/base/modal/ModalNotMobileFriendly'
-import { ArrowDownIcon } from '@components/icons'
+import { ArrowDownIcon } from '@lms/assets'
 import StatusTestQuizBadge, {
   STATUS_QUIZ_TEST,
 } from '@components/test/StatusTestQuizBadge'

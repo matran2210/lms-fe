@@ -1,5 +1,5 @@
 import { ButtonSecondary } from "@lms/ui";
-// import Icon, { CourseTimeIcon, GraduationCapIcon } from '@components/icons' comment monorepo
+import { Icon, CourseTimeIcon, GraduationCapIcon } from '@lms/assets'
 import { useCourseContext } from "@contexts/index";
 import { clearStylesHtml, trackGAEvent, truncateString } from "@lms/utils";
 import {
@@ -493,10 +493,10 @@ const Course = ({
               <div className="flex justify-between">
                 <div className="flex items-center gap-2">
                   <div>
-                    {/* <GraduationCapIcon
+                    <GraduationCapIcon
                       className={sizeIcon}
                       fill={enableCourse ? "#1C274C" : "#D1D5DB"}
-                    /> */}
+                    />
                   </div>
                   <div
                     className={`text-xs font-semibold ${enableCourse ? "text-icon" : "text-gray-300"}  md:text-sm`}
@@ -522,7 +522,7 @@ const Course = ({
                         enableCourse ? "text-icon" : "text-gray-300"
                       }`}
                     >
-                      {/* <CourseTimeIcon className={sizeIcon} /> */}
+                      <CourseTimeIcon className={sizeIcon} />
                     </div>
                     <div
                       className={`text-xs font-medium md:text-sm ${
@@ -580,12 +580,12 @@ const Course = ({
                 <div className="progress mb-6">
                   <div className="info mb-1.5 flex items-center justify-between">
                     <div className="text flex items-center">
-                      {/* <Icon
+                      <Icon
                         type={enableCourse ? iconType : "expired"}
                         className={`relative ${
                           enableCourse ? "text-[#050505]" : "text-gray-300"
                         }`}
-                      /> */}
+                      />
                       <p
                         className={`text-sm font-normal ${
                           enableCourse ? "text-gray-800" : "text-gray-300"

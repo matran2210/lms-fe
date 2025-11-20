@@ -1,6 +1,6 @@
 import React, { useEffect, Dispatch, SetStateAction } from "react";
 import router, { useRouter } from "next/router";
-// import { CourseSearchIcon } from '@components/icons'comment monorepo
+import { CourseSearchIcon } from '@lms/assets'
 import { Controller, useFormContext } from "react-hook-form";
 
 interface IProps {
@@ -56,7 +56,7 @@ const SearchForm = ({
       }}
     >
       <button type="submit" className="flex">
-        {/* <CourseSearchIcon /> */}
+        <CourseSearchIcon />
       </button>
       <Controller
         control={control}

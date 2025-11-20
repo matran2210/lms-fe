@@ -1,6 +1,6 @@
-import RemainingTimeIcon from '@assets/icons/RemainingTimeIcon'
+import React from 'react';
 import { SappModalV3 } from '@lms/ui'
-import { TimeOutIcon } from '@components/icons'
+import { TimeOutIcon, RemainingTimeIcon } from '@lms/assets'
 import { TEST_TYPE } from '@lms/core'
 import clsx from 'clsx'
 

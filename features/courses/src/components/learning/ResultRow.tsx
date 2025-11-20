@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import Icon from '@components/icons' comment monorepo
+import { Icon } from '@lms/assets'
 import { formatTimeMinToHhMm } from "@lms/utils";
 
 interface ResultRowsProps {
@@ -47,7 +47,7 @@ const ResultRow = ({
           </span>
           {statusPercentage != 0 && (
             <span className="flex items-center gap-1 text-base text-[#A1A1A1]">
-              {/* <Icon type={statusIcon} /> */}
+              <Icon type={statusIcon} />
               {statusPercentage}%
             </span>
           )}

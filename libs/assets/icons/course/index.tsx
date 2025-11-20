@@ -1,4 +1,3 @@
-export { ArrowDownIcon } from "./ArrowDownIcon";
 export { Union } from "./Union";
 export { BookMark } from "./BookMark";
 export { CourseContent } from "./CourseContent";

@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react'
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets'
 import blankAvatar from '@assets/images/blank_avatar_notification.png'
 import Image from 'next/image'
 import { calculateTimeAgo } from '@utils/helpers'
