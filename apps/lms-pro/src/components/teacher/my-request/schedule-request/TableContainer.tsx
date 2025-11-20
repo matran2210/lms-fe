@@ -1,4 +1,4 @@
-import SappTable from '@components/table/SappTable'
+import {SappTable} from '@lms/ui'
 import { TeacherAPI } from '@pages/api/teacher'
 import { StatusRequestSchedule } from '@lms/core'
 import { TablePaginationConfig } from 'antd'

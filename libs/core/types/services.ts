@@ -53,10 +53,17 @@ export interface ICoursesAPI {
     page_size: number,
     page_index?: number,
   ) => Promise<any>;
+  getTopicDescription:(
+    id: string | string[] | undefined,
+    quiz_id?: string,
+    class_user_id?: string,
+    cache?: boolean,
+  ) => Promise<any>;
 }
 export interface IActivityAPI {
   createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<any>;
   reactDiscussion: (data: ICreateDiscussionResReact) => Promise<any>;
+  getQuizAttemptsAnswer:(id: string) => Promise<any>;
 }
 
 export interface CourseActivityApi {
@@ -100,4 +107,13 @@ export interface IAuthAPI {
     new_password: string,
     otp_code: string,
   ) => Promise<any>;
+}
+
+export interface IUploadAPI {
+  downloadFile: (data: {
+    files: {
+        name: string;
+        file_key: string;
+    }[];
+}) => Promise<void>
 }

@@ -1,7 +1,7 @@
 import { QuizActivity } from '@lms/core'
 import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import { Tooltip } from 'antd'
-import SappTable from '@components/table/SappTable'
+import {SappTable} from '@lms/ui'
 import { StatusQuizTag } from '@components/teacher/components/StatusActionCell'
 import { QUIZ_ATTEMPT_GRADING_STATUS, QUIZ_ATTEMPT_STATUS } from '@lms/core'
 import { getTimeFromInput } from '@lms/utils'

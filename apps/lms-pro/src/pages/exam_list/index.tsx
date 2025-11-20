@@ -1,5 +1,5 @@
 import { ColumnsType } from 'antd/es/table'
-import SappTable from '@components/table/SappTable'
+import {SappTable} from '@lms/ui'
 import Layout from '@components/layout'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { PageLink, TitleSidebar } from '@lms/core'
