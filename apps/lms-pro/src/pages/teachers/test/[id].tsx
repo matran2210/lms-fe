@@ -26,7 +26,7 @@ import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQ
 import NewFiltext from '@lms/ui/components/questionType/NewFillText'
 import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
-import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
+import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
 import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
@@ -34,7 +34,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import SappLoading from 'src/common/SappLoading'
-import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
+import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
 import {
   DISPLAY_TYPE,
   EXHIBIT_TEXT_REPLACE,
@@ -56,7 +56,7 @@ import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
 import LimitQuizModal from 'src/pages/test/limitQuizModal'
 
 import ButtonContent from '@components/mycourses/test/ButtonContent'
-import HeaderTest from '@components/test/HeaderTest'
+import HeaderTest from '@lms/feature-test/src/components/test/HeaderTest'
 import { trackGAEvent } from '@utils/google-analytics'
 import dayjs from 'dayjs'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
@@ -85,8 +85,8 @@ import useGetQuizDetail from 'src/pages/test/custom-hook/useGetQuizDetail'
 import { TestAPI } from '@pages/api/test'
 import { DEFAULT_EDITOR_VALUE, defaultSheetData } from '@lms/core'
 import { ButtonPrimaryV2 } from '@lms/ui'
-import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
-import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
+import ShowAnswerTemplate from '@lms/feature-test/src/components/test/ShowAnswerTemplate'
+import ResetToAnswerTemplateModal from '@lms/feature-test/src/components/test/ResetToAnswerTemplateModal'
 import { ButtonTextV2 } from '@lms/ui'
 declare global {
   interface Window {

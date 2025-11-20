@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-import { useEffect, useRef, useState } from 'react'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { useEffect, useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "src/redux/hook";
 import {
   confirmQuestion,
   courseActivityQuizReducer,
@@ -9,7 +9,7 @@ import {
   saveAnswer,
   selectQuestions,
   submitQuiz,
-} from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
+} from "src/redux/slice/Course/MyCourse/Activity/ActivityQuiz"; // Import confirmQuestion from quizSlice
 
 import {
   AlertTriagle,
@@ -20,24 +20,24 @@ import {
   MaximumContentIcon,
   MinimumContentIcon,
   RestartQuizIcon,
-} from '@assets/icons'
-import { ButtonSecondary } from '@lms/ui'
-import { SappButton } from '@lms/ui'
-import { SappModalV3 } from '@lms/ui'
-import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
-import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
-import { IFocusQuiz } from '@pages/courses/[id]/activity/[activityId]'
-import { isValidatedAnswer } from '@lms/utils'
-import { trackGAEvent } from '@lms/utils'
-import { Tooltip } from 'antd'
-import TooltipSapp from 'src/common/Tooltip'
+} from "@assets/icons";
+import { ButtonSecondary } from "@lms/ui";
+import { SappButton } from "@lms/ui";
+import { SappModalV3 } from "@lms/ui";
+import ResetToAnswerTemplateModal from "../../../../../../test/src/components/test/ResetToAnswerTemplateModal";
+import ShowAnswerTemplate from "../../../../../../test/src/components/test/ShowAnswerTemplate";
+import { IFocusQuiz } from "@pages/courses/[id]/activity/[activityId]";
+import { isValidatedAnswer } from "@lms/utils";
+import { trackGAEvent } from "@lms/utils";
+import { Tooltip } from "antd";
+import TooltipSapp from "src/common/Tooltip";
 
-import clsx from 'clsx'
-import dayjs from 'dayjs'
-import { every, isEmpty, isNull, isUndefined } from 'lodash'
-import { useRouter } from 'next/router'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
+import clsx from "clsx";
+import dayjs from "dayjs";
+import { every, isEmpty, isNull, isUndefined } from "lodash";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import {
   ANIMATION,
   FINISHED_TEST_TITLE,
@@ -47,42 +47,42 @@ import {
   QUESTION_TYPES,
   RESPONSE_OPTION,
   SOCIAL_LINK,
-} from '@lms/core'
-import { DEFAULT_EDITOR_VALUE } from '@lms/core'
-import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
-import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
-import { IQuizSetting } from '@lms/core'
-import { IQuestion, IRequirment } from '@lms/core'
-import LoadingQuizDocument from './LoadingQuizDocument'
-import QuizComponent, { QuizComponentRef } from './QuizComponent'
+} from "@lms/core";
+import { DEFAULT_EDITOR_VALUE } from "@lms/core";
+import ConFirmSubmit from "src/pages/test/conFirmSubmit";
+import { showPopupCompletedCourse } from "src/redux/slice/Popup/Result-test";
+import { IQuizSetting } from "@lms/core";
+import { IQuestion, IRequirment } from "@lms/core";
+import LoadingQuizDocument from "./LoadingQuizDocument";
+import QuizComponent, { QuizComponentRef } from "./QuizComponent";
 
 type Props = {
-  questions: IQuestion[]
-  activityId: string
-  tabId: string
-  quizId: string
-  grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
-  document_id: string
-  is_graded?: boolean
-  setOpenFile?: any
-  class_user_id?: string
-  quizSetting?: IQuizSetting
-  gradeStatus?: string
-  quizName?: string
-  reload: () => void
-  grading_method?: string
-  refreshTab: () => void
-  exhibitText: string
-  attemptId?: string
-  isTeacher?: boolean
-  focusOnlyQuiz: IFocusQuiz
-  setFocusOnlyQuiz: React.Dispatch<React.SetStateAction<IFocusQuiz>>
+  questions: IQuestion[];
+  activityId: string;
+  tabId: string;
+  quizId: string;
+  grading_preference: "AFTER_EACH_QUESTION" | "AFTER_ALL_QUESTIONS";
+  document_id: string;
+  is_graded?: boolean;
+  setOpenFile?: any;
+  class_user_id?: string;
+  quizSetting?: IQuizSetting;
+  gradeStatus?: string;
+  quizName?: string;
+  reload: () => void;
+  grading_method?: string;
+  refreshTab: () => void;
+  exhibitText: string;
+  attemptId?: string;
+  isTeacher?: boolean;
+  focusOnlyQuiz: IFocusQuiz;
+  setFocusOnlyQuiz: React.Dispatch<React.SetStateAction<IFocusQuiz>>;
   // Optional attempt limitation info
-  is_limited?: boolean
-  limit_count?: number
-  number_of_attempts: number
-  isQuizFinished?: boolean
-}
+  is_limited?: boolean;
+  limit_count?: number;
+  number_of_attempts: number;
+  isQuizFinished?: boolean;
+};
 
 const QuizDocument = ({
   questions,
@@ -109,28 +109,29 @@ const QuizDocument = ({
   number_of_attempts,
   isQuizFinished = false,
 }: Props): JSX.Element => {
-  const dispatch = useAppDispatch()
-  const selector = useAppSelector(courseActivityQuizReducer)
-  const router = useRouter()
-  const isAFTERAllQUESTION = grading_preference !== 'AFTER_EACH_QUESTION'
-  const isAFTEREACHQUESTION = grading_preference === 'AFTER_EACH_QUESTION'
-  const [activeQuestionIndex, setActiveQuestionIndex] = useState(0)
-  const questionRef = useRef<QuizComponentRef>(null)
-  const questionsList = selector[activityId]?.[tabId]?.[quizId]?.questions || []
+  const dispatch = useAppDispatch();
+  const selector = useAppSelector(courseActivityQuizReducer);
+  const router = useRouter();
+  const isAFTERAllQUESTION = grading_preference !== "AFTER_EACH_QUESTION";
+  const isAFTEREACHQUESTION = grading_preference === "AFTER_EACH_QUESTION";
+  const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
+  const questionRef = useRef<QuizComponentRef>(null);
+  const questionsList =
+    selector[activityId]?.[tabId]?.[quizId]?.questions || [];
 
-  const activeQuestion = questionsList[activeQuestionIndex]
-  const isLastQuestion = activeQuestionIndex === questions.length - 1
-  const isQuestionConfirmed = activeQuestion?.confirmed
+  const activeQuestion = questionsList[activeQuestionIndex];
+  const isLastQuestion = activeQuestionIndex === questions.length - 1;
+  const isQuestionConfirmed = activeQuestion?.confirmed;
   // const [runHandleFinishQuiz, setRunHandleFinishQuiz] = useState<number>(1)
 
-  const [loading, setLoading] = useState<boolean>(false)
-  const [loadingButton, setLoadingButton] = useState<boolean>(false)
-  const [resultId, setResultId] = useState<string>(attemptId || '')
-  const [openGradedReport, setOpenGradedReport] = useState<boolean>(false)
-  const [startWorkTime, setStartWorkTime] = useState(Date.now())
+  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingButton, setLoadingButton] = useState<boolean>(false);
+  const [resultId, setResultId] = useState<string>(attemptId || "");
+  const [openGradedReport, setOpenGradedReport] = useState<boolean>(false);
+  const [startWorkTime, setStartWorkTime] = useState(Date.now());
 
-  const [quizComponentKey, setQuizComponentKey] = useState<number>(1)
-  const [openFinishQuiz, setOpenFinishQuiz] = useState<boolean>(false)
+  const [quizComponentKey, setQuizComponentKey] = useState<number>(1);
+  const [openFinishQuiz, setOpenFinishQuiz] = useState<boolean>(false);
 
   const {
     control: controlAnswer,
@@ -139,38 +140,40 @@ const QuizDocument = ({
     getValues,
     watch,
     resetField,
-  } = useForm({})
+  } = useForm({});
 
   // Compute whether user still has attempts left
   const hasAttemptsLeft = (() => {
     // If backend already disallows attempts, block retake
-    if (quizSetting && quizSetting.allow_attempt === false) return false
+    if (quizSetting && quizSetting.allow_attempt === false) return false;
     // Use explicit limit rules if provided
-    if (typeof is_limited === 'boolean') {
-      if (!is_limited) return true
+    if (typeof is_limited === "boolean") {
+      if (!is_limited) return true;
       const limit =
-        typeof limit_count === 'number' ? limit_count : Number.POSITIVE_INFINITY
+        typeof limit_count === "number"
+          ? limit_count
+          : Number.POSITIVE_INFINITY;
       const used =
-        typeof number_of_attempts === 'number' ? number_of_attempts : 0
-      return used < limit
+        typeof number_of_attempts === "number" ? number_of_attempts : 0;
+      return used < limit;
     }
     // Fallback: allow retake when limits unknown
-    return true
-  })()
+    return true;
+  })();
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       if (questions?.[0]?.id) {
-        setStartWorkTime(Date.now())
+        setStartWorkTime(Date.now());
 
         // Load corrects from sessionStorage if available (only for AFTER_ALL_QUESTIONS)
         if (grading_preference) {
           // If finished, we'll restore answers and fetch corrects lazily per question on navigation
-          setIsFinishQuiz(isFinishQuiz)
+          setIsFinishQuiz(isFinishQuiz);
         }
 
         if (number_of_attempts && number_of_attempts > 0) {
-          setIsFinishQuiz(true)
+          setIsFinishQuiz(true);
         }
 
         // Load the first question when the component mounts
@@ -180,17 +183,17 @@ const QuizDocument = ({
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
-              questionId: questions?.[0]?.id || '',
+              questionId: questions?.[0]?.id || "",
               ...(isFinishQuiz && { attemptId }),
             }),
-          )
+          );
 
           // Restore corrects if available
           // No restore here; corrects fetched lazily per-question when finished
         } catch (error) {}
       }
-    })()
-  }, [questions, grading_preference, activityId, tabId, quizId, dispatch])
+    })();
+  }, [questions, grading_preference, activityId, tabId, quizId, dispatch]);
 
   // useEffect(() => {
   //   if (runHandleFinishQuiz > 1) {
@@ -204,11 +207,11 @@ const QuizDocument = ({
   useEffect(() => {
     const fetchAndConfirmQuestion = async () => {
       // if (grading_preference !== 'AFTER_ALL_QUESTIONS') return
-      if (!activeQuestion?.id) return
+      if (!activeQuestion?.id) return;
 
-      if (!isFinishQuiz) return
+      if (!isFinishQuiz) return;
       // Only call API if we haven't got corrects yet for this question
-      const hasCorrects = !!activeQuestion.corrects
+      const hasCorrects = !!activeQuestion.corrects;
       if (!hasCorrects) {
         dispatch(
           confirmQuestion({
@@ -220,10 +223,10 @@ const QuizDocument = ({
             myAnswers: [],
             time_spent: 0,
           }) as any,
-        )
+        );
       }
-    }
-    fetchAndConfirmQuestion()
+    };
+    fetchAndConfirmQuestion();
   }, [
     grading_preference,
     activeQuestion?.id,
@@ -232,7 +235,7 @@ const QuizDocument = ({
     tabId,
     quizId,
     dispatch,
-  ])
+  ]);
 
   const calculateWorkTime = () => {
     return activeQuestion?.confirmed
@@ -240,27 +243,27 @@ const QuizDocument = ({
       : activeQuestion?.time_spent !== 0
         ? Math.ceil((Date.now() - startWorkTime) / 1000) +
           activeQuestion?.time_spent
-        : Math.ceil((Date.now() - startWorkTime) / 1000)
-  }
+        : Math.ceil((Date.now() - startWorkTime) / 1000);
+  };
 
   const handleNextQuestion = async () => {
-    const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
+    const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`;
     const defaultValue =
       questionRef.current?.getValues?.(name) ||
-      activeQuestion?.myAnswers?.[0]?.short_answer
+      activeQuestion?.myAnswers?.[0]?.short_answer;
 
     if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
       await questionRef.current?.onResetWord(
         name,
         activeQuestion?.response_option,
         defaultValue,
-      )
+      );
     }
     if (activeQuestionIndex < questions?.length - 1) {
-      setActiveQuestionIndex(activeQuestionIndex + 1)
-      handleSaveAnswer()
+      setActiveQuestionIndex(activeQuestionIndex + 1);
+      handleSaveAnswer();
       // Load the next question if it hasn't been loaded yet
-      const nextQuestionId = questions[activeQuestionIndex + 1]?.id
+      const nextQuestionId = questions[activeQuestionIndex + 1]?.id;
       if (nextQuestionId) {
         try {
           const nextQuestion = await dispatch(
@@ -268,35 +271,35 @@ const QuizDocument = ({
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
-              questionId: nextQuestionId || '',
+              questionId: nextQuestionId || "",
               ...(isFinishQuiz && { attemptId }),
             }),
-          ).unwrap()
-          setStartWorkTime(Date.now())
-          const nextQuestionContent = nextQuestion?.question
-          const name = `${nextQuestionContent?.id}_${nextQuestionContent?.requirements?.length ? nextQuestionContent?.requirements?.[0]?.id : document_id}_essay`
+          ).unwrap();
+          setStartWorkTime(Date.now());
+          const nextQuestionContent = nextQuestion?.question;
+          const name = `${nextQuestionContent?.id}_${nextQuestionContent?.requirements?.length ? nextQuestionContent?.requirements?.[0]?.id : document_id}_essay`;
           const defaultValue =
             questionRef.current?.getValues(name) ||
             nextQuestionContent?.myAnswers?.[0]?.short_answer ||
             nextQuestionContent?.answer_template ||
-            nextQuestionContent?.requirements?.[0]?.answer_template
+            nextQuestionContent?.requirements?.[0]?.answer_template;
 
           if (nextQuestionContent?.response_option === RESPONSE_OPTION.SHEET) {
             await questionRef.current?.onResetSheet(
               nextQuestionContent?.response_option,
-            )
+            );
           } else {
             await questionRef.current?.onResetWord(
               name,
               nextQuestionContent?.response_option as RESPONSE_OPTION,
               defaultValue,
-            )
+            );
           }
         } catch (error) {}
       }
       // // questionRef?.current?.reset()
     }
-  }
+  };
 
   /**
    * Xử lý sự kiện khi người dùng hoàn thành một câu hỏi trong bài quiz.
@@ -311,37 +314,38 @@ const QuizDocument = ({
    * @returns Không có giá trị trả về.
    */
 
-  const [isFinishQuiz, setIsFinishQuiz] = useState<boolean>(isQuizFinished)
-  const [openUnsubmitWarning, setOpenUnsubmitWarning] = useState<boolean>(false)
+  const [isFinishQuiz, setIsFinishQuiz] = useState<boolean>(isQuizFinished);
+  const [openUnsubmitWarning, setOpenUnsubmitWarning] =
+    useState<boolean>(false);
 
   function isValid(value: any) {
-    if (isEmpty(value)) return false
-    return true
+    if (isEmpty(value)) return false;
+    return true;
   }
 
-  const [unsubittedQuestions, setUnsubittedQuestions] = useState<number[]>([])
+  const [unsubittedQuestions, setUnsubittedQuestions] = useState<number[]>([]);
 
   const handleQuizFinish = async () => {
     const quizQuestion = selectQuestions(
       selector,
       activityId,
       tabId,
-      quizId || '',
-    )
-    console.log('quizSoltiuon', quizQuestion)
+      quizId || "",
+    );
+    console.log("quizSoltiuon", quizQuestion);
 
     // Lọc hoặc giữ nguyên câu hỏi (ở đây hàm bạn gọi `isValidatedAnswer` đang return cùng item)
     const availableQuestions = quizQuestion?.map((item: any) => {
       return {
         ...item,
         isValidAnswer: isValidatedAnswer(item.myAnswers, item.qType),
-      }
-    })
+      };
+    });
 
     // Hàm helper: lấy giá trị trả lời hợp lệ từ câu trả lời
     const extractAnswerValue = (ans: any) => {
-      const answerQuestion = ans?.[0]
-      const answerObj = answerQuestion?.answer?.[0]
+      const answerQuestion = ans?.[0];
+      const answerObj = answerQuestion?.answer?.[0];
       return (
         answerObj?.answer_id ||
         answerObj?.answer_text ||
@@ -349,30 +353,30 @@ const QuizDocument = ({
         (answerQuestion?.short_answer !== DEFAULT_EDITOR_VALUE &&
           answerQuestion?.short_answer) ||
         !isNull(answerQuestion?.answer_file)
-      )
-    }
+      );
+    };
 
     // Map qua toàn bộ câu hỏi để check hợp lệ
     const validityList = availableQuestions?.map((item) =>
       isValid(extractAnswerValue(item?.myAnswers)),
-    )
+    );
 
-    const allValid = every(validityList)
+    const allValid = every(validityList);
     if (allValid) {
-      setOpenFinishQuiz(true)
-      setUnsubittedQuestions([])
+      setOpenFinishQuiz(true);
+      setUnsubittedQuestions([]);
     } else {
       const unsubmitted = validityList
         ?.map((v, i) => (!v ? i + 1 : null)) // +1 để đếm từ 1
-        .filter(Boolean) as number[]
-      setUnsubittedQuestions(unsubmitted)
-      setOpenUnsubmitWarning(true)
+        .filter(Boolean) as number[];
+      setUnsubittedQuestions(unsubmitted);
+      setOpenUnsubmitWarning(true);
     }
 
-    const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
+    const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`;
     const defaultValue =
       questionRef.current?.getValues(name) ||
-      activeQuestion?.myAnswers?.[0]?.short_answer
+      activeQuestion?.myAnswers?.[0]?.short_answer;
     if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
       // await questionRef.current?.onResetSheet(activeQuestion?.response_option)
     } else {
@@ -380,15 +384,15 @@ const QuizDocument = ({
         name,
         activeQuestion?.response_option,
         defaultValue,
-      )
+      );
     }
 
     // Lần cuối thì không cần tăng nữa
     // setActiveQuestionIndex(activeQuestionIndex + 1)
     // setIsFinishQuiz(true)
-    handleSaveAnswer()
+    handleSaveAnswer();
     // Load the next question if it hasn't been loaded yet
-    const nextQuestionId = questions[activeQuestionIndex + 1]?.id
+    const nextQuestionId = questions[activeQuestionIndex + 1]?.id;
     if (nextQuestionId) {
       try {
         await dispatch(
@@ -396,43 +400,43 @@ const QuizDocument = ({
             activityId: activityId,
             tabId: tabId,
             quizId: quizId,
-            questionId: nextQuestionId || '',
+            questionId: nextQuestionId || "",
           }),
-        )
-        setStartWorkTime(Date.now())
+        );
+        setStartWorkTime(Date.now());
       } catch (error) {}
     }
-  }
+  };
 
   /**
    * Hủy bỏ xác nhận nộp bài
    */
   const handleCancelConfirmSubmit = () => {
     // Nếu chưa hoàn thành bài quiz, không thực hiện gì cả
-    if (!isFinishQuiz) return
+    if (!isFinishQuiz) return;
     // Trả lại chỉ mục câu hỏi hiện tại về trước 1 để người dùng có thể tiếp tục làm bài
     // setActiveQuestionIndex(activeQuestionIndex - 1)
-    setIsFinishQuiz(false)
-  }
+    setIsFinishQuiz(false);
+  };
 
   const handlePrevQuestion = async () => {
-    const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
+    const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`;
     const defaultValue =
       questionRef.current?.getValues(name) ||
-      activeQuestion?.myAnswers?.[0]?.short_answer
+      activeQuestion?.myAnswers?.[0]?.short_answer;
 
     if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
       await questionRef.current?.onResetWord(
         name,
         activeQuestion?.response_option,
         defaultValue,
-      )
+      );
     }
     if (activeQuestionIndex > 0) {
-      setActiveQuestionIndex(activeQuestionIndex - 1)
-      handleSaveAnswer()
+      setActiveQuestionIndex(activeQuestionIndex - 1);
+      handleSaveAnswer();
       // Load the previous question if it hasn't been loaded yet
-      const prevQuestionId = questions?.[activeQuestionIndex - 1]?.id
+      const prevQuestionId = questions?.[activeQuestionIndex - 1]?.id;
       if (prevQuestionId) {
         try {
           const prevQuestion = await dispatch(
@@ -440,14 +444,14 @@ const QuizDocument = ({
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
-              questionId: prevQuestionId || '',
+              questionId: prevQuestionId || "",
             }),
-          ).unwrap()
-          setStartWorkTime(Date.now())
-          const preQuestionContent = prevQuestion?.question
+          ).unwrap();
+          setStartWorkTime(Date.now());
+          const preQuestionContent = prevQuestion?.question;
 
-          const name = `${preQuestionContent?.id}_${preQuestionContent?.requirements?.length ? preQuestionContent?.requirements?.[0]?.id : document_id}_essay`
-          const defaultValue = preQuestionContent?.myAnswers?.[0]?.short_answer
+          const name = `${preQuestionContent?.id}_${preQuestionContent?.requirements?.length ? preQuestionContent?.requirements?.[0]?.id : document_id}_essay`;
+          const defaultValue = preQuestionContent?.myAnswers?.[0]?.short_answer;
           if (
             preQuestionContent &&
             preQuestionContent?.response_option === RESPONSE_OPTION.WORD
@@ -456,14 +460,14 @@ const QuizDocument = ({
               name,
               preQuestionContent?.response_option,
               defaultValue,
-            )
+            );
           } else if (
             preQuestionContent &&
             preQuestionContent?.response_option === RESPONSE_OPTION.SHEET
           ) {
             questionRef.current?.onResetSheet(
               preQuestionContent?.response_option,
-            )
+            );
           }
         } catch (error) {}
       }
@@ -471,11 +475,11 @@ const QuizDocument = ({
       // questionRef.current?.reset()
     }
     // questionRef.current?.reset()
-  }
+  };
 
   const handleConfirmQuestion = async () => {
-    setLoading(true)
-    setLoadingButton(true)
+    setLoading(true);
+    setLoadingButton(true);
     if (activeQuestion) {
       questionRef?.current?.onSubmit({
         activityId: activityId,
@@ -483,25 +487,25 @@ const QuizDocument = ({
         quizId: quizId,
         time_spent: calculateWorkTime(),
         then: async () => {
-          setLoading(false)
-          await new Promise((resolve) => setTimeout(resolve, 500))
-          setLoadingButton(false)
+          setLoading(false);
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          setLoadingButton(false);
         },
         onFinally: async () => {
-          setLoading(false)
-          await new Promise((resolve) => setTimeout(resolve, 500))
-          setLoadingButton(false)
+          setLoading(false);
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          setLoadingButton(false);
         },
-      })
+      });
     }
-  }
+  };
   /**
    * Function: Xử lý việc lưu đáp án lên store trước khi chuyển sang câu khác
    */
   const handleSaveAnswer = () => {
     const myAnswers = questionRef?.current?.onSaveAnswer(
       activeQuestion,
-    ) as unknown
+    ) as unknown;
     if (!activeQuestion?.confirmed) {
       dispatch(
         saveAnswer({
@@ -512,28 +516,33 @@ const QuizDocument = ({
           question: activeQuestion,
           time_spent: calculateWorkTime(),
         }),
-      )
+      );
     }
-  }
+  };
 
   const handleFinishQuiz = async () => {
-    setOpenFinishQuiz(false)
-    setOpenUnsubmitWarning(false)
-    setLoading(true)
-    const questions = selectQuestions(selector, activityId, tabId, quizId || '')
+    setOpenFinishQuiz(false);
+    setOpenUnsubmitWarning(false);
+    setLoading(true);
+    const questions = selectQuestions(
+      selector,
+      activityId,
+      tabId,
+      quizId || "",
+    );
 
     if (grading_preference) {
       // Mark finished to preserve state across popup
-      setIsFinishQuiz(isFinishQuiz)
+      setIsFinishQuiz(isFinishQuiz);
     }
 
     // Handle: handle việc check xem đáp án đó đãn làm và có đáp án chưa chưa có thì sẽ return null
     const availableQuestions = questions?.map((item: any) => {
       if (isValidatedAnswer(item.myAnswers, item.qType)) {
-        return item
+        return item;
       }
-      return { ...item, myAnswers: null }
-    })
+      return { ...item, myAnswers: null };
+    });
 
     const {
       answers,
@@ -542,18 +551,18 @@ const QuizDocument = ({
       availableQuestions?.reduce(
         (acc: any, obj: any) => {
           if (obj?.myAnswers) {
-            acc.answers = acc?.answers?.concat(...obj.myAnswers)
+            acc.answers = acc?.answers?.concat(...obj.myAnswers);
           }
           if (obj?.quiz_position_mapping) {
             acc.quiz_position_mapping = acc?.quiz_position_mapping?.concat(
               obj?.quiz_position_mapping,
-            )
+            );
           }
 
-          return acc
+          return acc;
         },
         { answers: [] as any[], quiz_position_mapping: [] as any[] },
-      )
+      );
 
     try {
       await dispatch(
@@ -565,35 +574,35 @@ const QuizDocument = ({
       )
         .unwrap()
         .then((e: any) => {
-          const isCompletedCourse = e?.data?.progress
+          const isCompletedCourse = e?.data?.progress;
           if (!!isCompletedCourse?.is_completed) {
             setTimeout(() => {
               dispatch(
-                showPopupCompletedCourse(isCompletedCourse?.content || ''),
-              )
-            }, 2000)
+                showPopupCompletedCourse(isCompletedCourse?.content || ""),
+              );
+            }, 2000);
           }
           // getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
           if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
-            setResultId(e.quizAttemptId)
-            setOpenGradedReport(true)
-            return
+            setResultId(e.quizAttemptId);
+            setOpenGradedReport(true);
+            return;
           } else {
-            const searchParams: string[] = []
+            const searchParams: string[] = [];
             if (is_limited && limit_count && number_of_attempts) {
               searchParams.push(
                 `attempt=${number_of_attempts + 1}/${limit_count}`,
-              )
+              );
             }
             if (tabId) {
-              searchParams.push(`tabId=${tabId}`)
+              searchParams.push(`tabId=${tabId}`);
             }
-            const queryString = searchParams.join('&')
+            const queryString = searchParams.join("&");
             router.replace(
-              `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/quiz-result/${e.quizAttemptId}${
-                queryString ? `?${queryString}` : ''
+              `${isTeacher ? PageLink.TEACHER_MY_COURSE : "/courses"}/quiz/quiz-result/${e.quizAttemptId}${
+                queryString ? `?${queryString}` : ""
               }`,
-            )
+            );
           }
           // dispatch(
           //   removeQuizFinished({
@@ -602,17 +611,17 @@ const QuizDocument = ({
           //     quizId: quizId,
           //   }),
           // )
-          setQuizComponentKey((e) => e + 1)
+          setQuizComponentKey((e) => e + 1);
           // setActiveQuestionIndex(0)
-        })
+        });
     } catch (error: any) {
       if (error?.response?.status === 422) {
-        toast.error('Có lỗi xảy ra khi gửi bình luận nộp bài!')
+        toast.error("Có lỗi xảy ra khi gửi bình luận nộp bài!");
       }
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   // const getTable = async ({
   //   id,
@@ -673,39 +682,39 @@ const QuizDocument = ({
 
   const scrollToQuiz = (quizId: string) => {
     setTimeout(() => {
-      const element = document.getElementById(quizId)
+      const element = document.getElementById(quizId);
       if (element) {
         element.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-          inline: 'nearest',
-        })
+          behavior: "smooth",
+          block: "start",
+          inline: "nearest",
+        });
       }
-    }, 100) // delay 1 chút để React render xong
-  }
+    }, 100); // delay 1 chút để React render xong
+  };
 
-  const startTime = quizSetting?.start_time
-  const endTime = quizSetting?.end_time
+  const startTime = quizSetting?.start_time;
+  const endTime = quizSetting?.end_time;
   const BluredNotification = () => (
     <>
       {!quizSetting?.allow_attempt && !isNull(quizSetting) && (
         <div className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
-          {quizSetting?.reason_for_reject === 'NOT_OPEN_YET' && (
+          {quizSetting?.reason_for_reject === "NOT_OPEN_YET" && (
             <p className="text-center">
-              This Quiz will be opened at{' '}
+              This Quiz will be opened at{" "}
               <span className="font-semi-bold text-primary">
-                {dayjs(startTime).format('DD/MM/YYYY HH:mm')}{' '}
+                {dayjs(startTime).format("DD/MM/YYYY HH:mm")}{" "}
               </span>
-              and closed at{' '}
+              and closed at{" "}
               <span className="font-semi-bold text-primary">
-                {dayjs(endTime).format('DD/MM/YYYY HH:mm')}{' '}
+                {dayjs(endTime).format("DD/MM/YYYY HH:mm")}{" "}
               </span>
             </p>
           )}
-          {quizSetting?.reason_for_reject === 'EXPIRED' && (
+          {quizSetting?.reason_for_reject === "EXPIRED" && (
             <p className="text-center">
               The time for this Quiz has ended, you can no longer submit
-              answers. For further support, please contact SAPP Academy via{' '}
+              answers. For further support, please contact SAPP Academy via{" "}
               <a
                 href={SOCIAL_LINK.FACEBOOK}
                 className="font-semi-bold text-primary"
@@ -713,8 +722,8 @@ const QuizDocument = ({
                 rel="noreferrer"
               >
                 Facebook,
-              </a>{' '}
-              or hotline{' '}
+              </a>{" "}
+              or hotline{" "}
               <span className="font-semi-bold text-primary">19002225</span>.
             </p>
           )}
@@ -760,7 +769,7 @@ const QuizDocument = ({
               <div className="questions editor-wrap mce-content-body" id="">
                 <div className="">
                   <p>
-                    <span className="dropable"></span> 3{' '}
+                    <span className="dropable"></span> 3{" "}
                     <span className="dropable"></span> 4
                   </p>
                 </div>
@@ -789,7 +798,7 @@ const QuizDocument = ({
         </div>
       </div>
     </>
-  )
+  );
 
   /**
    *
@@ -803,21 +812,21 @@ const QuizDocument = ({
           <div className="rounded bg-[#3978391A] px-2 py-[2px] font-medium text-[#166534]">
             Finished Grading
           </div>
-        )
+        );
       case GRADE_STATUS.AWAITING_GRADING:
         return (
           <div className="rounded bg-warning-50 px-2 py-[2px] font-medium text-warning">
             Awaiting Grading
           </div>
-        )
+        );
       default:
         return (
           <div className="whitespace-nowrap rounded bg-warning-50 px-2 py-[2px] text-center text-sm font-normal text-warning">
             Manual Grading
           </div>
-        )
+        );
     }
-  }
+  };
 
   /**
    *
@@ -827,155 +836,155 @@ const QuizDocument = ({
   const getButttonTitle = () => {
     if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
       if (gradeStatus === GRADE_STATUS.AWAITING_GRADING) {
-        return 'Your Answers'
+        return "Your Answers";
       }
       if (gradeStatus === GRADE_STATUS.FINISHED_GRADING) {
-        return 'Result'
+        return "Result";
       }
       if (isLastQuestion) {
-        return 'Finish'
+        return "Finish";
       }
       if (!isLastQuestion && isAFTEREACHQUESTION) {
-        if (activeQuestion?.qType === 'ESSAY') {
-          return 'Submit & Next'
+        if (activeQuestion?.qType === "ESSAY") {
+          return "Submit & Next";
         } else {
-          return 'Submit & View Answer'
+          return "Submit & View Answer";
         }
       }
       if (!isLastQuestion && isAFTERAllQUESTION) {
-        return 'Next Question'
+        return "Next Question";
       }
     }
 
-    if (grading_method === 'AUTO') {
+    if (grading_method === "AUTO") {
       if (isAFTERAllQUESTION && !isLastQuestion) {
-        return 'Next question'
+        return "Next question";
       }
       if (isAFTERAllQUESTION && isLastQuestion) {
-        return 'Finish'
+        return "Finish";
       }
 
       if (isLastQuestion && isQuestionConfirmed && isAFTEREACHQUESTION) {
-        return 'Finish'
+        return "Finish";
       }
       if (
-        activeQuestion?.qType !== 'ESSAY' &&
+        activeQuestion?.qType !== "ESSAY" &&
         isAFTEREACHQUESTION &&
         !isQuestionConfirmed
       ) {
-        return 'Submit & View Answer'
+        return "Submit & View Answer";
       }
       if (
-        activeQuestion?.qType === 'ESSAY' &&
+        activeQuestion?.qType === "ESSAY" &&
         isAFTEREACHQUESTION &&
         !isQuestionConfirmed
       ) {
-        return 'Submit & View Solution'
+        return "Submit & View Solution";
       }
     }
 
-    if (grading_method === 'MANUAL' && !isLastQuestion) {
-      if (activeQuestion?.qType === 'ESSAY') {
-        return 'Submit & Next'
+    if (grading_method === "MANUAL" && !isLastQuestion) {
+      if (activeQuestion?.qType === "ESSAY") {
+        return "Submit & Next";
       }
     }
 
-    return 'Submit & View Answer'
-  }
+    return "Submit & View Answer";
+  };
 
   useEffect(() => {
-    if (!isQuestionConfirmed) return
+    if (!isQuestionConfirmed) return;
 
     if (isQuestionConfirmed && isLastQuestion && isAFTERAllQUESTION) {
-      handleQuizFinish()
+      handleQuizFinish();
     }
-  }, [isQuestionConfirmed])
+  }, [isQuestionConfirmed]);
 
   const handleSubmit = () => {
     if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
       if (gradeStatus === GRADE_STATUS.AWAITING_GRADING) {
         router.replace(
-          `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/your-answers-detail/${resultId}`,
-        )
-        return
+          `${isTeacher ? PageLink.TEACHER_MY_COURSE : "/courses"}/quiz/your-answers-detail/${resultId}`,
+        );
+        return;
       }
       if (gradeStatus === GRADE_STATUS.FINISHED_GRADING) {
-        const searchParams: string[] = []
+        const searchParams: string[] = [];
         if (tabId) {
-          searchParams.push(`tabId=${tabId}`)
+          searchParams.push(`tabId=${tabId}`);
         }
-        const queryString = searchParams.join('&')
+        const queryString = searchParams.join("&");
         router.replace(
-          `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/quiz-result/${resultId}${
-            queryString ? `?${queryString}` : ''
+          `${isTeacher ? PageLink.TEACHER_MY_COURSE : "/courses"}/quiz/quiz-result/${resultId}${
+            queryString ? `?${queryString}` : ""
           }`,
-        )
-        return
+        );
+        return;
       }
       if (isLastQuestion) {
-        setIsFinishQuiz(false)
-        handleQuizFinish()
+        setIsFinishQuiz(false);
+        handleQuizFinish();
       }
 
       if (!isLastQuestion && isAFTEREACHQUESTION) {
-        if (activeQuestion?.qType !== 'ESSAY') {
-          handleConfirmQuestion()
+        if (activeQuestion?.qType !== "ESSAY") {
+          handleConfirmQuestion();
         } else {
-          handleNextQuestion()
+          handleNextQuestion();
         }
       }
 
       if (!isLastQuestion && isAFTERAllQUESTION) {
-        handleNextQuestion()
+        handleNextQuestion();
       }
     }
 
-    if (grading_method === 'AUTO') {
+    if (grading_method === "AUTO") {
       if (isAFTERAllQUESTION && !isLastQuestion) {
-        handleNextQuestion()
+        handleNextQuestion();
       }
 
       if (isAFTERAllQUESTION && isLastQuestion && !isQuestionConfirmed) {
-        handleConfirmQuestion()
+        handleConfirmQuestion();
       }
 
       if (isAFTEREACHQUESTION && !isLastQuestion) {
-        handleConfirmQuestion()
+        handleConfirmQuestion();
       }
 
       if (isLastQuestion && isQuestionConfirmed && isAFTEREACHQUESTION) {
-        handleQuizFinish()
+        handleQuizFinish();
       }
 
       if (
-        activeQuestion?.qType !== 'ESSAY' &&
+        activeQuestion?.qType !== "ESSAY" &&
         isAFTEREACHQUESTION &&
         !isQuestionConfirmed
       ) {
-        handleConfirmQuestion()
+        handleConfirmQuestion();
       }
       if (
-        activeQuestion?.qType === 'ESSAY' &&
+        activeQuestion?.qType === "ESSAY" &&
         isAFTEREACHQUESTION &&
         !isQuestionConfirmed
       ) {
-        handleConfirmQuestion()
+        handleConfirmQuestion();
       }
     }
 
     // if (!loading) handleConfirmQuestion()
-    trackGAEvent('Click Button Confirm Quiz Activity')
-  }
+    trackGAEvent("Click Button Confirm Quiz Activity");
+  };
 
   const handleCalcelModalResult = () => {
-    refreshTab()
-    setOpenGradedReport(false)
-  }
+    refreshTab();
+    setOpenGradedReport(false);
+  };
   const handleClearSelection = (activeQuestion: any) => {
     if (!isQuestionConfirmed) {
-      setValue(`${activeQuestion?.id}_${document_id}_answer`, '')
+      setValue(`${activeQuestion?.id}_${document_id}_answer`, "");
     }
-  }
+  };
 
   const handleRetakeQuestion = () => {
     // Reset toàn bộ trạng thái quiz trong redux (xóa myAnswers, corrects, confirmed, time_spent, ...)
@@ -985,34 +994,34 @@ const QuizDocument = ({
         tabId,
         quizId,
       }),
-    )
+    );
     // Clear form values and force remount to avoid showing previous selections
-    reset({})
-    setQuizComponentKey((e) => e + 1)
-    setActiveQuestionIndex(0)
+    reset({});
+    setQuizComponentKey((e) => e + 1);
+    setActiveQuestionIndex(0);
     // setRunHandleFinishQuiz(1)
-    setOpenFinishQuiz(false)
-    setOpenGradedReport(false)
-    setIsFinishQuiz(false)
-  }
+    setOpenFinishQuiz(false);
+    setOpenGradedReport(false);
+    setIsFinishQuiz(false);
+  };
   const [openResetToTemplateModal, setOpenResetToTemplateModal] =
-    useState(false)
+    useState(false);
   const onOpenResetToTemplateModal = () => {
-    setOpenResetToTemplateModal(true)
-  }
+    setOpenResetToTemplateModal(true);
+  };
   const onCloseResetToTemplateModal = () => {
-    setOpenResetToTemplateModal(false)
-  }
+    setOpenResetToTemplateModal(false);
+  };
   const isShowTemplate =
     activeQuestion?.answer_template ||
     activeQuestion?.requirements?.some(
       (req: IRequirment) => req?.answer_template,
-    )
+    );
 
   return (
     <div
-      className={clsx('rounded-xl bg-gray-100 p-4 md:p-8 lg:rounded-2xl', {
-        'w-fit lg:w-full': activeQuestion?.qType === QUESTION_TYPES.MATCHING,
+      className={clsx("rounded-xl bg-gray-100 p-4 md:p-8 lg:rounded-2xl", {
+        "w-fit lg:w-full": activeQuestion?.qType === QUESTION_TYPES.MATCHING,
       })}
     >
       <SappModalV3
@@ -1020,8 +1029,8 @@ const QuizDocument = ({
         setOpen={setOpenUnsubmitWarning}
         onOk={handleFinishQuiz}
         handleCancel={() => {
-          setIsFinishQuiz(false)
-          setOpenUnsubmitWarning(false)
+          setIsFinishQuiz(false);
+          setOpenUnsubmitWarning(false);
         }}
         okButtonCaption="Confirm Finish"
         cancelButtonCaption="Keep doing"
@@ -1040,9 +1049,9 @@ const QuizDocument = ({
           </span>
           <span className="text-center font-semibold text-primary">
             {unsubittedQuestions?.length > 10
-              ? unsubittedQuestions?.slice(0, 10)?.join(', ')
-              : unsubittedQuestions.join(', ')}{' '}
-            {unsubittedQuestions?.length > 10 ? '...' : ''}
+              ? unsubittedQuestions?.slice(0, 10)?.join(", ")
+              : unsubittedQuestions.join(", ")}{" "}
+            {unsubittedQuestions?.length > 10 ? "..." : ""}
           </span>
           <span className="text-center font-normal text-gray-800">
             After you submit, you can&apos;t edit this assignment.
@@ -1058,7 +1067,7 @@ const QuizDocument = ({
         okButtonCaption="Finish"
         message="Are you sure you are done here and ready to view the report?"
       />
-      <div className={clsx({ 'mb-[10px]': is_graded })}>
+      <div className={clsx({ "mb-[10px]": is_graded })}>
         <div className="mb-8 flex items-center gap-3 rounded-md bg-white px-6 py-2">
           {((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
             isNull(quizSetting)) && (
@@ -1066,7 +1075,7 @@ const QuizDocument = ({
               {is_graded ? (
                 <div className="hidden flex-wrap items-center gap-3 md:flex">
                   <div
-                    className={` ${is_graded || 'invisible'} whitespace-nowrap rounded bg-info-50 px-2 py-[2px] text-center text-sm font-normal text-info`}
+                    className={` ${is_graded || "invisible"} whitespace-nowrap rounded bg-info-50 px-2 py-[2px] text-center text-sm font-normal text-info`}
                   >
                     Graded Activity
                   </div>
@@ -1082,14 +1091,14 @@ const QuizDocument = ({
                   <button
                     disabled={activeQuestionIndex === 0 || loading}
                     className={`cursor-pointer select-none  ${
-                      activeQuestionIndex === 0 || loading ? 'opacity-50' : ''
+                      activeQuestionIndex === 0 || loading ? "opacity-50" : ""
                     }`}
                     onClick={() => {
                       if (loading) {
-                        return
+                        return;
                       }
-                      handlePrevQuestion()
-                      trackGAEvent('Click Prev Question Quiz Activity')
+                      handlePrevQuestion();
+                      trackGAEvent("Click Prev Question Quiz Activity");
                     }}
                   >
                     <span className="text-[#1C274C]">
@@ -1098,21 +1107,21 @@ const QuizDocument = ({
                   </button>
                 )}
                 <div className="text-sm text-bw-13 md:text-base">
-                  Question: {activeQuestionIndex + 1} of{' '}
+                  Question: {activeQuestionIndex + 1} of{" "}
                   {questions?.length || 0}
                 </div>
                 {questions?.length > 1 && (
                   <button
                     disabled={isLastQuestion || loading}
                     className={`cursor-pointer select-none ${
-                      isLastQuestion || loading ? 'opacity-50' : ''
+                      isLastQuestion || loading ? "opacity-50" : ""
                     }`}
                     onClick={() => {
                       if (loading) {
-                        return
+                        return;
                       }
-                      handleNextQuestion()
-                      trackGAEvent('Click Next Question Quiz Activity')
+                      handleNextQuestion();
+                      trackGAEvent("Click Next Question Quiz Activity");
                     }}
                   >
                     <span className="text-[#1C274C]">
@@ -1127,9 +1136,9 @@ const QuizDocument = ({
                 onClick={() => {
                   setFocusOnlyQuiz({
                     open: !focusOnlyQuiz.open,
-                    id: !!focusOnlyQuiz.id ? '' : quizId,
-                  })
-                  scrollToQuiz(`quiz-toggle-${quizId}`)
+                    id: !!focusOnlyQuiz.id ? "" : quizId,
+                  });
+                  scrollToQuiz(`quiz-toggle-${quizId}`);
                 }}
               >
                 {focusOnlyQuiz.open ? (
@@ -1152,7 +1161,7 @@ const QuizDocument = ({
         >
           {/* Question */}
           <div
-            className={`text-black-1 h-full ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
+            className={`text-black-1 h-full ${!!gradeStatus ? "pointer-events-none opacity-100" : ""} `}
             data-aos={ANIMATION.DATA_AOS}
           >
             {!quizSetting?.allow_attempt && !isNull(quizSetting) && (
@@ -1190,11 +1199,11 @@ const QuizDocument = ({
 
           {/* Confirm Button */}
           <div
-            className={clsx('justify-between', {
-              'hidden md:flex': activeQuestion?.qType === QUESTION_TYPES.ESSAY,
+            className={clsx("justify-between", {
+              "hidden md:flex": activeQuestion?.qType === QUESTION_TYPES.ESSAY,
               flex: activeQuestion?.qType !== QUESTION_TYPES.ESSAY,
-              'gap-4': isShowTemplate,
-              'gap-2': !isShowTemplate,
+              "gap-4": isShowTemplate,
+              "gap-2": !isShowTemplate,
             })}
           >
             <div className="flex self-center text-base font-medium text-gray">
@@ -1202,9 +1211,9 @@ const QuizDocument = ({
                 <CircleInfoIcon />
               </div>
               Your Attemp: {number_of_attempts ?? 0}
-              {typeof limit_count === 'number' && limit_count > 0
+              {typeof limit_count === "number" && limit_count > 0
                 ? `/${limit_count}`
-                : ''}
+                : ""}
             </div>
             <div className="flex gap-3">
               {activeQuestion &&
@@ -1244,7 +1253,7 @@ const QuizDocument = ({
                 !isQuestionConfirmed && (
                   <ButtonSecondary
                     className="!px-4 !py-2 !text-sm"
-                    size={'small'}
+                    size={"small"}
                     disabled={
                       ((activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
                         activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE) &&
@@ -1257,8 +1266,8 @@ const QuizDocument = ({
                           ?.length)
                     }
                     onClick={() => {
-                      handleClearSelection(activeQuestion)
-                      trackGAEvent('Click Button Clear Selection Test')
+                      handleClearSelection(activeQuestion);
+                      trackGAEvent("Click Button Clear Selection Test");
                     }}
                     title="Clear Selection"
                   />
@@ -1281,10 +1290,10 @@ const QuizDocument = ({
                     watch(`${activeQuestion?.id}_${document_id}_answer`)
                       .length > 0)
                     ? null
-                    : 'You should select an answer before click'
+                    : "You should select an answer before click"
                 }
-                classNames={{ root: 'max-w-72' }}
-                trigger={'hover'}
+                classNames={{ root: "max-w-72" }}
+                trigger={"hover"}
               >
                 <>
                   {(isQuestionConfirmed ||
@@ -1297,25 +1306,25 @@ const QuizDocument = ({
                         childClass="text-sm"
                         title={
                           isLastQuestion
-                            ? 'Finish'
+                            ? "Finish"
                             : isAFTERAllQUESTION
-                              ? 'Next Question'
-                              : 'Next'
+                              ? "Next Question"
+                              : "Next"
                         }
                         full={false}
-                        size={'small'}
+                        size={"small"}
                         onClick={() => {
                           if (loading) {
-                            return
+                            return;
                           }
                           if (isLastQuestion) {
-                            setIsFinishQuiz(false)
-                            handleQuizFinish()
+                            setIsFinishQuiz(false);
+                            handleQuizFinish();
                             // setRunHandleFinishQuiz((e) => e + 1)
-                            trackGAEvent('Click Button Finish Quiz Activity')
+                            trackGAEvent("Click Button Finish Quiz Activity");
                           } else {
-                            handleNextQuestion()
-                            trackGAEvent('Click Button Next Quiz Activity')
+                            handleNextQuestion();
+                            trackGAEvent("Click Button Next Quiz Activity");
                           }
                         }}
                         color="light-dark"
@@ -1324,16 +1333,16 @@ const QuizDocument = ({
                     )}
                   {(!isQuestionConfirmed ||
                     (number_of_attempts > 0 &&
-                      grading_method === 'MANUAL')) && (
+                      grading_method === "MANUAL")) && (
                     <SappButton
                       className="!rounded-lg !px-4 py-2"
                       childClass="text-sm"
                       title={getButttonTitle()}
                       full={false}
-                      size={'small'}
+                      size={"small"}
                       disabled={loading}
                       onClick={() => {
-                        handleSubmit()
+                        handleSubmit();
                       }}
                       color="light-dark"
                       classNameLoading="!rounded-lg !px-4 py-2"
@@ -1342,18 +1351,18 @@ const QuizDocument = ({
                   )}
                   {/* AFTER_ALL_QUESTIONS: show Retake only when all questions have corrects */}
                   {isQuestionConfirmed &&
-                    grading_method !== 'MANUAL' &&
+                    grading_method !== "MANUAL" &&
                     isFinishQuiz &&
                     hasAttemptsLeft && (
                       <SappButton
                         className="!rounded-lg !px-4 !py-2"
                         childClass="text-sm"
-                        title={'Retake'}
+                        title={"Retake"}
                         full={false}
-                        size={'small'}
+                        size={"small"}
                         disabled={loading}
                         onClick={() => {
-                          handleRetakeQuestion()
+                          handleRetakeQuestion();
                         }}
                       />
                     )}
@@ -1369,22 +1378,22 @@ const QuizDocument = ({
           open={openGradedReport}
           okButtonCaption={
             is_graded && grading_method === GRADING_METHOD.MANUAL
-              ? 'Review Answers'
-              : 'Back'
+              ? "Review Answers"
+              : "Back"
           }
           showCancelButton={
             is_graded && grading_method === GRADING_METHOD.MANUAL
           }
-          cancelButtonCaption={'Back'}
+          cancelButtonCaption={"Back"}
           handleCancel={handleCalcelModalResult}
           onOk={() => {
             if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
               router.replace(
-                `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/your-answers-detail/${resultId}`,
-              )
-              handleCalcelModalResult()
+                `${isTeacher ? PageLink.TEACHER_MY_COURSE : "/courses"}/quiz/your-answers-detail/${resultId}`,
+              );
+              handleCalcelModalResult();
             } else {
-              handleCalcelModalResult()
+              handleCalcelModalResult();
             }
           }}
           isMaskClosable={false}
@@ -1405,7 +1414,7 @@ const QuizDocument = ({
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default QuizDocument
+export default QuizDocument;

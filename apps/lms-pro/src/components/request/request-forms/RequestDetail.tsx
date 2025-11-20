@@ -1,8 +1,8 @@
 import { useLayoutEffect, useMemo, useState } from 'react'
-import SappDrawer from '../../base/SappDrawer'
+import { SappDrawer } from '@lms/ui'
 
-import CollapseBox from '@components/layout/CollapseBox'
-import CollapseItem from '@components/layout/CollapseBox/CollapseItem'
+import { CollapseBox } from '@lms/ui'
+import { CollapseItem } from '@lms/ui'
 import { MyRequestAPI } from '@pages/api/my-request'
 import { capitalizeFirstLetter, formatDateTimeWithTimeZone } from '@lms/utils'
 import dayjs from 'dayjs'
@@ -18,7 +18,6 @@ import {
   requestStatusToBadge,
   requestStatusToTitle,
 } from '@lms/core'
-
 
 import { REQUEST_TYPE } from '@lms/core'
 import { IBusyRequestDetailResponse, IWeeklyNorms } from 'src/type/my-request'

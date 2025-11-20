@@ -1,7 +1,7 @@
 import LayoutTeacher from '@components/layout/Teacher'
 import PersonalScheduleTab from '@components/request/request-tabs/PersonalScheduleTab'
 import TimeOffTab from '@components/request/request-tabs/TimeOffTab'
-import SappTabs from '@components/tabs/SappTabs'
+import SappTabs from '@lms/ui/components/tabs/SappTabs'
 import ScheduleRequestTable from '@components/teacher/my-request/schedule-request'
 import { RequestProvider } from '@contexts/RequestContext'
 import { useRouter } from 'next/router'
