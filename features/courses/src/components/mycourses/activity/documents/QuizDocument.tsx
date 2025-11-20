@@ -1,6 +1,4 @@
 /* eslint-disable no-console */
-import { useEffect, useRef, useState } from "react";
-import { useAppDispatch, useAppSelector } from "src/redux/hook";
 import {
   confirmQuestion,
   courseActivityQuizReducer,
@@ -8,8 +6,9 @@ import {
   removeQuizFinished,
   saveAnswer,
   selectQuestions,
-  submitQuiz,
-} from "src/redux/slice/Course/MyCourse/Activity/ActivityQuiz"; // Import confirmQuestion from quizSlice
+  submitQuiz, useAppDispatch, useAppSelector
+} from "@lms/contexts";
+import { useEffect, useRef, useState } from "react";
 
 import {
   AlertTriagle,
@@ -21,7 +20,13 @@ import {
   MinimumContentIcon,
   RestartQuizIcon,
 } from "@lms/assets";
+import { showPopupCompletedCourse } from "@lms/contexts";
 import {
+  ANIMATION,
+  DEFAULT_EDITOR_VALUE,
+  FINISHED_TEST_TITLE,
+  GRADE_STATUS,
+  GRADING_METHOD,
   ICoursesAPI,
   IFocusQuiz,
   IQuestion,
@@ -29,33 +34,24 @@ import {
   IQuizSetting,
   IRequirment,
   IUploadAPI,
-} from "@lms/core";
-import { ButtonSecondary, SappButton, SappModalV3, Tooltip } from "@lms/ui";
-import { isValidatedAnswer, trackGAEvent } from "@lms/utils";
-
-import {
-  ANIMATION,
-  DEFAULT_EDITOR_VALUE,
-  FINISHED_TEST_TITLE,
-  GRADE_STATUS,
-  GRADING_METHOD,
   QUESTION_TYPES,
   RESPONSE_OPTION,
   SOCIAL_LINK,
 } from "@lms/core";
 import { ConFirmSubmit } from "@lms/feature-test";
+import { ButtonSecondary, SappButton, SappModalV3, Tooltip as SappTooltip } from "@lms/ui";
+import { isValidatedAnswer, trackGAEvent } from "@lms/utils";
+import Tooltip from 'antd';
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { every, isEmpty, isNull, isUndefined } from "lodash";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { showPopupCompletedCourse } from "src/redux/slice/Popup/Result-test";
 import ResetToAnswerTemplateModal from "../../../../../../test/src/components/test/ResetToAnswerTemplateModal";
 import ShowAnswerTemplate from "../../../../../../test/src/components/test/ShowAnswerTemplate";
 import LoadingQuizDocument from "./LoadingQuizDocument";
 import QuizComponent, { QuizComponentRef } from "./QuizComponent";
-import { PageLink } from "src/constants/routes";
 
 type Props = {
   questions: IQuestion[];
@@ -187,6 +183,8 @@ const QuizDocument = ({
         try {
           await dispatch(
             fetchQuestionById({
+              api: questionApi,
+              courseApi: courseApi,
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
@@ -222,6 +220,8 @@ const QuizDocument = ({
       if (!hasCorrects) {
         dispatch(
           confirmQuestion({
+            api: questionApi,
+            courseApi: courseApi,
             activityId,
             tabId,
             quizId,
@@ -275,6 +275,8 @@ const QuizDocument = ({
         try {
           const nextQuestion = await dispatch(
             fetchQuestionById({
+              api: questionApi,
+              courseApi: courseApi,
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
@@ -404,6 +406,8 @@ const QuizDocument = ({
       try {
         await dispatch(
           fetchQuestionById({
+            api: questionApi,
+            courseApi: courseApi,
             activityId: activityId,
             tabId: tabId,
             quizId: quizId,
@@ -448,6 +452,8 @@ const QuizDocument = ({
         try {
           const prevQuestion = await dispatch(
             fetchQuestionById({
+              api: questionApi,
+              courseApi: courseApi,
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
@@ -1231,7 +1237,7 @@ const QuizDocument = ({
                 isShowTemplate &&
                 !activeQuestion?.confirmed && (
                   <div className="flex items-center justify-end gap-3">
-                    <Tooltip title="Reset to Answer Template">
+                    <SappTooltip title="Reset to Answer Template">
                       <button
                         disabled={activeQuestion?.confirmed}
                         onClick={onOpenResetToTemplateModal}
@@ -1239,7 +1245,7 @@ const QuizDocument = ({
                       >
                         <RestartQuizIcon />
                       </button>
-                    </Tooltip>
+                    </SappTooltip>
                     <ShowAnswerTemplate
                       {...{
                         currentTabContent: activeQuestion,
@@ -1282,7 +1288,7 @@ const QuizDocument = ({
                     title="Clear Selection"
                   />
                 )}
-              <Tooltip
+                <Tooltip
                 title={
                   isQuestionConfirmed ||
                   isAFTERAllQUESTION ||

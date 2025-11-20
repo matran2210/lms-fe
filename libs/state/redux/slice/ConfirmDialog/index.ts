@@ -1,2 +1,2 @@
-export { default as ConfirmDialogThunk } from "./ConfirmDialogThunk";
-export { default as ConfirmDialogSlice } from "./ConfirmDialogSlice";
+export { default as confirmDialog } from "./ConfirmDialogThunk";
+export * from "./ConfirmDialogSlice";

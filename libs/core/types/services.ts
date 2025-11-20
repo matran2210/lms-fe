@@ -6,7 +6,7 @@ import {
 import { ChangePasswordReq, SendEmailReq, VerifyOtpReq } from "../../state/redux/types/Login/login";
 import { IResponse } from "./api-response";
 import { IQuestion } from "./course";
-import { IAnswerQuizLastestAttempt } from "./quiz";
+import { IAnswerQuizLastestAttempt, IScoreDetails } from "./quiz";
 
 export interface IAuthManager {
   getToken(): string;
@@ -53,17 +53,28 @@ export interface ICoursesAPI {
     page_size: number,
     page_index?: number,
   ) => Promise<any>;
-  getTopicDescription:(
+  getTopicDescription: (
     id: string | string[] | undefined,
     quiz_id?: string,
     class_user_id?: string,
     cache?: boolean,
   ) => Promise<any>;
+  getQuizAttemptsTable: (
+    id: string,
+    {
+      page_index,
+      page_size,
+      no_group_view,
+    }: { page_index: number; page_size: number; no_group_view?: boolean },
+  ) => Promise<{
+    success: boolean;
+    data: IScoreDetails;
+  }>;
 }
 export interface IActivityAPI {
   createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<any>;
   reactDiscussion: (data: ICreateDiscussionResReact) => Promise<any>;
-  getQuizAttemptsAnswer:(id: string) => Promise<any>;
+  getQuizAttemptsAnswer: (id: string) => Promise<any>;
 }
 
 export interface CourseActivityApi {
