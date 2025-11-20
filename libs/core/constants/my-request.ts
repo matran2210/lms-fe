@@ -39,8 +39,3 @@ export const REQUEST_STATUS = {
     label: "Cancelled",
   },
 };
-
-export enum TYPE_TEACHING_REQUEST {
-  TEACHING_MODE = "TEACHING_MODE",
-  TEACHER_SECTION = "TEACHER_SECTION",
-}

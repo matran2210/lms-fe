@@ -5,7 +5,7 @@ import { IResponse } from 'src/redux/types'
 import { AuthAPI } from 'src/pages/api/profile'
 import { PinnedNotifications } from '@lms/core'
 import { fetchFormData } from '@services/requestV2'
-import { IDeviceItem } from ''@lms/core''
+import { IDeviceItem } from '@lms/core'
 
 const UserApi = {
   /**

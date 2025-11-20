@@ -1,54 +1,53 @@
-import { BackToTop } from '@lms/ui'
-import Help from '@components/Help'
-import { RouteGuard } from '@components/auth/RouteGuard'
-import { AntConfigProvider } from '@lms/ui'
-import { SappConfirmDialogContainer } from '@lms/ui'
 import Metadata from '@components/common/Metadata'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
-// import LearningNotesList from '@components/mycourses/LearningNotesList'
-import LearningNotesList from '@components/courses/note-list/LearningNotesList'
 import PopupCompletedCourse from '@components/mycourses/PopupCompletedCourse'
 import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
 import { SocketContext } from '@contexts/SocketContext'
 import { CourseProvider } from '@contexts/index'
 import '@fortune-sheet/react/dist/index.css'
-import '@styles/globals.scss'
-import '@xyflow/react/dist/style.css'
-import { CERTIFICATE_DETAIL } from '@lms/core'
-import { initializeGA, pageview } from '@lms/utils'
-import Aos from 'aos'
-import 'aos/dist/aos.css'
-import type { AppProps } from 'next/app'
-import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
-import TagManager, { TagManagerArgs } from 'react-gtm-module'
-import { Toaster } from 'react-hot-toast'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { io } from 'socket.io-client'
 import {
   ANIMATION,
+  CERTIFICATE_DETAIL,
   ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
   LOCAL_STORAGE_KEYS,
   SOCKET_EVENTS,
 } from '@lms/core'
+import { RouteGuard } from '@lms/feature-auth'
+import { LearningNotesList } from '@lms/feature-courses'
+import {
+  AntConfigProvider,
+  BackToTop,
+  Help,
+  SappConfirmDialogContainer,
+} from '@lms/ui'
+import { initializeGA, onMessageListener, pageview } from '@lms/utils'
+import { ErrorBoundary } from '@sentry/nextjs'
+import '@styles/globals.scss'
+import '@xyflow/react/dist/style.css'
+import Aos from 'aos'
+import 'aos/dist/aos.css'
+import type { AppProps } from 'next/app'
+import { useRouter } from 'next/router'
+import 'preview-part/dist/index.css'
+import { useEffect, useState } from 'react'
+import TagManager, { TagManagerArgs } from 'react-gtm-module'
+import { Toaster } from 'react-hot-toast'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import 'sapp-common-package/dist/index.css'
+import 'sapp-common-package/dist/sapp-editor.css'
+import 'sapp-notification/dist/index.css'
+import { io } from 'socket.io-client'
 import { useAppDispatch } from 'src/redux/hook'
 import { injectStore } from 'src/redux/services/httpService'
 import {
   getCountUnRead,
   showNotification,
 } from 'src/redux/slice/Notification/Notification'
-import { resetNotesList } from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
-import { onMessageListener } from '@lms/utils'
 import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
-import 'sapp-common-package/dist/sapp-editor.css'
-import 'sapp-common-package/dist/index.css'
-import 'preview-part/dist/index.css'
-import 'sapp-notification/dist/index.css'
-import { ErrorBoundary } from '@sentry/nextjs'
 import ErrorRedirectPage from './error-redirect'
 
 export const excludedPathsHelp = [
@@ -330,9 +329,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                           <Help showHelp={showHelp} />
                         </>
                       )}
-                      <LearningNotesList
-                        onClose={() => dispatch(resetNotesList())}
-                      />
+                      <LearningNotesList />
                       <PopupCompletedCourse />
                     </>
                   </RouteGuard>

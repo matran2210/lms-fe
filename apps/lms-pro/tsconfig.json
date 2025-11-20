@@ -41,7 +41,10 @@
     "../../features/test/src/components/UnSubmitAnswerModal.tsx",
     "../../libs/ui/components/base/popover/Popover.tsx",
     "../../libs/ui/components/not-data/NotData.tsx",
-    "../../libs/ui/components/container/Container.tsx"
+    "../../libs/ui/components/container/Container.tsx",
+    "../../libs/ui/components/help/Help.tsx",
+    "../../libs/ui/components/help/PopupSupportCenter.tsx",
+    "../../libs/core/types/quiz/StatusActionCell.tsx"
   ],
   "exclude": ["node_modules"]
 }

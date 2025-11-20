@@ -1,210 +1,210 @@
 // ConfirmDialog.tsx
-import { SappTable } from '@lms/ui'
-import { SappModal } from '@lms/ui'
-import { Dispatch, FC, SetStateAction } from 'react'
-import ResultTableRows from './ResultTableRows'
-import Icon from '@components/icons'
-import { trackGAEvent } from '@lms/utils'
+import { SappTable } from "@lms/ui";
+import { SappModal } from "@lms/ui";
+import { Dispatch, FC, SetStateAction } from "react";
+import ResultTableRows from "./ResultTableRows";
+// import Icon from '@components/icons' comment monorepo
+import { trackGAEvent } from "@lms/utils";
 
 // define the props for the confirm dialog component
 export type ResultRowsModalProps = {
-  open: boolean
-  setOpen?: Dispatch<SetStateAction<boolean>>
-}
+  open: boolean;
+  setOpen?: Dispatch<SetStateAction<boolean>>;
+};
 
 // define headers
 const headers = [
   {
-    label: 'Question',
+    label: "Question",
     className:
-      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold w-[6%] min-w-[62px]',
+      "text-left pb-3 text-sm text-[#A1A1A1] font-semibold w-[6%] min-w-[62px]",
   },
   {
-    label: 'Type',
+    label: "Type",
     className:
-      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold pl-11 w-[72px] min-w-[165px]',
+      "text-left pb-3 text-sm text-[#A1A1A1] font-semibold pl-11 w-[72px] min-w-[165px]",
   },
   {
-    label: 'Part',
+    label: "Part",
     className:
-      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold w-[36%] min-w-[400px]',
+      "text-left pb-3 text-sm text-[#A1A1A1] font-semibold w-[36%] min-w-[400px]",
   },
   {
-    label: 'Chapter',
+    label: "Chapter",
     className:
-      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold w-[17%] min-w-[190px]',
+      "text-left pb-3 text-sm text-[#A1A1A1] font-semibold w-[17%] min-w-[190px]",
   },
   {
-    label: 'Result',
+    label: "Result",
     className:
-      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold min-w-[132px]',
+      "text-left pb-3 text-sm text-[#A1A1A1] font-semibold min-w-[132px]",
   },
   {
-    label: 'Time Spent',
+    label: "Time Spent",
     className:
-      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold w-[7%] min-w-[78px]',
+      "text-left pb-3 text-sm text-[#A1A1A1] font-semibold w-[7%] min-w-[78px]",
   },
-]
+];
 
 // Config ListResults
 const listResults = [
   {
-    type: 'Matching',
-    partName: 'Audit framework and regulation',
-    chapter: 'Time value',
+    type: "Matching",
+    partName: "Audit framework and regulation",
+    chapter: "Time value",
     correctStatus: true,
-    status: 'Correct',
+    status: "Correct",
     statusPercentage: 29,
-    statusIcon: 'global',
+    statusIcon: "global",
     time: 94,
   },
   {
-    type: 'Multiple Choice',
-    partName: 'Planning and risk management',
-    chapter: 'Index value',
+    type: "Multiple Choice",
+    partName: "Planning and risk management",
+    chapter: "Index value",
     correctStatus: false,
-    status: 'Incorrect',
+    status: "Incorrect",
     statusPercentage: 14,
-    statusIcon: 'global',
+    statusIcon: "global",
     time: 94,
   },
   {
-    type: 'True/False',
-    partName: 'Audit framework and regulation',
-    chapter: 'Time value',
+    type: "True/False",
+    partName: "Audit framework and regulation",
+    chapter: "Time value",
     correctStatus: true,
-    status: 'Correct ',
+    status: "Correct ",
     statusPercentage: 29,
-    statusIcon: 'global',
+    statusIcon: "global",
     time: 94,
   },
   {
-    type: 'Matching',
-    partName: 'Audit framework and regulation',
-    chapter: 'Time value',
+    type: "Matching",
+    partName: "Audit framework and regulation",
+    chapter: "Time value",
     correctStatus: true,
-    status: 'Correct ',
+    status: "Correct ",
     statusPercentage: 29,
-    statusIcon: 'global',
+    statusIcon: "global",
     time: 94,
   },
   {
-    type: 'One Choice',
-    partName: 'Audit framework and regulation',
-    chapter: 'Time value',
+    type: "One Choice",
+    partName: "Audit framework and regulation",
+    chapter: "Time value",
     correctStatus: false,
-    status: 'Incorrect',
+    status: "Incorrect",
     statusPercentage: 14,
-    statusIcon: 'global',
+    statusIcon: "global",
     time: 94,
   },
   {
-    type: 'Fill Up',
-    partName: 'Audit framework and regulation',
-    chapter: 'Time value',
+    type: "Fill Up",
+    partName: "Audit framework and regulation",
+    chapter: "Time value",
     correctStatus: true,
-    status: 'Correct ',
+    status: "Correct ",
     statusPercentage: 29,
-    statusIcon: 'global',
+    statusIcon: "global",
     time: 94,
   },
   {
-    type: 'Drag Drop',
-    partName: 'Audit framework and regulation',
-    chapter: 'Time value',
+    type: "Drag Drop",
+    partName: "Audit framework and regulation",
+    chapter: "Time value",
     correctStatus: true,
-    status: 'Correct ',
+    status: "Correct ",
     statusPercentage: 29,
-    statusIcon: 'global',
+    statusIcon: "global",
     time: 94,
   },
   {
-    type: 'One Choice',
-    partName: 'Audit framework and regulation',
-    chapter: 'Time value',
+    type: "One Choice",
+    partName: "Audit framework and regulation",
+    chapter: "Time value",
     correctStatus: false,
-    status: 'Incorrect',
+    status: "Incorrect",
     statusPercentage: 14,
-    statusIcon: 'global',
+    statusIcon: "global",
     time: 94,
   },
   {
-    type: 'Multiple Choice',
-    partName: 'Audit framework and regulation',
-    chapter: 'Time value',
+    type: "Multiple Choice",
+    partName: "Audit framework and regulation",
+    chapter: "Time value",
     correctStatus: true,
-    status: 'Correct ',
+    status: "Correct ",
     statusPercentage: 29,
-    statusIcon: 'global',
+    statusIcon: "global",
     time: 94,
   },
   {
-    type: 'Fill Up',
-    partName: 'Audit framework and regulation',
-    chapter: 'Time value',
+    type: "Fill Up",
+    partName: "Audit framework and regulation",
+    chapter: "Time value",
     correctStatus: true,
-    status: 'Correct ',
+    status: "Correct ",
     statusPercentage: 29,
-    statusIcon: 'global',
+    statusIcon: "global",
     time: 94,
   },
   {
-    type: 'One Choice',
-    partName: 'Audit framework and regulation',
-    chapter: 'Time value',
+    type: "One Choice",
+    partName: "Audit framework and regulation",
+    chapter: "Time value",
     correctStatus: true,
-    status: 'Incorrect',
+    status: "Incorrect",
     statusPercentage: 14,
-    statusIcon: 'global',
+    statusIcon: "global",
     time: 94,
   },
   {
-    type: 'One Choice',
-    partName: 'Audit framework and regulation',
-    chapter: 'Time value',
+    type: "One Choice",
+    partName: "Audit framework and regulation",
+    chapter: "Time value",
     correctStatus: true,
-    status: 'Incorrect',
+    status: "Incorrect",
     statusPercentage: 14,
-    statusIcon: 'global',
+    statusIcon: "global",
     time: 94,
   },
   {
-    type: 'Constructed',
-    partName: 'Audit framework and regulation',
-    chapter: 'Time value',
+    type: "Constructed",
+    partName: "Audit framework and regulation",
+    chapter: "Time value",
     correctStatus: true,
-    status: 'Submitted',
+    status: "Submitted",
     statusPercentage: 0,
-    statusIcon: 'global',
+    statusIcon: "global",
     time: 94,
   },
   {
-    type: 'Constructed',
-    partName: 'Audit framework and regulation',
-    chapter: 'Time value',
+    type: "Constructed",
+    partName: "Audit framework and regulation",
+    chapter: "Time value",
     correctStatus: true,
-    status: 'Submitted',
+    status: "Submitted",
     statusPercentage: 0,
-    statusIcon: 'global',
+    statusIcon: "global",
     time: 0,
   },
   {
-    type: 'Constructed',
-    partName: 'Audit framework and regulation',
-    chapter: 'Time value',
+    type: "Constructed",
+    partName: "Audit framework and regulation",
+    chapter: "Time value",
     correctStatus: false,
-    status: 'Unfinished',
+    status: "Unfinished",
     statusPercentage: 0,
-    statusIcon: 'global',
+    statusIcon: "global",
     time: 94,
   },
-]
+];
 
 // create the confirm dialog component
 const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
   const handleOnClick = () => {
-    setOpen && setOpen(false)
-  }
+    setOpen && setOpen(false);
+  };
 
   return (
     <>
@@ -226,11 +226,11 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
         <div
           className="absolute right-4 top-2.5 cursor-pointer p-2"
           onClick={() => {
-            handleOnClick()
-            trackGAEvent('Click Icon Close Your Score Details')
+            handleOnClick();
+            trackGAEvent("Click Icon Close Your Score Details");
           }}
         >
-          <Icon type="cross" />
+          {/* <Icon type="cross" />  */}
         </div>
         <SappTable
           headers={headers}
@@ -247,7 +247,7 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
         </SappTable>
       </SappModal>
     </>
-  )
-}
+  );
+};
 
-export default ResultRowsModal
+export default ResultRowsModal;

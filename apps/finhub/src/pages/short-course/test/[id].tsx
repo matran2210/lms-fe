@@ -50,7 +50,7 @@ import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
 import { HighlightableHTML } from '@lms/ui'
 import Icon from '@components/icons'
 import Layout from '@components/layout'
-import ButtonContent from '@components/mycourses/test/ButtonContent'
+import { ButtonContent } from '@lms/feature-test'
 import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import DragDropQuestion, {
   SlotValue,

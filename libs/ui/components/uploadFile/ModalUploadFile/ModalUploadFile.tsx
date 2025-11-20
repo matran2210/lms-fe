@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { UploadAPI } from "src/pages/api/upload";
 import UploadFileHandle from "./UploadFileHandle";
 import {
-  IResource,
+  IResourceFile,
   UPLOAD_TYPE,
 } from "@lms/core/types/file/UploadFileInterface";
 
@@ -21,7 +21,7 @@ interface IModalUploadProps {
   fileChecked?: any;
   onlyTab?: "UPLOAD_FILE" | "RESOURCES";
   title?: string;
-  getDefaultChecked?: (resources: IResource[]) => IResource[];
+  getDefaultChecked?: (resources: IResourceFile[]) => IResourceFile[];
   customValidate?: (
     file: UploadFile<any>,
     fileList: UploadFile<any>[],

@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
-import Icon from '@components/icons'
-import { formatTimeMinToHhMm } from '@lms/utils'
+import React, { useState } from "react";
+// import Icon from '@components/icons' comment monorepo
+import { formatTimeMinToHhMm } from "@lms/utils";
 
 interface ResultRowsProps {
-  type: string
-  partName: string
-  chapter: string
-  correctStatus: boolean
-  status: string
-  statusPercentage: number
-  statusIcon: string
-  time?: number
+  type: string;
+  partName: string;
+  chapter: string;
+  correctStatus: boolean;
+  status: string;
+  statusPercentage: number;
+  statusIcon: string;
+  time?: number;
 }
 
 const ResultRow = ({
@@ -23,7 +23,7 @@ const ResultRow = ({
   statusIcon,
   time,
 }: ResultRowsProps) => {
-  const formattedTime = formatTimeMinToHhMm(time || 0)
+  const formattedTime = formatTimeMinToHhMm(time || 0);
 
   return (
     <>
@@ -47,7 +47,7 @@ const ResultRow = ({
           </span>
           {statusPercentage != 0 && (
             <span className="flex items-center gap-1 text-base text-[#A1A1A1]">
-              <Icon type={statusIcon} />
+              {/* <Icon type={statusIcon} /> */}
               {statusPercentage}%
             </span>
           )}
@@ -57,7 +57,7 @@ const ResultRow = ({
         {formattedTime}
       </td>
     </>
-  )
-}
+  );
+};
 
-export default ResultRow
+export default ResultRow;
