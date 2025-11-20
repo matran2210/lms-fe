@@ -1,15 +1,14 @@
-import Layout from "@components/layout";
-import FullScreenLayout from "@components/layout/FullScreenLayout";
 import { CloseModalIcon } from "@lms/assets";
-import { ActivityInfo, LAYOUT } from "@lms/core";
+import { ActivityInfo, ICoursesAPI, LAYOUT } from "@lms/core";
+import { FullScreenLayout, Layout } from "@lms/ui";
 import { useRouter } from "next/router";
 import { QuizResultComponent } from "quiz-result-package";
 import { IQuestionResultResponse } from "quiz-result-package/dist/type";
 import { useEffect, useState } from "react";
-import { PageLink } from "src/constants/routes";
-import { CoursesAPI } from "src/pages/api/courses";
 
-const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
+const QuizResults = ({ isTeacher = false, api, pageLink }: { isTeacher?: boolean; api: ICoursesAPI; pageLink: {
+  [key: string]: string
+} }) => {
   const router = useRouter();
   const [activityInfo, setActivitiInfo] = useState<ActivityInfo | null>(null);
   const { id } = router.query;
@@ -30,7 +29,7 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
   }) => {
     setLoading(true);
     try {
-      const response = await CoursesAPI.getQuizAttemptsTable(
+      const response = await api.getQuizAttemptsTable(
         id || modalResult?.id || "",
         {
           page_index,
@@ -80,7 +79,7 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
             if (activityInfo !== null) {
               if (router.query?.tabId) {
                 router.push(
-                  `${isTeacher ? PageLink.TEACHER_MY_COURSE : "/courses"}/${activityInfo?.class_id}/activity/${activityInfo?.activity_id}?tabId=${router.query?.tabId}`,
+                  `${isTeacher ? pageLink.TEACHER_MY_COURSE : "/courses"}/${activityInfo?.class_id}/activity/${activityInfo?.activity_id}?tabId=${router.query?.tabId}`,
                 );
               } else {
                 router.push(
@@ -98,6 +97,7 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
           title="Quiz Result"
           showSidebar={false}
           className="bg-gray-4"
+          api={api}
         >
           <div className="m-auto">
             {modalResult?.questions?.data?.length > 0 && (
@@ -106,7 +106,7 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
                 getTable={getTable}
                 onShowDetail={(e) => {
                   router.push(
-                    `${isTeacher ? PageLink.TEACHER_EXPLANATION : "/explanation"}/${e.id}?title=Quiz Result`,
+                    `${isTeacher ? pageLink.TEACHER_EXPLANATION : "/explanation"}/${e.id}?title=Quiz Result`,
                   );
                 }}
                 loading={loading}
