@@ -1,0 +1,33 @@
+# Template chung cho deploy staging
+.deploy_staging_template:
+  stage: deploy
+  image: node:20
+
+  script:
+    - export VERCEL_TOKEN=$VERCEL_TOKEN
+    - export VERCEL_ORG_ID=$VERCEL_ORG_ID
+
+  environment: staging
+  tags:
+    - shell-docker
+  resource_group: lms-fe
+
+# Job deploy cho LMS
+deploy_staging_lms:
+  extends: .deploy_staging_template
+  only: 
+    - feature/sapp-sprint-39/sapp-17790
+  script:
+    - npm install -g vercel
+    - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_V2
+    - vercel deploy --prod --token=$VERCEL_TOKEN
+
+# Job deploy cho Finhub
+deploy_staging_finhub:
+  extends: .deploy_staging_template
+  only: 
+    - feature/sapp-sprint-39/sapp-17790
+  script:
+    - npm install -g vercel
+    - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_FINHUB
+    - vercel deploy --prod --token=$VERCEL_TOKEN
