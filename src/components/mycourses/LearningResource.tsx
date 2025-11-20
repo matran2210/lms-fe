@@ -285,7 +285,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         handleCancel={onClose}
         title={title}
         isShowBtnClose
-        closable
+        closable={!isOpenFilter}
         isShowBtnBack={isOpenFilter}
         handleBack={handleBack}
         isShowFooter={isOpenFilter}

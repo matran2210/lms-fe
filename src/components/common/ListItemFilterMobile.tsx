@@ -131,7 +131,8 @@ const ListItemFilterMobile = ({
         const isSelectedValue =
           selected.section === item.id ||
           selected.subsection === item.id ||
-          selected.activity === item.id
+          selected.activity === item.id || 
+          selected.unit === item.id
 
         const isSelected =
           item.name === DEFAULT_SELECT_SECTION_NAME

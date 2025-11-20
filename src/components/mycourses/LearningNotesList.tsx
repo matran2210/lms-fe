@@ -379,7 +379,7 @@ const LearningNotesList = () => {
       btnSubmitTile="Confirm"
       placement={!isAlwaysShowSidebar ? 'bottom' : 'right'}
       titleClassName={isOpenFilter ? 'w-full pr-8 text-center' : ''}
-      closable
+      closable={!isOpenFilter}
     >
       <FormProvider {...methods}>
         {!isOpenFilter ? (

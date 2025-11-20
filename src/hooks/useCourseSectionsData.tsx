@@ -45,7 +45,7 @@ export const useCourseSectionsData = ({
   } = useInitialSections()
   const subsectionData = useSectionData(selected.section, 'CHAPTER')
   const unitData = useSectionData(selected.subsection, 'UNIT')
-  const activityData = useSectionData(selected.subsection, 'ACTIVITY')
+  const activityData = useSectionData(selected.unit, 'ACTIVITY')
 
   // Fetch sections ban đầu
   useEffect(() => {
@@ -68,10 +68,10 @@ export const useCourseSectionsData = ({
   }, [selected.subsection])
 
   useEffect(() => {
-    if (selected.subsection && isEmpty(listActivity)) {
+    if (selected.unit && isEmpty(listActivity)) {
       activityData.fetchSections(DEFAULT_PAGE_SIZE)
     }
-  }, [selected.subsection])
+  }, [selected.unit])
 
   // Cập nhật dữ liệu khi fetch xong
   useEffect(() => {
