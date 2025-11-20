@@ -1,6 +1,6 @@
 import { RemainingTimeIcon } from "@lms/assets";
 import { SappModalV3 } from "@lms/ui";
-import { TimeOutIcon } from "@components/icons";
+// import { TimeOutIcon } from "@components/icons"; comment monorepo
 import { formatTime } from "@lms/utils";
 import clsx from "clsx";
 import { Dayjs } from "dayjs";
@@ -40,7 +40,7 @@ const TestPopup = ({
       isClosable={isClosable}
       onOk={() => {}}
       handleCancel={() => setOpen(false)}
-      icon={isTimeOut ? <TimeOutIcon /> : undefined}
+      // icon={isTimeOut ? <TimeOutIcon /> : undefined}
       header={title}
       showFooter={false}
       customFooter={customFooter}

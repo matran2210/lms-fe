@@ -1,14 +1,13 @@
+import Layout from "@components/layout";
 import FullScreenLayout from "@components/layout/FullScreenLayout";
-import { LAYOUT } from "@lms/core";
+import { CloseModalIcon } from "@lms/assets";
+import { ActivityInfo, LAYOUT } from "@lms/core";
 import { useRouter } from "next/router";
 import { QuizResultComponent } from "quiz-result-package";
 import { IQuestionResultResponse } from "quiz-result-package/dist/type";
-import { CoursesAPI } from "src/pages/api/courses";
-import { ActivityInfo } from "@lms/core";
-import Layout from "@components/layout";
-import { CloseModalIcon } from "@lms/assets";
 import { useEffect, useState } from "react";
 import { PageLink } from "src/constants/routes";
+import { CoursesAPI } from "src/pages/api/courses";
 
 const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
   const router = useRouter();
