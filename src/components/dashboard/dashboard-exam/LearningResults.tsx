@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import EChart from '@components/base/chart/Chart'
-import { DashboardAPI } from '@pages/api/dashboard'
 import dayjs from 'dayjs'
-import { useRouter } from 'next/router'
 import NoData from 'src/common/NoData'
 import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
 import { COURSE_TYPE, DATE_FORMAT } from 'src/constants'
@@ -21,12 +19,8 @@ interface CourseInfo {
   category: string
 }
 
-interface MockTestResponse {
-  success: boolean
-  data: {
-    reports: ILearningResult[]
-    mock_tests: Array<{ id: string }>
-  }
+interface LearningResultsProps {
+  mockTestResultsData: IMockTestResult | null
 }
 
 interface TooltipParams {
@@ -34,13 +28,8 @@ interface TooltipParams {
   name: string
 }
 
-const LearningResults = () => {
-  const router = useRouter()
-  const [results, setResults] = useState<ILearningResult[] | IMockTestResult[]>(
-    [],
-  )
-
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+const LearningResults = ({ mockTestResultsData }: LearningResultsProps) => {
+  const [results, setResults] = useState<ILearningResult[]>([])
   const [hasLearning, setHasLearning] = useState<boolean>(false)
   const [mockTestId, setMockTestId] = useState<string>('')
   const courseInfo = useMemo(
@@ -57,28 +46,17 @@ const LearningResults = () => {
   const { isMobile, isTablet } = useReponsive()
 
   useEffect(() => {
-    const getLearningResults = async (id: string) => {
-      try {
-        const res = (await DashboardAPI.getMockTestResults(
-          id,
-        )) as MockTestResponse
-        if (res && res.success) {
-          const data = res.data.reports
-          setResults(data)
-          setHasLearning(data.some((e: ILearningResult) => e.score))
-          if (!isNormal && res.data.mock_tests?.length === 1) {
-            setMockTestId(res.data.mock_tests[0].id)
-          }
-        }
-      } catch (error) {
-        setResults([])
-      } finally {
-        setIsLoading(false)
+    if (mockTestResultsData) {
+      const data = mockTestResultsData.reports || []
+      setResults(data)
+      setHasLearning(data.some((e: ILearningResult) => e.score))
+      if (!isNormal && mockTestResultsData.mock_tests?.length === 1) {
+        setMockTestId(mockTestResultsData.mock_tests[0].id)
       }
+    } else {
+      setResults([])
     }
-    if (router?.query?.courseId)
-      getLearningResults(router.query.courseId as string)
-  }, [router?.query?.courseId, isNormal])
+  }, [mockTestResultsData, isNormal])
 
   const option = useMemo(() => {
     if (!results || results.length === 0) return null
@@ -258,7 +236,7 @@ const LearningResults = () => {
       <div className="w-full xl:w-[515px]">
         <LearningMockTest results={results as ILearningResult[]} />
       </div>
-      {!isLoading && !option && (
+      {mockTestResultsData && !option && (
         <div className="flex grow items-center justify-center">
           <NoData />
         </div>
