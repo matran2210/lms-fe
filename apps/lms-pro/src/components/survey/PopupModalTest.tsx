@@ -1,10 +1,10 @@
 import { IconBuildingModify } from '@assets/icons'
+import { ECourseProgram } from '@lms/core'
 import { SappModalV3 } from '@lms/ui'
+import { onLinkSocial } from '@lms/utils'
 import { CoursesAPI } from '@pages/api/courses'
-import { onLinkSocial } from '@utils/index'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { ECourseProgram } from '@lms/core'
 
 interface SurveyModalProps {
   class_code?: string

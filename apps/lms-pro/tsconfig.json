@@ -37,7 +37,11 @@
     "src/components/base/radiobutton/HookFormRadioGroup.tsx_",
     "src/components/base/radiobutton/HookFormRadioTextFieldGroup.tsx_",
     "../../features/test/src/components/PopupSelectRetakeOrContinueAttempt.tsx",
-    "../../libs/utils/helpers/timer.ts"
+    "../../libs/utils/helpers/timer.ts",
+    "../../features/test/src/components/UnSubmitAnswerModal.tsx",
+    "../../libs/ui/components/base/popover/Popover.tsx",
+    "../../libs/ui/components/not-data/NotData.tsx",
+    "../../libs/ui/components/container/Container.tsx"
   ],
   "exclude": ["node_modules"]
 }

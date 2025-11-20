@@ -19,7 +19,7 @@ import MatchingQuestion from '@lms/ui/components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
-import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
+import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import useMousePosition from '@utils/hookMouseMove'
 import { runHighlight } from '@utils/index'
 import clsx from 'clsx'
@@ -29,7 +29,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
+import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
 import {
   ESSAY_TYPE,
   EXHIBIT_TEXT_REPLACE,

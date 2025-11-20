@@ -18,7 +18,7 @@ import MatchQuizComponent from '@lms/ui/components/questionType/MatchQuiz/MatchQ
 import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
-import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
+import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight } from '@utils/index'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
@@ -27,7 +27,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
+import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
 import {
   ESSAY_TYPE,
   EXHIBIT_TEXT_REPLACE,
@@ -56,8 +56,8 @@ import DragDropQuestion, {
 import { ButtonPrimaryV2 } from '@lms/ui'
 import { Requirement } from '@lms/core'
 import { defaultSheetData } from '@lms/core'
-import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
-import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
+import ShowAnswerTemplate from '@lms/feature-test/src/components/test/ShowAnswerTemplate'
+import ResetToAnswerTemplateModal from '@lms/feature-test/src/components/test/ResetToAnswerTemplateModal'
 import CaseStudyWrapper from '@components/case-study/layout/CaseStudyWrapper'
 import Popover from '@components/Popover'
 import { NotesOutline } from '@components/icons/Notes'

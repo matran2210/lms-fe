@@ -10,7 +10,7 @@ import DragDropQuestion, {
 } from "@components/questionType/NewDragNDropQuestion/NewDragNDrop";
 import OneChoiceQuestion from "@components/questionType/OneChoiceQuestion";
 import SelectWord from "@components/questionType/SelectQuestion";
-import ModalUploadFile from "@components/uploadFile/ModalUploadFile/ModalUploadFile";
+import ModalUploadFile from "@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile";
 import {
   CircleCheckIcon,
   CircleInfoIcon,

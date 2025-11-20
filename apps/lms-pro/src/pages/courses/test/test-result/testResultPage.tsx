@@ -1,4 +1,4 @@
-import Recommendation from '@components/test/Recommendation'
+import Recommendation from '@lms/feature-test/src/components/test/Recommendation'
 import { F_LOW_CODES } from '@lms/core'
 import { roundNumber } from '@utils/helpers'
 import { useMemo, useRef } from 'react'
