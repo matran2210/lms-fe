@@ -1,7 +1,7 @@
 import { trackGAEvent, truncateString} from '@lms/utils'
 import clsx from 'clsx'
 import Link from 'next/link'
-import Tooltip from 'src/common/Tooltip'
+import { Tooltip } from "@lms/ui";
 
 const BreadcrumbFilter = ({
   name,

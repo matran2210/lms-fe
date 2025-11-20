@@ -2,7 +2,7 @@
 import { IconClose } from '@assets/icons'
 import { Popover } from 'antd'
 import { useEffect, useRef, useState } from 'react'
-import Tooltip from 'src/common/Tooltip'
+import { Tooltip } from "@lms/ui";
 import PopupSupportCenter from './PopupSupportCenter'
 import { useRouter } from 'next/router'
 import { excludedPathsHelp } from '@pages/_app'

@@ -14,7 +14,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ILearningResult, IMockTestResult } from '@lms/core'
 import { COURSE_TYPE, DATE_FORMAT } from '@lms/core'
 import { IconEssentional } from '@assets/icons/Dashboard'
-import Tooltip from 'src/common/Tooltip'
+import { Tooltip } from "@lms/ui";
 import useReponsive from 'src/hooks/useReponsive'
 
 const LearningResultTest = () => {

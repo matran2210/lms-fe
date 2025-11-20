@@ -14,7 +14,7 @@ import {
 import { BookInClassIcon, ClockInClassIcon } from 'src/assets/icons/index'
 import { IMyClass } from '@lms/core'
 import { CLASS_TEACHER_STATUS, FLEXIBLE } from '@lms/core'
-import Tooltip from 'src/common/Tooltip'
+import { Tooltip } from "@lms/ui";
 import { isEmpty } from 'lodash'
 
 const statusMap = {

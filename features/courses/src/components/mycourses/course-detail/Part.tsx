@@ -7,7 +7,7 @@ import { getUserPrefix } from '@utils/helpers'
 import { buildQueryString, formatTime, handleReplaceText } from '@lms/utils'
 import { round } from 'lodash'
 import { useRouter } from 'next/router'
-import Tooltip from 'src/common/Tooltip'
+import { Tooltip } from "@lms/ui";
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { CLASS_USER_STATUS, IMyCourseDetail } from '@lms/core'
 

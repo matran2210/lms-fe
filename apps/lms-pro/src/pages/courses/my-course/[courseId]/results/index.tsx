@@ -103,7 +103,7 @@ const Results = () => {
           )
         }
       />
-      <ResultsTable openFilter={openFilter} setOpenFilter={setOpenFilter} />
+      <ResultsTable openFilter={openFilter} setOpenFilter={setOpenFilter} api={CoursesAPI} />
     </Layout>
   )
 }

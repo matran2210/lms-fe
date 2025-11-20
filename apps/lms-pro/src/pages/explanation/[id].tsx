@@ -14,7 +14,7 @@ import { QUESTION_TYPES } from '@lms/core'
 import { IAtempt } from '@lms/core'
 import { CoursesAPI } from '../api/courses'
 import { CloseIconV2 } from '@components/icons'
-import Tooltip from 'src/common/Tooltip'
+import { Tooltip } from "@lms/ui";
 
 const Explanation = () => {
   const router = useRouter()

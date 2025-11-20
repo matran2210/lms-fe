@@ -1,7 +1,7 @@
 import { truncateString } from '@lms/utils'
 import clsx from 'clsx'
 import React from 'react'
-import Tooltip from 'src/common/Tooltip'
+import { Tooltip } from "@lms/ui";
 import wavingHandAnimationIcon from 'public/animations/WavingHand.json'
 import Lottie from 'lottie-react'
 interface IProps {

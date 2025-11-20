@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from '@lms/core'
 import TableQuestions from 'src/pages/courses/quiz/your-answers-detail/TableQuestions'
-import SappLoading from 'src/common/SappLoading'
+import {SappLoading } from '@lms/ui'
 import { PageLink } from '@lms/core'
 import { SappBreadCrumbs } from '@lms/ui'
 

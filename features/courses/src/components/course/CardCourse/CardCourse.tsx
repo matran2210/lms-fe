@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
 import { EAttemptStatus } from "@lms/core";
 import Badge from "./CardCourseBadge";
-import Tooltip from "src/common/Tooltip";
+import { Tooltip } from "@lms/ui";;
 import { truncateString } from "@lms/utils";
 import clsx from "clsx";
 import { ANIMATION } from "@lms/core";

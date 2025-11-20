@@ -15,7 +15,7 @@ import {
   useState,
 } from 'react'
 import { FieldValues, UseFormWatch } from 'react-hook-form'
-import { SappTitleSolution } from 'src/common/SappTitleSolution'
+import { SappTitleSolution } from '@lms/ui'
 import { MY_COURSES } from '@lms/core'
 
 interface IProps {

@@ -20,27 +20,28 @@ import {
   backTypeMap,
   getTypeName,
   ISection,
+  ICoursesAPI,
 } from '@lms/core'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import { isEmpty } from 'lodash'
-import NoData from 'src/common/NoData'
 import { UploadAPI } from 'src/pages/api/upload'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { SortBy, ListFilterMobile, ListItemFilterMobile} from '@lms/ui'
-import Tooltip from 'src/common/Tooltip'
+import { SortBy, NoData, Tooltip} from '@lms/ui'
 import { PageLink } from '@lms/core'
 import FilterCourseSection from './FilterCourseSection'
+import { ListFilterMobile, ListItemFilterMobile } from '../course'
 interface IProps {
   open: boolean
   setOpenResource: Dispatch<SetStateAction<boolean>>
+  api: ICoursesAPI
 }
 
 const DEFAULT_PAGE_INDEX = 1
 const DEFAULT_PAGESIZE = 20
 
-const LearningResource = ({ open, setOpenResource }: IProps) => {
+const LearningResource = ({ open, setOpenResource, api }: IProps) => {
   const { isMobileView, isTabletView, isAlwaysShowSidebar } =
     useTailwindBreakpoint()
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -358,6 +359,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
               setListSubsection={setListSubsection}
               setListUnit={setListUnit}
               setListActivity={setListActivity}
+              api={api}
             />
           ) : (
             <ListItemFilterMobile
@@ -371,6 +373,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
               setListSubsection={setListSubsection}
               setListUnit={setListUnit}
               setListActivity={setListActivity}
+              api={api}
             />
           )}
         </FormProvider>

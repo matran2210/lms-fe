@@ -26,7 +26,7 @@ import {
 import { IAnswer, IQuizAttemptChartType } from '@lms/core'
 import { CoursesAPI } from '../../../api/courses/index'
 import { CloseIcon } from '@assets/icons'
-import Tooltip from 'src/common/Tooltip'
+import { Tooltip } from "@lms/ui";
 import ListScoreCollapse from '@components/quiz/your-answer-detail/ListScoreCollapse'
 
 const commonHeaderClass = 'text-left p-0 text-base font-medium text-gray'

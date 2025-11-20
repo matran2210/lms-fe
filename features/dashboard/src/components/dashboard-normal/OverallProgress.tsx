@@ -8,7 +8,7 @@ import { DashboardAPI } from '@pages/api/dashboard'
 import { EChartsOption } from 'echarts'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import Tooltip from 'src/common/Tooltip'
+import { Tooltip } from "@lms/ui";
 import useReponsive from 'src/hooks/useReponsive'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { IActivities, IActivityProgress } from '../CourseDashboard'

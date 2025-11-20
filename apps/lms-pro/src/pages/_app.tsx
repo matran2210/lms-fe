@@ -1,61 +1,55 @@
-import BackToTop from '@lms/ui/components/BackToTop'
 import Help from '@components/Help'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
-import { RouteGuard } from '@lms/feature-auth'
-import { AntConfigProvider } from '@lms/ui'
-import { SappConfirmDialogContainer } from '@lms/ui'
+import MKTInApp from '@components/MKTInApp'
 import Metadata from '@components/common/Metadata'
+import { CourseNoteProvider } from '@contexts/CourseNoteContext'
 import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
+import { PreviousSectionRouteProvider } from '@contexts/PreviousSectionRouteContext'
 import { SocketContext } from '@contexts/SocketContext'
 import { CourseProvider } from '@contexts/index'
 import '@fortune-sheet/react/dist/index.css'
+import {
+  ANIMATION, CERTIFICATE_DETAIL, ENTRANCE_TEST_RESULT,
+  ENTRANCE_TEST_TABLE_RESULT,
+  LOCAL_STORAGE_KEYS,
+  SOCKET_EVENTS
+} from '@lms/core'
+import { RouteGuard } from '@lms/feature-auth'
+import { LearningNotesList, PopupCompletedCourse } from '@lms/feature-courses'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { AntConfigProvider, BackToTop, SappConfirmDialogContainer } from '@lms/ui'
+import { initializeGA, onMessageListener, pageview } from '@lms/utils'
+import { ErrorBoundary } from '@sentry/nextjs'
 import '@styles/globals.scss'
-import { CERTIFICATE_DETAIL } from '@lms/core'
-import {pageview, initializeGA} from '@lms/utils'
 import '@xyflow/react/dist/style.css'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
 import 'entrance-test-result-package/dist/index.css'
-import 'quiz-result-package/dist/index.css'
 import type { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
+import 'preview-part/dist/index.css'
+import 'quiz-result-package/dist/index.css'
 import { useEffect, useState } from 'react'
 import TagManager, { TagManagerArgs } from 'react-gtm-module'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import 'sapp-common-package/dist/index.css'
+import 'sapp-common-package/dist/sapp-editor.css'
+import 'sapp-notification/dist/index.css'
+import 'slick-carousel/slick/slick-theme.css'
+import 'slick-carousel/slick/slick.css'
 import { io } from 'socket.io-client'
-import {
-  ANIMATION,
-  ENTRANCE_TEST_RESULT,
-  ENTRANCE_TEST_TABLE_RESULT,
-  LOCAL_STORAGE_KEYS,
-  SOCKET_EVENTS,
-} from '@lms/core'
 import { useAppDispatch } from 'src/redux/hook'
 import { injectStore } from 'src/redux/services/httpService'
 import {
   getCountUnRead,
   showNotification,
 } from 'src/redux/slice/Notification/Notification'
-import { onMessageListener } from '@lms/utils'
 import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
-import 'sapp-notification/dist/index.css'
-import '@xyflow/react/dist/style.css'
-import 'sapp-common-package/dist/sapp-editor.css'
-import 'sapp-common-package/dist/index.css'
-import 'preview-part/dist/index.css'
-import { ErrorBoundary } from '@sentry/nextjs'
+import { CoursesAPI } from './api/courses'
 import ErrorRedirectPage from './error-redirect'
-import { CourseNoteProvider } from '@contexts/CourseNoteContext'
-import { PreviousSectionRouteProvider } from '@contexts/PreviousSectionRouteContext'
-import MKTInApp from '@components/MKTInApp'
-import { useTailwindBreakpoint } from '@lms/hooks'
-// import { LearningNotesList } from '@lms/feature-courses'
 export const excludedPathsHelp = [
   '/test/[id]',
   '/case-study/[id]',
@@ -341,8 +335,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                           <MKTInApp showMKTInApp={showMKTInApp} />
                           <div id="floating-btn-divider" />
                           <Help showHelp={showHelp} />
-                          {/* <LearningNotesList /> */}
-                          {/* <PopupCompletedCourse /> */}
+                          <LearningNotesList api={CoursesAPI} />
+                          <PopupCompletedCourse />
                         </>
                       </RouteGuard>
                     </PreviousSectionRouteProvider>

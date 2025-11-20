@@ -1,7 +1,7 @@
 import useResizeObserver from '@react-hook/resize-observer'
 import { TooltipPlacement } from 'antd/es/tooltip'
 import React, { useEffect, useRef, useState } from 'react'
-import Tooltip from 'src/common/Tooltip'
+import { Tooltip } from "@lms/ui";
 
 interface ResponsiveTextTruncateProps {
   text: string

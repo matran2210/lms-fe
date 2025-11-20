@@ -6,7 +6,7 @@ import { calculateTimeAgo } from '@utils/helpers'
 import { ANIMATION } from 'src/constants'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
-import NoData from 'src/common/NoData'
+import {NoData } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
 import { containsKeyword, formatNotificationHTML } from 'src/utils/index'
 

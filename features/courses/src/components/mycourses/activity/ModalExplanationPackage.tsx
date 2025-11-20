@@ -7,7 +7,7 @@ import { UploadAPI } from 'src/pages/api/upload'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ActivityAPI } from '../../../pages/api/activity/index'
 import { Modal } from 'antd'
-import SappLoading from 'src/common/SappLoading'
+import {SappLoading } from '@lms/ui'
 import { CloseIconV2 } from '@components/icons'
 
 export enum QUESTION_LEVELS {

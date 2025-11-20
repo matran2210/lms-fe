@@ -1,4 +1,4 @@
-import { EditorReader } from '@lms/ui'
+import { EditorReader, SappTitleSolution } from '@lms/ui'
 import {SappDivider} from '@lms/ui'
 import { runHighlight } from '@lms/utils'
 import { uniqueId } from 'lodash'
@@ -11,7 +11,6 @@ import {
   useCallback,
   useLayoutEffect,
 } from 'react'
-import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from '@lms/core'
 import { DragDropAnswerItem } from '@lms/core'
 import { IExhibitData } from '@lms/core'
