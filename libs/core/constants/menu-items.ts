@@ -1,4 +1,4 @@
-import { ProfilePages } from "@lms/core";
+import { ProfilePages } from "../types";
 import { PageLink, TitleSidebar } from "./index";
 import { LANG_SIGNIN } from "./lang";
 

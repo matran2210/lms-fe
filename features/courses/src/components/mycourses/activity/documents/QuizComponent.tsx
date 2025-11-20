@@ -18,6 +18,9 @@ import {
 import {
   ANIMATION,
   DEFAULT_EDITOR_VALUE,
+  ICoursesAPI,
+  IQuestionAPI,
+  IUploadAPI,
   QUESTION_TYPES,
   RESPONSE_OPTION,
   defaultSheetData,
@@ -55,7 +58,6 @@ import toast from 'react-hot-toast';
 
 import { IEssayAnswer, IExhibit, IExhibitData, IFile } from "@lms/core";
 import { v4 as uuidv4 } from "uuid";
-import { download } from "../../../../../../../features/course/src/components/learning/activity/ActivityResource";
 import { SlotValue } from "@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop";
 
 interface IRequirement {
@@ -108,9 +110,9 @@ export type QuizComponentRef = {
   onResetAnswerEssayToTemplate: () => void;
   getEssayData: () =>
     | {
-        req?: IRequirement;
-        index?: number;
-      }
+      req?: IRequirement;
+      index?: number;
+    }
     | undefined;
 };
 
@@ -138,6 +140,9 @@ type Props = {
   getValues?: UseFormGetValues<FieldValues>;
   watch?: UseFormWatch<FieldValues>;
   resetField?: UseFormResetField<FieldValues>;
+  api: IUploadAPI
+  questionApi: IQuestionAPI;
+  courseApi: ICoursesAPI
 };
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
@@ -161,6 +166,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       getValues,
       watch,
       resetField,
+      api,
+      questionApi,
+      courseApi
     }: Props,
     ref,
   ) => {
@@ -418,7 +426,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     // Lift onSubmit using useImperativeHandle
     useImperativeHandle(ref, () => ({
       onSubmit: onSubmit,
-      reset: reset ?? (() => {}),
+      reset: reset ?? (() => { }),
       onSaveAnswer: handleGetAnswer,
       onResetWord: onResetWord,
       onResetSheet: onResetSheet,
@@ -572,6 +580,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         try {
           dispatch(
             confirmQuestion({
+              api: questionApi,
+              courseApi: courseApi,
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
@@ -863,7 +873,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       question_data={activeQuestion}
                       control={controlAnswer}
                       setValue={setValue}
-                      handleSaveHighLight={() => {}}
+                      handleSaveHighLight={() => { }}
                       forCaseStudy={true}
                       name={`${activeQuestion?.id}_${e?.id}_essay`}
                       fullData={{
@@ -1037,7 +1047,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       question_data={activeQuestion}
                       control={controlAnswer}
                       setValue={setValue}
-                      handleSaveHighLight={() => {}}
+                      handleSaveHighLight={() => { }}
                       forCaseStudy={true}
                       name={`${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`}
                       fullData={{
@@ -1249,34 +1259,34 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const exhibitItems: CollapseProps["items"] = exhibitData?.length
       ? exhibitData?.map((item: IExhibit, index) => ({
-          key: item?.id,
-          label: (
-            <p className="mb-[10px] flex items-center gap-2 text-xs font-semibold text-gray-800">
-              <NotesOutline className="h-5 w-5 shrink-0 text-icon" />
-              {`${exhibitText} ${index + 1}: ${item?.name}`}
-            </p>
-          ),
-          children: (
-            <div className="text-xs">
-              <EditorReader
-                text_editor_content={item?.description}
-                className="w-full"
-              />
-              {item?.files?.length > 0 &&
-                item?.files.map((e: any, index: number) => {
-                  return (
-                    <div key={index} className="h-full cursor-pointer">
-                      <FileViewer
-                        fileName={e?.resource?.name}
-                        fileUrl={e?.resource?.url}
-                      />
-                    </div>
-                  );
-                })}
-            </div>
-          ),
-          className: "mb-2 p-2 !border-none !rounded-md bg-gray-100",
-        }))
+        key: item?.id,
+        label: (
+          <p className="mb-[10px] flex items-center gap-2 text-xs font-semibold text-gray-800">
+            <NotesOutline className="h-5 w-5 shrink-0 text-icon" />
+            {`${exhibitText} ${index + 1}: ${item?.name}`}
+          </p>
+        ),
+        children: (
+          <div className="text-xs">
+            <EditorReader
+              text_editor_content={item?.description}
+              className="w-full"
+            />
+            {item?.files?.length > 0 &&
+              item?.files.map((e: any, index: number) => {
+                return (
+                  <div key={index} className="h-full cursor-pointer">
+                    <FileViewer
+                      fileName={e?.resource?.name}
+                      fileUrl={e?.resource?.url}
+                    />
+                  </div>
+                );
+              })}
+          </div>
+        ),
+        className: "mb-2 p-2 !border-none !rounded-md bg-gray-100",
+      }))
       : [];
 
     return (
@@ -1377,10 +1387,14 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                               <div
                                 className="cursor-pointer text-white"
                                 onClick={() =>
-                                  download(
-                                    e?.resource?.name,
-                                    e?.resource?.file_key,
-                                  )
+                                  api.downloadFile({
+                                    files: [
+                                      {
+                                        name: e?.resource?.name,
+                                        file_key: e?.resource?.file_key,
+                                      },
+                                    ],
+                                  })
                                 }
                               >
                                 <DownloadIcon color="currentColor" />

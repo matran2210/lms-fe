@@ -1,5 +1,5 @@
 import { ArrowRightV2Icon } from '@assets/icons'
-import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/PinnedNotificationsV2'
+import {PinnedNotificationsV2} from '@lms/ui'
 import { formatDateToLongString } from '@utils/helpers'
 import Image from 'next/image'
 import { useRouter } from 'next/router'

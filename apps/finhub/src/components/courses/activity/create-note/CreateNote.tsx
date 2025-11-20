@@ -12,7 +12,7 @@ import { IProps } from 'src/type/courses-3-level'
 import { NoteFormData } from 'src/type/courses-3-level'
 import CreateNoteDesktop from './CreateNoteDesktop'
 import CreateNoteMobile from './CreateNoteMobile'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
 
 const CreateNote = ({
   id,

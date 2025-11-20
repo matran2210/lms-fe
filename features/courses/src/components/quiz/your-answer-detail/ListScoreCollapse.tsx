@@ -6,8 +6,8 @@ import { convertSecondsToMinutesSeconds } from '@utils/helpers'
 import type { CollapseProps } from 'antd'
 import clsx from 'clsx'
 import React, { Fragment } from 'react'
-import BaseCollapse from 'src/components/quiz/your-answer-detail/BaseCollapse'
 import { ArrowDownIcon } from '../../../../../../libs/assets/icons/course'
+import BaseCollapse from './BaseCollapse'
 
 const ListScoreCollapse = ({
   data,
