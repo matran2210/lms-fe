@@ -1,5 +1,5 @@
 import { SappBreadCrumbs } from '@lms/ui'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
+import {FullScreenLayout} from '@lms/ui'
 import { TEST_TYPE } from '@lms/core'
 import { useGetDataQuery } from '@utils/index'
 import { useRouter } from 'next/router'

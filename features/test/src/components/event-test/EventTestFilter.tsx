@@ -1,5 +1,5 @@
-import FilterCourse from '@components/mycourses/FilterCourse'
 import { defaultStatusEventTest } from '@lms/core'
+import { FilterCourse } from '@lms/feature-courses'
 
 const EventTestFilter = ({ count }: { count: number }) => {
   return (

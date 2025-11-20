@@ -19,6 +19,9 @@ import {
 import {
   ANIMATION,
   DEFAULT_EDITOR_VALUE,
+  ICoursesAPI,
+  IQuestionAPI,
+  IUploadAPI,
   QUESTION_TYPES,
   RESPONSE_OPTION,
   defaultSheetData,
@@ -64,7 +67,6 @@ import toast from "react-hot-toast";
 
 import { IEssayAnswer, IExhibit, IExhibitData, IFile } from "@lms/core";
 import { v4 as uuidv4 } from "uuid";
-import { download } from "../../../learning";
 import { SlotValue } from "@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop";
 
 interface IRequirement {
@@ -147,6 +149,9 @@ type Props = {
   getValues?: UseFormGetValues<FieldValues>;
   watch?: UseFormWatch<FieldValues>;
   resetField?: UseFormResetField<FieldValues>;
+  api: IUploadAPI;
+  questionApi: IQuestionAPI;
+  courseApi: ICoursesAPI;
 };
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
@@ -170,6 +175,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       getValues,
       watch,
       resetField,
+      api,
+      questionApi,
+      courseApi,
     }: Props,
     ref,
   ) => {
@@ -581,6 +589,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         try {
           dispatch(
             confirmQuestion({
+              api: questionApi,
+              courseApi: courseApi,
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
@@ -1386,10 +1396,14 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                               <div
                                 className="cursor-pointer text-white"
                                 onClick={() =>
-                                  download(
-                                    e?.resource?.name,
-                                    e?.resource?.file_key,
-                                  )
+                                  api.downloadFile({
+                                    files: [
+                                      {
+                                        name: e?.resource?.name,
+                                        file_key: e?.resource?.file_key,
+                                      },
+                                    ],
+                                  })
                                 }
                               >
                                 <DownloadIcon color="currentColor" />

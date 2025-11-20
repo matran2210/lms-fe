@@ -1,4 +1,4 @@
-import FullScreenLayout from '@components/layout/FullScreenLayout'
+import {FullScreenLayout} from '@lms/ui'
 import QuizResult from '@components/quiz/quiz-result'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'

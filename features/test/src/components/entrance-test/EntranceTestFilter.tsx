@@ -1,5 +1,5 @@
-import FilterCourse from '@components/mycourses/FilterCourse'
 import { defaultStatusEnstraceTest } from '@lms/core'
+import { FilterCourse } from '@lms/feature-courses'
 
 const EntranceTestFilter = ({ count }: { count: number }) => {
   return (

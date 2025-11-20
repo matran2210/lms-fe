@@ -1,6 +1,4 @@
-import FilterCourseDetail from '@components/mycourses/FilterCourseDetail'
-import CourseParts from '@components/mycourses/course-detail/CourseParts'
-import CourseSkeleton from '@components/skeleton/CourseSkeleton'
+import { CourseParts, FilterCourseDetail } from '@lms/feature-courses'
 import PopupModalTest from '@components/survey/PopupModalTest'
 import { useCourseContext } from '@contexts/index'
 import { CoursesAPI } from '@pages/api/courses'
@@ -10,7 +8,7 @@ import { useInfiniteQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { ANIMATION, PageLink } from '@lms/core'
 import { UserType } from 'src/redux/types/User/urser'
-import LayoutTeacher from '@components/layout/Teacher'
+import {LayoutTeacher, CourseSkeleton} from '@lms/ui'
 import { ITabs } from '@lms/core'
 
 const DEFAULT_PAGESIZE = 18

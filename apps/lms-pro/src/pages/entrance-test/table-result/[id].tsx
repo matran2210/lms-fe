@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { CoursesAPI } from '../../api/courses/index'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
+import {FullScreenLayout} from '@lms/ui'
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
 
 const TableEntranceResult = () => {

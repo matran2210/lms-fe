@@ -1,8 +1,7 @@
 import { ButtonSecondary } from "@lms/ui";
-import { CardCourse } from "../../course";
 // import Icon from "@components/icons"; comment monorepo
 import { useCourseContext } from "@contexts/index";
-import { trackGAEvent } from "@lms/utils";
+import { formatTimeMinToHhMm, trackGAEvent } from "@lms/utils";
 import { getUserPrefix } from "@utils/helpers";
 import { buildQueryString, formatTime, handleReplaceText } from "@lms/utils";
 import { round } from "lodash";
@@ -10,6 +9,7 @@ import { useRouter } from "next/router";
 import { Tooltip } from "@lms/ui";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import { CLASS_USER_STATUS, IMyCourseDetail } from "@lms/core";
+import { CardCourse } from "../../course";
 
 const Part = ({
   course,
@@ -48,7 +48,7 @@ const Part = ({
   };
 
   const formattedTime = Number(
-    formatTime(
+    formatTimeMinToHhMm(
       course?.learning_progress?.duration -
         course?.learning_progress?.time_spent || 0,
     ),
