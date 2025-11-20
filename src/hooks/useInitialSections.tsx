@@ -7,15 +7,16 @@ import { isEmpty } from 'lodash'
 
 export const useInitialSections = () => {
   const [sections, setSections] = useState<ISection[]>([])
+  const [isLoadMore, setIsLoadMore] = useState<boolean>(true)
   const isFetchingRef = useRef(false)
   const router = useRouter()
 
   const fetchInitialSections = async (page_size: number) => {
     try {
       if (
-        isEmpty(sections) &&
         (router.query.courseId || router.query.id) &&
-        !isFetchingRef.current
+        !isFetchingRef.current &&
+        isLoadMore
       ) {
         isFetchingRef.current = true
         const { data } = await CoursesAPI.getCourseSectionList(
@@ -23,6 +24,7 @@ export const useInitialSections = () => {
           page_size || DEFAULT_PAGE_SIZE,
         )
         if (!isEmpty(data?.sections)) {
+          setIsLoadMore(data?.meta?.total_records > page_size)
           setSections([...data?.sections].reverse())
         }
       }
