@@ -26,6 +26,8 @@ import { runHighlight } from '@utils/index'
 import clsx from 'clsx'
 import { Grid } from 'antd'
 import SappDivider from '@components/common/Divider/Divider'
+import { useRouter } from 'next/router'
+import { HighlightableHTML } from '@components/highlights/HighlightHTML'
 
 interface IProps {
   data: any
@@ -54,6 +56,7 @@ interface IProps {
   correctAnswerClass?: string
   explainClassname?: string
   onChangeMatchedPairs?: (matchedPairs: any[]) => void
+  storageKey?: string
 }
 
 type Role = 'question' | 'answer'
@@ -100,9 +103,11 @@ const MatchQuiz = forwardRef(
       correctAnswerClass,
       explainClassname,
       onChangeMatchedPairs,
+      storageKey,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
+    const router = useRouter()
     const [edges, setEdges] = useState<Edge[]>([])
     const flowRef = useRef<HTMLDivElement>(null)
     const [nodes, setNodes] = useState<MatchNode[]>([])
@@ -607,11 +612,19 @@ const MatchQuiz = forwardRef(
                 <div className="my-6 border border-b-gray-300"></div>
               </>
             )}
-          <EditorReader
+          <HighlightableHTML
+            initialHTML={data?.question_content || ''}
+            storageKey={
+              storageKey ||
+              `${router.query.id}-${data?.qType}-question-${data?.id}`
+            }
+            className="sapp-questions sapp-editor-reader !mb-8"
+          />
+          {/* <EditorReader
             className="sapp-questions sapp-editor-reader !mb-[32px]"
             text_editor_content={data?.question_content}
             highlighted={highlighted}
-          />
+          /> */}
         </div>
         <div className="flex h-full w-full flex-col">
           <div

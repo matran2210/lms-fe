@@ -249,7 +249,7 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
               <CollapseArrowIcon className="rotate-90" />
             </div>
             {open?.data?.current_date
-              ? renderFormattedDate(open?.data?.current_date)
+              ? renderFormattedDate(open?.data?.current_date as Dayjs)
               : null}
           </div>
 

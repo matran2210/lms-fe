@@ -25,17 +25,46 @@ const CardResultTest = ({
 
   const dateSubmitted = resultData?.quiz?.attempts?.[0]?.updated_at
   const timeSpent = resultData?.quiz?.attempts?.[0]?.total_attempt_time
+  const textButtonViewResult = () => {
+    if (
+      !resultData?.quiz?.attempts ||
+      resultData?.quiz?.attempts?.length === 0
+    ) {
+      return 'Start'
+    }
+    const attempt = resultData?.quiz?.attempts?.[0]
+    const attemptStatus = attempt?.status
+    const gradingMethod = resultData?.quiz?.grading_method
+    if (attemptStatus === EAttemptStatus.IN_PROGRESS) {
+      return 'Continue'
+    }
+    if (gradingMethod === GRADING_METHOD.MANUAL) {
+      if (
+        attemptStatus === EAttemptStatus.SUBMITTED &&
+        attempt?.grading_status !== GRADE_STATUS.FINISHED_GRADING
+      ) {
+        return 'Your Answers Detail'
+      }
+    }
+    return 'View Result'
+  }
 
   const btnViewResult = () => (
     <div className="flex items-center">
       <div className="mr-2 block text-sm font-medium text-gray-800 underline md:hidden">
-        View Result
+        {textButtonViewResult()}
       </div>
       <div>
         <ArrowRight />
       </div>
     </div>
   )
+
+  const openInNewTab = (url: string) => {
+    if (typeof window === 'undefined') return
+    window.open(url, '_blank')
+  }
+
   const handleViewResult = () => {
     if (resultData?.quiz?.attempts?.length > 0) {
       if (resultData?.quiz?.grading_method === GRADING_METHOD.MANUAL) {
@@ -47,11 +76,11 @@ const CardResultTest = ({
               resultData?.quiz?.attempts?.[0]?.grading_status ===
               GRADE_STATUS.FINISHED_GRADING
             ) {
-              router.push(
+              openInNewTab(
                 `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
               )
             } else {
-              router.push(
+              openInNewTab(
                 `/courses/test/your-answers-detail/${resultData?.quiz?.attempts?.[0]?.id}`,
               )
             }
@@ -59,19 +88,19 @@ const CardResultTest = ({
             resultData?.quiz?.attempts?.[0]?.status ===
             EAttemptStatus.IN_PROGRESS
           ) {
-            router.push(
+            openInNewTab(
               `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
             )
           } else if (
             resultData?.quiz?.attempts?.[0]?.status ===
             EAttemptStatus.UN_SUBMITTED
           ) {
-            router.push(
+            openInNewTab(
               `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
             )
           }
         } else {
-          router.push(
+          openInNewTab(
             `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
           )
         }
@@ -79,17 +108,17 @@ const CardResultTest = ({
         if (
           resultData?.quiz?.attempts?.[0]?.status === EAttemptStatus.IN_PROGRESS
         ) {
-          router.push(
+          openInNewTab(
             `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
           )
         } else {
-          router.push(
+          openInNewTab(
             `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
           )
         }
       }
     } else {
-      router.push(
+      openInNewTab(
         `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
       )
     }

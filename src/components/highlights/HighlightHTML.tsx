@@ -158,19 +158,42 @@ export const HighlightableHTML: React.FC<Props> = ({
   }, [html])
 
   // Save highlights to sessionStorage - chỉ save khi DOM đã sẵn sàng
+  // useEffect(() => {
+  //   if (containerRef.current && isDOMReady && highlights.length >= 0) {
+  //     // Thêm một check để đảm bảo containerRef.current chứa nội dung đúng
+  //     const currentHTML = containerRef.current.innerHTML
+  //     // Chỉ lưu nếu HTML hiện tại không rỗng hoặc có highlights
+  //     if (currentHTML.trim() || highlights.length > 0) {
+  //       sessionStorage.setItem(
+  //         storageKey,
+  //         JSON.stringify({
+  //           htmlContent: currentHTML,
+  //           highlights,
+  //         }),
+  //       )
+  //     }
+  //   }
+  // }, [highlights, storageKey, isDOMReady])
   useEffect(() => {
-    if (containerRef.current && isDOMReady && highlights.length >= 0) {
-      // Thêm một check để đảm bảo containerRef.current chứa nội dung đúng
-      const currentHTML = containerRef.current.innerHTML
-      // Chỉ lưu nếu HTML hiện tại không rỗng hoặc có highlights
-      if (currentHTML.trim() || highlights.length > 0) {
-        sessionStorage.setItem(
-          storageKey,
-          JSON.stringify({
-            htmlContent: currentHTML,
-            highlights,
-          }),
-        )
+    if (!isDOMReady || !containerRef.current) return
+    if (highlights.length === 0) return // ❗ không lưu khi chưa có highlight
+
+    const currentHTML = containerRef.current.innerHTML
+
+    try {
+      sessionStorage.setItem(
+        storageKey,
+        JSON.stringify({
+          htmlContent: currentHTML,
+          highlights,
+        }),
+      )
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'QuotaExceededError') {
+        // console.warn('⚠️ Session storage quota exceeded, clearing old data...')
+        sessionStorage.removeItem(storageKey)
+      } else {
+        // console.error(err)
       }
     }
   }, [highlights, storageKey, isDOMReady])
@@ -886,6 +909,8 @@ export const HighlightableHTML: React.FC<Props> = ({
   }
 
   const convertMathToImage = async (element: any) => {
+    if (typeof com === 'undefined') return
+
     const viewer = com?.wiris?.js?.JsPluginViewer
 
     if (element && viewer) {

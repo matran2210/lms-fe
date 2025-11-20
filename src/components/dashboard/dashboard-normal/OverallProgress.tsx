@@ -3,11 +3,8 @@ import EChart from '@components/base/chart/Chart'
 import { EChartsOption } from 'echarts'
 import React, { useEffect, useState } from 'react'
 import Tooltip from 'src/common/Tooltip'
-import { IActivities, IActivityProgress } from '../CourseDashboard'
 import useReponsive from 'src/hooks/useReponsive'
-import { ANIMATION } from 'src/constants'
-import OverallProgressSkeleton from '@components/skeleton/OverallProgressSkeleton'
-import { useAppSelector } from 'src/redux/hook'
+import { IActivities, IActivityProgress } from '../CourseDashboard'
 
 interface OverallProgressProps {
   setActivities: React.Dispatch<React.SetStateAction<IActivities | undefined>>
@@ -59,14 +56,14 @@ const OverallProgress = ({
         left: 'center',
         top: '42%',
         textStyle: {
-          fontSize: 24,
+          fontSize: 20,
           fontWeight: '600',
           color: '#1F2937',
-          lineHeight: 32,
         },
         subtextStyle: {
           fontSize: 14,
-          color: '#666',
+          color: '#1F2937',
+          marginBottom: 20,
         },
       },
       responsive: true,

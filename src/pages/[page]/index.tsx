@@ -352,13 +352,8 @@ const ProfilePage = () => {
           className={'mb-4 hidden md:flex'}
         />
         <div className="mx-auto my-0 flex w-full grow flex-col">
-          <div className="main hidden sm:mx-4 md:mb-6 md:block lg:mx-0 lg:mb-4">
-            <div className="hidden text-2xl font-medium md:block lg:hidden">
-              Student Profile
-            </div>
-            <h1 className="text-lg font-semibold text-gray-800 lg:mt-4 lg:text-2xl">
-              Profile
-            </h1>
+          <div className="main hidden md:mb-6 md:mt-2 md:block lg:mx-0">
+            <h1 className="text-2xl font-semibold text-gray-800">Profile</h1>
           </div>
           <div className="relative" data-aos={ANIMATION.DATA_AOS}>
             <HeaderMobile

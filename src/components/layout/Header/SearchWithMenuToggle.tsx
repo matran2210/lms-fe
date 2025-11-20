@@ -176,7 +176,7 @@ const SearchWithMenuToggle = ({
               className={clsx(
                 'border-transparent flex w-full items-center justify-between rounded-lg border border-white bg-white px-2 py-3 shadow-small transition-all duration-300 focus-within:border-primary hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4',
                 {
-                  'z-50': isShowUserGuide && guideStatus && guideStep === 1,
+                  'md:z-50': isShowUserGuide && guideStatus && guideStep === 1,
                 },
               )}
             >
@@ -200,10 +200,10 @@ const SearchWithMenuToggle = ({
       {isShowUserGuide && guideStatus && guideStep === 1 && (
         <PopupStep
           content={UserGuide.CONTENT_STEP_1}
-          className="left-0"
+          className="left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-0 md:top-[68px] md:-translate-x-0 md:-translate-y-0 lg:top-[78px]"
           title={'Search box'}
           index={1}
-          total={7}
+          total={6}
           imgSrc={TourGuideStart}
         />
       )}

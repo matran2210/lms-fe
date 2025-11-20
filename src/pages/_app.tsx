@@ -58,6 +58,7 @@ import ErrorRedirectPage from './error-redirect'
 import { CourseNoteProvider } from '@contexts/CourseNoteContext'
 import { PreviousSectionRouteProvider } from '@contexts/PreviousSectionRouteContext'
 import MKTInApp from '@components/MKTInApp'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 export const excludedPathsHelp = [
   '/test/[id]',
@@ -66,6 +67,14 @@ export const excludedPathsHelp = [
   '/case-study/result/[id]',
   '/teachers',
   '/courses/[id]/activity/[activityId]',
+]
+
+const showSupportWidget = [
+  '/courses',
+  '/entrance-test',
+  '/calendar',
+  '/exam_list',
+  '/overview',
 ]
 
 const activityPath = ['/courses/[id]/activity/[activityId]']
@@ -80,6 +89,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   const router = useRouter()
   const dispatch = useAppDispatch()
+  const { isMobileView } = useTailwindBreakpoint()
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -170,13 +180,9 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     router.pathname.includes(path),
   )
 
-  const showHelp =
-    !excludedPathsHelp.some((path) => router.pathname.includes(path)) &&
-    !isTeacherPage // Add condition to hide help on teacher pages
-  const showMKTInApp = showHelp
-  const hiddenChatbot =
-    excludedPathsHelp.some((path) => router.pathname.includes(path)) ||
-    isTeacherPage
+  const showHelp = showSupportWidget.includes(router.pathname) && !isTeacherPage // Add condition to hide help on teacher pages
+  const showMKTInApp = showHelp && !isMobileView
+  const hiddenChatbot = !showHelp
   // Handle HubSpot widget visibility based on URL
   useEffect(() => {
     const hideHubspotWidget = () => {
@@ -336,8 +342,9 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                             <Component {...pageProps} />
                           </div>
                           {showBackToTop && <BackToTop />}
-                          <Help showHelp={showHelp} />
                           <MKTInApp showMKTInApp={showMKTInApp} />
+                          <div id="floating-btn-divider" />
+                          <Help showHelp={showHelp} />
                           <LearningNotesList />
                           <PopupCompletedCourse />
                         </>

@@ -1,6 +1,5 @@
 import Layout from '@components/layout'
 import CourseParts from '@components/mycourses/course-detail/CourseParts'
-import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import PopupModalTest from '@components/survey/PopupModalTest'
 import { useCourseContext } from '@contexts/index'
 import { CoursesAPI } from '@pages/api/courses'
@@ -27,6 +26,7 @@ import HeaderMobile from '@components/layout/Header/HeaderMobile'
 import clsx from 'clsx'
 import SelectExamPopup from '@components/mycourses/course-detail/SelectExamPopup'
 import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
+import CourseDetailSkeleton from '@components/skeleton/CourseDetailSkeleton'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -232,22 +232,24 @@ const CourseDetail = () => {
     }
   }, [data])
 
+  const hasCertificate =
+    !!data?.pages?.[0]?.courseDetail?.user_certificate_id ||
+    !!data?.pages?.[0]?.courseDetail?.user_certificate_url
   return (
     <Layout
       title="Course Detail"
       showSidebar={showSidebar || isAlwaysShowSidebar}
       handleToggleSidebar={handleCloseSidebar}
     >
-      <SearchWithMenuToggle
-        handleOpenSidebar={handleOpenSidebar}
-        isShowToggle
-        isCoursePage
-      />
-
       {isLoading ? (
-        <CourseSkeleton />
+        <CourseDetailSkeleton />
       ) : (
         <>
+          <SearchWithMenuToggle
+            handleOpenSidebar={handleOpenSidebar}
+            isShowToggle
+            isCoursePage
+          />
           <SappBreadCrumbs
             isTeacher={false}
             breadcrumbs={[
@@ -293,6 +295,7 @@ const CourseDetail = () => {
               is_passed_course={is_passed_course || false}
               class_user_id={class_user_id}
               lastElementRef={lastElementRef}
+              hasCertificate={hasCertificate}
             />
           </div>
         </>

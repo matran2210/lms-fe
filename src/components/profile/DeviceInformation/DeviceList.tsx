@@ -11,11 +11,13 @@ import { AuthAPI } from '@pages/api/profile'
 import { getCookie, getSessionIdFromToken } from '@utils/index'
 import { COOKIE_INFO } from 'src/constants'
 import clsx from 'clsx'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const DeviceList = () => {
   const sessionId =
     getSessionIdFromToken(getCookie(COOKIE_INFO.KEYCLOAK_TOKEN) ?? '') ??
     getCookie(COOKIE_INFO.SESSION_ID)
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [loading, setLoading] = useState(false)
   const [listDevices, setListDevices] = useState<IDeviceItem[]>()
   const [selectedDrawer, setSelectedDrawer] = useState<{
@@ -110,6 +112,8 @@ const DeviceList = () => {
         classNames={{
           content: 'rounded-2xl',
         }}
+        placement={!isAlwaysShowSidebar ? 'bottom' : 'right'}
+        height="auto"
       >
         <div className="items flex h-full flex-col justify-between gap-8 text-sm md:text-base">
           <div className="flex flex-col gap-3 md:gap-4">

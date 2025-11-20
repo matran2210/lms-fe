@@ -24,7 +24,7 @@ import {
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import { isEmpty } from 'lodash'
-import NoDataV2 from 'src/common/NodataV2'
+import NoData from 'src/common/NoData'
 import { UploadAPI } from 'src/pages/api/upload'
 import FilterCourseSection from '@components/mycourses/FilterCourseSection'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -43,7 +43,8 @@ const DEFAULT_PAGE_INDEX = 1
 const DEFAULT_PAGESIZE = 20
 
 const LearningResource = ({ open, setOpenResource }: IProps) => {
-  const { isMobileView, isTabletView } = useTailwindBreakpoint()
+  const { isMobileView, isTabletView, isAlwaysShowSidebar } =
+    useTailwindBreakpoint()
   const scrollRef = useRef<HTMLDivElement>(null)
   const [resources, setResources] = useState<IResourceDetail>()
   const router = useRouter()
@@ -290,10 +291,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         isShowFooter={isOpenFilter}
         handleSubmit={handleSubmit}
         classNameHeader={classNameHeader}
-        rootClassName={'responsive-drawer-center'}
+        rootClassName={'responsive-drawer-base'}
         submitButtonClassName="w-full h-10"
         btnSubmitTile="Confirm"
-        placement={isMobileView ? 'bottom' : 'right'}
+        titleClassName={isOpenFilter ? 'w-full pr-8 text-center' : ''}
+        placement={!isAlwaysShowSidebar ? 'bottom' : 'right'}
       >
         <FormProvider {...methods}>
           {!isOpenFilter ? (
@@ -308,8 +310,8 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
                 />
               )}
               {isEmpty(resources?.resources) && !loading ? (
-                <div className="flex min-h-[calc(100vh-42rem)] items-center justify-center lg:min-h-[calc(100vh-12rem)]">
-                  <NoDataV2 />
+                <div className="flex min-h-[200px] items-center justify-center md:min-h-[385px] lg:min-h-[calc(100vh-20rem)]">
+                  <NoData />
                 </div>
               ) : (
                 <div
@@ -348,7 +350,17 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
               )}
             </>
           ) : !openChooseItem.isOpen ? (
-            <ListFilterMobile setOpenChooseItem={setOpenChooseItem} />
+            <ListFilterMobile
+              setOpenChooseItem={setOpenChooseItem}
+              listSection={listSection}
+              listSubsection={listSubsection}
+              listUnit={listUnit}
+              listActivity={listActivity}
+              setListSection={setListSection}
+              setListSubsection={setListSubsection}
+              setListUnit={setListUnit}
+              setListActivity={setListActivity}
+            />
           ) : (
             <ListItemFilterMobile
               setOpenChooseItem={setOpenChooseItem}

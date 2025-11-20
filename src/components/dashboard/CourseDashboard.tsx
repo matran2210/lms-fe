@@ -3,10 +3,9 @@ import TopicProgress from '@components/dashboard/dashboard-exam/TopicProgress'
 import OverallProgress from './dashboard-normal/OverallProgress'
 import LearningResult from './dashboard-normal/LearningResult'
 import { isUndefined } from 'lodash'
-import { memo, useEffect, useState } from 'react'
-import { ANIMATION, COURSE_TYPE } from 'src/constants'
+import { memo, useState } from 'react'
+import { ANIMATION } from 'src/constants'
 import { IWeeklyReport, ITopicProgress } from 'src/type/dashboard'
-import StatsSkeleton from '@components/skeleton/StatsSkeleton'
 import Icon from '@components/icons'
 import { useRouter } from 'next/router'
 export interface IActivityProgress {
@@ -142,7 +141,7 @@ const CourseDashboard = ({
               overallProgressData={overallProgressData}
             />
           </div>
-          <div className="mt-6 rounded-2xl bg-white shadow-small xl:mt-0">
+          <div className="mt-4 rounded-2xl bg-white shadow-small md:mt-6 xl:mt-0">
             <WeeklyReport weeklyReportData={weeklyReportData} />
           </div>
         </div>
@@ -210,7 +209,7 @@ const CourseDashboard = ({
           <div className="order-2 lg:order-1 lg:w-[60%]">
             <TopicProgress topicProgressData={topicProgressData} />
           </div>
-          <div className="order-1 mb-6 flex h-auto rounded-2xl bg-white shadow-small lg:order-2 lg:my-0 lg:w-[40%]">
+          <div className="order-1 mb-4 flex h-auto rounded-2xl bg-white shadow-small md:mb-6 lg:order-2 lg:my-0 lg:w-[40%]">
             <LearningResult />
           </div>
         </div>

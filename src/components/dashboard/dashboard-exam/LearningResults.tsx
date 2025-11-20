@@ -3,7 +3,7 @@ import EChart from '@components/base/chart/Chart'
 import dayjs from 'dayjs'
 import NoData from 'src/common/NoData'
 import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
-import { COURSE_TYPE, DATE_FORMAT } from 'src/constants'
+import { ANIMATION, COURSE_TYPE, DATE_FORMAT } from 'src/constants'
 import {
   IconEssentional,
   MatchFailIcon,
@@ -151,7 +151,10 @@ const LearningResults = ({ mockTestResultsData }: LearningResultsProps) => {
   }, [results])
 
   return (
-    <div className="w-full rounded-2xl bg-white p-4 shadow-small md:p-6 xl:flex xl:h-[600px] xl:p-8">
+    <div
+      className="w-full rounded-2xl bg-white p-4 shadow-small md:p-6 xl:flex xl:h-[600px] xl:p-8"
+      data-aos={ANIMATION.DATA_AOS}
+    >
       <div className="w-full">
         <div className="mb-5 flex items-center justify-between">
           <div className="w-full flex-row justify-between xl:flex xl:flex-col">
@@ -174,62 +177,78 @@ const LearningResults = ({ mockTestResultsData }: LearningResultsProps) => {
           </div>
         </div>
         <div className="flex">
-          {option && (
-            <div className="flex grow flex-col gap-5 px-0 xl:flex-row xl:justify-evenly xl:px-5 2xl:pl-0 2xl:pr-12">
-              <div className="flex justify-center">
-                {(() => {
-                  const chartHeight = isMobile
-                    ? '350px'
-                    : isTablet
-                      ? '450px'
-                      : '500px'
-                  const chartMinHeight = isMobile
-                    ? '350px'
-                    : isTablet
-                      ? '450px'
-                      : '500px'
-                  const chartWidth = isMobile
-                    ? '300px'
-                    : isTablet
-                      ? '500px'
-                      : '550px'
-                  return (
-                    <EChart
-                      option={option as EChartsOption}
-                      height={chartHeight}
-                      minHeight={chartMinHeight}
-                      width={chartWidth}
-                    />
-                  )
-                })()}
-              </div>
-              <div className="flex flex-row items-start justify-center gap-5 xl:flex-col xl:gap-4">
-                {!isNormal && (
-                  <div className="flex items-center justify-center gap-2.5 text-sm font-medium xl:text-base">
-                    <span className="min-h-3 min-w-3 rounded-full bg-dashboard-mock-test"></span>
-                    <Link
-                      href={
-                        mockTestId
-                          ? `${window.location.origin}/courses/test/test-result/${mockTestId}`
-                          : ''
-                      }
-                      target="_blank"
-                      className={`inline-block min-w-fit text-base font-bold text-gray-800 ${!mockTestId ? 'pointer-events-none' : 'hover:text-dashboard-learing'}`}
-                      rel="noreferrer"
-                    >
-                      Mock test results
-                    </Link>
+          {isLoading ? (
+            <div className="w-full animate-pulse">
+              <div className="flex flex-col gap-6">
+                <div className="flex flex-col items-center justify-around gap-7 md:flex-row">
+                  <div className="h-[270px] w-[270px] rounded-full bg-skeleton"></div>
+                  <div className="flex w-full flex-col gap-3 md:w-[180px]">
+                    <div className="h-5 w-full rounded bg-skeleton"></div>
+                    <div className="h-5 w-full rounded bg-skeleton"></div>
                   </div>
-                )}
-
-                <div className="flex items-center justify-center gap-2.5">
-                  <span className="min-h-3 min-w-3 rounded-full bg-dashboard-learing"></span>
-                  <span className="min-w-fit text-sm font-medium text-gray-800 xl:text-base">
-                    Learning results
-                  </span>
                 </div>
               </div>
             </div>
+          ) : (
+            <>
+              {option && (
+                <div className="flex grow flex-col gap-5 px-0 xl:flex-row xl:justify-evenly xl:px-5 2xl:pl-0 2xl:pr-12">
+                  <div className="flex justify-center">
+                    {(() => {
+                      const chartHeight = isMobile
+                        ? '350px'
+                        : isTablet
+                          ? '450px'
+                          : '500px'
+                      const chartMinHeight = isMobile
+                        ? '350px'
+                        : isTablet
+                          ? '450px'
+                          : '500px'
+                      const chartWidth = isMobile
+                        ? '300px'
+                        : isTablet
+                          ? '500px'
+                          : '550px'
+                      return (
+                        <EChart
+                          option={option as EChartsOption}
+                          height={chartHeight}
+                          minHeight={chartMinHeight}
+                          width={chartWidth}
+                        />
+                      )
+                    })()}
+                  </div>
+                  <div className="flex flex-row items-start justify-center gap-5 xl:flex-col xl:gap-4">
+                    {!isNormal && (
+                      <div className="flex items-center justify-center gap-2.5 text-sm font-medium xl:text-base">
+                        <span className="min-h-3 min-w-3 rounded-full bg-dashboard-mock-test"></span>
+                        <Link
+                          href={
+                            mockTestId
+                              ? `${window.location.origin}/courses/test/test-result/${mockTestId}`
+                              : ''
+                          }
+                          target="_blank"
+                          className={`inline-block min-w-fit text-base font-bold text-gray-800 ${!mockTestId ? 'pointer-events-none' : 'hover:text-dashboard-learing'}`}
+                          rel="noreferrer"
+                        >
+                          Mock test results
+                        </Link>
+                      </div>
+                    )}
+
+                    <div className="flex items-center justify-center gap-2.5">
+                      <span className="min-h-3 min-w-3 rounded-full bg-dashboard-learing"></span>
+                      <span className="min-w-fit text-sm font-medium text-gray-800 xl:text-base">
+                        Learning results
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
