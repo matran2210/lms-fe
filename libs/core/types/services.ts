@@ -70,6 +70,9 @@ export interface ICoursesAPI {
     success: boolean;
     data: IScoreDetails;
   }>;
+  CACHE_GET_TOPIC_DESCRIPTION: {
+    [key: string]: any;
+}
 }
 export interface IActivityAPI {
   createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<any>;

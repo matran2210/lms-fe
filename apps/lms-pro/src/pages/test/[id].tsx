@@ -18,24 +18,21 @@ import {
   EXHIBIT_TEXT_REPLACE,
   GRADING_METHOD,
   IExhibit,
-  PageLink,
   PROGRAM,
   QUESTION_TYPES,
   RESPONSE_OPTION,
   TEST_TYPE,
 } from '@lms/core'
-import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
-import ConFirmSubmit from '@lms/feature-test/src/components/test/conFirmSubmit'
+import {UnSubmitAnswerModal,ConFirmSubmit } from '@lms/feature-test'
 import QuitTestModal from '@lms/feature-test/src/components/test/modal/quit-test-modal'
 import TestTimeOutModal from '@lms/feature-test/src/components/test/modal/test-timeout'
-import { SappLoading, TabSlide, useClickOutside } from '@lms/ui'
+import { BackToTop, FilterRadioGroup, Layout, Popover, SappLoading, useClickOutside } from '@lms/ui'
 import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
 import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
 import NewFilltext from '@lms/ui/components/questionType/NewFillText'
 import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
-import { runHighlight } from '@utils/index'
 import {
   cloneDeep,
   debounce,
@@ -53,12 +50,8 @@ import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
 
 import { CheckCircleOutlineYellow, FlagIconV2 } from '@assets/icons/test'
-import BackToTop from '@components/BackToTop'
-import Popover from '@components/Popover'
-import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
-import Layout from '@components/layout'
-import ButtonContent from '@components/mycourses/test/ButtonContent'
 import { Icon, NotesOutline, PulsingExclamation } from '@lms/assets'
+import { showPopupCompletedCourse } from '@lms/contexts'
 import {
   Answer,
   AnswerItem,
@@ -67,6 +60,8 @@ import {
   ScratchPad,
   ScratchPadValue
 } from '@lms/core'
+import { ButtonContent } from '@lms/feature-courses'
+import { TabSlide } from '@lms/feature-test'
 import RequirementsTab from '@lms/feature-test/src/components/test/RequirementsTab'
 import ResetToAnswerTemplateModal from '@lms/feature-test/src/components/test/ResetToAnswerTemplateModal'
 import ShowAnswerTemplate from '@lms/feature-test/src/components/test/ShowAnswerTemplate'
@@ -76,15 +71,14 @@ import DragDropQuestion, {
   SlotValue,
 } from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import TestWrapper from '@lms/ui/layout/TestLayout/TestWrapper'
-import { trackGAEvent } from '@lms/utils'
+import { checkSheetAnswered, runHighlight, trackGAEvent } from '@lms/utils'
 import { TestAPI } from '@pages/api/test'
+import { UploadAPI } from '@pages/api/upload'
 import { TabsProps, Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
-import { download } from '../../../../../features/course/src/components/learning/activity/ActivityResource'
+import { PageLink } from 'src/constants/routers'
 import {
-  checkSheetAnswered,
   checkTypeAndRenderTitle,
   hasEditorValueFromHtml,
   isValuesEqual,
@@ -2979,6 +2973,8 @@ const TestDetail = () => {
       title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}
       showSidebar={false}
       fullWidth
+      api={CoursesAPI}
+      pageLink={PageLink}
     >
       <CourseProvider>
         <SappLoading
@@ -3649,7 +3645,14 @@ const TestDetail = () => {
                         <div
                           className="cursor-pointer text-white"
                           onClick={() => {
-                            download(e?.resource?.name, e?.resource?.file_key)
+                            UploadAPI.downloadFile({
+                                files: [
+                                  {
+                                    name: e?.resource?.name,
+                                    file_key: e?.resource?.file_key,
+                                  },
+                                ],
+                              });
                           }}
                         >
                           <DownloadIcon color="currentColor" />

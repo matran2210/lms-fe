@@ -2,14 +2,14 @@ import {
   CalculatorIconV2,
   CloseIcon,
   CloseIconNote,
+  DiscussionIcon,
   DocumentTextIcon,
   HourglassIcon,
   ResourceIcon,
   ScratchPadIconV2,
-  TimeLineIcon,
-} from '@assets/icons'
-import CreateNote from '@components/mycourses/create-note/CreateNote'
-import { Discussion } from '@lms/feature-courses'
+  TimeLineIcon
+} from '@lms/assets'
+import { CreateNote, Discussion, LearningResource, PopupLockContent } from '@lms/feature-courses'
 import {
   Calculator,
   EditorReader,
@@ -21,37 +21,33 @@ import {
 import { convertMinutesToHourFormat } from '@lms/utils'
 
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
-import BackToTop from '@components/BackToTop'
 import { Triangle } from '@lms/assets';
-import BottomMenu from '@components/layout/BottomMenu'
-import AssistiveTouch from '@components/layout/BottomMenu/AssistiveTouch'
-import ExpandIcon from '@components/layout/ExpandIcon'
-import HeaderMobile from '@components/layout/Header/HeaderMobile'
-import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
-import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
-import LearningResource from '@components/mycourses/LearningResource'
 import { useCourseContext } from '@contexts/index'
 import { usePreviousSectionRoute } from '@contexts/PreviousSectionRouteContext'
+import { showPopupCompletedCourse } from '@lms/contexts'
 import {
   ANIMATION,
   CourseSectionType,
   EXHIBIT_TEXT_REPLACE,
   IActivity,
+  IFocusQuiz,
+  IQuestionAPI,
   ITabs,
   IVideo,
   PROGRAM,
+  VideoStateClicked,
 } from '@lms/core'
+import { ActivityPagination, ActivityResource, ActivityResourceMobile, CardMenuItem, CourseTabDocument, LearningOutcome, VideoTimelineMobile, } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { SappBreadCrumbs } from '@lms/ui'
+import { AssistiveTouch, BackToTop, BottomMenu, CtaTrial, HeaderMobile, SappBreadCrumbs, SappLoadingGlobal } from '@lms/ui'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
+import { CoursesAPI, getActivityById, submitQuizTest } from 'src/pages/api/courses'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   closeCalculator,
@@ -65,17 +61,12 @@ import {
   clearNote,
   pushNotes,
 } from 'src/redux/slice/Course/NotesList'
-import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { UserType } from 'src/redux/types/User/urser'
 import { v4 as uuidv4 } from 'uuid'
-import ActivityPagination from '../../../../../../../../features/course/src/components/learning/activity/ActivityPagination'
-import ActivityResource from '../../../../../../../../features/course/src/components/learning/activity/ActivityResource'
-import CardMenuItem from '../../../../../../../../features/course/src/components/learning/activity/CardMenuItem'
-import CourseTabDocument from '../../../../../../../../features/course/src/components/learning/activity/CourseTabDocument'
-import LearningOutcome from '../../../../../../../../features/course/src/components/learning/activity/LearningOutcome'
-import ActivityResourceMobile from '../../../../../../../../features/course/src/components/learning/activity/modal/ActivityResourceMobile'
-import VideoTimelineMobile from '../../../../../../../../features/course/src/components/learning/activity/modal/VideoTimelineMobile'
-import { DiscussionIcon } from '../../../../../assets/icons'
+import ExpandIcon from '@lms/ui/layout/ExpandIcon'
+import { PageLink } from 'src/constants/routers'
+import { UploadAPI } from '@pages/api/upload'
+import { QuestionAPI } from '@pages/api/question'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -525,6 +516,8 @@ const ActivityPage = () => {
         fullWidth={focusOnlyDiscussion}
         className={focusOnlyDiscussion ? 'h-full !bg-white' : ''}
         childClassName={focusOnlyDiscussion ? 'h-full' : ''}
+        api={CoursesAPI}
+        pageLink={PageLink}
       >
         <div
           className={clsx(
@@ -665,6 +658,11 @@ const ActivityPage = () => {
                 handleSetCurrentVideo,
                 focusOnlyDiscussion,
               }}
+              uploadApi={UploadAPI} 
+              questionApi={QuestionAPI} 
+              courseApi={CoursesAPI}
+              submitQuizTest={submitQuizTest}
+              pageLink={PageLink}
             />
             {/* Next/Prev Activities */}
             <ActivityPagination
@@ -872,7 +870,7 @@ const ActivityPage = () => {
         />
       </Layout>
 
-      <LearningResource open={openResource} setOpenResource={setOpenResource} />
+      <LearningResource open={openResource} setOpenResource={setOpenResource} api={CoursesAPI} />
 
       {openVideoTimeline && (
         <VideoTimelineMobile

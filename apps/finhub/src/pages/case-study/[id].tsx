@@ -52,7 +52,7 @@ import {
   loadMoreQuestion,
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
-import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
+import { showPopupCompletedCourse } from '@lms/contexts'
 import {IExhibit, IRequirement } from '@lms/core'
 import { CoursesAPI } from '../api/courses/index'
 import { TestAPI } from '../api/test'

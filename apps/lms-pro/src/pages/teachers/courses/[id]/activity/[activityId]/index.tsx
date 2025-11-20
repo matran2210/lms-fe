@@ -29,7 +29,7 @@ import {
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
-import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
+import { showPopupCompletedCourse } from '@lms/contexts'
 import { UserType } from 'src/redux/types/User/urser'
 
 interface IBreadCrumbs {

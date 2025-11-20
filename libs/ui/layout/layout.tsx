@@ -5,7 +5,7 @@ import clsx from "clsx";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactElement, ReactNode, useState } from "react";
-import { ICoursesAPI, PageLink } from "@lms/core";
+import { ICoursesAPI } from "@lms/core";
 import { useAppSelector } from "src/redux/hook";
 import Sidebar from "./Sidebar";
 import { useTailwindBreakpoint } from "@lms/hooks";
@@ -19,6 +19,9 @@ interface LayoutProps {
   className?: string;
   childClassName?: string;
   api: ICoursesAPI
+  pageLink: {
+    [key: string]: string
+  }
 }
 
 // eslint-disable-next-line import/no-unused-modules
@@ -32,7 +35,8 @@ export default function Layout(props: LayoutProps): ReactElement {
     handleToggleSidebar,
     className,
     childClassName,
-    api
+    api,
+    pageLink
   } = props;
   const router = useRouter();
   const { isShowMenuContent } = useTailwindBreakpoint();
@@ -55,11 +59,11 @@ export default function Layout(props: LayoutProps): ReactElement {
   const [openExaminationInfo, setOpenExaminationInfo] = useState(false);
 
   const isEnablePinnedPages = [
-    PageLink.COURSES,
-    PageLink.USERPAGE,
-    PageLink.COURSE_DETAIL,
-    PageLink.COURSE_PART_DETAIL,
-    PageLink.COURSE_ACTIVITY,
+    pageLink.COURSES,
+    pageLink.USERPAGE,
+    pageLink.COURSE_DETAIL,
+    pageLink.COURSE_PART_DETAIL,
+    pageLink.COURSE_ACTIVITY,
   ].includes(router.pathname);
 
   let paddingTop = "";

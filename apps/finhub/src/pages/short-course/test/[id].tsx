@@ -64,7 +64,7 @@ import { download } from '@utils/index'
 import { Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
+import { showPopupCompletedCourse } from '@lms/contexts'
 import {
   Answer,
   AnswerItem,

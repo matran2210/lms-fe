@@ -1,27 +1,28 @@
-import { ArrowLeft, ArrowRight, PaginationDotIcon } from '@assets/icons'
-import { ActivitySkeleton } from '@lms/ui'
-import { HighlightableHTML } from '@lms/ui'
-import { CoursesAPI } from '@pages/api/courses'
+import { ArrowLeft, ArrowRight, PaginationDotIcon } from '@lms/assets'
 import {
+  courseActivityReducer,
+  getCourseActivityTapById,
+  useAppDispatch, useAppSelector
+} from '@lms/contexts'
+import {
+  ANIMATION,
+  EAttemptStatus,
+  GradingPreference,
+  IActivity,
+  ICoursesAPI,
   IFocusQuiz,
+  IQuestionAPI,
+  IUploadAPI,
+  IVideo,
   VideoStateClicked,
-} from '@pages/courses/[id]/activity/[activityId]'
-import { GradingPreference } from '@lms/core'
-import { trackGAEvent, truncateBySpace} from '@lms/utils'
+} from '@lms/core'
+import { useQueryAction } from '@lms/hooks'
+import { ActivitySkeleton, HighlightableHTML } from '@lms/ui'
+import { trackGAEvent, truncateBySpace } from '@lms/utils'
 import { Tabs, Tooltip } from 'antd'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import React, { useMemo, useRef } from 'react'
-import { ANIMATION } from '@lms/core'
-import { EAttemptStatus } from '@lms/core'
-import {useQueryAction} from '@lms/hooks'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import {
-  courseActivityReducer,
-  getCourseActivityTapById,
-} from 'src/redux/slice/Course/MyCourse/Activity/Activity'
-import { IVideo } from '@lms/core'
-import { IActivity } from '@lms/core'
 import { Discussion, QuizDocument, VideoDocument } from '../../mycourses'
 
 interface IProps {
@@ -42,6 +43,11 @@ interface IProps {
   setFocusOnlyQuiz: React.Dispatch<React.SetStateAction<IFocusQuiz>>
   handleSetCurrentVideo: (video: IVideo) => void
   focusOnlyDiscussion: boolean
+  uploadApi: IUploadAPI;
+  questionApi: IQuestionAPI;
+  courseApi: ICoursesAPI;
+  submitQuizTest: (id: string, data: any, class_user_id?: string | undefined) => Promise<any>
+  pageLink: { [key: string]: string}
 }
 const CourseTabDocument = ({
   activity,
@@ -56,6 +62,11 @@ const CourseTabDocument = ({
   setFocusOnlyQuiz,
   handleSetCurrentVideo,
   focusOnlyDiscussion,
+  uploadApi,
+  questionApi,
+  courseApi,
+  submitQuizTest,
+  pageLink
 }: IProps) => {
   const selector = useAppSelector(courseActivityReducer)
   const quizDocumentRef = useRef<HTMLDivElement>(null)
@@ -82,7 +93,7 @@ const CourseTabDocument = ({
    */
   const handleChangeTab = (courseId: string, id: string) => {
     try {
-      dispatch(getCourseActivityTapById({ courseId, id }))
+      dispatch(getCourseActivityTapById({ courseId, id, api: courseApi }))
       router.replace(
         {
           pathname: router.pathname,
@@ -97,11 +108,12 @@ const CourseTabDocument = ({
   const handleRefreshCurrentTab = () => {
     try {
       selector?.currentTabId &&
-        delete CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION[selector?.currentTabId]
+        delete courseApi.CACHE_GET_TOPIC_DESCRIPTION[selector?.currentTabId]
       dispatch(
         getCourseActivityTapById({
           courseId: courseId as string,
           id: selector?.currentTabId ?? '',
+          api: courseApi
         }),
       )
       //   setActiveButtonId(selector?.currentTabId)
@@ -244,6 +256,11 @@ const CourseTabDocument = ({
                                   ?.number_of_attempts || 0
                               }
                               isQuizFinished={isQuizFinished}
+                              uploadApi={uploadApi}
+                              questionApi={questionApi}
+                              courseApi={courseApi}
+                              submitQuizTest={submitQuizTest}
+                              pageLink={pageLink}
                             />
                           </div>
                         )

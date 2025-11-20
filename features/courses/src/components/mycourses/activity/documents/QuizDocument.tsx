@@ -82,6 +82,8 @@ type Props = {
   uploadApi: IUploadAPI;
   questionApi: IQuestionAPI;
   courseApi: ICoursesAPI;
+  submitQuizTest: (id: string, data: any, class_user_id?: string | undefined) => Promise<any>
+  pageLink: { [key: string]: string}
 };
 
 const QuizDocument = ({
@@ -111,6 +113,8 @@ const QuizDocument = ({
   uploadApi,
   questionApi,
   courseApi,
+  submitQuizTest,
+  pageLink
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
   const selector = useAppSelector(courseActivityQuizReducer);
@@ -580,6 +584,7 @@ const QuizDocument = ({
     try {
       await dispatch(
         submitQuiz({
+          submitQuizTest,
           id: quizId,
           data: { answers, quiz_position_mapping },
           class_user_id,
@@ -612,7 +617,7 @@ const QuizDocument = ({
             }
             const queryString = searchParams.join("&");
             router.replace(
-              `${isTeacher ? PageLink.TEACHER_MY_COURSE : "/courses"}/quiz/quiz-result/${e.quizAttemptId}${
+              `${isTeacher ? pageLink.TEACHER_MY_COURSE : "/courses"}/quiz/quiz-result/${e.quizAttemptId}${
                 queryString ? `?${queryString}` : ""
               }`,
             );
@@ -917,7 +922,7 @@ const QuizDocument = ({
     if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
       if (gradeStatus === GRADE_STATUS.AWAITING_GRADING) {
         router.replace(
-          `${isTeacher ? PageLink.TEACHER_MY_COURSE : "/courses"}/quiz/your-answers-detail/${resultId}`,
+          `${isTeacher ? pageLink.TEACHER_MY_COURSE : "/courses"}/quiz/your-answers-detail/${resultId}`,
         );
         return;
       }
@@ -928,7 +933,7 @@ const QuizDocument = ({
         }
         const queryString = searchParams.join("&");
         router.replace(
-          `${isTeacher ? PageLink.TEACHER_MY_COURSE : "/courses"}/quiz/quiz-result/${resultId}${
+          `${isTeacher ? pageLink.TEACHER_MY_COURSE : "/courses"}/quiz/quiz-result/${resultId}${
             queryString ? `?${queryString}` : ""
           }`,
         );
@@ -1405,7 +1410,7 @@ const QuizDocument = ({
           onOk={() => {
             if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
               router.replace(
-                `${isTeacher ? PageLink.TEACHER_MY_COURSE : "/courses"}/quiz/your-answers-detail/${resultId}`,
+                `${isTeacher ? pageLink.TEACHER_MY_COURSE : "/courses"}/quiz/your-answers-detail/${resultId}`,
               );
               handleCalcelModalResult();
             } else {

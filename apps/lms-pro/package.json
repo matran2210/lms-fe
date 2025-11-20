@@ -30,6 +30,7 @@
     "@lms/utils": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/hooks": "workspace:*",
+    "@lms/contexts": "workspace:*",
     "@cloudflare/stream-react": "^1.8.0",
     "@cyntler/react-doc-viewer": "1.17.0",
     "@dnd-kit/core": "^6.3.1",

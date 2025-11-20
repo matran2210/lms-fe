@@ -57,7 +57,7 @@ import { ButtonContent, SappLoading } from '@lms/ui'
 import { HeaderTest } from '@lms/feature-test'
 import { trackGAEvent } from '@lms/utils'
 import dayjs from 'dayjs'
-import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
+import { showPopupCompletedCourse } from '@lms/contexts'
 import {
   Answer,
   AnswerItem,

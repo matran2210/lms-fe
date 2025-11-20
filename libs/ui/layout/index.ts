@@ -1,5 +1,5 @@
 export { default as Layout } from "./layout";
-export * from "./BottomMenu/index";
+export * from "./BottomMenu";
 export * from "./CollapseBox/index";
 export { default as FilterGrid } from "./FilterGrid/FilterGrid";
 export * from "./Footer/index";
