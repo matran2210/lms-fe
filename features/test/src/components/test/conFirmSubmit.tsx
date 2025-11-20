@@ -1,9 +1,11 @@
 import { ConfirmIcon } from "@assets/icons";
-import BackIcon from "@assets/icons/BackIcon";
-import { ButtonPrimary } from "@lms/ui";
-import { ButtonText } from "@lms/ui";
-import { SappButtonIcon } from "@lms/ui";
-import { SappModalV2 } from "@lms/ui";
+import { BackIcon } from "@lms/assets";
+import {
+  ButtonPrimary,
+  ButtonText,
+  SappButtonIcon,
+  SappModalV2,
+} from "@lms/ui";
 import { trackGAEvent } from "@lms/utils";
 
 interface IProps {

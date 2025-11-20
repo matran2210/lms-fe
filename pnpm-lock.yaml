@@ -851,9 +851,15 @@ importers:
       '@lms/core':
         specifier: workspace:*
         version: link:../../libs/core
+      '@lms/feature-auth':
+        specifier: workspace:*
+        version: link:../auth
       '@lms/feature-courses':
         specifier: workspace:*
         version: link:../courses
+      '@lms/feature-test':
+        specifier: workspace:*
+        version: 'link:'
       '@lms/hooks':
         specifier: workspace:*
         version: link:../../libs/hooks
@@ -949,9 +955,15 @@ importers:
       '@lms/core':
         specifier: workspace:*
         version: link:../core
+      '@lms/feature-auth':
+        specifier: workspace:*
+        version: link:../../features/auth
       '@lms/feature-courses':
         specifier: workspace:*
         version: link:../../features/courses
+      '@lms/feature-test':
+        specifier: workspace:*
+        version: link:../../features/test
       '@lms/hooks':
         specifier: workspace:*
         version: link:../hooks

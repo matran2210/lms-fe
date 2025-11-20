@@ -1,16 +1,15 @@
-import { AlertTriagle } from '@assets/icons'
-import QuizIcon from '@assets/icons/QuitIcon'
-import { SappModalV3 } from '@lms/ui'
-import { trackGAEvent } from '@lms/utils'
-import { Dispatch, SetStateAction } from 'react'
+import { QuizIcon } from "@lms/assets";
+import { SappModalV3 } from "@lms/ui";
+import { trackGAEvent } from "@lms/utils";
+import { Dispatch, SetStateAction } from "react";
 
 interface IProps {
-  open: boolean
-  content: string
-  setOpen: Dispatch<SetStateAction<boolean>>
-  handleQuit: () => void
-  handleCancel: () => void
-  [key: string]: any
+  open: boolean;
+  content: string;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  handleQuit: () => void;
+  handleCancel: () => void;
+  [key: string]: any;
 }
 
 const QuitTestModal = ({
@@ -22,16 +21,16 @@ const QuitTestModal = ({
   ...props
 }: IProps) => {
   const onSubmit = () => {
-    setOpen(false)
-    handleQuit()
-    trackGAEvent('Click Button Quit Modal Test')
-  }
+    setOpen(false);
+    handleQuit();
+    trackGAEvent("Click Button Quit Modal Test");
+  };
 
   const onCancel = () => {
-    handleCancel()
-    setOpen(false)
-    trackGAEvent('Click Button Cancel Modal Test')
-  }
+    handleCancel();
+    setOpen(false);
+    trackGAEvent("Click Button Cancel Modal Test");
+  };
 
   return (
     <SappModalV3
@@ -48,7 +47,7 @@ const QuitTestModal = ({
       cancelButtonClass="underline !p-0 !w-fit hover:text-primary"
       {...props}
     />
-  )
-}
+  );
+};
 
-export default QuitTestModal
+export default QuitTestModal;

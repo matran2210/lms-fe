@@ -1,11 +1,12 @@
-import { AccessIcon } from "@assets/icons/entranceTest";
+import { AccessIcon } from "@lms/assets";
+import {
+  closeShowRemindEntrance,
+  entranceTestReducer,
+  useAppDispatch,
+  useAppSelector,
+} from "@lms/contexts";
 import { SappModalV3 } from "@lms/ui";
 import { Dispatch, SetStateAction } from "react";
-import { useAppDispatch, useAppSelector } from "src/redux/hook";
-import {
-  closeShowRemind,
-  entranceTestReducer,
-} from "src/redux/slice/EntranceTest/EntranceTest";
 
 const PopUpRemindEntrance = ({
   setOpenFillForm,
@@ -18,12 +19,12 @@ const PopUpRemindEntrance = ({
   const dispatch = useAppDispatch();
   const getEnstranceTest = localStorage.getItem("enstranceTest");
   const onCancel = () => {
-    dispatch(closeShowRemind());
+    dispatch(closeShowRemindEntrance());
     localStorage.setItem("enstranceTest", "false");
   };
 
   const onOk = () => {
-    count === 1 ? setOpenTest(true) : dispatch(closeShowRemind());
+    count === 1 ? setOpenTest(true) : dispatch(closeShowRemindEntrance());
     localStorage.setItem("enstranceTest", "false");
   };
 

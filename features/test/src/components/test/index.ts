@@ -7,3 +7,4 @@ export { default as ShowAnswerTemplate } from "./ShowAnswerTemplate";
 export { default as ConFirmSubmit } from "./conFirmSubmit";
 export * from "./modal/index";
 export { default as GlobalAverage } from "./GlobalAverage";
+export { default as CountDown } from "./countdown";

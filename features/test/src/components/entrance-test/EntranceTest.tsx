@@ -1,4 +1,4 @@
-import { ArrowDownIcon } from "@assets/icons/entranceTest";
+import { ArrowDownIcon } from "@lms/assets";
 import { EAttemptStatus, IEntranceTest, IEntranceTestAttempt } from "@lms/core";
 import { CardCourse } from "@lms/feature-courses";
 import { ButtonSecondary, ButtonText } from "@lms/ui";

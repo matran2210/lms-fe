@@ -1,4 +1,4 @@
-export { default as EntrancePopup } from "./EntrancePopup";
+export * from "./EntrancePopup";
 export { default as EntrancePopupContent } from "./EntrancePopupContent";
 export { default as EntrancePopupContinue } from "./EntrancePopupContinue";
 export { default as EntranceTest } from "./EntranceTest";

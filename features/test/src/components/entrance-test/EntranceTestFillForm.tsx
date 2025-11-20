@@ -1,21 +1,21 @@
-import { SappHookFormSelect } from '@lms/ui'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { getMe, userReducer } from 'src/redux/slice/User/User'
-import { useRouter } from 'next/router'
-import { SappModalV2 } from '@lms/ui'
-import { EntranceTestAPI } from 'src/pages/api/entrance-test'
-import { entranceTestReducer } from 'src/redux/slice/EntranceTest/EntranceTest'
+import { SappHookFormSelect } from "@lms/ui";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { VALIDATE_REQUIRED } from "@utils/helpers/ValidateMessage";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAppDispatch, useAppSelector } from "src/redux/hook";
+import { getMe, userReducer } from "src/redux/slice/User/User";
+import { useRouter } from "next/router";
+import { SappModalV2 } from "@lms/ui";
+// import { EntranceTestAPI } from 'src/pages/api/entrance-test'
+import { entranceTestReducer } from "@lms/contexts";
 
 interface IProps {
-  open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>
-  entrancePopupContent: any
-  setOpenTestInfo: Dispatch<SetStateAction<boolean>> | undefined
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  entrancePopupContent: any;
+  setOpenTestInfo: Dispatch<SetStateAction<boolean>> | undefined;
 }
 const EntranceTestFillForm = ({
   open,
@@ -23,12 +23,12 @@ const EntranceTestFillForm = ({
   entrancePopupContent,
   setOpenTestInfo,
 }: IProps) => {
-  const [listUnivers, setListUnivers] = useState<any>()
-  const [listUniverPrograms, setListUniverPrograms] = useState<any>()
-  const [listMajors, setListMajors] = useState<any>()
-  const [listEngLevel, setListEngLevel] = useState<any>()
-  const { user } = useAppSelector(userReducer)
-  const router = useRouter()
+  const [listUnivers, setListUnivers] = useState<any>();
+  const [listUniverPrograms, setListUniverPrograms] = useState<any>();
+  const [listMajors, setListMajors] = useState<any>();
+  const [listEngLevel, setListEngLevel] = useState<any>();
+  const { user } = useAppSelector(userReducer);
+  const router = useRouter();
   const schema = z.object({
     univers_id: z
       .object({
@@ -58,91 +58,91 @@ const EntranceTestFillForm = ({
       })
       .optional()
       .refine((data) => data?.value && data?.label, VALIDATE_REQUIRED),
-  })
+  });
   const getListUniversities = async () => {
-    const res = await EntranceTestAPI.getListUnivers()
-    let optionUnivers = []
+    const res = await EntranceTestAPI.getListUnivers();
+    let optionUnivers = [];
     for (let e of res?.data) {
-      optionUnivers?.push({ value: e?.id, label: e?.name })
+      optionUnivers?.push({ value: e?.id, label: e?.name });
     }
-    setListUnivers(optionUnivers)
+    setListUnivers(optionUnivers);
     // return res?.data?.[0]
-  }
+  };
   const getListUniverPrograms = async () => {
-    const res = await EntranceTestAPI.getListUniversProgram()
-    let optionUniverProgram = []
+    const res = await EntranceTestAPI.getListUniversProgram();
+    let optionUniverProgram = [];
     for (let e of res?.data) {
-      optionUniverProgram?.push({ value: e?.id, label: e?.name })
+      optionUniverProgram?.push({ value: e?.id, label: e?.name });
     }
-    setListUniverPrograms(optionUniverProgram)
+    setListUniverPrograms(optionUniverProgram);
     // return res?.data?.[0]
-  }
+  };
   const getListMajors = async () => {
-    const res = await EntranceTestAPI.getListMajors()
-    let optionMajors = []
+    const res = await EntranceTestAPI.getListMajors();
+    let optionMajors = [];
     for (let e of res?.data) {
-      optionMajors?.push({ value: e?.id, label: e?.name })
+      optionMajors?.push({ value: e?.id, label: e?.name });
     }
-    setListMajors(optionMajors)
+    setListMajors(optionMajors);
     // return res?.data?.[0]
-  }
+  };
   const getListEngLevel = async () => {
-    const res = await EntranceTestAPI.getListEngLevel()
-    let optionEngLevel = []
+    const res = await EntranceTestAPI.getListEngLevel();
+    let optionEngLevel = [];
     for (let e of res?.data) {
-      optionEngLevel?.push({ value: e?.id, label: e?.name })
+      optionEngLevel?.push({ value: e?.id, label: e?.name });
     }
-    setListEngLevel(optionEngLevel)
+    setListEngLevel(optionEngLevel);
     // return res?.data?.[0]
-  }
+  };
   const { control, handleSubmit, setValue, reset } = useForm<any>({
     resolver: zodResolver(schema),
-    mode: 'onSubmit',
-  })
+    mode: "onSubmit",
+  });
   useEffect(() => {
     if (open) {
-      getListUniversities()
-      getListEngLevel()
-      getListMajors()
-      getListUniverPrograms()
+      getListUniversities();
+      getListEngLevel();
+      getListMajors();
+      getListUniverPrograms();
     }
-  }, [open])
+  }, [open]);
   useEffect(() => {
     if (user && open) {
       if (user?.detail?.university) {
-        setValue('univers_id', {
+        setValue("univers_id", {
           value: user?.detail?.university?.id,
           label: user?.detail?.university?.name,
-        })
+        });
       }
       if (user?.university_program) {
-        setValue('univers_program_id', {
+        setValue("univers_program_id", {
           value: user?.university_program?.id,
           label: user?.university_program?.name,
-        })
+        });
       }
       if (user?.detail?.major) {
-        setValue('majors_id', {
+        setValue("majors_id", {
           value: user?.detail?.major?.id,
           label: user?.detail?.major?.name,
-        })
+        });
       }
       if (user?.english_level) {
-        setValue('englishLevel_id', {
+        setValue("englishLevel_id", {
           value: user?.english_level?.id,
           label: user?.english_level?.name,
-        })
+        });
       }
     }
-  }, [user, open])
+  }, [user, open]);
 
   const handleOnClick = () => {
-    reset()
-    setOpen && setOpen(false)
-  }
+    reset();
+    setOpen && setOpen(false);
+  };
 
-  const { count } = useAppSelector(entranceTestReducer)
-  const dispatch = useAppDispatch()
+  const { count } = useAppSelector(entranceTestReducer);
+  const dispatch = useAppDispatch();
 
   const onSubmit = async (dataValue: any) => {
     const res = await EntranceTestAPI.putLevel({
@@ -150,15 +150,15 @@ const EntranceTestFillForm = ({
       major_id: dataValue?.majors_id?.value,
       english_level_id: dataValue?.englishLevel_id?.value,
       university_id: dataValue?.univers_id?.value,
-    })
+    });
 
     if (res?.success) {
-      await dispatch(getMe()).unwrap()
+      await dispatch(getMe()).unwrap();
     }
 
     if (count > 1) {
-      setOpenTestInfo && setOpenTestInfo(true)
-      setOpen(true)
+      setOpenTestInfo && setOpenTestInfo(true);
+      setOpen(true);
       // router.push({
       //   pathname: `/test/${entrancePopupContent?.id}`,
       //   query: {
@@ -168,15 +168,15 @@ const EntranceTestFillForm = ({
     }
 
     if (count === 1) {
-      setOpenTestInfo && setOpenTestInfo(true)
+      setOpenTestInfo && setOpenTestInfo(true);
     }
-  }
+  };
 
   return (
     <SappModalV2
       open={open}
       cancelButtonCaption="Cancel"
-      okButtonCaption={count > 0 ? 'Next' : 'Start'}
+      okButtonCaption={count > 0 ? "Next" : "Start"}
       handleCancel={handleOnClick}
       onOk={handleSubmit(onSubmit)}
       showHeader={false}
@@ -237,6 +237,6 @@ const EntranceTestFillForm = ({
         />
       </div>
     </SappModalV2>
-  )
-}
-export default EntranceTestFillForm
+  );
+};
+export default EntranceTestFillForm;

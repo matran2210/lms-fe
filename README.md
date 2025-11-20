@@ -1,217 +1,187 @@
-Hướng dẫn làm việc với Monorepo (Git Subtree)
+---
+# 📘 Hướng dẫn Phát triển Monorepo (LMS Frontend)
 
-File này ghi lại các lệnh git subtree chuẩn để thêm và đồng bộ code cho các dự án con (apps) trong monorepo này.
+Tài liệu này hướng dẫn quy trình làm việc chuẩn trong dự án **Monorepo**, bao gồm:
+  - Quản lý các **ứng dụng con** (`apps/`) bằng **Git Subtree**.
+  - Tạo và liên kết các **gói thư viện** (`libs/`, `features/`) bằng **pnpm workspace**.
+---
 
-Cấu trúc thư mục
+## 📂 Cấu trúc thư mục
 
-/apps: Chứa các ứng dụng con (ví dụ: lms-pro, finhub). Mỗi ứng dụng này được quản lý như một subtree.
+| Thư mục    | Mô tả                                                       | Ví dụ                                    |
+| ---------- | ----------------------------------------------------------- | ---------------------------------------- |
+| `apps`     | Chứa các ứng dụng con (deploy được). Mỗi app là một subtree | `apps/lms-pro`, `apps/finhub`            |
+| `libs`     | Chứa các thư viện dùng chung (Core, UI, Utils...)           | `@lms/ui`, `@lms/utils`                  |
+| `features` | Chứa các module nghiệp vụ dùng chung                        | `@lms/feature-auth`, `@lms/feature-test` |
 
-/libs: Chứa các thư viện dùng chung (UI, utils, assets...).
+---
 
-/features: Chứa các "feature" nghiệp vụ dùng chung.
+## PHẦN 1: Quản lý Apps con (Git Subtree)
 
-1. Thêm một App/Dự án mới (git subtree add)
+**Git Subtree** cho phép nhúng hoặc đồng bộ code từ repo bên ngoài vào thư mục `apps/` của monorepo.
 
-Đây là quy trình để "nhúng" code từ một repo Git bên ngoài (ví dụ: một app React/Next.js) vào thư mục /apps của monorepo.
+### 1️⃣ Thêm một App mới (`subtree add`)
 
-Lệnh quan trọng: git subtree add
+Dùng khi muốn thêm một dự án mới vào monorepo lần đầu.
 
-Cú pháp
-
+```bash
 git subtree add --prefix=<đường_dẫn_trong_monorepo> <url_repo_con> <tên_nhánh> --squash
+```
 
-Các bước thực hiện
+**Ví dụ:**
 
-Đứng ở thư mục gốc (root) của monorepo (lms-fe).
+```bash
+# Đứng tại thư mục gốc (lms-fe)
+git subtree add --prefix=apps/finhub https://github.com/user/finhub-repo.git main --squash
+```
 
-Chạy lệnh add, thay thế các giá trị cho đúng:
+> **Lưu ý:** `--squash` rất quan trọng, nén toàn bộ lịch sử commit của repo con thành một commit duy nhất.
 
-git subtree add --prefix=apps/ten-app-moi [https://github.com/user/ten-app-moi.git](https://github.com/user/ten-app-moi.git) main --squash
+---
 
-Giải thích tham số:
+### 2️⃣ Đồng bộ code từ App con (`subtree pull`)
 
---prefix=apps/ten-app-moi:
+Dùng khi repo con có code mới và bạn muốn cập nhật vào monorepo.
 
-Đây là đường dẫn bên trong monorepo mà bạn muốn đặt code của app con vào.
-
-Ví dụ: apps/lms-pro, apps/finhub.
-
-https://github.com/user/ten-app-moi.git:
-
-Đây là URL của repo Git (repo con) mà bạn muốn thêm vào.
-
-main:
-
-Tên nhánh (branch) của repo con mà bạn muốn kéo code về (ví dụ: main, master, staging, develop).
-
---squash:
-
-Rất quan trọng! Tham số này sẽ "nén" toàn bộ lịch sử commit của repo con thành một commit duy nhất khi thêm vào monorepo. Điều này giúp giữ lịch sử của monorepo sạch sẽ, không bị lẫn hàng ngàn commit rác từ app con.
-
-2. Đồng bộ Code từ App con (git subtree pull)
-
-Đây là quy trình để cập nhật code mới nhất từ repo con (ví dụ: lms-pro) vào monorepo của bạn.
-
-Lệnh quan trọng: git subtree pull
-
-Cú pháp
-
+```bash
 git subtree pull --prefix=<đường_dẫn_trong_monorepo> <url_repo_con> <tên_nhánh> --squash
+```
 
-Các bước thực hiện
+**Ví dụ:**
 
-Đứng ở thư mục gốc (root) của monorepo.
+```bash
+git subtree pull --prefix=apps/lms-pro https://github.com/user/lms-pro.git staging --squash
+```
 
-Chạy lệnh pull cho app mà bạn muốn đồng bộ:
+---
 
-Ví dụ (đồng bộ app lms-pro từ nhánh staging):
+## PHẦN 2: Tạo và Liên kết Package (`libs/`, `features/`)
 
-git subtree pull --prefix=apps/lms-pro [https://github.com/user/lms-pro.git](https://github.com/user/lms-pro.git) staging --squash
+Để một package mới (ví dụ `@lms/utils`) có thể được import bởi một package khác (ví dụ `@lms/feature-calculator`), bạn **bắt buộc** phải tuân thủ quy trình 5 bước dưới đây.
 
-Giải thích:
+### ✅ Checklist 5 File quan trọng
 
-Lệnh pull dùng các tham số y hệt như lệnh add.
+- `pnpm-workspace.yaml` (Gốc)
+- `package.json` (Của gói mới)
+- `index.ts` (Cổng vào của gói mới)
+- `tsconfig.base.json` (Gốc/Tools)
+- `package.json` (Của gói muốn sử dụng)
 
-Nó sẽ tìm nạp (fetch) code mới nhất từ nhánh staging của repo con và "merge" (trộn) vào thư mục apps/lms-pro của bạn.
+---
 
-Dùng --squash cũng rất quan trọng để giữ lịch sử sạch.
+### 📝 Ví dụ: Tạo package `@lms/utils`
 
-3. (Nâng cao) Đẩy Code từ Monorepo lên App con (git subtree push)
+Giả sử bạn muốn tạo package `utils` chứa hàm `formatDate` để `calculator` sử dụng.
 
-Nếu bạn sửa code của lms-pro ngay bên trong monorepo và muốn "đẩy" (push) những thay đổi đó LÊN LẠI repo lms-pro gốc.
+---
 
-Lệnh quan trọng: git subtree push
+#### Bước 1: Kiểm tra `pnpm-workspace.yaml` (Làm 1 lần)
 
-Cú pháp
+Đảm bảo file này ở thư mục gốc đã khai báo các thư mục chứa package:
 
-git subtree push --prefix=<đường_dẫn_trong_monorepo> <url_repo_con> <tên_nhánh>
-
-Ví dụ
-
-git subtree push --prefix=apps/lms-pro [https://github.com/user/lms-pro.git](https://github.com/user/lms-pro.git) main
-
-Lệnh này sẽ lấy toàn bộ commit liên quan đến apps/lms-pro và đẩy chúng lên nhánh main của repo con.
-
-Hướng dẫn "Tạo Link Export" cho Package (libs/ features/)
-
-Đây là quy trình 5 bước bắt buộc để tạo một package mới (ví dụ: @lms/utils) và làm cho nó có thể được import từ một package khác (ví dụ: @lms/feature-calculator).
-
-Nếu bạn làm thiếu 1 trong 5 bước này, bạn sẽ gặp lỗi Cannot find module.
-
-Tóm tắt 5 file cần kiểm tra:
-
-pnpm-workspace.yaml (Ở gốc): pnpm có "thấy" thư mục (libs, features) không?
-
-package.json của Gói Mới (ví dụ: libs/utils/package.json): Package mới tên là gì? "Cổng vào" (main) ở đâu?
-
-index.ts (Cổng vào) (ví dụ: libs/utils/index.ts): Gói này export (cho phép) những code gì ra ngoài?
-
-tsconfig.base.json (Ở tools/): TypeScript có "lối tắt" (paths) để tìm package này không?
-
-package.json của Gói Dùng (ví dụ: features/calculator/package.json): Package calculator đã "xin phép" (khai báo dependencies) để dùng utils chưa?
-
-VÍ DỤ: Tạo package @lms/utils
-
-Giả sử chúng ta muốn tạo một package libs/utils (tên @lms/utils) chứa hàm formatDate và dùng nó trong features/calculator (file features/calculator/package.json).
-
-Bước 1: Kiểm tra pnpm-workspace.yaml (Làm 1 lần)
-
-Đảm bảo file pnpm-workspace.yaml ở thư mục gốc (D:\lms-fe-1\lms-fe\) đã "thấy" thư mục libs/.
-
+```yaml
 packages:
+  - "apps/*"
+  - "libs/*" # <-- Bắt buộc
+  - "features/*" # <-- Bắt buộc
+```
 
-- 'apps/\*'
-- 'libs/\*' # <-- Phải có dòng này
-- 'features/\*' # <-- Phải có dòng này
+---
 
-(File của bạn (file pnpm-workspace.yaml) đã có dòng này, nên bước này OK)
+#### Bước 2: Tạo Package mới (3 file)
 
-Bước 2: Tạo Package Mới (Tạo 3 file)
+Tạo thư mục `libs/utils` và thêm các file sau:
 
-Đi đến thư mục libs/. Tạo thư mục utils. Bên trong libs/utils, tạo 3 file:
+**A. File code (`libs/utils/formatDate.ts`)**
 
-A. File code thật (libs/utils/formatDate.ts):
-
+```ts
 export const formatDate = (date: Date): string => {
-// ... (code định dạng ngày)
-return date.toISOString().split('T')[0];
+  return date.toISOString().split("T")[0];
 };
+```
 
-B. File package.json (File định danh):
-Tạo file libs/utils/package.json để khai báo tên và "cổng vào".
+**B. File định danh (`libs/utils/package.json`)**
 
+```json
 {
-"name": "@lms/utils",
-"version": "1.0.0",
-"private": true,
-"main": "./index.ts", // <-- Cổng vào
-"types": "./index.ts", // <-- Cổng vào cho Types
-"scripts": {
-"lint": "eslint ."
-},
-"peerDependencies": {
-// (Gói này không cần React)
+  "name": "@lms/utils",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./index.ts", // Cổng vào code
+  "types": "./index.ts", // Cổng vào types
+  "scripts": {
+    "lint": "eslint ."
+  }
 }
-}
+```
 
-C. File tsconfig.json (File kế thừa):
-Tạo file libs/utils/tsconfig.json để "kế thừa" cấu hình chung.
+**C. File cấu hình TS (`libs/utils/tsconfig.json`)**
 
+```json
 {
-"extends": "../../tools/typescript-config/tsconfig.base.json"
+  "extends": "../../tools/typescript-config/tsconfig.base.json"
 }
+```
 
-Bước 3: Cập nhật "Cổng vào" (index.ts)
+---
 
-Bây giờ, bạn phải tạo file libs/utils/index.ts (file mà package.json đã khai báo là main). File này có nhiệm vụ export hàm formatDate ra ngoài.
+#### Bước 3: Tạo "Cổng vào" (`index.ts`)
 
-// File: libs/utils/index.ts
-export _ from './formatDate';
-// (Nếu có file khác thì export _ from './anotherUtil';)
+File `libs/utils/index.ts` là nơi duy nhất được phép export code ra ngoài.
 
-Bước 4: Dạy TypeScript "Lối tắt" (Sửa tsconfig.base.json)
+```ts
+// libs/utils/index.ts
+export * from "./formatDate";
+// export * from './stringUtils';
+```
 
-pnpm đã biết utils ở đâu, nhưng TypeScript (VSCode) chưa biết. Bạn cần cập nhật file tools/typescript-config/base.json (file tools/typescript-config/base.json) để thêm "lối tắt" (path alias).
+---
 
+#### Bước 4: Cấu hình "Lối tắt" (Path Alias)
+
+Cập nhật `tools/typescript-config/base.json` để VSCode và TypeScript hiểu đường dẫn `@lms/utils`:
+
+```json
 {
-"compilerOptions": {
-"baseUrl": ".",
-"paths": {
-"@lms/assets": ["libs/assets/index.ts"],
-"@lms/ui": ["libs/ui/index.ts"],
-// THÊM DÒNG NÀY:
-"@lms/utils": ["libs/utils/index.ts"]
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@lms/assets": ["libs/assets/index.ts"],
+      "@lms/ui": ["libs/ui/index.ts"],
+      "@lms/utils": ["libs/utils/index.ts"] // <-- Thêm dòng này
+    }
+  }
 }
-}
-}
+```
 
-Bước 5: Khai báo Phụ thuộc và Cài đặt
+---
 
-Package utils đã sẵn sàng. Giờ bạn phải "xin phép" cho calculator được dùng nó.
+#### Bước 5: Khai báo phụ thuộc & cài đặt
 
-A. Sửa features/calculator/package.json (file features/calculator/package.json):
-Thêm @lms/utils vào dependencies:
+Để `features/calculator` dùng được `utils`, bạn phải khai báo dependency:
 
+**A. Sửa `features/calculator/package.json`**
+
+```json
 {
-"name": "@lms/feature-calculator",
-"dependencies": {
-"@lms/assets": "workspace:_",
-"@lms/ui": "workspace:_",
-"@lms/utils": "workspace:\*" // <-- THÊM DÒNG NÀY
+  "name": "@lms/feature-calculator",
+  "dependencies": {
+    "@lms/ui": "workspace:_",
+    "@lms/utils": "workspace:*" // <-- Thêm dòng này
+  }
 }
-// ... (peerDependencies, devDependencies...)
-}
+```
 
-B. Chạy pnpm install:
-Quay lại thư mục gốc (lms-fe-1/lms-fe/) và chạy:
+**B. Chạy lệnh cài đặt (tại thư mục gốc)**
 
+```bash
 pnpm install
+```
 
-Lệnh này sẽ đọc tất cả package.json, "liên kết" @lms/utils vào node_modules của calculator.
+**C. Sử dụng**
 
-C. Sử dụng:
-Bây giờ, trong file features/calculator/src/logic/calculate.ts (hoặc calcButton.tsx (file calcButton.tsx)), bạn đã có thể import thành công:
+```ts
+import { formatDate } from "@lms/utils";
+```
 
-import { formatDate } from '@lms/utils';
-
-// ...
+---
