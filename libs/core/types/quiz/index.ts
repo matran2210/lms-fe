@@ -170,4 +170,16 @@ export interface IQuizResultList {
   data: IQuizResult[];
 }
 
+export interface IFocusQuiz {
+  open: boolean;
+  id: string;
+}
+export interface VideoStateClicked {
+  course_tab_document_id: string;
+  videos: {
+    file_id: string;
+    is_click: boolean;
+  }[];
+}
+
 export * from "./StatusActionCell";

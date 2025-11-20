@@ -2,21 +2,12 @@ import { useEffect, useState } from "react";
 
 import { ExplanationPackageV2 } from "explanation-package";
 // import 'explanation-package/dist/index.css'
-<<<<<<< Updated upstream
-import { AltArrowLeft } from '@assets/icons'
-import { Modal } from 'antd'
-import {SappLoading } from '@lms/ui'
-import { CloseIconV2 } from '@components/icons'
-import { IActivityAPI, ICoursesAPI, IUploadAPI } from '@lms/core'
-=======
 import { AltArrowLeft } from "@lms/assets";
 import { UploadAPI } from "src/pages/api/upload";
 import { CoursesAPI } from "src/pages/api/courses";
-import { ActivityAPI } from "../../../pages/api/activity/index";
 import { Modal } from "antd";
 import { SappLoading } from "@lms/ui";
 // import { CloseIconV2 } from "@components/icons"; comment monorepo
->>>>>>> Stashed changes
 
 export enum QUESTION_LEVELS {
   FUNDAMENTAL = "FUNDAMENTAL",
@@ -38,25 +29,12 @@ const ModalExplanationPackage = ({
   quizAttemptsAnswerId,
   open,
   setOpen,
-<<<<<<< Updated upstream
-  document_id = '',
-  activityApi, coursesApi, uploadApi,
-}: {
-  quizAttemptsAnswerId: string
-  open: boolean
-  setOpen: () => void
-  document_id?: string
-  activityApi: IActivityAPI
-    coursesApi: ICoursesAPI
-  uploadApi: IUploadAPI
-=======
   document_id = "",
 }: {
   quizAttemptsAnswerId: string;
   open: boolean;
   setOpen: () => void;
   document_id?: string;
->>>>>>> Stashed changes
 }) => {
   const [activeQuestion, setActiveQuestion] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -64,13 +42,8 @@ const ModalExplanationPackage = ({
   const getActiveQuestion = async (id: string) => {
     setLoading(true);
     try {
-<<<<<<< Updated upstream
-      const resultResponse = await activityApi.getQuizAttemptsAnswer(id)
-      const topicDescription = await coursesApi.getTopicDescription(
-=======
       const resultResponse = await ActivityAPI.getQuizAttemptsAnswer(id);
       const topicDescription = await CoursesAPI.getTopicDescription(
->>>>>>> Stashed changes
         resultResponse?.data?.answer?.question?.question_topic_id,
         resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
       );
@@ -143,11 +116,7 @@ const ModalExplanationPackage = ({
     files: { name: string; file_key: string }[];
   }) => {
     try {
-<<<<<<< Updated upstream
-      await uploadApi.downloadFile(data)
-=======
       await UploadAPI.downloadFile(data);
->>>>>>> Stashed changes
     } catch (error) {}
   };
 

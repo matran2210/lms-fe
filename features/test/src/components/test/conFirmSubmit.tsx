@@ -1,20 +1,20 @@
-import { ConfirmIcon } from '@assets/icons'
-import BackIcon from '@assets/icons/BackIcon'
-import { ButtonPrimary } from '@lms/ui'
-import { ButtonText } from '@lms/ui'
-import { SappButtonIcon } from '@lms/ui'
-import { SappModalV2 } from '@lms/ui'
-import { trackGAEvent } from '@lms/utils'
+import { ConfirmIcon } from "@assets/icons";
+import BackIcon from "@assets/icons/BackIcon";
+import { ButtonPrimary } from "@lms/ui";
+import { ButtonText } from "@lms/ui";
+import { SappButtonIcon } from "@lms/ui";
+import { SappModalV2 } from "@lms/ui";
+import { trackGAEvent } from "@lms/utils";
 
 interface IProps {
-  open: boolean
-  setOpen: any
-  handleSubmit: any
-  handleCancel: any
-  message?: String
-  title?: string | undefined
-  okButtonCaption?: string | undefined
-  isTest?: boolean
+  open: boolean;
+  setOpen: any;
+  handleSubmit: any;
+  handleCancel: any;
+  message?: String;
+  title?: string | undefined;
+  okButtonCaption?: string | undefined;
+  isTest?: boolean;
 }
 const ConFirmSubmit = ({
   open,
@@ -22,22 +22,22 @@ const ConFirmSubmit = ({
   handleSubmit,
   handleCancel,
   message,
-  title = 'Confirm Submission',
-  okButtonCaption = 'Submit',
+  title = "Confirm Submission",
+  okButtonCaption = "Submit",
   isTest = true,
 }: IProps) => {
   const onSubmit = () => {
-    handleSubmit()
-    trackGAEvent('Click Button Submit Modal Confirm Quiz Activity')
-  }
+    handleSubmit();
+    trackGAEvent("Click Button Submit Modal Confirm Quiz Activity");
+  };
   const onCancel = () => {
-    handleCancel()
-    setOpen(false)
-    trackGAEvent('Click Button Cancel Modal Confirm Quiz Activity')
-  }
+    handleCancel();
+    setOpen(false);
+    trackGAEvent("Click Button Cancel Modal Confirm Quiz Activity");
+  };
   const onClose = () => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
   return (
     <SappModalV2
       open={open}
@@ -47,7 +47,7 @@ const ConFirmSubmit = ({
       cancelButtonClass="!text-base"
       handleCancel={onCancel}
       onOk={onSubmit}
-      title={''}
+      title={""}
       showFooter={false}
     >
       <div className="mx-auto flex w-max items-center justify-center rounded-full">
@@ -58,7 +58,7 @@ const ConFirmSubmit = ({
       </div>
       <div className="text-center text-sm font-normal text-gray-800 md:text-base">
         {message ??
-          'Are you sure you are done here and ready to view the report?'}
+          "Are you sure you are done here and ready to view the report?"}
       </div>
       <div className="relative pt-6 md:pt-10">
         <div className="flex flex-col gap-3">
@@ -83,7 +83,7 @@ const ConFirmSubmit = ({
         </div>
       </div>
     </SappModalV2>
-  )
-}
+  );
+};
 
-export default ConFirmSubmit
+export default ConFirmSubmit;

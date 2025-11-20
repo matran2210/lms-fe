@@ -20,17 +20,16 @@ import {
   MaximumContentIcon,
   MinimumContentIcon,
   RestartQuizIcon,
-} from "@assets/icons";
+} from "@lms/assets";
 import { ButtonSecondary } from "@lms/ui";
 import { SappButton } from "@lms/ui";
 import { SappModalV3 } from "@lms/ui";
 import ResetToAnswerTemplateModal from "../../../../../../test/src/components/test/ResetToAnswerTemplateModal";
 import ShowAnswerTemplate from "../../../../../../test/src/components/test/ShowAnswerTemplate";
-import { IFocusQuiz } from "@pages/courses/[id]/activity/[activityId]";
+import { IFocusQuiz } from "@lms/core";
 import { isValidatedAnswer } from "@lms/utils";
 import { trackGAEvent } from "@lms/utils";
-import { Tooltip } from "antd";
-import TooltipSapp from "src/common/Tooltip";
+import { Tooltip } from "@lms/ui";
 
 import clsx from "clsx";
 import dayjs from "dayjs";
@@ -43,13 +42,12 @@ import {
   FINISHED_TEST_TITLE,
   GRADE_STATUS,
   GRADING_METHOD,
-  PageLink,
   QUESTION_TYPES,
   RESPONSE_OPTION,
   SOCIAL_LINK,
 } from "@lms/core";
 import { DEFAULT_EDITOR_VALUE } from "@lms/core";
-import ConFirmSubmit from "src/pages/test/conFirmSubmit";
+import { ConFirmSubmit } from "@lms/feature-test";
 import { showPopupCompletedCourse } from "src/redux/slice/Popup/Result-test";
 import { IQuizSetting } from "@lms/core";
 import { IQuestion, IRequirment } from "@lms/core";

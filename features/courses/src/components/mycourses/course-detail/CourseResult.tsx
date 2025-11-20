@@ -1,72 +1,71 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { ClassAPI } from 'src/pages/api/class'
-import { IQuizResultList } from '@lms/core'
-import { Select } from 'antd'
-import { ArrowDownIcon } from '@assets/icons/entranceTest'
-
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { ClassAPI } from "src/pages/api/class";
+import { IQuizResultList } from "@lms/core";
+import { Select } from "antd";
+import { ArrowDownIcon } from "@lms/assets";
 interface IQuizAttempt {
   attempt?: {
-    grading_status?: string
-    id?: string
-    number_of_attempts?: number
-    quiz_id?: string
-    ratio_score?: string
-    score?: string | number
-    total_attempt_time?: string | number | Date
-  }
-  id: string
-  is_graded: boolean
-  grading_method?: string
-  required_percent_score?: number
-  is_limited: boolean
+    grading_status?: string;
+    id?: string;
+    number_of_attempts?: number;
+    quiz_id?: string;
+    ratio_score?: string;
+    score?: string | number;
+    total_attempt_time?: string | number | Date;
+  };
+  id: string;
+  is_graded: boolean;
+  grading_method?: string;
+  required_percent_score?: number;
+  is_limited: boolean;
 }
 
 interface CoursePart {
-  course_section_type?: string
-  description?: string
-  duration?: string | number
-  id?: string
+  course_section_type?: string;
+  description?: string;
+  duration?: string | number;
+  id?: string;
   learning_progress?: {
-    total_course_sections: number
-    total_course_sections_completed: number
-    time_spent: number
-    duration: number
-  }
-  name?: string
-  position?: number
-  quiz?: IQuizAttempt
-  user_section_learning_status?: string
+    total_course_sections: number;
+    total_course_sections_completed: number;
+    time_spent: number;
+    duration: number;
+  };
+  name?: string;
+  position?: number;
+  quiz?: IQuizAttempt;
+  user_section_learning_status?: string;
 }
 
 interface IProps {
-  class_user_id?: string
-  coursePart: CoursePart
-  setOpenReport: Dispatch<SetStateAction<boolean>>
+  class_user_id?: string;
+  coursePart: CoursePart;
+  setOpenReport: Dispatch<SetStateAction<boolean>>;
   selectedResult:
     | {
-        label: string
-        value: string
-        ratio_score?: string
-        status: string
-        score: number
-        total_attempt_time: number
+        label: string;
+        value: string;
+        ratio_score?: string;
+        status: string;
+        score: number;
+        total_attempt_time: number;
       }
-    | undefined
+    | undefined;
   setSelectedResult: Dispatch<
     SetStateAction<
       | {
-          label: string
-          value: string
-          ratio_score?: string
-          status: string
-          score: number
-          total_attempt_time: number
+          label: string;
+          value: string;
+          ratio_score?: string;
+          status: string;
+          score: number;
+          total_attempt_time: number;
         }
       | undefined
     >
-  >
-  isTeacher: boolean
-  setLabelResult: Dispatch<SetStateAction<string>>
+  >;
+  isTeacher: boolean;
+  setLabelResult: Dispatch<SetStateAction<string>>;
 }
 
 const ResultCourse = ({
@@ -86,18 +85,18 @@ const ResultCourse = ({
       total_records: 0,
     },
     data: [],
-  })
+  });
 
   const handleNextPage = () => {
-    const pageIndex = resultList.metadata.page_index
-    const totalPage = resultList.metadata.total_pages
+    const pageIndex = resultList.metadata.page_index;
+    const totalPage = resultList.metadata.total_pages;
     if (pageIndex < totalPage) {
-      fetchResult(pageIndex + 1, 10)
+      fetchResult(pageIndex + 1, 10);
     }
-  }
+  };
 
   const fetchResult = async (pageIndex: number = 1, pageSize: number = 10) => {
-    if (!class_user_id || !coursePart?.quiz?.id) return
+    if (!class_user_id || !coursePart?.quiz?.id) return;
 
     const response = await ClassAPI.getAllResultOfQuiz(
       class_user_id,
@@ -106,15 +105,15 @@ const ResultCourse = ({
         page_index: pageIndex,
         page_size: pageSize,
       },
-    )
+    );
 
-    const results = response?.data?.data || []
-    const totalRecords = response?.data?.metadata?.total_records || 0
+    const results = response?.data?.data || [];
+    const totalRecords = response?.data?.metadata?.total_records || 0;
 
-    if (!results.length) return
+    if (!results.length) return;
 
     // Set selected result (dùng chung ở cả 2 nhánh)
-    const firstResult = results[0]
+    const firstResult = results[0];
     setSelectedResult({
       label: firstResult.name,
       value: firstResult.id,
@@ -122,7 +121,7 @@ const ResultCourse = ({
       status: firstResult.status,
       score: firstResult.score,
       total_attempt_time: firstResult.total_attempt_time,
-    })
+    });
 
     // Nếu nhiều hơn 1 kết quả thì gộp vào result list
     if (totalRecords >= 1) {
@@ -132,23 +131,23 @@ const ResultCourse = ({
           (item, index, self) =>
             index === self.findIndex((t) => t.id === item.id),
         ),
-      }))
-      setLabelResult(resultList?.data?.[0]?.name)
+      }));
+      setLabelResult(resultList?.data?.[0]?.name);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchResult(1, 10)
-  }, [])
+    fetchResult(1, 10);
+  }, []);
 
-  const isAttempt = resultList?.data?.length >= 1
+  const isAttempt = resultList?.data?.length >= 1;
 
   return (
     <div className="time-allow flex items-center justify-between">
       <p className="text-sm text-gray-800 md:text-base">
         <div className="flex h-8 items-center">
           <div
-            className={`forcus-group:text-primary ${resultList?.data?.length <= 1 ? 'text-gray' : 'text-gray-800'}`}
+            className={`forcus-group:text-primary ${resultList?.data?.length <= 1 ? "text-gray" : "text-gray-800"}`}
           >
             Result of Attempts:
           </div>
@@ -166,12 +165,12 @@ const ResultCourse = ({
                     className="custom-select-v2 h-8 pr-2"
                     popupClassName="select-card-course"
                     onPopupScroll={(e) => {
-                      const target = e.target as HTMLDivElement
+                      const target = e.target as HTMLDivElement;
                       if (
                         target.scrollTop + target.offsetHeight >=
                         target.scrollHeight
                       ) {
-                        handleNextPage()
+                        handleNextPage();
                       }
                     }}
                     variant="borderless"
@@ -179,7 +178,7 @@ const ResultCourse = ({
                     onChange={(selectedOption) => {
                       const selectedResultFind = resultList?.data?.find(
                         (item) => item?.id === selectedOption,
-                      )
+                      );
 
                       const selectedResult = {
                         label: selectedResultFind?.name,
@@ -189,17 +188,17 @@ const ResultCourse = ({
                         score: selectedResultFind?.score,
                         total_attempt_time:
                           selectedResultFind?.total_attempt_time,
-                      }
+                      };
                       setSelectedResult(
                         selectedResult as {
-                          label: string
-                          value: string
-                          ratio_score?: string
-                          status: string
-                          score: number
-                          total_attempt_time: number
+                          label: string;
+                          value: string;
+                          ratio_score?: string;
+                          status: string;
+                          score: number;
+                          total_attempt_time: number;
                         },
-                      )
+                      );
                     }}
                     suffixIcon={<ArrowDownIcon />}
                   />
@@ -212,12 +211,12 @@ const ResultCourse = ({
         </div>
       </p>
       <p
-        className={`text-sm font-medium md:text-base ${isAttempt ? 'text-info' : 'text-gray-800'}`}
+        className={`text-sm font-medium md:text-base ${isAttempt ? "text-info" : "text-gray-800"}`}
       >
-        {isAttempt ? `${selectedResult?.score || 0}%` : '--'}
+        {isAttempt ? `${selectedResult?.score || 0}%` : "--"}
       </p>
     </div>
-  )
-}
+  );
+};
 
-export default ResultCourse
+export default ResultCourse;

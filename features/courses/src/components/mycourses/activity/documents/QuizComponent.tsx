@@ -1,6 +1,6 @@
-import { CloseIconV2 } from "@components/icons";
-import { NotesOutline } from "@components/icons/Notes";
-import PulsingExclamation from "@components/icons/PulsingExclamation";
+// import { CloseIconV2 } from "@components/icons"; comment monorepo
+// import { NotesOutline } from "@components/icons/Notes";
+// import PulsingExclamation from "@components/icons/PulsingExclamation";
 import {
   CircleCheckIcon,
   CircleInfoIcon,
@@ -13,8 +13,9 @@ import {
   clearFileEssay,
   confirmQuestion,
   pushNotes,
-  saveFileEssay, useAppDispatch
-} from '@lms/contexts';
+  saveFileEssay,
+  useAppDispatch,
+} from "@lms/contexts";
 import {
   ANIMATION,
   DEFAULT_EDITOR_VALUE,
@@ -22,12 +23,20 @@ import {
   RESPONSE_OPTION,
   defaultSheetData,
 } from "@lms/core";
-import { useTailwindBreakpoint } from '@lms/hooks';
+import { useTailwindBreakpoint } from "@lms/hooks";
 import {
-  AddWordPreview, NewDragNDropQuestion, EditorReader,
+  AddWordPreview,
+  NewDragNDropQuestion,
+  EditorReader,
   EssayQuestionPreview,
   FileViewer,
-  HighlightableHTML, MatchQuizComponent, MultiChoiceQuestion, OneChoiceQuestion, Popover, SelectWord, useClickOutside
+  HighlightableHTML,
+  MatchQuizComponent,
+  MultiChoiceQuestion,
+  OneChoiceQuestion,
+  Popover,
+  SelectWord,
+  useClickOutside,
 } from "@lms/ui";
 import ModalUploadFile from "@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile";
 import { checkSheetAnswered, isEmptyParagraph } from "@lms/utils";
@@ -50,12 +59,12 @@ import {
   UseFormResetField,
   UseFormSetValue,
   UseFormWatch,
-} from 'react-hook-form';
-import toast from 'react-hot-toast';
+} from "react-hook-form";
+import toast from "react-hot-toast";
 
 import { IEssayAnswer, IExhibit, IExhibitData, IFile } from "@lms/core";
 import { v4 as uuidv4 } from "uuid";
-import { download } from "../../../../../../../features/course/src/components/learning/activity/ActivityResource";
+import { download } from "../../../learning";
 import { SlotValue } from "@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop";
 
 interface IRequirement {

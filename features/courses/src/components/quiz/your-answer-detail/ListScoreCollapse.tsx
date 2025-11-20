@@ -1,13 +1,13 @@
-import type { QUESTION_TYPES } from '@lms/core'
-import { IAnswer } from '@lms/core'
-import { ButtonText } from '@lms/ui'
-import { htmlToRaw } from '@lms/utils'
-import { convertSecondsToMinutesSeconds } from '@utils/helpers'
-import type { CollapseProps } from 'antd'
-import clsx from 'clsx'
-import React, { Fragment } from 'react'
-import BaseCollapse from 'src/components/quiz/your-answer-detail/BaseCollapse'
-import { ArrowDownIcon } from '../../../../../../libs/assets/icons/course'
+import type { QUESTION_TYPES } from "@lms/core";
+import { IAnswer } from "@lms/core";
+import { ButtonText } from "@lms/ui";
+import { htmlToRaw } from "@lms/utils";
+import { convertSecondsToMinutesSeconds } from "@utils/helpers";
+import type { CollapseProps } from "antd";
+import clsx from "clsx";
+import React, { Fragment } from "react";
+import { BaseCollapse } from "../../index";
+import { ArrowDownIcon } from "@lms/assets";
 
 const ListScoreCollapse = ({
   data,
@@ -15,15 +15,15 @@ const ListScoreCollapse = ({
   renderResult,
   getTypeName,
 }: {
-  data: (IAnswer | undefined)[]
-  onShowDetail: (id: string) => void | undefined
-  renderResult: (item: IAnswer) => React.ReactNode
-  getTypeName: (type: QUESTION_TYPES | undefined) => string
+  data: (IAnswer | undefined)[];
+  onShowDetail: (id: string) => void | undefined;
+  renderResult: (item: IAnswer) => React.ReactNode;
+  getTypeName: (type: QUESTION_TYPES | undefined) => string;
 }) => {
   const renderContent = (item: IAnswer) => {
-    const classLabel = 'text-sm font-medium text-gray-400'
-    const classRow = 'flex items-center gap-3'
-    const classContent = 'text-gray-800 text-sm font-normal'
+    const classLabel = "text-sm font-medium text-gray-400";
+    const classRow = "flex items-center gap-3";
+    const classContent = "text-gray-800 text-sm font-normal";
     return (
       <Fragment>
         <div className="flex flex-col gap-3">
@@ -32,10 +32,10 @@ const ListScoreCollapse = ({
             <div
               className={clsx(
                 classContent,
-                'max-w-52 overflow-hidden truncate',
+                "max-w-52 overflow-hidden truncate",
               )}
             >
-              {item?.question?.question_filter?.part?.name || '--'}
+              {item?.question?.question_filter?.part?.name || "--"}
             </div>
           </div>
           <div className={classRow}>
@@ -55,20 +55,20 @@ const ListScoreCollapse = ({
             <span className={classContent}>
               {item?.time_spent || item?.time_spent === 0
                 ? convertSecondsToMinutesSeconds(item?.time_spent)
-                : '---'}
+                : "---"}
             </span>
           </div>
         </div>
         <ButtonText
           title="View Detail"
           className="mt-4"
-          onClick={() => (item?.id ? onShowDetail(item?.id) : '#')}
+          onClick={() => (item?.id ? onShowDetail(item?.id) : "#")}
         />
       </Fragment>
-    )
-  }
+    );
+  };
 
-  const getItems: (data: IAnswer[]) => CollapseProps['items'] = (data) => {
+  const getItems: (data: IAnswer[]) => CollapseProps["items"] = (data) => {
     return data.map((item: IAnswer) => ({
       key: item.id,
       label: (
@@ -77,8 +77,8 @@ const ListScoreCollapse = ({
         </div>
       ),
       children: renderContent(item),
-    }))
-  }
+    }));
+  };
 
   return (
     <BaseCollapse
@@ -87,13 +87,13 @@ const ListScoreCollapse = ({
       )}
       expandIcon={({ isActive }) => (
         <ArrowDownIcon
-          className={clsx('transition-transform', {
-            'rotate-180': isActive,
+          className={clsx("transition-transform", {
+            "rotate-180": isActive,
           })}
         />
       )}
     />
-  )
-}
+  );
+};
 
-export default ListScoreCollapse
+export default ListScoreCollapse;

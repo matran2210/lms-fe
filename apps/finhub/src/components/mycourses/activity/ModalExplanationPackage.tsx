@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import SappModal from '@components/base/modal/SappModal'
+import { SappModal } from '@lms/ui'
 import { ExplanationPackageV2 } from 'explanation-package'
 // import 'explanation-package/dist/index.css'
 import { CloseIcon } from '@assets/icons'

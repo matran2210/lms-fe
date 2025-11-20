@@ -1,30 +1,27 @@
-import { formatTime } from '@lms/utils'
-import {TestAnnouncementModal} from '@lms/feature-courses'
-import {PopupCanNotRetakeTest} from '@lms/feature-courses'
-import { TEST_TYPE } from '@lms/core'
-import { trackGAEvent } from '@lms/utils'
+import { ArrowDownIcon } from '@assets/icons/entranceTest'
+import StatusTestQuizBadge from '@components/StatusTestQuizBadge'
+import {
+  EAttemptStatus,
+  GRADE_STATUS,
+  GRADING_METHOD,
+  IQuizResultList,
+  TEST_TYPE,
+} from '@lms/core'
+import {
+  PopupCanNotRetakeTest,
+  TestAnnouncementModal,
+} from '@lms/feature-courses'
+import { TestPopup } from '@lms/feature-test'
+import { ButtonPrimary, ButtonSecondary, ButtonText } from '@lms/ui'
+import { capitalizeFirstLetter, formatTime, trackGAEvent } from '@lms/utils'
+import { CoursesAPI } from '@pages/api/courses'
+import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
+import { Select } from 'antd'
 import dayjs from 'dayjs'
 import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ClassAPI } from 'src/pages/api/class'
-import { IQuizResultList } from '@lms/core'
-import { Select } from 'antd'
-import { GRADING_METHOD, GRADE_STATUS } from '@lms/core'
-import { capitalizeFirstLetter } from '@lms/utils'
-import { CoursesAPI } from '@pages/api/courses'
-import {TestPopup} from '@lms/feature-test'
-import { ButtonPrimary } from '@lms/ui'
-import { ButtonSecondary } from '@lms/ui'
-import { ButtonText } from '@lms/ui'
-import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
-import StatusTestQuizBadge, {
-  STATUS_QUIZ_TEST,
-} from '@components/StatusTestQuizBadge'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { ModalNotMobileFriendly } from '@lms/ui'
-import { ArrowDownIcon } from '@assets/icons/entranceTest'
-import { EAttemptStatus } from '@lms/core'
 
 enum StatusQuizAttempt {
   Passed = 'PASSED',
@@ -50,7 +47,6 @@ const TestModal = ({
   activeCourse,
   is_passed_course,
 }: IProps) => {
-  const { isMobileView } = useTailwindBreakpoint()
   const router = useRouter()
   const isSubmitted =
     data?.quiz?.attempt && data?.quiz?.attempt?.status === 'SUBMITTED'

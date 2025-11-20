@@ -38,7 +38,7 @@ import {
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import {SappLoading } from '@lms/ui'
+import { SappLoading } from '@lms/ui'
 import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
 import {
   DISPLAY_TYPE,
@@ -54,9 +54,9 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import { IExhibit } from '@lms/core'
 import { CoursesAPI } from '../api/courses'
-import QuitTestModal from '../courses/test/quit-test'
-import TestTimeOutModal from '../courses/test/test-timeout'
-import ConFirmSubmit from './conFirmSubmit'
+import QuitTestModal from '@lms/feature-test/src/components/test/modal/quit-test-modal'
+import TestTimeOutModal from '@lms/feature-test/src/components/test/modal/test-timeout'
+import ConFirmSubmit from '@lms/feature-test/src/components/test/conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
 

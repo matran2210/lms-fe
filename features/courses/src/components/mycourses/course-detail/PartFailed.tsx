@@ -1,21 +1,20 @@
-import { ButtonSecondary } from '@lms/ui'
-import { formatTimeMinToHhMm } from '@lms/utils'
-import { trackGAEvent } from '@lms/utils'
-import { getUserPrefix, roundNumber } from '@utils/helpers'
-import { useEffect, useMemo, useState } from 'react'
-import router from 'next/router'
-import { GRADE_STATUS, GRADING_METHOD, TEST_TYPE } from '@lms/core'
-import TestModal from 'src/pages/courses/test'
-import TestModalTeacher from '@components/common/TestModalTeacher'
-import { IMyCourseDetail } from '@lms/core'
-import ResultCourse from './CourseResult'
-import { SappModalV3 } from '@lms/ui'
-import { ConfirmIcon } from '@assets/icons'
-import { useCourseContext } from '@contexts/index'
-import { ButtonText } from '@lms/ui'
-import { EAttemptStatus } from '@lms/core'
-import clsx from 'clsx'
-import { CardCourse } from '../../course'
+import { ButtonSecondary } from "@lms/ui";
+import { formatTimeMinToHhMm } from "@lms/utils";
+import { trackGAEvent } from "@lms/utils";
+import { getUserPrefix, roundNumber } from "@utils/helpers";
+import { useEffect, useMemo, useState } from "react";
+import router from "next/router";
+import { GRADE_STATUS, GRADING_METHOD, TEST_TYPE } from "@lms/core";
+import { TestModal, TestModalTeacher } from "@lms/feature-test";
+import { IMyCourseDetail } from "@lms/core";
+import ResultCourse from "./CourseResult";
+import { SappModalV3 } from "@lms/ui";
+import { ConfirmIcon } from "@assets/icons";
+import { useCourseContext } from "@contexts/index";
+import { ButtonText } from "@lms/ui";
+import { EAttemptStatus } from "@lms/core";
+import clsx from "clsx";
+import { CardCourse } from "../../course";
 
 const PartFailed = ({
   coursePart,
@@ -26,95 +25,95 @@ const PartFailed = ({
   isTeacher,
   hasCertificate = false,
 }: {
-  coursePart: IMyCourseDetail
-  class_user_id?: string
-  is_passed_course: boolean
-  isLock?: boolean
-  lastElementRef: (node: HTMLDivElement) => void
-  isTeacher: boolean
-  hasCertificate?: boolean
+  coursePart: IMyCourseDetail;
+  class_user_id?: string;
+  is_passed_course: boolean;
+  isLock?: boolean;
+  lastElementRef: (node: HTMLDivElement) => void;
+  isTeacher: boolean;
+  hasCertificate?: boolean;
 }) => {
   const noOfAttempts = `${coursePart?.quiz?.attempt?.number_of_attempts || 0}/${
-    coursePart?.quiz?.is_limited ? coursePart?.quiz?.limit_count : 'Unlimited'
-  }`
+    coursePart?.quiz?.is_limited ? coursePart?.quiz?.limit_count : "Unlimited"
+  }`;
   const isSubmitted =
     coursePart?.quiz?.attempt &&
-    coursePart?.quiz?.attempt?.status === 'SUBMITTED'
+    coursePart?.quiz?.attempt?.status === "SUBMITTED";
   const isUnsubmitted =
     coursePart?.quiz?.attempt &&
-    coursePart?.quiz?.attempt?.status === 'UN_SUBMITTED'
+    coursePart?.quiz?.attempt?.status === "UN_SUBMITTED";
   const isContinue =
     !coursePart?.quiz?.attempt ||
     (coursePart?.quiz?.attempt &&
-      coursePart?.quiz?.attempt?.status === 'IN_PROGRESS')
-  const quizAttempt = coursePart?.quiz
-  const [open, setOpen] = useState(false)
-  const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true)
-  const [openReport, setOpenReport] = useState<boolean>(false)
+      coursePart?.quiz?.attempt?.status === "IN_PROGRESS");
+  const quizAttempt = coursePart?.quiz;
+  const [open, setOpen] = useState(false);
+  const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true);
+  const [openReport, setOpenReport] = useState<boolean>(false);
   const [selectedResult, setSelectedResult] = useState<{
-    label: string
-    value: string
-    ratio_score?: string
-    status: string
-    score: number
-    total_attempt_time: number
-  }>()
-  const userPrefix = getUserPrefix(isTeacher)
+    label: string;
+    value: string;
+    ratio_score?: string;
+    status: string;
+    score: number;
+    total_attempt_time: number;
+  }>();
+  const userPrefix = getUserPrefix(isTeacher);
   const isManualGradingAndAwaitGrading =
     quizAttempt?.grading_method === GRADING_METHOD.MANUAL &&
-    quizAttempt?.attempt?.grading_status === GRADE_STATUS.AWAITING_GRADING
+    quizAttempt?.attempt?.grading_status === GRADE_STATUS.AWAITING_GRADING;
   const formattedTime = coursePart?.quiz?.quiz_timed
     ? formatTimeMinToHhMm(coursePart?.quiz?.quiz_timed * 60)
-    : 'Unlimited'
+    : "Unlimited";
 
   const checkFinished = useMemo(() => {
     if (coursePart?.quiz?.attempt) {
-      return true
+      return true;
     }
-    return false
-  }, [coursePart?.quiz?.attempt])
+    return false;
+  }, [coursePart?.quiz?.attempt]);
 
   const countTimeSpent = (ratio_score: string) => {
-    const parts = ratio_score?.split('/')
-    const firstPoint = parseInt(parts?.[0] || '0', 10)
-    const secondPoint = parseInt(parts?.[1] || '0', 10)
-    return roundNumber((firstPoint / secondPoint) * 100) || 0
-  }
+    const parts = ratio_score?.split("/");
+    const firstPoint = parseInt(parts?.[0] || "0", 10);
+    const secondPoint = parseInt(parts?.[1] || "0", 10);
+    return roundNumber((firstPoint / secondPoint) * 100) || 0;
+  };
 
   const runOutAttemp =
     Number(
       coursePart?.quiz?.attempt?.number_of_attempts /
         coursePart?.quiz?.limit_count,
-    ) || 0
+    ) || 0;
 
   const showTitleFinalTest =
     coursePart?.course_section_type === TEST_TYPE.FINAL_TEST
-      ? 'Final Test'
-      : 'MidTerm Test'
+      ? "Final Test"
+      : "MidTerm Test";
 
   useEffect(() => {
     if (runOutAttemp >= 1 && coursePart?.quiz?.is_limited === true) {
-      setIsRunoutAttemp(false)
+      setIsRunoutAttemp(false);
     }
-  }, [runOutAttemp])
+  }, [runOutAttemp]);
 
-  const { setOpenPopupCTA } = useCourseContext()
+  const { setOpenPopupCTA } = useCourseContext();
   const currentAttemptNumber = coursePart?.quiz?.attempt
-    ?.number_of_attempts as number
-  const selectedAttemptNumber = selectedResult?.label?.split('/')[0]
+    ?.number_of_attempts as number;
+  const selectedAttemptNumber = selectedResult?.label?.split("/")[0];
 
   const isShowButtonAction = () => {
-    if (hasCertificate) return false
+    if (hasCertificate) return false;
     // if (Number(currentAttemptNumber) > Number(selectedAttemptNumber))
     //   return false
     // if (Number(labelResult) > Number(selectedResult?.label)) return false
     // Case:  Unlimited time attempt
-    if (!coursePart?.quiz?.is_limited) return true
+    if (!coursePart?.quiz?.is_limited) return true;
 
     // Case: Limited time attempt
     if (coursePart?.quiz?.is_limited && !!coursePart?.quiz?.limit_count) {
       // & Case: Not Attempt
-      if (!coursePart?.quiz?.attempt) return true
+      if (!coursePart?.quiz?.attempt) return true;
 
       // & Case: Last attempt
       if (
@@ -122,48 +121,48 @@ const PartFailed = ({
           coursePart?.quiz?.limit_count &&
         !isSubmitted
       )
-        return true
+        return true;
 
       // & Case: has more than 1 attempt
       if (
         coursePart?.quiz?.attempt?.number_of_attempts <
         coursePart?.quiz?.limit_count
       )
-        return true
+        return true;
     }
-    return false
-  }
+    return false;
+  };
 
   const renderOkButtonCaption = () => {
     // // Case: Unlimited time attempt and submitted
     if (!coursePart?.quiz?.is_limited && (isSubmitted || isUnsubmitted))
-      return 'Retake'
+      return "Retake";
     // Case: Unlimited time attempt and continue
-    if (!coursePart?.quiz?.is_limited && isContinue) return 'Continue'
+    if (!coursePart?.quiz?.is_limited && isContinue) return "Continue";
     // Case: Limited time attempt
     if (coursePart?.quiz?.is_limited && !!coursePart?.quiz?.limit_count) {
       // & Case: Not Attempt
-      if (!coursePart?.quiz?.attempt) return 'Retake'
+      if (!coursePart?.quiz?.attempt) return "Retake";
 
       // & Case: Last attempt
       if (
         coursePart?.quiz?.attempt?.number_of_attempts ===
         coursePart?.quiz?.limit_count
       )
-        return 'Continue'
+        return "Continue";
       // & Case: has more than 1 attempt
       if (
         coursePart?.quiz?.attempt?.number_of_attempts <
         coursePart?.quiz?.limit_count
       )
-        return 'Retake'
+        return "Retake";
     }
-    return ''
-  }
+    return "";
+  };
 
   const isManualGradingAndNotFinishedGrading =
     coursePart?.quiz?.grading_method === GRADING_METHOD.MANUAL &&
-    coursePart?.quiz?.attempt?.grading_status !== GRADE_STATUS.FINISHED_GRADING
+    coursePart?.quiz?.attempt?.grading_status !== GRADE_STATUS.FINISHED_GRADING;
 
   const handleRedirectResult = () => {
     if (
@@ -173,7 +172,7 @@ const PartFailed = ({
     ) {
       router.push(
         `${userPrefix}/courses/test/your-answers-detail/${quizAttempt?.attempt?.id}`,
-      )
+      );
     } else if (
       isManualGradingAndNotFinishedGrading &&
       coursePart?.quiz?.attempt?.grading_status !==
@@ -182,7 +181,7 @@ const PartFailed = ({
       if (quizAttempt?.attempt && quizAttempt?.attempt?.id) {
         router.push(
           `${userPrefix}/courses/test/test-result/${quizAttempt?.attempt?.id}`,
-        )
+        );
       }
     } else {
       router.push({
@@ -191,17 +190,17 @@ const PartFailed = ({
           attempt: selectedResult?.label,
           ...(hasCertificate && { hasCertificate }),
         },
-      })
+      });
     }
-    trackGAEvent(`Click Button Result ${showTitleFinalTest}`)
-  }
+    trackGAEvent(`Click Button Result ${showTitleFinalTest}`);
+  };
 
   const titleButtonViewResult = () => {
     return coursePart?.quiz?.attempt?.grading_status ===
       GRADE_STATUS.AWAITING_GRADING
-      ? 'Your Answers'
-      : 'Result'
-  }
+      ? "Your Answers"
+      : "Result";
+  };
 
   // const handleClickTitle = () => {
   //   if (coursePart?.course_section_link_parents?.[0]?.is_preview_locked) {
@@ -217,24 +216,24 @@ const PartFailed = ({
   //   trackGAEvent(`Click Title ${showTitleFinalTest}`)
   // }
 
-  const [labelResult, setLabelResult] = useState<string>('')
+  const [labelResult, setLabelResult] = useState<string>("");
   const getAttemptStatus = () => {
     if (coursePart?.quiz?.grading_method === GRADING_METHOD.MANUAL) {
       if (coursePart?.quiz?.attempt?.status === EAttemptStatus.SUBMITTED) {
-        return coursePart?.quiz?.attempt?.grading_status
+        return coursePart?.quiz?.attempt?.grading_status;
       }
-      return coursePart?.quiz?.attempt?.status
+      return coursePart?.quiz?.attempt?.status;
     }
 
     if (coursePart?.quiz?.grading_method === GRADING_METHOD.AUTO) {
-      return coursePart?.quiz?.attempt?.status
+      return coursePart?.quiz?.attempt?.status;
     }
-  }
-  const isRetake = renderOkButtonCaption() === 'Retake'
+  };
+  const isRetake = renderOkButtonCaption() === "Retake";
   return (
     <>
       <CardCourse
-        attemptStatus={(getAttemptStatus() || 'UN_SUBMITTED') as EAttemptStatus}
+        attemptStatus={(getAttemptStatus() || "UN_SUBMITTED") as EAttemptStatus}
         title={coursePart?.name}
         key={coursePart?.id}
         ref={lastElementRef}
@@ -248,9 +247,9 @@ const PartFailed = ({
               ctaUpgrade: false,
               thankYou: false,
               thankYouLater: false,
-            })
+            });
           } else {
-            setOpen(true)
+            setOpen(true);
           }
         }}
       >
@@ -270,21 +269,21 @@ const PartFailed = ({
                   value={
                     !!selectedResult?.total_attempt_time
                       ? formatTimeMinToHhMm(selectedResult?.total_attempt_time)
-                      : '--'
+                      : "--"
                   }
                 />
                 <PartInfoItem
                   label="Latest Results:"
                   value={
                     isManualGradingAndAwaitGrading
-                      ? '--'
+                      ? "--"
                       : selectedResult?.score !== undefined &&
                           selectedResult?.score !== null
                         ? //  || (coursePart?.quiz?.attempt?.score !== undefined &&
                           //   coursePart?.quiz?.attempt?.score !== null)
                           `${selectedResult?.score}%`
                         : // ? `${coursePart?.quiz?.attempt?.score}%`
-                          '--'
+                          "--"
                   }
                 />
               </>
@@ -320,7 +319,7 @@ const PartFailed = ({
                   title={`Start`}
                   className={`${
                     coursePart?.quiz?.attempt?.number_of_attempts !==
-                      coursePart?.quiz?.limit_count && ''
+                      coursePart?.quiz?.limit_count && ""
                   } ml-auto w-full md:w-[84px]`}
                   onClick={() => {
                     if (
@@ -332,11 +331,11 @@ const PartFailed = ({
                         ctaUpgrade: false,
                         thankYou: false,
                         thankYouLater: false,
-                      })
+                      });
                     } else {
-                      setOpen(true)
+                      setOpen(true);
                     }
-                    trackGAEvent(`Click Button Start ${showTitleFinalTest}`)
+                    trackGAEvent(`Click Button Start ${showTitleFinalTest}`);
                   }}
                 />
               ) : (
@@ -358,7 +357,7 @@ const PartFailed = ({
                 {isShowButtonAction() && (
                   <ButtonSecondary
                     className={clsx(
-                      isRetake ? 'w-[84px]' : ' w-full md:w-[84px]',
+                      isRetake ? "w-[84px]" : " w-full md:w-[84px]",
                     )}
                     size="small"
                     title={renderOkButtonCaption()}
@@ -372,11 +371,11 @@ const PartFailed = ({
                           ctaUpgrade: false,
                           thankYou: false,
                           thankYouLater: false,
-                        })
+                        });
                       } else {
-                        setOpen(true)
+                        setOpen(true);
                       }
-                      trackGAEvent(`Click Button Retake ${showTitleFinalTest}`)
+                      trackGAEvent(`Click Button Retake ${showTitleFinalTest}`);
                     }}
                   />
                 )}
@@ -411,7 +410,7 @@ const PartFailed = ({
         okButtonCaption="Back"
         handleCancel={() => {}}
         onOk={() => {
-          setOpenReport(false)
+          setOpenReport(false);
         }}
         fullWidthBtn={true}
         buttonSize="extra"
@@ -420,22 +419,22 @@ const PartFailed = ({
         content={`Your test is currently being graded. The result will be sent to you via email as soon as the grading is complete.`}
       />
     </>
-  )
-}
+  );
+};
 
 const PartInfoItem = ({
   label,
   value,
 }: {
-  label: React.ReactNode
-  value: React.ReactNode
+  label: React.ReactNode;
+  value: React.ReactNode;
 }) => {
   return (
     <div className="time-allow mb-2 flex justify-between md:mb-4">
       <p className="text-sm text-gray md:text-base">{label}</p>
       <p className="text-sm font-medium text-gray-800 md:text-base">{value}</p>
     </div>
-  )
-}
+  );
+};
 
-export default PartFailed
+export default PartFailed;
