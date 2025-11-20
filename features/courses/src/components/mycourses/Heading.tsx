@@ -1,16 +1,15 @@
-import { truncateString } from '@lms/utils'
-import clsx from 'clsx'
-import React from 'react'
-import Tooltip from 'src/common/Tooltip'
-import wavingHandAnimationIcon from 'public/animations/WavingHand.json'
-import Lottie from 'lottie-react'
+import { truncateString } from "@lms/utils";
+import clsx from "clsx";
+import React from "react";
+// import wavingHandAnimationIcon from "public/animations/WavingHand.json"; comment monorepo
+import Lottie from "lottie-react";
 interface IProps {
-  greeting: string
-  title: string
-  des?: string | React.ReactNode
-  showShadow?: boolean
-  className?: string
-  showWavingHand?: boolean
+  greeting: string;
+  title: string;
+  des?: string | React.ReactNode;
+  showShadow?: boolean;
+  className?: string;
+  showWavingHand?: boolean;
 }
 
 const Heading = ({
@@ -23,8 +22,8 @@ const Heading = ({
 }: IProps) => {
   return (
     <div
-      className={clsx('w-full rounded-xl', className, {
-        'shadow-medium': showShadow === true,
+      className={clsx("w-full rounded-xl", className, {
+        "shadow-medium": showShadow === true,
       })}
     >
       <div className="mb-1 text-xl font-medium md:text-[28px] lg:text-3xl">
@@ -35,14 +34,14 @@ const Heading = ({
               {truncateString(title, 80)}
             </span>
           </h1>
-          {showWavingHand && (
+          {/* {showWavingHand && (
             <Lottie
               animationData={wavingHandAnimationIcon}
               loop={2}
               autoplay
-              className={'before-icon inline-block h-10 w-10'}
+              className={"before-icon inline-block h-10 w-10"}
             />
-          )}
+          )} */}
         </div>
       </div>
       {des && (
@@ -51,7 +50,7 @@ const Heading = ({
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Heading
+export default Heading;

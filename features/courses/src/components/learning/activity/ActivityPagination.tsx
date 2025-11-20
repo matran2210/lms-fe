@@ -10,8 +10,8 @@ import { trackGAEvent, truncateString} from '@lms/utils'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import React, { useRef } from 'react'
-import SappIcon from 'src/common/SappIcon'
-import Tooltip from 'src/common/Tooltip'
+import {SappIcon} from '@lms/ui'
+import { Tooltip } from "@lms/ui";
 import { ANIMATION } from '@lms/core'
 import { IActivity } from '@lms/core'
 interface IProps {

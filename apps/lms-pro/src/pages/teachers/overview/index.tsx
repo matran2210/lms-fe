@@ -1,4 +1,4 @@
-import { Icon } from '@lms/assets/icons'
+import { Icon } from '@lms/assets'
 import LayoutTeacher from '@components/layout/Teacher'
 import TabHeaderItem from '@components/tab/TabHeaderItem'
 import Certificate from '@components/teacher/my-profile/Certificate'

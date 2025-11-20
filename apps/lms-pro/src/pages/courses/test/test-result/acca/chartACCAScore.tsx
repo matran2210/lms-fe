@@ -1,5 +1,5 @@
 import { calculatePercentage } from '@utils/helpers'
-import Tooltip from 'src/common/Tooltip'
+import { Tooltip } from "@lms/ui";
 import { useDraggable } from 'react-use-draggable-scroll'
 import { useScrollShadows } from 'src/hooks/useScrollShadows'
 import { ChartDatum } from '@lms/core'

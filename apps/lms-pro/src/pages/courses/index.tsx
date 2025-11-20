@@ -1,30 +1,24 @@
-import Layout from '@components/layout'
-import CoursesList from '@components/mycourses/CoursesList'
-import Heading from '@components/mycourses/Heading'
+import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
 import PopupStep from '@components/user-guide/PopupStep'
 import PopupWelcome from '@components/user-guide/PopupWelcome'
-import { Button } from 'antd'
+import { useCourseContext } from '@contexts/index'
+import { ANIMATION, defaultStatusCourse, ICoursesAPI, UserGuide } from '@lms/core'
+import { CoursesList, FilterCourse, Heading } from '@lms/feature-courses'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
 import Aos from 'aos'
+import clsx from 'clsx'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import TourGuideCourseTab from 'src/assets/lotties/tour-guide-course-tab.json'
 import TourGuideCourses from 'src/assets/lotties/tour-guide-courses.json'
 import TourGuideFilter from 'src/assets/lotties/tour-guide-filter.json'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { ANIMATION, defaultStatusCourse, UserGuide } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { active, clearGuideState } from 'src/redux/slice/Course/UserGuide'
 import { UserType } from 'src/redux/types/User/urser'
 import { CoursesAPI } from '../api/courses'
-import FilterCourse from '@components/mycourses/FilterCourse'
-import { useCourseContext } from '@contexts/index'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
-import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
-import clsx from 'clsx'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -34,7 +28,10 @@ const defaultCategory = [
   },
 ]
 
-const MyCourse = () => {
+type IProps = {
+  api: ICoursesAPI
+}
+const MyCourse = ({ api }: IProps) => {
   const isEndGuide = Number(window.sessionStorage.getItem('totalCourse')) <= 0
   const {
     status: guideStatus,
@@ -220,6 +217,7 @@ const MyCourse = () => {
         showSidebar={showSidebar || isAlwaysShowSidebar}
         handleToggleSidebar={handleCloseSidebar}
         className="relative"
+        api={api}
       >
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}
@@ -355,4 +353,4 @@ const MyCourse = () => {
   )
 }
 
-export default withAuthorization([UserType.STUDENT])(MyCourse)
+export default withAuthorization<IProps>([UserType.STUDENT])(MyCourse)

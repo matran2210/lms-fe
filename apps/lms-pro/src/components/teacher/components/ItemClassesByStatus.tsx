@@ -1,5 +1,5 @@
 import { ButtonIconSapp } from '@lms/ui'
-import { Icon } from '@lms/assets/icons'
+import { Icon } from '@lms/assets'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { truncateString } from '@utils/index'
 import { useEffect, useState } from 'react'
@@ -14,7 +14,7 @@ import {
 import { BookInClassIcon, ClockInClassIcon } from 'src/assets/icons/index'
 import { IMyClass } from '@lms/core'
 import { CLASS_TEACHER_STATUS, FLEXIBLE } from '@lms/core'
-import Tooltip from 'src/common/Tooltip'
+import { Tooltip } from "@lms/ui";
 import { isEmpty } from 'lodash'
 
 const statusMap = {

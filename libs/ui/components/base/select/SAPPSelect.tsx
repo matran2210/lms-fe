@@ -1,4 +1,5 @@
-import { ArrowDownIcon } from '@lms/assets/icons'
+import React from 'react';
+import { ArrowDownIcon } from '@lms/assets'
 import { Select } from 'antd'
 import { ButtonSize } from 'antd/es/button'
 import { DefaultOptionType } from 'antd/es/select'

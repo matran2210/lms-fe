@@ -1,4 +1,4 @@
-import { Icon } from '@lms/assets/icons'
+import { Icon } from '@lms/assets'
 import Layout from '@components/layout'
 import Certificate from '@components/profile/Certificate'
 import ChangePassword from '@components/profile/ChangePassword'

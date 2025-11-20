@@ -5,8 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { defaultStatusDetail } from '@lms/core'
 import { useForm } from 'react-hook-form'
-import { SappHookFormSelect } from '@lms/ui'
-import TotalResullt from 'src/common/TotalResullt'
+import { SappHookFormSelect, TotalResullt } from '@lms/ui'
 import { getUserPrefix } from '@utils/helpers'
 
 const FilterCourseDetail = ({

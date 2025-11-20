@@ -1,10 +1,10 @@
 // components/SearchForm.tsx
 
-import React from 'react'
-import { Icon } from '@lms/assets/icons'
+import React from "react";
+import { Icon } from '@lms/assets'
 
 interface IProps {
-  question: string
+  question: string;
 }
 
 const HeadingSolution = ({ question }: IProps) => {
@@ -16,7 +16,7 @@ const HeadingSolution = ({ question }: IProps) => {
         <Icon type="ant-right" />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default HeadingSolution
+export default HeadingSolution;

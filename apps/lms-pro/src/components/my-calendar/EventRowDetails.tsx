@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
 import { IEvent } from 'sapp-common-package/dist/types'
-import SappIcon from 'src/common/SappIcon'
+import {SappIcon} from '@lms/ui'
 import {
   EVENT_TYPES,
   EVENT_TYPES_LABEL,

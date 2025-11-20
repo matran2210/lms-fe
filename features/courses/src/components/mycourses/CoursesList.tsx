@@ -1,7 +1,6 @@
 import { ButtonSecondary } from "@lms/ui";
 import { CardCourse } from "../course/index";
-import Icon, { CourseTimeIcon, GraduationCapIcon } from "@lms/assets/icons";
-import Tooltip from "src/common/Tooltip";
+import { Icon, CourseTimeIcon, GraduationCapIcon } from "@lms/assets/icons";
 import { clearStylesHtml } from "@lms/utils";
 import clsx from "clsx";
 import { isEmpty } from "lodash";
@@ -9,7 +8,7 @@ import React from "react";
 import { useAppSelector } from "src/redux/hook";
 import { ICourse } from "@lms/core";
 import Course from "./Course";
-import NoCoursesAvailable from "src/common/NoCoursesAvailable";
+import { NoCoursesAvailable, Tooltip } from "@lms/ui";
 
 interface CoursesProps {
   courses: ICourse[];

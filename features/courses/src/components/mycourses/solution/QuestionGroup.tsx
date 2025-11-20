@@ -1,5 +1,6 @@
+import React from 'react';
 // components/SearchForm.tsx
-import { Icon } from "@lms/assets/icons";
+import { Icon } from "@lms/assets";
 
 interface QuestionGroupProps {
   question: string;

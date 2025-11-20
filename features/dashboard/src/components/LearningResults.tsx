@@ -5,10 +5,9 @@ import dayjs from 'dayjs'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import NoData from 'src/common/NoData'
+import {Tooltip, NoData } from '@lms/ui'
 import { ILearningResult, IMockTestResult } from '@lms/core'
 
-import Tooltip from 'src/common/Tooltip'
 import { COURSE_TYPE, DATE_FORMAT, LABEL_MAX_LENGTH } from '@lms/core'
 
 const LearningResults = () => {

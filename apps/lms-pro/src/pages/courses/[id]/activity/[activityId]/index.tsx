@@ -6,16 +6,23 @@ import {
   HourglassIcon,
   ResourceIcon,
   ScratchPadIconV2,
-  TimeLineIcon
+  TimeLineIcon,
 } from '@assets/icons'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
 import { Discussion } from '@lms/feature-courses'
-import { Calculator, EditorReader, FileViewer, Layout, ModalResizeable, MovableWindow } from '@lms/ui'
+import {
+  Calculator,
+  EditorReader,
+  FileViewer,
+  Layout,
+  ModalResizeable,
+  MovableWindow,
+} from '@lms/ui'
 import { convertMinutesToHourFormat } from '@lms/utils'
 
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import BackToTop from '@components/BackToTop'
-import { Triangle } from '@lms/assets/icons';
+import { Triangle } from '@lms/assets';
 import BottomMenu from '@components/layout/BottomMenu'
 import AssistiveTouch from '@components/layout/BottomMenu/AssistiveTouch'
 import ExpandIcon from '@components/layout/ExpandIcon'
@@ -25,7 +32,15 @@ import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
 import LearningResource from '@components/mycourses/LearningResource'
 import { useCourseContext } from '@contexts/index'
 import { usePreviousSectionRoute } from '@contexts/PreviousSectionRouteContext'
-import { ANIMATION, CourseSectionType, EXHIBIT_TEXT_REPLACE, IActivity, ITabs, IVideo, PROGRAM } from '@lms/core'
+import {
+  ANIMATION,
+  CourseSectionType,
+  EXHIBIT_TEXT_REPLACE,
+  IActivity,
+  ITabs,
+  IVideo,
+  PROGRAM,
+} from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { SappBreadCrumbs } from '@lms/ui'
 import { Divider } from 'antd'
@@ -45,7 +60,11 @@ import {
   getDiscussion,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
-import { activeNotesList, clearNote, pushNotes } from 'src/redux/slice/Course/NotesList'
+import {
+  activeNotesList,
+  clearNote,
+  pushNotes,
+} from 'src/redux/slice/Course/NotesList'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { UserType } from 'src/redux/types/User/urser'
 import { v4 as uuidv4 } from 'uuid'
@@ -63,17 +82,6 @@ interface IBreadCrumbs {
   id: string
   name: string
   parent_id: string
-}
-export interface IFocusQuiz {
-  open: boolean
-  id: string
-}
-export interface VideoStateClicked {
-  course_tab_document_id: string
-  videos: {
-    file_id: string
-    is_click: boolean
-  }[]
 }
 const ActivityPage = () => {
   const router = useRouter()

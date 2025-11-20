@@ -1,30 +1,29 @@
-import { SappModalV2 } from '@lms/ui'
-import { useRouter } from 'next/router'
-import { Dispatch, FC, SetStateAction, useEffect, useMemo } from 'react'
-import { useAppSelector } from 'src/redux/hook'
-import { entranceTestReducer } from 'src/redux/slice/EntranceTest/EntranceTest'
-import EntrancePopupContent from './EntrancePopupContent'
-import dayjs from 'dayjs'
-import { SappModalV3 } from '@lms/ui'
+import { SappModalV3 } from "@lms/ui";
+import dayjs from "dayjs";
+import { useRouter } from "next/router";
+import { Dispatch, FC, SetStateAction, useMemo } from "react";
+import { useAppSelector } from "src/redux/hook";
+import { entranceTestReducer } from "@lms/contexts";
+import EntrancePopupContent from "./EntrancePopupContent";
 
 const calculateEndTime = (createdAt: Date, quizTimed: number): Date => {
-  return dayjs(createdAt).add(quizTimed, 'minutes').toDate()
-}
+  return dayjs(createdAt).add(quizTimed, "minutes").toDate();
+};
 
 export const isQuizExpired = (createdAt: Date, quizTimed: number): boolean => {
-  const endTime = calculateEndTime(createdAt, quizTimed)
-  return dayjs().isAfter(endTime)
-}
+  const endTime = calculateEndTime(createdAt, quizTimed);
+  return dayjs().isAfter(endTime);
+};
 
 // define the props for the confirm dialog component
 export type EntrancePopupProps = {
-  open: boolean
-  setOpen?: Dispatch<SetStateAction<boolean>>
-  data?: any
-  setOpenFillForm: Dispatch<SetStateAction<boolean>>
-  openFillForn: boolean
-  entranceTest?: Record<any, any> | undefined
-}
+  open: boolean;
+  setOpen?: Dispatch<SetStateAction<boolean>>;
+  data?: any;
+  setOpenFillForm: Dispatch<SetStateAction<boolean>>;
+  openFillForn: boolean;
+  entranceTest?: Record<any, any> | undefined;
+};
 
 // create the confirm dialog component
 const EntrancePopup: FC<EntrancePopupProps> = ({
@@ -36,20 +35,20 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
   entranceTest,
 }) => {
   const handleOnClick = () => {
-    setOpen && setOpen(false)
-  }
+    setOpen && setOpen(false);
+  };
 
-  const { count } = useAppSelector(entranceTestReducer)
-  const router = useRouter()
+  const { count } = useAppSelector(entranceTestReducer);
+  const router = useRouter();
 
   const checkLimit = useMemo(() => {
     if (data?.is_limited) {
       if (data?.attempt_times === data?.limit_count) {
-        return true
+        return true;
       }
     }
-    return false
-  }, [data])
+    return false;
+  }, [data]);
 
   return (
     <>
@@ -62,9 +61,9 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
           router.push({
             pathname: `/test/${data?.id}`,
             query: {
-              type: 'entrance',
+              type: "entrance",
             },
-          })
+          });
         }}
         showOkButton={!checkLimit || count >= 1}
         showHeader={false}
@@ -81,9 +80,9 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
           bản thân và bắt đầu ngay nhé!
         </div>
         <EntrancePopupContent
-          name={count === 1 ? entranceTest?.name : data?.name || ''}
+          name={count === 1 ? entranceTest?.name : data?.name || ""}
           timeAllow={count === 1 ? entranceTest?.quiz_timed : data?.quiz_timed}
-          attemps={`${count === 1 ? entranceTest?.attempt_times || 0 : data?.attempt_times || '0'}`}
+          attemps={`${count === 1 ? entranceTest?.attempt_times || 0 : data?.attempt_times || "0"}`}
           limit_count={
             count === 1 ? entranceTest?.limit_count : data?.limit_count
           }
@@ -99,7 +98,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         setOpenTestInfo={setOpen}
       /> */}
     </>
-  )
-}
+  );
+};
 
-export default EntrancePopup
+export default EntrancePopup;

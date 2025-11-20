@@ -4,12 +4,11 @@ import dayjs from 'dayjs'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useRef } from 'react'
-import NoData from 'src/common/NoData'
 import { TEST_TYPE } from '@lms/core'
 import { IMyCourseDetail } from '@lms/core'
 import Part from './Part'
 import PartMiddleTest from './PartFailed'
-import NoCoursesAvailable from 'src/common/NoCoursesAvailable'
+import {NoCoursesAvailable} from '@lms/ui'
 
 const CourseParts = ({
   courses,

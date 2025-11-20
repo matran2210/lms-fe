@@ -5,8 +5,9 @@ import {
   MAX_UPLOAD_SIZE,
   MAX_UPLOAD_VIDEO_SIZE,
   VALID_UPLOAD_FILES,
-} from "@lms/core";
-export interface IResource {
+} from "../../constants";
+
+export interface IResourceFile {
   id: string;
   created_at: string;
   updated_at: string;

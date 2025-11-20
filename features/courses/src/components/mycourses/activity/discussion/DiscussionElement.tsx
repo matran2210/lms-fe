@@ -1,68 +1,67 @@
+import React from 'react';
+import blankAvatar from "@assets/images/blank_avatar.webp";
+import sappAvatar from "@assets/images/blank_avatar_notification.png";
 import {
   CameraIcon,
   CloseIconPreview,
-  DeleteIcon,
   DeleteMessageIcon,
   EditMessageIcon,
-  IconSend,
   ReplyMessageIcon,
-} from '@assets/icons'
-import blankAvatar from '@assets/images/blank_avatar.webp'
-import sappAvatar from '@assets/images/blank_avatar_notification.png'
-import { VerifiedIcon } from '@lms/assets'
-import { trackGAEvent } from '@lms/utils'
-import { calculateTimeAgo } from '@utils/helpers'
-import Image from 'next/image'
-import { SetStateAction, useEffect, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import SappIcon from 'src/common/SappIcon'
-import { ActivityAPI } from 'src/pages/api/activity'
-import { useAppDispatch } from 'src/redux/hook'
-import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
-import { getDiscussion } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
+  VerifiedIcon
+} from "@lms/assets";
 import {
+  getDiscussion,
   ICreateDiscussionResReact,
   IDiscussion,
   IDiscussionFile,
-} from 'src/redux/types/Course/MyCourse/Activity/activity'
-import { IUser } from 'src/redux/types/User/urser'
-import ModalDeleteComment from './ModalDeleteComment'
-import { SappButtonIcon } from '@lms/ui'
-import { SappButton } from '@lms/ui'
-import clsx from 'clsx'
-import { HookFormTextArea } from '@lms/ui'
-import ActionDiscussion from './ActionDiscussion'
-import SappDisplayText from 'src/common/SappDisplayText'
-import SendComment from './SendComment'
-import { Popover } from 'antd'
-import { CoursesAPI } from '@pages/api/courses'
-import { isEmpty } from 'lodash'
-import { useTailwindBreakpoint } from '@lms/hooks'
+  IUser,
+  useAppDispatch,
+} from "@lms/contexts";
+import { useTailwindBreakpoint } from "@lms/hooks";
+import {
+  HookFormTextArea,
+  SappButton,
+  SappButtonIcon,
+  SappDisplayText,
+} from "@lms/ui";
+import { calculateTimeAgo, trackGAEvent } from "@lms/utils";
+import { CoursesAPI } from "@pages/api/courses";
+import { Popover } from "antd";
+import clsx from "clsx";
+import { isEmpty } from "lodash";
+import Image from "next/image";
+import { SetStateAction, useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { ActivityAPI } from "src/pages/api/activity";
+import CourseActivityApi from "src/redux/services/Course/MyCourse/Activity";
+import ActionDiscussion from "./ActionDiscussion";
+import ModalDeleteComment from "./ModalDeleteComment";
+import SendComment from "./SendComment";
 
 type Props = {
-  rank?: number
-  discussion: IDiscussion
-  idReply?: string
-  handleChangeIdReply?: (idReply: string) => void
-  onReact: (data: ICreateDiscussionResReact) => Promise<void>
-  setImageSrc: (value: SetStateAction<string | undefined>) => void
-  classId?: string
-  profile?: IUser
-  setLoading: (isLoading: boolean) => void
-  isSappSupporterUserCurrent?: boolean
-  handleEditDiscussionElement: (isEdit: boolean) => void
-}
+  rank?: number;
+  discussion: IDiscussion;
+  idReply?: string;
+  handleChangeIdReply?: (idReply: string) => void;
+  onReact: (data: ICreateDiscussionResReact) => Promise<void>;
+  setImageSrc: (value: SetStateAction<string | undefined>) => void;
+  classId?: string;
+  profile?: IUser;
+  setLoading: (isLoading: boolean) => void;
+  isSappSupporterUserCurrent?: boolean;
+  handleEditDiscussionElement: (isEdit: boolean) => void;
+};
 type UserInfo = {
-  name: string
-  email: string
-  phone: string
-  avatar: string
-}
+  name: string;
+  email: string;
+  phone: string;
+  avatar: string;
+};
 
 type IEventData = {
-  editData?: string
-}
+  editData?: string;
+};
 function DiscussionElement({
   rank = 0,
   discussion,
@@ -75,32 +74,32 @@ function DiscussionElement({
   isSappSupporterUserCurrent = false,
   handleEditDiscussionElement,
 }: Props) {
-  const { isMobileView } = useTailwindBreakpoint()
-  const [isLike, setIsLike] = useState<boolean>(discussion.is_like)
-  const [timeAgo, setTimeAgo] = useState<string>('')
-  const [isEdit, setIsEdit] = useState<boolean>(false)
-  const [isDelete, setIsDelete] = useState<boolean>(false)
-  const [editValue, setEditValue] = useState('')
+  const { isMobileView } = useTailwindBreakpoint();
+  const [isLike, setIsLike] = useState<boolean>(discussion.is_like);
+  const [timeAgo, setTimeAgo] = useState<string>("");
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [isDelete, setIsDelete] = useState<boolean>(false);
+  const [editValue, setEditValue] = useState("");
   const [discussionContent, setDiscussionContent] = useState(
     discussion?.content,
-  )
-  const dispatch = useAppDispatch()
-  const [selectFile, setSelectFile] = useState<File[]>([])
-  const [discussionFile, setDiscussionFile] = useState<IDiscussionFile[]>([])
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [isOpenUserInfo, setIsOpenUserInfo] = useState<boolean>(false)
-  const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo)
-  const canEdit = profile?.username === discussion?.username
-  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  );
+  const dispatch = useAppDispatch();
+  const [selectFile, setSelectFile] = useState<File[]>([]);
+  const [discussionFile, setDiscussionFile] = useState<IDiscussionFile[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isOpenUserInfo, setIsOpenUserInfo] = useState<boolean>(false);
+  const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo);
+  const canEdit = profile?.username === discussion?.username;
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const { control, handleSubmit } = useForm<IEventData>({})
+  const { control, handleSubmit } = useForm<IEventData>({});
 
   const onSubmit = async (e: IEventData) => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const params = {
         content: e?.editData,
-      }
+      };
       if (selectFile) {
         await CourseActivityApi.uploadImagesDiscussion({
           discussion_id: discussion?.id,
@@ -109,30 +108,30 @@ function DiscussionElement({
             .filter((el) => {
               const isNotDelete = discussionFile.find(
                 (item) => item.id === el.id,
-              )
+              );
               if (isNotDelete?.id) {
-                return el
+                return el;
               }
             })
             .map((item) => item.id),
-        })
+        });
       }
       const res = await ActivityAPI.updateDiscussionComment(
         discussion?.id,
         params,
-      )
-      handleRefresh()
+      );
+      handleRefresh();
       if (res?.success) {
-        setDiscussionContent(res?.data?.content)
-        setIsEdit(false)
-        handleEditDiscussionElement(false)
-        setSelectFile([])
+        setDiscussionContent(res?.data?.content);
+        setIsEdit(false);
+        handleEditDiscussionElement(false);
+        setSelectFile([]);
       }
     } catch (error) {
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleRefresh = () => {
     dispatch(
@@ -140,103 +139,103 @@ function DiscussionElement({
         id: classId,
         sectionId: discussion?.course_section_id,
       }),
-    )
-  }
+    );
+  };
 
   const onDeleteComment = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const res = await ActivityAPI.deleteDiscussion(discussion?.id)
+      const res = await ActivityAPI.deleteDiscussion(discussion?.id);
       if (res) {
-        handleRefresh()
-        setIsDelete(false)
-        setLoading(false)
+        handleRefresh();
+        setIsDelete(false);
+        setLoading(false);
       }
     } catch (error) {}
-  }
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e?.target?.files
+    const files = e?.target?.files;
     if (files) {
       const imageFiles = Array.from(files).filter((file) =>
-        file?.type?.startsWith('image/'),
-      )
+        file?.type?.startsWith("image/"),
+      );
       if (imageFiles.length > 1) {
-        toast.error('Vui lòng chỉ chọn 1 ảnh từ thiết bị.')
-        return
+        toast.error("Vui lòng chỉ chọn 1 ảnh từ thiết bị.");
+        return;
       }
 
       // Loại bỏ các file có định dạng .webp
       const filteredFiles = imageFiles?.filter(
-        (file) => !file?.name?.toLowerCase()?.endsWith('.webp'),
-      )
+        (file) => !file?.name?.toLowerCase()?.endsWith(".webp"),
+      );
 
       // Kiểm tra kích thước file không vượt quá 20MB
       const validFiles = filteredFiles?.filter(
         (file) => file?.size < 20 * 1024 * 1024,
-      )
+      );
 
       if (validFiles?.length > 0) {
-        setSelectFile(validFiles)
+        setSelectFile(validFiles);
       } else {
-        toast.error('Vui lòng chọn ảnh từ thiết bị, không quá 20MB')
-        return
+        toast.error("Vui lòng chọn ảnh từ thiết bị, không quá 20MB");
+        return;
       }
     }
 
     // Xóa giá trị của input để làm sạch
     if (fileInputRef?.current) {
-      fileInputRef.current.value = ''
+      fileInputRef.current.value = "";
     }
 
-    e.target.value = ''
-  }
+    e.target.value = "";
+  };
 
   const handleDeleteFile = (id: string | number, isFile: boolean) => {
     if (isFile) {
       setSelectFile((prev: File[]) => {
-        return prev.filter((_, i) => i !== id)
-      })
+        return prev.filter((_, i) => i !== id);
+      });
     } else {
       setDiscussionFile((prev) => {
-        return prev?.filter((e) => e.id !== id)
-      })
+        return prev?.filter((e) => e.id !== id);
+      });
     }
-  }
+  };
 
   const handleEdit = () => {
-    setEditValue(discussionContent)
-    setIsEdit(true)
-    handleEditDiscussionElement(true)
-    trackGAEvent('Click Edit Comment Activity')
-  }
+    setEditValue(discussionContent);
+    setIsEdit(true);
+    handleEditDiscussionElement(true);
+    trackGAEvent("Click Edit Comment Activity");
+  };
 
   const handleCancelEdit = () => {
-    setIsEdit(false)
-    handleEditDiscussionElement(false)
-    handleRefresh()
-    setSelectFile([])
-    trackGAEvent('Click Cancel Edit Comment Activity')
-  }
+    setIsEdit(false);
+    handleEditDiscussionElement(false);
+    handleRefresh();
+    setSelectFile([]);
+    trackGAEvent("Click Cancel Edit Comment Activity");
+  };
 
   const handleDeleteComment = () => {
-    setIsDelete(true)
-    trackGAEvent('Click Delete Comment Activity')
-  }
+    setIsDelete(true);
+    trackGAEvent("Click Delete Comment Activity");
+  };
 
   useEffect(() => {
-    setIsLike(discussion.is_like)
-    setTimeAgo(() => calculateTimeAgo(discussion.created_at))
-    setDiscussionFile(discussion.course_discussion_files)
-  }, [discussion])
+    setIsLike(discussion.is_like);
+    setTimeAgo(() => calculateTimeAgo(discussion.created_at));
+    setDiscussionFile(discussion.course_discussion_files);
+  }, [discussion]);
 
   const handleKeyDown = (e: any) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       // Kiểm tra nếu nhấn Enter và không nhấn Shift
-      e.preventDefault() // Ngăn chặn hành động mặc định của Enter
-      handleSubmit(onSubmit)()
+      e.preventDefault(); // Ngăn chặn hành động mặc định của Enter
+      handleSubmit(onSubmit)();
     }
-  }
+  };
 
   const contentPopover = (
     <div className="flex w-72 items-start">
@@ -261,44 +260,44 @@ function DiscussionElement({
         <div className="text-xs text-[#A1A1A1]">{userInfo?.phone}</div>
       </div>
     </div>
-  )
+  );
   const fetchDiscussionStudentInfo = async () => {
     try {
       const res = await CoursesAPI.getDiscussionStudentInfo(
         discussion?.course_section_id,
         classId as string,
         discussion?.user_id,
-      )
-      const { data } = res
-      if (isEmpty(data)) return
+      );
+      const { data } = res;
+      if (isEmpty(data)) return;
       setUserInfo({
         name: data?.student_info?.detail?.full_name,
         email: data?.student_info?.user_contacts?.[0]?.email,
         phone: data?.student_info?.user_contacts?.[0]?.phone,
-        avatar: data?.student_info?.detail.avatar?.['50x50'] || blankAvatar,
-      })
+        avatar: data?.student_info?.detail.avatar?.["50x50"] || blankAvatar,
+      });
     } catch (error: any) {}
-  }
+  };
 
   const handleMouseEnter = () => {
     if (!isEmpty(userInfo)) {
-      setIsOpenUserInfo(true)
+      setIsOpenUserInfo(true);
     } else {
       if (!discussion.is_sapp_supporter && isSappSupporterUserCurrent) {
-        fetchDiscussionStudentInfo()
+        fetchDiscussionStudentInfo();
       }
     }
-  }
+  };
 
   const handleMouseLeave = () => {
-    setIsOpenUserInfo(false)
-  }
+    setIsOpenUserInfo(false);
+  };
 
   useEffect(() => {
     if (!isEmpty(userInfo)) {
-      setIsOpenUserInfo(true)
+      setIsOpenUserInfo(true);
     }
-  }, [userInfo])
+  }, [userInfo]);
 
   return (
     <div className="flex gap-3 text-gray-800">
@@ -319,8 +318,8 @@ function DiscussionElement({
             >
               <div
                 className={clsx(
-                  'flex-none leading-0',
-                  !isEmpty(userInfo) && 'cursor-pointer',
+                  "flex-none leading-0",
+                  !isEmpty(userInfo) && "cursor-pointer",
                 )}
               >
                 <Image
@@ -329,11 +328,11 @@ function DiscussionElement({
                   className="h-8 w-8 rounded-full md:h-10 md:w-10"
                   src={
                     discussion.is_sapp_supporter
-                      ? discussion?.avatar?.['50x50'] ||
-                        discussion?.avatar?.['ORIGIN'] ||
+                      ? discussion?.avatar?.["50x50"] ||
+                        discussion?.avatar?.["ORIGIN"] ||
                         sappAvatar
-                      : discussion?.avatar?.['50x50'] ||
-                        discussion?.avatar?.['ORIGIN'] ||
+                      : discussion?.avatar?.["50x50"] ||
+                        discussion?.avatar?.["ORIGIN"] ||
                         blankAvatar
                   }
                   loading="eager"
@@ -344,8 +343,8 @@ function DiscussionElement({
               </div>
               <div
                 className={clsx(
-                  'flex h-fit items-center gap-2',
-                  !isEmpty(userInfo) && 'cursor-pointer',
+                  "flex h-fit items-center gap-2",
+                  !isEmpty(userInfo) && "cursor-pointer",
                 )}
               >
                 <div className="text-base font-medium">
@@ -412,7 +411,7 @@ function DiscussionElement({
                   <div
                     className="absolute right-[-10px] top-[-10px] rounded-[80px] bg-white p-[5px] shadow-md"
                     onClick={() => {
-                      handleDeleteFile(index, true)
+                      handleDeleteFile(index, true);
                     }}
                   >
                     <CloseIconPreview width={12} height={12} />
@@ -443,7 +442,7 @@ function DiscussionElement({
                           ishover={false}
                           disabled={isLoading}
                           className="sapp-custom-hover h-fit !min-w-1 cursor-pointer border-none bg-transparent"
-                          classTitle={'!m-0'}
+                          classTitle={"!m-0"}
                         >
                           <SendComment />
                         </SappButtonIcon>
@@ -489,11 +488,11 @@ function DiscussionElement({
                 <div
                   role="button"
                   className={`${
-                    discussion?.id === idReply ? 'text-primary' : ''
+                    discussion?.id === idReply ? "text-primary" : ""
                   } flex select-none items-center gap-2 font-medium hover:underline`}
                   onClick={() => {
-                    handleChangeIdReply && handleChangeIdReply(discussion?.id)
-                    trackGAEvent('Click Reply Comment Activity')
+                    handleChangeIdReply && handleChangeIdReply(discussion?.id);
+                    trackGAEvent("Click Reply Comment Activity");
                   }}
                 >
                   <ReplyMessageIcon /> Reply
@@ -521,7 +520,7 @@ function DiscussionElement({
                     ) : (
                       <ActionDiscussion
                         onClick={handleCancelEdit}
-                        titlePrimary={'edit this comment'}
+                        titlePrimary={"edit this comment"}
                       />
                     )}
                   </div>
@@ -542,7 +541,7 @@ function DiscussionElement({
         />
       )}
     </div>
-  )
+  );
 }
 
-export default DiscussionElement
+export default DiscussionElement;

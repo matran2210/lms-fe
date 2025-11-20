@@ -1,4 +1,4 @@
-import SappTable from '@components/table/SappTable'
+import {SappTable} from '@lms/ui'
 import { TeacherAPI } from '@pages/api/teacher'
 import { StatusRequestSchedule } from '@lms/core'
 import { TablePaginationConfig } from 'antd'
@@ -24,7 +24,7 @@ import {
 } from 'src/utils/index'
 import StatusItem from './StatusItem'
 import { ColumnsType } from 'antd/es/table'
-import Tooltip from 'src/common/Tooltip'
+import { Tooltip } from "@lms/ui";
 import TooltipParagraph from 'src/common/TooltipParagraph'
 import useSappPaging from 'src/hooks/useSappPaging'
 import { TeacherKey } from '@pages/api/queryKey'

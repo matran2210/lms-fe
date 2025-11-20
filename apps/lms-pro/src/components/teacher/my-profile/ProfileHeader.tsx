@@ -1,7 +1,7 @@
 import { CheckCircleOutlineYellow, PencilFillV2Icon } from '@assets/icons'
 import blankAvatar from '@assets/images/blank_avatar.webp'
 import { TextSkeleton } from '@lms/ui'
-import { CloseIconV2 } from '@lms/assets/icons'
+import { CloseIconV2 } from '@lms/assets'
 import { Divider, Tag } from 'antd'
 import clsx from 'clsx'
 import Image, { StaticImageData } from 'next/image'

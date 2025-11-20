@@ -1,6 +1,6 @@
 import SAPP_Logo from '@assets/images/sapp_logo.svg'
 import { ButtonPrimary } from '@lms/ui'
-import { Icon } from '@lms/assets/icons'
+import { Icon, CopyIcon } from '@lms/assets'
 import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import { ICertificate } from '@pages/certificates/[id]'
 import Image from 'next/image'
@@ -9,7 +9,6 @@ import { ClickToCopyButton } from 'src/common/SappCopyLink'
 import { LinkedInShareButton } from './ButtonShareLinkedin'
 import CertificateCard from './CertificateCard'
 import ModalShareToLinkedin from './ModalShareToLinkedin'
-import { CopyIcon } from '@assets/icons'
 
 interface CertificateVerticalProps {
   certificate?: ICertificate

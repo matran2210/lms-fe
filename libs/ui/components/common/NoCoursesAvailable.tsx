@@ -1,6 +1,6 @@
 import React from 'react'
 import { ANIMATION } from '@lms/core'
-import { NoCoursesAvailableIcon } from '@lms/assets/icons'
+import { NoCoursesAvailableIcon } from '@lms/assets'
 
 const NoCoursesAvailable = () => {
   return (

@@ -1,14 +1,14 @@
+import React from 'react';
 import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import { useLayoutEffect, useState } from 'react'
 import { AuthAPI } from 'src/pages/api/profile'
 import PopUpCertificate from './popupCertificate'
 import { Divider, Table, TableProps } from 'antd'
-import { Icon } from '@lms/assets/icons'
+import { Icon, NoCertificationIcon } from '@lms/assets'
 import useDownloadImage from 'src/hooks/useDownloadImage'
 import Image from 'next/image'
 import { sappFormatDate } from '@lms/utils'
 import clsx from 'clsx'
-import { NoCertificationIcon } from '@assets/icons'
 
 interface ICertificate {
   certificate: {

@@ -5,6 +5,7 @@ import { useFormContext } from 'react-hook-form'
 import {
   DEFAULT_SELECT_SECTION,
   DEFAULT_SELECT_SECTION_NAME,
+  ICoursesAPI,
 } from '@lms/core'
 import {
   IOpenChooseItem,
@@ -14,7 +15,7 @@ import {
   allTypes,
   ISection,
 } from '@lms/core'
-import { useCourseSectionsData } from 'src/hooks/useCourseSectionsData'
+import { useCourseSectionsData } from '@lms/hooks'
 
 interface IProps {
   setOpenChooseItem: Dispatch<SetStateAction<any>>
@@ -27,6 +28,7 @@ interface IProps {
   setListSubsection: Dispatch<SetStateAction<ISection[]>>
   setListUnit?: Dispatch<SetStateAction<ISection[]>>
   setListActivity: Dispatch<SetStateAction<ISection[]>>
+  api: ICoursesAPI
 }
 
 const ListItemFilterMobile = ({
@@ -40,6 +42,7 @@ const ListItemFilterMobile = ({
   setListSubsection,
   setListUnit,
   setListActivity,
+  api
 }: IProps) => {
   const { setValue } = useFormContext()
   const [list, setList] = useState<ISection[]>([])
@@ -52,6 +55,7 @@ const ListItemFilterMobile = ({
     setListSubsection,
     setListUnit,
     setListActivity,
+    api
   })
   const resetFormFields = (fields: SectionField[]) => {
     fields.forEach((field) => setValue(field, null))

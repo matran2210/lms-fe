@@ -13,7 +13,7 @@ import { isInteger } from 'lodash'
 import { memo, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import SappIcon from 'src/common/SappIcon'
+import {SappIcon} from '@lms/ui'
 import {
   ANT_THEME_CONFIG,
   CALENDAR_SIDEBAR_CANCEL_BUTTON,

@@ -5,56 +5,48 @@ import {
   ResizeIcon,
   ScratchPadIconV2,
 } from '@assets/icons'
-import { EditorReader } from '@lms/ui'
-import { HookFormTextArea } from '@lms/ui'
-import { MovableWindow } from '@lms/ui'
+import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import Calculator from '@components/calculator'
+import CaseStudyWrapper from '@components/case-study/layout/CaseStudyWrapper'
+import Popover from '@components/Popover'
+import { NotesOutline, PulsingExclamation, Triangle } from '@lms/assets'
+import {
+  EXHIBIT_TEXT_REPLACE,
+  IAnswerResult,
+  ICaseStudyResult,
+  ICratchPad,
+  IExhibit,
+  IQuestionResult,
+  IRequirement,
+  ITopic,
+  PROGRAM,
+  QUESTION_TYPES,
+  RESPONSE_OPTION,
+} from '@lms/core'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { EditorReader, FileViewer, HookFormTextArea, ModalResizeable, MovableWindow } from '@lms/ui'
 import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
 import AddWordPreview from '@lms/ui/components/questionType/FillText'
+import MatchQuizComponent from '@lms/ui/components/questionType/MatchQuiz/MatchQuiz'
 import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
+import DragDropQuestion, {
+  SlotValue,
+} from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
 import useMousePosition from '@utils/hookMouseMove'
 import { runHighlight } from '@utils/index'
+import { Divider } from 'antd'
+import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import {
-  EXHIBIT_TEXT_REPLACE,
-  PROGRAM,
-  QUESTION_TYPES,
-  RESPONSE_OPTION,
-} from '@lms/core'
+import { CoursesAPI } from 'src/pages/api/courses'
 import { useAppDispatch } from 'src/redux/hook'
 import { loadMoreQuestion } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
-import { IExhibit } from '@lms/core'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { ModalResizeable } from '@lms/ui'
-import {
-  IAnswerResult,
-  ICaseStudyResult,
-  ICratchPad,
-  IQuestionResult,
-  IRequirement,
-  ITopic,
-} from '@lms/core'
-import clsx from 'clsx'
-import { FileViewer } from '@lms/ui'
-import MatchQuizComponent from '@lms/ui/components/questionType/MatchQuiz/MatchQuiz'
-import DragDropQuestion, {
-  SlotValue,
-} from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
-import CloseModalIcon from '@assets/icons/CloseModalIcon'
-import { Triangle } from '@lms/assets/icons';
-import CaseStudyWrapper from '@components/case-study/layout/CaseStudyWrapper'
-import Popover from '@components/Popover'
 import { download } from '../../../../../../features/course/src/components/learning/activity/ActivityResource'
-import { NotesOutline } from '@lms/assets/icons'
-import { PulsingExclamation } from '@lms/assets/icons'
-import { Divider } from 'antd'
-import { useTailwindBreakpoint } from '@lms/hooks'
 
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])

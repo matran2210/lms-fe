@@ -1,9 +1,9 @@
-import { ArrowRight } from "@assets/icons";
-import { StatusQuizTag } from "@components/teacher/components/StatusActionCell";
+import { ArrowRight } from "@lms/assets";
+import { StatusQuizTag } from "@lms/core/types/quiz/StatusActionCell";
 import { getTimeFromInput } from "@lms/utils";
 import dayjs from "dayjs";
 import router from "next/router";
-import Tooltip from "src/common/Tooltip";
+import { Tooltip } from "@lms/ui";
 import {
   GRADE_STATUS,
   GRADING_METHOD,

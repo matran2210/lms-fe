@@ -84,6 +84,9 @@ importers:
       '@lms/feature-auth':
         specifier: workspace:*
         version: link:../../features/auth
+      '@lms/feature-calendar':
+        specifier: workspace:*
+        version: link:../../features/calendar
       '@lms/feature-class':
         specifier: workspace:*
         version: link:../../features/class
@@ -93,6 +96,9 @@ importers:
       '@lms/feature-notifications':
         specifier: workspace:*
         version: link:../../features/notifications
+      '@lms/feature-test':
+        specifier: workspace:*
+        version: link:../../features/test
       '@lms/feature-user':
         specifier: workspace:*
         version: link:../../features/user
@@ -782,6 +788,30 @@ importers:
       '@lms/assets':
         specifier: workspace:*
         version: link:../../libs/assets
+      '@lms/contexts':
+        specifier: workspace:*
+        version: link:../../libs/state
+      '@lms/core':
+        specifier: workspace:*
+        version: link:../../libs/core
+      '@lms/feature-test':
+        specifier: workspace:*
+        version: link:../test
+      '@lms/hooks':
+        specifier: workspace:*
+        version: link:../../libs/hooks
+      '@lms/ui':
+        specifier: workspace:*
+        version: link:../../libs/ui
+      '@lms/utils':
+        specifier: workspace:*
+        version: link:../../libs/utils
+
+  features/dashboard:
+    dependencies:
+      '@lms/assets':
+        specifier: workspace:*
+        version: link:../../libs/assets
       '@lms/core':
         specifier: workspace:*
         version: link:../../libs/core
@@ -815,6 +845,9 @@ importers:
       '@lms/assets':
         specifier: workspace:*
         version: link:../../libs/assets
+      '@lms/contexts':
+        specifier: workspace:*
+        version: link:../../libs/state
       '@lms/core':
         specifier: workspace:*
         version: link:../../libs/core

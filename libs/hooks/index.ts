@@ -8,3 +8,6 @@ export * from "./useScrollShadows";
 export * from "./useTailwindBreakpoint";
 export * from "./useTooltipModal"
 export { default as useQueryAction } from "./useQueryAction";
+export * from "./course/useCourseSectionsData"
+export { default as useReponsive } from "./useReponsive";
+

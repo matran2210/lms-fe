@@ -3,7 +3,7 @@ import React from 'react'
 import { IEntranceTest } from '@lms/core'
 import EntranceTest from './EntranceTest'
 import { EAttemptStatus } from '@lms/core'
-import NoCoursesAvailable from 'src/common/NoCoursesAvailable'
+import {NoCoursesAvailable} from '@lms/ui'
 
 interface EntranceTestListProps {
   entranceTestLists: IEntranceTest[]

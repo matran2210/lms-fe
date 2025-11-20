@@ -5,7 +5,7 @@ import clsx from "clsx";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactElement, ReactNode, useState } from "react";
-import { PageLink } from "@lms/core";
+import { ICoursesAPI, PageLink } from "@lms/core";
 import { useAppSelector } from "src/redux/hook";
 import Sidebar from "./Sidebar";
 import { useTailwindBreakpoint } from "@lms/hooks";
@@ -18,6 +18,7 @@ interface LayoutProps {
   handleToggleSidebar?: () => void;
   className?: string;
   childClassName?: string;
+  api: ICoursesAPI
 }
 
 // eslint-disable-next-line import/no-unused-modules
@@ -31,6 +32,7 @@ export default function Layout(props: LayoutProps): ReactElement {
     handleToggleSidebar,
     className,
     childClassName,
+    api
   } = props;
   const router = useRouter();
   const { isShowMenuContent } = useTailwindBreakpoint();
@@ -102,6 +104,7 @@ export default function Layout(props: LayoutProps): ReactElement {
           openResource={openResource}
           openExaminationInfo={openExaminationInfo}
           setOpenExaminationInfo={setOpenExaminationInfo}
+          api={api}
         />
 
         <div

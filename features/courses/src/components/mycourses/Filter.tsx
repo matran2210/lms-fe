@@ -1,6 +1,6 @@
 // components/SearchForm.tsx
 
-import { SappHookFormSelect } from '@lms/ui'
+import { SappHookFormSelect, TotalResullt } from '@lms/ui'
 import { getUserPrefix } from '@utils/helpers'
 import { buildQueryString } from '@lms/utils'
 import clsx from 'clsx'
@@ -8,7 +8,6 @@ import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import TotalResullt from 'src/common/TotalResullt'
 import { defaultStatusCourse } from '@lms/core'
 import { ICourseAll } from '@lms/core'
 

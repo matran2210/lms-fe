@@ -40,10 +40,30 @@ export interface ICoursesAPI {
     success: boolean;
     data: IAnswerQuizLastestAttempt;
   }>;
+  getCourseSubsectionList: (
+    page_size: number,
+    type: "CHAPTER" | "UNIT" | "ACTIVITY",
+    parentId?: string,
+    classId?: string,
+    page_index?: number,
+    params?: Object,
+  ) => Promise<any>;
+  getCourseSectionList: (
+    id: string | string[] | undefined,
+    page_size: number,
+    page_index?: number,
+  ) => Promise<any>;
+  getTopicDescription:(
+    id: string | string[] | undefined,
+    quiz_id?: string,
+    class_user_id?: string,
+    cache?: boolean,
+  ) => Promise<any>;
 }
 export interface IActivityAPI {
   createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<any>;
   reactDiscussion: (data: ICreateDiscussionResReact) => Promise<any>;
+  getQuizAttemptsAnswer:(id: string) => Promise<any>;
 }
 
 export interface CourseActivityApi {
@@ -87,4 +107,13 @@ export interface IAuthAPI {
     new_password: string,
     otp_code: string,
   ) => Promise<any>;
+}
+
+export interface IUploadAPI {
+  downloadFile: (data: {
+    files: {
+        name: string;
+        file_key: string;
+    }[];
+}) => Promise<void>
 }

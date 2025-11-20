@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import { Dispatch, SetStateAction } from 'react'
 import TourGuideNoti from 'src/assets/lotties/tour-guide-noti.json'
 import TourGuideSidebar from 'src/assets/lotties/tour-guide-sidebar.json'
-import { PageLink, UserGuide } from '@lms/core'
+import { ICoursesAPI, PageLink, UserGuide } from '@lms/core'
 import { useAppSelector } from 'src/redux/hook'
 import {
   MENU_BOTTOM,
@@ -25,6 +25,7 @@ type SidebarProps = {
   openResource: boolean
   openExaminationInfo: boolean
   setOpenExaminationInfo: Dispatch<SetStateAction<boolean>>
+  api: ICoursesAPI
 }
 
 export default function Sidebar({
@@ -35,6 +36,7 @@ export default function Sidebar({
   openResource,
   openExaminationInfo,
   setOpenExaminationInfo,
+  api
 }: SidebarProps) {
   const router = useRouter()
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
@@ -160,7 +162,7 @@ export default function Sidebar({
           },
         )}
       />
-      <LearningResource open={openResource} setOpenResource={setOpenResource} />
+      <LearningResource open={openResource} setOpenResource={setOpenResource} api={api} />
       <ExaminationInfo
         open={openExaminationInfo}
         setOpen={setOpenExaminationInfo}

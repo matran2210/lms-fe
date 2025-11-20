@@ -1,19 +1,19 @@
-import GlobalAverage from '@pages/courses/test/test-result/GlobalAverage'
-import { formatNumber } from '@lms/utils'
-import { isNull, isUndefined } from 'lodash'
+import { GlobalAverage } from "@lms/feature-test";
+import { formatNumber } from "@lms/utils";
+import { isNull, isUndefined } from "lodash";
 interface IProps {
-  score?: number
-  className?: string
-  classScore?: string
-  classCountAll?: string
-  globalAverage: number
-  isGraded?: boolean
+  score?: number;
+  className?: string;
+  classScore?: string;
+  classCountAll?: string;
+  globalAverage: number;
+  isGraded?: boolean;
 }
 
 const TotalScore = ({
   score,
-  className = '',
-  classScore = '',
+  className = "",
+  classScore = "",
   globalAverage,
   isGraded,
 }: IProps) => {
@@ -24,12 +24,12 @@ const TotalScore = ({
       <div className="flex w-full flex-row justify-between">
         <div className="block">
           <div className="mb-3 text-2xl font-semibold text-gray-800 xl:font-bold">
-            {isGraded ? 'Overall Score' : 'Multiple Choice Score'}
+            {isGraded ? "Overall Score" : "Multiple Choice Score"}
           </div>
           <div
             className={`${classScore} font-inter text-6xl font-bold text-primary xl:text-6xl`}
           >
-            {!isNull(score) && !isUndefined(score) ? formatNumber(score) : '--'}
+            {!isNull(score) && !isUndefined(score) ? formatNumber(score) : "--"}
             %
           </div>
         </div>
@@ -39,7 +39,7 @@ const TotalScore = ({
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TotalScore
+export default TotalScore;

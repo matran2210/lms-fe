@@ -20,41 +20,42 @@ import {
   MaximumContentIcon,
   MinimumContentIcon,
   RestartQuizIcon,
-} from "@assets/icons";
-import { ButtonSecondary } from "@lms/ui";
-import { SappButton } from "@lms/ui";
-import { SappModalV3 } from "@lms/ui";
-import ResetToAnswerTemplateModal from "../../../../../../test/src/components/test/ResetToAnswerTemplateModal";
-import ShowAnswerTemplate from "../../../../../../test/src/components/test/ShowAnswerTemplate";
-import { IFocusQuiz } from "@pages/courses/[id]/activity/[activityId]";
-import { isValidatedAnswer } from "@lms/utils";
-import { trackGAEvent } from "@lms/utils";
-import { Tooltip } from "antd";
-import TooltipSapp from "src/common/Tooltip";
+} from "@lms/assets";
+import {
+  ICoursesAPI,
+  IFocusQuiz,
+  IQuestion,
+  IQuestionAPI,
+  IQuizSetting,
+  IRequirment,
+  IUploadAPI,
+} from "@lms/core";
+import { ButtonSecondary, SappButton, SappModalV3, Tooltip } from "@lms/ui";
+import { isValidatedAnswer, trackGAEvent } from "@lms/utils";
 
+import {
+  ANIMATION,
+  DEFAULT_EDITOR_VALUE,
+  FINISHED_TEST_TITLE,
+  GRADE_STATUS,
+  GRADING_METHOD,
+  QUESTION_TYPES,
+  RESPONSE_OPTION,
+  SOCIAL_LINK,
+} from "@lms/core";
+import { ConFirmSubmit } from "@lms/feature-test";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { every, isEmpty, isNull, isUndefined } from "lodash";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import {
-  ANIMATION,
-  FINISHED_TEST_TITLE,
-  GRADE_STATUS,
-  GRADING_METHOD,
-  PageLink,
-  QUESTION_TYPES,
-  RESPONSE_OPTION,
-  SOCIAL_LINK,
-} from "@lms/core";
-import { DEFAULT_EDITOR_VALUE } from "@lms/core";
-import ConFirmSubmit from "src/pages/test/conFirmSubmit";
 import { showPopupCompletedCourse } from "src/redux/slice/Popup/Result-test";
-import { IQuizSetting } from "@lms/core";
-import { IQuestion, IRequirment } from "@lms/core";
+import ResetToAnswerTemplateModal from "../../../../../../test/src/components/test/ResetToAnswerTemplateModal";
+import ShowAnswerTemplate from "../../../../../../test/src/components/test/ShowAnswerTemplate";
 import LoadingQuizDocument from "./LoadingQuizDocument";
 import QuizComponent, { QuizComponentRef } from "./QuizComponent";
+import { PageLink } from "src/constants/routes";
 
 type Props = {
   questions: IQuestion[];
@@ -82,6 +83,9 @@ type Props = {
   limit_count?: number;
   number_of_attempts: number;
   isQuizFinished?: boolean;
+  uploadApi: IUploadAPI;
+  questionApi: IQuestionAPI;
+  courseApi: ICoursesAPI;
 };
 
 const QuizDocument = ({
@@ -108,6 +112,9 @@ const QuizDocument = ({
   limit_count,
   number_of_attempts,
   isQuizFinished = false,
+  uploadApi,
+  questionApi,
+  courseApi,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
   const selector = useAppSelector(courseActivityQuizReducer);
@@ -1193,6 +1200,9 @@ const QuizDocument = ({
                     watch,
                     resetField,
                   }}
+                  api={uploadApi}
+                  questionApi={questionApi}
+                  courseApi={courseApi}
                 />
               )}
           </div>
@@ -1221,7 +1231,7 @@ const QuizDocument = ({
                 isShowTemplate &&
                 !activeQuestion?.confirmed && (
                   <div className="flex items-center justify-end gap-3">
-                    <TooltipSapp title="Reset to Answer Template">
+                    <Tooltip title="Reset to Answer Template">
                       <button
                         disabled={activeQuestion?.confirmed}
                         onClick={onOpenResetToTemplateModal}
@@ -1229,7 +1239,7 @@ const QuizDocument = ({
                       >
                         <RestartQuizIcon />
                       </button>
-                    </TooltipSapp>
+                    </Tooltip>
                     <ShowAnswerTemplate
                       {...{
                         currentTabContent: activeQuestion,

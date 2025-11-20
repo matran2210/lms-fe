@@ -1,14 +1,13 @@
-import WeeklyReport from '@components/dashboard/dashboard-normal/WeeklyReport'
-import TopicProgress from '@components/dashboard/dashboard-exam/TopicProgress'
-import OverallProgress from './dashboard-normal/OverallProgress'
-import LearningResult from './dashboard-normal/LearningResult'
+import { Icon } from '@lms/assets'
+import { ANIMATION, ICourseInfo } from '@lms/core'
 import { isUndefined } from 'lodash'
-import { Dispatch, SetStateAction, memo, useState } from 'react'
-import { ANIMATION, COURSE_TYPE } from '@lms/core'
-import { ICourseInfo } from '@lms/core'
-import StatsSkeleton from '@components/skeleton/StatsSkeleton'
-import { Icon } from '@lms/assets/icons'
 import { useRouter } from 'next/router'
+import { Dispatch, SetStateAction, memo, useState } from 'react'
+import LearningResult from './dashboard-normal/LearningResult'
+import OverallProgress from './dashboard-normal/OverallProgress'
+import { WeeklyReport } from './dashboard-normal'
+import { StatsSkeleton } from '@lms/ui'
+import { TopicProgress } from './dashboard-exam'
 export interface IActivityProgress {
   completed: number
   total: number

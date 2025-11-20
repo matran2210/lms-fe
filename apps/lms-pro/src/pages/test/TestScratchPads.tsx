@@ -1,5 +1,3 @@
-import { CircleCloseIcon, CloseIconNote } from '@assets/icons'
-import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import { EditorReader } from '@lms/ui'
 import { FileViewer } from '@lms/ui'
 import { ModalResizeable } from '@lms/ui'
@@ -10,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import { ScratchPadValue } from '@lms/core'
 import { IExhibit } from '@lms/core'
 import ScratchPatch from './scratchPatch'
-import { Triangle } from '@lms/assets/icons';
+import { Triangle, CloseModalIcon, CloseIconNote } from '@lms/assets';
 interface IProps {
   openScratchPad: any[]
   onFocusingPad: string

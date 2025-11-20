@@ -48,9 +48,9 @@ import BackToTop from '@lms/ui/components/BackToTop'
 import Popover from '@components/Popover'
 import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
 import { HighlightableHTML } from '@lms/ui'
-import { Icon } from '@lms/assets/icons'
+import { Icon } from '@lms/assets'
 import Layout from '@components/layout'
-import ButtonContent from '@components/mycourses/test/ButtonContent'
+import { ButtonContent } from '@lms/feature-test'
 import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import DragDropQuestion, {
   SlotValue,

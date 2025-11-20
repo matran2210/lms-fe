@@ -1,22 +1,22 @@
-import { ButtonPrimary } from '@lms/ui'
-import { ButtonSecondary } from '@lms/ui'
-import { ButtonText } from '@lms/ui'
-import TestPopup from '@components/common/TestPopup'
-import { trackGAEvent } from '@lms/utils'
-import { getNoOfAttemptEntranceTest } from '@utils/helpers/quiz-test/helper'
-import dayjs from 'dayjs'
-import router from 'next/router'
-import { Dispatch, SetStateAction } from 'react'
-import { IEntranceTest, IEntranceTestAttempt } from '@lms/core'
+import { ButtonPrimary } from "@lms/ui";
+import { ButtonSecondary } from "@lms/ui";
+import { ButtonText } from "@lms/ui";
+import { trackGAEvent } from "@lms/utils";
+import { getNoOfAttemptEntranceTest } from "@utils/helpers/quiz-test/helper";
+import dayjs from "dayjs";
+import router from "next/router";
+import { Dispatch, SetStateAction } from "react";
+import { IEntranceTest, IEntranceTestAttempt } from "@lms/core";
+import TestPopup from "../TestPopup";
 
 interface EntrancePopupContinueProps {
-  currentAttempt: IEntranceTestAttempt
-  isOpenPopupLastAttempt: boolean
-  setIsOpenPopupLastAttempt: Dispatch<SetStateAction<boolean>>
-  data: IEntranceTest
-  remainingTimeLastAttempt: number
-  handleSubmit: (redirectToResult: boolean) => void
-  isLoading: boolean
+  currentAttempt: IEntranceTestAttempt;
+  isOpenPopupLastAttempt: boolean;
+  setIsOpenPopupLastAttempt: Dispatch<SetStateAction<boolean>>;
+  data: IEntranceTest;
+  remainingTimeLastAttempt: number;
+  handleSubmit: (redirectToResult: boolean) => void;
+  isLoading: boolean;
 }
 
 const EntrancePopupContinue = ({
@@ -35,38 +35,38 @@ const EntrancePopupContinue = ({
   // }, [remainingTimeLastAttempt])
 
   const handleRedirectResult = () => {
-    const searchParams = getNoOfAttemptEntranceTest({ data, currentAttempt })
+    const searchParams = getNoOfAttemptEntranceTest({ data, currentAttempt });
     router.push(
       `/entrance-test/test-result/${currentAttempt?.id}?${searchParams}`,
-    )
-  }
+    );
+  };
 
   const handleStartANewAttempt = async () => {
     //reset local storage
-    localStorage.removeItem('quizAttempt')
+    localStorage.removeItem("quizAttempt");
 
     try {
       router.push({
         pathname: `/test/${data?.id}`,
         query: {
-          type: 'entrance',
+          type: "entrance",
         },
-      })
-      trackGAEvent('Click Button Start Modal Test')
+      });
+      trackGAEvent("Click Button Start Modal Test");
     } catch (err) {}
-  }
+  };
 
   const handleContinueLastAttempt = async () => {
     try {
       router.push({
         pathname: `/test/${data?.id}`,
         query: {
-          type: 'entrance',
+          type: "entrance",
         },
-      })
-      trackGAEvent('Click Button Continue Modal Test')
+      });
+      trackGAEvent("Click Button Continue Modal Test");
     } catch (err) {}
-  }
+  };
 
   const renderFooter = () => {
     if (remainingTimeLastAttempt === 0) {
@@ -87,7 +87,7 @@ const EntrancePopupContinue = ({
             />
           )}
         </>
-      )
+      );
     }
     if (data?.limit_count === data?.attempts?.length) {
       //lượt làm cuối cùng của
@@ -107,7 +107,7 @@ const EntrancePopupContinue = ({
             onClick={() => handleSubmit(true)}
           />
         </>
-      )
+      );
     } else {
       return (
         <>
@@ -131,15 +131,15 @@ const EntrancePopupContinue = ({
             onClick={handleStartANewAttempt}
           />
         </>
-      )
+      );
     }
-  }
+  };
 
   return (
     <TestPopup
       title={
         <div
-          className={`flex items-center justify-center ${remainingTimeLastAttempt === 0 ? 'mt-10' : 'mt-0'}`}
+          className={`flex items-center justify-center ${remainingTimeLastAttempt === 0 ? "mt-10" : "mt-0"}`}
         >
           Entrance Test
         </div>
@@ -148,20 +148,20 @@ const EntrancePopupContinue = ({
       setOpen={setIsOpenPopupLastAttempt}
       time={
         dayjs()
-          .startOf('day')
+          .startOf("day")
           .add(
             remainingTimeLastAttempt >= 0 ? remainingTimeLastAttempt : 0,
-            'second',
-          ) || ''
+            "second",
+          ) || ""
       }
       customFooter={
         <div className="flex w-full flex-col items-center justify-center gap-3">
           {renderFooter()}
         </div>
       }
-      gapContent={'gap-8'}
+      gapContent={"gap-8"}
     />
-  )
-}
+  );
+};
 
-export default EntrancePopupContinue
+export default EntrancePopupContinue;

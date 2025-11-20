@@ -1,6 +1,6 @@
 export * from "./modal/index";
 export { default as ActivityPagination } from "./ActivityPagination";
-export { default as ActivityContent } from "./ActivityResource";
+export * from "./ActivityResource";
 export { default as CardMenuItem } from "./CardMenuItem";
 export { default as CardResultTest } from "./CardResultTest";
 export { default as CollapseActivity } from "./CollapseActivity";

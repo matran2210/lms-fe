@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { ANIMATION, PageLink, QUESTION_TYPES } from '@lms/core'
 import { CoursesAPI } from 'src/pages/api/courses'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
+import {FullScreenLayout} from '@lms/ui'
 import { UserType } from 'src/redux/types/User/urser'
 import withAuthorization from 'src/HOC/withAuthorization'
 

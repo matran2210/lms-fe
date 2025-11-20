@@ -1,5 +1,5 @@
 import { SappBreadCrumbs } from '@lms/ui'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
+import {FullScreenLayout} from '@lms/ui'
 import { TEST_TYPE } from '@lms/core'
 import { PageLink } from '@lms/core'
 import { useGetDataQuery } from '@utils/index'
@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from '@lms/core'
 import TableQuestions from 'src/pages/courses/quiz/your-answers-detail/TableQuestions'
-import SappLoading from 'src/common/SappLoading'
+import {SappLoading } from '@lms/ui'
 
 const TestResultDetail = () => {
   const router = useRouter()

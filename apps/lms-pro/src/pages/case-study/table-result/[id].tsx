@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { ANIMATION, QUESTION_TYPES } from '@lms/core'
 import { CoursesAPI } from '../../api/courses/index'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
+import {FullScreenLayout} from '@lms/ui'
 
 const headers = [
   {

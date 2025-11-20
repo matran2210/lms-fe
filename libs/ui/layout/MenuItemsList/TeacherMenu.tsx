@@ -18,22 +18,25 @@ import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { useAppSelector, useAppDispatch } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
 import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
-import { PageLink, TitleSidebar, TitleTeacherSidebar } from '@lms/core'
-import ExpandIcon from 'src/components/layout/ExpandIcon'
+import { ICoursesAPI, TitleSidebar, TitleTeacherSidebar } from '@lms/core'
+import {ExpandIcon} from '@lms/ui'
 import {LearningResource} from '@lms/feature-courses'
 import { v4 as uuidv4 } from 'uuid'
 import { openCalculator } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { IUser } from 'src/redux/types/User/urser'
 import { useCourseContext } from '@contexts/index'
 import clsx from 'clsx'
+import { PageLink } from 'src/constants/routers'
 const { Sider } = Layout
 
 export default function TeacherMenu({
   isCourseDetail,
   isActivity,
+  api
 }: {
   isCourseDetail: boolean
   isActivity: boolean
+  api: ICoursesAPI
 }) {
   const dispatch = useAppDispatch()
   const router = useRouter()
@@ -239,7 +242,7 @@ export default function TeacherMenu({
           <BottomActionMenu user={user} onLogout={handleLogout} />
         </div>
       </Sider>
-      <LearningResource open={openResource} setOpenResource={setOpenResource} />
+      <LearningResource open={openResource} setOpenResource={setOpenResource} api={api} />
     </Fragment>
   )
 }

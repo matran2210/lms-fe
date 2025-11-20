@@ -4,3 +4,6 @@ export { default as ModalRecomment } from "./ModalRecomment";
 export { default as Recommendation } from "./Recommendation";
 export { default as ResetToAnswerTemplateModal } from "./ResetToAnswerTemplateModal";
 export { default as ShowAnswerTemplate } from "./ShowAnswerTemplate";
+export { default as ConFirmSubmit } from "./conFirmSubmit";
+export * from "./modal/index";
+export { default as GlobalAverage } from "./GlobalAverage";

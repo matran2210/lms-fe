@@ -1,4 +1,4 @@
-import { Icon } from '@lms/assets/icons'
+import { Icon } from '@lms/assets'
 import clsx from 'clsx'
 import React from 'react'
 import { SubjectOptionItem } from './SubjectList'

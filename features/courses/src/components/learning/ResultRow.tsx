@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
-import { Icon } from '@lms/assets/icons'
-import { formatTimeMinToHhMm } from '@lms/utils'
+import React, { useState } from "react";
+import { Icon } from '@lms/assets'
+import { formatTimeMinToHhMm } from "@lms/utils";
 
 interface ResultRowsProps {
-  type: string
-  partName: string
-  chapter: string
-  correctStatus: boolean
-  status: string
-  statusPercentage: number
-  statusIcon: string
-  time?: number
+  type: string;
+  partName: string;
+  chapter: string;
+  correctStatus: boolean;
+  status: string;
+  statusPercentage: number;
+  statusIcon: string;
+  time?: number;
 }
 
 const ResultRow = ({
@@ -23,7 +23,7 @@ const ResultRow = ({
   statusIcon,
   time,
 }: ResultRowsProps) => {
-  const formattedTime = formatTimeMinToHhMm(time || 0)
+  const formattedTime = formatTimeMinToHhMm(time || 0);
 
   return (
     <>
@@ -57,7 +57,7 @@ const ResultRow = ({
         {formattedTime}
       </td>
     </>
-  )
-}
+  );
+};
 
-export default ResultRow
+export default ResultRow;

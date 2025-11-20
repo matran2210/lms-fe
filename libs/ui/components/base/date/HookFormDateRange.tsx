@@ -3,7 +3,7 @@ import { DatePicker, Skeleton } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import { Control, Controller } from 'react-hook-form'
 import { ErrorMessage } from '@lms/ui'
-import SappIcon from 'src/common/SappIcon'
+import {SappIcon} from '@lms/ui'
 import SAPPLabel from '../Label/SAPPLabel'
 import { IBaseFormFieldProps } from '@lms/core'
 

@@ -1,4 +1,3 @@
-import { Icon } from '@lms/assets/icons'
 import Layout from '@components/layout'
 import Certificate from '@components/profile/Certificate'
 import ChangePassword from '@components/profile/ChangePassword'
@@ -6,20 +5,21 @@ import LoginHistoryList from '@components/profile/LoginHistory/LoginHistoryList'
 import ProfileHeader from '@components/profile/ProfileHeader'
 import Settings from '@components/profile/Settings'
 import TabHeaderItem from '@components/tab/TabHeaderItem'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
-import { Collapse, CollapseProps, Divider, Tabs } from 'antd'
-import Image, { StaticImageData } from 'next/image'
-import { useEffect, useRef, useState } from 'react'
+import { Icon } from '@lms/assets'
 import {
   ANIMATION,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
+  IDeviceItem,
+  ITabs, NOTIFICATION_STATUS,
   PageLink,
+  ProfilePages,
 } from '@lms/core'
+import { Collapse, CollapseProps, Divider, Tabs } from 'antd'
+import Image, { StaticImageData } from 'next/image'
+import { useEffect, useRef, useState } from 'react'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
-import { ITabs, NOTIFICATION_STATUS } from '@lms/core'
-import { IDeviceItem, ProfilePages } from '@lms/core'
 
 import {
   convertSlugToTitle,
@@ -29,25 +29,24 @@ import {
 
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
+import { CollapseArrowIcon } from '@assets/icons'
+import Footer from '@components/layout/Footer'
+import HeaderMobile from '@components/layout/Header/HeaderMobile'
+import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
 import DeviceList from '@components/profile/DeviceInformation/DeviceList'
+import FullScreenMobile from '@components/profile/Modal/FullScreenMobile'
 import MyProfile from '@components/profile/MyProfile'
+import OverviewItemCard from '@components/profile/Overview/OverviewItemCard'
 import ProfileList from '@components/profile/ProfileInformation/ProfileList'
 import MyPasword from '@components/profile/Security/MyPasword'
 import SubjectList from '@components/profile/SubjectInformation/SubjectList'
-import { getLogoutUser } from 'src/redux/slice/Login/Login'
-import Footer from '@components/layout/Footer'
-import clsx from 'clsx'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import HeaderMobile from '@components/layout/Header/HeaderMobile'
-import { CollapseArrowIcon } from '@assets/icons'
-import OverviewItemCard from '@components/profile/Overview/OverviewItemCard'
-import FullScreenMobile from '@components/profile/Modal/FullScreenMobile'
-import { getLoginHistory, userReducer } from 'src/redux/slice/User/User'
-import UserApi from 'src/redux/services/User/user'
-import { useRouter } from 'next/router'
 import { useCourseContext } from '@contexts/index'
-import { SappBreadCrumbs } from '@lms/ui'
-import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import clsx from 'clsx'
+import { useRouter } from 'next/router'
+import UserApi from 'src/redux/services/User/user'
+import { getLogoutUser } from 'src/redux/slice/Login/Login'
+import { getLoginHistory, userReducer } from 'src/redux/slice/User/User'
 
 interface IFullScreenMobile {
   open: boolean

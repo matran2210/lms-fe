@@ -1,5 +1,5 @@
 import { AltArrowLeft, MenuDotsIcon } from '@assets/icons'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
+import {FullScreenLayout} from '@lms/ui'
 import { LAYOUT } from '@lms/core'
 import { ExplanationPackageV2 } from 'explanation-package'
 import { useRouter } from 'next/router'
@@ -13,8 +13,8 @@ import { IRequirement } from '@lms/core'
 import { QUESTION_TYPES } from '@lms/core'
 import { IAtempt } from '@lms/core'
 import { CoursesAPI } from '../api/courses'
-import { CloseIconV2 } from '@lms/assets/icons'
-import Tooltip from 'src/common/Tooltip'
+import { CloseIconV2 } from '@lms/assets'
+import { Tooltip } from "@lms/ui";
 
 const Explanation = () => {
   const router = useRouter()

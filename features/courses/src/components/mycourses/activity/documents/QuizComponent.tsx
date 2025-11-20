@@ -1,16 +1,6 @@
-import { CloseIconV2 } from "@components/icons";
-import { NotesOutline } from "@components/icons/Notes";
-import PulsingExclamation from "@components/icons/PulsingExclamation";
-import EssayQuestionPreview from "@components/questionType/ConstructedQuestion";
-import AddWordPreview from "@components/questionType/FillText";
-import MatchQuizComponent from "@components/questionType/MatchQuiz/MatchQuiz";
-import MultiChoiceQuestion from "@components/questionType/MultipleChoiceQuestion";
-import DragDropQuestion, {
-  SlotValue,
-} from "@components/questionType/NewDragNDropQuestion/NewDragNDrop";
-import OneChoiceQuestion from "@components/questionType/OneChoiceQuestion";
-import SelectWord from "@components/questionType/SelectQuestion";
-import ModalUploadFile from "@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile";
+// import { CloseIconV2 } from "@components/icons"; comment monorepo
+// import { NotesOutline } from "@components/icons/Notes";
+// import PulsingExclamation from "@components/icons/PulsingExclamation";
 import {
   CircleCheckIcon,
   CircleInfoIcon,
@@ -19,21 +9,40 @@ import {
   FileTextIcon,
 } from "@lms/assets";
 import {
+  IActivityStateQuestion,
+  clearFileEssay,
+  confirmQuestion,
+  pushNotes,
+  saveFileEssay,
+  useAppDispatch,
+} from "@lms/contexts";
+import {
   ANIMATION,
   DEFAULT_EDITOR_VALUE,
+  ICoursesAPI,
+  IQuestionAPI,
+  IUploadAPI,
   QUESTION_TYPES,
   RESPONSE_OPTION,
   defaultSheetData,
 } from "@lms/core";
+import { useTailwindBreakpoint } from "@lms/hooks";
 import {
+  AddWordPreview,
+  NewDragNDropQuestion,
   EditorReader,
+  EssayQuestionPreview,
   FileViewer,
   HighlightableHTML,
+  MatchQuizComponent,
+  MultiChoiceQuestion,
+  OneChoiceQuestion,
   Popover,
+  SelectWord,
   useClickOutside,
 } from "@lms/ui";
-import { isEmptyParagraph } from "@lms/utils";
-import { checkSheetAnswered } from "@utils/helpers/quiz-test/helper";
+import ModalUploadFile from "@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile";
+import { checkSheetAnswered, isEmptyParagraph } from "@lms/utils";
 import { Collapse, CollapseProps, Divider, Modal, Tabs } from "antd";
 import clsx from "clsx";
 import { isEmpty, isUndefined } from "lodash";
@@ -53,23 +62,12 @@ import {
   UseFormResetField,
   UseFormSetValue,
   UseFormWatch,
-} from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { ANIMATION, QUESTION_TYPES, RESPONSE_OPTION } from '@lms/core'
-import { DEFAULT_EDITOR_VALUE, defaultSheetData } from '@lms/core'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { useAppDispatch } from 'src/redux/hook'
-import {
-  IActivityStateQuestion,
-  clearFileEssay,
-  confirmQuestion,
-  saveFileEssay,
-} from "src/redux/slice/Course/MyCourse/Activity/ActivityQuiz";
-import { pushNotes } from "src/redux/slice/Course/NotesList";
-import { download } from "../../../../../../../features/course/src/components/learning/activity/ActivityResource";
+} from "react-hook-form";
+import toast from "react-hot-toast";
 
 import { IEssayAnswer, IExhibit, IExhibitData, IFile } from "@lms/core";
 import { v4 as uuidv4 } from "uuid";
+import { SlotValue } from "@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop";
 
 interface IRequirement {
   id: string;
@@ -151,6 +149,9 @@ type Props = {
   getValues?: UseFormGetValues<FieldValues>;
   watch?: UseFormWatch<FieldValues>;
   resetField?: UseFormResetField<FieldValues>;
+  api: IUploadAPI;
+  questionApi: IQuestionAPI;
+  courseApi: ICoursesAPI;
 };
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
@@ -174,6 +175,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       getValues,
       watch,
       resetField,
+      api,
+      questionApi,
+      courseApi,
     }: Props,
     ref,
   ) => {
@@ -585,6 +589,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         try {
           dispatch(
             confirmQuestion({
+              api: questionApi,
+              courseApi: courseApi,
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
@@ -740,7 +746,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             //   explainClassname="!mt-8 !p-0 !bg-transparent"
             //   correctAnswerClass="!mt-8 !pt-0"
             // />
-            <DragDropQuestion
+            <NewDragNDropQuestion
               data={activeQuestion as any}
               defaultValue={activeQuestion?.defaultValue}
               onChange={(data: SlotValue[]) => {
@@ -1390,10 +1396,14 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                               <div
                                 className="cursor-pointer text-white"
                                 onClick={() =>
-                                  download(
-                                    e?.resource?.name,
-                                    e?.resource?.file_key,
-                                  )
+                                  api.downloadFile({
+                                    files: [
+                                      {
+                                        name: e?.resource?.name,
+                                        file_key: e?.resource?.file_key,
+                                      },
+                                    ],
+                                  })
                                 }
                               >
                                 <DownloadIcon color="currentColor" />

@@ -1,21 +1,22 @@
-import { ArrowDownIcon } from '@lms/assets/icons'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { ErrorMessage, SAPPSelectV2, UploadSingleFileV2 } from '@lms/ui'
-import { message, Upload, UploadProps } from 'antd'
-import { RcFile } from 'antd/es/upload'
-import { useEffect } from 'react'
-import { Controller, useFormContext } from 'react-hook-form'
-import useSelectExams from 'src/hooks/useSelectExams'
+import { ArrowDownIcon } from "@lms/assets";
+import React from 'react';
+import { useTailwindBreakpoint } from "@lms/hooks";
+import { ErrorMessage, SAPPSelectV2, UploadSingleFileV2 } from "@lms/ui";
+import { message, Upload, UploadProps } from "antd";
+import { RcFile } from "antd/es/upload";
+import { useEffect } from "react";
+import { Controller, useFormContext } from "react-hook-form";
+import useSelectExams from "src/hooks/useSelectExams";
 interface IProps {
-  classId: string
-  remainingChanges?: number
-  currentValue?: string
-  isOpen: boolean
-  setIsOpenSelectExam: React.Dispatch<React.SetStateAction<boolean>>
-  setDirection: React.Dispatch<React.SetStateAction<1 | -1>>
+  classId: string;
+  remainingChanges?: number;
+  currentValue?: string;
+  isOpen: boolean;
+  setIsOpenSelectExam: React.Dispatch<React.SetStateAction<boolean>>;
+  setDirection: React.Dispatch<React.SetStateAction<1 | -1>>;
 }
 
-const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg']
+const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
 
 const ChangExamDate = ({
   classId,
@@ -25,9 +26,10 @@ const ChangExamDate = ({
   setIsOpenSelectExam,
   setDirection,
 }: IProps) => {
-  const { control, reset, setValue, clearErrors } = useFormContext()
-  const { exams, hasNextPage, fetchNextPage, refetch } = useSelectExams(classId)
-  const { isMobileView } = useTailwindBreakpoint()
+  const { control, reset, setValue, clearErrors } = useFormContext();
+  const { exams, hasNextPage, fetchNextPage, refetch } =
+    useSelectExams(classId);
+  const { isMobileView } = useTailwindBreakpoint();
 
   const options = exams?.data
     ?.map((exam) => ({
@@ -35,33 +37,33 @@ const ChangExamDate = ({
       value: exam?.id,
     }))
     ?.filter((item) => {
-      return item.value !== currentValue
-    })
+      return item.value !== currentValue;
+    });
 
   const getUploadProps = (onChange: (file: RcFile[]) => void): UploadProps => ({
     beforeUpload: (file) => {
-      clearErrors('note')
-      const isValidType = allowedTypes.includes(file.type)
+      clearErrors("note");
+      const isValidType = allowedTypes.includes(file.type);
 
       if (!isValidType) {
         message.error(
           `${file.name} is not a valid image file (only PNG, JPG, and JPEG allowed).`,
-        )
-        return Upload.LIST_IGNORE
+        );
+        return Upload.LIST_IGNORE;
       }
-      onChange([file]) // Manually update form state
-      return false // Prevent default upload behavior
+      onChange([file]); // Manually update form state
+      return false; // Prevent default upload behavior
     },
     onRemove: () => {
-      setValue('note', [])
+      setValue("note", []);
     },
-  })
+  });
   useEffect(() => {
     if (isOpen) {
-      reset({})
-      refetch()
+      reset({});
+      refetch();
     }
-  }, [isOpen, refetch, reset])
+  }, [isOpen, refetch, reset]);
 
   return (
     <div className="flex flex-col justify-start">
@@ -76,8 +78,8 @@ const ChangExamDate = ({
         placeholder="Choose one option"
         suffixIcon={<ArrowDownIcon className="rotate-[-90deg]" />}
         onDropdownVisibleChange={() => {
-          setIsOpenSelectExam(true)
-          setDirection(1)
+          setIsOpenSelectExam(true);
+          setDirection(1);
         }}
         isOpen={isMobileView ? false : undefined}
       />
@@ -110,6 +112,6 @@ const ChangExamDate = ({
         />
       </div>
     </div>
-  )
-}
-export default ChangExamDate
+  );
+};
+export default ChangExamDate;

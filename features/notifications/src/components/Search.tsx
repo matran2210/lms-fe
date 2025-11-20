@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { Icon } from '@lms/assets/icons'
+import { Icon } from '@lms/assets'
 
 interface IProps {
   placeholder: string

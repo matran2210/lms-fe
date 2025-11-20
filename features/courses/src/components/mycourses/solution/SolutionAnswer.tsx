@@ -1,9 +1,9 @@
-import React from 'react'
-import { Icon } from '@lms/assets/icons'
+import React from "react";
+import { Icon } from '@lms/assets'
 interface SolutionAnswerProps {
-  message: string
-  isYourAnswer: boolean
-  isCorrect: boolean
+  message: string;
+  isYourAnswer: boolean;
+  isCorrect: boolean;
 }
 
 const SolutionAnswer = ({
@@ -13,9 +13,9 @@ const SolutionAnswer = ({
 }: SolutionAnswerProps) => {
   let classParent = isYourAnswer
     ? isCorrect
-      ? 'text-success-600'
-      : 'text-error'
-    : 'text-[#050505]'
+      ? "text-success-600"
+      : "text-error"
+    : "text-[#050505]";
 
   return (
     <>
@@ -23,13 +23,9 @@ const SolutionAnswer = ({
         className={`mb-4 flex items-center gap-x-3 text-base ${classParent}`}
       >
         {isYourAnswer ? (
-          <>
-            <Icon type="group-fill" className="h-[18px] w-[18px]" />
-          </>
+          <><Icon type="group-fill" className="h-[18px] w-[18px]" /></>
         ) : (
-          <>
-            <Icon type="group-empty" className="h-[18px] w-[18px]" />
-          </>
+          <><Icon type="group-empty" className="h-[18px] w-[18px]" /></>
         )}
         <div className="w-fit">
           {message}
@@ -41,7 +37,7 @@ const SolutionAnswer = ({
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default SolutionAnswer
+export default SolutionAnswer;

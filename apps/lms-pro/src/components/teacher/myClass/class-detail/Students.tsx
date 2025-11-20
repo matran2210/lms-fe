@@ -1,5 +1,5 @@
 import LayoutFilter from '@components/layout/TeacherFilter/index'
-import SappTable from '@components/table/SappTable'
+import {SappTable} from '@lms/ui'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { formatDateFromUTC } from 'src/utils/index'

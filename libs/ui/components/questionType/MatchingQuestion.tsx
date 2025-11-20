@@ -13,7 +13,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { SappTitleSolution } from 'src/common/SappTitleSolution'
+import { SappTitleSolution } from '@lms/ui'
 import { MY_COURSES } from '@lms/core'
 import { IExhibitData } from '@lms/core'
 

@@ -1,6 +1,6 @@
 import { SappBreadCrumbs } from '@lms/ui'
 import { SappDrawerV3 } from '@lms/ui'
-import { StarCircleIcon } from '@lms/assets/icons'
+import { StarCircleIcon } from '@lms/assets'
 import {
   AlertInfoIcon,
   CloseIconPreview,
@@ -22,7 +22,7 @@ import { ANIMATION, PageLink, TEST_TYPE } from '@lms/core'
 import { TreeHelper } from 'src/helper/tree'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import TestModal from 'src/pages/courses/test'
+import TestModal from '@pages/courses/test/test-modal'
 import { UserType } from 'src/redux/types/User/urser'
 import { ILearningOutcome } from '@lms/core'
 import { CoursesAPI } from '../../../../api/courses/index'

@@ -1,19 +1,19 @@
-import React, { useEffect, Dispatch, SetStateAction } from 'react'
-import router, { useRouter } from 'next/router'
-import { CourseSearchIcon } from '@lms/assets/icons'
-import { Controller, useFormContext } from 'react-hook-form'
-import { PageLink } from '@lms/core'
+import React, { useEffect, Dispatch, SetStateAction } from "react";
+import router, { useRouter } from "next/router";
+import { CourseSearchIcon } from '@lms/assets'
+import { Controller, useFormContext } from "react-hook-form";
 
 interface IProps {
-  placeholder: string
-  formStyle: string
-  disabled?: boolean
-  inputRef?: React.MutableRefObject<HTMLInputElement | null>
-  setIsFocused?: Dispatch<SetStateAction<boolean>>
-  isFocused?: boolean
-  handleSubmit?: () => void
-  isCoursePage?: boolean
-  isTeacher?: boolean
+  placeholder: string;
+  formStyle: string;
+  disabled?: boolean;
+  inputRef?: React.MutableRefObject<HTMLInputElement | null>;
+  setIsFocused?: Dispatch<SetStateAction<boolean>>;
+  isFocused?: boolean;
+  handleSubmit?: () => void;
+  isCoursePage?: boolean;
+  isTeacher?: boolean;
+  redirectLink: string;
 }
 
 const SearchForm = ({
@@ -26,31 +26,33 @@ const SearchForm = ({
   handleSubmit,
   isCoursePage,
   isTeacher = false,
+  redirectLink,
 }: IProps) => {
-  const { query, push } = useRouter()
-  const { control, watch, setValue } = useFormContext()
+  const { query, push } = useRouter();
+  const { control, watch, setValue } = useFormContext();
 
   useEffect(() => {
     if (!isTeacher) {
       // if (!isFocused && watch('name')?.trim()?.length) {
       //   handleSubmit?.()
       // }
-      if (!isFocused && !watch('name')?.trim()?.length && isCoursePage) {
-        push(PageLink.COURSES)
+      if (!isFocused && !watch("name")?.trim()?.length && isCoursePage) {
+        // push(PageLink.COURSES);
+        push(redirectLink);
       }
     }
-  }, [isFocused, watch('name'), isCoursePage])
+  }, [isFocused, watch("name"), isCoursePage]);
 
   useEffect(() => {
-    setValue('name', query?.name ?? '')
-  }, [query?.name])
+    setValue("name", query?.name ?? "");
+  }, [query?.name]);
 
   return (
     <form
       className={formStyle}
       onSubmit={(e) => {
-        e.preventDefault()
-        handleSubmit?.()
+        e.preventDefault();
+        handleSubmit?.();
       }}
     >
       <button type="submit" className="flex">
@@ -59,14 +61,14 @@ const SearchForm = ({
       <Controller
         control={control}
         name="name"
-        defaultValue={router.query.name ?? ''}
+        defaultValue={router.query.name ?? ""}
         render={({ field }) => (
           <input
             {...field}
             type="text"
             ref={(el) => {
-              field.ref(el) // ← để react-hook-form hoạt động
-              if (inputRef) inputRef.current = el
+              field.ref(el); // ← để react-hook-form hoạt động
+              if (inputRef) inputRef.current = el;
             }}
             disabled={disabled}
             placeholder={placeholder}
@@ -78,7 +80,7 @@ const SearchForm = ({
         )}
       />
     </form>
-  )
-}
+  );
+};
 
-export default SearchForm
+export default SearchForm;
