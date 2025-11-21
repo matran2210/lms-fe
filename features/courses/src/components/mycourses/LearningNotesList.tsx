@@ -1,5 +1,4 @@
-import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from "@assets/icons";
-import { useCourseNoteContext } from "@contexts/CourseNoteContext";
+import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from "@lms/assets";
 import {
   backTypeMap,
   DEFAULT_PAGE_NUMBER,
@@ -9,7 +8,6 @@ import {
   INotesListResponse,
   IOpenChooseItem,
   ISection,
-  PageLink,
   SectionDropdownFormValues,
   SectionField,
 } from "@lms/core";
@@ -31,11 +29,7 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { CoursesAPI } from "src/pages/api/courses";
-import { useAppDispatch, useAppSelector } from "src/redux/hook";
-import { pushNotes, resetNotesList } from "src/redux/slice/Course/NotesList";
-import { userReducer } from "src/redux/slice/User/User";
-import { UserType } from "src/redux/types/User/urser";
+import { useAppDispatch, useAppSelector, pushNotes, resetNotesList, userReducer, UserType, useCourseNoteContext } from "@lms/contexts";
 import { v4 as uuidv4 } from "uuid";
 import FilterCourseSection from "./FilterCourseSection";
 import { ListFilterMobile, ListItemFilterMobile } from "../course";
@@ -46,8 +40,11 @@ const DEFAULT_PAGESIZE = 20;
 
 interface IProps {
   api: ICoursesAPI;
+  pageLink: {
+    [key: string]: string;
+  }
 }
-const LearningNotesList = ({ api }: IProps) => {
+const LearningNotesList = ({ api, pageLink }: IProps) => {
   const router = useRouter();
   const { isMobileView, isAlwaysShowSidebar } = useTailwindBreakpoint();
   const notesListStatus = useAppSelector(
@@ -89,7 +86,7 @@ const LearningNotesList = ({ api }: IProps) => {
   >();
 
   //Tạo các biến để lấy id trên thanh url
-  const isCourseDetail = PageLink.COURSE_DETAIL === router.pathname;
+  const isCourseDetail = pageLink.COURSE_DETAIL === router.pathname;
   const isCoursePartDetail = router.pathname.includes("/section");
   const isActivityDetail = router.pathname.includes("/activity");
   const courseId = router.query?.courseId;
@@ -208,7 +205,7 @@ const LearningNotesList = ({ api }: IProps) => {
     isFetchingRef.current = true;
     setLoading(true);
 
-    CoursesAPI.getCourseNotesList(DEFAULT_PAGE_NUMBER, DEFAULT_PAGESIZE, params)
+    api.getCourseNotesList(DEFAULT_PAGE_NUMBER, DEFAULT_PAGESIZE, params)
       .then((res) => {
         setNotesListData(res?.data);
         // Các điều kiện không auto fill filter
@@ -278,7 +275,7 @@ const LearningNotesList = ({ api }: IProps) => {
   const fetchData = async (pageIndexNext: number, params?: Object) => {
     setLoading(true);
     try {
-      const res = await CoursesAPI.getCourseNotesList(
+      const res = await api.getCourseNotesList(
         pageIndexNext,
         DEFAULT_PAGESIZE,
         params,
@@ -298,7 +295,7 @@ const LearningNotesList = ({ api }: IProps) => {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await CoursesAPI.deleteCourseNoteList(id);
+      const res = await api.deleteCourseNoteList(id);
       fetchData(pageIndex, params);
       refetchNotesList();
       toast.success("Xóa thành công!");

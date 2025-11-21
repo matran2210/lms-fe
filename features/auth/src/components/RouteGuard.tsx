@@ -7,14 +7,14 @@ import {
   ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
 } from "@lms/core";
-import { useAppDispatch, useAppSelector } from "src/redux/hook";
-import { getMe, userReducer } from "src/redux/slice/User/User";
+import { useAppDispatch, useAppSelector, getMe, userReducer, IUserAPI } from "@lms/contexts";
 
 interface IProps {
   children: JSX.Element;
+  api: IUserAPI
 }
 
-export const RouteGuard = ({ children }: IProps) => {
+export const RouteGuard = ({ children, api }: IProps) => {
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
   const dispatch = useAppDispatch();
@@ -43,7 +43,7 @@ export const RouteGuard = ({ children }: IProps) => {
     }
 
     try {
-      await dispatch(getMe()).unwrap();
+      await dispatch(getMe(api)).unwrap();
       setAuthorized(true);
     } catch (error) {}
   };
