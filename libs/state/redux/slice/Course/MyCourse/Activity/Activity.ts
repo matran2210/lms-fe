@@ -7,7 +7,7 @@ import {
   IDiscussion,
   IUserInDiscussion,
 } from '../../../../types/Course/MyCourse/Activity/activity'
-import { CourseActivityApi, IActivity, IActivityAPI, IActivityBreadcrumb, IBreadcrumb, ICoursesAPI } from '@lms/core'
+import { ICourseActivityApi, IActivity, IActivityAPI, IActivityBreadcrumb, IBreadcrumb, ICoursesAPI } from '@lms/core'
 
 // Tạo một đối tượng activity với giá trị mặc định
 export interface ICourseActivityState extends IActivity {
@@ -123,7 +123,7 @@ export const createDiscussion = createAsyncThunk(
 
 export const uploadImagesDiscussion = createAsyncThunk(
   'courseActivityReducer/uploadImagesDiscussion',
-  async ({api, data}: {api: CourseActivityApi; data: ICreateDiscussionUploadRequest}, thunkAPI) => {
+  async ({api, data}: {api: ICourseActivityApi; data: ICreateDiscussionUploadRequest}, thunkAPI) => {
     try {
       const res = await api.uploadImagesDiscussion(data)
       if (!res?.data) {

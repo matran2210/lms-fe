@@ -326,7 +326,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                         }}
                       />
                       <SappConfirmDialogContainer />
-                      <RouteGuard>
+                      <RouteGuard api={UserApi}>
                         <>
                           <div className="relative">
                             {/* <PinnedNotifications /> */}

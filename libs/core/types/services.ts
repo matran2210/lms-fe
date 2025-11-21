@@ -72,7 +72,13 @@ export interface ICoursesAPI {
   }>;
   CACHE_GET_TOPIC_DESCRIPTION: {
     [key: string]: any;
-}
+  };
+  getCourseNotesList: (
+    page_index: number,
+    page_size: number,
+    params?: Object,
+  ) => Promise<any>;
+  deleteCourseNoteList: (id: string) => Promise<any>;
 }
 export interface IActivityAPI {
   createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<any>;
@@ -80,7 +86,7 @@ export interface IActivityAPI {
   getQuizAttemptsAnswer: (id: string) => Promise<any>;
 }
 
-export interface CourseActivityApi {
+export interface ICourseActivityApi {
   uploadImagesDiscussion: ({
     discussion_id,
     new_discussion_file,
