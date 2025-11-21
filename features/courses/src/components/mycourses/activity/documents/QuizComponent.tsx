@@ -1,12 +1,10 @@
-// import { CloseIconV2 } from "@components/icons"; comment monorepo
-// import { NotesOutline } from "@components/icons/Notes";
-// import PulsingExclamation from "@components/icons/PulsingExclamation";
 import {
   CircleCheckIcon,
   CircleInfoIcon,
   CollapseArrowIcon,
   DownloadIcon,
   FileTextIcon,
+  CloseIconV2, NotesOutline, PulsingExclamation
 } from "@lms/assets";
 import {
   IActivityStateQuestion,

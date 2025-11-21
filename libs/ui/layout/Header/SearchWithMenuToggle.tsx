@@ -7,7 +7,7 @@ import { MY_COURSES } from "@lms/core";
 import { useAppSelector } from "@lms/contexts";
 import TourGuideStart from "src/assets/lotties/tour-guide-start.json";
 import clsx from "clsx";
-import { CloseIconV2 } from "@components/icons";
+import { CloseIconV2 } from "@lms/assets";
 import { FormProvider, useForm } from "react-hook-form";
 import { buildQueryString } from "@lms/utils";
 import { useRouter } from "next/router";

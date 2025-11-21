@@ -1,6 +1,6 @@
 import React from "react";
 import { EditorReader } from "@lms/ui";
-// import { CloseIconV2 } from '@lms/assets' comment monorepo
+import { CloseIconV2 } from '@lms/assets'
 import { Modal } from "antd";
 import { useTailwindBreakpoint } from "@lms/hooks";
 
@@ -27,14 +27,14 @@ const ModalRecomment = ({
       footer={false}
       onCancel={handleCloseRecomment}
       closable={!isMobileView}
-      // closeIcon={<CloseIconV2 />}
+      closeIcon={<CloseIconV2 />}
     >
       <div className="mb-6 flex items-center justify-between md:mb-10">
         <h1 className="text-center text-xl font-bold text-gray-800 md:text-3xl">
           {isComment ? "Examiner’s Comment" : "Recommendation"}
         </h1>
         <div className="block md:hidden" onClick={handleCloseRecomment}>
-          {/* <CloseIconV2 /> */}
+          <CloseIconV2 />
         </div>
       </div>
 
