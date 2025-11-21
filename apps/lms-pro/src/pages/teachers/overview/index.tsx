@@ -16,7 +16,7 @@ import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
 import { PageLink } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
+import { UserType } from '@lms/contexts'
 import { ITabs } from '@lms/core'
 
 const breadcrumbs: ITabs[] = [

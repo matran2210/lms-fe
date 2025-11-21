@@ -34,7 +34,7 @@ import { useQuery } from 'react-query'
 import { ACTIVE_TABS, ANIMATION, PageLink } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { UploadAPI } from 'src/pages/api/short-course/upload'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { useAppDispatch, useAppSelector } from '@lms/contexts'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
 import {
   closeCalculator,

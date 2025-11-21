@@ -25,7 +25,7 @@ import {
   removeLocalStorageItem,
 } from '@lms/utils'
 
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { useAppDispatch, useAppSelector } from '@lms/contexts'
 
 import DeviceList from '@components/profile/DeviceInformation/DeviceList'
 import MyProfile from '@components/profile/MyProfile'

@@ -5,7 +5,7 @@ import {
   LockClosedIcon,
 } from '@assets/icons'
 import { ButtonText } from '@lms/ui'
-import { useCourseContext } from '@contexts/index'
+import { useCourseContext } from '@lms/contexts'
 import { trackGAEvent, truncateString} from '@lms/utils'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'

@@ -2,7 +2,7 @@ import Image from 'next/image'
 import blankAvatar from '@assets/images/blank_avatar.webp'
 
 import React from 'react'
-import { useAppSelector } from 'src/redux/hook'
+import { useAppSelector } from '@lms/contexts'
 import { userReducer } from 'src/redux/slice/User/User'
 import clsx from 'clsx'
 

@@ -32,7 +32,7 @@ import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { UploadAPI } from 'src/pages/api/upload'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { useAppDispatch, useAppSelector } from '@lms/contexts'
 import {
   closeCalculator,
   courseActivityAction,

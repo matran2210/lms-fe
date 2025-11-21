@@ -38,7 +38,7 @@ import 'sapp-common-package/dist/index.css'
 import 'sapp-common-package/dist/sapp-editor.css'
 import 'sapp-notification/dist/index.css'
 import { io } from 'socket.io-client'
-import { useAppDispatch } from 'src/redux/hook'
+import { useAppDispatch } from '@lms/contexts'
 import { injectStore } from 'src/redux/services/httpService'
 import {
   getCountUnRead,

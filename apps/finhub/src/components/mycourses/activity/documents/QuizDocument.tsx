@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import SappIcon from '@components/common/SappIcon'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { useAppDispatch, useAppSelector } from '@lms/contexts'
 import {
   courseActivityQuizReducer,
   fetchQuestionById,

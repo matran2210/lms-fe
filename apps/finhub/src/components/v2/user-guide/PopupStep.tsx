@@ -3,7 +3,7 @@ import ButtonText from '@components/base/button/ButtonText'
 import Lottie from 'lottie-react'
 import Image, { StaticImageData } from 'next/image'
 import { useRef } from 'react'
-import { useAppDispatch } from 'src/redux/hook'
+import { useAppDispatch } from '@lms/contexts'
 import { decrement, increment } from 'src/redux/slice/Course/UserGuide'
 
 type Props = {
