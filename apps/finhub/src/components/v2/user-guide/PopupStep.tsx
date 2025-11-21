@@ -1,5 +1,4 @@
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import ButtonText from '@components/base/button/ButtonText'
+import { ButtonPrimary, ButtonText } from '@lms/ui'
 import Lottie from 'lottie-react'
 import Image, { StaticImageData } from 'next/image'
 import { useRef } from 'react'
@@ -56,7 +55,7 @@ const PopupStep = ({
     <>
       <div
         ref={confirmDialogRef}
-        className={`absolute z-50 animate-jump-in rounded-xl bg-white p-4 ${className} w-[315px] text-gray-v2-800`}
+        className={`absolute z-50 animate-jump-in rounded-xl bg-white p-4 ${className} text-gray-v2-800 w-[315px]`}
       >
         <div>
           <div className={imgSrc && `mb-4`}>

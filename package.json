@@ -4,11 +4,14 @@
   "type": "module",
   "scripts": {
     "build": "turbo run build",
+    "build:lms-pro": "pnpm --filter ./apps/lms-pro build",
+    "build:finhub": "pnpm --filter ./apps/finhub build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "dev:lms": "pnpm --filter lms-fe dev",
+    "dev:lms-pro": "pnpm --filter ./apps/lms-pro dev",
+    "dev:finhub": "pnpm --filter ./apps/finhub dev",
     "prepare": "husky install",
     "lint-staged": "lint-staged"
   },
