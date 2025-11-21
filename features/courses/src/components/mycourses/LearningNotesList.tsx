@@ -1,71 +1,79 @@
-import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from '@assets/icons'
-import { useCourseNoteContext } from '@contexts/CourseNoteContext'
+import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from "@assets/icons";
+import { useCourseNoteContext } from "@contexts/CourseNoteContext";
 import {
   backTypeMap,
   DEFAULT_PAGE_NUMBER,
   getTypeName,
   ICoursesAPI,
-  ICourseSectionNoteItem, INotesListResponse,
+  ICourseSectionNoteItem,
+  INotesListResponse,
   IOpenChooseItem,
   ISection,
   PageLink,
   SectionDropdownFormValues,
   SectionField,
-} from '@lms/core'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { ActionCellV2, SappBreadcrumbNotLink, SappDrawerV3, SortBy, NoData} from '@lms/ui'
+} from "@lms/core";
+import { useTailwindBreakpoint } from "@lms/hooks";
+import {
+  ActionCellV2,
+  SappBreadcrumbNotLink,
+  SappDrawerV3,
+  SortBy,
+  NoData,
+} from "@lms/ui";
 
-import { cleanParamsAPI } from '@lms/utils'
-import clsx from 'clsx'
-import { format } from 'date-fns'
-import { isEmpty } from 'lodash'
-import getConfig from 'next/config'
-import { useRouter } from 'next/router'
-import { useEffect, useRef, useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { pushNotes, resetNotesList } from 'src/redux/slice/Course/NotesList'
-import { userReducer } from 'src/redux/slice/User/User'
-import { UserType } from 'src/redux/types/User/urser'
-import { v4 as uuidv4 } from 'uuid'
-import FilterCourseSection from './FilterCourseSection'
-import { ListFilterMobile, ListItemFilterMobile } from '../course'
-const { publicRuntimeConfig } = getConfig()
-export const { apiURL } = publicRuntimeConfig
+import { cleanParamsAPI } from "@lms/utils";
+import clsx from "clsx";
+import { format } from "date-fns";
+import { isEmpty } from "lodash";
+import getConfig from "next/config";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { CoursesAPI } from "src/pages/api/courses";
+import { useAppDispatch, useAppSelector } from "src/redux/hook";
+import { pushNotes, resetNotesList } from "src/redux/slice/Course/NotesList";
+import { userReducer } from "src/redux/slice/User/User";
+import { UserType } from "src/redux/types/User/urser";
+import { v4 as uuidv4 } from "uuid";
+import FilterCourseSection from "./FilterCourseSection";
+import { ListFilterMobile, ListItemFilterMobile } from "../course";
+const { publicRuntimeConfig } = getConfig();
+export const { apiURL } = publicRuntimeConfig;
 
-const DEFAULT_PAGESIZE = 20
+const DEFAULT_PAGESIZE = 20;
 
 interface IProps {
-  api: ICoursesAPI
+  api: ICoursesAPI;
 }
-const LearningNotesList = ({api}: IProps) => {
-  const router = useRouter()
-  const { isMobileView, isAlwaysShowSidebar } = useTailwindBreakpoint()
+const LearningNotesList = ({ api }: IProps) => {
+  const router = useRouter();
+  const { isMobileView, isAlwaysShowSidebar } = useTailwindBreakpoint();
   const notesListStatus = useAppSelector(
     (state) => state.notesListReducer?.status,
-  )
+  );
   const getNotesData = useAppSelector(
     (state) => state.notesListReducer?.note_data,
-  )
-  const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false)
+  );
+  const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false);
   const [openChooseItem, setOpenChooseItem] = useState<IOpenChooseItem>({
     isOpen: false,
-    type: 'section',
-    name: '',
-    params: '',
-  })
+    type: "section",
+    name: "",
+    params: "",
+  });
   const isNotBottomDrawer =
-    router.pathname === '/courses/[id]/section/[course_section_id]' ||
-    (router.pathname === '/courses/[id]/activity/[activityId]' && !isMobileView)
+    router.pathname === "/courses/[id]/section/[course_section_id]" ||
+    (router.pathname === "/courses/[id]/activity/[activityId]" &&
+      !isMobileView);
 
-  const userType = useAppSelector(userReducer).user.type
+  const userType = useAppSelector(userReducer).user.type;
 
-  const [listSection, setListSection] = useState<ISection[]>([])
-  const [listSubsection, setListSubsection] = useState<ISection[]>([])
-  const [listUnit, setListUnit] = useState<ISection[]>([])
-  const [listActivity, setListActivity] = useState<ISection[]>([])
+  const [listSection, setListSection] = useState<ISection[]>([]);
+  const [listSubsection, setListSubsection] = useState<ISection[]>([]);
+  const [listUnit, setListUnit] = useState<ISection[]>([]);
+  const [listActivity, setListActivity] = useState<ISection[]>([]);
 
   const {
     setOpenNote,
@@ -74,33 +82,33 @@ const LearningNotesList = ({api}: IProps) => {
     setNoteInput,
     refetchNotesList,
     setIsViewOnly,
-  } = useCourseNoteContext()
-  const dispatch = useAppDispatch()
+  } = useCourseNoteContext();
+  const dispatch = useAppDispatch();
   const [notesListData, setNotesListData] = useState<
     INotesListResponse | undefined
-  >()
+  >();
 
   //Tạo các biến để lấy id trên thanh url
-  const isCourseDetail = PageLink.COURSE_DETAIL === router.pathname
-  const isCoursePartDetail = router.pathname.includes('/section')
-  const isActivityDetail = router.pathname.includes('/activity')
-  const courseId = router.query?.courseId
-  const queryId = router.query?.id
-  const activityId = router.query?.activityId
-  const chapterId = router.query?.chapter
-  const unitId = router.query?.unit
-  const courseSectionId = router.query.course_section_id
+  const isCourseDetail = PageLink.COURSE_DETAIL === router.pathname;
+  const isCoursePartDetail = router.pathname.includes("/section");
+  const isActivityDetail = router.pathname.includes("/activity");
+  const courseId = router.query?.courseId;
+  const queryId = router.query?.id;
+  const activityId = router.query?.activityId;
+  const chapterId = router.query?.chapter;
+  const unitId = router.query?.unit;
+  const courseSectionId = router.query.course_section_id;
 
-  const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_NUMBER)
-  const [isFirstCallApi, setIsFirstCallApi] = useState(false)
-  const [expandedNotes, setExpandedNotes] = useState<string[]>([])
+  const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_NUMBER);
+  const [isFirstCallApi, setIsFirstCallApi] = useState(false);
+  const [expandedNotes, setExpandedNotes] = useState<string[]>([]);
   const [noteHeights, setNoteHeights] = useState<{
-    [key: string]: { full: number; collapsed: number }
-  }>({})
-  const [loading, setLoading] = useState<boolean>(false)
-  const [paramsCourseSectionId, setCourseSectionId] = useState<string>('')
+    [key: string]: { full: number; collapsed: number };
+  }>({});
+  const [loading, setLoading] = useState<boolean>(false);
+  const [paramsCourseSectionId, setCourseSectionId] = useState<string>("");
   const [isPageStateVariables, setIsPageStateVariables] =
-    useState<boolean>(false)
+    useState<boolean>(false);
   const methods = useForm<SectionDropdownFormValues>({
     defaultValues: {
       section: null,
@@ -108,65 +116,67 @@ const LearningNotesList = ({api}: IProps) => {
       unit: null,
       activity: null,
     },
-  })
+  });
   const resetFormFields = (fields: SectionField[]) => {
-    fields.forEach((field) => methods.setValue(field, null))
-  }
+    fields.forEach((field) => methods.setValue(field, null));
+  };
   const toggleExpand = (noteId: string) => {
     setExpandedNotes((prevExpanded: string[]) => {
       if (prevExpanded.includes(noteId)) {
         // Nếu noteId đã trong mảng, loại bỏ nó
-        return prevExpanded.filter((id: string) => id !== noteId)
+        return prevExpanded.filter((id: string) => id !== noteId);
       } else {
         // Nếu noteId chưa có trong mảng, thêm nó vào
-        return [...prevExpanded, noteId]
+        return [...prevExpanded, noteId];
       }
-    })
-  }
+    });
+  };
 
   const measureNoteHeight = (noteId: string, element: HTMLDivElement) => {
-    if (noteHeights[noteId]) return
+    if (noteHeights[noteId]) return;
 
     // Lấy computed styles của element gốc
-    const computedStyles = window.getComputedStyle(element)
-    const spanElement = element.querySelector('span')
-    const spanStyles = spanElement ? window.getComputedStyle(spanElement) : null
+    const computedStyles = window.getComputedStyle(element);
+    const spanElement = element.querySelector("span");
+    const spanStyles = spanElement
+      ? window.getComputedStyle(spanElement)
+      : null;
 
     // Tạo element tạm để đo chiều cao full
-    const tempElement = element.cloneNode(true) as HTMLDivElement
-    tempElement.style.position = 'absolute'
-    tempElement.style.visibility = 'hidden'
-    tempElement.style.height = 'auto'
-    tempElement.style.maxHeight = 'none'
-    tempElement.style.overflow = 'visible'
-    tempElement.style.webkitLineClamp = 'unset'
+    const tempElement = element.cloneNode(true) as HTMLDivElement;
+    tempElement.style.position = "absolute";
+    tempElement.style.visibility = "hidden";
+    tempElement.style.height = "auto";
+    tempElement.style.maxHeight = "none";
+    tempElement.style.overflow = "visible";
+    tempElement.style.webkitLineClamp = "unset";
 
     // Copy các styles quan trọng từ element gốc
-    tempElement.style.width = computedStyles.width
-    tempElement.style.padding = computedStyles.padding
-    tempElement.style.margin = computedStyles.margin
-    tempElement.style.fontSize = computedStyles.fontSize
-    tempElement.style.lineHeight = computedStyles.lineHeight
-    tempElement.style.fontFamily = computedStyles.fontFamily
+    tempElement.style.width = computedStyles.width;
+    tempElement.style.padding = computedStyles.padding;
+    tempElement.style.margin = computedStyles.margin;
+    tempElement.style.fontSize = computedStyles.fontSize;
+    tempElement.style.lineHeight = computedStyles.lineHeight;
+    tempElement.style.fontFamily = computedStyles.fontFamily;
 
     // Tìm span chứa text trong tempElement và copy styles
-    const tempSpan = tempElement.querySelector('span')
+    const tempSpan = tempElement.querySelector("span");
     if (tempSpan && spanStyles) {
-      tempSpan.style.webkitLineClamp = 'unset'
-      tempSpan.style.display = 'block'
-      tempSpan.style.whiteSpace = spanStyles.whiteSpace
-      tempSpan.style.wordBreak = spanStyles.wordBreak
-      tempSpan.style.fontSize = spanStyles.fontSize
-      tempSpan.style.lineHeight = spanStyles.lineHeight
+      tempSpan.style.webkitLineClamp = "unset";
+      tempSpan.style.display = "block";
+      tempSpan.style.whiteSpace = spanStyles.whiteSpace;
+      tempSpan.style.wordBreak = spanStyles.wordBreak;
+      tempSpan.style.fontSize = spanStyles.fontSize;
+      tempSpan.style.lineHeight = spanStyles.lineHeight;
     }
 
-    document.body.appendChild(tempElement)
-    const fullHeight = tempElement.offsetHeight
+    document.body.appendChild(tempElement);
+    const fullHeight = tempElement.offsetHeight;
 
     // Đo chiều cao collapsed (3 dòng) - đảm bảo element đang ở trạng thái collapsed
-    const collapsedHeight = element.offsetHeight
+    const collapsedHeight = element.offsetHeight;
 
-    document.body.removeChild(tempElement)
+    document.body.removeChild(tempElement);
 
     setNoteHeights((prev) => ({
       ...prev,
@@ -174,18 +184,18 @@ const LearningNotesList = ({api}: IProps) => {
         full: fullHeight + 10,
         collapsed: collapsedHeight,
       },
-    }))
-  }
+    }));
+  };
 
   const params = cleanParamsAPI({
     class_id: courseId || queryId,
     course_section_id: isFirstCallApi
       ? paramsCourseSectionId
-      : activityId || chapterId || courseSectionId || '',
-  })
+      : activityId || chapterId || courseSectionId || "",
+  });
 
   // Thêm cờ để tránh call duplicate api
-  const isFetchingRef = useRef(false)
+  const isFetchingRef = useRef(false);
 
   useEffect(() => {
     if (
@@ -193,17 +203,17 @@ const LearningNotesList = ({api}: IProps) => {
       !notesListStatus ||
       isFetchingRef.current
     )
-      return
+      return;
 
-    isFetchingRef.current = true
-    setLoading(true)
+    isFetchingRef.current = true;
+    setLoading(true);
 
     CoursesAPI.getCourseNotesList(DEFAULT_PAGE_NUMBER, DEFAULT_PAGESIZE, params)
       .then((res) => {
-        setNotesListData(res?.data)
+        setNotesListData(res?.data);
         // Các điều kiện không auto fill filter
-        if (isFirstCallApi && !paramsCourseSectionId) return
-        if (isCourseDetail || paramsCourseSectionId) return
+        if (isFirstCallApi && !paramsCourseSectionId) return;
+        if (isCourseDetail || paramsCourseSectionId) return;
 
         // Logic auto fill filter
         const fieldMap: Record<string, any> = {
@@ -211,153 +221,153 @@ const LearningNotesList = ({api}: IProps) => {
           subsection: chapterId,
           unit: unitId,
           activity: activityId,
-        }
+        };
         const fieldsToSet = isActivityDetail // Đối với màn activity fill all
-          ? ['section', 'subsection', 'unit', 'activity']
+          ? ["section", "subsection", "unit", "activity"]
           : isCoursePartDetail // Đối với màn course part detail fill section và subsection
-            ? ['section', 'subsection']
-            : [] // Đối với màn course detail không fill
+            ? ["section", "subsection"]
+            : []; // Đối với màn course detail không fill
         fieldsToSet.forEach((field) => {
-          const value = fieldMap[field]
+          const value = fieldMap[field];
           methods.setValue(
-            field as 'section' | 'subsection' | 'unit' | 'activity',
+            field as "section" | "subsection" | "unit" | "activity",
             Array.isArray(value) ? (value?.[0] ?? null) : (value ?? null),
-          )
-        })
+          );
+        });
       })
       .catch(() => {})
       .finally(() => {
-        setIsFirstCallApi(true)
-        isFetchingRef.current = false
+        setIsFirstCallApi(true);
+        isFetchingRef.current = false;
         setTimeout(() => {
-          setLoading(false)
-        }, 500)
-      })
-  }, [notesListStatus, router, paramsCourseSectionId])
+          setLoading(false);
+        }, 500);
+      });
+  }, [notesListStatus, router, paramsCourseSectionId]);
 
-  const scrollRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isEmpty(notesListData)) return
+    if (isEmpty(notesListData)) return;
 
-    const scrollEl = scrollRef.current
-    if (!scrollEl || !notesListStatus) return
+    const scrollEl = scrollRef.current;
+    if (!scrollEl || !notesListStatus) return;
 
     const handleScroll = async () => {
-      const { scrollTop, scrollHeight, clientHeight } = scrollEl
+      const { scrollTop, scrollHeight, clientHeight } = scrollEl;
       if (
         scrollTop + clientHeight + 200 >= scrollHeight &&
         !isFetchingRef.current &&
         (notesListData?.meta?.total_pages ?? 0) > pageIndex
       ) {
-        isFetchingRef.current = true
-        await fetchData(pageIndex + 1, params)
+        isFetchingRef.current = true;
+        await fetchData(pageIndex + 1, params);
       }
-    }
+    };
 
-    scrollEl.addEventListener('scroll', handleScroll)
-    return () => scrollEl.removeEventListener('scroll', handleScroll)
-  }, [notesListData, pageIndex, notesListStatus])
+    scrollEl.addEventListener("scroll", handleScroll);
+    return () => scrollEl.removeEventListener("scroll", handleScroll);
+  }, [notesListData, pageIndex, notesListStatus]);
 
   const onClose = () => {
-    document.body.style.overflow = 'auto'
-    dispatch(resetNotesList())
-    resetFormFields(['section', 'subsection', 'unit', 'activity'])
-    setIsPageStateVariables(true)
-  }
+    document.body.style.overflow = "auto";
+    dispatch(resetNotesList());
+    resetFormFields(["section", "subsection", "unit", "activity"]);
+    setIsPageStateVariables(true);
+  };
   const fetchData = async (pageIndexNext: number, params?: Object) => {
-    setLoading(true)
+    setLoading(true);
     try {
       const res = await CoursesAPI.getCourseNotesList(
         pageIndexNext,
         DEFAULT_PAGESIZE,
         params,
-      )
+      );
       setNotesListData((prevResources) => ({
         ...prevResources,
         notes: [...(prevResources?.notes ?? []), ...(res?.data?.notes ?? [])],
         meta: res?.data?.meta ?? prevResources?.meta,
-      }))
-      setPageIndex(pageIndexNext)
+      }));
+      setPageIndex(pageIndexNext);
     } catch (error) {
     } finally {
-      isFetchingRef.current = false
-      setLoading(false)
+      isFetchingRef.current = false;
+      setLoading(false);
     }
-  }
+  };
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await CoursesAPI.deleteCourseNoteList(id)
-      fetchData(pageIndex, params)
-      refetchNotesList()
-      toast.success('Xóa thành công!')
+      const res = await CoursesAPI.deleteCourseNoteList(id);
+      fetchData(pageIndex, params);
+      refetchNotesList();
+      toast.success("Xóa thành công!");
     } catch (error) {}
-  }
+  };
   const handleEditNote = (id: string, description: string, index: number) => {
     const note = {
       uuid: uuidv4(),
       id: id,
-      name: 'Note',
+      name: "Note",
       description: description,
-    }
-    const isExist = getNotesData.find((item) => item.id === note.id)
+    };
+    const isExist = getNotesData.find((item) => item.id === note.id);
     if (!isExist) {
-      dispatch(pushNotes(note))
+      dispatch(pushNotes(note));
     }
-  }
+  };
 
   const handleOpenNote = (
     note: ICourseSectionNoteItem,
     isViewOnly: boolean,
   ) => {
-    setOpenNote(true)
-    setNoteData(note)
-    setModalPosition({ top: 300, left: 0 })
-    setNoteInput(note?.description)
-    setIsViewOnly(isViewOnly)
-  }
+    setOpenNote(true);
+    setNoteData(note);
+    setModalPosition({ top: 300, left: 0 });
+    setNoteInput(note?.description);
+    setIsViewOnly(isViewOnly);
+  };
   const title = !openChooseItem.isOpen
     ? isOpenFilter
-      ? 'Filter'
-      : 'Note List'
-    : openChooseItem.name
+      ? "Filter"
+      : "Note List"
+    : openChooseItem.name;
   const classNameHeader = openChooseItem.isOpen
-    ? 'pb-4 border-b border-gray-200'
-    : 'mb-6'
+    ? "pb-4 border-b border-gray-200"
+    : "mb-6";
 
   const handleBack = () => {
-    if (openChooseItem.isOpen && openChooseItem.type !== 'section') {
-      const type = backTypeMap[openChooseItem.type]
+    if (openChooseItem.isOpen && openChooseItem.type !== "section") {
+      const type = backTypeMap[openChooseItem.type];
       setOpenChooseItem({
         ...openChooseItem,
         type: type,
         name: getTypeName[type],
-      })
+      });
     } else {
-      setIsOpenFilter(false)
+      setIsOpenFilter(false);
       setOpenChooseItem({
         ...openChooseItem,
         isOpen: false,
-      })
+      });
     }
-  }
+  };
 
   const handleSubmit = () => {
-    setIsOpenFilter(false)
-    setCourseSectionId(openChooseItem.params || '')
+    setIsOpenFilter(false);
+    setCourseSectionId(openChooseItem.params || "");
     setOpenChooseItem({
       ...openChooseItem,
       isOpen: false,
-    })
-  }
+    });
+  };
 
   useEffect(() => {
     if (!notesListStatus) {
-      setIsFirstCallApi(false)
-      setNotesListData(undefined)
+      setIsFirstCallApi(false);
+      setNotesListData(undefined);
     }
-  }, [notesListStatus])
+  }, [notesListStatus]);
 
   return (
     <SappDrawerV3
@@ -370,14 +380,14 @@ const LearningNotesList = ({api}: IProps) => {
       isShowFooter={isOpenFilter}
       handleSubmit={handleSubmit}
       classNameHeader={classNameHeader}
-      rootClassName={clsx('responsive-drawer-base', {
-        'drawer-bottom-0': !isNotBottomDrawer && !isAlwaysShowSidebar,
+      rootClassName={clsx("responsive-drawer-base", {
+        "drawer-bottom-0": !isNotBottomDrawer && !isAlwaysShowSidebar,
       })}
       submitButtonClassName="w-full h-10"
       btnSubmitTile="Confirm"
-      placement={!isAlwaysShowSidebar ? 'bottom' : 'right'}
-      titleClassName={isOpenFilter ? 'w-full pr-8 text-center' : ''}
-      closable
+      placement={!isAlwaysShowSidebar ? "bottom" : "right"}
+      titleClassName={isOpenFilter ? "w-full pr-8 text-center" : ""}
+      closable={!isOpenFilter}
     >
       <FormProvider {...methods}>
         {!isOpenFilter ? (
@@ -395,9 +405,9 @@ const LearningNotesList = ({api}: IProps) => {
             <div
               ref={scrollRef}
               className={clsx(
-                'result-scroll mt-6 flex h-[250px] flex-col gap-6 md:mt-4 md:h-[510px] md:gap-0 lg:h-[700px]',
+                "result-scroll mt-6 flex h-[250px] flex-col gap-6 md:mt-4 md:h-[510px] md:gap-0 lg:h-[700px]",
                 {
-                  'overflow-y-auto': !isEmpty(notesListData?.notes),
+                  "overflow-y-auto": !isEmpty(notesListData?.notes),
                 },
               )}
             >
@@ -405,47 +415,47 @@ const LearningNotesList = ({api}: IProps) => {
                 <>
                   {notesListData?.notes?.map(
                     (note: ICourseSectionNoteItem, index) => {
-                      const isExpanded = expandedNotes.includes(note?.id)
-                      const isEdit = activityId === note?.course_section_id
+                      const isExpanded = expandedNotes.includes(note?.id);
+                      const isEdit = activityId === note?.course_section_id;
                       const handleEdit = () => {
                         if (
                           !getNotesData.some((item) =>
                             item.id.includes(note?.id),
                           )
                         ) {
-                          handleOpenNote(note, false)
-                          handleEditNote(note?.id, note?.description, index)
-                          onClose()
+                          handleOpenNote(note, false);
+                          handleEditNote(note?.id, note?.description, index);
+                          onClose();
                         }
-                      }
+                      };
                       const handleView = async () => {
                         await router.push({
                           pathname: `/courses/${queryId || courseId}/activity/${note?.course_section_id}`,
                           query: {
                             note_id: note?.id,
                           },
-                        })
-                        handleOpenNote(note, true)
-                        handleEditNote(note?.id, note?.description, index)
-                        onClose()
-                      }
+                        });
+                        handleOpenNote(note, true);
+                        handleEditNote(note?.id, note?.description, index);
+                        onClose();
+                      };
 
                       const listAction = [
                         ...(isEdit
                           ? [
                               {
                                 icon: <PencilV2Icon className="h-5 w-5" />,
-                                nameAction: 'Edit',
+                                nameAction: "Edit",
                                 action: handleEdit,
                               },
                             ]
                           : []),
                         {
                           icon: <DeleteIcon />,
-                          nameAction: 'Delete',
+                          nameAction: "Delete",
                           action: () => handleDelete(note?.id),
                         },
-                      ]
+                      ];
 
                       return (
                         <div
@@ -483,8 +493,8 @@ const LearningNotesList = ({api}: IProps) => {
                                 ) {
                                   // Đo chiều cao ngay khi component mount
                                   setTimeout(() => {
-                                    measureNoteHeight(note?.id, el)
-                                  }, 0)
+                                    measureNoteHeight(note?.id, el);
+                                  }, 0);
                                 }
                               }}
                               className="overflow-hidden transition-all duration-300 ease-in-out"
@@ -494,10 +504,10 @@ const LearningNotesList = ({api}: IProps) => {
                                     ? isExpanded
                                       ? noteHeights[note?.id]?.full
                                         ? `${noteHeights[note?.id].full}px`
-                                        : 'none'
+                                        : "none"
                                       : noteHeights[note?.id]?.collapsed
                                         ? `${noteHeights[note?.id].collapsed}px`
-                                        : '4.5rem'
+                                        : "4.5rem"
                                     : undefined,
                               }}
                             >
@@ -506,8 +516,8 @@ const LearningNotesList = ({api}: IProps) => {
                                   !isExpanded &&
                                   note?.description?.length > 230 &&
                                   !noteHeights[note?.id]
-                                    ? 'line-clamp-3'
-                                    : ''
+                                    ? "line-clamp-3"
+                                    : ""
                                 }`}
                               >
                                 {note?.description}
@@ -517,21 +527,21 @@ const LearningNotesList = ({api}: IProps) => {
                               <button
                                 className="block text-sm font-normal text-gray-400 transition-colors duration-200 hover:text-gray-600 md:text-base"
                                 onClick={(e) => {
-                                  e.stopPropagation()
-                                  toggleExpand(note?.id)
+                                  e.stopPropagation();
+                                  toggleExpand(note?.id);
                                 }}
                               >
-                                {isExpanded ? 'Show less' : 'Show more'}
+                                {isExpanded ? "Show less" : "Show more"}
                               </button>
                             )}
                           </div>
                           <div className="mt-2 flex md:mt-4">
                             <div className="text-sm font-normal text-gray-400">
-                              {format(note?.updated_at, 'dd/MM/yyyy HH:mm')}
+                              {format(note?.updated_at, "dd/MM/yyyy HH:mm")}
                             </div>
                           </div>
                         </div>
-                      )
+                      );
                     },
                   )}
                 </>
@@ -572,7 +582,7 @@ const LearningNotesList = ({api}: IProps) => {
         )}
       </FormProvider>
     </SappDrawerV3>
-  )
-}
+  );
+};
 
-export default LearningNotesList
+export default LearningNotesList;

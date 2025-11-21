@@ -1,81 +1,74 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { DownloadIcon } from '@assets/icons'
-import { SappDrawerV3 } from '@lms/ui'
-import { formatBytes, cleanParamsAPI } from '@lms/utils'
-import getConfig from 'next/config'
-import { useRouter } from 'next/router'
-import React, {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
-import { CoursesAPI } from 'src/pages/api/courses'
+import { DownloadIcon } from "@assets/icons";
 import {
-  IResourceDetail,
-  SectionDropdownFormValues,
-  SectionField,
-  IOpenChooseItem,
   backTypeMap,
   getTypeName,
-  ISection,
   ICoursesAPI,
-} from '@lms/core'
-const { publicRuntimeConfig } = getConfig()
-export const { apiURL } = publicRuntimeConfig
-import { isEmpty } from 'lodash'
-import { UploadAPI } from 'src/pages/api/upload'
-import { FormProvider, useForm } from 'react-hook-form'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { SortBy, NoData, Tooltip} from '@lms/ui'
-import { PageLink } from '@lms/core'
-import FilterCourseSection from './FilterCourseSection'
-import { ListFilterMobile, ListItemFilterMobile } from '../course'
+  IOpenChooseItem,
+  IResourceDetail,
+  ISection,
+  SectionDropdownFormValues,
+  SectionField,
+} from "@lms/core";
+import { useTailwindBreakpoint } from "@lms/hooks";
+import { NoData, SappDrawerV3, SortBy, Tooltip } from "@lms/ui";
+import { cleanParamsAPI, formatBytes } from "@lms/utils";
+import { isEmpty } from "lodash";
+import getConfig from "next/config";
+import { useRouter } from "next/router";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { PageLink } from "src/constants/routes";
+import { CoursesAPI } from "src/pages/api/courses";
+import { UploadAPI } from "src/pages/api/upload";
+import { ListFilterMobile, ListItemFilterMobile } from "../course";
+import FilterCourseSection from "./FilterCourseSection";
+const { publicRuntimeConfig } = getConfig();
+export const { apiURL } = publicRuntimeConfig;
 interface IProps {
-  open: boolean
-  setOpenResource: Dispatch<SetStateAction<boolean>>
-  api: ICoursesAPI
+  open: boolean;
+  setOpenResource: Dispatch<SetStateAction<boolean>>;
+  api: ICoursesAPI;
 }
 
-const DEFAULT_PAGE_INDEX = 1
-const DEFAULT_PAGESIZE = 20
+const DEFAULT_PAGE_INDEX = 1;
+const DEFAULT_PAGESIZE = 20;
 
 const LearningResource = ({ open, setOpenResource, api }: IProps) => {
   const { isMobileView, isTabletView, isAlwaysShowSidebar } =
-    useTailwindBreakpoint()
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const [resources, setResources] = useState<IResourceDetail>()
-  const router = useRouter()
+    useTailwindBreakpoint();
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [resources, setResources] = useState<IResourceDetail>();
+  const router = useRouter();
   //Tạo các biến để lấy id trên thanh url
-  const isCourseDetail = PageLink.COURSE_DETAIL === router.pathname
-  const isCoursePartDetail = router.pathname.includes('/section')
-  const isActivityDetail = router.pathname.includes('/activity')
-  const courseId = router.query?.courseId
-  const queryId = router.query?.id
-  const activityId = router.query?.activityId
-  const chapterId = router.query?.chapter
-  const unitId = router.query?.unit
-  const courseSectionId = router.query.course_section_id
+  const isCourseDetail = PageLink.COURSE_DETAIL === router.pathname;
+  const isCoursePartDetail = router.pathname.includes("/section");
+  const isActivityDetail = router.pathname.includes("/activity");
+  const courseId = router.query?.courseId;
+  const queryId = router.query?.id;
+  const activityId = router.query?.activityId;
+  const chapterId = router.query?.chapter;
+  const unitId = router.query?.unit;
+  const courseSectionId = router.query.course_section_id;
 
-  const [loading, setLoading] = useState<boolean>(false)
-  const [isFirstCallApi, setIsFirstCallApi] = useState(false)
-  const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isFirstCallApi, setIsFirstCallApi] = useState(false);
+  const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false);
   const [openChooseItem, setOpenChooseItem] = useState<IOpenChooseItem>({
     isOpen: false,
-    type: 'section',
-    name: '',
-    params: '',
-  })
+    type: "section",
+    name: "",
+    params: "",
+  });
 
-  const [listSection, setListSection] = useState<ISection[]>([])
-  const [listSubsection, setListSubsection] = useState<ISection[]>([])
-  const [listUnit, setListUnit] = useState<ISection[]>([])
-  const [listActivity, setListActivity] = useState<ISection[]>([])
+  const [listSection, setListSection] = useState<ISection[]>([]);
+  const [listSubsection, setListSubsection] = useState<ISection[]>([]);
+  const [listUnit, setListUnit] = useState<ISection[]>([]);
+  const [listActivity, setListActivity] = useState<ISection[]>([]);
 
-  const [paramsSubId, setParamsSubId] = useState<string>('')
+  const [paramsSubId, setParamsSubId] = useState<string>("");
   const [isPageStateVariables, setIsPageStateVariables] =
-    useState<boolean>(false)
+    useState<boolean>(false);
   const methods = useForm<SectionDropdownFormValues>({
     defaultValues: {
       section: null,
@@ -83,56 +76,56 @@ const LearningResource = ({ open, setOpenResource, api }: IProps) => {
       unit: null,
       activity: null,
     },
-  })
+  });
 
   const resetFormFields = (fields: SectionField[]) => {
-    fields.forEach((field) => methods.setValue(field, null))
-  }
+    fields.forEach((field) => methods.setValue(field, null));
+  };
 
   const onClose = () => {
-    document.body.style.overflow = 'auto'
-    setOpenResource(false)
-    resetFormFields(['section', 'subsection', 'unit', 'activity'])
-    methods.setValue('section', null)
-    setPageIndex(DEFAULT_PAGE_INDEX)
-    setResources(undefined)
-    setIsPageStateVariables(true)
-  }
+    document.body.style.overflow = "auto";
+    setOpenResource(false);
+    resetFormFields(["section", "subsection", "unit", "activity"]);
+    methods.setValue("section", null);
+    setPageIndex(DEFAULT_PAGE_INDEX);
+    setResources(undefined);
+    setIsPageStateVariables(true);
+  };
 
-  const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_INDEX)
+  const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_INDEX);
 
   const params = cleanParamsAPI({
     sub_id: isFirstCallApi
       ? paramsSubId
-      : activityId || chapterId || courseSectionId || '',
+      : activityId || chapterId || courseSectionId || "",
     page_index: DEFAULT_PAGE_INDEX,
     page_size: DEFAULT_PAGESIZE,
-  })
+  });
 
   // Thêm cờ để tránh call duplicate api
-  const isFetchingRef = useRef(false)
+  const isFetchingRef = useRef(false);
 
   useEffect(() => {
     const initFetchData = async () => {
       // Kiểm tra điều kiện gọi API
-      const hasValidId = params.sub_id || courseId || queryId
-      if (!hasValidId || !open || isFetchingRef.current) return
+      const hasValidId = params.sub_id || courseId || queryId;
+      if (!hasValidId || !open || isFetchingRef.current) return;
 
-      isFetchingRef.current = true
-      setLoading(true)
+      isFetchingRef.current = true;
+      setLoading(true);
 
       try {
         const resources = await CoursesAPI.getCourseResource(
           courseId || queryId,
           params,
-        )
+        );
 
-        setPageIndex(DEFAULT_PAGE_INDEX)
-        setResources(resources.data)
+        setPageIndex(DEFAULT_PAGE_INDEX);
+        setResources(resources.data);
 
         // Các điều kiện không auto fill filter
-        if (isFirstCallApi && !paramsSubId) return
-        if (isCourseDetail || paramsSubId) return
+        if (isFirstCallApi && !paramsSubId) return;
+        if (isCourseDetail || paramsSubId) return;
 
         // Logic auto fill filter
         const fieldMap: Record<string, any> = {
@@ -140,82 +133,82 @@ const LearningResource = ({ open, setOpenResource, api }: IProps) => {
           subsection: chapterId,
           unit: unitId,
           activity: activityId,
-        }
+        };
 
         const fieldsToSet = isActivityDetail // Đối với màn activity fill all
-          ? ['section', 'subsection', 'unit', 'activity']
+          ? ["section", "subsection", "unit", "activity"]
           : isCoursePartDetail // Đối với màn course part detail fill section và subsection
-            ? ['section', 'subsection']
-            : [] // Đối với màn course detail không fill
+            ? ["section", "subsection"]
+            : []; // Đối với màn course detail không fill
 
         fieldsToSet.forEach((field) => {
-          const value = fieldMap[field]
+          const value = fieldMap[field];
           methods.setValue(
-            field as 'section' | 'subsection' | 'unit' | 'activity',
+            field as "section" | "subsection" | "unit" | "activity",
             Array.isArray(value) ? (value?.[0] ?? null) : (value ?? null),
-          )
-        })
+          );
+        });
       } catch (err) {
       } finally {
         // Đảm bảo reset trạng thái sau khi API hoàn tất
-        setIsFirstCallApi(true)
-        isFetchingRef.current = false
+        setIsFirstCallApi(true);
+        isFetchingRef.current = false;
         setTimeout(() => {
-          setLoading(false)
-        }, 500)
+          setLoading(false);
+        }, 500);
       }
-    }
+    };
 
-    initFetchData()
-  }, [open, paramsSubId, router])
+    initFetchData();
+  }, [open, paramsSubId, router]);
 
-  const requestOngoingRef = useRef(false)
+  const requestOngoingRef = useRef(false);
   const fetchData = async (nextPageIndex: number) => {
-    setLoading(true)
+    setLoading(true);
     try {
-      if (requestOngoingRef.current) return
-      requestOngoingRef.current = true
-      params.page_index = nextPageIndex
+      if (requestOngoingRef.current) return;
+      requestOngoingRef.current = true;
+      params.page_index = nextPageIndex;
       const res = await CoursesAPI.getCourseResource(
         courseId || queryId,
         params,
-      )
+      );
 
       if (resources && res?.data.resources) {
         setResources((prevResources: any) => ({
           ...prevResources,
           resources: [...prevResources.resources, ...res.data.resources],
-        }))
-        setPageIndex(nextPageIndex)
-        requestOngoingRef.current = false
+        }));
+        setPageIndex(nextPageIndex);
+        requestOngoingRef.current = false;
       }
     } catch (error) {
       // Handle error if needed
     }
     setTimeout(() => {
-      setLoading(false)
-    }, 500)
-  }
+      setLoading(false);
+    }, 500);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollEl = scrollRef.current
-      if (!scrollEl) return
-      const { scrollTop, scrollHeight, clientHeight } = scrollEl
+      const scrollEl = scrollRef.current;
+      if (!scrollEl) return;
+      const { scrollTop, scrollHeight, clientHeight } = scrollEl;
       if (scrollTop + clientHeight + 200 >= scrollHeight) {
         if ((courseId || queryId) && open) {
-          const nextPageIndex = pageIndex + 1
+          const nextPageIndex = pageIndex + 1;
           if (Number(resources?.meta?.total_pages) >= nextPageIndex) {
-            fetchData(nextPageIndex)
+            fetchData(nextPageIndex);
           }
         }
       }
-    }
+    };
 
-    const scrollEl = scrollRef.current
-    scrollEl?.addEventListener('scroll', handleScroll)
-    return () => scrollEl?.removeEventListener('scroll', handleScroll)
-  }, [fetchData, pageIndex])
+    const scrollEl = scrollRef.current;
+    scrollEl?.addEventListener("scroll", handleScroll);
+    return () => scrollEl?.removeEventListener("scroll", handleScroll);
+  }, [fetchData, pageIndex]);
 
   const download = async (name: string, file_key: string) => {
     await UploadAPI.downloadFile({
@@ -225,57 +218,57 @@ const LearningResource = ({ open, setOpenResource, api }: IProps) => {
           file_key: file_key,
         },
       ],
-    })
-  }
+    });
+  };
 
   const title = !openChooseItem.isOpen
     ? isOpenFilter
-      ? 'Filter'
-      : 'Course Resource'
-    : openChooseItem.name
+      ? "Filter"
+      : "Course Resource"
+    : openChooseItem.name;
   const classNameHeader = openChooseItem.isOpen
-    ? 'pb-4 border-b border-gray-200'
-    : 'mb-6'
+    ? "pb-4 border-b border-gray-200"
+    : "mb-6";
 
   const handleBack = () => {
-    if (openChooseItem.isOpen && openChooseItem.type !== 'section') {
-      const type = backTypeMap[openChooseItem.type]
+    if (openChooseItem.isOpen && openChooseItem.type !== "section") {
+      const type = backTypeMap[openChooseItem.type];
       setOpenChooseItem({
         ...openChooseItem,
         type: type,
         name: getTypeName[type],
-      })
+      });
     } else {
-      setIsOpenFilter(false)
+      setIsOpenFilter(false);
       setOpenChooseItem({
         ...openChooseItem,
         isOpen: false,
-      })
+      });
     }
-  }
+  };
 
   const handleSubmit = () => {
-    setIsOpenFilter(false)
-    setParamsSubId(openChooseItem.params || '')
+    setIsOpenFilter(false);
+    setParamsSubId(openChooseItem.params || "");
     setOpenChooseItem({
       ...openChooseItem,
       isOpen: false,
-    })
-  }
+    });
+  };
   const heightContent = isMobileView
-    ? '120px'
+    ? "120px"
     : isTabletView
-      ? '128px'
-      : '136px'
+      ? "128px"
+      : "136px";
 
-  const getSize = (size: number) => formatBytes(size)
+  const getSize = (size: number) => formatBytes(size);
 
   useEffect(() => {
     if (!open) {
-      setIsFirstCallApi(false)
-      setResources(undefined)
+      setIsFirstCallApi(false);
+      setResources(undefined);
     }
-  }, [open])
+  }, [open]);
 
   return (
     <>
@@ -284,17 +277,17 @@ const LearningResource = ({ open, setOpenResource, api }: IProps) => {
         handleCancel={onClose}
         title={title}
         isShowBtnClose
-        closable
+        closable={!isOpenFilter}
         isShowBtnBack={isOpenFilter}
         handleBack={handleBack}
         isShowFooter={isOpenFilter}
         handleSubmit={handleSubmit}
         classNameHeader={classNameHeader}
-        rootClassName={'responsive-drawer-base'}
+        rootClassName={"responsive-drawer-base"}
         submitButtonClassName="w-full h-10"
         btnSubmitTile="Confirm"
-        titleClassName={isOpenFilter ? 'w-full pr-8 text-center' : ''}
-        placement={!isAlwaysShowSidebar ? 'bottom' : 'right'}
+        titleClassName={isOpenFilter ? "w-full pr-8 text-center" : ""}
+        placement={!isAlwaysShowSidebar ? "bottom" : "right"}
       >
         <FormProvider {...methods}>
           {!isOpenFilter ? (
@@ -379,7 +372,7 @@ const LearningResource = ({ open, setOpenResource, api }: IProps) => {
         </FormProvider>
       </SappDrawerV3>
     </>
-  )
-}
+  );
+};
 
-export default LearningResource
+export default LearningResource;

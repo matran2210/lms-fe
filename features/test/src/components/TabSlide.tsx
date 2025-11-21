@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { QUESTION_TYPES } from "@lms/core";
 import { ArrowIconV2 } from "@lms/ui/components/base/pagination/ArrowIconV2";
-import PageLink from "@lms/ui/components/base/pagination/PageLink";
+import { PageLinkPagination } from "@lms/ui";
 import { useTailwindBreakpoint } from "@lms/hooks";
 
 interface IProps {
@@ -224,7 +224,7 @@ const TabSlide = ({
         {/* Nút mũi tên trái */}
         {data?.length > 0 && (
           <div className="flex items-center">
-            <PageLink
+            <PageLinkPagination
               disabled={sortedData.findIndex((e) => e.id === currentTab) === 0}
               arrow={true}
               onClick={() => {
@@ -241,7 +241,7 @@ const TabSlide = ({
               )}
             >
               <ArrowIconV2 />
-            </PageLink>
+            </PageLinkPagination>
           </div>
         )}
         {/* Phần render các số */}
@@ -275,7 +275,7 @@ const TabSlide = ({
                     data-tab-id={pageNum.id}
                   >
                     {idx !== 0 && <div className="me-2 h-full border"></div>}
-                    <PageLink
+                    <PageLinkPagination
                       key={pageNum.id}
                       active={currentTab === pageNum.id}
                       onClick={() => {
@@ -289,7 +289,7 @@ const TabSlide = ({
                       isFlagedProp={pageNum.flag}
                     >
                       {pageNum.index + 1}
-                    </PageLink>
+                    </PageLinkPagination>
                   </div>
                 ) : (
                   <div
@@ -297,7 +297,7 @@ const TabSlide = ({
                     key={pageNum.id}
                     data-tab-id={pageNum.id}
                   >
-                    <PageLink
+                    <PageLinkPagination
                       key={pageNum.id}
                       active={currentTab === pageNum.id}
                       onClick={() => {
@@ -309,7 +309,7 @@ const TabSlide = ({
                       isFlagedProp={pageNum.flag}
                     >
                       {pageNum.index + 1}
-                    </PageLink>
+                    </PageLinkPagination>
                   </div>
                 ),
               )
@@ -324,7 +324,7 @@ const TabSlide = ({
                         key={pageNum.id}
                         data-tab-id={pageNum.id}
                       >
-                        <PageLink
+                        <PageLinkPagination
                           key={pageNum.id}
                           active={currentTab === pageNum.id}
                           onClick={() => {
@@ -336,7 +336,7 @@ const TabSlide = ({
                           isFlagedProp={pageNum.flag}
                         >
                           {pageNum.index + 1}
-                        </PageLink>
+                        </PageLinkPagination>
                       </div>
                     ))}
                   </div>
@@ -352,7 +352,7 @@ const TabSlide = ({
         {/* Nút mũi tên phải */}
         {data?.length > 0 && (
           <div className="flex items-center">
-            <PageLink
+            <PageLinkPagination
               disabled={
                 sortedData.findIndex((e) => e.id === currentTab) ===
                 sortedData.length - 1
@@ -373,7 +373,7 @@ const TabSlide = ({
               )}
             >
               <ArrowIconV2 right={true} />
-            </PageLink>
+            </PageLinkPagination>
           </div>
         )}
       </div>

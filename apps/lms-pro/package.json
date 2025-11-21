@@ -18,6 +18,7 @@
     "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
+    "@lms/feature-dashboard": "workspace:*",
     "@lms/feature-test": "workspace:*",
     "@lms/feature-calendar": "workspace:*",
     "@lms/feature-auth": "workspace:*",

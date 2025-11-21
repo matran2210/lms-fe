@@ -89,6 +89,7 @@ const CoursePartDetail = () => {
   const [isOpenChapter, setIsOpenChapter] = useState<boolean>(false)
   const [loadingLearningOutcome, setLoadingLearningOutcome] =
     useState<boolean>(false)
+  const [loadingScreen, setLoadingScreen] = useState<boolean>(true)
   const [openResource, setOpenResource] = useState<boolean>(false)
   const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
 
@@ -540,6 +541,11 @@ const CoursePartDetail = () => {
       ? '128px'
       : '144px'
 
+  useEffect(() => {
+    if (!isLoading && !loadingChapter) {
+      setLoadingScreen(false)
+    }
+  }, [isLoading, loadingChapter])
   return (
     <Layout title="Course Part Detail" showSidebar={isAlwaysShowSidebar}>
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
@@ -577,10 +583,9 @@ const CoursePartDetail = () => {
           />
         </div>
       ) : null}
-
       <div className="mb-24 mt-4 min-h-[calc(100vh-3rem)] md:min-h-[calc(100vh-5rem)]">
-        {isLoading ? (
-          <Skeleton.Input size="default" className="w-1/2 pt-6" block />
+        {loadingScreen ? (
+          <Skeleton.Input size="default" active className="!w-1/2" block />
         ) : (
           <SappBreadCrumbs
             className="mb-2"
@@ -609,8 +614,8 @@ const CoursePartDetail = () => {
             chapterMenu={partDetail}
             fetchChapterDetail={fetchChapterDetail}
             chapterDetail={chapterDetail}
-            loading={isLoading}
-            loadingChapter={loadingChapter}
+            loading={loadingScreen}
+            loadingChapter={loadingScreen}
             setLoadingChapter={setLoadingChapter}
             setOpenLearningOutcome={setOpenLearningOutcome}
             course_id={router.query.id as any}

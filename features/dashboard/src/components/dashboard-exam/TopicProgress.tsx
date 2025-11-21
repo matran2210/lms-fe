@@ -1,19 +1,16 @@
-import { EChart } from '@lms/ui'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import { DashboardAPI } from '@pages/api/dashboard'
-import { ICourseInfo, ITopicProgress } from '@lms/core'
-import { EChartsOption } from 'echarts'
-import useReponsive from 'src/hooks/useReponsive'
+import { ITopicProgress } from "@lms/core";
+import { EChart } from "@lms/ui";
+import { EChartsOption } from "echarts";
+import { useEffect, useState } from "react";
+import useReponsive from "src/hooks/useReponsive";
 
 const TopicProgress = ({
-  setInfoCourse,
+  topicProgressData,
 }: {
-  setInfoCourse: Dispatch<SetStateAction<ICourseInfo>>
+  topicProgressData: ITopicProgress[] | null;
 }) => {
-  const router = useRouter()
-  const [option, setOption] = useState<EChartsOption>()
-  const { isMobile } = useReponsive()
+  const [option, setOption] = useState<EChartsOption>();
+  const { isMobile } = useReponsive();
 
   const handleTopicProgress = (data: ITopicProgress[]) => {
     if (data.length) {
@@ -27,7 +24,7 @@ const TopicProgress = ({
         },
         tooltip: {
           show: !isMobile,
-          trigger: 'item',
+          trigger: "item",
           borderWidth: 0,
           extraCssText: `
               border-radius: 8px;
@@ -45,12 +42,12 @@ const TopicProgress = ({
           Progress: ${params.value}%
         </div>
       </div>
-    `
+    `;
           },
         },
         dataZoom: [
           {
-            type: 'inside', // Cuộn bằng chuột hoặc touch
+            type: "inside", // Cuộn bằng chuột hoặc touch
             xAxisIndex: 0,
             start: 0,
             end: 50,
@@ -58,26 +55,26 @@ const TopicProgress = ({
         ],
 
         xAxis: {
-          type: 'category',
+          type: "category",
           data: data.map((e: ITopicProgress) => e.short_name || e.name),
           axisLabel: {
             show: true,
-            color: '#374151', // Màu chữ (blue-600)
+            color: "#374151", // Màu chữ (blue-600)
             fontSize: isMobile ? 12 : 14, // Cỡ chữ
             fontWeight: 500, // Đậm
             lineHeight: isMobile ? 20 : 22,
             formatter: function (value: string) {
-              const maxLength = 10 // số ký tự tối đa muốn hiển thị
+              const maxLength = 10; // số ký tự tối đa muốn hiển thị
               return value.length > maxLength
-                ? value.slice(0, maxLength) + '…'
-                : value
+                ? value.slice(0, maxLength) + "…"
+                : value;
             },
-            overflow: 'truncate', // hoặc 'break', 'breakAll'
+            overflow: "truncate", // hoặc 'break', 'breakAll'
           },
           axisLine: {
             show: true,
             lineStyle: {
-              color: '#D1D5DB', // Màu của đường viền trục Y
+              color: "#D1D5DB", // Màu của đường viền trục Y
             },
           },
           splitLine: {
@@ -85,19 +82,19 @@ const TopicProgress = ({
           },
         },
         yAxis: {
-          type: 'value',
+          type: "value",
           min: 0,
           max: 100, // ✅ Trục dọc có giá trị tối đa là 100
           axisLine: {
             show: false,
             lineStyle: {
-              color: '#D1D5DB', // Màu của đường viền trục Y
+              color: "#D1D5DB", // Màu của đường viền trục Y
               width: 1, // Độ dày của đường viền
             },
           },
           axisLabel: {
             show: true,
-            color: '#374151', // Màu chữ (blue-600)
+            color: "#374151", // Màu chữ (blue-600)
             fontSize: 12, // Cỡ chữ
             fontWeight: 400,
           },
@@ -107,7 +104,7 @@ const TopicProgress = ({
           splitLine: {
             show: true,
             lineStyle: {
-              color: '#D1D5DB', // Màu của đường kẻ ngang
+              color: "#D1D5DB", // Màu của đường kẻ ngang
               width: 1, // Độ dày của đường kẻ
             },
           },
@@ -121,41 +118,29 @@ const TopicProgress = ({
                   )
                 : 0,
               itemStyle: {
-                color: '#63ACFF', // Màu xen kẽ
+                color: "#63ACFF", // Màu xen kẽ
                 borderRadius: [12, 12, 0, 0],
               },
             })),
-            type: 'bar',
+            type: "bar",
             barWidth: isMobile ? 50 : 58,
           },
         ],
-      }
+      };
 
-      setOption(option as EChartsOption)
+      setOption(option as EChartsOption);
     } else {
-      setOption(undefined)
+      setOption(undefined);
     }
-  }
-
-  const getTopicProgress = async (id: string) => {
-    try {
-      const res = await DashboardAPI.getTopicProgress(id)
-      if (res && res.success && res?.data) {
-        handleTopicProgress(res.data)
-        setInfoCourse({
-          course_type: res.data?.[0]?.course_type,
-          course_name: res.data?.[0]?.course_name,
-        })
-      }
-    } catch (error) {
-      setOption(undefined)
-    }
-  }
+  };
 
   useEffect(() => {
-    if (router?.query?.courseId)
-      getTopicProgress(router.query.courseId as string)
-  }, [router?.query?.courseId, isMobile])
+    if (topicProgressData && topicProgressData.length > 0) {
+      handleTopicProgress(topicProgressData);
+    } else {
+      setOption(undefined);
+    }
+  }, [topicProgressData, isMobile]);
 
   return (
     <div className="flex flex-col rounded-2xl bg-white p-4 shadow-small md:p-6 lg:h-full">
@@ -166,13 +151,13 @@ const TopicProgress = ({
       {option && (
         <EChart
           option={option}
-          minHeight={isMobile ? '350px' : '450px'}
-          height={isMobile ? '350px' : '450px'}
+          minHeight={isMobile ? "350px" : "450px"}
+          height={isMobile ? "350px" : "450px"}
           width="100%"
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default TopicProgress
+export default TopicProgress;

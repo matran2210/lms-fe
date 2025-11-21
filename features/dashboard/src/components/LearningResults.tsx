@@ -1,265 +1,324 @@
-import infoIcon from '@assets/images/info-icon.svg'
-import { EChart } from '@lms/ui'
-import { DashboardAPI } from '@pages/api/dashboard'
-import dayjs from 'dayjs'
-import Image from 'next/image'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import {Tooltip, NoData } from '@lms/ui'
-import { ILearningResult, IMockTestResult } from '@lms/core'
+import { IconEssentional, MatchFailIcon, SuccessMatchIcon } from "@lms/assets";
+import {
+  ANIMATION,
+  COURSE_TYPE,
+  DATE_FORMAT,
+  ILearningResult,
+  IMockTestResult,
+} from "@lms/core";
+import { useReponsive } from "@lms/hooks";
+import { EChart, NoData, Tooltip } from "@lms/ui";
+import dayjs from "dayjs";
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { EChartsOption } from "echarts";
 
-import { COURSE_TYPE, DATE_FORMAT, LABEL_MAX_LENGTH } from '@lms/core'
+interface LearningResultsProps {
+  mockTestResultsData: IMockTestResult | null;
+}
 
-const LearningResults = () => {
-  const router = useRouter()
-  const [option, setOption] = useState<any>()
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [hasLearning, setHasLearning] = useState<boolean>(false)
-  const [mockTestId, setMockTestId] = useState<string>('')
-  const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
-  const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE
+interface TooltipParams {
+  value: number[];
+  name: string;
+}
 
-  const shortName = (name: string) => {
-    return name.length < LABEL_MAX_LENGTH
-      ? name
-      : `${name.slice(0, LABEL_MAX_LENGTH)}...`
-  }
+const LearningResults = ({ mockTestResultsData }: LearningResultsProps) => {
+  const [results, setResults] = useState<ILearningResult[]>([]);
+  const [hasLearning, setHasLearning] = useState<boolean>(false);
+  const [mockTestId, setMockTestId] = useState<string>("");
+  const courseInfo = useMemo(
+    () => JSON.parse(localStorage.getItem("courseInfo") as string),
+    [],
+  );
+  const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE;
+  const resultFormula =
+    courseInfo?.category === "ACCA"
+      ? "%Results = Graded activities (70%) + Final test (30%)"
+      : "%Results = Module test (40%) + Topic test (60%)";
 
-  const handleLearningResults = (
-    data: ILearningResult[] | IMockTestResult | any,
-  ) => {
-    const results = isNormal ? data : data.reports
+  const { isMobile, isTablet } = useReponsive();
 
-    if (!isNormal && data.mock_tests?.length == 1) {
-      setMockTestId(data.mock_tests[0].id)
+  useEffect(() => {
+    if (mockTestResultsData) {
+      const data = mockTestResultsData.reports || [];
+      setResults(data);
+      setHasLearning(data.some((e: ILearningResult) => e.score));
+      if (!isNormal && mockTestResultsData.mock_tests?.length === 1) {
+        setMockTestId(mockTestResultsData.mock_tests[0].id);
+      }
     } else {
-      setMockTestId('')
+      setResults([]);
     }
+  }, [mockTestResultsData, isNormal]);
 
-    if (results.length) {
-      let total = 0
-      const hasLearning = results.some((e: ILearningResult) => e.score)
-      const indicator = results.map((e: ILearningResult, index: number) => {
-        total += e.score
-        let newName = e.short_name ? shortName(e.short_name) : shortName(e.name)
-        const name = `${newName}\n${hasLearning ? e.score : e.mock_test_score || 0}%`
-        if (index) return { name: name, max: 100 }
-
-        return {
-          name: name,
-          max: 100,
-          axisLabel: {
-            show: true,
-            fontSize: 10,
-          },
-        }
-      })
-
-      const option: EChartsProps['option'] = {
-        title: {
-          show: false,
+  const option = useMemo(() => {
+    if (!results || results.length === 0) return null;
+    const maxValues = results.map(
+      (result: ILearningResult | IMockTestResult) => {
+        const learning = "score" in result ? result.score : 0;
+        const mock =
+          "mock_test_score" in result ? result.mock_test_score || 0 : 0;
+        return Math.max(learning, mock, 100);
+      },
+    );
+    const indicator = results.map(
+      (result: ILearningResult | IMockTestResult, idx: number) => ({
+        text:
+          "short_name" in result
+            ? result.short_name || ""
+            : "name" in result
+              ? (result as IMockTestResult)?.name
+              : "",
+        max: maxValues[idx],
+      }),
+    );
+    return {
+      title: { text: "" },
+      responsive: true,
+      tooltip: {
+        borderWidth: 0,
+        trigger: "item",
+        formatter: function (params: TooltipParams) {
+          const values = params.value;
+          const indicators = results.map(
+            (e: ILearningResult | IMockTestResult) =>
+              "name" in e ? e.name : (e as ILearningResult)?.short_name,
+          );
+          let tooltipText = `<strong>${params.name}</strong><br/>`;
+          values.forEach((val: number, i: number) => {
+            tooltipText += `<span class='text-[#7086FD]'>●</span> ${indicators[i]}: ${val}%<br/>`;
+          });
+          return tooltipText;
         },
-        responsive: true,
-        maintainAspectRatio: false,
-        radar: {
-          indicator: indicator,
-          radius: '70%',
-          axisName: {
-            fontSize: 12,
-            color: '#374151',
-            lineHeight: 14,
-            fontFamily: 'Roboto',
-          },
-          z: 1,
-        },
-        tooltip: {
-          trigger: 'item',
-          formatter: function (params: any) {
-            const values = params.value
-            const indicators = results.map((e: ILearningResult) => e.name)
-            let tooltipText = `<strong>${params.name}</strong><br/>`
-            values.forEach((val: any, i: number) => {
-              tooltipText += `<span class='text-blue-5'>●</span> ${indicators[i]}: ${val}%<br/>`
-            })
-            return tooltipText
-          },
-        },
-        series: [
-          {
-            name: 'Learning Results',
-            type: 'radar',
-            tooltip: {
-              show: isNormal,
+      },
+      radar: [
+        {
+          shape: "circle",
+          radius: "75%",
+          indicator,
+          axisLine: { lineStyle: { color: "#D1D5DB" } },
+          splitLine: { lineStyle: { color: "#D1D5DB" } },
+          splitArea: { areaStyle: { color: "transparent" } },
+          name: {
+            color: "#374151",
+            fontSize: isMobile ? 12 : 14,
+            fontWeight: "500",
+            lineHeight: isMobile ? 20 : 22,
+            formatter: function (name: string) {
+              const maxLength = 16;
+              return name.length > maxLength
+                ? name.slice(0, maxLength) + "…"
+                : name;
             },
-            data: [
-              {
-                value: results.map((e: ILearningResult) => e.score),
-                name: 'Your Learning results',
-                lineStyle: {
-                  color: '#7086FD',
-                },
-                areaStyle: {
-                  color: 'rgba(112, 134, 253, 0.5)',
-                },
-                symbol: 'none',
-              },
-              {
-                value: isNormal
-                  ? []
-                  : results.map((e: ILearningResult) => e.mock_test_score),
-                name: 'Mock test results',
-                lineStyle: {
-                  color: '#6FD195',
-                },
-                areaStyle: {
-                  color: 'rgba(111, 209, 149, 0.5)',
-                },
-                itemStyle: {
-                  color: '#6FD195',
-                },
-              },
-            ],
           },
-        ],
-        graphic: {
-          type: 'group',
-          left: 'center',
-          top: 'middle',
-          children: [
+        },
+      ],
+      series: [
+        {
+          type: "radar",
+          data: [
             {
-              type: 'rect',
-              invisible: !isNormal,
-              shape: {
-                width: total ? 60 : 50,
-                height: 30,
-              },
-              style: {
-                fill: '#fff',
-                stroke: '#FFFFFF',
-                lineWidth: 2,
-                shadowColor: 'rgba(0, 0, 0, 0.1)',
-                shadowBlur: 10,
-              },
-              x: total ? -30 : -25,
-              y: -15,
-              z: 3,
+              name: "Learning results",
+              value: results?.map(
+                (result: ILearningResult | IMockTestResult) =>
+                  "score" in result ? result.score : 0,
+              ),
+              areaStyle: { color: "rgba(111, 211, 176, 0.45)" },
+              lineStyle: { color: "#6FD3B0", width: 1 },
+              itemStyle: { color: "#6FD3B0" },
             },
             {
-              type: 'text',
-              invisible: !isNormal,
-              style: {
-                text: `${parseFloat((total / results.length).toFixed(2))}%`,
-                fontSize: 16,
-                fontWeight: 'bold',
-                fill: !total ? '#252F4A' : '#7086FD',
-                align: 'center',
-                verticalAlign: 'middle',
-              },
-              x: 0,
-              y: 0,
-              z: 4,
+              name: "Mock test results",
+              value: results?.map(
+                (result: ILearningResult | IMockTestResult) =>
+                  "mock_test_score" in result ? result.mock_test_score || 0 : 0,
+              ),
+              areaStyle: { color: "rgba(251, 140, 91, 0.45)" },
+              lineStyle: { color: "#FB8C5B", width: 1 },
+              itemStyle: { color: "#FB8C5B" },
             },
           ],
         },
-      }
-
-      setHasLearning(hasLearning)
-      setOption(option)
-    } else {
-      setOption(null)
-    }
-  }
-
-  const getLearningResults = async (id: string) => {
-    try {
-      const res = isNormal
-        ? await DashboardAPI.getLearningResults(id)
-        : await DashboardAPI.getMockTestResults(id)
-
-      if (res && res.success) handleLearningResults(res.data)
-    } catch (error) {
-      setOption(null)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    if (router?.query?.courseId)
-      getLearningResults(router.query.courseId as string)
-  }, [router?.query?.courseId])
+      ],
+    };
+  }, [results]);
 
   return (
-    <div className="flex h-[55vh] w-full grow flex-col bg-white px-3 pb-7 pt-4 shadow-activity 3.5xl:px-8">
-      <div className="mb-5 flex items-center justify-between border-b pb-3">
-        {isNormal ? (
-          <Tooltip
-            title={
-              <div className="text-support-1">
-                {courseInfo?.category == 'ACCA'
-                  ? '%Results = Graded activities (70%) + Final test (30%)'
-                  : '%Results = Module test (40%) + Topic test (60%)'}
+    <div
+      className="w-full rounded-2xl bg-white p-4 shadow-small md:p-6 xl:flex xl:h-[600px] xl:p-8"
+      data-aos={ANIMATION.DATA_AOS}
+    >
+      <div className="w-full">
+        <div className="mb-5 flex items-center justify-between">
+          <div className="w-full flex-row justify-between xl:flex xl:flex-col">
+            <div className="flex">
+              <div className="min-w-fit text-lg font-semibold xl:text-xl">
+                Your Learning Results
               </div>
-            }
-            className="dashboard_tooltip"
-          >
-            <div className="flex min-w-fit items-center gap-1 text-lg-xl font-bold 4xl:text-xl">
-              Your Learning Results
-              <Image src={infoIcon} alt="" width={16} height={16} />
+              <Tooltip
+                title={<div className="text-center">{resultFormula}</div>}
+                placement="bottom"
+              >
+                <div className="ms-2">
+                  <IconEssentional />
+                </div>
+              </Tooltip>
             </div>
-          </Tooltip>
-        ) : (
-          <div className="min-w-fit text-lg-xl font-bold 4xl:text-xl">
-            Your Learning Results
+            <div className="mt-2 text-xs text-gray-400 xl:text-sm">
+              {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
+            </div>
           </div>
-        )}
-        <div className="text-gray-11 text-xsm 4xl:text-sm">
-          {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
         </div>
-      </div>
-      {option && (
-        <div
-          className={`flex grow ${isNormal ? 'flex-col' : 'flex-row gap-5 px-5 2xl:px-12'}`}
-        >
-          <div className="grow">
-            <EChart option={option} />
-          </div>
-          <div
-            className={`${isNormal ? '' : 'flex flex-col items-start justify-center gap-4'}`}
-          >
-            {!isNormal && (
-              <div className="flex items-center justify-center gap-2.5">
-                <span className="min-h-3 min-w-3 rounded-full bg-green-4"></span>
-                <a
-                  href={
-                    mockTestId
-                      ? `${window.location.origin}/courses/test/test-result/${mockTestId}`
-                      : ''
-                  }
-                  target="_blank"
-                  className={`inline-block min-w-fit font-medium ${!mockTestId ? 'pointer-events-none' : 'hover:text-green-4'}`}
-                  rel="noreferrer"
-                >
-                  Mock test results
-                </a>
+        <div className="flex">
+          <>
+            {option && (
+              <div className="flex grow flex-col gap-5 px-0 xl:flex-row xl:justify-evenly xl:px-5 2xl:pl-0 2xl:pr-12">
+                <div className="flex justify-center">
+                  {(() => {
+                    const chartHeight = isMobile
+                      ? "350px"
+                      : isTablet
+                        ? "450px"
+                        : "500px";
+                    const chartMinHeight = isMobile
+                      ? "350px"
+                      : isTablet
+                        ? "450px"
+                        : "500px";
+                    const chartWidth = isMobile
+                      ? "300px"
+                      : isTablet
+                        ? "500px"
+                        : "550px";
+                    return (
+                      <EChart
+                        option={option as EChartsOption}
+                        height={chartHeight}
+                        minHeight={chartMinHeight}
+                        width={chartWidth}
+                      />
+                    );
+                  })()}
+                </div>
+                <div className="flex flex-row items-start justify-center gap-5 xl:flex-col xl:gap-4">
+                  {!isNormal && (
+                    <div className="flex items-center justify-center gap-2.5 text-sm font-medium xl:text-base">
+                      <span className="min-h-3 min-w-3 rounded-full bg-dashboard-mock-test"></span>
+                      <Link
+                        href={
+                          mockTestId
+                            ? `${window.location.origin}/courses/test/test-result/${mockTestId}`
+                            : ""
+                        }
+                        target="_blank"
+                        className={`inline-block min-w-fit text-base font-bold text-gray-800 ${!mockTestId ? "pointer-events-none" : "hover:text-dashboard-learing"}`}
+                        rel="noreferrer"
+                      >
+                        Mock test results
+                      </Link>
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-center gap-2.5">
+                    <span className="min-h-3 min-w-3 rounded-full bg-dashboard-learing"></span>
+                    <span className="min-w-fit text-sm font-medium text-gray-800 xl:text-base">
+                      Learning results
+                    </span>
+                  </div>
+                </div>
               </div>
             )}
-            {isNormal || hasLearning ? (
-              <div className="flex items-center justify-center gap-2.5">
-                <span className="min-h-3 min-w-3 rounded-full bg-blue-5"></span>
-                <span className="min-w-fit font-medium">Learning results</span>
-              </div>
-            ) : null}
-          </div>
+          </>
         </div>
-      )}
-      {!isLoading && !option && (
+      </div>
+      <div className="w-full xl:w-[515px]">
+        <LearningMockTest results={results as ILearningResult[]} />
+      </div>
+      {mockTestResultsData && !option && (
         <div className="flex grow items-center justify-center">
           <NoData />
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default LearningResults
+const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
+  return (
+    <div className="w-full flex-col xl:w-[515px]">
+      <div className="mb-6 mt-8 flex justify-between text-lg font-semibold text-gray-800 md:justify-start lg:mb-6 lg:mt-10 xl:mb-10 xl:mt-0 xl:text-xl">
+        <div>Learning & Mock test Comparision</div>
+        <div className="ms-2">
+          <IconEssentional />
+        </div>
+      </div>
+      <div className="overflow-y-auto md:h-[230px] xl:h-[450px]">
+        {results?.map((result) => {
+          const differenceResult =
+            (result?.mock_test_score || 0) - (result?.score || 0);
+
+          const hasBothScores =
+            result?.score !== 0 && result?.mock_test_score != 0;
+
+          return (
+            <div
+              key={result?.id}
+              className="mb-4 flex flex-col rounded-lg bg-gray-100 px-3 py-2 xl:p-4"
+            >
+              <div className="mb-3 text-base font-medium text-gray-800 lg:font-semibold xl:mb-2 xl:text-lg">
+                {result?.short_name || result?.name}
+              </div>
+
+              <div className="items-cente mb-1 flex justify-between">
+                <div className="text-xs text-gray-800 xl:text-sm">
+                  Learning result: {result?.score}%
+                </div>
+                {hasBothScores && (
+                  <div className="flex items-center">
+                    {differenceResult > 0 ? (
+                      <SuccessMatchIcon />
+                    ) : (
+                      <MatchFailIcon />
+                    )}
+                    <div
+                      className={`ms-1 text-sm font-semibold md:text-lg ${differenceResult > 0 ? "text-success" : "text-error"}`}
+                    >
+                      {differenceResult > 0 ? "+" : ""}
+                      {differenceResult}%
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="text-xs text-gray-800 xl:text-sm">
+                  Mock test: {result?.mock_test_score}%
+                </div>
+                {hasBothScores && (
+                  <div className="mt-2 text-sm text-gray-400 md:text-base">
+                    difference
+                  </div>
+                )}
+              </div>
+              {hasBothScores && (
+                <div
+                  className={
+                    differenceResult > 0
+                      ? "text-sm text-success"
+                      : "text-sm text-error"
+                  }
+                >
+                  {differenceResult > 0
+                    ? "Okay, keep it up!"
+                    : "Review more formulas"}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+export default LearningResults;

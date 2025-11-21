@@ -1,13 +1,25 @@
-import { Skeleton } from 'antd'
-import clsx from 'clsx'
-import { forwardRef, HTMLAttributes } from 'react'
+import { Skeleton } from "antd";
+import clsx from "clsx";
+import { forwardRef, HTMLAttributes } from "react";
 
 const DashboardSkeleton = forwardRef<
   HTMLDivElement,
   HTMLAttributes<HTMLDivElement>
 >((props, ref) => {
   return (
-    <div ref={ref} {...props} className={clsx(props.className)}>
+    <div ref={ref} {...props} className={"py-4" + clsx(props.className)}>
+      <div className="space-y-3 pb-8 lg:pb-10">
+        <Skeleton.Input
+          active
+          className="!hidden !h-4 !w-[300px] !rounded-full lg:!block"
+        />
+        <div className="!flex !w-full items-center !justify-between">
+          <Skeleton.Input
+            active
+            className="!h-8 !w-[100px] !rounded-xl lg:!h-10"
+          />
+        </div>
+      </div>
       <div className="flex w-full flex-col gap-4 bg-[#F9F9F9] md:gap-6 xl:gap-8">
         <div className="grid xl:grid-cols-2 xl:gap-8">
           <div className="rounded-2xl bg-white p-4 shadow-small md:p-6">
@@ -77,14 +89,14 @@ const DashboardSkeleton = forwardRef<
                   <div className="ms-4 w-full">
                     <div className="text-lg font-semibold text-gray-800">
                       <Skeleton.Input
-                        style={{ width: '60%' }}
+                        style={{ width: "60%" }}
                         active
                         size="small"
                       />
                     </div>
                     <div className="mt-4 text-base font-medium text-gray-400 xl:mt-[22px]">
                       <Skeleton.Input
-                        style={{ width: '40%' }}
+                        style={{ width: "40%" }}
                         active
                         size="small"
                       />
@@ -111,7 +123,7 @@ const DashboardSkeleton = forwardRef<
                   .map((_, i) => (
                     <div className="flex items-center justify-between" key={i}>
                       <Skeleton.Input
-                        style={{ width: '55%' }}
+                        style={{ width: "55%" }}
                         active
                         size="small"
                       />
@@ -148,9 +160,9 @@ const DashboardSkeleton = forwardRef<
         </div>
       </div>
     </div>
-  )
-})
+  );
+});
 
-DashboardSkeleton.displayName = 'DashboardSkeleton'
+DashboardSkeleton.displayName = "DashboardSkeleton";
 
-export default DashboardSkeleton
+export default DashboardSkeleton;

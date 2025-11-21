@@ -1,5 +1,5 @@
 import { getPaginationItems } from "./pagination";
-import PageLink from "./PageLink";
+import PageLinkPagination from "./PageLink";
 import { Dispatch, ReactNode, SetStateAction, useRef } from "react";
 import ArrowIcon from "./ArrowIcon";
 import { useState, useEffect } from "react";
@@ -77,7 +77,7 @@ const Pagination = ({
             "absolute -left-3 top-0.5 -translate-x-full"
           }`}
         >
-          <PageLink
+          <PageLinkPagination
             disabled={type !== "row" && currentPage === 1}
             arrow={true}
             onClick={() => {
@@ -92,7 +92,7 @@ const Pagination = ({
             <ArrowIcon
               iconType={`${type === "table" ? "chervon" : "teeny"}`}
             ></ArrowIcon>
-          </PageLink>
+          </PageLinkPagination>
         </div>
         <div
           className={`${
@@ -103,7 +103,7 @@ const Pagination = ({
           ref={elementRef}
         >
           {pageNums.map((pageNum: number, idx: any) => (
-            <PageLink
+            <PageLinkPagination
               key={idx}
               active={currentPage === pageNum}
               disabled={isNaN(pageNum)}
@@ -115,7 +115,7 @@ const Pagination = ({
               type={type}
             >
               {!isNaN(pageNum) ? pageNum : type === "table" ? "..." : "|"}
-            </PageLink>
+            </PageLinkPagination>
           ))}
         </div>
         <div
@@ -125,7 +125,7 @@ const Pagination = ({
             "absolute -right-3 top-0.5 translate-x-full"
           }`}
         >
-          <PageLink
+          <PageLinkPagination
             disabled={type !== "row" && currentPage === pageSize}
             arrow={true}
             onClick={() => {
@@ -141,7 +141,7 @@ const Pagination = ({
               iconType={`${type === "table" ? "chervon" : "teeny"}`}
               right={true}
             ></ArrowIcon>
-          </PageLink>
+          </PageLinkPagination>
         </div>
         {type === "row" && (
           <div className="flex items-center">

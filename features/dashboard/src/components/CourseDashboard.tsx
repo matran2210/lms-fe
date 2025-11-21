@@ -1,47 +1,46 @@
-import { Icon } from '@lms/assets'
-import { ANIMATION, ICourseInfo } from '@lms/core'
-import { isUndefined } from 'lodash'
-import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, memo, useState } from 'react'
-import LearningResult from './dashboard-normal/LearningResult'
-import OverallProgress from './dashboard-normal/OverallProgress'
-import { WeeklyReport } from './dashboard-normal'
-import { StatsSkeleton } from '@lms/ui'
-import { TopicProgress } from './dashboard-exam'
+import { Icon } from "@lms/assets";
+import { ANIMATION, ITopicProgress, IWeeklyReport } from "@lms/core";
+import { isUndefined } from "lodash";
+import { useRouter } from "next/router";
+import { memo, useState } from "react";
+import { TopicProgress } from "./dashboard-exam";
+import { WeeklyReport } from "./dashboard-normal";
+import LearningResult from "./dashboard-normal/LearningResult";
+import OverallProgress from "./dashboard-normal/OverallProgress";
 export interface IActivityProgress {
-  completed: number
-  total: number
+  completed: number;
+  total: number;
 }
 export interface IActivities {
-  section?: IActivityProgress
-  time?: IActivityProgress
-  test?: IActivityProgress
-  activity?: IActivityProgress
-  certificate_id?: string
+  section?: IActivityProgress;
+  time?: IActivityProgress;
+  test?: IActivityProgress;
+  activity?: IActivityProgress;
+  certificate_id?: string;
 }
 
 const CourseDashboard = ({
-  setInfoCourse,
+  topicProgressData,
+  overallProgressData,
+  weeklyReportData,
 }: {
-  setInfoCourse: Dispatch<SetStateAction<ICourseInfo>>
+  topicProgressData: ITopicProgress[] | null;
+  overallProgressData: any;
+  weeklyReportData: IWeeklyReport | null;
 }) => {
-  const router = useRouter()
+  const router = useRouter();
   const [activities, setActivities] = useState<IActivities | undefined>(
     undefined,
-  )
-  const [loading, setLoading] = useState<boolean>(false)
-  const handleLoading = (loading: boolean) => {
-    setLoading(loading)
-  }
+  );
 
   const onSeeCertificate = (id: string) => {
-    router.push(`/certificates/${id}`)
-  }
+    router.push(`/certificates/${id}`);
+  };
 
   const dashboardStats = [
     {
       id: 1,
-      name: 'Number of Finished Sections',
+      name: "Number of Finished Sections",
       completed: activities?.section?.completed,
       total: activities?.section?.total,
       icon: (
@@ -63,7 +62,7 @@ const CourseDashboard = ({
     },
     {
       id: 2,
-      name: 'Total Time Studied',
+      name: "Total Time Studied",
       completed: activities?.time?.completed,
       total: activities?.time?.total,
       icon: (
@@ -85,7 +84,7 @@ const CourseDashboard = ({
     },
     {
       id: 3,
-      name: 'Number of Finished Tests',
+      name: "Number of Finished Tests",
       completed: activities?.test?.completed,
       total: activities?.test?.total,
       icon: (
@@ -107,7 +106,7 @@ const CourseDashboard = ({
     },
     {
       id: 4,
-      name: 'Certificate Earned',
+      name: "Certificate Earned",
       certificate_id: activities?.certificate_id,
       icon: (
         <svg
@@ -126,7 +125,7 @@ const CourseDashboard = ({
         </svg>
       ),
     },
-  ]
+  ];
 
   return (
     <>
@@ -138,83 +137,76 @@ const CourseDashboard = ({
           <div>
             <OverallProgress
               setActivities={setActivities}
-              handleLoading={handleLoading}
-              loading={loading}
+              overallProgressData={overallProgressData}
             />
           </div>
           <div className="mt-4 rounded-2xl bg-white shadow-small md:mt-6 xl:mt-0">
-            <WeeklyReport />
+            <WeeklyReport weeklyReportData={weeklyReportData} />
           </div>
         </div>
-        {loading ? (
-          <div className="w-full">
-            <StatsSkeleton></StatsSkeleton>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 xl:gap-8">
-            {dashboardStats.map((data) => {
-              let bgColorClass = ''
-              if (data.id === 1) bgColorClass = 'bg-primary'
-              else if (data.id === 2) bgColorClass = 'bg-info-500'
-              else if (data.id === 3) bgColorClass = 'bg-warning'
-              else bgColorClass = 'bg-success'
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 xl:gap-8">
+          {dashboardStats.map((data) => {
+            let bgColorClass = "";
+            if (data.id === 1) bgColorClass = "bg-primary";
+            else if (data.id === 2) bgColorClass = "bg-info-500";
+            else if (data.id === 3) bgColorClass = "bg-warning";
+            else bgColorClass = "bg-success";
 
-              return (
-                <div
-                  className="w-full rounded-2xl bg-white p-5 shadow-small md:p-6"
-                  key={data.name}
-                >
-                  <div className="flex">
+            return (
+              <div
+                className="w-full rounded-2xl bg-white p-5 shadow-small md:p-6"
+                key={data.name}
+              >
+                <div className="flex">
+                  <div
+                    className={`${bgColorClass} flex h-9 w-9 items-center justify-center rounded-md px-1.5`}
+                  >
+                    {data.icon}
+                  </div>
+                  <div className="ms-4 w-full">
+                    <div className="text-lg font-semibold text-gray-800">
+                      {data?.name}
+                    </div>
                     <div
-                      className={`${bgColorClass} flex h-9 w-9 items-center justify-center rounded-md px-1.5`}
+                      className={`${data.id === 4 ? "mt-2" : "mt-4 xl:mt-[22px]"} text-base font-normal text-gray-400`}
                     >
-                      {data.icon}
+                      {!isUndefined(data?.completed) ? (
+                        `${data.completed}/${data.total}`
+                      ) : data?.certificate_id ? (
+                        <div
+                          className="flex cursor-pointer items-center text-base font-semibold text-primary underline"
+                          onClick={() =>
+                            onSeeCertificate(data?.certificate_id || "")
+                          }
+                        >
+                          See Certificate&nbsp;
+                          <Icon type="arrow-right" />
+                        </div>
+                      ) : (
+                        "Complete course to get certificate"
+                      )}
                     </div>
-                    <div className="ms-4 w-full">
-                      <div className="text-lg font-semibold text-gray-800">
-                        {data?.name}
-                      </div>
-                      <div
-                        className={`${data.id === 4 ? 'mt-2' : 'mt-4 xl:mt-[22px]'} text-base font-normal text-gray-400`}
-                      >
-                        {!isUndefined(data?.completed) ? (
-                          `${data.completed}/${data.total}`
-                        ) : data?.certificate_id ? (
+                    {!isUndefined(data?.completed) &&
+                      !isUndefined(data?.total) &&
+                      data.total !== 0 && (
+                        <div className="mt-2 h-1.5 w-full rounded-full bg-gray-200 xl:mt-1">
                           <div
-                            className="flex cursor-pointer items-center text-base font-semibold text-primary underline"
-                            onClick={() =>
-                              onSeeCertificate(data?.certificate_id || '')
-                            }
-                          >
-                            See Certificate&nbsp;
-                            <Icon type="arrow-right" />
-                          </div>
-                        ) : (
-                          'Complete course to get certificate'
-                        )}
-                      </div>
-                      {!isUndefined(data?.completed) &&
-                        !isUndefined(data?.total) &&
-                        data.total !== 0 && (
-                          <div className="mt-2 h-1.5 w-full rounded-full bg-gray-200 xl:mt-1">
-                            <div
-                              className="h-full rounded-full bg-primary"
-                              style={{
-                                width: `${Math.floor((data?.completed / data?.total) * 100)}%`,
-                              }}
-                            ></div>
-                          </div>
-                        )}
-                    </div>
+                            className="h-full rounded-full bg-primary"
+                            style={{
+                              width: `${Math.floor((data?.completed / data?.total) * 100)}%`,
+                            }}
+                          ></div>
+                        </div>
+                      )}
                   </div>
                 </div>
-              )
-            })}
-          </div>
-        )}
+              </div>
+            );
+          })}
+        </div>
         <div className="grid lg:flex lg:gap-6 xl:gap-8 2xl:mb-8">
           <div className="order-2 lg:order-1 lg:w-[60%]">
-            <TopicProgress setInfoCourse={setInfoCourse} />
+            <TopicProgress topicProgressData={topicProgressData} />
           </div>
           <div className="order-1 mb-4 flex h-auto rounded-2xl bg-white shadow-small md:mb-6 lg:order-2 lg:my-0 lg:w-[40%]">
             <LearningResult />
@@ -222,7 +214,7 @@ const CourseDashboard = ({
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default memo(CourseDashboard)
+export default memo(CourseDashboard);

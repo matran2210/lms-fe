@@ -1,3 +1,4 @@
+import { CourseDetailSkeleton } from '@lms/ui'
 import PopupModalTest from '@components/survey/PopupModalTest'
 import { useCourseContext } from '@contexts/index'
 import {
@@ -5,17 +6,29 @@ import {
   CLASS_TYPE,
   defaultStatusDetail,
   DELAY_TIME_DISPLAY_POPUP,
-  PageLink,
   RemindChoosingExam,
 } from '@lms/core'
-import { CourseParts, FilterCourse, PopupLockContent, SelectExamPopup } from '@lms/feature-courses'
+import {
+  CourseParts,
+  FilterCourse,
+  PopupLockContent,
+  SelectExamPopup,
+} from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { CtaTrial, HeaderMobile, Layout, PinnedCompletedCourse, SappBreadCrumbs, SearchWithMenuToggle, CourseSkeleton } from '@lms/ui'
+import {
+  CtaTrial,
+  HeaderMobile,
+  Layout,
+  PinnedCompletedCourse,
+  SappBreadCrumbs,
+  SearchWithMenuToggle,
+} from '@lms/ui'
 import { CoursesAPI } from '@pages/api/courses'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
+import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 
@@ -232,16 +245,15 @@ const CourseDetail = () => {
       showSidebar={showSidebar || isAlwaysShowSidebar}
       handleToggleSidebar={handleCloseSidebar}
     >
-      <SearchWithMenuToggle
-        handleOpenSidebar={handleOpenSidebar}
-        isShowToggle
-        isCoursePage
-      />
-
       {isLoading ? (
-        <CourseSkeleton />
+        <CourseDetailSkeleton />
       ) : (
         <>
+          <SearchWithMenuToggle
+            handleOpenSidebar={handleOpenSidebar}
+            isShowToggle
+            isCoursePage
+          />
           <SappBreadCrumbs
             isTeacher={false}
             breadcrumbs={[
