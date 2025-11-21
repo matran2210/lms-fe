@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useAppSelector, userReducer, UserType } from '@lms/contexts'
 import { useRouter } from 'next/router'
-import { useAppSelector, userReducer , UserType} from '@lms/contexts'
+import { useEffect, useState } from 'react'
 
 const withAuthorization =
   <P extends object>(allowedRoles: string[]) =>

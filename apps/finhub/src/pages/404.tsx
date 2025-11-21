@@ -2,7 +2,7 @@ import { LAYOUT } from '@lms/core'
 import Link from 'next/link'
 import { PageLink } from '@lms/core'
 import { useAppSelector } from '@lms/contexts'
-import { userReducer } from 'src/redux/slice/User/User'
+import { userReducer } from '@lms/contexts'
 import { SappButton } from '@lms/ui'
 
 const ErrorPage = () => {

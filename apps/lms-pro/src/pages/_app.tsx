@@ -45,6 +45,7 @@ import { CoursesAPI } from './api/courses'
 import { EventTestAPI } from './api/event-test'
 import { NotificationAPI } from './api/notification'
 import ErrorRedirectPage from './error-redirect'
+import { PageLink } from 'src/constants/routers'
 dayjs.extend(utc);
 dayjs.extend(weekday);
 export const excludedPathsHelp = [
@@ -336,7 +337,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                           <MKTInApp showMKTInApp={showMKTInApp} />
                           <div id="floating-btn-divider" />
                           <Help showHelp={showHelp} />
-                          <LearningNotesList api={CoursesAPI} />
+                          <LearningNotesList api={CoursesAPI} pageLink={PageLink} />
                           <PopupCompletedCourse />
                         </>
                       </RouteGuard>
