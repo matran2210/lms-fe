@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import React from 'react'
 import { SubjectOptionItem } from './SubjectList'
 import { useAppSelector } from '@lms/contexts'
-import { userReducer } from 'src/redux/slice/User/User'
+import { userReducer } from '@lms/contexts'
 
 interface IProps {
   data: SubjectOptionItem

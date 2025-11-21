@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAppSelector } from '@lms/contexts'
-import { userReducer } from 'src/redux/slice/User/User'
+import { userReducer } from '@lms/contexts'
 import { UserType } from '@lms/contexts'
 
 const withAuthorization =

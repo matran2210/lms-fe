@@ -20,7 +20,7 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { pushNotes, resetNotesList } from 'src/redux/slice/Course/NotesList'
-import { userReducer } from 'src/redux/slice/User/User'
+import { userReducer } from '@lms/contexts'
 import { UserType } from 'src/redux/types/User/urser'
 import { getTypeName } from 'src/type'
 import {

@@ -13,7 +13,7 @@ import {
   reactDiscussion,
   uploadImagesDiscussion,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
-import { userReducer } from 'src/redux/slice/User/User'
+import { userReducer } from '@lms/contexts'
 import {
   ICreateDiscussionResReact,
   IDiscussion,

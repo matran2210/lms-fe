@@ -10,7 +10,7 @@ import {
   activeNotesList,
   pushNotes,
 } from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
-import { userReducer } from 'src/redux/slice/User/User'
+import { userReducer } from '@lms/contexts'
 import { v4 as uuidv4 } from 'uuid'
 import { LANG_SIGNIN } from 'src/constants/lang'
 import ExpandIcon from '@components/layout/ExpandIcon'

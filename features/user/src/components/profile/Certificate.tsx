@@ -1,10 +1,9 @@
 import React from 'react';
-import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import { useLayoutEffect, useState } from 'react'
 import { AuthAPI } from 'src/pages/api/profile'
 import PopUpCertificate from './popupCertificate'
 import { Divider, Table, TableProps } from 'antd'
-import { Icon, NoCertificationIcon } from '@lms/assets'
+import { CertificateImg, Icon, NoCertificationIcon } from '@lms/assets'
 import {useDownloadImage} from '@lms/hooks'
 
 import Image from 'next/image'

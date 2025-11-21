@@ -1,5 +1,4 @@
 import { PointerIcon, ShowCommentIcon } from "@lms/assets";
-import { useCourseNoteContext } from "@contexts/CourseNoteContext";
 import { doHighlight, optionsImpl } from "@funktechno/texthighlighter/lib";
 import { video_url } from "@lms/core";
 import {
@@ -20,6 +19,7 @@ import parseHTML, { Element } from "html-react-parser";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
+import { useCourseNoteContext } from "@lms/contexts";
 
 const { TextArea } = Input;
 const DEBOUNCE_DELAY = 100;

@@ -3,7 +3,7 @@ import blankAvatar from '@assets/images/blank_avatar.webp'
 
 import React from 'react'
 import { useAppSelector } from '@lms/contexts'
-import { userReducer } from 'src/redux/slice/User/User'
+import { userReducer } from '@lms/contexts'
 import clsx from 'clsx'
 
 interface IProps {

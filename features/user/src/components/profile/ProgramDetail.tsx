@@ -3,14 +3,14 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import MyProfileAPI from 'src/pages/api/profile'
 import { useAppSelector } from '@lms/contexts'
-import { userReducer } from 'src/redux/slice/User/User'
+import { userReducer } from '@lms/contexts'
 import { Icon } from '@lms/assets'
 import { Divider } from 'antd'
-import SappCollapse from '@components/collapse/SappCollapse'
 import AttempItem from './SubjectInformation/AttempItem'
 import { ISubjectItem, IUser } from '@lms/contexts'
 import { UserApi } from '@pages/api/user'
 import { PROGRAM } from '@lms/core'
+import { SappCollapse } from 'node_modules/@lms/ui'
 
 interface IProps {
   typeProgram: PROGRAM
