@@ -8,7 +8,7 @@ import {
   ResourceIcon,
   ChapterIcon,
 } from '@assets/icons'
-import Layout from '@components/layout'
+import {Layout} from '@lms/ui'
 import { useCourseContext } from '@contexts/index'
 import { buildQueryString, formatDate } from '@lms/utils'
 import { Alert, Skeleton } from 'antd'
@@ -18,7 +18,7 @@ import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
-import { ANIMATION, PageLink, TEST_TYPE } from '@lms/core'
+import { ANIMATION, TEST_TYPE } from '@lms/core'
 import { TreeHelper } from 'src/helper/tree'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useTailwindBreakpoint } from '@lms/hooks'
@@ -37,6 +37,7 @@ import {
 } from 'src/redux/slice/Course/NotesList'
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
+import { PageLink } from 'src/constants/routers'
 
 interface IProps {
   course_section_type: string
@@ -547,7 +548,8 @@ const CoursePartDetail = () => {
     }
   }, [isLoading, loadingChapter])
   return (
-    <Layout title="Course Part Detail" showSidebar={isAlwaysShowSidebar}>
+    <Layout title="Course Part Detail" showSidebar={isAlwaysShowSidebar} pageLink={PageLink}
+      api={CoursesAPI}>
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
         <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
           <Alert

@@ -1,4 +1,3 @@
-import Layout from '@components/layout'
 import Certificate from '@components/profile/Certificate'
 import ChangePassword from '@components/profile/ChangePassword'
 import LoginHistoryList from '@components/profile/LoginHistory/LoginHistoryList'
@@ -12,9 +11,9 @@ import {
   DEFAULT_PAGE_SIZE,
   IDeviceItem,
   ITabs, NOTIFICATION_STATUS,
-  PageLink,
   ProfilePages,
 } from '@lms/core'
+import { Layout } from '@lms/ui'
 import { Collapse, CollapseProps, Divider, Tabs } from 'antd'
 import Image, { StaticImageData } from 'next/image'
 import { useEffect, useRef, useState } from 'react'
@@ -25,7 +24,7 @@ import {
   convertSlugToTitle,
   getLocalStorageItem,
   removeLocalStorageItem,
-} from '@utils/index'
+} from '@lms/utils'
 
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
@@ -47,6 +46,8 @@ import { useRouter } from 'next/router'
 import UserApi from 'src/redux/services/User/user'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import { getLoginHistory, userReducer } from 'src/redux/slice/User/User'
+import { PageLink } from 'src/constants/routers'
+import { CoursesAPI } from '@pages/api/courses'
 
 interface IFullScreenMobile {
   open: boolean
@@ -343,6 +344,8 @@ const ProfilePage = () => {
       showSidebar={showSidebar || isAlwaysShowSidebar}
       handleToggleSidebar={handleCloseSidebar}
       fullWidth={isMobileView}
+      pageLink={PageLink}
+      api={CoursesAPI}
     >
       <div className="mt-2 flex h-full w-full flex-col px-4 md:mt-0 md:px-0">
         <SearchWithMenuToggle

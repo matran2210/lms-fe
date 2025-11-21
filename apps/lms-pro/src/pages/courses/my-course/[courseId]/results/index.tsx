@@ -1,10 +1,9 @@
-import Layout from '@components/layout'
 import { useRouter } from 'next/router'
 import ResultsTable from './ResultsTable'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
-import { SappBreadCrumbs } from '@lms/ui'
-import { PageLink, TEST_AND_QUIZ_TITLE } from '@lms/core'
+import { Layout, SappBreadCrumbs } from '@lms/ui'
+import { TEST_AND_QUIZ_TITLE } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import HeaderMobile from '@components/layout/Header/HeaderMobile'
 import { useQuery } from 'react-query'
@@ -14,6 +13,7 @@ import clsx from 'clsx'
 import { FilterCourseIcon } from 'src/assets/icons'
 import { useState } from 'react'
 import { IOpenChooseItem } from '@lms/core'
+import { PageLink } from 'src/constants/routers'
 
 const Results = () => {
   const router = useRouter()
@@ -65,7 +65,8 @@ const Results = () => {
   const courseNameDetail = courseData?.courseDetail?.data?.name
 
   return (
-    <Layout title={TEST_AND_QUIZ_TITLE} showSidebar={isAlwaysShowSidebar}>
+    <Layout title={TEST_AND_QUIZ_TITLE} showSidebar={isAlwaysShowSidebar} pageLink={PageLink}
+          api={CoursesAPI}>
       {isAlwaysShowSidebar && (
         <div className="mb-2 mt-4 flex w-full">
           <SappBreadCrumbs

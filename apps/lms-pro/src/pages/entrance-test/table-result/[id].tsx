@@ -1,5 +1,4 @@
 import { CloseIcon } from '@assets/icons'
-import Layout from '@components/layout'
 import { LAYOUT } from '@lms/core'
 import { useRouter } from 'next/router'
 import { QuizResultComponent } from 'quiz-result-package'
@@ -8,8 +7,9 @@ import { useEffect, useState } from 'react'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { CoursesAPI } from '../../api/courses/index'
-import {FullScreenLayout} from '@lms/ui'
+import {FullScreenLayout, Layout} from '@lms/ui'
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
+import { PageLink } from 'src/constants/routers'
 
 const TableEntranceResult = () => {
   const router = useRouter()
@@ -90,7 +90,8 @@ const TableEntranceResult = () => {
           <CloseModalIcon />
         </div>
       </div>
-      <Layout fullWidth title="Entrance Test Result" showSidebar={false}>
+      <Layout fullWidth title="Entrance Test Result" showSidebar={false} pageLink={PageLink}
+            api={CoursesAPI}>
         <div className="">
           {modalResult?.questions?.data?.length > 0 && (
             <QuizResultComponent

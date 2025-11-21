@@ -1,6 +1,5 @@
 import { EventTestFilter } from '@lms/feature-test'
 import { EventTestList } from '@lms/feature-test'
-import Layout from '@components/layout'
 import Heading from '@components/mycourses/Heading'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
@@ -18,6 +17,9 @@ import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import Footer from '@components/layout/Footer'
 import { getEventCount } from 'src/redux/slice/EventTest/EventTest'
 import { useAppDispatch } from 'src/redux/hook'
+import { Layout } from '@lms/ui'
+import { PageLink } from 'src/constants/routers'
+import { CoursesAPI } from '@pages/api/courses'
 
 const EventTest = () => {
   const router = useRouter()
@@ -68,6 +70,8 @@ const EventTest = () => {
         title={LANG_SIGNIN.eventTest}
         showSidebar={showSidebar || isAlwaysShowSidebar}
         handleToggleSidebar={handleCloseSidebar}
+        pageLink={PageLink}
+        api={CoursesAPI}
       >
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}

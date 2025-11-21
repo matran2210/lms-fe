@@ -1,7 +1,6 @@
 import DetailCalendar from '@components/calendar/DetailCalendar'
 import DetailCalendarMobile from '@components/calendar/DetailCalendarMobile'
 import DetailCalendarTablet from '@components/calendar/DetailCalendarTablet'
-import Layout from '@components/layout'
 import HeaderMobile from '@components/layout/Header/HeaderMobile'
 import CalendarApi from '@pages/api/calendar'
 import dayjs from 'dayjs'
@@ -14,12 +13,16 @@ import {
   CALENDAR_COLOR_TYPES,
   CALENDAR_FILTER_TYPE,
   CALENDAR_TYPE,
-  PageLink,
   TitleSidebar,
 } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { ICalendar, ICalendarList } from '@lms/core'
 import clsx from 'clsx'
+import { Layout } from '@lms/ui'
+import { PageLink } from 'src/constants/routers'
+import { CoursesAPI } from '@pages/api/courses'
+
+
 const Page = () => {
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =
     useTailwindBreakpoint()
@@ -125,6 +128,8 @@ const Page = () => {
       showSidebar={isAlwaysShowSidebar}
       className="h-full"
       childClassName="h-full"
+      pageLink={PageLink}
+      api={CoursesAPI}
     >
       <div
         className="mx-auto my-0 h-full max-w-[1644px]"

@@ -1,6 +1,5 @@
 import EntranceTestFilter from '@lms/feature-test/src/components/entrance-test/EntranceTestFilter'
 import EntranceTestList from '@lms/feature-test/src/components/entrance-test/EntranceTestList'
-import Layout from '@components/layout'
 import Footer from '@components/layout/Footer'
 import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
 import Heading from '@components/mycourses/Heading'
@@ -18,6 +17,9 @@ import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import { UserType } from 'src/redux/types/User/urser'
 import { EntranceTestAPI } from '../api/entrance-test'
 import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
+import { Layout } from '@lms/ui'
+import { PageLink } from 'src/constants/routers'
+import { CoursesAPI } from '@pages/api/courses'
 
 const EntranceTest = () => {
   const router = useRouter()
@@ -74,6 +76,8 @@ const EntranceTest = () => {
         title="Entrance Test"
         showSidebar={showSidebar || isAlwaysShowSidebar}
         handleToggleSidebar={handleCloseSidebar}
+        pageLink={PageLink}
+        api={CoursesAPI}
       >
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}

@@ -244,6 +244,8 @@ const CourseDetail = () => {
       title="Course Detail"
       showSidebar={showSidebar || isAlwaysShowSidebar}
       handleToggleSidebar={handleCloseSidebar}
+      pageLink={PageLink}
+      api={CoursesAPI}
     >
       {isLoading ? (
         <CourseDetailSkeleton />

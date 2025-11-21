@@ -56,7 +56,6 @@ function FormViewProgress({
   allowSection,
   classId,
 }: IProps) {
-  const dispatch = useAppDispatch()
   const router = useRouter()
   const currentQuery = { ...router.query }
 

@@ -1,19 +1,11 @@
-import { SAPPButtonV2 } from '@lms/ui'
-import { HookFormDateRangeV2 } from '@lms/ui'
 import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatField'
 import SappTeacherTextField from '@components/teacher/components/sapp-textfield/SappTeacherTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { SchedulesAPI } from '@pages/api/schedules'
-import { handleDisableDate, handleDisableTime } from '@lms/utils'
-import { REPEAT_TYPE } from '@lms/core'
-import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
-import { ConfigProvider, Drawer } from 'antd'
-import { Dayjs } from 'dayjs'
-import { isInteger } from 'lodash'
-import { memo, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import {SappIcon} from '@lms/ui'
+import {
+  confirmDialog,
+  ICreateScheduleForm,
+  ICreateSchedulePayload, useAppDispatch
+} from '@lms/contexts'
 import {
   ANT_THEME_CONFIG,
   CALENDAR_SIDEBAR_CANCEL_BUTTON,
@@ -22,14 +14,18 @@ import {
   CALENDAR_SIDEBAR_TITLE,
   CONFIRM_CANCEL,
   EVENT_REPEAT_TYPES,
-  EVENT_TYPES,
+  EVENT_TYPES, REPEAT_TYPE
 } from '@lms/core'
-import { useAppDispatch } from 'src/redux/hook'
-import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
-import {
-  ICreateScheduleForm,
-  ICreateSchedulePayload,
-} from 'src/redux/types/Schedule/schedule'
+import { HookFormDateRangeV2, SAPPButtonV2, SappIcon } from '@lms/ui'
+import { handleDisableDate, handleDisableTime } from '@lms/utils'
+import { SchedulesAPI } from '@pages/api/schedules'
+import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
+import { ConfigProvider, Drawer } from 'antd'
+import { Dayjs } from 'dayjs'
+import { isInteger } from 'lodash'
+import { memo, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { z } from 'zod'
 
 interface IProps {

@@ -1,5 +1,5 @@
 export * from "./CourseNoteContext"
-export * from "./index"
+export * from "./CommonContext"
 export * from "./PinnedNotifyContext"
 export * from "./PreviousSectionRouteContext"
 export * from "./RequestContext"
