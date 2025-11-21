@@ -1,5 +1,5 @@
 import { Dispatch, ReactNode, SetStateAction, useRef } from "react";
-import Icon from "../../icons/index";
+import { Icon } from "@lms/assets/icons";
 import useClickOutside from "../clickoutside/HookClick";
 import clsx from "clsx";
 

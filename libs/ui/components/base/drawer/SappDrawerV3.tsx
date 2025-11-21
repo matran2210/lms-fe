@@ -1,9 +1,8 @@
-import { CloseIconV2 } from "@components/icons";
 import { Drawer, DrawerProps } from "antd";
 import React, { ReactNode, useEffect } from "react";
 import { ButtonPrimary, ButtonText } from "@lms/ui";
 import clsx from "clsx";
-import { CollapseArrowIcon } from "@assets/icons";
+import { CollapseArrowIcon, CloseIconV2 } from "@lms/assets";
 
 interface IProps extends DrawerProps {
   open: boolean;
