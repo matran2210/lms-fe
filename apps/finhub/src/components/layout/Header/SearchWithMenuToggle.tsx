@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { MY_COURSES } from '@lms/core'
 import { useAppSelector } from 'src/redux/hook'
 import clsx from 'clsx'
-// import { CloseIconV2 } from '@components/icons' comment monorepo
+import { CloseIconV2 } from '@lms/assets'
 import { FormProvider, useForm } from 'react-hook-form'
 import { buildQueryString } from '@lms/utils'
 import { useRouter } from 'next/router'
@@ -116,13 +116,13 @@ const SearchWithMenuToggle = ({
                     methods.handleSubmit(handleSubmit)
                   },
                 },
-                // {
-                //   icon: <CloseIconV2 />,
-                //   className: 'p-1',
-                //   action: () => {
-                //     methods.setValue('name', '')
-                //   },
-                // },
+                {
+                  icon: <CloseIconV2 />,
+                  className: 'p-1',
+                  action: () => {
+                    methods.setValue('name', '')
+                  },
+                },
               ],
             })
           : isFocused

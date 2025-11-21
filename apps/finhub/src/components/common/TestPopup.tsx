@@ -1,4 +1,4 @@
-// import RemainingTimeIcon, { TimeOutIcon } from '@components/icons' comment monorepo
+import { RemainingTimeIcon, TimeOutIcon } from '@lms/assets'
 import { SappModalV3 } from '@lms/ui'
 import { formatTime } from '@lms/utils'
 import clsx from 'clsx'
@@ -39,7 +39,7 @@ const TestPopup = ({
       isClosable={isClosable}
       onOk={() => {}}
       handleCancel={() => setOpen(false)}
-      // icon={isTimeOut ? <TimeOutIcon /> : undefined}
+      icon={isTimeOut ? <TimeOutIcon /> : undefined}
       header={title}
       showFooter={false}
       customFooter={customFooter}
@@ -66,7 +66,7 @@ const TestPopup = ({
           {time && (
             <div className="flex justify-center gap-4 pb-10">
               <div className="flex items-center gap-2 text-base font-semibold">
-                {/* <RemainingTimeIcon /> */}
+                <RemainingTimeIcon />
                 Your remaining time:
               </div>
               <div
