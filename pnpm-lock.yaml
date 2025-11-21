@@ -928,6 +928,9 @@ importers:
 
   libs/hooks:
     dependencies:
+      '@lms/assets':
+        specifier: workspace:*
+        version: link:../assets
       '@lms/contexts':
         specifier: workspace:*
         version: link:../state
@@ -988,9 +991,6 @@ importers:
       '@lms/hooks':
         specifier: workspace:*
         version: link:../hooks
-      '@lms/ui':
-        specifier: workspace:*
-        version: 'link:'
       '@lms/utils':
         specifier: workspace:*
         version: link:../utils

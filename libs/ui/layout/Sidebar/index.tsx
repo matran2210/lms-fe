@@ -5,7 +5,7 @@ import { trackGAEvent } from "@lms/utils";
 import clsx from "clsx";
 import { Dispatch, SetStateAction } from "react";
 import { useAppSelector } from "@lms/contexts";
-import ExpandIcon from "../ExpandIcon";
+import { ExpandIcon } from "@lms/assets";
 import MenuItemsList from "../MenuItemsList";
 import TourGuideSidebar from "src/assets/lotties/tour-guide-sidebar.json";
 import { Divider } from "antd";
@@ -20,7 +20,7 @@ type SidebarProps = {
   openExaminationInfo: boolean;
   setOpenExaminationInfo: Dispatch<SetStateAction<boolean>>;
   api: ICoursesAPI;
-  notificationApi: INotificationAPI
+  notificationApi: INotificationAPI;
   pageLink: {
     [key: string]: string;
   };
@@ -112,7 +112,6 @@ export default function Sidebar({
             setOpenExaminationInfo={setOpenExaminationInfo}
             notificationApi={notificationApi}
             pageLink={pageLink}
-
           />
           {guideStatus && guideStep == 2 && (
             <PopupStep

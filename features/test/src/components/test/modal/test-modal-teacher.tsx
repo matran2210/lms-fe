@@ -12,7 +12,12 @@ import {
 } from "@lms/feature-courses";
 import { PopupSelectRetakeOrContinueAttempt } from "@lms/feature-test";
 import { HookFormSelect, SappModalV3 } from "@lms/ui";
-import { capitalizeFirstLetter, formatTime, formatTimeMinToHhMm, trackGAEvent } from "@lms/utils";
+import {
+  capitalizeFirstLetter,
+  formatTime,
+  formatTimeMinToHhMm,
+  trackGAEvent,
+} from "@lms/utils";
 import { isQuizExpired } from "@lms/feature-test";
 import clsx from "clsx";
 import dayjs from "dayjs";
@@ -35,7 +40,7 @@ interface IProps {
   activeCourse?: any;
   is_passed_course: boolean;
   classApi: IClassAPI;
-  pageLink: { [key: string]: string;}
+  pageLink: { [key: string]: string };
 }
 
 const TestModalTeacher = ({
@@ -46,7 +51,7 @@ const TestModalTeacher = ({
   activeCourse,
   is_passed_course,
   classApi,
-  pageLink
+  pageLink,
 }: IProps) => {
   const router = useRouter();
   const isSubmitted =
@@ -447,7 +452,9 @@ const TestModalTeacher = ({
         <SappModalV3
           title={
             <div className="flex items-center justify-between gap-2">
-              <div>{TEST_TYPE[data?.course_section_type as keyof typeof TEST_TYPE]}</div>
+              <div>
+                {TEST_TYPE[data?.course_section_type as keyof typeof TEST_TYPE]}
+              </div>
               {!!data?.quiz?.quiz_timed &&
                 !!remainingTimeLastAttempt.current &&
                 renderShowOkButton() &&
@@ -669,7 +676,9 @@ const TestModalTeacher = ({
           }}
           title={
             <div className="flex items-center justify-between gap-2">
-              <div>{TEST_TYPE[data?.course_section_type as keyof typeof TEST_TYPE]}</div>
+              <div>
+                {TEST_TYPE[data?.course_section_type as keyof typeof TEST_TYPE]}
+              </div>
               {!!data?.quiz?.quiz_timed &&
                 (remainingTime !== undefined && remainingTime >= 0 ? (
                   <div

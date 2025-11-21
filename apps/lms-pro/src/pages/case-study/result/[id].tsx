@@ -5,7 +5,7 @@ import {
   ResizeIcon,
   ScratchPadIconV2,
 } from '@assets/icons'
-import CloseModalIcon from '@assets/icons/CloseModalIcon'
+import { CloseModalIcon } from '@lms/assets'
 import Calculator from '@components/calculator'
 import CaseStudyWrapper from '@components/case-study/layout/CaseStudyWrapper'
 import Popover from '@components/Popover'
@@ -24,7 +24,13 @@ import {
   RESPONSE_OPTION,
 } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { EditorReader, FileViewer, HookFormTextArea, ModalResizeable, MovableWindow } from '@lms/ui'
+import {
+  EditorReader,
+  FileViewer,
+  HookFormTextArea,
+  ModalResizeable,
+  MovableWindow,
+} from '@lms/ui'
 import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
 import AddWordPreview from '@lms/ui/components/questionType/FillText'
 import MatchQuizComponent from '@lms/ui/components/questionType/MatchQuiz/MatchQuiz'
@@ -121,7 +127,7 @@ const CaseStudyResult = () => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
-            handleSaveHighLight={() => { }}
+            handleSaveHighLight={() => {}}
             highlighted={highlighted}
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
@@ -137,7 +143,7 @@ const CaseStudyResult = () => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
-            handleSaveHighLight={() => { }}
+            handleSaveHighLight={() => {}}
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             solution={solution}
@@ -151,7 +157,7 @@ const CaseStudyResult = () => {
             name={`${index}_answer`}
             defaultValues={defaultValue}
             setValue={setValue}
-            handleSaveHighLight={() => { }}
+            handleSaveHighLight={() => {}}
             allowUnHighLight={allowUnHighLight}
             corrects={corrects}
             solution={solution}
@@ -175,7 +181,7 @@ const CaseStudyResult = () => {
         return (
           <AddWordPreview
             data={data}
-            handleSaveHighLight={() => { }}
+            handleSaveHighLight={() => {}}
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
@@ -207,7 +213,7 @@ const CaseStudyResult = () => {
         return (
           <SelectWord
             data={data}
-            handleSaveHighLight={() => { }}
+            handleSaveHighLight={() => {}}
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
@@ -226,7 +232,7 @@ const CaseStudyResult = () => {
             index={requirementIndex === -1 ? 0 : requirementIndex}
             question_data={data}
             control={control}
-            handleSaveHighLight={() => { }}
+            handleSaveHighLight={() => {}}
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             forCaseStudy={true}
@@ -708,13 +714,13 @@ const CaseStudyResult = () => {
                       if (e) {
                         if (allowHighLight) {
                           runHighlight(
-                            () => { },
+                            () => {},
                             allowHighLight || false,
                             'hightlight_area_topic',
                           )
                         } else if (allowUnHighLight) {
                           runHighlight(
-                            () => { },
+                            () => {},
                             allowUnHighLight || false,
                             'hightlight_area_topic',
                             { color: 'white' },
@@ -774,13 +780,13 @@ const CaseStudyResult = () => {
                         if (e) {
                           if (allowHighLight) {
                             runHighlight(
-                              () => { },
+                              () => {},
                               allowHighLight || false,
                               'hightlight_area_topic',
                             )
                           } else if (allowUnHighLight) {
                             runHighlight(
-                              () => { },
+                              () => {},
                               allowUnHighLight || false,
                               'hightlight_area_topic',
                               { color: 'white' },
@@ -1047,7 +1053,7 @@ const CaseStudyResult = () => {
                                       file_key: e?.resource?.file_key,
                                     },
                                   ],
-                                });
+                                })
                               }}
                             >
                               <DownloadIcon color="currentColor" />
@@ -1084,8 +1090,8 @@ const CaseStudyResult = () => {
             </div>
             {((exhibitData && exhibitData?.length > 0) ||
               (topics?.files && topics?.files?.length > 0)) && (
-                <Divider className="my-6" />
-              )}
+              <Divider className="my-6" />
+            )}
             <div className="flex flex-col gap-3">
               <Popover
                 content={

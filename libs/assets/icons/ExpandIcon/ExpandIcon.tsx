@@ -1,7 +1,7 @@
-import { NotificationIcon, OutlineArchive } from '@assets/icons'
-import ArrowUp from './ArrowUp'
-import LogoDefault from './LogoDefault'
-import LogoFull from './LogoFull'
+import { NotificationIcon, OutlineArchive } from "@assets/icons";
+import ArrowUp from "./ArrowUp";
+import LogoDefault from "./LogoDefault";
+import LogoFull from "./LogoFull";
 import {
   AddNote,
   BookMark,
@@ -9,16 +9,17 @@ import {
   CourseContent,
   NoteList,
   Union,
-} from '@lms/assets'
-import TeacherLogoFull from './TeacherLogoFull'
+} from "@lms/assets";
+import TeacherLogoFull from "./TeacherLogoFull";
 
 type ExpandIconPros = {
-  isExpanded?: boolean
-  handleClick?: () => void | undefined
-  type: string
-  className?: string
-  extraClassName?: string
-}
+  isExpanded?: boolean;
+  handleClick?: () => void | undefined;
+  type: string;
+  className?: string;
+  extraClassName?: string;
+  pageLink: { [key: string]: string };
+};
 
 export default function ExpandIcon({
   isExpanded,
@@ -26,24 +27,25 @@ export default function ExpandIcon({
   type,
   className,
   extraClassName,
+  pageLink,
 }: ExpandIconPros) {
   return (
     <>
-      {isExpanded && type === 'ontoggle' ? (
+      {isExpanded && type === "ontoggle" ? (
         <div onClick={handleClick}>
           <ArrowUp className={`${className}`} />
         </div>
       ) : (
-        type === 'ontoggle' && (
+        type === "ontoggle" && (
           <div onClick={handleClick}>
             <ArrowUp className={`rotate-180 ${className}`} />
           </div>
         )
       )}
-      {type === 'logo-default' && <LogoDefault className={`${className}`} />}
-      {type === 'logo-full' && <LogoFull className={`${className}`} />}
-      {type === 'teacher-logo-full' && <TeacherLogoFull />}
-      {type === 'stats-chart-sharp' && (
+      {type === "logo-default" && <LogoDefault className={`${className}`} />}
+      {type === "logo-full" && <LogoFull className={`${className}`} />}
+      {type === "teacher-logo-full" && <TeacherLogoFull pageLink={pageLink} />}
+      {type === "stats-chart-sharp" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -58,7 +60,7 @@ export default function ExpandIcon({
           ></path>
         </svg>
       )}
-      {type === 'course' && (
+      {type === "course" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -75,7 +77,7 @@ export default function ExpandIcon({
           />
         </svg>
       )}
-      {type === 'result' && (
+      {type === "result" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -93,7 +95,7 @@ export default function ExpandIcon({
         </svg>
       )}
 
-      {type === 'caculator' && (
+      {type === "caculator" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -106,17 +108,17 @@ export default function ExpandIcon({
             fillRule="evenodd"
             clipRule="evenodd"
             d="M15.9209 1.66699H16.0739C19.1518 1.66698 21.5638 1.66696 23.4458 1.91999C25.3721 2.17897 26.8921 2.71943 28.0852 3.91251C29.2783 5.10559 29.8187 6.62562 30.0777 8.55193C30.3308 10.4339 30.3307 12.846 30.3307 15.9238V16.0768C30.3307 19.1547 30.3308 21.5667 30.0777 23.4487C29.8187 25.375 29.2783 26.8951 28.0852 28.0881C26.8921 29.2812 25.3721 29.8217 23.4458 30.0807C21.5638 30.3337 19.1518 30.3337 16.0739 30.3337H15.9209C12.843 30.3337 10.431 30.3337 8.549 30.0807C6.62269 29.8217 5.10266 29.2812 3.90958 28.0881C2.7165 26.8951 2.17604 25.375 1.91706 23.4487C1.66403 21.5667 1.66405 19.1547 1.66406 16.0768V15.9238C1.66405 12.846 1.66403 10.4339 1.91706 8.55193C2.17604 6.62562 2.7165 5.10559 3.90958 3.91251C5.10266 2.71943 6.62269 2.17897 8.549 1.91999C10.431 1.66696 12.843 1.66698 15.9209 1.66699ZM8.8155 3.90215C7.11096 4.13132 6.08333 4.56718 5.32379 5.32672C4.56425 6.08626 4.12839 7.11389 3.89922 8.81843C3.66619 10.5517 3.66406 12.8294 3.66406 16.0003C3.66406 19.1713 3.66619 21.4489 3.89922 23.1822C4.12839 24.8868 4.56425 25.9144 5.32379 26.6739C6.08333 27.4335 7.11096 27.8693 8.8155 28.0985C10.5488 28.3315 12.8264 28.3337 15.9974 28.3337C19.1684 28.3337 21.446 28.3315 23.1793 28.0985C24.8838 27.8693 25.9115 27.4335 26.671 26.6739C27.4305 25.9144 27.8664 24.8868 28.0956 23.1822C28.3286 21.4489 28.3307 19.1713 28.3307 16.0003C28.3307 12.8294 28.3286 10.5517 28.0956 8.81843C27.8664 7.11389 27.4305 6.08626 26.671 5.32672C25.9115 4.56718 24.8838 4.13132 23.1793 3.90215C21.446 3.66912 19.1684 3.66699 15.9974 3.66699C12.8264 3.66699 10.5488 3.66912 8.8155 3.90215Z"
-            fill={'currentColor'}
+            fill={"currentColor"}
           />
           <path
             fillRule="evenodd"
             clipRule="evenodd"
             d="M10.6641 7.66696C11.2163 7.66696 11.6641 8.11468 11.6641 8.66696L11.6641 10.3336H13.3307C13.883 10.3336 14.3307 10.7814 14.3307 11.3336C14.3307 11.8859 13.883 12.3336 13.3307 12.3336H11.6641V14.0003C11.6641 14.5526 11.2163 15.0003 10.6641 15.0003C10.1118 15.0003 9.66406 14.5526 9.66406 14.0003V12.3336H7.9974C7.44511 12.3336 6.9974 11.8859 6.9974 11.3336C6.9974 10.7814 7.44511 10.3336 7.9974 10.3336H9.66406L9.66406 8.66696C9.66406 8.11468 10.1118 7.66696 10.6641 7.66696ZM17.6641 11.3336C17.6641 10.7813 18.1118 10.3336 18.6641 10.3336H23.9974C24.5497 10.3336 24.9974 10.7813 24.9974 11.3336C24.9974 11.8859 24.5497 12.3336 23.9974 12.3336H18.6641C18.1118 12.3336 17.6641 11.8859 17.6641 11.3336ZM17.6641 19.3336C17.6641 18.7813 18.1118 18.3336 18.6641 18.3336H23.9974C24.5497 18.3336 24.9974 18.7813 24.9974 19.3336C24.9974 19.8859 24.5497 20.3336 23.9974 20.3336H18.6641C18.1118 20.3336 17.6641 19.8859 17.6641 19.3336ZM7.95696 18.6266C8.34748 18.236 8.98065 18.236 9.37117 18.6266L10.6641 19.9195L11.957 18.6266C12.3475 18.236 12.9806 18.236 13.3712 18.6266C13.7617 19.0171 13.7617 19.6503 13.3712 20.0408L12.0783 21.3337L13.3712 22.6265C13.7617 23.0171 13.7617 23.6502 13.3712 24.0408C12.9806 24.4313 12.3475 24.4313 11.9569 24.0407L10.6641 22.7479L9.37119 24.0408C8.98066 24.4313 8.3475 24.4313 7.95697 24.0408C7.56645 23.6502 7.56645 23.0171 7.95697 22.6266L9.24986 21.3337L7.95696 20.0408C7.56643 19.6502 7.56643 19.0171 7.95696 18.6266ZM17.6641 23.3336C17.6641 22.7813 18.1118 22.3336 18.6641 22.3336H23.9974C24.5497 22.3336 24.9974 22.7813 24.9974 23.3336C24.9974 23.8859 24.5497 24.3336 23.9974 24.3336H18.6641C18.1118 24.3336 17.6641 23.8859 17.6641 23.3336Z"
-            fill={'currentColor'}
+            fill={"currentColor"}
           />
         </svg>
       )}
-      {type === 'document' && (
+      {type === "document" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -133,7 +135,7 @@ export default function ExpandIcon({
           ></path>
         </svg>
       )}
-      {type === 'grid' && (
+      {type === "grid" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -168,7 +170,7 @@ export default function ExpandIcon({
           />
         </svg>
       )}
-      {type === 'minimal-grid' && (
+      {type === "minimal-grid" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -203,7 +205,7 @@ export default function ExpandIcon({
         </svg>
       )}
 
-      {type === 'forder' && (
+      {type === "forder" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="44"
@@ -218,7 +220,7 @@ export default function ExpandIcon({
           ></path>
         </svg>
       )}
-      {type === 'home' && (
+      {type === "home" && (
         <svg
           width="44"
           height="44"
@@ -234,7 +236,7 @@ export default function ExpandIcon({
           />
         </svg>
       )}
-      {type === 'logout' && (
+      {type === "logout" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="44"
@@ -250,13 +252,13 @@ export default function ExpandIcon({
         </svg>
       )}
 
-      {type === 'notification' && (
+      {type === "notification" && (
         <NotificationIcon
           className={className}
           extraClassName={extraClassName}
         />
       )}
-      {type === 'setting' && (
+      {type === "setting" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="22"
@@ -273,7 +275,7 @@ export default function ExpandIcon({
           ></path>
         </svg>
       )}
-      {type === 'avatar' && (
+      {type === "avatar" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           data-name="Layer 1"
@@ -288,7 +290,7 @@ export default function ExpandIcon({
           ></path>
         </svg>
       )}
-      {type === 'dot' && (
+      {type === "dot" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="4"
@@ -305,7 +307,7 @@ export default function ExpandIcon({
           </g>
         </svg>
       )}
-      {type === 'learning-resource' && (
+      {type === "learning-resource" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -322,7 +324,7 @@ export default function ExpandIcon({
           />
         </svg>
       )}
-      {type === 'entrance-test' && (
+      {type === "entrance-test" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -346,7 +348,7 @@ export default function ExpandIcon({
         </svg>
       )}
 
-      {type === 'event-test' && (
+      {type === "event-test" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="22"
@@ -370,7 +372,7 @@ export default function ExpandIcon({
         </svg>
       )}
 
-      {type === 'notes-list' && (
+      {type === "notes-list" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -387,7 +389,7 @@ export default function ExpandIcon({
           />
         </svg>
       )}
-      {type === 'create-note' && (
+      {type === "create-note" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -404,7 +406,7 @@ export default function ExpandIcon({
           />
         </svg>
       )}
-      {type === 'profile-detail' && (
+      {type === "profile-detail" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -419,7 +421,7 @@ export default function ExpandIcon({
           ></path>
         </svg>
       )}
-      {type === 'exam_list' && (
+      {type === "exam_list" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -436,7 +438,7 @@ export default function ExpandIcon({
           />
         </svg>
       )}
-      {type === 'exam-information' && (
+      {type === "exam-information" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -461,7 +463,7 @@ export default function ExpandIcon({
           />
         </svg>
       )}
-      {type === 'bookmark' && (
+      {type === "bookmark" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -478,7 +480,7 @@ export default function ExpandIcon({
           />
         </svg>
       )}
-      {type === 'calendar' && (
+      {type === "calendar" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -519,13 +521,13 @@ export default function ExpandIcon({
           />
         </svg>
       )}
-      {type === 'outline-archive' && <OutlineArchive className={className} />}
-      {type === 'union' && <Union className={className} />}
-      {type === 'book-mark' && <BookMark className={className} />}
-      {type === 'course-content' && <CourseContent className={className} />}
-      {type === 'note-list' && <NoteList className={className} />}
-      {type === 'calculator' && <Calculator className={className} />}
-      {type === 'add-note' && <AddNote className={className} />}
+      {type === "outline-archive" && <OutlineArchive className={className} />}
+      {type === "union" && <Union className={className} />}
+      {type === "book-mark" && <BookMark className={className} />}
+      {type === "course-content" && <CourseContent className={className} />}
+      {type === "note-list" && <NoteList className={className} />}
+      {type === "calculator" && <Calculator className={className} />}
+      {type === "add-note" && <AddNote className={className} />}
     </>
-  )
+  );
 }

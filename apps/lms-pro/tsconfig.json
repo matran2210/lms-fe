@@ -51,7 +51,8 @@
     "../../features/test/src/components/test/modal/test-timeout.tsx",
     "../../features/test/src/components/test/modal/TestModalTeacher.tsx",
     "../../features/test/src/components/test/GlobalAverage.tsx",
-    "../../features/test/src/components/test/countdown.tsx"
+    "../../features/test/src/components/test/countdown.tsx",
+    "../../features/test/src/components/test/StatusTestQuizBadge.tsx"
   ],
   "exclude": ["node_modules"]
 }
