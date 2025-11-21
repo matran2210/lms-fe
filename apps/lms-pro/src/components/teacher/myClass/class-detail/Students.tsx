@@ -1,8 +1,8 @@
-import LayoutFilter from '@components/layout/TeacherFilter/index'
+import {LayoutFilter} from '@lms/ui'
 import {SappTable} from '@lms/ui'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { formatDateFromUTC } from 'src/utils/index'
+import { formatDateFromUTC } from '@lms/utils'
 import StudentCell from '@components/teacher/components/StudentCell'
 import { TeacherAPI } from '@pages/api/teacher'
 import StudentFilter from '@components/teacher/components/StudentFilter'
@@ -11,8 +11,8 @@ import { IStudentClassDetail } from '@lms/core'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import _, { round } from 'lodash'
 import { FOUNDATION } from '@lms/core'
-import useSappPaging from 'src/hooks/useSappPaging'
 import { StudentKey } from '@pages/api/queryKey'
+import { useSappPaging } from '@lms/hooks'
 
 interface FilterParams {
   text?: string

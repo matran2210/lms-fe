@@ -26,6 +26,7 @@ import {
   MENU_ITEMS,
   MENU_ITEMS_EVENT,
 } from 'src/constants/menu-items'
+import { NotificationAPI } from '@pages/api/notification'
 
 const Page = () => {
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =
@@ -134,6 +135,7 @@ const Page = () => {
       childClassName="h-full"
       pageLink={PageLink}
       api={CoursesAPI}
+      notificationApi={NotificationAPI}
       menuItems={MENU_ITEMS}
       menuItemsEvent={MENU_ITEMS_EVENT}
       menuBottom={MENU_BOTTOM}

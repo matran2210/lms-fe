@@ -8,8 +8,11 @@ import { IEvent } from 'sapp-common-package/dist/types'
 import { DATE_TIME_FORMAT, TitleSidebar } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from '@lms/contexts'
-import { IPopupDetails } from '@lms/core'
-import LayoutTeacher from '@components/layout/Teacher'
+import { IPopupDetails } from 'src/type/my-calendar'
+import { LayoutTeacher } from '@lms/ui'
+import { CoursesAPI } from '@pages/api/courses'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
+import { PageLink } from 'src/constants/routers'
 
 const breadcrumbs = [
   {
@@ -56,6 +59,7 @@ const MyCalendar = () => {
       title={TitleSidebar.MY_CALENDAR}
       breadcrumbs={breadcrumbs}
       className="bg-[#F2F4F7] p-0"
+      courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}
     >
       <div className="h-fit w-full rounded-xl bg-white px-8 py-5">
         <Calendar

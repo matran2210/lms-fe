@@ -1,7 +1,4 @@
-import Footer from '@components/layout/Footer'
-import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
-import Heading from '@components/mycourses/Heading'
-import CourseSkeleton from '@components/skeleton/CourseSkeleton'
+
 import {
   UserType,
   getEventCount,
@@ -11,7 +8,7 @@ import {
 import { ANIMATION, LANG_SIGNIN } from '@lms/core'
 import { EventTestFilter, EventTestList } from '@lms/feature-test'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { Layout, SappLoadingGlobal } from '@lms/ui'
+import { CourseSkeleton, Footer, Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
 import { CoursesAPI } from '@pages/api/courses'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -20,6 +17,8 @@ import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { EventTestAPI } from '../api/event-test'
 import { MENU_BOTTOM, MENU_ITEMS, MENU_ITEMS_EVENT } from 'src/constants/menu-items'
+import { NotificationAPI } from '@pages/api/notification'
+import { Heading } from '@lms/feature-courses'
 
 const EventTest = () => {
   const router = useRouter()
@@ -72,6 +71,7 @@ const EventTest = () => {
         handleToggleSidebar={handleCloseSidebar}
         pageLink={PageLink}
         api={CoursesAPI}
+        notificationApi={NotificationAPI}
         menuItems={MENU_ITEMS}
         menuItemsEvent={MENU_ITEMS_EVENT}
         menuBottom={MENU_BOTTOM}
