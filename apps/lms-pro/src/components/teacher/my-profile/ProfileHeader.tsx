@@ -13,7 +13,7 @@ import {
   useState,
 } from 'react'
 import toast from 'react-hot-toast'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { useAppDispatch, useAppSelector } from '@lms/contexts'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import {
   getMe,

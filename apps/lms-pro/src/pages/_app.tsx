@@ -1,8 +1,7 @@
-import {Help} from '@lms/ui'
 import MKTInApp from '@components/MKTInApp'
 import Metadata from '@components/common/Metadata'
-import { CourseNoteProvider, PinnedNotifyProvider, PreviousSectionRouteProvider, SocketContext, CourseProvider} from '@lms/contexts'
 import '@fortune-sheet/react/dist/index.css'
+import { CourseNoteProvider, CourseProvider, getCountUnRead, PinnedNotifyProvider, PreviousSectionRouteProvider, showNotification, SocketContext, store, useAppDispatch, wrapper } from '@lms/contexts'
 import {
   ANIMATION, CERTIFICATE_DETAIL, ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
@@ -12,13 +11,16 @@ import {
 import { RouteGuard } from '@lms/feature-auth'
 import { LearningNotesList, PopupCompletedCourse } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { AntConfigProvider, BackToTop, SappConfirmDialogContainer } from '@lms/ui'
+import { AntConfigProvider, BackToTop, Help, SappConfirmDialogContainer } from '@lms/ui'
 import { initializeGA, onMessageListener, pageview } from '@lms/utils'
 import { ErrorBoundary } from '@sentry/nextjs'
 import '@styles/globals.scss'
 import '@xyflow/react/dist/style.css'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
+import dayjs from 'dayjs'
+import utc from "dayjs/plugin/utc"
+import weekday from "dayjs/plugin/weekday"
 import 'entrance-test-result-package/dist/index.css'
 import type { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
@@ -34,21 +36,15 @@ import 'sapp-notification/dist/index.css'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import { io } from 'socket.io-client'
-import {
-  store, wrapper ,  getCountUnRead,
-  showNotification,useAppDispatch } from '@lms/contexts'
+import UserApi from 'src/redux/services/User/user'
 import { injectStore } from 'src/redux/services/httpService'
 import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { CoursesAPI } from './api/courses'
-import ErrorRedirectPage from './error-redirect'
-import UserApi from 'src/redux/services/User/user'
 import { EventTestAPI } from './api/event-test'
 import { NotificationAPI } from './api/notification'
-import utc from "dayjs/plugin/utc";
-import weekday from "dayjs/plugin/weekday";
-import dayjs from 'dayjs'
+import ErrorRedirectPage from './error-redirect'
 dayjs.extend(utc);
 dayjs.extend(weekday);
 export const excludedPathsHelp = [

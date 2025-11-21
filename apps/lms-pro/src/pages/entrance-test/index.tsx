@@ -4,7 +4,6 @@ import Footer from '@components/layout/Footer'
 import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
 import Heading from '@components/mycourses/Heading'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
-import { useCourseContext } from '@contexts/index'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -12,9 +11,7 @@ import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { ANIMATION } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { useAppDispatch } from 'src/redux/hook'
-import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
-import { UserType } from 'src/redux/types/User/urser'
+import { UserType, useAppDispatch, getEntranceCount, useCourseContext } from '@lms/contexts'
 import { EntranceTestAPI } from '../api/entrance-test'
 import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
 import { Layout } from '@lms/ui'
@@ -48,7 +45,7 @@ const EntranceTest = () => {
     { retry: false },
   )
 
-  const getEntranceTestCount = async () => await dispatch(getEntranceCount())
+  const getEntranceTestCount = async () => await dispatch(getEntranceCount(EntranceTestAPI))
   /**
    * @description handle open and close sidebar
    */

@@ -6,11 +6,10 @@ import {
   ScratchPadIcon,
   UnHighLightIcon,
 } from '@assets/icons'
-import { SappButton } from '@lms/ui'
+import { Calculator, SappButton, SappLoadingGlobal } from '@lms/ui'
 import { EditorReader } from '@lms/ui'
 import { HookFormTextArea } from '@lms/ui'
 import { MovableWindow } from '@lms/ui'
-import Calculator from '@components/calculator'
 import {FullScreenLayout} from '@lms/ui'
 import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@lms/ui/components/questionType/DragNDrop'
@@ -20,30 +19,25 @@ import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQ
 import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
-import useMousePosition from '@utils/hookMouseMove'
-import { runHighlight } from '@utils/index'
+import {useMousePosition} from '@lms/hooks'
+import { runHighlight } from '@lms/utils'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
 import {
   ESSAY_TYPE,
   EXHIBIT_TEXT_REPLACE,
-  PageLink,
   PROGRAM,
   QUESTION_TYPES,
 } from '@lms/core'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import {
-  clearFileEssay,
+import {   clearFileEssay,
   getTopicsCaseStudy,
   loadMoreQuestion,
-  saveFileEssay,
-} from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
+  saveFileEssay, useAppDispatch, useAppSelector, UserType } from '@lms/contexts'
 import { IRequirement } from '@lms/core'
 import { IExhibit } from '@lms/core'
 import { CoursesAPI } from 'src/pages/api/courses'
@@ -55,7 +49,8 @@ import { ModalResizeable } from '@lms/ui'
 import { showPopupCompletedCourse } from '@lms/contexts'
 import { FileViewer } from '@lms/ui'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
+import { CaseStudyAPI } from '@pages/api/case-study'
+import { PageLink } from 'src/constants/routers'
 
 const CaseStudyDetailTeacher = () => {
   const checkType = (
@@ -365,6 +360,7 @@ const CaseStudyDetailTeacher = () => {
     if (router.query.id) {
       dispatch(
         getTopicsCaseStudy({
+          api: CaseStudyAPI,
           id: router.query.id,
           quiz_id: router.query.quiz_id,
         }),

@@ -1,30 +1,25 @@
-import { EventTestFilter } from '@lms/feature-test'
-import { EventTestList } from '@lms/feature-test'
-import Heading from '@components/mycourses/Heading'
-import { useRouter } from 'next/router'
-import { useQuery } from 'react-query'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { EventTestAPI } from '../api/event-test'
-import { LANG_SIGNIN } from '@lms/core'
-import { ANIMATION } from '@lms/core'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
-import { useCourseContext } from '@contexts/index'
-import { useEffect, useState } from 'react'
-import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import Footer from '@components/layout/Footer'
-import { getEventCount } from 'src/redux/slice/EventTest/EventTest'
-import { useAppDispatch } from 'src/redux/hook'
-import { Layout } from '@lms/ui'
-import { PageLink } from 'src/constants/routers'
-import { CoursesAPI } from '@pages/api/courses'
+import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
+import Heading from '@components/mycourses/Heading'
+import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import {
-  MENU_BOTTOM,
-  MENU_ITEMS,
-  MENU_ITEMS_EVENT,
-} from 'src/constants/menu-items'
+  UserType,
+  getEventCount,
+  useAppDispatch,
+  useCourseContext
+} from '@lms/contexts'
+import { ANIMATION, LANG_SIGNIN } from '@lms/core'
+import { EventTestFilter, EventTestList } from '@lms/feature-test'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { Layout, SappLoadingGlobal } from '@lms/ui'
+import { CoursesAPI } from '@pages/api/courses'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { useQuery } from 'react-query'
+import { PageLink } from 'src/constants/routers'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { EventTestAPI } from '../api/event-test'
+import { MENU_BOTTOM, MENU_ITEMS, MENU_ITEMS_EVENT } from 'src/constants/menu-items'
 
 const EventTest = () => {
   const router = useRouter()
@@ -48,7 +43,7 @@ const EventTest = () => {
     { retry: false },
   )
 
-  const getEventTestCount = async () => await dispatch(getEventCount())
+  const getEventTestCount = async () => await dispatch(getEventCount(EventTestAPI))
   /**
    * @description handle open and close sidebar
    */

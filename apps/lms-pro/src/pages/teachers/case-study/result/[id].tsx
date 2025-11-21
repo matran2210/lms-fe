@@ -6,10 +6,9 @@ import {
   ScratchPadIcon,
   UnHighLightIcon,
 } from '@assets/icons'
-import { EditorReader } from '@lms/ui'
+import { Calculator, EditorReader, SappLoadingGlobal } from '@lms/ui'
 import { HookFormTextArea } from '@lms/ui'
 import { MovableWindow } from '@lms/ui'
-import Calculator from '@components/calculator'
 import {FullScreenLayout} from '@lms/ui'
 import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@lms/ui/components/questionType/DragNDrop'
@@ -18,21 +17,15 @@ import MatchingQuestion from '@lms/ui/components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
-import useMousePosition from '@utils/hookMouseMove'
-import { runHighlight } from '@utils/index'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import {
   EXHIBIT_TEXT_REPLACE,
-  PageLink,
   PROGRAM,
   QUESTION_TYPES,
 } from '@lms/core'
-import { useAppDispatch } from 'src/redux/hook'
-import { loadMoreQuestion } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
 import { IExhibit } from '@lms/core'
 import { SappButton } from '@lms/ui'
 import { CoursesAPI } from 'src/pages/api/courses'
@@ -48,8 +41,11 @@ import {
 import { IFile } from 'preview-activity/dist/shared/interfaces'
 import clsx from 'clsx'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
+import { UserType, useAppDispatch, loadMoreQuestion } from '@lms/contexts'
 import { FileViewer } from '@lms/ui'
+import { PageLink } from 'src/constants/routers'
+import { useMousePosition } from '@lms/hooks'
+import { runHighlight } from '@lms/utils'
 
 const CaseStudyResultTeacher = () => {
   const router = useRouter()

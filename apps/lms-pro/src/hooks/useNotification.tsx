@@ -3,9 +3,7 @@ import { useRouter } from 'next/router'
 import { NotificationAPI } from 'src/pages/api/notification'
 import { isEmpty } from 'lodash'
 import { LOCAL_STORAGE_KEYS } from '@lms/core'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import {
-  getCountUnRead,
+import { useAppDispatch, useAppSelector ,getCountUnRead,
   getNotification,
   getNotificationDetail,
   loadMoreNotification,
@@ -13,8 +11,7 @@ import {
   updateStatusAll,
   toggleStatusById,
   deleteNotificationById,
-  deleteAllNotifications,
-} from 'src/redux/slice/Notification/Notification'
+  deleteAllNotifications,} from '@lms/contexts'
 import { useTailwindBreakpoint } from '@lms/hooks'
 
 export const useNotification = () => {
@@ -45,15 +42,18 @@ export const useNotification = () => {
     const loadMultiplePages = async () => {
       const screenHeight = window.innerHeight
 
-      isRefresh && (await dispatch(getCountUnRead()))
+      isRefresh && (await dispatch(getCountUnRead(NotificationAPI)))
 
       const firstPageAction = await dispatch(
         getNotification({
-          page_index: 1,
+          api: NotificationAPI,
+          params: {
+            page_index: 1,
           page_size: 10,
           ...(selectedTab === 2 && {
             is_read: false,
           }),
+          }
         }),
       )
 
@@ -66,11 +66,14 @@ export const useNotification = () => {
       for (let page = 2; page <= pagesToLoad; page++) {
         await dispatch(
           loadMoreNotification({
+            api: NotificationAPI,
+            params: {
             page_index: page,
             page_size: 10,
             ...(selectedTab === 2 && {
               is_read: false,
             }),
+          }
           }),
         )
       }
@@ -81,13 +84,13 @@ export const useNotification = () => {
 
   const countNotificationsUnRead = async () => {
     try {
-      await dispatch(getCountUnRead())
+      await dispatch(getCountUnRead(NotificationAPI))
     } catch (error) {}
   }
 
   const markAllRead = async (selectedTab: number) => {
     try {
-      await dispatch(markAllNotifications())
+      await dispatch(markAllNotifications(NotificationAPI))
       if (selectedTab === 2) {
         dispatch(deleteAllNotifications())
       } else {
@@ -107,7 +110,7 @@ export const useNotification = () => {
       if (!res?.data) {
         return
       }
-      dispatch(getCountUnRead())
+      dispatch(getCountUnRead(NotificationAPI))
       ids.forEach((id) => {
         if (selectedTab === 2) {
           dispatch(deleteNotificationById(id))
@@ -127,7 +130,7 @@ export const useNotification = () => {
       ids.forEach((id) => {
         dispatch(toggleStatusById(id))
       })
-      dispatch(getCountUnRead())
+      dispatch(getCountUnRead(NotificationAPI))
     } catch (error) {}
   }
 
@@ -138,7 +141,7 @@ export const useNotification = () => {
   ) => {
     try {
       if (id !== notifyDetail?.id) {
-        const res = await dispatch(getNotificationDetail(id))
+        const res = await dispatch(getNotificationDetail({ api: NotificationAPI, id }))
         if (res) {
           await countNotificationsUnRead()
         }
@@ -196,11 +199,14 @@ export const useNotification = () => {
             isFetching.current = true
             await dispatch(
               loadMoreNotification({
+                api: NotificationAPI,
+                params: {
                 page_index: page_index + 1,
                 page_size,
                 ...(selectedTab === 2 && {
                   is_read: false,
                 }),
+              }
               }),
             )
             await countNotificationsUnRead()

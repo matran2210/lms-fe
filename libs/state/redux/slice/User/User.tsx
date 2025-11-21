@@ -9,7 +9,7 @@ import {
   ITemplateConfig,
   IUserAPI,
 } from '../../types/User/urser'
-import { IAuthAPI } from '../../types'
+import { IAuthAPI } from '@lms/core'
 
 const initialState: UserState = {
   loading: false,

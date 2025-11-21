@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   getLoginHistory,
   loadMoreLoginHistory,
-  userReducer,
-} from 'src/redux/slice/User/User'
+  userReducer, useAppDispatch, useAppSelector } from '@lms/contexts'
 import HistoryItem from './HistoryItem'
-import TeacherProfileCard from '@components/card/TeacherProfileCard'
+import TeacherProfileCard from '@components/common/TeacherProfileCard'
+import UserApi from 'src/redux/services/User/user'
 
 const LoginHistoryList = () => {
   const dispatch = useAppDispatch()
@@ -16,6 +15,7 @@ const LoginHistoryList = () => {
   useEffect(() => {
     dispatch(
       getLoginHistory({
+        api: UserApi,
         page_index: pageIndex,
         page_size: pageSize,
         type: 'login',
@@ -29,8 +29,10 @@ const LoginHistoryList = () => {
         setPageIndex((prev) => {
           dispatch(
             loadMoreLoginHistory({
+              api: UserApi,
               page_index: prev + 1,
               page_size: pageSize,
+              type: undefined
             }),
           )
           return prev + 1
