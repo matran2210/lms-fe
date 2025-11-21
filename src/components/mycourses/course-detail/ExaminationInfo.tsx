@@ -192,6 +192,10 @@ const ExaminationInfo = ({
   const { exams } = useSelectExams(classId)
 
   const handleChangeExamDate = async () => {
+    if (isOpenSelectExam) {
+      handleBack()
+      return
+    }
     if (isEmpty(exams?.current_exam_name)) {
       methods.handleSubmit(onSubmit)()
     } else {

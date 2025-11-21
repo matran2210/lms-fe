@@ -17,7 +17,7 @@ const SelectExamDate = ({
   itemSelected?: string
   setItemSelected: React.Dispatch<React.SetStateAction<string>>
 }) => {
-  const { watch } = useFormContext()
+  const { watch, setValue } = useFormContext()
   const { exams } = useSelectExams(classId)
   const options = exams?.data
     ?.map((exam) => ({
@@ -36,7 +36,7 @@ const SelectExamDate = ({
 
   if (isEmpty(options)) {
     return (
-      <div className='flex items-center min-h-[290px] justify-center'>
+      <div className="flex min-h-[290px] items-center justify-center">
         <NoData />
       </div>
     )
@@ -53,6 +53,7 @@ const SelectExamDate = ({
             key={item.value}
             className="flex items-center justify-between py-2"
             onClick={() => {
+              setValue('examination_subject_id', item.value)
               setItemSelected(item.value)
             }}
           >
