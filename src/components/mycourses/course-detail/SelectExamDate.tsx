@@ -1,7 +1,9 @@
 import { CheckIconV2 } from '@assets/icons'
 import clsx from 'clsx'
+import { isEmpty } from 'lodash'
 import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
+import NoData from 'src/common/NoData'
 import useSelectExams from 'src/hooks/useSelectExams'
 
 const SelectExamDate = ({
@@ -31,6 +33,14 @@ const SelectExamDate = ({
       setItemSelected('')
     }
   }, [])
+
+  if (isEmpty(options)) {
+    return (
+      <div className='flex items-center min-h-[290px] justify-center'>
+        <NoData />
+      </div>
+    )
+  }
 
   return (
     <div className="flex max-h-[240px] flex-1 flex-col overflow-y-auto">
