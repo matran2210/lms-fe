@@ -1,8 +1,18 @@
 import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
-import PopupStep from '@components/user-guide/PopupStep'
-import PopupWelcome from '@components/user-guide/PopupWelcome'
-import { UserType, active, clearGuideState , useAppDispatch, useAppSelector , useCourseContext } from '@lms/contexts'
-import { ANIMATION, defaultStatusCourse, ICoursesAPI, UserGuide } from '@lms/core'
+import {
+  UserType,
+  active,
+  clearGuideState,
+  useAppDispatch,
+  useAppSelector,
+  useCourseContext,
+} from '@lms/contexts'
+import {
+  ANIMATION,
+  defaultStatusCourse,
+  ICoursesAPI,
+  UserGuide,
+} from '@lms/core'
 import { CoursesList, FilterCourse, Heading } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
@@ -22,6 +32,8 @@ import {
   MENU_ITEMS,
   MENU_ITEMS_EVENT,
 } from 'src/constants/menu-items'
+import { PopupStep, PopupWelcome } from '@lms/feature-user'
+import TourGuideCourseTab from 'src/assets/lotties/tour-guide-course-tab.json'
 import { NotificationAPI } from '@pages/api/notification'
 
 const DEFAULT_PAGESIZE = 9
@@ -271,7 +283,7 @@ const MyCourse = () => {
               />
             )}
           </div>
-          {/* <div
+          <div
             className={`hidden items-center rounded-md bg-white p-3 md:flex md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 5 ? ' z-50 h-auto' : ''}`}
             data-aos={ANIMATION.DATA_AOS}
           >
@@ -287,7 +299,7 @@ const MyCourse = () => {
                 handleCancel={closeUserGuide}
               />
             )}
-          </div> */}
+          </div>
         </div>
         <div
           className={clsx(

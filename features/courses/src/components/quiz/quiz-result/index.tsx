@@ -1,5 +1,11 @@
 import { CloseModalIcon } from "@lms/assets";
-import { ActivityInfo, ICoursesAPI, INotificationAPI, LAYOUT, MenuItem } from "@lms/core";
+import {
+  ActivityInfo,
+  ICoursesAPI,
+  INotificationAPI,
+  LAYOUT,
+  MenuItem,
+} from "@lms/core";
 import { FullScreenLayout, Layout } from "@lms/ui";
 import { useRouter } from "next/router";
 import { QuizResultComponent } from "quiz-result-package";
@@ -21,9 +27,9 @@ const QuizResults = ({
   pageLink: {
     [key: string]: string;
   };
-    menuItems: MenuItem[];
-    menuItemsEvent: MenuItem[];
-    menuBottom: MenuItem[];
+  menuItems: MenuItem[];
+  menuItemsEvent: MenuItem[];
+  menuBottom: MenuItem[];
 }) => {
   const router = useRouter();
   const [activityInfo, setActivitiInfo] = useState<ActivityInfo | null>(null);

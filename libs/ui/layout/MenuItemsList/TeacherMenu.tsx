@@ -20,7 +20,7 @@ import {
 } from "src/assets/icons";
 import { IUser, userReducer, activeNotesList, pushNotes, openCalculator, useAppDispatch, useAppSelector } from "@lms/contexts";
 import { v4 as uuidv4 } from "uuid";
-import ExpandIcon from "../ExpandIcon";
+import ExpandIcon from "@lms/assets/icons/ExpandIcon";
 const { Sider } = Layout;
 
 export default function TeacherMenu({

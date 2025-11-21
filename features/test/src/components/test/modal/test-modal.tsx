@@ -1,42 +1,42 @@
-import { ArrowDownIcon } from '@assets/icons/entranceTest'
-import StatusTestQuizBadge from '@components/StatusTestQuizBadge'
+import { ArrowDownIcon } from "@lms/assets";
 import {
   EAttemptStatus,
   GRADE_STATUS,
   GRADING_METHOD,
   IQuizResultList,
   TEST_TYPE,
-} from '@lms/core'
+} from "@lms/core";
 import {
   PopupCanNotRetakeTest,
   TestAnnouncementModal,
-} from '@lms/feature-courses'
-import { TestPopup } from '@lms/feature-test'
-import { ButtonPrimary, ButtonSecondary, ButtonText } from '@lms/ui'
-import { capitalizeFirstLetter, formatTime, trackGAEvent } from '@lms/utils'
-import { CoursesAPI } from '@pages/api/courses'
-import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
-import { Select } from 'antd'
-import dayjs from 'dayjs'
-import { isNull } from 'lodash'
-import { useRouter } from 'next/router'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { ClassAPI } from 'src/pages/api/class'
+} from "@lms/feature-courses";
+import { TestPopup } from "@lms/feature-test";
+import { ButtonPrimary, ButtonSecondary, ButtonText } from "@lms/ui";
+import { capitalizeFirstLetter, formatTime, trackGAEvent } from "@lms/utils";
+import { CoursesAPI } from "@pages/api/courses";
+import { isQuizExpired } from "@utils/helpers/quiz-test/helper";
+import { Select } from "antd";
+import dayjs from "dayjs";
+import { isNull } from "lodash";
+import { useRouter } from "next/router";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ClassAPI } from "src/pages/api/class";
+import StatusTestQuizBadge from "../StatusTestQuizBadge";
 
 enum StatusQuizAttempt {
-  Passed = 'PASSED',
-  Failed = 'FAILED',
-  Unsubmitted = 'UN_SUBMITTED',
-  Submitted = 'SUBMITTED',
+  Passed = "PASSED",
+  Failed = "FAILED",
+  Unsubmitted = "UN_SUBMITTED",
+  Submitted = "SUBMITTED",
 }
 interface IProps {
-  open: boolean
-  setOpen: any
-  title?: string
-  data?: any
-  class_user_id?: string
-  activeCourse?: any
-  is_passed_course: boolean
+  open: boolean;
+  setOpen: any;
+  title?: string;
+  data?: any;
+  class_user_id?: string;
+  activeCourse?: any;
+  is_passed_course: boolean;
 }
 
 const TestModal = ({
@@ -47,14 +47,14 @@ const TestModal = ({
   activeCourse,
   is_passed_course,
 }: IProps) => {
-  const router = useRouter()
+  const router = useRouter();
   const isSubmitted =
-    data?.quiz?.attempt && data?.quiz?.attempt?.status === 'SUBMITTED'
+    data?.quiz?.attempt && data?.quiz?.attempt?.status === "SUBMITTED";
   const isUnsubmitted =
-    data?.quiz?.attempt && data?.quiz?.attempt?.status === 'UN_SUBMITTED'
+    data?.quiz?.attempt && data?.quiz?.attempt?.status === "UN_SUBMITTED";
   const isContinue =
     // !data?.quiz?.attempt ||
-    data?.quiz?.attempt && data?.quiz?.attempt?.status === 'IN_PROGRESS'
+    data?.quiz?.attempt && data?.quiz?.attempt?.status === "IN_PROGRESS";
 
   const [resultList, setResultList] = useState<IQuizResultList>({
     metadata: {
@@ -64,34 +64,34 @@ const TestModal = ({
       total_records: 0,
     },
     data: [],
-  })
+  });
   const [selectedResult, setSelectedResult] = useState<{
-    label: string
-    value: string
-    ratio_score?: string
-    status: string
-    grading_method?: string
-    created_at?: Date
-    number_of_attempt?: number
-  }>()
-  const [isFocus, setIsFocus] = useState<boolean>(false)
-  const [openResource, setOpenPopup] = useState(false)
-  const [remainingTime, setRemainingTime] = useState<number>()
-  const remainingTimeLastAttempt = useRef<number | null>(null)
-  const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false)
+    label: string;
+    value: string;
+    ratio_score?: string;
+    status: string;
+    grading_method?: string;
+    created_at?: Date;
+    number_of_attempt?: number;
+  }>();
+  const [isFocus, setIsFocus] = useState<boolean>(false);
+  const [openResource, setOpenPopup] = useState(false);
+  const [remainingTime, setRemainingTime] = useState<number>();
+  const remainingTimeLastAttempt = useRef<number | null>(null);
+  const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false);
 
-  const quiz = data?.quiz
-  const isLimited = !!quiz.is_limited
-  const attempt = quiz.attempt
-  const limitCount = quiz.limit_count
-  const currentAttemptNum = attempt?.number_of_attempts
-  const isNoAttempt = !data?.quiz?.attempt
+  const quiz = data?.quiz;
+  const isLimited = !!quiz.is_limited;
+  const attempt = quiz.attempt;
+  const limitCount = quiz.limit_count;
+  const currentAttemptNum = attempt?.number_of_attempts;
+  const isNoAttempt = !data?.quiz?.attempt;
 
   const isNoAttemptOrLimitReached =
     isSubmitted ||
     isUnsubmitted ||
     isNoAttempt ||
-    currentAttemptNum === limitCount // Hiển thị bài chưa làm hoặc đã làm hết số lần cho phép
+    currentAttemptNum === limitCount; // Hiển thị bài chưa làm hoặc đã làm hết số lần cho phép
 
   const displayTime =
     !!data?.quiz?.quiz_timed &&
@@ -99,20 +99,20 @@ const TestModal = ({
     remainingTime !== undefined &&
     remainingTime >= 0
       ? dayjs()
-          .startOf('day')
+          .startOf("day")
           .add(
             remainingTimeLastAttempt.current >= 0
               ? remainingTimeLastAttempt.current
               : 0,
-            'second',
+            "second",
           )
-      : ''
+      : "";
 
   const onCancel = () => {
     setTimeout(() => {
-      setOpen(false)
-    })
-  }
+      setOpen(false);
+    });
+  };
 
   const fetchResult = async (pageIndex: number, pageSize: number) => {
     if (class_user_id && data?.quiz?.id) {
@@ -120,12 +120,12 @@ const TestModal = ({
         class_user_id,
         data?.quiz?.id,
         { page_index: pageIndex ?? 1, page_size: pageSize ?? 10 },
-      )
+      );
       if (
         response?.data?.data &&
         response?.data?.metadata?.total_records >= 1
       ) {
-        const results = response.data.data
+        const results = response.data.data;
         setResultList((prev: IQuizResultList) => {
           return {
             metadata: response.data.metadata,
@@ -133,8 +133,8 @@ const TestModal = ({
               (item, index, self) =>
                 index === self?.findIndex((t) => t.id === item.id),
             ),
-          }
-        })
+          };
+        });
 
         setSelectedResult({
           label: results?.[0]?.name,
@@ -144,23 +144,23 @@ const TestModal = ({
           grading_method: results?.[0]?.quiz?.grading_method,
           created_at: new Date(results?.[0]?.created_at),
           number_of_attempt: Number(
-            (results?.[0]?.name ?? '').split('/')[0] ?? 0,
+            (results?.[0]?.name ?? "").split("/")[0] ?? 0,
           ),
-        })
+        });
         //check điều kiện xem có được tiếp tục làm bài hay không
-        let isExpired = false
+        let isExpired = false;
         if (data?.quiz?.quiz_timed) {
           isExpired = isQuizExpired(
             new Date(results?.[0]?.created_at),
             data?.quiz?.quiz_timed,
-          )
+          );
         }
 
-        setIsExpiredLastAttempt(isExpired)
-        const isContinueAttempt = results?.[0]?.status === 'IN_PROGRESS'
+        setIsExpiredLastAttempt(isExpired);
+        const isContinueAttempt = results?.[0]?.status === "IN_PROGRESS";
         if (isContinueAttempt && !isExpired) {
           localStorage.setItem(
-            'quizAttempt',
+            "quizAttempt",
             JSON.stringify({
               id: results?.[0]?.id,
               number_of_attempts:
@@ -170,142 +170,142 @@ const TestModal = ({
               quiz_timed: data?.quiz?.quiz_timed,
               created_at: results?.[0]?.created_at,
             }),
-          )
+          );
         } else {
-          localStorage.removeItem('quizAttempt')
+          localStorage.removeItem("quizAttempt");
         }
       } else {
-        localStorage.removeItem('quizAttempt')
+        localStorage.removeItem("quizAttempt");
       }
     }
-  }
+  };
 
   useEffect(() => {
     if (open && selectedResult) {
-      if (data?.quiz?.quiz_timed && selectedResult?.status === 'IN_PROGRESS') {
+      if (data?.quiz?.quiz_timed && selectedResult?.status === "IN_PROGRESS") {
         const calcTime = dayjs(
           dayjs(selectedResult.created_at).add(
             data?.quiz?.quiz_timed,
-            'minutes',
+            "minutes",
           ),
-        ).diff(dayjs(), 'seconds')
+        ).diff(dayjs(), "seconds");
 
         if (remainingTimeLastAttempt.current === null) {
-          remainingTimeLastAttempt.current = calcTime >= 0 ? calcTime : 0
+          remainingTimeLastAttempt.current = calcTime >= 0 ? calcTime : 0;
         }
 
         const remainingTimeInterval = setInterval(() => {
           if (remainingTimeLastAttempt.current !== null) {
             // Kiểm tra null
-            const currentTime = remainingTimeLastAttempt.current
-            setRemainingTime(currentTime >= 0 ? currentTime : 0)
-            remainingTimeLastAttempt.current -= 1
+            const currentTime = remainingTimeLastAttempt.current;
+            setRemainingTime(currentTime >= 0 ? currentTime : 0);
+            remainingTimeLastAttempt.current -= 1;
             if (remainingTimeLastAttempt.current <= 0) {
-              clearInterval(remainingTimeInterval)
+              clearInterval(remainingTimeInterval);
             }
           }
-        }, 1000)
+        }, 1000);
 
         return () => {
-          clearInterval(remainingTimeInterval)
-        }
+          clearInterval(remainingTimeInterval);
+        };
       }
     }
-  }, [selectedResult])
+  }, [selectedResult]);
 
   useEffect(() => {
     if (open) {
-      fetchResult(1, 10)
+      fetchResult(1, 10);
     }
-  }, [open])
+  }, [open]);
 
   const isFinalAttemptTimeout =
     remainingTimeLastAttempt?.current != null &&
     remainingTimeLastAttempt.current <= 0 &&
-    currentAttemptNum === limitCount
+    currentAttemptNum === limitCount;
 
   const isTimeOut =
     remainingTimeLastAttempt?.current != null &&
-    remainingTimeLastAttempt.current <= 0
+    remainingTimeLastAttempt.current <= 0;
 
   const handleSubmitNow = async () => {
-    await CoursesAPI.submitAllQuestion(data?.quiz?.attempt?.id as string)
-    handleRedirectResult()
-  }
+    await CoursesAPI.submitAllQuestion(data?.quiz?.attempt?.id as string);
+    handleRedirectResult();
+  };
 
   useEffect(() => {
     if (isTimeOut) {
-      handleSubmitNow()
+      handleSubmitNow();
     }
-  }, [isTimeOut])
+  }, [isTimeOut]);
 
   const handleNextPage = () => {
-    const pageIndex = resultList.metadata.page_index
-    const totalPage = resultList.metadata.total_pages
+    const pageIndex = resultList.metadata.page_index;
+    const totalPage = resultList.metadata.total_pages;
     if (pageIndex < totalPage) {
-      fetchResult(pageIndex + 1, 10)
+      fetchResult(pageIndex + 1, 10);
     }
-  }
+  };
 
   const handleCheckStatus = (
     attempt: { status: string; score: number },
     quiz: { is_graded: boolean; required_percent_score: number },
   ) => {
-    if (!attempt) return StatusQuizAttempt.Unsubmitted
-    if (attempt?.status === 'SUBMITTED') {
-      return StatusQuizAttempt.Submitted
+    if (!attempt) return StatusQuizAttempt.Unsubmitted;
+    if (attempt?.status === "SUBMITTED") {
+      return StatusQuizAttempt.Submitted;
     }
     if (quiz?.is_graded) {
       const status =
         attempt?.score < quiz?.required_percent_score
           ? StatusQuizAttempt.Failed
-          : StatusQuizAttempt.Passed
-      return status
+          : StatusQuizAttempt.Passed;
+      return status;
     }
-  }
+  };
 
   const can_retake = useMemo(() => {
     if (!data?.quiz?.attempt) {
-      return true
+      return true;
     }
     if (data.quiz.is_graded && is_passed_course) {
-      return false
+      return false;
     }
-    return true
-  }, [data?.quiz?.attempt])
+    return true;
+  }, [data?.quiz?.attempt]);
 
   const status = useMemo(() => {
     if (selectedResult?.value) {
       const result = resultList?.data?.find(
         (item) => item.id === selectedResult?.value,
-      )
+      );
       if (result) {
-        return handleCheckStatus(result, result?.quiz)
+        return handleCheckStatus(result, result?.quiz);
       }
     } else {
-      return handleCheckStatus(data?.quiz?.attempt, data?.quiz)
+      return handleCheckStatus(data?.quiz?.attempt, data?.quiz);
     }
-  }, [selectedResult?.value, data?.quiz?.attempt])
+  }, [selectedResult?.value, data?.quiz?.attempt]);
 
   const handleStartANewAttempt = async () => {
     //to do: start test
     try {
-      activeCourse && (await activeCourse())
+      activeCourse && (await activeCourse());
       router.push({
         pathname: `/test/${data.quiz.id}`,
         query: {
           class_user_id: class_user_id,
         },
-      })
+      });
       status
-        ? () => trackGAEvent('Click Button Retake Modal Test')
-        : () => trackGAEvent('Click Button Start Modal Test')
+        ? () => trackGAEvent("Click Button Retake Modal Test")
+        : () => trackGAEvent("Click Button Start Modal Test");
     } catch (err) {}
-  }
+  };
 
   const handleFinishTest = async () => {
     localStorage.setItem(
-      'quizAttempt',
+      "quizAttempt",
       JSON.stringify({
         id: selectedResult?.value,
         number_of_attempts: data?.quiz?.attempt?.number_of_attempts,
@@ -313,11 +313,11 @@ const TestModal = ({
         quiz_timed: data?.quiz?.quiz_timed,
         created_at: selectedResult?.created_at,
       }),
-    )
-    handleStartANewAttempt()
-  }
+    );
+    handleStartANewAttempt();
+  };
 
-  const startTime = data?.quiz?.quiz_setting?.start_time
+  const startTime = data?.quiz?.quiz_setting?.start_time;
   // Test Unopend or Expired
   if (
     !isNull(data?.quiz?.quiz_setting) &&
@@ -327,13 +327,13 @@ const TestModal = ({
       <TestAnnouncementModal
         open={open}
         handleCancel={() => {
-          setOpen(false)
-          trackGAEvent('Click Button Cancel Modal Test')
+          setOpen(false);
+          trackGAEvent("Click Button Cancel Modal Test");
         }}
         type={data?.quiz?.quiz_setting?.reason_for_reject}
         start_time={startTime}
       />
-    )
+    );
   }
 
   const getResultOfTest = () => {
@@ -346,33 +346,33 @@ const TestModal = ({
       ) {
         return data?.quiz?.required_percent_score > data?.quiz?.attempt?.score
           ? StatusQuizAttempt.Failed
-          : StatusQuizAttempt.Passed
+          : StatusQuizAttempt.Passed;
       }
-      return '_ _'
+      return "_ _";
     }
     return (
-      selectedResult?.ratio_score ?? data?.quiz?.attempt?.ratio_score ?? '_ _'
-    )
-  }
+      selectedResult?.ratio_score ?? data?.quiz?.attempt?.ratio_score ?? "_ _"
+    );
+  };
 
   const isManualGradingAndNotFinishedGrading =
     data?.quiz?.grading_method === GRADING_METHOD.MANUAL &&
     data?.quiz?.attempt?.grading_status !== GRADE_STATUS.FINISHED_GRADING &&
     data?.quiz?.attempt &&
-    data?.quiz?.attempt?.status === 'SUBMITTED'
+    data?.quiz?.attempt?.status === "SUBMITTED";
 
   const isShowDetail = () => {
     if (isManualGradingAndNotFinishedGrading) {
-      return true
+      return true;
     }
     if (data?.quiz?.grading_method == GRADING_METHOD.MANUAL) {
       return (
         data?.quiz?.attempt?.grading_status === GRADE_STATUS.FINISHED_GRADING
-      )
+      );
     } else {
-      return status !== StatusQuizAttempt.Unsubmitted
+      return status !== StatusQuizAttempt.Unsubmitted;
     }
-  }
+  };
 
   const renderBackButton = () => (
     <ButtonText
@@ -380,14 +380,14 @@ const TestModal = ({
       // icon={<BackIcon />}
       size="medium"
       onClick={() => {
-        setOpen(false)
-        trackGAEvent('Click Button Back to My Course')
+        setOpen(false);
+        trackGAEvent("Click Button Back to My Course");
       }}
     />
-  )
+  );
 
   const renderCustomFooter = () => {
-    if (!quiz) return null
+    if (!quiz) return null;
 
     // ✅ Trường hợp: có thể hiển thị nút Start hoặc Retake
     const shouldShowButtonStartOrRetake =
@@ -401,7 +401,7 @@ const TestModal = ({
           !!limitCount &&
           (isNoAttempt ||
             currentAttemptNum < limitCount ||
-            (currentAttemptNum === limitCount && !isSubmitted))))
+            (currentAttemptNum === limitCount && !isSubmitted))));
 
     // 🟡 Trường hợp: chưa từng làm hoặc đã làm đủ số lượt cho phép
 
@@ -422,7 +422,7 @@ const TestModal = ({
               )}
               {renderBackButton()}
             </>
-          )
+          );
         }
 
         if (isContinue) {
@@ -443,7 +443,7 @@ const TestModal = ({
               />
               {renderBackButton()}
             </>
-          )
+          );
         }
 
         // ✅ Đã làm xong → được làm lại
@@ -459,7 +459,7 @@ const TestModal = ({
             )}
             {renderBackButton()}
           </>
-        )
+        );
       } else {
         // 🔴 Quiz CÓ giới hạn số lượt làm
         if (isFinalAttemptTimeout) {
@@ -471,7 +471,7 @@ const TestModal = ({
               full
               onClick={handleRedirectResult}
             />
-          )
+          );
         }
 
         if (isNoAttempt || isSubmitted || isUnsubmitted) {
@@ -488,7 +488,7 @@ const TestModal = ({
               )}
               {renderBackButton()}
             </>
-          )
+          );
         }
 
         if (attempt.number_of_attempts === limitCount) {
@@ -509,7 +509,7 @@ const TestModal = ({
                   onClick={handleSubmitNow}
                 />
               </>
-            )
+            );
           } else {
             // ✅ Là lần cuối và đã nộp → chỉ xem kết quả
             return (
@@ -519,7 +519,7 @@ const TestModal = ({
                 full
                 onClick={handleRedirectResult}
               />
-            )
+            );
           }
         }
 
@@ -543,12 +543,12 @@ const TestModal = ({
               full
               size="medium"
               onClick={async () => {
-                await handleSubmitNow()
-                handleRetakeNewAttempt()
+                await handleSubmitNow();
+                handleRetakeNewAttempt();
               }}
             />
           </div>
-        )
+        );
       }
     }
 
@@ -571,7 +571,7 @@ const TestModal = ({
               onClick={handleRetakeNewAttempt}
             />
           </>
-        )
+        );
       }
 
       // ✅ Còn thời gian → tiếp tục bài cũ, nộp hoặc bắt đầu mới
@@ -596,12 +596,12 @@ const TestModal = ({
             onClick={handleRetakeNewAttempt}
           />
         </>
-      )
+      );
     }
 
     // ⚪ Trường hợp không xác định → không hiển thị footer
-    return null
-  }
+    return null;
+  };
 
   const handleContinueLastAttempt = async () => {
     if (
@@ -609,51 +609,51 @@ const TestModal = ({
       quiz.is_limited &&
       quiz.quiz_timed > 0
     )
-      return
+      return;
     if (
       remainingTimeLastAttempt.current !== null &&
       remainingTimeLastAttempt?.current <= 0
     ) {
-      handleFinishTest()
+      handleFinishTest();
     } else {
-      handleStartANewAttempt()
+      handleStartANewAttempt();
     }
-  }
+  };
 
   const handleRetakeNewAttempt = async () => {
     if (!can_retake) {
-      setOpenPopup(true)
-      return
+      setOpenPopup(true);
+      return;
     }
-    localStorage.removeItem('quizAttempt')
-    handleStartANewAttempt()
-  }
+    localStorage.removeItem("quizAttempt");
+    handleStartANewAttempt();
+  };
 
   const handleRedirectResult = () => {
     if (isManualGradingAndNotFinishedGrading) {
       router.push(
         `/courses/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
-      )
+      );
     } else {
       router.push({
         pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
         query: { attempt: selectedResult?.label },
-      })
+      });
     }
-  }
+  };
 
   const getAttemptStatus = () => {
     if (data?.quiz?.grading_method === GRADING_METHOD.MANUAL) {
       if (data?.quiz?.attempt?.status === EAttemptStatus.SUBMITTED) {
-        return data?.quiz?.attempt?.grading_status
+        return data?.quiz?.attempt?.grading_status;
       }
-      return data?.quiz?.attempt?.status
+      return data?.quiz?.attempt?.status;
     }
 
     if (data?.quiz?.grading_method === GRADING_METHOD.AUTO) {
-      return data?.quiz?.attempt?.status
+      return data?.quiz?.attempt?.status;
     }
-  }
+  };
 
   return (
     <>
@@ -678,7 +678,7 @@ const TestModal = ({
                   label="Pass Point:"
                   value={
                     data?.quiz?.is_graded ? (
-                      <>{data?.quiz?.required_percent_score ?? '_ _'}</>
+                      <>{data?.quiz?.required_percent_score ?? "_ _"}</>
                     ) : (
                       <>_ _</>
                     )
@@ -689,7 +689,7 @@ const TestModal = ({
                   value={
                     data?.quiz?.quiz_timed
                       ? formatTime(data?.quiz?.quiz_timed * 60)
-                      : 'Unlimited'
+                      : "Unlimited"
                   }
                 />
                 <TestInfoItem
@@ -704,7 +704,7 @@ const TestModal = ({
                   value={`${data?.quiz?.attempt?.number_of_attempts || 0}/${
                     data?.quiz?.is_limited
                       ? data?.quiz?.limit_count
-                      : 'Unlimited'
+                      : "Unlimited"
                   }`}
                 />
 
@@ -712,15 +712,15 @@ const TestModal = ({
                   <div className="flex justify-between gap-8 text-base">
                     <div className="flex items-center gap-2 hover:text-primary">
                       <div
-                        className={`forcus-group:text-primary text-gray ${isFocus ? 'text-primary' : ''}`}
+                        className={`forcus-group:text-primary text-gray ${isFocus ? "text-primary" : ""}`}
                       >
                         Result:
                       </div>
                       {resultList?.data?.length >= 1 && (
                         <Select
                           classNames={{
-                            root: 'select-result-attempt',
-                            popup: { root: 'select-result-attempt-option' },
+                            root: "select-result-attempt",
+                            popup: { root: "select-result-attempt-option" },
                           }}
                           variant="borderless"
                           value={selectedResult?.value}
@@ -728,7 +728,7 @@ const TestModal = ({
                             if (selectedOption) {
                               const tempSelectedResult = resultList?.data?.find(
                                 (item) => item?.id === selectedOption,
-                              )
+                              );
                               if (tempSelectedResult) {
                                 setSelectedResult({
                                   label: tempSelectedResult?.name,
@@ -737,7 +737,7 @@ const TestModal = ({
                                   status: tempSelectedResult?.status,
                                   grading_method:
                                     tempSelectedResult?.quiz?.grading_method,
-                                })
+                                });
                               }
                             }
                           }}
@@ -750,12 +750,12 @@ const TestModal = ({
                             number_of_attempt: 3 - index,
                           }))}
                           onPopupScroll={(e) => {
-                            const target = e.target as HTMLDivElement
+                            const target = e.target as HTMLDivElement;
                             if (
                               target.scrollTop + target.offsetHeight >=
                               target.scrollHeight
                             ) {
-                              handleNextPage()
+                              handleNextPage();
                             }
                           }}
                           suffixIcon={<ArrowDownIcon />}
@@ -773,20 +773,20 @@ const TestModal = ({
                             if (isManualGradingAndNotFinishedGrading) {
                               router.push(
                                 `/courses/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
-                              )
+                              );
                             } else {
                               router.push({
                                 pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
                                 query: { attempt: selectedResult?.label },
-                              })
+                              });
                             }
 
-                            trackGAEvent('Click Button View Modal Result')
+                            trackGAEvent("Click Button View Modal Result");
                           }}
                         >
                           {isManualGradingAndNotFinishedGrading
-                            ? 'Your Answers'
-                            : 'Detail'}
+                            ? "Your Answers"
+                            : "Detail"}
                         </div>
                       )}
                     </div>
@@ -821,21 +821,21 @@ const TestModal = ({
       />
       {/* )} */}
     </>
-  )
-}
+  );
+};
 
 const TestInfoItem = ({
   label,
   value,
 }: {
-  label: React.ReactNode
-  value: React.ReactNode
+  label: React.ReactNode;
+  value: React.ReactNode;
 }) => {
   return (
     <div className="flex justify-between gap-8 text-base">
       <div className="text-gray">{label}</div>
       <div className="pr-0.5 text-start font-medium text-gray-800">{value}</div>
     </div>
-  )
-}
-export default TestModal
+  );
+};
+export default TestModal;

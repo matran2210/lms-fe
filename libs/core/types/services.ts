@@ -3,10 +3,18 @@ import {
   ICreateDiscussionResReact,
   ICreateDiscussionUploadRequest,
 } from "../../state/redux/types/Course/MyCourse/Activity/activity";
-import { ChangePasswordReq, SendEmailReq, VerifyOtpReq } from "../../state/redux/types/Login/login";
+import {
+  ChangePasswordReq,
+  SendEmailReq,
+  VerifyOtpReq,
+} from "../../state/redux/types/Login/login";
 import { IResponse } from "./api-response";
 import { IQuestion } from "./course";
-import { IAnswerQuizLastestAttempt, IQuizResultList, IScoreDetails } from "./quiz";
+import {
+  IAnswerQuizLastestAttempt,
+  IQuizResultList,
+  IScoreDetails,
+} from "./quiz";
 
 export interface IAuthManager {
   getToken(): string;
@@ -90,7 +98,10 @@ export interface ICoursesAPI {
     user_id: string,
   ) => Promise<any>;
   createNote: (params: Object) => Promise<any>;
-  updateCourseNotesList: (id: string | undefined, params?: Object) => Promise<any>;
+  updateCourseNotesList: (
+    id: string | undefined,
+    params?: Object,
+  ) => Promise<any>;
 }
 export interface IActivityAPI {
   createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<any>;
@@ -149,10 +160,10 @@ export interface IAuthAPI {
 export interface IUploadAPI {
   downloadFile: (data: {
     files: {
-        name: string;
-        file_key: string;
+      name: string;
+      file_key: string;
     }[];
-}) => Promise<void>
+  }) => Promise<void>;
 }
 
 export interface IClassAPI {

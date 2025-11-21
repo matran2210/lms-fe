@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Draggable from "react-draggable";
-import { AssistiveIcon } from "@lms/assets";
+import { ButtonIconSapp } from "@lms/ui";
 import clsx from "clsx";
 
 interface AssistiveTouchProps {
@@ -107,7 +107,7 @@ export default function AssistiveTouch({
               pointerEvents: "auto",
             }}
           >
-            <AssistiveIcon className="h-7 w-7" />
+            <ButtonIconSapp title="" />
           </button>
         )}
 

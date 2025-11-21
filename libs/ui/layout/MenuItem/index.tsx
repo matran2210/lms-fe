@@ -1,45 +1,56 @@
-import blankAvatar from '@assets/images/blank_avatar.webp'
-import { trackGAEvent } from '@lms/utils'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
-import {  INotificationAPI, TitleSidebar } from '@lms/core'
-import { useAppDispatch, useAppSelector, openCalculator, activeNotesList, pushNotes, userReducer, clearNotifications } from '@lms/contexts'
-import { v4 as uuidv4 } from 'uuid'
-import { MenuItem as MenuItemType } from '@lms/core'
-import ExpandIcon from '../ExpandIcon'
-import MenuItemsList from '../MenuItemsList'
-import { LANG_SIGNIN } from '@lms/core'
-import { isEmpty } from 'lodash'
-import SappNotificationComponent from 'sapp-notification'
-import { useNotification } from '@lms/hooks'
-import { Divider } from 'antd'
-import clsx from 'clsx'
-import myCourseAnimationIcon from 'public/animations/MyCourse.json'
-import addNoteAnimationIcon from 'public/animations/AddNote.json'
-import resourceAnimationIcon from 'public/animations/Resource.json'
-import calculatorAnimationIcon from 'public/animations/Calculator.json'
-import calendarAnimationIcon from 'public/animations/Calendar.json'
-import courseContentAnimationIcon from 'public/animations/CourseContent.json'
-import dashboardAnimationIcon from 'public/animations/Dashboard.json'
-import entranceTestAnimationIcon from 'public/animations/EntranceTest.json'
-import examListAnimationIcon from 'public/animations/ExamList.json'
-import eventTestAminationIcon from 'public/animations/EventTest.json'
-import examInfoAnimationIcon from 'public/animations/ExamInfo.json'
-import noteListAnimationIcon from 'public/animations/NoteList.json'
-import testQuizListAnimationIcon from 'public/animations/TestQuizList.json'
-import notificationAnimationIcon from 'public/animations/Notification.json'
-import Lottie from 'lottie-react'
+import blankAvatar from "@assets/images/blank_avatar.webp";
+import { ExpandIcon } from "@lms/assets";
+import {
+  activeNotesList,
+  clearNotifications,
+  openCalculator,
+  pushNotes,
+  useAppDispatch,
+  useAppSelector,
+  userReducer,
+} from "@lms/contexts";
+import {
+  INotificationAPI,
+  LANG_SIGNIN,
+  MenuItem as MenuItemType,
+  TitleSidebar,
+} from "@lms/core";
+import { useNotification } from "@lms/hooks";
+import { trackGAEvent } from "@lms/utils";
+import { Divider } from "antd";
+import clsx from "clsx";
+import { isEmpty } from "lodash";
+import Lottie from "lottie-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+// import addNoteAnimationIcon from "public/animations/AddNote.json"; comment monorepo
+// import calculatorAnimationIcon from "public/animations/Calculator.json";
+// import calendarAnimationIcon from "public/animations/Calendar.json";
+// import courseContentAnimationIcon from "public/animations/CourseContent.json";
+// import dashboardAnimationIcon from "public/animations/Dashboard.json";
+// import entranceTestAnimationIcon from "public/animations/EntranceTest.json";
+// import eventTestAminationIcon from "public/animations/EventTest.json";
+// import examInfoAnimationIcon from "public/animations/ExamInfo.json";
+// import examListAnimationIcon from "public/animations/ExamList.json";
+// import myCourseAnimationIcon from "public/animations/MyCourse.json";
+// import noteListAnimationIcon from "public/animations/NoteList.json";
+// import notificationAnimationIcon from "public/animations/Notification.json";
+// import resourceAnimationIcon from "public/animations/Resource.json";
+// import testQuizListAnimationIcon from "public/animations/TestQuizList.json";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import SappNotificationComponent from "sapp-notification";
+import { v4 as uuidv4 } from "uuid";
+import MenuItemsList from "../MenuItemsList";
 
 type MenuItemProps = {
-  menuItem: MenuItemType
-  setOpenResource?: Dispatch<SetStateAction<boolean>>
-  closeSideBar: () => void
-  setOpenExaminationInfo?: Dispatch<SetStateAction<boolean>>
-  notificationApi: INotificationAPI
-  pageLink: { [key: string]: string; }
-}
+  menuItem: MenuItemType;
+  setOpenResource?: Dispatch<SetStateAction<boolean>>;
+  closeSideBar: () => void;
+  setOpenExaminationInfo?: Dispatch<SetStateAction<boolean>>;
+  notificationApi: INotificationAPI;
+  pageLink: { [key: string]: string };
+};
 
 export default function MenuItem({
   menuItem: { name, icon: Icon, url, type, subItems },
@@ -47,7 +58,7 @@ export default function MenuItem({
   closeSideBar,
   setOpenExaminationInfo,
   notificationApi,
-  pageLink
+  pageLink,
 }: MenuItemProps) {
   const {
     isViewDetail,
@@ -66,130 +77,132 @@ export default function MenuItem({
     refreshNotification,
     isDesktopView,
     notificationUnread,
-  } = useNotification(notificationApi)
+  } = useNotification(notificationApi);
 
-  const isLoading = useAppSelector((state) => state.notificationReducer.loading)
+  const isLoading = useAppSelector(
+    (state) => state.notificationReducer.loading,
+  );
   const tabs = [
     {
       id: 1,
-      title: 'All Notifications',
+      title: "All Notifications",
     },
     {
       id: 2,
-      title: `Unread ${notificationUnread ? `(${notificationUnread})` : ''}`,
+      title: `Unread ${notificationUnread ? `(${notificationUnread})` : ""}`,
     },
-  ]
+  ];
 
   useEffect(() => {
     if (selectedTab) {
-      dispatch(clearNotifications())
+      dispatch(clearNotifications());
     }
-  }, [selectedTab])
+  }, [selectedTab]);
 
-  const [isExpanded, toggleExpanded] = useState(false)
-  const dispatch = useAppDispatch()
-  const { user } = useAppSelector(userReducer)
-  const router = useRouter()
-  const isNested = subItems && subItems?.length > 0
-  const selected = router.pathname === url
-  const [badgeClass, setBadgeClass] = useState('w-4 h-4 -top-[5px] -right-1.5') // Default width
+  const [isExpanded, toggleExpanded] = useState(false);
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector(userReducer);
+  const router = useRouter();
+  const isNested = subItems && subItems?.length > 0;
+  const selected = router.pathname === url;
+  const [badgeClass, setBadgeClass] = useState("w-4 h-4 -top-[5px] -right-1.5"); // Default width
 
   useEffect(() => {
     if (notificationUnread > 9) {
-      setBadgeClass('w-6 h-6 -top-3.5 -right-3.5')
+      setBadgeClass("w-6 h-6 -top-3.5 -right-3.5");
     } else {
-      setBadgeClass('w-4 h-4 -top-[5px] -right-1.5') // Default width for single digits
+      setBadgeClass("w-4 h-4 -top-[5px] -right-1.5"); // Default width for single digits
     }
-  }, [notificationUnread])
+  }, [notificationUnread]);
   const onClick = () => {
-    toggleExpanded((prev) => !prev)
-  }
+    toggleExpanded((prev) => !prev);
+  };
 
   const handleOpenResource = () => {
-    setOpenResource && setOpenResource(true)
-    document.body.style.overflow = 'hidden'
-  }
+    setOpenResource && setOpenResource(true);
+    document.body.style.overflow = "hidden";
+  };
 
   const handleOpenNotesList = () => {
-    dispatch(activeNotesList())
-    document.body.style.overflow = 'hidden'
-  }
+    dispatch(activeNotesList());
+    document.body.style.overflow = "hidden";
+  };
 
   const handleAddNote = () => {
     const note = {
       uuid: uuidv4(),
-      id: '',
-      name: 'Note',
-      description: '',
-    }
-    dispatch(pushNotes(note))
-  }
+      id: "",
+      name: "Note",
+      description: "",
+    };
+    dispatch(pushNotes(note));
+  };
 
   const handleOpenCalculator = () => {
-    dispatch(openCalculator())
-  }
+    dispatch(openCalculator());
+  };
 
   const handleOpenCourseContentPage = () => {
     router.push({
       pathname: `/courses/my-course/${router.query.courseId || router.query.id}`,
-    })
-  }
+    });
+  };
   const handleOpenResultsPage = () => {
     router.push({
       pathname: `/courses/my-course/${router.query.courseId || router.query.id}/results`,
-    })
-  }
+    });
+  };
 
   const handleViewNotification = (link: string) => {
     router.push({
       pathname: link,
-    })
-  }
+    });
+  };
 
   const handleOpenExaminationInfoPage = () => {
-    setOpenExaminationInfo && setOpenExaminationInfo(true)
-  }
+    setOpenExaminationInfo && setOpenExaminationInfo(true);
+  };
 
   const onClickMenuItem = () => {
-    const hasCourseContext = router?.query?.courseId || router?.query?.id
+    const hasCourseContext = router?.query?.courseId || router?.query?.id;
 
     // Nếu url trống => là menu Notification
     if (isEmpty(url)) {
-      setOpenNotification(true)
+      setOpenNotification(true);
       if (isEmpty(notifyLists)) {
-        refreshNotification(false)
+        refreshNotification(false);
       }
-      closeSideBar()
-      return
+      closeSideBar();
+      return;
     }
 
     // Nếu đang ở trong course
     if (hasCourseContext) {
       switch (name) {
         case TitleSidebar.COURSE_CONTENT:
-          handleOpenCourseContentPage()
-          break
+          handleOpenCourseContentPage();
+          break;
         case TitleSidebar.RESOURCES:
-          handleOpenResource()
-          break
+          handleOpenResource();
+          break;
         case TitleSidebar.NOTES_LIST:
-          handleOpenNotesList()
-          break
+          handleOpenNotesList();
+          break;
         case TitleSidebar.NEW_NOTE:
-          handleAddNote()
-          break
+          handleAddNote();
+          break;
         case TitleSidebar.CALCULATOR:
-          handleOpenCalculator()
-          break
+          handleOpenCalculator();
+          break;
         case TitleSidebar.RESULTS:
-          handleOpenResultsPage()
-          break
+          handleOpenResultsPage();
+          break;
         case TitleSidebar.EXAM:
-          handleOpenExaminationInfoPage()
-          break
+          handleOpenExaminationInfoPage();
+          break;
         default:
           // Nếu có url cụ thể
-          if (url && url !== '#') {
+          if (url && url !== "#") {
             const targetUrl =
               url === pageLink.RESULTS
                 ? `/courses/my-course/${router.query.courseId || router.query.id}/results`
@@ -197,166 +210,166 @@ export default function MenuItem({
                   ? `/courses/my-course/${router.query.courseId || router.query.id}/dashboard`
                   : name === TitleSidebar.COURSE_CONTENT
                     ? `/courses/my-course/${router.query.courseId || router.query.id}`
-                    : url
+                    : url;
 
-            router.push({ pathname: targetUrl })
+            router.push({ pathname: targetUrl });
           }
-          break
+          break;
       }
     } else {
       // Nếu không ở trong course thì chỉ điều hướng URL bình thường
-      if (url && url !== '#') router.push({ pathname: url })
+      if (url && url !== "#") router.push({ pathname: url });
     }
-    closeSideBar()
-  }
+    closeSideBar();
+  };
 
   function formatName(fullName?: string): string {
-    if (!fullName) return ''
+    if (!fullName) return "";
 
-    const words = fullName.trim().split(/\s+/)
-    const lastTwo = words.slice(-2)
-    return lastTwo.join(' ')
+    const words = fullName.trim().split(/\s+/);
+    const lastTwo = words.slice(-2);
+    return lastTwo.join(" ");
   }
 
-  const isActivity = router?.query?.activityId
+  const isActivity = router?.query?.activityId;
   const isInCourse =
     router?.query?.courseId ||
     (router?.query?.activityId && name !== TitleSidebar.EXAM) ||
-    (router?.query?.course_section_id && name !== TitleSidebar.EXAM)
-  const isInMyProfile = router.asPath === pageLink.MYPROFILE
+    (router?.query?.course_section_id && name !== TitleSidebar.EXAM);
+  const isInMyProfile = router.asPath === pageLink.MYPROFILE;
   const checkIsHiddenDashboard = (info: any) => {
-    return name == TitleSidebar.DASHBOARD && !info
-  }
+    return name == TitleSidebar.DASHBOARD && !info;
+  };
 
   const animationClass = clsx(
     `before-icon w-6 h-6 hidden group-hover/menuItem:block`,
-  )
+  );
   const renderIcon = () => {
     switch (Icon) {
-      case 'course':
-      case 'course-content':
-      case 'activity':
+      case "course":
+      case "course-content":
+      case "activity":
         return (
           <Lottie
-            animationData={myCourseAnimationIcon}
+            // animationData={myCourseAnimationIcon}
             loop
             autoplay
             className={animationClass}
           />
-        )
-      case 'notes-list':
+        );
+      case "notes-list":
         return (
           <Lottie
-            animationData={noteListAnimationIcon}
+            // animationData={noteListAnimationIcon}
             loop
             autoplay
             className={animationClass}
           />
-        )
-      case 'create-note':
+        );
+      case "create-note":
         return (
           <Lottie
-            animationData={addNoteAnimationIcon}
+            // animationData={addNoteAnimationIcon}
             loop
             autoplay
             className={animationClass}
           />
-        )
-      case 'learning-resource':
+        );
+      case "learning-resource":
         return (
           <Lottie
-            animationData={resourceAnimationIcon}
+            // animationData={resourceAnimationIcon}
             loop
             autoplay
             className={animationClass}
           />
-        )
-      case 'caculator':
+        );
+      case "caculator":
         return (
           <Lottie
-            animationData={calculatorAnimationIcon}
+            // animationData={calculatorAnimationIcon}
             loop
             autoplay
             className={animationClass}
           />
-        )
-      case 'calendar':
+        );
+      case "calendar":
         return (
           <Lottie
-            animationData={calendarAnimationIcon}
+            // animationData={calendarAnimationIcon}
             loop
             autoplay
             className={animationClass}
           />
-        )
-      case 'grid':
+        );
+      case "grid":
         return (
           <Lottie
-            animationData={dashboardAnimationIcon}
+            // animationData={dashboardAnimationIcon}
             loop
             autoplay
             className={animationClass}
           />
-        )
-      case 'entrance-test':
+        );
+      case "entrance-test":
         return (
           <Lottie
-            animationData={entranceTestAnimationIcon}
+            // animationData={entranceTestAnimationIcon}
             loop
             autoplay
             className={animationClass}
           />
-        )
-      case 'exam_list':
+        );
+      case "exam_list":
         return (
           <Lottie
-            animationData={examListAnimationIcon}
+            // animationData={examListAnimationIcon}
             loop
             autoplay
             className={animationClass}
           />
-        )
-      case 'result':
+        );
+      case "result":
         return (
           <Lottie
-            animationData={testQuizListAnimationIcon}
+            // animationData={testQuizListAnimationIcon}
             loop
             autoplay
             className={animationClass}
           />
-        )
-      case 'bookmark':
+        );
+      case "bookmark":
         return (
           <Lottie
-            animationData={courseContentAnimationIcon}
+            // animationData={courseContentAnimationIcon}
             loop
             autoplay
             className={animationClass}
           />
-        )
-      case 'event-test':
+        );
+      case "event-test":
         return (
           <Lottie
-            animationData={eventTestAminationIcon}
+            // animationData={eventTestAminationIcon}
             loop
             autoplay
             className={animationClass}
           />
-        )
-      case 'exam-information':
+        );
+      case "exam-information":
         return (
           <Lottie
-            animationData={examInfoAnimationIcon}
+            // animationData={examInfoAnimationIcon}
             loop
             autoplay
             className={animationClass}
           />
-        )
-      case 'notification':
+        );
+      case "notification":
         return (
           <div className="relative">
             <Lottie
-              animationData={notificationAnimationIcon}
+              // animationData={notificationAnimationIcon}
               loop
               autoplay
               className={animationClass}
@@ -364,50 +377,50 @@ export default function MenuItem({
             {notificationUnread > 0 && (
               <span
                 className={clsx(
-                  'absolute aspect-1 items-center justify-center rounded-full bg-[#D35563] text-xs text-white',
-                  'hidden group-hover/menuItem:flex',
+                  "absolute aspect-1 items-center justify-center rounded-full bg-[#D35563] text-xs text-white",
+                  "hidden group-hover/menuItem:flex",
                   badgeClass,
                 )}
               >
-                {notificationUnread > 99 ? '99+' : notificationUnread}
+                {notificationUnread > 99 ? "99+" : notificationUnread}
               </span>
             )}
           </div>
-        )
+        );
 
       default:
         return (
           <Lottie
-            animationData={myCourseAnimationIcon}
+            // animationData={myCourseAnimationIcon}
             loop
             autoplay
             className={animationClass}
           />
-        )
-        break
+        );
+        break;
     }
-  }
+  };
 
   const isShowHoverIcon = () => {
-    return true
+    return true;
     // return !['notification'].includes(Icon)
-  }
+  };
 
   const renderMenuContent = () => {
     return (
       <div className="flex items-center">
-        {Icon === 'avatar' ? (
+        {Icon === "avatar" ? (
           <div
-            className={clsx('h-10 w-10 shrink-0', {
-              'rounded-full !border-2 border-primary': isInMyProfile,
+            className={clsx("h-10 w-10 shrink-0", {
+              "rounded-full !border-2 border-primary": isInMyProfile,
             })}
           >
-            {user?.detail?.avatar?.['40x40'] ||
-            user.detail.avatar?.['ORIGIN'] ? (
+            {user?.detail?.avatar?.["40x40"] ||
+            user.detail.avatar?.["ORIGIN"] ? (
               <Image
                 src={
-                  user.detail.avatar?.['40x40'] ||
-                  user.detail.avatar?.['ORIGIN']
+                  user.detail.avatar?.["40x40"] ||
+                  user.detail.avatar?.["ORIGIN"]
                 }
                 alt="avatar"
                 className="h-10 w-10 rounded-full object-cover"
@@ -427,12 +440,12 @@ export default function MenuItem({
           </div>
         ) : (
           <>
-            {Icon === 'profile-detail' ? (
+            {Icon === "profile-detail" ? (
               <div className="h-10 w-10 shrink-0">
                 <Image
                   src={
-                    user.detail.avatar?.['40x40'] ||
-                    user.detail.avatar?.['ORIGIN'] ||
+                    user.detail.avatar?.["40x40"] ||
+                    user.detail.avatar?.["ORIGIN"] ||
                     blankAvatar
                   }
                   alt="avatar"
@@ -446,19 +459,20 @@ export default function MenuItem({
               <>
                 {!selected && isShowHoverIcon() && renderIcon()}
                 <ExpandIcon
+                  pageLink={pageLink}
                   type={Icon}
                   className={clsx(
                     `before-icon min-h-6 min-w-6 shrink-0 ${
-                      selected ? 'bg-primary text-white' : 'text-gray-800'
+                      selected ? "bg-primary text-white" : "text-gray-800"
                     }`,
                     {
-                      'group-hover:text-gray-800': !selected,
-                      'group-hover/menuItem:hidden':
+                      "group-hover:text-gray-800": !selected,
+                      "group-hover/menuItem:hidden":
                         !selected && isShowHoverIcon(),
                     },
                   )}
                   extraClassName={clsx({
-                    'group-hover/menuItem:hidden':
+                    "group-hover/menuItem:hidden":
                       !selected && isShowHoverIcon(),
                   })}
                 />
@@ -477,23 +491,23 @@ export default function MenuItem({
             )}
           </>
         )}
-        {Icon === 'avatar' ? (
+        {Icon === "avatar" ? (
           <div
             className={clsx(
               `label avatar invisible pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
-                selected ? 'bg-primary text-white' : 'text-gray-800'
+                selected ? "bg-primary text-white" : "text-gray-800"
               }`,
               {
-                'group-hover:text-gray-800': !selected,
+                "group-hover:text-gray-800": !selected,
               },
             )}
           >
             <div
               className={clsx(
-                'line-clamp-1 text-base font-semibold text-[#050505]',
+                "line-clamp-1 text-base font-semibold text-[#050505]",
                 {
-                  'group-hover:text-gray-800': !selected,
-                  '!text-primary': isInMyProfile,
+                  "group-hover:text-gray-800": !selected,
+                  "!text-primary": isInMyProfile,
                 },
               )}
             >
@@ -501,24 +515,24 @@ export default function MenuItem({
             </div>
             <div
               className={clsx(
-                'line-clamp-1 text-sm font-normal capitalize text-[#A1A1A1]',
+                "line-clamp-1 text-sm font-normal capitalize text-[#A1A1A1]",
                 {
-                  'group-hover:text-gray-800': !selected,
-                  '!text-primary': isInMyProfile,
+                  "group-hover:text-gray-800": !selected,
+                  "!text-primary": isInMyProfile,
                 },
               )}
             ></div>
           </div>
         ) : (
           <>
-            {Icon === 'profile-detail' ? (
+            {Icon === "profile-detail" ? (
               <span
                 className={clsx(
                   `label invisible line-clamp-1 pl-3 text-base font-normal opacity-0 transition-all duration-200 ease-in-out md:pl-4 ${
-                    selected ? 'bg-primary text-white' : 'text-gray-800'
+                    selected ? "bg-primary text-white" : "text-gray-800"
                   }`,
                   {
-                    'group-hover:text-gray-800': !selected,
+                    "group-hover:text-gray-800": !selected,
                   },
                 )}
               >
@@ -528,10 +542,10 @@ export default function MenuItem({
               <span
                 className={clsx(
                   `label invisible line-clamp-1 pl-3 text-base font-normal opacity-0 transition-all duration-200 ease-in-out md:pl-4 ${
-                    selected ? 'bg-primary text-white' : 'text-gray-800'
+                    selected ? "bg-primary text-white" : "text-gray-800"
                   }`,
                   {
-                    'group-hover:text-gray-800': !selected,
+                    "group-hover:text-gray-800": !selected,
                   },
                 )}
                 onClick={() => trackGAEvent(`Click Button ${name} Menu `)}
@@ -542,8 +556,8 @@ export default function MenuItem({
           </>
         )}
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <>
@@ -556,18 +570,18 @@ export default function MenuItem({
         className={clsx(
           `group/menuItem transform cursor-pointer rounded transition-all duration-200 ease-in-out ${
             selected &&
-            ((type === 'level-1' &&
-              Icon !== 'avatar' &&
-              Icon !== 'profile-detail') ||
-              (type === 'level-2' &&
-                (Icon === 'result' || Icon === 'bookmark')))
-              ? 'bg-primary text-white'
-              : ''
+            ((type === "level-1" &&
+              Icon !== "avatar" &&
+              Icon !== "profile-detail") ||
+              (type === "level-2" &&
+                (Icon === "result" || Icon === "bookmark")))
+              ? "bg-primary text-white"
+              : ""
           } sidebar-list-items relative px-4 py-2 last:mb-0 ${
             !isActivity &&
             (name === TitleSidebar.NEW_NOTE || name === TitleSidebar.CALCULATOR)
-              ? 'hidden'
-              : ''
+              ? "hidden"
+              : ""
           }
         ${
           !isInCourse &&
@@ -577,10 +591,10 @@ export default function MenuItem({
             name === TitleSidebar.RESULTS ||
             name === TitleSidebar.EXAM ||
             name === TitleSidebar.DASHBOARD ||
-            Icon === 'stats-chart-sharp' ||
-            Icon === 'profile-detail')
-            ? 'hidden'
-            : ''
+            Icon === "stats-chart-sharp" ||
+            Icon === "profile-detail")
+            ? "hidden"
+            : ""
         }
         ${
           isInCourse &&
@@ -592,28 +606,28 @@ export default function MenuItem({
             // hidden when in course
             name === LANG_SIGNIN.eventTest ||
             name === TitleSidebar.NOTIFICATION ||
-            Icon === 'avatar' ||
-            Icon === 'profile-detail' ||
+            Icon === "avatar" ||
+            Icon === "profile-detail" ||
             checkIsHiddenDashboard(
-              JSON.parse(localStorage.getItem('courseInfo') as any),
+              JSON.parse(localStorage.getItem("courseInfo") as any),
             ) ||
-            Icon === 'avatar')
-            ? 'hidden'
-            : ''
+            Icon === "avatar")
+            ? "hidden"
+            : ""
         }
         `,
           {
-            'hover:bg-gray-100': !selected,
+            "hover:bg-gray-100": !selected,
           },
         )}
         onClick={() => onClickMenuItem()}
       >
         <div
           className={`sidebar-item flex items-center ${
-            Icon === 'avatar' || Icon === 'profile-detail' ? '-ml-2' : ''
+            Icon === "avatar" || Icon === "profile-detail" ? "-ml-2" : ""
           }`}
         >
-          {url !== '#' && !isEmpty(url) ? (
+          {url !== "#" && !isEmpty(url) ? (
             <Link
               href={
                 url === pageLink.RESULTS
@@ -631,15 +645,16 @@ export default function MenuItem({
           ) : (
             <>{renderMenuContent()}</>
           )}
-          {isNested && type === 'level-2' ? (
+          {isNested && type === "level-2" ? (
             <ExpandIcon
+              pageLink={pageLink}
               isExpanded={isExpanded}
               handleClick={onClick}
-              type={'ontoggle'}
+              type={"ontoggle"}
               className={clsx(
-                `transition-all duration-200 ease-in-out ${selected ? 'bg-primary text-white' : ''}`,
+                `transition-all duration-200 ease-in-out ${selected ? "bg-primary text-white" : ""}`,
                 {
-                  'group-hover:text-gray-800': !selected,
+                  "group-hover:text-gray-800": !selected,
                 },
               )}
             />
@@ -648,7 +663,7 @@ export default function MenuItem({
         {isNested ? (
           <div
             className={`sidebar-child ${type} ${
-              isExpanded && type === 'level-2' ? 'active' : ''
+              isExpanded && type === "level-2" ? "active" : ""
             }`}
           >
             <MenuItemsList
@@ -665,7 +680,7 @@ export default function MenuItem({
       <SappNotificationComponent
         notifyDetail={{
           ...notifyDetail,
-          send_time: notifyDetail?.send_time || '', // Ensure send_time is always a string
+          send_time: notifyDetail?.send_time || "", // Ensure send_time is always a string
         }}
         tabs={tabs}
         selectedTab={selectedTab}
@@ -686,5 +701,5 @@ export default function MenuItem({
         isLoading={isLoading}
       />
     </>
-  )
+  );
 }

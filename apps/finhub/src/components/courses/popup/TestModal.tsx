@@ -1,30 +1,32 @@
-import { formatTime } from '@components/common/timer'
-import TestAnnouncementModal from '@components/mycourses/course-detail/TestAnnoucementModal'
-import PopupCanNotRetakeTest from '@components/mycourses/course-detail/PogupCannotRetakeTest'
-import { TEST_TYPE } from '@utils/constants'
-import { trackGAEvent } from '@utils/google-analytics'
+import { ArrowDownIcon } from '@lms/assets'
+import {
+  GRADE_STATUS,
+  GRADING_METHOD,
+  IQuizResultList,
+  STATUS_QUIZ_TEST,
+  TEST_TYPE,
+} from '@lms/core'
+import {
+  PopupCanNotRetakeTest,
+  TestAnnouncementModal,
+} from '@lms/feature-courses'
+import { StatusTestQuizBadge, TestPopup } from '@lms/feature-test'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import {
+  ButtonPrimary,
+  ButtonSecondary,
+  ButtonText,
+  ModalNotMobileFriendly,
+} from '@lms/ui'
+import { capitalizeFirstLetter, formatTime, trackGAEvent } from '@lms/utils'
+import { CoursesAPI } from '@pages/api/courses'
+import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
+import { Select } from 'antd'
 import dayjs from 'dayjs'
 import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ClassAPI } from 'src/pages/api/class'
-import { IQuizResultList } from 'src/type/quiz'
-import { Select } from 'antd'
-import { GRADING_METHOD, GRADE_STATUS } from 'src/constants'
-import { capitalizeFirstLetter } from '@utils/index'
-import { CoursesAPI } from '@pages/api/courses'
-import TestPopup from '@components/common/TestPopup'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import ButtonText from '@components/base/button/ButtonText'
-import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-import ModalNotMobileFriendly from '@components/base/modal/ModalNotMobileFriendly'
-import { ArrowDownIcon } from '@lms/assets'
-import StatusTestQuizBadge, {
-  STATUS_QUIZ_TEST,
-} from '@components/test/StatusTestQuizBadge'
-
 enum StatusQuizAttempt {
   Passed = 'PASSED',
   Failed = 'FAILED',

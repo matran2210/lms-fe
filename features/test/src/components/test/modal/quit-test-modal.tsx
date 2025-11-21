@@ -1,4 +1,4 @@
-import { QuizIcon } from "@lms/assets";
+import { QuitIcon } from "@lms/assets";
 import { SappModalV3 } from "@lms/ui";
 import { trackGAEvent } from "@lms/utils";
 import { Dispatch, SetStateAction } from "react";
@@ -41,7 +41,7 @@ const QuitTestModal = ({
       onOk={onCancel}
       fullWidthBtn={true}
       buttonSize="medium"
-      icon={<QuizIcon />}
+      icon={<QuitIcon />}
       header="Are you sure?"
       content={content}
       cancelButtonClass="underline !p-0 !w-fit hover:text-primary"

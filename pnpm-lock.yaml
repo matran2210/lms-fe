@@ -893,6 +893,12 @@ importers:
       '@lms/core':
         specifier: workspace:*
         version: link:../../libs/core
+      '@lms/feature-auth':
+        specifier: workspace:*
+        version: link:../auth
+      '@lms/feature-test':
+        specifier: workspace:*
+        version: link:../test
       '@lms/hooks':
         specifier: workspace:*
         version: link:../../libs/hooks
@@ -928,6 +934,9 @@ importers:
 
   libs/hooks:
     dependencies:
+      '@lms/assets':
+        specifier: workspace:*
+        version: link:../assets
       '@lms/contexts':
         specifier: workspace:*
         version: link:../state
@@ -988,9 +997,6 @@ importers:
       '@lms/hooks':
         specifier: workspace:*
         version: link:../hooks
-      '@lms/ui':
-        specifier: workspace:*
-        version: 'link:'
       '@lms/utils':
         specifier: workspace:*
         version: link:../utils

@@ -1,67 +1,67 @@
+import { ExpandIcon } from "@lms/assets";
 import {
+  ANIMATION,
   IAuthManager,
+  IProfilePages,
   MYPROFILE_TREE,
   PROFILE_PAGES,
   SECURITY_TREE,
-} from '@lms/core'
-import { trackGAEvent } from '@lms/utils'
-import clsx from 'clsx'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { ANIMATION } from '@lms/core'
-import { IProfilePages } from '@lms/core'
-import ExpandIcon from '@lms/ui/layout/ExpandIcon'
+} from "@lms/core";
+import { trackGAEvent } from "@lms/utils";
+import clsx from "clsx";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 interface IProps {
-  page: IProfilePages
-  className?: string
-  children?: React.ReactNode
-  authManager: IAuthManager
+  page: IProfilePages;
+  className?: string;
+  children?: React.ReactNode;
+  authManager: IAuthManager;
 }
 
 interface ChildWithLabel {
-  label: string
+  label: string;
 }
 
 interface ChildWithDevices {
   DEVICES: {
-    label: string
-  }
+    label: string;
+  };
 }
 
 interface ChildWithLoginHistory {
   LOGIN_HISTORY: {
-    label: string
-  }
+    label: string;
+  };
 }
 
 interface ChildWithChangePassword {
   CHANGE_PASSWORD: {
-    label: string
-  }
+    label: string;
+  };
 }
 
 interface ChildWithOverview {
   OVERVIEW: {
-    label: string
-  }
+    label: string;
+  };
 }
 
 interface ChildWithACCA {
   ACCA: {
-    label: string
-  }
+    label: string;
+  };
 }
 interface ChildWithCMA {
   CMA: {
-    label: string
-  }
+    label: string;
+  };
 }
 
 interface ChildWithCFA {
   CFA: {
-    label: string
-  }
+    label: string;
+  };
 }
 
 type Child =
@@ -72,44 +72,44 @@ type Child =
   | ChildWithOverview
   | ChildWithACCA
   | ChildWithCMA
-  | ChildWithCFA
+  | ChildWithCFA;
 
 const ProfileSideBar = ({ page, children, authManager }: IProps) => {
-  const router = useRouter()
+  const router = useRouter();
 
   const getLabelFromChild = (child: Child): string => {
-    if ('label' in child) {
-      return child.label
-    } else if ('DEVICES' in child) {
-      return child.DEVICES.label
-    } else if ('LOGIN_HISTORY' in child) {
-      return child.LOGIN_HISTORY.label
-    } else if ('CHANGE_PASSWORD' in child) {
-      return child.CHANGE_PASSWORD.label
-    } else if ('OVERVIEW' in child) {
-      return child.OVERVIEW.label
-    } else if ('ACCA' in child) {
-      return child.ACCA.label
-    } else if ('CFA' in child) {
-      return child.CFA.label
-    } else if ('CMA' in child) {
-      return child.CMA.label
+    if ("label" in child) {
+      return child.label;
+    } else if ("DEVICES" in child) {
+      return child.DEVICES.label;
+    } else if ("LOGIN_HISTORY" in child) {
+      return child.LOGIN_HISTORY.label;
+    } else if ("CHANGE_PASSWORD" in child) {
+      return child.CHANGE_PASSWORD.label;
+    } else if ("OVERVIEW" in child) {
+      return child.OVERVIEW.label;
+    } else if ("ACCA" in child) {
+      return child.ACCA.label;
+    } else if ("CFA" in child) {
+      return child.CFA.label;
+    } else if ("CMA" in child) {
+      return child.CMA.label;
     }
 
     // Mặc định trả về chuỗi rỗng nếu không tìm thấy
-    return ''
-  }
+    return "";
+  };
 
   const handleLogout = async () => {
     try {
-      await authManager.logout()
+      await authManager.logout();
     } catch (error) {}
-  }
+  };
 
   // Sử dụng useState để lưu trạng thái active của từng child
   const [childActivationStates, setChildActivationStates] = useState<{
-    [key: string]: boolean
-  }>({})
+    [key: string]: boolean;
+  }>({});
 
   const handleSetStatusActiveChild = (childLabel: string) => {
     // Set the child and the "Security" page to active
@@ -117,39 +117,39 @@ const ProfileSideBar = ({ page, children, authManager }: IProps) => {
       ...prev,
       [childLabel]: true,
       // security: true,
-    }))
+    }));
 
     // Set the active state of other children to false
     Object.keys(childActivationStates).forEach((key) => {
       if (key !== childLabel) {
-        setChildActivationStates((prev) => ({ ...prev, [key]: false }))
+        setChildActivationStates((prev) => ({ ...prev, [key]: false }));
       }
-    })
-  }
+    });
+  };
   const handleChildClick = (childLabel: string) => {
     // Check if the clicked label is "Security"
-    if (childLabel?.toLowerCase() === 'security') {
+    if (childLabel?.toLowerCase() === "security") {
       // Set both the "Security" page and the first child to active
       setChildActivationStates({
         security: true,
         [Object.keys(childActivationStates)[0]]: true,
-      })
-      return
+      });
+      return;
     }
 
     // Check if the clicked label is a child
     if (childActivationStates[childLabel]) {
-      return // If the child is already active, do nothing
+      return; // If the child is already active, do nothing
     }
 
-    handleSetStatusActiveChild(childLabel)
+    handleSetStatusActiveChild(childLabel);
     // Chuyển trang
-    let formattedChildLabel = childLabel?.toLowerCase()
+    let formattedChildLabel = childLabel?.toLowerCase();
 
-    router.push(`/${formattedChildLabel}`)
-  }
+    router.push(`/${formattedChildLabel}`);
+  };
 
-  const [isExpanded, toggleExpanded] = useState({ urlPage: '', isOpen: false })
+  const [isExpanded, toggleExpanded] = useState({ urlPage: "", isOpen: false });
 
   /**
    * Hàm xử lý khi người dùng click vào nút mở rộng.
@@ -162,8 +162,8 @@ const ProfileSideBar = ({ page, children, authManager }: IProps) => {
       /**
        * Trang cá nhân hoặc trang bảo mật.
        */
-      case 'myprofile':
-      case 'security':
+      case "myprofile":
+      case "security":
         /**
          * Đổi trạng thái mở rộng của trang hiện tại.
          *
@@ -173,24 +173,24 @@ const ProfileSideBar = ({ page, children, authManager }: IProps) => {
         toggleExpanded((prev) => ({
           urlPage,
           isOpen: urlPage !== prev.urlPage ? true : !prev.isOpen,
-        }))
+        }));
         /**
          * Nếu đang ở trang cá nhân hoặc trang bảo mật, thì không cần chuyển trang.
          * Nếu không, chuyển đến trang con đầu tiên của trang hiện tại.
          */
         if (
           MYPROFILE_TREE.includes(router.query.page as string) &&
-          urlPage === 'myprofile'
+          urlPage === "myprofile"
         ) {
-          handleSetStatusActiveChild(router.query.page as string)
-          break
+          handleSetStatusActiveChild(router.query.page as string);
+          break;
         }
         if (
           SECURITY_TREE.includes(router.query.page as string) &&
-          urlPage === 'security'
+          urlPage === "security"
         ) {
-          handleSetStatusActiveChild(router.query.page as string)
-          break
+          handleSetStatusActiveChild(router.query.page as string);
+          break;
         }
 
         /**
@@ -199,28 +199,28 @@ const ProfileSideBar = ({ page, children, authManager }: IProps) => {
          * @param {string} parentKey - Khóa của trang hiện tại.
          * @returns {array} - Danh sách trang con.
          */
-        const parentKey = urlPage.toUpperCase()
+        const parentKey = urlPage.toUpperCase();
         const listChildren =
-          PROFILE_PAGES[parentKey as keyof typeof PROFILE_PAGES].children
+          PROFILE_PAGES[parentKey as keyof typeof PROFILE_PAGES].children;
         /**
          * Lấy trang con đầu tiên.
          *
          * @param {array} listChildren - Danh sách trang con.
          * @returns {object} - Trang con đầu tiên.
          */
-        const firstChild = listChildren[0]
+        const firstChild = listChildren[0];
         /**
          * Lấy nhãn của trang con đầu tiên.
          *
          * @param {object} firstChild - Trang con đầu tiên.
          * @returns {string} - Nhãn của trang con đầu tiên.
          */
-        const firstChildKey = Object.keys(firstChild)[0]
+        const firstChildKey = Object.keys(firstChild)[0];
         const firstChildLabel =
-          firstChild?.[firstChildKey as keyof typeof firstChild]
+          firstChild?.[firstChildKey as keyof typeof firstChild];
         const firstChildLabelValue = getLabelFromChild(
           firstChildLabel as ChildWithLabel,
-        )
+        );
         /**
          * Định dạng nhãn của trang con đầu tiên.
          *
@@ -229,15 +229,15 @@ const ProfileSideBar = ({ page, children, authManager }: IProps) => {
          */
         const formattedChildLabel = firstChildLabelValue
           .toLowerCase()
-          .replace(/\s+/g, '_')
+          .replace(/\s+/g, "_");
         /**
          * Chuyển trang đến trang con đầu tiên.
          *
          * @param {string} formattedChildLabel - Nhãn định dạng.
          */
-        handleSetStatusActiveChild(formattedChildLabel)
-        router.push(`/${formattedChildLabel}`)
-        break
+        handleSetStatusActiveChild(formattedChildLabel);
+        router.push(`/${formattedChildLabel}`);
+        break;
       default:
         /**
          * Đổi trạng thái mở rộng của trang hiện tại.
@@ -245,12 +245,12 @@ const ProfileSideBar = ({ page, children, authManager }: IProps) => {
          * @param {object} - Trạng thái mở rộng mới.
          */
         toggleExpanded({
-          urlPage: '',
+          urlPage: "",
           isOpen: false,
-        })
-        break
+        });
+        break;
     }
-  }
+  };
   /**
    * Hàm xử lý khi người dùng click vào menu.
    * Xử lý dựa trên đường dẫn trang hiện tại và nhãn của trang con.
@@ -260,51 +260,51 @@ const ProfileSideBar = ({ page, children, authManager }: IProps) => {
    */
   const hanldeClickMenu = (urlPage: string, childLabel: string) => {
     switch (urlPage) {
-      case 'myprofile':
-        setChildActivationStates({ myprofile: true, security: false })
-        onClickExpand(urlPage)
-        trackGAEvent(`Click Button Programs My Profile`)
-        break
-      case 'security':
-        setChildActivationStates({ security: true, myprofile: false })
-        onClickExpand(urlPage)
-        trackGAEvent(`Click Button Security My Profile`)
-        break
+      case "myprofile":
+        setChildActivationStates({ myprofile: true, security: false });
+        onClickExpand(urlPage);
+        trackGAEvent(`Click Button Programs My Profile`);
+        break;
+      case "security":
+        setChildActivationStates({ security: true, myprofile: false });
+        onClickExpand(urlPage);
+        trackGAEvent(`Click Button Security My Profile`);
+        break;
       default:
-        setChildActivationStates({ security: false, myprofile: false })
-        handleChildClick(childLabel)
-        onClickExpand('')
-        trackGAEvent(`Click Button ${childLabel} My Profile`)
-        break
+        setChildActivationStates({ security: false, myprofile: false });
+        handleChildClick(childLabel);
+        onClickExpand("");
+        trackGAEvent(`Click Button ${childLabel} My Profile`);
+        break;
     }
-  }
+  };
 
   useEffect(() => {
     const rootMenu = SECURITY_TREE.includes(router.query.page as string)
-      ? 'security'
+      ? "security"
       : MYPROFILE_TREE.includes(router.query.page as string)
-        ? 'myprofile'
-        : null
-    rootMenu && onClickExpand(rootMenu)
-    handleChildClick(router.query.page as string)
-  }, [])
+        ? "myprofile"
+        : null;
+    rootMenu && onClickExpand(rootMenu);
+    handleChildClick(router.query.page as string);
+  }, []);
 
   useEffect(() => {
     // Check if the clicked label is a child
     if (childActivationStates[page]) {
-      return // If the child is already active, do nothing
+      return; // If the child is already active, do nothing
     } else {
-      handleSetStatusActiveChild(page)
+      handleSetStatusActiveChild(page);
 
       // if page is child of security or myprofile, set expanded
       if (SECURITY_TREE.includes(page)) {
-        toggleExpanded({ urlPage: 'security', isOpen: true })
+        toggleExpanded({ urlPage: "security", isOpen: true });
       }
       if (MYPROFILE_TREE.includes(page)) {
-        toggleExpanded({ urlPage: 'myprofile', isOpen: true })
+        toggleExpanded({ urlPage: "myprofile", isOpen: true });
       }
     }
-  }, [page])
+  }, [page]);
 
   return (
     <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-4">
@@ -312,18 +312,18 @@ const ProfileSideBar = ({ page, children, authManager }: IProps) => {
         <ul className="flex h-full flex-col justify-between bg-white px-3 py-4">
           <div>
             {Object.entries(PROFILE_PAGES).map(([key, value]) => {
-              const urlPage = key?.toLowerCase()
-              const urlChildren = (value?.children || []) as Child[]
-              const childLabel = getLabelFromChild(value)?.replace(/\s+/g, '_')
-              const isActive = urlPage === page
+              const urlPage = key?.toLowerCase();
+              const urlChildren = (value?.children || []) as Child[];
+              const childLabel = getLabelFromChild(value)?.replace(/\s+/g, "_");
+              const isActive = urlPage === page;
 
               let className =
-                'text-[#A1A1A1] relative hover:text-primary font-normal'
+                "text-[#A1A1A1] relative hover:text-primary font-normal";
               if (isActive) {
-                className = 'bg-secondary font-medium text-primary'
+                className = "bg-secondary font-medium text-primary";
               }
               if (childActivationStates[childLabel]) {
-                className = 'bg-secondary text-primary'
+                className = "bg-secondary text-primary";
               }
 
               return (
@@ -339,24 +339,24 @@ const ProfileSideBar = ({ page, children, authManager }: IProps) => {
                           (active) => active,
                         ) &&
                         !childActivationStates[childLabel])
-                        ? 'bg-secondary font-medium text-primary'
-                        : 'font-normal'
+                        ? "bg-secondary font-medium text-primary"
+                        : "font-normal"
                     }`}
                     style={{
-                      position: 'relative', // Đặt position là relative
+                      position: "relative", // Đặt position là relative
                       zIndex: 2, // Thiết lập z-index của thẻ a
                     }}
                     onClick={() => hanldeClickMenu(urlPage, childLabel)}
                   >
                     {value?.label}
-                    {['security', 'myprofile'].includes(urlPage) && (
+                    {["security", "myprofile"].includes(urlPage) && (
                       <div className="mt-2">
                         <ExpandIcon
                           isExpanded={
                             isExpanded.isOpen && isExpanded.urlPage === urlPage
                           }
-                          type={'ontoggle'}
-                          className={''}
+                          type={"ontoggle"}
+                          className={""}
                         />
                       </div>
                     )}
@@ -364,10 +364,10 @@ const ProfileSideBar = ({ page, children, authManager }: IProps) => {
                   {urlChildren?.length > 0 && (
                     <div
                       className={clsx(
-                        'ml-5 border-l border-[#DCDDDD]',
+                        "ml-5 border-l border-[#DCDDDD]",
                         isExpanded.isOpen &&
                           isExpanded.urlPage === urlPage &&
-                          'my-5',
+                          "my-5",
                       )}
                     >
                       {isExpanded.isOpen &&
@@ -375,16 +375,16 @@ const ProfileSideBar = ({ page, children, authManager }: IProps) => {
                         urlChildren?.map((child) => {
                           const childLabel = getLabelFromChild(child)
                             ?.toLowerCase()
-                            ?.replace(/\s+/g, '_')
+                            ?.replace(/\s+/g, "_");
                           const childIsActive =
-                            childActivationStates[childLabel] || false
+                            childActivationStates[childLabel] || false;
                           return (
                             <div
                               key={childLabel}
                               className={`${className} hover-transition-font-weight relative ms-4 cursor-pointer hover:bg-secondary ${
                                 childIsActive
-                                  ? 'bg-secondary font-medium text-primary'
-                                  : 'font-normal'
+                                  ? "bg-secondary font-medium text-primary"
+                                  : "font-normal"
                               }`}
                             >
                               <a
@@ -392,12 +392,12 @@ const ProfileSideBar = ({ page, children, authManager }: IProps) => {
                                 onClick={() => handleChildClick(childLabel)}
                               >
                                 {getLabelFromChild(child).toLowerCase() ===
-                                'devices'
-                                  ? 'Browsers'
+                                "devices"
+                                  ? "Browsers"
                                   : getLabelFromChild(child)}
                               </a>
                             </div>
-                          )
+                          );
                         })}
                     </div>
                   )}
@@ -405,7 +405,7 @@ const ProfileSideBar = ({ page, children, authManager }: IProps) => {
                     className={`hover-transition-font-weight relative top-px border-b border-[#F1F1F1] `}
                   />
                 </li>
-              )
+              );
             })}
             <li
               className="hover-transition-font-weight relative cursor-pointer p-5 font-normal text-[#A1A1A1]  hover:bg-secondary hover:text-primary"
@@ -424,7 +424,7 @@ const ProfileSideBar = ({ page, children, authManager }: IProps) => {
         {children}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProfileSideBar
+export default ProfileSideBar;

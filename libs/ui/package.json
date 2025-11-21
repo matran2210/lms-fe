@@ -13,7 +13,6 @@
     "@lms/assets": "workspace:*",
     "@lms/utils": "workspace:*",
     "@lms/core": "workspace:*",
-    "@lms/ui": "workspace:*",
     "@lms/hooks": "workspace:*",
     "@lms/feature-courses": "workspace:*",
     "@lms/contexts": "workspace:*",

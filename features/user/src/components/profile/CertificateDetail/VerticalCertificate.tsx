@@ -1,29 +1,27 @@
-import SAPP_Logo from '@assets/images/sapp_logo.svg'
-import { ButtonPrimary } from '@lms/ui'
-import { Icon, CopyIcon } from '@lms/assets'
-import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
-import { ICertificate } from '@pages/certificates/[id]'
-import Image from 'next/image'
-import React, { useState } from 'react'
-import { ClickToCopyButton } from 'src/common/SappCopyLink'
-import { LinkedInShareButton } from './ButtonShareLinkedin'
-import CertificateCard from './CertificateCard'
-import ModalShareToLinkedin from './ModalShareToLinkedin'
+import SAPP_Logo from "@assets/images/sapp_logo.svg";
+import { CopyIcon, Icon } from "@lms/assets";
+import { ButtonPrimary, CertificateImg, ClickToCopyButton } from "@lms/ui";
+import { ICertificate } from "@pages/certificates/[id]";
+import Image from "next/image";
+import React, { useState } from "react";
+import { LinkedInShareButton } from "./ButtonShareLinkedin";
+import CertificateCard from "./CertificateCard";
+import ModalShareToLinkedin from "./ModalShareToLinkedin";
 
 interface CertificateVerticalProps {
-  certificate?: ICertificate
-  issuedBy?: string
-  onDownload?: () => void
+  certificate?: ICertificate;
+  issuedBy?: string;
+  onDownload?: () => void;
 }
 
 const CertificateVertical: React.FC<CertificateVerticalProps> = ({
   certificate,
-  issuedBy = 'SAPP Academy',
+  issuedBy = "SAPP Academy",
   onDownload,
 }) => {
-  const [openModalShare, setOpenModalShare] = useState(false)
-  const onOpenModalShare = () => setOpenModalShare(true)
-  const onCloseModalShare = () => setOpenModalShare(false)
+  const [openModalShare, setOpenModalShare] = useState(false);
+  const onOpenModalShare = () => setOpenModalShare(true);
+  const onCloseModalShare = () => setOpenModalShare(false);
   return (
     <CertificateCard
       bodyClassName="2xl:px-[373px] py-[138px] px-[70px] justify-center"
@@ -34,7 +32,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
           {certificate?.certificate_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={certificate?.certificate_url || ''}
+              src={certificate?.certificate_url || ""}
               alt={certificate?.course.name}
               className="max-h-full max-w-full object-contain"
             />
@@ -48,7 +46,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
         <div className="flex flex-col items-center gap-12">
           <div
             className="flex w-full cursor-pointer items-end"
-            onClick={() => window.open('https://sapp.edu.vn', '_blank')}
+            onClick={() => window.open("https://sapp.edu.vn", "_blank")}
           >
             <div className="mx-auto my-auto block w-1/2 overflow-hidden sm:max-w-[14rem]">
               <Image
@@ -81,7 +79,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
                 Download
               </ButtonPrimary>
               <LinkedInShareButton
-                certificateUrl={certificate?.certificate_url || ''}
+                certificateUrl={certificate?.certificate_url || ""}
                 onOpenModalShare={onOpenModalShare}
               />
               <ClickToCopyButton
@@ -104,7 +102,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
         />
       )}
     </CertificateCard>
-  )
-}
+  );
+};
 
-export default CertificateVertical
+export default CertificateVertical;
