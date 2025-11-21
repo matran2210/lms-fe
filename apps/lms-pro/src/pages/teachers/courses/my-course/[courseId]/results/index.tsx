@@ -1,13 +1,13 @@
-import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { UserType } from '@lms/contexts'
-import LayoutTeacher from '@components/layout/Teacher'
 import { ITabs } from '@lms/core'
-import { PageLink, TitleSidebar } from '@lms/core'
+import {  TitleSidebar } from '@lms/core'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
+import { CourseSkeleton, LayoutTeacher, SappLoadingGlobal } from '@lms/ui'
+import { PageLink } from 'src/constants/routers'
 
 const DEFAULT_PAGESIZE = 10
 
@@ -75,6 +75,7 @@ const ResultsTeacher = () => {
         title="Course Results"
         breadcrumbs={breadcrumbs}
         isCourseDetail
+        courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}
       >
         <div className="my-0">
           {isLoading ? (

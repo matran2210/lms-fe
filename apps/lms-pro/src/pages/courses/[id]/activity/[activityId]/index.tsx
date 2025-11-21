@@ -88,6 +88,7 @@ import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById, submitQuizTest } from 'src/pages/api/courses'
 import { v4 as uuidv4 } from 'uuid'
+import { NotificationAPI } from '@pages/api/notification'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -538,6 +539,7 @@ const ActivityPage = () => {
         className={focusOnlyDiscussion ? 'h-full !bg-white' : ''}
         childClassName={focusOnlyDiscussion ? 'h-full' : ''}
         api={CoursesAPI}
+        notificationApi={NotificationAPI}
         pageLink={PageLink}
         menuItems={MENU_ITEMS}
         menuItemsEvent={MENU_ITEMS_EVENT}

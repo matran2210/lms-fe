@@ -1,23 +1,22 @@
-import LayoutTeacher from '@components/layout/Teacher'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import LayoutFilter from '@components/layout/TeacherFilter/index'
 import ChapterTestFilter from '@components/teacher/components/ChapterTestFilter'
 import { useForm } from 'react-hook-form'
 import { TeacherAPI } from 'src/pages/api/teacher/index'
-import { ITabs } from '@lms/core'
-import { PageLink } from '@lms/core'
-import {SappTable} from '@lms/ui'
+import { ITabs, StatusActionCell } from '@lms/core'
+import {SappTable, LayoutFilter, LayoutTeacher} from '@lms/ui'
 import { StudentKey } from '@pages/api/queryKey'
 import StudentCell from '@components/teacher/components/StudentCell'
 import { IStudentClassDetail } from '@lms/core'
 import DateActionCell from '@components/teacher/components/DateActionCell'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
-import StatusActionCell from '@lms/core/types/quiz/StatusActionCell'
-import useSappPaging from 'src/hooks/useSappPaging'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from '@lms/contexts'
 import { ProfilePages } from '@lms/core'
+import { PageLink } from 'src/constants/routers'
+import { useSappPaging } from '@lms/hooks'
+import { CoursesAPI } from '@pages/api/courses'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 
 interface FilterParams {
   status?: string
@@ -159,7 +158,7 @@ const ChapterTest = () => {
   ]
 
   return (
-    <LayoutTeacher title="My Class" breadcrumbs={breadcrumbs}>
+    <LayoutTeacher title="My Class" breadcrumbs={breadcrumbs} courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}>
       <LayoutFilter
         listFilter={<ChapterTestFilter control={control} />}
         className="mb-6"

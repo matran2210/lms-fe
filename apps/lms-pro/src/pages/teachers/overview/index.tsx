@@ -1,6 +1,4 @@
 import { Icon } from '@lms/assets'
-import LayoutTeacher from '@components/layout/Teacher'
-import TabHeaderItem from '@components/tab/TabHeaderItem'
 import Certificate from '@components/teacher/my-profile/Certificate'
 import ChangePassword from '@components/teacher/my-profile/ChangePassword'
 import DeviceList from '@components/teacher/my-profile/DeviceInformation/DeviceList'
@@ -9,15 +7,17 @@ import MyProfile from '@components/teacher/my-profile/MyProfile'
 import ProfileHeader from '@components/teacher/my-profile/ProfileHeader'
 import MyPasword from '@components/teacher/my-profile/Security/MyPasword'
 import Settings from '@components/teacher/my-profile/Settings'
-import { RequestProvider } from '@contexts/RequestContext'
 import { Tabs } from 'antd'
 import { StaticImageData } from 'next/image'
 import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
-import { PageLink } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from '@lms/contexts'
+import { RequestProvider, UserType } from '@lms/contexts'
 import { ITabs } from '@lms/core'
+import { PageLink } from 'src/constants/routers'
+import { LayoutTeacher, TabHeaderItem } from '@lms/ui'
+import { CoursesAPI } from '@pages/api/courses'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 
 const breadcrumbs: ITabs[] = [
   {
@@ -129,6 +129,7 @@ const MyProfilePage = () => {
         title="My Profile"
         breadcrumbs={breadcrumbs}
         className="bg-[#F2F4F7] p-0"
+        courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}
       >
         <div className="h-fit w-full rounded-2xl bg-transparent md:bg-white md:p-6 md:shadow-card lg:px-10 lg:py-8">
           <div className="relative">

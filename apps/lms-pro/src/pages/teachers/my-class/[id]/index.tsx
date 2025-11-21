@@ -1,8 +1,6 @@
-import LayoutTeacher from '@components/layout/Teacher'
 import { useRouter } from 'next/router'
-import { ClassCard } from '@lms/ui'
 import { ITabs, NumberToDayOfWeekMap } from '@lms/core'
-import { ANIMATION, DATE_FORMAT_HM, DATE_FORMAT_YMD, PageLink } from '@lms/core'
+import { ANIMATION, DATE_FORMAT_HM, DATE_FORMAT_YMD } from '@lms/core'
 import { useQuery } from 'react-query'
 import { TeacherAPI } from 'src/pages/api/teacher/index'
 import { useEffect, useState } from 'react'
@@ -18,6 +16,10 @@ import dayjs from 'dayjs'
 import { Space } from 'antd'
 import { capitalize } from 'lodash'
 import { ClassStandardScheduleItem } from 'src/type/teachers/request-schedule.interface'
+import { PageLink } from 'src/constants/routers'
+import { LayoutTeacher, ClassCard } from '@lms/ui'
+import { CoursesAPI } from '@pages/api/courses'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 
 const breadcrumbs: ITabs[] = [
   {
@@ -154,6 +156,7 @@ const ClassDetail = () => {
       title="Class Detail"
       breadcrumbs={breadcrumbs}
       className="bg-[#F2F4F7] p-0"
+      courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}
     >
       <div className="mb-6 h-fit w-full rounded-xl bg-white px-8 pt-8">
         <ClassCard

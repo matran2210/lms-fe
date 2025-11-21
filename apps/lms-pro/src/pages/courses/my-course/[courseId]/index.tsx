@@ -24,6 +24,7 @@ import {
   SearchWithMenuToggle,
 } from '@lms/ui'
 import { CoursesAPI } from '@pages/api/courses'
+import { NotificationAPI } from '@pages/api/notification'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -250,6 +251,7 @@ const CourseDetail = () => {
       handleToggleSidebar={handleCloseSidebar}
       pageLink={PageLink}
       api={CoursesAPI}
+      notificationApi={NotificationAPI}
       menuItems={MENU_ITEMS}
       menuItemsEvent={MENU_ITEMS_EVENT}
       menuBottom={MENU_BOTTOM}

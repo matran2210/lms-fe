@@ -15,6 +15,7 @@ import {
   MENU_ITEMS,
   MENU_ITEMS_EVENT,
 } from 'src/constants/menu-items'
+import { NotificationAPI } from '@pages/api/notification'
 
 const TableEntranceResult = () => {
   const router = useRouter()
@@ -104,6 +105,7 @@ const TableEntranceResult = () => {
         menuItemsEvent={MENU_ITEMS_EVENT}
         menuBottom={MENU_BOTTOM}
         api={CoursesAPI}
+        notificationApi={NotificationAPI}
       >
         <div className="">
           {modalResult?.questions?.data?.length > 0 && (

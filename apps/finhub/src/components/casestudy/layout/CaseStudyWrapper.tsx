@@ -1,10 +1,10 @@
 import { NextIcon, PreviousIcon } from '@assets/icons'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import { CloseIconV2 } from '@components/icons'
 import { Layout } from 'antd'
 import clsx from 'clsx'
 import React, { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import Head from 'next/head'
+import { ButtonSecondary } from '@lms/ui'
+import { CloseIconV2 } from '@lms/assets'
 const { Header, Content, Footer } = Layout
 
 interface IProps {

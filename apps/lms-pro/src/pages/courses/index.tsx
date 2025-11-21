@@ -34,6 +34,7 @@ import {
 } from 'src/constants/menu-items'
 import { PopupStep, PopupWelcome } from '@lms/feature-user'
 import TourGuideCourseTab from 'src/assets/lotties/tour-guide-course-tab.json'
+import { NotificationAPI } from '@pages/api/notification'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -234,6 +235,7 @@ const MyCourse = () => {
         className="relative"
         pageLink={PageLink}
         api={CoursesAPI}
+        notificationApi={NotificationAPI}
         menuItems={MENU_ITEMS}
         menuItemsEvent={MENU_ITEMS_EVENT}
         menuBottom={MENU_BOTTOM}

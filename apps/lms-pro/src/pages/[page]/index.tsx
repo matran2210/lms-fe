@@ -52,6 +52,7 @@ import UserApi from 'src/redux/services/User/user'
 import { UserType, useAppDispatch, useAppSelector, getLogoutUser, getLoginHistory, userReducer, useCourseContext } from '@lms/contexts'
 import { PageLink } from 'src/constants/routers'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
+import { NotificationAPI } from '@pages/api/notification'
 
 interface IFullScreenMobile {
   open: boolean
@@ -351,6 +352,7 @@ const ProfilePage = () => {
       fullWidth={isMobileView}
       pageLink={PageLink}
       api={CoursesAPI}
+      notificationApi={NotificationAPI}
       menuItems={MENU_ITEMS}
       menuBottom={MENU_BOTTOM}
       menuItemsEvent={MENU_ITEMS_EVENT}

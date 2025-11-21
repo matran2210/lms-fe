@@ -1,21 +1,20 @@
 import { CloseIcon } from '@assets/icons'
-import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/PinnedNotificationsV2'
-import { useGetDataQuery } from '@utils/index'
+import { useGetDataQuery } from '@lms/utils'
 import QuizResult from 'entrance-test-result-package'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { ANIMATION } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { UserType } from '@lms/contexts'
 import { PageLink } from 'src/constants/routers'
-import { Layout } from '@lms/ui'
+import { Layout, PinnedNotificationsV2, SappLoadingGlobal } from '@lms/ui'
 import {
   MENU_BOTTOM,
   MENU_ITEMS,
   MENU_ITEMS_EVENT,
 } from 'src/constants/menu-items'
+import { NotificationAPI } from '@pages/api/notification'
 
 const TestEntranceResult = () => {
   const router = useRouter()
@@ -59,6 +58,7 @@ const TestEntranceResult = () => {
           menuItemsEvent={MENU_ITEMS_EVENT}
           menuBottom={MENU_BOTTOM}
           api={CoursesAPI}
+          notificationApi={NotificationAPI}
         >
           <div className="relative mt-4 md:mt-12" data-aos={ANIMATION.DATA_AOS}>
             {chartData && (

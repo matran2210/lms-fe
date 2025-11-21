@@ -24,6 +24,7 @@ import {
   MENU_ITEMS,
   MENU_ITEMS_EVENT,
 } from 'src/constants/menu-items'
+import { NotificationAPI } from '@pages/api/notification'
 
 const ExamInformation = () => {
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =
@@ -245,6 +246,7 @@ const ExamInformation = () => {
       menuItemsEvent={MENU_ITEMS_EVENT}
       menuBottom={MENU_BOTTOM}
       api={CoursesAPI}
+      notificationApi={NotificationAPI}
     >
       <div className="mb-4 mt-4 md:mb-0">
         <HeaderMobile

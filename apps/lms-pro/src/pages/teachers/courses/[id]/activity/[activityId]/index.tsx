@@ -31,6 +31,9 @@ import {
 import { showPopupCompletedCourse } from '@lms/contexts'
 import { PageLink } from 'src/constants/routers'
 import { QuestionAPI } from '@pages/api/question'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
+import { ActivityAPI } from '@pages/api/activity'
+import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -486,7 +489,7 @@ const ActivityTeacherPage = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <LayoutTeacher title="Activity" breadcrumbs={breadcrumbsData} isActivity>
+      <LayoutTeacher title="Activity" breadcrumbs={breadcrumbsData} isActivity courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}>
         <div className={`mx-auto my-0 max-w-xxl text-bw-1`}>
           {/* Notes */}
           <>
@@ -498,6 +501,7 @@ const ActivityTeacherPage = () => {
                   uuid={e?.uuid}
                   count={index}
                   key={e?.uuid}
+                  courseApi={CoursesAPI}
                 />
               )
             })}
@@ -692,6 +696,7 @@ const ActivityTeacherPage = () => {
                                 'AFTER_EACH_QUESTION'
                               }
                               class_user_id={activity?.class_user_id}
+                              questionApi={QuestionAPI} courseApi={CoursesAPI} uploadAPI={UploadAPI}
                             ></VideoDocument>
                           </div>
                         )
@@ -932,7 +937,7 @@ const ActivityTeacherPage = () => {
           </div>
           <div></div>
           <div className="mt-6 shadow-activity" data-aos={ANIMATION.DATA_AOS}>
-            <Discussion class_id={(router.query.id as string) || ''} />
+            <Discussion class_id={(router.query.id as string) || ''} activityApi={ActivityAPI} courseApi={CoursesAPI} courseActivityApi={CourseActivityApi} />
           </div>
 
           {/* Sratchpad */}

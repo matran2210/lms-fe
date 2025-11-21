@@ -38,6 +38,7 @@ import {
   MENU_ITEMS,
   MENU_ITEMS_EVENT,
 } from 'src/constants/menu-items'
+import { NotificationAPI } from '@pages/api/notification'
 
 interface IProps {
   course_section_type: string
@@ -556,6 +557,7 @@ const CoursePartDetail = () => {
       menuItemsEvent={MENU_ITEMS_EVENT}
       menuBottom={MENU_BOTTOM}
       api={CoursesAPI}
+      notificationApi={NotificationAPI}
     >
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
         <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">

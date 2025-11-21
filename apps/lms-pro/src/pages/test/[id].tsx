@@ -109,6 +109,7 @@ import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 import eventTest from '@pages/event-test'
 import { EventTestAPI } from '@pages/api/event-test'
+import { NotificationAPI } from '@pages/api/notification'
 declare global {
   interface Window {
     userAgreed: any
@@ -870,6 +871,7 @@ const TestDetail = () => {
                       handleChange={handleEssayChange}
                       explainClassname="!mt-8 !p-0 !bg-transparent"
                       storageKey={storageKey}
+                      uploadApi={UploadAPI}
                     />
                   )}
                 </>
@@ -1158,6 +1160,7 @@ const TestDetail = () => {
                 showRequiment={showListRequirement}
                 handleChange={handleEssayChange}
                 storageKey={storageKey}
+                uploadApi={UploadAPI}
               />
             )}
           </>
@@ -2744,6 +2747,7 @@ const TestDetail = () => {
                     currentTabContent,
                     essayData,
                   }}
+                  uploadApi={UploadAPI}
                 />
               </div>
             )}
@@ -2994,6 +2998,7 @@ const TestDetail = () => {
       showSidebar={false}
       fullWidth
       api={CoursesAPI}
+      notificationApi={NotificationAPI}
       pageLink={PageLink}
       menuItems={MENU_ITEMS}
       menuItemsEvent={MENU_ITEMS_EVENT}
