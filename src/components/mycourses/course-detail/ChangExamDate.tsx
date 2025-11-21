@@ -99,13 +99,15 @@ const ChangExamDate = ({
           name="note"
           control={control}
           render={({ field, fieldState }) => (
-            <div>
+            <div className="relative">
               <UploadSingleFileV2
                 fileList={field.value || []}
                 {...getUploadProps(field.onChange)}
               />
               {fieldState.error && (
-                <ErrorMessage>{fieldState.error.message}</ErrorMessage>
+                <ErrorMessage className="absolute -bottom-5">
+                  {fieldState.error.message}
+                </ErrorMessage>
               )}
             </div>
           )}
