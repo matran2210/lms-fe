@@ -1,17 +1,16 @@
 import { ExaminationInfo, LearningResource } from "@lms/feature-courses";
 import { PopupStep } from "@lms/feature-user";
-import { ICoursesAPI, MenuItem, UserGuide } from "@lms/core";
+import { ICoursesAPI, INotificationAPI, MenuItem, UserGuide } from "@lms/core";
 import { trackGAEvent } from "@lms/utils";
 import clsx from "clsx";
 import { Dispatch, SetStateAction } from "react";
-import { useAppSelector } from "src/redux/hook";
+import { useAppSelector } from "@lms/contexts";
 import ExpandIcon from "../ExpandIcon";
 import MenuItemsList from "../MenuItemsList";
 import TourGuideSidebar from "src/assets/lotties/tour-guide-sidebar.json";
 import { Divider } from "antd";
 import { useRouter } from "next/router";
 import TourGuideNoti from "src/assets/lotties/tour-guide-noti.json";
-import { PageLink } from "src/constants/routers";
 type SidebarProps = {
   isOpened: boolean;
   className: string;
@@ -21,6 +20,7 @@ type SidebarProps = {
   openExaminationInfo: boolean;
   setOpenExaminationInfo: Dispatch<SetStateAction<boolean>>;
   api: ICoursesAPI;
+  notificationApi: INotificationAPI
   pageLink: {
     [key: string]: string;
   };
@@ -38,6 +38,7 @@ export default function Sidebar({
   openExaminationInfo,
   setOpenExaminationInfo,
   api,
+  notificationApi,
   pageLink,
   menuItems,
   menuItemsEvent,
@@ -109,6 +110,9 @@ export default function Sidebar({
             setOpenResource={setOpenResource}
             closeSideBar={closeSideBar}
             setOpenExaminationInfo={setOpenExaminationInfo}
+            notificationApi={notificationApi}
+            pageLink={pageLink}
+
           />
           {guideStatus && guideStep == 2 && (
             <PopupStep
@@ -135,6 +139,8 @@ export default function Sidebar({
             setOpenResource={setOpenResource}
             closeSideBar={closeSideBar}
             setOpenExaminationInfo={setOpenExaminationInfo}
+            notificationApi={notificationApi}
+            pageLink={pageLink}
           />
           {guideStatus && guideStep == 3 && (
             <PopupStep
@@ -171,7 +177,7 @@ export default function Sidebar({
         open={openResource}
         setOpenResource={setOpenResource}
         api={api}
-        pageLink={PageLink}
+        pageLink={pageLink}
       />
       <ExaminationInfo
         open={openExaminationInfo}

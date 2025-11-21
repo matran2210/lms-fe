@@ -1,11 +1,11 @@
 import { useCourseContext, usePinnedNotifyContext } from "@lms/contexts";
-import { ICoursesAPI, MenuItem } from "@lms/core";
+import { ICoursesAPI, INotificationAPI, MenuItem } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import clsx from "clsx";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactElement, ReactNode, useState } from "react";
-import { useAppSelector } from "src/redux/hook";
+import { useAppSelector } from "@lms/contexts";
 import Sidebar from "./Sidebar";
 interface LayoutProps {
   children: ReactNode;
@@ -17,6 +17,7 @@ interface LayoutProps {
   className?: string;
   childClassName?: string;
   api: ICoursesAPI;
+  notificationApi: INotificationAPI;
   pageLink: {
     [key: string]: string;
   };
@@ -37,6 +38,7 @@ export default function Layout(props: LayoutProps): ReactElement {
     className,
     childClassName,
     api,
+    notificationApi,
     pageLink,
     menuItems,
     menuItemsEvent,
@@ -117,6 +119,7 @@ export default function Layout(props: LayoutProps): ReactElement {
           openExaminationInfo={openExaminationInfo}
           setOpenExaminationInfo={setOpenExaminationInfo}
           api={api}
+          notificationApi={notificationApi}
         />
 
         <div

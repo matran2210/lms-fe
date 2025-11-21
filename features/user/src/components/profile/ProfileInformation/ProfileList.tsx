@@ -1,17 +1,13 @@
-import React, { useState } from 'react'
-import { useAppSelector } from 'src/redux/hook'
-import { userReducer } from 'src/redux/slice/User/User'
-import ProfileItem from './ProfileItem'
-import { getMe, makeContactDefault } from 'src/redux/slice/User/User'
-import { useAppDispatch } from 'src/redux/hook'
-import ProfileCard from '@components/card/ProfileCard'
-import { SappDrawerV2 } from '@lms/ui'
-import { Icon } from '@lms/assets'
-import { Divider, Select, Switch } from 'antd'
-import { IUserContact } from 'src/redux/types/User/urser'
-import { CollapseArrowIcon } from '@assets/icons'
-import clsx from 'clsx'
+import { CollapseArrowIcon, Icon } from '@lms/assets'
+import { getMe, IUserAPI, IUserContact, makeContactDefault, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
 import { useTailwindBreakpoint } from '@lms/hooks'
+import { SappDrawerV2 } from '@lms/ui'
+import { Divider, Select, Switch } from 'antd'
+import clsx from 'clsx'
+import { useState } from 'react'
+import ProfileItem from './ProfileItem'
+import ProfileCard from '../ProfileCard'
+import { IAuthAPI } from '@lms/core'
 interface ProfileOptionItem {
   label: string
   value: string
@@ -24,8 +20,10 @@ interface ProfileOptionItem {
 }
 interface IProps {
   isEdit: boolean
+  authApi: IAuthAPI
+  userApi: IUserAPI
 }
-const ProfileList = ({ isEdit }: IProps) => {
+const ProfileList = ({ isEdit, authApi, userApi }: IProps) => {
   const { user } = useAppSelector(userReducer)
   const dispatch = useAppDispatch()
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
@@ -44,11 +42,11 @@ const ProfileList = ({ isEdit }: IProps) => {
   const submitMakeDefault = async () => {
     try {
       if (makeDefaultDrawer?.id) {
-        await dispatch(makeContactDefault(makeDefaultDrawer.id))
+        await dispatch(makeContactDefault({ id: makeDefaultDrawer.id, api: authApi }))
           .unwrap()
           .then(async (e) => {
             setMakeDefaultDrawer(undefined)
-            await dispatch(getMe())
+            await dispatch(getMe(userApi))
           })
       }
     } catch (error) {}

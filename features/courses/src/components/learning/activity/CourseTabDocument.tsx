@@ -9,6 +9,8 @@ import {
   EAttemptStatus,
   GradingPreference,
   IActivity,
+  IActivityAPI,
+  ICourseActivityAPI,
   ICoursesAPI,
   IFocusQuiz,
   IQuestionAPI,
@@ -46,6 +48,8 @@ interface IProps {
   uploadApi: IUploadAPI;
   questionApi: IQuestionAPI;
   courseApi: ICoursesAPI;
+  activityApi: IActivityAPI
+  courseActivityApi: ICourseActivityAPI
   submitQuizTest: (id: string, data: any, class_user_id?: string | undefined) => Promise<any>
   pageLink: { [key: string]: string}
 }
@@ -65,6 +69,8 @@ const CourseTabDocument = ({
   uploadApi,
   questionApi,
   courseApi,
+  activityApi,
+  courseActivityApi,
   submitQuizTest,
   pageLink
 }: IProps) => {
@@ -312,6 +318,9 @@ const CourseTabDocument = ({
                               handleSetCurrentVideoCallback={
                                 handleSetCurrentVideo
                               }
+                              uploadAPI={uploadApi}
+                              questionApi={questionApi}
+                              courseApi={courseApi}
                             ></VideoDocument>
                           </div>
                         )
@@ -357,7 +366,7 @@ const CourseTabDocument = ({
           hidden: !focusOnlyDiscussion,
         })}
       >
-        <Discussion class_id={(router.query.id as string) || ''} />
+        <Discussion class_id={(router.query.id as string) || ''} activityApi={activityApi} courseApi={courseApi} courseActivityApi={courseActivityApi} />
       </div>
       {selector?.tabs && selector?.tabs?.length > 1 && (
         <div

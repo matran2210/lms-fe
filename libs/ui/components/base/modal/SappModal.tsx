@@ -6,11 +6,10 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { useAppDispatch } from 'src/redux/hook'
-import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
+import { useAppDispatch, confirmDialog } from '@lms/contexts'
 import { IButtonColors } from '@lms/core'
 import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
-import { CloseIcon } from '@assets/icons'
+import { CloseIcon } from '@lms/assets'
 
 interface IProps {
   open?: boolean

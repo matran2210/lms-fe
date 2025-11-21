@@ -6,7 +6,7 @@ import {
 import { ChangePasswordReq, SendEmailReq, VerifyOtpReq } from "../../state/redux/types/Login/login";
 import { IResponse } from "./api-response";
 import { IQuestion } from "./course";
-import { IAnswerQuizLastestAttempt, IScoreDetails } from "./quiz";
+import { IAnswerQuizLastestAttempt, IQuizResultList, IScoreDetails } from "./quiz";
 
 export interface IAuthManager {
   getToken(): string;
@@ -19,6 +19,11 @@ export interface IEventTestAPI {
 }
 export interface IEntranceTestAPI {
   getEntranceCount: () => Promise<any>;
+  getListUnivers: () => Promise<any>;
+  getListUniversProgram: () => Promise<any>;
+  getListMajors: () => Promise<any>;
+  getListEngLevel: () => Promise<any>;
+  putLevel: (data: any) => Promise<any>;
 }
 
 export interface ICaseStudyAPI {
@@ -79,14 +84,26 @@ export interface ICoursesAPI {
     params?: Object,
   ) => Promise<any>;
   deleteCourseNoteList: (id: string) => Promise<any>;
+  getDiscussionStudentInfo: (
+    course_section_id: string,
+    class_id: string,
+    user_id: string,
+  ) => Promise<any>;
+  createNote: (params: Object) => Promise<any>;
+  updateCourseNotesList: (id: string | undefined, params?: Object) => Promise<any>;
 }
 export interface IActivityAPI {
   createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<any>;
   reactDiscussion: (data: ICreateDiscussionResReact) => Promise<any>;
   getQuizAttemptsAnswer: (id: string) => Promise<any>;
+  updateDiscussionComment: (
+    id: string | undefined,
+    params?: Object,
+  ) => Promise<any>;
+  deleteDiscussion: (id: string) => Promise<any>;
 }
 
-export interface ICourseActivityApi {
+export interface ICourseActivityAPI {
   uploadImagesDiscussion: ({
     discussion_id,
     new_discussion_file,
@@ -136,4 +153,12 @@ export interface IUploadAPI {
         file_key: string;
     }[];
 }) => Promise<void>
+}
+
+export interface IClassAPI {
+  getAllResultOfQuiz: (
+    id: string,
+    quiz_id: string,
+    params?: { page_index: number; page_size: number },
+  ) => Promise<IResponse<IQuizResultList>>;
 }

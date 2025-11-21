@@ -1,22 +1,22 @@
-import ExpandIcon from '@components/layout/ExpandIcon'
 import {
+  IAuthManager,
   MYPROFILE_TREE,
   PROFILE_PAGES,
   SECURITY_TREE,
 } from '@lms/core'
 import { trackGAEvent } from '@lms/utils'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { ANIMATION } from '@lms/core'
-import { useAppDispatch } from 'src/redux/hook'
 import { IProfilePages } from '@lms/core'
+import ExpandIcon from '@lms/ui/layout/ExpandIcon'
 
 interface IProps {
   page: IProfilePages
   className?: string
   children?: React.ReactNode
+  authManager: IAuthManager
 }
 
 interface ChildWithLabel {
@@ -74,8 +74,7 @@ type Child =
   | ChildWithCMA
   | ChildWithCFA
 
-const ProfileSideBar = ({ page, children }: IProps) => {
-  const dispatch = useAppDispatch()
+const ProfileSideBar = ({ page, children, authManager }: IProps) => {
   const router = useRouter()
 
   const getLabelFromChild = (child: Child): string => {
@@ -103,8 +102,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
 
   const handleLogout = async () => {
     try {
-      const authenticationManager = new AuthenticationManager()
-      await authenticationManager.logout()
+      await authManager.logout()
     } catch (error) {}
   }
 

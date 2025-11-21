@@ -13,15 +13,15 @@ import {
   useState,
 } from 'react'
 import toast from 'react-hot-toast'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import {
   getMe,
   getUserInformation,
   updateUser,
   updateUserAvatar,
-  userReducer,
-} from 'src/redux/slice/User/User'
+  userReducer,useAppDispatch, useAppSelector,getLogoutUser,
+  IUserAPI
+} from '@lms/contexts'
+import { IAuthManager } from '@lms/core'
 interface IProps {
   isEdit: boolean
   avatar: File | undefined
@@ -32,6 +32,9 @@ interface IProps {
     SetStateAction<string | StaticImageData | undefined>
   >
   setIsEdit: (edit: boolean) => void
+  userApi: IUserAPI
+  authManager: IAuthManager
+  
 }
 const ProfileHeader = ({
   isEdit,
@@ -41,6 +44,8 @@ const ProfileHeader = ({
   reViewImageSrc,
   setReViewImageSrc,
   setIsEdit,
+  userApi,
+  authManager
 }: IProps) => {
   const dispatch = useAppDispatch()
   // Sử dụng hook useAppSelector để lấy dữ liệu từ state redux
@@ -137,9 +142,9 @@ const ProfileHeader = ({
       // Nếu không có avatar và người dùng có avatar hiện tại
       if (!avatar && user?.detail?.avatar) {
         // Gọi hành động thunk updateUser để cập nhật tên và avatar của người dùng
-        await dispatch(updateUser({ full_name, avatar: null })).unwrap()
+        await dispatch(updateUser({ full_name, avatar: null, api: userApi })).unwrap()
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
-        dispatch(getMe())
+        dispatch(getMe(userApi))
         // Đặt trạng thái isEdit thành false
         setIsEdit(false)
         setIsEditAvatar(false)
@@ -149,12 +154,12 @@ const ProfileHeader = ({
       // Nếu có avatar
       if (avatar) {
         // Gọi hành động thunk updateUserAvatar để cập nhật avatar của người dùng
-        await dispatch(updateUserAvatar(avatar)).unwrap()
+        await dispatch(updateUserAvatar({api: userApi, avatar})).unwrap()
         // Đặt lại giá trị của avatar
         setAvatar(undefined)
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
       }
-      dispatch(getMe())
+      dispatch(getMe(userApi))
       // Đặt trạng thái isEdit thành false
       setIsEdit(false)
       setIsEditAvatar(false)
@@ -163,12 +168,12 @@ const ProfileHeader = ({
       setIsEditAvatar(false)
       setReViewImageSrc(undefined)
       if (error?.response?.data?.error?.code === '403|1002') {
-        await dispatch(getLogoutUser())
+        await dispatch(getLogoutUser({ authManager }))
       }
     }
   }
   useEffect(() => {
-    dispatch(getUserInformation())
+    dispatch(getUserInformation(userApi))
   }, [])
 
   return (
