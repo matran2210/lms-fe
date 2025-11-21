@@ -11,6 +11,11 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import { UserType } from 'src/redux/types/User/urser'
 import { PageLink } from 'src/constants/routers'
 import { Layout } from '@lms/ui'
+import {
+  MENU_BOTTOM,
+  MENU_ITEMS,
+  MENU_ITEMS_EVENT,
+} from 'src/constants/menu-items'
 
 const TestEntranceResult = () => {
   const router = useRouter()
@@ -45,8 +50,16 @@ const TestEntranceResult = () => {
         >
           <CloseIcon className="h-4.5 w-4.5 transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary md:h-6 md:w-6" />
         </div>
-        <Layout size="xl" title="Entrance Test Detail" showSidebar={false} pageLink={PageLink}
-          api={CoursesAPI}>
+        <Layout
+          size="xl"
+          title="Entrance Test Detail"
+          showSidebar={false}
+          pageLink={PageLink}
+          menuItems={MENU_ITEMS}
+          menuItemsEvent={MENU_ITEMS_EVENT}
+          menuBottom={MENU_BOTTOM}
+          api={CoursesAPI}
+        >
           <div className="relative mt-4 md:mt-12" data-aos={ANIMATION.DATA_AOS}>
             {chartData && (
               <QuizResult

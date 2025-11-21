@@ -21,7 +21,11 @@ import clsx from 'clsx'
 import { Layout } from '@lms/ui'
 import { PageLink } from 'src/constants/routers'
 import { CoursesAPI } from '@pages/api/courses'
-
+import {
+  MENU_BOTTOM,
+  MENU_ITEMS,
+  MENU_ITEMS_EVENT,
+} from 'src/constants/menu-items'
 
 const Page = () => {
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =
@@ -130,6 +134,9 @@ const Page = () => {
       childClassName="h-full"
       pageLink={PageLink}
       api={CoursesAPI}
+      menuItems={MENU_ITEMS}
+      menuItemsEvent={MENU_ITEMS_EVENT}
+      menuBottom={MENU_BOTTOM}
     >
       <div
         className="mx-auto my-0 h-full max-w-[1644px]"

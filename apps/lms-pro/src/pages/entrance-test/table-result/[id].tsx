@@ -7,9 +7,14 @@ import { useEffect, useState } from 'react'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { CoursesAPI } from '../../api/courses/index'
-import {FullScreenLayout, Layout} from '@lms/ui'
+import { FullScreenLayout, Layout } from '@lms/ui'
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import { PageLink } from 'src/constants/routers'
+import {
+  MENU_BOTTOM,
+  MENU_ITEMS,
+  MENU_ITEMS_EVENT,
+} from 'src/constants/menu-items'
 
 const TableEntranceResult = () => {
   const router = useRouter()
@@ -90,8 +95,16 @@ const TableEntranceResult = () => {
           <CloseModalIcon />
         </div>
       </div>
-      <Layout fullWidth title="Entrance Test Result" showSidebar={false} pageLink={PageLink}
-            api={CoursesAPI}>
+      <Layout
+        fullWidth
+        title="Entrance Test Result"
+        showSidebar={false}
+        pageLink={PageLink}
+        menuItems={MENU_ITEMS}
+        menuItemsEvent={MENU_ITEMS_EVENT}
+        menuBottom={MENU_BOTTOM}
+        api={CoursesAPI}
+      >
         <div className="">
           {modalResult?.questions?.data?.length > 0 && (
             <QuizResultComponent

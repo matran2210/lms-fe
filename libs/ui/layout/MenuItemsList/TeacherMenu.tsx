@@ -1,80 +1,80 @@
-import { useEffect, useMemo, useState, useCallback, Fragment } from 'react'
-import { Layout, Menu, Tooltip } from 'antd'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
+import blankAvatar from "@assets/images/blank_avatar.webp";
+import { useCourseContext } from "@lms/contexts";
+import { ICoursesAPI, TitleSidebar, TitleTeacherSidebar } from "@lms/core";
+import { LearningResource } from "@lms/feature-courses";
+import { AuthenticationManager } from "@utils/helpers/keycloak";
+import { Layout, Menu, Tooltip } from "antd";
+import clsx from "clsx";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import {
-  HomeMenuIcon,
+  BellIcon,
   BookMenuIcon,
   FileMenuIcon,
-  BellIcon,
   HelpMenuIcon,
+  HomeMenuIcon,
   LogOutMenuIcon,
   MyCalendarMenuIcon,
   MyCourseTeacherIcon,
-} from 'src/assets/icons'
-import blankAvatar from '@assets/images/blank_avatar.webp'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
-import { useAppSelector, useAppDispatch } from 'src/redux/hook'
-import { userReducer } from 'src/redux/slice/User/User'
-import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
-import { ICoursesAPI, TitleSidebar, TitleTeacherSidebar } from '@lms/core'
-import {ExpandIcon} from '@lms/ui'
-import {LearningResource} from '@lms/feature-courses'
-import { v4 as uuidv4 } from 'uuid'
-import { openCalculator } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
-import { IUser } from 'src/redux/types/User/urser'
-import { useCourseContext } from '@contexts/index'
-import clsx from 'clsx'
-import { PageLink } from 'src/constants/routers'
-const { Sider } = Layout
+} from "src/assets/icons";
+import { PageLink } from "src/constants/routers";
+import { useAppDispatch, useAppSelector } from "src/redux/hook";
+import { openCalculator } from "src/redux/slice/Course/MyCourse/Activity/Activity";
+import { activeNotesList, pushNotes } from "src/redux/slice/Course/NotesList";
+import { userReducer } from "src/redux/slice/User/User";
+import { IUser } from "src/redux/types/User/urser";
+import { v4 as uuidv4 } from "uuid";
+import ExpandIcon from "../ExpandIcon";
+const { Sider } = Layout;
 
 export default function TeacherMenu({
   isCourseDetail,
   isActivity,
-  api
+  api,
 }: {
-  isCourseDetail: boolean
-  isActivity: boolean
-  api: ICoursesAPI
+  isCourseDetail: boolean;
+  isActivity: boolean;
+  api: ICoursesAPI;
 }) {
-  const dispatch = useAppDispatch()
-  const router = useRouter()
-  const { user } = useAppSelector(userReducer)
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const { user } = useAppSelector(userReducer);
 
-  const [selectedKey, setSelectedKey] = useState('Home')
-  const [openResource, setOpenResource] = useState(false)
-  const { showPinnedTrial } = useCourseContext()
+  const [selectedKey, setSelectedKey] = useState("Home");
+  const [openResource, setOpenResource] = useState(false);
+  const { showPinnedTrial } = useCourseContext();
   const isCurrent = useCallback(
     (path: string | string[]) =>
       Array.isArray(path)
         ? path.includes(router.pathname)
         : router.pathname === path,
     [router.pathname],
-  )
+  );
 
   const handleLogout = useCallback(async () => {
     try {
-      await new AuthenticationManager().logout()
+      await new AuthenticationManager().logout();
     } catch {}
-  }, [])
+  }, []);
 
   const actionHandlers: Record<string, () => void> = {
     [TitleSidebar.NOTES_LIST]: () => {
-      dispatch(activeNotesList())
-      document.body.style.overflow = 'hidden'
+      dispatch(activeNotesList());
+      document.body.style.overflow = "hidden";
     },
     [TitleSidebar.RESOURCES]: () => {
-      setOpenResource(true)
-      document.body.style.overflow = 'hidden'
+      setOpenResource(true);
+      document.body.style.overflow = "hidden";
     },
     [TitleSidebar.NEW_NOTE]: () => {
       dispatch(
-        pushNotes({ uuid: uuidv4(), id: '', name: 'Note', description: '' }),
-      )
+        pushNotes({ uuid: uuidv4(), id: "", name: "Note", description: "" }),
+      );
     },
     [TitleSidebar.CALCULATOR]: () => dispatch(openCalculator()),
-  }
+  };
 
   const getMenuItems = useCallback(() => {
     if (isCourseDetail || isActivity) {
@@ -98,7 +98,7 @@ export default function TeacherMenu({
           icon: (
             <BookMenuIcon selected={selectedKey === TitleSidebar.NOTES_LIST} />
           ),
-          link: '#',
+          link: "#",
           active: selectedKey === TitleSidebar.NOTES_LIST,
         },
         {
@@ -107,7 +107,7 @@ export default function TeacherMenu({
           icon: (
             <FileMenuIcon selected={selectedKey === TitleSidebar.RESOURCES} />
           ),
-          link: '#',
+          link: "#",
           active: selectedKey === TitleSidebar.RESOURCES,
         },
         {
@@ -120,10 +120,10 @@ export default function TeacherMenu({
           ),
           link: `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query.id || router.query.courseId}/results`,
           active: isCurrent(
-            `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query?.id ? '[id]' : '[courseId]'}/results`,
+            `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query?.id ? "[id]" : "[courseId]"}/results`,
           ),
         },
-      ]
+      ];
 
       if (isActivity) {
         baseItems.push(
@@ -135,7 +135,7 @@ export default function TeacherMenu({
                 selected={selectedKey === TitleSidebar.NEW_NOTE}
               />
             ),
-            link: '#',
+            link: "#",
             active: selectedKey === TitleSidebar.NEW_NOTE,
           },
           {
@@ -144,33 +144,33 @@ export default function TeacherMenu({
             icon: (
               <BellIcon selected={selectedKey === TitleSidebar.CALCULATOR} />
             ),
-            link: '#',
+            link: "#",
             active: selectedKey === TitleSidebar.CALCULATOR,
           },
-        )
+        );
       }
-      return baseItems
+      return baseItems;
     }
 
     return [
       {
-        key: 'Home',
+        key: "Home",
         title: TitleTeacherSidebar.DASHBOARD,
-        icon: <HomeMenuIcon selected={selectedKey === 'Home'} />,
+        icon: <HomeMenuIcon selected={selectedKey === "Home"} />,
         link: PageLink.TEACHERS,
         active: isCurrent(PageLink.TEACHERS),
       },
       {
-        key: 'MyCourse',
+        key: "MyCourse",
         title: TitleSidebar.COURSES,
-        icon: <MyCourseTeacherIcon selected={selectedKey === 'MyCourse'} />,
+        icon: <MyCourseTeacherIcon selected={selectedKey === "MyCourse"} />,
         link: PageLink.TEACHER_MY_COURSE,
         active: isCurrent(PageLink.TEACHER_MY_COURSE),
       },
       {
-        key: 'Book',
+        key: "Book",
         title: TitleTeacherSidebar.MYCLASS,
-        icon: <BookMenuIcon selected={selectedKey === 'Book'} />,
+        icon: <BookMenuIcon selected={selectedKey === "Book"} />,
         link: PageLink.TEACHER_MY_CLASS,
         active: isCurrent([
           PageLink.TEACHER_MY_CLASS,
@@ -179,49 +179,49 @@ export default function TeacherMenu({
         ]),
       },
       {
-        key: 'MyCalendar',
+        key: "MyCalendar",
         title: TitleTeacherSidebar.MYCALENDAR,
-        icon: <MyCalendarMenuIcon selected={selectedKey === 'MyCalendar'} />,
+        icon: <MyCalendarMenuIcon selected={selectedKey === "MyCalendar"} />,
         link: PageLink.MY_CALENDAR,
         active: isCurrent(PageLink.MY_CALENDAR),
       },
       {
-        key: 'File',
+        key: "File",
         title: TitleTeacherSidebar.MYREQUEST,
-        icon: <FileMenuIcon selected={selectedKey === 'File'} />,
+        icon: <FileMenuIcon selected={selectedKey === "File"} />,
         link: PageLink.TEACHER_MY_REQUEST,
         active: isCurrent(PageLink.TEACHER_MY_REQUEST),
       },
       {
-        key: 'Bell',
+        key: "Bell",
         title: TitleTeacherSidebar.NOTIFICATIONS,
-        icon: <BellIcon selected={selectedKey === 'Bell'} />,
+        icon: <BellIcon selected={selectedKey === "Bell"} />,
         link: PageLink.TEACHERS,
         active: isCurrent(PageLink.TEACHERS),
       },
-    ]
-  }, [isCourseDetail, isActivity, selectedKey, router.query, isCurrent])
+    ];
+  }, [isCourseDetail, isActivity, selectedKey, router.query, isCurrent]);
 
-  const menuItems = useMemo(() => getMenuItems(), [getMenuItems])
+  const menuItems = useMemo(() => getMenuItems(), [getMenuItems]);
 
   useEffect(() => {
     setSelectedKey((prevKey) => {
-      if (prevKey === 'Home' || prevKey === '') {
-        return menuItems.find((item) => item.active)?.key ?? 'Home'
+      if (prevKey === "Home" || prevKey === "") {
+        return menuItems.find((item) => item.active)?.key ?? "Home";
       }
-      return prevKey
-    })
-  }, [menuItems])
+      return prevKey;
+    });
+  }, [menuItems]);
 
   const handleMenuClick = ({ key }: { key: string }) => {
     if (actionHandlers[key]) {
-      actionHandlers[key]()
+      actionHandlers[key]();
     } else {
-      const target = menuItems.find((item) => item.key === key)
-      if (target?.link) router.push(target.link)
+      const target = menuItems.find((item) => item.key === key);
+      if (target?.link) router.push(target.link);
     }
-    if (key !== selectedKey) setSelectedKey(key)
-  }
+    if (key !== selectedKey) setSelectedKey(key);
+  };
 
   return (
     <Fragment>
@@ -229,8 +229,8 @@ export default function TeacherMenu({
         width={80}
         collapsed
         className={clsx(
-          'bg-blue-2 fixed bottom-0 left-0 top-0 flex h-screen flex-col items-center',
-          showPinnedTrial && 'pt-[54px]',
+          "bg-blue-2 fixed bottom-0 left-0 top-0 flex h-screen flex-col items-center",
+          showPinnedTrial && "pt-[54px]",
         )}
       >
         <div className="flex h-full flex-col justify-between">
@@ -242,9 +242,14 @@ export default function TeacherMenu({
           <BottomActionMenu user={user} onLogout={handleLogout} />
         </div>
       </Sider>
-      <LearningResource open={openResource} setOpenResource={setOpenResource} api={api} />
+      <LearningResource
+        open={openResource}
+        setOpenResource={setOpenResource}
+        api={api}
+        pageLink={PageLink}
+      />
     </Fragment>
-  )
+  );
 }
 
 const SidebarMenu = ({
@@ -253,14 +258,14 @@ const SidebarMenu = ({
   onClick,
 }: {
   items: {
-    key: string
-    title: string
-    icon: React.ReactNode
-    link: string
-    active: boolean
-  }[]
-  selectedKey: string
-  onClick: (key: { key: string }) => void
+    key: string;
+    title: string;
+    icon: React.ReactNode;
+    link: string;
+    active: boolean;
+  }[];
+  selectedKey: string;
+  onClick: (key: { key: string }) => void;
 }) => (
   <div className="flex flex-col items-center">
     <div className="mb-8 mt-6 h-10 w-10 cursor-pointer">
@@ -289,22 +294,22 @@ const SidebarMenu = ({
       ))}
     </Menu>
   </div>
-)
+);
 
 const BottomActionMenu = ({
   user,
   onLogout,
 }: {
-  user: IUser
-  onLogout: () => void
+  user: IUser;
+  onLogout: () => void;
 }) => (
   <div className="mb-6 flex flex-col items-center gap-6">
     <Link href={PageLink.TEACHER_MY_PROFILE}>
       <Image
         alt="avatar"
         src={
-          user?.detail?.avatar['32x32'] ||
-          user?.detail?.avatar['ORIGIN'] ||
+          user?.detail?.avatar["32x32"] ||
+          user?.detail?.avatar["ORIGIN"] ||
           blankAvatar
         }
         width={32}
@@ -319,4 +324,4 @@ const BottomActionMenu = ({
       <LogOutMenuIcon />
     </div>
   </div>
-)
+);

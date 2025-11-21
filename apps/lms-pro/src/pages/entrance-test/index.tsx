@@ -20,6 +20,11 @@ import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInAp
 import { Layout } from '@lms/ui'
 import { PageLink } from 'src/constants/routers'
 import { CoursesAPI } from '@pages/api/courses'
+import {
+  MENU_BOTTOM,
+  MENU_ITEMS,
+  MENU_ITEMS_EVENT,
+} from 'src/constants/menu-items'
 
 const EntranceTest = () => {
   const router = useRouter()
@@ -78,6 +83,9 @@ const EntranceTest = () => {
         handleToggleSidebar={handleCloseSidebar}
         pageLink={PageLink}
         api={CoursesAPI}
+        menuItems={MENU_ITEMS}
+        menuItemsEvent={MENU_ITEMS_EVENT}
+        menuBottom={MENU_BOTTOM}
       >
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}

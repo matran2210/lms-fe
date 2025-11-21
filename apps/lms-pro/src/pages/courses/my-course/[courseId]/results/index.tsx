@@ -14,6 +14,11 @@ import { FilterCourseIcon } from 'src/assets/icons'
 import { useState } from 'react'
 import { IOpenChooseItem } from '@lms/core'
 import { PageLink } from 'src/constants/routers'
+import {
+  MENU_BOTTOM,
+  MENU_ITEMS,
+  MENU_ITEMS_EVENT,
+} from 'src/constants/menu-items'
 
 const Results = () => {
   const router = useRouter()
@@ -65,8 +70,15 @@ const Results = () => {
   const courseNameDetail = courseData?.courseDetail?.data?.name
 
   return (
-    <Layout title={TEST_AND_QUIZ_TITLE} showSidebar={isAlwaysShowSidebar} pageLink={PageLink}
-          api={CoursesAPI}>
+    <Layout
+      title={TEST_AND_QUIZ_TITLE}
+      showSidebar={isAlwaysShowSidebar}
+      pageLink={PageLink}
+      menuItems={MENU_ITEMS}
+      menuItemsEvent={MENU_ITEMS_EVENT}
+      menuBottom={MENU_BOTTOM}
+      api={CoursesAPI}
+    >
       {isAlwaysShowSidebar && (
         <div className="mb-2 mt-4 flex w-full">
           <SappBreadCrumbs
@@ -104,7 +116,11 @@ const Results = () => {
           )
         }
       />
-      <ResultsTable openFilter={openFilter} setOpenFilter={setOpenFilter} api={CoursesAPI} />
+      <ResultsTable
+        openFilter={openFilter}
+        setOpenFilter={setOpenFilter}
+        api={CoursesAPI}
+      />
     </Layout>
   )
 }

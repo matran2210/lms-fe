@@ -2,7 +2,12 @@ import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInAp
 import PopupStep from '@components/user-guide/PopupStep'
 import PopupWelcome from '@components/user-guide/PopupWelcome'
 import { useCourseContext } from '@contexts/index'
-import { ANIMATION, defaultStatusCourse, ICoursesAPI, UserGuide } from '@lms/core'
+import {
+  ANIMATION,
+  defaultStatusCourse,
+  ICoursesAPI,
+  UserGuide,
+} from '@lms/core'
 import { CoursesList, FilterCourse, Heading } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
@@ -20,6 +25,11 @@ import { active, clearGuideState } from 'src/redux/slice/Course/UserGuide'
 import { UserType } from 'src/redux/types/User/urser'
 import { CoursesAPI } from '../api/courses'
 import { PageLink } from 'src/constants/routers'
+import {
+  MENU_BOTTOM,
+  MENU_ITEMS,
+  MENU_ITEMS_EVENT,
+} from 'src/constants/menu-items'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -220,6 +230,9 @@ const MyCourse = () => {
         className="relative"
         pageLink={PageLink}
         api={CoursesAPI}
+        menuItems={MENU_ITEMS}
+        menuItemsEvent={MENU_ITEMS_EVENT}
+        menuBottom={MENU_BOTTOM}
       >
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}

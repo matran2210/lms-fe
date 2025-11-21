@@ -5,7 +5,7 @@ export { default as ChangePassword } from "./ChangePassword";
 export * from "./DeviceInformation";
 export { default as ExamInfoActionCell } from "./ExamInformation/ExamInfoActionCell";
 export * from "./LoginHistory/index";
-export * from "./MyProfile";
+export { default as MyProfile } from "./MyProfile";
 export { default as OverviewItemCard } from "./Overview/OverviewItemCard";
 export { default as PasswordProfile } from "./PasswordProfile";
 export * from "./popupCertificate/index";

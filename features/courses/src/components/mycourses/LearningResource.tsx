@@ -18,7 +18,6 @@ import getConfig from "next/config";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { PageLink } from "src/constants/routes";
 import { CoursesAPI } from "src/pages/api/courses";
 import { UploadAPI } from "src/pages/api/upload";
 import { ListFilterMobile, ListItemFilterMobile } from "../course";
@@ -29,19 +28,22 @@ interface IProps {
   open: boolean;
   setOpenResource: Dispatch<SetStateAction<boolean>>;
   api: ICoursesAPI;
+  pageLink: {
+    [key: string]: string;
+  };
 }
 
 const DEFAULT_PAGE_INDEX = 1;
 const DEFAULT_PAGESIZE = 20;
 
-const LearningResource = ({ open, setOpenResource, api }: IProps) => {
+const LearningResource = ({ open, setOpenResource, api, pageLink }: IProps) => {
   const { isMobileView, isTabletView, isAlwaysShowSidebar } =
     useTailwindBreakpoint();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [resources, setResources] = useState<IResourceDetail>();
   const router = useRouter();
   //Tạo các biến để lấy id trên thanh url
-  const isCourseDetail = PageLink.COURSE_DETAIL === router.pathname;
+  const isCourseDetail = pageLink.COURSE_DETAIL === router.pathname;
   const isCoursePartDetail = router.pathname.includes("/section");
   const isActivityDetail = router.pathname.includes("/activity");
   const courseId = router.query?.courseId;

@@ -4,6 +4,7 @@ export { default as ChangeAnywayModal } from "./ChangeAnywayModal";
 export { default as CourseParts } from "./CourseParts";
 export { default as CourseResult } from "./CourseResult";
 export { default as ExaminationInfo } from "./ExaminationInfo";
+export * from "./ExaminationInfo";
 export { default as ModalCongrats } from "./ModalCongrats";
 export { default as Part } from "./Part";
 export { default as PartFailed } from "./PartFailed";

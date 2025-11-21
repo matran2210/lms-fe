@@ -1,53 +1,60 @@
-import Certificate from '@components/profile/Certificate'
-import ChangePassword from '@components/profile/ChangePassword'
-import LoginHistoryList from '@components/profile/LoginHistory/LoginHistoryList'
-import ProfileHeader from '@components/profile/ProfileHeader'
-import Settings from '@components/profile/Settings'
-import TabHeaderItem from '@components/tab/TabHeaderItem'
+import { CollapseArrowIcon } from '@assets/icons'
 import { Icon } from '@lms/assets'
+import { useCourseContext } from '@lms/contexts'
 import {
   ANIMATION,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   IDeviceItem,
-  ITabs, NOTIFICATION_STATUS,
+  ITabs,
+  NOTIFICATION_STATUS,
   ProfilePages,
 } from '@lms/core'
-import { Layout } from '@lms/ui'
-import { Collapse, CollapseProps, Divider, Tabs } from 'antd'
-import Image, { StaticImageData } from 'next/image'
-import { useEffect, useRef, useState } from 'react'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
-
+import {
+  Certificate,
+  ChangePassword,
+  DeviceList,
+  LoginHistoryList,
+  MyPasword,
+  MyProfile,
+  OverviewItemCard,
+  ProfileHeader,
+  ProfileList,
+  Settings,
+  SubjectList,
+} from '@lms/feature-user'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import {
+  Footer,
+  FullScreenMobile,
+  HeaderMobile,
+  Layout,
+  SearchWithMenuToggle,
+  TabHeaderItem,
+} from '@lms/ui'
 import {
   convertSlugToTitle,
   getLocalStorageItem,
   removeLocalStorageItem,
 } from '@lms/utils'
-
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-
-import { CollapseArrowIcon } from '@assets/icons'
-import Footer from '@components/layout/Footer'
-import HeaderMobile from '@components/layout/Header/HeaderMobile'
-import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
-import DeviceList from '@components/profile/DeviceInformation/DeviceList'
-import FullScreenMobile from '@components/profile/Modal/FullScreenMobile'
-import MyProfile from '@components/profile/MyProfile'
-import OverviewItemCard from '@components/profile/Overview/OverviewItemCard'
-import ProfileList from '@components/profile/ProfileInformation/ProfileList'
-import MyPasword from '@components/profile/Security/MyPasword'
-import SubjectList from '@components/profile/SubjectInformation/SubjectList'
-import { useCourseContext } from '@contexts/index'
-import { useTailwindBreakpoint } from '@lms/hooks'
+import { CoursesAPI } from '@pages/api/courses'
+import { Collapse, CollapseProps, Divider, Tabs } from 'antd'
 import clsx from 'clsx'
+import Image, { StaticImageData } from 'next/image'
 import { useRouter } from 'next/router'
+import { useEffect, useRef, useState } from 'react'
+import {
+  MENU_BOTTOM,
+  MENU_ITEMS,
+  MENU_ITEMS_EVENT,
+} from 'src/constants/menu-items'
+import { PageLink } from 'src/constants/routers'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import UserApi from 'src/redux/services/User/user'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import { getLoginHistory, userReducer } from 'src/redux/slice/User/User'
-import { PageLink } from 'src/constants/routers'
-import { CoursesAPI } from '@pages/api/courses'
+import { UserType } from 'src/redux/types/User/urser'
 
 interface IFullScreenMobile {
   open: boolean
@@ -346,6 +353,9 @@ const ProfilePage = () => {
       fullWidth={isMobileView}
       pageLink={PageLink}
       api={CoursesAPI}
+      menuItems={MENU_ITEMS}
+      menuBottom={MENU_BOTTOM}
+      menuItemsEvent={MENU_ITEMS_EVENT}
     >
       <div className="mt-2 flex h-full w-full flex-col px-4 md:mt-0 md:px-0">
         <SearchWithMenuToggle

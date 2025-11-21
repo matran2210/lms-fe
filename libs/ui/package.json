@@ -18,7 +18,8 @@
     "@lms/feature-courses": "workspace:*",
     "@lms/contexts": "workspace:*",
     "@lms/feature-auth": "workspace:*",
-    "@lms/feature-test": "workspace:*"
+    "@lms/feature-test": "workspace:*",
+    "@lms/feature-user": "workspace:*"
   },
   "peerDependencies": {
     "react": "*",

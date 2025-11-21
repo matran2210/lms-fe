@@ -1,13 +1,13 @@
-import { Dispatch, SetStateAction } from 'react'
-import { MenuItem as MenuItemType } from '../../../constants/menu-items'
-import MenuItem from '../MenuItem'
+import { Dispatch, SetStateAction } from "react";
+import { MenuItem as MenuItemType } from "@lms/core";
+import MenuItem from "../MenuItem";
 
 type MenuItemsListProps = {
-  options: MenuItemType[]
-  setOpenResource?: Dispatch<SetStateAction<boolean>>
-  closeSideBar: () => void
-  setOpenExaminationInfo?: Dispatch<SetStateAction<boolean>>
-}
+  options: MenuItemType[];
+  setOpenResource?: Dispatch<SetStateAction<boolean>>;
+  closeSideBar: () => void;
+  setOpenExaminationInfo?: Dispatch<SetStateAction<boolean>>;
+};
 
 export default function MenuItemsList({
   options,
@@ -27,5 +27,5 @@ export default function MenuItemsList({
         />
       ))}
     </div>
-  )
+  );
 }

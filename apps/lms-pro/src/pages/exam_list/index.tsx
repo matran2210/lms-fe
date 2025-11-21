@@ -1,5 +1,5 @@
 import { ColumnsType } from 'antd/es/table'
-import {Layout, SappTable} from '@lms/ui'
+import { Layout, SappTable } from '@lms/ui'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { TitleSidebar } from '@lms/core'
 import { UserApi } from '@pages/api/user'
@@ -13,14 +13,17 @@ import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { getDuration } from '@lms/utils'
 import { ActionCellV2 } from '@lms/ui'
 import { PencilV2Icon } from '@assets/icons'
-// import {
-//   ExaminationInfo, InfoItemProps,
-// } from '@lms/feature-courses' lỗi monorepo đừng xóa
-import {HeaderMobile} from '@lms/ui'
+import { ExaminationInfo, InfoItemProps } from '@lms/feature-courses'
+import { HeaderMobile } from '@lms/ui'
 import { useRouter } from 'next/router'
 import { CoursesAPI } from '@pages/api/courses'
 import { PageLink } from 'src/constants/routers'
-import ExaminationInfo, { InfoItemProps } from '@lms/feature-courses/src/components/mycourses/course-detail/ExaminationInfo'
+
+import {
+  MENU_BOTTOM,
+  MENU_ITEMS,
+  MENU_ITEMS_EVENT,
+} from 'src/constants/menu-items'
 
 const ExamInformation = () => {
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =
@@ -234,8 +237,15 @@ const ExamInformation = () => {
     )
   }
   return (
-    <Layout title={TitleSidebar.EXAM_LIST} showSidebar={isAlwaysShowSidebar} pageLink={PageLink}
-          api={CoursesAPI}>
+    <Layout
+      title={TitleSidebar.EXAM_LIST}
+      showSidebar={isAlwaysShowSidebar}
+      pageLink={PageLink}
+      menuItems={MENU_ITEMS}
+      menuItemsEvent={MENU_ITEMS_EVENT}
+      menuBottom={MENU_BOTTOM}
+      api={CoursesAPI}
+    >
       <div className="mb-4 mt-4 md:mb-0">
         <HeaderMobile
           title={TitleSidebar.EXAM_LIST}

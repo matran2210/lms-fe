@@ -7,9 +7,14 @@ import {
   HourglassIcon,
   ResourceIcon,
   ScratchPadIconV2,
-  TimeLineIcon
+  TimeLineIcon,
 } from '@lms/assets'
-import { CreateNote, Discussion, LearningResource, PopupLockContent } from '@lms/feature-courses'
+import {
+  CreateNote,
+  Discussion,
+  LearningResource,
+  PopupLockContent,
+} from '@lms/feature-courses'
 import {
   Calculator,
   EditorReader,
@@ -21,9 +26,9 @@ import {
 import { convertMinutesToHourFormat } from '@lms/utils'
 
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
-import { Triangle } from '@lms/assets';
 import { useCourseContext } from '@contexts/index'
 import { usePreviousSectionRoute } from '@contexts/PreviousSectionRouteContext'
+import { Triangle } from '@lms/assets'
 import { showPopupCompletedCourse } from '@lms/contexts'
 import {
   ANIMATION,
@@ -31,23 +36,51 @@ import {
   EXHIBIT_TEXT_REPLACE,
   IActivity,
   IFocusQuiz,
-  IQuestionAPI,
   ITabs,
   IVideo,
   PROGRAM,
   VideoStateClicked,
 } from '@lms/core'
-import { ActivityPagination, ActivityResource, ActivityResourceMobile, CardMenuItem, CourseTabDocument, LearningOutcome, VideoTimelineMobile, } from '@lms/feature-courses'
+import {
+  ActivityPagination,
+  ActivityResource,
+  ActivityResourceMobile,
+  CardMenuItem,
+  CourseTabDocument,
+  LearningOutcome,
+  VideoTimelineMobile,
+} from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { AssistiveTouch, BackToTop, BottomMenu, CtaTrial, HeaderMobile, SappBreadCrumbs, SappLoadingGlobal } from '@lms/ui'
+import {
+  AssistiveTouch,
+  BackToTop,
+  BottomMenu,
+  CtaTrial,
+  HeaderMobile,
+  SappBreadCrumbs,
+  SappLoadingGlobal,
+} from '@lms/ui'
+import ExpandIcon from '@lms/ui/layout/ExpandIcon'
+import { QuestionAPI } from '@pages/api/question'
+import { UploadAPI } from '@pages/api/upload'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
+import {
+  MENU_BOTTOM,
+  MENU_ITEMS,
+  MENU_ITEMS_EVENT,
+} from 'src/constants/menu-items'
+import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { CoursesAPI, getActivityById, submitQuizTest } from 'src/pages/api/courses'
+import {
+  CoursesAPI,
+  getActivityById,
+  submitQuizTest,
+} from 'src/pages/api/courses'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   closeCalculator,
@@ -63,10 +96,6 @@ import {
 } from 'src/redux/slice/Course/NotesList'
 import { UserType } from 'src/redux/types/User/urser'
 import { v4 as uuidv4 } from 'uuid'
-import ExpandIcon from '@lms/ui/layout/ExpandIcon'
-import { PageLink } from 'src/constants/routers'
-import { UploadAPI } from '@pages/api/upload'
-import { QuestionAPI } from '@pages/api/question'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -518,6 +547,9 @@ const ActivityPage = () => {
         childClassName={focusOnlyDiscussion ? 'h-full' : ''}
         api={CoursesAPI}
         pageLink={PageLink}
+        menuItems={MENU_ITEMS}
+        menuItemsEvent={MENU_ITEMS_EVENT}
+        menuBottom={MENU_BOTTOM}
       >
         <div
           className={clsx(
@@ -658,8 +690,8 @@ const ActivityPage = () => {
                 handleSetCurrentVideo,
                 focusOnlyDiscussion,
               }}
-              uploadApi={UploadAPI} 
-              questionApi={QuestionAPI} 
+              uploadApi={UploadAPI}
+              questionApi={QuestionAPI}
               courseApi={CoursesAPI}
               submitQuizTest={submitQuizTest}
               pageLink={PageLink}
@@ -870,7 +902,12 @@ const ActivityPage = () => {
         />
       </Layout>
 
-      <LearningResource open={openResource} setOpenResource={setOpenResource} api={CoursesAPI} />
+      <LearningResource
+        open={openResource}
+        setOpenResource={setOpenResource}
+        api={CoursesAPI}
+        pageLink={PageLink}
+      />
 
       {openVideoTimeline && (
         <VideoTimelineMobile

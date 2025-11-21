@@ -8,7 +8,7 @@ import {
   ResourceIcon,
   ChapterIcon,
 } from '@assets/icons'
-import {Layout} from '@lms/ui'
+import { Layout } from '@lms/ui'
 import { useCourseContext } from '@contexts/index'
 import { buildQueryString, formatDate } from '@lms/utils'
 import { Alert, Skeleton } from 'antd'
@@ -38,6 +38,11 @@ import {
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
 import { PageLink } from 'src/constants/routers'
+import {
+  MENU_BOTTOM,
+  MENU_ITEMS,
+  MENU_ITEMS_EVENT,
+} from 'src/constants/menu-items'
 
 interface IProps {
   course_section_type: string
@@ -548,8 +553,15 @@ const CoursePartDetail = () => {
     }
   }, [isLoading, loadingChapter])
   return (
-    <Layout title="Course Part Detail" showSidebar={isAlwaysShowSidebar} pageLink={PageLink}
-      api={CoursesAPI}>
+    <Layout
+      title="Course Part Detail"
+      showSidebar={isAlwaysShowSidebar}
+      pageLink={PageLink}
+      menuItems={MENU_ITEMS}
+      menuItemsEvent={MENU_ITEMS_EVENT}
+      menuBottom={MENU_BOTTOM}
+      api={CoursesAPI}
+    >
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
         <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
           <Alert

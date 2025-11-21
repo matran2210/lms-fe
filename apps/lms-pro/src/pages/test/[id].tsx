@@ -10,9 +10,9 @@ import {
   ResizeIcon,
   ScratchPadIconV2,
   ShowLessIcon,
-  ShowMoreIcon
+  ShowMoreIcon,
 } from '@assets/icons'
-import { CourseProvider, useCourseContext } from '@contexts/index'
+import { CourseProvider, useCourseContext } from '@lms/contexts'
 import {
   DISPLAY_TYPE,
   EXHIBIT_TEXT_REPLACE,
@@ -23,23 +23,24 @@ import {
   RESPONSE_OPTION,
   TEST_TYPE,
 } from '@lms/core'
-import {UnSubmitAnswerModal,ConFirmSubmit } from '@lms/feature-test'
+import { ConFirmSubmit, UnSubmitAnswerModal } from '@lms/feature-test'
 import QuitTestModal from '@lms/feature-test/src/components/test/modal/quit-test-modal'
 import TestTimeOutModal from '@lms/feature-test/src/components/test/modal/test-timeout'
-import { BackToTop, FilterRadioGroup, Layout, Popover, SappLoading, useClickOutside } from '@lms/ui'
+import {
+  BackToTop,
+  FilterRadioGroup,
+  Layout,
+  Popover,
+  SappLoading,
+  useClickOutside,
+} from '@lms/ui'
 import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
 import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
 import NewFilltext from '@lms/ui/components/questionType/NewFillText'
 import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
-import {
-  cloneDeep,
-  debounce,
-  isEmpty,
-  isUndefined,
-  uniqueId
-} from 'lodash'
+import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -55,17 +56,31 @@ import { showPopupCompletedCourse } from '@lms/contexts'
 import {
   Answer,
   AnswerItem,
-  AnswerList, DEFAULT_EDITOR_VALUE, defaultSheetData, DragDropAnswerItem, GradingPreference, IDataQuestion, IQuestion, IRequirement, Requirement,
+  AnswerList,
+  DEFAULT_EDITOR_VALUE,
+  defaultSheetData,
+  DragDropAnswerItem,
+  GradingPreference,
+  IDataQuestion,
+  IQuestion,
+  IRequirement,
+  Requirement,
   RequirementItem,
   ScratchPad,
-  ScratchPadValue
+  ScratchPadValue,
 } from '@lms/core'
 import { ButtonContent } from '@lms/feature-courses'
 import { TabSlide } from '@lms/feature-test'
 import RequirementsTab from '@lms/feature-test/src/components/test/RequirementsTab'
 import ResetToAnswerTemplateModal from '@lms/feature-test/src/components/test/ResetToAnswerTemplateModal'
 import ShowAnswerTemplate from '@lms/feature-test/src/components/test/ShowAnswerTemplate'
-import { ButtonPrimary, ButtonSecondary, ButtonText, ButtonTextV2, HighlightableHTML } from '@lms/ui'
+import {
+  ButtonPrimary,
+  ButtonSecondary,
+  ButtonText,
+  ButtonTextV2,
+  HighlightableHTML,
+} from '@lms/ui'
 import MatchQuizComponent from '@lms/ui/components/questionType/MatchQuiz/MatchQuiz'
 import DragDropQuestion, {
   SlotValue,
@@ -77,6 +92,11 @@ import { UploadAPI } from '@pages/api/upload'
 import { TabsProps, Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
+import {
+  MENU_BOTTOM,
+  MENU_ITEMS,
+  MENU_ITEMS_EVENT,
+} from 'src/constants/menu-items'
 import { PageLink } from 'src/constants/routers'
 import {
   checkTypeAndRenderTitle,
@@ -89,6 +109,8 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
+import eventTest from '@pages/event-test'
+import { EventTestAPI } from '@pages/api/event-test'
 declare global {
   interface Window {
     userAgreed: any
@@ -2975,8 +2997,11 @@ const TestDetail = () => {
       fullWidth
       api={CoursesAPI}
       pageLink={PageLink}
+      menuItems={MENU_ITEMS}
+      menuItemsEvent={MENU_ITEMS_EVENT}
+      menuBottom={MENU_BOTTOM}
     >
-      <CourseProvider>
+      <CourseProvider router={router} api={{ get: EventTestAPI.get }}>
         <SappLoading
           className={loading || !currentTabContent?.id ? 'block' : 'hidden'}
         />
@@ -3646,13 +3671,13 @@ const TestDetail = () => {
                           className="cursor-pointer text-white"
                           onClick={() => {
                             UploadAPI.downloadFile({
-                                files: [
-                                  {
-                                    name: e?.resource?.name,
-                                    file_key: e?.resource?.file_key,
-                                  },
-                                ],
-                              });
+                              files: [
+                                {
+                                  name: e?.resource?.name,
+                                  file_key: e?.resource?.file_key,
+                                },
+                              ],
+                            })
                           }}
                         >
                           <DownloadIcon color="currentColor" />

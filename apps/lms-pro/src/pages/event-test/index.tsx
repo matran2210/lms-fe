@@ -20,6 +20,11 @@ import { useAppDispatch } from 'src/redux/hook'
 import { Layout } from '@lms/ui'
 import { PageLink } from 'src/constants/routers'
 import { CoursesAPI } from '@pages/api/courses'
+import {
+  MENU_BOTTOM,
+  MENU_ITEMS,
+  MENU_ITEMS_EVENT,
+} from 'src/constants/menu-items'
 
 const EventTest = () => {
   const router = useRouter()
@@ -72,6 +77,9 @@ const EventTest = () => {
         handleToggleSidebar={handleCloseSidebar}
         pageLink={PageLink}
         api={CoursesAPI}
+        menuItems={MENU_ITEMS}
+        menuItemsEvent={MENU_ITEMS_EVENT}
+        menuBottom={MENU_BOTTOM}
       >
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}

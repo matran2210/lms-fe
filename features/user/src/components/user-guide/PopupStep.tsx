@@ -1,56 +1,54 @@
-import { ButtonPrimary } from '@lms/ui'
-import { ButtonText } from '@lms/ui'
-import Lottie from 'lottie-react'
-import Image, { StaticImageData } from 'next/image'
-import { useRef } from 'react'
-import { useAppDispatch } from 'src/redux/hook'
-import { decrement, increment } from 'src/redux/slice/Course/UserGuide'
+import { decrement, increment, useAppDispatch } from "@lms/contexts";
+import { ButtonPrimary, ButtonText } from "@lms/ui";
+import Lottie from "lottie-react";
+import Image, { StaticImageData } from "next/image";
+import { useRef } from "react";
 
 type Props = {
-  content: string
-  index: number
-  total: number
-  className?: string
-  titleButtonNext?: string
-  title?: string
-  handleCancel?: () => void
-  imgSrc?: StaticImageData | object
-  imgType?: 'static' | 'animation'
-  isEnd?: boolean
-}
+  content: string;
+  index: number;
+  total: number;
+  className?: string;
+  titleButtonNext?: string;
+  title?: string;
+  handleCancel?: () => void;
+  imgSrc?: StaticImageData | object;
+  imgType?: "static" | "animation";
+  isEnd?: boolean;
+};
 
 const PopupStep = ({
   content,
   index,
   total,
-  className = 'top-0 left-0',
+  className = "top-0 left-0",
   titleButtonNext,
   handleCancel,
   title,
   imgSrc,
   isEnd,
-  imgType = 'animation',
+  imgType = "animation",
 }: Props) => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   const nextStep = () => {
-    dispatch(increment())
-  }
+    dispatch(increment());
+  };
 
   const previousStep = () => {
-    dispatch(decrement())
-  }
-  const confirmDialogRef = useRef<HTMLDivElement>(null)
+    dispatch(decrement());
+  };
+  const confirmDialogRef = useRef<HTMLDivElement>(null);
   const handleClose = () => {
     if (confirmDialogRef.current) {
-      confirmDialogRef.current.classList.add('animate-jump-out')
-      confirmDialogRef.current.classList.add('pointer-events-none')
+      confirmDialogRef.current.classList.add("animate-jump-out");
+      confirmDialogRef.current.classList.add("pointer-events-none");
     }
     // Remove hidden scroll when close user guide
-    document.body.style.removeProperty('padding-right')
-    document.body.classList.remove('overflow-hidden')
-    handleCancel && handleCancel()
-  }
+    document.body.style.removeProperty("padding-right");
+    document.body.classList.remove("overflow-hidden");
+    handleCancel && handleCancel();
+  };
 
   return (
     <>
@@ -60,10 +58,10 @@ const PopupStep = ({
       >
         <div>
           <div className={imgSrc && `mb-4`}>
-            {(imgType === 'static' && typeof imgSrc === 'string') ||
-            (typeof imgSrc === 'object' &&
+            {(imgType === "static" && typeof imgSrc === "string") ||
+            (typeof imgSrc === "object" &&
               imgSrc !== null &&
-              'src' in imgSrc) ? (
+              "src" in imgSrc) ? (
               <Image
                 src={imgSrc as StaticImageData}
                 alt={`Tour guide step ${index} - ${title}`}
@@ -72,7 +70,7 @@ const PopupStep = ({
               />
             ) : null}
 
-            {imgType === 'animation' && imgSrc && (
+            {imgType === "animation" && imgSrc && (
               <Lottie animationData={imgSrc} loop={true} />
             )}
           </div>
@@ -80,7 +78,7 @@ const PopupStep = ({
           <h6 className="mb-3 text-lg font-bold">{title}</h6>
           <span className="text-base font-normal">{content}</span>
           <div
-            className={`mt-3 flex items-center ${index === 1 ? 'justify-end' : 'justify-between'}`}
+            className={`mt-3 flex items-center ${index === 1 ? "justify-end" : "justify-between"}`}
           >
             {isEnd === true ? (
               <ButtonPrimary
@@ -99,7 +97,7 @@ const PopupStep = ({
                   />
                 )}
                 <ButtonPrimary
-                  title={titleButtonNext || 'Next'}
+                  title={titleButtonNext || "Next"}
                   className="ml-3 min-w-[84px]"
                   size="small"
                   onClick={index === total ? handleClose : nextStep}
@@ -112,7 +110,7 @@ const PopupStep = ({
               <div
                 key={i}
                 className={`aspect-square h-[6px] w-[6px] rounded-full ${
-                  i + 1 === index ? 'bg-primary' : 'bg-gray-300'
+                  i + 1 === index ? "bg-primary" : "bg-gray-300"
                 }`}
               />
             ))}
@@ -120,7 +118,7 @@ const PopupStep = ({
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default PopupStep
+export default PopupStep;

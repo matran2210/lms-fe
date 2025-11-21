@@ -1,14 +1,12 @@
-import { ModalMobile } from "@lms/ui";
-import { usePinnedNotifyContext } from "@contexts/PinnedNotifyContext";
-import { useCourseContext } from "@contexts/index";
+import { useCourseContext, usePinnedNotifyContext } from "@lms/contexts";
+import { ICoursesAPI, MenuItem } from "@lms/core";
+import { useTailwindBreakpoint } from "@lms/hooks";
 import clsx from "clsx";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactElement, ReactNode, useState } from "react";
-import { ICoursesAPI } from "@lms/core";
 import { useAppSelector } from "src/redux/hook";
 import Sidebar from "./Sidebar";
-import { useTailwindBreakpoint } from "@lms/hooks";
 interface LayoutProps {
   children: ReactNode;
   title: string;
@@ -18,10 +16,13 @@ interface LayoutProps {
   handleToggleSidebar?: () => void;
   className?: string;
   childClassName?: string;
-  api: ICoursesAPI
+  api: ICoursesAPI;
   pageLink: {
-    [key: string]: string
-  }
+    [key: string]: string;
+  };
+  menuItems: MenuItem[];
+  menuItemsEvent: MenuItem[];
+  menuBottom: MenuItem[];
 }
 
 // eslint-disable-next-line import/no-unused-modules
@@ -36,7 +37,10 @@ export default function Layout(props: LayoutProps): ReactElement {
     className,
     childClassName,
     api,
-    pageLink
+    pageLink,
+    menuItems,
+    menuItemsEvent,
+    menuBottom,
   } = props;
   const router = useRouter();
   const { isShowMenuContent } = useTailwindBreakpoint();
@@ -85,6 +89,10 @@ export default function Layout(props: LayoutProps): ReactElement {
         })}
       >
         <Sidebar
+          menuBottom={menuBottom}
+          menuItems={menuItems}
+          menuItemsEvent={menuItemsEvent}
+          pageLink={pageLink}
           isOpened={isOpenSidebar}
           toggleDrawer={toggleDrawer}
           className={clsx(

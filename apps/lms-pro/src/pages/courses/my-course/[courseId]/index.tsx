@@ -1,4 +1,3 @@
-import { CourseDetailSkeleton } from '@lms/ui'
 import PopupModalTest from '@components/survey/PopupModalTest'
 import { useCourseContext } from '@contexts/index'
 import {
@@ -16,6 +15,7 @@ import {
 } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
+  CourseDetailSkeleton,
   CtaTrial,
   HeaderMobile,
   Layout,
@@ -28,6 +28,11 @@ import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
+import {
+  MENU_BOTTOM,
+  MENU_ITEMS,
+  MENU_ITEMS_EVENT,
+} from 'src/constants/menu-items'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
@@ -246,6 +251,9 @@ const CourseDetail = () => {
       handleToggleSidebar={handleCloseSidebar}
       pageLink={PageLink}
       api={CoursesAPI}
+      menuItems={MENU_ITEMS}
+      menuItemsEvent={MENU_ITEMS_EVENT}
+      menuBottom={MENU_BOTTOM}
     >
       {isLoading ? (
         <CourseDetailSkeleton />

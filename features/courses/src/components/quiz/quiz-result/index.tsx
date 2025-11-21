@@ -5,10 +5,23 @@ import { useRouter } from "next/router";
 import { QuizResultComponent } from "quiz-result-package";
 import { IQuestionResultResponse } from "quiz-result-package/dist/type";
 import { useEffect, useState } from "react";
+import {
+  MENU_BOTTOM,
+  MENU_ITEMS,
+  MENU_ITEMS_EVENT,
+} from "src/constants/menu-items";
 
-const QuizResults = ({ isTeacher = false, api, pageLink }: { isTeacher?: boolean; api: ICoursesAPI; pageLink: {
-  [key: string]: string
-} }) => {
+const QuizResults = ({
+  isTeacher = false,
+  api,
+  pageLink,
+}: {
+  isTeacher?: boolean;
+  api: ICoursesAPI;
+  pageLink: {
+    [key: string]: string;
+  };
+}) => {
   const router = useRouter();
   const [activityInfo, setActivitiInfo] = useState<ActivityInfo | null>(null);
   const { id } = router.query;
@@ -99,6 +112,9 @@ const QuizResults = ({ isTeacher = false, api, pageLink }: { isTeacher?: boolean
           className="bg-gray-4"
           api={api}
           pageLink={pageLink}
+          menuItems={MENU_ITEMS}
+          menuItemsEvent={MENU_ITEMS_EVENT}
+          menuBottom={MENU_BOTTOM}
         >
           <div className="m-auto">
             {modalResult?.questions?.data?.length > 0 && (
