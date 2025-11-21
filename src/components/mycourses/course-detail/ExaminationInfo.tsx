@@ -104,11 +104,11 @@ const ExaminationInfo = ({
   const router = useRouter()
   const [direction, setDirection] = useState<1 | -1>(1)
   const [isOpenSelectExam, setIsOpenSelectExam] = useState<boolean>(false)
-  const [classId, setClassId] = useState(router.query.courseId as string)
+  const [classId, setClassId] = useState(router.query?.courseId as string)
+
   const { data, isLoading, isError, isSuccess, refetch } = useQuery({
     queryKey: [ClassKey.ExamInfo, classId],
     queryFn: () => ClassAPI.getExamInfo(classId),
-    refetchOnWindowFocus: false,
     select: (data) => data.data,
     retry: false,
     enabled: !!classId && open,

@@ -38,8 +38,11 @@ export class ClassAPI {
     })
   }
 
-  static getExamInfo(id: string): Promise<ExamInformation> {
-    return fetcher(`${apiURL}/classes/${id}/exam-info`, { method: 'GET' })
+  static getExamInfo(id?: string): Promise<ExamInformation> {
+    if (!id || id === 'undefined') {
+      return Promise.reject(new Error('Invalid classId'))
+    }
+    return fetcher(`${apiURL}/classes/${id}/exam-info`)
   }
 
   static sendMailRequestRegrading(
