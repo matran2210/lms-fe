@@ -2,7 +2,6 @@ import { IconMinusSquared, IconPlusSquared } from '@assets/icons'
 import { SAPPButtonV2 } from '@lms/ui'
 import { HookFormDateRangeV2 } from '@lms/ui'
 import { SAPPSelectV2 } from '@lms/ui'
-import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatField'
 import SappTeacherTextField from '@components/teacher/components/sapp-textfield/SappTeacherTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MyRequestAPI } from '@pages/api/my-request'
@@ -24,13 +23,11 @@ import { ANT_THEME_CONFIG, CONFIRM_CANCEL } from '@lms/core'
 import { REQUEST_STATUS, REQUEST_TYPE } from '@lms/core'
 import useSelectClassCode from 'src/hooks/useSelectClassCode'
 import useLesson from 'src/hooks/useSelectLesson'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
-import { getUserInformation, userReducer } from 'src/redux/slice/User/User'
-import { IResponse } from 'src/redux/types'
+import { IResponse, useAppDispatch, useAppSelector, confirmDialog, getUserInformation, userReducer } from '@lms/contexts'
 import { ISelect } from '@lms/core'
-import { IRequest } from '@lms/core'
-import { IRecurringSchedule, IWeeklyNorm } from 'src/type/my-request'
+import { IRecurringSchedule, IRequest, IWeeklyNorm } from 'src/type/my-request'
+import HookFormEventRepeat from '@lms/ui/components/event-repeat/HookFormEventRepeatField'
+import UserApi from 'src/redux/services/User/user'
 
 
 export interface IProps {
@@ -534,7 +531,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
   }, [params])
 
   useEffect(() => {
-    dispatch(getUserInformation())
+    dispatch(getUserInformation(UserApi))
   }, [])
 
   function selectStatusOption(option: string | undefined) {

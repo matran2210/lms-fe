@@ -1,23 +1,20 @@
-import { HeaderMobile, SappBreadCrumbs } from '@lms/ui'
-import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
-import { ANIMATION, COURSE_TYPE } from '@lms/core'
-import { Layout } from '@lms/ui'
+
+import {
+  ANIMATION, COURSE_TYPE, ICourseInfo, IMockTestResult,
+  ITopicProgress, IWeeklyReport
+} from '@lms/core'
 import CourseDashboard from '@components/dashboard/CourseDashboard'
 import ExamDashboard from '@components/dashboard/dashboard-exam/ExamDashboard'
+import { ContinueLearning } from '@lms/feature-dashboard'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { DashboardSkeleton, HeaderMobile, Layout, SappBreadCrumbs } from '@lms/ui'
+import { CoursesAPI } from '@pages/api/courses'
+import { DashboardAPI } from '@pages/api/dashboard'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import {
-  ICourseInfo,
-  IWeeklyReport,
-  IMockTestResult,
-  ITopicProgress,
-} from '@lms/core'
-import { ContinueLearning } from '@lms/feature-dashboard'
-import DashboardSkeleton from '@components/skeleton/DashboardSkeleton'
-import { DashboardAPI } from '@pages/api/dashboard'
-import { PageLink } from 'src/constants/routers'
 
 const Dashboard = () => {
   const router = useRouter()
@@ -154,7 +151,8 @@ const Dashboard = () => {
     }
   }, [infoCourse?.course_type, router?.query?.courseId])
   return (
-    <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar} size="xl">
+    <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar} size="xl" pageLink={PageLink}
+      api={CoursesAPI}>
       {isLoading ? (
         <DashboardSkeleton />
       ) : (

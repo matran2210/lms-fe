@@ -12,8 +12,7 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import {SappIcon} from '@lms/ui'
 import { CONFIRM_CANCEL } from '@lms/core'
-import { useAppDispatch } from 'src/redux/hook'
-import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
+import { confirmDialog, useAppDispatch } from '@lms/contexts'
 import {
   IContentCompleted,
   IDefaultFormAddProgress,

@@ -1,11 +1,7 @@
 import {Help} from '@lms/ui'
 import MKTInApp from '@components/MKTInApp'
 import Metadata from '@components/common/Metadata'
-import { CourseNoteProvider } from '@contexts/CourseNoteContext'
-import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
-import { PreviousSectionRouteProvider } from '@contexts/PreviousSectionRouteContext'
-import { SocketContext } from '@contexts/SocketContext'
-import { CourseProvider } from '@contexts/index'
+import { CourseNoteProvider, PinnedNotifyProvider, PreviousSectionRouteProvider, SocketContext, CourseProvider} from '@lms/contexts'
 import '@fortune-sheet/react/dist/index.css'
 import {
   ANIMATION, CERTIFICATE_DETAIL, ENTRANCE_TEST_RESULT,
@@ -38,18 +34,23 @@ import 'sapp-notification/dist/index.css'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import { io } from 'socket.io-client'
-import { useAppDispatch } from 'src/redux/hook'
-import { injectStore } from 'src/redux/services/httpService'
 import {
-  getCountUnRead,
-  showNotification,
-} from 'src/redux/slice/Notification/Notification'
+  store, wrapper ,  getCountUnRead,
+  showNotification,useAppDispatch } from '@lms/contexts'
+import { injectStore } from 'src/redux/services/httpService'
 import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
-import { store, wrapper } from '../redux/store'
 import { CoursesAPI } from './api/courses'
 import ErrorRedirectPage from './error-redirect'
+import UserApi from 'src/redux/services/User/user'
+import { EventTestAPI } from './api/event-test'
+import { NotificationAPI } from './api/notification'
+import utc from "dayjs/plugin/utc";
+import weekday from "dayjs/plugin/weekday";
+import dayjs from 'dayjs'
+dayjs.extend(utc);
+dayjs.extend(weekday);
 export const excludedPathsHelp = [
   '/test/[id]',
   '/case-study/[id]',
@@ -280,7 +281,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       ].includes(router.pathname)
     ) {
       try {
-        dispatch(getCountUnRead())
+        dispatch(getCountUnRead(NotificationAPI))
       } catch (error) {}
     }
   }, [])
@@ -311,12 +312,16 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       <main>
         <Metadata />
         <AntConfigProvider>
-          <PinnedNotifyProvider>
-            <CourseProvider>
-              <CourseNoteProvider>
+          <PinnedNotifyProvider router={router} api={{
+            getPinnedNotifications: UserApi.getPinnedNotifications,
+          }}>
+            <CourseProvider router={router} api={{
+              get: EventTestAPI.get
+            }}>
+              <CourseNoteProvider router={router} api={CoursesAPI}>
                 <QueryClientProvider client={queryClient}>
                   <SocketContext.Provider value={socket}>
-                    <PreviousSectionRouteProvider>
+                    <PreviousSectionRouteProvider router={router}>
                       <Toaster
                         toastOptions={{
                           style: {

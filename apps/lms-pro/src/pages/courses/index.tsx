@@ -19,6 +19,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { active, clearGuideState } from 'src/redux/slice/Course/UserGuide'
 import { UserType } from 'src/redux/types/User/urser'
 import { CoursesAPI } from '../api/courses'
+import { PageLink } from 'src/constants/routers'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -31,7 +32,7 @@ const defaultCategory = [
 type IProps = {
   api: ICoursesAPI
 }
-const MyCourse = ({ api }: IProps) => {
+const MyCourse = () => {
   const isEndGuide = Number(window.sessionStorage.getItem('totalCourse')) <= 0
   const {
     status: guideStatus,
@@ -217,7 +218,8 @@ const MyCourse = ({ api }: IProps) => {
         showSidebar={showSidebar || isAlwaysShowSidebar}
         handleToggleSidebar={handleCloseSidebar}
         className="relative"
-        api={api}
+        pageLink={PageLink}
+        api={CoursesAPI}
       >
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}

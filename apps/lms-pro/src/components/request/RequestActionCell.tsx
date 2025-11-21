@@ -1,5 +1,5 @@
 import { SAPPDropdown } from '@lms/ui'
-import { useRequestContext } from '@contexts/RequestContext'
+import { useRequestContext, useAppDispatch, confirmDialog } from '@lms/contexts'
 import { MyRequestAPI } from '@pages/api/my-request'
 import { RequestAPI } from '@pages/api/request'
 import Link from 'next/link'
@@ -11,8 +11,6 @@ import {
   E_REQUEST_STATUS,
   E_REQUEST_TYPE,
 } from '@lms/core'
-import { useAppDispatch } from 'src/redux/hook'
-import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { IRequest } from '@lms/core'
 
 interface Iprops {

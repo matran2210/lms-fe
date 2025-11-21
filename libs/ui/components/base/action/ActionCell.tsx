@@ -1,7 +1,7 @@
 import { Dispatch, ReactNode, SetStateAction, useRef } from "react";
-import { Icon } from "@lms/assets/icons";
 import useClickOutside from "../clickoutside/HookClick";
 import clsx from "clsx";
+import { Icon } from "@lms/assets";
 
 interface actionCellProps {
   children: ReactNode;

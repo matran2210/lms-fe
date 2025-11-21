@@ -1,15 +1,16 @@
 import { CloseIcon } from '@assets/icons'
-import Layout from '@components/layout'
 import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/PinnedNotificationsV2'
 import { useGetDataQuery } from '@utils/index'
 import QuizResult from 'entrance-test-result-package'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { ANIMATION, PageLink } from '@lms/core'
+import { ANIMATION } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { UserType } from 'src/redux/types/User/urser'
+import { PageLink } from 'src/constants/routers'
+import { Layout } from '@lms/ui'
 
 const TestEntranceResult = () => {
   const router = useRouter()
@@ -44,7 +45,8 @@ const TestEntranceResult = () => {
         >
           <CloseIcon className="h-4.5 w-4.5 transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary md:h-6 md:w-6" />
         </div>
-        <Layout size="xl" title="Entrance Test Detail" showSidebar={false}>
+        <Layout size="xl" title="Entrance Test Detail" showSidebar={false} pageLink={PageLink}
+          api={CoursesAPI}>
           <div className="relative mt-4 md:mt-12" data-aos={ANIMATION.DATA_AOS}>
             {chartData && (
               <QuizResult

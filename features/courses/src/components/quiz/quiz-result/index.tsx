@@ -98,6 +98,7 @@ const QuizResults = ({ isTeacher = false, api, pageLink }: { isTeacher?: boolean
           showSidebar={false}
           className="bg-gray-4"
           api={api}
+          pageLink={pageLink}
         >
           <div className="m-auto">
             {modalResult?.questions?.data?.length > 0 && (
