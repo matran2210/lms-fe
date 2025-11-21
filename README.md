@@ -25,17 +25,15 @@ Tài liệu này hướng dẫn quy trình làm việc chuẩn trong dự án **
 Dùng khi muốn thêm một dự án mới vào monorepo lần đầu.
 
 ```bash
-git subtree add --prefix=<đường_dẫn_trong_monorepo> <url_repo_con> <tên_nhánh> --squash
+git subtree add --prefix=<đường_dẫn_trong_monorepo> <url_repo_con> <tên_nhánh>
 ```
 
 **Ví dụ:**
 
 ```bash
 # Đứng tại thư mục gốc (lms-fe)
-git subtree add --prefix=apps/finhub https://github.com/user/finhub-repo.git main --squash
+git subtree add --prefix=apps/finhub https://github.com/user/finhub-repo.git main
 ```
-
-> **Lưu ý:** `--squash` rất quan trọng, nén toàn bộ lịch sử commit của repo con thành một commit duy nhất.
 
 ---
 
@@ -44,13 +42,13 @@ git subtree add --prefix=apps/finhub https://github.com/user/finhub-repo.git mai
 Dùng khi repo con có code mới và bạn muốn cập nhật vào monorepo.
 
 ```bash
-git subtree pull --prefix=<đường_dẫn_trong_monorepo> <url_repo_con> <tên_nhánh> --squash
+git subtree pull --prefix=<đường_dẫn_trong_monorepo> <url_repo_con> <tên_nhánh>
 ```
 
 **Ví dụ:**
 
 ```bash
-git subtree pull --prefix=apps/lms-pro https://github.com/user/lms-pro.git staging --squash
+git subtree pull --prefix=apps/lms-pro https://github.com/user/lms-pro.git staging
 ```
 
 ---
