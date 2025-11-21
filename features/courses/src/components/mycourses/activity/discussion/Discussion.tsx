@@ -1,4 +1,4 @@
-import { CameraIcon } from '@assets/icons'
+import { CameraIcon } from '@lms/assets'
 import blankAvatar from '@assets/images/blank_avatar.webp'
 import sappAvatar from '@assets/images/blank_avatar_notification.png'
 import { HookFormTextArea, NoData, SappButton, SappButtonIcon, SappModalImage } from '@lms/ui'
@@ -9,33 +9,34 @@ import { useRouter } from 'next/router'
 import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
+  useAppDispatch, useAppSelector,
   courseActivityReducer,
   createDiscussion,
   getDiscussion,
   reactDiscussion,
-  uploadImagesDiscussion,
-} from 'src/redux/slice/Course/MyCourse/Activity/Activity'
-import { userReducer } from 'src/redux/slice/User/User'
-import {
+  uploadImagesDiscussion,userReducer,
   ICreateDiscussionResReact,
   IDiscussion,
-} from 'src/redux/types/Course/MyCourse/Activity/activity'
+} from '@lms/contexts'
 import ActionDiscussion from './ActionDiscussion'
 import DiscussionElement from './DiscussionElement'
 import SendComment from './SendComment'
+import { IActivityAPI, ICourseActivityAPI, ICoursesAPI } from '@lms/core'
 
 
 type Props = {
   class_id: string
+  activityApi: IActivityAPI
+  courseApi: ICoursesAPI
+  courseActivityApi: ICourseActivityAPI
 }
 
 /**
  * Component chức năng đại diện cho phần discussion.
  * @param {Props} props - Props của component.
  */
-const Discussion = ({ class_id }: Props) => {
+const Discussion = ({ class_id, activityApi, courseApi, courseActivityApi }: Props) => {
   const router = useRouter()
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityReducer)
@@ -137,10 +138,13 @@ const Discussion = ({ class_id }: Props) => {
 
         await dispatch(
           createDiscussion({
-            course_section_id: router.query.activityId as string,
+            api: activityApi,
+            data: {
+              course_section_id: router.query.activityId as string,
             class_id: class_id,
             content: content?.trim(),
             parent_id,
+            }
           }),
         )
           .unwrap()
@@ -152,6 +156,7 @@ const Discussion = ({ class_id }: Props) => {
             ) {
               dispatch(
                 getDiscussion({
+                  api: courseApi,
                   id: class_id,
                   sectionId: router.query.activityId as string,
                 }),
@@ -161,16 +166,21 @@ const Discussion = ({ class_id }: Props) => {
 
             dispatch(
               uploadImagesDiscussion({
-                discussion_id: e?.id,
+                api: courseActivityApi,
+                data: {
+                   discussion_id: e?.id,
                 new_discussion_file: isRoot
                   ? getRootSelectedFiles
                   : getSelectedFiles,
+                }
+               
               }),
             )
               .unwrap()
               .then(() => {
                 dispatch(
                   getDiscussion({
+                    api: courseApi,
                     id: class_id,
                     sectionId: router.query.activityId as string,
                   }),
@@ -211,10 +221,10 @@ const Discussion = ({ class_id }: Props) => {
         return
       }
       try {
-        await dispatch(reactDiscussion(data))
+        await dispatch(reactDiscussion({ api: activityApi, data  }))
       } catch (error) {
       } finally {
-        await dispatch(getDiscussion(router.query.activityId as string))
+        await dispatch(getDiscussion({api: courseApi, id: class_id, sectionId: router.query.activityId as string}))
       }
     }, 1000)
   }
@@ -357,6 +367,9 @@ const Discussion = ({ class_id }: Props) => {
                       selector?.userInDiscussion?.is_sapp_supporter
                     }
                     handleEditDiscussionElement={handleEditDiscussionElement}
+                    courseApi={courseApi}
+                    activityApi={activityApi}
+                    courseActivityApi={courseActivityApi}
                   />
                   <div
                     className={`${
@@ -392,6 +405,9 @@ const Discussion = ({ class_id }: Props) => {
                                 handleEditDiscussionElement={
                                   handleEditDiscussionElement
                                 }
+                                courseApi={courseApi}
+                                activityApi={activityApi}
+                                courseActivityApi={courseActivityApi}
                               />
                             </div>
                           )

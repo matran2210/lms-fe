@@ -1,26 +1,29 @@
 import { CloseModalIcon } from "@lms/assets";
-import { ActivityInfo, ICoursesAPI, LAYOUT } from "@lms/core";
+import { ActivityInfo, ICoursesAPI, INotificationAPI, LAYOUT, MenuItem } from "@lms/core";
 import { FullScreenLayout, Layout } from "@lms/ui";
 import { useRouter } from "next/router";
 import { QuizResultComponent } from "quiz-result-package";
 import { IQuestionResultResponse } from "quiz-result-package/dist/type";
 import { useEffect, useState } from "react";
-import {
-  MENU_BOTTOM,
-  MENU_ITEMS,
-  MENU_ITEMS_EVENT,
-} from "src/constants/menu-items";
 
 const QuizResults = ({
   isTeacher = false,
   api,
+  notificationApi,
   pageLink,
+  menuItems,
+  menuItemsEvent,
+  menuBottom,
 }: {
   isTeacher?: boolean;
   api: ICoursesAPI;
+  notificationApi: INotificationAPI;
   pageLink: {
     [key: string]: string;
   };
+    menuItems: MenuItem[];
+    menuItemsEvent: MenuItem[];
+    menuBottom: MenuItem[];
 }) => {
   const router = useRouter();
   const [activityInfo, setActivitiInfo] = useState<ActivityInfo | null>(null);
@@ -112,9 +115,10 @@ const QuizResults = ({
           className="bg-gray-4"
           api={api}
           pageLink={pageLink}
-          menuItems={MENU_ITEMS}
-          menuItemsEvent={MENU_ITEMS_EVENT}
-          menuBottom={MENU_BOTTOM}
+          menuItems={menuItems}
+          menuItemsEvent={menuItemsEvent}
+          menuBottom={menuBottom}
+          notificationApi={notificationApi}
         >
           <div className="m-auto">
             {modalResult?.questions?.data?.length > 0 && (

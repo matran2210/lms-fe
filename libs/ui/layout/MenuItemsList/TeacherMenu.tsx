@@ -1,8 +1,7 @@
 import blankAvatar from "@assets/images/blank_avatar.webp";
 import { useCourseContext } from "@lms/contexts";
-import { ICoursesAPI, TitleSidebar, TitleTeacherSidebar } from "@lms/core";
+import { IAuthManager, ICoursesAPI, TitleSidebar, TitleTeacherSidebar } from "@lms/core";
 import { LearningResource } from "@lms/feature-courses";
-import { AuthenticationManager } from "@utils/helpers/keycloak";
 import { Layout, Menu, Tooltip } from "antd";
 import clsx from "clsx";
 import Image from "next/image";
@@ -19,12 +18,7 @@ import {
   MyCalendarMenuIcon,
   MyCourseTeacherIcon,
 } from "src/assets/icons";
-import { PageLink } from "src/constants/routers";
-import { useAppDispatch, useAppSelector } from "src/redux/hook";
-import { openCalculator } from "src/redux/slice/Course/MyCourse/Activity/Activity";
-import { activeNotesList, pushNotes } from "src/redux/slice/Course/NotesList";
-import { userReducer } from "src/redux/slice/User/User";
-import { IUser } from "src/redux/types/User/urser";
+import { IUser, userReducer, activeNotesList, pushNotes, openCalculator, useAppDispatch, useAppSelector } from "@lms/contexts";
 import { v4 as uuidv4 } from "uuid";
 import ExpandIcon from "../ExpandIcon";
 const { Sider } = Layout;
@@ -33,10 +27,16 @@ export default function TeacherMenu({
   isCourseDetail,
   isActivity,
   api,
+  authManager,
+  pageLink
 }: {
   isCourseDetail: boolean;
   isActivity: boolean;
   api: ICoursesAPI;
+  authManager: IAuthManager
+  pageLink: {
+    [key: string]: string;
+  };
 }) {
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -55,7 +55,7 @@ export default function TeacherMenu({
 
   const handleLogout = useCallback(async () => {
     try {
-      await new AuthenticationManager().logout();
+      await authManager.logout();
     } catch {}
   }, []);
 
@@ -87,9 +87,9 @@ export default function TeacherMenu({
               selected={selectedKey === TitleSidebar.COURSE_CONTENT}
             />
           ),
-          link: `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query.id || router.query.courseId}`,
+          link: `${pageLink.TEACHER_MY_COURSE}/my-course/${router.query.id || router.query.courseId}`,
           active:
-            isCurrent(`${PageLink.TEACHERS}${PageLink.COURSE_DETAIL}`) &&
+            isCurrent(`${pageLink.TEACHERS}${pageLink.COURSE_DETAIL}`) &&
             selectedKey !== TitleSidebar.NOTES_LIST,
         },
         {
@@ -118,9 +118,9 @@ export default function TeacherMenu({
               selected={selectedKey === TitleSidebar.RESULTS}
             />
           ),
-          link: `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query.id || router.query.courseId}/results`,
+          link: `${pageLink.TEACHER_MY_COURSE}/my-course/${router.query.id || router.query.courseId}/results`,
           active: isCurrent(
-            `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query?.id ? "[id]" : "[courseId]"}/results`,
+            `${pageLink.TEACHER_MY_COURSE}/my-course/${router.query?.id ? "[id]" : "[courseId]"}/results`,
           ),
         },
       ];
@@ -157,47 +157,47 @@ export default function TeacherMenu({
         key: "Home",
         title: TitleTeacherSidebar.DASHBOARD,
         icon: <HomeMenuIcon selected={selectedKey === "Home"} />,
-        link: PageLink.TEACHERS,
-        active: isCurrent(PageLink.TEACHERS),
+        link: pageLink.TEACHERS,
+        active: isCurrent(pageLink.TEACHERS),
       },
       {
         key: "MyCourse",
         title: TitleSidebar.COURSES,
         icon: <MyCourseTeacherIcon selected={selectedKey === "MyCourse"} />,
-        link: PageLink.TEACHER_MY_COURSE,
-        active: isCurrent(PageLink.TEACHER_MY_COURSE),
+        link: pageLink.TEACHER_MY_COURSE,
+        active: isCurrent(pageLink.TEACHER_MY_COURSE),
       },
       {
         key: "Book",
         title: TitleTeacherSidebar.MYCLASS,
         icon: <BookMenuIcon selected={selectedKey === "Book"} />,
-        link: PageLink.TEACHER_MY_CLASS,
+        link: pageLink.TEACHER_MY_CLASS,
         active: isCurrent([
-          PageLink.TEACHER_MY_CLASS,
-          `${PageLink.TEACHER_MY_CLASS}/[id]`,
-          PageLink.TEACHER_CHAPTER_TEST,
+          pageLink.TEACHER_MY_CLASS,
+          `${pageLink.TEACHER_MY_CLASS}/[id]`,
+          pageLink.TEACHER_CHAPTER_TEST,
         ]),
       },
       {
         key: "MyCalendar",
         title: TitleTeacherSidebar.MYCALENDAR,
         icon: <MyCalendarMenuIcon selected={selectedKey === "MyCalendar"} />,
-        link: PageLink.MY_CALENDAR,
-        active: isCurrent(PageLink.MY_CALENDAR),
+        link: pageLink.MY_CALENDAR,
+        active: isCurrent(pageLink.MY_CALENDAR),
       },
       {
         key: "File",
         title: TitleTeacherSidebar.MYREQUEST,
         icon: <FileMenuIcon selected={selectedKey === "File"} />,
-        link: PageLink.TEACHER_MY_REQUEST,
-        active: isCurrent(PageLink.TEACHER_MY_REQUEST),
+        link: pageLink.TEACHER_MY_REQUEST,
+        active: isCurrent(pageLink.TEACHER_MY_REQUEST),
       },
       {
         key: "Bell",
         title: TitleTeacherSidebar.NOTIFICATIONS,
         icon: <BellIcon selected={selectedKey === "Bell"} />,
-        link: PageLink.TEACHERS,
-        active: isCurrent(PageLink.TEACHERS),
+        link: pageLink.TEACHERS,
+        active: isCurrent(pageLink.TEACHERS),
       },
     ];
   }, [isCourseDetail, isActivity, selectedKey, router.query, isCurrent]);
@@ -239,14 +239,14 @@ export default function TeacherMenu({
             selectedKey={selectedKey}
             onClick={handleMenuClick}
           />
-          <BottomActionMenu user={user} onLogout={handleLogout} />
+          <BottomActionMenu user={user} onLogout={handleLogout} pageLink={pageLink} />
         </div>
       </Sider>
       <LearningResource
         open={openResource}
         setOpenResource={setOpenResource}
         api={api}
-        pageLink={PageLink}
+        pageLink={pageLink}
       />
     </Fragment>
   );
@@ -299,12 +299,15 @@ const SidebarMenu = ({
 const BottomActionMenu = ({
   user,
   onLogout,
+  pageLink
 }: {
   user: IUser;
   onLogout: () => void;
+  pageLink: { [key: string]: string;
+  };
 }) => (
   <div className="mb-6 flex flex-col items-center gap-6">
-    <Link href={PageLink.TEACHER_MY_PROFILE}>
+    <Link href={pageLink.TEACHER_MY_PROFILE}>
       <Image
         alt="avatar"
         src={

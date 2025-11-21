@@ -1,28 +1,28 @@
-import { CloseIconNote, SaveIcon } from '@assets/icons'
+import { CloseIconNote, SaveIcon } from '@lms/assets'
 import { ButtonPrimary } from '@lms/ui'
 import { ButtonSecondary } from '@lms/ui'
 import { ModalResizeable } from '@lms/ui'
 import { HookFormTextArea } from '@lms/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
+import { VALIDATE_REQUIRED } from '@lms/utils'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { useAppDispatch } from 'src/redux/hook'
-import { closeNote } from 'src/redux/slice/Course/NotesList'
+import { closeNote, useAppDispatch } from '@lms/contexts'
 import { z } from 'zod'
+import { ICoursesAPI } from '@lms/core'
 
 interface IProps {
   id: string | undefined
   content: string
   uuid: string | number
   count: number
+  courseApi: ICoursesAPI
 }
 
-const CreateNote = ({ id, content, uuid, count }: IProps) => {
+const CreateNote = ({ id, content, uuid, count, courseApi }: IProps) => {
   const router = useRouter()
   const activityId = router.query.activityId
   const [activeSectionId, setActiveSectionId] = useState<string>()
@@ -56,7 +56,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
         name: 'Note',
         description: data?.[`description_${id ? id : uuid}`],
       }
-      const res = await CoursesAPI.createNote(params)
+      const res = await courseApi.createNote(params)
       setActiveSectionId(res?.data?.id)
       // Cập nhật baseline để lần gõ tiếp theo hiển thị nút Save chính xác
       const savedValue = data?.[`description_${id ? id : uuid}`] || ''
@@ -80,7 +80,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
         name: 'Note',
         description: data?.[`description_${id ? id : uuid}`],
       }
-      await CoursesAPI.updateCourseNotesList(id || activeSectionId, params)
+      await courseApi.updateCourseNotesList(id || activeSectionId, params)
       // Cập nhật baseline sau khi lưu để theo dõi thay đổi mới
       const savedValue = data?.[`description_${id ? id : uuid}`] || ''
       setBaselineContent(savedValue)

@@ -1,4 +1,4 @@
-import { CloseIcon, UploadIcon } from "@assets/icons";
+import { CloseIcon, UploadIcon } from "@lms/assets";
 import { EditorReader } from "@lms/ui";
 import { HookFormEditor } from "@lms/ui";
 import { HookFormExcel } from "@lms/ui";
@@ -19,12 +19,10 @@ import React, {
 import { Controller } from "react-hook-form";
 import toast from "react-hot-toast";
 import { SappTitleSolution } from "@lms/ui";
-import { DISPLAY_TYPE, RESPONSE_OPTION } from "@lms/core";
+import { DISPLAY_TYPE, IUploadAPI, RESPONSE_OPTION } from "@lms/core";
 import { DEFAULT_EDITOR_VALUE, generateSheetId, SheetData } from "@lms/core";
 import { MY_COURSES } from "@lms/core";
-import { UploadAPI } from "src/pages/api/upload";
-import { useAppDispatch } from "src/redux/hook";
-import { disableUnsavedChange, loginSlice } from "src/redux/slice/Login/Login";
+import { useAppDispatch, disableUnsavedChange, loginSlice } from "@lms/contexts";
 
 export type IPreviewProp = {
   data: any;
@@ -59,6 +57,7 @@ export type IPreviewProp = {
   uniqueKey?: string;
   isInTest?: boolean;
   storageKey?: string;
+  uploadApi: IUploadAPI
 };
 type SAPPEditorHandle = {
   moveSelectionOutOfTable: () => void;
@@ -95,6 +94,7 @@ const EssayQuestionPreview = ({
   uniqueKey,
   isInTest = false,
   storageKey,
+  uploadApi
 }: IPreviewProp) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -360,7 +360,7 @@ const EssayQuestionPreview = ({
     try {
       setUnsavedChanges && setUnsavedChanges(false);
       dispatch(disableUnsavedChange());
-      await UploadAPI.downloadFile(data);
+      await uploadApi.downloadFile(data);
     } catch (error) {
     } finally {
       setUnsavedChanges && setUnsavedChanges(true);

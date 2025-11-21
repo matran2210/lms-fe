@@ -4,7 +4,7 @@ import { Tooltip } from "antd";
 import clsx from "clsx";
 import React, { useLayoutEffect, useState } from "react";
 import EssayQuestionPreview from "@lms/ui/components/questionType/ConstructedQuestion";
-import { RESPONSE_OPTION } from "@lms/core";
+import { IUploadAPI, RESPONSE_OPTION } from "@lms/core";
 import {
   Control,
   FieldValues,
@@ -25,12 +25,14 @@ interface IProps {
   };
   isQuiz?: boolean;
   className?: string;
+  uploadApi: IUploadAPI
 }
 const ShowAnswerTemplate = ({
   currentTabContent,
   essayData,
   isQuiz,
   className,
+  uploadApi
 }: IProps) => {
   const { control, setValue } = useForm();
   const [showModalTemplate, setShowModalTemplate] = useState(false);
@@ -147,6 +149,7 @@ const ShowAnswerTemplate = ({
                   response_option === RESPONSE_OPTION.WORD ? true : false,
               }}
               isShowContent={false}
+              uploadApi={uploadApi}
             />
           </div>
           <Triangle className="absolute bottom-2 right-2" />

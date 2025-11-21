@@ -1257,6 +1257,7 @@ const QuizDocument = ({
                         essayData: questionRef.current?.getEssayData() as any,
                       }}
                       isQuiz
+                      uploadApi={uploadApi}
                     />
                   </div>
                 )}

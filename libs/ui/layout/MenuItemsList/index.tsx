@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { MenuItem as MenuItemType } from "@lms/core";
+import { INotificationAPI, MenuItem as MenuItemType } from "@lms/core";
 import MenuItem from "../MenuItem";
 
 type MenuItemsListProps = {
@@ -7,6 +7,8 @@ type MenuItemsListProps = {
   setOpenResource?: Dispatch<SetStateAction<boolean>>;
   closeSideBar: () => void;
   setOpenExaminationInfo?: Dispatch<SetStateAction<boolean>>;
+  pageLink: { [key: string]: string };
+  notificationApi: INotificationAPI
 };
 
 export default function MenuItemsList({
@@ -14,6 +16,8 @@ export default function MenuItemsList({
   setOpenResource,
   closeSideBar,
   setOpenExaminationInfo,
+  notificationApi,
+  pageLink
 }: MenuItemsListProps) {
   return (
     <div className="menu-items-list flex flex-col gap-4 px-3">
@@ -24,6 +28,8 @@ export default function MenuItemsList({
           setOpenResource={setOpenResource}
           closeSideBar={closeSideBar}
           setOpenExaminationInfo={setOpenExaminationInfo}
+          notificationApi={notificationApi}
+          pageLink={pageLink}
         />
       ))}
     </div>

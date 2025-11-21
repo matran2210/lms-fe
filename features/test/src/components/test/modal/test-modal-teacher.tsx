@@ -2,6 +2,7 @@ import { ClockIcon } from "@lms/assets";
 import {
   GRADE_STATUS,
   GRADING_METHOD,
+  IClassAPI,
   IQuizResultList,
   TEST_TYPE,
 } from "@lms/core";
@@ -11,16 +12,13 @@ import {
 } from "@lms/feature-courses";
 import { PopupSelectRetakeOrContinueAttempt } from "@lms/feature-test";
 import { HookFormSelect, SappModalV3 } from "@lms/ui";
-import { capitalizeFirstLetter, formatTime, trackGAEvent } from "@lms/utils";
+import { capitalizeFirstLetter, formatTime, formatTimeMinToHhMm, trackGAEvent } from "@lms/utils";
 import { isQuizExpired } from "@lms/feature-test";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { isNull } from "lodash";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
-import { PageLink } from "src/constants/routers";
-import { ClassAPI } from "src/pages/api/class";
 
 enum StatusQuizAttempt {
   Passed = "Passed",
@@ -36,6 +34,8 @@ interface IProps {
   class_user_id?: string;
   activeCourse?: any;
   is_passed_course: boolean;
+  classApi: IClassAPI;
+  pageLink: { [key: string]: string;}
 }
 
 const TestModalTeacher = ({
@@ -45,9 +45,10 @@ const TestModalTeacher = ({
   class_user_id,
   activeCourse,
   is_passed_course,
+  classApi,
+  pageLink
 }: IProps) => {
   const router = useRouter();
-  const dispatch = useDispatch();
   const isSubmitted =
     data?.quiz?.attempt && data?.quiz?.attempt?.status === "SUBMITTED";
   const isUnsubmitted =
@@ -88,7 +89,7 @@ const TestModalTeacher = ({
 
   const fetchResult = async (pageIndex: number, pageSize: number) => {
     if (class_user_id && data?.quiz?.id) {
-      const response = await ClassAPI.getAllResultOfQuiz(
+      const response = await classApi.getAllResultOfQuiz(
         class_user_id,
         data?.quiz?.id,
         { page_index: pageIndex ?? 1, page_size: pageSize ?? 10 },
@@ -242,7 +243,7 @@ const TestModalTeacher = ({
     try {
       activeCourse && (await activeCourse());
       router.push({
-        pathname: `${PageLink.TEACHER_TEST}/${data.quiz.id}`,
+        pathname: `${pageLink.TEACHER_TEST}/${data.quiz.id}`,
         query: {
           class_user_id: class_user_id,
         },
@@ -446,7 +447,7 @@ const TestModalTeacher = ({
         <SappModalV3
           title={
             <div className="flex items-center justify-between gap-2">
-              <div>{TEST_TYPE[data?.course_section_type]}</div>
+              <div>{TEST_TYPE[data?.course_section_type as keyof typeof TEST_TYPE]}</div>
               {!!data?.quiz?.quiz_timed &&
                 !!remainingTimeLastAttempt.current &&
                 renderShowOkButton() &&
@@ -465,7 +466,7 @@ const TestModalTeacher = ({
                       />
                     </div>
                     <div className="text-[20px]">
-                      {formatTime(
+                      {formatTimeMinToHhMm(
                         remainingTimeLastAttempt.current > 0
                           ? remainingTimeLastAttempt.current
                           : 0,
@@ -529,7 +530,7 @@ const TestModalTeacher = ({
                 <div className="text-gray-1">Time Allowed:</div>
                 <div className="pr-0.5 font-medium text-bw-1">
                   {data?.quiz?.quiz_timed
-                    ? formatTime(data?.quiz?.quiz_timed * 60)
+                    ? formatTimeMinToHhMm(data?.quiz?.quiz_timed * 60)
                     : "Unlimited"}
                 </div>
               </div>
@@ -615,11 +616,11 @@ const TestModalTeacher = ({
                         onClick={() => {
                           if (isManualGradingAndNotFinishedGrading) {
                             router.push(
-                              `${PageLink.TEACHER_MY_COURSE}/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
+                              `${pageLink.TEACHER_MY_COURSE}/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
                             );
                           } else {
                             router.push({
-                              pathname: `${PageLink.TEACHER_MY_COURSE}/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
+                              pathname: `${pageLink.TEACHER_MY_COURSE}/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
                               query: { attempt: selectedResult?.label },
                             });
                           }
@@ -668,7 +669,7 @@ const TestModalTeacher = ({
           }}
           title={
             <div className="flex items-center justify-between gap-2">
-              <div>{TEST_TYPE[data?.course_section_type]}</div>
+              <div>{TEST_TYPE[data?.course_section_type as keyof typeof TEST_TYPE]}</div>
               {!!data?.quiz?.quiz_timed &&
                 (remainingTime !== undefined && remainingTime >= 0 ? (
                   <div
@@ -681,7 +682,7 @@ const TestModalTeacher = ({
                       <ClockIcon size={24} />
                     </div>
                     <div className="text-[20px]">
-                      {formatTime(
+                      {formatTimeMinToHhMm(
                         remainingTimeLastAttempt?.current >= 0
                           ? remainingTimeLastAttempt.current
                           : 0,

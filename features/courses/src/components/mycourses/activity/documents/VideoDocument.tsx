@@ -1,15 +1,12 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import {  IActivityStateQuestion,
+  fetchQuestionById,useAppDispatch, useAppSelector } from '@lms/contexts'
 import { SappModal } from '@lms/ui'
 import { SAPPVideo } from '@lms/ui'
 import { formatTime, htmlToRaw } from '@lms/utils'
-import { video_url } from '@lms/core'
-import { debounce } from '@utils/helpers'
-import {
-  IActivityStateQuestion,
-  fetchQuestionById,
-} from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
+import { ICoursesAPI, IQuestionAPI, IUploadAPI, video_url } from '@lms/core'
+import { debounce } from '@lms/utils'
 import { IQuestion, IVideo } from '@lms/core'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import { SAPPRadio } from '@lms/ui'
@@ -33,6 +30,9 @@ type Props = {
   handleCloseTab?: (activeTab: string) => void
   onUpdateActiveVideo?: (activeVideo: string) => void
   newQuizModal?: boolean
+  questionApi: IQuestionAPI;
+  courseApi: ICoursesAPI;
+  uploadAPI: IUploadAPI;
 }
 
 /**
@@ -56,6 +56,9 @@ const VideoDocument = ({
   handleCloseTab,
   onUpdateActiveVideo,
   newQuizModal,
+  questionApi,
+courseApi,
+uploadAPI,
 }: Props) => {
   const {
     control: controlAnswer,
@@ -100,6 +103,8 @@ const VideoDocument = ({
     if (activeQuestion?.id) {
       dispatch(
         fetchQuestionById({
+          api: questionApi,
+          courseApi: courseApi,
           activityId: activityId,
           tabId: tabId,
           quizId: currentVideo?.quiz?.id || '',
@@ -177,6 +182,8 @@ const VideoDocument = ({
       if (open) {
         await dispatch(
           fetchQuestionById({
+            api: questionApi,
+            courseApi: courseApi,
             activityId: activityId,
             tabId: tabId,
             quizId: currentVideo?.quiz?.id || '',
@@ -484,6 +491,9 @@ const VideoDocument = ({
                 document_id={document_id}
                 grading_preference={grading_preference}
                 controlAnswer={controlAnswer}
+                api={uploadAPI}
+                courseApi={courseApi}
+                questionApi={questionApi}
               />
             </div>
           </SappModal>

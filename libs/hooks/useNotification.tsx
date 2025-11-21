@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
 import { INotificationAPI, LOCAL_STORAGE_KEYS } from '@lms/core'
-import {   getCountUnRead,
+import { useAppDispatch, useAppSelector ,getCountUnRead,
   getNotification,
   getNotificationDetail,
   loadMoreNotification,
@@ -9,18 +10,11 @@ import {   getCountUnRead,
   updateStatusAll,
   toggleStatusById,
   deleteNotificationById,
-  deleteAllNotifications,useAppDispatch, useAppSelector } from '@lms/contexts'
-import { useTailwindBreakpoint } from '../../../../libs/hooks'
+  deleteAllNotifications,} from '@lms/contexts'
+import { useTailwindBreakpoint } from './useTailwindBreakpoint'
 
-export const useNotification = ({
-  markById,
-  router,
-  notificationApi
-}: {
-markById: (ids: string[], markRead: boolean) => Promise<any>;
-router: any
-    notificationApi: INotificationAPI
-}) => {
+export const useNotification = (notificationApi: INotificationAPI) => {
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const notifyDetail = useAppSelector((state) => state.notificationReducer)
   const notifyLists = useAppSelector(
@@ -78,7 +72,7 @@ router: any
             ...(selectedTab === 2 && {
               is_read: false,
             }),
-            }
+          }
           }),
         )
       }
@@ -111,7 +105,7 @@ router: any
 
   const handleMarkById = async (ids: string[], selectedTab: number) => {
     try {
-      const res = await markById(ids, true)
+      const res = await notificationApi.markById(ids, true)
       if (!res?.data) {
         return
       }
@@ -128,7 +122,7 @@ router: any
 
   const handleUnMarkById = async (ids: string[], selectedTab: number) => {
     try {
-      const res = await markById(ids, false)
+      const res = await notificationApi.markById(ids, false)
       if (!res?.data) {
         return
       }
@@ -211,7 +205,7 @@ router: any
                 ...(selectedTab === 2 && {
                   is_read: false,
                 }),
-                }
+              }
               }),
             )
             await countNotificationsUnRead()

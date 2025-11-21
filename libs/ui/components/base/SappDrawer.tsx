@@ -1,10 +1,9 @@
-import { useAppDispatch } from 'src/redux/hook'
+import { useAppDispatch, confirmDialog } from '@lms/contexts'
 import ButtonPrimary from './button/ButtonPrimary'
-import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import ButtonSecondary from './button/ButtonSecondary'
-import { CloseIcon } from '@assets/icons'
+import { CloseIcon } from '@lms/assets'
 import { Spin } from 'antd'
 
 interface IProps {

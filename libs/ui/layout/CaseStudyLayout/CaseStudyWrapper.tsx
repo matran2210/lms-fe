@@ -4,8 +4,7 @@ import { ButtonSecondary } from "@lms/ui";
 import { Layout } from "antd";
 import clsx from "clsx";
 import React, { Dispatch, PropsWithChildren, SetStateAction } from "react";
-import { useAppDispatch } from "src/redux/hook";
-import { disableUnsavedChange } from "src/redux/slice/Login/Login";
+import { useAppDispatch, disableUnsavedChange } from "@lms/contexts";
 
 const { Header, Content, Footer } = Layout;
 

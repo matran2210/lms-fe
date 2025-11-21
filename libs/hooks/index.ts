@@ -10,4 +10,4 @@ export * from "./useTooltipModal"
 export { default as useQueryAction } from "./useQueryAction";
 export * from "./course/useCourseSectionsData"
 export { default as useReponsive } from "./useReponsive";
-
+export * from "./useNotification"

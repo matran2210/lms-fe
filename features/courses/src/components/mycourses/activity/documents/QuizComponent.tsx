@@ -1,10 +1,11 @@
 import {
   CircleCheckIcon,
   CircleInfoIcon,
+  CloseIconV2,
   CollapseArrowIcon,
   DownloadIcon,
   FileTextIcon,
-  CloseIconV2, NotesOutline, PulsingExclamation
+  NotesOutline, PulsingExclamation
 } from "@lms/assets";
 import {
   IActivityStateQuestion,
@@ -27,13 +28,13 @@ import {
 import { useTailwindBreakpoint } from "@lms/hooks";
 import {
   AddWordPreview,
-  NewDragNDropQuestion,
   EditorReader,
   EssayQuestionPreview,
   FileViewer,
   HighlightableHTML,
   MatchQuizComponent,
   MultiChoiceQuestion,
+  NewDragNDropQuestion,
   OneChoiceQuestion,
   Popover,
   SelectWord,
@@ -64,8 +65,8 @@ import {
 import toast from "react-hot-toast";
 
 import { IEssayAnswer, IExhibit, IExhibitData, IFile } from "@lms/core";
-import { v4 as uuidv4 } from "uuid";
 import { SlotValue } from "@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop";
+import { v4 as uuidv4 } from "uuid";
 
 interface IRequirement {
   id: string;
@@ -918,6 +919,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       }}
                       isShowContent={showQuestionContent}
                       externalRef={refEditor}
+                      uploadApi={api}
                     />
                   </div>
                 ),
@@ -1092,6 +1094,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       }}
                       isShowContent={showQuestionContent}
                       externalRef={refEditor}
+                      uploadApi={api}
                     />
                   </div>
                 )}

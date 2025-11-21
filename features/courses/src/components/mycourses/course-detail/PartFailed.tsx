@@ -1,20 +1,14 @@
-import { ButtonSecondary } from "@lms/ui";
-import { formatTimeMinToHhMm } from "@lms/utils";
-import { trackGAEvent } from "@lms/utils";
-import { getUserPrefix, roundNumber } from "@utils/helpers";
-import { useEffect, useMemo, useState } from "react";
-import router from "next/router";
-import { GRADE_STATUS, GRADING_METHOD, TEST_TYPE } from "@lms/core";
+import { ConfirmIcon } from "@lms/assets";
+import { useCourseContext } from "@lms/contexts";
+import { EAttemptStatus, GRADE_STATUS, GRADING_METHOD, IClassAPI, IMyCourseDetail, TEST_TYPE } from "@lms/core";
 import { TestModal, TestModalTeacher } from "@lms/feature-test";
-import { IMyCourseDetail } from "@lms/core";
-import ResultCourse from "./CourseResult";
-import { SappModalV3 } from "@lms/ui";
-import { ConfirmIcon } from "@assets/icons";
-import { useCourseContext } from "@contexts/index";
-import { ButtonText } from "@lms/ui";
-import { EAttemptStatus } from "@lms/core";
+import { ButtonSecondary, ButtonText, SappModalV3 } from "@lms/ui";
+import { formatTimeMinToHhMm, getUserPrefix, roundNumber, trackGAEvent } from "@lms/utils";
 import clsx from "clsx";
+import router from "next/router";
+import { useEffect, useMemo, useState } from "react";
 import { CardCourse } from "../../course";
+import ResultCourse from "./CourseResult";
 
 const PartFailed = ({
   coursePart,
@@ -24,6 +18,8 @@ const PartFailed = ({
   lastElementRef,
   isTeacher,
   hasCertificate = false,
+  classApi,
+  pageLink,
 }: {
   coursePart: IMyCourseDetail;
   class_user_id?: string;
@@ -32,6 +28,8 @@ const PartFailed = ({
   lastElementRef: (node: HTMLDivElement) => void;
   isTeacher: boolean;
   hasCertificate?: boolean;
+    classApi: IClassAPI;
+    pageLink: { [key: string]: string;}
 }) => {
   const noOfAttempts = `${coursePart?.quiz?.attempt?.number_of_attempts || 0}/${
     coursePart?.quiz?.is_limited ? coursePart?.quiz?.limit_count : "Unlimited"
@@ -58,7 +56,7 @@ const PartFailed = ({
     score: number;
     total_attempt_time: number;
   }>();
-  const userPrefix = getUserPrefix(isTeacher);
+  const userPrefix = getUserPrefix(isTeacher, pageLink);
   const isManualGradingAndAwaitGrading =
     quizAttempt?.grading_method === GRADING_METHOD.MANUAL &&
     quizAttempt?.attempt?.grading_status === GRADE_STATUS.AWAITING_GRADING;
@@ -393,6 +391,8 @@ const PartFailed = ({
           class_user_id={class_user_id}
           is_passed_course={is_passed_course}
           activeCourse={() => {}}
+          classApi={classApi}
+          pageLink={pageLink}
         />
       ) : (
         <TestModal

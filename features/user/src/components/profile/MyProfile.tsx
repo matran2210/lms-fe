@@ -1,37 +1,29 @@
-import { ButtonCancelSubmit } from "@lms/ui";
-import { ButtonPrimary } from "@lms/ui";
-import { ButtonSecondary } from "@lms/ui";
-import { HookFormTextField } from "@lms/ui";
-import { HookFormTextFieldV2 } from "@lms/ui";
-import ProfileCard from "@components/card/ProfileCard";
-import Icon from "@components/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { USER_STATUS, USER_TYPE } from "@lms/core";
-import { formatDate } from "@utils/helpers";
 import {
-  VALIDATE_MAX,
+  getLogoutUser,
+  getMe,
+  IUserAPI,
+  IUserContact,
+  updateUser,
+  updateUserAvatar,
+  useAppDispatch, useAppSelector,
+  userReducer
+} from "@lms/contexts";
+import { IAuthManager, USER_TYPE } from "@lms/core";
+import { useTailwindBreakpoint } from "@lms/hooks";
+import { ButtonCancelSubmit, ButtonPrimary, ButtonSecondary, FullScreenMobile, HookFormTextField, HookFormTextFieldV2, ProfileSkeleton } from "@lms/ui";
+import {
+  convertHumanReadableToSnakeCase, formatDate, formatDateToSlash, VALIDATE_MAX,
   VALIDATE_MIN,
-  VALIDATE_REQUIRED,
-} from "@utils/helpers/ValidateMessage";
-import { convertHumanReadableToSnakeCase } from "@lms/utils";
+  VALIDATE_REQUIRED
+} from "@lms/utils";
 import clsx from "clsx";
 import { StaticImageData } from "next/image";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Control, useForm } from "react-hook-form";
-import { useAppDispatch, useAppSelector } from "src/redux/hook";
-import { getLogoutUser } from "src/redux/slice/Login/Login";
-import {
-  getMe,
-  updateUser,
-  updateUserAvatar,
-  userReducer,
-} from "src/redux/slice/User/User";
 import { z } from "zod";
-import FullScreenMobile from "@lms/ui/components/base/modal/Modal/FullScreenMobile";
-import { useTailwindBreakpoint } from "@lms/hooks";
-import { ProfileSkeleton } from "@lms/ui";
-import TabLayout from "./TabLayout";
-import { IUserContact } from "src/redux/types/User/urser";
+import ProfileCard from "./ProfileCard";
+import { Icon } from "@lms/assets";
 
 interface IProps {
   isEdit: boolean;
@@ -41,6 +33,8 @@ interface IProps {
   setReViewImageSrc: Dispatch<
     SetStateAction<string | StaticImageData | undefined>
   >;
+  userApi: IUserAPI
+  authManager: IAuthManager
 }
 
 const schema = z.object({
@@ -56,6 +50,8 @@ const MyProfile = ({
   avatar,
   handleSetAvatar,
   setReViewImageSrc,
+  userApi,
+  authManager
 }: IProps) => {
   const { isMobileView } = useTailwindBreakpoint();
 
@@ -117,25 +113,25 @@ const MyProfile = ({
       // Nếu không có avatar và người dùng có avatar hiện tại
       if (!avatar && user?.detail?.avatar) {
         // Gọi hành động thunk updateUser để cập nhật tên và avatar của người dùng
-        await dispatch(updateUser({ full_name, avatar: null })).unwrap();
+        await dispatch(updateUser({ full_name, avatar: null, api: userApi })).unwrap();
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
-        dispatch(getMe());
+        dispatch(getMe(userApi));
         // Đặt trạng thái isEdit thành false
         setIsEdit(false);
         setOpenEditProfile(false);
         return;
       }
       // Gọi hành động thunk updateUser để cập nhật tên của người dùng
-      await dispatch(updateUser({ full_name })).unwrap();
+      await dispatch(updateUser({ api: userApi, full_name })).unwrap();
       // Nếu có avatar
       if (avatar) {
         // Gọi hành động thunk updateUserAvatar để cập nhật avatar của người dùng
-        await dispatch(updateUserAvatar(avatar)).unwrap();
+        await dispatch(updateUserAvatar({api: userApi, avatar})).unwrap();
         // Đặt lại giá trị của avatar
         handleSetAvatar(undefined);
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
       }
-      dispatch(getMe());
+      dispatch(getMe(userApi));
       // Đặt trạng thái isEdit thành false
       setIsEdit(false);
       setOpenEditProfile(false);
@@ -144,7 +140,7 @@ const MyProfile = ({
       setOpenEditProfile(false);
       setReViewImageSrc(undefined);
       if (error?.response?.data?.error?.code === "403|1002") {
-        await dispatch(getLogoutUser());
+        await dispatch(getLogoutUser({ authManager }));
       }
     }
   };
@@ -245,7 +241,7 @@ const MyProfile = ({
               <TextWrapper
                 title="D.O.B"
                 value={
-                  user?.detail?.dob ? formatDate(user?.detail?.dob, true) : ""
+                  user?.detail?.dob ? formatDateToSlash(user?.detail?.dob, true) : ""
                 }
                 loading={loading}
                 control={control}
@@ -392,7 +388,7 @@ const MyProfile = ({
                     title="D.O.B"
                     value={
                       user?.detail?.dob
-                        ? formatDate(user?.detail?.dob, true)
+                        ? formatDateToSlash(user?.detail?.dob, true)
                         : ""
                     }
                     loading={loading}

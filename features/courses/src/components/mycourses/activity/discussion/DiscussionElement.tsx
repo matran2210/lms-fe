@@ -25,7 +25,6 @@ import {
   SappDisplayText,
 } from "@lms/ui";
 import { calculateTimeAgo, trackGAEvent } from "@lms/utils";
-import { CoursesAPI } from "@pages/api/courses";
 import { Popover } from "antd";
 import clsx from "clsx";
 import { isEmpty } from "lodash";
@@ -33,11 +32,10 @@ import Image from "next/image";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { ActivityAPI } from "src/pages/api/activity";
-import CourseActivityApi from "src/redux/services/Course/MyCourse/Activity";
 import ActionDiscussion from "./ActionDiscussion";
 import ModalDeleteComment from "./ModalDeleteComment";
 import SendComment from "./SendComment";
+import { IActivityAPI, ICourseActivityAPI, ICoursesAPI } from '@lms/core';
 
 type Props = {
   rank?: number;
@@ -51,6 +49,10 @@ type Props = {
   setLoading: (isLoading: boolean) => void;
   isSappSupporterUserCurrent?: boolean;
   handleEditDiscussionElement: (isEdit: boolean) => void;
+  courseApi: ICoursesAPI;
+  activityApi: IActivityAPI
+  courseActivityApi: ICourseActivityAPI
+
 };
 type UserInfo = {
   name: string;
@@ -73,6 +75,9 @@ function DiscussionElement({
   setLoading,
   isSappSupporterUserCurrent = false,
   handleEditDiscussionElement,
+  courseApi,
+  activityApi,
+  courseActivityApi
 }: Props) {
   const { isMobileView } = useTailwindBreakpoint();
   const [isLike, setIsLike] = useState<boolean>(discussion.is_like);
@@ -101,7 +106,7 @@ function DiscussionElement({
         content: e?.editData,
       };
       if (selectFile) {
-        await CourseActivityApi.uploadImagesDiscussion({
+        await courseActivityApi.uploadImagesDiscussion({
           discussion_id: discussion?.id,
           new_discussion_file: selectFile,
           discussion_file_ids: discussion.course_discussion_files
@@ -116,7 +121,7 @@ function DiscussionElement({
             .map((item) => item.id),
         });
       }
-      const res = await ActivityAPI.updateDiscussionComment(
+      const res = await activityApi.updateDiscussionComment(
         discussion?.id,
         params,
       );
@@ -136,7 +141,8 @@ function DiscussionElement({
   const handleRefresh = () => {
     dispatch(
       getDiscussion({
-        id: classId,
+        api: courseApi,
+        id: classId as string,
         sectionId: discussion?.course_section_id,
       }),
     );
@@ -145,13 +151,13 @@ function DiscussionElement({
   const onDeleteComment = async () => {
     setLoading(true);
     try {
-      const res = await ActivityAPI.deleteDiscussion(discussion?.id);
+      const res = await activityApi.deleteDiscussion(discussion?.id);
       if (res) {
         handleRefresh();
         setIsDelete(false);
         setLoading(false);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -263,7 +269,7 @@ function DiscussionElement({
   );
   const fetchDiscussionStudentInfo = async () => {
     try {
-      const res = await CoursesAPI.getDiscussionStudentInfo(
+      const res = await courseApi.getDiscussionStudentInfo(
         discussion?.course_section_id,
         classId as string,
         discussion?.user_id,
@@ -276,7 +282,7 @@ function DiscussionElement({
         phone: data?.student_info?.user_contacts?.[0]?.phone,
         avatar: data?.student_info?.detail.avatar?.["50x50"] || blankAvatar,
       });
-    } catch (error: any) {}
+    } catch (error: any) { }
   };
 
   const handleMouseEnter = () => {
@@ -329,11 +335,11 @@ function DiscussionElement({
                   src={
                     discussion.is_sapp_supporter
                       ? discussion?.avatar?.["50x50"] ||
-                        discussion?.avatar?.["ORIGIN"] ||
-                        sappAvatar
+                      discussion?.avatar?.["ORIGIN"] ||
+                      sappAvatar
                       : discussion?.avatar?.["50x50"] ||
-                        discussion?.avatar?.["ORIGIN"] ||
-                        blankAvatar
+                      discussion?.avatar?.["ORIGIN"] ||
+                      blankAvatar
                   }
                   loading="eager"
                   blurDataURL={blankAvatar.src}
@@ -487,9 +493,8 @@ function DiscussionElement({
               {!isEdit && rank < 1 && (
                 <div
                   role="button"
-                  className={`${
-                    discussion?.id === idReply ? "text-primary" : ""
-                  } flex select-none items-center gap-2 font-medium hover:underline`}
+                  className={`${discussion?.id === idReply ? "text-primary" : ""
+                    } flex select-none items-center gap-2 font-medium hover:underline`}
                   onClick={() => {
                     handleChangeIdReply && handleChangeIdReply(discussion?.id);
                     trackGAEvent("Click Reply Comment Activity");
