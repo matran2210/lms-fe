@@ -1,16 +1,13 @@
-import React from 'react'
-import { IButtonBaseProps } from '@lms/core'
-import BaseButton from './BaseButton'
-import Link from 'next/link'
-import { IButtonProps } from '@lms/core'
-import LoadingBtnAnimation from '@assets/icons/LoadingBtnAnimation'
+import { LoadingBtnAnimation } from "@lms/assets";
+import { IButtonBaseProps } from "@lms/core";
+import BaseButton from "./BaseButton";
 
 const ButtonText = ({
   title,
   onClick,
-  className = '',
+  className = "",
   link,
-  size = 'small',
+  size = "small",
   disabled = false,
   startIcon,
   endIcon,
@@ -21,18 +18,18 @@ const ButtonText = ({
   ...props
 }: IButtonBaseProps) => {
   let textSizeClass =
-    size === 'small'
-      ? 'text-sm'
-      : size === 'medium'
-        ? 'text-sm md:text-base'
-        : 'text-sm md:text-lg'
+    size === "small"
+      ? "text-sm"
+      : size === "medium"
+        ? "text-sm md:text-base"
+        : "text-sm md:text-lg";
 
-  let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
+  let fullWidthClass = full ? "block w-full" : "inline-block w-fit";
   let disabledClass = disabled
-    ? 'cursor-not-allowed !text-secondary-100 hover:!text-secondary-100'
-    : 'cursor-pointer'
+    ? "cursor-not-allowed !text-secondary-100 hover:!text-secondary-100"
+    : "cursor-pointer";
 
-  let isUnderline = isUnderLine ? 'underline' : ''
+  let isUnderline = isUnderLine ? "underline" : "";
 
   let componentClass = `
     p-0
@@ -47,7 +44,7 @@ const ButtonText = ({
     ${disabledClass} 
     ${textSizeClass} 
     ${className} 
-  `
+  `;
 
   return (
     <BaseButton
@@ -69,7 +66,7 @@ const ButtonText = ({
         )}
       </div>
     </BaseButton>
-  )
-}
+  );
+};
 
-export default ButtonText
+export default ButtonText;

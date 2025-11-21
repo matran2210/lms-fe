@@ -1,129 +1,119 @@
-import useCountdown from '@components/auth/Countdown'
-import { ButtonText } from '@lms/ui'
-import { SappModalV2 } from '@lms/ui'
-import { SAPPTextFiled } from '@lms/ui'
-import { Icon } from '@lms/assets'
-import React, {
-  createRef,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react'
-import { UseFormGetValues, UseFormReset } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { AuthAPI } from 'src/pages/api/profile'
-import { useAppSelector } from '@lms/contexts'
-import { userReducer } from 'src/redux/slice/User/User'
-import { IChangePassword } from './ChangePassword'
-import { ButtonPrimary } from '@lms/ui'
-import type { GetProps } from 'antd'
-import { Input } from 'antd'
+import { Icon } from "@lms/assets";
+import { useAppSelector, userReducer } from "@lms/contexts";
+import { useCountdown } from "@lms/feature-auth";
+import { ButtonPrimary, ButtonText, SappModalV2 } from "@lms/ui";
+import type { GetProps } from "antd";
+import { Input } from "antd";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { UseFormGetValues, UseFormReset } from "react-hook-form";
+import toast from "react-hot-toast";
+import { AuthAPI } from "src/pages/api/profile";
+import { IChangePassword } from "./ChangePassword";
 
-type OTPProps = GetProps<typeof Input.OTP>
+type OTPProps = GetProps<typeof Input.OTP>;
 interface IProps {
-  open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>
-  reset: UseFormReset<any>
-  getValues: UseFormGetValues<IChangePassword>
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  reset: UseFormReset<any>;
+  getValues: UseFormGetValues<IChangePassword>;
 }
 
 const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
-  const { user } = useAppSelector(userReducer)
+  const { user } = useAppSelector(userReducer);
 
-  const [code, setCode] = useState(Array(6).join('.').split('.'))
-  const [canResend, setCanResend] = useState(false)
-  const [resetCountdown, setResetCountdown] = useState(false)
+  const [code, setCode] = useState(Array(6).join(".").split("."));
+  const [canResend, setCanResend] = useState(false);
+  const [resetCountdown, setResetCountdown] = useState(false);
   const [timeCountDown, setTimeCountDown, time] = useCountdown(
     0,
     0,
     resetCountdown,
-  )
-  const [timeCountDownResent, settimeCountDownResent] = useState<number>(285)
-  const [errorMessage, setErrorMessage] = useState('')
-  const [loading, setLoading] = useState<boolean>(false)
+  );
+  const [timeCountDownResent, settimeCountDownResent] = useState<number>(285);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   /**
    * @description mở popup set lại countdown và message error
    */
   useEffect(() => {
     if (open) {
-      setResetCountdown((prev) => !prev)
-      setTimeCountDown(5)
-      setErrorMessage('')
+      setResetCountdown((prev) => !prev);
+      setTimeCountDown(5);
+      setErrorMessage("");
     }
-  }, [open])
+  }, [open]);
 
   /**
    * @description Handle countdown timeout
    */
   useEffect(() => {
     if (time < timeCountDownResent && canResend === false) {
-      setCanResend(true)
+      setCanResend(true);
     }
 
     if (time <= 0) {
-      setErrorMessage('OTP expired. Please generate a new OTP and try again!')
-      setCanResend(true)
+      setErrorMessage("OTP expired. Please generate a new OTP and try again!");
+      setCanResend(true);
     }
-  }, [timeCountDown])
+  }, [timeCountDown]);
 
   /**
    * @description function verify code
    */
   const verifyCode = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       await AuthAPI.verifyOTPPassword(
-        getValues('password'),
-        getValues('newPassword'),
-        code?.join(''),
-      )
-      reset()
-      setOpen(false)
-      setCode(['', '', '', '', '', ''])
-      toast.success('Change Password Successfully!')
+        getValues("password"),
+        getValues("newPassword"),
+        code?.join(""),
+      );
+      reset();
+      setOpen(false);
+      setCode(["", "", "", "", "", ""]);
+      toast.success("Change Password Successfully!");
     } catch (error) {
-      setErrorMessage('Invaild OTP. Please try again!')
+      setErrorMessage("Invaild OTP. Please try again!");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   /**
    * @description Handle on click resend button
    */
   const onResendCode = async () => {
     try {
-      await AuthAPI.changeUserPassword(getValues('password'))
-      setErrorMessage('')
-      setCanResend(false)
+      await AuthAPI.changeUserPassword(getValues("password"));
+      setErrorMessage("");
+      setCanResend(false);
       settimeCountDownResent(() => {
         if (time <= 0) {
-          setTimeCountDown(5)
-          setResetCountdown((prev) => !prev)
-          return 285
+          setTimeCountDown(5);
+          setResetCountdown((prev) => !prev);
+          return 285;
         }
-        return time - 15
-      })
+        return time - 15;
+      });
 
-      setCode(Array(6).join('.').split('.'))
+      setCode(Array(6).join(".").split("."));
     } catch (error) {}
-  }
+  };
 
-  const otpLength = 6
+  const otpLength = 6;
 
-  const onInput: OTPProps['onInput'] = (value) => {
+  const onInput: OTPProps["onInput"] = (value) => {
     const paddedValue = Array.from(
       { length: otpLength },
-      (_, i) => value[i] || '',
-    )
-    setCode(paddedValue)
-  }
+      (_, i) => value[i] || "",
+    );
+    setCode(paddedValue);
+  };
 
   const sharedProps: OTPProps = {
     onInput,
-  }
+  };
   return (
     <SappModalV2
       title={undefined}
@@ -145,7 +135,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
             <div>Please enter the code we sent to</div>
             <div>
               <span className="text-xl font-semibold">
-                {user?.user_contacts?.[0]?.email || ''}
+                {user?.user_contacts?.[0]?.email || ""}
               </span>
             </div>
           </div>
@@ -156,7 +146,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
                 {...sharedProps}
                 size="large"
                 rootClassName="profile-change-password"
-                status={errorMessage ? 'error' : undefined}
+                status={errorMessage ? "error" : undefined}
                 className="profile-change-password"
               />
             </div>
@@ -164,9 +154,9 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
               <span className="text-sm text-error-400">{errorMessage}</span>
               <span
                 className={`min-w-fit text-right text-sm font-semibold ${
-                  timeCountDown === '00 : 00'
-                    ? 'text-error-400'
-                    : 'text-[#050505]'
+                  timeCountDown === "00 : 00"
+                    ? "text-error-400"
+                    : "text-[#050505]"
                 }`}
               >
                 {timeCountDown}
@@ -183,7 +173,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
             size="medium"
             loading={loading}
             onClick={verifyCode}
-            disabled={code.some((e) => e === '') || time <= 0}
+            disabled={code.some((e) => e === "") || time <= 0}
           />
           <ButtonText
             title="Resend Code"
@@ -197,7 +187,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
         </div>
       </div>
     </SappModalV2>
-  )
-}
+  );
+};
 
-export default PasswordProfile
+export default PasswordProfile;

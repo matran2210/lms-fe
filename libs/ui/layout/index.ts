@@ -10,7 +10,7 @@ export { default as Sidebar } from "./Sidebar/index";
 export * from "./PinnedNotifications/index";
 export { default as SingleDialog } from "./SingleDialog/index";
 export { default as SinglePageLayout } from "./Singlepage/index";
-export { default as TeacherLayoutFilter } from "./TeacherFilter";
+export { default as LayoutFilter } from "./TeacherFilter";
 export { default as CaseStudyLayout } from "./CaseStudyLayout/CaseStudyWrapper";
 export { default as TestWrapper } from "./TestLayout/TestWrapper";
 export { default as LayoutTeacher } from "./TeacherLayout";

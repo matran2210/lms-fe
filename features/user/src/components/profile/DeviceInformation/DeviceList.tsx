@@ -1,17 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
-import { MY_COURSES } from "@lms/core";
-import UserApi from "src/redux/services/User/user";
-import DeviceItem from "./DeviceItem";
-import ProfileCard from "../ProfileCard";
-import Icon from "@components/icons";
-import { IDeviceItem } from "@lms/core";
-import { SappDrawerV2 } from "@lms/ui";
-import { calculateTimeAgo } from "@lms/utils";
-import { AuthAPI } from "@pages/api/profile";
-import { getCookie, getSessionIdFromToken } from "@lms/utils";
-import { COOKIE_INFO } from "@lms/core";
-import clsx from "clsx";
+import { Icon } from "@lms/assets";
+import { COOKIE_INFO, IDeviceItem, MY_COURSES } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
+import { SappDrawerV2 } from "@lms/ui";
+import { calculateTimeAgo, getCookie, getSessionIdFromToken } from "@lms/utils";
+import { AuthAPI } from "@pages/api/profile";
+import clsx from "clsx";
+import { useEffect, useMemo, useState } from "react";
+import UserApi from "src/redux/services/User/user";
+import ProfileCard from "../ProfileCard";
+import DeviceItem from "./DeviceItem";
 
 const DeviceList = () => {
   const sessionId =

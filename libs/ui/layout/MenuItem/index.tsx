@@ -1,50 +1,55 @@
 import blankAvatar from "@assets/images/blank_avatar.webp";
+import { ExpandIcon } from "@lms/assets";
+import {
+  activeNotesList,
+  clearNotifications,
+  openCalculator,
+  pushNotes,
+  useAppDispatch,
+  useAppSelector,
+  userReducer,
+} from "@lms/contexts";
+import {
+  INotificationAPI,
+  LANG_SIGNIN,
+  MenuItem as MenuItemType,
+  TitleSidebar,
+} from "@lms/core";
+import { useNotification } from "@lms/hooks";
 import { trackGAEvent } from "@lms/utils";
+import { Divider } from "antd";
+import clsx from "clsx";
+import { isEmpty } from "lodash";
+import Lottie from "lottie-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { INotificationAPI, TitleSidebar } from "@lms/core";
-import {
-  useAppDispatch,
-  useAppSelector,
-  openCalculator,
-  activeNotesList,
-  pushNotes,
-  userReducer,
-  clearNotifications,
-} from "@lms/contexts";
-import { v4 as uuidv4 } from "uuid";
-import { MenuItem as MenuItemType } from "@lms/core";
-import ExpandIcon from "../ExpandIcon";
-import MenuItemsList from "../MenuItemsList";
-import { LANG_SIGNIN } from "@lms/core";
-import { isEmpty } from "lodash";
+// import addNoteAnimationIcon from "public/animations/AddNote.json"; comment monorepo
+// import calculatorAnimationIcon from "public/animations/Calculator.json";
+// import calendarAnimationIcon from "public/animations/Calendar.json";
+// import courseContentAnimationIcon from "public/animations/CourseContent.json";
+// import dashboardAnimationIcon from "public/animations/Dashboard.json";
+// import entranceTestAnimationIcon from "public/animations/EntranceTest.json";
+// import eventTestAminationIcon from "public/animations/EventTest.json";
+// import examInfoAnimationIcon from "public/animations/ExamInfo.json";
+// import examListAnimationIcon from "public/animations/ExamList.json";
+// import myCourseAnimationIcon from "public/animations/MyCourse.json";
+// import noteListAnimationIcon from "public/animations/NoteList.json";
+// import notificationAnimationIcon from "public/animations/Notification.json";
+// import resourceAnimationIcon from "public/animations/Resource.json";
+// import testQuizListAnimationIcon from "public/animations/TestQuizList.json";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import SappNotificationComponent from "sapp-notification";
-import { useNotification } from "@lms/hooks";
-import { Divider } from "antd";
-import clsx from "clsx";
-import myCourseAnimationIcon from "public/animations/MyCourse.json";
-import addNoteAnimationIcon from "public/animations/AddNote.json";
-import resourceAnimationIcon from "public/animations/Resource.json";
-import calculatorAnimationIcon from "public/animations/Calculator.json";
-import calendarAnimationIcon from "public/animations/Calendar.json";
-import courseContentAnimationIcon from "public/animations/CourseContent.json";
-import dashboardAnimationIcon from "public/animations/Dashboard.json";
-import entranceTestAnimationIcon from "public/animations/EntranceTest.json";
-import examListAnimationIcon from "public/animations/ExamList.json";
-import eventTestAminationIcon from "public/animations/EventTest.json";
-import examInfoAnimationIcon from "public/animations/ExamInfo.json";
-import noteListAnimationIcon from "public/animations/NoteList.json";
-import testQuizListAnimationIcon from "public/animations/TestQuizList.json";
-import notificationAnimationIcon from "public/animations/Notification.json";
-import Lottie from "lottie-react";
+import { v4 as uuidv4 } from "uuid";
+import MenuItemsList from "../MenuItemsList";
 
 type MenuItemProps = {
   menuItem: MenuItemType;
   setOpenResource?: Dispatch<SetStateAction<boolean>>;
   closeSideBar: () => void;
   setOpenExaminationInfo?: Dispatch<SetStateAction<boolean>>;
+  notificationApi: INotificationAPI;
+  pageLink: { [key: string]: string };
 };
 
 export default function MenuItem({
@@ -72,7 +77,7 @@ export default function MenuItem({
     refreshNotification,
     isDesktopView,
     notificationUnread,
-  } = useNotification();
+  } = useNotification(notificationApi);
 
   const isLoading = useAppSelector(
     (state) => state.notificationReducer.loading,
@@ -231,7 +236,7 @@ export default function MenuItem({
     router?.query?.courseId ||
     (router?.query?.activityId && name !== TitleSidebar.EXAM) ||
     (router?.query?.course_section_id && name !== TitleSidebar.EXAM);
-  const isInMyProfile = router.asPath === PageLink.MYPROFILE;
+  const isInMyProfile = router.asPath === pageLink.MYPROFILE;
   const checkIsHiddenDashboard = (info: any) => {
     return name == TitleSidebar.DASHBOARD && !info;
   };
@@ -246,7 +251,7 @@ export default function MenuItem({
       case "activity":
         return (
           <Lottie
-            animationData={myCourseAnimationIcon}
+            // animationData={myCourseAnimationIcon}
             loop
             autoplay
             className={animationClass}
@@ -255,7 +260,7 @@ export default function MenuItem({
       case "notes-list":
         return (
           <Lottie
-            animationData={noteListAnimationIcon}
+            // animationData={noteListAnimationIcon}
             loop
             autoplay
             className={animationClass}
@@ -264,7 +269,7 @@ export default function MenuItem({
       case "create-note":
         return (
           <Lottie
-            animationData={addNoteAnimationIcon}
+            // animationData={addNoteAnimationIcon}
             loop
             autoplay
             className={animationClass}
@@ -273,7 +278,7 @@ export default function MenuItem({
       case "learning-resource":
         return (
           <Lottie
-            animationData={resourceAnimationIcon}
+            // animationData={resourceAnimationIcon}
             loop
             autoplay
             className={animationClass}
@@ -282,7 +287,7 @@ export default function MenuItem({
       case "caculator":
         return (
           <Lottie
-            animationData={calculatorAnimationIcon}
+            // animationData={calculatorAnimationIcon}
             loop
             autoplay
             className={animationClass}
@@ -291,7 +296,7 @@ export default function MenuItem({
       case "calendar":
         return (
           <Lottie
-            animationData={calendarAnimationIcon}
+            // animationData={calendarAnimationIcon}
             loop
             autoplay
             className={animationClass}
@@ -300,7 +305,7 @@ export default function MenuItem({
       case "grid":
         return (
           <Lottie
-            animationData={dashboardAnimationIcon}
+            // animationData={dashboardAnimationIcon}
             loop
             autoplay
             className={animationClass}
@@ -309,7 +314,7 @@ export default function MenuItem({
       case "entrance-test":
         return (
           <Lottie
-            animationData={entranceTestAnimationIcon}
+            // animationData={entranceTestAnimationIcon}
             loop
             autoplay
             className={animationClass}
@@ -318,7 +323,7 @@ export default function MenuItem({
       case "exam_list":
         return (
           <Lottie
-            animationData={examListAnimationIcon}
+            // animationData={examListAnimationIcon}
             loop
             autoplay
             className={animationClass}
@@ -327,7 +332,7 @@ export default function MenuItem({
       case "result":
         return (
           <Lottie
-            animationData={testQuizListAnimationIcon}
+            // animationData={testQuizListAnimationIcon}
             loop
             autoplay
             className={animationClass}
@@ -336,7 +341,7 @@ export default function MenuItem({
       case "bookmark":
         return (
           <Lottie
-            animationData={courseContentAnimationIcon}
+            // animationData={courseContentAnimationIcon}
             loop
             autoplay
             className={animationClass}
@@ -345,7 +350,7 @@ export default function MenuItem({
       case "event-test":
         return (
           <Lottie
-            animationData={eventTestAminationIcon}
+            // animationData={eventTestAminationIcon}
             loop
             autoplay
             className={animationClass}
@@ -354,7 +359,7 @@ export default function MenuItem({
       case "exam-information":
         return (
           <Lottie
-            animationData={examInfoAnimationIcon}
+            // animationData={examInfoAnimationIcon}
             loop
             autoplay
             className={animationClass}
@@ -364,7 +369,7 @@ export default function MenuItem({
         return (
           <div className="relative">
             <Lottie
-              animationData={notificationAnimationIcon}
+              // animationData={notificationAnimationIcon}
               loop
               autoplay
               className={animationClass}
@@ -386,7 +391,7 @@ export default function MenuItem({
       default:
         return (
           <Lottie
-            animationData={myCourseAnimationIcon}
+            // animationData={myCourseAnimationIcon}
             loop
             autoplay
             className={animationClass}
@@ -454,6 +459,7 @@ export default function MenuItem({
               <>
                 {!selected && isShowHoverIcon() && renderIcon()}
                 <ExpandIcon
+                  pageLink={pageLink}
                   type={Icon}
                   className={clsx(
                     `before-icon min-h-6 min-w-6 shrink-0 ${
@@ -641,6 +647,7 @@ export default function MenuItem({
           )}
           {isNested && type === "level-2" ? (
             <ExpandIcon
+              pageLink={pageLink}
               isExpanded={isExpanded}
               handleClick={onClick}
               type={"ontoggle"}

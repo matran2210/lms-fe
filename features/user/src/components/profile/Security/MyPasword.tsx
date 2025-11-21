@@ -1,24 +1,24 @@
-import ProfileCard from '@components/card/ProfileCard'
-import { Icon } from '@lms/assets'
-import React, { useState } from 'react'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import FullScreenMobile from '../Modal/FullScreenMobile'
-import ChangePassword from '../ChangePassword'
+import { Icon } from "@lms/assets";
+import { useTailwindBreakpoint } from "@lms/hooks";
+import { FullScreenMobile } from "@lms/ui";
+import { useState } from "react";
+import ChangePassword from "../ChangePassword";
+import ProfileCard from "../ProfileCard";
 
 interface IProps {
-  setIsChangePassword: (isChangePassword: boolean) => void
+  setIsChangePassword: (isChangePassword: boolean) => void;
 }
 const MyPasword = ({ setIsChangePassword }: IProps) => {
-  const { isMobileView } = useTailwindBreakpoint()
-  const [openChangePassword, setOpenChangePassword] = useState(false)
+  const { isMobileView } = useTailwindBreakpoint();
+  const [openChangePassword, setOpenChangePassword] = useState(false);
   const onCloseChangePassword = () => {
-    setOpenChangePassword(false)
-    setIsChangePassword(false)
-  }
+    setOpenChangePassword(false);
+    setIsChangePassword(false);
+  };
   const handleClickEdit = () => {
-    setIsChangePassword(true)
-    setOpenChangePassword(true)
-  }
+    setIsChangePassword(true);
+    setOpenChangePassword(true);
+  };
 
   return (
     <ProfileCard title="Password">
@@ -37,7 +37,7 @@ const MyPasword = ({ setIsChangePassword }: IProps) => {
       {isMobileView && openChangePassword && (
         <FullScreenMobile
           className="bg-gray-canvas px-4 pb-4"
-          title={'Security'}
+          title={"Security"}
           open={openChangePassword}
           onClose={onCloseChangePassword}
         >
@@ -45,15 +45,15 @@ const MyPasword = ({ setIsChangePassword }: IProps) => {
             <div className="text-base font-semibold">Change Password</div>
             <ChangePassword
               handleCancel={() => {
-                setIsChangePassword(false)
-                onCloseChangePassword()
+                setIsChangePassword(false);
+                onCloseChangePassword();
               }}
             />
           </div>
         </FullScreenMobile>
       )}
     </ProfileCard>
-  )
-}
+  );
+};
 
-export default MyPasword
+export default MyPasword;

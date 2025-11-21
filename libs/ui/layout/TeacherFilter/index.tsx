@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { SappFilterButton } from "@lms/ui";
+import { SappFilterButton } from "../../components";
 
 interface IProps {
   listFilter: ReactNode;

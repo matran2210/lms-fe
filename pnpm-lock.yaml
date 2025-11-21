@@ -893,6 +893,12 @@ importers:
       '@lms/core':
         specifier: workspace:*
         version: link:../../libs/core
+      '@lms/feature-auth':
+        specifier: workspace:*
+        version: link:../auth
+      '@lms/feature-test':
+        specifier: workspace:*
+        version: link:../test
       '@lms/hooks':
         specifier: workspace:*
         version: link:../../libs/hooks

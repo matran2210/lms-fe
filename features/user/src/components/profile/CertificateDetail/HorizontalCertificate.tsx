@@ -1,23 +1,23 @@
-import React from 'react'
-import { Button, Typography } from 'antd'
-import CertificateCard from './CertificateCard'
-import Image from 'next/image'
-import { Icon } from '@lms/assets'
-import { ICertificate } from '@pages/certificates/[id]'
-import { ClickToCopyButton } from 'src/common/SappCopyLink'
-import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
-import SAPP_Logo from '@assets/images/sapp_logo.svg'
-import { ButtonPrimary } from '@lms/ui'
+import React from "react";
+import { Button, Typography } from "antd";
+import CertificateCard from "./CertificateCard";
+import Image from "next/image";
+import { Icon } from "@lms/assets";
+import { ICertificate } from "@pages/certificates/[id]";
+import { ClickToCopyButton } from "@lms/ui";
+// import CertificateImg from "@components/layout/ExpandIcon/CertificateImg"; comment monorepo
+import SAPP_Logo from "@assets/images/sapp_logo.svg";
+import { ButtonPrimary } from "@lms/ui";
 
 interface HorizontalCertificateProps {
-  certificate?: ICertificate
-  issuedBy?: string
-  onDownload?: () => void
+  certificate?: ICertificate;
+  issuedBy?: string;
+  onDownload?: () => void;
 }
 
 const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
   certificate,
-  issuedBy = 'SAPP Academy',
+  issuedBy = "SAPP Academy",
   onDownload,
 }) => {
   return (
@@ -28,7 +28,7 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
       <div className="flex max-w-[90%] flex-col items-center py-[84px] md:gap-10 md:py-[56px]">
         <div
           className="mb-10 flex w-full flex-shrink-0 cursor-pointer items-end md:mb-0"
-          onClick={() => window.open('https://sapp.edu.vn', '_blank')}
+          onClick={() => window.open("https://sapp.edu.vn", "_blank")}
         >
           <div className="mx-auto my-auto block w-1/2 overflow-hidden sm:max-w-[14rem]">
             <Image
@@ -44,15 +44,16 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
           {certificate?.certificate_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={certificate?.certificate_url || ''}
+              src={certificate?.certificate_url || ""}
               alt={certificate?.course.name}
               className="max-h-full max-w-full object-contain"
             />
           ) : (
-            <CertificateImg
-              size={400}
-              className=" max-w-full border-none text-[#A1A1A1] group-hover:text-primary"
-            />
+            // <CertificateImg
+            //   size={400}
+            //   className=" max-w-full border-none text-[#A1A1A1] group-hover:text-primary"
+            // />
+            <></>
           )}
         </div>
 
@@ -63,8 +64,8 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
                 Congratulation!
               </div>
               <div className="text-center text-sm md:text-base">
-                Congratulations, you have achieved the{' '}
-                <span className="font-bold">{certificate?.course.name}</span>{' '}
+                Congratulations, you have achieved the{" "}
+                <span className="font-bold">{certificate?.course.name}</span>{" "}
                 issued by {issuedBy}!
               </div>
             </div>
@@ -95,7 +96,7 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
         </div>
       </div>
     </CertificateCard>
-  )
-}
+  );
+};
 
-export default HorizontalCertificate
+export default HorizontalCertificate;

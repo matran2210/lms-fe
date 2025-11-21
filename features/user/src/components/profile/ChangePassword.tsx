@@ -1,34 +1,34 @@
-import { ButtonCancelSubmit } from '@lms/ui'
-import { HookFormTextField } from '@lms/ui'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { VALIDATE_PASSWORD } from '@lms/core'
+import { ButtonCancelSubmit } from "@lms/ui";
+import { HookFormTextField } from "@lms/ui";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { VALIDATE_PASSWORD } from "@lms/core";
 import {
   VALIDATE_MIN_LENGTH_PASSWORD,
   VALIDATE_PASSWORD_REGEX_MSG,
   VALIDATE_REQUIRED,
-} from '@utils/helpers/ValidateMessage'
-import { isEmpty } from 'lodash'
-import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { AuthAPI } from 'src/pages/api/profile'
-import { z } from 'zod'
-import exceptions from '../../services/en.exceptions.json'
-import PasswordProfile from './PasswordProfile'
-import { ButtonSecondary } from '@lms/ui'
-import { ButtonPrimary } from '@lms/ui'
+} from "@utils/helpers/ValidateMessage";
+import { isEmpty } from "lodash";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { AuthAPI } from "src/pages/api/profile";
+import { z } from "zod";
+// import exceptions from "../../services/en.exceptions.json"; comment monorepo
+import PasswordProfile from "./PasswordProfile";
+import { ButtonSecondary } from "@lms/ui";
+import { ButtonPrimary } from "@lms/ui";
 
 export interface IChangePassword {
-  password: string
-  newPassword: string
-  confirmPassword: string
+  password: string;
+  newPassword: string;
+  confirmPassword: string;
 }
 
 interface IProp {
-  handleCancel?: () => void
+  handleCancel?: () => void;
 }
 
 const ChangePassword = ({ handleCancel }: IProp) => {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   /**
    * @description validate password
@@ -41,7 +41,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
         .min(1, {
           message: VALIDATE_REQUIRED,
         })
-        .min(8, { message: VALIDATE_MIN_LENGTH_PASSWORD('Password', 8, 1, 1) })
+        .min(8, { message: VALIDATE_MIN_LENGTH_PASSWORD("Password", 8, 1, 1) })
         .regex(VALIDATE_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG),
       newPassword: z
         .string({ required_error: VALIDATE_REQUIRED })
@@ -49,7 +49,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
         .min(1, {
           message: VALIDATE_REQUIRED,
         })
-        .min(8, { message: VALIDATE_MIN_LENGTH_PASSWORD('Password', 8, 1, 1) })
+        .min(8, { message: VALIDATE_MIN_LENGTH_PASSWORD("Password", 8, 1, 1) })
         .regex(VALIDATE_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG),
       confirmPassword: z
         .string({ required_error: VALIDATE_REQUIRED })
@@ -57,13 +57,13 @@ const ChangePassword = ({ handleCancel }: IProp) => {
         .min(1, {
           message: VALIDATE_REQUIRED,
         })
-        .min(8, { message: VALIDATE_MIN_LENGTH_PASSWORD('Password', 8, 1, 1) })
+        .min(8, { message: VALIDATE_MIN_LENGTH_PASSWORD("Password", 8, 1, 1) })
         .regex(VALIDATE_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG),
     })
     .refine((data) => data.newPassword === data.confirmPassword, {
       message: "Passwords don't match",
-      path: ['confirmPassword'],
-    })
+      path: ["confirmPassword"],
+    });
 
   /**
    * @description sử dụng useForm
@@ -71,35 +71,36 @@ const ChangePassword = ({ handleCancel }: IProp) => {
   const { control, handleSubmit, reset, getValues, watch, setError } =
     useForm<IChangePassword>({
       resolver: zodResolver(validationSchema),
-      mode: 'onSubmit',
-    })
+      mode: "onSubmit",
+    });
 
   /**
    * @description state này dùng để mở popup khi submit thành công mật khẩu hiện tại
    */
-  const [openPopup, setOpenPopup] = useState(false)
+  const [openPopup, setOpenPopup] = useState(false);
 
   /**
    * @description call API submit mật khẩu hiện tại
    */
   const onSubmit = async (data: IChangePassword) => {
-    setLoading(true)
+    setLoading(true);
     try {
-      await AuthAPI.changeUserPassword(data.password)
-      setOpenPopup(true)
+      await AuthAPI.changeUserPassword(data.password);
+      setOpenPopup(true);
     } catch (error: any) {
-      const errorCode = error?.response?.data?.error?.code
-      const errorMessage = exceptions.find(
-        (exception) => exception.code === errorCode,
-      )
+      const errorCode = error?.response?.data?.error?.code;
+      // const errorMessage = exceptions.find(
+      //   (exception) => exception.code === errorCode,
+      // );
 
-      setError('password', {
-        message: errorMessage?.message || '',
-      })
+      const errorMessage = "";
+      setError("password", {
+        message: errorMessage?.message || "",
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <React.Fragment>
@@ -146,23 +147,23 @@ const ChangePassword = ({ handleCancel }: IProp) => {
             <ButtonCancelSubmit
               className="flex flex-row-reverse items-center gap-2"
               cancel={{
-                title: 'Cancel',
+                title: "Cancel",
                 onClick: handleCancel,
-                size: 'medium',
+                size: "medium",
                 disabled: loading,
-                className: 'min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4',
+                className: "min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4",
               }}
               submit={{
-                title: 'Confirm',
-                size: 'medium',
+                title: "Confirm",
+                size: "medium",
                 className:
-                  'min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4 !no-underline',
-                htmlType: 'submit',
+                  "min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4 !no-underline",
+                htmlType: "submit",
                 disabled:
                   loading ||
-                  isEmpty(watch('confirmPassword')) ||
-                  isEmpty(watch('newPassword')) ||
-                  isEmpty(watch('password')),
+                  isEmpty(watch("confirmPassword")) ||
+                  isEmpty(watch("newPassword")) ||
+                  isEmpty(watch("password")),
               }}
             ></ButtonCancelSubmit>
           </div>
@@ -181,9 +182,9 @@ const ChangePassword = ({ handleCancel }: IProp) => {
               htmlType="submit"
               disabled={
                 loading ||
-                isEmpty(watch('confirmPassword')) ||
-                isEmpty(watch('newPassword')) ||
-                isEmpty(watch('password'))
+                isEmpty(watch("confirmPassword")) ||
+                isEmpty(watch("newPassword")) ||
+                isEmpty(watch("password"))
               }
             />
           </div>
@@ -196,7 +197,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
         getValues={getValues}
       />
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default ChangePassword
+export default ChangePassword;
