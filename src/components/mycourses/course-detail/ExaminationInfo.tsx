@@ -9,7 +9,7 @@ import { getDuration } from '@utils/index'
 import { Avatar, GetProp, List, Skeleton, UploadFile, UploadProps } from 'antd'
 import clsx from 'clsx'
 import { AnimatePresence, motion } from 'framer-motion'
-import { isEmpty } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import { useRouter } from 'next/router'
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
@@ -108,15 +108,15 @@ const ExaminationInfo = ({
 
   const { data, isLoading, isError, isSuccess, refetch } = useQuery({
     queryKey: [ClassKey.ExamInfo, classId],
-    queryFn: () => ClassAPI.getExamInfo(classId, isEditProps),
+    queryFn: () => ClassAPI.getExamInfo(classId),
     select: (data) => data.data,
     retry: false,
-    enabled: !!classId && open,
+    enabled: !isUndefined(classId) && open && !isEditProps,
   })
   const [itemSelected, setItemSelected] = useState('')
 
   useEffect(() => {
-    if (!open) return
+    if (!open || isUndefined(classId) || isEditProps) return
 
     refetch()
   }, [open])
@@ -182,7 +182,7 @@ const ExaminationInfo = ({
       methods.reset()
     }
   }
-  const handleCancel = () => {    
+  const handleCancel = () => {
     setOpen(false)
     setIsOpenSelectExam(false)
     setTimeout(() => {
