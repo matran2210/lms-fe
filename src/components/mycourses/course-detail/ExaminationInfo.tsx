@@ -182,8 +182,7 @@ const ExaminationInfo = ({
       methods.reset()
     }
   }
-  const handleCancel = () => {
-    debugger
+  const handleCancel = () => {    
     setOpen(false)
     setIsOpenSelectExam(false)
     setTimeout(() => {
@@ -193,7 +192,6 @@ const ExaminationInfo = ({
   const { exams } = useSelectExams(classId)
 
   const handleChangeExamDate = async () => {
-    debugger
     if (isEmpty(exams?.current_exam_name)) {
       methods.handleSubmit(onSubmit)()
     } else {
