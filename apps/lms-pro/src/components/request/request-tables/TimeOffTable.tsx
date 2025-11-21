@@ -11,7 +11,7 @@ import {
   requestStatusToBadge,
   requestTypeToTitle,
 } from '@lms/core'
-import { IUser } from 'src/redux/types/User/urser'
+import { IUser } from '@lms/contexts'
 import { IRequest, ITeacherSchedule, TableColumn } from '@lms/core'
 import RequestActionCell from '../RequestActionCell'
 

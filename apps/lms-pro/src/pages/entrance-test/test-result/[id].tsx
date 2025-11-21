@@ -8,7 +8,7 @@ import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { ANIMATION } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { UserType } from 'src/redux/types/User/urser'
+import { UserType } from '@lms/contexts'
 import { PageLink } from 'src/constants/routers'
 import { Layout } from '@lms/ui'
 import {

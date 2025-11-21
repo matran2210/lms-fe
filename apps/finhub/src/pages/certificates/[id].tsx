@@ -6,7 +6,10 @@ import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
-import { CoursesAPI } from '../api/courses'
+import { useDownloadImage } from '@lms/hooks'
+import SinglePageLayout from '@components/layout/SinglePage'
+import CertificateVertical from '@components/profile/CertificateDetail/VerticalCertificate'
+import HorizontalCertificate from '@components/profile/CertificateDetail/HorizontalCertificate'
 
 export interface ICertificate {
   certificate_url: string

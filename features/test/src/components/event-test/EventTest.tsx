@@ -1,5 +1,5 @@
 import { AlertIcon, IconCongrats } from "@assets/icons";
-import { useCourseContext } from "@contexts/index";
+import { useCourseContext } from "@lms/contexts";
 import { EAttemptStatus, IEventTest, MY_COURSES } from "@lms/core";
 import { CardCourse } from "@lms/feature-courses";
 import { ButtonSecondary, SappModalV3 } from "@lms/ui";

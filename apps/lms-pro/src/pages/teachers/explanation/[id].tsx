@@ -11,7 +11,7 @@ import {FullScreenLayout} from '@lms/ui'
 import { GRADING_METHOD, PageLink, TEST_ATTEMPT_TYPE } from '@lms/core'
 import { IAtempt } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
+import { UserType } from '@lms/contexts'
 import { IRequirement } from '@lms/core'
 
 const Explanation = () => {

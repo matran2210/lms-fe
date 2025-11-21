@@ -30,7 +30,7 @@ import toast from 'react-hot-toast'
 import SappIcon from '@components/common/SappIcon'
 import { QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
 import { DEFAULT_EDITOR_VALUE, defaultSheetData } from 'src/constants/attempt'
-import { useAppDispatch } from 'src/redux/hook'
+import { useAppDispatch } from '@lms/contexts'
 import {
   IActivityStateQuestion,
   clearFileEssay,

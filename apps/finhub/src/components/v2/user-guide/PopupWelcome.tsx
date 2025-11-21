@@ -5,7 +5,7 @@ import { RefObject } from 'react'
 import SappModal from 'src/components/base/modal/SappModal'
 import { UserGuide } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { useAppDispatch } from 'src/redux/hook'
+import { useAppDispatch } from '@lms/contexts'
 import { clearGuideState, increment } from 'src/redux/slice/Course/UserGuide'
 
 type Props = {

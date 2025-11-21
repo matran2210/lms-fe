@@ -1,6 +1,6 @@
 import LayoutTeacher from '@components/layout/Teacher'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
+import { UserType } from '@lms/contexts'
 const PageTeacher = () => {
   return (
     <LayoutTeacher>

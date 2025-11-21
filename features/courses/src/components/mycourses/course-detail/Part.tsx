@@ -1,7 +1,7 @@
 import React from 'react';
 import { ButtonSecondary } from "@lms/ui";
 import { Icon } from '@lms/assets'
-import { useCourseContext } from "@contexts/index";
+import { useCourseContext } from "@lms/contexts";
 import { formatTimeMinToHhMm, trackGAEvent } from "@lms/utils";
 import { getUserPrefix } from "@utils/helpers";
 import { buildQueryString, formatTime, handleReplaceText } from "@lms/utils";

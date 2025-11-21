@@ -1,7 +1,7 @@
 import { LAYOUT } from '@lms/core'
 import Link from 'next/link'
 import { PageLink } from '@lms/core'
-import { useAppSelector } from 'src/redux/hook'
+import { useAppSelector } from '@lms/contexts'
 import { userReducer } from 'src/redux/slice/User/User'
 import { SappButton } from '@lms/ui'
 
