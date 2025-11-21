@@ -2,7 +2,7 @@ import { CloseIconNote } from '@assets/icons'
 import { useRouter } from 'next/router'
 import React, { useLayoutEffect } from 'react'
 import { PageLink } from '@lms/core'
-import { useCourseContext } from '@contexts/index'
+import { useCourseContext } from '@lms/contexts'
 import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 import PinnedNotificationsV2 from 'src/components/layout/PinnedNotifications/PinnedNotificationsV2'
 

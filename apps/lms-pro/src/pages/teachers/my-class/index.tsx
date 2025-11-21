@@ -13,7 +13,7 @@ import { PaginationSAPP } from '@lms/ui'
 import { TeacherKey } from '@pages/api/queryKey'
 import { IMyClass } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
+import { UserType } from '@lms/contexts'
 
 const breadcrumbs: ITabs[] = [
   { link: PageLink.TEACHERS, title: 'LMS' },

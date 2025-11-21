@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react'
 import { ANIMATION, LOCAL_STORAGE_KEYS } from '@lms/core'
 import { MY_COURSES } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { useAppDispatch, useAppSelector } from '@lms/contexts'
 import {
   getCountUnRead,
   getNotification,

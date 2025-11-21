@@ -1,5 +1,5 @@
 import PopupModalTest from '@components/survey/PopupModalTest'
-import { useCourseContext } from '@contexts/index'
+import { useCourseContext, UserType } from '@lms/contexts'
 import {
   ANIMATION,
   CLASS_TYPE,
@@ -35,7 +35,6 @@ import {
 } from 'src/constants/menu-items'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
 
 const DEFAULT_PAGESIZE = 18
 

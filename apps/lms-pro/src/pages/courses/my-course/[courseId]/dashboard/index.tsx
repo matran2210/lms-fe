@@ -27,7 +27,7 @@ import {
 } from 'src/constants/menu-items'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
+import { UserType } from '@lms/contexts'
 
 const Dashboard = () => {
   const router = useRouter()

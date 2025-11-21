@@ -12,7 +12,7 @@
 // import { useInfiniteQuery } from 'react-query'
 // import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 // import { ANIMATION, UserGuide } from '@lms/core'
-// import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+// import { useAppDispatch, useAppSelector } from '@lms/contexts'
 // import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
 // import { CoursesAPI } from '../api/courses'
 // import { MY_COURSES } from '@lms/core'

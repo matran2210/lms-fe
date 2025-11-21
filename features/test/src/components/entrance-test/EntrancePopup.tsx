@@ -2,7 +2,7 @@ import { SappModalV3 } from "@lms/ui";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { Dispatch, FC, SetStateAction, useMemo } from "react";
-import { useAppSelector } from "src/redux/hook";
+import { useAppSelector } from "@lms/contexts";
 import { entranceTestReducer } from "@lms/contexts";
 import EntrancePopupContent from "./EntrancePopupContent";
 

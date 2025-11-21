@@ -1,7 +1,7 @@
 import { Icon } from '@lms/assets'
 import clsx from 'clsx'
 import React from 'react'
-import { IUserContact } from 'src/redux/types/User/urser'
+import { IUserContact } from '@lms/contexts'
 
 interface IProps {
   data: IUserContact

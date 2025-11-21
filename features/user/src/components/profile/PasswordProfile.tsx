@@ -13,7 +13,7 @@ import React, {
 import { UseFormGetValues, UseFormReset } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { AuthAPI } from 'src/pages/api/profile'
-import { useAppSelector } from 'src/redux/hook'
+import { useAppSelector } from '@lms/contexts'
 import { userReducer } from 'src/redux/slice/User/User'
 import { IChangePassword } from './ChangePassword'
 import { ButtonPrimary } from '@lms/ui'

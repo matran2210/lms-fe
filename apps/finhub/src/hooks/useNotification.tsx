@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { NotificationAPI } from 'src/pages/api/notification'
 import { isEmpty } from 'lodash'
 import { LOCAL_STORAGE_KEYS } from '@lms/core'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { useAppDispatch, useAppSelector } from '@lms/contexts'
 import {
   getCountUnRead,
   getNotification,

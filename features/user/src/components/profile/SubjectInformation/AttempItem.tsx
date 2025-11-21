@@ -1,7 +1,7 @@
 import { HookFormTextField } from '@lms/ui'
 import React from 'react'
 import { Control, FieldValues } from 'react-hook-form'
-import { UserHubspotExaminationSubjectItem } from 'src/redux/types/User/urser'
+import { UserHubspotExaminationSubjectItem } from '@lms/contexts'
 
 interface IProps {
   index: number

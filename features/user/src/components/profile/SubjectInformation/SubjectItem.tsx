@@ -2,7 +2,7 @@ import { Icon } from '@lms/assets'
 import clsx from 'clsx'
 import React from 'react'
 import { SubjectOptionItem } from './SubjectList'
-import { useAppSelector } from 'src/redux/hook'
+import { useAppSelector } from '@lms/contexts'
 import { userReducer } from 'src/redux/slice/User/User'
 
 interface IProps {

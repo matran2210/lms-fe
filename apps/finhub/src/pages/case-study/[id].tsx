@@ -45,7 +45,7 @@ import {
   ROUTES,
 } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { useAppDispatch, useAppSelector } from '@lms/contexts'
 import {
   clearFileEssay,
   getTopicsCaseStudy,

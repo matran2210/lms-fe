@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 import { ANIMATION, PageLink, QUESTION_TYPES } from '@lms/core'
 import { CoursesAPI } from 'src/pages/api/courses'
 import {FullScreenLayout} from '@lms/ui'
-import { UserType } from 'src/redux/types/User/urser'
+import { UserType } from '@lms/contexts'
 import withAuthorization from 'src/HOC/withAuthorization'
 
 const headers = [

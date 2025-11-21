@@ -10,7 +10,7 @@ import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import { CoursesAPI } from 'src/pages/api/courses'
 import toast from 'react-hot-toast'
 import { pushNotes, closeNote } from 'src/redux/slice/Course/NotesList'
-import { useAppDispatch } from 'src/redux/hook'
+import { useAppDispatch } from '@lms/contexts'
 import { v4 as uuidv4 } from 'uuid'
 
 interface IProps {

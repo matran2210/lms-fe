@@ -1,5 +1,5 @@
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
+import { UserType } from '@lms/contexts'
 
 const IndexPage = () => {
   return <></>

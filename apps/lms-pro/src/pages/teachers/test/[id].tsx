@@ -26,7 +26,7 @@ import NewFiltext from '@lms/ui/components/questionType/NewFillText'
 import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
-import { CourseProvider, useCourseContext } from '@contexts/index'
+import { CourseProvider, useCourseContext } from '@lms/contexts'
 import { runHighlight } from '@lms/utils'
 import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
@@ -43,7 +43,7 @@ import {
   RESPONSE_OPTION,
   TEST_TYPE,
 } from '@lms/core'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { useAppDispatch, useAppSelector } from '@lms/contexts'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import { IExhibit } from '@lms/core'

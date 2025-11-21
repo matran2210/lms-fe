@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import ResultsTable from './ResultsTable'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
+import { UserType } from '@lms/contexts'
 import { Layout, SappBreadCrumbs } from '@lms/ui'
 import { TEST_AND_QUIZ_TITLE } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'

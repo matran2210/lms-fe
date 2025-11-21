@@ -36,7 +36,7 @@ import {
   QUESTION_TYPES,
   TEST_TYPE,
 } from '@lms/core'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { useAppDispatch, useAppSelector } from '@lms/contexts'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import { IExhibit } from '@lms/core'
 import ConFirmSubmit from './conFirmSubmit'

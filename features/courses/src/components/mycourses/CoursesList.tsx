@@ -5,7 +5,7 @@ import { clearStylesHtml } from "@lms/utils";
 import clsx from "clsx";
 import { isEmpty } from "lodash";
 import React from "react";
-import { useAppSelector } from "src/redux/hook";
+import { useAppSelector } from "@lms/contexts";
 import { ICourse } from "@lms/core";
 import Course from "./Course";
 import { NoCoursesAvailable, Tooltip } from "@lms/ui";

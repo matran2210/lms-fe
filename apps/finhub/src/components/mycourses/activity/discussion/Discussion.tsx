@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import SappIcon from '@components/common/SappIcon'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { useAppDispatch, useAppSelector } from '@lms/contexts'
 import {
   courseActivityReducer,
   createDiscussion,

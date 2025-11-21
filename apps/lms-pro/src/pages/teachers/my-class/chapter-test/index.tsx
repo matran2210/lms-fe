@@ -16,7 +16,7 @@ import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import StatusActionCell from '@lms/core/types/quiz/StatusActionCell'
 import useSappPaging from 'src/hooks/useSappPaging'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
+import { UserType } from '@lms/contexts'
 import { ProfilePages } from '@lms/core'
 
 interface FilterParams {

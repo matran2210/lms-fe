@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappIcon from '@components/common/SappIcon'
 import { ActivityAPI } from 'src/pages/api/activity'
-import { useAppDispatch } from 'src/redux/hook'
+import { useAppDispatch } from '@lms/contexts'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { getDiscussion } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import {

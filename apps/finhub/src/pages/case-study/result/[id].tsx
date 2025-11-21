@@ -45,7 +45,7 @@ import {
 } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { useAppDispatch } from 'src/redux/hook'
+import { useAppDispatch } from '@lms/contexts'
 import { loadMoreQuestion } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
 import {
   IAnswerResult,

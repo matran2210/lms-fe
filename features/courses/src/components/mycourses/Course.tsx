@@ -1,6 +1,6 @@
 import { ButtonSecondary } from "@lms/ui";
 import { Icon, CourseTimeIcon, GraduationCapIcon } from '@lms/assets'
-import { useCourseContext } from "@contexts/index";
+import { useCourseContext } from "@lms/contexts";
 import { clearStylesHtml, trackGAEvent, truncateString } from "@lms/utils";
 import {
   convertHourToDayLeft,

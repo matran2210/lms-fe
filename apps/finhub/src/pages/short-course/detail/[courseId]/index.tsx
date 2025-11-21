@@ -31,7 +31,7 @@ import {
 } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { useAppDispatch } from 'src/redux/hook'
+import { useAppDispatch } from '@lms/contexts'
 import { activeNotesList } from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
 import { UserType } from 'src/redux/types/User/urser'
 import { ISubSection } from 'src/type/courses-3-level'

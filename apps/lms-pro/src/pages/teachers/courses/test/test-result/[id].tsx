@@ -7,7 +7,7 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from '@lms/core'
 import TestResultPage from 'src/pages/courses/test/test-result/testResultPage'
 import { GRADE_STATUS, TitleSidebar, PageLink } from '@lms/core'
-import { UserType } from 'src/redux/types/User/urser'
+import { UserType } from '@lms/contexts'
 import withAuthorization from 'src/HOC/withAuthorization'
 
 const TestResultDetailTeacher = () => {

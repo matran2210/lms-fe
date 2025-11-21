@@ -8,7 +8,7 @@ import { video_url } from '@utils/constants'
 import { debounce } from '@utils/helpers'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useAppDispatch } from 'src/redux/hook'
+import { useAppDispatch } from '@lms/contexts'
 import {
   IActivityStateQuestion,
   fetchQuestionById,
