@@ -12,7 +12,7 @@ import {
   ShowLessIcon,
   ShowMoreIcon,
 } from '@assets/icons'
-import { CourseProvider, useCourseContext } from '@lms/contexts'
+import { CourseProvider, disableUnsavedChange, loginSlice, useAppDispatch, useAppSelector, useCourseContext } from '@lms/contexts'
 import {
   DISPLAY_TYPE,
   EXHIBIT_TEXT_REPLACE,
@@ -44,8 +44,6 @@ import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import { CoursesAPI } from '../api/courses'
 import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'

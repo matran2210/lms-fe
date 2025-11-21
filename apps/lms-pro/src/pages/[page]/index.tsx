@@ -1,6 +1,5 @@
 import { CollapseArrowIcon } from '@assets/icons'
 import { Icon } from '@lms/assets'
-import { useCourseContext } from '@lms/contexts'
 import {
   ANIMATION,
   DEFAULT_PAGE_NUMBER,
@@ -48,13 +47,11 @@ import {
   MENU_ITEMS,
   MENU_ITEMS_EVENT,
 } from 'src/constants/menu-items'
-import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import UserApi from 'src/redux/services/User/user'
-import { getLogoutUser } from 'src/redux/slice/Login/Login'
-import { getLoginHistory, userReducer } from 'src/redux/slice/User/User'
-import { UserType } from 'src/redux/types/User/urser'
+import { UserType, useAppDispatch, useAppSelector, getLogoutUser, getLoginHistory, userReducer, useCourseContext } from '@lms/contexts'
+import { PageLink } from 'src/constants/routers'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 
 interface IFullScreenMobile {
   open: boolean
@@ -130,7 +127,7 @@ const ProfilePage = () => {
 
   const handleLogout = async () => {
     try {
-      await dispatch(getLogoutUser()).then(() => {
+      await dispatch(getLogoutUser({ authManager : new AuthenticationManager()})).then(() => {
         const pinnedStatus = getLocalStorageItem('pinnedStatus')
         if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
           removeLocalStorageItem('pinnedId')
@@ -146,6 +143,7 @@ const ProfilePage = () => {
   useEffect(() => {
     dispatch(
       getLoginHistory({
+        api: UserApi,
         page_index: DEFAULT_PAGE_NUMBER,
         page_size: DEFAULT_PAGE_SIZE,
         type: 'login',

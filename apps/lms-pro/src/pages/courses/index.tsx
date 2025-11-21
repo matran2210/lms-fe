@@ -1,5 +1,12 @@
 import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
-import { useCourseContext } from '@contexts/index'
+import {
+  UserType,
+  active,
+  clearGuideState,
+  useAppDispatch,
+  useAppSelector,
+  useCourseContext,
+} from '@lms/contexts'
 import {
   ANIMATION,
   defaultStatusCourse,
@@ -18,9 +25,6 @@ import { useInfiniteQuery } from 'react-query'
 import TourGuideCourses from 'src/assets/lotties/tour-guide-courses.json'
 import TourGuideFilter from 'src/assets/lotties/tour-guide-filter.json'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { active, clearGuideState } from 'src/redux/slice/Course/UserGuide'
-import { UserType } from 'src/redux/types/User/urser'
 import { CoursesAPI } from '../api/courses'
 import { PageLink } from 'src/constants/routers'
 import {

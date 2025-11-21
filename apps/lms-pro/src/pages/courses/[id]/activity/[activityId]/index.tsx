@@ -26,10 +26,20 @@ import {
 import { convertMinutesToHourFormat } from '@lms/utils'
 
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
-import { useCourseContext } from '@contexts/index'
-import { usePreviousSectionRoute } from '@contexts/PreviousSectionRouteContext'
 import { Triangle } from '@lms/assets'
-import { showPopupCompletedCourse } from '@lms/contexts'
+import {
+  activeNotesList,
+  clearNote,
+  closeCalculator,
+  courseActivityAction,
+  courseActivityReducer,
+  getDiscussion,
+  pushNotes, resetQuizActivity,
+  showPopupCompletedCourse,
+  useAppDispatch, useAppSelector,
+  useCourseContext, usePreviousSectionRoute,
+  UserType
+} from '@lms/contexts'
 import {
   ANIMATION,
   CourseSectionType,
@@ -76,25 +86,7 @@ import {
 } from 'src/constants/menu-items'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import {
-  CoursesAPI,
-  getActivityById,
-  submitQuizTest,
-} from 'src/pages/api/courses'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import {
-  closeCalculator,
-  courseActivityAction,
-  courseActivityReducer,
-  getDiscussion,
-} from 'src/redux/slice/Course/MyCourse/Activity/Activity'
-import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
-import {
-  activeNotesList,
-  clearNote,
-  pushNotes,
-} from 'src/redux/slice/Course/NotesList'
-import { UserType } from 'src/redux/types/User/urser'
+import { CoursesAPI, getActivityById, submitQuizTest } from 'src/pages/api/courses'
 import { v4 as uuidv4 } from 'uuid'
 
 interface IBreadCrumbs {
@@ -265,7 +257,7 @@ const ActivityPage = () => {
         dispatch(
           courseActivityAction.setCurrentTabId(router.query?.tabId as string),
         )
-        dispatch(getDiscussion({ id: router.query?.id, sectionId: sectionId }))
+        dispatch(getDiscussion({api: CoursesAPI, id: router.query?.id as string, sectionId: sectionId }))
       } catch (error) {}
     }
 

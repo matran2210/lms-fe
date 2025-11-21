@@ -6,8 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { useAppDispatch } from 'src/redux/hook'
-import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
+import { confirmDialog, useAppDispatch } from '@lms/contexts'
 import { IButtonColors } from '@lms/core'
 
 import { CloseIcon } from '@assets/icons'
