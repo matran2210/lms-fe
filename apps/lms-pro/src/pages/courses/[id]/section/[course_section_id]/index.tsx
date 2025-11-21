@@ -8,8 +8,7 @@ import {
   ResourceIcon,
   ChapterIcon,
 } from '@assets/icons'
-import { Layout } from '@lms/ui'
-import { useCourseContext } from '@contexts/index'
+import {Layout} from '@lms/ui'
 import { buildQueryString, formatDate } from '@lms/utils'
 import { Alert, Skeleton } from 'antd'
 import clsx from 'clsx'
@@ -23,18 +22,14 @@ import { TreeHelper } from 'src/helper/tree'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import TestModal from '@pages/courses/test/test-modal'
-import { UserType } from 'src/redux/types/User/urser'
 import { ILearningOutcome } from '@lms/core'
 import { CoursesAPI } from '../../../../api/courses/index'
 import BottomMenu from '@components/layout/BottomMenu'
 import CardMenuItem from '../../../../../../../../features/course/src/components/learning/activity/CardMenuItem'
 import { Divider } from 'antd'
 import LearningResource from '@components/mycourses/LearningResource'
-import { useAppDispatch } from 'src/redux/hook'
-import {
-  activeNotesList,
-  resetNotesList,
-} from 'src/redux/slice/Course/NotesList'
+import { activeNotesList,
+  resetNotesList,useCourseContext, useAppDispatch, UserType } from '@lms/contexts'
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
 import { PageLink } from 'src/constants/routers'

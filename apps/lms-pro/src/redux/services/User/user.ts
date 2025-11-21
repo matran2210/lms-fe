@@ -1,11 +1,9 @@
-import { IUser } from 'src/redux/types/User/urser'
+import { IDeviceItem, IResponse, PinnedNotifications } from '@lms/core'
+import { fetchFormData } from '@services/requestV2'
+import { AuthAPI } from 'src/pages/api/profile'
+import { IUser } from '@lms/contexts'
 import { apiURL } from '../httpService'
 import url from './url'
-import { IResponse } from 'src/redux/types'
-import { AuthAPI } from 'src/pages/api/profile'
-import { PinnedNotifications } from '@lms/core'
-import { fetchFormData } from '@services/requestV2'
-import { IDeviceItem } from '@lms/core'
 
 const UserApi = {
   /**

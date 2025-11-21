@@ -5,7 +5,7 @@
  * @param {string | number} input - The input duration in seconds.
  * @returns {string} The formatted time string.
  */
-export const formatTime = (input?: string | number): string => {
+export const formatTimer = (input?: string | number): string => {
   if (input === undefined) {
     return "";
   }

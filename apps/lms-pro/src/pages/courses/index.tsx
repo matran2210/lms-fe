@@ -1,13 +1,8 @@
 import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
 import PopupStep from '@components/user-guide/PopupStep'
 import PopupWelcome from '@components/user-guide/PopupWelcome'
-import { useCourseContext } from '@contexts/index'
-import {
-  ANIMATION,
-  defaultStatusCourse,
-  ICoursesAPI,
-  UserGuide,
-} from '@lms/core'
+import { UserType, active, clearGuideState , useAppDispatch, useAppSelector , useCourseContext } from '@lms/contexts'
+import { ANIMATION, defaultStatusCourse, ICoursesAPI, UserGuide } from '@lms/core'
 import { CoursesList, FilterCourse, Heading } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
@@ -20,9 +15,6 @@ import { useInfiniteQuery } from 'react-query'
 import TourGuideCourses from 'src/assets/lotties/tour-guide-courses.json'
 import TourGuideFilter from 'src/assets/lotties/tour-guide-filter.json'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { active, clearGuideState } from 'src/redux/slice/Course/UserGuide'
-import { UserType } from 'src/redux/types/User/urser'
 import { CoursesAPI } from '../api/courses'
 import { PageLink } from 'src/constants/routers'
 import {

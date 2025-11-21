@@ -1,7 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { LOCAL_STORAGE_KEYS } from '@lms/core'
 import { RootState } from '../../store'
-import { INotificationAPI } from '../../types'
+import { INotificationAPI } from '@lms/core'
 
 // Tạo một đối tượng Notification với giá trị mặc định
 export interface INotifications {

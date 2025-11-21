@@ -1,8 +1,9 @@
-import { decrement, increment, useAppDispatch } from "@lms/contexts";
-import { ButtonPrimary, ButtonText } from "@lms/ui";
-import Lottie from "lottie-react";
-import Image, { StaticImageData } from "next/image";
-import { useRef } from "react";
+import { ButtonPrimary } from '@lms/ui'
+import { ButtonText } from '@lms/ui'
+import Lottie from 'lottie-react'
+import Image, { StaticImageData } from 'next/image'
+import { useRef } from 'react'
+import { decrement, increment, useAppDispatch} from '@lms/contexts'
 
 type Props = {
   content: string;
