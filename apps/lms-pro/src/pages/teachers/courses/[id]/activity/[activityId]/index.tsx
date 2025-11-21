@@ -1,9 +1,24 @@
 import { CloseIcon, DownloadIcon, LinkIcon } from '@assets/icons'
-import { SUFFIX_TYPE } from '@lms/core'
-import { ANIMATION, EXHIBIT_TEXT_REPLACE, IActivity, ITabs, PROGRAM } from '@lms/core'
+import {
+  clearNote,
+  closeCalculator,
+  courseActivityAction,
+  courseActivityReducer,
+  getCourseActivityTapById,
+  getDiscussion,
+  resetQuizActivity,
+  showPopupCompletedCourse,
+  useAppDispatch, useAppSelector,
+  useCourseContext,
+  UserType
+} from '@lms/contexts'
+import { ANIMATION, EXHIBIT_TEXT_REPLACE, IActivity, ITabs, PROGRAM, SUFFIX_TYPE } from '@lms/core'
 import { CreateNote, Discussion, QuizDocument, TextDocument, VideoDocument } from '@lms/feature-courses'
-import { ActivitySkeleton, Calculator, EditorReader, FileViewer, LayoutTeacher, ModalResizeable, MovableWindow, SappButton } from '@lms/ui'
+import { ActivitySkeleton, Calculator, EditorReader, FileViewer, LayoutTeacher, ModalResizeable, MovableWindow, SAPPBorder, SappButton, SappIcon, SappLoadingGlobal, Tooltip } from '@lms/ui'
 import { trackGAEvent, truncateBySpace, truncateString } from '@lms/utils'
+import { ActivityAPI } from '@pages/api/activity'
+import { QuestionAPI } from '@pages/api/question'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import React, {
@@ -14,25 +29,10 @@ import React, {
   useState,
 } from 'react'
 import { useQuery } from 'react-query'
-import { SAPPBorder, SappIcon, SappLoadingGlobal, Tooltip } from '@lms/ui'
+import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById, submitQuizTest } from 'src/pages/api/courses'
 import { UploadAPI } from 'src/pages/api/upload'
-import {
-  closeCalculator,
-  courseActivityAction,
-  courseActivityReducer,
-  getCourseActivityTapById,
-  getDiscussion, useAppDispatch, useAppSelector, resetQuizActivity,
-  clearNote,
-  UserType,
-  useCourseContext
-} from '@lms/contexts'
-import { showPopupCompletedCourse } from '@lms/contexts'
-import { PageLink } from 'src/constants/routers'
-import { QuestionAPI } from '@pages/api/question'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
-import { ActivityAPI } from '@pages/api/activity'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 
 interface IBreadCrumbs {

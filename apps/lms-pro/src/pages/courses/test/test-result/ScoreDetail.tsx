@@ -11,6 +11,7 @@ import {
   QUESTION_TYPES
 } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
+import { Tooltip } from "@lms/ui"
 import { htmlToRaw } from '@lms/utils'
 import { Collapse } from 'antd'
 import 'aos/dist/aos.css'
@@ -22,7 +23,6 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
-import { Tooltip } from "@lms/ui";
 import { CoursesAPI } from '../../../api/courses/index'
 
 const commonHeaderClass = 'font-medium leading-6 text-gray py-2 pb-4 md:pb-6'

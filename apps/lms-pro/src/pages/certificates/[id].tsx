@@ -1,14 +1,13 @@
-import SinglePageLayout from '@components/layout/SinglePage'
+
+import { UserType } from '@lms/contexts'
 import { LAYOUT } from '@lms/core'
+import { useDownloadImage } from '@lms/hooks'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { CoursesAPI } from '../api/courses'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from '@lms/contexts'
-import {useDownloadImage} from '@lms/hooks'
-import CertificateVertical from '@components/profile/CertificateDetail/VerticalCertificate'
-import HorizontalCertificate from '@components/profile/CertificateDetail/HorizontalCertificate'
+import { CoursesAPI } from '../api/courses'
+import { SappLoadingGlobal, SinglePageLayout } from '@lms/ui'
+import { CertificateVertical, HorizontalCertificate } from '@lms/feature-user'
 
 export interface ICertificate {
   certificate_url: string

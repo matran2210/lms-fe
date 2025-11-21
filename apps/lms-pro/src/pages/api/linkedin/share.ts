@@ -5,7 +5,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const { accessToken, urn, asset, shareUrl, content } = req.body
+  const { accessToken, urn, asset, content } = req.body
 
   try {
     await axios.post(
