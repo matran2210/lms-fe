@@ -108,7 +108,7 @@ const ExaminationInfo = ({
 
   const { data, isLoading, isError, isSuccess, refetch } = useQuery({
     queryKey: [ClassKey.ExamInfo, classId],
-    queryFn: () => ClassAPI.getExamInfo(classId),
+    queryFn: () => ClassAPI.getExamInfo(classId, isEditProps),
     select: (data) => data.data,
     retry: false,
     enabled: !!classId && open,
@@ -154,7 +154,6 @@ const ExaminationInfo = ({
       const formData = new FormData()
       formData.append('examination_subject_id', examination_subject_id)
       note && formData.append('note', note[0] as FileType)
-
       return ClassAPI.changeExamDate(classId, formData)
     },
     onSuccess: (res) => {
@@ -174,25 +173,27 @@ const ExaminationInfo = ({
       note: data.note,
     })
   }
-  const handleBack = () => {
+  const handleBack = (isCancel: boolean = false) => {
     setDirection(-1)
     if (isOpenSelectExam) {
       setIsOpenSelectExam(false)
     } else {
-      setIsEdit(false)
+      setIsEdit(isCancel)
       methods.reset()
     }
   }
   const handleCancel = () => {
+    debugger
     setOpen(false)
     setIsOpenSelectExam(false)
     setTimeout(() => {
-      handleBack()
+      handleBack(isEditProps)
     }, 500)
   }
   const { exams } = useSelectExams(classId)
 
   const handleChangeExamDate = async () => {
+    debugger
     if (isEmpty(exams?.current_exam_name)) {
       methods.handleSubmit(onSubmit)()
     } else {
@@ -230,6 +231,7 @@ const ExaminationInfo = ({
         </div>
       )
     }
+
     if (isSuccess) {
       return (
         <div className="flex w-full flex-col gap-4 text-sm md:text-base">
@@ -258,7 +260,11 @@ const ExaminationInfo = ({
     }
   }
 
-  const title = isEdit ? 'Change Exam Date' : TitleSidebar.EXAM_INFORMATION
+  const title = isOpenSelectExam
+    ? 'Choose one option'
+    : isEdit
+      ? 'Change Exam Date'
+      : TitleSidebar.EXAM_INFORMATION
   const isShowCloseBtn = !isEdit || isExamList || isTabletView || isMobileView
   const isClosable = !isEdit || isExamList
   const isShowBackBtn = (isTabletView || isMobileView) && isEdit && !isExamList
@@ -293,9 +299,9 @@ const ExaminationInfo = ({
         handleCancel={handleCancel}
         title={title}
         isShowBtnClose={isShowCloseBtn}
-        closable={isClosable}
-        isShowBtnBack={isShowBackBtn}
-        isShowFooter={isEdit}
+        closable={isClosable && !isOpenSelectExam}
+        isShowBtnBack={isShowBackBtn || isOpenSelectExam}
+        isShowFooter={isEdit && !isEmpty(exams?.data)}
         btnSubmitTile={btnSubmitTile}
         cancelButtonCaption={cancelButtonCaption}
         handleBack={handleBack}
