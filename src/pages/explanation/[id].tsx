@@ -118,8 +118,8 @@ const Explanation = () => {
 
   const isUserViewAnswers = router?.query?.title === 'Your Answers Detail'
   const viewAnswersType = router?.query?.type
-  const isUserViewAnswersDetailAndEssay =
-    isUserViewAnswers && activeQuestion?.qType === QUESTION_TYPES.ESSAY
+  // const isUserViewAnswersDetailAndEssay =
+  //   isUserViewAnswers && activeQuestion?.qType === QUESTION_TYPES.ESSAY
 
   return (
     <SappLoadingGlobal loading={loading}>
@@ -189,20 +189,16 @@ const Explanation = () => {
           getActiveQuestion={getActiveQuestion}
           activeQuestion={{
             ...activeQuestion,
-            solution: isUserViewAnswersDetailAndEssay
-              ? null
-              : activeQuestion?.solution,
+            solution: activeQuestion?.solution,
             requirements: activeQuestion?.requirements.map(
               (req: IRequirement) => ({
                 ...req,
-                explanation: isUserViewAnswersDetailAndEssay
-                  ? null
-                  : req.explanation,
+                explanation: req.explanation,
               }),
             ),
-            ...(isUserViewAnswersDetailAndEssay && {
-              grading_method: GRADING_METHOD.MANUAL,
-            }),
+            // ...(isUserViewAnswersDetailAndEssay && {
+            //   grading_method: GRADING_METHOD.MANUAL,
+            // }),
           }}
           document_id={''}
           handleDownload={handleDownload}
