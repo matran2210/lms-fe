@@ -6,10 +6,21 @@ import {
   ScratchPadIcon,
   UnHighLightIcon,
 } from '@assets/icons'
-import { Calculator, EditorReader, SappLoadingGlobal } from '@lms/ui'
-import { HookFormTextArea } from '@lms/ui'
-import { MovableWindow } from '@lms/ui'
-import {FullScreenLayout} from '@lms/ui'
+import { UserType, loadMoreQuestion, useAppDispatch } from '@lms/contexts'
+import {
+  EXHIBIT_TEXT_REPLACE,
+  IAnswerResult,
+  ICaseStudyResult,
+  ICratchPad,
+  IExhibit,
+  IQuestionResult,
+  IRequirement,
+  ITopic,
+  PROGRAM,
+  QUESTION_TYPES,
+} from '@lms/core'
+import { useMousePosition } from '@lms/hooks'
+import { Calculator, EditorReader, FileViewer, FullScreenLayout, HookFormTextArea, ModalResizeable, MovableWindow, SappButton, SappLoadingGlobal } from '@lms/ui'
 import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@lms/ui/components/questionType/DragNDrop'
 import AddWordPreview from '@lms/ui/components/questionType/FillText'
@@ -17,35 +28,16 @@ import MatchingQuestion from '@lms/ui/components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
+import { runHighlight } from '@lms/utils'
+import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
+import { IFile } from 'preview-activity/dist/shared/interfaces'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import {
-  EXHIBIT_TEXT_REPLACE,
-  PROGRAM,
-  QUESTION_TYPES,
-} from '@lms/core'
-import { IExhibit } from '@lms/core'
-import { SappButton } from '@lms/ui'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { ModalResizeable } from '@lms/ui'
-import {
-  IAnswerResult,
-  ICaseStudyResult,
-  ICratchPad,
-  IQuestionResult,
-  IRequirement,
-  ITopic,
-} from '@lms/core'
-import { IFile } from 'preview-activity/dist/shared/interfaces'
-import clsx from 'clsx'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType, useAppDispatch, loadMoreQuestion } from '@lms/contexts'
-import { FileViewer } from '@lms/ui'
 import { PageLink } from 'src/constants/routers'
-import { useMousePosition } from '@lms/hooks'
-import { runHighlight } from '@lms/utils'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { CoursesAPI } from 'src/pages/api/courses'
 
 const CaseStudyResultTeacher = () => {
   const router = useRouter()

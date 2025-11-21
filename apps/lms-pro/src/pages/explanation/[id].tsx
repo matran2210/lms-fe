@@ -1,20 +1,15 @@
 import { AltArrowLeft, MenuDotsIcon } from '@assets/icons'
-import {FullScreenLayout} from '@lms/ui'
-import { LAYOUT } from '@lms/core'
+import { CloseIconV2 } from '@lms/assets'
+import { UserType } from '@lms/contexts'
+import { GRADING_METHOD, IAtempt, IRequirement, LAYOUT, QUESTION_TYPES, TEST_ATTEMPT_TYPE } from '@lms/core'
+import { FullScreenLayout, SappLoadingGlobal, Tooltip } from '@lms/ui'
 import { ExplanationPackageV2 } from 'explanation-package'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { GRADING_METHOD, PageLink, TEST_ATTEMPT_TYPE } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UploadAPI } from 'src/pages/api/upload'
-import { UserType } from '@lms/contexts'
-import { IRequirement } from '@lms/core'
-import { QUESTION_TYPES } from '@lms/core'
-import { IAtempt } from '@lms/core'
 import { CoursesAPI } from '../api/courses'
-import { CloseIconV2 } from '@lms/assets'
-import { Tooltip } from "@lms/ui";
+import { PageLink } from 'src/constants/routers'
 
 const Explanation = () => {
   const router = useRouter()

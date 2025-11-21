@@ -14,10 +14,19 @@ import {
   UnHighLightIcon,
   WordIcon,
 } from '@assets/icons'
-import { HookFormCheckBoxGroup } from '@lms/ui'
-import { useClickOutside } from '@lms/ui'
-import { EditorReader } from '@lms/ui'
-import { TabSlide, FullScreenLayout } from '@lms/ui'
+import { confirmDialog, CourseProvider, disableUnsavedChange, loginSlice, useAppDispatch, useAppSelector, useCourseContext } from '@lms/contexts'
+import {
+  DISPLAY_TYPE,
+  EXHIBIT_TEXT_REPLACE,
+  GRADING_METHOD,
+  IExhibit,
+  PROGRAM,
+  QUESTION_TYPES,
+  RESPONSE_OPTION,
+  TEST_TYPE,
+} from '@lms/core'
+import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
+import { EditorReader, FullScreenLayout, HookFormCheckBoxGroup, useClickOutside } from '@lms/ui'
 import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@lms/ui/components/questionType/DragNDrop'
 import MatchingQuestion from '@lms/ui/components/questionType/MatchingQuestion'
@@ -26,66 +35,46 @@ import NewFiltext from '@lms/ui/components/questionType/NewFillText'
 import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
-import { CourseProvider, useCourseContext } from '@lms/contexts'
 import { runHighlight } from '@lms/utils'
 import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
-import {
-  DISPLAY_TYPE,
-  EXHIBIT_TEXT_REPLACE,
-  GRADING_METHOD,
-  PageLink,
-  PROGRAM,
-  QUESTION_TYPES,
-  RESPONSE_OPTION,
-  TEST_TYPE,
-} from '@lms/core'
-import { useAppDispatch, useAppSelector } from '@lms/contexts'
-import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
-import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
-import { IExhibit } from '@lms/core'
 import { CoursesAPI } from 'src/pages/api/courses'
-import QuitTestModal from '@pages/courses/test/quit-test-modal'
-import TestTimeOutModal from 'src/pages/courses/test/test-timeout'
-import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
 import LimitQuizModal from 'src/pages/test/limitQuizModal'
 
-import { ButtonContent, SappLoading } from '@lms/ui'
-import { HeaderTest } from '@lms/feature-test'
-import { trackGAEvent } from '@lms/utils'
-import dayjs from 'dayjs'
 import { showPopupCompletedCourse } from '@lms/contexts'
 import {
   Answer,
   AnswerItem,
   AnswerList,
+  DEFAULT_EDITOR_VALUE, defaultSheetData,
   DragDropAnswerItem,
   IDataQuestion,
+  IRequirement,
   Requirement,
   RequirementItem,
   ScratchPadValue,
 } from '@lms/core'
-import { IRequirement } from '@lms/core'
+import { ConFirmSubmit, HeaderTest, QuitTestModal, TabSlide, TestTimeOutModal } from '@lms/feature-test'
+import ResetToAnswerTemplateModal from '@lms/feature-test/src/components/test/ResetToAnswerTemplateModal'
+import ShowAnswerTemplate from '@lms/feature-test/src/components/test/ShowAnswerTemplate'
+import { ButtonContent, ButtonPrimaryV2, ButtonTextV2, SappLoading } from '@lms/ui'
+import { trackGAEvent } from '@lms/utils'
+import { TestAPI } from '@pages/api/test'
+import dayjs from 'dayjs'
+import { QuestionAPI } from 'src/pages/api/question'
+import SuccessSubmittedConstructorModal from 'src/pages/test/SuccessSubmittedConstructorModal'
+import TestScratchPads from 'src/pages/test/TestScratchPads'
+import useGetQuestionTabs from 'src/pages/test/custom-hook/useGetQuestionTabs'
+import useGetQuizDetail from 'src/pages/test/custom-hook/useGetQuizDetail'
 import {
   checkSheetAnswered,
   checkTypeAndRenderTitle,
   isValuesEqual,
   isWorkbookEmpty,
 } from 'src/utils/helpers/quiz-test/helper'
-import { QuestionAPI } from 'src/pages/api/question'
-import SuccessSubmittedConstructorModal from 'src/pages/test/SuccessSubmittedConstructorModal'
-import TestScratchPads from 'src/pages/test/TestScratchPads'
-import useGetQuestionTabs from 'src/pages/test/custom-hook/useGetQuestionTabs'
-import useGetQuizDetail from 'src/pages/test/custom-hook/useGetQuizDetail'
-import { TestAPI } from '@pages/api/test'
-import { DEFAULT_EDITOR_VALUE, defaultSheetData } from '@lms/core'
-import { ButtonPrimaryV2 } from '@lms/ui'
-import ShowAnswerTemplate from '@lms/feature-test/src/components/test/ShowAnswerTemplate'
-import ResetToAnswerTemplateModal from '@lms/feature-test/src/components/test/ResetToAnswerTemplateModal'
-import { ButtonTextV2 } from '@lms/ui'
+import { PageLink } from 'src/constants/routers'
 declare global {
   interface Window {
     userAgreed: any

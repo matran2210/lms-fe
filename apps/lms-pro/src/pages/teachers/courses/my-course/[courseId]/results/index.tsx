@@ -1,13 +1,12 @@
+import { UserType } from '@lms/contexts'
+import { ITabs, TitleSidebar } from '@lms/core'
+import { CourseSkeleton, LayoutTeacher, SappLoadingGlobal } from '@lms/ui'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
+import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { UserType } from '@lms/contexts'
-import { ITabs } from '@lms/core'
-import {  TitleSidebar } from '@lms/core'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
-import { CourseSkeleton, LayoutTeacher, SappLoadingGlobal } from '@lms/ui'
-import { PageLink } from 'src/constants/routers'
 
 const DEFAULT_PAGESIZE = 10
 

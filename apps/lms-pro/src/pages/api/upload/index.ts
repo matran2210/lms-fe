@@ -1,6 +1,6 @@
 import axios, { AxiosResponse, CancelTokenSource } from 'axios'
-import { IResponse } from 'src/redux/types'
 import request, { fetcher, getBaseUrl } from '@services/requestV2'
+import { IResponse } from '@lms/core';
 
 type PartUploadDto = { part_number: number; upload_url: string }
 

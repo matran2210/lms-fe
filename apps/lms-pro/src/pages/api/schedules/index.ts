@@ -1,11 +1,6 @@
+import { ICreateSchedulePayload, IResponseSchedule, IWeeklyNorm } from '@lms/contexts'
+import { IResponse } from '@lms/core'
 import { fetcher } from '@services/requestV2'
-import { apiURL } from 'src/redux/services/httpService'
-import { IResponse } from 'src/redux/types'
-import {
-  ICreateSchedulePayload,
-  IResponseSchedule,
-  IWeeklyNorm,
-} from 'src/redux/types/Schedule/schedule'
 
 export class SchedulesAPI {
   static get(params: Object): Promise<IResponse<IResponseSchedule[]>> {

@@ -6,11 +6,26 @@ import {
   ScratchPadIcon,
   UnHighLightIcon,
 } from '@assets/icons'
-import { Calculator, SappButton, SappLoadingGlobal } from '@lms/ui'
-import { EditorReader } from '@lms/ui'
-import { HookFormTextArea } from '@lms/ui'
-import { MovableWindow } from '@lms/ui'
-import {FullScreenLayout} from '@lms/ui'
+import {
+  clearFileEssay,
+  getTopicsCaseStudy,
+  loadMoreQuestion,
+  saveFileEssay,
+  showPopupCompletedCourse,
+  useAppDispatch, useAppSelector, UserType
+} from '@lms/contexts'
+import {
+  ESSAY_TYPE,
+  EXHIBIT_TEXT_REPLACE,
+  IExhibit,
+  IRequirement,
+  PROGRAM,
+  QUESTION_TYPES,
+} from '@lms/core'
+import { ConFirmSubmit, QuitTestModal } from '@lms/feature-test'
+import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
+import { useMousePosition } from '@lms/hooks'
+import { Calculator, EditorReader, FileViewer, FullScreenLayout, HookFormTextArea, ModalResizeable, MovableWindow, SappButton, SappLoadingGlobal } from '@lms/ui'
 import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@lms/ui/components/questionType/DragNDrop'
 import AddWordPreview from '@lms/ui/components/questionType/FillText'
@@ -19,38 +34,19 @@ import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQ
 import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
-import {useMousePosition} from '@lms/hooks'
 import { runHighlight } from '@lms/utils'
+import { CaseStudyAPI } from '@pages/api/case-study'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
-import {
-  ESSAY_TYPE,
-  EXHIBIT_TEXT_REPLACE,
-  PROGRAM,
-  QUESTION_TYPES,
-} from '@lms/core'
-import {   clearFileEssay,
-  getTopicsCaseStudy,
-  loadMoreQuestion,
-  saveFileEssay, useAppDispatch, useAppSelector, UserType } from '@lms/contexts'
-import { IRequirement } from '@lms/core'
-import { IExhibit } from '@lms/core'
+import { PageLink } from 'src/constants/routers'
+import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { TestAPI } from 'src/pages/api/test'
-import QuitTestModal from '@pages/courses/test/quit-test-modal'
-import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
 import LimitQuizModal from 'src/pages/test/limitQuizModal'
-import { ModalResizeable } from '@lms/ui'
-import { showPopupCompletedCourse } from '@lms/contexts'
-import { FileViewer } from '@lms/ui'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { CaseStudyAPI } from '@pages/api/case-study'
-import { PageLink } from 'src/constants/routers'
 
 const CaseStudyDetailTeacher = () => {
   const checkType = (

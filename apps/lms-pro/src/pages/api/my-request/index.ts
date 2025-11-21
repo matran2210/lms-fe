@@ -1,15 +1,6 @@
+import { IResponse } from '@lms/core'
 import { fetcher } from '@services/requestV2'
-import { IResponse } from 'src/redux/types'
-import {
-  IBusyRequestDetailResponse,
-  ICreateBusyScheduleData,
-  ICreateEditWeeklyNorm,
-  ICreateTimeoffRequestData,
-  ICreateWeeklyNormData,
-  IEditBusyScheduleData,
-  IEditTimeoffRequestData,
-  IEditWeeklyNormData,
-} from '@lms/core'
+import { IBusyRequestDetailResponse, ICreateBusyScheduleData, ICreateEditWeeklyNorm, ICreateTimeoffRequestData, ICreateWeeklyNormData, IEditBusyScheduleData, IEditTimeoffRequestData, IEditWeeklyNormData } from 'src/type/my-request'
 
 export class MyRequestAPI {
   static createBusySchedule(

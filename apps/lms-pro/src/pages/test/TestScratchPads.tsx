@@ -1,14 +1,10 @@
-import { EditorReader } from '@lms/ui'
-import { FileViewer } from '@lms/ui'
-import { ModalResizeable } from '@lms/ui'
-import { MovableWindow } from '@lms/ui'
+import { CloseIconNote, CloseModalIcon, Triangle } from '@lms/assets'
+import { IExhibit, ScratchPadValue } from '@lms/core'
+import { EditorReader, FileViewer, ModalResizeable, MovableWindow } from '@lms/ui'
 import Calculator from '@lms/ui/components/calculator/index'
-import { ChangeEvent, Dispatch, SetStateAction, useEffect } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
-import { ScratchPadValue } from '@lms/core'
-import { IExhibit } from '@lms/core'
 import ScratchPatch from './scratchPatch'
-import { Triangle, CloseModalIcon, CloseIconNote } from '@lms/assets';
 interface IProps {
   openScratchPad: any[]
   onFocusingPad: string
