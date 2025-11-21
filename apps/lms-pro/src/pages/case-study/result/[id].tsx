@@ -4,7 +4,7 @@ import {
   FileTextIcon,
   ResizeIcon,
   ScratchPadIconV2,
-} from '@assets/icons'
+} from '@lms/assets'
 import { CloseModalIcon } from '@lms/assets'
 import Calculator from '@components/calculator'
 import CaseStudyWrapper from '@components/case-study/layout/CaseStudyWrapper'

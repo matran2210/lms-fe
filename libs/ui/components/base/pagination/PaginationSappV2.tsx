@@ -1,7 +1,7 @@
 import { Pagination, Select } from 'antd'
 import { Dispatch, ReactNode, SetStateAction, useCallback } from 'react'
 import clsx from 'clsx'
-import { RightOutlined, AntSelectIcon } from '@assets/icons'
+import { RightOutlined, AntSelectIcon } from '@lms/assets'
 
 interface IProps {
   currentPage: number

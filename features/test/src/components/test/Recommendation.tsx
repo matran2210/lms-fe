@@ -1,4 +1,4 @@
-import { AltArrowIcon } from '@assets/icons'
+import { AltArrowIcon } from '@lms/assets'
 import { ButtonText } from '@lms/ui'
 import { EditorReader } from '@lms/ui'
 import React, { useState } from 'react'

@@ -1,4 +1,4 @@
-import { CollapseArrowIcon } from '@assets/icons'
+import { CollapseArrowIcon } from '@lms/assets'
 import Link from 'next/link'
 import React from 'react'
 

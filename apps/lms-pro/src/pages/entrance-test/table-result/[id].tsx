@@ -1,4 +1,4 @@
-import { CloseIcon } from '@assets/icons'
+import { CloseIcon } from '@lms/assets'
 import { LAYOUT } from '@lms/core'
 import { useRouter } from 'next/router'
 import { QuizResultComponent } from 'quiz-result-package'
@@ -8,7 +8,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from '@lms/contexts'
 import { CoursesAPI } from '../../api/courses/index'
 import { FullScreenLayout, Layout } from '@lms/ui'
-import CloseModalIcon from '@assets/icons/CloseModalIcon'
+import CloseModalIcon from '@lms/assets/CloseModalIcon'
 import { PageLink } from 'src/constants/routers'
 import {
   MENU_BOTTOM,

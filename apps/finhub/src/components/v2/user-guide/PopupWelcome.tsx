@@ -1,4 +1,4 @@
-import { HandShake } from '@assets/icons'
+import { HandShake } from '@lms/assets'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonText from '@components/base/button/ButtonText'
 import { RefObject } from 'react'

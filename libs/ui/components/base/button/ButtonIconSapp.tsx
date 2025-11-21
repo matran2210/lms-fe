@@ -1,4 +1,4 @@
-import { ArrowIcon, PlusIcon } from '@assets/icons'
+import { ArrowIcon, PlusIcon } from '@lms/assets'
 import Link from 'next/link'
 import { useState } from 'react'
 import { IButtonIconProps, IButtonSize, IButtonVariant } from '@lms/core'

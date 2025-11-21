@@ -1,4 +1,4 @@
-import { MKTInAppIcon } from '@assets/icons'
+import { MKTInAppIcon } from '@lms/assets'
 import { Tooltip } from 'antd'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'

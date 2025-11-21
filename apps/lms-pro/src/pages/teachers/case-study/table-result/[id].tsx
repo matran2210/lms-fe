@@ -1,4 +1,4 @@
-import { CloseIcon } from '@assets/icons'
+import { CloseIcon } from '@lms/assets'
 import { SappTable } from '@lms/ui'
 import { ButtonPrimary } from '@lms/ui'
 import { ButtonSecondary } from '@lms/ui'

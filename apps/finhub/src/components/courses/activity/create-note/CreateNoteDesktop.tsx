@@ -1,4 +1,4 @@
-import { CloseNone, SaveIcon } from '@assets/icons'
+import { CloseNone, SaveIcon } from '@lms/assets'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'

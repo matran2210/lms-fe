@@ -2,7 +2,7 @@ import React, { useEffect, Dispatch, SetStateAction } from 'react'
 import router, { useRouter } from 'next/router'
 import { Controller, useFormContext } from 'react-hook-form'
 import { PageLink } from 'src/constants'
-import { CourseSearchIcon } from '@assets/icons'
+import { CourseSearchIcon } from '@lms/assets'
 
 interface IProps {
   placeholder: string

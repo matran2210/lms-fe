@@ -10,7 +10,7 @@ import {
   submitQuiz,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
-import { CloseIcon, ConfirmIcon } from '@assets/icons'
+import { CloseIcon, ConfirmIcon } from '@lms/assets'
 import SappButton from '@components/base/button/SappButton'
 import SappModal from '@components/base/modal/SappModal'
 import SappModalV3 from '@components/base/modal/SappModalV3'

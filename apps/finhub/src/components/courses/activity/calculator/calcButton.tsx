@@ -1,12 +1,12 @@
-import DeleteIcon from '@assets/icons/CalculatorIcons/DeleteIcon'
-import MinusIcon from '@assets/icons/CalculatorIcons/MinusIcon'
-import MultiplyIcon from '@assets/icons/CalculatorIcons/MultiplyIcon'
-import PlusIcon from '@assets/icons/CalculatorIcons/PlusIcon'
-import DivideIcon from '@assets/icons/CalculatorIcons/DivideIcon'
+import DeleteIcon from '@lms/assets/CalculatorIcons/DeleteIcon'
+import MinusIcon from '@lms/assets/CalculatorIcons/MinusIcon'
+import MultiplyIcon from '@lms/assets/CalculatorIcons/MultiplyIcon'
+import PlusIcon from '@lms/assets/CalculatorIcons/PlusIcon'
+import DivideIcon from '@lms/assets/CalculatorIcons/DivideIcon'
 import React from 'react'
-import PlusMinusIcon from '@assets/icons/CalculatorIcons/PlusMinusIcon'
-import PercentageIcon from '@assets/icons/CalculatorIcons/PercentageIcon'
-import EqualIcon from '@assets/icons/CalculatorIcons/EqualIcon'
+import PlusMinusIcon from '@lms/assets/CalculatorIcons/PlusMinusIcon'
+import PercentageIcon from '@lms/assets/CalculatorIcons/PercentageIcon'
+import EqualIcon from '@lms/assets/CalculatorIcons/EqualIcon'
 
 interface IProps {
   value?: string | React.ReactNode

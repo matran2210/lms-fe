@@ -1,4 +1,4 @@
-import { AlertTriagle } from '@assets/icons'
+import { AlertTriagle } from '@lms/assets'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import dayjs from 'dayjs'
 import { SOCIAL_LINK } from 'src/constants'

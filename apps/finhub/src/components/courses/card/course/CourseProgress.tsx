@@ -1,4 +1,4 @@
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets'
 import { ICourseProgress } from 'src/type/courses-3-level/course'
 
 export default function CourseProgress({

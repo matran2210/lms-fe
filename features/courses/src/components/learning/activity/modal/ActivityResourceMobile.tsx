@@ -4,7 +4,7 @@ import { IActivity } from '@lms/core'
 import clsx from 'clsx'
 import { download } from '../ActivityResource'
 import { trackGAEvent } from '@lms/utils'
-import { DocumentTextIcon, DownloadIcon } from '@assets/icons'
+import { DocumentTextIcon, DownloadIcon } from '@lms/assets'
 
 interface IProps {
   open: boolean

@@ -1,4 +1,4 @@
-import { CloseIconPreview } from '@assets/icons'
+import { CloseIconPreview } from '@lms/assets'
 import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction } from 'react'
 import SappModalCerti from './CertificatePopup'

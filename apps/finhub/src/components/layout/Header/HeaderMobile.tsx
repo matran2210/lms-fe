@@ -1,4 +1,4 @@
-import { CollapseArrowIcon } from '@assets/icons'
+import { CollapseArrowIcon } from '@lms/assets'
 import { truncateString } from '@utils/index'
 import clsx from 'clsx'
 import React from 'react'

@@ -1,4 +1,4 @@
-import { BooksIcon, CheckMatchIcon, ClockIcon } from "@assets/icons/Dashboard";
+import { BooksIcon, CheckMatchIcon, ClockIcon } from "@lms/assets/Dashboard";
 import goalIcon from "@assets/images/goal-icon.svg";
 import medalIcon from "@assets/images/medal-icon.svg";
 import { DATE_FORMAT, IWeeklyReport } from "@lms/core";

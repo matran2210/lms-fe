@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { IconClose } from "@assets/icons";
+import { IconClose } from "@lms/assets";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import { excludedPathsHelp } from "@pages/_app";
 import { Popover } from "antd";

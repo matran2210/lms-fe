@@ -1,5 +1,5 @@
-import { MenuDotsIcon } from '@assets/icons'
-import { CloseModalIcon } from '@assets/icons'
+import { MenuDotsIcon } from '@lms/assets'
+import { CloseModalIcon } from '@lms/assets'
 import { useGetDataQuery } from '@lms/utils'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'

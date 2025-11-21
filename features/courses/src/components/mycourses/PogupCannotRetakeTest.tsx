@@ -1,4 +1,4 @@
-import { AlertIcon } from '@assets/icons'
+import { AlertIcon } from '@lms/assets'
 import { SappModalV2 } from '@lms/ui'
 import { Dispatch, SetStateAction } from 'react'
 

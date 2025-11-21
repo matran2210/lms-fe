@@ -2,7 +2,7 @@ import { SappTable } from '@lms/ui'
 import { truncateString } from '@lms/utils'
 import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
 
-import { CollapseArrowIcon } from '@assets/icons'
+import { CollapseArrowIcon } from '@lms/assets'
 import {
   ANIMATION,
   COMMON_TEXT_ENUM,

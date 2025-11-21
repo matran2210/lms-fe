@@ -1,4 +1,4 @@
-import { ConfirmIcon } from '@assets/icons'
+import { ConfirmIcon } from '@lms/assets'
 import { useRouter } from 'next/router'
 import React, { Dispatch, SetStateAction } from 'react'
 import { FINISHED_TEST_TITLE } from '@lms/core'

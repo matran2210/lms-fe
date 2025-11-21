@@ -1,4 +1,4 @@
-import { CheckIconV2 } from '@assets/icons'
+import { CheckIconV2 } from '@lms/assets'
 import clsx from 'clsx'
 import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'

@@ -1,4 +1,4 @@
-import { CheckCircleOutlineYellow, PencilFillV2Icon } from '@assets/icons'
+import { CheckCircleOutlineYellow, PencilFillV2Icon } from '@lms/assets'
 import blankAvatar from '@assets/images/blank_avatar.webp'
 import { TextSkeleton } from '@lms/ui'
 import { CloseIconV2 } from '@lms/assets'

@@ -7,7 +7,7 @@ import {
   DocumentTextIcon,
   ResourceIcon,
   ChapterIcon,
-} from '@assets/icons'
+} from '@lms/assets'
 import {Layout} from '@lms/ui'
 import { buildQueryString, formatDate } from '@lms/utils'
 import { Alert, Skeleton } from 'antd'

@@ -1,4 +1,4 @@
-import { CloseIconNote } from '@assets/icons'
+import { CloseIconNote } from '@lms/assets'
 import { useRouter } from 'next/router'
 import React, { useLayoutEffect } from 'react'
 import { PageLink } from '@lms/core'

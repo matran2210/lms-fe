@@ -25,7 +25,7 @@ import {
 } from '@lms/ui'
 import { convertMinutesToHourFormat } from '@lms/utils'
 
-import CloseModalIcon from '@assets/icons/CloseModalIcon'
+import CloseModalIcon from '@lms/assets/CloseModalIcon'
 import { Triangle } from '@lms/assets'
 import {
   activeNotesList,

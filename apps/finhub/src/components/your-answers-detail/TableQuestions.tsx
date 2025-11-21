@@ -25,7 +25,7 @@ import {
 } from 'src/constants'
 import { EYourAnswerType, IAnswer } from 'src/type'
 import { CoursesAPI } from '../../pages/api/courses/index'
-import { CloseIcon } from '@assets/icons'
+import { CloseIcon } from '@lms/assets'
 import Tooltip from '@components/common/Tooltip'
 import ListScoreCollapse from '@components/quiz/your-answer-detail/ListScoreCollapse'
 

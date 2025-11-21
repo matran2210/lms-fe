@@ -1,6 +1,6 @@
 import React, { useEffect, Dispatch, SetStateAction } from 'react'
 import router, { useRouter } from 'next/router'
-import { CourseSearchIcon } from '@assets/icons'
+import { CourseSearchIcon } from '@lms/assets'
 import { Controller, useFormContext } from 'react-hook-form'
 import { PageLink } from 'src/constants'
 

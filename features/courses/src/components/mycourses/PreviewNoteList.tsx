@@ -1,4 +1,4 @@
-import { CloseIconPreview } from '@assets/icons'
+import { CloseIconPreview } from '@lms/assets'
 
 type IProps = {
   setOpen?: () => void

@@ -1,4 +1,4 @@
-import { CloseIcon, DownloadIcon, LinkIcon } from '@assets/icons'
+import { CloseIcon, DownloadIcon, LinkIcon } from '@lms/assets'
 import { SUFFIX_TYPE } from '@lms/core'
 import { ANIMATION, EXHIBIT_TEXT_REPLACE, IActivity, ITabs, PROGRAM } from '@lms/core'
 import { CreateNote, Discussion, QuizDocument, TextDocument, VideoDocument } from '@lms/feature-courses'

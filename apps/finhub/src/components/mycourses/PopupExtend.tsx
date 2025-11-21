@@ -1,4 +1,4 @@
-import { AlertIcon, LockIcon } from '@assets/icons'
+import { AlertIcon, LockIcon } from '@lms/assets'
 import ShortCourseModal from '@components/base/modal/ShortCourseModal'
 import { onLinkSocial } from '@utils/index'
 import { Dispatch, SetStateAction } from 'react'

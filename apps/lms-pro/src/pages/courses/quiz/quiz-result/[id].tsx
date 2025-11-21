@@ -1,4 +1,4 @@
-import { CloseIcon } from '@assets/icons'
+import { CloseIcon } from '@lms/assets'
 import {FullScreenLayout} from '@lms/ui'
 import QuizResult from '@components/quiz/quiz-result'
 import withAuthorization from 'src/HOC/withAuthorization'

@@ -1,4 +1,4 @@
-import { LinkedinIcon } from '@assets/icons'
+import { LinkedinIcon } from '@lms/assets'
 
 export const LinkedInShareButton = ({
   certificateUrl,

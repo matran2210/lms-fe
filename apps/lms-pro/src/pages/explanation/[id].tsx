@@ -1,4 +1,4 @@
-import { AltArrowLeft, MenuDotsIcon } from '@assets/icons'
+import { AltArrowLeft, MenuDotsIcon } from '@lms/assets'
 import {FullScreenLayout} from '@lms/ui'
 import { LAYOUT } from '@lms/core'
 import { ExplanationPackageV2 } from 'explanation-package'

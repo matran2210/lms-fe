@@ -11,7 +11,7 @@ import {
   ScratchPadIconV2,
   ShowLessIcon,
   ShowMoreIcon,
-} from '@assets/icons'
+} from '@lms/assets'
 import { CourseProvider, disableUnsavedChange, loginSlice, useAppDispatch, useAppSelector, useCourseContext } from '@lms/contexts'
 import {
   DISPLAY_TYPE,
@@ -48,7 +48,7 @@ import { CoursesAPI } from '../api/courses'
 import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
 
-import { CheckCircleOutlineYellow, FlagIconV2 } from '@assets/icons/test'
+import { CheckCircleOutlineYellow, FlagIconV2 } from '@lms/assets/test'
 import { Icon, NotesOutline, PulsingExclamation } from '@lms/assets'
 import { showPopupCompletedCourse } from '@lms/contexts'
 import {

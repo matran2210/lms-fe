@@ -1,4 +1,4 @@
-import { NotificationIcon, OutlineArchive } from '@assets/icons'
+import { NotificationIcon, OutlineArchive } from '@lms/assets'
 import ArrowUp from './ArrowUp'
 import LogoDefault from './LogoDefault'
 import LogoFull from './LogoFull'
@@ -10,7 +10,7 @@ import {
   CourseContent,
   NoteList,
   Union,
-} from '@components/courses/icons'
+} from '@lms/assets'
 
 type ExpandIconPros = {
   isExpanded?: boolean

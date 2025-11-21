@@ -1,4 +1,4 @@
-import { CloseModalIcon } from '@assets/icons'
+import { CloseModalIcon } from '@lms/assets'
 import { Drawer, DrawerProps } from 'antd'
 import clsx from 'clsx'
 import React, { ReactNode } from 'react'

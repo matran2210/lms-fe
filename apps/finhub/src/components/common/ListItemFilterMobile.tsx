@@ -1,4 +1,4 @@
-import { CheckIconV2 } from '@assets/icons'
+import { CheckIconV2 } from '@lms/assets'
 import {
   allTypes,
   DEFAULT_PAGE_SIZE,

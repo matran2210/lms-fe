@@ -14,7 +14,7 @@ import {
 import { ArrowDownIcon } from '../icons'
 import TestModal from '../popup/TestModal'
 import Tooltip from '@components/common/Tooltip'
-import { CompletedIcon, LockClosedIcon } from '@assets/icons'
+import { CompletedIcon, LockClosedIcon } from '@lms/assets'
 import { useCourseContext } from '@contexts/index'
 
 const { Panel } = Collapse

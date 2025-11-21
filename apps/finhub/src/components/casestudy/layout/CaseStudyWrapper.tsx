@@ -1,10 +1,9 @@
-import { NextIcon, PreviousIcon } from '@assets/icons'
 import { Layout } from 'antd'
 import clsx from 'clsx'
 import React, { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import Head from 'next/head'
 import { ButtonSecondary } from '@lms/ui'
-import { CloseIconV2 } from '@lms/assets'
+import { CloseIconV2, NextIcon, PreviousIcon } from '@lms/assets'
 const { Header, Content, Footer } = Layout
 
 interface IProps {

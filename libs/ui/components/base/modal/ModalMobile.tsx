@@ -1,4 +1,4 @@
-import { SadIcon } from '@assets/icons'
+import { SadIcon } from '@lms/assets'
 import { isMobileExtensive } from '@utils/helpers'
 import { Modal } from 'antd'
 import { useEffect, useState } from 'react'

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import MovableWindow from '@components/base/window'
-import { SaveIcon, PlusIcon, CloseIconNote } from '@assets/icons'
+import { SaveIcon, PlusIcon, CloseIconNote } from '@lms/assets'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'

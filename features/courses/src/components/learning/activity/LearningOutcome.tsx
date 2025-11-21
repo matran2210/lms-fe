@@ -1,4 +1,4 @@
-import { CollapseArrowIcon, StarCircleIcon } from '@assets/icons'
+import { CollapseArrowIcon, StarCircleIcon } from '@lms/assets'
 import { EditorReader } from '@lms/ui'
 import { Collapse } from 'antd'
 import clsx from 'clsx'

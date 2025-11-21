@@ -1,4 +1,4 @@
-import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from '@assets/icons'
+import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from '@lms/assets'
 import ActionCellV2 from '@components/base/action/ActionCellV2'
 import SappBreadcrumbNotLink from '@components/base/breadcrumb/SappBreadcrumbNotLink'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'

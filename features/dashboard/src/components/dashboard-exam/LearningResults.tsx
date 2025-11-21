@@ -10,7 +10,7 @@ import {
   IconEssentional,
   MatchFailIcon,
   SuccessMatchIcon,
-} from '@assets/icons/Dashboard'
+} from '@lms/assets/Dashboard'
 import Link from 'next/link'
 import { EChartsOption } from 'echarts'
 import {useReponsive} from '@lms/hooks'

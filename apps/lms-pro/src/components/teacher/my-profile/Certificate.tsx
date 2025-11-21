@@ -7,7 +7,7 @@ import {useDownloadImage} from '@lms/hooks'
 import Image from 'next/image'
 import { sappFormatDate } from '@lms/utils'
 import clsx from 'clsx'
-import { HaveNoItemIcon } from '@assets/icons/teacher'
+import { HaveNoItemIcon } from '@lms/assets/teacher'
 
 interface ICertificate {
   certificate: {

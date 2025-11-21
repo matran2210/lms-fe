@@ -1,4 +1,4 @@
-import { CloseIcon } from '@assets/icons'
+import { CloseIcon } from '@lms/assets'
 import { useGetDataQuery } from '@lms/utils'
 import QuizResult from 'entrance-test-result-package'
 import { useRouter } from 'next/router'

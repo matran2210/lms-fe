@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import React, { useState } from 'react'
 import { ControllerRenderProps } from 'react-hook-form'
 import SAPPLabel from '../Label/SAPPLabel'
-import { EyeV2Icon, CloseEyeIcon } from '@assets/icons'
+import { EyeV2Icon, CloseEyeIcon } from '@lms/assets'
 
 interface IProps {
   inputRef?: React.LegacyRef<HTMLInputElement>

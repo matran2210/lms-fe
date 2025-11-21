@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, ConfirmIcon } from '@assets/icons'
+import { ArrowLeftIcon, ConfirmIcon } from '@lms/assets'
 import { SappModalV3 } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
 

@@ -1,4 +1,4 @@
-import { CloseIcon, CloseIconNote, CloseModalIcon } from '@assets/icons'
+import { CloseIcon, CloseIconNote, CloseModalIcon } from '@lms/assets'
 import Calculator from '@lms/ui/components/calculator/index'
 import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'

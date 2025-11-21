@@ -5,7 +5,7 @@ import {
   HighlightIcon,
   ScratchPadIcon,
   UnHighLightIcon,
-} from '@assets/icons'
+} from '@lms/assets'
 import { Calculator, EditorReader, SappLoadingGlobal } from '@lms/ui'
 import { HookFormTextArea } from '@lms/ui'
 import { MovableWindow } from '@lms/ui'

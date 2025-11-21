@@ -1,5 +1,5 @@
 import { CheckCircleTwoTone } from '@ant-design/icons'
-import { PencilV2Icon } from '@assets/icons'
+import { PencilV2Icon } from '@lms/assets'
 import { SappDrawerV3 } from '@lms/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ClassAPI } from '@pages/api/class'

@@ -1,4 +1,4 @@
-import { Plus } from '@assets/icons'
+import { Plus } from '@lms/assets'
 import { SAPPInput } from '@lms/ui'
 import { SAPPButtonV2 } from '@lms/ui'
 import { SAPPSelect } from '@lms/ui'

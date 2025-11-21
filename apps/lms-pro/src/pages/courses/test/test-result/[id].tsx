@@ -1,5 +1,5 @@
-import { MenuDotsIcon } from '@assets/icons'
-import CloseModalIcon from '@assets/icons/CloseModalIcon'
+import { MenuDotsIcon } from '@lms/assets'
+import CloseModalIcon from '@lms/assets/CloseModalIcon'
 import { ButtonSecondary } from '@lms/ui'
 import { ModalNotMobileFriendly } from '@lms/ui'
 import { useGetDataQuery } from '@utils/index'

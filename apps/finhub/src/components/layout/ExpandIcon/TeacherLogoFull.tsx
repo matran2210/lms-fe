@@ -1,4 +1,4 @@
-import { LogoSappIcon } from '@assets/icons'
+import { LogoSappIcon } from '@lms/assets'
 import { PageLink } from 'src/constants/routes'
 import Link from 'next/link'
 

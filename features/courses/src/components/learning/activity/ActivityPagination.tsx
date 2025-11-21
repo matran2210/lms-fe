@@ -3,7 +3,7 @@ import {
   ArrowRight,
   CollapseArrowIcon,
   LockClosedIcon,
-} from '@assets/icons'
+} from '@lms/assets'
 import { ButtonText } from '@lms/ui'
 import { useCourseContext } from '@lms/contexts'
 import { trackGAEvent, truncateString} from '@lms/utils'

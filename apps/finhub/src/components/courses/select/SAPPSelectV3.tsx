@@ -1,4 +1,4 @@
-import { ArrowDownIcon } from '@components/icons'
+import { ArrowDownIcon } from '@lms/assets'
 import { Select } from 'antd'
 import { DefaultOptionType, SelectProps } from 'antd/es/select'
 import clsx from 'clsx'

@@ -1,4 +1,4 @@
-import { MenuDotsIcon } from '@assets/icons'
+import { MenuDotsIcon } from '@lms/assets'
 import { AltArrowLeft } from '@components/courses/icons/AltArrowLeft'
 import { CloseIconV2 } from '@lms/assets'
 import { FullScreenLayout, SappLoadingGlobal, Tooltip, } from '@lms/ui'

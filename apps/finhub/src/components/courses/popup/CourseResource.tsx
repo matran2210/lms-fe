@@ -3,7 +3,7 @@
 //   DownloadMinimalistic,
 //   OutlineText,
 //   OutlineVideo,
-// } from '@assets/icons'
+// } from '@lms/assets'
 // import { bytesToKilobyte, cleanParamsAPI } from '@utils/index'
 // import getConfig from 'next/config'
 // import { useEffect, useState, useCallback, useRef } from 'react'

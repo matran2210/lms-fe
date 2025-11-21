@@ -1,4 +1,4 @@
-import { CloseIconPreview, IconSend } from '@assets/icons'
+import { CloseIconPreview, IconSend } from '@lms/assets'
 import blankAvatar from '@assets/images/blank_avatar.webp'
 import sappAvatar from '@assets/images/blank_avatar_notification.png'
 import { VerifiedIcon } from '@components/icons'

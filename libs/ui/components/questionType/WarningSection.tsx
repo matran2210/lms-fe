@@ -1,4 +1,4 @@
-import { CircleInfoIcon } from '@assets/icons'
+import { CircleInfoIcon } from '@lms/assets'
 import clsx from 'clsx'
 import React from 'react'
 interface IProps {

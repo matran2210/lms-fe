@@ -1,4 +1,4 @@
-import { ArrowRightV2Icon } from '@assets/icons'
+import { ArrowRightV2Icon } from '@lms/assets'
 import {PinnedNotificationsV2} from '@lms/ui'
 import { formatDateToLongString } from '@utils/helpers'
 import Image from 'next/image'

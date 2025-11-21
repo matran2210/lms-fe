@@ -13,7 +13,7 @@ import {
   TextSquareIcon,
   UnHighLightIcon,
   WordIcon,
-} from '@assets/icons'
+} from '@lms/assets'
 import { HookFormCheckBoxGroup } from '@lms/ui'
 import { useClickOutside } from '@lms/ui'
 import { EditorReader } from '@lms/ui'

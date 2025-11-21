@@ -1,4 +1,4 @@
-import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from '@assets/icons'
+import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from '@lms/assets'
 import { SappBreadcrumbNotLink } from '@lms/ui'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'

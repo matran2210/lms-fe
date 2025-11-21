@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDraggable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
-import { DragNDropIcon } from '@assets/icons/test'
+import { DragNDropIcon } from '@lms/assets/test'
 
 interface DraggableItemProps {
   id: string

@@ -1,4 +1,4 @@
-import { IconBuildingModify } from '@assets/icons'
+import { IconBuildingModify } from '@lms/assets'
 import { ECourseProgram } from '@lms/core'
 import { SappModalV3 } from '@lms/ui'
 import { onLinkSocial } from '@lms/utils'

@@ -5,7 +5,7 @@ import { MENU_BOTTOM, MENU_ITEMS } from 'src/constants/sidebar'
 import { LogoMobile } from '@components/courses/icons'
 import { useRouter } from 'next/router'
 import clsx from 'clsx'
-import { HamburgerMenuLargeIcon } from '@assets/icons'
+import { HamburgerMenuLargeIcon } from '@lms/assets'
 
 export default function SidebarMobile() {
   const [open, setOpen] = useState<boolean>(false)

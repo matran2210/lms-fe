@@ -3,7 +3,7 @@ import { useTailwindBreakpoint } from '@lms/hooks'
 import FullScreenMobile from '../Modal/FullScreenMobile'
 import ChangePassword from '../ChangePassword'
 import TeacherProfileCard from '@components/card/TeacherProfileCard'
-import { PencilFillV2Icon } from '@assets/icons'
+import { PencilFillV2Icon } from '@lms/assets'
 
 interface IProps {
   setIsChangePassword: (isChangePassword: boolean) => void

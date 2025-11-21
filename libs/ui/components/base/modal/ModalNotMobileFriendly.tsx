@@ -1,4 +1,4 @@
-import { MobileNotFriendlyIcon } from '@assets/icons'
+import { MobileNotFriendlyIcon } from '@lms/assets'
 import { Modal } from 'antd'
 import { createPortal } from 'react-dom'
 import ButtonPrimary from '../button/ButtonPrimary'

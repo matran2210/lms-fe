@@ -10,7 +10,7 @@ import { CourseSectionType, TEST_TYPE_ENUM } from "@lms/core";
 import { LearningMode } from "@lms/core";
 import { buildQueryString } from "@utils/index";
 import getConfig from "next/config";
-import { StatusDotIcon, ZoomIcon } from "@assets/icons/calendar";
+import { StatusDotIcon, ZoomIcon } from "@lms/assets/calendar";
 import { Divider } from "antd";
 import clsx from "clsx";
 import { ButtonPrimary } from "@lms/ui";
