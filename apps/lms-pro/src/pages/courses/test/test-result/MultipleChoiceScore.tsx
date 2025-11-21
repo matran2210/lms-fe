@@ -1,10 +1,9 @@
+import { GRADE_STATUS, IQuizAttempt } from '@lms/core'
+import GlobalAverage from '@lms/feature-test/src/components/test/GlobalAverage'
+import clsx from 'clsx'
 import { isNull, isUndefined } from 'lodash'
 import { RefObject } from 'react'
-import { GRADE_STATUS } from '@lms/core'
-import { IQuizAttempt } from '@lms/core'
-import GlobalAverage from '@lms/feature-test/src/components/test/GlobalAverage'
 import MultipleQuestion from './multipleQuestion'
-import clsx from 'clsx'
 
 interface IMultipleChoiceScore {
   questions: {

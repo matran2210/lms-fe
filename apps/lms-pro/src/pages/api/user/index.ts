@@ -1,4 +1,4 @@
-import { UserExamInformation } from '@components/profile/ExamInformation/type'
+import { UserExamInformation } from '@lms/core'
 import { fetcher } from '@services/requestV2'
 import { apiURL } from 'src/redux/services/httpService'
 

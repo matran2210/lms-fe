@@ -1,15 +1,12 @@
-import Recommendation from '@lms/feature-test/src/components/test/Recommendation'
-import { F_LOW_CODES } from '@lms/core'
-import { roundNumber } from '@utils/helpers'
-import { useMemo, useRef } from 'react'
-import {SappLoading } from '@lms/ui'
-import { GRADE_STATUS } from '@lms/core'
 import {
-  IQuizAttempt,
+  F_LOW_CODES, GRADE_STATUS, IQuizAttempt,
   IQuizAttemptChartType,
   QuizAttemptChart,
-  QuizAttemptChartType,
+  QuizAttemptChartType
 } from '@lms/core'
+import Recommendation from '@lms/feature-test/src/components/test/Recommendation'
+import { roundNumber } from '@utils/helpers'
+import { useMemo, useRef } from 'react'
 import ChartACCAScore from './acca/chartACCAScore'
 import ChartCFAScore from './cfa/chartCFAScore'
 import ChartCMAScore from './cma/chartCMAScore'

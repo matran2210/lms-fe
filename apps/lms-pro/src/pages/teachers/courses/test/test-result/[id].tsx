@@ -1,14 +1,15 @@
 import { SappBreadCrumbs } from '@lms/ui'
 import {FullScreenLayout} from '@lms/ui'
 import { TEST_TYPE } from '@lms/core'
-import { useGetDataQuery } from '@utils/index'
 import { useRouter } from 'next/router'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from '@lms/core'
 import TestResultPage from 'src/pages/courses/test/test-result/testResultPage'
-import { GRADE_STATUS, TitleSidebar, PageLink } from '@lms/core'
+import { GRADE_STATUS, TitleSidebar } from '@lms/core'
 import { UserType } from '@lms/contexts'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { useGetDataQuery } from '@lms/utils'
+import { PageLink } from 'src/constants/routers'
 
 const TestResultDetailTeacher = () => {
   const router = useRouter()

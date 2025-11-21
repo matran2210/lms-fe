@@ -1,13 +1,12 @@
+import { COMMENTS, GRADE_STATUS, IAnswer } from '@lms/core'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { ButtonPrimary } from '@lms/ui'
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { ANIMATION, GRADE_STATUS, PageLink } from '@lms/core'
-import { IAnswer } from '@lms/core'
 import Recommendation from './Recommendation'
-import { COMMENTS } from '@lms/core'
-import { ButtonPrimary } from '@lms/ui'
+import { PageLink } from 'src/constants/routers'
 
 interface MultipleQuestionProps {
   questions: any

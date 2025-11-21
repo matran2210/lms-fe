@@ -4,6 +4,7 @@ import {
   CloseIconNote,
   DiscussionIcon,
   DocumentTextIcon,
+  ExpandIcon,
   HourglassIcon,
   ResourceIcon,
   ScratchPadIconV2,
@@ -53,7 +54,6 @@ import {
 } from '@lms/core'
 import {
   ActivityPagination,
-  ActivityResource,
   ActivityResourceMobile,
   CardMenuItem,
   CourseTabDocument,
@@ -70,7 +70,6 @@ import {
   SappBreadCrumbs,
   SappLoadingGlobal,
 } from '@lms/ui'
-import ExpandIcon from '@lms/ui/layout/ExpandIcon'
 import { QuestionAPI } from '@pages/api/question'
 import { UploadAPI } from '@pages/api/upload'
 import { Divider } from 'antd'
@@ -89,6 +88,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById, submitQuizTest } from 'src/pages/api/courses'
 import { v4 as uuidv4 } from 'uuid'
 import { NotificationAPI } from '@pages/api/notification'
+import ActivityResource from '@lms/feature-courses/src/components/learning/activity/ActivityResource'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'

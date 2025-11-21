@@ -1,5 +1,4 @@
 import { fetcher } from '@services/requestV2'
-import { IResponse } from 'src/redux/types'
 import {
   IWeeklyReport,
   IOverProgress,
@@ -7,6 +6,7 @@ import {
   ITopicProgress,
   IExamPrediction,
   IMockTestResult,
+  IResponse,
 } from '@lms/core'
 
 export class DashboardAPI {

@@ -30,10 +30,10 @@ import {
   BackToTop,
   FilterRadioGroup,
   Layout,
-  Popover,
   SappLoading,
   useClickOutside,
 } from '@lms/ui'
+import { Popover } from "antd";
 import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
 import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
 import NewFilltext from '@lms/ui/components/questionType/NewFillText'
@@ -85,6 +85,8 @@ import DragDropQuestion, {
 } from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import TestWrapper from '@lms/ui/layout/TestLayout/TestWrapper'
 import { checkSheetAnswered, runHighlight, trackGAEvent } from '@lms/utils'
+import { EventTestAPI } from '@pages/api/event-test'
+import { NotificationAPI } from '@pages/api/notification'
 import { TestAPI } from '@pages/api/test'
 import { UploadAPI } from '@pages/api/upload'
 import { TabsProps, Tooltip } from 'antd'
@@ -107,9 +109,6 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import eventTest from '@pages/event-test'
-import { EventTestAPI } from '@pages/api/event-test'
-import { NotificationAPI } from '@pages/api/notification'
 declare global {
   interface Window {
     userAgreed: any

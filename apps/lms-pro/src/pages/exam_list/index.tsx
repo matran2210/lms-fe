@@ -1,30 +1,26 @@
-import { ColumnsType } from 'antd/es/table'
-import { Layout, SappTable } from '@lms/ui'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { TitleSidebar } from '@lms/core'
-import { UserApi } from '@pages/api/user'
-import { useCallback, useMemo, useRef, useState } from 'react'
-import { IExamInformation } from '@lms/core'
-import { useInfiniteQuery, useQuery } from 'react-query'
-import { UserKey } from '@pages/api/queryKey'
-import { PaginationSappV2 } from '@lms/ui'
-import { isEmpty } from 'lodash'
-import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
-import { getDuration } from '@lms/utils'
-import { ActionCellV2 } from '@lms/ui'
 import { PencilV2Icon } from '@lms/assets'
+import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
+import { IExamInformation, TitleSidebar } from '@lms/core'
 import { ExaminationInfo, InfoItemProps } from '@lms/feature-courses'
-import { HeaderMobile } from '@lms/ui'
-import { useRouter } from 'next/router'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { ActionCellV2, HeaderMobile, Layout, PaginationSappV2, SappTable } from '@lms/ui'
+import { getDuration } from '@lms/utils'
 import { CoursesAPI } from '@pages/api/courses'
+import { UserKey } from '@pages/api/queryKey'
+import { UserApi } from '@pages/api/user'
+import { ColumnsType } from 'antd/es/table'
+import { isEmpty } from 'lodash'
+import { useRouter } from 'next/router'
+import { useCallback, useMemo, useRef, useState } from 'react'
+import { useInfiniteQuery, useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 
+import { NotificationAPI } from '@pages/api/notification'
 import {
   MENU_BOTTOM,
   MENU_ITEMS,
   MENU_ITEMS_EVENT,
 } from 'src/constants/menu-items'
-import { NotificationAPI } from '@pages/api/notification'
 
 const ExamInformation = () => {
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =
