@@ -1,14 +1,15 @@
-import clsx from 'clsx'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { PageLink } from '@lms/core'
+import clsx from "clsx";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useFeature } from "@lms/contexts";
 
 const LogoDefault = ({ className }: { className?: string }) => {
-  const router = useRouter()
-  const pathname = router.pathname
+  const router = useRouter();
+  const { pageLink } = useFeature();
+  const pathname = router.pathname;
 
   return (
-    <Link href={PageLink.COURSES}>
+    <Link href={pageLink?.COURSES}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -16,7 +17,7 @@ const LogoDefault = ({ className }: { className?: string }) => {
         height="50"
         fill="none"
         viewBox="0 0 42 50"
-        className={clsx('logo-default shrink-0 cursor-pointer', className)}
+        className={clsx("logo-default shrink-0 cursor-pointer", className)}
       >
         <path fill="url(#pattern0)" d="M0 0H42V50H0z"></path>
         <defs>
@@ -40,7 +41,7 @@ const LogoDefault = ({ className }: { className?: string }) => {
         </defs>
       </svg>
     </Link>
-  )
-}
+  );
+};
 
-export default LogoDefault
+export default LogoDefault;

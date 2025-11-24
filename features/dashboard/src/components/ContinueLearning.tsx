@@ -1,16 +1,14 @@
-import PinnedNotificationsV2 from "@components/layout/PinnedNotifications/PinnedNotificationsV2";
-import React from "react";
 import continue_learning from "@assets/images/book-continue-learning.svg";
-import Image from "next/image";
-import { PageLink } from "@lms/core";
-import { useRouter } from "next/router";
 import { ArrowRightV2Icon } from "@lms/assets";
+import { PinnedNotificationsV2 } from "@lms/ui";
+import Image from "next/image";
+import { useFeature } from "node_modules/@lms/contexts";
 
 const ContinueLearning = () => {
-  const router = useRouter();
+  const { pageLink, router } = useFeature();
   const goToCourseContent = () => {
     router.push(
-      PageLink.COURSE_DETAIL.replace(
+      pageLink.COURSE_DETAIL.replace(
         "[courseId]",
         router.query.courseId as string,
       ),

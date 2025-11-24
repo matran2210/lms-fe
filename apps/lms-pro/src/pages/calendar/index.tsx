@@ -1,28 +1,34 @@
+import {
+  ANIMATION,
+  CALENDAR_COLOR_TYPES,
+  CALENDAR_FILTER_TYPE,
+  CALENDAR_TYPE,
+  ICalendar,
+  ICalendarList,
+  TitleSidebar,
+} from '@lms/core'
+import {
+  DetailCalendar,
+  DetailCalendarMobile,
+  DetailCalendarTablet,
+} from '@lms/feature-calendar'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { HeaderMobile, Layout } from '@lms/ui'
 import CalendarApi from '@pages/api/calendar'
+import { CoursesAPI } from '@pages/api/courses'
+import { NotificationAPI } from '@pages/api/notification'
+import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { SAPPCalendarV2 } from 'sapp-common-package'
 import { IEvent, IFilter } from 'sapp-common-package/dist/types'
 import {
-  ANIMATION,
-  CALENDAR_COLOR_TYPES,
-  CALENDAR_FILTER_TYPE,
-  CALENDAR_TYPE,
-  TitleSidebar,
-  ICalendar, ICalendarList
-} from '@lms/core'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import clsx from 'clsx'
-import { HeaderMobile, Layout } from '@lms/ui'
-import { PageLink } from 'src/constants/routers'
-import { CoursesAPI } from '@pages/api/courses'
-import {
   MENU_BOTTOM,
   MENU_ITEMS,
   MENU_ITEMS_EVENT,
 } from 'src/constants/menu-items'
-import { NotificationAPI } from '@pages/api/notification'
+import { PageLink } from 'src/constants/routers'
 
 const Page = () => {
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =

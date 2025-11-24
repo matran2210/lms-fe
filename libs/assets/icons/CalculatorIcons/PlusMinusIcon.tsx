@@ -1,6 +1,6 @@
 import React from "react";
 
-const PlusMinusIcon = () => {
+export const PlusMinusIcon = () => {
   return (
     <svg
       width="32"
@@ -16,5 +16,3 @@ const PlusMinusIcon = () => {
     </svg>
   );
 };
-
-export default PlusMinusIcon;

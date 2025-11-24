@@ -30,7 +30,15 @@ export default function Sidebar({
   openExaminationInfo,
   setOpenExaminationInfo,
 }: SidebarProps) {
-    const { courseApi, notificationApi, pageLink, menuItems, menuItemsEvent, menuBottom, router } = useFeature();
+  const {
+    courseApi,
+    notificationApi,
+    pageLink,
+    menuItems,
+    menuItemsEvent,
+    menuBottom,
+    router,
+  } = useFeature();
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status);
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step);
   /**
@@ -154,14 +162,11 @@ export default function Sidebar({
           },
         )}
       />
-      <LearningResource
-        open={openResource}
-        setOpenResource={setOpenResource}
-      />
-      <ExaminationInfo
-        open={openExaminationInfo}
+      <LearningResource open={openResource} setOpenResource={setOpenResource} />
+      {/* <ExaminationInfo
+        open={openExaminationInfo} comment monorepo
         setOpen={setOpenExaminationInfo}
-      />
+      /> */}
     </div>
   );
 }

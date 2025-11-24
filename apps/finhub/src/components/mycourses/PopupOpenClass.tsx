@@ -1,8 +1,8 @@
 import { UnstartedIcon } from '@lms/assets'
-import ShortCourseModal from '@components/base/modal/ShortCourseModal'
+import ShortCourseModal from '@components/modal/ShortCourseModal'
 import { formatDate } from '@utils/helpers'
 import { Dispatch, SetStateAction } from 'react'
-import { MY_COURSES } from 'src/constants/lang'
+import { MY_COURSES } from '@lms/core'
 
 interface IProps {
   open: boolean

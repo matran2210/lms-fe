@@ -1,23 +1,27 @@
 import PopupActive from '@components/mycourses/PopupActive'
+import PopupExtend from '@components/mycourses/PopupExtend'
 import PopupLesson from '@components/mycourses/PopupLesson'
 import PopupOpenClass from '@components/mycourses/PopupOpenClass'
+import { useCourseContext } from '@contexts/index'
+import {
+  ANIMATION,
+  CLASS_USER_STATUS,
+  COURSES_STATUS_BADGE,
+  ICourse,
+  ROUTES,
+} from '@lms/core'
+import { useCourseStatus } from '@lms/hooks'
+import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { ANIMATION } from 'src/constants'
-import { COURSES_STATUS_BADGE, ROUTES } from 'src/constants/courses'
-import { useCourseStatus } from 'src/hooks/useCourseStatus'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
 import Badge from './Badge'
 import CourseAction from './course/CourseAction'
 import CourseClass from './course/CourseClass'
 import CourseDescription from './course/CourseDescription'
 import CourseProgress from './course/CourseProgress'
 import CourseTitle from './course/CourseTitle'
-import PopupExtend from '@components/mycourses/PopupExtend'
-import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
-import { useCourseContext } from '@contexts/index'
 
 export default function CourseCard({
   course,

@@ -1,9 +1,10 @@
-import { useCourseContext } from "@lms/contexts";
-import { ITabs } from "@lms/core";
-import { SappBreadCrumbs, TeacherMenu } from "@lms/ui";
 import { Typography } from "antd";
 import clsx from "clsx";
 import Head from "next/head";
+import { useCourseContext } from "@lms/contexts";
+import { ITabs } from "@lms/core";
+import TeacherMenu from "../MenuItemsList/TeacherMenu";
+import { SappBreadCrumbs } from "../../components";
 import { memo } from "react";
 
 const { Title } = Typography;
@@ -22,7 +23,7 @@ const LayoutTeacher: React.FC<LayoutTeacherProps> = ({
   breadcrumbs = [],
   className = "",
   isCourseDetail = false,
-  isActivity = false
+  isActivity = false,
 }: LayoutTeacherProps) => {
   const { showPinnedTrial } = useCourseContext();
 

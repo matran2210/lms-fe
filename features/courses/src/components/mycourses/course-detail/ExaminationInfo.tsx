@@ -1,86 +1,92 @@
-import { CheckCircleTwoTone } from '@ant-design/icons'
-import { PencilV2Icon } from '@lms/assets'
-import { SappDrawerV3 } from '@lms/ui'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { ClassAPI } from '@pages/api/class'
-import { ClassKey } from '@pages/api/queryKey'
-import { getDuration } from '@lms/utils'
-import { Avatar, GetProp, List, Skeleton, UploadFile, UploadProps } from 'antd'
-import clsx from 'clsx'
-import { AnimatePresence, motion } from 'framer-motion'
-import { isEmpty } from 'lodash'
-import { useRouter } from 'next/router'
-import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from 'react'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { NoData, Tooltip} from '@lms/ui'
-import { COURSE_TYPE } from '@lms/core'
-import { zodMsg } from '@lms/core'
-import { z } from 'zod'
-import { ExaminationForm } from 'src/redux/types/Course/MyCourse/ExamInformation'
-import useSelectExams from 'src/hooks/useSelectExams'
-import { TitleSidebar } from '@lms/core'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { Data } from '@lms/core'
-import SelectExamDate from './SelectExamDate'
-import ChangExamDate from './ChangExamDate'
-import ChangeAnywayModal from './ChangeAnywayModal'
+import { CheckCircleTwoTone } from "@ant-design/icons";
+import { PencilV2Icon } from "@lms/assets";
+import { SappDrawerV3 } from "@lms/ui";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ClassAPI } from "@pages/api/class";
+import { ClassKey } from "@pages/api/queryKey";
+import { getDuration } from "@lms/utils";
+import { Avatar, GetProp, List, Skeleton, UploadFile, UploadProps } from "antd";
+import clsx from "clsx";
+import { AnimatePresence, motion } from "framer-motion";
+import { isEmpty } from "lodash";
+import { useRouter } from "next/router";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { NoData, Tooltip } from "@lms/ui";
+import { COURSE_TYPE } from "@lms/core";
+import { zodMsg } from "@lms/core";
+import { z } from "zod";
+import { ExaminationForm } from "@lms/contexts";
+import useSelectExams from "src/hooks/useSelectExams";
+import { TitleSidebar } from "@lms/core";
+import { useTailwindBreakpoint } from "@lms/hooks";
+import { Data } from "@lms/core";
+import SelectExamDate from "./SelectExamDate";
+import ChangExamDate from "./ChangExamDate";
+import ChangeAnywayModal from "./ChangeAnywayModal";
 
 type Props = {
-  open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>
-  isEditProps?: boolean
-  classIdProps?: string
-  isExamList?: boolean
-  currentValue?: string
-  onSuccess?: () => void
-}
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  isEditProps?: boolean;
+  classIdProps?: string;
+  isExamList?: boolean;
+  currentValue?: string;
+  onSuccess?: () => void;
+};
 
 export interface InfoItemProps {
-  label: string
-  value: ReactNode
+  label: string;
+  value: ReactNode;
 }
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 const InfoItem = ({ label, value }: InfoItemProps) => {
   return (
     <div className="flex justify-between gap-2 text-sm text-secondary md:text-base">
       <div>{label}</div>
       <div className="flex items-center gap-2 font-semibold">
-        {value || '-'}
+        {value || "-"}
       </div>
     </div>
-  )
-}
+  );
+};
 
 const ExamDate = ({
   data,
   setIsEdit,
   setDirection,
 }: {
-  data: Data
-  setIsEdit: (isEdit: boolean) => void
-  setDirection: React.Dispatch<React.SetStateAction<1 | -1>>
+  data: Data;
+  setIsEdit: (isEdit: boolean) => void;
+  setDirection: React.Dispatch<React.SetStateAction<1 | -1>>;
 }) => (
   <>
-    <div>{data?.exam?.examination?.name ?? '-'}</div>
+    <div>{data?.exam?.examination?.name ?? "-"}</div>
     {data?.is_final_examination_subject ? (
       <Tooltip
         showTooltip={true}
-        title={'This is your official exam date and can not be changed'}
+        title={"This is your official exam date and can not be changed"}
       >
-        <CheckCircleTwoTone twoToneColor={'#52c41a'} />
+        <CheckCircleTwoTone twoToneColor={"#52c41a"} />
       </Tooltip>
     ) : (
       data?.remaining_changes > 0 &&
       data?.course.course_type === COURSE_TYPE.NORMAL_COURSE && (
-        <Tooltip showTooltip={false} title={'Change Exam Date'}>
+        <Tooltip showTooltip={false} title={"Change Exam Date"}>
           <div
             className="cursor-pointer text-primary"
             onClick={() => {
-              setIsEdit(true)
-              setDirection(1)
+              setIsEdit(true);
+              setDirection(1);
             }}
           >
             <PencilV2Icon />
@@ -89,22 +95,22 @@ const ExamDate = ({
       )
     )}
   </>
-)
+);
 
 const ExaminationInfo = ({
   open,
   setOpen,
   isEditProps = false,
-  classIdProps = '',
+  classIdProps = "",
   isExamList = false,
   currentValue,
   onSuccess,
 }: Props) => {
-  const { isTabletView, isMobileView } = useTailwindBreakpoint()
-  const router = useRouter()
-  const [direction, setDirection] = useState<1 | -1>(1)
-  const [isOpenSelectExam, setIsOpenSelectExam] = useState<boolean>(false)
-  const [classId, setClassId] = useState(router.query.courseId as string)
+  const { isTabletView, isMobileView } = useTailwindBreakpoint();
+  const router = useRouter();
+  const [direction, setDirection] = useState<1 | -1>(1);
+  const [isOpenSelectExam, setIsOpenSelectExam] = useState<boolean>(false);
+  const [classId, setClassId] = useState(router.query.courseId as string);
   const { data, isLoading, isError, isSuccess, refetch } = useQuery({
     queryKey: [ClassKey.ExamInfo, classId],
     queryFn: () => ClassAPI.getExamInfo(classId),
@@ -112,18 +118,18 @@ const ExaminationInfo = ({
     select: (data) => data.data,
     retry: false,
     enabled: !!classId && open,
-  })
-  const [itemSelected, setItemSelected] = useState('')
+  });
+  const [itemSelected, setItemSelected] = useState("");
 
   useEffect(() => {
-    if (!open) return
+    if (!open) return;
 
-    refetch()
-  }, [open])
+    refetch();
+  }, [open]);
 
-  const queryClient = useQueryClient()
-  const [isEdit, setIsEdit] = useState(isEditProps)
-  const [openConfirmModal, setOpenConfirmModal] = useState(false)
+  const queryClient = useQueryClient();
+  const [isEdit, setIsEdit] = useState(isEditProps);
+  const [openConfirmModal, setOpenConfirmModal] = useState(false);
 
   const validationSchema = z.object({
     note: z
@@ -132,84 +138,84 @@ const ExaminationInfo = ({
     examination_subject_id: z
       .string({ required_error: zodMsg.required })
       .min(1, { message: zodMsg.required }),
-  })
+  });
 
   const methods = useForm<ExaminationForm>({
     resolver: zodResolver(validationSchema),
-  })
+  });
   const handleSuccess = () => {
     queryClient.invalidateQueries({
       queryKey: [ClassKey.ExamInfo],
-    })
-  }
+    });
+  };
 
   const { mutate, isLoading: isChangingLoad } = useMutation({
     mutationFn: ({
       examination_subject_id,
       note,
     }: {
-      examination_subject_id: string
-      note: UploadFile[]
+      examination_subject_id: string;
+      note: UploadFile[];
     }) => {
-      const formData = new FormData()
-      formData.append('examination_subject_id', examination_subject_id)
-      note && formData.append('note', note[0] as FileType)
+      const formData = new FormData();
+      formData.append("examination_subject_id", examination_subject_id);
+      note && formData.append("note", note[0] as FileType);
 
-      return ClassAPI.changeExamDate(classId, formData)
+      return ClassAPI.changeExamDate(classId, formData);
     },
     onSuccess: (res) => {
       if (res.data.success) {
-        toast.success(res.data.data.message)
-        handleSuccess()
-        handleCancel()
-        onSuccess && onSuccess()
+        toast.success(res.data.data.message);
+        handleSuccess();
+        handleCancel();
+        onSuccess && onSuccess();
       }
-      setOpenConfirmModal(false)
+      setOpenConfirmModal(false);
     },
-  })
+  });
 
   const onSubmit: SubmitHandler<ExaminationForm> = (data) => {
     mutate({
       examination_subject_id: data.examination_subject_id,
       note: data.note,
-    })
-  }
+    });
+  };
   const handleBack = () => {
-    setDirection(-1)
+    setDirection(-1);
     if (isOpenSelectExam) {
-      setIsOpenSelectExam(false)
+      setIsOpenSelectExam(false);
     } else {
-      setIsEdit(false)
-      methods.reset()
+      setIsEdit(false);
+      methods.reset();
     }
-  }
+  };
   const handleCancel = () => {
-    setOpen(false)
-    setIsOpenSelectExam(false)
+    setOpen(false);
+    setIsOpenSelectExam(false);
     setTimeout(() => {
-      handleBack()
-    }, 500)
-  }
-  const { exams } = useSelectExams(classId)
+      handleBack();
+    }, 500);
+  };
+  const { exams } = useSelectExams(classId);
 
   const handleChangeExamDate = async () => {
     if (isEmpty(exams?.current_exam_name)) {
-      methods.handleSubmit(onSubmit)()
+      methods.handleSubmit(onSubmit)();
     } else {
-      const valid = await methods.trigger()
+      const valid = await methods.trigger();
 
-      if (!valid) return
-      setOpenConfirmModal(true)
-      setOpen(false)
+      if (!valid) return;
+      setOpenConfirmModal(true);
+      setOpen(false);
     }
-  }
+  };
 
   useEffect(() => {
     if (classIdProps && isEditProps) {
-      setClassId(classIdProps)
-      setIsEdit(isEditProps)
+      setClassId(classIdProps);
+      setIsEdit(isEditProps);
     }
-  }, [classIdProps, isEditProps])
+  }, [classIdProps, isEditProps]);
 
   const renderContent = () => {
     if (isLoading) {
@@ -221,14 +227,14 @@ const ExaminationInfo = ({
             </Skeleton>
           ))}
         </>
-      )
+      );
     }
     if (isError) {
       return (
         <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center">
           <NoData />
         </div>
-      )
+      );
     }
     if (isSuccess) {
       return (
@@ -254,26 +260,26 @@ const ExaminationInfo = ({
             value={getDuration(data?.exam?.start_date, data?.exam?.end_date)}
           />
         </div>
-      )
+      );
     }
-  }
+  };
 
-  const title = isEdit ? 'Change Exam Date' : TitleSidebar.EXAM_INFORMATION
-  const isShowCloseBtn = !isEdit || isExamList || isTabletView || isMobileView
-  const isClosable = !isEdit || isExamList
-  const isShowBackBtn = (isTabletView || isMobileView) && isEdit && !isExamList
-  const btnSubmitTile = isEdit ? 'Confirm' : ''
-  const cancelButtonCaption = isEdit && !isMobileView ? 'Cancel' : ''
-  const placement = isTabletView || isMobileView ? 'bottom' : 'right'
+  const title = isEdit ? "Change Exam Date" : TitleSidebar.EXAM_INFORMATION;
+  const isShowCloseBtn = !isEdit || isExamList || isTabletView || isMobileView;
+  const isClosable = !isEdit || isExamList;
+  const isShowBackBtn = (isTabletView || isMobileView) && isEdit && !isExamList;
+  const btnSubmitTile = isEdit ? "Confirm" : "";
+  const cancelButtonCaption = isEdit && !isMobileView ? "Cancel" : "";
+  const placement = isTabletView || isMobileView ? "bottom" : "right";
   const height =
     (isTabletView || isMobileView) && isEdit
       ? 386
       : isTabletView || isMobileView
-        ? 'auto'
-        : '100%'
+        ? "auto"
+        : "100%";
   const variants = {
     enter: (direction: number) => ({
-      x: direction > 0 ? '100%' : '-100%',
+      x: direction > 0 ? "100%" : "-100%",
       opacity: 0,
     }),
     center: {
@@ -281,10 +287,10 @@ const ExaminationInfo = ({
       opacity: 1,
     },
     exit: (direction: number) => ({
-      x: direction > 0 ? '-100%' : '100%',
+      x: direction > 0 ? "-100%" : "100%",
       opacity: 0,
     }),
-  }
+  };
 
   return (
     <>
@@ -304,8 +310,8 @@ const ExaminationInfo = ({
         placement={placement}
         height={height}
         submitButtonClassName="w-full md:w-auto"
-        rootClassName={clsx('responsive-drawer-base', {
-          'drawer-bottom-0': isMobileView,
+        rootClassName={clsx("responsive-drawer-base", {
+          "drawer-bottom-0": isMobileView,
         })}
       >
         <FormProvider {...methods}>
@@ -313,10 +319,10 @@ const ExaminationInfo = ({
             <motion.div
               key={
                 isMobileView && isOpenSelectExam
-                  ? 'selectExam'
+                  ? "selectExam"
                   : isEdit
-                    ? 'changeExam'
-                    : 'viewExam'
+                    ? "changeExam"
+                    : "viewExam"
               }
               custom={direction}
               variants={variants}
@@ -357,7 +363,7 @@ const ExaminationInfo = ({
         exams={exams}
       />
     </>
-  )
-}
+  );
+};
 
-export default ExaminationInfo
+export default ExaminationInfo;

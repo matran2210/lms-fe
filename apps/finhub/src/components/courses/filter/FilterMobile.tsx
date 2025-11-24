@@ -1,10 +1,9 @@
-import React from 'react'
-import { defaultStatusCourse } from 'src/constants'
 import { CheckIcon, FineTuninIcon } from '@components/courses/icons'
 import BaseDrawer from '@components/courses/popup/BaseDrawer'
+import { defaultStatusCourse } from '@lms/core'
+import { ButtonPrimary } from '@lms/ui'
 import { MobileFilter3LevelProps } from 'src/type/courses-3-level'
 import ButtonIcon from '../buttons/ButtonIcon'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
 
 export default function MobileFilter3Level({
   courses,

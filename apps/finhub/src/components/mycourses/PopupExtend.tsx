@@ -1,8 +1,8 @@
+import ShortCourseModal from '@components/modal/ShortCourseModal'
 import { AlertIcon, LockIcon } from '@lms/assets'
-import ShortCourseModal from '@components/base/modal/ShortCourseModal'
-import { onLinkSocial } from '@utils/index'
+import { onLinkSocial } from '@lms/utils'
 import { Dispatch, SetStateAction } from 'react'
-import { MY_COURSES } from 'src/constants/lang'
+import { MY_COURSES } from '@lms/core'
 
 interface IProps {
   open: boolean

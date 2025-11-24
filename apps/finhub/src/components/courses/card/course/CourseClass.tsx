@@ -1,7 +1,7 @@
 import { Bachelor, CourseTimeIcon } from '@components/courses/icons'
 import TooltipCourses from '@components/courses/shared/Tooltip'
-import { truncateString } from '@utils/index'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { truncateString } from '@lms/utils'
 import { ICourseClassDay } from 'src/type/courses-3-level/course'
 
 export default function CourseClass({
@@ -39,8 +39,9 @@ export default function CourseClass({
                 <CourseTimeIcon className={sizeIcon} />
               </div>
               <div
-                className={`text-xs font-medium md:text-sm ${enableCourse ? 'text-icon' : 'text-gray-300'
-                  }`}
+                className={`text-xs font-medium md:text-sm ${
+                  enableCourse ? 'text-icon' : 'text-gray-300'
+                }`}
               >
                 {daysDifference > 0
                   ? daysDifference
@@ -48,9 +49,7 @@ export default function CourseClass({
                     ? 1
                     : 0}{' '}
               </div>
-              <div
-                className="text-xs font-normal md:text-sm text-gray"
-              >
+              <div className="text-xs font-normal text-gray md:text-sm">
                 {daysDifference > 1 ? 'days left' : 'day left'}
               </div>
             </div>

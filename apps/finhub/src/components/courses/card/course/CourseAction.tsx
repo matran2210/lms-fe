@@ -1,6 +1,6 @@
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import { trackGAEvent } from '@utils/google-analytics'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { ButtonSecondary } from '@lms/ui'
+import { trackGAEvent } from '@lms/utils'
 import { ICourseAction } from 'src/type/courses-3-level/course'
 
 export default function CourseAction({

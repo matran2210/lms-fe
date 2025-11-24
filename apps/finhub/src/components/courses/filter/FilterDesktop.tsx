@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import { defaultStatusCourse } from '@lms/core'
+import { SAPPSelect } from '@lms/ui'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { defaultStatusCourse } from 'src/constants'
 import { DesktopFilter3LevelProps } from 'src/type/courses-3-level'
-import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
-import SAPPSelect from '@components/base/select/SAPPSelect'
 
 export default function DesktopFilter3Level({
   courses,

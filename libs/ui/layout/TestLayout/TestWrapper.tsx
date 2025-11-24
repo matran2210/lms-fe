@@ -11,7 +11,7 @@ import { CountDown } from "@lms/feature-test";
 import { useAppDispatch } from "@lms/contexts";
 import { disableUnsavedChange } from "@lms/contexts";
 import dayjs from "dayjs";
-import { ButtonSecondary } from "@lms/ui";
+import { ButtonSecondary } from "../../components";
 
 const { Header, Content, Footer } = Layout;
 

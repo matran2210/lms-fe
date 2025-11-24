@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const path = require('path')
-require('dotenv').config({ path: '../../.env' })
 
 // --- EXTERNAL WRAPPERS ---
 const withBundleAnalyzer = require('@next/bundle-analyzer')({

@@ -1,5 +1,5 @@
+import ShortCourseModal from '@components/modal/ShortCourseModal'
 import { ConfirmIcon } from '@lms/assets'
-import ShortCourseModal from '@components/base/modal/ShortCourseModal'
 
 interface IProps {
   open: boolean

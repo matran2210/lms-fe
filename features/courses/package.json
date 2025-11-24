@@ -33,6 +33,7 @@
     "lottie-react": "^2.4.1",
     "explanation-package": "latest",
     "quiz-result-package": "latest",
-    "@hookform/resolvers": "^3.3.2"
+    "@hookform/resolvers": "^3.3.2",
+    "@ant-design/icons": "^5.6.1"
   }
 }

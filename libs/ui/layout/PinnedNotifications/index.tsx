@@ -1,12 +1,12 @@
 import { CloseIconNote, IconLoudSpeaker } from "@lms/assets";
-import { EditorReader } from "@lms/ui";
 import { usePinnedNotifyContext } from "@lms/contexts";
+import { PageLink } from "@lms/core";
 import { Col, Row } from "antd";
+import clsx from "clsx";
 import { useRouter } from "next/router";
 import React from "react";
-import { PageLink } from "@lms/core";
 import Marquee from "react-fast-marquee";
-import clsx from "clsx";
+import { EditorReader } from "../../components/base";
 
 function PinnedNotifications() {
   const router = useRouter();

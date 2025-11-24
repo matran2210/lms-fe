@@ -1,14 +1,12 @@
-import clsx from 'clsx'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { PageLink } from '@lms/core'
+import clsx from "clsx";
+import Link from "next/link";
+import { useFeature } from "node_modules/@lms/contexts";
 
 const LogoFull = ({ className }: { className?: string }) => {
-  const router = useRouter()
-  const pathname = router.pathname
+  const { pageLink } = useFeature();
 
   return (
-    <Link href={PageLink.COURSES}>
+    <Link href={pageLink.COURSES}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="57"
@@ -16,7 +14,7 @@ const LogoFull = ({ className }: { className?: string }) => {
         fill="none"
         viewBox="0 0 57 37"
         className={clsx(
-          'logo-full pointer-events-none shrink-0 cursor-pointer opacity-0 transition-opacity duration-200 ease-in-out',
+          "logo-full pointer-events-none shrink-0 cursor-pointer opacity-0 transition-opacity duration-200 ease-in-out",
           className,
         )}
       >
@@ -26,7 +24,7 @@ const LogoFull = ({ className }: { className?: string }) => {
         ></path>
       </svg>
     </Link>
-  )
-}
+  );
+};
 
-export default LogoFull
+export default LogoFull;

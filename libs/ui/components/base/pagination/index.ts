@@ -4,3 +4,4 @@ export { default as PageLinkPagination } from "./PageLink";
 export * from "./Pagination";
 export { default as PaginationSAPP } from "./PaginationSAPP";
 export { default as PaginationSappV2 } from "./PaginationSappV2";
+export * from "./pagination-fn";

@@ -1,175 +1,175 @@
-import React, { useEffect, useState, useMemo } from 'react'
-import { EChart } from '@lms/ui'
-import { DashboardAPI } from '@pages/api/dashboard'
-import dayjs from 'dayjs'
-import { useRouter } from 'next/router'
-import {Tooltip, NoData } from '@lms/ui'
-import { ILearningResult, IMockTestResult } from '@lms/core'
-import { ANIMATION, COURSE_TYPE, DATE_FORMAT } from '@lms/core'
+import { IconEssentional, MatchFailIcon, SuccessMatchIcon } from "@lms/assets";
 import {
-  IconEssentional,
-  MatchFailIcon,
-  SuccessMatchIcon,
-} from '@lms/assets/Dashboard'
-import Link from 'next/link'
-import { EChartsOption } from 'echarts'
-import {useReponsive} from '@lms/hooks'
+  ANIMATION,
+  COURSE_TYPE,
+  DATE_FORMAT,
+  ILearningResult,
+  IMockTestResult,
+} from "@lms/core";
+import { useReponsive } from "@lms/hooks";
+import { EChart, NoData, Tooltip } from "@lms/ui";
+import { DashboardAPI } from "@pages/api/dashboard";
+import dayjs from "dayjs";
+import { EChartsOption } from "echarts";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useMemo, useState } from "react";
 
 interface CourseInfo {
-  courseType: string
-  category: string
+  courseType: string;
+  category: string;
 }
 
 interface MockTestResponse {
-  success: boolean
+  success: boolean;
   data: {
-    reports: ILearningResult[]
-    mock_tests: Array<{ id: string }>
-  }
+    reports: ILearningResult[];
+    mock_tests: Array<{ id: string }>;
+  };
 }
 
 interface TooltipParams {
-  value: number[]
-  name: string
+  value: number[];
+  name: string;
 }
 
 const LearningResults = () => {
-  const router = useRouter()
+  const router = useRouter();
   const [results, setResults] = useState<ILearningResult[] | IMockTestResult[]>(
     [],
-  )
+  );
 
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [hasLearning, setHasLearning] = useState<boolean>(false)
-  const [mockTestId, setMockTestId] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [hasLearning, setHasLearning] = useState<boolean>(false);
+  const [mockTestId, setMockTestId] = useState<string>("");
   const courseInfo = useMemo(
     () =>
-      JSON.parse(localStorage.getItem('courseInfo') as string) as CourseInfo,
+      JSON.parse(localStorage.getItem("courseInfo") as string) as CourseInfo,
     [],
-  )
-  const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE
+  );
+  const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE;
   const resultFormula =
-    courseInfo?.category === 'ACCA'
-      ? '%Results = Graded activities (70%) + Final test (30%)'
-      : '%Results = Module test (40%) + Topic test (60%)'
+    courseInfo?.category === "ACCA"
+      ? "%Results = Graded activities (70%) + Final test (30%)"
+      : "%Results = Module test (40%) + Topic test (60%)";
 
-  const { isMobile, isTablet } = useReponsive()
+  const { isMobile, isTablet } = useReponsive();
 
   useEffect(() => {
     const getLearningResults = async (id: string) => {
       try {
         const res = (await DashboardAPI.getMockTestResults(
           id,
-        )) as MockTestResponse
+        )) as MockTestResponse;
         if (res && res.success) {
-          const data = res.data.reports
-          setResults(data)
-          setHasLearning(data.some((e: ILearningResult) => e.score))
+          const data = res.data.reports;
+          setResults(data);
+          setHasLearning(data.some((e: ILearningResult) => e.score));
           if (!isNormal && res.data.mock_tests?.length === 1) {
-            setMockTestId(res.data.mock_tests[0].id)
+            setMockTestId(res.data.mock_tests[0].id);
           }
         }
       } catch (error) {
-        setResults([])
+        setResults([]);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
     if (router?.query?.courseId)
-      getLearningResults(router.query.courseId as string)
-  }, [router?.query?.courseId, isNormal])
+      getLearningResults(router.query.courseId as string);
+  }, [router?.query?.courseId, isNormal]);
 
   const option = useMemo(() => {
-    if (!results || results.length === 0) return null
+    if (!results || results.length === 0) return null;
     const maxValues = results.map(
       (result: ILearningResult | IMockTestResult) => {
-        const learning = 'score' in result ? result.score : 0
+        const learning = "score" in result ? result.score : 0;
         const mock =
-          'mock_test_score' in result ? result.mock_test_score || 0 : 0
-        return Math.max(learning, mock, 100)
+          "mock_test_score" in result ? result.mock_test_score || 0 : 0;
+        return Math.max(learning, mock, 100);
       },
-    )
+    );
     const indicator = results.map(
       (result: ILearningResult | IMockTestResult, idx: number) => ({
         text:
-          'short_name' in result
-            ? result.short_name || ''
-            : 'name' in result
+          "short_name" in result
+            ? result.short_name || ""
+            : "name" in result
               ? (result as IMockTestResult)?.name
-              : '',
+              : "",
         max: maxValues[idx],
       }),
-    )
+    );
     return {
-      title: { text: '' },
+      title: { text: "" },
       responsive: true,
       tooltip: {
         borderWidth: 0,
-        trigger: 'item',
+        trigger: "item",
         formatter: function (params: TooltipParams) {
-          const values = params.value
+          const values = params.value;
           const indicators = results.map(
             (e: ILearningResult | IMockTestResult) =>
-              'name' in e ? e.name : (e as ILearningResult)?.short_name,
-          )
-          let tooltipText = `<strong>${params.name}</strong><br/>`
+              "name" in e ? e.name : (e as ILearningResult)?.short_name,
+          );
+          let tooltipText = `<strong>${params.name}</strong><br/>`;
           values.forEach((val: number, i: number) => {
-            tooltipText += `<span class='text-[#7086FD]'>●</span> ${indicators[i]}: ${val}%<br/>`
-          })
-          return tooltipText
+            tooltipText += `<span class='text-[#7086FD]'>●</span> ${indicators[i]}: ${val}%<br/>`;
+          });
+          return tooltipText;
         },
       },
       radar: [
         {
-          shape: 'circle',
-          radius: '75%',
+          shape: "circle",
+          radius: "75%",
           indicator,
-          axisLine: { lineStyle: { color: '#D1D5DB' } },
-          splitLine: { lineStyle: { color: '#D1D5DB' } },
-          splitArea: { areaStyle: { color: 'transparent' } },
+          axisLine: { lineStyle: { color: "#D1D5DB" } },
+          splitLine: { lineStyle: { color: "#D1D5DB" } },
+          splitArea: { areaStyle: { color: "transparent" } },
           name: {
-            color: '#374151',
+            color: "#374151",
             fontSize: isMobile ? 12 : 14,
-            fontWeight: '500',
+            fontWeight: "500",
             lineHeight: isMobile ? 20 : 22,
             formatter: function (name: string) {
-              const maxLength = 16
+              const maxLength = 16;
               return name.length > maxLength
-                ? name.slice(0, maxLength) + '…'
-                : name
+                ? name.slice(0, maxLength) + "…"
+                : name;
             },
           },
         },
       ],
       series: [
         {
-          type: 'radar',
+          type: "radar",
           data: [
             {
-              name: 'Learning results',
+              name: "Learning results",
               value: results?.map(
                 (result: ILearningResult | IMockTestResult) =>
-                  'score' in result ? result.score : 0,
+                  "score" in result ? result.score : 0,
               ),
-              areaStyle: { color: 'rgba(111, 211, 176, 0.45)' },
-              lineStyle: { color: '#6FD3B0', width: 1 },
-              itemStyle: { color: '#6FD3B0' },
+              areaStyle: { color: "rgba(111, 211, 176, 0.45)" },
+              lineStyle: { color: "#6FD3B0", width: 1 },
+              itemStyle: { color: "#6FD3B0" },
             },
             {
-              name: 'Mock test results',
+              name: "Mock test results",
               value: results?.map(
                 (result: ILearningResult | IMockTestResult) =>
-                  'mock_test_score' in result ? result.mock_test_score || 0 : 0,
+                  "mock_test_score" in result ? result.mock_test_score || 0 : 0,
               ),
-              areaStyle: { color: 'rgba(251, 140, 91, 0.45)' },
-              lineStyle: { color: '#FB8C5B', width: 1 },
-              itemStyle: { color: '#FB8C5B' },
+              areaStyle: { color: "rgba(251, 140, 91, 0.45)" },
+              lineStyle: { color: "#FB8C5B", width: 1 },
+              itemStyle: { color: "#FB8C5B" },
             },
           ],
         },
       ],
-    }
-  }, [results])
+    };
+  }, [results]);
 
   return (
     <div
@@ -217,20 +217,20 @@ const LearningResults = () => {
                   <div className="flex justify-center">
                     {(() => {
                       const chartHeight = isMobile
-                        ? '350px'
+                        ? "350px"
                         : isTablet
-                          ? '450px'
-                          : '500px'
+                          ? "450px"
+                          : "500px";
                       const chartMinHeight = isMobile
-                        ? '350px'
+                        ? "350px"
                         : isTablet
-                          ? '450px'
-                          : '500px'
+                          ? "450px"
+                          : "500px";
                       const chartWidth = isMobile
-                        ? '300px'
+                        ? "300px"
                         : isTablet
-                          ? '500px'
-                          : '550px'
+                          ? "500px"
+                          : "550px";
                       return (
                         <EChart
                           option={option as EChartsOption}
@@ -238,7 +238,7 @@ const LearningResults = () => {
                           minHeight={chartMinHeight}
                           width={chartWidth}
                         />
-                      )
+                      );
                     })()}
                   </div>
                   <div className="flex flex-row items-start justify-center gap-5 xl:flex-col xl:gap-4">
@@ -249,10 +249,10 @@ const LearningResults = () => {
                           href={
                             mockTestId
                               ? `${window.location.origin}/courses/test/test-result/${mockTestId}`
-                              : ''
+                              : ""
                           }
                           target="_blank"
-                          className={`inline-block min-w-fit text-base font-bold text-gray-800 ${!mockTestId ? 'pointer-events-none' : 'hover:text-dashboard-learing'}`}
+                          className={`inline-block min-w-fit text-base font-bold text-gray-800 ${!mockTestId ? "pointer-events-none" : "hover:text-dashboard-learing"}`}
                           rel="noreferrer"
                         >
                           Mock test results
@@ -282,8 +282,8 @@ const LearningResults = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
 const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
   return (
@@ -297,10 +297,10 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
       <div className="overflow-y-auto md:h-[230px] xl:h-[450px]">
         {results?.map((result) => {
           const differenceResult =
-            (result?.mock_test_score || 0) - (result?.score || 0)
+            (result?.mock_test_score || 0) - (result?.score || 0);
 
           const hasBothScores =
-            result?.score !== 0 && result?.mock_test_score != 0
+            result?.score !== 0 && result?.mock_test_score != 0;
 
           return (
             <div
@@ -323,9 +323,9 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
                       <MatchFailIcon />
                     )}
                     <div
-                      className={`ms-1 text-sm font-semibold md:text-lg ${differenceResult > 0 ? 'text-success' : 'text-error'}`}
+                      className={`ms-1 text-sm font-semibold md:text-lg ${differenceResult > 0 ? "text-success" : "text-error"}`}
                     >
-                      {differenceResult > 0 ? '+' : ''}
+                      {differenceResult > 0 ? "+" : ""}
                       {differenceResult}%
                     </div>
                   </div>
@@ -346,21 +346,21 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
                 <div
                   className={
                     differenceResult > 0
-                      ? 'text-sm text-success'
-                      : 'text-sm text-error'
+                      ? "text-sm text-success"
+                      : "text-sm text-error"
                   }
                 >
                   {differenceResult > 0
-                    ? 'Okay, keep it up!'
-                    : 'Review more formulas'}
+                    ? "Okay, keep it up!"
+                    : "Review more formulas"}
                 </div>
               )}
             </div>
-          )
+          );
         })}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LearningResults
+export default LearningResults;
