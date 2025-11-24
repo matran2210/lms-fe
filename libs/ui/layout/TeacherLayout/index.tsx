@@ -1,11 +1,10 @@
-import {TeacherMenu} from "@lms/ui";
-import { SappBreadCrumbs } from "@lms/ui";
+import { useCourseContext } from "@lms/contexts";
+import { ITabs } from "@lms/core";
+import { SappBreadCrumbs, TeacherMenu } from "@lms/ui";
 import { Typography } from "antd";
-import { IAuthManager, ICoursesAPI, ITabs } from "@lms/core";
-import { memo } from "react";
 import clsx from "clsx";
 import Head from "next/head";
-import { useCourseContext } from "@lms/contexts";
+import { memo } from "react";
 
 const { Title } = Typography;
 type LayoutTeacherProps = {
@@ -15,11 +14,6 @@ type LayoutTeacherProps = {
   className?: string;
   isCourseDetail?: boolean;
   isActivity?: boolean;
-  courseApi: ICoursesAPI;
-  authManager: IAuthManager;
-  pageLink: {
-    [key: string]: string;
-  };
 };
 
 const LayoutTeacher: React.FC<LayoutTeacherProps> = ({
@@ -28,19 +22,17 @@ const LayoutTeacher: React.FC<LayoutTeacherProps> = ({
   breadcrumbs = [],
   className = "",
   isCourseDetail = false,
-  isActivity = false,
-  courseApi,
-  authManager,
-  pageLink,
+  isActivity = false
 }: LayoutTeacherProps) => {
   const { showPinnedTrial } = useCourseContext();
+
   return (
     <>
       <Head>
         <title>{title}</title>
       </Head>
       <div className="flex flex-nowrap">
-        <TeacherMenu isCourseDetail={isCourseDetail} isActivity={isActivity} api={courseApi} authManager={authManager} pageLink={pageLink} />
+        <TeacherMenu isCourseDetail={isCourseDetail} isActivity={isActivity} />
         <div
           className={clsx(
             "min-h-screen w-full bg-gray-10",

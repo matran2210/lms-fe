@@ -1,24 +1,16 @@
+import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
+import { UserType, getEntranceCount, useAppDispatch, useCourseContext } from '@lms/contexts'
+import { ANIMATION } from '@lms/core'
+import { Heading } from '@lms/feature-courses'
 import EntranceTestFilter from '@lms/feature-test/src/components/entrance-test/EntranceTestFilter'
 import EntranceTestList from '@lms/feature-test/src/components/entrance-test/EntranceTestList'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { CourseSkeleton, Footer, Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { ANIMATION } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { UserType, useAppDispatch, getEntranceCount, useCourseContext } from '@lms/contexts'
 import { EntranceTestAPI } from '../api/entrance-test'
-import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
-import { CourseSkeleton, Footer, Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
-import { PageLink } from 'src/constants/routers'
-import { CoursesAPI } from '@pages/api/courses'
-import {
-  MENU_BOTTOM,
-  MENU_ITEMS,
-  MENU_ITEMS_EVENT,
-} from 'src/constants/menu-items'
-import { NotificationAPI } from '@pages/api/notification'
-import { Heading } from '@lms/feature-courses'
 
 const EntranceTest = () => {
   const router = useRouter()
@@ -75,12 +67,6 @@ const EntranceTest = () => {
         title="Entrance Test"
         showSidebar={showSidebar || isAlwaysShowSidebar}
         handleToggleSidebar={handleCloseSidebar}
-        pageLink={PageLink}
-        api={CoursesAPI}
-        notificationApi={NotificationAPI}
-        menuItems={MENU_ITEMS}
-        menuItemsEvent={MENU_ITEMS_EVENT}
-        menuBottom={MENU_BOTTOM}
       >
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}

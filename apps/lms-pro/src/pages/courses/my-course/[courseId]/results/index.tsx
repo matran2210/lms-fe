@@ -1,24 +1,16 @@
-import { useRouter } from 'next/router'
-import ResultsTable from './ResultsTable'
-import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from '@lms/contexts'
-import { HeaderMobile, Layout, SappBreadCrumbs } from '@lms/ui'
-import { TEST_AND_QUIZ_TITLE } from '@lms/core'
+import { DEFAULT_PAGE_SIZE, TEST_AND_QUIZ_TITLE } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { useQuery } from 'react-query'
+import { HeaderMobile, Layout, SappBreadCrumbs } from '@lms/ui'
 import { CoursesAPI } from '@pages/api/courses'
-import { DEFAULT_PAGE_SIZE } from '@lms/core'
 import clsx from 'clsx'
-import { FilterCourseIcon } from 'src/assets/icons'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { IOpenChooseItem } from '@lms/core'
+import { useQuery } from 'react-query'
+import { FilterCourseIcon } from 'src/assets/icons'
 import { PageLink } from 'src/constants/routers'
-import {
-  MENU_BOTTOM,
-  MENU_ITEMS,
-  MENU_ITEMS_EVENT,
-} from 'src/constants/menu-items'
-import { NotificationAPI } from '@pages/api/notification'
+import withAuthorization from 'src/HOC/withAuthorization'
+import ResultsTable from './ResultsTable'
 
 const Results = () => {
   const router = useRouter()
@@ -73,12 +65,6 @@ const Results = () => {
     <Layout
       title={TEST_AND_QUIZ_TITLE}
       showSidebar={isAlwaysShowSidebar}
-      pageLink={PageLink}
-      menuItems={MENU_ITEMS}
-      menuItemsEvent={MENU_ITEMS_EVENT}
-      menuBottom={MENU_BOTTOM}
-      api={CoursesAPI}
-      notificationApi={NotificationAPI}
     >
       {isAlwaysShowSidebar && (
         <div className="mb-2 mt-4 flex w-full">
@@ -120,7 +106,6 @@ const Results = () => {
       <ResultsTable
         openFilter={openFilter}
         setOpenFilter={setOpenFilter}
-        api={CoursesAPI}
       />
     </Layout>
   )

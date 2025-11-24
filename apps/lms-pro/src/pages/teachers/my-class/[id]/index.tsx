@@ -153,7 +153,6 @@ const ClassDetail = () => {
       title="Class Detail"
       breadcrumbs={breadcrumbs}
       className="bg-[#F2F4F7] p-0"
-      courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}
     >
       <div className="mb-6 h-fit w-full rounded-xl bg-white px-8 pt-8">
         <ClassCard

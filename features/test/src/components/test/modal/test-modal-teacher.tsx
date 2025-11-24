@@ -2,27 +2,24 @@ import { ClockIcon } from "@lms/assets";
 import {
   GRADE_STATUS,
   GRADING_METHOD,
-  IClassAPI,
   IQuizResultList,
-  TEST_TYPE,
+  TEST_TYPE
 } from "@lms/core";
 import {
   PopupCanNotRetakeTest,
   TestAnnouncementModal,
 } from "@lms/feature-courses";
-import { PopupSelectRetakeOrContinueAttempt } from "@lms/feature-test";
+import { isQuizExpired, PopupSelectRetakeOrContinueAttempt } from "@lms/feature-test";
 import { HookFormSelect, SappModalV3 } from "@lms/ui";
 import {
   capitalizeFirstLetter,
-  formatTime,
   formatTimeMinToHhMm,
-  trackGAEvent,
+  trackGAEvent
 } from "@lms/utils";
-import { isQuizExpired } from "@lms/feature-test";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { isNull } from "lodash";
-import { useRouter } from "next/router";
+import { useFeature } from "node_modules/@lms/contexts";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 enum StatusQuizAttempt {
@@ -39,8 +36,6 @@ interface IProps {
   class_user_id?: string;
   activeCourse?: any;
   is_passed_course: boolean;
-  classApi: IClassAPI;
-  pageLink: { [key: string]: string };
 }
 
 const TestModalTeacher = ({
@@ -50,10 +45,10 @@ const TestModalTeacher = ({
   class_user_id,
   activeCourse,
   is_passed_course,
-  classApi,
-  pageLink,
 }: IProps) => {
-  const router = useRouter();
+  const { router, classApi,
+    pageLink, } = useFeature();
+
   const isSubmitted =
     data?.quiz?.attempt && data?.quiz?.attempt?.status === "SUBMITTED";
   const isUnsubmitted =

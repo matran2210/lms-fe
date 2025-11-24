@@ -350,12 +350,6 @@ const ProfilePage = () => {
       showSidebar={showSidebar || isAlwaysShowSidebar}
       handleToggleSidebar={handleCloseSidebar}
       fullWidth={isMobileView}
-      pageLink={PageLink}
-      api={CoursesAPI}
-      notificationApi={NotificationAPI}
-      menuItems={MENU_ITEMS}
-      menuBottom={MENU_BOTTOM}
-      menuItemsEvent={MENU_ITEMS_EVENT}
     >
       <div className="mt-2 flex h-full w-full flex-col px-4 md:mt-0 md:px-0">
         <SearchWithMenuToggle

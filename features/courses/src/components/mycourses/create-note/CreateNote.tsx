@@ -1,29 +1,24 @@
-import { CloseIconNote, SaveIcon } from '@lms/assets'
-import { ButtonPrimary } from '@lms/ui'
-import { ButtonSecondary } from '@lms/ui'
-import { ModalResizeable } from '@lms/ui'
-import { HookFormTextArea } from '@lms/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { CloseIconNote, SaveIcon } from '@lms/assets'
+import { closeNote, useAppDispatch, useFeature } from '@lms/contexts'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { ButtonSecondary, HookFormTextArea, ModalResizeable } from '@lms/ui'
 import { VALIDATE_REQUIRED } from '@lms/utils'
-import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { closeNote, useAppDispatch } from '@lms/contexts'
 import { z } from 'zod'
-import { ICoursesAPI } from '@lms/core'
 
 interface IProps {
   id: string | undefined
   content: string
   uuid: string | number
   count: number
-  courseApi: ICoursesAPI
 }
 
-const CreateNote = ({ id, content, uuid, count, courseApi }: IProps) => {
-  const router = useRouter()
+const CreateNote = ({ id, content, uuid, count }: IProps) => {
+  const { courseApi, router } = useFeature();
+
   const activityId = router.query.activityId
   const [activeSectionId, setActiveSectionId] = useState<string>()
   const dispatch = useAppDispatch()

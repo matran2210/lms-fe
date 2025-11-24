@@ -33,13 +33,13 @@ import {
   SappLoading,
   useClickOutside,
 } from '@lms/ui'
-import { Popover } from "antd";
 import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
 import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
 import NewFilltext from '@lms/ui/components/questionType/NewFillText'
 import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
+import { Popover } from "antd"
 import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -48,8 +48,7 @@ import { CoursesAPI } from '../api/courses'
 import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
 
-import { CheckCircleOutlineYellow, FlagIconV2 } from '@lms/assets/test'
-import { Icon, NotesOutline, PulsingExclamation } from '@lms/assets'
+import { CheckCircleOutlineYellow, FlagIconV2, Icon, NotesOutline, PulsingExclamation } from '@lms/assets'
 import { showPopupCompletedCourse } from '@lms/contexts'
 import {
   Answer,
@@ -86,17 +85,11 @@ import DragDropQuestion, {
 import TestWrapper from '@lms/ui/layout/TestLayout/TestWrapper'
 import { checkSheetAnswered, runHighlight, trackGAEvent } from '@lms/utils'
 import { EventTestAPI } from '@pages/api/event-test'
-import { NotificationAPI } from '@pages/api/notification'
 import { TestAPI } from '@pages/api/test'
 import { UploadAPI } from '@pages/api/upload'
 import { TabsProps, Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import {
-  MENU_BOTTOM,
-  MENU_ITEMS,
-  MENU_ITEMS_EVENT,
-} from 'src/constants/menu-items'
 import { PageLink } from 'src/constants/routers'
 import {
   checkTypeAndRenderTitle,
@@ -870,7 +863,6 @@ const TestDetail = () => {
                       handleChange={handleEssayChange}
                       explainClassname="!mt-8 !p-0 !bg-transparent"
                       storageKey={storageKey}
-                      uploadApi={UploadAPI}
                     />
                   )}
                 </>
@@ -1159,7 +1151,6 @@ const TestDetail = () => {
                 showRequiment={showListRequirement}
                 handleChange={handleEssayChange}
                 storageKey={storageKey}
-                uploadApi={UploadAPI}
               />
             )}
           </>
@@ -2746,7 +2737,6 @@ const TestDetail = () => {
                     currentTabContent,
                     essayData,
                   }}
-                  uploadApi={UploadAPI}
                 />
               </div>
             )}
@@ -2996,12 +2986,6 @@ const TestDetail = () => {
       title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}
       showSidebar={false}
       fullWidth
-      api={CoursesAPI}
-      notificationApi={NotificationAPI}
-      pageLink={PageLink}
-      menuItems={MENU_ITEMS}
-      menuItemsEvent={MENU_ITEMS_EVENT}
-      menuBottom={MENU_BOTTOM}
     >
       <CourseProvider router={router} api={{ get: EventTestAPI.get }}>
         <SappLoading

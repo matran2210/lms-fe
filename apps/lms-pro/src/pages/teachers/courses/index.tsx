@@ -1,21 +1,18 @@
 
+import { UserType } from '@lms/contexts'
+import { ANIMATION, ITabs, MY_COURSES } from '@lms/core'
+import { CoursesList, Filter, SearchForm } from '@lms/feature-courses'
+import { LayoutTeacher, SappLoadingGlobal } from '@lms/ui'
+import { buildQueryString } from '@lms/utils'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
-import { useInfiniteQuery } from 'react-query'
-import { ANIMATION } from '@lms/core'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { MY_COURSES } from '@lms/core'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from '@lms/contexts'
-import { ITabs } from '@lms/core'
 import { FormProvider, useForm } from 'react-hook-form'
-import { buildQueryString } from '@lms/utils'
+import { useInfiniteQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
-import { LayoutTeacher, SappLoadingGlobal } from '@lms/ui'
-import { CoursesList, Filter, SearchForm } from '@lms/feature-courses'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { CoursesAPI } from 'src/pages/api/courses'
 
 const DEFAULT_PAGESIZE = 9
 const breadcrumbs: ITabs[] = [
@@ -140,7 +137,7 @@ const MyCourseTeacher = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <LayoutTeacher title="My Course" breadcrumbs={breadcrumbs} courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}>
+      <LayoutTeacher title="My Course" breadcrumbs={breadcrumbs}>
         <FormProvider {...methods}>
           <div className="header border-default border-b bg-white">
             <div className={`relative my-0 flex`}>

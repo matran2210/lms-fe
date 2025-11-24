@@ -6,7 +6,7 @@ import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { PageLink } from 'src/constants/routers'
 const PageTeacher = () => {
   return (
-    <LayoutTeacher courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}>
+    <LayoutTeacher>
       <div />
     </LayoutTeacher>
   )

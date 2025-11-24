@@ -1,43 +1,40 @@
-import { CameraIcon } from '@lms/assets'
 import blankAvatar from '@assets/images/blank_avatar.webp'
 import sappAvatar from '@assets/images/blank_avatar_notification.png'
+import { CameraIcon } from '@lms/assets'
+import {
+  courseActivityReducer,
+  createDiscussion,
+  getDiscussion,
+  ICreateDiscussionResReact,
+  IDiscussion,
+  reactDiscussion,
+  uploadImagesDiscussion,
+  useAppDispatch, useAppSelector,
+  useFeature,
+  userReducer,
+} from '@lms/contexts'
 import { HookFormTextArea, NoData, SappButton, SappButtonIcon, SappModalImage } from '@lms/ui'
 import { Skeleton } from 'antd'
 import clsx from 'clsx'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import {
-  useAppDispatch, useAppSelector,
-  courseActivityReducer,
-  createDiscussion,
-  getDiscussion,
-  reactDiscussion,
-  uploadImagesDiscussion,userReducer,
-  ICreateDiscussionResReact,
-  IDiscussion,
-} from '@lms/contexts'
 import ActionDiscussion from './ActionDiscussion'
 import DiscussionElement from './DiscussionElement'
 import SendComment from './SendComment'
-import { IActivityAPI, ICourseActivityAPI, ICoursesAPI } from '@lms/core'
 
 
 type Props = {
   class_id: string
-  activityApi: IActivityAPI
-  courseApi: ICoursesAPI
-  courseActivityApi: ICourseActivityAPI
 }
 
 /**
  * Component chức năng đại diện cho phần discussion.
  * @param {Props} props - Props của component.
  */
-const Discussion = ({ class_id, activityApi, courseApi, courseActivityApi }: Props) => {
-  const router = useRouter()
+const Discussion = ({ class_id,  }: Props) => {
+  const { activityApi, courseApi, courseActivityApi, router } = useFeature();
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityReducer)
   const [idReply, setIdReply] = useState<string>()
@@ -367,9 +364,6 @@ const Discussion = ({ class_id, activityApi, courseApi, courseActivityApi }: Pro
                       selector?.userInDiscussion?.is_sapp_supporter
                     }
                     handleEditDiscussionElement={handleEditDiscussionElement}
-                    courseApi={courseApi}
-                    activityApi={activityApi}
-                    courseActivityApi={courseActivityApi}
                   />
                   <div
                     className={`${
@@ -405,9 +399,7 @@ const Discussion = ({ class_id, activityApi, courseApi, courseActivityApi }: Pro
                                 handleEditDiscussionElement={
                                   handleEditDiscussionElement
                                 }
-                                courseApi={courseApi}
-                                activityApi={activityApi}
-                                courseActivityApi={courseActivityApi}
+                               
                               />
                             </div>
                           )

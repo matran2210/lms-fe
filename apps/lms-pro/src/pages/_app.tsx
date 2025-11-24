@@ -1,7 +1,7 @@
 import MKTInApp from '@components/MKTInApp'
 import Metadata from '@components/common/Metadata'
 import '@fortune-sheet/react/dist/index.css'
-import { CourseNoteProvider, CourseProvider, getCountUnRead, PinnedNotifyProvider, PreviousSectionRouteProvider, showNotification, SocketContext, store, useAppDispatch, wrapper } from '@lms/contexts'
+import { CourseNoteProvider, CourseProvider, FeatureProvider, getCountUnRead, PinnedNotifyProvider, PreviousSectionRouteProvider, showNotification, SocketContext, store, useAppDispatch, wrapper } from '@lms/contexts'
 import {
   ANIMATION, CERTIFICATE_DETAIL, ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
@@ -41,11 +41,20 @@ import { injectStore } from 'src/redux/services/httpService'
 import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
-import { CoursesAPI } from './api/courses'
+import { CoursesAPI, submitQuizTest } from './api/courses'
 import { EventTestAPI } from './api/event-test'
 import { NotificationAPI } from './api/notification'
 import ErrorRedirectPage from './error-redirect'
 import { PageLink } from 'src/constants/routers'
+import { QuestionAPI } from './api/question'
+import { UploadAPI } from './api/upload'
+import { ClassAPI } from './api/class'
+import { ActivityAPI } from './api/activity'
+import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
+import { CaseStudyAPI } from './api/case-study'
+import { EntranceTestAPI } from './api/entrance-test'
+import { AuthAPI } from './api/profile'
+import { MENU_BOTTOM, MENU_ITEMS, MENU_ITEMS_EVENT } from 'src/constants/menu-items'
 dayjs.extend(utc);
 dayjs.extend(weekday);
 export const excludedPathsHelp = [
@@ -312,6 +321,27 @@ function MyApp({ Component, pageProps }: MyAppProps) {
           <PinnedNotifyProvider router={router} api={{
             getPinnedNotifications: UserApi.getPinnedNotifications,
           }}>
+            <FeatureProvider value={{
+              courseApi: CoursesAPI,
+              questionApi: QuestionAPI,
+              uploadApi: UploadAPI,
+              userApi: UserApi,
+              notificationApi: NotificationAPI,
+              authApi: AuthAPI,
+              classApi: ClassAPI,
+              activityApi: ActivityAPI,
+              courseActivityApi: CourseActivityApi,
+              caseStudyApi: CaseStudyAPI,
+              entranceTestApi: EntranceTestAPI,
+              eventTestApi: EventTestAPI,
+              submitQuizTest: submitQuizTest,
+              authManager: new AuthenticationManager(),
+              pageLink: PageLink,
+              menuItems: MENU_ITEMS,
+              menuItemsEvent: MENU_ITEMS_EVENT,
+              menuBottom: MENU_BOTTOM,
+              router: router,
+            }}>
             <CourseProvider router={router} api={{
               get: EventTestAPI.get
             }}>
@@ -327,7 +357,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                         }}
                       />
                       <SappConfirmDialogContainer />
-                      <RouteGuard api={UserApi}>
+                      <RouteGuard>
                         <>
                           <div className="relative">
                             {/* <PinnedNotifications /> */}
@@ -337,7 +367,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                           <MKTInApp showMKTInApp={showMKTInApp} />
                           <div id="floating-btn-divider" />
                           <Help showHelp={showHelp} />
-                          <LearningNotesList api={CoursesAPI} pageLink={PageLink} />
+                          <LearningNotesList />
                           <PopupCompletedCourse />
                         </>
                       </RouteGuard>
@@ -346,6 +376,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 </QueryClientProvider>
               </CourseNoteProvider>
             </CourseProvider>
+            </FeatureProvider>
           </PinnedNotifyProvider>
         </AntConfigProvider>
       </main>

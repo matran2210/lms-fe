@@ -233,12 +233,6 @@ const MyCourse = () => {
         showSidebar={showSidebar || isAlwaysShowSidebar}
         handleToggleSidebar={handleCloseSidebar}
         className="relative"
-        pageLink={PageLink}
-        api={CoursesAPI}
-        notificationApi={NotificationAPI}
-        menuItems={MENU_ITEMS}
-        menuItemsEvent={MENU_ITEMS_EVENT}
-        menuBottom={MENU_BOTTOM}
       >
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}

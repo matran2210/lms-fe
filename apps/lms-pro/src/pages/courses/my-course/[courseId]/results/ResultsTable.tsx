@@ -1,16 +1,14 @@
 import { ConfirmIcon } from '@lms/assets'
 import {
-  ICoursesAPI,
   IOpenChooseItem,
   ISection,
   SectionDropdownFormValues,
   backTypeMap,
-  getTypeName,
+  getTypeName
 } from '@lms/core'
-import { CardResultTest, CollapseActivity, FilterCourseSection } from '@lms/feature-courses'
+import { CardResultTest, CollapseActivity, FilterCourseSection, ListFilterMobile, ListItemFilterMobile } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { SappDrawerV3, SappModalV3 } from '@lms/ui'
-import {ListFilterMobile, ListItemFilterMobile } from "@lms/feature-courses"
+import { NoCoursesAvailable, SappDrawerV3, SappModalV3 } from '@lms/ui'
 import { Avatar, List, Skeleton } from 'antd'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
@@ -24,18 +22,15 @@ import {
 } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useInfiniteQuery } from 'react-query'
-import {NoCoursesAvailable} from '@lms/ui'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
 
 const ResultsTable = ({
   openFilter,
   setOpenFilter,
-  api
 }: {
   openFilter: boolean
   setOpenFilter: Dispatch<SetStateAction<boolean>>
-  api: ICoursesAPI
 }) => {
   const router = useRouter()
   const { isMobileView } = useTailwindBreakpoint()
@@ -267,7 +262,6 @@ const ResultsTable = ({
             setListSubsection={setListSubsection}
             setListUnit={setListUnit}
             setListActivity={setListActivity}
-            api={api}
           />
         ) : (
           <ListItemFilterMobile
@@ -281,7 +275,6 @@ const ResultsTable = ({
             setListSubsection={setListSubsection}
             setListUnit={setListUnit}
             setListActivity={setListActivity}
-            api={api}
           />
         )}
       </SappDrawerV3>

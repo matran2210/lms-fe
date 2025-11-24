@@ -18,13 +18,9 @@ import toast from "react-hot-toast";
 import { DISPLAY_TYPE, IUploadAPI, RESPONSE_OPTION } from "@lms/core";
 import { DEFAULT_EDITOR_VALUE, generateSheetId, SheetData } from "@lms/core";
 import { MY_COURSES } from "@lms/core";
-import {
-  useAppDispatch,
-  disableUnsavedChange,
-  loginSlice,
-} from "@lms/contexts";
 import { EditorReader, HookFormEditor, HookFormExcel } from "../base";
 import { SappTitleSolution } from "../common";
+import { useAppDispatch, disableUnsavedChange, loginSlice, useFeature } from "@lms/contexts";
 
 export type IPreviewProp = {
   data: any;
@@ -59,7 +55,6 @@ export type IPreviewProp = {
   uniqueKey?: string;
   isInTest?: boolean;
   storageKey?: string;
-  uploadApi: IUploadAPI;
 };
 type SAPPEditorHandle = {
   moveSelectionOutOfTable: () => void;
@@ -96,9 +91,10 @@ const EssayQuestionPreview = ({
   uniqueKey,
   isInTest = false,
   storageKey,
-  uploadApi,
+  
 }: IPreviewProp) => {
-  const router = useRouter();
+  const { uploadApi, router } = useFeature();
+
   const dispatch = useAppDispatch();
   const refSheet = useRef(null) as any;
   const [key, setKey] = useState("1");

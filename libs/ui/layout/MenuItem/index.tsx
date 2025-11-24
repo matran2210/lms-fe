@@ -7,10 +7,10 @@ import {
   pushNotes,
   useAppDispatch,
   useAppSelector,
+  useFeature,
   userReducer,
 } from "@lms/contexts";
 import {
-  INotificationAPI,
   LANG_SIGNIN,
   MenuItem as MenuItemType,
   TitleSidebar,
@@ -48,8 +48,6 @@ type MenuItemProps = {
   setOpenResource?: Dispatch<SetStateAction<boolean>>;
   closeSideBar: () => void;
   setOpenExaminationInfo?: Dispatch<SetStateAction<boolean>>;
-  notificationApi: INotificationAPI;
-  pageLink: { [key: string]: string };
 };
 
 export default function MenuItem({
@@ -57,9 +55,9 @@ export default function MenuItem({
   setOpenResource,
   closeSideBar,
   setOpenExaminationInfo,
-  notificationApi,
-  pageLink,
 }: MenuItemProps) {
+  const { notificationApi,
+    pageLink } = useFeature();
   const {
     isViewDetail,
     openNotification,
@@ -459,7 +457,6 @@ export default function MenuItem({
               <>
                 {!selected && isShowHoverIcon() && renderIcon()}
                 <ExpandIcon
-                  pageLink={pageLink}
                   type={Icon}
                   className={clsx(
                     `before-icon min-h-6 min-w-6 shrink-0 ${
@@ -647,7 +644,6 @@ export default function MenuItem({
           )}
           {isNested && type === "level-2" ? (
             <ExpandIcon
-              pageLink={pageLink}
               isExpanded={isExpanded}
               handleClick={onClick}
               type={"ontoggle"}
@@ -671,8 +667,6 @@ export default function MenuItem({
               setOpenResource={setOpenResource}
               closeSideBar={closeSideBar}
               setOpenExaminationInfo={setOpenExaminationInfo}
-              notificationApi={notificationApi}
-              pageLink={pageLink}
             />
           </div>
         ) : null}
@@ -698,7 +692,6 @@ export default function MenuItem({
         scrollRef={scrollRef}
         handleViewNotification={(link) => handleViewNotification(link)}
         isDesktopView={isDesktopView}
-        isLoading={isLoading}
       />
     </>
   );

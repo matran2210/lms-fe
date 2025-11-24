@@ -1,15 +1,18 @@
-import { useEffect, useState } from 'react'
-import { getLoginHistory,
+import {
+  getLoginHistory,
   loadMoreLoginHistory,
-  userReducer,useAppDispatch, useAppSelector, 
-  IUserAPI} from '@lms/contexts'
-import HistoryItem from './HistoryItem'
+  useAppDispatch, useAppSelector,
+  useFeature,
+  userReducer
+} from '@lms/contexts'
+import { useEffect, useState } from 'react'
 import ProfileCard from '../ProfileCard'
+import HistoryItem from './HistoryItem'
 
-const LoginHistoryList = ({userApi}: {
-  userApi: IUserAPI
-}) => {
+const LoginHistoryList = () => {
   const dispatch = useAppDispatch()
+  const { userApi } = useFeature();
+
   const { loginHistory, loadHistory } = useAppSelector(userReducer)
   const [pageIndex, setPageIndex] = useState(1)
   const [pageSize, setPageSize] = useState(10)

@@ -549,12 +549,6 @@ const CoursePartDetail = () => {
     <Layout
       title="Course Part Detail"
       showSidebar={isAlwaysShowSidebar}
-      pageLink={PageLink}
-      menuItems={MENU_ITEMS}
-      menuItemsEvent={MENU_ITEMS_EVENT}
-      menuBottom={MENU_BOTTOM}
-      api={CoursesAPI}
-      notificationApi={NotificationAPI}
     >
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
         <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">

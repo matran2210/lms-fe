@@ -66,7 +66,6 @@ const MyRequestPage = () => {
         title="My Request"
         breadcrumbs={breadcrumbs}
         className="bg-[#F2F4F7] p-0"
-        courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}
       >
         <div className="h-fit w-full rounded-xl bg-white px-8 py-5">
           <SappTabs

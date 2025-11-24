@@ -156,7 +156,7 @@ const ChapterTest = () => {
   ]
 
   return (
-    <LayoutTeacher title="My Class" breadcrumbs={breadcrumbs} courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}>
+    <LayoutTeacher title="My Class" breadcrumbs={breadcrumbs}>
       <LayoutFilter
         listFilter={<ChapterTestFilter control={control} />}
         className="mb-6"

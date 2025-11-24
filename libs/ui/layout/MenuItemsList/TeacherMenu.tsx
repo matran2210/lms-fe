@@ -1,5 +1,5 @@
 import blankAvatar from "@assets/images/blank_avatar.webp";
-import { useCourseContext } from "@lms/contexts";
+import { useCourseContext, useFeature } from "@lms/contexts";
 import { IAuthManager, ICoursesAPI, TitleSidebar, TitleTeacherSidebar } from "@lms/core";
 import { LearningResource } from "@lms/feature-courses";
 import { Layout, Menu, Tooltip } from "antd";
@@ -20,26 +20,19 @@ import {
 } from "src/assets/icons";
 import { IUser, userReducer, activeNotesList, pushNotes, openCalculator, useAppDispatch, useAppSelector } from "@lms/contexts";
 import { v4 as uuidv4 } from "uuid";
-import ExpandIcon from "@lms/assets/icons/ExpandIcon";
+import { ExpandIcon } from "node_modules/@lms/assets";
 const { Sider } = Layout;
 
 export default function TeacherMenu({
   isCourseDetail,
   isActivity,
-  api,
-  authManager,
-  pageLink
+ 
 }: {
   isCourseDetail: boolean;
   isActivity: boolean;
-  api: ICoursesAPI;
-  authManager: IAuthManager
-  pageLink: {
-    [key: string]: string;
-  };
 }) {
+  const { authManager, pageLink, router } = useFeature();
   const dispatch = useAppDispatch();
-  const router = useRouter();
   const { user } = useAppSelector(userReducer);
 
   const [selectedKey, setSelectedKey] = useState("Home");
@@ -245,8 +238,6 @@ export default function TeacherMenu({
       <LearningResource
         open={openResource}
         setOpenResource={setOpenResource}
-        api={api}
-        pageLink={pageLink}
       />
     </Fragment>
   );

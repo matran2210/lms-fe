@@ -129,12 +129,6 @@ const Page = () => {
       showSidebar={isAlwaysShowSidebar}
       className="h-full"
       childClassName="h-full"
-      pageLink={PageLink}
-      api={CoursesAPI}
-      notificationApi={NotificationAPI}
-      menuItems={MENU_ITEMS}
-      menuItemsEvent={MENU_ITEMS_EVENT}
-      menuBottom={MENU_BOTTOM}
     >
       <div
         className="mx-auto my-0 h-full max-w-[1644px]"

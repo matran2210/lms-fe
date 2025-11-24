@@ -1,21 +1,13 @@
-import { ModalResizeable } from "@lms/ui";
-import { Triangle, CircleCloseIcon } from "@lms/assets";
-import { Tooltip } from "antd";
-import clsx from "clsx";
-import React, { useLayoutEffect, useState } from "react";
+import { CircleCloseIcon, Triangle } from "@lms/assets";
+import { defaultSheetData, RESPONSE_OPTION } from "@lms/core";
+import { ButtonSecondary, ModalResizeable } from "@lms/ui";
 import EssayQuestionPreview from "@lms/ui/components/questionType/ConstructedQuestion";
-import { IUploadAPI, RESPONSE_OPTION } from "@lms/core";
+import clsx from "clsx";
+import { useFeature } from "@lms/contexts";
+import { useLayoutEffect, useState } from "react";
 import {
-  Control,
-  FieldValues,
-  useForm,
-  UseFormGetValues,
-  UseFormSetValue,
+  useForm
 } from "react-hook-form";
-import { defaultSheetData } from "@lms/core";
-import { ButtonPrimaryV2 } from "@lms/ui";
-import { ButtonSecondaryV2 } from "@lms/ui";
-import { ButtonSecondary } from "@lms/ui";
 
 interface IProps {
   currentTabContent: any;
@@ -25,15 +17,16 @@ interface IProps {
   };
   isQuiz?: boolean;
   className?: string;
-  uploadApi: IUploadAPI
 }
 const ShowAnswerTemplate = ({
   currentTabContent,
   essayData,
   isQuiz,
   className,
-  uploadApi
+  
 }: IProps) => {
+  const { uploadApi } = useFeature();
+
   const { control, setValue } = useForm();
   const [showModalTemplate, setShowModalTemplate] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
@@ -149,7 +142,6 @@ const ShowAnswerTemplate = ({
                   response_option === RESPONSE_OPTION.WORD ? true : false,
               }}
               isShowContent={false}
-              uploadApi={uploadApi}
             />
           </div>
           <Triangle className="absolute bottom-2 right-2" />

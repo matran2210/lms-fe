@@ -29,7 +29,7 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useAppDispatch, useAppSelector, pushNotes, resetNotesList, userReducer, UserType, useCourseNoteContext } from "@lms/contexts";
+import { useAppDispatch, useAppSelector, pushNotes, resetNotesList, userReducer, UserType, useCourseNoteContext, useFeature } from "@lms/contexts";
 import { v4 as uuidv4 } from "uuid";
 import FilterCourseSection from "./FilterCourseSection";
 import { ListFilterMobile, ListItemFilterMobile } from "../course";
@@ -38,14 +38,8 @@ export const { apiURL } = publicRuntimeConfig;
 
 const DEFAULT_PAGESIZE = 20;
 
-interface IProps {
-  api: ICoursesAPI;
-  pageLink: {
-    [key: string]: string;
-  }
-}
-const LearningNotesList = ({ api, pageLink }: IProps) => {
-  const router = useRouter();
+const LearningNotesList = () => {
+  const { courseApi, pageLink, router } = useFeature();
   const { isMobileView, isAlwaysShowSidebar } = useTailwindBreakpoint();
   const notesListStatus = useAppSelector(
     (state) => state.notesListReducer?.status,
@@ -205,7 +199,7 @@ const LearningNotesList = ({ api, pageLink }: IProps) => {
     isFetchingRef.current = true;
     setLoading(true);
 
-    api.getCourseNotesList(DEFAULT_PAGE_NUMBER, DEFAULT_PAGESIZE, params)
+    courseApi.getCourseNotesList(DEFAULT_PAGE_NUMBER, DEFAULT_PAGESIZE, params)
       .then((res) => {
         setNotesListData(res?.data);
         // Các điều kiện không auto fill filter
@@ -275,7 +269,7 @@ const LearningNotesList = ({ api, pageLink }: IProps) => {
   const fetchData = async (pageIndexNext: number, params?: Object) => {
     setLoading(true);
     try {
-      const res = await api.getCourseNotesList(
+      const res = await courseApi.getCourseNotesList(
         pageIndexNext,
         DEFAULT_PAGESIZE,
         params,
@@ -295,7 +289,7 @@ const LearningNotesList = ({ api, pageLink }: IProps) => {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await api.deleteCourseNoteList(id);
+      const res = await courseApi.deleteCourseNoteList(id);
       fetchData(pageIndex, params);
       refetchNotesList();
       toast.success("Xóa thành công!");
@@ -560,7 +554,6 @@ const LearningNotesList = ({ api, pageLink }: IProps) => {
             setListSubsection={setListSubsection}
             setListUnit={setListUnit}
             setListActivity={setListActivity}
-            api={api}
           />
         ) : (
           <ListItemFilterMobile
@@ -574,7 +567,6 @@ const LearningNotesList = ({ api, pageLink }: IProps) => {
             setListSubsection={setListSubsection}
             setListUnit={setListUnit}
             setListActivity={setListActivity}
-            api={api}
           />
         )}
       </FormProvider>

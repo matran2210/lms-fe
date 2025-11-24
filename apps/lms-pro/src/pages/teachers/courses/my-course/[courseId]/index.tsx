@@ -145,7 +145,6 @@ const CourseDetailTeacher = () => {
       title="Course Detail"
       breadcrumbs={breadcrumbs}
       isCourseDetail
-      courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}
     >
       <div className="my-0">
         {isLoading ? (

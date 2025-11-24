@@ -1,11 +1,10 @@
-import { PencilV2Icon } from '@lms/assets'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
+import { PencilV2Icon } from '@lms/assets'
 import { IExamInformation, TitleSidebar } from '@lms/core'
 import { ExaminationInfo, InfoItemProps } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { ActionCellV2, HeaderMobile, Layout, PaginationSappV2, SappTable } from '@lms/ui'
 import { getDuration } from '@lms/utils'
-import { CoursesAPI } from '@pages/api/courses'
 import { UserKey } from '@pages/api/queryKey'
 import { UserApi } from '@pages/api/user'
 import { ColumnsType } from 'antd/es/table'
@@ -15,12 +14,6 @@ import { useCallback, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery, useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 
-import { NotificationAPI } from '@pages/api/notification'
-import {
-  MENU_BOTTOM,
-  MENU_ITEMS,
-  MENU_ITEMS_EVENT,
-} from 'src/constants/menu-items'
 
 const ExamInformation = () => {
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =
@@ -237,12 +230,6 @@ const ExamInformation = () => {
     <Layout
       title={TitleSidebar.EXAM_LIST}
       showSidebar={isAlwaysShowSidebar}
-      pageLink={PageLink}
-      menuItems={MENU_ITEMS}
-      menuItemsEvent={MENU_ITEMS_EVENT}
-      menuBottom={MENU_BOTTOM}
-      api={CoursesAPI}
-      notificationApi={NotificationAPI}
     >
       <div className="mb-4 mt-4 md:mb-0">
         <HeaderMobile
