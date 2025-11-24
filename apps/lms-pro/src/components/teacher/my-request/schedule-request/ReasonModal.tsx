@@ -1,4 +1,4 @@
-import { AlertIcon } from '@assets/icons'
+import { AlertIcon } from '@lms/assets'
 import { SappModalV3 } from '@lms/ui'
 import SappTeacherTextField from '@components/teacher/components/sapp-textfield/SappTeacherTextField'
 import React, { Dispatch, SetStateAction } from 'react'

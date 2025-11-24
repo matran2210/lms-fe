@@ -1,4 +1,4 @@
-import { CollapseArrowIcon, DownloadIcon } from '@assets/icons'
+import { CollapseArrowIcon, DownloadIcon } from '@lms/assets'
 import { SUFFIX_TYPE } from '@lms/core'
 import { UploadAPI } from '@pages/api/upload'
 import { trackGAEvent } from '@lms/utils'

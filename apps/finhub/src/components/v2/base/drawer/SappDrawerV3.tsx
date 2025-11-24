@@ -4,7 +4,7 @@ import React, { ReactNode } from 'react'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import clsx from 'clsx'
 import ButtonText from '@components/base/button/ButtonText'
-import { CollapseArrowIcon } from '@assets/icons'
+import { CollapseArrowIcon } from '@lms/assets'
 
 interface IProps extends DrawerProps {
   open: boolean

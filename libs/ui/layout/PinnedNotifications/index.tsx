@@ -1,6 +1,6 @@
-import { CloseIconNote, IconLoudSpeaker } from "@assets/icons";
-import { EditorReader } from "../base";
-import { usePinnedNotifyContext } from "@contexts/PinnedNotifyContext";
+import { CloseIconNote, IconLoudSpeaker } from "@lms/assets";
+import { EditorReader } from "@lms/ui";
+import { usePinnedNotifyContext } from "@lms/contexts";
 import { Col, Row } from "antd";
 import { useRouter } from "next/router";
 import React from "react";

@@ -1,4 +1,4 @@
-import { IconMinusSquared, IconPlusSquared } from '@assets/icons'
+import { IconMinusSquared, IconPlusSquared } from '@lms/assets'
 import { SAPPButtonV2 } from '@lms/ui'
 import { HookFormDateRangeV2 } from '@lms/ui'
 import { SAPPSelectV2 } from '@lms/ui'

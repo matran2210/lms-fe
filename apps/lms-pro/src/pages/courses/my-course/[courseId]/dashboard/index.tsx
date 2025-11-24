@@ -1,5 +1,4 @@
-import CourseDashboard from '@components/dashboard/CourseDashboard'
-import ExamDashboard from '@components/dashboard/dashboard-exam/ExamDashboard'
+
 import {
   ANIMATION,
   COURSE_TYPE,
@@ -8,7 +7,7 @@ import {
   ITopicProgress,
   IWeeklyReport,
 } from '@lms/core'
-import { ContinueLearning } from '@lms/feature-dashboard'
+import { ContinueLearning, CourseDashboard, ExamDashboard } from '@lms/feature-dashboard'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   DashboardSkeleton,
@@ -28,6 +27,7 @@ import {
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from '@lms/contexts'
+import { NotificationAPI } from '@pages/api/notification'
 
 const Dashboard = () => {
   const router = useRouter()
@@ -173,6 +173,7 @@ const Dashboard = () => {
       menuItemsEvent={MENU_ITEMS_EVENT}
       menuBottom={MENU_BOTTOM}
       api={CoursesAPI}
+      notificationApi={NotificationAPI}
     >
       {isLoading ? (
         <DashboardSkeleton />

@@ -4,9 +4,9 @@ import {
   FileTextIcon,
   ResizeIcon,
   ScratchPadIconV2
-} from '@assets/icons'
+} from '@lms/assets'
 
-import CloseModalIcon from '@assets/icons/CloseModalIcon'
+import CloseModalIcon from '@lms/assets/CloseModalIcon'
 import { NotesOutline, PulsingExclamation, Triangle } from '@lms/assets'
 import { clearFileEssay, getTopicsCaseStudy, loadMoreQuestion, saveFileEssay, showPopupCompletedCourse, useAppDispatch, useAppSelector } from '@lms/contexts'
 import {

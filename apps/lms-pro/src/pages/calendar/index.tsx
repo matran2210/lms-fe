@@ -1,7 +1,3 @@
-import DetailCalendar from '@components/calendar/DetailCalendar'
-import DetailCalendarMobile from '@components/calendar/DetailCalendarMobile'
-import DetailCalendarTablet from '@components/calendar/DetailCalendarTablet'
-import HeaderMobile from '@components/layout/Header/HeaderMobile'
 import CalendarApi from '@pages/api/calendar'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
@@ -14,11 +10,11 @@ import {
   CALENDAR_FILTER_TYPE,
   CALENDAR_TYPE,
   TitleSidebar,
+  ICalendar, ICalendarList
 } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { ICalendar, ICalendarList } from '@lms/core'
 import clsx from 'clsx'
-import { Layout } from '@lms/ui'
+import { HeaderMobile, Layout } from '@lms/ui'
 import { PageLink } from 'src/constants/routers'
 import { CoursesAPI } from '@pages/api/courses'
 import {
@@ -26,6 +22,7 @@ import {
   MENU_ITEMS,
   MENU_ITEMS_EVENT,
 } from 'src/constants/menu-items'
+import { NotificationAPI } from '@pages/api/notification'
 
 const Page = () => {
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =
@@ -134,6 +131,7 @@ const Page = () => {
       childClassName="h-full"
       pageLink={PageLink}
       api={CoursesAPI}
+      notificationApi={NotificationAPI}
       menuItems={MENU_ITEMS}
       menuItemsEvent={MENU_ITEMS_EVENT}
       menuBottom={MENU_BOTTOM}

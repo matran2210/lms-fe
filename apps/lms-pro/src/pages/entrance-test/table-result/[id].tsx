@@ -1,20 +1,20 @@
-import { CloseIcon } from '@assets/icons'
+import CloseModalIcon from '@lms/assets'
+import { UserType } from '@lms/contexts'
 import { LAYOUT } from '@lms/core'
+import { FullScreenLayout, Layout } from '@lms/ui'
+import { NotificationAPI } from '@pages/api/notification'
 import { useRouter } from 'next/router'
 import { QuizResultComponent } from 'quiz-result-package'
 import { IQuestionResultResponse } from 'quiz-result-package/dist/type'
 import { useEffect, useState } from 'react'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from '@lms/contexts'
-import { CoursesAPI } from '../../api/courses/index'
-import { FullScreenLayout, Layout } from '@lms/ui'
-import CloseModalIcon from '@assets/icons/CloseModalIcon'
-import { PageLink } from 'src/constants/routers'
 import {
   MENU_BOTTOM,
   MENU_ITEMS,
   MENU_ITEMS_EVENT,
 } from 'src/constants/menu-items'
+import { PageLink } from 'src/constants/routers'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { CoursesAPI } from '../../api/courses/index'
 
 const TableEntranceResult = () => {
   const router = useRouter()
@@ -104,6 +104,7 @@ const TableEntranceResult = () => {
         menuItemsEvent={MENU_ITEMS_EVENT}
         menuBottom={MENU_BOTTOM}
         api={CoursesAPI}
+        notificationApi={NotificationAPI}
       >
         <div className="">
           {modalResult?.questions?.data?.length > 0 && (

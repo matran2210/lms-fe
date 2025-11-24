@@ -1,15 +1,15 @@
-import LayoutTeacher from '@components/layout/Teacher'
 import PersonalScheduleTab from '@components/request/request-tabs/PersonalScheduleTab'
 import TimeOffTab from '@components/request/request-tabs/TimeOffTab'
-import SappTabs from '@lms/ui/components/tabs/SappTabs'
 import ScheduleRequestTable from '@components/teacher/my-request/schedule-request'
-import { RequestProvider } from '@contexts/RequestContext'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { PageLink } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from '@lms/contexts'
+import { RequestProvider, UserType } from '@lms/contexts'
 import { ITabs } from '@lms/core'
+import { PageLink } from 'src/constants/routers'
+import { LayoutTeacher, SappTabs } from '@lms/ui'
+import { CoursesAPI } from '@pages/api/courses'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 
 const breadcrumbs: ITabs[] = [
   {
@@ -66,6 +66,7 @@ const MyRequestPage = () => {
         title="My Request"
         breadcrumbs={breadcrumbs}
         className="bg-[#F2F4F7] p-0"
+        courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}
       >
         <div className="h-fit w-full rounded-xl bg-white px-8 py-5">
           <SappTabs

@@ -1,4 +1,4 @@
-import { SearchIcon } from '@assets/icons'
+import { SearchIcon } from '@lms/assets'
 import { HookFormTextField } from '@lms/ui'
 import { SappHookFormSelect } from '@lms/ui'
 import { Control } from 'react-hook-form'

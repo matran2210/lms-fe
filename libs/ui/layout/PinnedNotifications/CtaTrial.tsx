@@ -1,9 +1,8 @@
-import { CloseIconNote } from '@assets/icons'
+import { CloseIconNote } from '@lms/assets'
 import { useRouter } from 'next/router'
 import React, { useLayoutEffect } from 'react'
 import { PageLink } from '@lms/core'
-import { useCourseContext } from '@lms/contexts'
-import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
+import { useCourseContext, usePinnedNotifyContext } from '@lms/contexts'
 import PinnedNotificationsV2 from 'src/components/layout/PinnedNotifications/PinnedNotificationsV2'
 
 const ENABLED_PINNED_PAGES = [

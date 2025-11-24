@@ -1,4 +1,4 @@
-import { IRibbon } from '@assets/icons'
+import { IRibbon } from '@lms/assets'
 import { EditorReader } from '@lms/ui'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { hidePopup } from 'src/redux/slice/Popup/Result-test'

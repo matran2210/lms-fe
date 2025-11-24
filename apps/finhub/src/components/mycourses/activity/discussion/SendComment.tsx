@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { IconSend, IconSendHover } from '@assets/icons'
+import { IconSend, IconSendHover } from '@lms/assets'
 import { useHover } from 'usehooks-ts'
 
 const SendComment = () => {

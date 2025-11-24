@@ -11,7 +11,7 @@ import {
   ScratchPadIconV2,
   ShowLessIcon,
   ShowMoreIcon,
-} from '@assets/icons'
+} from '@lms/assets'
 import { CourseProvider, disableUnsavedChange, loginSlice, useAppDispatch, useAppSelector, useCourseContext } from '@lms/contexts'
 import {
   DISPLAY_TYPE,
@@ -30,10 +30,10 @@ import {
   BackToTop,
   FilterRadioGroup,
   Layout,
-  Popover,
   SappLoading,
   useClickOutside,
 } from '@lms/ui'
+import { Popover } from "antd";
 import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
 import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
 import NewFilltext from '@lms/ui/components/questionType/NewFillText'
@@ -48,7 +48,7 @@ import { CoursesAPI } from '../api/courses'
 import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
 
-import { CheckCircleOutlineYellow, FlagIconV2 } from '@assets/icons/test'
+import { CheckCircleOutlineYellow, FlagIconV2 } from '@lms/assets/test'
 import { Icon, NotesOutline, PulsingExclamation } from '@lms/assets'
 import { showPopupCompletedCourse } from '@lms/contexts'
 import {
@@ -85,6 +85,8 @@ import DragDropQuestion, {
 } from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import TestWrapper from '@lms/ui/layout/TestLayout/TestWrapper'
 import { checkSheetAnswered, runHighlight, trackGAEvent } from '@lms/utils'
+import { EventTestAPI } from '@pages/api/event-test'
+import { NotificationAPI } from '@pages/api/notification'
 import { TestAPI } from '@pages/api/test'
 import { UploadAPI } from '@pages/api/upload'
 import { TabsProps, Tooltip } from 'antd'
@@ -107,8 +109,6 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import eventTest from '@pages/event-test'
-import { EventTestAPI } from '@pages/api/event-test'
 declare global {
   interface Window {
     userAgreed: any
@@ -870,6 +870,7 @@ const TestDetail = () => {
                       handleChange={handleEssayChange}
                       explainClassname="!mt-8 !p-0 !bg-transparent"
                       storageKey={storageKey}
+                      uploadApi={UploadAPI}
                     />
                   )}
                 </>
@@ -1158,6 +1159,7 @@ const TestDetail = () => {
                 showRequiment={showListRequirement}
                 handleChange={handleEssayChange}
                 storageKey={storageKey}
+                uploadApi={UploadAPI}
               />
             )}
           </>
@@ -2744,6 +2746,7 @@ const TestDetail = () => {
                     currentTabContent,
                     essayData,
                   }}
+                  uploadApi={UploadAPI}
                 />
               </div>
             )}
@@ -2994,6 +2997,7 @@ const TestDetail = () => {
       showSidebar={false}
       fullWidth
       api={CoursesAPI}
+      notificationApi={NotificationAPI}
       pageLink={PageLink}
       menuItems={MENU_ITEMS}
       menuItemsEvent={MENU_ITEMS_EVENT}

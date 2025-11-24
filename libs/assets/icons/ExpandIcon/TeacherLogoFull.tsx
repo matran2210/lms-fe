@@ -1,4 +1,4 @@
-import { LogoSappIcon } from "@assets/icons";
+import { LogoSappIcon } from "@lms/assets";
 import Link from "next/link";
 
 const TeacherLogoFull = ({

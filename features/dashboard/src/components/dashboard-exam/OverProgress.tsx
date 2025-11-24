@@ -5,7 +5,7 @@ import { DashboardAPI } from '@pages/api/dashboard'
 import { DATE_FORMAT } from '@lms/core'
 import { IOverProgress, IExamPrediction } from '@lms/core'
 import dayjs from 'dayjs'
-import { IconEssentional } from '@assets/icons/Dashboard'
+import { IconEssentional } from '@lms/assets/Dashboard'
 import useReponsive from 'src/hooks/useReponsive'
 import { EChartsOption } from 'echarts'
 

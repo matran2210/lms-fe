@@ -1,4 +1,4 @@
-import { CloseIcon } from '@assets/icons'
+import { CloseIcon } from '@lms/assets'
 import { ANIMATION, LAYOUT, QUESTION_TYPES } from '@lms/core'
 import { ButtonPrimary, ButtonSecondary, FullScreenLayout, SappTable } from '@lms/ui'
 import { roundNumber } from '@utils/helpers'

@@ -13,7 +13,7 @@ import {
   reactDiscussion,
   uploadImagesDiscussion,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
-import { userReducer } from 'src/redux/slice/User/User'
+import { userReducer } from '@lms/contexts'
 import {
   ICreateDiscussionResReact,
   IDiscussion,
@@ -22,7 +22,7 @@ import DiscussionElement from './DiscussionElement'
 import SappModalImage from '@components/base/modal/SappModalImage'
 import toast from 'react-hot-toast'
 import { Skeleton } from 'antd'
-import { IconSend } from '@assets/icons'
+import { IconSend } from '@lms/assets'
 import SappButtonIcon from '@components/base/button/SappButtonIcon'
 import SappButton from '@components/base/button/SappButton'
 import clsx from 'clsx'

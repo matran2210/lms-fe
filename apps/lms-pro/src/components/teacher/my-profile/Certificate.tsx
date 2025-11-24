@@ -1,14 +1,13 @@
-import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import { useLayoutEffect, useState } from 'react'
 import { AuthAPI } from 'src/pages/api/profile'
 import PopUpCertificate from './popupCertificate'
 import { Divider, Table, TableProps } from 'antd'
-import { Icon } from '@lms/assets'
+import { CertificateImg, Icon } from '@lms/assets'
 import {useDownloadImage} from '@lms/hooks'
 import Image from 'next/image'
 import { sappFormatDate } from '@lms/utils'
 import clsx from 'clsx'
-import { HaveNoItemIcon } from '@assets/icons/teacher'
+import { HaveNoItemIcon } from '@lms/assets/teacher'
 
 interface ICertificate {
   certificate: {

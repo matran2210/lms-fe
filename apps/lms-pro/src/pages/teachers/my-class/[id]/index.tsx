@@ -1,22 +1,21 @@
-import LayoutTeacher from '@components/layout/Teacher'
-import { useRouter } from 'next/router'
-import { ClassCard } from '@lms/ui'
-import { ITabs, NumberToDayOfWeekMap } from '@lms/core'
-import { ANIMATION, DATE_FORMAT_HM, DATE_FORMAT_YMD, PageLink } from '@lms/core'
-import { useQuery } from 'react-query'
-import { TeacherAPI } from 'src/pages/api/teacher/index'
-import { useEffect, useState } from 'react'
+import Progress from '@components/my-class/progress-table/Progress'
 import Overview from '@components/teacher/myClass/class-detail/OverView'
 import Students from '@components/teacher/myClass/class-detail/Students'
 import StudentsTestResult from '@components/teacher/myClass/class-detail/StudentsTestResult'
-import { ICertificateData, IMyClass } from '@lms/core'
-import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from '@lms/contexts'
-import Progress from '@components/my-class/progress-table/Progress'
-import { IProfilePages, ProfilePages } from '@lms/core'
-import dayjs from 'dayjs'
+import { ANIMATION, DATE_FORMAT_HM, DATE_FORMAT_YMD, ICertificateData, IMyClass, IProfilePages, ITabs, NumberToDayOfWeekMap, ProfilePages } from '@lms/core'
+import { ClassCard, LayoutTeacher } from '@lms/ui'
+import { CoursesAPI } from '@pages/api/courses'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { Space } from 'antd'
+import dayjs from 'dayjs'
 import { capitalize } from 'lodash'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { useQuery } from 'react-query'
+import { PageLink } from 'src/constants/routers'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { TeacherAPI } from 'src/pages/api/teacher/index'
 import { ClassStandardScheduleItem } from 'src/type/teachers/request-schedule.interface'
 
 const breadcrumbs: ITabs[] = [
@@ -154,6 +153,7 @@ const ClassDetail = () => {
       title="Class Detail"
       breadcrumbs={breadcrumbs}
       className="bg-[#F2F4F7] p-0"
+      courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}
     >
       <div className="mb-6 h-fit w-full rounded-xl bg-white px-8 pt-8">
         <ClassCard

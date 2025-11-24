@@ -1,4 +1,4 @@
-import { Plus } from '@assets/icons'
+import { Plus } from '@lms/assets'
 import { SAPPRangePicker } from '@lms/ui'
 import { ButtonPrimary } from '@lms/ui'
 import { ButtonSecondary } from '@lms/ui'

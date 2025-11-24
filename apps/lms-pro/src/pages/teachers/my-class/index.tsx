@@ -1,19 +1,18 @@
-import LayoutTeacher from '@components/layout/Teacher'
+import ItemClassesByStatus from '@components/teacher/components/ItemClassesByStatus'
+import MyClassFilter from '@components/teacher/components/MyClassFilter'
+import { UserType } from '@lms/contexts'
+import { IMyClass, ITabs } from '@lms/core'
+import { LayoutFilter, LayoutTeacher, PaginationSAPP } from '@lms/ui'
+import { CoursesAPI } from '@pages/api/courses'
+import { TeacherKey } from '@pages/api/queryKey'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { useQuery } from 'react-query'
-import LayoutFilter from '@components/layout/TeacherFilter/index'
-import MyClassFilter from '@components/teacher/components/MyClassFilter'
 import { useForm } from 'react-hook-form'
-import { TeacherAPI } from 'src/pages/api/teacher/index'
-import ItemClassesByStatus from '@components/teacher/components/ItemClassesByStatus'
-import { ITabs } from '@lms/core'
-import { PageLink } from '@lms/core'
-import { PaginationSAPP } from '@lms/ui'
-import { TeacherKey } from '@pages/api/queryKey'
-import { IMyClass } from '@lms/core'
+import { useQuery } from 'react-query'
+import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from '@lms/contexts'
+import { TeacherAPI } from 'src/pages/api/teacher/index'
 
 const breadcrumbs: ITabs[] = [
   { link: PageLink.TEACHERS, title: 'LMS' },
@@ -90,7 +89,7 @@ const MyClass = () => {
   }
 
   return (
-    <LayoutTeacher title="My Class" breadcrumbs={breadcrumbs}>
+    <LayoutTeacher title="My Class" breadcrumbs={breadcrumbs} courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}>
       <LayoutFilter
         listFilter={
           <MyClassFilter

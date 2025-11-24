@@ -1,4 +1,4 @@
-import { AlertIcon, LockIcon } from '@assets/icons'
+import { AlertIcon, LockIcon } from '@lms/assets'
 import { SappModalV3 } from '@lms/ui'
 import { onLinkSocial } from '@lms/utils'
 import { Dispatch, SetStateAction } from 'react'

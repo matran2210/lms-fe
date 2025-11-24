@@ -1,4 +1,4 @@
-import { AlertTriagle } from '@assets/icons'
+import { AlertTriagle } from '@lms/assets'
 import { SappModalV3 } from '@lms/ui'
 
 interface IProps {

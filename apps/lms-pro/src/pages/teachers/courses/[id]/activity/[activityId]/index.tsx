@@ -1,9 +1,24 @@
-import { CloseIcon, DownloadIcon, LinkIcon } from '@assets/icons'
-import { SUFFIX_TYPE } from '@lms/core'
-import { ANIMATION, EXHIBIT_TEXT_REPLACE, IActivity, ITabs, PROGRAM } from '@lms/core'
+import { CloseIcon, DownloadIcon, LinkIcon } from '@lms/assets'
+import {
+  clearNote,
+  closeCalculator,
+  courseActivityAction,
+  courseActivityReducer,
+  getCourseActivityTapById,
+  getDiscussion,
+  resetQuizActivity,
+  showPopupCompletedCourse,
+  useAppDispatch, useAppSelector,
+  useCourseContext,
+  UserType
+} from '@lms/contexts'
+import { ANIMATION, EXHIBIT_TEXT_REPLACE, IActivity, ITabs, PROGRAM, SUFFIX_TYPE } from '@lms/core'
 import { CreateNote, Discussion, QuizDocument, TextDocument, VideoDocument } from '@lms/feature-courses'
-import { ActivitySkeleton, Calculator, EditorReader, FileViewer, LayoutTeacher, ModalResizeable, MovableWindow, SappButton } from '@lms/ui'
+import { ActivitySkeleton, Calculator, EditorReader, FileViewer, LayoutTeacher, ModalResizeable, MovableWindow, SAPPBorder, SappButton, SappIcon, SappLoadingGlobal, Tooltip } from '@lms/ui'
 import { trackGAEvent, truncateBySpace, truncateString } from '@lms/utils'
+import { ActivityAPI } from '@pages/api/activity'
+import { QuestionAPI } from '@pages/api/question'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import React, {
@@ -14,23 +29,11 @@ import React, {
   useState,
 } from 'react'
 import { useQuery } from 'react-query'
-import { SAPPBorder, SappIcon, SappLoadingGlobal, Tooltip } from '@lms/ui'
+import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById, submitQuizTest } from 'src/pages/api/courses'
 import { UploadAPI } from 'src/pages/api/upload'
-import {
-  closeCalculator,
-  courseActivityAction,
-  courseActivityReducer,
-  getCourseActivityTapById,
-  getDiscussion, useAppDispatch, useAppSelector, resetQuizActivity,
-  clearNote,
-  UserType,
-  useCourseContext
-} from '@lms/contexts'
-import { showPopupCompletedCourse } from '@lms/contexts'
-import { PageLink } from 'src/constants/routers'
-import { QuestionAPI } from '@pages/api/question'
+import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -486,7 +489,7 @@ const ActivityTeacherPage = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <LayoutTeacher title="Activity" breadcrumbs={breadcrumbsData} isActivity>
+      <LayoutTeacher title="Activity" breadcrumbs={breadcrumbsData} isActivity courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}>
         <div className={`mx-auto my-0 max-w-xxl text-bw-1`}>
           {/* Notes */}
           <>
@@ -498,6 +501,7 @@ const ActivityTeacherPage = () => {
                   uuid={e?.uuid}
                   count={index}
                   key={e?.uuid}
+                  courseApi={CoursesAPI}
                 />
               )
             })}
@@ -692,6 +696,7 @@ const ActivityTeacherPage = () => {
                                 'AFTER_EACH_QUESTION'
                               }
                               class_user_id={activity?.class_user_id}
+                              questionApi={QuestionAPI} courseApi={CoursesAPI} uploadAPI={UploadAPI}
                             ></VideoDocument>
                           </div>
                         )
@@ -932,7 +937,7 @@ const ActivityTeacherPage = () => {
           </div>
           <div></div>
           <div className="mt-6 shadow-activity" data-aos={ANIMATION.DATA_AOS}>
-            <Discussion class_id={(router.query.id as string) || ''} />
+            <Discussion class_id={(router.query.id as string) || ''} activityApi={ActivityAPI} courseApi={CoursesAPI} courseActivityApi={CourseActivityApi} />
           </div>
 
           {/* Sratchpad */}

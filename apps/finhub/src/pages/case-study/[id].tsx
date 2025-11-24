@@ -6,7 +6,7 @@ import {
   NotesOutline,
   PulsingExclamation,
   ResizeIcon,
-} from '@assets/icons'
+} from '@lms/assets'
 import { EditorReader } from '@lms/ui'
 import { FileViewer } from '@lms/ui'
 import { ModalResizeable } from '@lms/ui'

@@ -1,4 +1,4 @@
-import { Plus } from '@assets/icons'
+import { Plus } from '@lms/assets'
 
 import { useRequestContext } from '@contexts/RequestContext'
 import {

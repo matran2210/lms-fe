@@ -1,24 +1,22 @@
-import { SappDrawer } from '@lms/ui'
-import { TextSkeleton } from '@lms/ui'
+import { AlertInfoIcon, CloseIconPreview } from '@assets/icons'
+import { useCourseContext, UserType } from '@lms/contexts'
+import { ILearningOutcome, ITabs, TEST_TYPE } from '@lms/core'
+import { TestModalTeacher } from '@lms/feature-test'
+import { LayoutTeacher, SappDrawer, TextSkeleton } from '@lms/ui'
+import { buildQueryString, formatDate } from '@lms/utils'
+import { ClassAPI } from '@pages/api/class'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { Alert } from 'antd'
+import clsx from 'clsx'
+import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
-import { PageLink, TEST_TYPE } from '@lms/core'
+import { PageLink } from 'src/constants/routers'
 import { TreeHelper } from 'src/helper/tree'
-import TestModalTeacher from '@components/common/TestModalTeacher'
-import { ILearningOutcome } from '@lms/core'
-import LayoutTeacher from '@components/layout/Teacher'
-import { CoursesAPI } from 'src/pages/api/courses/index'
-import { buildQueryString, formatDate } from '@lms/utils'
-import { useCourseContext } from '@lms/contexts'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from '@lms/contexts'
-import dayjs from 'dayjs'
-import { AlertInfoIcon, CloseIconPreview } from '@assets/icons'
-import clsx from 'clsx'
-import { ITabs } from '@lms/core'
+import { CoursesAPI } from 'src/pages/api/courses/index'
 interface IProps {
   course_section_type: string
   description: string
@@ -346,8 +344,8 @@ const CoursePartDetailTeacher = () => {
       lockSection
         ? handleLockedSection()
         : handleUnlockedSection(() =>
-            handleRouterChapter(course_section?.quiz?.id),
-          )
+          handleRouterChapter(course_section?.quiz?.id),
+        )
     } else if (
       course_section?.course_section_type === 'ACTIVITY' ||
       course_section?.course_section_type === 'UNIT'
@@ -356,20 +354,20 @@ const CoursePartDetailTeacher = () => {
       lockSection || learningOutcome?.next_section?.is_preview_locked
         ? handleLockedSection()
         : handleUnlockedSection(() =>
-            handleRouterActivity(course_section?.children?.[0]?.id, undefined),
-          )
+          handleRouterActivity(course_section?.children?.[0]?.id, undefined),
+        )
     } else if (course_section?.course_section_type === 'STORY') {
       // Handle story section
       lockSection
         ? handleLockedSection()
         : handleUnlockedSection(() =>
-            handleRouterCaseStudy(
-              quiz?.id,
-              quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
-              course_section?.id,
-              quiz?.case_study_story?.instances?.[0]?.id,
-            ),
-          )
+          handleRouterCaseStudy(
+            quiz?.id,
+            quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
+            course_section?.id,
+            quiz?.case_study_story?.instances?.[0]?.id,
+          ),
+        )
     }
   }
 
@@ -465,8 +463,7 @@ const CoursePartDetailTeacher = () => {
     <LayoutTeacher
       title="Course Part Detail"
       breadcrumbs={breadcrumbs}
-      isCourseDetail
-    >
+      isCourseDetail courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}    >
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
         <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
           <Alert
@@ -526,7 +523,7 @@ const CoursePartDetailTeacher = () => {
           listFocusSubSectionIds={listFocusSubSectionIds}
           listFocusUnitIds={listFocusUnitIds}
           deadline={deadline}
-          // isTeacher
+        // isTeacher
         />
         <SappDrawer
           isOpen={openLearningOutcome}
@@ -581,9 +578,8 @@ const CoursePartDetailTeacher = () => {
             setOpen={setOpen}
             data={chapterData}
             class_user_id={previewPart?.class_user_id}
-            activeCourse={() => {}}
-            is_passed_course={isPassedCourse}
-          />
+            activeCourse={() => { }}
+            is_passed_course={isPassedCourse} classApi={ClassAPI} pageLink={PageLink} />
         )}
       </div>
     </LayoutTeacher>

@@ -3,7 +3,7 @@ import { Tree, TreeDataNode, TreeProps } from 'antd'
 import { IContentCompleted, ICourseSections } from '@lms/core'
 import { UseFormSetValue } from 'react-hook-form'
 import styles from './styles.module.scss'
-import { SwitcherClosed, SwitcherExpanded } from '@assets/icons'
+import { SwitcherClosed, SwitcherExpanded } from '@lms/assets'
 
 interface TreeTicketProps {
   isView?: boolean

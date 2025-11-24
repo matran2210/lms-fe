@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { DownloadIcon } from "@assets/icons";
+import { DownloadIcon } from "@lms/assets";
 import {
   backTypeMap,
   getTypeName,

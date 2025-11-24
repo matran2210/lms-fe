@@ -2,7 +2,7 @@
 import router from 'next/router'
 import { FC, useEffect } from 'react'
 import SappModal from '../modal/SappModal'
-import { AlertCircleSharp } from '@assets/icons'
+import { AlertCircleSharp } from '@lms/assets'
 
 // define the props for the confirm dialog component
 export type SappConfirmDialogProps = {

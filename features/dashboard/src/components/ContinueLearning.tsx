@@ -4,7 +4,7 @@ import continue_learning from "@assets/images/book-continue-learning.svg";
 import Image from "next/image";
 import { PageLink } from "@lms/core";
 import { useRouter } from "next/router";
-import { ArrowRightV2Icon } from "@assets/icons";
+import { ArrowRightV2Icon } from "@lms/assets";
 
 const ContinueLearning = () => {
   const router = useRouter();

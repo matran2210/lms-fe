@@ -1,4 +1,4 @@
-import { UnstartedIcon } from '@assets/icons'
+import { UnstartedIcon } from '@lms/assets'
 import { SappModalV3 } from '@lms/ui'
 import { formatDate } from '@utils/helpers'
 import { Dispatch, SetStateAction } from 'react'

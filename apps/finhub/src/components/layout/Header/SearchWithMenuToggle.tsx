@@ -1,4 +1,4 @@
-import { ArrowActionSearchIcon, HamburgerMenuLargeIcon } from '@assets/icons'
+import { ArrowActionSearchIcon, HamburgerMenuLargeIcon } from '@lms/assets'
 import { SearchForm } from '@lms/feature-courses'
 import React, { useEffect, useRef, useState } from 'react'
 import { MY_COURSES } from '@lms/core'

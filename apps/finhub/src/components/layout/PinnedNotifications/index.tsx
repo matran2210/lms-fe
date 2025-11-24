@@ -1,4 +1,4 @@
-import { CloseIconNote, IconLoudSpeaker } from '@assets/icons'
+import { CloseIconNote, IconLoudSpeaker } from '@lms/assets'
 import { EditorReader } from '@lms/ui'
 import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 import { Col, Row } from 'antd'

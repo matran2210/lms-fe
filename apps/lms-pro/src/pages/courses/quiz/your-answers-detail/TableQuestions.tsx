@@ -25,7 +25,7 @@ import {
 } from '@lms/core'
 import { IAnswer, IQuizAttemptChartType } from '@lms/core'
 import { CoursesAPI } from '../../../api/courses/index'
-import { CloseIcon } from '@assets/icons'
+import { CloseIcon } from '@lms/assets'
 import { Tooltip } from "@lms/ui";
 import ListScoreCollapse from '@components/quiz/your-answer-detail/ListScoreCollapse'
 

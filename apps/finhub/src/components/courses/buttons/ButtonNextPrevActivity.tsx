@@ -3,7 +3,7 @@ import { Arrows, SpinIcon } from '@components/courses/icons'
 import { IButtonNextPrevProps } from 'src/type/courses-3-level/button'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import clsx from 'clsx'
-import { LockClosedIcon } from '@assets/icons'
+import { LockClosedIcon } from '@lms/assets'
 
 export default function NextPrevActivityButton({
   nextClick,

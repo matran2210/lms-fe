@@ -1,10 +1,7 @@
 import Badge from '@components/courses/card/Badge'
-import {
-  COURSES_STATUS_BADGE,
-  COURSES_STATUS_LABEL,
-} from 'src/constants/courses'
 import { PlayIcon, TextIcon, ListIcon } from '@components/courses/icons'
 import { PastExamAnalysisIcon } from '@components/courses/icons/PastExamAnalysisIcon'
+import { COURSES_STATUS_BADGE, COURSES_STATUS_LABEL } from '@lms/core'
 
 export const formatDuration = (minutes: number) => {
   const hours = Math.floor(minutes / 60)

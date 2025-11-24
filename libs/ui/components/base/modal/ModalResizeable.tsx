@@ -1,4 +1,4 @@
-import { CloseIcon } from '@assets/icons'
+import { CloseIcon } from '@lms/assets'
 // import styles from '@styles/components/ModalResizeable.module.scss'
 import clsx from 'clsx'
 import React, { ReactNode, useEffect, useState } from 'react'

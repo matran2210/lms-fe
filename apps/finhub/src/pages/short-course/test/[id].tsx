@@ -11,7 +11,7 @@ import {
   ScratchPadIcon,
   ShowLessIcon,
   ShowMoreIcon,
-} from '@assets/icons'
+} from '@lms/assets'
 import SappLoading from '@components/common/SappLoading'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import NewFilltext from '@components/questionType/NewFillText'
@@ -43,7 +43,7 @@ import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
 
-import { NotesOutline, PulsingExclamation } from '@assets/icons'
+import { NotesOutline, PulsingExclamation } from '@lms/assets'
 import BackToTop from '@lms/ui/components/BackToTop'
 import Popover from '@components/Popover'
 import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'

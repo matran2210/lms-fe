@@ -1,4 +1,4 @@
-import { CloseIcon } from '@assets/icons'
+import { CloseIcon } from '@lms/assets'
 import { Modal } from 'antd'
 import { QuizResultComponent } from 'quiz-result-package'
 import React from 'react'

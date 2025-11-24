@@ -15,7 +15,7 @@ import { ScheduleSkeleton } from '@lms/ui'
 import PrimaryInfoItem from '@components/teacher/my-request/schedule-request/PrimaryInfoItem'
 import { formatTimeOnlyHourMinute } from '@utils/helpers'
 import { CONSTRUCTION_MODE, TYPE_TEACHING_REQUEST } from '@lms/core'
-import { CollapseArrowIcon } from '@assets/icons'
+import { CollapseArrowIcon } from '@lms/assets'
 import Link from 'next/link'
 import { Tooltip } from "@lms/ui";
 import TooltipParagraph from 'src/common/TooltipParagraph'

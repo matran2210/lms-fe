@@ -1,4 +1,4 @@
-import { ActiveIcon } from '@assets/icons'
+import { ActiveIcon } from '@lms/assets'
 import { SappModalV3 } from '@lms/ui'
 import React from 'react'
 

@@ -1,4 +1,4 @@
-import { CheckIcon } from '@assets/icons'
+import { CheckIcon } from '@lms/assets'
 import { SappModalV3 } from '@lms/ui'
 import React, { Dispatch, SetStateAction } from 'react'
 

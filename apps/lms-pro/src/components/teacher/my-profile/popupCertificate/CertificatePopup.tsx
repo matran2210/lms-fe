@@ -9,7 +9,7 @@ import React, {
 import { confirmDialog, useAppDispatch } from '@lms/contexts'
 import { IButtonColors } from '@lms/core'
 
-import { CloseIcon } from '@assets/icons'
+import { CloseIcon } from '@lms/assets'
 import { ButtonCancelSubmit } from '@lms/ui'
 
 interface IProps {

@@ -1,10 +1,7 @@
-import { apiURL } from '@lms/core'
-import { fetcher, fetchFormData } from '@services/requestV2'
-import { AxiosPromise } from 'axios'
-import { IResponse } from 'src/redux/types'
-import { ExaminationsResponse } from 'src/redux/types/Course/MyCourse/ExamInformation'
-import { IQuizResultList } from '@lms/core'
-import { ExamInformation } from '@lms/core'
+import { ExaminationsResponse } from '@lms/contexts';
+import { apiURL, ExamInformation, IQuizResultList, IResponse } from '@lms/core';
+import { fetcher, fetchFormData } from '@services/requestV2';
+import { AxiosPromise } from 'axios';
 
 export class ClassAPI {
   static getAllResultOfQuiz(

@@ -1,4 +1,4 @@
-import { CloseIcon, CloseModalIcon } from '@assets/icons'
+import { CloseIcon, CloseModalIcon } from '@lms/assets'
 import {
   ActivityBar,
   ActivityResource,

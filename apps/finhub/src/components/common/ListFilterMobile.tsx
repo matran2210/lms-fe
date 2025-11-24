@@ -1,4 +1,4 @@
-import { CollapseArrowIcon } from '@assets/icons'
+import { CollapseArrowIcon } from '@lms/assets'
 import clsx from 'clsx'
 import { Dispatch, SetStateAction } from 'react'
 import { useFormContext } from 'react-hook-form'

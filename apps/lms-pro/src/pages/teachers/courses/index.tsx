@@ -1,14 +1,10 @@
-import LayoutTeacher from '@components/layout/Teacher'
-import CoursesList from '@components/mycourses/CoursesList'
-import Filter from '@components/mycourses/Filter'
-import SearchForm from '@components/mycourses/Search'
+
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { ANIMATION, PageLink } from '@lms/core'
+import { ANIMATION } from '@lms/core'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { MY_COURSES } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
@@ -16,6 +12,10 @@ import { UserType } from '@lms/contexts'
 import { ITabs } from '@lms/core'
 import { FormProvider, useForm } from 'react-hook-form'
 import { buildQueryString } from '@lms/utils'
+import { PageLink } from 'src/constants/routers'
+import { LayoutTeacher, SappLoadingGlobal } from '@lms/ui'
+import { CoursesList, Filter, SearchForm } from '@lms/feature-courses'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 
 const DEFAULT_PAGESIZE = 9
 const breadcrumbs: ITabs[] = [
@@ -140,7 +140,7 @@ const MyCourseTeacher = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <LayoutTeacher title="My Course" breadcrumbs={breadcrumbs}>
+      <LayoutTeacher title="My Course" breadcrumbs={breadcrumbs} courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}>
         <FormProvider {...methods}>
           <div className="header border-default border-b bg-white">
             <div className={`relative my-0 flex`}>
@@ -149,6 +149,7 @@ const MyCourseTeacher = () => {
                 formStyle="w-full flex items-center"
                 handleSubmit={handleSubmit}
                 isTeacher
+                redirectLink={PageLink.COURSES}
               />
             </div>
           </div>

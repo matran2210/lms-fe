@@ -1,4 +1,4 @@
-import { CollapseArrowIcon } from "@assets/icons";
+import { CollapseArrowIcon } from "@lms/assets";
 import { Collapse } from "antd";
 import React, { useState, useEffect } from "react";
 import TableListQuizInActivity from "./TableListQuizInActivity";

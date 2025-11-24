@@ -1,4 +1,4 @@
-import { FlagIcon } from "@assets/icons";
+import { FlagIcon } from "@lms/assets";
 import React from "react";
 
 interface PageLinkProps extends React.LiHTMLAttributes<HTMLLIElement> {

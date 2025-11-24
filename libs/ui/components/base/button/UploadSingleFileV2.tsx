@@ -1,6 +1,6 @@
 import { Upload, UploadProps } from 'antd'
 import ButtonSecondary from './ButtonSecondary'
-import { UploadIcon } from '@assets/icons'
+import { UploadIcon } from '@lms/assets'
 import { useRef } from 'react'
 import { RcFile } from 'antd/es/upload'
 

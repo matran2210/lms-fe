@@ -22,7 +22,7 @@ import {
   QUESTION_TYPES,
 } from 'src/constants'
 import { IAnswer, IQuizAttempt, IQuizAttemptChartType } from 'src/type'
-import { CollapseArrowIcon } from '@assets/icons'
+import { CollapseArrowIcon } from '@lms/assets'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { ResultAPI } from '@pages/api/short-course/test-result'
 

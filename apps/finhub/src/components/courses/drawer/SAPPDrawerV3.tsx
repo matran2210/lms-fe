@@ -1,4 +1,4 @@
-import Icon from '@components/icons'
+import { Icon } from '@lms/assets'
 import { Drawer, DrawerProps } from 'antd'
 import clsx from 'clsx'
 import { ReactNode } from 'react'

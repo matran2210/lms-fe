@@ -7,7 +7,7 @@ import {
   ResizeIcon,
   ScratchPadIcon,
   UnHighLightIcon,
-} from '@assets/icons'
+} from '@lms/assets'
 
 import {
   ButtonText,

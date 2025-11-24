@@ -1,15 +1,15 @@
-import { CourseParts, FilterCourseDetail } from '@lms/feature-courses'
 import PopupModalTest from '@components/survey/PopupModalTest'
-import { useCourseContext } from '@lms/contexts'
+import { useCourseContext, UserType } from '@lms/contexts'
+import { ANIMATION, ITabs } from '@lms/core'
+import { CourseParts, FilterCourseDetail } from '@lms/feature-courses'
+import { CourseSkeleton, LayoutTeacher } from '@lms/ui'
 import { CoursesAPI } from '@pages/api/courses'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useInfiniteQuery } from 'react-query'
+import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { ANIMATION, PageLink } from '@lms/core'
-import { UserType } from '@lms/contexts'
-import {LayoutTeacher, CourseSkeleton} from '@lms/ui'
-import { ITabs } from '@lms/core'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -145,6 +145,7 @@ const CourseDetailTeacher = () => {
       title="Course Detail"
       breadcrumbs={breadcrumbs}
       isCourseDetail
+      courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}
     >
       <div className="my-0">
         {isLoading ? (

@@ -1,4 +1,4 @@
-import { InfoIcon } from '@assets/icons'
+import { InfoIcon } from '@lms/assets'
 import getConfig from 'next/config'
 import React, { Dispatch, SetStateAction } from 'react'
 const { publicRuntimeConfig } = getConfig()

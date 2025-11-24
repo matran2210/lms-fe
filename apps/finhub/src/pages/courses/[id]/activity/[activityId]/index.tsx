@@ -1,4 +1,4 @@
-import { CloseIcon, DownloadIcon, LinkIcon } from '@assets/icons'
+import { CloseIcon, DownloadIcon, LinkIcon } from '@lms/assets'
 
 import { Calculator } from '@lms/ui'
 import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'

@@ -1,4 +1,4 @@
-import { PepIconsPencil } from '@assets/icons'
+import { PepIconsPencil } from '@lms/assets'
 import { Dropdown } from 'antd'
 import React from 'react'
 import { Placement } from '@lms/core'

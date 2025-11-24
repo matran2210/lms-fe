@@ -12,7 +12,7 @@ import { SAPPDropdown } from '@lms/ui'
 import { TableColumn } from '@lms/core'
 import { round } from 'lodash'
 import { useSelector } from 'react-redux'
-import { userReducer } from 'src/redux/slice/User/User'
+import { userReducer } from '@lms/contexts'
 
 interface ProgressTableProps {
   loading: boolean

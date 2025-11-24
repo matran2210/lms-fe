@@ -1,4 +1,4 @@
-import { CollapseArrowIcon } from '@assets/icons'
+import { CollapseArrowIcon } from '@lms/assets'
 import { Collapse, CollapseProps } from 'antd'
 
 interface IProps {

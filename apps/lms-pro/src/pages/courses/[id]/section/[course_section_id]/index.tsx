@@ -1,43 +1,41 @@
-import { SappBreadCrumbs } from '@lms/ui'
-import { SappDrawerV3 } from '@lms/ui'
-import { StarCircleIcon } from '@lms/assets'
 import {
   AlertInfoIcon,
+  ChapterIcon,
   CloseIconPreview,
   DocumentTextIcon,
   ResourceIcon,
-  ChapterIcon,
-} from '@assets/icons'
-import {Layout} from '@lms/ui'
+  StarCircleIcon
+} from '@lms/assets'
+import {
+  activeNotesList,
+  resetNotesList,
+  useAppDispatch,
+  useCourseContext,
+  UserType
+} from '@lms/contexts'
+import { ANIMATION, ILearningOutcome, TEST_TYPE } from '@lms/core'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { BottomMenu, CtaTrial, Layout, SappBreadCrumbs, SappDrawerV3 } from '@lms/ui'
 import { buildQueryString, formatDate } from '@lms/utils'
-import { Alert, Skeleton } from 'antd'
+import { NotificationAPI } from '@pages/api/notification'
+import { Alert, Divider, Skeleton } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
-import { ANIMATION, TEST_TYPE } from '@lms/core'
-import { TreeHelper } from 'src/helper/tree'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import TestModal from '@pages/courses/test/test-modal'
-import { ILearningOutcome } from '@lms/core'
-import { CoursesAPI } from '../../../../api/courses/index'
-import BottomMenu from '@components/layout/BottomMenu'
-import CardMenuItem from '../../../../../../../../features/course/src/components/learning/activity/CardMenuItem'
-import { Divider } from 'antd'
-import LearningResource from '@components/mycourses/LearningResource'
-import { activeNotesList,
-  resetNotesList,useCourseContext, useAppDispatch, UserType } from '@lms/contexts'
-import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
-import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
-import { PageLink } from 'src/constants/routers'
 import {
   MENU_BOTTOM,
   MENU_ITEMS,
   MENU_ITEMS_EVENT,
 } from 'src/constants/menu-items'
+import { PageLink } from 'src/constants/routers'
+import { TreeHelper } from 'src/helper/tree'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { CoursesAPI } from '../../../../api/courses/index'
+import { CardMenuItem, LearningResource, PopupLockContent } from '@lms/feature-courses'
+import { TestModal } from '@lms/feature-test'
 
 interface IProps {
   course_section_type: string
@@ -556,6 +554,7 @@ const CoursePartDetail = () => {
       menuItemsEvent={MENU_ITEMS_EVENT}
       menuBottom={MENU_BOTTOM}
       api={CoursesAPI}
+      notificationApi={NotificationAPI}
     >
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
         <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">

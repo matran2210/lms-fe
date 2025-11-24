@@ -1,4 +1,4 @@
-import { CollapseArrowIcon } from '@assets/icons'
+import { CollapseArrowIcon } from '@lms/assets'
 import React, { useState } from 'react'
 
 type IProps = {

@@ -1,4 +1,4 @@
-import { DeleteCommentIcon } from '@assets/icons'
+import { DeleteCommentIcon } from '@lms/assets'
 import { SappModalV3 } from '@lms/ui'
 import React, { Dispatch, SetStateAction } from 'react'
 

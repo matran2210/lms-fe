@@ -1,4 +1,4 @@
-import { UnstartedIcon } from '@assets/icons'
+import { UnstartedIcon } from '@lms/assets'
 import ShortCourseModal from '@components/base/modal/ShortCourseModal'
 import { formatDate } from '@utils/helpers'
 import { Dispatch, SetStateAction } from 'react'

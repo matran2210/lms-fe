@@ -2,10 +2,9 @@ import { useRouter } from 'next/router'
 import ResultsTable from './ResultsTable'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from '@lms/contexts'
-import { Layout, SappBreadCrumbs } from '@lms/ui'
+import { HeaderMobile, Layout, SappBreadCrumbs } from '@lms/ui'
 import { TEST_AND_QUIZ_TITLE } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import HeaderMobile from '@components/layout/Header/HeaderMobile'
 import { useQuery } from 'react-query'
 import { CoursesAPI } from '@pages/api/courses'
 import { DEFAULT_PAGE_SIZE } from '@lms/core'
@@ -19,6 +18,7 @@ import {
   MENU_ITEMS,
   MENU_ITEMS_EVENT,
 } from 'src/constants/menu-items'
+import { NotificationAPI } from '@pages/api/notification'
 
 const Results = () => {
   const router = useRouter()
@@ -78,6 +78,7 @@ const Results = () => {
       menuItemsEvent={MENU_ITEMS_EVENT}
       menuBottom={MENU_BOTTOM}
       api={CoursesAPI}
+      notificationApi={NotificationAPI}
     >
       {isAlwaysShowSidebar && (
         <div className="mb-2 mt-4 flex w-full">

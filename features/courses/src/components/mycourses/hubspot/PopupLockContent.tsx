@@ -2,7 +2,7 @@ import { SappModalV3 } from '@lms/ui'
 import { CoursesAPI } from '@pages/api/courses'
 import React, { Dispatch, SetStateAction } from 'react'
 import { useRouter } from 'next/router'
-import { LockSectionIcon, ThankYouIcon, UnlockIcon } from '@assets/icons'
+import { LockSectionIcon, ThankYouIcon, UnlockIcon } from '@lms/assets'
 
 export interface IPopupFormState {
   lockSection: boolean

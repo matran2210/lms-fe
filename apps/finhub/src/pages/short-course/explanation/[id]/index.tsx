@@ -1,4 +1,4 @@
-import { CloseIcon } from '@assets/icons'
+import { CloseIcon } from '@lms/assets'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import {FullScreenLayout} from '@lms/ui'
 import { LAYOUT } from '@lms/core'

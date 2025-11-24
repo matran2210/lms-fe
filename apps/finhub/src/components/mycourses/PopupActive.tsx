@@ -1,4 +1,4 @@
-import { ActiveIcon } from '@assets/icons'
+import { ActiveIcon } from '@lms/assets'
 import ShortCourseModal from '@components/base/modal/ShortCourseModal'
 import { Dispatch, SetStateAction } from 'react'
 

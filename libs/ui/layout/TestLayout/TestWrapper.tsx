@@ -9,7 +9,7 @@ import clsx from "clsx";
 import { Icon } from "@lms/assets";
 import { CountDown } from "@lms/feature-test";
 import { useAppDispatch } from "@lms/contexts";
-import { disableUnsavedChange } from "src/redux/slice/Login/Login";
+import { disableUnsavedChange } from "@lms/contexts";
 import dayjs from "dayjs";
 import { ButtonSecondary } from "@lms/ui";
 

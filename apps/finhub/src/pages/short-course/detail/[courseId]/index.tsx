@@ -4,7 +4,7 @@ import {
   CloseIconPreview,
   DocumentTextIcon,
   ResourceIcon,
-} from '@assets/icons'
+} from '@lms/assets'
 import { Breadcrumb3Level } from '@components/courses'
 import LearningOutComeModal from '@components/courses/popup/LearningOutComeModal'
 import TestModal from '@components/courses/popup/TestModal'

@@ -1,4 +1,4 @@
-import { IconCongrats } from '@assets/icons'
+import { IconCongrats } from '@lms/assets'
 import { SappModalV2 } from '@lms/ui'
 import { useCourseContext } from '@lms/contexts'
 import { useRouter } from 'next/router'

@@ -1,4 +1,4 @@
-import { AppleLogo, PhoneLogo, WinDowLogo } from '@assets/icons'
+import { AppleLogo, PhoneLogo, WinDowLogo } from '@lms/assets'
 import { useMemo } from 'react'
 import { calculateTimeAgo } from '@utils/helpers'
 

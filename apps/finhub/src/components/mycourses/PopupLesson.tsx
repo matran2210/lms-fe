@@ -1,4 +1,4 @@
-import { ConfirmIcon } from '@assets/icons'
+import { ConfirmIcon } from '@lms/assets'
 import ShortCourseModal from '@components/base/modal/ShortCourseModal'
 
 interface IProps {
