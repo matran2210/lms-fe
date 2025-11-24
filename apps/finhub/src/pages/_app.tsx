@@ -1,10 +1,8 @@
 import Metadata from '@components/common/Metadata'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
 import PopupCompletedCourse from '@components/mycourses/PopupCompletedCourse'
-import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
-import { SocketContext } from '@contexts/SocketContext'
-import { CourseProvider } from '@contexts/index'
 import '@fortune-sheet/react/dist/index.css'
+import { CourseProvider, FeatureProvider, PinnedNotifyProvider, SocketContext, store, useAppDispatch, wrapper } from '@lms/contexts'
 import {
   ANIMATION,
   CERTIFICATE_DETAIL,
@@ -38,8 +36,11 @@ import 'sapp-common-package/dist/index.css'
 import 'sapp-common-package/dist/sapp-editor.css'
 import 'sapp-notification/dist/index.css'
 import { io } from 'socket.io-client'
-import { FeatureProvider, useAppDispatch } from '@lms/contexts'
+import { MENU_BOTTOM, MENU_ITEMS, MENU_ITEMS_EVENT } from 'src/constants/menu-items'
+import { PageLink } from 'src/constants/routes'
+import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { injectStore } from 'src/redux/services/httpService'
+import UserApi from 'src/redux/services/User/user'
 import {
   getCountUnRead,
   showNotification,
@@ -47,20 +48,15 @@ import {
 import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
-import { store, wrapper } from '../redux/store'
-import ErrorRedirectPage from './error-redirect'
-import { QuestionAPI } from './api/question'
+import { ActivityAPI } from './api/activity'
+import { CaseStudyAPI } from './api/case-study'
+import { ClassAPI } from './api/class'
 import { CoursesAPI, submitQuizTest } from './api/courses'
-import { UploadAPI } from './api/upload'
-import UserApi from 'src/redux/services/User/user'
 import { NotificationAPI } from './api/notification'
 import { AuthAPI } from './api/profile'
-import { ClassAPI } from './api/class'
-import { ActivityAPI } from './api/activity'
-import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
-import { CaseStudyAPI } from './api/case-study'
-import { PageLink } from 'src/constants/routes'
-import { MENU_BOTTOM, MENU_ITEMS, MENU_ITEMS_EVENT } from 'src/constants/menu-items'
+import { QuestionAPI } from './api/question'
+import { UploadAPI } from './api/upload'
+import ErrorRedirectPage from './error-redirect'
 
 export const excludedPathsHelp = [
   '/test/[id]',
@@ -317,7 +313,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       <main>
         <Metadata />
         <AntConfigProvider>
-          <PinnedNotifyProvider>
+          <PinnedNotifyProvider router={router} api={{
+            
+            getPinnedNotifications: UserApi.getPinnedNotifications,
+          
+          }}>
             <FeatureProvider value={{
               courseApi: CoursesAPI,
               questionApi: QuestionAPI,
@@ -337,7 +337,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
               menuBottom: MENU_BOTTOM,
               router: router,
             }}>
-            <CourseProvider>
+              <CourseProvider router={router}>
               <QueryClientProvider client={queryClient}>
                 <SocketContext.Provider value={socket}>
                   <Toaster

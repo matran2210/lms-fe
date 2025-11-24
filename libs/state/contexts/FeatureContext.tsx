@@ -40,7 +40,6 @@ interface FeatureContextProps {
   menuItemsEvent: MenuItem[];
   menuBottom: MenuItem[];
   router: any;
-  queryClient: any;
 }
 
 const FeatureContext = createContext<FeatureContextProps>(

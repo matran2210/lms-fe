@@ -1,8 +1,8 @@
 import { CollapseArrowIcon } from '@lms/assets'
+import { SectionField } from '@lms/core'
 import clsx from 'clsx'
 import { Dispatch, SetStateAction } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { IOpenChooseItem, SectionField } from 'src/type'
 
 interface IList {
   id: number

@@ -2,10 +2,8 @@ import { ArrowActionSearchIcon, HamburgerMenuLargeIcon } from "@lms/assets";
 import {SearchForm} from "@lms/feature-courses";
 // import PopupStep from "@components/user-guide/PopupStep"; lỗi monorepo dừng xóa
 import React, { useEffect, useRef, useState } from "react";
-import { PageLink, UserGuide } from "@lms/core";
 import { MY_COURSES } from "@lms/core";
-import { useAppSelector } from "@lms/contexts";
-import TourGuideStart from "src/assets/lotties/tour-guide-start.json";
+import { useAppSelector, useFeature } from "@lms/contexts";
 import clsx from "clsx";
 import { CloseIconV2 } from "@lms/assets";
 import { FormProvider, useForm } from "react-hook-form";
@@ -19,6 +17,7 @@ interface IProps {
   isShowToggle?: boolean;
   className?: string;
   isCoursePage?: boolean;
+  redirectLink: string
 }
 interface IListIcon {
   icon: React.ReactNode;
@@ -32,7 +31,9 @@ const SearchWithMenuToggle = ({
   isShowToggle = false,
   className,
   isCoursePage = false,
+  redirectLink
 }: IProps) => {
+  const { pageLink } = useFeature();  
   const {
     status: guideStatus,
     isActive: guideIsActive,
@@ -56,7 +57,7 @@ const SearchWithMenuToggle = ({
   const handleSubmit = () => {
     // Redirect to the search results page with the query as a query parameter
     push(
-      `${PageLink.COURSES}${
+      `${pageLink.COURSES}${
         methods.watch("name")?.trim()?.length
           ? `?name=${methods.watch("name")}`
           : ""
@@ -189,6 +190,8 @@ const SearchWithMenuToggle = ({
                 isFocused={isFocused}
                 handleSubmit={handleSubmit}
                 isCoursePage={isCoursePage}
+                redirectLink={redirectLink}
+                control={methods.control}
               />
               <div className="hidden lg:block">
                 <ActionIcon />

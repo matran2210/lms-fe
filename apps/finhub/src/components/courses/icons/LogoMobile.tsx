@@ -5,7 +5,6 @@ import { PageLink } from 'src/constants/routes'
 export const LogoMobile = ({ className = '' }: { className?: string }) => {
   const router = useRouter()
   const pathname = router.pathname
-  const isShortCourse = pathname.startsWith(PageLink.SHORT_COURSE)
 
   return (
     <Link href={PageLink.SHORT_COURSE}>

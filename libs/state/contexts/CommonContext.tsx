@@ -60,8 +60,8 @@ const CourseContext = createContext<Context>(initContext)
 
 export function CourseProvider(props: PropsWithChildren<{
   router: any
-  api: {
-    get: (params: Object) => Promise<any>
+  api?: {
+    get?: (params: Object) => Promise<any>
   }
 }>) {
   const { router, api } = props
@@ -114,7 +114,8 @@ export function CourseProvider(props: PropsWithChildren<{
    */
 
   async function fetchEventTest() {
-    const res = await api.get({})
+    if (!api?.get) return
+    const res = await api?.get?.({})
     if (res.success) {
       localStorage.setItem('countEvent', res?.data?.length)
     }

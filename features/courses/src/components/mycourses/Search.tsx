@@ -14,6 +14,7 @@ interface IProps {
   isCoursePage?: boolean;
   isTeacher?: boolean;
   redirectLink: string;
+  control: any
 }
 
 const SearchForm = ({
@@ -27,9 +28,13 @@ const SearchForm = ({
   isCoursePage,
   isTeacher = false,
   redirectLink,
+  control
 }: IProps) => {
+
+  console.log("Vao 9999990909009")
   const { query, push } = useRouter();
-  const { control, watch, setValue } = useFormContext();
+  const {  watch, setValue } = useFormContext();
+  console.log("useFormContext():", useFormContext());
 
   useEffect(() => {
     if (!isTeacher) {

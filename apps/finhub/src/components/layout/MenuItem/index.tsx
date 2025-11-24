@@ -5,25 +5,18 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import { TitleSidebar } from '@lms/core'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { openCalculator } from 'src/redux/slice/Course/ShortCourse/Activity/Activity'
-import { activeNotesList } from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
-import { pushNotes } from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
-import { userReducer } from '@lms/contexts'
+import { activeNotesList3Level, getCountUnRead, loadMoreNotification, openCalculator3Level, pushNotes3Level, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
 import { v4 as uuidv4 } from 'uuid'
 import { MenuItem as MenuItemType } from '@lms/core'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
 import { isEmpty } from 'lodash'
-import {
-  getCountUnRead,
-  loadMoreNotification,
-} from 'src/redux/slice/Notification/Notification'
 import SappNotificationComponent from 'sapp-notification'
-import { useNotification } from 'src/hooks/useNotification'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import { PageLink } from 'src/constants/routes'
+import { useNotification } from '@lms/hooks'
+import { NotificationAPI } from '@pages/api/notification'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -55,7 +48,7 @@ export default function MenuItem({
     refreshNotification,
     isDesktopView,
     notificationUnread,
-  } = useNotification()
+  } = useNotification(NotificationAPI)
   const tabs = [
     {
       id: 1,
@@ -86,7 +79,7 @@ export default function MenuItem({
   }
 
   const handleOpenNotesList = () => {
-    dispatch(activeNotesList())
+    dispatch(activeNotesList3Level())
     document.body.style.overflow = 'hidden'
   }
 
@@ -97,11 +90,11 @@ export default function MenuItem({
       name: 'Note',
       description: '',
     }
-    dispatch(pushNotes(note))
+    dispatch(pushNotes3Level(note))
   }
 
   const handleOpenCalculator = () => {
-    dispatch(openCalculator())
+    dispatch(openCalculator3Level())
   }
 
   const handleOpenCourseContentPage = () => {
@@ -196,7 +189,7 @@ export default function MenuItem({
   const isInMyProfile = router.asPath === PageLink.MYPROFILE
   const countNotificationsUnRead = async () => {
     try {
-      await dispatch(getCountUnRead())
+      await dispatch(getCountUnRead(NotificationAPI))
     } catch (error) {}
   }
 
@@ -217,11 +210,15 @@ export default function MenuItem({
             isFetching.current = true
             await dispatch(
               loadMoreNotification({
-                page_index: page_index + 1,
+                api: NotificationAPI,
+                params: {
+                  page_index: page_index + 1,
                 page_size,
                 ...(selectedTab === 2 && {
                   is_read: false,
                 }),
+                }
+                
               }),
             )
             await countNotificationsUnRead()
@@ -491,9 +488,9 @@ export default function MenuItem({
         tabs={tabs}
         selectedTab={selectedTab}
         setSelectedTab={setSelectedTab}
-        handleMarkAll={handleMarkAll}
-        handleMarkById={handleMarkById}
-        handleUnMarkById={handleUnMarkById}
+        handleMarkAll={() => handleMarkAll(selectedTab)}
+        handleMarkById={(ids: string[]) => handleMarkById(ids, selectedTab)}
+        handleUnMarkById={(ids: string[]) => handleUnMarkById(ids, selectedTab)}
         handleBack={handleBack}
         isViewDetail={isViewDetail}
         setOpenNotification={setOpenNotification}
