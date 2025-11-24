@@ -1,4 +1,4 @@
-import { AlertInfoIcon, CloseIconPreview } from '@assets/icons'
+import { AlertInfoIcon, CloseIconPreview } from '@lms/assets'
 import { useCourseContext, UserType } from '@lms/contexts'
 import { ILearningOutcome, ITabs, TEST_TYPE } from '@lms/core'
 import { TestModalTeacher } from '@lms/feature-test'
