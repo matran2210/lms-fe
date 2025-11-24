@@ -1,4 +1,4 @@
-import { CloseIcon } from '@assets/icons'
+import { CloseIcon } from '@lms/assets'
 import { UserType } from '@lms/contexts'
 import { GRADING_METHOD, IAtempt, IRequirement, LAYOUT, QUESTION_TYPES, TEST_ATTEMPT_TYPE } from '@lms/core'
 import { FullScreenLayout, SappLoadingGlobal } from '@lms/ui'
