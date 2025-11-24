@@ -27,6 +27,7 @@ interface IProps {
   setListSubsection: Dispatch<SetStateAction<ISection[]>>
   setListUnit?: Dispatch<SetStateAction<ISection[]>>
   setListActivity: Dispatch<SetStateAction<ISection[]>>
+  setDirection: Dispatch<SetStateAction<1 | -1>>
 }
 
 const ListItemFilterMobile = ({
@@ -40,6 +41,7 @@ const ListItemFilterMobile = ({
   setListSubsection,
   setListUnit,
   setListActivity,
+  setDirection,
 }: IProps) => {
   const { setValue } = useFormContext()
   const [list, setList] = useState<ISection[]>([])
@@ -82,6 +84,7 @@ const ListItemFilterMobile = ({
   }
 
   const handleSelect = (item: ISection, isSelected: boolean) => {
+    setDirection(1)
     if (!isSelected) {
       const currentIndex = allTypes.indexOf(
         openChooseItem.type as (typeof allTypes)[number],
@@ -131,7 +134,7 @@ const ListItemFilterMobile = ({
         const isSelectedValue =
           selected.section === item.id ||
           selected.subsection === item.id ||
-          selected.activity === item.id || 
+          selected.activity === item.id ||
           selected.unit === item.id
 
         const isSelected =
