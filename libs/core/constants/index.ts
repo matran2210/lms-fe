@@ -40,6 +40,7 @@ export const TitleSidebar = {
   DASHBOARD_TEST: "Dashboard Test",
   HOME: "Home",
   STUDENT_PROFILE: "Student Profile",
+  ACTIVITY: "Activity",
 };
 
 export const ValueSidebar = {

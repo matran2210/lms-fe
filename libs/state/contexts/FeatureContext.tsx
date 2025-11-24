@@ -12,8 +12,8 @@ interface FeatureContextProps {
   activityApi: IActivityAPI;
   courseActivityApi: ICourseActivityAPI;
   caseStudyApi: ICaseStudyAPI;
-  entranceTestApi: IEntranceTestAPI;
-  eventTestApi: IEventTestAPI;
+  entranceTestApi?: IEntranceTestAPI;
+  eventTestApi?: IEventTestAPI;
   submitQuizTest: (id: string, data: any, class_user_id?: string | undefined) => Promise<any>
   authManager: IAuthManager;
   pageLink: { [key: string]: string }

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { VALIDATE_REQUIRED } from "@lms/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getMe, userReducer, useAppDispatch, useAppSelector, IUserAPI } from "@lms/contexts";
+import { getMe, userReducer, useAppDispatch, useAppSelector, IUserAPI, useFeature } from "@lms/contexts";
 import { useRouter } from "next/router";
 import { SappModalV2 } from "@lms/ui";
 // import { EntranceTestAPI } from 'src/pages/api/entrance-test'
@@ -16,17 +16,15 @@ interface IProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
   entrancePopupContent: any;
   setOpenTestInfo: Dispatch<SetStateAction<boolean>> | undefined;
-  entranceTestApi: IEntranceTestAPI
-  userApi: IUserAPI
 }
 const EntranceTestFillForm = ({
   open,
   setOpen,
   entrancePopupContent,
   setOpenTestInfo,
-  entranceTestApi,
-  userApi
+
 }: IProps) => {
+  const { entranceTestApi, userApi } = useFeature();
   const [listUnivers, setListUnivers] = useState<any>();
   const [listUniverPrograms, setListUniverPrograms] = useState<any>();
   const [listMajors, setListMajors] = useState<any>();
@@ -64,7 +62,7 @@ const EntranceTestFillForm = ({
       .refine((data) => data?.value && data?.label, VALIDATE_REQUIRED),
   });
   const getListUniversities = async () => {
-    const res = await entranceTestApi.getListUnivers();
+    const res = await entranceTestApi?.getListUnivers();
     let optionUnivers = [];
     for (let e of res?.data) {
       optionUnivers?.push({ value: e?.id, label: e?.name });
@@ -73,7 +71,7 @@ const EntranceTestFillForm = ({
     // return res?.data?.[0]
   };
   const getListUniverPrograms = async () => {
-    const res = await entranceTestApi.getListUniversProgram();
+    const res = await entranceTestApi?.getListUniversProgram();
     let optionUniverProgram = [];
     for (let e of res?.data) {
       optionUniverProgram?.push({ value: e?.id, label: e?.name });
@@ -82,7 +80,7 @@ const EntranceTestFillForm = ({
     // return res?.data?.[0]
   };
   const getListMajors = async () => {
-    const res = await entranceTestApi.getListMajors();
+    const res = await entranceTestApi?.getListMajors();
     let optionMajors = [];
     for (let e of res?.data) {
       optionMajors?.push({ value: e?.id, label: e?.name });
@@ -91,7 +89,7 @@ const EntranceTestFillForm = ({
     // return res?.data?.[0]
   };
   const getListEngLevel = async () => {
-    const res = await entranceTestApi.getListEngLevel();
+    const res = await entranceTestApi?.getListEngLevel();
     let optionEngLevel = [];
     for (let e of res?.data) {
       optionEngLevel?.push({ value: e?.id, label: e?.name });
@@ -149,7 +147,7 @@ const EntranceTestFillForm = ({
   const dispatch = useAppDispatch();
 
   const onSubmit = async (dataValue: any) => {
-    const res = await entranceTestApi.putLevel({
+    const res = await entranceTestApi?.putLevel({
       university_program_id: dataValue?.univers_program_id?.value,
       major_id: dataValue?.majors_id?.value,
       english_level_id: dataValue?.englishLevel_id?.value,
