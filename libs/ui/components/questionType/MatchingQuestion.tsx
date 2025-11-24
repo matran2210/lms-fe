@@ -1,9 +1,4 @@
-import { EditorReader } from '@lms/ui'
-import {SappDivider} from '@lms/ui'
-import { runHighlight } from '@lms/utils'
-import { Divider } from 'antd'
-import clsx from 'clsx'
-import { uniqueId } from 'lodash'
+import { runHighlight } from "@lms/utils";
 import {
   ForwardedRef,
   forwardRef,
@@ -12,43 +7,45 @@ import {
   useImperativeHandle,
   useRef,
   useState,
-} from 'react'
-import { SappTitleSolution } from '@lms/ui'
-import { MY_COURSES } from '@lms/core'
-import { IExhibitData } from '@lms/core'
+} from "react";
+import { MY_COURSES } from "@lms/core";
+import { IExhibitData } from "@lms/core";
+import { EditorReader, SappDivider } from "../base";
+import { SappTitleSolution } from "../common";
+import { uniqueId } from "lodash";
 
 interface IProps {
-  data: any
-  action?: any
-  handleSaveHighLight?: any
-  highlighted?: any
-  removeHighlight?: any
-  allowHighLight?: boolean
-  defaultAnswer?: any
-  done?: boolean
-  extenalRef?: any
-  index?: number
-  corrects?: any
-  solution?: string
-  allowUnHighLight?: boolean
-  uuid?: string
+  data: any;
+  action?: any;
+  handleSaveHighLight?: any;
+  highlighted?: any;
+  removeHighlight?: any;
+  allowHighLight?: boolean;
+  defaultAnswer?: any;
+  done?: boolean;
+  extenalRef?: any;
+  index?: number;
+  corrects?: any;
+  solution?: string;
+  allowUnHighLight?: boolean;
+  uuid?: string;
   setOpenFile?: (
     data: IExhibitData,
     file?: string | null,
     fileName?: string | null,
     event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) => void
-  isHideExhibit?: boolean
-  isAlwaysShowAnswer?: boolean
-  exhibitText?: string
-  explainClassname?: string
-  correctAnswerClass?: string
+  ) => void;
+  isHideExhibit?: boolean;
+  isAlwaysShowAnswer?: boolean;
+  exhibitText?: string;
+  explainClassname?: string;
+  correctAnswerClass?: string;
 }
 type IProp = {
-  value: string
-  className?: string
-}
-let dragParentIdRef: string
+  value: string;
+  className?: string;
+};
+let dragParentIdRef: string;
 const MatchingQuestion = forwardRef(
   (
     {
@@ -65,120 +62,120 @@ const MatchingQuestion = forwardRef(
       setOpenFile,
       isHideExhibit = true,
       isAlwaysShowAnswer = false,
-      exhibitText = 'Exhibit',
+      exhibitText = "Exhibit",
       explainClassname,
       correctAnswerClass,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
-    const [defaultValue, setDefaultValue] = useState<any>()
-    const [answers, setAnswers] = useState<any>()
-    const [correctAnswer, setCorrectAnswer] = useState<any>()
-    const [storageId, setStoreId] = useState(uniqueId('storage'))
-    const matchingQuestionRef = useRef<HTMLDivElement>(null)
-    const isSelfReflection = data?.is_self_reflection
+    const [defaultValue, setDefaultValue] = useState<any>();
+    const [answers, setAnswers] = useState<any>();
+    const [correctAnswer, setCorrectAnswer] = useState<any>();
+    const [storageId, setStoreId] = useState(uniqueId("storage"));
+    const matchingQuestionRef = useRef<HTMLDivElement>(null);
+    const isSelfReflection = data?.is_self_reflection;
 
     function allowDrop(ev: any) {
-      ev?.preventDefault()
+      ev?.preventDefault();
 
-      const slotElement = ev?.target
-      slotElement?.classList?.add('dragging')
+      const slotElement = ev?.target;
+      slotElement?.classList?.add("dragging");
 
-      const matchingQuestion = matchingQuestionRef?.current
-      if (!matchingQuestion) return
+      const matchingQuestion = matchingQuestionRef?.current;
+      if (!matchingQuestion) return;
 
-      const rect = matchingQuestion?.getBoundingClientRect()
+      const rect = matchingQuestion?.getBoundingClientRect();
 
       // Lấy chiều dài của phần tử matchingQuestion
-      const matchingQuestionHeight = matchingQuestion?.clientHeight
+      const matchingQuestionHeight = matchingQuestion?.clientHeight;
 
       // Lấy tọa độ y của con trỏ chuột tính từ đỉnh của phần tử matchingQuestion
-      const mouseY = ev?.clientY - rect?.top
+      const mouseY = ev?.clientY - rect?.top;
 
       // Thiết lập ngưỡng cho việc cuộn
-      const threshold = 200
+      const threshold = 200;
 
       // Kiểm tra nếu con trỏ chuột nằm ở phía trên ngưỡng
       if (mouseY < threshold) {
-        matchingQuestion?.scrollBy(0, -10)
+        matchingQuestion?.scrollBy(0, -10);
       }
 
       // Kiểm tra nếu con trỏ chuột nằm ở phía dưới ngưỡng
       if (mouseY > matchingQuestionHeight - threshold) {
-        matchingQuestion?.scrollBy(0, 10)
+        matchingQuestion?.scrollBy(0, 10);
       }
     }
     function allowDropStorage(ev: any) {
-      if (ev?.target?.classList?.contains('dropable')) {
-        ev?.preventDefault()
+      if (ev?.target?.classList?.contains("dropable")) {
+        ev?.preventDefault();
       } else {
-        return
+        return;
       }
     }
 
     function drag(ev: any) {
-      ev?.dataTransfer?.setData('text', ev.target.id)
-      ev?.dataTransfer?.setData('questionId', data.id)
+      ev?.dataTransfer?.setData("text", ev.target.id);
+      ev?.dataTransfer?.setData("questionId", data.id);
 
       if (uuid) {
-        dragParentIdRef = ev?.target?.closest(`#${uuid}`)?.id
+        dragParentIdRef = ev?.target?.closest(`#${uuid}`)?.id;
       }
     }
 
     function drop(ev: any, dropId: string, dropItem?: boolean) {
-      ev.preventDefault()
+      ev.preventDefault();
 
-      const slotElement = ev?.target
-      slotElement?.classList?.remove('dragging')
+      const slotElement = ev?.target;
+      slotElement?.classList?.remove("dragging");
 
       if (uuid && (!dragParentIdRef || dragParentIdRef !== uuid)) {
-        return
+        return;
       }
-      dragParentIdRef = ''
+      dragParentIdRef = "";
 
-      const questionId = ev?.dataTransfer.getData('questionId')
-      var data = ev?.dataTransfer?.getData('text')
+      const questionId = ev?.dataTransfer.getData("questionId");
+      var data = ev?.dataTransfer?.getData("text");
 
-      let draggingItem
+      let draggingItem;
 
       if (uuid) {
         draggingItem = slotElement
           .closest(`#${uuid}`)
-          ?.querySelector(`[id="${data}"]`)
+          ?.querySelector(`[id="${data}"]`);
       } else {
-        draggingItem = document?.getElementById(data)
+        draggingItem = document?.getElementById(data);
       }
 
-      const oldParent = draggingItem?.parentNode
+      const oldParent = draggingItem?.parentNode;
       if (questionId === dropId) {
         if (
           slotElement?.children?.length === 0 &&
-          ev?.target?.classList?.contains('dropable') &&
+          ev?.target?.classList?.contains("dropable") &&
           !dropItem
         ) {
-          ev?.target?.appendChild(draggingItem)
+          ev?.target?.appendChild(draggingItem);
         } else if (dropItem) {
-          const parent = ev?.target?.parentNode
-          oldParent?.appendChild(ev?.target)
-          parent.appendChild(draggingItem)
-          return
+          const parent = ev?.target?.parentNode;
+          oldParent?.appendChild(ev?.target);
+          parent.appendChild(draggingItem);
+          return;
         }
-      } else return
+      } else return;
     }
     const handleStorage = (event: any, id: string) => {
       // prevent the default behavior of the drop event
-      event.preventDefault()
+      event.preventDefault();
       // get the id of the dragged piece from the dataTransfer object
-      const pieceId = event?.dataTransfer.getData('text')
-      const questId = event?.dataTransfer.getData('questionId')
+      const pieceId = event?.dataTransfer.getData("text");
+      const questId = event?.dataTransfer.getData("questionId");
       // get the storage element from the DOM
-      let storage
+      let storage;
       if (uuid) {
         storage = event?.target
           ?.closest(`#${uuid}`)
-          ?.querySelector(`.${storageId}`)
+          ?.querySelector(`.${storageId}`);
       } else {
-        storage = document.querySelector(`.${storageId}`)
+        storage = document.querySelector(`.${storageId}`);
       }
       // append the piece element to the storage element
       if (event.target === storage && questId === id) {
@@ -187,33 +184,33 @@ const MatchingQuestion = forwardRef(
             event?.target
               .closest(`#${uuid}`)
               ?.querySelector(`[id="${pieceId}"]`) as any,
-          )
+          );
         } else {
-          storage?.appendChild(document.getElementById(pieceId) as any)
+          storage?.appendChild(document.getElementById(pieceId) as any);
         }
-      } else return
-    }
-    const [key, setKey] = useState<string>('1')
+      } else return;
+    };
+    const [key, setKey] = useState<string>("1");
 
     useImperativeHandle(ref, () => ({
       handleReset() {
         // setAnswered([])
         setKey((prev) => {
-          const newKey = uniqueId('key')
-          return newKey
-        })
+          const newKey = uniqueId("key");
+          return newKey;
+        });
         // setAnswered()
       },
       handleGetResult() {
         // action()
       },
-    }))
+    }));
     const QuestionCard = ({
       value,
-      className = 'sapp-arrowed-container',
+      className = "sapp-arrowed-container",
     }: IProp) => {
-      return <div className={`${className}`}>{value}</div>
-    }
+      return <div className={`${className}`}>{value}</div>;
+    };
     // useEffect(() => {
     //   if (data) {
     //     DeserializeHighlight(highlighted)
@@ -221,43 +218,43 @@ const MatchingQuestion = forwardRef(
     // }, [data])
     function shuffleArray(array: Array<any>) {
       let currentIndex = array?.length,
-        randomIndex
+        randomIndex;
       // While there remain elements to shuffle
       while (currentIndex > 0) {
         // Pick a remaining element
-        randomIndex = Math.floor(Math.random() * currentIndex)
-        currentIndex--
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
         // And swap it with the current element
-        ;[array[currentIndex], array[randomIndex]] = [
+        [array[currentIndex], array[randomIndex]] = [
           array[randomIndex],
           array[currentIndex],
-        ]
+        ];
       }
-      return array
+      return array;
     }
     useEffect(() => {
-      let obj = {} as any
-      let objCorrect = {} as any
-      let arr = []
+      let obj = {} as any;
+      let objCorrect = {} as any;
+      let arr = [];
       for (let quest of data?.question_matchings) {
-        arr.push(quest?.answer)
+        arr.push(quest?.answer);
         if (defaultAnswer) {
           obj[quest?.id] = data?.question_matchings.find(
             (el: any) =>
               el?.answer?.id ===
               defaultAnswer.find((e: any) => e?.question_id === quest?.id)
                 ?.answer_id,
-          )
+          );
         }
       }
-      shuffleArray(arr)
+      shuffleArray(arr);
       if (corrects) {
         for (let correct of corrects) {
           if (defaultAnswer || isAlwaysShowAnswer) {
-            objCorrect[correct?.id] = correct?.answer
+            objCorrect[correct?.id] = correct?.answer;
           }
         }
-        setCorrectAnswer(objCorrect)
+        setCorrectAnswer(objCorrect);
       }
 
       if (defaultAnswer) {
@@ -265,9 +262,9 @@ const MatchingQuestion = forwardRef(
           const foundAns = data?.answers?.find(
             (a: { id: string; answer: string; answer_position: string }) =>
               a.id === e.answer_id,
-          )
+          );
           if (foundAns)
-            obj[e.question_id] = { id: e.question_id, answer: foundAns }
+            obj[e.question_id] = { id: e.question_id, answer: foundAns };
         }
         arr = arr.filter(
           (el) =>
@@ -275,12 +272,12 @@ const MatchingQuestion = forwardRef(
               (e: { answer_id: string; question_id: string; id: string }) =>
                 e.answer_id === el.id,
             ),
-        )
+        );
       }
 
-      setAnswers(arr)
-      setDefaultValue(obj)
-    }, [defaultAnswer, data?.question_matchings])
+      setAnswers(arr);
+      setDefaultValue(obj);
+    }, [defaultAnswer, data?.question_matchings]);
 
     return (
       <div key={key} ref={extenalRef} id={`${uuid}`}>
@@ -288,19 +285,19 @@ const MatchingQuestion = forwardRef(
           id="hightlight_area"
           onMouseUp={(e: any) => {
             if (
-              e?.target?.tagName?.charAt(0) !== 'm' &&
-              e?.target?.firstChild?.tagName !== 'math'
+              e?.target?.tagName?.charAt(0) !== "m" &&
+              e?.target?.firstChild?.tagName !== "math"
             ) {
               // if(e){
               if (allowHighLight) {
-                runHighlight(handleSaveHighLight, true, 'hightlight_area')
+                runHighlight(handleSaveHighLight, true, "hightlight_area");
               } else if (allowUnHighLight) {
                 runHighlight(
                   handleSaveHighLight,
                   allowUnHighLight || false,
-                  'hightlight_area',
-                  { color: 'white' },
-                )
+                  "hightlight_area",
+                  { color: "white" },
+                );
               }
               // }
             }
@@ -315,7 +312,7 @@ const MatchingQuestion = forwardRef(
                 )}
                 <div className="mb-4 flex items-center">
                   <div className="font-semibold">
-                    {exhibitText ? exhibitText + 's' : 'Exhibits'} (
+                    {exhibitText ? exhibitText + "s" : "Exhibits"} (
                     {data?.question_topic?.exhibits?.length || 0})
                   </div>
                   <div className="ml-4">
@@ -333,7 +330,7 @@ const MatchingQuestion = forwardRef(
                           setOpenFile &&
                             setOpenFile(
                               {
-                                type: 'exhibits',
+                                type: "exhibits",
                                 description: e?.description,
                                 name: e?.name,
                                 index: i,
@@ -342,12 +339,12 @@ const MatchingQuestion = forwardRef(
                               null,
                               null,
                               event,
-                            )
+                            );
                         }}
                       >
                         {exhibitText} {i + 1}: {e?.name}
                       </div>
-                    )
+                    );
                   })}
                 </div>
                 <div className="my-6 border border-b-gray-300"></div>
@@ -389,7 +386,7 @@ const MatchingQuestion = forwardRef(
                     )}
                   </div>
                 </div>
-              )
+              );
             })}
             <div
               className={`sapp-store dropable flex min-h-large flex-wrap gap-5 overflow-hidden border p-5 ${storageId}`}
@@ -411,7 +408,7 @@ const MatchingQuestion = forwardRef(
                   >
                     {answer?.answer}
                   </div>
-                )
+                );
               })}
             </div>
           </div>
@@ -467,7 +464,7 @@ const MatchingQuestion = forwardRef(
                       </>
                     )}
                   </div>
-                )
+                );
               })}
             </div>
             <div className={correctAnswerClass}>
@@ -495,7 +492,7 @@ const MatchingQuestion = forwardRef(
                         )}
                       </div>
                     </div>
-                  )
+                  );
                 })}
               </div>
             </div>
@@ -509,8 +506,8 @@ const MatchingQuestion = forwardRef(
           </div>
         )}
       </div>
-    )
+    );
   },
-)
-MatchingQuestion.displayName = 'MatchingQuestion123'
-export default memo(MatchingQuestion)
+);
+MatchingQuestion.displayName = "MatchingQuestion123";
+export default memo(MatchingQuestion);

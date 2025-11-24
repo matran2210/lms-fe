@@ -1,31 +1,31 @@
-import { Control, Controller } from 'react-hook-form'
-import { TimePicker } from 'antd'
-import dayjs from 'dayjs'
-import { ErrorMessage } from '@lms/ui'
-import { EDateTime } from '@lms/core'
-import SAPPLabel from '../Label/SAPPLabel'
+import { Control, Controller } from "react-hook-form";
+import { TimePicker } from "antd";
+import dayjs from "dayjs";
+import { EDateTime } from "@lms/core";
+import SAPPLabel from "../Label/SAPPLabel";
+import { ErrorMessage } from "../../common";
 
-const { RangePicker } = TimePicker
+const { RangePicker } = TimePicker;
 
 interface IProps {
-  control: Control<any>
-  name: string
-  defaultValue?: string
-  format?: string
-  placeholder?: [string, string]
-  needConfirm?: boolean
-  required?: boolean
-  disabled?: boolean
-  className?: string
-  label?: string
+  control: Control<any>;
+  name: string;
+  defaultValue?: string;
+  format?: string;
+  placeholder?: [string, string];
+  needConfirm?: boolean;
+  required?: boolean;
+  disabled?: boolean;
+  className?: string;
+  label?: string;
 }
 
 const HookformTimePicker = ({
   name,
   control,
   format = EDateTime.timepicker,
-  placeholder = ['Start Time', 'End Time'],
-  className = 'h-[45px]',
+  placeholder = ["Start Time", "End Time"],
+  className = "h-[45px]",
   label,
   required,
   needConfirm = false,
@@ -65,13 +65,13 @@ const HookformTimePicker = ({
                       times[1]?.format(EDateTime.timepicker),
                     ]
                   : null,
-              )
+              );
             }}
             onBlur={onBlur}
             placeholder={placeholder}
-            status={error ? 'error' : undefined}
+            status={error ? "error" : undefined}
             className={className}
-            style={{ width: '-webkit-fill-available' }}
+            style={{ width: "-webkit-fill-available" }}
             needConfirm={needConfirm}
             disabled={disabled}
           />
@@ -79,7 +79,7 @@ const HookformTimePicker = ({
         </div>
       )}
     />
-  )
-}
+  );
+};
 
-export default HookformTimePicker
+export default HookformTimePicker;

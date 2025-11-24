@@ -13,6 +13,13 @@
     "@lms/assets": "workspace:*",
     "@lms/utils": "workspace:*",
     "@lms/core": "workspace:*",
-    "@lms/ui": "workspace:*"
+    "@lms/ui": "workspace:*",
+    "react": "latest",
+    "sapp-common-package": "latest",
+    "dayjs": "latest",
+    "next": "latest",
+    "antd": "latest",
+    "clsx": "latest",
+    "react-dom": "latest"
   }
 }

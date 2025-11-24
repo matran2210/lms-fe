@@ -1,15 +1,15 @@
-import React from 'react'
-import { DatePicker, Skeleton } from 'antd'
-const { RangePicker } = DatePicker
-import { Controller } from 'react-hook-form'
-import { ErrorMessage } from '@lms/ui'
-import { IHookFormDateRangePicker } from '@lms/core'
+import React from "react";
+import { DatePicker, Skeleton } from "antd";
+const { RangePicker } = DatePicker;
+import { Controller } from "react-hook-form";
+import { IHookFormDateRangePicker } from "@lms/core";
+import { ErrorMessage } from "../../common";
 
 const HookFormDateRangePicker = ({
   name,
   control,
   defaultValue,
-  className = '',
+  className = "",
   disabled,
   skeleton,
   style,
@@ -38,16 +38,16 @@ const HookFormDateRangePicker = ({
                 />
                 {error?.message && (
                   <div>
-                    <ErrorMessage>{error?.message ?? ''}</ErrorMessage>
+                    <ErrorMessage>{error?.message ?? ""}</ErrorMessage>
                   </div>
                 )}
               </div>
             )}
           </div>
-        )
+        );
       }}
     />
-  )
-}
+  );
+};
 
-export default HookFormDateRangePicker
+export default HookFormDateRangePicker;

@@ -3,3 +3,8 @@ packages:
   - "packages/*"
   - "features/*"
   - "libs/*"
+
+hoistPattern:
+  - "react*"
+  - "antd"
+  - "@ant-design/*"

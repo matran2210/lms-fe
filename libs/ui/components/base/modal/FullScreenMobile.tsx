@@ -1,5 +1,5 @@
-import { SappDrawerV3 } from "@lms/ui";
 import React, { PropsWithChildren } from "react";
+import { SappDrawerV3 } from "../drawer";
 
 interface IProps {
   open: boolean;

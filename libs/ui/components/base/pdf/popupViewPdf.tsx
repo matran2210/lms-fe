@@ -1,6 +1,6 @@
-import { SappModal } from "@lms/ui";
 import dynamic from "next/dynamic";
 import React, { memo } from "react";
+import { SappModal } from "../modal";
 
 interface IProps {
   open: boolean;

@@ -1,29 +1,29 @@
-import React from 'react'
-import { Control, Controller } from 'react-hook-form'
-import { ErrorMessage, GuidelineFieldV2 } from '@lms/ui'
-import SappTextFieldV2 from './SappTextFieldV2'
+import React from "react";
+import { Control, Controller } from "react-hook-form";
+import { ErrorMessage, GuidelineFieldV2 } from "../../common";
+import SappTextFieldV2 from "./SappTextFieldV2";
 
 interface IProps {
-  name: string
-  control: Control<any>
-  defaultValue?: any
-  onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
-  type?: 'number' | 'password' | 'email' | 'text' | 'date'
-  placeholder?: string
-  className?: string
-  disabled?: boolean
-  label?: string
-  labelClass?: string
-  onChangeType?: () => void
-  passwordVisible?: boolean
-  showIconPassword?: boolean
-  guideline?: Array<string> | undefined
-  skeleton?: boolean
-  required?: boolean
-  maxLength?: number
-  textSize?: 'base' | 'sm'
-  style?: React.CSSProperties
-  placeholderIcon?: React.ReactNode
+  name: string;
+  control: Control<any>;
+  defaultValue?: any;
+  onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  type?: "number" | "password" | "email" | "text" | "date";
+  placeholder?: string;
+  className?: string;
+  disabled?: boolean;
+  label?: string;
+  labelClass?: string;
+  onChangeType?: () => void;
+  passwordVisible?: boolean;
+  showIconPassword?: boolean;
+  guideline?: Array<string> | undefined;
+  skeleton?: boolean;
+  required?: boolean;
+  maxLength?: number;
+  textSize?: "base" | "sm";
+  style?: React.CSSProperties;
+  placeholderIcon?: React.ReactNode;
 }
 
 const HookFormTextFieldV2 = ({
@@ -33,7 +33,7 @@ const HookFormTextFieldV2 = ({
   onChange,
   type,
   placeholder,
-  className = '',
+  className = "",
   disabled,
   label,
   skeleton,
@@ -54,16 +54,16 @@ const HookFormTextFieldV2 = ({
               <div>
                 <SappTextFieldV2
                   type={type}
-                  value={field.value ?? ''}
+                  value={field.value ?? ""}
                   defaultValue={field.value ? undefined : defaultValue}
                   onChange={(value) => {
-                    field.onChange(value)
-                    onChange && onChange(value)
+                    field.onChange(value);
+                    onChange && onChange(value);
                   }}
                   className={`${className} ${
                     error
-                      ? 'border-[#B90E0A] focus:border-[#B90E0A]'
-                      : 'border-[#DCDDDD] focus:border-[#141414]'
+                      ? "border-[#B90E0A] focus:border-[#B90E0A]"
+                      : "border-[#DCDDDD] focus:border-[#141414]"
                   }`}
                   placeholder={placeholder}
                   disabled={disabled}
@@ -79,7 +79,7 @@ const HookFormTextFieldV2 = ({
                 <>
                   {error?.message && (
                     <div>
-                      <ErrorMessage>{error?.message ?? ''}</ErrorMessage>
+                      <ErrorMessage>{error?.message ?? ""}</ErrorMessage>
                     </div>
                   )}
                 </>
@@ -88,10 +88,10 @@ const HookFormTextFieldV2 = ({
               <div className="flex items-center">Loading...</div>
             )}
           </div>
-        )
+        );
       }}
     />
-  )
-}
+  );
+};
 
-export default HookFormTextFieldV2
+export default HookFormTextFieldV2;

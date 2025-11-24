@@ -14,6 +14,10 @@
     "@lms/utils": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/ui": "workspace:*",
-    "@lms/contexts": "workspace:*"
+    "@lms/contexts": "workspace:*",
+    "react": "latest",
+    "next": "latest",
+    "aos": "latest",
+    "lodash": "latest"
   }
 }

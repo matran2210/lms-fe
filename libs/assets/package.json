@@ -14,6 +14,11 @@
     "@lms/core": "workspace:*",
     "@lms/ui": "workspace:*",
     "@lms/hooks": "workspace:*",
-    "@lms/feature-courses": "workspace:*"
+    "@lms/feature-courses": "workspace:*",
+    "react": "latest",
+    "clsx": "latest",
+    "next": "latest",
+    "public": "latest",
+    "lottie-react": "^2.4.1"
   }
 }

@@ -1,23 +1,22 @@
-import { StyleProvider } from '@ant-design/cssinjs'
-import { SAPPInput } from '@lms/ui'
-import { HookFormSelect } from '@lms/ui'
-import { Input } from 'antd'
-import clsx from 'clsx'
-import { memo, useEffect, useMemo, useState } from 'react'
 import {
   FREQUENCY_OPTIONS,
   FREQUENCY_OPTIONS_PLURAL,
   FREQUENCY_UNITS,
   FREQUENCY_UNITS_LIMIT,
   FREQUENCY_UNITS_OBJECT,
-} from '@lms/core'
-import { IRepeatFrequency, IRepeatUnitOption } from '@lms/core'
+  IRepeatUnitOption,
+  IRepeatFrequency,
+} from "@lms/core";
+import { Input } from "antd";
+import clsx from "clsx";
+import { memo, useEffect, useMemo, useState } from "react";
+import { HookFormSelect } from "../base";
 
 interface IProps {
-  className?: string | undefined
-  defaultValue?: IRepeatFrequency
-  onChange: (data: IRepeatFrequency) => void
-  disabled?: boolean
+  className?: string | undefined;
+  defaultValue?: IRepeatFrequency;
+  onChange: (data: IRepeatFrequency) => void;
+  disabled?: boolean;
 }
 
 const RepeatFrequency = ({
@@ -31,53 +30,53 @@ const RepeatFrequency = ({
       interval: 1,
       unit: FREQUENCY_UNITS.WEEK,
     },
-  )
+  );
 
   const unitOptions = useMemo(
     () =>
       frequency.interval > 1 ? FREQUENCY_OPTIONS_PLURAL : FREQUENCY_OPTIONS,
     [frequency.interval],
-  )
+  );
 
   const onNumberChange = (interval: number | null) => {
     if (interval === null || interval < FREQUENCY_UNITS_LIMIT.MIN)
-      interval = FREQUENCY_UNITS_LIMIT.MIN
+      interval = FREQUENCY_UNITS_LIMIT.MIN;
     if (interval > FREQUENCY_UNITS_LIMIT.MAX[frequency.unit])
-      interval = FREQUENCY_UNITS_LIMIT.MAX[frequency.unit]
+      interval = FREQUENCY_UNITS_LIMIT.MAX[frequency.unit];
 
-    setFrequency((prev) => ({ ...prev, interval }))
-  }
+    setFrequency((prev) => ({ ...prev, interval }));
+  };
 
   const onUnitChange = (option: IRepeatUnitOption) => {
     const frequencyValue =
       frequency.interval > FREQUENCY_UNITS_LIMIT.MAX[option.value]
         ? FREQUENCY_UNITS_LIMIT.MAX[option.value]
-        : frequency.interval
+        : frequency.interval;
 
     setFrequency({
       interval: frequencyValue,
       unit: option.value as keyof typeof FREQUENCY_UNITS_OBJECT,
-    })
-  }
+    });
+  };
 
   useEffect(() => {
-    onChange(frequency)
-  }, [frequency])
+    onChange(frequency);
+  }, [frequency]);
 
   const handleKeyDownInterval = (
     event: React.KeyboardEvent<HTMLInputElement>,
   ) => {
-    const key = event.key
+    const key = event.key;
     if (
       !/^\d$/.test(key) &&
-      !['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(key)
+      !["Backspace", "Delete", "Tab", "ArrowLeft", "ArrowRight"].includes(key)
     ) {
-      event.preventDefault()
+      event.preventDefault();
     }
-  }
+  };
 
   return (
-    <div className={clsx('flex flex-row items-center gap-x-3', className)}>
+    <div className={clsx("flex flex-row items-center gap-x-3", className)}>
       <Input
         type="number"
         min={FREQUENCY_UNITS_LIMIT.MIN}
@@ -85,8 +84,8 @@ const RepeatFrequency = ({
         defaultValue={FREQUENCY_UNITS_LIMIT.MIN}
         value={frequency.interval}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          const value = Number(event.target.value)
-          onNumberChange(value)
+          const value = Number(event.target.value);
+          onNumberChange(value);
         }}
         className="flex h-[45px] min-w-[80px] max-w-[80px] rounded border-[#DCDDDD] focus:border-primary"
         name="repeat_every"
@@ -102,7 +101,7 @@ const RepeatFrequency = ({
         isDisabled={disabled}
       />
     </div>
-  )
-}
+  );
+};
 
-export default memo(RepeatFrequency)
+export default memo(RepeatFrequency);

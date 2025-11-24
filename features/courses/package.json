@@ -16,6 +16,23 @@
     "@lms/ui": "workspace:*",
     "@lms/hooks": "workspace:*",
     "@lms/contexts": "workspace:*",
-    "@lms/feature-test": "workspace:*"
+    "@lms/feature-test": "workspace:*",
+    "react": "latest",
+    "clsx": "latest",
+    "react-hook-form": "latest",
+    "next": "latest",
+    "antd": "latest",
+    "dayjs": "latest",
+    "react-hot-toast": "latest",
+    "lodash": "latest",
+    "uuid": "latest",
+    "framer-motion": "latest",
+    "react-query": "latest",
+    "zod": "latest",
+    "date-fns": "latest",
+    "lottie-react": "^2.4.1",
+    "explanation-package": "latest",
+    "quiz-result-package": "latest",
+    "@hookform/resolvers": "^3.3.2"
   }
 }

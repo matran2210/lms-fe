@@ -1,4 +1,3 @@
-import { EditorReader } from "@lms/ui";
 import {
   ReactFlowProvider,
   addEdge,
@@ -16,7 +15,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { SappTitleSolution } from "@lms/ui";
 import { MY_COURSES } from "@lms/core";
 import { IExhibitData } from "@lms/core";
 import CustomEdge from "./CustomEdge";
@@ -28,6 +26,8 @@ import { Grid } from "antd";
 import SappDivider from "../../base/divider/Divider";
 import { useRouter } from "next/router";
 import { HighlightableHTML } from "../../highlights";
+import { SappTitleSolution } from "../../common";
+import { EditorReader } from "../../base";
 
 interface IProps {
   data: any;

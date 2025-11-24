@@ -1,17 +1,17 @@
-import { CollapseArrowIcon } from '@assets/icons'
-import { truncateString } from '@lms/utils'
-import clsx from 'clsx'
-import React from 'react'
-import { Tooltip } from "@lms/ui";
+import { CollapseArrowIcon } from "@assets/icons";
+import { truncateString } from "@lms/utils";
+import clsx from "clsx";
+import React from "react";
+import { Tooltip } from "../../components";
 
 interface IProps {
-  extraActions?: React.ReactNode
-  title: string
-  icon?: React.ReactNode
-  showIcon?: boolean
-  className?: string
-  isHidden?: boolean
-  onBack?: () => void
+  extraActions?: React.ReactNode;
+  title: string;
+  icon?: React.ReactNode;
+  showIcon?: boolean;
+  className?: string;
+  isHidden?: boolean;
+  onBack?: () => void;
 }
 const HeaderMobile = ({
   title,
@@ -42,7 +42,7 @@ const HeaderMobile = ({
       </div>
       <div>{extraActions}</div>
     </div>
-  )
-}
+  );
+};
 
-export default HeaderMobile
+export default HeaderMobile;

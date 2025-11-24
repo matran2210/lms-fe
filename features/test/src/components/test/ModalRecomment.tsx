@@ -1,8 +1,8 @@
 import React from "react";
-import { EditorReader } from "@lms/ui";
-import { CloseIconV2 } from '@lms/assets'
+import { CloseIconV2 } from "@lms/assets";
 import { Modal } from "antd";
 import { useTailwindBreakpoint } from "@lms/hooks";
+import { EditorReader } from "@lms/ui";
 
 interface IProps {
   isOpen: boolean;

@@ -1,47 +1,44 @@
-import { EditorReader } from '@lms/ui'
-import { HookFormRadioGroup } from '@lms/ui'
-import {SappDivider} from '@lms/ui'
-import { getUppercaseByNumber, runHighlight } from '@lms/utils'
-import clsx from 'clsx'
-import { useEffect, useMemo } from 'react'
-import { SappTitleSolution } from '@lms/ui'
-import { MY_COURSES } from '@lms/core'
-import { IExhibitData } from '@lms/core'
-import WarningSection from './WarningSection'
-import { HighlightableHTML } from '@lms/ui'
-import { useRouter } from 'next/router'
+import { IExhibitData, MY_COURSES } from "@lms/core";
+import { getUppercaseByNumber, runHighlight } from "@lms/utils";
+import clsx from "clsx";
+import { useRouter } from "next/router";
+import { useEffect, useMemo } from "react";
+import { EditorReader, HookFormRadioGroup, SappDivider } from "../base";
+import { SappTitleSolution } from "../common";
+import { HighlightableHTML } from "../highlights";
+import WarningSection from "./WarningSection";
 export type IPreviewProp = {
-  data: any
-  control: any
-  name?: string
-  corrects?: { [key: string]: boolean }
-  defaultValues?: any
-  setValue?: any
-  handleSaveHighLight?: any
-  highlighted?: any
-  removeHighlight?: any
-  allowHighLight?: boolean
-  solution?: any
-  allowUnHighLight?: boolean
+  data: any;
+  control: any;
+  name?: string;
+  corrects?: { [key: string]: boolean };
+  defaultValues?: any;
+  setValue?: any;
+  handleSaveHighLight?: any;
+  highlighted?: any;
+  removeHighlight?: any;
+  allowHighLight?: boolean;
+  solution?: any;
+  allowUnHighLight?: boolean;
   setOpenFile?: (
     data: IExhibitData,
     file?: string | null,
     fileName?: string | null,
     event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) => void
-  isHideExhibit?: boolean
-  getValue?: any | undefined
-  tabs?: Array<{ id: string }> | undefined
-  currentPage?: string | undefined
-  exhibitText?: string
-  isShowWarning?: boolean
-  explainClassname?: string
-  storageKey?: string
-}
+  ) => void;
+  isHideExhibit?: boolean;
+  getValue?: any | undefined;
+  tabs?: Array<{ id: string }> | undefined;
+  currentPage?: string | undefined;
+  exhibitText?: string;
+  isShowWarning?: boolean;
+  explainClassname?: string;
+  storageKey?: string;
+};
 
 type IAnswers = {
-  answer_position: number
-}
+  answer_position: number;
+};
 const OneChoiceQuestion = ({
   data,
   control,
@@ -57,38 +54,38 @@ const OneChoiceQuestion = ({
   allowUnHighLight,
   setOpenFile,
   isHideExhibit = true,
-  exhibitText = 'Exhibit',
+  exhibitText = "Exhibit",
   isShowWarning = false,
   explainClassname,
   storageKey,
 }: IPreviewProp) => {
-  const router = useRouter()
+  const router = useRouter();
   useEffect(() => {
     if (defaultValues) {
-      setValue(name, defaultValues)
+      setValue(name, defaultValues);
     } else {
-      setValue?.(name, '')
+      setValue?.(name, "");
     }
-  }, [defaultValues, name])
+  }, [defaultValues, name]);
   const convertAnswer = useMemo(() => {
-    let answers = []
-    let number = 0
+    let answers = [];
+    let number = 0;
 
     if (data?.answers) {
-      const dataAnswers = [...data?.answers]
+      const dataAnswers = [...data?.answers];
       dataAnswers.sort(
         (a: IAnswers, b: IAnswers) => a?.answer_position - b?.answer_position,
-      )
+      );
       for (let e of dataAnswers) {
-        number++
+        number++;
         answers.push({
           label: `${getUppercaseByNumber(number)}. ${e?.answer}`,
           value: e?.id,
-        })
+        });
       }
     }
-    return answers
-  }, [data])
+    return answers;
+  }, [data]);
 
   return (
     <div>
@@ -96,23 +93,23 @@ const OneChoiceQuestion = ({
         id="hightlight_area"
         onMouseUp={(e: any) => {
           if (
-            e?.target?.tagName?.charAt(0) !== 'm' &&
-            e?.target?.firstChild?.tagName !== 'math'
+            e?.target?.tagName?.charAt(0) !== "m" &&
+            e?.target?.firstChild?.tagName !== "math"
           ) {
             if (e) {
               if (allowHighLight) {
                 runHighlight(
                   handleSaveHighLight,
                   allowHighLight || false,
-                  'hightlight_area',
-                )
+                  "hightlight_area",
+                );
               } else if (allowUnHighLight) {
                 runHighlight(
                   handleSaveHighLight,
                   allowUnHighLight || false,
-                  'hightlight_area',
-                  { color: 'white' },
-                )
+                  "hightlight_area",
+                  { color: "white" },
+                );
               }
               // runHighlight(handleSaveHighLight, allowHighLight || false, "hightlight_area")
             }
@@ -120,7 +117,7 @@ const OneChoiceQuestion = ({
         }}
       >
         <HighlightableHTML
-          initialHTML={data?.question_content || ''}
+          initialHTML={data?.question_content || ""}
           storageKey={
             storageKey ||
             `${router.query.id}-${data?.qType}-question-${data?.id}`
@@ -143,7 +140,7 @@ const OneChoiceQuestion = ({
             )}
             <div className="mb-4 flex items-center">
               <div className="font-semibold">
-                {exhibitText ? exhibitText + 's' : 'Exhibits'} (
+                {exhibitText ? exhibitText + "s" : "Exhibits"} (
                 {data?.question_topic?.exhibits?.length || 0})
               </div>
               <div className="ml-4">
@@ -161,7 +158,7 @@ const OneChoiceQuestion = ({
                       setOpenFile &&
                         setOpenFile(
                           {
-                            type: 'exhibits',
+                            type: "exhibits",
                             description: e?.description,
                             name: e?.name,
                             index: i,
@@ -170,12 +167,12 @@ const OneChoiceQuestion = ({
                           null,
                           null,
                           event,
-                        )
+                        );
                     }}
                   >
-                    {exhibitText || 'Exhibit'} {i + 1}: {e?.name}
+                    {exhibitText || "Exhibit"} {i + 1}: {e?.name}
                   </div>
-                )
+                );
               })}
             </div>
             <div className="my-6 border border-gray-300" />
@@ -184,29 +181,29 @@ const OneChoiceQuestion = ({
       <div
         className="sapp-answer-wrapper pt-0"
         style={{
-          flexDirection: 'column',
+          flexDirection: "column",
         }}
       >
         <HookFormRadioGroup
           options={convertAnswer || []}
           control={control}
-          name={name || 'answer'}
+          name={name || "answer"}
           corrects={corrects}
           defaultValue={defaultValues}
-          labelClass={'text-base font-normal text-gray-800'}
+          labelClass={"text-base font-normal text-gray-800"}
           optionClassName="checked:bg-radio-primary-checked checked:text-transparent checked:hover:bg-radio-primary-checked checked:focus:bg-radio-primary-checked"
         />
       </div>
       {solution && (
         <>
           <SappDivider />
-          <div className={clsx('mt-6', explainClassname)}>
+          <div className={clsx("mt-6", explainClassname)}>
             <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>
         </>
       )}
     </div>
-  )
-}
-export default OneChoiceQuestion
+  );
+};
+export default OneChoiceQuestion;

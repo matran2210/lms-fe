@@ -18,6 +18,16 @@
     "@lms/feature-courses": "workspace:*",
     "@lms/contexts": "workspace:*",
     "@lms/feature-auth": "workspace:*",
-    "@lms/feature-test": "workspace:*"
+    "@lms/feature-test": "workspace:*",
+    "dayjs": "latest",
+    "next": "latest",
+    "react": "latest",
+    "antd": "latest",
+    "react-hook-form": "latest",
+    "zod": "latest",
+    "lodash": "latest",
+    "date-fns": "latest",
+    "clsx": "latest",
+    "@hookform/resolvers": "^3.10.0"
   }
 }

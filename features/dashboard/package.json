@@ -14,6 +14,12 @@
     "@lms/utils": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/ui": "workspace:*",
-    "@lms/hooks": "workspace:*"
+    "@lms/hooks": "workspace:*",
+    "react": "latest",
+    "next": "latest",
+    "lodash": "latest",
+    "echarts": "latest",
+    "dayjs": "latest",
+    "recharts": "latest"
   }
 }

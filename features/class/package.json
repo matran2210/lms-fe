@@ -13,6 +13,7 @@
     "@lms/assets": "workspace:*",
     "@lms/utils": "workspace:*",
     "@lms/core": "workspace:*",
-    "@lms/ui": "workspace:*"
+    "@lms/ui": "workspace:*",
+    "antd": "latest"
   }
 }

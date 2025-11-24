@@ -1,26 +1,25 @@
-import type { GetProps } from 'antd'
-import { DatePicker, Skeleton } from 'antd'
-import dayjs, { Dayjs } from 'dayjs'
-import { Control, Controller } from 'react-hook-form'
-import { ErrorMessage } from '@lms/ui'
-import {SappIcon} from '@lms/ui'
-import SAPPLabel from '../Label/SAPPLabel'
-import { IBaseFormFieldProps } from '@lms/core'
+import type { GetProps } from "antd";
+import { DatePicker, Skeleton } from "antd";
+import dayjs, { Dayjs } from "dayjs";
+import { Control, Controller } from "react-hook-form";
+import SAPPLabel from "../Label/SAPPLabel";
+import { IBaseFormFieldProps } from "@lms/core";
+import { ErrorMessage, SappIcon } from "../../common";
 
-type RangePickerProps = GetProps<typeof DatePicker.RangePicker>
+type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
 
 interface IProps extends IBaseFormFieldProps {
-  defaultValue?: [Date, Date] | null
-  onChange?: RangePickerProps['onChange']
-  placeholder?: [string, string]
-  guideline?: Array<string> | undefined
-  showTime?: RangePickerProps['showTime']
-  format?: string
-  inputClassName?: string | undefined
-  suffixIcon?: React.ReactNode
-  allowClear?: boolean
-  disabledDate?: (targetDate: Dayjs) => boolean
-  disabledTime?: (targetDate: Dayjs) => any
+  defaultValue?: [Date, Date] | null;
+  onChange?: RangePickerProps["onChange"];
+  placeholder?: [string, string];
+  guideline?: Array<string> | undefined;
+  showTime?: RangePickerProps["showTime"];
+  format?: string;
+  inputClassName?: string | undefined;
+  suffixIcon?: React.ReactNode;
+  allowClear?: boolean;
+  disabledDate?: (targetDate: Dayjs) => boolean;
+  disabledTime?: (targetDate: Dayjs) => any;
 }
 
 const HookFormDateRange = ({
@@ -32,19 +31,19 @@ const HookFormDateRange = ({
   className,
   disabled,
   label,
-  labelClass = 'text-base block font-medium mb-2',
+  labelClass = "text-base block font-medium mb-2",
   skeleton,
-  showTime = { format: 'HH:mm' },
-  format = 'DD/MM/YYYY | HH:mm',
+  showTime = { format: "HH:mm" },
+  format = "DD/MM/YYYY | HH:mm",
   required,
-  inputClassName = 'h-[50px] w-full rounded-none',
+  inputClassName = "h-[50px] w-full rounded-none",
   suffixIcon = <SappIcon icon="input_calendar" />,
   disabledDate,
   disabledTime,
 }: IProps) => {
   const formattedDefaultValue = defaultValue
     ? [dayjs(defaultValue[0]), dayjs(defaultValue[1])]
-    : null
+    : null;
 
   return (
     <Controller
@@ -75,9 +74,9 @@ const HookFormDateRange = ({
                 onChange={(dates, dateStrings) => {
                   field.onChange(
                     dates ? [dates[0]?.toDate(), dates[1]?.toDate()] : [],
-                  )
+                  );
 
-                  onChange && onChange(dates, dateStrings)
+                  onChange && onChange(dates, dateStrings);
                 }}
                 suffixIcon={suffixIcon}
                 disabled={disabled}
@@ -89,7 +88,7 @@ const HookFormDateRange = ({
               <>
                 {error?.message && (
                   <div>
-                    <ErrorMessage>{error?.message ?? ''}</ErrorMessage>
+                    <ErrorMessage>{error?.message ?? ""}</ErrorMessage>
                   </div>
                 )}
               </>
@@ -100,7 +99,7 @@ const HookFormDateRange = ({
         </div>
       )}
     />
-  )
-}
+  );
+};
 
-export default HookFormDateRange
+export default HookFormDateRange;

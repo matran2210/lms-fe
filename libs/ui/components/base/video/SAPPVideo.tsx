@@ -7,7 +7,6 @@ import {
   getResolution,
   isMobileOrTablet,
 } from "@utils/helpers";
-import { ArrowIcon, useClickOutside } from "@lms/ui";
 import Image from "next/image";
 import { Thumbnail } from "@lms/core";
 import { Stream } from "@cloudflare/stream-react";
@@ -15,6 +14,8 @@ import { fetcher } from "@services/requestV2";
 import { LoadingIcon, PiPIcon } from "@assets/icons";
 import { useRouter } from "next/router";
 import { useTailwindBreakpoint } from "@lms/hooks";
+import { ArrowIcon } from "../pagination";
+import useClickOutside from "../clickoutside/HookClick";
 
 interface IProp {
   options: any;

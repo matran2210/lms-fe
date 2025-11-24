@@ -1,7 +1,4 @@
 import { CloseIcon, UploadIcon } from "@lms/assets";
-import { EditorReader } from "@lms/ui";
-import { HookFormEditor } from "@lms/ui";
-import { HookFormExcel } from "@lms/ui";
 import { SappDivider } from "../../components/base/divider";
 import { HighlightableHTML } from "../highlights";
 import { runHighlight } from "@lms/utils";
@@ -18,11 +15,16 @@ import React, {
 } from "react";
 import { Controller } from "react-hook-form";
 import toast from "react-hot-toast";
-import { SappTitleSolution } from "@lms/ui";
 import { DISPLAY_TYPE, IUploadAPI, RESPONSE_OPTION } from "@lms/core";
 import { DEFAULT_EDITOR_VALUE, generateSheetId, SheetData } from "@lms/core";
 import { MY_COURSES } from "@lms/core";
-import { useAppDispatch, disableUnsavedChange, loginSlice } from "@lms/contexts";
+import {
+  useAppDispatch,
+  disableUnsavedChange,
+  loginSlice,
+} from "@lms/contexts";
+import { EditorReader, HookFormEditor, HookFormExcel } from "../base";
+import { SappTitleSolution } from "../common";
 
 export type IPreviewProp = {
   data: any;
@@ -57,7 +59,7 @@ export type IPreviewProp = {
   uniqueKey?: string;
   isInTest?: boolean;
   storageKey?: string;
-  uploadApi: IUploadAPI
+  uploadApi: IUploadAPI;
 };
 type SAPPEditorHandle = {
   moveSelectionOutOfTable: () => void;
@@ -94,7 +96,7 @@ const EssayQuestionPreview = ({
   uniqueKey,
   isInTest = false,
   storageKey,
-  uploadApi
+  uploadApi,
 }: IPreviewProp) => {
   const router = useRouter();
   const dispatch = useAppDispatch();

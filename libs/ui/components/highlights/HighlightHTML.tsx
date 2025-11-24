@@ -1,14 +1,7 @@
 import { PointerIcon, ShowCommentIcon } from "@lms/assets";
-import { useCourseNoteContext } from "@contexts/CourseNoteContext";
+import { useCourseNoteContext } from "@lms/contexts";
 import { doHighlight, optionsImpl } from "@funktechno/texthighlighter/lib";
 import { video_url } from "@lms/core";
-import {
-  AvatarCard,
-  ButtonPrimary,
-  ButtonSecondary,
-  SappModalImage,
-  SAPPVideo,
-} from "@lms/ui";
 import { CoursesAPI } from "@pages/api/courses";
 import {
   replaceTextAlignCenterToWebKitCenter,
@@ -20,6 +13,13 @@ import parseHTML, { Element } from "html-react-parser";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
+import {
+  ButtonPrimary,
+  ButtonSecondary,
+  SappModalImage,
+  SAPPVideo,
+} from "../base";
+import { AvatarCard } from "../card";
 
 const { TextArea } = Input;
 const DEBOUNCE_DELAY = 100;

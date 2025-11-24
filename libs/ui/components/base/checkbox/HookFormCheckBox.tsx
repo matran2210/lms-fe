@@ -1,22 +1,22 @@
-import { Control, Controller } from 'react-hook-form'
-import { ErrorMessage } from '@lms/ui'
-import SAPPCheckbox from './SAPPCheckbox'
+import { Control, Controller } from "react-hook-form";
+import SAPPCheckbox from "./SAPPCheckbox";
+import { ErrorMessage } from "../../common";
 
 interface IHookFormCheckBoxProps {
-  name: string
-  control: Control<any>
-  defaultValue?: string | boolean
-  title?: string
-  className?: string
-  onChange?: React.ChangeEventHandler<any>
-  checked?: string | boolean
-  label?: string | undefined
-  required?: boolean
-  disabled?: boolean
-  classNameTitle?: string
-  state?: 'default' | 'error' | 'success' | 'primary' // Thêm prop state
-  size?: 'small' | 'medium' | 'large' // Thêm prop size
-  inputStyle?: string
+  name: string;
+  control: Control<any>;
+  defaultValue?: string | boolean;
+  title?: string;
+  className?: string;
+  onChange?: React.ChangeEventHandler<any>;
+  checked?: string | boolean;
+  label?: string | undefined;
+  required?: boolean;
+  disabled?: boolean;
+  classNameTitle?: string;
+  state?: "default" | "error" | "success" | "primary"; // Thêm prop state
+  size?: "small" | "medium" | "large"; // Thêm prop size
+  inputStyle?: string;
 }
 
 const HookFormCheckBox = ({
@@ -24,14 +24,14 @@ const HookFormCheckBox = ({
   control,
   defaultValue,
   title,
-  className = '',
+  className = "",
   onChange,
   checked,
   // label,
   // required,
   disabled,
   classNameTitle,
-  size = 'small',
+  size = "small",
   state,
   inputStyle,
 }: IHookFormCheckBoxProps) => {
@@ -44,15 +44,15 @@ const HookFormCheckBox = ({
         <>
           <label
             className={`flex w-fit items-center justify-center ${
-              disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
+              disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"
             }`}
           >
             <SAPPCheckbox
               className={`me-2 ${className}`}
               checked={checked ?? field.value}
               onChange={(event: React.ChangeEvent<any>) => {
-                field.onChange(event.target.checked)
-                onChange && onChange(event.target.checked)
+                field.onChange(event.target.checked);
+                onChange && onChange(event.target.checked);
               }}
               disabled={disabled}
               size={size}
@@ -60,7 +60,7 @@ const HookFormCheckBox = ({
               inputStyle={inputStyle}
             />
             <span
-              className={`${classNameTitle ?? ''} form-check-label fw-semibold`}
+              className={`${classNameTitle ?? ""} form-check-label fw-semibold`}
             >
               {title}
             </span>
@@ -69,7 +69,7 @@ const HookFormCheckBox = ({
         </>
       )}
     />
-  )
-}
+  );
+};
 
-export default HookFormCheckBox
+export default HookFormCheckBox;

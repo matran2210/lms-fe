@@ -17,6 +17,17 @@
     "@lms/hooks": "workspace:*",
     "@lms/contexts": "workspace:*",
     "@lms/feature-auth": "workspace:*",
-    "@lms/feature-test": "workspace:*"
+    "@lms/feature-test": "workspace:*",
+    "react": "latest",
+    "next": "latest",
+    "antd": "latest",
+    "clsx": "latest",
+    "dayjs": "latest",
+    "react-hook-form": "latest",
+    "react-hot-toast": "latest",
+    "lodash": "latest",
+    "zod": "latest",
+    "date-fns": "latest",
+    "lottie-react": "^2.4.1"
   }
 }

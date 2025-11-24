@@ -77,6 +77,10 @@ let nextConfig = {
     unoptimized: true,
   },
 
+  compiler: {
+    styledComponents: true,
+  },
+
   async headers() {
     return [
       {

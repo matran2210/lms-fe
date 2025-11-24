@@ -1,7 +1,5 @@
 /** @type {import('next').NextConfig} */
 const path = require('path')
-require('dotenv').config({ path: '../../.env' })
-
 // --- EXTERNAL WRAPPERS ---
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
@@ -43,19 +41,15 @@ let nextConfig = {
   ],
 
   webpack: (config, { isServer, defaultLoaders }) => {
-    config.resolve.alias.canvas = false // RULE MỚI: Dùng Next.js's default Babel loader cho libs/ và features/
+    config.resolve.alias.canvas = false
 
     config.module.rules.push({
       test: /\.(ts|tsx)$/,
       include: [
-        // Trỏ đến thư mục libs/ và features/ từ gốc monorepo
-        path.resolve(__dirname, '../../libs'),
         path.resolve(__dirname, '../../features'),
+        path.resolve(__dirname, '../../libs'),
       ],
-      use: [
-        // Sử dụng bộ loader mặc định của Next.js (thường là SWC hoặc Babel)
-        defaultLoaders.babel,
-      ],
+      use: [defaultLoaders.babel],
     })
 
     return config
@@ -75,6 +69,10 @@ let nextConfig = {
     minimumCacheTTL: 43200,
     remotePatterns: [{ protocol: 'https', hostname: '**' }],
     unoptimized: true,
+  },
+
+  compiler: {
+    styledComponents: true,
   },
 
   async headers() {

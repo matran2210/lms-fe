@@ -1,25 +1,25 @@
-import { Control, Controller } from 'react-hook-form'
-import { ErrorMessage } from '@lms/ui'
-import { ISelect } from '@lms/core'
-import { IEventRepeatFieldValues } from '@lms/core'
-import EventRepeatField from './EventRepeatField'
-import { Skeleton } from 'antd'
-import { IBaseFormFieldProps } from '@lms/core'
+import { Control, Controller } from "react-hook-form";
+import { ISelect } from "@lms/core";
+import { IEventRepeatFieldValues } from "@lms/core";
+import EventRepeatField from "./EventRepeatField";
+import { Skeleton } from "antd";
+import { IBaseFormFieldProps } from "@lms/core";
+import { ErrorMessage } from "../common";
 
 interface IProps extends IBaseFormFieldProps {
-  defaultDate?: Date
-  defaultValue?: IEventRepeatFieldValues
-  repeatOption?: ISelect
-  resetRepeat?: boolean
-  setResetRepeat?: React.Dispatch<React.SetStateAction<boolean>>
-  rangeDate?: [Date, Date]
-  defaultEndOn?: Date | string
+  defaultDate?: Date;
+  defaultValue?: IEventRepeatFieldValues;
+  repeatOption?: ISelect;
+  resetRepeat?: boolean;
+  setResetRepeat?: React.Dispatch<React.SetStateAction<boolean>>;
+  rangeDate?: [Date, Date];
+  defaultEndOn?: Date | string;
 }
 
 const HookFormEventRepeat = ({
-  className = '',
+  className = "",
   label,
-  labelClass = '',
+  labelClass = "",
   name,
   control,
   defaultDate,
@@ -48,11 +48,11 @@ const HookFormEventRepeat = ({
                 required={required}
                 defaultDate={defaultDate || new Date()}
                 onChange={(val) => {
-                  const current = field.value || {}
+                  const current = field.value || {};
                   field.onChange({
                     ...current,
                     ...val, // new or updated values overwrite the existing ones
-                  })
+                  });
                 }}
                 className={className}
                 repeatOption={repeatOption}
@@ -66,7 +66,7 @@ const HookFormEventRepeat = ({
               <>
                 {error?.message && (
                   <div>
-                    <ErrorMessage>{error?.message ?? ''}</ErrorMessage>
+                    <ErrorMessage>{error?.message ?? ""}</ErrorMessage>
                   </div>
                 )}
               </>
@@ -77,7 +77,7 @@ const HookFormEventRepeat = ({
         </div>
       )}
     />
-  )
-}
+  );
+};
 
-export default HookFormEventRepeat
+export default HookFormEventRepeat;

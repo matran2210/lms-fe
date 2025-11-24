@@ -1,26 +1,26 @@
-import React from 'react';
-import { ArrowDownIcon } from '@lms/assets'
-import { Select } from 'antd'
-import { ButtonSize } from 'antd/es/button'
-import { DefaultOptionType } from 'antd/es/select'
-import clsx from 'clsx'
-import { Control, Controller } from 'react-hook-form'
-import { ErrorMessage } from '@lms/ui'
-import SAPPLabel from '../Label/SAPPLabel'
-import { IBaseFormFieldProps } from '@lms/core'
+import React from "react";
+import { ArrowDownIcon } from "@lms/assets";
+import { Select } from "antd";
+import { ButtonSize } from "antd/es/button";
+import { DefaultOptionType } from "antd/es/select";
+import clsx from "clsx";
+import { Control, Controller } from "react-hook-form";
+import SAPPLabel from "../Label/SAPPLabel";
+import { IBaseFormFieldProps } from "@lms/core";
+import { ErrorMessage } from "../../common";
 
 interface SAPPSelectProps extends IBaseFormFieldProps {
-  placeholder?: string
-  options: DefaultOptionType[]
-  size?: ButtonSize
-  suffixIcon?: React.ReactNode
-  isSearchable?: boolean
-  onSearch?: (value: string) => Promise<void> | any
-  isLoading?: boolean
-  onMenuScrollToBottom?: () => void
-  onChange?: (select: any) => void
-  onDropdownVisibleChange?: ((open: boolean) => void) | undefined
-  allowClear?: boolean
+  placeholder?: string;
+  options: DefaultOptionType[];
+  size?: ButtonSize;
+  suffixIcon?: React.ReactNode;
+  isSearchable?: boolean;
+  onSearch?: (value: string) => Promise<void> | any;
+  isLoading?: boolean;
+  onMenuScrollToBottom?: () => void;
+  onChange?: (select: any) => void;
+  onDropdownVisibleChange?: ((open: boolean) => void) | undefined;
+  allowClear?: boolean;
 }
 
 const SAPPSelect = ({
@@ -60,15 +60,15 @@ const SAPPSelect = ({
             <>
               <Select
                 {...field}
-                className={clsx('h-10 w-full font-medium', className)}
+                className={clsx("h-10 w-full font-medium", className)}
                 placeholder={placeholder}
                 value={field?.value}
                 options={options}
                 size={size}
                 suffixIcon={suffixIcon}
                 onChange={(selectedOption) => {
-                  field.onChange(selectedOption)
-                  onSelectChange && onSelectChange?.(selectedOption)
+                  field.onChange(selectedOption);
+                  onSelectChange && onSelectChange?.(selectedOption);
                 }}
                 disabled={disabled}
                 showSearch={isSearchable}
@@ -76,14 +76,14 @@ const SAPPSelect = ({
                 loading={isLoading}
                 onDropdownVisibleChange={onDropdownVisibleChange}
                 onPopupScroll={(e) => {
-                  const { target } = e
+                  const { target } = e;
                   if (
                     Math.ceil((target as HTMLElement).scrollTop) +
                       Math.ceil((target as HTMLElement).offsetHeight) ===
                     Math.ceil((target as HTMLElement).scrollHeight)
                   ) {
                     if (onMenuScrollToBottom) {
-                      onMenuScrollToBottom
+                      onMenuScrollToBottom;
                     }
                   }
                 }}
@@ -91,11 +91,11 @@ const SAPPSelect = ({
               />
               <ErrorMessage>{error?.message}</ErrorMessage>
             </>
-          )
+          );
         }}
       />
     </>
-  )
-}
+  );
+};
 
-export default SAPPSelect
+export default SAPPSelect;

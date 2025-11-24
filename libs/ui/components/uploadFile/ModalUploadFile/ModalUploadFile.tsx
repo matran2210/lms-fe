@@ -1,4 +1,3 @@
-import { SappModalV3 } from "@lms/ui";
 import { UploadFile } from "antd/es/upload";
 import axios, { CancelTokenSource } from "axios";
 import { capitalize } from "lodash";
@@ -10,6 +9,7 @@ import {
   IResourceFile,
   UPLOAD_TYPE,
 } from "@lms/core/types/file/UploadFileInterface";
+import { SappModalV3 } from "../../base";
 
 interface IModalUploadProps {
   open: boolean;

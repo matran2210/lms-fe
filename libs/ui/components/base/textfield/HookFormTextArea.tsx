@@ -1,26 +1,26 @@
-import { Skeleton } from 'antd'
-import clsx from 'clsx'
-import React, { KeyboardEvent } from 'react'
-import { Control, Controller } from 'react-hook-form'
-import { ErrorMessage } from '@lms/ui'
+import { Skeleton } from "antd";
+import clsx from "clsx";
+import React, { KeyboardEvent } from "react";
+import { Control, Controller } from "react-hook-form";
+import { ErrorMessage } from "../../common";
 
 interface IProps {
-  name: string
-  control: Control<any>
-  defaultValue?: string
-  onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
-  placeholder?: string
-  className?: string
-  extraClassName?: string
+  name: string;
+  control: Control<any>;
+  defaultValue?: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  placeholder?: string;
+  className?: string;
+  extraClassName?: string;
   // rows?: number | undefined
   // label?: string
   // guideline?: string[]
-  disabled?: boolean
-  labelClass?: string
+  disabled?: boolean;
+  labelClass?: string;
   // required?: boolean
-  skeleton?: boolean
-  handleKeyDown?: (e: KeyboardEvent<HTMLTextAreaElement>) => void
-  actions?: React.ReactNode
+  skeleton?: boolean;
+  handleKeyDown?: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
+  actions?: React.ReactNode;
 }
 
 const HookFormTextArea = ({
@@ -29,8 +29,8 @@ const HookFormTextArea = ({
   defaultValue,
   onChange,
   placeholder,
-  className = 'w-fill--available h-[7.5rem]',
-  extraClassName = 'top-4',
+  className = "w-fill--available h-[7.5rem]",
+  extraClassName = "top-4",
   // rows,
   // label,
   // guideline,
@@ -52,21 +52,21 @@ const HookFormTextArea = ({
             <div className="relative h-full">
               <textarea
                 {...field}
-                value={field.value ?? ''}
+                value={field.value ?? ""}
                 defaultValue={field.value ? undefined : defaultValue}
                 onChange={(value) => {
-                  field.onChange(value)
-                  onChange && onChange(value)
+                  field.onChange(value);
+                  onChange && onChange(value);
                 }}
                 className={`${className} form-control rounded-[4px] border-[#dcdddd] focus:border-primary focus:shadow-0 focus:outline-none ${
-                  error?.message ? 'is-invalid' : ''
+                  error?.message ? "is-invalid" : ""
                 }`}
                 placeholder={placeholder}
                 // rows={rows ?? 3}
                 disabled={disabled}
                 onKeyDown={handleKeyDown}
               />
-              <div className={clsx('absolute right-4', extraClassName)}>
+              <div className={clsx("absolute right-4", extraClassName)}>
                 {actions}
               </div>
             </div>
@@ -77,11 +77,11 @@ const HookFormTextArea = ({
               className="w-100 h-150px"
             ></Skeleton.Input>
           )}
-          <ErrorMessage>{error?.message ?? ''}</ErrorMessage>
+          <ErrorMessage>{error?.message ?? ""}</ErrorMessage>
         </>
       )}
     />
-  )
-}
+  );
+};
 
-export default HookFormTextArea
+export default HookFormTextArea;

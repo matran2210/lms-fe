@@ -1,32 +1,32 @@
-import { ErrorMessage, SappIcon } from '@lms/ui'
-import type { GetProps } from 'antd'
-import { DatePicker, Skeleton } from 'antd'
-import clsx from 'clsx'
-import dayjs, { Dayjs } from 'dayjs'
-import { Control, Controller } from 'react-hook-form'
+import type { GetProps } from "antd";
+import { DatePicker, Skeleton } from "antd";
+import clsx from "clsx";
+import dayjs, { Dayjs } from "dayjs";
+import { Control, Controller } from "react-hook-form";
+import { ErrorMessage } from "../../common";
 
-type RangePickerProps = GetProps<typeof DatePicker.RangePicker>
+type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
 
 interface IProps {
-  name: string
-  control: Control<any>
-  defaultValue?: [Date, Date] | null
-  onChange?: RangePickerProps['onChange']
-  placeholder?: [string, string]
-  className?: string
-  disabled?: boolean
-  label?: string
-  labelClass?: string
-  guideline?: Array<string> | undefined
-  skeleton?: boolean
-  showTime?: RangePickerProps['showTime']
-  format?: string
-  required?: boolean
-  inputClassName?: string | undefined
-  suffixIcon?: React.ReactNode
-  allowClear?: boolean
-  disabledDate?: (targetDate: Dayjs) => boolean
-  disabledTime?: (targetDate: Dayjs) => any
+  name: string;
+  control: Control<any>;
+  defaultValue?: [Date, Date] | null;
+  onChange?: RangePickerProps["onChange"];
+  placeholder?: [string, string];
+  className?: string;
+  disabled?: boolean;
+  label?: string;
+  labelClass?: string;
+  guideline?: Array<string> | undefined;
+  skeleton?: boolean;
+  showTime?: RangePickerProps["showTime"];
+  format?: string;
+  required?: boolean;
+  inputClassName?: string | undefined;
+  suffixIcon?: React.ReactNode;
+  allowClear?: boolean;
+  disabledDate?: (targetDate: Dayjs) => boolean;
+  disabledTime?: (targetDate: Dayjs) => any;
 }
 
 const HookFormDateRangeV2 = ({
@@ -38,19 +38,19 @@ const HookFormDateRangeV2 = ({
   className,
   disabled,
   label,
-  labelClass = 'text-base block font-medium mb-2',
+  labelClass = "text-base block font-medium mb-2",
   skeleton,
-  showTime = { format: 'HH:mm' },
-  format = 'DD/MM/YYYY | HH:mm',
+  showTime = { format: "HH:mm" },
+  format = "DD/MM/YYYY | HH:mm",
   required,
-  inputClassName = '',
+  inputClassName = "",
   suffixIcon = <SappIcon icon="input_calendar" />,
   disabledDate,
   disabledTime,
 }: IProps) => {
   const formattedDefaultValue = defaultValue
     ? [dayjs(defaultValue[0]), dayjs(defaultValue[1])]
-    : null
+    : null;
 
   return (
     <Controller
@@ -63,7 +63,7 @@ const HookFormDateRangeV2 = ({
             <div className="float-label">
               <DatePicker.RangePicker
                 {...field}
-                className={clsx('h-12 w-full font-normal', inputClassName)}
+                className={clsx("h-12 w-full font-normal", inputClassName)}
                 showTime={showTime}
                 format={format}
                 value={
@@ -74,9 +74,9 @@ const HookFormDateRangeV2 = ({
                 onChange={(dates, dateStrings) => {
                   field.onChange(
                     dates ? [dates[0]?.toDate(), dates[1]?.toDate()] : [],
-                  )
+                  );
 
-                  onChange && onChange(dates, dateStrings)
+                  onChange && onChange(dates, dateStrings);
                 }}
                 suffixIcon={suffixIcon}
                 disabled={disabled}
@@ -86,13 +86,13 @@ const HookFormDateRangeV2 = ({
               />
               {label && (
                 <label className="textfield-label as-label">
-                  <span className={clsx({ required }, '')}>{label}</span>
+                  <span className={clsx({ required }, "")}>{label}</span>
                 </label>
               )}
               <>
                 {error?.message && (
                   <div>
-                    <ErrorMessage>{error?.message ?? ''}</ErrorMessage>
+                    <ErrorMessage>{error?.message ?? ""}</ErrorMessage>
                   </div>
                 )}
               </>
@@ -103,7 +103,7 @@ const HookFormDateRangeV2 = ({
         </>
       )}
     />
-  )
-}
+  );
+};
 
-export default HookFormDateRangeV2
+export default HookFormDateRangeV2;

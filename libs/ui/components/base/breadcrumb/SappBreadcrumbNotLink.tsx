@@ -1,45 +1,45 @@
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { Tooltip } from "@lms/ui";
-import { PageLink } from '@lms/core'
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { PageLink } from "@lms/core";
+import { Tooltip } from "../../common";
 
 type IProps = {
-  id: string
-  name: string
-  type: string
-}
+  id: string;
+  name: string;
+  type: string;
+};
 
 const SappBreadcrumbNotLink = ({
   paths,
   isTeacher = false,
 }: {
-  paths: IProps[]
-  isTeacher?: boolean
+  paths: IProps[];
+  isTeacher?: boolean;
 }) => {
-  const router = useRouter()
-  const getCourseId = router?.query?.courseId ?? router.query.id
-  const displayPaths = paths.filter((p) => p.type !== 'ACTIVITY')
+  const router = useRouter();
+  const getCourseId = router?.query?.courseId ?? router.query.id;
+  const displayPaths = paths.filter((p) => p.type !== "ACTIVITY");
 
   return (
     <>
       {displayPaths.map((path, index) => {
-        let url = ''
+        let url = "";
         switch (path.type) {
-          case 'PART':
+          case "PART":
             url = `${
               isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
-            }/${getCourseId}/section/${path?.id}`
-            break
-          case 'CHAPTER':
+            }/${getCourseId}/section/${path?.id}`;
+            break;
+          case "CHAPTER":
             url = `${
               isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
-            }/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${path?.id}`
-            break
-          case 'UNIT':
+            }/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${path?.id}`;
+            break;
+          case "UNIT":
             url = `${
               isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
-            }/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`
-            break
+            }/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`;
+            break;
         }
         return (
           <span
@@ -53,15 +53,15 @@ const SappBreadcrumbNotLink = ({
             </Link>
             {index < displayPaths.length - 1 && (
               <span className="inline-block overflow-hidden px-1 text-sm font-normal text-[#A1A1A1]">
-                {' '}
-                /{' '}
+                {" "}
+                /{" "}
               </span>
             )}
           </span>
-        )
+        );
       })}
     </>
-  )
-}
+  );
+};
 
-export default SappBreadcrumbNotLink
+export default SappBreadcrumbNotLink;

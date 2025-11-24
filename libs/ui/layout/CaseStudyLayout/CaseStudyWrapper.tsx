@@ -1,10 +1,10 @@
 import { NextIcon, PreviousIcon } from "@lms/assets";
 import { CloseIconV2 } from "@lms/assets/icons";
-import { ButtonSecondary } from "@lms/ui";
 import { Layout } from "antd";
 import clsx from "clsx";
 import React, { Dispatch, PropsWithChildren, SetStateAction } from "react";
 import { useAppDispatch, disableUnsavedChange } from "@lms/contexts";
+import { ButtonSecondary } from "../../components";
 
 const { Header, Content, Footer } = Layout;
 

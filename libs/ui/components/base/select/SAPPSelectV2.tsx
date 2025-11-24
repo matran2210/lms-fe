@@ -1,34 +1,33 @@
-import { ArrowDownIcon } from '@lms/assets'
-import { Select } from 'antd'
-import { ButtonSize } from 'antd/es/button'
-import { DefaultOptionType } from 'antd/es/select'
-import clsx from 'clsx'
-import { Control, Controller } from 'react-hook-form'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { ErrorMessage } from '@lms/ui'
-import { Tooltip } from "@lms/ui";
+import { ArrowDownIcon } from "@lms/assets";
+import { Select } from "antd";
+import { ButtonSize } from "antd/es/button";
+import { DefaultOptionType } from "antd/es/select";
+import clsx from "clsx";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Control, Controller } from "react-hook-form";
+import { ErrorMessage, Tooltip } from "../../common";
 
 interface SAPPSelectProps {
-  control: Control<any>
-  name: string
-  defaultValue?: any
-  className?: string
-  placeholder?: string
-  options: DefaultOptionType[]
-  size?: ButtonSize
-  suffixIcon?: React.ReactNode
-  label?: string
-  required?: boolean
-  labelClass?: string
-  disabled?: boolean
-  isSearchable?: boolean
-  onSearch?: (value: string) => Promise<void> | any
-  isLoading?: boolean
-  onMenuScrollToBottom?: any
-  onChange?: (select: any) => void
-  onDropdownVisibleChange?: ((open: boolean) => void) | undefined
-  heightCustom?: string
-  allowClear?: boolean
+  control: Control<any>;
+  name: string;
+  defaultValue?: any;
+  className?: string;
+  placeholder?: string;
+  options: DefaultOptionType[];
+  size?: ButtonSize;
+  suffixIcon?: React.ReactNode;
+  label?: string;
+  required?: boolean;
+  labelClass?: string;
+  disabled?: boolean;
+  isSearchable?: boolean;
+  onSearch?: (value: string) => Promise<void> | any;
+  isLoading?: boolean;
+  onMenuScrollToBottom?: any;
+  onChange?: (select: any) => void;
+  onDropdownVisibleChange?: ((open: boolean) => void) | undefined;
+  heightCustom?: string;
+  allowClear?: boolean;
 }
 
 const SAPPSelectV2 = ({
@@ -51,35 +50,35 @@ const SAPPSelectV2 = ({
   onMenuScrollToBottom,
   onChange: onSelectChange,
   onDropdownVisibleChange,
-  heightCustom = 'h-12',
+  heightCustom = "h-12",
   allowClear = false,
 }: SAPPSelectProps) => {
   const EllipsisTooltip = ({ text }: { text: string }) => {
-    const ref = useRef<HTMLDivElement>(null)
-    const [isOverflow, setIsOverflow] = useState(false)
+    const ref = useRef<HTMLDivElement>(null);
+    const [isOverflow, setIsOverflow] = useState(false);
 
     useEffect(() => {
-      const el = ref.current
-      if (!el) return
+      const el = ref.current;
+      if (!el) return;
 
       const checkOverflow = () => {
-        const scrollWidth = el.scrollWidth
-        const clientWidth = el.clientWidth
+        const scrollWidth = el.scrollWidth;
+        const clientWidth = el.clientWidth;
 
-        const hasOverflow = scrollWidth > clientWidth
-        setIsOverflow(hasOverflow)
-      }
+        const hasOverflow = scrollWidth > clientWidth;
+        setIsOverflow(hasOverflow);
+      };
 
       requestAnimationFrame(() => {
-        requestAnimationFrame(checkOverflow)
-      })
-    }, [text])
+        requestAnimationFrame(checkOverflow);
+      });
+    }, [text]);
 
     const content = (
       <div className="w-full truncate" ref={ref}>
         {text}
       </div>
-    )
+    );
 
     return isOverflow ? (
       <Tooltip title={text} placement="right">
@@ -87,8 +86,8 @@ const SAPPSelectV2 = ({
       </Tooltip>
     ) : (
       content
-    )
-  }
+    );
+  };
 
   const customizedOptions = useMemo(
     () =>
@@ -97,7 +96,7 @@ const SAPPSelectV2 = ({
         label: <EllipsisTooltip text={option.label as string} />,
       })),
     [options],
-  )
+  );
 
   return (
     <>
@@ -113,18 +112,18 @@ const SAPPSelectV2 = ({
                 <Select
                   {...field}
                   className={clsx(
-                    'custom-select-v2 w-full',
+                    "custom-select-v2 w-full",
                     heightCustom,
                     className,
                   )}
-                  placeholder={placeholder || ''}
+                  placeholder={placeholder || ""}
                   value={field?.value}
                   options={customizedOptions}
                   size={size}
                   suffixIcon={suffixIcon}
                   onChange={(selectedOption) => {
-                    field.onChange(selectedOption)
-                    onSelectChange && onSelectChange?.(selectedOption)
+                    field.onChange(selectedOption);
+                    onSelectChange && onSelectChange?.(selectedOption);
                   }}
                   disabled={disabled}
                   showSearch={isSearchable}
@@ -133,31 +132,31 @@ const SAPPSelectV2 = ({
                   allowClear={allowClear}
                   onDropdownVisibleChange={onDropdownVisibleChange}
                   onPopupScroll={(e) => {
-                    const { target } = e
+                    const { target } = e;
                     if (
                       Math.ceil((target as HTMLElement).scrollTop) +
                         Math.ceil((target as HTMLElement).offsetHeight) ===
                       Math.ceil((target as HTMLElement).scrollHeight)
                     ) {
                       if (onMenuScrollToBottom) {
-                        onMenuScrollToBottom(e)
+                        onMenuScrollToBottom(e);
                       }
                     }
                   }}
                 />
                 {label && (
                   <label className="textfield-label as-label">
-                    <span className={clsx({ required }, '')}>{label}</span>
+                    <span className={clsx({ required }, "")}>{label}</span>
                   </label>
                 )}
                 <ErrorMessage>{error?.message}</ErrorMessage>
               </>
-            )
+            );
           }}
         />
       </div>
     </>
-  )
-}
+  );
+};
 
-export default SAPPSelectV2
+export default SAPPSelectV2;

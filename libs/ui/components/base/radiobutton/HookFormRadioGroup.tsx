@@ -1,31 +1,31 @@
-import clsx from 'clsx'
-import { uniqueId } from 'lodash'
-import { Control, Controller } from 'react-hook-form'
-import { ErrorMessage } from '@lms/ui'
-import YourAnswer from '../tags/YourAnswer'
-import SAPPRadio from './SAPPRadio'
+import clsx from "clsx";
+import { uniqueId } from "lodash";
+import { Control, Controller } from "react-hook-form";
+import YourAnswer from "../tags/YourAnswer";
+import SAPPRadio from "./SAPPRadio";
+import { ErrorMessage } from "../../common";
 // import './HookFormRadioGroup.scss'
 
 interface IHookFormRadioGroupProps {
-  name: string
-  control: Control<any>
-  defaultValue?: unknown
+  name: string;
+  control: Control<any>;
+  defaultValue?: unknown;
   options: Array<{
-    label?: string
-    value: string | boolean
-    description?: string
-    disabled?: boolean
-  }>
-  direction?: 'horizontal' | 'vertical'
-  separator?: boolean
-  justify?: 'between' | 'start' | 'center' | 'end'
-  gap?: string
-  onChange?: React.ChangeEventHandler<HTMLInputElement>
-  labelClass?: string
-  labelClassChecked?: string
-  optionClassName?: string
-  disabled?: boolean
-  corrects?: { [key: string]: boolean }
+    label?: string;
+    value: string | boolean;
+    description?: string;
+    disabled?: boolean;
+  }>;
+  direction?: "horizontal" | "vertical";
+  separator?: boolean;
+  justify?: "between" | "start" | "center" | "end";
+  gap?: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  labelClass?: string;
+  labelClassChecked?: string;
+  optionClassName?: string;
+  disabled?: boolean;
+  corrects?: { [key: string]: boolean };
 }
 
 const HookFormRadioGroup = ({
@@ -37,15 +37,15 @@ const HookFormRadioGroup = ({
   separator,
   gap,
   onChange,
-  justify = 'between',
-  labelClass = '',
-  labelClassChecked = '',
-  optionClassName = '',
+  justify = "between",
+  labelClass = "",
+  labelClassChecked = "",
+  optionClassName = "",
   disabled,
   corrects,
 }: IHookFormRadioGroupProps) => {
-  const count_items = options?.length - 1
-  gap = gap ? gap : direction === 'horizontal' ? 'gap-6' : 'gap-4'
+  const count_items = options?.length - 1;
+  gap = gap ? gap : direction === "horizontal" ? "gap-6" : "gap-4";
   return (
     <Controller
       control={control}
@@ -56,41 +56,41 @@ const HookFormRadioGroup = ({
           <>
             <div
               className={
-                (direction === 'horizontal'
-                  ? '_horizontal flex flex-wrap'
-                  : '_vertical flex flex-col') +
+                (direction === "horizontal"
+                  ? "_horizontal flex flex-wrap"
+                  : "_vertical flex flex-col") +
                 ` ${gap} ` +
                 ` ${
-                  justify === 'between'
-                    ? 'justify-between'
-                    : justify == 'center'
-                      ? 'justify-center'
-                      : justify === 'start'
-                        ? 'justify-start'
-                        : 'justify-end'
+                  justify === "between"
+                    ? "justify-between"
+                    : justify == "center"
+                      ? "justify-center"
+                      : justify === "start"
+                        ? "justify-start"
+                        : "justify-end"
                 }`
               }
             >
               {options.map((option, index) => {
-                let state: 'error' | 'default' | 'success' | undefined
-                let stateLabel: string = ''
-                let checked: boolean = option.value.toString() === field.value
+                let state: "error" | "default" | "success" | undefined;
+                let stateLabel: string = "";
+                let checked: boolean = option.value.toString() === field.value;
                 let correctCheck: boolean =
-                  corrects?.[option.value as string] || false
+                  corrects?.[option.value as string] || false;
                 if (!!corrects) {
                   if (corrects?.[option.value as string]) {
-                    state = 'success'
-                    stateLabel = 'text-success-600'
+                    state = "success";
+                    stateLabel = "text-success-600";
                   } else if (checked) {
-                    state = 'error'
-                    stateLabel = 'text-error'
+                    state = "error";
+                    stateLabel = "text-error";
                   }
                 }
 
                 return (
                   <div
-                    key={uniqueId('check')}
-                    className={`${!!corrects && 'pointer-events-none'}`}
+                    key={uniqueId("check")}
+                    className={`${!!corrects && "pointer-events-none"}`}
                   >
                     <div className="flex flex-row">
                       <label
@@ -100,8 +100,8 @@ const HookFormRadioGroup = ({
                               ? option.disabled
                               : disabled
                           )
-                            ? 'cursor-not-allowed opacity-60'
-                            : 'cursor-pointer'
+                            ? "cursor-not-allowed opacity-60"
+                            : "cursor-pointer"
                         }`}
                       >
                         <SAPPRadio
@@ -112,8 +112,8 @@ const HookFormRadioGroup = ({
                               : disabled
                           }
                           onChange={(e) => {
-                            onChange && onChange(e)
-                            field.onChange(e.target.value)
+                            onChange && onChange(e);
+                            field.onChange(e.target.value);
                           }}
                           key={index}
                           value={option.value.toString()}
@@ -126,16 +126,16 @@ const HookFormRadioGroup = ({
                             className={`${
                               option.value === field.value
                                 ? ` ${stateLabel} ${
-                                    labelClassChecked ? labelClassChecked : ''
+                                    labelClassChecked ? labelClassChecked : ""
                                   }`
                                 : ` ${stateLabel} ${
-                                    labelClass ? labelClass : ''
+                                    labelClass ? labelClass : ""
                                   }`
                             } fw-bold flex-1 text-base`}
                           >
                             <span
                               className={clsx({
-                                'mr-3': checked && !!corrects,
+                                "mr-3": checked && !!corrects,
                               })}
                             >
                               {option.label}
@@ -159,15 +159,15 @@ const HookFormRadioGroup = ({
                         <div className="separator separator-dashed my-5"></div>
                       )}
                   </div>
-                )
+                );
               })}
             </div>
             <ErrorMessage>{error?.message}</ErrorMessage>
           </>
-        )
+        );
       }}
     />
-  )
-}
+  );
+};
 
-export default HookFormRadioGroup
+export default HookFormRadioGroup;

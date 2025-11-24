@@ -1,19 +1,21 @@
 {
-"name": "@lms/utils",
-"version": "1.0.0",
-"private": true,
-"main": "./index.ts", 
-"types": "./index.ts",
-"scripts": {
-"lint": "eslint ."
-},
-"peerDependencies": {
-},
-"dependencies": {
+  "name": "@lms/utils",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "peerDependencies": {},
+  "dependencies": {
     "@lms/core": "workspace:*",
     "@funktechno/texthighlighter": "^2.1.2",
     "dompurify": "^3.1.6",
     "lodash": "^4.17.21",
-    "react-query": "^3.39.3"
-}
+    "react-query": "^3.39.3",
+    "dayjs": "latest",
+    "firebase": "latest",
+    "react-ga4": "latest"
+  }
 }

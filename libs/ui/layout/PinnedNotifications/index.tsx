@@ -1,24 +1,24 @@
-import { CloseIconNote, IconLoudSpeaker } from '@assets/icons'
-import { EditorReader } from '@lms/ui'
-import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
-import { Col, Row } from 'antd'
-import { useRouter } from 'next/router'
-import React from 'react'
-import { PageLink } from '@lms/core'
-import Marquee from 'react-fast-marquee'
-import clsx from 'clsx'
+import { CloseIconNote, IconLoudSpeaker } from "@assets/icons";
+import { EditorReader } from "../base";
+import { usePinnedNotifyContext } from "@contexts/PinnedNotifyContext";
+import { Col, Row } from "antd";
+import { useRouter } from "next/router";
+import React from "react";
+import { PageLink } from "@lms/core";
+import Marquee from "react-fast-marquee";
+import clsx from "clsx";
 
 function PinnedNotifications() {
-  const router = useRouter()
+  const router = useRouter();
   const { openPinned, setOpenPinned, pinnedNotifications } =
-    usePinnedNotifyContext()
+    usePinnedNotifyContext();
 
   const handleClosePinned = () => {
-    localStorage.setItem('openPinned', 'false')
-    setOpenPinned(false)
-  }
+    localStorage.setItem("openPinned", "false");
+    setOpenPinned(false);
+  };
 
-  const showPinNoti = pinnedNotifications?.data?.content?.length < 200
+  const showPinNoti = pinnedNotifications?.data?.content?.length < 200;
 
   const isEnablePinnedPages = [
     PageLink.COURSES,
@@ -26,7 +26,7 @@ function PinnedNotifications() {
     PageLink.COURSE_DETAIL,
     PageLink.COURSE_PART_DETAIL,
     PageLink.COURSE_ACTIVITY,
-  ].includes(router.pathname)
+  ].includes(router.pathname);
 
   return (
     <React.Fragment>
@@ -50,7 +50,7 @@ function PinnedNotifications() {
                           gradient={false}
                           speed={showPinNoti ? 0 : 50}
                           pauseOnHover={true}
-                          className={clsx({ 'leading-5': showPinNoti })}
+                          className={clsx({ "leading-5": showPinNoti })}
                           delay={2}
                         >
                           <EditorReader
@@ -78,7 +78,7 @@ function PinnedNotifications() {
           </React.Fragment>
         )}
     </React.Fragment>
-  )
+  );
 }
 
-export default PinnedNotifications
+export default PinnedNotifications;

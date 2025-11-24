@@ -1,27 +1,27 @@
-import { Skeleton } from 'antd'
-import React, { KeyboardEvent } from 'react'
-import { Control, Controller } from 'react-hook-form'
-import { ErrorMessage } from '@lms/ui'
-import { Input } from 'antd'
-const { TextArea } = Input
+import { Skeleton } from "antd";
+import React, { KeyboardEvent } from "react";
+import { Control, Controller } from "react-hook-form";
+import { ErrorMessage } from "../../common";
+import { Input } from "antd";
+const { TextArea } = Input;
 interface IProps {
-  name: string
-  control: Control<any>
-  defaultValue?: string
-  onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
-  placeholder?: string
-  className?: string
-  rows?: number | undefined
+  name: string;
+  control: Control<any>;
+  defaultValue?: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  placeholder?: string;
+  className?: string;
+  rows?: number | undefined;
   // label?: string
   // guideline?: string[]
-  disabled?: boolean
-  labelClass?: string
+  disabled?: boolean;
+  labelClass?: string;
   // required?: boolean
-  skeleton?: boolean
-  handleKeyDown?: (e: KeyboardEvent<HTMLTextAreaElement>) => void
-  actions?: React.ReactNode
-  variant?: 'outlined' | 'borderless' | 'filled' | 'underlined' | undefined
-  autoSize?: boolean | object | undefined
+  skeleton?: boolean;
+  handleKeyDown?: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
+  actions?: React.ReactNode;
+  variant?: "outlined" | "borderless" | "filled" | "underlined" | undefined;
+  autoSize?: boolean | object | undefined;
 }
 
 const HookFormTextAreaV2 = ({
@@ -54,15 +54,15 @@ const HookFormTextAreaV2 = ({
             <div className="relative h-full flex-1">
               <TextArea
                 {...field}
-                value={field.value ?? ''}
+                value={field.value ?? ""}
                 variant={variant}
                 defaultValue={field.value ? undefined : defaultValue}
                 onChange={(value) => {
-                  field.onChange(value)
-                  onChange && onChange(value)
+                  field.onChange(value);
+                  onChange && onChange(value);
                 }}
                 className={`${className} form-control rounded-[4px] border-[#dcdddd] ${
-                  error?.message ? 'is-invalid' : ''
+                  error?.message ? "is-invalid" : ""
                 }`}
                 placeholder={placeholder}
                 rows={rows ?? 3}
@@ -81,11 +81,11 @@ const HookFormTextAreaV2 = ({
               className="w-100 h-150px"
             ></Skeleton.Input>
           )}
-          <ErrorMessage>{error?.message ?? ''}</ErrorMessage>
+          <ErrorMessage>{error?.message ?? ""}</ErrorMessage>
         </>
       )}
     />
-  )
-}
+  );
+};
 
-export default HookFormTextAreaV2
+export default HookFormTextAreaV2;

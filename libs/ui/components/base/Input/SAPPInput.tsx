@@ -1,19 +1,19 @@
-import { StyleProvider } from '@ant-design/cssinjs'
-import { Input, InputRef } from 'antd'
-import { ButtonSize } from 'antd/es/button'
-import clsx from 'clsx'
-import { Control, Controller } from 'react-hook-form'
-import { ErrorMessage, GuidelineField } from '@lms/ui'
-import SAPPLabel from '../Label/SAPPLabel'
-import { useEffect, useRef } from 'react'
-import { IBaseFormFieldProps } from '@lms/core'
+import { StyleProvider } from "@ant-design/cssinjs";
+import { IBaseFormFieldProps } from "@lms/core";
+import { Input, InputRef } from "antd";
+import { ButtonSize } from "antd/es/button";
+import clsx from "clsx";
+import { useEffect, useRef } from "react";
+import { Controller } from "react-hook-form";
+import { ErrorMessage, GuidelineField } from "../../common";
+import SAPPLabel from "../Label/SAPPLabel";
 
 export interface SAPPInputProps extends IBaseFormFieldProps {
-  placeholder?: string
-  size?: ButtonSize
-  onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
-  guideline?: string[]
-  autoFocus?: boolean
+  placeholder?: string;
+  size?: ButtonSize;
+  onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  guideline?: string[];
+  autoFocus?: boolean;
 }
 
 const SAPPInput = ({
@@ -31,15 +31,15 @@ const SAPPInput = ({
   guideline,
   autoFocus = false,
 }: SAPPInputProps) => {
-  const inputRef = useRef<InputRef>(null)
+  const inputRef = useRef<InputRef>(null);
 
   useEffect(() => {
     if (autoFocus && inputRef.current?.focus) {
       setTimeout(() => {
-        inputRef.current?.focus()
-      }, 0)
+        inputRef.current?.focus();
+      }, 0);
     }
-  }, [autoFocus])
+  }, [autoFocus]);
   return (
     <>
       {label && (
@@ -55,32 +55,32 @@ const SAPPInput = ({
             <StyleProvider hashPriority="high">
               <Input
                 {...field}
-                className={clsx('h-10 w-full font-medium', className)}
+                className={clsx("h-10 w-full font-medium", className)}
                 placeholder={placeholder}
                 value={field?.value}
                 size={size}
                 disabled={disabled}
                 onChange={(value) => {
-                  field.onChange(value)
-                  onChange && onChange(value)
+                  field.onChange(value);
+                  onChange && onChange(value);
                 }}
                 autoFocus={true}
                 ref={(instance) => {
-                  field.ref(instance)
+                  field.ref(instance);
                   if (instance) {
-                    ;(inputRef as React.MutableRefObject<any>).current =
-                      instance
+                    (inputRef as React.MutableRefObject<any>).current =
+                      instance;
                   }
                 }}
               />
               <GuidelineField guideline={guideline} />
               <ErrorMessage>{error?.message}</ErrorMessage>
             </StyleProvider>
-          )
+          );
         }}
       />
     </>
-  )
-}
+  );
+};
 
-export default SAPPInput
+export default SAPPInput;

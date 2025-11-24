@@ -1,13 +1,20 @@
 {
-"name": "@lms/core",
-"version": "1.0.0",
-"private": false,
-"main": "./index.ts", 
-"types": "./index.ts",
-"type": "module",
-"scripts": {
-"lint": "eslint ."
-},
-"peerDependencies": {
-}
+  "name": "@lms/core",
+  "version": "1.0.0",
+  "private": false,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "peerDependencies": {},
+  "dependencies": {
+    "next": "latest",
+    "antd": "latest",
+    "react": "latest",
+    "rc-table": "latest",
+    "react-hook-form": "latest",
+    "dayjs": "latest"
+  }
 }

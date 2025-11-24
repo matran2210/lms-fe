@@ -1,5 +1,3 @@
-import { EditorReader } from "@lms/ui";
-import SappDivider from "../base/divider/Divider";
 import { runHighlight } from "@lms/utils";
 import { uniqueId } from "lodash";
 import {
@@ -10,9 +8,11 @@ import {
   useRef,
   useState,
 } from "react";
-import { SappTitleSolution } from "@lms/ui";
-import { MY_COURSES } from "@lms/core";
-import { IExhibitData } from "@lms/core";
+import SappDivider from "../base/divider/Divider";
+
+import { IExhibitData, MY_COURSES } from "@lms/core";
+import { EditorReader } from "../base";
+import { SappTitleSolution } from "../common";
 
 interface IProps {
   data: any;

@@ -1,34 +1,34 @@
-import clsx from 'clsx'
-import React, { ReactNode, useCallback, memo } from 'react'
-import { Control, Controller, FieldValues, Path } from 'react-hook-form'
-import Select, { SingleValue, MultiValue } from 'react-select'
-import { ErrorMessage } from '@lms/ui'
-import { OptionType } from '@lms/core'
+import { OptionType } from "@lms/core";
+import clsx from "clsx";
+import { memo, ReactNode, useCallback } from "react";
+import { Control, Controller } from "react-hook-form";
+import Select from "react-select";
+import { ErrorMessage } from "../../common";
 
 interface IProps {
-  name: string
-  control: Control<any>
-  required?: boolean
-  className?: string
-  options?: Array<{ label: string; value: string; isDisabled?: boolean }>
-  isMulti?: boolean
-  children?: ReactNode
-  placeholder?: string
-  onChange?: (select: any) => void
-  value?: string | null | undefined
-  isDisabled?: boolean
-  defaultValue?: string | Object | undefined | null
-  label?: string
-  labelClass?: string
-  isSearchable?: boolean
-  onMenuScrollToBottom?: () => void
-  onFocus?: () => void
-  isClearable?: boolean
-  onMenuClose?: () => void
-  onBlur?: () => void
-  isLoading?: boolean
-  isSelectCustom?: boolean
-  onSearch?: (value?: string) => void
+  name: string;
+  control: Control<any>;
+  required?: boolean;
+  className?: string;
+  options?: Array<{ label: string; value: string; isDisabled?: boolean }>;
+  isMulti?: boolean;
+  children?: ReactNode;
+  placeholder?: string;
+  onChange?: (select: any) => void;
+  value?: string | null | undefined;
+  isDisabled?: boolean;
+  defaultValue?: string | Object | undefined | null;
+  label?: string;
+  labelClass?: string;
+  isSearchable?: boolean;
+  onMenuScrollToBottom?: () => void;
+  onFocus?: () => void;
+  isClearable?: boolean;
+  onMenuClose?: () => void;
+  onBlur?: () => void;
+  isLoading?: boolean;
+  isSelectCustom?: boolean;
+  onSearch?: (value?: string) => void;
 }
 
 const SappHookFormSelect = ({
@@ -40,7 +40,7 @@ const SappHookFormSelect = ({
   options,
   placeholder,
   onChange: onSelectChange,
-  labelClass = 'text-base block font-medium mb-2',
+  labelClass = "text-base block font-medium mb-2",
   label,
   required,
   isSearchable = true,
@@ -55,20 +55,20 @@ const SappHookFormSelect = ({
 }: IProps) => {
   const handleChange = useCallback(
     (selectedOption: OptionType | null) => {
-      onSelectChange?.(selectedOption)
+      onSelectChange?.(selectedOption);
     },
     [onSelectChange],
-  )
+  );
 
   const handleMenuOpen = useCallback(() => {
-    onSearch?.()
-  }, [onSearch])
+    onSearch?.();
+  }, [onSearch]);
 
   return (
     <>
       {label && (
         <label className={labelClass}>
-          <span className={required ? 'required' : ''}>{label}</span>
+          <span className={required ? "required" : ""}>{label}</span>
         </label>
       )}
       <Controller
@@ -81,8 +81,8 @@ const SappHookFormSelect = ({
               {...field}
               options={options}
               className={clsx(
-                'select-single',
-                isSelectCustom && 'select-single-custom',
+                "select-single",
+                isSelectCustom && "select-single-custom",
                 className,
               )}
               classNamePrefix="select"
@@ -91,8 +91,8 @@ const SappHookFormSelect = ({
               isDisabled={isDisabled}
               isClearable={isClearable}
               onChange={(selectedOption) => {
-                field.onChange(selectedOption)
-                handleChange(selectedOption)
+                field.onChange(selectedOption);
+                handleChange(selectedOption);
               }}
               onMenuOpen={handleMenuOpen}
               onMenuClose={onMenuClose}
@@ -109,7 +109,7 @@ const SappHookFormSelect = ({
         )}
       />
     </>
-  )
-}
+  );
+};
 
-export default memo(SappHookFormSelect)
+export default memo(SappHookFormSelect);

@@ -9,8 +9,8 @@ import SappModalImage from "../modal/SappModalImage";
 import { video_url } from "@lms/core";
 // import "src/utils/global.d.ts"; lỗi monorepo đừng xóa
 import clsx from "clsx";
-import { SAPPVideo } from "@lms/ui";
 import React from "react";
+import { SAPPVideo } from "../video";
 
 type Props = {
   text_editor_content: string | undefined;

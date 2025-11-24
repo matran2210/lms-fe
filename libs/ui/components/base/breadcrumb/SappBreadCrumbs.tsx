@@ -1,49 +1,49 @@
-import clsx from 'clsx'
-import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
-import { ITabs } from '@lms/core'
-import { Tooltip } from "@lms/ui";
-import { motion, AnimatePresence } from 'framer-motion'
+import clsx from "clsx";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { ITabs } from "@lms/core";
+import { motion, AnimatePresence } from "framer-motion";
+import { Tooltip } from "../../common";
 
 const SappBreadCrumbs = ({
   breadcrumbs = [],
   isTeacher = false,
   className,
 }: {
-  breadcrumbs?: ITabs[]
-  isTeacher?: boolean
-  className?: string
+  breadcrumbs?: ITabs[];
+  isTeacher?: boolean;
+  className?: string;
 }) => {
-  const [isLastTakesFullWidth, setIsLastTakesFullWidth] = useState(false)
-  const [isDisplayFull, setIsDisplayFull] = useState(false)
-  const lastIndex = breadcrumbs.length - 1
-  const isHideItemBreadcrumb = breadcrumbs.length > 3
+  const [isLastTakesFullWidth, setIsLastTakesFullWidth] = useState(false);
+  const [isDisplayFull, setIsDisplayFull] = useState(false);
+  const lastIndex = breadcrumbs.length - 1;
+  const isHideItemBreadcrumb = breadcrumbs.length > 3;
 
   const handleTitleDisplay = (title: string, length: number) => {
-    const isLong = title?.length > length
-    return isLong ? title.slice(0, length) + '...' : title
-  }
+    const isLong = title?.length > length;
+    return isLong ? title.slice(0, length) + "..." : title;
+  };
 
   const checkIsLastTakesFullWidth = () => {
-    const element = document.querySelector('.breadcrumb-last') as HTMLElement
-    if (!element) return false
-    const computedStyle = window.getComputedStyle(element)
-    const lineHeight = parseFloat(computedStyle.lineHeight)
-    const elementHeight = element.offsetHeight
-    const numberOfLines = Math.round(elementHeight / lineHeight)
-    return numberOfLines >= 2
-  }
+    const element = document.querySelector(".breadcrumb-last") as HTMLElement;
+    if (!element) return false;
+    const computedStyle = window.getComputedStyle(element);
+    const lineHeight = parseFloat(computedStyle.lineHeight);
+    const elementHeight = element.offsetHeight;
+    const numberOfLines = Math.round(elementHeight / lineHeight);
+    return numberOfLines >= 2;
+  };
 
   useEffect(() => {
-    setIsLastTakesFullWidth(checkIsLastTakesFullWidth())
-  }, [])
+    setIsLastTakesFullWidth(checkIsLastTakesFullWidth());
+  }, []);
 
   return (
-    <nav aria-label="breadcrumb" className={clsx('hidden lg:block', className)}>
+    <nav aria-label="breadcrumb" className={clsx("hidden lg:block", className)}>
       <ul className="flex items-center overflow-hidden text-sm font-normal text-[#a1a1aa]">
         <AnimatePresence initial={false}>
           {breadcrumbs.map((breadcrumb, index) => {
-            const isLast = index === lastIndex
+            const isLast = index === lastIndex;
 
             if (isHideItemBreadcrumb && index > 1 && !isDisplayFull) {
               if (index === lastIndex - 1) {
@@ -59,16 +59,16 @@ const SappBreadCrumbs = ({
                   >
                     ...&nbsp;&nbsp;/
                   </motion.div>
-                )
+                );
               }
-              if (!isLast) return null
+              if (!isLast) return null;
             }
 
             const titleDisplay = handleTitleDisplay(
               breadcrumb.title,
               isLast ? 20 : 30,
-            )
-            const isLong = breadcrumb.title?.length > 30
+            );
+            const isLong = breadcrumb.title?.length > 30;
 
             return (
               <motion.li
@@ -82,8 +82,8 @@ const SappBreadCrumbs = ({
                   duration: 0.3,
                 }}
                 className={clsx(
-                  'flex items-center text-base',
-                  isLast ? 'font-medium text-gray-400' : 'text-gray-800',
+                  "flex items-center text-base",
+                  isLast ? "font-medium text-gray-400" : "text-gray-800",
                 )}
               >
                 {/* Nội dung breadcrumb */}
@@ -111,9 +111,9 @@ const SappBreadCrumbs = ({
                       >
                         <span
                           className={clsx(
-                            'transition-all duration-300',
+                            "transition-all duration-300",
                             !breadcrumb?.disable &&
-                              'cursor-pointer hover:text-primary',
+                              "cursor-pointer hover:text-primary",
                           )}
                         >
                           {titleDisplay}
@@ -127,23 +127,23 @@ const SappBreadCrumbs = ({
                 {!isLast && (
                   <span
                     className={clsx(
-                      'mx-2 text-[1.125rem]',
-                      isTeacher && 'text-tiny',
+                      "mx-2 text-[1.125rem]",
+                      isTeacher && "text-tiny",
                       index === lastIndex - 1
-                        ? 'text-gray-800'
-                        : 'text-gray-400',
+                        ? "text-gray-800"
+                        : "text-gray-400",
                     )}
                   >
-                    {isTeacher ? '▶' : '/'}
+                    {isTeacher ? "▶" : "/"}
                   </span>
                 )}
               </motion.li>
-            )
+            );
           })}
         </AnimatePresence>
       </ul>
     </nav>
-  )
-}
+  );
+};
 
-export default SappBreadCrumbs
+export default SappBreadCrumbs;

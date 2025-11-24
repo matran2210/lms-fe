@@ -1,21 +1,17 @@
-import { HookFormCheckBoxGroup } from '@lms/ui'
-import { EditorReader } from '@lms/ui'
-import { getUppercaseByNumber, runHighlight } from '@lms/utils'
-import { useEffect, useMemo } from 'react'
-import { SappTitleSolution } from '@lms/ui'
-import { CircleInfoIcon } from '@assets/icons'
-import WarningSection from './WarningSection'
-import clsx from 'clsx'
-import { IPreviewProp } from './OneChoiceQuestion'
-import { MY_COURSES } from '@lms/core'
-import {SappDivider} from '@lms/ui'
-import { HighlightableHTML } from '@lms/ui'
-import { useRouter } from 'next/router'
+import { MY_COURSES } from "@lms/core";
+import { getUppercaseByNumber, runHighlight } from "@lms/utils";
+import { useRouter } from "next/router";
+import { useEffect, useMemo } from "react";
+import { EditorReader, HookFormCheckBoxGroup, SappDivider } from "../base";
+import { SappTitleSolution } from "../common";
+import { HighlightableHTML } from "../highlights";
+import { IPreviewProp } from "./OneChoiceQuestion";
+import WarningSection from "./WarningSection";
 
 interface IDataAnswer {
   data: {
-    answers: Array<{ id: string }>
-  }
+    answers: Array<{ id: string }>;
+  };
 }
 
 const MultiChoiceQuestion = ({
@@ -35,47 +31,47 @@ const MultiChoiceQuestion = ({
   getValue,
   tabs,
   currentPage,
-  exhibitText = 'Exhibit',
+  exhibitText = "Exhibit",
   isShowWarning = false,
   explainClassname,
   storageKey,
 }: IPreviewProp) => {
-  const router = useRouter()
+  const router = useRouter();
   const convertAnswer = useMemo(() => {
-    let answers = []
-    let number = 0
+    let answers = [];
+    let number = 0;
     if (data?.answers) {
-      const oldData = [...data?.answers]
+      const oldData = [...data?.answers];
       const sorted = oldData?.sort(
         (a: any, b: any) => a?.answer_position - b?.answer_position,
-      )
+      );
       for (let e of sorted) {
-        number++
+        number++;
         answers.push({
           label: `${getUppercaseByNumber(number)}. ${e?.answer}`,
           value: e?.id,
-        })
+        });
       }
     }
-    return answers
-  }, [data])
+    return answers;
+  }, [data]);
 
   useEffect(() => {
     const tab_current = tabs?.find((e) => e.id === currentPage) as
       | IDataAnswer
-      | undefined
+      | undefined;
 
     if (tab_current && Array.isArray(getValue(name))) {
-      const answer_ids = tab_current?.data?.answers?.map((e) => e.id)
+      const answer_ids = tab_current?.data?.answers?.map((e) => e.id);
 
       const filteredData = getValue(name)?.filter((e: string) =>
         answer_ids?.includes(e),
-      )
+      );
 
       // Cập nhật lại giá trị sau khi lọc
-      setValue(name, filteredData) // Cần hàm `setValue` để thay đổi giá trị getValue(name)
+      setValue(name, filteredData); // Cần hàm `setValue` để thay đổi giá trị getValue(name)
     }
-  }, [tabs, currentPage, getValue, name, setValue])
+  }, [tabs, currentPage, getValue, name, setValue]);
 
   return (
     <div>
@@ -83,30 +79,30 @@ const MultiChoiceQuestion = ({
         id="hightlight_area"
         onMouseUp={(e: any) => {
           if (
-            e?.target?.tagName?.charAt(0) !== 'm' &&
-            e?.target?.firstChild?.tagName !== 'math'
+            e?.target?.tagName?.charAt(0) !== "m" &&
+            e?.target?.firstChild?.tagName !== "math"
           ) {
             if (e) {
               if (allowHighLight) {
                 runHighlight(
                   handleSaveHighLight,
                   allowHighLight || false,
-                  'hightlight_area',
-                )
+                  "hightlight_area",
+                );
               } else if (allowUnHighLight) {
                 runHighlight(
                   handleSaveHighLight,
                   allowUnHighLight || false,
-                  'hightlight_area',
-                  { color: 'white' },
-                )
+                  "hightlight_area",
+                  { color: "white" },
+                );
               }
             }
           }
         }}
       >
         <HighlightableHTML
-          initialHTML={data?.question_content || ''}
+          initialHTML={data?.question_content || ""}
           storageKey={
             storageKey ||
             `${router.query.id}-${data?.qType}-question-${data?.id}`
@@ -126,7 +122,7 @@ const MultiChoiceQuestion = ({
               <div className="my-6 border border-b-gray-300"></div>
               <div className="mb-4 flex items-center">
                 <div className="font-semibold">
-                  {exhibitText ? exhibitText + 's' : 'Exhibits'} (
+                  {exhibitText ? exhibitText + "s" : "Exhibits"} (
                   {data?.question_topic?.exhibits?.length || 0})
                 </div>
                 <div className="ml-4">
@@ -144,7 +140,7 @@ const MultiChoiceQuestion = ({
                         setOpenFile &&
                           setOpenFile(
                             {
-                              type: 'exhibits',
+                              type: "exhibits",
                               description: e?.description,
                               name: e?.name,
                               index: i,
@@ -153,12 +149,12 @@ const MultiChoiceQuestion = ({
                             null,
                             null,
                             event,
-                          )
+                          );
                       }}
                     >
-                      {exhibitText || 'Exhibit'} {i + 1}: {e.name}
+                      {exhibitText || "Exhibit"} {i + 1}: {e.name}
                     </div>
-                  )
+                  );
                 })}
               </div>
               <div className="my-6 border border-b-gray-300"></div>
@@ -168,17 +164,17 @@ const MultiChoiceQuestion = ({
       <div
         className="sapp-answer-wrapper"
         style={{
-          flexDirection: 'column',
+          flexDirection: "column",
         }}
       >
         <HookFormCheckBoxGroup
           options={convertAnswer || []}
           control={control}
-          name={name || 'multiples'}
+          name={name || "multiples"}
           multiple
           className="mr-4 mt-0"
           corrects={corrects}
-          defaultValue={defaultValues || ''}
+          defaultValue={defaultValues || ""}
           positionCheckBox="start"
         />
       </div>
@@ -191,6 +187,6 @@ const MultiChoiceQuestion = ({
         </div>
       )}
     </div>
-  )
-}
-export default MultiChoiceQuestion
+  );
+};
+export default MultiChoiceQuestion;

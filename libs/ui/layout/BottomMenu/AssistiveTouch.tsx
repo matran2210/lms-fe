@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Draggable from "react-draggable";
-import { ButtonIconSapp } from "@lms/ui";
 import clsx from "clsx";
+import { ButtonIconSapp } from "../../components";
 
 interface AssistiveTouchProps {
   menuItems: {

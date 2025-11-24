@@ -1,27 +1,27 @@
-import { Skeleton } from 'antd'
-import { Control, Controller } from 'react-hook-form'
-import { ErrorMessage } from '@lms/ui'
-import DynamicBundledEditor from '../../form/editor'
-import { DEFAULT_EDITOR_VALUE } from '@lms/core'
-import { SAPPEditorHandle } from '@lms/core'
+import { Skeleton } from "antd";
+import { Control, Controller } from "react-hook-form";
+import DynamicBundledEditor from "../../form/editor";
+import { DEFAULT_EDITOR_VALUE } from "@lms/core";
+import { SAPPEditorHandle } from "@lms/core";
+import { ErrorMessage } from "../../common";
 
 interface Props {
-  name: string
-  control: Control<any>
-  defaultValue?: any
-  className?: string
-  height?: number
-  skeleton?: boolean
-  math?: boolean
-  placeholder?: string
-  required?: boolean
-  label?: string
-  labelClass?: string
-  guideline?: string[]
-  handleChange?: any
-  disabled?: boolean
-  key?: number | string
-  editorRef?: React.RefObject<SAPPEditorHandle>
+  name: string;
+  control: Control<any>;
+  defaultValue?: any;
+  className?: string;
+  height?: number;
+  skeleton?: boolean;
+  math?: boolean;
+  placeholder?: string;
+  required?: boolean;
+  label?: string;
+  labelClass?: string;
+  guideline?: string[];
+  handleChange?: any;
+  disabled?: boolean;
+  key?: number | string;
+  editorRef?: React.RefObject<SAPPEditorHandle>;
 }
 
 const HookFormEditor = ({
@@ -52,20 +52,20 @@ const HookFormEditor = ({
         return (
           <>
             {label && (
-              <label className={'mb-2 block text-base font-medium'}>
-                {label} {`${required ? '*' : ''}`}
+              <label className={"mb-2 block text-base font-medium"}>
+                {label} {`${required ? "*" : ""}`}
               </label>
-            )}{' '}
+            )}{" "}
             {!skeleton ? (
               <div>
                 <DynamicBundledEditor
                   onChange={(e) => {
-                    onChange(e)
-                    handleChange && handleChange(e)
+                    onChange(e);
+                    handleChange && handleChange(e);
                   }}
                   // key={key}
                   valueText={defaultValue}
-                  className={`${className} ${error ? 'tox-tinymce_error' : ''}`}
+                  className={`${className} ${error ? "tox-tinymce_error" : ""}`}
                   height={height}
                   math={math}
                   placeholder={placeholder}
@@ -74,7 +74,7 @@ const HookFormEditor = ({
                 />
                 <div>
                   {/* <GuidelineField guideline={guideline} /> */}
-                  <ErrorMessage>{error?.message ?? ''}</ErrorMessage>
+                  <ErrorMessage>{error?.message ?? ""}</ErrorMessage>
                 </div>
               </div>
             ) : (
@@ -85,10 +85,10 @@ const HookFormEditor = ({
               ></Skeleton.Input>
             )}
           </>
-        )
+        );
       }}
     />
-  )
-}
+  );
+};
 
-export default HookFormEditor
+export default HookFormEditor;

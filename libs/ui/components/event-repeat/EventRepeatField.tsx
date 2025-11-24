@@ -1,82 +1,82 @@
-import { SAPPSelectV2 } from '@lms/ui'
-import { convertLocalWeekDaysToUTC, reverseDaysOfWeek } from '@lms/utils'
-import { DatePicker } from 'antd'
-import dayjs from 'dayjs'
-import localeData from 'dayjs/plugin/localeData'
-import weekday from 'dayjs/plugin/weekday'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { Controller, ControllerRenderProps, useForm } from 'react-hook-form'
-import {SappIcon} from '@lms/ui'
+import { convertLocalWeekDaysToUTC, reverseDaysOfWeek } from "@lms/utils";
+import { DatePicker } from "antd";
+import dayjs from "dayjs";
+import localeData from "dayjs/plugin/localeData";
+import weekday from "dayjs/plugin/weekday";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { Controller, ControllerRenderProps, useForm } from "react-hook-form";
 import {
   EVENT_REPEAT_LABEL,
   EVENT_REPEAT_TYPES,
   FREQUENCY_UNITS,
   REPEAT_ON,
   REPEAT_ON_MAPPED_PAYLOAD,
-} from '@lms/core'
-import { ISelect } from '@lms/core'
+} from "@lms/core";
+import { ISelect } from "@lms/core";
+import { IRecurringSchedule, RecurringScheduleType } from "src/type/my-request";
+
+import RepeatFrequency from "./RepeatFrequency";
+import RepeatOn from "./RepeatOn";
+import { REPEAT_TYPE } from "@lms/core";
+import clsx from "clsx";
+import utc from "dayjs/plugin/utc";
 import {
-  IRecurringSchedule,
-  RecurringScheduleType
-} from 'src/type/my-request'
+  IEventRepeatFieldValues,
+  IRepeatFrequency,
+} from "src/type/my-calendar";
+import { SappIcon } from "../common";
+import { SAPPSelectV2 } from "../base";
 
-import RepeatFrequency from './RepeatFrequency'
-import RepeatOn from './RepeatOn'
-import { REPEAT_TYPE } from '@lms/core'
-import clsx from 'clsx'
-import utc from 'dayjs/plugin/utc'
-import { IEventRepeatFieldValues, IRepeatFrequency } from 'src/type/my-calendar'
+const DEFAULT_END_DATE_HOUR_OFFSET = 1;
+const MAX_END_DATE_YEAR_RANGE = 2;
 
-const DEFAULT_END_DATE_HOUR_OFFSET = 1
-const MAX_END_DATE_YEAR_RANGE = 2
-
-dayjs.extend(weekday)
-dayjs.extend(localeData)
-dayjs.extend(utc)
+dayjs.extend(weekday);
+dayjs.extend(localeData);
+dayjs.extend(utc);
 
 interface IRepeatTypeOption {
-  label: string
-  value: (typeof EVENT_REPEAT_TYPES)[keyof typeof EVENT_REPEAT_TYPES]
+  label: string;
+  value: (typeof EVENT_REPEAT_TYPES)[keyof typeof EVENT_REPEAT_TYPES];
 }
 
 interface IEventRepeatFieldForm {
   repeat_type:
     | (typeof EVENT_REPEAT_TYPES)[keyof typeof EVENT_REPEAT_TYPES]
-    | ISelect
-  repeat_frequency: IRepeatFrequency
-  repeat_on: (typeof REPEAT_ON)[number][]
-  end_on?: Date | string
-  type: string
+    | ISelect;
+  repeat_frequency: IRepeatFrequency;
+  repeat_on: (typeof REPEAT_ON)[number][];
+  end_on?: Date | string;
+  type: string;
 }
 
 interface IProps {
-  className?: string
-  label?: string
-  labelClass?: string
-  defaultDate: Date
-  defaultValue?: IEventRepeatFieldValues
-  onChange: (val?: IEventRepeatFieldValues) => void
-  required?: boolean
-  field?: ControllerRenderProps<any, string>
-  repeatOption?: ISelect
-  resetRepeat?: boolean
-  setResetRepeat?: React.Dispatch<React.SetStateAction<boolean>>
-  disabled?: boolean
-  rangeDate?: [Date, Date]
-  defaultEndOn?: Date | string
+  className?: string;
+  label?: string;
+  labelClass?: string;
+  defaultDate: Date;
+  defaultValue?: IEventRepeatFieldValues;
+  onChange: (val?: IEventRepeatFieldValues) => void;
+  required?: boolean;
+  field?: ControllerRenderProps<any, string>;
+  repeatOption?: ISelect;
+  resetRepeat?: boolean;
+  setResetRepeat?: React.Dispatch<React.SetStateAction<boolean>>;
+  disabled?: boolean;
+  rangeDate?: [Date, Date];
+  defaultEndOn?: Date | string;
 }
 
 interface BlockLabelTextProps {
-  text: React.ReactNode
-  className?: string
-  required?: boolean
+  text: React.ReactNode;
+  className?: string;
+  required?: boolean;
 }
 
 const BlockLabelText = ({ text, className, required }: BlockLabelTextProps) => {
   return (
     <p
       className={clsx(
-        'flex items-center pr-6 font-medium',
+        "flex items-center pr-6 font-medium",
         {
           required,
         },
@@ -85,13 +85,13 @@ const BlockLabelText = ({ text, className, required }: BlockLabelTextProps) => {
     >
       {text}
     </p>
-  )
-}
+  );
+};
 
 const EventRepeatField = ({
-  className = '',
+  className = "",
   label,
-  labelClass = '',
+  labelClass = "",
   defaultDate,
   defaultValue,
   onChange,
@@ -106,17 +106,20 @@ const EventRepeatField = ({
 }: IProps) => {
   const [repeatType, setRepeatType] = useState<RecurringScheduleType>(
     EVENT_REPEAT_TYPES.NO_REPEAT as RecurringScheduleType,
-  )
+  );
 
-  const initDate = useMemo(() => rangeDate?.[0] || new Date(), [rangeDate])
-  const initEndonDate = useMemo(() => defaultEndOn || undefined, [defaultEndOn])
+  const initDate = useMemo(() => rangeDate?.[0] || new Date(), [rangeDate]);
+  const initEndonDate = useMemo(
+    () => defaultEndOn || undefined,
+    [defaultEndOn],
+  );
 
   const endOnMinDate = useMemo(
     () =>
       rangeDate?.[1] ||
-      dayjs().add(DEFAULT_END_DATE_HOUR_OFFSET, 'hour').toDate(),
+      dayjs().add(DEFAULT_END_DATE_HOUR_OFFSET, "hour").toDate(),
     [rangeDate],
-  )
+  );
 
   const formattedDefaultValue = useMemo(() => {
     // TODO: Add code to add default values
@@ -125,15 +128,19 @@ const EventRepeatField = ({
       repeat_frequency: { interval: 1, unit: FREQUENCY_UNITS.WEEK },
       repeat_on: [],
       end_on: defaultEndOn,
-    }
-  }, [defaultValue])
+    };
+  }, [defaultValue]);
   const repeatTypeOptions = useMemo(() => {
-    const weeklyText = initDate.toLocaleDateString('en-US', { weekday: 'long' })
-    const monthlyText = initDate.toLocaleDateString('en-US', { day: '2-digit' })
-    const annuallyText = initDate.toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: 'long',
-    })
+    const weeklyText = initDate.toLocaleDateString("en-US", {
+      weekday: "long",
+    });
+    const monthlyText = initDate.toLocaleDateString("en-US", {
+      day: "2-digit",
+    });
+    const annuallyText = initDate.toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "long",
+    });
 
     return [
       {
@@ -150,13 +157,13 @@ const EventRepeatField = ({
       {
         label: EVENT_REPEAT_LABEL.EVERY_WEEKDAY,
         value: EVENT_REPEAT_TYPES.EVERY_WEEKDAY,
-        disabled: ['Saturday', 'Sunday'].includes(
-          dayjs(initDate).format('dddd'),
+        disabled: ["Saturday", "Sunday"].includes(
+          dayjs(initDate).format("dddd"),
         ),
       },
       { label: EVENT_REPEAT_LABEL.CUSTOM, value: EVENT_REPEAT_TYPES.CUSTOM },
-    ]
-  }, [initDate])
+    ];
+  }, [initDate]);
 
   const {
     watch,
@@ -170,71 +177,72 @@ const EventRepeatField = ({
       repeat_frequency: { interval: 1, unit: FREQUENCY_UNITS.WEEK },
       repeat_on: [],
     },
-  })
+  });
 
   const mapRepeatOn = (
     data: ((typeof REPEAT_ON)[number] | undefined)[] | undefined,
   ) => {
-    if (!data) return []
+    if (!data) return [];
     const numberDay = data
-      .map((day) => REPEAT_ON_MAPPED_PAYLOAD[day || 'T2'])
-      .sort()
+      .map((day) => REPEAT_ON_MAPPED_PAYLOAD[day || "T2"])
+      .sort();
 
-    const convertDay = convertLocalWeekDaysToUTC(initDate, numberDay)
-    return reverseDaysOfWeek(initDate, convertDay)
-  }
+    const convertDay = convertLocalWeekDaysToUTC(initDate, numberDay);
+    return reverseDaysOfWeek(initDate, convertDay);
+  };
 
   const cleanObject = useCallback((params: Object) => {
     return Object.fromEntries(
       Object.entries(params).filter(
-        ([_, value]) => value !== undefined && value !== '' && value !== null,
+        ([_, value]) => value !== undefined && value !== "" && value !== null,
       ),
-    )
-  }, [])
+    );
+  }, []);
 
   // Handle form change
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
-      if (value?.repeat_type === EVENT_REPEAT_TYPES.NO_REPEAT) return onChange()
+      if (value?.repeat_type === EVENT_REPEAT_TYPES.NO_REPEAT)
+        return onChange();
 
       const getInterval = () => {
         if (value?.repeat_type === EVENT_REPEAT_TYPES.CUSTOM)
-          return value?.repeat_frequency?.interval || 1
+          return value?.repeat_frequency?.interval || 1;
 
-        return 1
-      }
+        return 1;
+      };
       const getFrequency = () => {
         switch (value?.repeat_type) {
           case EVENT_REPEAT_TYPES.DAILY:
           case EVENT_REPEAT_TYPES.EVERY_WEEKDAY:
-            return FREQUENCY_UNITS.DAY
+            return FREQUENCY_UNITS.DAY;
           case EVENT_REPEAT_TYPES.WEEKLY:
-            return FREQUENCY_UNITS.WEEK
+            return FREQUENCY_UNITS.WEEK;
           case EVENT_REPEAT_TYPES.MONTHLY:
-            return FREQUENCY_UNITS.MONTH
+            return FREQUENCY_UNITS.MONTH;
           case EVENT_REPEAT_TYPES.ANNUALLY:
-            return FREQUENCY_UNITS.YEAR
+            return FREQUENCY_UNITS.YEAR;
           default:
-            return value?.repeat_frequency?.unit || FREQUENCY_UNITS.WEEK
+            return value?.repeat_frequency?.unit || FREQUENCY_UNITS.WEEK;
         }
-      }
+      };
       const getDayOfWeek = () => {
         if (
           value?.repeat_type === EVENT_REPEAT_TYPES.CUSTOM &&
           value?.repeat_frequency?.unit === FREQUENCY_UNITS.WEEK
         )
-          return mapRepeatOn(value?.repeat_on)
+          return mapRepeatOn(value?.repeat_on);
 
         if (value?.repeat_type === EVENT_REPEAT_TYPES.EVERY_WEEKDAY)
           return mapRepeatOn(
-            REPEAT_ON.filter((day) => day !== 'T7' && day !== 'CN'),
-          )
+            REPEAT_ON.filter((day) => day !== "T7" && day !== "CN"),
+          );
 
         if (value?.repeat_type === EVENT_REPEAT_TYPES.WEEKLY)
-          return [dayjs(initDate).utc().weekday()]
+          return [dayjs(initDate).utc().weekday()];
 
-        return undefined
-      }
+        return undefined;
+      };
       const getDayOfMonth = () => {
         if (
           value?.repeat_type === EVENT_REPEAT_TYPES.MONTHLY ||
@@ -245,24 +253,24 @@ const EventRepeatField = ({
             (value?.repeat_frequency?.unit === FREQUENCY_UNITS.MONTH ||
               value?.repeat_frequency?.unit === FREQUENCY_UNITS.YEAR))
         )
-          return [dayjs(initDate).utc().date()]
+          return [dayjs(initDate).utc().date()];
 
-        return undefined
-      }
+        return undefined;
+      };
       const getMonthOfYear = () => {
         if (
           value?.repeat_type === EVENT_REPEAT_TYPES.ANNUALLY ||
           (value?.repeat_type === EVENT_REPEAT_TYPES.CUSTOM &&
             value?.repeat_frequency?.unit === FREQUENCY_UNITS.YEAR)
         )
-          return [dayjs(initDate).utc().month() + 1]
+          return [dayjs(initDate).utc().month() + 1];
 
-        return undefined
-      }
+        return undefined;
+      };
 
       const recurrence_end_date = value?.end_on
-        ? dayjs(value?.end_on).endOf('day')
-        : initEndonDate
+        ? dayjs(value?.end_on).endOf("day")
+        : initEndonDate;
       onChange({
         repeat: value?.repeat_type !== EVENT_REPEAT_TYPES.NO_REPEAT,
         recurring_schedule: cleanObject({
@@ -274,37 +282,37 @@ const EventRepeatField = ({
           day_of_month: getDayOfMonth(),
           month_of_year: getMonthOfYear(),
         }) as IRecurringSchedule,
-      })
-    })
+      });
+    });
 
-    return () => subscription.unsubscribe()
-  }, [watch, initDate, initEndonDate])
+    return () => subscription.unsubscribe();
+  }, [watch, initDate, initEndonDate]);
 
   useEffect(() => {
     if (resetRepeat && setResetRepeat) {
-      reset()
-      setResetRepeat(false)
+      reset();
+      setResetRepeat(false);
     }
-  }, [resetRepeat])
+  }, [resetRepeat]);
 
   useEffect(() => {
     if (rangeDate?.[0] && rangeDate?.[1]) {
-      setFormValue('end_on', undefined)
+      setFormValue("end_on", undefined);
     }
-  }, [rangeDate])
+  }, [rangeDate]);
 
   useEffect(() => {
-    setRepeatType(watch('repeat_type') as RecurringScheduleType)
-  }, [watch('repeat_type')])
+    setRepeatType(watch("repeat_type") as RecurringScheduleType);
+  }, [watch("repeat_type")]);
 
   // Watch form values
-  const repeat_frequency = watch('repeat_frequency')
+  const repeat_frequency = watch("repeat_frequency");
 
-  const is_repeat = repeatType !== EVENT_REPEAT_TYPES.NO_REPEAT
-  const is_custom_repeat = repeatType === EVENT_REPEAT_TYPES.CUSTOM
+  const is_repeat = repeatType !== EVENT_REPEAT_TYPES.NO_REPEAT;
+  const is_custom_repeat = repeatType === EVENT_REPEAT_TYPES.CUSTOM;
   const repeat_on_visible =
     repeatType === EVENT_REPEAT_TYPES.CUSTOM &&
-    repeat_frequency.unit === FREQUENCY_UNITS.WEEK
+    repeat_frequency.unit === FREQUENCY_UNITS.WEEK;
 
   return (
     <>
@@ -329,7 +337,7 @@ const EventRepeatField = ({
                 <BlockLabelText text="Repeat every" required />
                 <RepeatFrequency
                   defaultValue={repeat_frequency}
-                  onChange={(data) => setFormValue('repeat_frequency', data)}
+                  onChange={(data) => setFormValue("repeat_frequency", data)}
                   disabled={disabled}
                 />
               </>
@@ -340,7 +348,7 @@ const EventRepeatField = ({
                 <BlockLabelText text="Repeat on" required />
                 <RepeatOn
                   date={initDate}
-                  onChange={(data) => setFormValue('repeat_on', data)}
+                  onChange={(data) => setFormValue("repeat_on", data)}
                   disabled={disabled}
                 />
               </>
@@ -357,7 +365,7 @@ const EventRepeatField = ({
                   minDate={dayjs(endOnMinDate)}
                   maxDate={dayjs(endOnMinDate).add(
                     MAX_END_DATE_YEAR_RANGE,
-                    'year',
+                    "year",
                   )}
                   value={field?.value ? dayjs(field.value) : undefined}
                   className="h-[45px] w-full"
@@ -373,7 +381,7 @@ const EventRepeatField = ({
         )}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default memo(EventRepeatField)
+export default memo(EventRepeatField);
