@@ -1,6 +1,5 @@
 import { fetcher } from '@services/requestV2'
-import { IResponse } from 'src/redux/types'
-import { IQuestion } from '@lms/core'
+import { IQuestion, IResponse } from '@lms/core'
 
 type QuestionDetailQueryDTO = {
   after_test: boolean

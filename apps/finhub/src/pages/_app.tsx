@@ -38,7 +38,7 @@ import 'sapp-common-package/dist/index.css'
 import 'sapp-common-package/dist/sapp-editor.css'
 import 'sapp-notification/dist/index.css'
 import { io } from 'socket.io-client'
-import { useAppDispatch } from '@lms/contexts'
+import { FeatureProvider, useAppDispatch } from '@lms/contexts'
 import { injectStore } from 'src/redux/services/httpService'
 import {
   getCountUnRead,
@@ -49,6 +49,18 @@ import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
 import ErrorRedirectPage from './error-redirect'
+import { QuestionAPI } from './api/question'
+import { CoursesAPI, submitQuizTest } from './api/courses'
+import { UploadAPI } from './api/upload'
+import UserApi from 'src/redux/services/User/user'
+import { NotificationAPI } from './api/notification'
+import { AuthAPI } from './api/profile'
+import { ClassAPI } from './api/class'
+import { ActivityAPI } from './api/activity'
+import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
+import { CaseStudyAPI } from './api/case-study'
+import { PageLink } from 'src/constants/routes'
+import { MENU_BOTTOM, MENU_ITEMS, MENU_ITEMS_EVENT } from 'src/constants/menu-items'
 
 export const excludedPathsHelp = [
   '/test/[id]',
@@ -306,6 +318,25 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         <Metadata />
         <AntConfigProvider>
           <PinnedNotifyProvider>
+            <FeatureProvider value={{
+              courseApi: CoursesAPI,
+              questionApi: QuestionAPI,
+              uploadApi: UploadAPI,
+              userApi: UserApi,
+              notificationApi: NotificationAPI,
+              authApi: AuthAPI,
+              classApi: ClassAPI,
+              activityApi: ActivityAPI,
+              courseActivityApi: CourseActivityApi,
+              caseStudyApi: CaseStudyAPI,
+              submitQuizTest: submitQuizTest,
+              authManager: new AuthenticationManager(),
+              pageLink: PageLink,
+              menuItems: MENU_ITEMS,
+              menuItemsEvent: MENU_ITEMS_EVENT,
+              menuBottom: MENU_BOTTOM,
+              router: router,
+            }}>
             <CourseProvider>
               <QueryClientProvider client={queryClient}>
                 <SocketContext.Provider value={socket}>
@@ -336,6 +367,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 </SocketContext.Provider>
               </QueryClientProvider>
             </CourseProvider>
+            </FeatureProvider>
           </PinnedNotifyProvider>
         </AntConfigProvider>
       </main>

@@ -1,7 +1,7 @@
 import { fetcher } from '@services/requestV2'
 import url from 'src/redux/services/Course/MyCourse/Test/url'
 import { apiURL } from 'src/redux/services/httpService'
-import { CourseDetail, IResponse, IScoreDetails } from '@lms/core'
+import { CourseDetail, IAnswerQuizLastestAttempt, IResponse, IScoreDetails } from '@lms/core'
 export class CoursesAPI {
   static getNoteDetail(
     course_section_id: string | number,
@@ -241,7 +241,18 @@ export class CoursesAPI {
       },
     })
   }
-
+  static getQuizAttemptsAnswer({
+    attempt_id,
+    question_id,
+  }: {
+    attempt_id: string
+    question_id: string
+  }): Promise<{
+    success: boolean
+    data: IAnswerQuizLastestAttempt
+  }> {
+    return fetcher(`/quiz-attempts/${attempt_id}/answer/${question_id}`)
+  }
   static getQuizAttempts(id: string | string[] | undefined): Promise<any> {
     return fetcher(`${url.getQuizAttempts}/${id}`)
   }
