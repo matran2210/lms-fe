@@ -1,3 +1,4 @@
+import ShortCourseModal from '@components/modal/ShortCourseModal'
 import { IRibbon } from '@lms/assets'
 import { EditorReader } from '@lms/ui'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'

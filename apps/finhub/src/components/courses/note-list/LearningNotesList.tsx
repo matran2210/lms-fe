@@ -13,17 +13,11 @@ import {
 } from 'src/type/courses-3-level/course'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
-import { useAppSelector, useAppDispatch } from 'src/redux/hook'
-import {
-  resetNotesList,
-  pushNotes,
-} from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
 import toast from 'react-hot-toast'
 import { format } from 'date-fns'
 import { debounce, isEmpty } from 'lodash'
 import { FormProvider, useForm } from 'react-hook-form'
 import FilterCourseSection from '@components/courses/note-list/FilterCourseSection'
-import { useCourseNoteContext } from 'src/contexts/CourseNoteContext'
 import {
   ICourseSectionNoteItem,
   INotesListResponse,
@@ -42,6 +36,7 @@ import { AltArrowLeft } from '@lms/assets'
 import { ButtonPrimary, SappDrawerV3 } from '@lms/ui'
 import { PageLink } from 'src/constants/routes'
 import { useTailwindBreakpoint } from '@lms/hooks'
+import { pushNotes3Level, resetNotesList3Level, useAppDispatch, useAppSelector, useCourseNoteContext } from '@lms/contexts'
 
 export default function LearningNotesList({
   onClose,
@@ -228,7 +223,7 @@ export default function LearningNotesList({
     }
     const isExist = getNotesData.find((item) => item.id === note.id)
     if (!isExist) {
-      dispatch(pushNotes(note))
+      dispatch(pushNotes3Level(note))
     }
   }
 
@@ -275,10 +270,10 @@ export default function LearningNotesList({
   const handleDrawerClose = () => {
     if (onClose) {
       onClose?.()
-      dispatch(resetNotesList())
+      dispatch(resetNotesList3Level())
     } else {
       document.body.style.overflow = 'auto'
-      dispatch(resetNotesList())
+      dispatch(resetNotesList3Level())
       resetFormFields(['section', 'subsection', 'activity'])
       setIsPageStateVariables(true)
       setFirstLoadActity(false)
@@ -435,7 +430,7 @@ export default function LearningNotesList({
                         (item) => item.id === note?.id,
                       )
                       if (!isExist) {
-                        dispatch(pushNotes(noteForModal))
+                        dispatch(pushNotes3Level(noteForModal))
                       }
                       handleOpenNote(note, true)
                       handleDrawerClose()

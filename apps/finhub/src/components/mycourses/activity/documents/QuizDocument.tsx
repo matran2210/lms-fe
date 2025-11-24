@@ -1,46 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
-import SappIcon from '@components/common/SappIcon'
-import { useAppDispatch, useAppSelector } from '@lms/contexts'
-import {
-  courseActivityQuizReducer,
-  fetchQuestionById,
-  removeQuizFinished,
-  saveAnswer,
-  selectQuestions,
-  submitQuiz,
-} from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
+import { courseActivityQuizReducer, fetchQuestionById, removeQuizFinished, saveAnswer, selectQuestions, submitQuiz, useAppDispatch, useAppSelector } from '@lms/contexts'
 
 import { CloseIcon, ConfirmIcon } from '@lms/assets'
-import SappButton from '@components/base/button/SappButton'
-import SappModal from '@components/base/modal/SappModal'
-import SappModalV3 from '@components/base/modal/SappModalV3'
-import { isValidatedAnswer } from '@utils/answer'
-import { trackGAEvent } from '@utils/google-analytics'
 import dayjs from 'dayjs'
 import { QuizResultComponent } from 'quiz-result-package'
 import toast from 'react-hot-toast'
-import {
-  ANIMATION,
-  FINISHED_TEST_TITLE,
-  GRADE_STATUS,
-  GRADING_METHOD,
-  PageLink,
-  RESPONSE_OPTION,
-  SOCIAL_LINK,
-} from 'src/constants'
 import ConFirmSubmit from '@pages/short-course/test/conFirmSubmit'
 import { showPopupCompletedCourse } from '@lms/contexts'
-import { IQuizSetting } from 'src/type'
-import { IQuestion } from 'src/type/course/Question'
-import { CoursesAPI } from '../../../../pages/api/courses/index'
+import { CoursesAPI, submitQuizTest } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import {
-  IQuestionResult,
-  IQuestionResultResponse,
-} from 'src/type/course/my-course/Activity'
 import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
+import { ANIMATION, FINISHED_TEST_TITLE, GRADE_STATUS, GRADING_METHOD, IQuestion, IQuestionResult, IQuestionResultResponse, IQuizSetting, RESPONSE_OPTION, SOCIAL_LINK } from '@lms/core'
+import { QuestionAPI } from '@pages/api/question'
+import { isValidatedAnswer, trackGAEvent } from '@lms/utils'
+import { PageLink } from 'src/constants/routes'
+import { SappButton, SappIcon, SappModal, SappModalV3 } from '@lms/ui'
 
 type Props = {
   questions: IQuestion[]
@@ -149,6 +125,8 @@ const QuizDocument = ({
         try {
           dispatch(
             fetchQuestionById({
+              api: QuestionAPI,
+              courseApi: CoursesAPI,
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
@@ -197,6 +175,8 @@ const QuizDocument = ({
         try {
           const nextQuestion = await dispatch(
             fetchQuestionById({
+              api: QuestionAPI,
+              courseApi: CoursesAPI,
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
@@ -266,6 +246,8 @@ const QuizDocument = ({
       try {
         await dispatch(
           fetchQuestionById({
+            api: QuestionAPI,
+            courseApi: CoursesAPI,
             activityId: activityId,
             tabId: tabId,
             quizId: quizId,
@@ -309,6 +291,8 @@ const QuizDocument = ({
         try {
           const prevQuestion = await dispatch(
             fetchQuestionById({
+              api: QuestionAPI,
+              courseApi: CoursesAPI,
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
@@ -415,6 +399,7 @@ const QuizDocument = ({
     try {
       await dispatch(
         submitQuiz({
+          submitQuizTest: submitQuizTest,
           id: quizId,
           data: { answers, quiz_position_mapping },
           class_user_id,

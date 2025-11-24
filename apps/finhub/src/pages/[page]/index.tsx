@@ -1,49 +1,34 @@
-import { Icon } from '@lms/assets'
 import Layout from '@components/layout'
-import Certificate from '@components/profile/Certificate'
-import ChangePassword from '@components/profile/ChangePassword'
-import LoginHistoryList from '@components/profile/LoginHistory/LoginHistoryList'
-import ProfileHeader from '@components/profile/ProfileHeader'
-import Settings from '@components/profile/Settings'
-import TabHeaderItem from '@components/tab/TabHeaderItem'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
-import { Collapse, CollapseProps, Divider, Tabs } from 'antd'
-import Image, { StaticImageData } from 'next/image'
-import { useEffect, useRef, useState } from 'react'
+import { Icon } from '@lms/assets'
 import {
   ANIMATION,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
-  PageLink,
+  IDeviceItem, NOTIFICATION_STATUS,
 } from '@lms/core'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
-import { IDeviceItem, NOTIFICATION_STATUS } from '@lms/core'
 import {
   convertSlugToTitle,
   getLocalStorageItem,
   removeLocalStorageItem,
 } from '@lms/utils'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
+import { Collapse, CollapseProps, Divider, Tabs } from 'antd'
+import Image, { StaticImageData } from 'next/image'
+import { useEffect, useRef, useState } from 'react'
+import withAuthorization from 'src/HOC/withAuthorization'
 
-import { useAppDispatch, useAppSelector } from '@lms/contexts'
+import { getLoginHistory, getLogoutUser, useAppDispatch, useAppSelector, useCourseContext, userReducer, UserType } from '@lms/contexts'
 
-import DeviceList from '@components/profile/DeviceInformation/DeviceList'
-import MyProfile from '@components/profile/MyProfile'
-import ProfileList from '@components/profile/ProfileInformation/ProfileList'
-import MyPasword from '@components/profile/Security/MyPasword'
-import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import Footer from '@components/layout/Footer'
-import clsx from 'clsx'
-import { useTailwindBreakpoint } from '@lms/hooks'
 import HeaderMobile from '@components/layout/Header/HeaderMobile'
 import { CollapseArrowIcon } from '@lms/assets'
-import OverviewItemCard from '@components/profile/Overview/OverviewItemCard'
-import FullScreenMobile from '@components/profile/Modal/FullScreenMobile'
-import { getLoginHistory, userReducer } from 'src/redux/slice/User/User'
-import UserApi from 'src/redux/services/User/user'
+import { Certificate, ChangePassword, DeviceList, LoginHistoryList, MyPasword, MyProfile, OverviewItemCard, ProfileHeader, ProfileList, Settings } from '@lms/feature-user'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { FullScreenMobile, SearchWithMenuToggle, TabHeaderItem } from '@lms/ui'
+import clsx from 'clsx'
 import { useRouter } from 'next/router'
-import { useCourseContext } from '@contexts/index'
-import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
+import { PageLink } from 'src/constants/routes'
+import UserApi from 'src/redux/services/User/user'
 
 interface IFullScreenMobile {
   open: boolean
@@ -119,7 +104,9 @@ const ProfilePage = () => {
 
   const handleLogout = async () => {
     try {
-      await dispatch(getLogoutUser()).then(() => {
+      await dispatch(getLogoutUser({
+        authManager: new AuthenticationManager(),
+      })).then(() => {
         const pinnedStatus = getLocalStorageItem('pinnedStatus')
         if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
           removeLocalStorageItem('pinnedId')
@@ -131,12 +118,13 @@ const ProfilePage = () => {
   }
   const getListDevices = async () => {
     const res = await UserApi.getListDevices()
-    setListDevices(res.data)
+    setListDevices(res)
   }
 
   useEffect(() => {
     dispatch(
       getLoginHistory({
+        api: UserApi,
         page_index: DEFAULT_PAGE_NUMBER,
         page_size: DEFAULT_PAGE_SIZE,
         type: 'login',
@@ -331,6 +319,7 @@ const ProfilePage = () => {
           handleOpenSidebar={handleOpenSidebar}
           isShowToggle
           className={'mb-4 hidden md:flex'}
+          redirectLink={PageLink.SHORT_COURSE}
         />
         <div className="mx-auto my-0 flex w-full grow flex-col">
           <div className="main hidden sm:mx-4 md:mb-6 md:block lg:mx-0 lg:mb-4">

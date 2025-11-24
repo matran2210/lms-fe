@@ -1,14 +1,14 @@
 import ExaminationInfo from '@components/mycourses/course-detail/ExaminationInfo'
-import { MENU_BOTTOM, MENU_ITEMS } from '@lms/core'
 import { trackGAEvent } from '@lms/utils'
 import clsx from 'clsx'
 import { Dispatch, SetStateAction } from 'react'
-import { useAppSelector } from 'src/redux/hook'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
 
 import LearningResource from '@components/mycourses/LearningResource'
 import { Divider } from 'antd'
+import { useAppSelector } from '@lms/contexts'
+import { MENU_BOTTOM, MENU_ITEMS } from 'src/constants/menu-items'
 type SidebarProps = {
   isOpened: boolean
   className: string

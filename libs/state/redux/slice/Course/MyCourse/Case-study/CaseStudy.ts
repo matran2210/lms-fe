@@ -72,7 +72,7 @@ export const caseStudyTestSlice = createSlice({
         }
       }
     },
-    saveFileEssay: (state, action) => {
+    saveFileEssayCaseStudy: (state, action) => {
       const { question_id, file, topic_id, requirement_id } = action.payload
       const arr = [...state.listQuestions]
       let newData = [] as any
@@ -120,7 +120,7 @@ export const caseStudyTestSlice = createSlice({
         listQuestions: [...newData],
       }
     },
-    clearFileEssay: (state, action) => {
+    clearFileEssayCaseStudy: (state, action) => {
       const { question_id, topic_id, requirement_id } = action.payload
       const arr = [...state.listQuestions]
       let newData = [] as any
@@ -181,6 +181,6 @@ export const caseStudyTestSlice = createSlice({
 export const caseStudyTestReducer = (state: RootState) =>
   state.caseStudyTestReducer
 export const caseStudyTestAction = caseStudyTestSlice.actions
-export const { loadMoreQuestion, saveFileEssay, clearFileEssay } =
-  caseStudyTestSlice.actions
+export const { loadMoreQuestion, saveFileEssayCaseStudy, clearFileEssayCaseStudy } =
+  caseStudyTestSlice.actions;
 export default caseStudyTestSlice.reducer

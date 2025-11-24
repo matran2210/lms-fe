@@ -8,9 +8,7 @@ import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
-import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
-import { useCourseContext } from '@contexts/index'
-import { CourseSectionType } from '@lms/core'
+import { CourseSectionType, IActivity, SUFFIX_TYPE } from '@lms/core'
 import {truncateBySpace, truncateString , trackGAEvent } from '@lms/utils'
 
 import { uniqueId } from 'lodash'
@@ -32,19 +30,8 @@ import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { UploadAPI } from 'src/pages/api/upload'
-import { useAppDispatch, useAppSelector } from '@lms/contexts'
-import {
-  closeCalculator,
-  courseActivityAction,
-  courseActivityReducer,
-  getCourseActivityTapById,
-  getDiscussion,
-} from 'src/redux/slice/Course/MyCourse/Activity/Activity'
-import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
-import { clearNote } from 'src/redux/slice/Course/NotesList'
+import { clearNote, closeCalculator, courseActivityAction, courseActivityReducer, getCourseActivityTapById, getDiscussion, resetQuizActivity, useAppDispatch, useAppSelector, useCourseContext } from '@lms/contexts'
 import { showPopupCompletedCourse } from '@lms/contexts'
-import { UserType } from 'src/redux/types/User/urser'
-import { IActivity } from 'src/type/course/my-course/Activity'
 import {
   ActivitySkeleton,
   EditorReader,
@@ -184,7 +171,7 @@ const ActivityPage = () => {
       CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION = {}
       try {
         dispatch(courseActivityAction.setActivityState(activity))
-        dispatch(getDiscussion({ id: router.query?.id, sectionId: sectionId }))
+        dispatch(getDiscussion({ api: CoursesAPI, id: router.query?.id as string, sectionId: sectionId }))
       } catch (error) {}
     }
 
@@ -283,6 +270,7 @@ const ActivityPage = () => {
         delete CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION[selector?.currentTabId]
       dispatch(
         getCourseActivityTapById({
+          api: CoursesAPI,
           courseId: courseId as string,
           id: selector?.currentTabId ?? '',
         }),
@@ -297,7 +285,7 @@ const ActivityPage = () => {
    */
   const handleChangeTab = (courseId: string, id: string) => {
     try {
-      dispatch(getCourseActivityTapById({ courseId, id }))
+      dispatch(getCourseActivityTapById({ api: CoursesAPI, courseId, id }))
       setActiveButtonId(id)
     } catch (error) {}
   }

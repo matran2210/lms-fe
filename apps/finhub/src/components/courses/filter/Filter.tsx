@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form'
 import { IFilterProps } from 'src/type/courses-3-level'
 import DesktopFilter3Level from '@components/courses/filter/FilterDesktop'
 import MobileFilter3Level from '@components/courses/filter/FilterMobile'
-import { PageLink, defaultStatusCourse } from '@lms/core'
+import { defaultStatusCourse } from '@lms/core'
+import { PageLink } from 'src/constants/routes'
 
 export default function Filter3Level({ courses, setPage }: IFilterProps) {
   const router = useRouter()
