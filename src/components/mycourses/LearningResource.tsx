@@ -34,6 +34,7 @@ import ListFilterMobile from '@components/common/ListFilterMobile'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
 import Tooltip from 'src/common/Tooltip'
 import { PageLink } from 'src/constants'
+import CarouselSlideAnimation from 'src/common/animations/CarouselSlideAnimation'
 interface IProps {
   open: boolean
   setOpenResource: Dispatch<SetStateAction<boolean>>
@@ -45,6 +46,7 @@ const DEFAULT_PAGESIZE = 20
 const LearningResource = ({ open, setOpenResource }: IProps) => {
   const { isMobileView, isTabletView, isAlwaysShowSidebar } =
     useTailwindBreakpoint()
+  const [direction, setDirection] = useState<1 | -1>(1)
   const scrollRef = useRef<HTMLDivElement>(null)
   const [resources, setResources] = useState<IResourceDetail>()
   const router = useRouter()
@@ -239,6 +241,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     : 'mb-6'
 
   const handleBack = () => {
+    setDirection(-1)
     if (openChooseItem.isOpen && openChooseItem.type !== 'section') {
       const type = backTypeMap[openChooseItem.type]
       setOpenChooseItem({
@@ -256,6 +259,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   }
 
   const handleSubmit = () => {
+    setDirection(-1)
     setIsOpenFilter(false)
     setParamsSubId(openChooseItem.params || '')
     setOpenChooseItem({
@@ -298,83 +302,92 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         placement={!isAlwaysShowSidebar ? 'bottom' : 'right'}
       >
         <FormProvider {...methods}>
-          {!isOpenFilter ? (
-            <>
-              {isMobileView ? (
-                <SortBy action={() => setIsOpenFilter(true)} />
-              ) : (
-                <FilterCourseSection
-                  setParams={setParamsSubId}
-                  heightCustom="h-10"
-                  isPageStateVariables={isPageStateVariables}
-                />
-              )}
-              {isEmpty(resources?.resources) && !loading ? (
-                <div className="flex min-h-[200px] items-center justify-center md:min-h-[385px] lg:min-h-[calc(100vh-20rem)]">
-                  <NoData />
-                </div>
-              ) : (
-                <div
-                  ref={scrollRef}
-                  className="mt-6 flex flex-col gap-4 overflow-y-auto md:mt-8"
-                  style={{
-                    maxHeight: `calc(100% - ${heightContent})`,
-                  }}
-                >
-                  {resources?.resources?.map((resource) => (
-                    <div
-                      key={resource.id}
-                      className="flex items-center justify-between gap-6 rounded-lg bg-gray-100 px-4 py-3 hover:bg-primary-50"
-                    >
-                      <div>
-                        <div className="line-clamp-2 break-all text-base font-medium text-gray-800">
-                          <Tooltip title={resource?.name}>
-                            {resource?.name}
-                          </Tooltip>
-                        </div>
-                        <div className="text-sm font-normal text-gray">
-                          {getSize(resource?.size)}
-                        </div>
-                      </div>
-                      <a
-                        className="cursor-pointer hover:text-primary"
-                        onClick={() =>
-                          download(resource.name, resource.file_key)
-                        }
+          <CarouselSlideAnimation slideKey={title} direction={direction}>
+            {!isOpenFilter ? (
+              <>
+                {isMobileView ? (
+                  <SortBy
+                    action={() => {
+                      setIsOpenFilter(true)
+                      setDirection(1)
+                    }}
+                  />
+                ) : (
+                  <FilterCourseSection
+                    setParams={setParamsSubId}
+                    heightCustom="h-10"
+                    isPageStateVariables={isPageStateVariables}
+                    setDirection={setDirection}
+                  />
+                )}
+                {isEmpty(resources?.resources) && !loading ? (
+                  <div className="flex min-h-[200px] items-center justify-center md:min-h-[385px] lg:min-h-[calc(100vh-20rem)]">
+                    <NoData />
+                  </div>
+                ) : (
+                  <div
+                    ref={scrollRef}
+                    className="mt-6 flex flex-col gap-4 overflow-y-auto md:mt-8"
+                    style={{
+                      maxHeight: `calc(100% - ${heightContent})`,
+                    }}
+                  >
+                    {resources?.resources?.map((resource) => (
+                      <div
+                        key={resource.id}
+                        className="flex items-center justify-between gap-6 rounded-lg bg-gray-100 px-4 py-3 hover:bg-primary-50"
                       >
-                        <DownloadIcon />
-                      </a>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </>
-          ) : !openChooseItem.isOpen ? (
-            <ListFilterMobile
-              setOpenChooseItem={setOpenChooseItem}
-              listSection={listSection}
-              listSubsection={listSubsection}
-              listUnit={listUnit}
-              listActivity={listActivity}
-              setListSection={setListSection}
-              setListSubsection={setListSubsection}
-              setListUnit={setListUnit}
-              setListActivity={setListActivity}
-            />
-          ) : (
-            <ListItemFilterMobile
-              setOpenChooseItem={setOpenChooseItem}
-              openChooseItem={openChooseItem}
-              listSection={listSection}
-              listSubsection={listSubsection}
-              listUnit={listUnit}
-              listActivity={listActivity}
-              setListSection={setListSection}
-              setListSubsection={setListSubsection}
-              setListUnit={setListUnit}
-              setListActivity={setListActivity}
-            />
-          )}
+                        <div>
+                          <div className="line-clamp-2 break-all text-base font-medium text-gray-800">
+                            <Tooltip title={resource?.name}>
+                              {resource?.name}
+                            </Tooltip>
+                          </div>
+                          <div className="text-sm font-normal text-gray">
+                            {getSize(resource?.size)}
+                          </div>
+                        </div>
+                        <a
+                          className="cursor-pointer hover:text-primary"
+                          onClick={() =>
+                            download(resource.name, resource.file_key)
+                          }
+                        >
+                          <DownloadIcon />
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : !openChooseItem.isOpen ? (
+              <ListFilterMobile
+                setOpenChooseItem={setOpenChooseItem}
+                listSection={listSection}
+                listSubsection={listSubsection}
+                listUnit={listUnit}
+                listActivity={listActivity}
+                setListSection={setListSection}
+                setListSubsection={setListSubsection}
+                setListUnit={setListUnit}
+                setListActivity={setListActivity}
+              />
+            ) : (
+              <ListItemFilterMobile
+                setOpenChooseItem={setOpenChooseItem}
+                openChooseItem={openChooseItem}
+                listSection={listSection}
+                listSubsection={listSubsection}
+                listUnit={listUnit}
+                listActivity={listActivity}
+                setListSection={setListSection}
+                setListSubsection={setListSubsection}
+                setListUnit={setListUnit}
+                setListActivity={setListActivity}
+                setDirection={setDirection}
+              />
+            )}
+          </CarouselSlideAnimation>
         </FormProvider>
       </SappDrawerV3>
     </>
