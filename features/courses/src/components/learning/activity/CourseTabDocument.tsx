@@ -2,21 +2,17 @@ import { ArrowLeft, ArrowRight, PaginationDotIcon } from '@lms/assets'
 import {
   courseActivityReducer,
   getCourseActivityTapById,
-  useAppDispatch, useAppSelector
+  useAppDispatch, useAppSelector,
+  useFeature
 } from '@lms/contexts'
 import {
   ANIMATION,
   EAttemptStatus,
   GradingPreference,
   IActivity,
-  IActivityAPI,
-  ICourseActivityAPI,
-  ICoursesAPI,
   IFocusQuiz,
-  IQuestionAPI,
-  IUploadAPI,
   IVideo,
-  VideoStateClicked,
+  VideoStateClicked
 } from '@lms/core'
 import { useQueryAction } from '@lms/hooks'
 import { ActivitySkeleton, HighlightableHTML } from '@lms/ui'
@@ -45,13 +41,6 @@ interface IProps {
   setFocusOnlyQuiz: React.Dispatch<React.SetStateAction<IFocusQuiz>>
   handleSetCurrentVideo: (video: IVideo) => void
   focusOnlyDiscussion: boolean
-  uploadApi: IUploadAPI;
-  questionApi: IQuestionAPI;
-  courseApi: ICoursesAPI;
-  activityApi: IActivityAPI
-  courseActivityApi: ICourseActivityAPI
-  submitQuizTest: (id: string, data: any, class_user_id?: string | undefined) => Promise<any>
-  pageLink: { [key: string]: string}
 }
 const CourseTabDocument = ({
   activity,
@@ -66,19 +55,15 @@ const CourseTabDocument = ({
   setFocusOnlyQuiz,
   handleSetCurrentVideo,
   focusOnlyDiscussion,
-  uploadApi,
-  questionApi,
-  courseApi,
-  activityApi,
-  courseActivityApi,
-  submitQuizTest,
-  pageLink
+
+  
 }: IProps) => {
   const selector = useAppSelector(courseActivityReducer)
+  const { courseApi,  router } = useFeature();
+
   const quizDocumentRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<any>(null)
   const queryAction = useQueryAction()
-  const router = useRouter()
   const courseId = router.query?.id
   const activityId = router.query.activityId
   const dispatch = useAppDispatch()
@@ -262,11 +247,7 @@ const CourseTabDocument = ({
                                   ?.number_of_attempts || 0
                               }
                               isQuizFinished={isQuizFinished}
-                              uploadApi={uploadApi}
-                              questionApi={questionApi}
-                              courseApi={courseApi}
-                              submitQuizTest={submitQuizTest}
-                              pageLink={pageLink}
+                             
                             />
                           </div>
                         )
@@ -318,9 +299,6 @@ const CourseTabDocument = ({
                               handleSetCurrentVideoCallback={
                                 handleSetCurrentVideo
                               }
-                              uploadAPI={uploadApi}
-                              questionApi={questionApi}
-                              courseApi={courseApi}
                             ></VideoDocument>
                           </div>
                         )
@@ -366,7 +344,7 @@ const CourseTabDocument = ({
           hidden: !focusOnlyDiscussion,
         })}
       >
-        <Discussion class_id={(router.query.id as string) || ''} activityApi={activityApi} courseApi={courseApi} courseActivityApi={courseActivityApi} />
+        <Discussion class_id={(router.query.id as string) || ''} />
       </div>
       {selector?.tabs && selector?.tabs?.length > 1 && (
         <div

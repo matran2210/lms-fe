@@ -1,5 +1,5 @@
 import { ConfirmIcon } from "@lms/assets";
-import { useCourseContext } from "@lms/contexts";
+import { useCourseContext, useFeature } from "@lms/contexts";
 import { EAttemptStatus, GRADE_STATUS, GRADING_METHOD, IClassAPI, IMyCourseDetail, TEST_TYPE } from "@lms/core";
 import { TestModal, TestModalTeacher } from "@lms/feature-test";
 import { ButtonSecondary, ButtonText, SappModalV3 } from "@lms/ui";
@@ -18,8 +18,6 @@ const PartFailed = ({
   lastElementRef,
   isTeacher,
   hasCertificate = false,
-  classApi,
-  pageLink,
 }: {
   coursePart: IMyCourseDetail;
   class_user_id?: string;
@@ -28,9 +26,9 @@ const PartFailed = ({
   lastElementRef: (node: HTMLDivElement) => void;
   isTeacher: boolean;
   hasCertificate?: boolean;
-    classApi: IClassAPI;
-    pageLink: { [key: string]: string;}
 }) => {
+  const { pageLink } = useFeature();
+
   const noOfAttempts = `${coursePart?.quiz?.attempt?.number_of_attempts || 0}/${
     coursePart?.quiz?.is_limited ? coursePart?.quiz?.limit_count : "Unlimited"
   }`;
@@ -391,8 +389,6 @@ const PartFailed = ({
           class_user_id={class_user_id}
           is_passed_course={is_passed_course}
           activeCourse={() => {}}
-          classApi={classApi}
-          pageLink={pageLink}
         />
       ) : (
         <TestModal

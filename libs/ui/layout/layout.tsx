@@ -1,11 +1,8 @@
-import { useCourseContext, usePinnedNotifyContext } from "@lms/contexts";
-import { ICoursesAPI, INotificationAPI, MenuItem } from "@lms/core";
+import { useAppSelector, useCourseContext, useFeature, usePinnedNotifyContext } from "@lms/contexts";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import clsx from "clsx";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { ReactElement, ReactNode, useState } from "react";
-import { useAppSelector } from "@lms/contexts";
 import Sidebar from "./Sidebar";
 interface LayoutProps {
   children: ReactNode;
@@ -16,14 +13,6 @@ interface LayoutProps {
   handleToggleSidebar?: () => void;
   className?: string;
   childClassName?: string;
-  api: ICoursesAPI;
-  notificationApi: INotificationAPI;
-  pageLink: {
-    [key: string]: string;
-  };
-  menuItems: MenuItem[];
-  menuItemsEvent: MenuItem[];
-  menuBottom: MenuItem[];
 }
 
 // eslint-disable-next-line import/no-unused-modules
@@ -37,14 +26,10 @@ export default function Layout(props: LayoutProps): ReactElement {
     handleToggleSidebar,
     className,
     childClassName,
-    api,
-    notificationApi,
-    pageLink,
-    menuItems,
-    menuItemsEvent,
-    menuBottom,
+
   } = props;
-  const router = useRouter();
+  const { pageLink, menuItems, menuItemsEvent, menuBottom, router } = useFeature();
+
   const { isShowMenuContent } = useTailwindBreakpoint();
 
   const { isOpenSidebar, setOpenSidebar } = useCourseContext();
@@ -91,10 +76,6 @@ export default function Layout(props: LayoutProps): ReactElement {
         })}
       >
         <Sidebar
-          menuBottom={menuBottom}
-          menuItems={menuItems}
-          menuItemsEvent={menuItemsEvent}
-          pageLink={pageLink}
           isOpened={isOpenSidebar}
           toggleDrawer={toggleDrawer}
           className={clsx(
@@ -118,8 +99,6 @@ export default function Layout(props: LayoutProps): ReactElement {
           openResource={openResource}
           openExaminationInfo={openExaminationInfo}
           setOpenExaminationInfo={setOpenExaminationInfo}
-          api={api}
-          notificationApi={notificationApi}
         />
 
         <div

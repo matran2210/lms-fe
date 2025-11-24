@@ -1,14 +1,13 @@
 import { Dispatch, SetStateAction } from "react";
 import { INotificationAPI, MenuItem as MenuItemType } from "@lms/core";
 import MenuItem from "../MenuItem";
+import { useFeature } from "node_modules/@lms/contexts";
 
 type MenuItemsListProps = {
   options: MenuItemType[];
   setOpenResource?: Dispatch<SetStateAction<boolean>>;
   closeSideBar: () => void;
   setOpenExaminationInfo?: Dispatch<SetStateAction<boolean>>;
-  pageLink: { [key: string]: string };
-  notificationApi: INotificationAPI
 };
 
 export default function MenuItemsList({
@@ -16,9 +15,9 @@ export default function MenuItemsList({
   setOpenResource,
   closeSideBar,
   setOpenExaminationInfo,
-  notificationApi,
-  pageLink
+  
 }: MenuItemsListProps) {
+
   return (
     <div className="menu-items-list flex flex-col gap-4 px-3">
       {options.map((option, index) => (
@@ -28,8 +27,6 @@ export default function MenuItemsList({
           setOpenResource={setOpenResource}
           closeSideBar={closeSideBar}
           setOpenExaminationInfo={setOpenExaminationInfo}
-          notificationApi={notificationApi}
-          pageLink={pageLink}
         />
       ))}
     </div>

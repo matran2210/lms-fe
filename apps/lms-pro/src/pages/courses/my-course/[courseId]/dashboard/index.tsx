@@ -1,4 +1,5 @@
 
+import { UserType } from '@lms/contexts'
 import {
   ANIMATION,
   COURSE_TYPE,
@@ -15,19 +16,11 @@ import {
   Layout,
   SappBreadCrumbs,
 } from '@lms/ui'
-import { CoursesAPI } from '@pages/api/courses'
 import { DashboardAPI } from '@pages/api/dashboard'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import {
-  MENU_BOTTOM,
-  MENU_ITEMS,
-  MENU_ITEMS_EVENT,
-} from 'src/constants/menu-items'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from '@lms/contexts'
-import { NotificationAPI } from '@pages/api/notification'
 
 const Dashboard = () => {
   const router = useRouter()
@@ -168,12 +161,6 @@ const Dashboard = () => {
       title="Dashboard"
       showSidebar={isAlwaysShowSidebar}
       size="xl"
-      pageLink={PageLink}
-      menuItems={MENU_ITEMS}
-      menuItemsEvent={MENU_ITEMS_EVENT}
-      menuBottom={MENU_BOTTOM}
-      api={CoursesAPI}
-      notificationApi={NotificationAPI}
     >
       {isLoading ? (
         <DashboardSkeleton />

@@ -6,19 +6,15 @@ import {
   useCourseContext
 } from '@lms/contexts'
 import { ANIMATION, LANG_SIGNIN } from '@lms/core'
+import { Heading } from '@lms/feature-courses'
 import { EventTestFilter, EventTestList } from '@lms/feature-test'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { CourseSkeleton, Footer, Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
-import { CoursesAPI } from '@pages/api/courses'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { EventTestAPI } from '../api/event-test'
-import { MENU_BOTTOM, MENU_ITEMS, MENU_ITEMS_EVENT } from 'src/constants/menu-items'
-import { NotificationAPI } from '@pages/api/notification'
-import { Heading } from '@lms/feature-courses'
 
 const EventTest = () => {
   const router = useRouter()
@@ -69,12 +65,6 @@ const EventTest = () => {
         title={LANG_SIGNIN.eventTest}
         showSidebar={showSidebar || isAlwaysShowSidebar}
         handleToggleSidebar={handleCloseSidebar}
-        pageLink={PageLink}
-        api={CoursesAPI}
-        notificationApi={NotificationAPI}
-        menuItems={MENU_ITEMS}
-        menuItemsEvent={MENU_ITEMS_EVENT}
-        menuBottom={MENU_BOTTOM}
       >
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}

@@ -12,11 +12,11 @@ import {
   EVENT_TYPES_RESPONSE,
 } from '@lms/core'
 import { SchedulesAPI } from 'src/pages/api/schedules'
-import { IResponseSchedule } from 'src/redux/types/Schedule/schedule'
 import CalendarHead from './CalendarHead'
 import { pick } from 'lodash'
 import { formatRecurringSchedule } from '@utils/request'
 import { formatDateTimeWithTimeZone } from '@lms/utils'
+import { IResponseSchedule } from '@lms/contexts'
 
 interface IProps {
   onOpenDetail: (date: Date, events: IEvent[]) => void

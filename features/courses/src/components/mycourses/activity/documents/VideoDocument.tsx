@@ -1,18 +1,16 @@
+import {
+  IActivityStateQuestion,
+  fetchQuestionById, useAppDispatch,
+  useFeature
+} from '@lms/contexts'
+import { ANIMATION, IQuestion, IVideo, video_url } from '@lms/core'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { SAPPRadio, SAPPVideo, SappModal } from '@lms/ui'
+import { debounce, formatTime, htmlToRaw } from '@lms/utils'
+import clsx from 'clsx'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import {  IActivityStateQuestion,
-  fetchQuestionById,useAppDispatch, useAppSelector } from '@lms/contexts'
-import { SappModal } from '@lms/ui'
-import { SAPPVideo } from '@lms/ui'
-import { formatTime, htmlToRaw } from '@lms/utils'
-import { ICoursesAPI, IQuestionAPI, IUploadAPI, video_url } from '@lms/core'
-import { debounce } from '@lms/utils'
-import { IQuestion, IVideo } from '@lms/core'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import { SAPPRadio } from '@lms/ui'
-import clsx from 'clsx'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { ANIMATION } from '@lms/core'
 
 type Props = {
   videos?: IVideo[]
@@ -30,9 +28,6 @@ type Props = {
   handleCloseTab?: (activeTab: string) => void
   onUpdateActiveVideo?: (activeVideo: string) => void
   newQuizModal?: boolean
-  questionApi: IQuestionAPI;
-  courseApi: ICoursesAPI;
-  uploadAPI: IUploadAPI;
 }
 
 /**
@@ -56,10 +51,11 @@ const VideoDocument = ({
   handleCloseTab,
   onUpdateActiveVideo,
   newQuizModal,
-  questionApi,
-courseApi,
-uploadAPI,
+
 }: Props) => {
+  const { questionApi,
+    courseApi } = useFeature();
+
   const {
     control: controlAnswer,
     setValue,
@@ -491,9 +487,6 @@ uploadAPI,
                 document_id={document_id}
                 grading_preference={grading_preference}
                 controlAnswer={controlAnswer}
-                api={uploadAPI}
-                courseApi={courseApi}
-                questionApi={questionApi}
               />
             </div>
           </SappModal>

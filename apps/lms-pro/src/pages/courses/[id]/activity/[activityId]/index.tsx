@@ -2,6 +2,7 @@ import {
   CalculatorIconV2,
   CloseIcon,
   CloseIconNote,
+  CloseModalIcon,
   DiscussionIcon,
   DocumentTextIcon,
   ExpandIcon,
@@ -26,7 +27,6 @@ import {
 } from '@lms/ui'
 import { convertMinutesToHourFormat } from '@lms/utils'
 
-import CloseModalIcon from '@lms/assets/CloseModalIcon'
 import { Triangle } from '@lms/assets'
 import {
   activeNotesList,
@@ -538,12 +538,6 @@ const ActivityPage = () => {
         fullWidth={focusOnlyDiscussion}
         className={focusOnlyDiscussion ? 'h-full !bg-white' : ''}
         childClassName={focusOnlyDiscussion ? 'h-full' : ''}
-        api={CoursesAPI}
-        notificationApi={NotificationAPI}
-        pageLink={PageLink}
-        menuItems={MENU_ITEMS}
-        menuItemsEvent={MENU_ITEMS_EVENT}
-        menuBottom={MENU_BOTTOM}
       >
         <div
           className={clsx(
@@ -684,11 +678,6 @@ const ActivityPage = () => {
                 handleSetCurrentVideo,
                 focusOnlyDiscussion,
               }}
-              uploadApi={UploadAPI}
-              questionApi={QuestionAPI}
-              courseApi={CoursesAPI}
-              submitQuizTest={submitQuizTest}
-              pageLink={PageLink}
             />
             {/* Next/Prev Activities */}
             <ActivityPagination
@@ -899,8 +888,6 @@ const ActivityPage = () => {
       <LearningResource
         open={openResource}
         setOpenResource={setOpenResource}
-        api={CoursesAPI}
-        pageLink={PageLink}
       />
 
       {openVideoTimeline && (

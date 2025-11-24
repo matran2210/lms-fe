@@ -129,7 +129,6 @@ const MyProfilePage = () => {
         title="My Profile"
         breadcrumbs={breadcrumbs}
         className="bg-[#F2F4F7] p-0"
-        courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}
       >
         <div className="h-fit w-full rounded-2xl bg-transparent md:bg-white md:p-6 md:shadow-card lg:px-10 lg:py-8">
           <div className="relative">

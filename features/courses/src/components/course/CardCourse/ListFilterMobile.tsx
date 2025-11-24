@@ -3,7 +3,8 @@ import clsx from "clsx";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useCourseSectionsData } from "@lms/hooks";
-import { getTypeName, ICoursesAPI, ISection, SectionField } from "@lms/core";
+import { getTypeName, ISection, SectionField } from "@lms/core";
+import { useFeature } from "@lms/contexts";
 
 interface IList {
   id: number;
@@ -22,7 +23,6 @@ const ListFilterMobile = ({
   setListSubsection,
   setListUnit,
   setListActivity,
-  api
 }: {
   setOpenChooseItem: Dispatch<SetStateAction<any>>;
   listSection: ISection[];
@@ -33,8 +33,9 @@ const ListFilterMobile = ({
   setListSubsection: Dispatch<SetStateAction<ISection[]>>;
   setListUnit?: Dispatch<SetStateAction<ISection[]>>;
   setListActivity: Dispatch<SetStateAction<ISection[]>>;
-  api: ICoursesAPI
 }) => {
+  const { courseApi } = useFeature();
+
   const { watch } = useFormContext();
   const [list, setList] = useState<IList[]>([]);
   const { selected } = useCourseSectionsData({
@@ -46,7 +47,7 @@ const ListFilterMobile = ({
     setListSubsection,
     setListUnit,
     setListActivity,
-    api
+    api: courseApi,
   });
   const sectionNameSection = listSection?.find(
     (item) => item?.id === selected.section,

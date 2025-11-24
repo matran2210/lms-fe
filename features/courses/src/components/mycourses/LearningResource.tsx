@@ -22,21 +22,19 @@ import { CoursesAPI } from "src/pages/api/courses";
 import { UploadAPI } from "src/pages/api/upload";
 import { ListFilterMobile, ListItemFilterMobile } from "../course";
 import FilterCourseSection from "./FilterCourseSection";
+import { useFeature } from "@lms/contexts";
 const { publicRuntimeConfig } = getConfig();
 export const { apiURL } = publicRuntimeConfig;
 interface IProps {
   open: boolean;
   setOpenResource: Dispatch<SetStateAction<boolean>>;
-  api: ICoursesAPI;
-  pageLink: {
-    [key: string]: string;
-  };
 }
 
 const DEFAULT_PAGE_INDEX = 1;
 const DEFAULT_PAGESIZE = 20;
 
-const LearningResource = ({ open, setOpenResource, api, pageLink }: IProps) => {
+const LearningResource = ({ open, setOpenResource }: IProps) => {
+  const { pageLink } = useFeature();
   const { isMobileView, isTabletView, isAlwaysShowSidebar } =
     useTailwindBreakpoint();
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -354,7 +352,6 @@ const LearningResource = ({ open, setOpenResource, api, pageLink }: IProps) => {
               setListSubsection={setListSubsection}
               setListUnit={setListUnit}
               setListActivity={setListActivity}
-              api={api}
             />
           ) : (
             <ListItemFilterMobile
@@ -368,7 +365,6 @@ const LearningResource = ({ open, setOpenResource, api, pageLink }: IProps) => {
               setListSubsection={setListSubsection}
               setListUnit={setListUnit}
               setListActivity={setListActivity}
-              api={api}
             />
           )}
         </FormProvider>

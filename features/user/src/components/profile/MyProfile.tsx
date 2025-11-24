@@ -7,6 +7,7 @@ import {
   updateUser,
   updateUserAvatar,
   useAppDispatch, useAppSelector,
+  useFeature,
   userReducer
 } from "@lms/contexts";
 import { IAuthManager, USER_TYPE } from "@lms/core";
@@ -33,8 +34,6 @@ interface IProps {
   setReViewImageSrc: Dispatch<
     SetStateAction<string | StaticImageData | undefined>
   >;
-  userApi: IUserAPI
-  authManager: IAuthManager
 }
 
 const schema = z.object({
@@ -50,10 +49,9 @@ const MyProfile = ({
   avatar,
   handleSetAvatar,
   setReViewImageSrc,
-  userApi,
-  authManager
 }: IProps) => {
   const { isMobileView } = useTailwindBreakpoint();
+  const { userApi, authManager } = useFeature();
 
   const [openEditProfile, setOpenEditProfile] = useState(false);
   const dispatch = useAppDispatch();

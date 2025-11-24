@@ -6,7 +6,8 @@ import {
   removeQuizFinished,
   saveAnswer,
   selectQuestions,
-  submitQuiz, useAppDispatch, useAppSelector
+  submitQuiz, useAppDispatch, useAppSelector,
+  useFeature
 } from "@lms/contexts";
 import { useEffect, useRef, useState } from "react";
 
@@ -79,11 +80,6 @@ type Props = {
   limit_count?: number;
   number_of_attempts: number;
   isQuizFinished?: boolean;
-  uploadApi: IUploadAPI;
-  questionApi: IQuestionAPI;
-  courseApi: ICoursesAPI;
-  submitQuizTest: (id: string, data: any, class_user_id?: string | undefined) => Promise<any>
-  pageLink: { [key: string]: string}
 };
 
 const QuizDocument = ({
@@ -110,15 +106,13 @@ const QuizDocument = ({
   limit_count,
   number_of_attempts,
   isQuizFinished = false,
-  uploadApi,
-  questionApi,
-  courseApi,
-  submitQuizTest,
-  pageLink
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
+    const {
+      questionApi,
+      courseApi, pageLink,
+      submitQuizTest, router } = useFeature();
   const selector = useAppSelector(courseActivityQuizReducer);
-  const router = useRouter();
   const isAFTERAllQUESTION = grading_preference !== "AFTER_EACH_QUESTION";
   const isAFTEREACHQUESTION = grading_preference === "AFTER_EACH_QUESTION";
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
@@ -1211,9 +1205,6 @@ const QuizDocument = ({
                     watch,
                     resetField,
                   }}
-                  api={uploadApi}
-                  questionApi={questionApi}
-                  courseApi={courseApi}
                 />
               )}
           </div>
@@ -1257,7 +1248,6 @@ const QuizDocument = ({
                         essayData: questionRef.current?.getEssayData() as any,
                       }}
                       isQuiz
-                      uploadApi={uploadApi}
                     />
                   </div>
                 )}

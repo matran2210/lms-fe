@@ -463,7 +463,7 @@ const CoursePartDetailTeacher = () => {
     <LayoutTeacher
       title="Course Part Detail"
       breadcrumbs={breadcrumbs}
-      isCourseDetail courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}    >
+      isCourseDetail  >
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
         <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
           <Alert
@@ -579,7 +579,7 @@ const CoursePartDetailTeacher = () => {
             data={chapterData}
             class_user_id={previewPart?.class_user_id}
             activeCourse={() => { }}
-            is_passed_course={isPassedCourse} classApi={ClassAPI} pageLink={PageLink} />
+            is_passed_course={isPassedCourse}/>
         )}
       </div>
     </LayoutTeacher>

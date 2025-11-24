@@ -8,30 +8,18 @@ import {
 } from "@lms/core";
 import { FullScreenLayout, Layout } from "@lms/ui";
 import { useRouter } from "next/router";
+import { useFeature } from "node_modules/@lms/contexts";
 import { QuizResultComponent } from "quiz-result-package";
 import { IQuestionResultResponse } from "quiz-result-package/dist/type";
 import { useEffect, useState } from "react";
 
 const QuizResults = ({
   isTeacher = false,
-  api,
-  notificationApi,
-  pageLink,
-  menuItems,
-  menuItemsEvent,
-  menuBottom,
 }: {
   isTeacher?: boolean;
-  api: ICoursesAPI;
-  notificationApi: INotificationAPI;
-  pageLink: {
-    [key: string]: string;
-  };
-  menuItems: MenuItem[];
-  menuItemsEvent: MenuItem[];
-  menuBottom: MenuItem[];
 }) => {
-  const router = useRouter();
+  const { router, pageLink, courseApi } = useFeature();
+
   const [activityInfo, setActivitiInfo] = useState<ActivityInfo | null>(null);
   const { id } = router.query;
   const [loading, setLoading] = useState<boolean>(false);
@@ -51,7 +39,7 @@ const QuizResults = ({
   }) => {
     setLoading(true);
     try {
-      const response = await api.getQuizAttemptsTable(
+      const response = await courseApi.getQuizAttemptsTable(
         id || modalResult?.id || "",
         {
           page_index,
@@ -119,12 +107,7 @@ const QuizResults = ({
           title="Quiz Result"
           showSidebar={false}
           className="bg-gray-4"
-          api={api}
-          pageLink={pageLink}
-          menuItems={menuItems}
-          menuItemsEvent={menuItemsEvent}
-          menuBottom={menuBottom}
-          notificationApi={notificationApi}
+        
         >
           <div className="m-auto">
             {modalResult?.questions?.data?.length > 0 && (

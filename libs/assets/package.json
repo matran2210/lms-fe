@@ -15,6 +15,7 @@
     "@lms/ui": "workspace:*",
     "@lms/hooks": "workspace:*",
     "@lms/feature-courses": "workspace:*",
+    "@lms/contexts": "workspace:*",
     "react": "latest",
     "clsx": "latest",
     "next": "latest",

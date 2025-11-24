@@ -19,7 +19,8 @@ import {
   updateUser,
   updateUserAvatar,
   userReducer,useAppDispatch, useAppSelector,getLogoutUser,
-  IUserAPI
+  IUserAPI,
+  useFeature
 } from '@lms/contexts'
 import { IAuthManager } from '@lms/core'
 interface IProps {
@@ -32,9 +33,6 @@ interface IProps {
     SetStateAction<string | StaticImageData | undefined>
   >
   setIsEdit: (edit: boolean) => void
-  userApi: IUserAPI
-  authManager: IAuthManager
-  
 }
 const ProfileHeader = ({
   isEdit,
@@ -43,11 +41,11 @@ const ProfileHeader = ({
   inputFileRef,
   reViewImageSrc,
   setReViewImageSrc,
-  setIsEdit,
-  userApi,
-  authManager
+  setIsEdit
 }: IProps) => {
   const dispatch = useAppDispatch()
+  const { userApi, authManager } = useFeature();
+
   // Sử dụng hook useAppSelector để lấy dữ liệu từ state redux
   const { user, loading, loadingEditName, loadingEditAvatar } =
     useAppSelector(userReducer)

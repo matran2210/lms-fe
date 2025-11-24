@@ -489,7 +489,7 @@ const ActivityTeacherPage = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <LayoutTeacher title="Activity" breadcrumbs={breadcrumbsData} isActivity courseApi={CoursesAPI} authManager={new AuthenticationManager} pageLink={PageLink}>
+      <LayoutTeacher title="Activity" breadcrumbs={breadcrumbsData} isActivity>
         <div className={`mx-auto my-0 max-w-xxl text-bw-1`}>
           {/* Notes */}
           <>
@@ -501,7 +501,6 @@ const ActivityTeacherPage = () => {
                   uuid={e?.uuid}
                   count={index}
                   key={e?.uuid}
-                  courseApi={CoursesAPI}
                 />
               )
             })}
@@ -654,11 +653,7 @@ const ActivityTeacherPage = () => {
                               setFocusOnlyQuiz={() => { }}
                               isTeacher
                               number_of_attempts={0}
-                              uploadApi={UploadAPI} 
-                              questionApi={QuestionAPI} 
-                              courseApi={CoursesAPI} 
-                              submitQuizTest={submitQuizTest} 
-                              pageLink={PageLink}
+        
                             />
                           </div>
                         )
@@ -696,7 +691,6 @@ const ActivityTeacherPage = () => {
                                 'AFTER_EACH_QUESTION'
                               }
                               class_user_id={activity?.class_user_id}
-                              questionApi={QuestionAPI} courseApi={CoursesAPI} uploadAPI={UploadAPI}
                             ></VideoDocument>
                           </div>
                         )
@@ -937,7 +931,7 @@ const ActivityTeacherPage = () => {
           </div>
           <div></div>
           <div className="mt-6 shadow-activity" data-aos={ANIMATION.DATA_AOS}>
-            <Discussion class_id={(router.query.id as string) || ''} activityApi={ActivityAPI} courseApi={CoursesAPI} courseActivityApi={CourseActivityApi} />
+            <Discussion class_id={(router.query.id as string) || ''} />
           </div>
 
           {/* Sratchpad */}

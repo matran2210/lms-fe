@@ -1,5 +1,5 @@
 import { CollapseArrowIcon, Icon } from '@lms/assets'
-import { getMe, IUserAPI, IUserContact, makeContactDefault, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
+import { getMe, IUserAPI, IUserContact, makeContactDefault, useAppDispatch, useAppSelector, useFeature, userReducer } from '@lms/contexts'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { SappDrawerV2 } from '@lms/ui'
 import { Divider, Select, Switch } from 'antd'
@@ -20,11 +20,11 @@ interface ProfileOptionItem {
 }
 interface IProps {
   isEdit: boolean
-  authApi: IAuthAPI
-  userApi: IUserAPI
 }
-const ProfileList = ({ isEdit, authApi, userApi }: IProps) => {
+const ProfileList = ({ isEdit}: IProps) => {
   const { user } = useAppSelector(userReducer)
+  const { userApi, authApi } = useFeature();
+  
   const dispatch = useAppDispatch()
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [makeDefaultDrawer, setMakeDefaultDrawer] = useState<{

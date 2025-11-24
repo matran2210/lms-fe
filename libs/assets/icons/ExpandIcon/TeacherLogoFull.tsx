@@ -1,11 +1,9 @@
 import { LogoSappIcon } from "@lms/assets";
 import Link from "next/link";
+import { useFeature } from "@lms/contexts";
+const TeacherLogoFull = () => {
+  const { pageLink } = useFeature();
 
-const TeacherLogoFull = ({
-  pageLink,
-}: {
-  pageLink: { [key: string]: string };
-}) => {
   return (
     <Link href={pageLink.TEACHERS}>
       <LogoSappIcon />

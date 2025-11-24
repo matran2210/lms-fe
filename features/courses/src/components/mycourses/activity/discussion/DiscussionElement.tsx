@@ -16,6 +16,7 @@ import {
   IDiscussionFile,
   IUser,
   useAppDispatch,
+  useFeature,
 } from "@lms/contexts";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import {
@@ -49,10 +50,6 @@ type Props = {
   setLoading: (isLoading: boolean) => void;
   isSappSupporterUserCurrent?: boolean;
   handleEditDiscussionElement: (isEdit: boolean) => void;
-  courseApi: ICoursesAPI;
-  activityApi: IActivityAPI
-  courseActivityApi: ICourseActivityAPI
-
 };
 type UserInfo = {
   name: string;
@@ -75,10 +72,12 @@ function DiscussionElement({
   setLoading,
   isSappSupporterUserCurrent = false,
   handleEditDiscussionElement,
-  courseApi,
-  activityApi,
-  courseActivityApi
+
 }: Props) {
+  const { courseApi,
+    activityApi,
+    courseActivityApi } = useFeature();
+
   const { isMobileView } = useTailwindBreakpoint();
   const [isLike, setIsLike] = useState<boolean>(discussion.is_like);
   const [timeAgo, setTimeAgo] = useState<string>("");

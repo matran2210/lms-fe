@@ -14,6 +14,7 @@ import {
   pushNotes,
   saveFileEssay,
   useAppDispatch,
+  useFeature,
 } from "@lms/contexts";
 import {
   ANIMATION,
@@ -148,9 +149,6 @@ type Props = {
   getValues?: UseFormGetValues<FieldValues>;
   watch?: UseFormWatch<FieldValues>;
   resetField?: UseFormResetField<FieldValues>;
-  api: IUploadAPI;
-  questionApi: IQuestionAPI;
-  courseApi: ICoursesAPI;
 };
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
@@ -174,12 +172,15 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       getValues,
       watch,
       resetField,
-      api,
-      questionApi,
-      courseApi,
     }: Props,
     ref,
   ) => {
+        const { uploadApi,
+          questionApi,
+          courseApi,
+          activityApi,
+          courseActivityApi, pageLink,
+          submitQuizTest, router } = useFeature();
     const isAFTEREACHQUESTION = grading_preference === "AFTER_EACH_QUESTION";
     const questionRef = useRef<HTMLDivElement>(null);
     const isShowIconButtonInBottom = [
@@ -919,7 +920,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       }}
                       isShowContent={showQuestionContent}
                       externalRef={refEditor}
-                      uploadApi={api}
                     />
                   </div>
                 ),
@@ -1094,7 +1094,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       }}
                       isShowContent={showQuestionContent}
                       externalRef={refEditor}
-                      uploadApi={api}
                     />
                   </div>
                 )}
@@ -1397,7 +1396,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                               <div
                                 className="cursor-pointer text-white"
                                 onClick={() =>
-                                  api.downloadFile({
+                                  uploadApi.downloadFile({
                                     files: [
                                       {
                                         name: e?.resource?.name,

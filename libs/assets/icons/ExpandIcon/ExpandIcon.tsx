@@ -18,7 +18,6 @@ type ExpandIconPros = {
   type: string;
   className?: string;
   extraClassName?: string;
-  pageLink: { [key: string]: string };
 };
 
 export default function ExpandIcon({
@@ -27,7 +26,6 @@ export default function ExpandIcon({
   type,
   className,
   extraClassName,
-  pageLink,
 }: ExpandIconPros) {
   return (
     <>
@@ -44,7 +42,7 @@ export default function ExpandIcon({
       )}
       {type === "logo-default" && <LogoDefault className={`${className}`} />}
       {type === "logo-full" && <LogoFull className={`${className}`} />}
-      {type === "teacher-logo-full" && <TeacherLogoFull pageLink={pageLink} />}
+      {type === "teacher-logo-full" && <TeacherLogoFull />}
       {type === "stats-chart-sharp" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"

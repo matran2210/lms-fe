@@ -4,7 +4,7 @@ import { ICoursesAPI, INotificationAPI, MenuItem, UserGuide } from "@lms/core";
 import { trackGAEvent } from "@lms/utils";
 import clsx from "clsx";
 import { Dispatch, SetStateAction } from "react";
-import { useAppSelector } from "@lms/contexts";
+import { useAppSelector, useFeature } from "@lms/contexts";
 import { ExpandIcon } from "@lms/assets";
 import MenuItemsList from "../MenuItemsList";
 import TourGuideSidebar from "src/assets/lotties/tour-guide-sidebar.json";
@@ -19,14 +19,6 @@ type SidebarProps = {
   openResource: boolean;
   openExaminationInfo: boolean;
   setOpenExaminationInfo: Dispatch<SetStateAction<boolean>>;
-  api: ICoursesAPI;
-  notificationApi: INotificationAPI;
-  pageLink: {
-    [key: string]: string;
-  };
-  menuItems: MenuItem[];
-  menuItemsEvent: MenuItem[];
-  menuBottom: MenuItem[];
 };
 
 export default function Sidebar({
@@ -37,14 +29,8 @@ export default function Sidebar({
   openResource,
   openExaminationInfo,
   setOpenExaminationInfo,
-  api,
-  notificationApi,
-  pageLink,
-  menuItems,
-  menuItemsEvent,
-  menuBottom,
 }: SidebarProps) {
-  const router = useRouter();
+    const { courseApi, notificationApi, pageLink, menuItems, menuItemsEvent, menuBottom, router } = useFeature();
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status);
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step);
   /**
@@ -110,8 +96,6 @@ export default function Sidebar({
             setOpenResource={setOpenResource}
             closeSideBar={closeSideBar}
             setOpenExaminationInfo={setOpenExaminationInfo}
-            notificationApi={notificationApi}
-            pageLink={pageLink}
           />
           {guideStatus && guideStep == 2 && (
             <PopupStep
@@ -138,8 +122,6 @@ export default function Sidebar({
             setOpenResource={setOpenResource}
             closeSideBar={closeSideBar}
             setOpenExaminationInfo={setOpenExaminationInfo}
-            notificationApi={notificationApi}
-            pageLink={pageLink}
           />
           {guideStatus && guideStep == 3 && (
             <PopupStep
@@ -175,8 +157,6 @@ export default function Sidebar({
       <LearningResource
         open={openResource}
         setOpenResource={setOpenResource}
-        api={api}
-        pageLink={pageLink}
       />
       <ExaminationInfo
         open={openExaminationInfo}
