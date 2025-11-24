@@ -8,14 +8,15 @@
   "scripts": {
     "lint": "eslint ."
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "react": "^18.2.0"
+  },
   "dependencies": {
     "@lms/assets": "workspace:*",
     "@lms/utils": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/ui": "workspace:*",
     "@lms/contexts": "workspace:*",
-    "react": "latest",
     "next": "latest"
   }
 }

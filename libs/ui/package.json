@@ -20,7 +20,6 @@
     "@lms/feature-test": "workspace:*",
     "@lms/feature-user": "workspace:*",
     "clsx": "latest",
-    "react": "latest",
     "antd": "latest",
     "next": "latest",
     "framer-motion": "latest",
@@ -29,7 +28,6 @@
     "react-redux": "latest",
     "dayjs": "latest",
     "html-react-parser": "latest",
-    "react-dom": "latest",
     "react-rnd": "latest",
     "react-select": "latest",
     "big.js": "latest",
@@ -55,7 +53,7 @@
     "@lottiefiles/react-lottie-player": "^3.5.3"
   },
   "peerDependencies": {
-    "react": "*",
+    "react": "^18.2.0",
     "react-dom": "*"
   },
   "devDependencies": {

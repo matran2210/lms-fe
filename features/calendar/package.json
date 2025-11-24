@@ -8,18 +8,19 @@
   "scripts": {
     "lint": "eslint ."
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
   "dependencies": {
     "@lms/assets": "workspace:*",
     "@lms/utils": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/ui": "workspace:*",
-    "react": "latest",
     "sapp-common-package": "latest",
     "dayjs": "latest",
     "next": "latest",
     "antd": "latest",
-    "clsx": "latest",
-    "react-dom": "latest"
+    "clsx": "latest"
   }
 }

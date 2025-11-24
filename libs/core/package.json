@@ -8,11 +8,12 @@
   "scripts": {
     "lint": "eslint ."
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "react": "^18.2.0"
+  },
   "dependencies": {
     "next": "latest",
     "antd": "latest",
-    "react": "latest",
     "rc-table": "latest",
     "react-hook-form": "latest",
     "dayjs": "latest"

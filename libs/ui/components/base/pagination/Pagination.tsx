@@ -1,4 +1,4 @@
-import { getPaginationItems } from "./pagination";
+import { getPaginationItems } from "./pagination-fn";
 import PageLinkPagination from "./PageLink";
 import { Dispatch, ReactNode, SetStateAction, useRef } from "react";
 import ArrowIcon from "./ArrowIcon";

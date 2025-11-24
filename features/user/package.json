@@ -8,7 +8,9 @@
   "scripts": {
     "lint": "eslint ."
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "react": "^18.2.0"
+  },
   "dependencies": {
     "@lms/assets": "workspace:*",
     "@lms/utils": "workspace:*",
@@ -18,7 +20,6 @@
     "@lms/contexts": "workspace:*",
     "@lms/feature-auth": "workspace:*",
     "@lms/feature-test": "workspace:*",
-    "react": "latest",
     "next": "latest",
     "antd": "latest",
     "clsx": "latest",

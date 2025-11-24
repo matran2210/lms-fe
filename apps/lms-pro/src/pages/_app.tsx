@@ -1,17 +1,36 @@
 import MKTInApp from '@components/MKTInApp'
 import Metadata from '@components/common/Metadata'
 import '@fortune-sheet/react/dist/index.css'
-import { CourseNoteProvider, CourseProvider, FeatureProvider, getCountUnRead, PinnedNotifyProvider, PreviousSectionRouteProvider, showNotification, SocketContext, store, useAppDispatch, wrapper } from '@lms/contexts'
 import {
-  ANIMATION, CERTIFICATE_DETAIL, ENTRANCE_TEST_RESULT,
+  CourseNoteProvider,
+  CourseProvider,
+  FeatureProvider,
+  getCountUnRead,
+  PinnedNotifyProvider,
+  PreviousSectionRouteProvider,
+  showNotification,
+  SocketContext,
+  store,
+  useAppDispatch,
+  wrapper,
+} from '@lms/contexts'
+import {
+  ANIMATION,
+  CERTIFICATE_DETAIL,
+  ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
   LOCAL_STORAGE_KEYS,
-  SOCKET_EVENTS
+  SOCKET_EVENTS,
 } from '@lms/core'
 import { RouteGuard } from '@lms/feature-auth'
 import { LearningNotesList, PopupCompletedCourse } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { AntConfigProvider, BackToTop, Help, SappConfirmDialogContainer } from '@lms/ui'
+import {
+  AntConfigProvider,
+  BackToTop,
+  Help,
+  SappConfirmDialogContainer,
+} from '@lms/ui'
 import { initializeGA, onMessageListener, pageview } from '@lms/utils'
 import { ErrorBoundary } from '@sentry/nextjs'
 import '@styles/globals.scss'
@@ -19,8 +38,8 @@ import '@xyflow/react/dist/style.css'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
 import dayjs from 'dayjs'
-import utc from "dayjs/plugin/utc"
-import weekday from "dayjs/plugin/weekday"
+import utc from 'dayjs/plugin/utc'
+import weekday from 'dayjs/plugin/weekday'
 import 'entrance-test-result-package/dist/index.css'
 import type { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
@@ -54,9 +73,13 @@ import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { CaseStudyAPI } from './api/case-study'
 import { EntranceTestAPI } from './api/entrance-test'
 import { AuthAPI } from './api/profile'
-import { MENU_BOTTOM, MENU_ITEMS, MENU_ITEMS_EVENT } from 'src/constants/menu-items'
-dayjs.extend(utc);
-dayjs.extend(weekday);
+import {
+  MENU_BOTTOM,
+  MENU_ITEMS,
+  MENU_ITEMS_EVENT,
+} from 'src/constants/menu-items'
+dayjs.extend(utc)
+dayjs.extend(weekday)
 export const excludedPathsHelp = [
   '/test/[id]',
   '/case-study/[id]',
@@ -318,64 +341,73 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       <main>
         <Metadata />
         <AntConfigProvider>
-          <PinnedNotifyProvider router={router} api={{
-            getPinnedNotifications: UserApi.getPinnedNotifications,
-          }}>
-            <FeatureProvider value={{
-              courseApi: CoursesAPI,
-              questionApi: QuestionAPI,
-              uploadApi: UploadAPI,
-              userApi: UserApi,
-              notificationApi: NotificationAPI,
-              authApi: AuthAPI,
-              classApi: ClassAPI,
-              activityApi: ActivityAPI,
-              courseActivityApi: CourseActivityApi,
-              caseStudyApi: CaseStudyAPI,
-              entranceTestApi: EntranceTestAPI,
-              eventTestApi: EventTestAPI,
-              submitQuizTest: submitQuizTest,
-              authManager: new AuthenticationManager(),
-              pageLink: PageLink,
-              menuItems: MENU_ITEMS,
-              menuItemsEvent: MENU_ITEMS_EVENT,
-              menuBottom: MENU_BOTTOM,
-              router: router,
-            }}>
-            <CourseProvider router={router} api={{
-              get: EventTestAPI.get
-            }}>
-              <CourseNoteProvider router={router} api={CoursesAPI}>
-                <QueryClientProvider client={queryClient}>
-                  <SocketContext.Provider value={socket}>
-                    <PreviousSectionRouteProvider router={router}>
-                      <Toaster
-                        toastOptions={{
-                          style: {
-                            maxWidth: '400px', // Tăng chiều rộng của toast
-                          },
-                        }}
-                      />
-                      <SappConfirmDialogContainer />
-                      <RouteGuard>
-                        <>
-                          <div className="relative">
-                            {/* <PinnedNotifications /> */}
-                            <Component {...pageProps} />
-                          </div>
-                          {showBackToTop && <BackToTop />}
-                          <MKTInApp showMKTInApp={showMKTInApp} />
-                          <div id="floating-btn-divider" />
-                          <Help showHelp={showHelp} />
-                          <LearningNotesList />
-                          <PopupCompletedCourse />
-                        </>
-                      </RouteGuard>
-                    </PreviousSectionRouteProvider>
-                  </SocketContext.Provider>
-                </QueryClientProvider>
-              </CourseNoteProvider>
-            </CourseProvider>
+          <PinnedNotifyProvider
+            router={router}
+            api={{
+              getPinnedNotifications: UserApi.getPinnedNotifications,
+            }}
+          >
+            <FeatureProvider
+              value={{
+                courseApi: CoursesAPI,
+                questionApi: QuestionAPI,
+                uploadApi: UploadAPI,
+                userApi: UserApi,
+                notificationApi: NotificationAPI,
+                authApi: AuthAPI,
+                classApi: ClassAPI,
+                activityApi: ActivityAPI,
+                courseActivityApi: CourseActivityApi,
+                caseStudyApi: CaseStudyAPI,
+                entranceTestApi: EntranceTestAPI,
+                eventTestApi: EventTestAPI,
+                submitQuizTest: submitQuizTest,
+                authManager: new AuthenticationManager(),
+                pageLink: PageLink,
+                menuItems: MENU_ITEMS,
+                menuItemsEvent: MENU_ITEMS_EVENT,
+                menuBottom: MENU_BOTTOM,
+                router: router,
+                queryClient: queryClient,
+              }}
+            >
+              <CourseProvider
+                router={router}
+                api={{
+                  get: EventTestAPI.get,
+                }}
+              >
+                <CourseNoteProvider router={router} api={CoursesAPI}>
+                  <QueryClientProvider client={queryClient}>
+                    <SocketContext.Provider value={socket}>
+                      <PreviousSectionRouteProvider router={router}>
+                        <Toaster
+                          toastOptions={{
+                            style: {
+                              maxWidth: '400px', // Tăng chiều rộng của toast
+                            },
+                          }}
+                        />
+                        <SappConfirmDialogContainer />
+                        <RouteGuard>
+                          <>
+                            <div className="relative">
+                              {/* <PinnedNotifications /> */}
+                              <Component {...pageProps} />
+                            </div>
+                            {showBackToTop && <BackToTop />}
+                            <MKTInApp showMKTInApp={showMKTInApp} />
+                            <div id="floating-btn-divider" />
+                            <Help showHelp={showHelp} />
+                            <LearningNotesList />
+                            <PopupCompletedCourse />
+                          </>
+                        </RouteGuard>
+                      </PreviousSectionRouteProvider>
+                    </SocketContext.Provider>
+                  </QueryClientProvider>
+                </CourseNoteProvider>
+              </CourseProvider>
             </FeatureProvider>
           </PinnedNotifyProvider>
         </AntConfigProvider>

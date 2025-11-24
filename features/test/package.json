@@ -8,7 +8,9 @@
   "scripts": {
     "lint": "eslint ."
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "react": "^18.2.0"
+  },
   "dependencies": {
     "@lms/assets": "workspace:*",
     "@lms/utils": "workspace:*",
@@ -21,7 +23,6 @@
     "@lms/feature-test": "workspace:*",
     "dayjs": "latest",
     "next": "latest",
-    "react": "latest",
     "antd": "latest",
     "react-hook-form": "latest",
     "zod": "latest",

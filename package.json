@@ -54,6 +54,7 @@
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.0.0",
     "lodash": "^4.17.21",
+    "react-query": "3.39.3",
     "styled-components": "^6.1.19",
     "typescript-eslint": "^8.32.0"
   }

@@ -163,10 +163,10 @@ export default function Sidebar({
         )}
       />
       <LearningResource open={openResource} setOpenResource={setOpenResource} />
-      {/* <ExaminationInfo
-        open={openExaminationInfo} comment monorepo
+      <ExaminationInfo
+        open={openExaminationInfo}
         setOpen={setOpenExaminationInfo}
-      /> */}
+      />
     </div>
   );
 }
