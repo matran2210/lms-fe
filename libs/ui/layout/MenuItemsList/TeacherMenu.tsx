@@ -17,7 +17,7 @@ import {
   LogOutMenuIcon,
   MyCalendarMenuIcon,
   MyCourseTeacherIcon,
-} from "src/assets/icons";
+} from "@lms/assets";
 import { IUser, userReducer, activeNotesList, pushNotes, openCalculator, useAppDispatch, useAppSelector } from "@lms/contexts";
 import { v4 as uuidv4 } from "uuid";
 import { ExpandIcon } from "node_modules/@lms/assets";

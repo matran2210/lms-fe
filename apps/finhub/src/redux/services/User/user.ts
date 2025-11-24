@@ -1,9 +1,8 @@
 import { IUser } from 'src/redux/types/User/urser'
 import { apiURL } from '../httpService'
 import url from './url'
-import { IResponse } from 'src/redux/types'
 import { AuthAPI } from 'src/pages/api/profile'
-import { PinnedNotifications } from '@lms/core'
+import { IResponse, PinnedNotifications } from '@lms/core'
 import { fetchFormData } from '@services/requestV2'
 import { IDeviceItem } from '@lms/core'
 
@@ -52,7 +51,7 @@ const UserApi = {
     // Sử dụng httpService để gửi yêu cầu POST_FORM_DATA
     return fetchFormData({ url: `${apiURL}/users/avatar`, formData })
   },
-  getListDevices: async (): Promise<IResponse<any>> => {
+  getListDevices: async (): Promise<IDeviceItem[]> => {
     return AuthAPI.getListDevices()
   },
   getListDevicesV2: async (): Promise<IDeviceItem[]> => {
