@@ -1,6 +1,6 @@
-import { FixedType } from "rc-table/lib/interface";
-import { Control, FieldValues } from "react-hook-form";
 import { ButtonProps } from "antd";
+import { FixedType } from "rc-table/lib/interface";
+import { FieldValues } from "react-hook-form";
 import { IMetaData } from "./api-response";
 
 export interface ITabs {
@@ -45,7 +45,7 @@ export interface IQueryParams {
 
 export interface IBaseFormFieldProps<T extends FieldValues = any> {
   name: string;
-  control: Control<T>;
+  control: any;
   className?: string;
   label?: string;
   labelClass?: string;

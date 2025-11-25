@@ -339,8 +339,6 @@ const QuizDocument = ({
       tabId,
       quizId || "",
     );
-    console.log("quizSoltiuon", quizQuestion);
-
     // Lọc hoặc giữ nguyên câu hỏi (ở đây hàm bạn gọi `isValidatedAnswer` đang return cùng item)
     const availableQuestions = quizQuestion?.map((item: any) => {
       return {

@@ -31,10 +31,8 @@ const SearchForm = ({
   control
 }: IProps) => {
 
-  console.log("Vao 9999990909009")
   const { query, push } = useRouter();
   const {  watch, setValue } = useFormContext();
-  console.log("useFormContext():", useFormContext());
 
   useEffect(() => {
     if (!isTeacher) {

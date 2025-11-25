@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import { formatPathWithQueryParams } from '@lms/utils'
-import { useForm } from 'react-hook-form'
-import { IFilterProps } from 'src/type/courses-3-level'
 import DesktopFilter3Level from '@components/courses/filter/FilterDesktop'
 import MobileFilter3Level from '@components/courses/filter/FilterMobile'
 import { defaultStatusCourse } from '@lms/core'
+import { formatPathWithQueryParams } from '@lms/utils'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants/routes'
+import { IFilterProps } from 'src/type/courses-3-level'
 
 export default function Filter3Level({ courses, setPage }: IFilterProps) {
   const router = useRouter()
-  const { control, setValue } = useForm()
+  const { setValue } = useForm()
 
   const [filterType, setFilterType] = useState<{
     label: string
