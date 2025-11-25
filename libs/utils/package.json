@@ -10,10 +10,10 @@
   "dependencies": {
     "@funktechno/texthighlighter": "^2.1.2",
     "@lms/core": "workspace:*",
-    "dayjs": "latest",
+    "dayjs": "^1.11.12",
     "dompurify": "^3.1.6",
-    "firebase": "latest",
+    "firebase": "^10.7.1",
     "lodash": "^4.17.21",
-    "react-ga4": "latest"
+    "react-ga4": "^2.1.0"
   }
 }

@@ -9,13 +9,13 @@
     "lint": "eslint ."
   },
   "peerDependencies": {
-    "react": "^18.2.0"
+    "react": "^18.2.0",
+    "next": "^12.1.6"
   },
   "dependencies": {
-    "next": "latest",
-    "antd": "latest",
-    "rc-table": "latest",
+    "antd": "^5.25.0",
+    "rc-table": "^7.55.1",
     "react-hook-form": "7.48.2",
-    "dayjs": "latest"
+    "dayjs": "^1.11.12"
   }
 }

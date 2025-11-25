@@ -9,14 +9,15 @@
     "lint": "eslint ."
   },
   "peerDependencies": {
-    "react": "^18.2.0"
+    "react": "^18.2.0",
+    "lottie-react": "^2.4.1",
+    "next": "^12.1.6"
   },
   "dependencies": {
     "@lms/assets": "workspace:*",
     "@lms/utils": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/ui": "workspace:*",
-    "@lms/contexts": "workspace:*",
-    "next": "latest"
+    "@lms/contexts": "workspace:*"
   }
 }

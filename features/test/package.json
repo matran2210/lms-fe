@@ -9,7 +9,8 @@
     "lint": "eslint ."
   },
   "peerDependencies": {
-    "react": "^18.2.0"
+    "react": "^18.2.0",
+    "next": "^12.1.6"
   },
   "dependencies": {
     "@lms/assets": "workspace:*",
@@ -21,14 +22,13 @@
     "@lms/contexts": "workspace:*",
     "@lms/feature-auth": "workspace:*",
     "@lms/feature-test": "workspace:*",
-    "dayjs": "latest",
-    "next": "latest",
-    "antd": "latest",
+    "dayjs": "^1.11.12",
+    "antd": "^5.25.0",
     "react-hook-form": "7.48.2",
-    "zod": "latest",
-    "lodash": "latest",
-    "date-fns": "latest",
-    "clsx": "latest",
+    "zod": "^3.22.4",
+    "lodash": "^4.17.21",
+    "date-fns": "^3.0.6",
+    "clsx": "^2.1.1",
     "@hookform/resolvers": "^3.10.0"
   }
 }

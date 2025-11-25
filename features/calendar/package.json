@@ -10,17 +10,17 @@
   },
   "peerDependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "next": "^12.1.6"
   },
   "dependencies": {
     "@lms/assets": "workspace:*",
     "@lms/utils": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/ui": "workspace:*",
-    "sapp-common-package": "latest",
-    "dayjs": "latest",
-    "next": "latest",
-    "antd": "latest",
-    "clsx": "latest"
+    "sapp-common-package": "^1.5.2",
+    "dayjs": "^1.11.12",
+    "antd": "^5.25.0",
+    "clsx": "^2.1.1"
   }
 }

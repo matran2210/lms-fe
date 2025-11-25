@@ -48,7 +48,7 @@
     "@eslint/js": "^8.0.0",
     "@funktechno/texthighlighter": "^2.1.2",
     "@hookform/resolvers": "^3.10.0",
-    "antd": "^6.0.0",
+    "antd": "^5.25.0",
     "critters": "^0.0.19",
     "eslint": "^8.57.1",
     "eslint-plugin-react": "^7.37.5",

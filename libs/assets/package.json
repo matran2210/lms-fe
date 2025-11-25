@@ -9,7 +9,8 @@
     "lint": "eslint ."
   },
   "peerDependencies": {
-    "react": "^18.2.0"
+    "react": "^18.2.0",
+    "next": "^12.1.6"
   },
   "dependencies": {
     "@lms/assets": "workspace:*",
@@ -19,9 +20,7 @@
     "@lms/hooks": "workspace:*",
     "@lms/feature-courses": "workspace:*",
     "@lms/contexts": "workspace:*",
-    "clsx": "latest",
-    "next": "latest",
-    "public": "latest",
+    "clsx": "^2.1.1",
     "lottie-react": "^2.4.1"
   }
 }
