@@ -1,12 +1,12 @@
 import { IExhibitData, MY_COURSES } from "@lms/core";
 import { getUppercaseByNumber, runHighlight } from "@lms/utils";
 import clsx from "clsx";
-import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import { EditorReader, HookFormRadioGroup, SappDivider } from "../base";
 import { SappTitleSolution } from "../common";
 import { HighlightableHTML } from "../highlights";
 import WarningSection from "./WarningSection";
+import { useFeature } from "@lms/contexts";
 export type IPreviewProp = {
   data: any;
   control: any;
@@ -59,7 +59,8 @@ const OneChoiceQuestion = ({
   explainClassname,
   storageKey,
 }: IPreviewProp) => {
-  const router = useRouter();
+  console.log("control", control);
+  const { router } = useFeature();
   useEffect(() => {
     if (defaultValues) {
       setValue(name, defaultValues);

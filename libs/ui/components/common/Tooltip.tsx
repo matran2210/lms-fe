@@ -1,18 +1,18 @@
-import { Tooltip as AntdTooltip, ConfigProvider } from 'antd'
-import { TooltipPlacement } from 'antd/es/tooltip'
-import { ReactNode } from 'react'
+import { Tooltip as AntdTooltip, ConfigProvider } from "antd";
+import { TooltipPlacement } from "antd/es/tooltip";
+import { ReactNode } from "react";
 
-export const DEFAULT_TOOLTIP_BG_COLOR = '#404041'
-export const DEFAULT_TOOLTIP_COLOR = '#FFF'
+export const DEFAULT_TOOLTIP_BG_COLOR = "#404041";
+export const DEFAULT_TOOLTIP_COLOR = "#FFF";
 
 interface ITooltip {
-  showTooltip?: boolean
-  color?: string
-  children: ReactNode
-  title: ReactNode
-  placement?: TooltipPlacement
-  className?: string
-  arrow?: boolean
+  showTooltip?: boolean;
+  color?: string;
+  children: ReactNode;
+  title: ReactNode;
+  placement?: TooltipPlacement;
+  className?: string;
+  arrow?: boolean;
 }
 
 const Tooltip: React.FC<ITooltip> = ({
@@ -21,11 +21,11 @@ const Tooltip: React.FC<ITooltip> = ({
   color = DEFAULT_TOOLTIP_BG_COLOR,
   title,
   className,
-  placement = 'top',
+  placement = "top",
   arrow,
 }) => {
   if (!showTooltip) {
-    return <span className={className}>{children}</span>
+    return <span className={className}>{children}</span>;
   }
 
   return (
@@ -47,7 +47,7 @@ const Tooltip: React.FC<ITooltip> = ({
         {children}
       </AntdTooltip>
     </ConfigProvider>
-  )
-}
+  );
+};
 
-export default Tooltip
+export default Tooltip;

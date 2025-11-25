@@ -15,7 +15,7 @@
     "next": "latest",
     "antd": "latest",
     "rc-table": "latest",
-    "react-hook-form": "latest",
+    "react-hook-form": "7.48.2",
     "dayjs": "latest"
   }
 }

@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import { uniqueId } from "lodash";
 import { Control, Controller } from "react-hook-form";
-import YourAnswer from "../tags/YourAnswer";
 import SAPPRadio from "./SAPPRadio";
 import { ErrorMessage } from "../../common";
 // import './HookFormRadioGroup.scss'
