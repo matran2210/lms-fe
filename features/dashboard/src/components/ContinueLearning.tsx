@@ -6,10 +6,10 @@ import { useFeature } from "@lms/contexts";
 import { InstructionText } from "./InstructionText";
 
 const ContinueLearning = () => {
-  const { pageLink, router } = useFeature();
+  const router = useRouter();
   const goToCourseContent = () => {
     router.push(
-      pageLink.COURSE_DETAIL.replace(
+      PageLink.COURSE_DETAIL.replace(
         "[courseId]",
         router.query.courseId as string,
       ),
@@ -25,14 +25,14 @@ const ContinueLearning = () => {
           classPinned="bottom-5 flex flex-col gap-0 md:flex-row md:items-center md:justify-between md:gap-4"
         >
           {/* Nội dung chính bên trái */}
-          <div className="flex items-center gap-2 md:gap-4">
+          <div className="flex items-center md:items-start gap-2 md:gap-4">
             {/* Hình ảnh */}
             <div className="h-6 w-6 md:size-10">
-              {/* <Image src={continue_learning} alt="pinned-completed-course" /> */}
+              <Image src={continue_learning} alt="pinned-completed-course" />
             </div>
 
             {/* Text */}
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-2">
               <div className="text-base font-semibold text-gray-800 md:text-xl">
                 Continue your learning journey!
               </div>
@@ -64,4 +64,15 @@ const ContinueLearning = () => {
     </div>
   );
 };
+
+const InstructionText = ({ onClick }: { onClick: () => void }) => (
+  <>
+    <span className="font-normal">Click on</span>{" "}
+    <span className="cursor-pointer font-semibold underline" onClick={onClick}>
+      Course Content
+    </span>{" "}
+    <span className="font-normal">to resume your lessons.</span>
+  </>
+);
+
 export default ContinueLearning;

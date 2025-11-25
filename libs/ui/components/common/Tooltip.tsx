@@ -13,6 +13,7 @@ interface ITooltip {
   placement?: TooltipPlacement;
   className?: string;
   arrow?: boolean;
+  rootClassName?: string;
 }
 
 const Tooltip: React.FC<ITooltip> = ({
@@ -23,6 +24,7 @@ const Tooltip: React.FC<ITooltip> = ({
   className,
   placement = "top",
   arrow,
+  rootClassName,
 }) => {
   if (!showTooltip) {
     return <span className={className}>{children}</span>;
@@ -43,6 +45,7 @@ const Tooltip: React.FC<ITooltip> = ({
         placement={placement}
         className={className}
         arrow={arrow}
+        rootClassName={rootClassName}
       >
         {children}
       </AntdTooltip>

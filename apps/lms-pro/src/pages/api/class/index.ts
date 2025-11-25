@@ -35,8 +35,8 @@ export class ClassAPI {
     })
   }
 
-  static getExamInfo(id: string): Promise<ExamInformation> {
-    return fetcher(`${apiURL}/classes/${id}/exam-info`, { method: 'GET' })
+  static getExamInfo(id?: string): Promise<ExamInformation> {
+    return fetcher(`${apiURL}/classes/${id}/exam-info`)
   }
 
   static sendMailRequestRegrading(

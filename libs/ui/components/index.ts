@@ -13,3 +13,4 @@ export { default as SappTable } from "./table/SappTable";
 export { default as Container } from "./container/Container";
 export { default as NotData } from "./not-data/NotData";
 export * from "./help";
+export * from "./animations";

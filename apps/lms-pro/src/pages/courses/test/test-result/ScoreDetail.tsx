@@ -183,7 +183,7 @@ const ScoreDetail = ({
       })}
     >
       <div className="mb-4 flex items-center gap-x-3">
-        <div className="text-xl font-semibold">
+        <div className="text-lg md:text-xl font-semibold">
           Score Details{' '}
           {!router?.query?.attempt && quizAttempt?.number_of_attempts && (
             <span className="text-sm text-gray-400 md:text-base">

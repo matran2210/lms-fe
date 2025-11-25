@@ -1,21 +1,22 @@
-import { DEFAULT_PAGE_SIZE, SectionField } from '@lms/core'
-import { useDynamicLoading } from '@lms/hooks'
-import { SAPPSelectV2 } from '@lms/ui'
-import clsx from 'clsx'
-import { isEmpty } from 'lodash'
-import { Dispatch, SetStateAction, useCallback, useEffect } from 'react'
-import { useFormContext } from 'react-hook-form'
-import { useInitialSections } from 'src/hooks/useInitialSections'
-import { useSectionData } from 'src/hooks/useSectionData'
+import { DEFAULT_PAGE_SIZE, SectionField } from "@lms/core";
+import { useDynamicLoading } from "@lms/hooks";
+import { SAPPSelectV2 } from "@lms/ui";
+import clsx from "clsx";
+import { isEmpty } from "lodash";
+import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
+import { useFormContext } from "react-hook-form";
+import { useInitialSections } from "src/hooks/useInitialSections";
+import { useSectionData } from "src/hooks/useSectionData";
 
-const DEFAULT_SELECT = [{ label: 'All Section', value: '' }]
+const DEFAULT_SELECT = [{ label: "All Section", value: "" }];
 
 interface FilterCourseSectionProps {
-  setParams: Dispatch<SetStateAction<string>>
-  heightCustom?: string
-  isPageStateVariables?: boolean
-  allowClear?: boolean
-  showOnlySection?: boolean
+  setParams: Dispatch<SetStateAction<string>>;
+  heightCustom?: string;
+  isPageStateVariables?: boolean;
+  allowClear?: boolean;
+  showOnlySection?: boolean;
+  setDirection: Dispatch<SetStateAction<1 | -1>>;
 }
 
 const FilterCourseSection = ({
@@ -24,30 +25,31 @@ const FilterCourseSection = ({
   isPageStateVariables,
   allowClear = false,
   showOnlySection = false,
+  setDirection,
 }: FilterCourseSectionProps) => {
-  const { control, watch, setValue } = useFormContext()
+  const { control, watch, setValue } = useFormContext();
 
-  const selectedSection = watch('section')
-  const selectedSubsection = watch('subsection')
-  const selectedUnit = watch('unit')
-  const selectedActivity = watch('activity')
+  const selectedSection = watch("section");
+  const selectedSubsection = watch("subsection");
+  const selectedUnit = watch("unit");
+  const selectedActivity = watch("activity");
 
-  const { sections, fetchInitialSections } = useInitialSections()
+  const { sections, fetchInitialSections } = useInitialSections();
   const { sections: subSections, fetchSections: fetchSubsections } =
-    useSectionData(showOnlySection ? null : selectedSection, 'CHAPTER')
+    useSectionData(showOnlySection ? null : selectedSection, "CHAPTER");
   const { sections: units, fetchSections: fetchUnits } = useSectionData(
     showOnlySection ? null : selectedSubsection,
-    'UNIT',
-  )
+    "UNIT",
+  );
   const { sections: activities, fetchSections: fetchActivities } =
-    useSectionData(showOnlySection ? null : selectedUnit, 'ACTIVITY')
+    useSectionData(showOnlySection ? null : selectedUnit, "ACTIVITY");
 
   const resetFormFields = useCallback(
     (fields: SectionField[]) => {
-      fields.forEach((field) => setValue(field, null))
+      fields.forEach((field) => setValue(field, null));
     },
     [setValue],
-  )
+  );
 
   const handleDropdownChange = useCallback(
     (
@@ -55,52 +57,52 @@ const FilterCourseSection = ({
       selected: string | null,
       fieldsToReset: SectionField[],
     ) => {
-      setValue(fieldName, selected)
-      resetFormFields(fieldsToReset)
+      setValue(fieldName, selected);
+      resetFormFields(fieldsToReset);
     },
     [setValue, resetFormFields],
-  )
+  );
 
   useEffect(() => {
     if (!showOnlySection && !selectedSection) {
-      resetFormFields(['subsection', 'unit', 'activity'])
+      resetFormFields(["subsection", "unit", "activity"]);
     }
-  }, [selectedSection, showOnlySection, resetFormFields])
+  }, [selectedSection, showOnlySection, resetFormFields]);
 
   useEffect(() => {
     if (isEmpty(sections)) {
-      fetchInitialSections(DEFAULT_PAGE_SIZE)
+      fetchInitialSections(DEFAULT_PAGE_SIZE);
     }
-  }, [sections])
+  }, [sections]);
 
   useEffect(() => {
     if (!showOnlySection && !isEmpty(selectedSection)) {
-      fetchSubsections(DEFAULT_PAGE_SIZE)
+      fetchSubsections(DEFAULT_PAGE_SIZE);
     }
-  }, [selectedSection, showOnlySection])
+  }, [selectedSection, showOnlySection]);
 
   useEffect(() => {
     if (!showOnlySection && !isEmpty(selectedSubsection)) {
-      fetchUnits(DEFAULT_PAGE_SIZE)
+      fetchUnits(DEFAULT_PAGE_SIZE);
     }
-  }, [selectedSubsection, showOnlySection])
+  }, [selectedSubsection, showOnlySection]);
 
   useEffect(() => {
     if (!showOnlySection && !isEmpty(selectedUnit)) {
-      fetchActivities(DEFAULT_PAGE_SIZE)
+      fetchActivities(DEFAULT_PAGE_SIZE);
     }
-  }, [selectedUnit, showOnlySection])
+  }, [selectedUnit, showOnlySection]);
 
   useEffect(() => {
     const next = showOnlySection
-      ? selectedSection || ''
+      ? selectedSection || ""
       : selectedActivity ||
         selectedUnit ||
         selectedSubsection ||
         selectedSection ||
-        ''
+        "";
 
-    setParams((prev) => (prev === next ? prev : next))
+    setParams((prev) => (prev === next ? prev : next));
   }, [
     selectedActivity,
     selectedUnit,
@@ -108,12 +110,12 @@ const FilterCourseSection = ({
     selectedSection,
     showOnlySection,
     setParams,
-  ])
+  ]);
 
   const {
     handleMenuScrollToBottom: handleMenuScrollToSections,
     setPage: setPageSection,
-  } = useDynamicLoading(fetchInitialSections, DEFAULT_PAGE_SIZE)
+  } = useDynamicLoading(fetchInitialSections, DEFAULT_PAGE_SIZE);
 
   const {
     handleMenuScrollToBottom: handleMenuScrollToSubsections,
@@ -121,7 +123,7 @@ const FilterCourseSection = ({
   } = useDynamicLoading(
     showOnlySection ? () => {} : fetchSubsections,
     DEFAULT_PAGE_SIZE,
-  )
+  );
 
   const {
     handleMenuScrollToBottom: handleMenuScrollToUnit,
@@ -129,7 +131,7 @@ const FilterCourseSection = ({
   } = useDynamicLoading(
     showOnlySection ? () => {} : fetchUnits,
     DEFAULT_PAGE_SIZE,
-  )
+  );
 
   const {
     handleMenuScrollToBottom: handleMenuScrollToActivity,
@@ -137,22 +139,22 @@ const FilterCourseSection = ({
   } = useDynamicLoading(
     showOnlySection ? () => {} : fetchActivities,
     DEFAULT_PAGE_SIZE,
-  )
+  );
 
   useEffect(() => {
     if (isPageStateVariables) {
       if (showOnlySection) {
-        setPageSection(DEFAULT_PAGE_SIZE * 2)
+        setPageSection(DEFAULT_PAGE_SIZE * 2);
       } else {
         const pageStateVariables = [
           setPageSection,
           setPageSubsection,
           setPageUnit,
           setPageActivity,
-        ]
+        ];
         pageStateVariables.forEach((setPageVariable) => {
-          setPageVariable(DEFAULT_PAGE_SIZE * 2)
-        })
+          setPageVariable(DEFAULT_PAGE_SIZE * 2);
+        });
       }
     }
   }, [
@@ -162,13 +164,13 @@ const FilterCourseSection = ({
     setPageSubsection,
     setPageUnit,
     setPageActivity,
-  ])
+  ]);
 
   return (
     <div
       className={clsx(
-        showOnlySection ? 'w-full' : 'grid w-full grid-cols-4',
-        !showOnlySection && (heightCustom ? 'gap-2' : 'gap-4'),
+        showOnlySection ? "w-full" : "grid w-full grid-cols-4",
+        !showOnlySection && (heightCustom ? "gap-2" : "gap-4"),
       )}
     >
       <SAPPSelectV2
@@ -181,15 +183,16 @@ const FilterCourseSection = ({
             value: section.id,
           })),
         )}
-        onChange={(selected) =>
+        onChange={(selected) => {
+          setDirection(1);
           showOnlySection
-            ? setValue('section', selected)
-            : handleDropdownChange('section', selected, [
-                'subsection',
-                'unit',
-                'activity',
-              ])
-        }
+            ? setValue("section", selected)
+            : handleDropdownChange("section", selected, [
+                "subsection",
+                "unit",
+                "activity",
+              ]);
+        }}
         heightCustom={heightCustom}
         onMenuScrollToBottom={handleMenuScrollToSections}
         allowClear={allowClear}
@@ -206,7 +209,7 @@ const FilterCourseSection = ({
                 : []
             }
             onChange={(selected) =>
-              handleDropdownChange('subsection', selected, ['unit', 'activity'])
+              handleDropdownChange("subsection", selected, ["unit", "activity"])
             }
             allowClear={allowClear}
             onMenuScrollToBottom={handleMenuScrollToSubsections}
@@ -223,7 +226,7 @@ const FilterCourseSection = ({
                 : []
             }
             onChange={(selected) =>
-              handleDropdownChange('unit', selected, ['activity'])
+              handleDropdownChange("unit", selected, ["activity"])
             }
             onMenuScrollToBottom={handleMenuScrollToUnit}
             disabled={!selectedSubsection}
@@ -240,7 +243,7 @@ const FilterCourseSection = ({
                 : []
             }
             onChange={(selected) =>
-              handleDropdownChange('activity', selected, [])
+              handleDropdownChange("activity", selected, [])
             }
             onMenuScrollToBottom={handleMenuScrollToActivity}
             disabled={!selectedUnit}
@@ -250,7 +253,7 @@ const FilterCourseSection = ({
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default FilterCourseSection
+export default FilterCourseSection;
