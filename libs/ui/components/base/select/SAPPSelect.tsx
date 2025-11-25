@@ -1,13 +1,13 @@
-import React from "react";
 import { ArrowDownIcon } from "@lms/assets";
+import { IBaseFormFieldProps } from "@lms/core";
 import { Select } from "antd";
 import { ButtonSize } from "antd/es/button";
 import { DefaultOptionType } from "antd/es/select";
 import clsx from "clsx";
-import { Control, Controller } from "react-hook-form";
-import SAPPLabel from "../Label/SAPPLabel";
-import { IBaseFormFieldProps } from "@lms/core";
+import React from "react";
+import { Controller } from "react-hook-form";
 import { ErrorMessage } from "../../common";
+import SAPPLabel from "../Label/SAPPLabel";
 
 interface SAPPSelectProps extends IBaseFormFieldProps {
   placeholder?: string;

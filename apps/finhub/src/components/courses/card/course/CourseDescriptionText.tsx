@@ -1,4 +1,4 @@
-import { clearStylesHtml } from '@utils/index'
+import { clearStylesHtml } from '@lms/utils'
 import clsx from 'clsx'
 
 interface ICourseDescriptionTextProps {
