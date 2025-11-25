@@ -1,8 +1,8 @@
 import { truncateString } from "@lms/utils";
 import clsx from "clsx";
 import React from "react";
-// import wavingHandAnimationIcon from "public/animations/WavingHand.json"; comment monorepo
 import Lottie from "lottie-react";
+import { WavingHandAnimation } from "node_modules/@lms/assets";
 interface IProps {
   greeting: string;
   title: string;
@@ -34,14 +34,14 @@ const Heading = ({
               {truncateString(title, 80)}
             </span>
           </h1>
-          {/* {showWavingHand && (
+          {showWavingHand && (
             <Lottie
-              animationData={wavingHandAnimationIcon}
+              animationData={WavingHandAnimation}
               loop={2}
               autoplay
               className={"before-icon inline-block h-10 w-10"}
             />
-          )} */}
+          )}
         </div>
       </div>
       {des && (

@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import animation from 'src/assets/images/animation.json'
+import { AnimationImage } from '@lms/assets'
 
 const Player = dynamic(
   () => import('@lottiefiles/react-lottie-player').then((mod) => mod.Player),
@@ -14,7 +14,7 @@ const SappLoading = ({ className }: { className?: string }) => {
       className={`fixed z-[9999] block h-full w-full bg-white backdrop-blur-[2000px] ${className ?? ''}`}
     >
       <Player
-        src={animation}
+        src={AnimationImage}
         autoplay
         loop
         className="left-0 top-0 z-[9999] max-h-[90px] max-w-[90px] !bg-white backdrop-blur-[2000px]"

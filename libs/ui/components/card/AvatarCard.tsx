@@ -1,10 +1,9 @@
 import Image from 'next/image'
-import blankAvatar from '@assets/images/blank_avatar.webp'
-
 import React from 'react'
 import { useAppSelector } from '@lms/contexts'
 import { userReducer } from '@lms/contexts'
 import clsx from 'clsx'
+import { BlankAvatarImage } from '@lms/assets'
 
 interface IProps {
   className?: string
@@ -34,7 +33,7 @@ const AvatarCard = ({
           />
         ) : (
           <Image
-            src={blankAvatar}
+              src={BlankAvatarImage}
             alt="avatar"
             className="rounded-full"
             width={40}

@@ -13,7 +13,8 @@
     "dev:lms-pro": "pnpm --filter ./apps/lms-pro dev",
     "dev:finhub": "pnpm --filter ./apps/finhub dev",
     "prepare": "husky install",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "gen:assets": "node scripts/generate-assets-index.js"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.20",

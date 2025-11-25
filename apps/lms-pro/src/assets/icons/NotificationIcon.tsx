@@ -2,8 +2,8 @@ import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { useNotification } from 'src/hooks/useNotification'
 import { IIcon } from '@lms/core'
-import notificationAnimationIcon from 'public/animations/Notification.json'
 import Lottie from 'lottie-react'
+import { NotificationAnimation } from '@lms/assets'
 const NotificationIcon = ({ className, extraClassName }: IIcon) => {
   const [badgeClass, setBadgeClass] = useState('w-4 h-4 -top-[5px] -right-1.5') // Default width
   const { notificationUnread, hasNewNotification } = useNotification()
@@ -20,7 +20,7 @@ const NotificationIcon = ({ className, extraClassName }: IIcon) => {
     <div className="relative">
       {hasNewNotification ? (
         <Lottie
-          animationData={notificationAnimationIcon}
+          animationData={NotificationAnimation}
           loop
           autoplay
           className={animationClass}
