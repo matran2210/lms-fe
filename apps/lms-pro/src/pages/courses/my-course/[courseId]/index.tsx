@@ -34,19 +34,6 @@ import withAuthorization from 'src/HOC/withAuthorization'
 const DEFAULT_PAGESIZE = 18
 
 const CourseDetail = () => {
-  console.log({
-    CourseParts,
-    FilterCourse,
-    PopupLockContent,
-    SelectExamPopup,
-    CourseDetailSkeleton,
-    // CtaTrial,
-    HeaderMobile,
-    Layout,
-    PinnedCompletedCourse,
-    SappBreadCrumbs,
-    SearchWithMenuToggle,
-  })
   const router = useRouter()
   const observer = useRef<IntersectionObserver>()
   const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
@@ -60,7 +47,6 @@ const CourseDetail = () => {
     userCertificateId: '',
     courseName: '',
   })
-  const [showSelectExam, setShowSelectExam] = useState(false)
 
   const params = {
     user_section_learning_status:

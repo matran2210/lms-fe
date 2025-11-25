@@ -1,14 +1,13 @@
-import { ArrowActionSearchIcon, HamburgerMenuLargeIcon } from "@lms/assets";
-import {SearchForm} from "@lms/feature-courses";
+import { ArrowActionSearchIcon, HamburgerMenuLargeIcon, CloseIconV2 } from "@lms/assets";
+import { SearchForm } from "@lms/feature-courses";
 // import PopupStep from "@components/user-guide/PopupStep"; lỗi monorepo dừng xóa
-import React, { useEffect, useRef, useState } from "react";
-import { MY_COURSES } from "@lms/core";
 import { useAppSelector, useFeature } from "@lms/contexts";
-import clsx from "clsx";
-import { CloseIconV2 } from "@lms/assets";
-import { FormProvider, useForm } from "react-hook-form";
+import { MY_COURSES } from "@lms/core";
 import { buildQueryString } from "@lms/utils";
+import clsx from "clsx";
 import { useRouter } from "next/router";
+import React, { useEffect, useRef, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 
 interface IProps {
   handleOpenSidebar: () => void;
@@ -36,7 +35,6 @@ const SearchWithMenuToggle = ({
   const { pageLink } = useFeature();  
   const {
     status: guideStatus,
-    isActive: guideIsActive,
     step: guideStep,
   } = useAppSelector((state) => state.userGuideReducer);
   const { query, push } = useRouter();

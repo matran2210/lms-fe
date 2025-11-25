@@ -1,8 +1,6 @@
-import { Skeleton } from 'antd'
 import { isEmpty } from 'lodash'
-import React from 'react'
-import EmptyCourses from '../shared/EmptyCourses'
 import { Courses3LevelProps } from 'src/type/courses-3-level/course'
+import EmptyCourses from '../shared/EmptyCourses'
 import CourseCard from './CourseCard'
 
 export default function CoursesList({
