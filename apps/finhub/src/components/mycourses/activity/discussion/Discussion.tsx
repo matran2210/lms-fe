@@ -1,34 +1,26 @@
-import blankAvatar from '@assets/images/blank_avatar.webp'
 import sappAvatar from '@assets/images/blank_avatar_notification.png'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import SappIcon from '@components/common/SappIcon'
-import { useAppDispatch, useAppSelector } from '@lms/contexts'
-import {
-  courseActivityReducer,
-  createDiscussion,
-  getDiscussion,
-  reactDiscussion,
-  uploadImagesDiscussion,
-} from 'src/redux/slice/Course/MyCourse/Activity/Activity'
+import { courseActivityReducer, createDiscussion, getDiscussion, reactDiscussion, uploadImagesDiscussion, useAppDispatch, useAppSelector } from '@lms/contexts'
 import { userReducer } from '@lms/contexts'
 import {
   ICreateDiscussionResReact,
   IDiscussion,
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
 import DiscussionElement from './DiscussionElement'
-import SappModalImage from '@components/base/modal/SappModalImage'
 import toast from 'react-hot-toast'
 import { Skeleton } from 'antd'
-import { IconSend } from '@lms/assets'
-import SappButtonIcon from '@components/base/button/SappButtonIcon'
-import SappButton from '@components/base/button/SappButton'
+import { BlankAvatarImage, IconSend } from '@lms/assets'
 import clsx from 'clsx'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import ActionDiscussion from './ActionDiscussion'
 import SendComment from './SendComment'
+import { ActivityAPI } from '@pages/api/activity'
+import { CoursesAPI } from '@pages/api/courses'
+import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
+import { HookFormTextArea, SappButton, SappButtonIcon, SappModalImage } from '@lms/ui'
 
 type Props = {
   class_id: string
@@ -137,10 +129,13 @@ const Discussion = ({ class_id }: Props) => {
 
         await dispatch(
           createDiscussion({
-            course_section_id: router.query.activityId as string,
+            api: ActivityAPI,
+            data: {
+              course_section_id: router.query.activityId as string,
             class_id: class_id,
             content: content?.trim(),
             parent_id,
+            }
           }),
         )
           .unwrap()
@@ -152,6 +147,7 @@ const Discussion = ({ class_id }: Props) => {
             ) {
               dispatch(
                 getDiscussion({
+                  api: CoursesAPI,
                   id: class_id,
                   sectionId: router.query.activityId as string,
                 }),
@@ -161,16 +157,20 @@ const Discussion = ({ class_id }: Props) => {
 
             dispatch(
               uploadImagesDiscussion({
-                discussion_id: e?.id,
+                api: CourseActivityApi,
+                data: {
+                    discussion_id: e?.id,
                 new_discussion_file: isRoot
                   ? getRootSelectedFiles
                   : getSelectedFiles,
+                }
               }),
             )
               .unwrap()
               .then(() => {
                 dispatch(
                   getDiscussion({
+                    api: CoursesAPI,
                     id: class_id,
                     sectionId: router.query.activityId as string,
                   }),
@@ -211,10 +211,14 @@ const Discussion = ({ class_id }: Props) => {
         return
       }
       try {
-        await dispatch(reactDiscussion(data))
+        await dispatch(reactDiscussion({ api: ActivityAPI, data }))
       } catch (error) {
       } finally {
-        await dispatch(getDiscussion(router.query.activityId as string))
+        await dispatch(getDiscussion({
+          api: CoursesAPI,
+          id: class_id,
+          sectionId: router.query.activityId as string,
+        }),)
       }
     }, 1000)
   }
@@ -406,7 +410,7 @@ const Discussion = ({ class_id }: Props) => {
                             sappAvatar
                           : user?.detail?.avatar?.['50x50'] ||
                             user?.detail?.avatar?.['ORIGIN'] ||
-                            blankAvatar
+                            BlankAvatarImage
                       }
                       loading="eager"
                       priority={true}
@@ -519,7 +523,7 @@ const Discussion = ({ class_id }: Props) => {
                   sappAvatar
                 : user?.detail?.avatar['50x50'] ||
                   user?.detail?.avatar['ORIGIN'] ||
-                  blankAvatar
+                BlankAvatarImage
             }
             loading="eager"
             priority={true}

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "types": ["./types/assets.d.ts"]
+  },
+  "include": [
+    "./images/**/*",
+    "./animations/**/*",
+    "./types/**/*",
+    "./image-generate.ts",
+    "./animations-generate.ts"
+  ]
+}

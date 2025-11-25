@@ -1,7 +1,4 @@
-import { CloseIconPreview, IconSend, VerifiedIcon } from '@lms/assets'
-import blankAvatar from '@assets/images/blank_avatar.webp'
-import sappAvatar from '@assets/images/blank_avatar_notification.png'
-import { trackGAEvent } from '@utils/google-analytics'
+import { BlankAvatarImage, BlankAvatarNotificationImage, CloseIconPreview, IconSend, VerifiedIcon } from '@lms/assets'
 import { calculateTimeAgo } from '@utils/helpers'
 import Image from 'next/image'
 import { SetStateAction, useEffect, useState } from 'react'
@@ -9,26 +6,18 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappIcon from '@components/common/SappIcon'
 import { ActivityAPI } from 'src/pages/api/activity'
-import { useAppDispatch } from '@lms/contexts'
-import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
-import { getDiscussion } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
-import {
-  ICreateDiscussionResReact,
-  IDiscussion,
-  IDiscussionFile,
-} from 'src/redux/types/Course/MyCourse/Activity/activity'
-import { IUser } from 'src/redux/types/User/urser'
+import { getDiscussion, ICreateDiscussionResReact, IDiscussion, IDiscussionFile, IUser, useAppDispatch } from '@lms/contexts'
 import ModalDeleteComment from './ModalDeleteComment'
-import SappButtonIcon from '@components/base/button/SappButtonIcon'
-import SappButton from '@components/base/button/SappButton'
 import clsx from 'clsx'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import ActionDiscussion from './ActionDiscussion'
 import SappDisplayText from '@components/common/SappDisplayText'
 import SendComment from './SendComment'
 import { Popover } from 'antd'
 import { CoursesAPI } from '@pages/api/courses'
 import { isEmpty } from 'lodash'
+import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
+import { trackGAEvent } from '@lms/utils'
+import { HookFormTextArea, SappButton, SappButtonIcon } from '@lms/ui'
 
 type Props = {
   rank?: number
@@ -122,7 +111,8 @@ function DiscussionElement({
   const handleRefresh = () => {
     dispatch(
       getDiscussion({
-        id: classId,
+        api: CoursesAPI,
+        id: classId as string,
         sectionId: discussion?.course_section_id,
       }),
     )
@@ -223,7 +213,7 @@ function DiscussionElement({
           className="rounded-full"
           src={userInfo?.avatar}
           loading="eager"
-          blurDataURL={blankAvatar.src}
+          blurDataURL={BlankAvatarImage.src}
           priority={true}
           alt="avatar user"
         />
@@ -251,7 +241,7 @@ function DiscussionElement({
         name: data?.student_info?.detail?.full_name,
         email: data?.student_info?.user_contacts?.[0]?.email,
         phone: data?.student_info?.user_contacts?.[0]?.phone,
-        avatar: data?.student_info?.detail.avatar?.['50x50'] || blankAvatar,
+        avatar: data?.student_info?.detail.avatar?.['50x50'] || BlankAvatarImage,
       })
     } catch (error: any) {}
   }
@@ -307,13 +297,13 @@ function DiscussionElement({
                     discussion.is_sapp_supporter
                       ? discussion?.avatar?.['50x50'] ||
                         discussion?.avatar?.['ORIGIN'] ||
-                        sappAvatar
+                      BlankAvatarNotificationImage
                       : discussion?.avatar?.['50x50'] ||
                         discussion?.avatar?.['ORIGIN'] ||
-                        blankAvatar
+                        BlankAvatarImage
                   }
                   loading="eager"
-                  blurDataURL={blankAvatar.src}
+                  blurDataURL={BlankAvatarImage.src}
                   priority={true}
                   alt="avatar"
                 />
@@ -349,7 +339,7 @@ function DiscussionElement({
                   height={100}
                   src={e.url}
                   loading="eager"
-                  blurDataURL={blankAvatar.src}
+                  blurDataURL={BlankAvatarImage.src}
                   objectFit="contain"
                   onClick={() => setImageSrc(e.url)}
                   priority={true}
@@ -375,7 +365,7 @@ function DiscussionElement({
                   height={100}
                   src={URL.createObjectURL(file)}
                   loading="eager"
-                  blurDataURL={blankAvatar.src}
+                  blurDataURL={BlankAvatarImage.src}
                   objectFit="contain"
                   onClick={() => setImageSrc(URL.createObjectURL(file))}
                   priority={true}
