@@ -1524,7 +1524,7 @@ export const ArrowIcon = ({ color }: { color?: string }) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_2703_2922)">
+      <g clipPath="url(#clip0_2703_2922)">
         <path
           d="M14.94 8.69997C14.9 8.65997 14.88 8.61997 14.88 8.57997L14.76 8.45997L10.26 3.95997C10.14 3.79997 9.98 3.71997 9.78 3.71997C9.58 3.71997 9.4 3.79997 9.24 3.95997C9.08 4.11997 9 4.29997 9 4.49997C9 4.69997 9.08 4.87997 9.24 5.03997L12.48 8.21997H0.78C0.54 8.21997 0.35 8.28997 0.21 8.42997C0.07 8.56997 0 8.75997 0 8.99997C0 9.23997 0.07 9.41997 0.21 9.53997C0.35 9.65997 0.54 9.71997 0.78 9.71997H12.48L9.24 12.96C9.08 13.12 9 13.3 9 13.5C9 13.7 9.07 13.87 9.21 14.01C9.35 14.15 9.53 14.22 9.75 14.22C9.97 14.22 10.14 14.16 10.26 14.04L14.76 9.53997C14.88 9.41997 14.94 9.33997 14.94 9.29997C14.98 9.09997 14.98 8.89997 14.94 8.69997Z"
           fill={color}
@@ -2406,7 +2406,7 @@ export const PulsingExclamation = (props: React.SVGProps<SVGSVGElement>) => {
       viewBox="0 28 28"
       {...props}
     >
-      <g fill="#F80903" clip-path="url(#a)">
+      <g fill="#F80903" clipPath="url(#a)">
         <path d="M14.633 24.449a2.471 2.471 0 1 1-4.569-1.887 2.471 2.471 0 0 1 4.569 1.887ZM21.54 9.843l-4.84 8.528a2.066 2.066 0 0 1-2.61.926 2.07 2.07 0 0 1-1.195-2.498l2.591-9.457a3.295 3.295 0 1 1 6.054 2.501Z" />
       </g>
       <defs>
@@ -2824,9 +2824,9 @@ export const NoCertificationIcon = ({ className }: IIconProps) => {
           width="165.551"
           height="165.55"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -2858,9 +2858,9 @@ export const NoCertificationIcon = ({ className }: IIconProps) => {
           width="97.8762"
           height="97.8761"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -2969,7 +2969,7 @@ export const ComingSoonIcon = ({ className }: IIconProps) => {
           rx="7.40398"
           fill="white"
         />
-        <g clip-path="url(#clip0_10196_107162)">
+        <g clipPath="url(#clip0_10196_107162)">
           <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -2990,9 +2990,9 @@ export const ComingSoonIcon = ({ className }: IIconProps) => {
           width="156.229"
           height="137.237"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -3024,9 +3024,9 @@ export const ComingSoonIcon = ({ className }: IIconProps) => {
           width="74.0417"
           height="74.0398"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"

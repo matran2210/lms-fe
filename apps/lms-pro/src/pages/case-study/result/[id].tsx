@@ -6,9 +6,7 @@ import {
   ScratchPadIconV2,
 } from '@lms/assets'
 import { CloseModalIcon } from '@lms/assets'
-import Calculator from '@components/calculator'
-import CaseStudyWrapper from '@components/case-study/layout/CaseStudyWrapper'
-import Popover from '@components/Popover'
+import { Calculator, Popover, SappLoadingGlobal } from '@lms/ui'
 import { NotesOutline, PulsingExclamation, Triangle } from '@lms/assets'
 import {
   EXHIBIT_TEXT_REPLACE,
@@ -23,7 +21,7 @@ import {
   QUESTION_TYPES,
   RESPONSE_OPTION,
 } from '@lms/core'
-import { useTailwindBreakpoint } from '@lms/hooks'
+import { useMousePosition, useTailwindBreakpoint } from '@lms/hooks'
 import {
   EditorReader,
   FileViewer,
@@ -40,18 +38,17 @@ import DragDropQuestion, {
 } from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
-import useMousePosition from '@utils/hookMouseMove'
-import { runHighlight } from '@utils/index'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { useAppDispatch, loadMoreQuestion } from '@lms/contexts'
 import { UploadAPI } from '@pages/api/upload'
+import CaseStudyWrapper from '@lms/ui/layout/CaseStudyLayout/CaseStudyWrapper'
+import { runHighlight } from '@lms/utils'
 
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])
