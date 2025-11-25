@@ -1,22 +1,22 @@
-import { Upload, UploadProps } from 'antd'
-import ButtonSecondary from './ButtonSecondary'
-import { UploadIcon } from '@lms/assets'
-import { useRef } from 'react'
-import { RcFile } from 'antd/es/upload'
+import { Upload, UploadProps } from "antd";
+import ButtonSecondary from "./ButtonSecondary";
+import { UploadIcon } from "@lms/assets";
+import { useRef } from "react";
+import { RcFile } from "antd/es/upload";
 
 interface IProps extends UploadProps {
-  title?: string
-  fileList?: RcFile[]
+  title?: string;
+  fileList?: RcFile[];
 }
 
 const UploadSingleFileV2 = ({
-  title = 'Choose file upload',
+  title = "Choose file upload",
   fileList = [],
   ...props
 }: IProps) => {
-  const uploadRef = useRef<HTMLDivElement>(null)
+  const uploadRef = useRef<HTMLDivElement>(null);
 
-  const hasFile = fileList?.length || 0
+  const hasFile = fileList?.length || 0;
 
   return (
     <Upload
@@ -31,12 +31,12 @@ const UploadSingleFileV2 = ({
           props.beforeUpload &&
           !props.beforeUpload(file, fileList as RcFile[])
         )
-          return Upload.LIST_IGNORE
+          return Upload.LIST_IGNORE;
 
         // Gọi props.onChange nếu có (tự cập nhật fileList)
-        props.onChange?.({ file, fileList: [file] })
+        props.onChange?.({ file, fileList: [file] });
 
-        return false // Ngăn AntD upload mặc định
+        return false; // Ngăn AntD upload mặc định
       }}
       {...props}
     >
@@ -44,18 +44,18 @@ const UploadSingleFileV2 = ({
         <div
           className="group relative inline-flex cursor-pointer items-center text-base font-semibold text-info"
           onClick={(e) => {
-            e.stopPropagation()
+            e.stopPropagation();
             const input = document.querySelector(
-              '.ant-upload input[type=file]',
-            ) as HTMLInputElement
+              ".ant-upload input[type=file]",
+            ) as HTMLInputElement;
             if (input) {
-              input.value = '' // Reset input
-              input.click()
+              input.value = ""; // Reset input
+              input.click();
             }
           }}
         >
           {fileList?.[0]?.name}
-          <div className="ml-2 opacity-0 transition-opacity duration-1000 group-hover:opacity-100">
+          <div className="ml-2 opacity-0 transition-opacity duration-100 group-hover:opacity-100">
             <UploadIcon />
           </div>
         </div>
@@ -67,7 +67,7 @@ const UploadSingleFileV2 = ({
         />
       )}
     </Upload>
-  )
-}
+  );
+};
 
-export default UploadSingleFileV2
+export default UploadSingleFileV2;

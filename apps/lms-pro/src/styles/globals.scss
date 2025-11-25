@@ -1541,3 +1541,12 @@ mark {
 .shadow-entrance-test {
   box-shadow: 0px 4px 16px 0px rgba(44, 48, 0, 0.05);
 }
+
+.my-retake-tooltip.ant-tooltip-placement-left {
+  .ant-tooltip-content {
+    margin-right: -14px !important;
+  }
+  .ant-tooltip-arrow {
+    right: -14px !important;
+  }
+}

@@ -2134,5 +2134,37 @@
   {
     "code": "400|540000",
     "message": "Enrollment Time Range Overlaps"
+  },
+  {
+    "code": "400|170201",
+    "message": "Hubspot Contact Phone Exist"
+  },
+  {
+    "code": "400|072305",
+    "message": "Invalid Course Status"
+  },
+  {
+    "code": "400|100313",
+    "message": "Empty Student Duration Change Reason"
+  },
+  {
+    "code": "400|100325",
+    "message": "Cannot Delete Class User"
+  },
+  {
+    "code": "400|100612",
+    "message": "Empty Reason For Extension"
+  },
+  {
+    "code": "400|101106",
+    "message": "Invalid Class Type With Class Has Student Studying"
+  },
+  {
+    "code": "400|101107",
+    "message": "Invalid Course With Class Has Student Studying"
+  },
+  {
+    "code": "400|420016",
+    "message": "Please Activate Course Before Choosing Examination"
   }
 ]

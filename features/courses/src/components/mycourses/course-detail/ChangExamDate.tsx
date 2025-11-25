@@ -1,5 +1,5 @@
 import { ArrowDownIcon } from "@lms/assets";
-import React from 'react';
+import React from "react";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import { ErrorMessage, SAPPSelectV2, UploadSingleFileV2 } from "@lms/ui";
 import { message, Upload, UploadProps } from "antd";
@@ -78,8 +78,10 @@ const ChangExamDate = ({
         placeholder="Choose one option"
         suffixIcon={<ArrowDownIcon className="rotate-[-90deg]" />}
         onDropdownVisibleChange={() => {
-          setIsOpenSelectExam(true);
-          setDirection(1);
+          if (isMobileView) {
+            setIsOpenSelectExam(true);
+            setDirection(1);
+          }
         }}
         isOpen={isMobileView ? false : undefined}
       />
@@ -99,13 +101,15 @@ const ChangExamDate = ({
           name="note"
           control={control}
           render={({ field, fieldState }) => (
-            <div>
+            <div className="relative">
               <UploadSingleFileV2
                 fileList={field.value || []}
                 {...getUploadProps(field.onChange)}
               />
               {fieldState.error && (
-                <ErrorMessage>{fieldState.error.message}</ErrorMessage>
+                <ErrorMessage className="absolute -bottom-5">
+                  {fieldState.error.message}
+                </ErrorMessage>
               )}
             </div>
           )}

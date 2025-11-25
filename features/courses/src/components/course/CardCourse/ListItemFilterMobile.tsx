@@ -1,33 +1,32 @@
-import { CheckIconV2 } from '@lms/assets'
-import clsx from 'clsx'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { CheckIconV2 } from "@lms/assets";
 import {
+  allTypes,
   DEFAULT_SELECT_SECTION,
   DEFAULT_SELECT_SECTION_NAME,
-} from '@lms/core'
-import {
-  IOpenChooseItem,
   getTypeName,
-  SectionField,
-  nextTypeMap,
-  allTypes,
+  IOpenChooseItem,
   ISection,
-} from '@lms/core'
-import { useCourseSectionsData } from '@lms/hooks'
-import { useFeature } from '@lms/contexts'
+  nextTypeMap,
+  SectionField,
+} from "@lms/core";
+import { useCourseSectionsData } from "@lms/hooks";
+import clsx from "clsx";
+import { useFeature } from "node_modules/@lms/contexts";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
 
 interface IProps {
-  setOpenChooseItem: Dispatch<SetStateAction<any>>
-  openChooseItem: IOpenChooseItem
-  listSection: ISection[]
-  listSubsection: ISection[]
-  listUnit?: ISection[]
-  listActivity: ISection[]
-  setListSection: Dispatch<SetStateAction<ISection[]>>
-  setListSubsection: Dispatch<SetStateAction<ISection[]>>
-  setListUnit?: Dispatch<SetStateAction<ISection[]>>
-  setListActivity: Dispatch<SetStateAction<ISection[]>>
+  setOpenChooseItem: Dispatch<SetStateAction<any>>;
+  openChooseItem: IOpenChooseItem;
+  listSection: ISection[];
+  listSubsection: ISection[];
+  listUnit?: ISection[];
+  listActivity: ISection[];
+  setListSection: Dispatch<SetStateAction<ISection[]>>;
+  setListSubsection: Dispatch<SetStateAction<ISection[]>>;
+  setListUnit?: Dispatch<SetStateAction<ISection[]>>;
+  setListActivity: Dispatch<SetStateAction<ISection[]>>;
+  setDirection: Dispatch<SetStateAction<1 | -1>>;
 }
 
 const ListItemFilterMobile = ({
@@ -41,10 +40,11 @@ const ListItemFilterMobile = ({
   setListSubsection,
   setListUnit,
   setListActivity,
+  setDirection,
 }: IProps) => {
-  const { courseApi } = useFeature()
-  const { setValue } = useFormContext()
-  const [list, setList] = useState<ISection[]>([])
+  const { courseApi } = useFeature();
+  const { setValue } = useFormContext();
+  const [list, setList] = useState<ISection[]>([]);
   const { isLoading, selected } = useCourseSectionsData({
     listSection,
     listSubsection,
@@ -55,58 +55,59 @@ const ListItemFilterMobile = ({
     setListUnit,
     setListActivity,
     api: courseApi,
-  })
+  });
   const resetFormFields = (fields: SectionField[]) => {
-    fields.forEach((field) => setValue(field, null))
-  }
+    fields.forEach((field) => setValue(field, null));
+  };
 
   const handleChange = (
     fieldName: SectionField,
     selectedId: string | null,
     fieldsToReset: SectionField[],
   ) => {
-    setValue(fieldName, selectedId)
-    resetFormFields(fieldsToReset)
+    setValue(fieldName, selectedId);
+    resetFormFields(fieldsToReset);
 
     const clearMap = {
       section: () => {
-        setListSubsection([])
-        setListUnit && setListUnit([])
-        setListActivity([])
+        setListSubsection([]);
+        setListUnit && setListUnit([]);
+        setListActivity([]);
       },
       subsection: () => {
-        setListUnit && setListUnit([])
-        setListActivity([])
+        setListUnit && setListUnit([]);
+        setListActivity([]);
       },
       unit: () => setListActivity([]),
-    }
+    };
 
-    clearMap[fieldName as keyof typeof clearMap]?.()
-  }
+    clearMap[fieldName as keyof typeof clearMap]?.();
+  };
 
   const handleSelect = (item: ISection, isSelected: boolean) => {
+    setDirection(1);
     if (!isSelected) {
       const currentIndex = allTypes.indexOf(
         openChooseItem.type as (typeof allTypes)[number],
-      )
+      );
       const childTypes =
-        currentIndex >= 0 ? allTypes.slice(currentIndex + 1) : []
-      handleChange(openChooseItem.type, item.id, childTypes)
+        currentIndex >= 0 ? allTypes.slice(currentIndex + 1) : [];
+      handleChange(openChooseItem.type, item.id, childTypes);
     }
 
     const type =
-      openChooseItem.type === 'activity'
-        ? 'activity'
-        : nextTypeMap[openChooseItem.type]
-    const name = getTypeName[type]
+      openChooseItem.type === "activity"
+        ? "activity"
+        : nextTypeMap[openChooseItem.type];
+    const name = getTypeName[type];
 
     setOpenChooseItem({
       ...openChooseItem,
       params: item.id,
       type,
       name,
-    })
-  }
+    });
+  };
 
   // SELECT list to render
   useEffect(() => {
@@ -117,16 +118,22 @@ const ListItemFilterMobile = ({
       subsection: listSubsection,
       unit: listUnit ?? [],
       activity: listActivity,
-    }
-    setList(map[openChooseItem.type] ?? [])
-  }, [openChooseItem.type, listSection, listSubsection, listUnit, listActivity])
+    };
+    setList(map[openChooseItem.type] ?? []);
+  }, [
+    openChooseItem.type,
+    listSection,
+    listSubsection,
+    listUnit,
+    listActivity,
+  ]);
 
-  const hasSelectedOption = Object.values(selected).some((value) => !!value)
+  const hasSelectedOption = Object.values(selected).some((value) => !!value);
 
   // COMBINED loading check
-  const isAnyLoading = isLoading
+  const isAnyLoading = isLoading;
 
-  if (isAnyLoading) return null
+  if (isAnyLoading) return null;
 
   return (
     <div className="flex max-h-[230px] min-h-1 flex-1 flex-col overflow-y-auto">
@@ -134,12 +141,13 @@ const ListItemFilterMobile = ({
         const isSelectedValue =
           selected.section === item.id ||
           selected.subsection === item.id ||
-          selected.activity === item.id
+          selected.activity === item.id ||
+          selected.unit === item.id;
 
         const isSelected =
           item.name === DEFAULT_SELECT_SECTION_NAME
             ? !hasSelectedOption
-            : isSelectedValue
+            : isSelectedValue;
 
         return (
           <div
@@ -149,18 +157,18 @@ const ListItemFilterMobile = ({
           >
             <div
               className={clsx(
-                'text-sm font-medium text-gray-800',
-                isSelected && 'text-primary',
+                "text-sm font-medium text-gray-800",
+                isSelected && "text-primary",
               )}
             >
               {item.name}
             </div>
             <div>{isSelected && <CheckIconV2 />}</div>
           </div>
-        )
+        );
       })}
     </div>
-  )
-}
+  );
+};
 
-export default ListItemFilterMobile
+export default ListItemFilterMobile;

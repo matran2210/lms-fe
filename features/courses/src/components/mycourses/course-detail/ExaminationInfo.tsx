@@ -1,15 +1,16 @@
 import { CheckCircleTwoTone } from "@ant-design/icons";
-import { PencilV2Icon } from "@lms/assets";
-import { SappDrawerV3 } from "@lms/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { PencilV2Icon } from "@lms/assets";
+import { ExaminationForm, useFeature } from "@lms/contexts";
+import { COURSE_TYPE, Data, TitleSidebar, zodMsg } from "@lms/core";
+import { useTailwindBreakpoint } from "@lms/hooks";
+import { CarouselSlideAnimation, NoData, SappDrawerV3, Tooltip } from "@lms/ui";
+import { getDuration } from "@lms/utils";
 import { ClassAPI } from "@pages/api/class";
 import { ClassKey } from "@pages/api/queryKey";
-import { getDuration } from "@lms/utils";
 import { Avatar, GetProp, List, Skeleton, UploadFile, UploadProps } from "antd";
 import clsx from "clsx";
-import { AnimatePresence, motion } from "framer-motion";
-import { isEmpty } from "lodash";
-import { useRouter } from "next/router";
+import { isEmpty, isUndefined } from "lodash";
 import {
   Dispatch,
   ReactNode,
@@ -20,18 +21,11 @@ import {
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { NoData, Tooltip } from "@lms/ui";
-import { COURSE_TYPE } from "@lms/core";
-import { zodMsg } from "@lms/core";
-import { z } from "zod";
-import { ExaminationForm } from "@lms/contexts";
 import useSelectExams from "src/hooks/useSelectExams";
-import { TitleSidebar } from "@lms/core";
-import { useTailwindBreakpoint } from "@lms/hooks";
-import { Data } from "@lms/core";
-import SelectExamDate from "./SelectExamDate";
+import { z } from "zod";
 import ChangExamDate from "./ChangExamDate";
 import ChangeAnywayModal from "./ChangeAnywayModal";
+import SelectExamDate from "./SelectExamDate";
 
 type Props = {
   open: boolean;
@@ -107,22 +101,22 @@ const ExaminationInfo = ({
   onSuccess,
 }: Props) => {
   const { isTabletView, isMobileView } = useTailwindBreakpoint();
-  const router = useRouter();
+  const { router } = useFeature();
   const [direction, setDirection] = useState<1 | -1>(1);
   const [isOpenSelectExam, setIsOpenSelectExam] = useState<boolean>(false);
-  const [classId, setClassId] = useState(router.query.courseId as string);
+  const [classId, setClassId] = useState(router.query?.courseId as string);
+
   const { data, isLoading, isError, isSuccess, refetch } = useQuery({
     queryKey: [ClassKey.ExamInfo, classId],
     queryFn: () => ClassAPI.getExamInfo(classId),
-    refetchOnWindowFocus: false,
     select: (data) => data.data,
     retry: false,
-    enabled: !!classId && open,
+    enabled: !isUndefined(classId) && open && !isEditProps,
   });
   const [itemSelected, setItemSelected] = useState("");
 
   useEffect(() => {
-    if (!open) return;
+    if (!open || isUndefined(classId) || isEditProps) return;
 
     refetch();
   }, [open]);
@@ -160,7 +154,6 @@ const ExaminationInfo = ({
       const formData = new FormData();
       formData.append("examination_subject_id", examination_subject_id);
       note && formData.append("note", note[0] as FileType);
-
       return ClassAPI.changeExamDate(classId, formData);
     },
     onSuccess: (res) => {
@@ -180,12 +173,12 @@ const ExaminationInfo = ({
       note: data.note,
     });
   };
-  const handleBack = () => {
+  const handleBack = (isCancel: boolean = false) => {
     setDirection(-1);
     if (isOpenSelectExam) {
       setIsOpenSelectExam(false);
     } else {
-      setIsEdit(false);
+      setIsEdit(isCancel);
       methods.reset();
     }
   };
@@ -193,12 +186,16 @@ const ExaminationInfo = ({
     setOpen(false);
     setIsOpenSelectExam(false);
     setTimeout(() => {
-      handleBack();
+      handleBack(isEditProps);
     }, 500);
   };
   const { exams } = useSelectExams(classId);
 
   const handleChangeExamDate = async () => {
+    if (isOpenSelectExam) {
+      handleBack();
+      return;
+    }
     if (isEmpty(exams?.current_exam_name)) {
       methods.handleSubmit(onSubmit)();
     } else {
@@ -236,6 +233,7 @@ const ExaminationInfo = ({
         </div>
       );
     }
+
     if (isSuccess) {
       return (
         <div className="flex w-full flex-col gap-4 text-sm md:text-base">
@@ -264,7 +262,11 @@ const ExaminationInfo = ({
     }
   };
 
-  const title = isEdit ? "Change Exam Date" : TitleSidebar.EXAM_INFORMATION;
+  const title = isOpenSelectExam
+    ? "Choose one option"
+    : isEdit
+      ? "Change Exam Date"
+      : TitleSidebar.EXAM_INFORMATION;
   const isShowCloseBtn = !isEdit || isExamList || isTabletView || isMobileView;
   const isClosable = !isEdit || isExamList;
   const isShowBackBtn = (isTabletView || isMobileView) && isEdit && !isExamList;
@@ -277,20 +279,6 @@ const ExaminationInfo = ({
       : isTabletView || isMobileView
         ? "auto"
         : "100%";
-  const variants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? "100%" : "-100%",
-      opacity: 0,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-    },
-    exit: (direction: number) => ({
-      x: direction > 0 ? "-100%" : "100%",
-      opacity: 0,
-    }),
-  };
 
   return (
     <>
@@ -299,9 +287,9 @@ const ExaminationInfo = ({
         handleCancel={handleCancel}
         title={title}
         isShowBtnClose={isShowCloseBtn}
-        closable={isClosable}
-        isShowBtnBack={isShowBackBtn}
-        isShowFooter={isEdit}
+        closable={isClosable && !isOpenSelectExam}
+        isShowBtnBack={isShowBackBtn || isOpenSelectExam}
+        isShowFooter={isEdit && !isEmpty(exams?.data)}
         btnSubmitTile={btnSubmitTile}
         cancelButtonCaption={cancelButtonCaption}
         handleBack={handleBack}
@@ -315,43 +303,27 @@ const ExaminationInfo = ({
         })}
       >
         <FormProvider {...methods}>
-          <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
-              key={
-                isMobileView && isOpenSelectExam
-                  ? "selectExam"
-                  : isEdit
-                    ? "changeExam"
-                    : "viewExam"
-              }
-              custom={direction}
-              variants={variants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.2 }}
-            >
-              {isMobileView && isOpenSelectExam ? (
-                <SelectExamDate
-                  classId={classId}
-                  currentValue={data?.exam?.id || currentValue}
-                  itemSelected={itemSelected}
-                  setItemSelected={setItemSelected}
-                />
-              ) : isEdit ? (
-                <ChangExamDate
-                  isOpen={isEdit}
-                  classId={classId}
-                  remainingChanges={data?.remaining_changes}
-                  currentValue={data?.exam?.id || currentValue}
-                  setIsOpenSelectExam={setIsOpenSelectExam}
-                  setDirection={setDirection}
-                />
-              ) : (
-                renderContent()
-              )}
-            </motion.div>
-          </AnimatePresence>
+          <CarouselSlideAnimation slideKey={title} direction={direction}>
+            {isMobileView && isOpenSelectExam ? (
+              <SelectExamDate
+                classId={classId}
+                currentValue={data?.exam?.id || currentValue}
+                itemSelected={itemSelected}
+                setItemSelected={setItemSelected}
+              />
+            ) : isEdit ? (
+              <ChangExamDate
+                isOpen={isEdit}
+                classId={classId}
+                remainingChanges={data?.remaining_changes}
+                currentValue={data?.exam?.id || currentValue}
+                setIsOpenSelectExam={setIsOpenSelectExam}
+                setDirection={setDirection}
+              />
+            ) : (
+              renderContent()
+            )}
+          </CarouselSlideAnimation>
         </FormProvider>
       </SappDrawerV3>
       <ChangeAnywayModal
