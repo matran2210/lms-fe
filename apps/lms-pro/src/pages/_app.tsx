@@ -78,6 +78,7 @@ import {
   MENU_ITEMS,
   MENU_ITEMS_EVENT,
 } from 'src/constants/menu-items'
+import { PinnedNotifications } from '@lms/ui'
 dayjs.extend(utc)
 dayjs.extend(weekday)
 export const excludedPathsHelp = [
@@ -392,7 +393,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                         <RouteGuard>
                           <>
                             <div className="relative">
-                              {/* <PinnedNotifications /> */}
+                              <PinnedNotifications />
                               <Component {...pageProps} />
                             </div>
                             {showBackToTop && <BackToTop />}

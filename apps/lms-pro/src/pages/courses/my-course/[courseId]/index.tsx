@@ -24,22 +24,29 @@ import {
   SearchWithMenuToggle,
 } from '@lms/ui'
 import { CoursesAPI } from '@pages/api/courses'
-import { NotificationAPI } from '@pages/api/notification'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import {
-  MENU_BOTTOM,
-  MENU_ITEMS,
-  MENU_ITEMS_EVENT,
-} from 'src/constants/menu-items'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 
 const DEFAULT_PAGESIZE = 18
 
 const CourseDetail = () => {
+  console.log({
+    CourseParts,
+    FilterCourse,
+    PopupLockContent,
+    SelectExamPopup,
+    CourseDetailSkeleton,
+    // CtaTrial,
+    HeaderMobile,
+    Layout,
+    PinnedCompletedCourse,
+    SappBreadCrumbs,
+    SearchWithMenuToggle,
+  })
   const router = useRouter()
   const observer = useRef<IntersectionObserver>()
   const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()

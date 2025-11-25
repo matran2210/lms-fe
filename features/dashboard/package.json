@@ -17,6 +17,7 @@
     "@lms/core": "workspace:*",
     "@lms/ui": "workspace:*",
     "@lms/hooks": "workspace:*",
+    "@lms/contexts": "workspace:*",
     "next": "latest",
     "lodash": "latest",
     "echarts": "latest",

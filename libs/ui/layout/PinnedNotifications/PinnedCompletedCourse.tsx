@@ -1,20 +1,20 @@
-import { ArrowRightV2Icon } from '@lms/assets'
-import {PinnedNotificationsV2} from '@lms/ui'
-import { formatDateToLongString } from '@utils/helpers'
-import Image from 'next/image'
-import { useRouter } from 'next/router'
-import React from 'react'
+import { ArrowRightV2Icon } from "@lms/assets";
+import PinnedNotificationsV2 from "./PinnedNotificationsV2";
+import { formatDateToLongString } from "@lms/utils";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import React from "react";
 
 interface PinnedCompletedCourseData {
-  isOpen: boolean
-  passedAt: string
-  userCertificateId: string
-  courseName: string
-  userCertificateUrl: string
+  isOpen: boolean;
+  passedAt: string;
+  userCertificateId: string;
+  courseName: string;
+  userCertificateUrl: string;
 }
 
 interface IProps {
-  pinnedCompletedCourse: PinnedCompletedCourseData
+  pinnedCompletedCourse: PinnedCompletedCourseData;
 }
 
 const NotificationMessage = React.memo(
@@ -30,15 +30,15 @@ const NotificationMessage = React.memo(
       </div>
     </div>
   ),
-)
-NotificationMessage.displayName = 'NotificationMessage'
+);
+NotificationMessage.displayName = "NotificationMessage";
 
 const CertificateImage = React.memo(({ url }: { url: string }) => (
   <div className="hidden h-[50px] w-[77px] md:block">
     <Image src={url} alt="pinned-completed-course" width={77} height={50} />
   </div>
-))
-CertificateImage.displayName = 'CertificateImage'
+));
+CertificateImage.displayName = "CertificateImage";
 
 const SeeCertificateButton = React.memo(
   ({ onClick }: { onClick: () => void }) => (
@@ -54,25 +54,25 @@ const SeeCertificateButton = React.memo(
       </div>
     </div>
   ),
-)
-SeeCertificateButton.displayName = 'SeeCertificateButton'
+);
+SeeCertificateButton.displayName = "SeeCertificateButton";
 
 const PinnedCompletedCourse: React.FC<IProps> = React.memo(
   ({ pinnedCompletedCourse }) => {
-    const router = useRouter()
+    const router = useRouter();
     const {
       isOpen,
       passedAt,
       userCertificateUrl,
       userCertificateId,
       courseName,
-    } = pinnedCompletedCourse
+    } = pinnedCompletedCourse;
 
     const onSeeCertificate = React.useCallback(() => {
-      router.push(`/certificates/${userCertificateId}`)
-    }, [router, userCertificateId])
+      router.push(`/certificates/${userCertificateId}`);
+    }, [router, userCertificateId]);
 
-    if (!isOpen) return null
+    if (!isOpen) return null;
 
     return (
       <PinnedNotificationsV2
@@ -86,9 +86,9 @@ const PinnedCompletedCourse: React.FC<IProps> = React.memo(
         </div>
         <SeeCertificateButton onClick={onSeeCertificate} />
       </PinnedNotificationsV2>
-    )
+    );
   },
-)
-PinnedCompletedCourse.displayName = 'PinnedCompletedCourse'
+);
+PinnedCompletedCourse.displayName = "PinnedCompletedCourse";
 
-export default PinnedCompletedCourse
+export default PinnedCompletedCourse;

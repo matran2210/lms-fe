@@ -1,47 +1,48 @@
-import { CloseIconNote } from '@lms/assets'
-import { useRouter } from 'next/router'
-import React, { useLayoutEffect } from 'react'
-import { PageLink } from '@lms/core'
-import { useCourseContext, usePinnedNotifyContext } from '@lms/contexts'
-import PinnedNotificationsV2 from 'src/components/layout/PinnedNotifications/PinnedNotificationsV2'
+import { CloseIconNote } from "@lms/assets";
+import {
+  useCourseContext,
+  useFeature,
+  usePinnedNotifyContext,
+} from "@lms/contexts";
+import { useLayoutEffect } from "react";
+import PinnedNotificationsV2 from "./PinnedNotificationsV2";
 
-const ENABLED_PINNED_PAGES = [
-  PageLink.COURSE_DETAIL,
-  PageLink.COURSE_PART_DETAIL,
-  PageLink.COURSE_ACTIVITY,
-  PageLink.TEACHER_COURSE_DETAIL_ID,
-  PageLink.TEACHER_COURSE_PART_DETAIL,
-  PageLink.TEACHER_COURSE_ACTIVITY,
-]
+export default function CtaTrial() {
+  const { pageLink, router } = useFeature();
+  const ENABLED_PINNED_PAGES = [
+    pageLink.COURSE_DETAIL,
+    pageLink.COURSE_PART_DETAIL,
+    pageLink.COURSE_ACTIVITY,
+    pageLink.TEACHER_COURSE_DETAIL_ID,
+    pageLink.TEACHER_COURSE_PART_DETAIL,
+    pageLink.TEACHER_COURSE_ACTIVITY,
+  ];
 
-const ENABLED_PINNED_NOTI_PAGES = [
-  PageLink.COURSES,
-  PageLink.TEACHERS,
-  PageLink.USERPAGE,
-  ...ENABLED_PINNED_PAGES,
-]
-
-function CtaTrial() {
-  const router = useRouter()
+  const ENABLED_PINNED_NOTI_PAGES = [
+    pageLink.COURSES,
+    pageLink.TEACHERS,
+    pageLink.USERPAGE,
+    ...ENABLED_PINNED_PAGES,
+  ];
   const { setShowPinnedTrial, showPinnedTrial, setOpenPopupCTA } =
-    useCourseContext()
-  const { openPinned } = usePinnedNotifyContext()
+    useCourseContext();
+  const { openPinned } = usePinnedNotifyContext();
 
-  const isEnablePinnedPages = ENABLED_PINNED_PAGES.includes(router.pathname)
+  const isEnablePinnedPages = ENABLED_PINNED_PAGES.includes(router.pathname);
   const isEnablePinnedNotiPages = ENABLED_PINNED_NOTI_PAGES.includes(
     router.pathname,
-  )
+  );
 
   useLayoutEffect(() => {
     setShowPinnedTrial(
-      localStorage.getItem('showPinTrial') === 'true' && isEnablePinnedPages,
-    )
-  }, [router, isEnablePinnedPages, setShowPinnedTrial])
+      localStorage.getItem("showPinTrial") === "true" && isEnablePinnedPages,
+    );
+  }, [router, isEnablePinnedPages, setShowPinnedTrial]);
 
   const handleClose = () => {
-    localStorage.setItem('showPinTrial', 'false')
-    setShowPinnedTrial(false)
-  }
+    localStorage.setItem("showPinTrial", "false");
+    setShowPinnedTrial(false);
+  };
 
   const handleUpgrade = () => {
     setOpenPopupCTA({
@@ -49,10 +50,10 @@ function CtaTrial() {
       ctaUpgrade: true,
       thankYou: false,
       thankYouLater: false,
-    })
-  }
+    });
+  };
 
-  if (!isEnablePinnedPages || !showPinnedTrial) return null
+  if (!isEnablePinnedPages || !showPinnedTrial) return null;
 
   return (
     <>
@@ -67,7 +68,7 @@ function CtaTrial() {
             <div>
               You have&nbsp;
               <span className="font-semibold">
-                {localStorage.getItem('daysDifference')}&nbsp;days&nbsp;
+                {localStorage.getItem("daysDifference")}&nbsp;days&nbsp;
               </span>
               left on your free trial. Upgrade today to unlock the full course.
             </div>
@@ -84,7 +85,5 @@ function CtaTrial() {
         </PinnedNotificationsV2>
       )}
     </>
-  )
+  );
 }
-
-export default CtaTrial

@@ -1,15 +1,13 @@
 import { CloseIconNote, IconLoudSpeaker } from "@lms/assets";
-import { usePinnedNotifyContext } from "@lms/contexts";
-import { PageLink } from "@lms/core";
+import { useFeature, usePinnedNotifyContext } from "@lms/contexts";
 import { Col, Row } from "antd";
 import clsx from "clsx";
-import { useRouter } from "next/router";
 import React from "react";
 import Marquee from "react-fast-marquee";
 import { EditorReader } from "../../components/base";
 
 function PinnedNotifications() {
-  const router = useRouter();
+  const { pageLink, router } = useFeature();
   const { openPinned, setOpenPinned, pinnedNotifications } =
     usePinnedNotifyContext();
 
@@ -21,11 +19,11 @@ function PinnedNotifications() {
   const showPinNoti = pinnedNotifications?.data?.content?.length < 200;
 
   const isEnablePinnedPages = [
-    PageLink.COURSES,
-    PageLink.USERPAGE,
-    PageLink.COURSE_DETAIL,
-    PageLink.COURSE_PART_DETAIL,
-    PageLink.COURSE_ACTIVITY,
+    pageLink.COURSES,
+    pageLink.USERPAGE,
+    pageLink.COURSE_DETAIL,
+    pageLink.COURSE_PART_DETAIL,
+    pageLink.COURSE_ACTIVITY,
   ].includes(router.pathname);
 
   return (

@@ -1,7 +1,7 @@
 import _, { uniqBy } from 'lodash'
 import dayjs from 'dayjs'
 import { round } from 'lodash'
-import { PageLink } from '@lms/core'
+import { PageLink } from 'src/constants/routers'
 
 export function isMobile() {
   const toMatch = [
@@ -144,16 +144,6 @@ export const calculateTimeAgo = (date: string): string => {
     return `${formatter.format(updatedDateTime)}`
   }
   return ''
-}
-
-export function formatDateToLongString(isoDateString: string): string {
-  if (!isoDateString) return ''
-  const date = new Date(isoDateString)
-  return new Intl.DateTimeFormat('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  }).format(date)
 }
 
 /**
@@ -385,3 +375,5 @@ export const formatTimeOnlyHourMinute = (rawTime: string) => {
 
 export const getUserPrefix = (isTeacher: boolean) =>
   isTeacher ? PageLink.TEACHERS : ''
+
+export * from './quiz-test/helper'

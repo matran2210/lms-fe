@@ -1,4 +1,3 @@
-
 import { UserType } from '@lms/contexts'
 import {
   ANIMATION,
@@ -8,7 +7,11 @@ import {
   ITopicProgress,
   IWeeklyReport,
 } from '@lms/core'
-import { ContinueLearning, CourseDashboard, ExamDashboard } from '@lms/feature-dashboard'
+import {
+  ContinueLearning,
+  CourseDashboard,
+  ExamDashboard,
+} from '@lms/feature-dashboard'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   DashboardSkeleton,
@@ -157,11 +160,7 @@ const Dashboard = () => {
     }
   }, [infoCourse?.course_type, router?.query?.courseId])
   return (
-    <Layout
-      title="Dashboard"
-      showSidebar={isAlwaysShowSidebar}
-      size="xl"
-    >
+    <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar} size="xl">
       {isLoading ? (
         <DashboardSkeleton />
       ) : (
@@ -214,7 +213,7 @@ const Dashboard = () => {
                   />
                 )}
           </div>
-          <ContinueLearning />
+          {/* <ContinueLearning /> comment monorepo */}
         </div>
       )}
     </Layout>

@@ -1,8 +1,9 @@
-import continue_learning from "@assets/images/book-continue-learning.svg";
+// import continue_learning from "@assets/images/book-continue-learning.svg"; comment monorepo
 import { ArrowRightV2Icon } from "@lms/assets";
 import { PinnedNotificationsV2 } from "@lms/ui";
 import Image from "next/image";
-import { useFeature } from "node_modules/@lms/contexts";
+import { useFeature } from "@lms/contexts";
+import { InstructionText } from "./InstructionText";
 
 const ContinueLearning = () => {
   const { pageLink, router } = useFeature();
@@ -27,7 +28,7 @@ const ContinueLearning = () => {
           <div className="flex items-center gap-2 md:gap-4">
             {/* Hình ảnh */}
             <div className="h-6 w-6 md:size-10">
-              <Image src={continue_learning} alt="pinned-completed-course" />
+              {/* <Image src={continue_learning} alt="pinned-completed-course" /> */}
             </div>
 
             {/* Text */}
@@ -63,15 +64,4 @@ const ContinueLearning = () => {
     </div>
   );
 };
-
-const InstructionText = ({ onClick }: { onClick: () => void }) => (
-  <>
-    <span className="font-normal">Click on</span>{" "}
-    <span className="cursor-pointer font-semibold underline" onClick={onClick}>
-      Course Content
-    </span>{" "}
-    <span className="font-normal">to resume your lessons.</span>
-  </>
-);
-
 export default ContinueLearning;

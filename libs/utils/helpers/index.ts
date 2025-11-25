@@ -29,14 +29,16 @@ export const debounce = <T extends (...args: any[]) => void>(
   func: T,
   delay: number,
 ) => {
-  let timeoutId: NodeJS.Timeout
+  let timeoutId: NodeJS.Timeout;
   return (...args: Parameters<T>) => {
-    clearTimeout(timeoutId)
-    timeoutId = setTimeout(() => func(...args), delay)
-  }
-}
-export const getUserPrefix = (isTeacher: boolean, pageLink: { [key: string]: string; }) =>
-  isTeacher ? pageLink.TEACHERS : "";
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func(...args), delay);
+  };
+};
+export const getUserPrefix = (
+  isTeacher: boolean,
+  pageLink: { [key: string]: string },
+) => (isTeacher ? pageLink.TEACHERS : "");
 
 /**
  * @description Return number percent with type: 80
@@ -44,7 +46,17 @@ export const getUserPrefix = (isTeacher: boolean, pageLink: { [key: string]: str
  * @return {*}
  */
 export const roundNumber = (num: number) => {
-  return Math.round(num * 100) / 100
+  return Math.round(num * 100) / 100;
+};
+
+export function formatDateToLongString(isoDateString: string): string {
+  if (!isoDateString) return "";
+  const date = new Date(isoDateString);
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(date);
 }
 
 export * from "./timer";
