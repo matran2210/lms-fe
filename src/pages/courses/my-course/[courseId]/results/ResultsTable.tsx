@@ -37,6 +37,7 @@ import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { FormProvider, useForm } from 'react-hook-form'
 import ListFilterMobile from '@components/common/ListFilterMobile'
 import NoCoursesAvailable from 'src/common/NoCoursesAvailable'
+import CarouselSlideAnimation from 'src/common/animations/CarouselSlideAnimation'
 
 const ResultsTable = ({
   openFilter,
@@ -47,6 +48,7 @@ const ResultsTable = ({
 }) => {
   const router = useRouter()
   const { isMobileView } = useTailwindBreakpoint()
+  const [direction, setDirection] = useState<1 | -1>(1)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
   const [openReport, setOpenReport] = useState<boolean>(false)
@@ -161,6 +163,7 @@ const ResultsTable = ({
   }
 
   const handleBack = () => {
+    setDirection(-1)
     if (openChooseItem.isOpen && openChooseItem.type !== 'section') {
       const type = backTypeMap[openChooseItem.type]
       setOpenChooseItem({
@@ -190,6 +193,7 @@ const ResultsTable = ({
             setParams={setParams}
             showOnlySection={true}
             allowClear={true}
+            setDirection={setDirection}
           />
         </div>
       </div>
@@ -264,32 +268,35 @@ const ResultsTable = ({
         btnSubmitTile="Confirm"
         placement="bottom"
       >
-        {openFilter && !openChooseItem.isOpen ? (
-          <ListFilterMobile
-            setOpenChooseItem={setOpenChooseItem}
-            listSection={listSection}
-            listSubsection={listSubsection}
-            listUnit={listUnit}
-            listActivity={listActivity}
-            setListSection={setListSection}
-            setListSubsection={setListSubsection}
-            setListUnit={setListUnit}
-            setListActivity={setListActivity}
-          />
-        ) : (
-          <ListItemFilterMobile
-            setOpenChooseItem={setOpenChooseItem}
-            openChooseItem={openChooseItem}
-            listSection={listSection}
-            listSubsection={listSubsection}
-            listUnit={listUnit}
-            listActivity={listActivity}
-            setListSection={setListSection}
-            setListSubsection={setListSubsection}
-            setListUnit={setListUnit}
-            setListActivity={setListActivity}
-          />
-        )}
+        <CarouselSlideAnimation slideKey={title} direction={direction}>
+          {openFilter && !openChooseItem.isOpen ? (
+            <ListFilterMobile
+              setOpenChooseItem={setOpenChooseItem}
+              listSection={listSection}
+              listSubsection={listSubsection}
+              listUnit={listUnit}
+              listActivity={listActivity}
+              setListSection={setListSection}
+              setListSubsection={setListSubsection}
+              setListUnit={setListUnit}
+              setListActivity={setListActivity}
+            />
+          ) : (
+            <ListItemFilterMobile
+              setOpenChooseItem={setOpenChooseItem}
+              openChooseItem={openChooseItem}
+              listSection={listSection}
+              listSubsection={listSubsection}
+              listUnit={listUnit}
+              listActivity={listActivity}
+              setListSection={setListSection}
+              setListSubsection={setListSubsection}
+              setListUnit={setListUnit}
+              setListActivity={setListActivity}
+              setDirection={setDirection}
+            />
+          )}
+        </CarouselSlideAnimation>
       </SappDrawerV3>
     </FormProvider>
   )

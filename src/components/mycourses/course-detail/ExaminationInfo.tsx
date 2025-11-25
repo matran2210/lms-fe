@@ -8,7 +8,6 @@ import { ClassKey } from '@pages/api/queryKey'
 import { getDuration } from '@utils/index'
 import { Avatar, GetProp, List, Skeleton, UploadFile, UploadProps } from 'antd'
 import clsx from 'clsx'
-import { AnimatePresence, motion } from 'framer-motion'
 import { isEmpty, isUndefined } from 'lodash'
 import { useRouter } from 'next/router'
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from 'react'
@@ -26,6 +25,7 @@ import { ExaminationForm } from 'src/redux/types/Course/MyCourse/ExamInformation
 import { Data } from 'src/type/course'
 import { z } from 'zod'
 import SelectExamDate from './SelectExamDate'
+import CarouselSlideAnimation from 'src/common/animations/CarouselSlideAnimation'
 
 type Props = {
   open: boolean
@@ -279,20 +279,6 @@ const ExaminationInfo = ({
       : isTabletView || isMobileView
         ? 'auto'
         : '100%'
-  const variants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? '100%' : '-100%',
-      opacity: 0,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-    },
-    exit: (direction: number) => ({
-      x: direction > 0 ? '-100%' : '100%',
-      opacity: 0,
-    }),
-  }
 
   return (
     <>
@@ -317,43 +303,27 @@ const ExaminationInfo = ({
         })}
       >
         <FormProvider {...methods}>
-          <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
-              key={
-                isMobileView && isOpenSelectExam
-                  ? 'selectExam'
-                  : isEdit
-                    ? 'changeExam'
-                    : 'viewExam'
-              }
-              custom={direction}
-              variants={variants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.2 }}
-            >
-              {isMobileView && isOpenSelectExam ? (
-                <SelectExamDate
-                  classId={classId}
-                  currentValue={data?.exam?.id || currentValue}
-                  itemSelected={itemSelected}
-                  setItemSelected={setItemSelected}
-                />
-              ) : isEdit ? (
-                <ChangExamDate
-                  isOpen={isEdit}
-                  classId={classId}
-                  remainingChanges={data?.remaining_changes}
-                  currentValue={data?.exam?.id || currentValue}
-                  setIsOpenSelectExam={setIsOpenSelectExam}
-                  setDirection={setDirection}
-                />
-              ) : (
-                renderContent()
-              )}
-            </motion.div>
-          </AnimatePresence>
+          <CarouselSlideAnimation slideKey={title} direction={direction}>
+            {isMobileView && isOpenSelectExam ? (
+              <SelectExamDate
+                classId={classId}
+                currentValue={data?.exam?.id || currentValue}
+                itemSelected={itemSelected}
+                setItemSelected={setItemSelected}
+              />
+            ) : isEdit ? (
+              <ChangExamDate
+                isOpen={isEdit}
+                classId={classId}
+                remainingChanges={data?.remaining_changes}
+                currentValue={data?.exam?.id || currentValue}
+                setIsOpenSelectExam={setIsOpenSelectExam}
+                setDirection={setDirection}
+              />
+            ) : (
+              renderContent()
+            )}
+          </CarouselSlideAnimation>
         </FormProvider>
       </SappDrawerV3>
       <ChangeAnywayModal
