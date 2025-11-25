@@ -1,4 +1,3 @@
-import { CloseIcon, CloseModalIcon } from '@lms/assets'
 import {
   ActivityBar,
   ActivityResource,
@@ -23,32 +22,21 @@ import {
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
-import { useCourseContext } from '@contexts/index'
+import { CloseIcon, CloseModalIcon } from '@lms/assets'
+import { clearNote3Level, closeCalculator3Level, courseActivityAction3Level, showPopupCompletedCourse, useAppDispatch, useAppSelector, useCourseContext } from '@lms/contexts'
+import { shortCourseActivityReducer } from '@lms/contexts'
+import { ACTIVE_TABS, ActivityFile, ANIMATION, IActivity3Level, IActivityResource, ISubSection } from '@lms/core'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { MovableWindow } from '@lms/ui'
+import { trackGAEvent } from '@lms/utils'
 import { CoursesAPI } from '@pages/api/courses'
 import { getActivityById } from '@pages/api/short-course/activity'
-import { trackGAEvent } from '@lms/utils'
+import { UploadAPI } from '@pages/api/short-course/upload'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
-import { ACTIVE_TABS, ANIMATION, PageLink } from '@lms/core'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { UploadAPI } from 'src/pages/api/short-course/upload'
-import { useAppDispatch, useAppSelector } from '@lms/contexts'
-import { clearNote } from 'src/redux/slice/Course/NotesList'
-import {
-  closeCalculator,
-  courseActivityAction,
-  shortCourseActivityReducer,
-} from 'src/redux/slice/Course/ShortCourse/Activity/Activity'
-import { showPopupCompletedCourse } from '@lms/contexts'
-import {
-  ActivityFile,
-  IActivity,
-  IActivityResource,
-  ISubSection,
-} from 'src/type/courses-3-level'
-import { MovableWindow } from '@lms/ui'
+import { PageLink } from 'src/constants/routes'
 
 interface VideoStateClicked {
   course_tab_document_id: string
@@ -182,12 +170,12 @@ export default function ActivityDetail() {
     if (activity) {
       CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION = {}
       try {
-        dispatch(courseActivityAction.setActivityState(activity))
+        dispatch(courseActivityAction3Level.setActivityState3Level(activity))
       } catch (error) {}
     }
 
     return () => {
-      dispatch(courseActivityAction.resetActivity())
+      dispatch(courseActivityAction3Level.resetActivity3Level())
     }
   }, [activity, dispatch, COURSEID, ACTIVITYID])
 
@@ -212,8 +200,8 @@ export default function ActivityDetail() {
 
   // Clear notes & calculator
   useEffect(() => {
-    dispatch(clearNote())
-    dispatch(closeCalculator())
+    dispatch(clearNote3Level())
+    dispatch(closeCalculator3Level())
   }, [dispatch, router.asPath])
 
   const onVideoStart = (file_id: string, course_tab_document_id: string) => {
@@ -245,7 +233,7 @@ export default function ActivityDetail() {
     setVideoClicked(videoClicked)
   }
 
-  const settingDoneProcessActivity = (activity: IActivity) => {
+  const settingDoneProcessActivity = (activity: IActivity3Level) => {
     setIsDoneActivity(false)
     setVideoClicked([])
     if (activity?.user_course_section_progress?.length) {
@@ -312,7 +300,7 @@ export default function ActivityDetail() {
     return activity?.course_tab_documents
   }, [activity])
 
-  const [sessionData, setSessionData] = useState<Array<IActivity>>([])
+  const [sessionData, setSessionData] = useState<Array<IActivity3Level>>([])
 
   useEffect(() => {
     // Lấy giá trị từ sessionStorage với key 'activityId'
@@ -332,7 +320,7 @@ export default function ActivityDetail() {
   }, [])
 
   // Tạo một mảng chứa các id của các hoạt động từ sessionData
-  const activityIds = sessionData?.map((activity: IActivity) => activity.id)
+  const activityIds = sessionData?.map((activity: IActivity3Level) => activity.id)
 
   // Lấy id của hoạt động tiếp theo
   const nextActivityId = activity?.next_activity?.id || ACTIVITYID
@@ -355,7 +343,7 @@ export default function ActivityDetail() {
 
   // Lấy danh sách trạng thái khóa của các hoạt động trong phiên làm việc
   const activityPreviewLocks = sessionData?.map(
-    (activity: IActivity) => activity?.is_preview_locked,
+    (activity: IActivity3Level) => activity?.is_preview_locked,
   )
 
   // Kiểm tra xem hoạt động tiếp theo có bị khóa hay không
@@ -487,7 +475,7 @@ export default function ActivityDetail() {
                 <div className="text-sm font-bold">Calculator</div>
                 <button
                   onClick={() => {
-                    dispatch(closeCalculator())
+                    dispatch(closeCalculator3Level())
                   }}
                 >
                   <CloseModalIcon />

@@ -12,7 +12,6 @@ import Layout from '@components/layout'
 import LearningResource from '@components/mycourses/LearningResource'
 import BottomMenu from '@components/v2/course-detail/BottomMenu'
 import CardMenuItem from '@components/v2/course-detail/CardMenuItem'
-import { useCourseContext } from '@contexts/index'
 import { CoursesAPI } from '@pages/api/courses'
 import { buildQueryString, formatDate } from '@lms/utils'
 import { Alert, Divider, Skeleton } from 'antd'
@@ -25,19 +24,17 @@ import PreviewPartDetail from 'preview-part'
 import {
   ANIMATION,
   DEFAULT_PAGESIZE,
-  PageLink,
   ROUTES,
   TEST_TYPE,
 } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { useAppDispatch } from '@lms/contexts'
-import { activeNotesList } from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
-import { UserType } from 'src/redux/types/User/urser'
+import { activeNotesList, useAppDispatch, useCourseContext, UserType } from '@lms/contexts'
 import { ISubSection } from 'src/type/courses-3-level'
-import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import { isEmpty } from 'lodash'
-import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
+import { PageLink } from 'src/constants/routes'
+import { PopupLockContent } from '@lms/feature-courses'
+import { CtaTrial } from '@lms/ui'
 
 interface IProps {
   course_section_type: string

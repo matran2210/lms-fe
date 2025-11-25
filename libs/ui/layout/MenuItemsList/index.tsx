@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
-import { INotificationAPI, MenuItem as MenuItemType } from "@lms/core";
+import { MenuItem as MenuItemType } from "@lms/core";
 import MenuItem from "../MenuItem";
-import { useFeature } from "node_modules/@lms/contexts";
 
 type MenuItemsListProps = {
   options: MenuItemType[];
@@ -20,7 +19,7 @@ export default function MenuItemsList({
 
   return (
     <div className="menu-items-list flex flex-col gap-4 px-3">
-      {options.map((option, index) => (
+      {options?.map((option, index) => (
         <MenuItem
           menuItem={option}
           key={option.id + index}

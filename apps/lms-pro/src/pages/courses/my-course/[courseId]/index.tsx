@@ -265,6 +265,7 @@ const CourseDetail = () => {
             handleOpenSidebar={handleOpenSidebar}
             isShowToggle
             isCoursePage
+            redirectLink={PageLink.COURSES}
           />
           <SappBreadCrumbs
             isTeacher={false}

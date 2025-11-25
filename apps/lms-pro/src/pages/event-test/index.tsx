@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { EventTestAPI } from '../api/event-test'
+import { PageLink } from 'src/constants/routers'
 
 const EventTest = () => {
   const router = useRouter()
@@ -70,6 +71,7 @@ const EventTest = () => {
           handleOpenSidebar={handleOpenSidebar}
           isShowToggle
           className="my-4"
+          redirectLink={PageLink.COURSES}
         />
         <div className="my-0">
           {isLoading ? (

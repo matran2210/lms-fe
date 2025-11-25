@@ -7,12 +7,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import { ANIMATION } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
 import { CoursesAPI } from '../api/courses'
-import Layout from '@components/layout'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { useCourseContext } from '@contexts/index'
-import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
+import { useCourseContext, UserType } from '@lms/contexts'
+import { Layout, SearchWithMenuToggle } from '@lms/ui'
+import { PageLink } from 'src/constants/routes'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -116,6 +115,7 @@ const MyCourse3Level = () => {
           handleOpenSidebar={handleOpenSidebar}
           isShowToggle
           isShowUserGuide
+          redirectLink={PageLink.SHORT_COURSE}
         />
       </div>
       <div

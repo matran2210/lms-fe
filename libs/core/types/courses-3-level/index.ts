@@ -1,14 +1,18 @@
 import { TooltipPlacement } from 'antd/es/tooltip'
 import { Dispatch, ForwardedRef, ReactNode, SetStateAction } from 'react'
 import { FieldValues, UseFormSetValue } from 'react-hook-form'
-import { CourseProgram, CourseSectionLinkParent, ExaminationSubject, IActivity3Level, ILearningOutcome, IQuizSetting, RemindChoosingExam } from '@lms/core'
-import { IQuestion, Thumbnail , IMetaData, IExhibit, IButtonProps, ICourseAll, ITabs } from '@lms/core'
-import { DrawerProps } from 'antd'
 import {
-  QueryObserverResult,
-  RefetchOptions,
-  RefetchQueryFilters,
-} from 'react-query'
+  CourseSectionLinkParent,
+  IActivity,
+  ITab,
+  RemindChoosingExam,
+} from '../course/my-course'
+import { CourseProgram, IQuestion, IVideo } from '../course'
+import { DrawerProps } from 'antd'
+import { ICourseAll, ICourseSection, ILearningOutcome, IQuizSetting } from '../courses'
+import { IMetaData } from '../api-response'
+import { ExaminationSubject } from '../exam-infomation'
+import { IBreadcrumb, IButtonProps, IExhibit } from '..'
 
 export interface ICourseOutcomes {
   id: string
@@ -33,7 +37,7 @@ export interface ICourseTabDocument {
   type: 'TEXT' | 'VIDEO' | 'QUIZ'
   text_editor_content?: string
   course_section_id?: string
-  files?: IFile[]
+  files?: File[]
   videos?: IVideo[]
   quiz?: {
     attempt: {
@@ -53,49 +57,10 @@ export interface ICourseTabDocument {
 }
 
 type CourseSectionType = 'ACTIVITY' | 'UNIT' | 'CHAPTER_TEST' | 'STORY'
-export interface IBreadcrumb {
-  id: string
-  name: string
-  course_section_type: CourseSectionType
-  parent_id?: string
-  url?: string
-}
-
-export interface IFile {
-  id: string
-  created_at: string
-  updated_at: string
-  deleted_at: string
-  dom_id: string
-  type: string
-  object_id: string
-  resource_id: string
-  resource: {
-    id: string
-    name: string
-    file_key: string
-    stream_url: string
-    cloudflare_video_id: string
-    time_line: ITimeLine[]
-    status: string
-    url: string
-    url_expired_in: string
-    sub_url: string
-    thumbnail: Thumbnail
-  }
-}
 
 export interface ITimeLine {
   time: String
   text: string
-}
-export interface IVideo {
-  file: IFile
-  quiz?: {
-    id: string
-    constructed_questions: IQuestion[]
-    multiple_choice_questions: IQuestion[]
-  }
 }
 
 export interface ISubSection {
@@ -176,34 +141,6 @@ export interface ShortCourseDetail {
   class_type: string
 }
 
-export interface ICourseSection {
-  id: string
-  name: string
-  activity_count: number
-  course_section_type: 'PART' | 'MID_TERM_TEST' | 'FINAL_TEST'
-  cta_status?: string
-  duration?: number
-  learning_progress: {
-    duration: number
-    time_spent: number
-    total_course_sections: number
-    total_course_sections_completed: number
-  }
-  course_section_link_parents: CourseSectionLinkParent[]
-  description: string
-  subsections: ISubSection[]
-  user_section_learning_status: 'IN_PROGRESS' | 'READY_TO_LEARN' | 'COMPLETED'
-  quiz: {
-    id: string
-    attempt: IAttempt
-    quiz_timed: number | null
-    is_graded: boolean
-    required_percent_score: number
-    is_limited: boolean
-    limit_count: number
-    grading_method: string
-  }
-}
 export interface ITooltip {
   showTooltip?: boolean
   color?: string
@@ -238,7 +175,7 @@ export interface IActivityResourceProps {
 }
 
 export interface BreadcrumbProps {
-  tabs: ITabs[]
+  tabs?: ITab[];
   currentPage: string
   className?: string
 }
@@ -302,14 +239,14 @@ export interface CourseInfo {
   category: string
 }
 
-export type SectionContentProps = {
-  title?: string
-  sections: ISubSection[]
-  class_user_id: string
-  refetch?: <TPageData>(
-    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
-  ) => Promise<QueryObserverResult<IActivity3Level, unknown>>
-}
+// export type SectionContentProps = {
+//   title?: string
+//   sections: ISubSection[]
+//   class_user_id: string
+//   refetch?: <TPageData>(
+//     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
+//   ) => Promise<QueryObserverResult<IActivity, unknown>>
+// }
 
 export type SectionContentModalProp = {
   sections: ISubSection[]
@@ -644,8 +581,6 @@ export interface ITabSlideProps {
   isScrollCenter?: boolean
 }
 
-export type TabItem = IQuestionTab | 'split' | undefined
-
 export interface IProps {
   id: string | undefined
   content: string
@@ -664,4 +599,95 @@ export type CalcState = {
 
 export type NoteFormData = {
   [key: string]: string
+}
+export interface IActivity3Level {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: null;
+  course_id: string;
+  name: string;
+  code: string;
+  description: string;
+  status: string;
+  is_public: boolean;
+  duration: number;
+  is_peer_review: boolean;
+  is_graded: boolean;
+  course_section_notes: {
+    name: string;
+    description: string;
+  }[];
+  children: any;
+  activity_type: string;
+  position: string;
+  parent_id: string;
+  total_activity: number;
+  activity_count: number;
+  course_section_type: "ACTIVITY" | "UNIT" | "CHAPTER_TEST" | "STORY";
+  display_icon: "TEXT" | "VIDEO";
+  learning_progress: {
+    duration: number;
+    time_spent: number;
+    total_course_sections: number;
+    total_course_sections_completed: number;
+  };
+  type: "video" | "text" | "list";
+  course_outcomes: {
+    id: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string;
+    description: string;
+  }[];
+  files: ActivityFile[];
+  quiz: {
+    id: string;
+    case_study_story?: {
+      id: string;
+      instances: Array<{
+        id: string;
+        created_at: string;
+        position: number;
+        question_topic_id: string;
+        question_topic: {
+          id: string;
+          name: string;
+          number_of_multiple_choice_questions: number;
+          number_of_essay_questions: number;
+        };
+      }>;
+    };
+    attempt: IAttempt[];
+    quiz_timed: number;
+    required_percent_score: number;
+    is_limited: boolean;
+    limit_count: number;
+    grading_method: string;
+    is_graded: boolean;
+    quiz_question_instances?: {
+      id: string;
+      question_id: string;
+    }[];
+  };
+  course_tab_documents: ICourseTabDocument[];
+  class_id?: string;
+  class_user_id?: string;
+  next_activity: INeighborActivity;
+  previous_activity: INeighborActivity;
+  breadcumb?: IBreadcrumb[];
+  user_course_section_progress: {
+    id: string;
+    total_course_sections: number;
+    total_course_sections_completed: number;
+  }[];
+  is_preview_locked?: boolean;
+  course_section_link_parents: CourseSectionLinkParent[];
+  section_root: {
+    id: string;
+    name: string;
+  };
+  course: {
+    name: string;
+  };
 }

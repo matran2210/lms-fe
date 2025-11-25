@@ -1,5 +1,5 @@
+import { IActivity3Level } from '@lms/core'
 import { fetcher } from '@services/requestV2'
-import { IActivity } from 'src/type/courses-3-level'
 import { ICourseTabDocument, IFile } from 'src/type/courses-3-level'
 
 /**
@@ -13,7 +13,7 @@ import { ICourseTabDocument, IFile } from 'src/type/courses-3-level'
 export const getActivityById = async (
   id: string | string[] | undefined,
   course_id: string | string[] | undefined,
-): Promise<IActivity> => {
+): Promise<IActivity3Level> => {
   try {
     const responseActivity = await fetcher(
       `courses/${course_id}/activity/${id}?activity_sc_id=true`,

@@ -1,11 +1,11 @@
 import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
 import {
-  UserType,
   active,
   clearGuideState,
   useAppDispatch,
   useAppSelector,
   useCourseContext,
+  UserType,
 } from '@lms/contexts'
 import {
   ANIMATION,
@@ -14,6 +14,7 @@ import {
   UserGuide,
 } from '@lms/core'
 import { CoursesList, FilterCourse, Heading } from '@lms/feature-courses'
+import { PopupStep, PopupWelcome } from '@lms/feature-user'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
 import Aos from 'aos'
@@ -22,19 +23,12 @@ import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
+import TourGuideCourseTab from 'src/assets/lotties/tour-guide-course-tab.json'
 import TourGuideCourses from 'src/assets/lotties/tour-guide-courses.json'
 import TourGuideFilter from 'src/assets/lotties/tour-guide-filter.json'
+import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from '../api/courses'
-import { PageLink } from 'src/constants/routers'
-import {
-  MENU_BOTTOM,
-  MENU_ITEMS,
-  MENU_ITEMS_EVENT,
-} from 'src/constants/menu-items'
-import { PopupStep, PopupWelcome } from '@lms/feature-user'
-import TourGuideCourseTab from 'src/assets/lotties/tour-guide-course-tab.json'
-import { NotificationAPI } from '@pages/api/notification'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -239,6 +233,7 @@ const MyCourse = () => {
           isShowToggle
           isShowUserGuide
           disabledSearch={guideIsActive}
+          redirectLink={PageLink.COURSES}
         />
 
         <div

@@ -1,9 +1,7 @@
-import { TEST_TYPE_ENUM } from '@utils/constants'
 import { Collapse } from 'antd'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { ROUTES } from 'src/constants'
 import { SectionContentProps } from 'src/type/courses-3-level'
 import {
   formatDuration,
@@ -14,8 +12,10 @@ import {
 import { ArrowDownIcon } from '../icons'
 import TestModal from '../popup/TestModal'
 import Tooltip from '@components/common/Tooltip'
-import { CompletedIcon, LockClosedIcon } from '@lms/assets'
-import { useCourseContext } from '@contexts/index'
+import { LockClosedIcon } from '@lms/assets'
+import { useCourseContext } from '@lms/contexts'
+import { ROUTES, TEST_TYPE_ENUM } from '@lms/core'
+import { CompletedIcon } from '@assets/icons'
 
 const { Panel } = Collapse
 

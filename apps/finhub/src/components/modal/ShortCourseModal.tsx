@@ -117,7 +117,6 @@ const ShortCourseModal = ({
             className={footerButtonClassName}
             showOkButton={showOkButton}
             showCancelButton={showCancelButton}
-            startIcon={startIcon}
             submit={{
               title: okButtonCaption,
               size: buttonSize,

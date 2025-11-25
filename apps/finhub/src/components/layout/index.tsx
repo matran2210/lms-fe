@@ -1,13 +1,12 @@
-import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
-import { useCourseContext } from '@contexts/index'
+
 import clsx from 'clsx'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { ReactElement, ReactNode, useState } from 'react'
 import { PageLink } from 'src/constants/routes'
-import { useAppSelector } from 'src/redux/hook'
 import Sidebar from './Sidebar'
 import { useTailwindBreakpoint } from '@lms/hooks'
+import { useAppSelector, useCourseContext, usePinnedNotifyContext } from '@lms/contexts'
 interface LayoutProps {
   children: ReactNode
   title: string

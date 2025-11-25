@@ -1,30 +1,22 @@
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import { trackGAEvent } from '@utils/google-analytics'
+import { trackGAEvent } from '@lms/utils'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
-import { PageLink, TitleSidebar } from 'src/constants'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import {
-  activeNotesList,
-  pushNotes,
-} from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
-import { userReducer } from '@lms/contexts'
 import { v4 as uuidv4 } from 'uuid'
-import { LANG_SIGNIN } from 'src/constants/lang'
 import ExpandIcon from '@components/layout/ExpandIcon'
 import MenuItemsList from './MenuItemsList'
-import { MenuItemProps } from 'src/constants/sidebar'
+import { LANG_SIGNIN, MenuItemProps, ROUTES, TitleSidebar } from '@lms/core'
 import { CourseInfo } from 'src/type/courses-3-level'
-import { ROUTES } from 'src/constants/courses'
-import { openCalculator } from 'src/redux/slice/Course/ShortCourse/Activity/Activity'
 import SappNotificationComponent from 'sapp-notification'
-import { useNotification } from 'src/hooks/useNotification'
-import { clearNotifications } from 'src/redux/slice/Notification/Notification'
 import { isEmpty } from 'lodash'
 import clsx from 'clsx'
 import { Divider } from 'antd'
+import { PageLink } from 'src/constants/routes'
+import { activeNotesList3Level, clearNotifications, openCalculator3Level, pushNotes3Level, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
+import { useNotification } from '@lms/hooks'
+import { NotificationAPI } from '@pages/api/notification'
 export default function MenuItem({
   menuItem: { name, icon: Icon, url, type, subItems },
   closeSideBar,
@@ -47,7 +39,7 @@ export default function MenuItem({
     refreshNotification,
     isDesktopView,
     notificationUnread,
-  } = useNotification()
+  } = useNotification(NotificationAPI)
 
   const isLoading = useAppSelector((state) => state.notificationReducer.loading)
 
@@ -80,7 +72,7 @@ export default function MenuItem({
   }
 
   const handleOpenNotesList = () => {
-    dispatch(activeNotesList())
+    dispatch(activeNotesList3Level())
     document.body.style.overflow = 'hidden'
   }
 
@@ -91,11 +83,11 @@ export default function MenuItem({
       name: 'Note',
       description: '',
     }
-    dispatch(pushNotes(note))
+    dispatch(pushNotes3Level(note))
   }
 
   const handleOpenCalculator = () => {
-    dispatch(openCalculator())
+    dispatch(openCalculator3Level())
   }
 
   const handleViewNotification = (link: string) => {
@@ -387,9 +379,9 @@ export default function MenuItem({
           tabs={tabs}
           selectedTab={selectedTab}
           setSelectedTab={setSelectedTab}
-          handleMarkAll={handleMarkAll}
-          handleMarkById={handleMarkById}
-          handleUnMarkById={handleUnMarkById}
+          handleMarkAll={() => handleMarkAll(selectedTab)}
+          handleMarkById={(ids: string[]) => handleMarkById(ids, selectedTab)}
+          handleUnMarkById={(ids: string[]) => handleUnMarkById(ids, selectedTab)}
           handleBack={handleBack}
           isViewDetail={isViewDetail}
           setOpenNotification={setOpenNotification}

@@ -2,7 +2,6 @@ import PopupActive from '@components/mycourses/PopupActive'
 import PopupExtend from '@components/mycourses/PopupExtend'
 import PopupLesson from '@components/mycourses/PopupLesson'
 import PopupOpenClass from '@components/mycourses/PopupOpenClass'
-import { useCourseContext } from '@contexts/index'
 import {
   ANIMATION,
   CLASS_USER_STATUS,
@@ -22,6 +21,7 @@ import CourseClass from './course/CourseClass'
 import CourseDescription from './course/CourseDescription'
 import CourseProgress from './course/CourseProgress'
 import CourseTitle from './course/CourseTitle'
+import { useCourseContext } from '@lms/contexts'
 
 export default function CourseCard({
   course,
