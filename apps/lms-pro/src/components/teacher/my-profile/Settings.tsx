@@ -1,4 +1,4 @@
-import { UnderDevelopmentIcon } from '@lms/assets/teacher'
+import { UnderDevelopmentIcon } from '@lms/assets'
 
 const Settings = () => {
   return (

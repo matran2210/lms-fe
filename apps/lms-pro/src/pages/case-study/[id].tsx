@@ -3,12 +3,24 @@ import {
   DownloadIcon,
   FileTextIcon,
   ResizeIcon,
-  ScratchPadIconV2
+  ScratchPadIconV2,
 } from '@lms/assets'
 
-import CloseModalIcon from '@lms/assets/CloseModalIcon'
-import { NotesOutline, PulsingExclamation, Triangle } from '@lms/assets'
-import { clearFileEssay, getTopicsCaseStudy, loadMoreQuestion, saveFileEssay, showPopupCompletedCourse, useAppDispatch, useAppSelector } from '@lms/contexts'
+import {
+  CloseModalIcon,
+  NotesOutline,
+  PulsingExclamation,
+  Triangle,
+} from '@lms/assets'
+import {
+  clearFileEssay,
+  getTopicsCaseStudy,
+  loadMoreQuestion,
+  saveFileEssay,
+  showPopupCompletedCourse,
+  useAppDispatch,
+  useAppSelector,
+} from '@lms/contexts'
 import {
   defaultSheetData,
   ESSAY_TYPE,
@@ -25,7 +37,17 @@ import ResetToAnswerTemplateModal from '@lms/feature-test/src/components/test/Re
 import ShowAnswerTemplate from '@lms/feature-test/src/components/test/ShowAnswerTemplate'
 import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { ButtonTextV2, Calculator, EditorReader, FileViewer, HookFormTextArea, ModalResizeable, MovableWindow, Popover, SappLoadingGlobal } from '@lms/ui'
+import {
+  ButtonTextV2,
+  Calculator,
+  EditorReader,
+  FileViewer,
+  HookFormTextArea,
+  ModalResizeable,
+  MovableWindow,
+  Popover,
+  SappLoadingGlobal,
+} from '@lms/ui'
 import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
 import AddWordPreview from '@lms/ui/components/questionType/FillText'
 import MatchQuizComponent from '@lms/ui/components/questionType/MatchQuiz/MatchQuiz'
@@ -50,7 +72,6 @@ import toast from 'react-hot-toast'
 import { CoursesAPI } from '../api/courses/index'
 import { TestAPI } from '../api/test'
 import LimitQuizModal from '../test/limitQuizModal'
-
 
 const CaseStudyDetail = ({ questions }: any) => {
   const editorRefs = useRef<any[]>([])
@@ -1677,13 +1698,13 @@ const CaseStudyDetail = ({ questions }: any) => {
                               className="cursor-pointer text-white"
                               onClick={() => {
                                 UploadAPI.downloadFile({
-                                    files: [
-                                      {
-                                        name: e?.resource?.name,
-                                        file_key: e?.resource?.file_key,
-                                      },
-                                    ],
-                                  });
+                                  files: [
+                                    {
+                                      name: e?.resource?.name,
+                                      file_key: e?.resource?.file_key,
+                                    },
+                                  ],
+                                })
                               }}
                             >
                               <DownloadIcon color="currentColor" />

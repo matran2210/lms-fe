@@ -1,4 +1,4 @@
-// import styles from "@styles/components/SAPPVideo.module.scss";
+// import styles from "@styles/components/SAPPVideo.module.scss"; comment monorepo
 import { video_url } from "@lms/core";
 import { useEffect, useRef, useState, ReactNode } from "react";
 import { Icon } from "@lms/assets/icons";
@@ -841,9 +841,9 @@ const SAPPVideo = ({
         <>
           {cloudflarePlayer ? (
             <div
-              className={`group ${
-                !hideVideo ? styles.wrapper : styles.hideWrapper
-              } ${loading ? "hidden" : ""}`}
+            // className={`group ${
+            //   !hideVideo ? styles.wrapper : styles.hideWrapper comment monorepo
+            // } ${loading ? "hidden" : ""}`}
             >
               <div className={`popup-question`}>{children}</div>
               <Stream
@@ -852,7 +852,7 @@ const SAPPVideo = ({
                 streamRef={streamRef}
                 controls
                 responsive={false}
-                className={`${styles.content}`}
+                // className={`${styles.content}`} comment monorepo
                 onSeeking={() => {
                   if (streamRef.current && pauseOnSeek) {
                     streamRef.current.pause();
@@ -863,9 +863,8 @@ const SAPPVideo = ({
             </div>
           ) : (
             <div
-              className={`sapp-video-custom video-container group ${
-                !hideVideo ? styles.wrapper : styles.hideWrapper
-              } ${loading ? "hidden" : ""}`}
+              // className={`sapp-video-custom video-container group ${
+              //   !hideVideo ? styles.wrapper : styles.hideWrapper comment monorepo
               ref={videoContainerRef}
             >
               <div className={`popup-question`}>{children}</div>
@@ -895,7 +894,7 @@ const SAPPVideo = ({
                 key={options.src}
                 ref={streamRef}
                 controls={false}
-                className={`${styles.content}`}
+                // className={`${styles.content}`} comment monorepo
                 poster={src}
                 onSeeking={() => {
                   if (streamRef?.current && pauseOnSeek && openQuestion) {

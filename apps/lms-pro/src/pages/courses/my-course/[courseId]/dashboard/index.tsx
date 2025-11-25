@@ -213,7 +213,7 @@ const Dashboard = () => {
                   />
                 )}
           </div>
-          {/* <ContinueLearning /> comment monorepo */}
+          <ContinueLearning />
         </div>
       )}
     </Layout>

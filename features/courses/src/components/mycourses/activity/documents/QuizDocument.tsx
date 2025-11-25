@@ -6,8 +6,10 @@ import {
   removeQuizFinished,
   saveAnswer,
   selectQuestions,
-  submitQuiz, useAppDispatch, useAppSelector,
-  useFeature
+  submitQuiz,
+  useAppDispatch,
+  useAppSelector,
+  useFeature,
 } from "@lms/contexts";
 import { useEffect, useRef, useState } from "react";
 
@@ -28,29 +30,32 @@ import {
   FINISHED_TEST_TITLE,
   GRADE_STATUS,
   GRADING_METHOD,
-  ICoursesAPI,
   IFocusQuiz,
   IQuestion,
-  IQuestionAPI,
   IQuizSetting,
   IRequirment,
-  IUploadAPI,
   QUESTION_TYPES,
   RESPONSE_OPTION,
   SOCIAL_LINK,
 } from "@lms/core";
-import { ConFirmSubmit } from "@lms/feature-test";
-import { ButtonSecondary, SappButton, SappModalV3, Tooltip as SappTooltip } from "@lms/ui";
+import {
+  ConFirmSubmit,
+  ResetToAnswerTemplateModal,
+  ShowAnswerTemplate,
+} from "@lms/feature-test";
+import {
+  ButtonSecondary,
+  SappButton,
+  SappModalV3,
+  Tooltip as SappTooltip,
+} from "@lms/ui";
 import { isValidatedAnswer, trackGAEvent } from "@lms/utils";
-import Tooltip from 'antd';
+import { Tooltip } from "antd";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { every, isEmpty, isNull, isUndefined } from "lodash";
-import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import ResetToAnswerTemplateModal from "../../../../../../test/src/components/test/ResetToAnswerTemplateModal";
-import ShowAnswerTemplate from "../../../../../../test/src/components/test/ShowAnswerTemplate";
 import LoadingQuizDocument from "./LoadingQuizDocument";
 import QuizComponent, { QuizComponentRef } from "./QuizComponent";
 
@@ -108,10 +113,8 @@ const QuizDocument = ({
   isQuizFinished = false,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
-    const {
-      questionApi,
-      courseApi, pageLink,
-      submitQuizTest, router } = useFeature();
+  const { questionApi, courseApi, pageLink, submitQuizTest, router } =
+    useFeature();
   const selector = useAppSelector(courseActivityQuizReducer);
   const isAFTERAllQUESTION = grading_preference !== "AFTER_EACH_QUESTION";
   const isAFTEREACHQUESTION = grading_preference === "AFTER_EACH_QUESTION";
@@ -1284,7 +1287,7 @@ const QuizDocument = ({
                     title="Clear Selection"
                   />
                 )}
-                <Tooltip
+              <Tooltip
                 title={
                   isQuestionConfirmed ||
                   isAFTERAllQUESTION ||

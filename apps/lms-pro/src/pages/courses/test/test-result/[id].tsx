@@ -1,16 +1,13 @@
-import { MenuDotsIcon } from '@lms/assets'
-import CloseModalIcon from '@lms/assets/CloseModalIcon'
+import { CloseModalIcon, MenuDotsIcon } from '@lms/assets'
 import { ButtonSecondary } from '@lms/ui'
 
 import { GRADE_STATUS } from '@lms/core'
-import { useTailwindBreakpoint } from '@lms/hooks'
 import { SappLoading, Tooltip } from '@lms/ui'
+import { useGetDataQuery } from '@lms/utils'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
 import { CoursesAPI } from 'src/pages/api/courses'
 import TestResultPage from 'src/pages/courses/test/test-result/testResultPage'
-import { useGetDataQuery } from '@lms/utils'
 
 const TestResultDetail = () => {
   const router = useRouter()
