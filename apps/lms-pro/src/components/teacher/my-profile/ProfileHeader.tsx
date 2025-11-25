@@ -1,5 +1,4 @@
-import { CheckCircleOutlineYellow, PencilFillV2Icon } from '@lms/assets'
-import blankAvatar from '@assets/images/blank_avatar.webp'
+import { BlankAvatarImage, CheckCircleOutlineYellow, PencilFillV2Icon } from '@lms/assets'
 import { TextSkeleton } from '@lms/ui'
 import { CloseIconV2 } from '@lms/assets'
 import { Divider, Tag } from 'antd'
@@ -13,15 +12,9 @@ import {
   useState,
 } from 'react'
 import toast from 'react-hot-toast'
-import { useAppDispatch, useAppSelector } from '@lms/contexts'
-import { getLogoutUser } from 'src/redux/slice/Login/Login'
-import {
-  getMe,
-  getUserInformation,
-  updateUser,
-  updateUserAvatar,
-  userReducer,
-} from 'src/redux/slice/User/User'
+import { getLogoutUser, getMe, getUserInformation, updateUser, updateUserAvatar, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
+import UserApi from 'src/redux/services/User/user'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 interface IProps {
   isEdit: boolean
   avatar: File | undefined
@@ -80,7 +73,7 @@ const ProfileHeader = ({
    */
   const handlerCancelUploadAvatar = () => {
     // Đặt giá trị cho state reViewImageSrc bằng hình ảnh mặc định
-    setReViewImageSrc(blankAvatar)
+    setReViewImageSrc(BlankAvatarImage)
     // Đặt giá trị cho state avatar thành undefined
     setAvatar(undefined)
     setIsEdit(false)
@@ -135,9 +128,9 @@ const ProfileHeader = ({
       // Nếu không có avatar và người dùng có avatar hiện tại
       if (!avatar && user?.detail?.avatar) {
         // Gọi hành động thunk updateUser để cập nhật tên và avatar của người dùng
-        await dispatch(updateUser({ full_name, avatar: null })).unwrap()
+        await dispatch(updateUser({ full_name, avatar: null, api: UserApi })).unwrap()
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
-        dispatch(getMe())
+        dispatch(getMe(UserApi))
         // Đặt trạng thái isEdit thành false
         setIsEdit(false)
         setIsEditAvatar(false)
@@ -147,12 +140,12 @@ const ProfileHeader = ({
       // Nếu có avatar
       if (avatar) {
         // Gọi hành động thunk updateUserAvatar để cập nhật avatar của người dùng
-        await dispatch(updateUserAvatar(avatar)).unwrap()
+        await dispatch(updateUserAvatar({ avatar, api: UserApi })).unwrap()
         // Đặt lại giá trị của avatar
         setAvatar(undefined)
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
       }
-      dispatch(getMe())
+      dispatch(getMe(UserApi))
       // Đặt trạng thái isEdit thành false
       setIsEdit(false)
       setIsEditAvatar(false)
@@ -161,12 +154,14 @@ const ProfileHeader = ({
       setIsEditAvatar(false)
       setReViewImageSrc(undefined)
       if (error?.response?.data?.error?.code === '403|1002') {
-        await dispatch(getLogoutUser())
+        await dispatch(getLogoutUser({
+          authManager: new AuthenticationManager(),
+        }))
       }
     }
   }
   useEffect(() => {
-    dispatch(getUserInformation())
+    dispatch(getUserInformation(UserApi))
   }, [])
 
   return (
@@ -238,7 +233,7 @@ const ProfileHeader = ({
                   reViewImageSrc ||
                   user.detail.avatar['150x150'] ||
                   user.detail.avatar?.['ORIGIN'] ||
-                  blankAvatar
+                  BlankAvatarImage
                 }
                 alt="avatar"
                 className=""
