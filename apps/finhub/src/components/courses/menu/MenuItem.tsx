@@ -1,4 +1,4 @@
-import blankAvatar from '@assets/images/blank_avatar.webp'
+import {BlankAvatarImage} from '@lms/assets'
 import { trackGAEvent } from '@lms/utils'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -147,7 +147,7 @@ export default function MenuItem({
               />
             ) : (
               <Image
-                src={blankAvatar}
+                src={BlankAvatarImage}
                 alt="avatar"
                 className="rounded-full"
                 width={40}
@@ -164,7 +164,7 @@ export default function MenuItem({
                   src={
                     user?.detail?.avatar?.['40x40'] ||
                     user?.detail?.avatar?.['ORIGIN'] ||
-                    blankAvatar
+                    BlankAvatarImage
                   }
                   alt="avatar"
                   className="h-10 w-10 rounded-full object-cover"

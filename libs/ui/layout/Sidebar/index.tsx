@@ -1,16 +1,13 @@
+import { ExpandIcon, TourGuideNotiAnimation, TourGuideSidebarAnimation } from "@lms/assets";
+import { useAppSelector, useFeature } from "@lms/contexts";
+import { UserGuide } from "@lms/core";
 import { ExaminationInfo, LearningResource } from "@lms/feature-courses";
 import { PopupStep } from "@lms/feature-user";
-import { ICoursesAPI, INotificationAPI, MenuItem, UserGuide } from "@lms/core";
 import { trackGAEvent } from "@lms/utils";
+import { Divider } from "antd";
 import clsx from "clsx";
 import { Dispatch, SetStateAction } from "react";
-import { useAppSelector, useFeature } from "@lms/contexts";
-import { ExpandIcon } from "@lms/assets";
 import MenuItemsList from "../MenuItemsList";
-import TourGuideSidebar from "src/assets/lotties/tour-guide-sidebar.json";
-import { Divider } from "antd";
-import { useRouter } from "next/router";
-import TourGuideNoti from "src/assets/lotties/tour-guide-noti.json";
 type SidebarProps = {
   isOpened: boolean;
   className: string;
@@ -112,7 +109,7 @@ export default function Sidebar({
               className="left-full top-1/2 ml-5"
               index={2}
               total={6}
-              imgSrc={TourGuideSidebar}
+              imgSrc={TourGuideSidebarAnimation}
             />
           )}
         </div>
@@ -136,7 +133,7 @@ export default function Sidebar({
               content={UserGuide.CONTENT_STEP_3}
               className="bottom-0 left-full ml-5"
               title="Notification & Profile"
-              imgSrc={TourGuideNoti}
+              imgSrc={TourGuideNotiAnimation}
               index={3}
               total={6}
             />

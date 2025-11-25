@@ -1,0 +1,23 @@
+// AUTO-GENERATED — DO NOT EDIT
+export { default as AddNoteAnimation } from "./animations/AddNote.json";
+export { default as CalculatorAnimation } from "./animations/Calculator.json";
+export { default as CalendarAnimation } from "./animations/Calendar.json";
+export { default as CourseContentAnimation } from "./animations/CourseContent.json";
+export { default as DashboardAnimation } from "./animations/Dashboard.json";
+export { default as EntranceTestAnimation } from "./animations/EntranceTest.json";
+export { default as EventTestAnimation } from "./animations/EventTest.json";
+export { default as ExamInfoAnimation } from "./animations/ExamInfo.json";
+export { default as ExamListAnimation } from "./animations/ExamList.json";
+export { default as LoadingBtnAnimation } from "./animations/LoadingBtn.json";
+export { default as MyCourseAnimation } from "./animations/MyCourse.json";
+export { default as NoteListAnimation } from "./animations/NoteList.json";
+export { default as NotificationAnimation } from "./animations/Notification.json";
+export { default as ResourceAnimation } from "./animations/Resource.json";
+export { default as TestQuizListAnimation } from "./animations/TestQuizList.json";
+export { default as TourGuideCoursesAnimation } from "./animations/TourGuideCourses.json";
+export { default as TourGuideCourseTabAnimation } from "./animations/TourGuideCourseTab.json";
+export { default as TourGuideFilterAnimation } from "./animations/TourGuideFilter.json";
+export { default as TourGuideNotiAnimation } from "./animations/TourGuideNoti.json";
+export { default as TourGuideSidebarAnimation } from "./animations/TourGuideSidebar.json";
+export { default as TourGuideStartAnimation } from "./animations/TourGuideStart.json";
+export { default as WavingHandAnimation } from "./animations/WavingHand.json";

@@ -1,4 +1,4 @@
-import blankAvatar from "@assets/images/blank_avatar.webp";
+import { AddNoteAnimation, BlankAvatarImage, CalculatorAnimation, CalendarAnimation, CourseContentAnimation, DashboardAnimation, EntranceTestAnimation, EventTestAnimation, ExamInfoAnimation, ExamListAnimation, MyCourseAnimation, NoteListAnimation, NotificationAnimation, ResourceAnimation, TestQuizListAnimation } from "@lms/assets";
 import { ExpandIcon } from "@lms/assets";
 import {
   activeNotesList,
@@ -24,20 +24,6 @@ import Lottie from "lottie-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-// import addNoteAnimationIcon from "public/animations/AddNote.json"; comment monorepo
-// import calculatorAnimationIcon from "public/animations/Calculator.json";
-// import calendarAnimationIcon from "public/animations/Calendar.json";
-// import courseContentAnimationIcon from "public/animations/CourseContent.json";
-// import dashboardAnimationIcon from "public/animations/Dashboard.json";
-// import entranceTestAnimationIcon from "public/animations/EntranceTest.json";
-// import eventTestAminationIcon from "public/animations/EventTest.json";
-// import examInfoAnimationIcon from "public/animations/ExamInfo.json";
-// import examListAnimationIcon from "public/animations/ExamList.json";
-// import myCourseAnimationIcon from "public/animations/MyCourse.json";
-// import noteListAnimationIcon from "public/animations/NoteList.json";
-// import notificationAnimationIcon from "public/animations/Notification.json";
-// import resourceAnimationIcon from "public/animations/Resource.json";
-// import testQuizListAnimationIcon from "public/animations/TestQuizList.json";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import SappNotificationComponent from "sapp-notification";
 import { v4 as uuidv4 } from "uuid";
@@ -249,7 +235,7 @@ export default function MenuItem({
       case "activity":
         return (
           <Lottie
-            // animationData={myCourseAnimationIcon}
+            animationData={MyCourseAnimation}
             loop
             autoplay
             className={animationClass}
@@ -258,7 +244,7 @@ export default function MenuItem({
       case "notes-list":
         return (
           <Lottie
-            // animationData={noteListAnimationIcon}
+            animationData={NoteListAnimation}
             loop
             autoplay
             className={animationClass}
@@ -267,7 +253,7 @@ export default function MenuItem({
       case "create-note":
         return (
           <Lottie
-            // animationData={addNoteAnimationIcon}
+            animationData={AddNoteAnimation}
             loop
             autoplay
             className={animationClass}
@@ -276,7 +262,7 @@ export default function MenuItem({
       case "learning-resource":
         return (
           <Lottie
-            // animationData={resourceAnimationIcon}
+            animationData={ResourceAnimation}
             loop
             autoplay
             className={animationClass}
@@ -285,7 +271,7 @@ export default function MenuItem({
       case "caculator":
         return (
           <Lottie
-            // animationData={calculatorAnimationIcon}
+            animationData={CalculatorAnimation}
             loop
             autoplay
             className={animationClass}
@@ -294,7 +280,7 @@ export default function MenuItem({
       case "calendar":
         return (
           <Lottie
-            // animationData={calendarAnimationIcon}
+            animationData={CalendarAnimation}
             loop
             autoplay
             className={animationClass}
@@ -303,7 +289,7 @@ export default function MenuItem({
       case "grid":
         return (
           <Lottie
-            // animationData={dashboardAnimationIcon}
+            animationData={DashboardAnimation}
             loop
             autoplay
             className={animationClass}
@@ -312,7 +298,7 @@ export default function MenuItem({
       case "entrance-test":
         return (
           <Lottie
-            // animationData={entranceTestAnimationIcon}
+            animationData={EntranceTestAnimation}
             loop
             autoplay
             className={animationClass}
@@ -321,7 +307,7 @@ export default function MenuItem({
       case "exam_list":
         return (
           <Lottie
-            // animationData={examListAnimationIcon}
+            animationData={ExamListAnimation}
             loop
             autoplay
             className={animationClass}
@@ -330,7 +316,7 @@ export default function MenuItem({
       case "result":
         return (
           <Lottie
-            // animationData={testQuizListAnimationIcon}
+            animationData={TestQuizListAnimation}
             loop
             autoplay
             className={animationClass}
@@ -339,7 +325,7 @@ export default function MenuItem({
       case "bookmark":
         return (
           <Lottie
-            // animationData={courseContentAnimationIcon}
+            animationData={CourseContentAnimation}
             loop
             autoplay
             className={animationClass}
@@ -348,7 +334,7 @@ export default function MenuItem({
       case "event-test":
         return (
           <Lottie
-            // animationData={eventTestAminationIcon}
+            animationData={EventTestAnimation}
             loop
             autoplay
             className={animationClass}
@@ -357,7 +343,7 @@ export default function MenuItem({
       case "exam-information":
         return (
           <Lottie
-            // animationData={examInfoAnimationIcon}
+            animationData={ExamInfoAnimation}
             loop
             autoplay
             className={animationClass}
@@ -367,7 +353,7 @@ export default function MenuItem({
         return (
           <div className="relative">
             <Lottie
-              // animationData={notificationAnimationIcon}
+              animationData={NotificationAnimation}
               loop
               autoplay
               className={animationClass}
@@ -389,7 +375,7 @@ export default function MenuItem({
       default:
         return (
           <Lottie
-            // animationData={myCourseAnimationIcon}
+            animationData={MyCourseAnimation}
             loop
             autoplay
             className={animationClass}
@@ -427,7 +413,7 @@ export default function MenuItem({
               />
             ) : (
               <Image
-                src={blankAvatar}
+                  src={BlankAvatarImage}
                 alt="avatar"
                 className="rounded-full"
                 width={40}
@@ -444,7 +430,7 @@ export default function MenuItem({
                   src={
                     user.detail.avatar?.["40x40"] ||
                     user.detail.avatar?.["ORIGIN"] ||
-                    blankAvatar
+                    BlankAvatarImage
                   }
                   alt="avatar"
                   className="h-10 w-10 rounded-full object-cover"

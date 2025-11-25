@@ -7,7 +7,7 @@ export * from "./Dashboard";
 export * from "./entranceTest/index";
 export * from "./ExpandIcon/index";
 export * from "./icons";
-export { default as LoadingBtnAnimation } from "./LoadingBtnAnimation";
+export { default as LoadingButtonAnimation } from "./LoadingButtonAnimation";
 export * from "./Notes";
 export { default as NotificationIcon } from "./NotificationIcon";
 export { default as QuitIcon } from "./QuitIcon";

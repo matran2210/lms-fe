@@ -23,12 +23,10 @@ import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import TourGuideCourseTab from 'src/assets/lotties/tour-guide-course-tab.json'
-import TourGuideCourses from 'src/assets/lotties/tour-guide-courses.json'
-import TourGuideFilter from 'src/assets/lotties/tour-guide-filter.json'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from '../api/courses'
+import { TourGuideCoursesAnimation, TourGuideCourseTabAnimation, TourGuideFilterAnimation } from '@lms/assets'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -283,7 +281,7 @@ const MyCourse = () => {
                 index={5}
                 total={7}
                 isEnd={isEndGuide}
-                imgSrc={TourGuideCourseTab}
+                imgSrc={TourGuideCourseTabAnimation}
                 title="Course Tab"
                 handleCancel={closeUserGuide}
               />
@@ -313,7 +311,7 @@ const MyCourse = () => {
                 titleButtonNext="Finish"
                 title="Filter"
                 handleCancel={closeUserGuide}
-                imgSrc={TourGuideFilter}
+                imgSrc={TourGuideFilterAnimation}
               />
             )}
           </div>
@@ -340,7 +338,7 @@ const MyCourse = () => {
               index={5}
               total={6}
               title="Courses"
-              imgSrc={TourGuideCourses}
+              imgSrc={TourGuideCoursesAnimation}
             />
           )}
         </div>
