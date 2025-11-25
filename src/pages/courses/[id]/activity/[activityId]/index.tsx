@@ -249,7 +249,11 @@ const ActivityPage = () => {
       try {
         dispatch(courseActivityAction.setActivityState(activity))
         dispatch(
-          courseActivityAction.setCurrentTabId(router.query?.tabId as string),
+          courseActivityAction.setCurrentTabId(
+            !!router.query?.tabId
+              ? (router.query?.tabId as string)
+              : activity?.tabs?.[0]?.id,
+          ),
         )
         dispatch(getDiscussion({ id: router.query?.id, sectionId: sectionId }))
       } catch (error) {}
