@@ -2,12 +2,11 @@ import { useRef } from 'react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import ButtonPrimary from 'src/components/base/button/ButtonPrimary'
 import { Dispatch, SetStateAction } from 'react'
-import { COMMENTS } from 'src/constants/grade'
 import { ClassAPI } from '@pages/api/class'
 import toast from 'react-hot-toast'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
+import { COMMENTS } from '@lms/core'
+import { ButtonPrimary, HookFormTextArea } from '@lms/ui'
 interface IProps {
   classId: string
   quizAttemptId: string

@@ -1,8 +1,4 @@
 import {
-  removeHighlights,
-  serializeHighlights,
-} from '@/../node_modules/@funktechno/texthighlighter/lib/index'
-import {
   CalculatorIcon,
   DownloadIcon,
   FileTextIcon,
@@ -13,49 +9,30 @@ import {
   ShowMoreIcon,
 } from '@lms/assets'
 import SappLoading from '@components/common/SappLoading'
-import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
-import NewFilltext from '@components/questionType/NewFillText'
-import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
-import SelectWord from '@components/questionType/SelectQuestion'
-import QuitTestModal from '@components/test/modals/QuizTestModal'
-import TestTimeOutModal from '@components/test/modals/TestTimeOutModal'
-import { CourseProvider, useCourseContext } from '@contexts/index'
 import { CoursesAPI } from '@pages/api/courses'
 import { runHighlight } from '@lms/utils'
 import { cloneDeep, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
 import {
   DISPLAY_TYPE,
   EXHIBIT_TEXT_REPLACE,
   GRADING_METHOD,
-  PageLink,
   PROGRAM,
   QUESTION_TYPES,
   TEST_TYPE,
 } from '@lms/core'
-import { useAppDispatch, useAppSelector } from '@lms/contexts'
-import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
+import { CourseProvider, disableUnsavedChange, loginSlice, useAppDispatch, useAppSelector, useCourseContext } from '@lms/contexts'
 import { IExhibit } from '@lms/core'
 import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
 
 import { NotesOutline, PulsingExclamation } from '@lms/assets'
-import BackToTop from '@lms/ui/components/BackToTop'
-import Popover from '@components/Popover'
-import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
-import { HighlightableHTML } from '@lms/ui'
+import { BackToTop, FilterRadioGroup, HighlightableHTML, MatchQuizComponent, MultiChoiceQuestion, NewDragNDropQuestion, NewFillText, OneChoiceQuestion, Popover, SelectWord, SlotValue, TestWrapper } from '@lms/ui'
 import { Icon } from '@lms/assets'
 import Layout from '@components/layout'
-import { ButtonContent } from '@lms/feature-test'
-import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
-import DragDropQuestion, {
-  SlotValue,
-} from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
-import TestWrapper from '@components/test/layout/TestWrapper'
 import { QuestionAPI } from '@pages/api/question'
 import { TestAPI } from '@pages/api/test'
 import { GradingPreference } from '@lms/core'
@@ -79,7 +56,11 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import { ButtonPrimary, ButtonSecondary, ButtonText, TabSlide } from '@lms/ui'
+import { ButtonPrimary, ButtonSecondary, ButtonText } from '@lms/ui'
+import { removeHighlights, serializeHighlights } from '@funktechno/texthighlighter/lib'
+import { PageLink } from 'src/constants/routes'
+import { ButtonContent } from '@lms/feature-courses'
+import { QuitTestModal, TabSlide, UnSubmitAnswerModal } from '@lms/feature-test'
 
 declare global {
   interface Window {
@@ -643,7 +624,7 @@ const TestDetail = () => {
         )
       case QUESTION_TYPES.FILL_WORD:
         return (
-          <NewFilltext
+          <NewFillText
             control={control}
             name={`${currentTabID}_fillword`}
             data={data}
@@ -664,7 +645,7 @@ const TestDetail = () => {
         )
       case QUESTION_TYPES.DRAG_DROP:
         return (
-          <DragDropQuestion
+          <NewDragNDropQuestion
             data={data}
             defaultValue={defaultValue}
             onChange={(data: SlotValue[]) => {
@@ -1879,7 +1860,7 @@ const TestDetail = () => {
       showSidebar={false}
       fullWidth
     >
-      <CourseProvider>
+      <CourseProvider router={router}>
         <SappLoading
           className={loading || !currentTabContent?.id ? 'block' : 'hidden'}
         />
@@ -2011,10 +1992,9 @@ const TestDetail = () => {
                       setScratchPads('')
                       handleSubmitAnswer('change-tab')
                       handleChangeTab(id)
-                    }}
+                    } }
                     activeShowAll={activeShowAll}
-                    isScrollCenter={false}
-                  />
+                    isScrollCenter={false} setHasScrollBar={undefined}                  />
                   <div
                     className={clsx(
                       `flex items-center justify-center lg:justify-start`,

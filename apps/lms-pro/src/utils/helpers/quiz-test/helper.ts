@@ -238,27 +238,3 @@ export function hasEditorValueFromHtml(
   return text.length > 0
 }
 
-export const getNoOfAttemptEntranceTest = ({
-  data,
-  currentAttempt,
-}: {
-  currentAttempt: IEntranceTestAttempt
-  data: IEntranceTest
-}) => {
-  const attemptIndex = data?.attempts?.findIndex(
-    (item) => item.id === currentAttempt.id,
-  )
-  let searchParams = ''
-  if (data?.limit_count === 1) {
-    searchParams = (attemptIndex ?? -1) > -1 ? `attempt=1/1` : ''
-  } else if (data?.attempts?.length === 1) {
-    searchParams =
-      (attemptIndex ?? -1) > -1 ? `attempt=1/${data?.limit_count}` : ''
-  } else {
-    searchParams =
-      data?.limit_count && (attemptIndex ?? -1) > -1
-        ? `attempt=${attemptIndex === 1 ? 1 : 2}/${data?.limit_count}`
-        : ''
-  }
-  return searchParams
-}

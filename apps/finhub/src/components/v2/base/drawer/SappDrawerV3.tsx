@@ -1,9 +1,8 @@
 import { Drawer, DrawerProps } from 'antd'
 import React, { ReactNode } from 'react'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import clsx from 'clsx'
-import ButtonText from '@components/base/button/ButtonText'
 import { CollapseArrowIcon, CloseIconV2 } from '@lms/assets'
+import { ButtonPrimary, ButtonText } from '@lms/ui'
 
 interface IProps extends DrawerProps {
   open: boolean

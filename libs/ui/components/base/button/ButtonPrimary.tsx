@@ -1,4 +1,4 @@
-import { LoadingBtnAnimation } from "@lms/assets";
+import { LoadingButtonAnimation } from "@lms/assets";
 import { IButtonBaseProps } from "@lms/core";
 import clsx from "clsx";
 import BaseButton from "./BaseButton";
@@ -56,7 +56,7 @@ const ButtonPrimary = ({
     >
       <div className="flex items-center gap-2.5">
         {loading ? (
-          <LoadingBtnAnimation />
+          <LoadingButtonAnimation />
         ) : (
           <>
             {startIcon && <div className="w-full">{startIcon}</div>}

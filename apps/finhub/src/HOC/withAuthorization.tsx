@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { useAppSelector } from '@lms/contexts'
+import { useAppSelector, UserType } from '@lms/contexts'
 import { userReducer } from '@lms/contexts'
-import { UserType } from 'src/redux/types/User/urser'
 
 const withAuthorization =
   <P extends object>(allowedRoles: string[]) =>
