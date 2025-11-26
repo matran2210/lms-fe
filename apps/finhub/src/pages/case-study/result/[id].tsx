@@ -10,24 +10,24 @@ import {
 } from '@lms/assets'
 
 import {
+  AddWordPreview,
+  ButtonPrimary,
   ButtonText,
   Calculator,
   EditorReader,
+  EssayQuestionPreview,
   FileViewer,
   HookFormTextArea,
+  MatchQuizComponent,
   ModalResizeable,
   MovableWindow,
+  MultiChoiceQuestion,
+  NewDragNDropQuestion,
+  OneChoiceQuestion,
+  SelectWord,
+  SlotValue,
 } from '@lms/ui'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
-import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
-import AddWordPreview from '@components/questionType/FillText'
-import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
-import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
-import DragDropQuestion, {
-  SlotValue,
-} from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
-import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
-import SelectWord from '@components/questionType/SelectQuestion'
 import {useMousePosition} from '@lms/hooks'
 import { runHighlight } from '@lms/utils'
 import clsx from 'clsx'
@@ -45,8 +45,7 @@ import {
 } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { useAppDispatch } from '@lms/contexts'
-import { loadMoreQuestion } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
+import { loadMoreQuestion, useAppDispatch } from '@lms/contexts'
 import {
   IAnswerResult,
   ICaseStudyResult,
@@ -192,7 +191,7 @@ const CaseStudyResult = () => {
         )
       case QUESTION_TYPES.DRAG_DROP:
         return (
-          <DragDropQuestion
+          <NewDragNDropQuestion
             data={data as any}
             defaultValue={defaultValue}
             onChange={(data: SlotValue[]) => {

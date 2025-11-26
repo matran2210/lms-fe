@@ -1,15 +1,8 @@
-<<<<<<< HEAD
-import { CloseIcon } from '@lms/assets'
-import { SappTable } from '@lms/ui'
-import { ButtonPrimary } from '@lms/ui'
-import { ButtonSecondary } from '@lms/ui'
-import { LAYOUT } from '@lms/core'
-=======
+
 import { CloseIcon } from '@lms/assets'
 import { UserType } from '@lms/contexts'
 import { ANIMATION, LAYOUT, QUESTION_TYPES } from '@lms/core'
 import { ButtonPrimary, ButtonSecondary, FullScreenLayout, SappTable } from '@lms/ui'
->>>>>>> 3572f61fce6cbd719611149a638238300d8d49fc
 import { roundNumber } from '@utils/helpers'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'

@@ -1,9 +1,9 @@
 import React from 'react'
 import { Arrows, SpinIcon } from '@components/courses/icons'
 import { IButtonNextPrevProps } from 'src/type/courses-3-level/button'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import clsx from 'clsx'
 import { LockClosedIcon } from '@lms/assets'
+import { ButtonPrimary } from '@lms/ui'
 
 export default function NextPrevActivityButton({
   nextClick,

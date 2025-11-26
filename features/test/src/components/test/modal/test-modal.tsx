@@ -12,7 +12,7 @@ import {
 } from "@lms/feature-courses";
 import { TestPopup } from "@lms/feature-test";
 import { ButtonPrimary, ButtonSecondary, ButtonText } from "@lms/ui";
-import { capitalizeFirstLetter, formatTime, trackGAEvent } from "@lms/utils";
+import { capitalizeFirstLetter, formatTime, formatTimeMinToHhMm, trackGAEvent } from "@lms/utils";
 import { CoursesAPI } from "@pages/api/courses";
 import { isQuizExpired } from "@utils/helpers/quiz-test/helper";
 import { Select } from "antd";
@@ -665,7 +665,7 @@ const TestModal = ({
         setOpen={setOpen}
         title={
           <div className="flex items-center justify-center">
-            {TEST_TYPE[data?.course_section_type]}
+            {TEST_TYPE[data?.course_section_type as keyof typeof TEST_TYPE]}
           </div>
         }
         time={displayTime}
@@ -688,7 +688,7 @@ const TestModal = ({
                   label="Time Allowed:"
                   value={
                     data?.quiz?.quiz_timed
-                      ? formatTime(data?.quiz?.quiz_timed * 60)
+                      ? formatTimeMinToHhMm(data?.quiz?.quiz_timed * 60)
                       : "Unlimited"
                   }
                 />

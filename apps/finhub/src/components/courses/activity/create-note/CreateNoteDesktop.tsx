@@ -1,7 +1,5 @@
 import { CloseNone, SaveIcon } from '@lms/assets'
-import ModalResizeable from '@components/base/modal/ModalResizeable'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import { ButtonPrimary, HookFormTextArea, ModalResizeable } from '@lms/ui'
 import { Control, UseFormHandleSubmit } from 'react-hook-form'
 import { NoteFormData } from 'src/type/courses-3-level'
 

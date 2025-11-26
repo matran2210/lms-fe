@@ -1,12 +1,9 @@
-import { ButtonPrimary } from "@lms/ui";
-import { ButtonSecondary } from "@lms/ui";
-import { ButtonText } from "@lms/ui";
-import { trackGAEvent } from "@lms/utils";
-import { getNoOfAttemptEntranceTest } from "@utils/helpers/quiz-test/helper";
+import { IEntranceTest, IEntranceTestAttempt } from "@lms/core";
+import { ButtonPrimary, ButtonSecondary, ButtonText } from "@lms/ui";
+import { getNoOfAttemptEntranceTest, trackGAEvent } from "@lms/utils";
 import dayjs from "dayjs";
 import router from "next/router";
 import { Dispatch, SetStateAction } from "react";
-import { IEntranceTest, IEntranceTestAttempt } from "@lms/core";
 import TestPopup from "../TestPopup";
 
 interface EntrancePopupContinueProps {
