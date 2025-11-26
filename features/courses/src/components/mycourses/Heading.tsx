@@ -2,7 +2,7 @@ import { truncateString } from "@lms/utils";
 import clsx from "clsx";
 import React from "react";
 import Lottie from "lottie-react";
-import { WavingHandAnimation } from "node_modules/@lms/assets";
+import { WavingHandAnimation } from "@lms/assets";
 interface IProps {
   greeting: string;
   title: string;

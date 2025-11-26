@@ -1,7 +1,6 @@
-import React from 'react';
-import blankAvatar from "@assets/images/blank_avatar.webp";
-import sappAvatar from "@assets/images/blank_avatar_notification.png";
 import {
+  BlankAvatarImage,
+  BlankAvatarNotificationImage,
   CameraIcon,
   CloseIconPreview,
   DeleteMessageIcon,
@@ -30,13 +29,12 @@ import { Popover } from "antd";
 import clsx from "clsx";
 import { isEmpty } from "lodash";
 import Image from "next/image";
-import { SetStateAction, useEffect, useRef, useState } from "react";
+import React, { SetStateAction, useEffect, useRef, useState } from 'react';
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import ActionDiscussion from "./ActionDiscussion";
 import ModalDeleteComment from "./ModalDeleteComment";
 import SendComment from "./SendComment";
-import { IActivityAPI, ICourseActivityAPI, ICoursesAPI } from '@lms/core';
 
 type Props = {
   rank?: number;
@@ -251,7 +249,7 @@ function DiscussionElement({
           className="rounded-full"
           src={userInfo?.avatar}
           loading="eager"
-          blurDataURL={blankAvatar.src}
+          blurDataURL={BlankAvatarImage.src}
           priority={true}
           alt="avatar user"
         />
@@ -279,7 +277,7 @@ function DiscussionElement({
         name: data?.student_info?.detail?.full_name,
         email: data?.student_info?.user_contacts?.[0]?.email,
         phone: data?.student_info?.user_contacts?.[0]?.phone,
-        avatar: data?.student_info?.detail.avatar?.["50x50"] || blankAvatar,
+        avatar: data?.student_info?.detail.avatar?.["50x50"] || BlankAvatarImage,
       });
     } catch (error: any) { }
   };
@@ -335,13 +333,13 @@ function DiscussionElement({
                     discussion.is_sapp_supporter
                       ? discussion?.avatar?.["50x50"] ||
                       discussion?.avatar?.["ORIGIN"] ||
-                      sappAvatar
+                      BlankAvatarNotificationImage
                       : discussion?.avatar?.["50x50"] ||
                       discussion?.avatar?.["ORIGIN"] ||
-                      blankAvatar
+                      BlankAvatarImage
                   }
                   loading="eager"
-                  blurDataURL={blankAvatar.src}
+                  blurDataURL={BlankAvatarImage.src}
                   priority={true}
                   alt="avatar"
                 />
@@ -380,7 +378,7 @@ function DiscussionElement({
                   height={100}
                   src={e.url}
                   loading="eager"
-                  blurDataURL={blankAvatar.src}
+                  blurDataURL={BlankAvatarImage.src}
                   objectFit="contain"
                   onClick={() => setImageSrc(e.url)}
                   priority={true}
@@ -406,7 +404,7 @@ function DiscussionElement({
                   height={100}
                   src={URL.createObjectURL(file)}
                   loading="eager"
-                  blurDataURL={blankAvatar.src}
+                  blurDataURL={BlankAvatarImage.src}
                   objectFit="contain"
                   onClick={() => setImageSrc(URL.createObjectURL(file))}
                   priority={true}

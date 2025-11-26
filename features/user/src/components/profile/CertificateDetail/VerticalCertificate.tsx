@@ -1,6 +1,5 @@
-import SAPP_Logo from "@assets/images/sapp_logo.svg";
-import { CopyIcon, Icon } from "@lms/assets";
-import { ButtonPrimary, CertificateImg, ClickToCopyButton } from "@lms/ui";
+import { CertificateImg, CopyIcon, Icon, SappLogoImage } from "@lms/assets";
+import { ButtonPrimary, ClickToCopyButton } from "@lms/ui";
 import { ICertificate } from "@pages/certificates/[id]";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -50,7 +49,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
           >
             <div className="mx-auto my-auto block w-1/2 overflow-hidden sm:max-w-[14rem]">
               <Image
-                src={SAPP_Logo}
+                src={SappLogoImage}
                 alt="SAPP Logo"
                 priority={true}
                 layout="responsive"

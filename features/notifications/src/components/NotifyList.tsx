@@ -1,14 +1,11 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react'
-import { Icon } from '@lms/assets'
-import blankAvatar from '@assets/images/blank_avatar_notification.png'
+import { BlankAvatarImage, Icon } from '@lms/assets'
 import Image from 'next/image'
-import { calculateTimeAgo } from '@utils/helpers'
-import { ANIMATION } from 'src/constants'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
 import {NoData } from '@lms/ui'
-import { trackGAEvent } from '@lms/utils'
-import { containsKeyword, formatNotificationHTML } from 'src/utils/index'
+import { calculateTimeAgo, containsKeyword, formatNotificationHTML, trackGAEvent } from '@lms/utils'
+import { ANIMATION } from '@lms/core'
 
 interface IProps {
   notifyLists: any[]
@@ -89,7 +86,7 @@ const NotifyList = ({
                   />
                 ) : (
                   <Image
-                    src={blankAvatar}
+                    src={BlankAvatarImage}
                     alt="avatar"
                     className={`rounded-full`}
                     width={56}

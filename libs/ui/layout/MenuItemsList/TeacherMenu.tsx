@@ -1,16 +1,8 @@
-import blankAvatar from "@assets/images/blank_avatar.webp";
-import { useCourseContext, useFeature } from "@lms/contexts";
-import { IAuthManager, ICoursesAPI, TitleSidebar, TitleTeacherSidebar } from "@lms/core";
-import { LearningResource } from "@lms/feature-courses";
-import { Layout, Menu, Tooltip } from "antd";
-import clsx from "clsx";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import {
   BellIcon,
+  BlankAvatarImage,
   BookMenuIcon,
+  ExpandIcon,
   FileMenuIcon,
   HelpMenuIcon,
   HomeMenuIcon,
@@ -18,9 +10,15 @@ import {
   MyCalendarMenuIcon,
   MyCourseTeacherIcon,
 } from "@lms/assets";
-import { IUser, userReducer, activeNotesList, pushNotes, openCalculator, useAppDispatch, useAppSelector } from "@lms/contexts";
+import { activeNotesList, IUser, openCalculator, pushNotes, useAppDispatch, useAppSelector, useCourseContext, useFeature, userReducer } from "@lms/contexts";
+import { TitleSidebar, TitleTeacherSidebar } from "@lms/core";
+import { LearningResource } from "@lms/feature-courses";
+import { Layout, Menu, Tooltip } from "antd";
+import clsx from "clsx";
+import Image from "next/image";
+import Link from "next/link";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { ExpandIcon } from "node_modules/@lms/assets";
 const { Sider } = Layout;
 
 export default function TeacherMenu({
@@ -304,7 +302,7 @@ const BottomActionMenu = ({
         src={
           user?.detail?.avatar["32x32"] ||
           user?.detail?.avatar["ORIGIN"] ||
-          blankAvatar
+          BlankAvatarImage
         }
         width={32}
         height={32}

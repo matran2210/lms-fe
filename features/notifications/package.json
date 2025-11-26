@@ -12,6 +12,9 @@
     "react": "^18.2.0",
     "next": "^12.1.6"
   },
+  "devDependencies": {
+    "@types/aos": "^3.0.7"
+  },
   "dependencies": {
     "@lms/assets": "workspace:*",
     "@lms/utils": "workspace:*",

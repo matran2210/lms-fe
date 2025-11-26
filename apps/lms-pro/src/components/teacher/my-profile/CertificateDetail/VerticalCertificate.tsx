@@ -1,12 +1,10 @@
 import React from 'react'
 import { Button } from 'antd'
-import CertificateCard from './CertificateCard'
 import Image from 'next/image'
-import { CertificateImg, Icon } from '@lms/assets'
-import { ClickToCopyButton } from 'src/common/SappCopyLink'
+import { CertificateImg, Icon, SappLogoImage } from '@lms/assets'
+import { ButtonPrimary, ClickToCopyButton } from '@lms/ui'
 import { ICertificate } from '@pages/certificates/[id]'
-import SAPP_Logo from '@assets/images/sapp_logo.svg'
-import { ButtonPrimary } from '@lms/ui'
+import { CertificateCard } from '@lms/feature-user'
 
 interface CertificateVerticalProps {
   certificate?: ICertificate
@@ -49,7 +47,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
           >
             <div className="mx-auto my-auto block w-1/2 overflow-hidden sm:max-w-[14rem]">
               <Image
-                src={SAPP_Logo}
+                src={SappLogoImage}
                 alt="SAPP Logo"
                 priority={true}
                 layout="responsive"

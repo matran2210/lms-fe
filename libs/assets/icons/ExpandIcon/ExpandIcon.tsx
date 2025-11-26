@@ -1,15 +1,9 @@
-import { NotificationIcon, OutlineArchive } from "@lms/assets";
+import { AddNote, BookMark, CourseContent, NoteList, Union } from "../course";
+import { CalculatorIcon, OutlineArchive } from "../icons";
+import NotificationIcon from "../NotificationIcon";
 import ArrowUp from "./ArrowUp";
 import LogoDefault from "./LogoDefault";
 import LogoFull from "./LogoFull";
-import {
-  AddNote,
-  BookMark,
-  Calculator,
-  CourseContent,
-  NoteList,
-  Union,
-} from "@lms/assets";
 import TeacherLogoFull from "./TeacherLogoFull";
 
 type ExpandIconPros = {
@@ -524,7 +518,7 @@ export default function ExpandIcon({
       {type === "book-mark" && <BookMark className={className} />}
       {type === "course-content" && <CourseContent className={className} />}
       {type === "note-list" && <NoteList className={className} />}
-      {type === "calculator" && <Calculator className={className} />}
+      {type === "calculator" && <CalculatorIcon className={className} />}
       {type === "add-note" && <AddNote className={className} />}
     </>
   );

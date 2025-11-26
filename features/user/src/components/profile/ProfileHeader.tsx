@@ -1,7 +1,15 @@
-import React from 'react'
-import blankAvatar from '@assets/images/blank_avatar.webp'
+import { BlankAvatarImage, CheckCircleOutlineYellow, CloseIconV2, PencilFillV2Icon, PencilV2Icon } from '@lms/assets'
+import {
+  getLogoutUser,
+  getMe,
+  getUserInformation,
+  updateUser,
+  updateUserAvatar,
+  useAppDispatch, useAppSelector,
+  useFeature,
+  userReducer
+} from '@lms/contexts'
 import { ProfileSkeleton } from '@lms/ui'
-import { CloseIconV2, PencilFillV2Icon, PencilV2Icon, CheckCircleOutlineYellow } from '@lms/assets'
 import { Divider, Tag } from 'antd'
 import clsx from 'clsx'
 import Image, { StaticImageData } from 'next/image'
@@ -13,16 +21,6 @@ import {
   useState,
 } from 'react'
 import toast from 'react-hot-toast'
-import {
-  getMe,
-  getUserInformation,
-  updateUser,
-  updateUserAvatar,
-  userReducer,useAppDispatch, useAppSelector,getLogoutUser,
-  IUserAPI,
-  useFeature
-} from '@lms/contexts'
-import { IAuthManager } from '@lms/core'
 interface IProps {
   isEdit: boolean
   avatar: File | undefined
@@ -85,7 +83,7 @@ const ProfileHeader = ({
    */
   const handlerCancelUploadAvatar = () => {
     // Đặt giá trị cho state reViewImageSrc bằng hình ảnh mặc định
-    setReViewImageSrc(blankAvatar)
+    setReViewImageSrc(BlankAvatarImage)
     // Đặt giá trị cho state avatar thành undefined
     setAvatar(undefined)
     setIsEdit(false)
@@ -237,7 +235,7 @@ const ProfileHeader = ({
                   reViewImageSrc ||
                   user.detail.avatar['150x150'] ||
                   user.detail.avatar?.['ORIGIN'] ||
-                  blankAvatar
+                  BlankAvatarImage
                 }
                 alt="avatar"
                 className=""

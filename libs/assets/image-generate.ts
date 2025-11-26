@@ -1,12 +1,15 @@
 // AUTO-GENERATED — DO NOT EDIT
+export { default as AlarmImage } from "./images/alarm.svg";
 export { default as AnimationImage } from "./images/animation.json";
 export { default as ArrowDownIconImage } from "./images/arrow-down-icon.svg";
 export { default as ArrowsImage } from "./images/arrows.svg";
 export { default as BgProfileImage } from "./images/bg_profile.svg";
 export { default as BlankAvatarImage } from "./images/blank_avatar.webp";
 export { default as BlankAvatarNotificationImage } from "./images/blank_avatar_notification.png";
+export { default as BookContinueLearningImage } from "./images/book-continue-learning.svg";
 export { default as BookOpenIconImage } from "./images/book-open-icon.svg";
 export { default as CertificateBgImage } from "./images/certificate-bg.png";
+export { default as CourseContentImage } from "./images/course_content.svg";
 export { default as CrossImage } from "./images/cross.svg";
 export { default as DashboardImage } from "./images/dashboard.png";
 export { default as DocumentIconImage } from "./images/document-icon.svg";
@@ -23,5 +26,6 @@ export { default as PrevImage } from "./images/prev.svg";
 export { default as SappLogoImage } from "./images/sapp_logo.svg";
 export { default as SappPasswordSuccessImage } from "./images/sapp_password_success.svg";
 export { default as SappSearchImage } from "./images/sapp_search.svg";
+export { default as SquareAcademicCapImage } from "./images/square-academic-cap.svg";
 export { default as TimeIconImage } from "./images/time-icon.svg";
 export { default as VideoIconImage } from "./images/video-icon.svg";

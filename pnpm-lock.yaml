@@ -1013,6 +1013,10 @@ importers:
       react:
         specifier: ^18.2.0
         version: 18.3.1
+    devDependencies:
+      '@types/aos':
+        specifier: ^3.0.7
+        version: 3.0.7
 
   features/test:
     dependencies:
@@ -1136,9 +1140,6 @@ importers:
 
   libs/assets:
     dependencies:
-      '@lms/assets':
-        specifier: workspace:*
-        version: 'link:'
       '@lms/contexts':
         specifier: workspace:*
         version: link:../state

@@ -1,13 +1,13 @@
 import { LAYOUT } from '@lms/core'
-import SAPP_OOps from '@assets/images/Oops.svg'
 import Image from 'next/image'
 import { SappButton } from '@lms/ui'
+import { OopsImage } from '@lms/assets'
 
 const ErrorRedirectPage = () => {
   return (
     <div className="flex h-screen flex-col flex-nowrap items-center justify-center gap-6 p-4 text-center">
       <Image
-        src={SAPP_OOps}
+        src={OopsImage}
         alt="SAPP Oops"
         width={321}
         height={142}

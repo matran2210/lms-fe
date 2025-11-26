@@ -1,13 +1,13 @@
-import { ArrowActionSearchIcon, HamburgerMenuLargeIcon, CloseIconV2 } from "@lms/assets";
+import { ArrowActionSearchIcon, HamburgerMenuLargeIcon, CloseIconV2, TourGuideStartAnimation } from "@lms/assets";
 import { SearchForm } from "@lms/feature-courses";
-// import PopupStep from "@components/user-guide/PopupStep"; lỗi monorepo dừng xóa
 import { useAppSelector, useFeature } from "@lms/contexts";
-import { MY_COURSES } from "@lms/core";
+import { MY_COURSES, UserGuide } from "@lms/core";
 import { buildQueryString } from "@lms/utils";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { PopupStep } from "@lms/feature-user";
 
 interface IProps {
   handleOpenSidebar: () => void;
@@ -198,16 +198,16 @@ const SearchWithMenuToggle = ({
           )}
         </div>
       </FormProvider>
-      {/* {isShowUserGuide && guideStatus && guideStep === 1 && (
+      {isShowUserGuide && guideStatus && guideStep === 1 && (
         <PopupStep
           content={UserGuide.CONTENT_STEP_1}
           className="left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-0 md:top-[68px] md:-translate-x-0 md:-translate-y-0 lg:top-[78px]"
           title={"Search box"}
           index={1}
           total={6}
-          imgSrc={TourGuideStart}
+          imgSrc={TourGuideStartAnimation}
         />
-      )} */}
+      )}
     </>
   );
 };
