@@ -2,6 +2,7 @@ import PopupModalTest from '@components/survey/PopupModalTest'
 import { useCourseContext, UserType } from '@lms/contexts'
 import {
   ANIMATION,
+  AppType,
   CLASS_TYPE,
   defaultStatusDetail,
   DELAY_TIME_DISPLAY_POPUP,
@@ -252,6 +253,7 @@ const CourseDetail = () => {
             isShowToggle
             isCoursePage
             redirectLink={PageLink.COURSES}
+            appType={AppType.LMS_PRO}
           />
           <SappBreadCrumbs
             isTeacher={false}

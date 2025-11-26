@@ -1,18 +1,15 @@
 import React from 'react'
-import { DocumentAdd } from '../icons/DocumentAdd'
-import ButtonIcon from '../buttons/ButtonIcon'
-import { Archive } from '../icons/Archive'
-import { Soundwave } from '../icons/Soundwave'
-import { List } from '../icons/List'
-import { ActivityBarProps, IActivityTab } from 'src/type/courses-3-level'
 import { useDispatch } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
-import {
-  activeNotesList,
-  pushNotes,
-} from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
-import { DocumentText } from '../icons/DocumentText'
 import clsx from 'clsx'
+import { ActivityBarProps, IActivityTab } from '@lms/core'
+import { DocumentAdd } from '../icons/DocumentAdd'
+import { DocumentText } from '../icons/DocumentText'
+import { Archive } from '../icons/Archive'
+import { Soundwave } from '../icons'
+import { activeNotesList3Level, pushNotes3Level } from '@lms/contexts'
+import { List } from '../icons/List'
+import ButtonIcon from '../buttons/ButtonIcon'
 
 const tabs: IActivityTab[] = [
   { key: 'add-note', icon: <DocumentAdd /> },
@@ -39,10 +36,10 @@ export default function ActivityBar({
           name: 'Note',
           description: '',
         }
-        dispatch(pushNotes(note))
+        dispatch(pushNotes3Level(note))
         break
       case 'note-list':
-        dispatch(activeNotesList())
+        dispatch(activeNotesList3Level())
         break
     }
 

@@ -1,6 +1,6 @@
 import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
 import { UserType, getEntranceCount, useAppDispatch, useCourseContext } from '@lms/contexts'
-import { ANIMATION } from '@lms/core'
+import { ANIMATION, AppType } from '@lms/core'
 import { Heading } from '@lms/feature-courses'
 import EntranceTestFilter from '@lms/feature-test/src/components/entrance-test/EntranceTestFilter'
 import EntranceTestList from '@lms/feature-test/src/components/entrance-test/EntranceTestList'
@@ -74,6 +74,7 @@ const EntranceTest = () => {
           isShowToggle
           className="mb-6 mt-4"
           redirectLink={PageLink.COURSES}
+          appType={AppType.LMS_PRO}
         />
         <div className="my-0">
           {isLoading ? (

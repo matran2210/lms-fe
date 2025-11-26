@@ -1,21 +1,20 @@
-import { ButtonIconSapp } from '@lms/ui'
-import { Icon } from '@lms/assets'
-import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
-import { truncateString } from '@utils/index'
-import { useEffect, useState } from 'react'
+import { BookInClassIcon, ClockInClassIcon, Icon } from '@lms/assets'
 import {
   ANIMATION,
   BUTTON_STATUS,
   CLASS_STATUS,
+  CLASS_TEACHER_STATUS,
   CLASS_USER_TYPES,
   COURSE_STATUS,
-  PageLink,
+  FLEXIBLE,
+  IMyClass,
 } from '@lms/core'
-import { BookInClassIcon, ClockInClassIcon } from 'src/assets/icons/index'
-import { IMyClass } from '@lms/core'
-import { CLASS_TEACHER_STATUS, FLEXIBLE } from '@lms/core'
-import { Tooltip } from "@lms/ui";
+import { ButtonIconSapp, Tooltip } from '@lms/ui'
+import { truncateString } from '@lms/utils'
+import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { isEmpty } from 'lodash'
+import { useEffect, useState } from 'react'
+import { PageLink } from 'src/constants/routers'
 
 const statusMap = {
   [CLASS_TEACHER_STATUS.NOT_STARTED]: 'Not Started',

@@ -9,6 +9,7 @@ import {
 } from '@lms/contexts'
 import {
   ANIMATION,
+  AppType,
   defaultStatusCourse,
   ICoursesAPI,
   UserGuide,
@@ -232,6 +233,7 @@ const MyCourse = () => {
           isShowUserGuide
           disabledSearch={guideIsActive}
           redirectLink={PageLink.COURSES}
+          appType={AppType.LMS_PRO}
         />
 
         <div
