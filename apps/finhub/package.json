@@ -37,6 +37,7 @@
     "@lms/hooks": "workspace:*",
     "@lms/ui": "workspace:*",
     "@lms/utils": "workspace:*",
+    "@lms/styles": "workspace:*",
     "@lottiefiles/react-lottie-player": "^3.5.3",
     "@next/third-parties": "^14.2.5",
     "@react-native-async-storage/async-storage": "^1.19.5",

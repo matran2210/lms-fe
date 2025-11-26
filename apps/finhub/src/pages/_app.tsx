@@ -21,7 +21,7 @@ import {
 } from '@lms/ui'
 import { initializeGA, onMessageListener, pageview } from '@lms/utils'
 import { ErrorBoundary } from '@sentry/nextjs'
-import '@styles/globals.scss'
+import '@lms/styles'
 import '@xyflow/react/dist/style.css'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
@@ -133,8 +133,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   useEffect(() => {
     if (socket) {
-      socket.on('connect', () => {})
-      socket.on('disconnect', () => {})
+      socket.on('connect', () => { })
+      socket.on('disconnect', () => { })
       socket?.on(SOCKET_EVENTS.NOTIFICATION_UNREAD, (data: any) => {
         localStorage.setItem(
           LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
@@ -276,7 +276,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     ) {
       try {
         dispatch(getCountUnRead())
-      } catch (error) {}
+      } catch (error) { }
     }
   }, [])
 
@@ -314,9 +314,9 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         <Metadata />
         <AntConfigProvider>
           <PinnedNotifyProvider router={router} api={{
-            
+
             getPinnedNotifications: UserApi.getPinnedNotifications,
-          
+
           }}>
             <FeatureProvider value={{
               courseApi: CoursesAPI,
@@ -338,35 +338,35 @@ function MyApp({ Component, pageProps }: MyAppProps) {
               router: router,
             }}>
               <CourseProvider router={router}>
-              <QueryClientProvider client={queryClient}>
-                <SocketContext.Provider value={socket}>
-                  <Toaster
-                    toastOptions={{
-                      style: {
-                        maxWidth: '400px', // Tăng chiều rộng của toast
-                      },
-                    }}
-                  />
-                  <SappConfirmDialogContainer />
-                  <RouteGuard>
-                    <>
-                      <div className="relative">
-                        <PinnedNotifications />
-                        <Component {...pageProps} />
-                      </div>
-                      {showHelp && (
-                        <>
-                          <BackToTop />
-                          <Help showHelp={showHelp} />
-                        </>
-                      )}
-                      <LearningNotesList />
-                      <PopupCompletedCourse />
-                    </>
-                  </RouteGuard>
-                </SocketContext.Provider>
-              </QueryClientProvider>
-            </CourseProvider>
+                <QueryClientProvider client={queryClient}>
+                  <SocketContext.Provider value={socket}>
+                    <Toaster
+                      toastOptions={{
+                        style: {
+                          maxWidth: '400px', // Tăng chiều rộng của toast
+                        },
+                      }}
+                    />
+                    <SappConfirmDialogContainer />
+                    <RouteGuard>
+                      <>
+                        <div className="relative">
+                          <PinnedNotifications />
+                          <Component {...pageProps} />
+                        </div>
+                        {showHelp && (
+                          <>
+                            <BackToTop />
+                            <Help showHelp={showHelp} />
+                          </>
+                        )}
+                        <LearningNotesList />
+                        <PopupCompletedCourse />
+                      </>
+                    </RouteGuard>
+                  </SocketContext.Provider>
+                </QueryClientProvider>
+              </CourseProvider>
             </FeatureProvider>
           </PinnedNotifyProvider>
         </AntConfigProvider>
