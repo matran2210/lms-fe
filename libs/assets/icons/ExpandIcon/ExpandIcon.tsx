@@ -1,4 +1,4 @@
-import { NotificationIcon, OutlineArchive } from "@lms/assets";
+import React from 'react';
 import ArrowUp from "./ArrowUp";
 import LogoDefault from "./LogoDefault";
 import LogoFull from "./LogoFull";
@@ -9,7 +9,9 @@ import {
   CourseContent,
   NoteList,
   Union,
-} from "@lms/assets";
+  NotificationIcon,
+  OutlineArchive
+} from "../index";
 import TeacherLogoFull from "./TeacherLogoFull";
 
 type ExpandIconPros = {

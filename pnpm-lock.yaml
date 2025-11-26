@@ -1136,9 +1136,6 @@ importers:
 
   libs/assets:
     dependencies:
-      '@lms/assets':
-        specifier: workspace:*
-        version: 'link:'
       '@lms/contexts':
         specifier: workspace:*
         version: link:../state

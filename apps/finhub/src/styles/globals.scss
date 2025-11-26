@@ -366,7 +366,7 @@ img.Wirisformula {
   width: 30px;
   height: 30px;
   transform: translate(-50%, 0) rotate(-135deg);
-  // clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  // clipPath: polygon(0px 0px, 0% 100%, 100% 100%);
   @apply absolute z-0 border border-r-0 border-t-0 border-solid border-[#D8D8E5] bg-white;
 }
 
@@ -382,7 +382,7 @@ img.Wirisformula {
   width: 30px;
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
-  // clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  // clipPath: polygon(0px 0px, 0% 100%, 100% 100%);
   @apply absolute z-0 border border-r-0 border-t-0 border-solid border-[#D8D8E5] bg-[#F1F1F1];
 }
 
@@ -398,7 +398,7 @@ img.Wirisformula {
   width: 30px;
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
-  // clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  // clipPath: polygon(0px 0px, 0% 100%, 100% 100%);
   @apply absolute z-10 border border-r-0 border-t-0 border-solid border-[#397839] bg-[#F9FAFC];
 }
 
@@ -413,7 +413,7 @@ img.Wirisformula {
   width: 30px;
   height: 30px;
   transform: translate(-50%, 0) rotate(-135deg);
-  clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  clipPath: polygon(0px 0px, 0% 100%, 100% 100%);
   @apply absolute z-0 border-solid border-[#397839] bg-[#F9FAFC];
 }
 
@@ -429,7 +429,7 @@ img.Wirisformula {
   width: 30px;
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
-  // clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  // clipPath: polygon(0px 0px, 0% 100%, 100% 100%);
   @apply absolute z-10 border border-r-0 border-t-0 border-solid border-[#B90E0A] bg-[#F9FAFC];
 }
 
@@ -445,7 +445,7 @@ img.Wirisformula {
   height: 30px;
   border: 0;
   transform: translate(-50%, 0) rotate(-135deg);
-  clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
+  clipPath: polygon(0px 0px, 0% 100%, 100% 100%);
   @apply absolute z-0 border-solid border-[#B90E0A] bg-[#F9FAFC];
 }
 

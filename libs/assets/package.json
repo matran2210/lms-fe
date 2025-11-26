@@ -13,7 +13,6 @@
     "next": "^12.1.6"
   },
   "dependencies": {
-    "@lms/assets": "workspace:*",
     "@lms/utils": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/ui": "workspace:*",

@@ -1,22 +1,21 @@
-import blankAvatar from '@assets/images/blank_avatar.webp'
+import { activeNotesList3Level, getCountUnRead, loadMoreNotification, openCalculator3Level, pushNotes3Level, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
+import { MenuItem as MenuItemType, TitleSidebar } from '@lms/core'
+import { useNotification } from '@lms/hooks'
 import { trackGAEvent } from '@lms/utils'
+import { NotificationAPI } from '@pages/api/notification'
+import { Divider } from 'antd'
+import clsx from 'clsx'
+import { isEmpty } from 'lodash'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
-import { TitleSidebar } from '@lms/core'
-import { activeNotesList3Level, getCountUnRead, loadMoreNotification, openCalculator3Level, pushNotes3Level, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
+import SappNotificationComponent from 'sapp-notification'
+import { PageLink } from 'src/constants/routes'
 import { v4 as uuidv4 } from 'uuid'
-import { MenuItem as MenuItemType } from '@lms/core'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
-import { isEmpty } from 'lodash'
-import SappNotificationComponent from 'sapp-notification'
-import { Divider } from 'antd'
-import clsx from 'clsx'
-import { PageLink } from 'src/constants/routes'
-import { useNotification } from '@lms/hooks'
-import { NotificationAPI } from '@pages/api/notification'
+import { BlankAvatarImage } from '@lms/assets'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -261,7 +260,7 @@ export default function MenuItem({
               />
             ) : (
               <Image
-                src={blankAvatar}
+                src={BlankAvatarImage}
                 alt="avatar"
                 className="rounded-full"
                 width={40}
@@ -278,7 +277,7 @@ export default function MenuItem({
                   src={
                     user.detail.avatar?.['40x40'] ||
                     user.detail.avatar?.['ORIGIN'] ||
-                    blankAvatar
+                      BlankAvatarImage
                   }
                   alt="avatar"
                   className="h-10 w-10 rounded-full object-cover"
