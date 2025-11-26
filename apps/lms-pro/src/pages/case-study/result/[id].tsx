@@ -1,15 +1,15 @@
 import {
   CalculatorIconV2,
+  CloseModalIcon,
   DownloadIcon,
   FileTextIcon,
+  NotesOutline,
+  PulsingExclamation,
   ResizeIcon,
   ScratchPadIconV2,
+  Triangle,
 } from '@lms/assets'
-import { CloseModalIcon } from '@lms/assets'
-import Calculator from '@components/calculator'
-import CaseStudyWrapper from '@components/case-study/layout/CaseStudyWrapper'
-import Popover from '@components/Popover'
-import { NotesOutline, PulsingExclamation, Triangle } from '@lms/assets'
+import { loadMoreQuestion, useAppDispatch } from '@lms/contexts'
 import {
   EXHIBIT_TEXT_REPLACE,
   IAnswerResult,
@@ -23,35 +23,35 @@ import {
   QUESTION_TYPES,
   RESPONSE_OPTION,
 } from '@lms/core'
-import { useTailwindBreakpoint } from '@lms/hooks'
+import { useMousePosition, useTailwindBreakpoint } from '@lms/hooks'
 import {
+  AddWordPreview,
+  Calculator,
+  CaseStudyWrapper,
+  NewDragNDropQuestion,
   EditorReader,
+  EssayQuestionPreview,
   FileViewer,
   HookFormTextArea,
+  MatchQuizComponent,
   ModalResizeable,
   MovableWindow,
-} from '@lms/ui'
-import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
-import AddWordPreview from '@lms/ui/components/questionType/FillText'
-import MatchQuizComponent from '@lms/ui/components/questionType/MatchQuiz/MatchQuiz'
-import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
-import DragDropQuestion, {
+  MultiChoiceQuestion,
+  OneChoiceQuestion,
+  Popover,
+  SappLoadingGlobal,
+  SelectWord,
   SlotValue,
-} from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
-import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
-import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
-import useMousePosition from '@utils/hookMouseMove'
-import { runHighlight } from '@utils/index'
+} from '@lms/ui'
+import { runHighlight } from '@lms/utils'
+import { UploadAPI } from '@pages/api/upload'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { useAppDispatch, loadMoreQuestion } from '@lms/contexts'
-import { UploadAPI } from '@pages/api/upload'
 
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])
@@ -199,7 +199,7 @@ const CaseStudyResult = () => {
           //   corrects={corrects?.corrects}
           //   solution={solution}
           // />
-          <DragDropQuestion
+          <NewDragNDropQuestion
             data={data as any}
             defaultValue={defaultValue}
             onChange={(data: SlotValue[]) => {
