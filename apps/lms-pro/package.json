@@ -38,6 +38,7 @@
     "@lms/hooks": "workspace:*",
     "@lms/ui": "workspace:*",
     "@lms/utils": "workspace:*",
+    "@lms/styles": "workspace:*",
     "@lottiefiles/react-lottie-player": "^3.5.3",
     "@next/third-parties": "^14.2.5",
     "@react-native-async-storage/async-storage": "^1.19.5",
@@ -138,7 +139,7 @@
     "postcss-nesting": "^12.0.1",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.6",
-    "tailwindcss": "3.4.17",
+    "tailwindcss": "3.3.5",
     "typescript": "^5.5.4"
   },
   "resolutions": {
