@@ -55,6 +55,7 @@ export const HighlightableHTML: React.FC<Props> = ({
   const highlightTimers = useRef<Map<string, NodeJS.Timeout>>(new Map())
   const [loading, setLoading] = useState<boolean>(false)
   const [highlights, setHighlights] = useState<HighlightItem[]>([])
+  const isRestoringRef = useRef(false)
   const [selection, setSelection] = useState<{
     text: string
     startOffset: number
@@ -77,9 +78,8 @@ export const HighlightableHTML: React.FC<Props> = ({
     isViewOnly,
     setIsViewOnly,
   } = useCourseNoteContext()
-  // Thêm state để track khi nào DOM đã được cập nhật
-  const prevStorageKeyRef = useRef<string>(storageKey)
 
+  const prevStorageKeyRef = useRef<string>(storageKey)
   const [selectionRect, setSelectionRect] = useState<DOMRect | null>(null)
   const [selectedHighlightId, setSelectedHighlightId] = useState<string | null>(
     null,
@@ -87,7 +87,6 @@ export const HighlightableHTML: React.FC<Props> = ({
   const [editingHighlightId, setEditingHighlightId] = useState<string | null>(
     null,
   )
-
   const [highlightRect, setHighlightRect] = useState<DOMRect | null>(null)
   const [lastRect, setLastRect] = useState<DOMRect | null>(null)
   const [isProtectingSelection, setIsProtectingSelection] = useState(false)
@@ -102,127 +101,33 @@ export const HighlightableHTML: React.FC<Props> = ({
     )
   }
 
-  /* Comment từ đây
-  // Load highlights from sessionStorage - chỉ chạy khi storageKey thay đổi
-  useEffect(() => {
-    const raw = sessionStorage.getItem(storageKey)
-    if (raw) {
-      try {
-        const parsed = JSON.parse(raw)
-        setHtml(parsed.htmlContent || initialHTML)
-        setHighlights(parsed.highlights || [])
-      } catch (err) {
-        setHtml(initialHTML)
-        setHighlights([])
+  // Helper function to clear all highlights from DOM
+  const clearHighlightsFromDOM = (container: HTMLElement) => {
+    if (!container) return
+
+    const allHighlightSpans = container.querySelectorAll(
+      'span.highlighted[data-tracked="true"]',
+    )
+
+    allHighlightSpans.forEach((span) => {
+      const parent = span.parentNode
+      if (parent && parent.contains(span)) {
+        try {
+          const textContent = span.textContent || ''
+          const textNode = document.createTextNode(textContent)
+          parent.replaceChild(textNode, span)
+        } catch (e) {
+          // Ignore errors if node already removed
+        }
       }
-    } else {
-      setHtml(initialHTML)
-      setHighlights([])
+    })
+
+    // Normalize to merge text nodes
+    if (container.normalize) {
+      container.normalize()
     }
-
-    // Reset các state khi chuyển câu hỏi
-    setSelection(null)
-    setSelectionRect(null)
-    setSelectedHighlightId(null)
-    setHighlightRect(null)
-    setOpenNote(false)
-    setNoteInput('')
-    setIsDOMReady(false)
-
-    prevStorageKeyRef.current = storageKey
-  }, [storageKey])
-
-  // Effect riêng để handle khi initialHTML thay đổi nhưng storageKey không đổi
-  useEffect(() => {
-    if (prevStorageKeyRef.current === storageKey) {
-      // Nếu cùng storageKey nhưng initialHTML thay đổi, có thể là trường hợp đặc biệt
-      // Kiểm tra xem có data trong storage không
-      const raw = sessionStorage.getItem(storageKey)
-      if (!raw) {
-        setHtml(initialHTML)
-        setHighlights([])
-      }
-    }
-  }, [initialHTML, storageKey])
-
-  // Effect để đánh dấu DOM đã sẵn sàng
-  useEffect(() => {
-    if (containerRef.current && html) {
-      // Sử dụng setTimeout để đảm bảo DOM đã được render
-      const timer = setTimeout(() => {
-        setIsDOMReady(true)
-      }, 0)
-
-      return () => clearTimeout(timer)
-    }
-  }, [html])
-
-  // Save highlights to sessionStorage - chỉ save khi DOM đã sẵn sàng
-  // useEffect(() => {
-  //   if (containerRef.current && isDOMReady && highlights.length >= 0) {
-  //     // Thêm một check để đảm bảo containerRef.current chứa nội dung đúng
-  //     const currentHTML = containerRef.current.innerHTML
-  //     // Chỉ lưu nếu HTML hiện tại không rỗng hoặc có highlights
-  //     if (currentHTML.trim() || highlights.length > 0) {
-  //       sessionStorage.setItem(
-  //         storageKey,
-  //         JSON.stringify({
-  //           htmlContent: currentHTML,
-  //           highlights,
-  //         }),
-  //       )
-  //     }
-  //   }
-  // }, [highlights, storageKey, isDOMReady])
-  useEffect(() => {
-    if (!isDOMReady || !containerRef.current) return
-    if (highlights.length === 0) return // ❗ không lưu khi chưa có highlight
-
-    const currentHTML = containerRef.current.innerHTML
-
-    try {
-      sessionStorage.setItem(
-        storageKey,
-        JSON.stringify({
-          htmlContent: currentHTML,
-          highlights,
-        }),
-      )
-    } catch (err) {
-      if (err instanceof DOMException && err.name === 'QuotaExceededError') {
-        // console.warn('⚠️ Session storage quota exceeded, clearing old data...')
-        sessionStorage.removeItem(storageKey)
-      } else {
-        // console.error(err)
-      }
-    }
-  }, [highlights, storageKey, isDOMReady])
-  */
-  // Helper function to check if a node is a block element
-  const isBlockElement = (node: Node): boolean => {
-    if (node.nodeType !== Node.ELEMENT_NODE) return false
-    const element = node as HTMLElement
-    const blockTags = [
-      'P',
-      'DIV',
-      'H1',
-      'H2',
-      'H3',
-      'H4',
-      'H5',
-      'H6',
-      'LI',
-      'UL',
-      'OL',
-      'BLOCKQUOTE',
-      'PRE',
-      'TABLE',
-      'TR',
-      'TD',
-      'TH',
-    ]
-    return blockTags.includes(element.tagName)
   }
+
   // Helper function to restore highlights from positions
   const restoreHighlightsToDOM = (
     container: HTMLElement,
@@ -288,7 +193,9 @@ export const HighlightableHTML: React.FC<Props> = ({
 
           try {
             range.surroundContents(span)
-          } catch (e) {}
+          } catch (e) {
+            // console.error('Error surrounding contents:', e)
+          }
         } else {
           // Complex case: spans multiple text nodes
           // We need to wrap each text node segment separately to avoid wrapping block elements
@@ -349,6 +256,9 @@ export const HighlightableHTML: React.FC<Props> = ({
           // Apply highlight to each text node segment (in reverse to maintain positions)
           textNodesInRange.reverse().forEach((item) => {
             try {
+              // Check if node is still in document
+              if (!document.contains(item.node)) return
+
               const nodeRange = document.createRange()
               nodeRange.setStart(item.node, item.start)
               nodeRange.setEnd(item.node, item.end)
@@ -360,10 +270,14 @@ export const HighlightableHTML: React.FC<Props> = ({
               span.setAttribute('data-tracked', 'true')
 
               nodeRange.surroundContents(span)
-            } catch (e) {}
+            } catch (e) {
+              // console.warn('Failed to wrap text node:', e)
+            }
           })
         }
-      } catch (error) {}
+      } catch (error) {
+        // console.error('Error restoring highlight:', error)
+      }
     })
 
     // Final cleanup: normalize all text nodes in container
@@ -372,17 +286,38 @@ export const HighlightableHTML: React.FC<Props> = ({
 
   // Load highlights from sessionStorage - chỉ lưu positions
   useEffect(() => {
+    isRestoringRef.current = true
+
+    // Clear old highlights trước khi load mới
+
+    if (containerRef.current) {
+      clearHighlightsFromDOM(containerRef.current)
+    }
     const raw = sessionStorage.getItem(storageKey)
 
     if (raw) {
       try {
         const parsed = JSON.parse(raw)
-        setHighlights(parsed.highlights || [])
+        const loadedHighlights = parsed.highlights || []
+        setHighlights(loadedHighlights)
+        // Chỉ restore khi có highlights được load từ storage
+        if (loadedHighlights.length > 0 && containerRef.current) {
+          setTimeout(() => {
+            if (containerRef.current) {
+              restoreHighlightsToDOM(containerRef.current!, loadedHighlights)
+              isRestoringRef.current = false
+            }
+          }, 200)
+        } else {
+          isRestoringRef.current = false
+        }
       } catch (err) {
         setHighlights([])
+        isRestoringRef.current = false
       }
     } else {
       setHighlights([])
+      isRestoringRef.current = false
     }
 
     // Reset các state khi chuyển câu hỏi
@@ -395,18 +330,25 @@ export const HighlightableHTML: React.FC<Props> = ({
 
     prevStorageKeyRef.current = storageKey
   }, [storageKey])
-
-  // Restore highlights khi DOM ready
+  // Cleanup effect riêng biệt
   useEffect(() => {
-    if (containerRef.current && highlights.length > 0) {
-      // Đợi một chút để đảm bảo DOM đã render xong
-      const timer = setTimeout(() => {
-        restoreHighlightsToDOM(containerRef.current!, highlights)
-      }, 100)
-
-      return () => clearTimeout(timer)
+    return () => {
+      if (containerRef.current && !isRestoringRef.current) {
+        clearHighlightsFromDOM(containerRef.current)
+      }
     }
-  }, [highlights.length]) // Chỉ chạy khi số lượng highlights thay đổi
+  }, [storageKey])
+  // Restore highlights khi DOM ready
+  // useEffect(() => {
+  //   if (containerRef.current && highlights.length > 0) {
+  //     // Đợi một chút để đảm bảo DOM đã render xong
+  //     const timer = setTimeout(() => {
+  //       restoreHighlightsToDOM(containerRef.current!, highlights)
+  //     }, 100)
+
+  //     return () => clearTimeout(timer)
+  //   }
+  // }, [highlights.length]) // Chỉ chạy khi số lượng highlights thay đổi
 
   // Save highlights to sessionStorage - CHỈ LƯU POSITIONS
   useEffect(() => {
@@ -481,7 +423,7 @@ export const HighlightableHTML: React.FC<Props> = ({
         '.ant-modal, .ant-modal-content, .ant-modal-body',
       )
       for (let modal of modalElements) {
-        if (modal.contains(target)) return // ← Sửa lỗi ở đây
+        if (modal.contains(target)) return
       }
 
       // Kiểm tra các element con của modal
@@ -601,7 +543,7 @@ export const HighlightableHTML: React.FC<Props> = ({
     // Prevent event from bubbling
     e.stopPropagation()
 
-    // 👉 Lấy rect của từ đầu tiên (ở dòng đầu tiên)
+    //Lấy rect của từ đầu tiên (ở dòng đầu tiên)
     const rects = highlightSpan.getClientRects()
     const firstRect = rects[0] ?? highlightSpan.getBoundingClientRect()
     setHighlightRect(firstRect)
@@ -667,30 +609,25 @@ export const HighlightableHTML: React.FC<Props> = ({
     const highlightMade = doHighlight(domEle, false, options)
 
     if (highlightMade) {
-      // Small delay to ensure DOM is updated
       setTimeout(() => {
-        // Find the newly created highlight spans
         const newHighlightSpans = domEle.querySelectorAll(
           'span.highlighted:not([data-tracked])',
         )
 
-        newHighlightSpans.forEach((span) => {
-          // Mark as tracked to avoid duplicate processing
-          span.setAttribute('data-tracked', 'true')
+        // Chỉ tạo MỘT highlight item duy nhất cho toàn bộ selection
+        if (newHighlightSpans.length > 0) {
+          const id = `highlight-${Date.now()}`
 
-          // Get or create ID
-          let id =
-            span.getAttribute('data-timestamp') || span.getAttribute('data-id')
-
-          if (!id) {
-            id = `highlight-${Date.now()}`
+          // Đánh dấu TẤT CẢ các span với cùng ID
+          newHighlightSpans.forEach((span) => {
+            span.setAttribute('data-tracked', 'true')
             span.setAttribute('data-id', id)
-          }
+          })
 
-          // Create highlight item to track
+          // Chỉ tạo MỘT highlight item duy nhất
           const newHighlight: HighlightItem = {
             id: id,
-            text: span.textContent || selection.text,
+            text: selection.text,
             note: noteInput,
             noteTime: dayjs().format('YYYY-MM-DDTHH:mm:ssZ'),
             startOffset: selection.startOffset,
@@ -698,7 +635,7 @@ export const HighlightableHTML: React.FC<Props> = ({
           }
 
           setHighlights((prev) => [...prev, newHighlight])
-        })
+        }
       }, 10)
     }
 
@@ -767,6 +704,7 @@ export const HighlightableHTML: React.FC<Props> = ({
       closeCourseNote()
     }
   }
+
   const updateNote = async (data: string, noteId: string) => {
     try {
       setLoading(true)
@@ -791,7 +729,6 @@ export const HighlightableHTML: React.FC<Props> = ({
     if (noteData?.id) updateNote(noteInput, noteData.id)
     else {
       const currentHighlightId = editingHighlightId
-      // if (!selectedHighlightId) return
       setHighlights((prev) =>
         prev.map((h) =>
           h.id === currentHighlightId
@@ -822,6 +759,7 @@ export const HighlightableHTML: React.FC<Props> = ({
     // Bảo vệ selection trong một khoảng thời gian ngắn
     setIsProtectingSelection(true)
     setTimeout(() => setIsProtectingSelection(false), 100)
+
     if (selectedHighlightId) {
       setEditingHighlightId(selectedHighlightId)
     }
@@ -841,7 +779,7 @@ export const HighlightableHTML: React.FC<Props> = ({
       const modalHeight = 200
       const padding = 20
 
-      // ❌ KHÔNG cộng window.scrollY (vì fixed theo viewport)
+      // KHÔNG cộng window.scrollY (vì fixed theo viewport)
       let top = highlightRect.top + highlightRect.height + padding
       let left = highlightRect.left
 
@@ -962,7 +900,6 @@ export const HighlightableHTML: React.FC<Props> = ({
   const handleOnclick = async (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e?.target as HTMLElement
     if (target.className === 'sapp_overlay_video') {
-      // const overlay = target.nextSibling as any
       const video = target?.previousSibling as any
       const src = video?.querySelector('source')?.getAttribute('token')
       if (src && src !== 'null' && video.tagName === 'VIDEO') {
@@ -976,7 +913,6 @@ export const HighlightableHTML: React.FC<Props> = ({
         iframe.allowFullscreen = true
         video?.parentNode?.replaceChild(iframe, video)
         target?.classList.add('hidden')
-        // target?.parentNode?.removeChild(target.nextSibling as Node)
       }
     } else if (target?.tagName === 'IMG') {
       const imageSrc = target?.getAttribute('src')
@@ -988,6 +924,7 @@ export const HighlightableHTML: React.FC<Props> = ({
       }
     }
   }
+
   return (
     <div
       className="text-base"
@@ -1139,6 +1076,7 @@ export const HighlightableHTML: React.FC<Props> = ({
       )}
 
       <div
+        key={`${storageKey}-content`}
         id={storageKey}
         ref={containerRef}
         className={`${className} editor-wrap`}
@@ -1146,6 +1084,7 @@ export const HighlightableHTML: React.FC<Props> = ({
         onContextMenu={(e) => e.preventDefault()}
         onClick={handleOnclick}
         translate="no"
+        suppressHydrationWarning // Tắt warning khi DOM được manipulate bởi vanilla JS
       >
         {parseHTML(
           replaceTextAlignCenterToWebKitCenter(

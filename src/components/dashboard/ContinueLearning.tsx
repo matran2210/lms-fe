@@ -26,7 +26,7 @@ const ContinueLearning = () => {
           classPinned="bottom-5 flex flex-col gap-0 md:flex-row md:items-center md:justify-between md:gap-4"
         >
           {/* Nội dung chính bên trái */}
-          <div className="flex items-center md:items-start gap-2 md:gap-4">
+          <div className="flex items-center gap-2 md:items-start md:gap-4">
             {/* Hình ảnh */}
             <div className="h-6 w-6 md:size-10">
               <Image src={continue_learning} alt="pinned-completed-course" />
