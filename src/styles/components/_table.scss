@@ -124,7 +124,9 @@
       @apply hidden;
     }
   }
-
+  .ant-table-cell {
+    @apply text-center;
+  }
   // Loại bỏ border-bottom của row cuối cùng
   .last-row-no-border {
     .ant-table-cell {
