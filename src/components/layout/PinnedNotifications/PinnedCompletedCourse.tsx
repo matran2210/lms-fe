@@ -91,7 +91,7 @@ const PinnedCompletedCourse: React.FC<IProps> = React.memo(
             height={sizeImg}
             src={iconCongratulations}
             loading="eager"
-            priority={true}
+            priority
             alt="avatar"
           />
           <NotificationMessage courseName={courseName} passedAt={passedAt} />
