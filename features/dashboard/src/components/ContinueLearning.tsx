@@ -2,6 +2,7 @@ import { ArrowRightV2Icon, BookContinueLearningImage } from "@lms/assets";
 import { PinnedNotificationsV2 } from "@lms/ui";
 import Image from "next/image";
 import { useFeature } from "@lms/contexts";
+import { InstructionText } from "./InstructionText";
 
 const ContinueLearning = () => {
   const {router, pageLink} = useFeature()
@@ -62,15 +63,5 @@ const ContinueLearning = () => {
     </div>
   );
 };
-
-const InstructionText = ({ onClick }: { onClick: () => void }) => (
-  <>
-    <span className="font-normal">Click on</span>{" "}
-    <span className="cursor-pointer font-semibold underline" onClick={onClick}>
-      Course Content
-    </span>{" "}
-    <span className="font-normal">to resume your lessons.</span>
-  </>
-);
 
 export default ContinueLearning;
