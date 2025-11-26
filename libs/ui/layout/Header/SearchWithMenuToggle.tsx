@@ -1,7 +1,7 @@
 import { ArrowActionSearchIcon, HamburgerMenuLargeIcon, CloseIconV2, TourGuideStartAnimation } from "@lms/assets";
 import { SearchForm } from "@lms/feature-courses";
 import { useAppSelector, useFeature } from "@lms/contexts";
-import { MY_COURSES, UserGuide } from "@lms/core";
+import { AppType, MY_COURSES, UserGuide } from "@lms/core";
 import { buildQueryString } from "@lms/utils";
 import clsx from "clsx";
 import { useRouter } from "next/router";
@@ -16,7 +16,8 @@ interface IProps {
   isShowToggle?: boolean;
   className?: string;
   isCoursePage?: boolean;
-  redirectLink: string
+  redirectLink: string;
+  appType: AppType
 }
 interface IListIcon {
   icon: React.ReactNode;
@@ -30,7 +31,8 @@ const SearchWithMenuToggle = ({
   isShowToggle = false,
   className,
   isCoursePage = false,
-  redirectLink
+  redirectLink, 
+  appType
 }: IProps) => {
   const { pageLink } = useFeature();  
   const {
@@ -52,10 +54,11 @@ const SearchWithMenuToggle = ({
     type: query.type ?? "",
   });
 
+  const appCourseLink = appType === AppType.LMS_PRO ? pageLink.COURSES : pageLink.SHORT_COURSE 
   const handleSubmit = () => {
     // Redirect to the search results page with the query as a query parameter
     push(
-      `${pageLink.COURSES}${
+      `${appCourseLink}${
         methods.watch("name")?.trim()?.length
           ? `?name=${methods.watch("name")}`
           : ""

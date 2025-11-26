@@ -2,6 +2,7 @@ import Layout from '@components/layout'
 import { Icon } from '@lms/assets'
 import {
   ANIMATION,
+  AppType,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   IDeviceItem, NOTIFICATION_STATUS,
@@ -19,12 +20,10 @@ import withAuthorization from 'src/HOC/withAuthorization'
 
 import { getLoginHistory, getLogoutUser, useAppDispatch, useAppSelector, useCourseContext, userReducer, UserType } from '@lms/contexts'
 
-import Footer from '@components/layout/Footer'
-import HeaderMobile from '@components/layout/Header/HeaderMobile'
 import { CollapseArrowIcon } from '@lms/assets'
 import { Certificate, ChangePassword, DeviceList, LoginHistoryList, MyPasword, MyProfile, OverviewItemCard, ProfileHeader, ProfileList, Settings } from '@lms/feature-user'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { FullScreenMobile, SearchWithMenuToggle, TabHeaderItem } from '@lms/ui'
+import { Footer, FullScreenMobile, HeaderMobile, SearchWithMenuToggle, TabHeaderItem } from '@lms/ui'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { PageLink } from 'src/constants/routes'
@@ -320,6 +319,7 @@ const ProfilePage = () => {
           isShowToggle
           className={'mb-4 hidden md:flex'}
           redirectLink={PageLink.SHORT_COURSE}
+          appType={AppType.FINHUB}
         />
         <div className="mx-auto my-0 flex w-full grow flex-col">
           <div className="main hidden sm:mx-4 md:mb-6 md:block lg:mx-0 lg:mb-4">

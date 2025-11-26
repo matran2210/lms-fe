@@ -1,15 +1,13 @@
 import { LAYOUT } from '@lms/core'
-import { CertificateVertical, HorizontalCertificate } from '@lms/feature-user'
-import { useDownloadImage } from '@lms/hooks'
-import { SappLoadingGlobal, SinglePageLayout } from '@lms/ui'
+import { SappLoadingGlobal } from '@lms/ui'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { useDownloadImage } from '@lms/hooks'
 import SinglePageLayout from '@components/layout/SinglePage'
-import CertificateVertical from '@components/profile/CertificateDetail/VerticalCertificate'
-import HorizontalCertificate from '@components/profile/CertificateDetail/HorizontalCertificate'
+import { CoursesAPI } from '@pages/api/courses'
+import { CertificateVertical, HorizontalCertificate } from '@lms/feature-user'
 
 export interface ICertificate {
   certificate_url: string
