@@ -4,6 +4,8 @@ import { formatDateToLongString } from '@utils/helpers'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
+import iconCongratulations from '@assets/images/icon_congratulations.png'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 interface PinnedCompletedCourseData {
   isOpen: boolean
@@ -60,6 +62,7 @@ SeeCertificateButton.displayName = 'SeeCertificateButton'
 const PinnedCompletedCourse: React.FC<IProps> = React.memo(
   ({ pinnedCompletedCourse }) => {
     const router = useRouter()
+    const { isMobileView } = useTailwindBreakpoint()
     const {
       isOpen,
       passedAt,
@@ -74,6 +77,8 @@ const PinnedCompletedCourse: React.FC<IProps> = React.memo(
 
     if (!isOpen) return null
 
+    const sizeImg = isMobileView ? 32 : 40
+
     return (
       <PinnedNotificationsV2
         bgColor="bg-primary-200"
@@ -81,7 +86,14 @@ const PinnedCompletedCourse: React.FC<IProps> = React.memo(
         classPinned="lg:flex-row lg:justify-between lg:items-center flex-col gap-2 md:gap-4"
       >
         <div className="flex items-center gap-4">
-          <CertificateImage url={userCertificateUrl} />
+          <Image
+            width={sizeImg}
+            height={sizeImg}
+            src={iconCongratulations}
+            loading="eager"
+            priority={true}
+            alt="avatar"
+          />
           <NotificationMessage courseName={courseName} passedAt={passedAt} />
         </div>
         <SeeCertificateButton onClick={onSeeCertificate} />
