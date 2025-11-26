@@ -2,8 +2,7 @@ import { ButtonPrimary, ButtonText } from '@lms/ui'
 import Lottie from 'lottie-react'
 import Image, { StaticImageData } from 'next/image'
 import { useRef } from 'react'
-import { useAppDispatch } from '@lms/contexts'
-import { decrement, increment } from 'src/redux/slice/Course/UserGuide'
+import { decrement, increment, useAppDispatch } from '@lms/contexts'
 
 type Props = {
   content: string

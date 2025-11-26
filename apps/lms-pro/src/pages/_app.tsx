@@ -369,7 +369,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 menuItemsEvent: MENU_ITEMS_EVENT,
                 menuBottom: MENU_BOTTOM,
                 router: router,
-                queryClient: queryClient,
               }}
             >
               <CourseProvider

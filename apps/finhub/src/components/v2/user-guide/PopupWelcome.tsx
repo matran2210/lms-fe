@@ -1,13 +1,9 @@
 import { HandShake } from '@lms/assets'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import ButtonText from '@components/base/button/ButtonText'
 import { RefObject } from 'react'
-import SappModal from 'src/components/base/modal/SappModal'
-import { UserGuide } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { useAppDispatch } from '@lms/contexts'
-import { clearGuideState, increment } from 'src/redux/slice/Course/UserGuide'
-
+import { clearGuideState, increment, useAppDispatch } from '@lms/contexts'
+import { ButtonPrimary, ButtonText, SappModal } from '@lms/ui'
+import { UserGuide } from '@lms/core'
 type Props = {
   confirmDialogOverLayRef: RefObject<HTMLDivElement>
 }

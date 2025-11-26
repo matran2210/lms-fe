@@ -35,7 +35,7 @@ import NewFiltext from '@lms/ui/components/questionType/NewFillText'
 import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
-import { runHighlight } from '@lms/utils'
+import { checkSheetAnswered, runHighlight } from '@lms/utils'
 import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -59,7 +59,7 @@ import {
 import { ConFirmSubmit, HeaderTest, QuitTestModal, TabSlide, TestTimeOutModal } from '@lms/feature-test'
 import ResetToAnswerTemplateModal from '@lms/feature-test/src/components/test/ResetToAnswerTemplateModal'
 import ShowAnswerTemplate from '@lms/feature-test/src/components/test/ShowAnswerTemplate'
-import { ButtonContent, ButtonPrimaryV2, ButtonTextV2, SappLoading } from '@lms/ui'
+import { ButtonPrimaryV2, ButtonTextV2, SappLoading } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
 import { TestAPI } from '@pages/api/test'
 import dayjs from 'dayjs'
@@ -69,7 +69,6 @@ import TestScratchPads from 'src/pages/test/TestScratchPads'
 import useGetQuestionTabs from 'src/pages/test/custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from 'src/pages/test/custom-hook/useGetQuizDetail'
 import {
-  checkSheetAnswered,
   checkTypeAndRenderTitle,
   isValuesEqual,
   isWorkbookEmpty,
@@ -2503,7 +2502,7 @@ const TestDetail = () => {
 
   return (
     <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
-      <CourseProvider>
+      <CourseProvider router={router} api={{ get: EventTestAPI.get }}>
         <SappLoading
           className={loading || !currentTabContent?.id ? 'block' : 'hidden'}
         />
