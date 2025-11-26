@@ -7,7 +7,19 @@ const DashboardSkeleton = forwardRef<
   HTMLAttributes<HTMLDivElement>
 >((props, ref) => {
   return (
-    <div ref={ref} {...props} className={clsx(props.className)}>
+    <div ref={ref} {...props} className={'py-4' + clsx(props.className)}>
+      <div className="space-y-3 pb-8 lg:pb-10">
+        <Skeleton.Input
+          active
+          className="!hidden !h-4 !w-[300px] !rounded-full lg:!block"
+        />
+        <div className="!flex !w-full items-center !justify-between">
+          <Skeleton.Input
+            active
+            className="!h-8 !w-[100px] !rounded-xl lg:!h-10"
+          />
+        </div>
+      </div>
       <div className="flex w-full flex-col gap-4 bg-[#F9F9F9] md:gap-6 xl:gap-8">
         <div className="grid xl:grid-cols-2 xl:gap-8">
           <div className="rounded-2xl bg-white p-4 shadow-small md:p-6">

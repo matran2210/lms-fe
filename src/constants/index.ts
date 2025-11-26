@@ -162,10 +162,8 @@ export const UserGuide = {
   CONTENT_STEP_4:
     'This is the welcome section! You will find information about your location here, and take a moment to familiarize yourself with the features and possibilities that await you on this page.',
   CONTENT_STEP_5:
-    'Here you can convert your courses to General Course or Master Finance depending on the study credit you have registered with SAPP.',
-  CONTENT_STEP_6:
     'This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.',
-  CONTENT_STEP_7:
+  CONTENT_STEP_6:
     'This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.',
 }
 

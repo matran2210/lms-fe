@@ -60,6 +60,8 @@ const EditorReader = ({
   }, [text_editor_content])
 
   const convertMathToImage = async (element: any) => {
+    if (typeof com === 'undefined') return
+
     const viewer = com?.wiris?.js?.JsPluginViewer
 
     if (element && viewer) {
@@ -107,6 +109,71 @@ const EditorReader = ({
       }
     }, 100)
   })
+
+  useEffect(() => {
+    const container = editorRef.current
+    if (!container) {
+      return
+    }
+
+    const hasOverflowTable = Array.from(
+      container.querySelectorAll<HTMLTableElement>('table'),
+    ).some((table) => table.scrollWidth > container.clientWidth)
+
+    if (hasOverflowTable) {
+      container.classList.add('editor-wrap--draggable')
+      container.classList.add('editor-wrap--dragging')
+      let isDragging = false
+      let startX = 0
+      let scrollLeft = 0
+
+      const handleMouseDown = (event: MouseEvent) => {
+        if (event.button !== 0) {
+          return
+        }
+        const target = event.target as HTMLElement
+        if (!target.closest('table')) {
+          return
+        }
+        if (container.scrollWidth <= container.clientWidth) {
+          return
+        }
+        isDragging = true
+        startX = event.pageX
+        scrollLeft = container.scrollLeft
+      }
+
+      const handleMouseMove = (event: MouseEvent) => {
+        if (!isDragging) {
+          return
+        }
+        event.preventDefault()
+        const walk = event.pageX - startX
+        container.scrollLeft = scrollLeft - walk
+      }
+
+      const endDragging = () => {
+        if (!isDragging) {
+          return
+        }
+        isDragging = false
+      }
+
+      container.addEventListener('mousedown', handleMouseDown)
+      container.addEventListener('mousemove', handleMouseMove)
+      container.addEventListener('mouseleave', endDragging)
+      window.addEventListener('mouseup', endDragging)
+
+      return () => {
+        container.classList.remove('editor-wrap--draggable')
+        container.classList.remove('editor-wrap--dragging')
+        container.removeEventListener('mousedown', handleMouseDown)
+        container.removeEventListener('mousemove', handleMouseMove)
+        container.removeEventListener('mouseleave', endDragging)
+        window.removeEventListener('mouseup', endDragging)
+      }
+    }
+  }, [content])
 
   const handleOnclick = async (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e?.target as HTMLElement

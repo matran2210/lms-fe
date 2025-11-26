@@ -255,7 +255,7 @@ const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
       <div className="relative flex h-full flex-col bg-white !text-bw-13">
         <div className="mb-4 flex items-center justify-between">
           {open?.data?.current_date
-            ? renderFormattedDate(open?.data?.current_date)
+            ? renderFormattedDate(open?.data?.current_date as Dayjs)
             : null}
         </div>
 

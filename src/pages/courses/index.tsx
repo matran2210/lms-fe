@@ -232,10 +232,10 @@ const MyCourse = () => {
           className={
             'mt-2 flex justify-center rounded-md bg-white shadow-medium md:mt-4 md:justify-between lg:rounded-xl'
           }
-          data-aos={ANIMATION.DATA_AOS}
+          data-aos={!guideStatus ? ANIMATION.DATA_AOS : ''}
         >
           <div
-            className={`heading relative h-full rounded-md bg-white p-3 md:p-6 lg:rounded-xl lg:px-8 lg:py-6 ${guideStatus && guideStep === 4 ? 'z-50' : ''}`}
+            className={`relative flex items-center rounded-md bg-white p-3 md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 4 ? 'z-50' : ''}`}
           >
             <Heading
               greeting="Welcome to"
@@ -257,21 +257,21 @@ const MyCourse = () => {
                 content={UserGuide.CONTENT_STEP_4}
                 className="left-0 top-full mt-5"
                 index={4}
-                total={7}
+                total={6}
                 isEnd={isEndGuide}
                 title="Welcome"
                 handleCancel={closeUserGuide}
               />
             )}
           </div>
-          <div
+          {/* <div
             className={`hidden items-center rounded-md bg-white p-3 md:flex md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 5 ? ' z-50 h-auto' : ''}`}
             data-aos={ANIMATION.DATA_AOS}
           >
             {guideStatus && guideStep === 5 && (
               <PopupStep
                 content={UserGuide.CONTENT_STEP_5}
-                className="left-0 top-full mt-5"
+                className="left-[-400px] top-full mt-5"
                 index={5}
                 total={7}
                 isEnd={isEndGuide}
@@ -280,28 +280,28 @@ const MyCourse = () => {
                 handleCancel={closeUserGuide}
               />
             )}
-          </div>
+          </div> */}
         </div>
         <div
           className={clsx(
             'mx-auto mb-6 mt-8 flex items-center justify-between lg:mt-11',
             {
-              'relative z-50': guideStatus && guideStep === 7,
+              'relative z-50': guideStatus && guideStep === 6,
             },
           )}
           data-aos={ANIMATION.DATA_AOS}
         >
-          <h1 className="text-lg font-semibold text-gray-800 lg:text-2xl">
+          <h1 className="text-lg font-semibold text-gray-800 md:text-xl lg:text-2xl">
             Course List
           </h1>
           <div className="relative">
             <FilterCourse totalResult={totalRecords} listFilter={listFilter} />
-            {guideStatus && guideStep === 7 && (
+            {guideStatus && guideStep === 6 && (
               <PopupStep
-                content={UserGuide.CONTENT_STEP_7}
+                content={UserGuide.CONTENT_STEP_6}
                 className="right-1/2 top-full mt-5"
-                index={7}
-                total={7}
+                index={6}
+                total={6}
                 titleButtonNext="Finish"
                 title="Filter"
                 handleCancel={closeUserGuide}
@@ -315,7 +315,7 @@ const MyCourse = () => {
             isEmpty(courses)
               ? 'flex min-h-[calc(100vh-21rem)] items-center justify-center'
               : ''
-          } ${guideStatus && guideStep === 6 && 'tour-guide-course-active'}`}
+          } ${guideStatus && guideStep === 5 && 'tour-guide-course-active z-50'}`}
         >
           <CoursesList
             courses={courses}
@@ -325,12 +325,12 @@ const MyCourse = () => {
             isFetchingNextPage={isFetchingNextPage}
             guideIsActive={guideStatus === true && !isEndGuide}
           />
-          {guideStatus && guideStep === 6 && (
+          {guideStatus && guideStep === 5 && (
             <PopupStep
-              content={UserGuide.CONTENT_STEP_6}
-              className="top-[20px] mt-6 2xl:left-[33.5%]"
-              index={6}
-              total={7}
+              content={UserGuide.CONTENT_STEP_5}
+              className="left-[50%] top-[20px] mt-6 xl:left-[33.5%]"
+              index={5}
+              total={6}
               title="Courses"
               imgSrc={TourGuideCourses}
             />

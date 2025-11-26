@@ -3,6 +3,7 @@ import { IButtonBaseProps } from 'src/type'
 import BaseButton from './BaseButton'
 import Link from 'next/link'
 import { IButtonProps } from 'src/type'
+import LoadingBtnAnimation from '@assets/icons/LoadingBtnAnimation'
 
 const ButtonText = ({
   title,
@@ -15,6 +16,7 @@ const ButtonText = ({
   endIcon,
   full = false,
   isUnderLine = true,
+  loading,
   children,
   ...props
 }: IButtonBaseProps) => {
@@ -56,9 +58,15 @@ const ButtonText = ({
       {...props}
     >
       <div className="flex items-center gap-2">
-        {startIcon && <div className="w-full">{startIcon}</div>}
-        <div className="w-full">{title || children}</div>
-        {endIcon && <div className="w-full">{endIcon}</div>}
+        {loading ? (
+          <LoadingBtnAnimation />
+        ) : (
+          <>
+            {startIcon && <div className="w-full">{startIcon}</div>}
+            <div className="w-full">{title || children}</div>
+            {endIcon && <div className="w-full">{endIcon}</div>}
+          </>
+        )}
       </div>
     </BaseButton>
   )

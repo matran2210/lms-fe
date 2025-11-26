@@ -1,6 +1,7 @@
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import CardCourse from '@components/common/CardCourse/CardCourse'
 import Icon, { CourseTimeIcon, GraduationCapIcon } from '@components/icons'
+import Tooltip from 'src/common/Tooltip'
 import { clearStylesHtml } from '@utils/index'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
@@ -82,78 +83,75 @@ const CoursesList: React.FC<CoursesProps> = ({
         <div className="mb-6 grid gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-3">
           {guideIsActive && (
             <CardCourse
-              title={'Certificate in International Financial Reporting'}
-              classNameTitle={`h-12 mb-4 md:h-16`}
-              badgeCode={{
-                badge: 'ACCA',
-                className: 'bg-badge-200 text-badge-500 font-medium',
-              }}
-              classNameCard={clsx('lg:min-h-[434px] min-h-[280px]', {
+              title="Certificate in International Financial Reporting"
+              classNameTitle="mb-4 line-clamp-2 sm:h-12 md:h-14"
+              hideBadge
+              classNameCard={clsx('lg:h-[434px] md:h-[390px] h-[312px]', {
                 'z-50': guideStatus && guideStep === 6,
               })}
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div>
-                    <GraduationCapIcon className={'h-5 w-5 md:h-6 md:w-6'} />
+              <div className="flex flex-1 flex-col justify-between">
+                <div className="flex flex-col">
+                  <div className="flex justify-between">
+                    <div className="flex items-center gap-2">
+                      <GraduationCapIcon className="h-5 w-5 md:h-[1.25rem] md:w-[1.25rem]" />
+                      <div className="text-xs font-semibold text-icon md:text-sm">
+                        <Tooltip title="CMA342023" showTooltip={false}>
+                          CMA342023
+                        </Tooltip>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="mr-1 text-icon">
+                        <CourseTimeIcon className="h-5 w-5 md:h-[1.25rem] md:w-[1.25rem]" />
+                      </div>
+                      <div className="text-xs font-medium text-icon md:text-sm">
+                        30
+                      </div>
+                      <div className="text-gray-500 text-xs font-normal md:text-sm">
+                        days left
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-xs font-semibold text-icon md:text-sm">
-                    CMA342023
-                  </div>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className={`mr-1 text-icon`}>
-                    <CourseTimeIcon className={'h-5 w-5 md:h-6 md:w-6'} />
-                  </div>
-                  <div className={`text-xs font-semibold text-icon md:text-sm`}>
-                    30
-                  </div>
-                  <div
-                    className={`text-gray-500 text-xs font-normal md:text-sm`}
-                  >
-                    days left
-                  </div>
-                </div>
-              </div>
-              <div className="des my-4 line-clamp-3 h-[62px] text-ellipsis leading-snug md:mb-8 md:mt-6 md:line-clamp-5 md:h-[124px]">
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: clearStylesHtml(
-                      'An introduction to ethics and its role in the investment profession. We examine the CFA Institute Code of Ethics',
-                    ),
-                  }}
-                  className={'text-sm font-normal text-gray-800 md:text-base'}
-                />
-              </div>
-              <div className="progress mb-[30px] h-8">
-                <div className="info mb-2 flex items-center justify-between">
-                  <div className="text flex items-center">
-                    <Icon type={'like'} className={`relative text-[#050505]`} />
+                  <div className="des my-4 line-clamp-3 text-ellipsis leading-snug md:mb-8 md:mt-6 md:line-clamp-5">
                     <p
-                      className={`ml-px pl-2 text-sm font-normal text-gray-800`}
-                    >
-                      Ready to learn
-                    </p>
-                  </div>
-                  <div className="number">
-                    <p className={`text-sm font-normal text-[#050505]`}>0%</p>
+                      dangerouslySetInnerHTML={{
+                        __html: clearStylesHtml(
+                          'An introduction to ethics and its role in the investment profession. We examine the CFA Institute Code of Ethics',
+                        ),
+                      }}
+                      className="text-sm font-normal text-gray-800 md:text-base"
+                    />
                   </div>
                 </div>
-                <div className="progressbar h-[6px] rounded-[100px] bg-gray-200">
-                  <div
-                    className={`progress-percentage h-[6px] rounded-[100px] bg-primary`}
-                    style={{ width: `0%` }}
-                  ></div>
-                </div>
-              </div>
-              <div className={clsx('action flex items-center justify-end')}>
-                <div className="w-[84px]">
-                  <ButtonSecondary
-                    full
-                    size="small"
-                    title={'Resume'}
-                    className="ml-auto w-full"
-                  />
+                <div className="flex flex-col">
+                  <div className="progress mb-6">
+                    <div className="info mb-1.5 flex items-center justify-between">
+                      <div className="text flex items-center">
+                        <Icon type="like" className="relative text-[#050505]" />
+                        <p className="ml-px pl-2 text-sm font-normal text-gray-800">
+                          Ready to learn
+                        </p>
+                      </div>
+                      <div className="number">
+                        <p className="text-sm font-normal text-[#050505]">0%</p>
+                      </div>
+                    </div>
+                    <div className="progressbar h-[6px] rounded-[100px] bg-gray-200">
+                      <div
+                        className="progress-percentage h-[6px] rounded-[100px] bg-primary"
+                        style={{ width: '0%' }}
+                      />
+                    </div>
+                  </div>
+                  <div className={clsx('action flex items-center justify-end')}>
+                    <ButtonSecondary
+                      full
+                      size="small"
+                      title="Resume"
+                      className="w-full md:w-[84px]"
+                    />
+                  </div>
                 </div>
               </div>
             </CardCourse>

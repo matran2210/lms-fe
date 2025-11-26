@@ -18,6 +18,7 @@ interface FilterCourseSectionProps {
   isPageStateVariables?: boolean
   allowClear?: boolean
   showOnlySection?: boolean
+  setDirection: Dispatch<SetStateAction<1 | -1>>
 }
 
 const FilterCourseSection = ({
@@ -26,6 +27,7 @@ const FilterCourseSection = ({
   isPageStateVariables,
   allowClear = false,
   showOnlySection = false,
+  setDirection,
 }: FilterCourseSectionProps) => {
   const { control, watch, setValue } = useFormContext()
 
@@ -183,7 +185,8 @@ const FilterCourseSection = ({
             value: section.id,
           })),
         )}
-        onChange={(selected) =>
+        onChange={(selected) => {
+          setDirection(1)
           showOnlySection
             ? setValue('section', selected)
             : handleDropdownChange('section', selected, [
@@ -191,7 +194,7 @@ const FilterCourseSection = ({
                 'unit',
                 'activity',
               ])
-        }
+        }}
         heightCustom={heightCustom}
         onMenuScrollToBottom={handleMenuScrollToSections}
         allowClear={allowClear}

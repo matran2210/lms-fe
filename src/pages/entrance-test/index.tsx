@@ -92,6 +92,7 @@ const EntranceTest = () => {
                 <Heading
                   showShadow={false}
                   greeting="Welcome to"
+                  showWavingHand
                   title="Entrance Test"
                   des="The course is your starting point to learning. From here, you can access every topic, reading, and video lesson, as well as assignment questions."
                 />
@@ -101,7 +102,7 @@ const EntranceTest = () => {
                   className="mx-auto mb-6 mt-8 flex items-center justify-between md:mb-7 md:mt-9"
                   data-aos={ANIMATION.DATA_AOS}
                 >
-                  <h2 className="text-lg font-semibold text-gray-800 lg:text-2xl">
+                  <h2 className="text-lg font-semibold text-gray-800 md:text-xl lg:text-2xl">
                     Entrance Test List
                   </h2>
                   <EntranceTestFilter count={entranceTestLists?.length || 0} />

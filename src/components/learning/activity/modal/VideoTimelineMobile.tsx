@@ -2,7 +2,6 @@ import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { formatTime, htmlToRaw } from '@components/common/timer'
 import React, { useRef, useState } from 'react'
 import NoData from 'src/common/NoData'
-import NoDataV2 from 'src/common/NodataV2'
 import { IVideo } from 'src/type/course'
 
 interface IProps {

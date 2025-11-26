@@ -55,7 +55,7 @@ const UploadSingleFileV2 = ({
           }}
         >
           {fileList?.[0]?.name}
-          <div className="ml-2 opacity-0 transition-opacity duration-1000 group-hover:opacity-100">
+          <div className="ml-2 opacity-0 transition-opacity duration-100 group-hover:opacity-100">
             <UploadIcon />
           </div>
         </div>
