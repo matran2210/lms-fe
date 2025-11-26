@@ -33,7 +33,7 @@ import {
 } from '@lms/ui'
 import { initializeGA, onMessageListener, pageview } from '@lms/utils'
 import { ErrorBoundary } from '@sentry/nextjs'
-import '@styles/globals.scss'
+import '@lms/styles'
 import '@xyflow/react/dist/style.css'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
@@ -168,8 +168,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   useEffect(() => {
     if (socket) {
-      socket.on('connect', () => {})
-      socket.on('disconnect', () => {})
+      socket.on('connect', () => { })
+      socket.on('disconnect', () => { })
       socket?.on(SOCKET_EVENTS.NOTIFICATION_UNREAD, (data: any) => {
         localStorage.setItem(
           LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
@@ -312,7 +312,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     ) {
       try {
         dispatch(getCountUnRead(NotificationAPI))
-      } catch (error) {}
+      } catch (error) { }
     }
   }, [])
 
