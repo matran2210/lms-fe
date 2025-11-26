@@ -256,7 +256,7 @@ export const HighlightableHTML: React.FC<Props> = ({
           // Apply highlight to each text node segment (in reverse to maintain positions)
           textNodesInRange.reverse().forEach((item) => {
             try {
-              // ✅ THÊM: Check if node is still in document
+              // Check if node is still in document
               if (!document.contains(item.node)) return
 
               const nodeRange = document.createRange()
@@ -271,7 +271,6 @@ export const HighlightableHTML: React.FC<Props> = ({
 
               nodeRange.surroundContents(span)
             } catch (e) {
-              // ✅ SỬA: Thêm log để debug
               // console.warn('Failed to wrap text node:', e)
             }
           })
@@ -287,7 +286,7 @@ export const HighlightableHTML: React.FC<Props> = ({
 
   // Load highlights from sessionStorage - chỉ lưu positions
   useEffect(() => {
-    isRestoringRef.current = true // ✅ THÊM DÒNG NÀY
+    isRestoringRef.current = true
 
     // Clear old highlights trước khi load mới
 
@@ -306,11 +305,11 @@ export const HighlightableHTML: React.FC<Props> = ({
           setTimeout(() => {
             if (containerRef.current) {
               restoreHighlightsToDOM(containerRef.current!, loadedHighlights)
-              isRestoringRef.current = false // ✅ THÊM DÒNG NÀY
+              isRestoringRef.current = false
             }
           }, 200)
         } else {
-          isRestoringRef.current = false // ✅ THÊM DÒNG NÀY
+          isRestoringRef.current = false
         }
       } catch (err) {
         setHighlights([])
@@ -544,7 +543,7 @@ export const HighlightableHTML: React.FC<Props> = ({
     // Prevent event from bubbling
     e.stopPropagation()
 
-    // 👉 Lấy rect của từ đầu tiên (ở dòng đầu tiên)
+    //Lấy rect của từ đầu tiên (ở dòng đầu tiên)
     const rects = highlightSpan.getClientRects()
     const firstRect = rects[0] ?? highlightSpan.getBoundingClientRect()
     setHighlightRect(firstRect)
@@ -780,7 +779,7 @@ export const HighlightableHTML: React.FC<Props> = ({
       const modalHeight = 200
       const padding = 20
 
-      // ❌ KHÔNG cộng window.scrollY (vì fixed theo viewport)
+      // KHÔNG cộng window.scrollY (vì fixed theo viewport)
       let top = highlightRect.top + highlightRect.height + padding
       let left = highlightRect.left
 
