@@ -1,7 +1,7 @@
 import { ReactElement, ReactNode } from 'react'
 import Image from 'next/image'
-import SAPP_Logo from '@assets/images/sapp_logo.svg'
 import Head from 'next/head'
+import { SappLogoImage } from '@lms/assets'
 
 interface LayoutProps {
   children: ReactNode
@@ -21,7 +21,7 @@ export default function SingleDialogLayout(props: LayoutProps): ReactElement {
         <section>
           <div className="xs:mb-12 mx-auto my-auto mb-10 block w-1/2 overflow-hidden sm:max-w-[14rem] md:mx-auto md:mb-20 lg:overflow-hidden">
             <Image
-              src={SAPP_Logo}
+              src={SappLogoImage}
               alt="SAPP Logo"
               priority={true}
               layout="responsive"

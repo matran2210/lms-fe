@@ -1,12 +1,11 @@
-// import continue_learning from "@assets/images/book-continue-learning.svg"; comment monorepo
-import { ArrowRightV2Icon } from "@lms/assets";
-import { useFeature } from "@lms/contexts";
+import { ArrowRightV2Icon, BookContinueLearningImage } from "@lms/assets";
 import { PinnedNotificationsV2 } from "@lms/ui";
+import Image from "next/image";
+import { useFeature } from "@lms/contexts";
 import { InstructionText } from "./InstructionText";
 
 const ContinueLearning = () => {
-  const { pageLink, router } = useFeature();
-
+  const {router, pageLink} = useFeature()
   const goToCourseContent = () => {
     router.push(
       pageLink.COURSE_DETAIL.replace(
@@ -28,7 +27,7 @@ const ContinueLearning = () => {
           <div className="flex items-center md:items-start gap-2 md:gap-4">
             {/* Hình ảnh */}
             <div className="h-6 w-6 md:size-10">
-              {/* <Image src={continue_learning} alt="pinned-completed-course" /> comment monorepo */}
+              <Image src={BookContinueLearningImage} alt="pinned-completed-course" />
             </div>
 
             {/* Text */}

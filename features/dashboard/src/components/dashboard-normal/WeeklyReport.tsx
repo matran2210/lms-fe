@@ -1,6 +1,4 @@
-import { BooksIcon, CheckMatchIcon, ClockIcon } from "@lms/assets";
-import goalIcon from "@assets/images/goal-icon.svg";
-import medalIcon from "@assets/images/medal-icon.svg";
+import { BooksIcon, CheckMatchIcon, ClockIcon, GoalIconImage, MedalIconImage } from "@lms/assets";
 import { DATE_FORMAT, IWeeklyReport } from "@lms/core";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
@@ -38,14 +36,14 @@ const WeeklyReport = ({ weeklyReportData }: WeeklyReportProps) => {
     ) {
       activities.note = "You've outperformed last week! Aim higher!";
       activities.color = "#37C78C";
-      activities.icon = medalIcon;
+      activities.icon = MedalIconImage;
     } else if (
       data.current_week.completed_activities ==
       data.last_week.completed_activities
     ) {
       activities.note = "You've matched last week's progress. Go further!";
       activities.color = "#FFAE4C";
-      activities.icon = goalIcon;
+      activities.icon = GoalIconImage;
     } else {
       activities.note = "More activities to outperform last week";
       activities.color = "#FF524E";
@@ -60,14 +58,14 @@ const WeeklyReport = ({ weeklyReportData }: WeeklyReportProps) => {
     ) {
       times.note = "You've outperformed last week! Aim higher!";
       times.color = "#37C78C";
-      times.icon = medalIcon;
+      times.icon = MedalIconImage;
     } else if (
       data.current_week.total_learning_time ==
       data.last_week.total_learning_time
     ) {
       times.note = "You've matched last week's progress. Go further!";
       times.color = "#FFAE4C";
-      times.icon = goalIcon;
+      times.icon = GoalIconImage;
     } else {
       times.note = "More minutes to outperform last week";
       times.color = "#FF524E";

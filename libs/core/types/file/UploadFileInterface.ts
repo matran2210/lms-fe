@@ -1,6 +1,4 @@
-import DocIcon from "src/assets/images/document-icon.svg";
-import ImageIcon from "src/assets/images/image-icon.svg";
-import VideoIcon from "src/assets/images/video-icon.svg";
+import { VideoIconImage, ImageIconImage, DocumentIconImage } from "../../../assets"
 import {
   MAX_UPLOAD_SIZE,
   MAX_UPLOAD_VIDEO_SIZE,
@@ -68,7 +66,7 @@ export const UPLOAD_TYPE: {
 } = {
   VIDEO: {
     type: "VIDEO",
-    icon: VideoIcon,
+    icon: VideoIconImage,
     accept: ".mp4",
     extension: "MP4",
     note: ["MP4"],
@@ -77,7 +75,7 @@ export const UPLOAD_TYPE: {
   },
   IMAGE: {
     type: "IMAGE",
-    icon: ImageIcon,
+    icon: ImageIconImage,
     accept: "image/*",
     extension: ".jpg, .jpeg, .png, .gif, .webp",
     note: [".jpg, .jpeg, .png, .gif, .webp"],
@@ -86,7 +84,7 @@ export const UPLOAD_TYPE: {
   },
   DOCUMENT: {
     type: "DOCUMENT",
-    icon: DocIcon,
+    icon: DocumentIconImage,
     accept: ".pdf,.docx,.doc,.xls,.xlsx,.csv,.txt,.ppt,.pptx",
     extension: ".pdf, .docx, .doc, .xls, .xlsx, .csv, .txt, .ppt, .pptx",
     note: [
@@ -98,7 +96,7 @@ export const UPLOAD_TYPE: {
   },
   ESSAY: {
     type: "DOCUMENT",
-    icon: DocIcon,
+    icon: DocumentIconImage,
     accept: ".pdf,.docx,.doc,.xls,.xlsx,.csv,.ppt,.pptx,.zip",
     extension: ".pdf, .docx, .doc, .xls, .xlsx, .csv, .ppt, .pptx, .zip",
     note: [
@@ -110,7 +108,7 @@ export const UPLOAD_TYPE: {
   },
   ALL: {
     type: "ALL",
-    icon: [DocIcon, VideoIcon, ImageIcon],
+    icon: [DocumentIconImage, VideoIconImage, ImageIconImage],
     accept: "image/*,.mp4,.pdf,.docx,.xls,.xlsx,.csv,.txt",
     extension:
       ".jpg, .jpeg, .png, .gif, .webp, .mp4, .pdf, .docx, .doc, .xls, .xlsx, .csv, .txt, .ppt, .pptx",
@@ -126,7 +124,7 @@ export const UPLOAD_TYPE: {
   },
   ALL_RESOURCE: {
     type: "ALL_RESOURCE",
-    icon: [DocIcon, VideoIcon, ImageIcon],
+    icon: [DocumentIconImage, VideoIconImage, ImageIconImage],
     accept:
       "image/*,.mp4, .pdf, .docx, .doc, .xls, .xlsx, .csv, .txt, .ppt, .pptx",
     extension:

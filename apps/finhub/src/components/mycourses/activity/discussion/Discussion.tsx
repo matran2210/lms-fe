@@ -1,26 +1,21 @@
-import sappAvatar from '@assets/images/blank_avatar_notification.png'
+import SappIcon from '@components/common/SappIcon'
+import { BlankAvatarImage, BlankAvatarNotificationImage } from '@lms/assets'
+import { courseActivityReducer, createDiscussion, getDiscussion, ICreateDiscussionResReact, IDiscussion, reactDiscussion, uploadImagesDiscussion, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
+import { HookFormTextArea, SappButton, SappButtonIcon, SappModalImage } from '@lms/ui'
+import { ActivityAPI } from '@pages/api/activity'
+import { CoursesAPI } from '@pages/api/courses'
+import { Skeleton } from 'antd'
+import clsx from 'clsx'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import SappIcon from '@components/common/SappIcon'
-import { courseActivityReducer, createDiscussion, getDiscussion, reactDiscussion, uploadImagesDiscussion, useAppDispatch, useAppSelector } from '@lms/contexts'
-import { userReducer } from '@lms/contexts'
-import {
-  ICreateDiscussionResReact,
-  IDiscussion,
-} from 'src/redux/types/Course/MyCourse/Activity/activity'
-import DiscussionElement from './DiscussionElement'
 import toast from 'react-hot-toast'
-import { Skeleton } from 'antd'
-import { BlankAvatarImage, IconSend } from '@lms/assets'
-import clsx from 'clsx'
-import ActionDiscussion from './ActionDiscussion'
-import SendComment from './SendComment'
-import { ActivityAPI } from '@pages/api/activity'
-import { CoursesAPI } from '@pages/api/courses'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
-import { HookFormTextArea, SappButton, SappButtonIcon, SappModalImage } from '@lms/ui'
+
+import ActionDiscussion from './ActionDiscussion'
+import DiscussionElement from './DiscussionElement'
+import SendComment from './SendComment'
 
 type Props = {
   class_id: string
@@ -407,7 +402,7 @@ const Discussion = ({ class_id }: Props) => {
                         selector?.userInDiscussion?.is_sapp_supporter
                           ? e?.avatar?.['50x50'] ||
                             e?.avatar?.['ORIGIN'] ||
-                            sappAvatar
+                            BlankAvatarNotificationImage
                           : user?.detail?.avatar?.['50x50'] ||
                             user?.detail?.avatar?.['ORIGIN'] ||
                             BlankAvatarImage
@@ -520,7 +515,7 @@ const Discussion = ({ class_id }: Props) => {
               selector.userInDiscussion?.avatar
                 ? selector.userInDiscussion?.avatar['50x50'] ||
                   selector.userInDiscussion?.avatar['ORIGIN'] ||
-                  sappAvatar
+                  BlankAvatarNotificationImage
                 : user?.detail?.avatar['50x50'] ||
                   user?.detail?.avatar['ORIGIN'] ||
                 BlankAvatarImage

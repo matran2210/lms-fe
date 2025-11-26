@@ -1,12 +1,10 @@
-import React from 'react'
-import { Button, Typography } from 'antd'
-import CertificateCard from './CertificateCard'
-import Image from 'next/image'
-import { CertificateImg, Icon } from '@lms/assets'
+import { CertificateImg, Icon, SappLogoImage } from '@lms/assets'
+import { CertificateCard } from '@lms/feature-user'
+import { ButtonPrimary, ClickToCopyButton } from '@lms/ui'
 import { ICertificate } from '@pages/certificates/[id]'
-import { ClickToCopyButton } from 'src/common/SappCopyLink'
-import SAPP_Logo from '@assets/images/sapp_logo.svg'
-import { ButtonPrimary } from '@lms/ui'
+import { Button } from 'antd'
+import Image from 'next/image'
+import React from 'react'
 
 interface HorizontalCertificateProps {
   certificate?: ICertificate
@@ -33,7 +31,7 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
         >
           <div className="mx-auto my-auto block w-1/2 overflow-hidden sm:max-w-[14rem]">
             <Image
-              src={SAPP_Logo}
+              src={SappLogoImage}
               alt="SAPP Logo"
               priority={true}
               layout="responsive"

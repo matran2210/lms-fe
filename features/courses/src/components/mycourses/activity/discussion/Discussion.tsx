@@ -1,6 +1,5 @@
-import blankAvatar from '@assets/images/blank_avatar.webp'
-import sappAvatar from '@assets/images/blank_avatar_notification.png'
-import { CameraIcon } from '@lms/assets'
+
+import { BlankAvatarImage, BlankAvatarNotificationImage, CameraIcon } from '@lms/assets'
 import {
   courseActivityReducer,
   createDiscussion,
@@ -420,10 +419,10 @@ const Discussion = ({ class_id,  }: Props) => {
                             selector?.userInDiscussion?.is_sapp_supporter
                               ? e?.avatar?.['50x50'] ||
                                 e?.avatar?.['ORIGIN'] ||
-                                sappAvatar
+                              BlankAvatarNotificationImage
                               : user?.detail?.avatar?.['50x50'] ||
                                 user?.detail?.avatar?.['ORIGIN'] ||
-                                blankAvatar
+                                BlankAvatarImage
                           }
                           loading="eager"
                           priority={true}
@@ -566,10 +565,10 @@ const Discussion = ({ class_id,  }: Props) => {
               selector.userInDiscussion?.avatar
                 ? selector.userInDiscussion?.avatar['50x50'] ||
                   selector.userInDiscussion?.avatar['ORIGIN'] ||
-                  sappAvatar
+                  BlankAvatarNotificationImage
                 : user?.detail?.avatar['50x50'] ||
                   user?.detail?.avatar['ORIGIN'] ||
-                  blankAvatar
+                  BlankAvatarImage
             }
             loading="eager"
             priority={true}
