@@ -1,5 +1,5 @@
 {
-  "name": "@repo/config-tailwind",
+  "name": "@lms/config-tailwind",
   "version": "0.0.0",
   "private": true,
   "exports": {
