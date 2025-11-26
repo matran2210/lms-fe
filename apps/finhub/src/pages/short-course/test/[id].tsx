@@ -1,3 +1,4 @@
+import SappLoading from '@components/common/SappLoading'
 import {
   CalculatorIcon,
   DownloadIcon,
@@ -8,59 +9,53 @@ import {
   ShowLessIcon,
   ShowMoreIcon,
 } from '@lms/assets'
-import SappLoading from '@components/common/SappLoading'
-import { CoursesAPI } from '@pages/api/courses'
-import { runHighlight } from '@lms/utils'
-import { cloneDeep, isEmpty, isUndefined, uniqueId } from 'lodash'
-import { useRouter } from 'next/router'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { CourseProvider, disableUnsavedChange, loginSlice, useAppDispatch, useAppSelector, useCourseContext } from '@lms/contexts'
 import {
   DISPLAY_TYPE,
   EXHIBIT_TEXT_REPLACE,
   GRADING_METHOD,
+  IExhibit,
   PROGRAM,
   QUESTION_TYPES,
   TEST_TYPE,
 } from '@lms/core'
-import { CourseProvider, disableUnsavedChange, loginSlice, useAppDispatch, useAppSelector, useCourseContext } from '@lms/contexts'
-import { IExhibit } from '@lms/core'
+import { runHighlight } from '@lms/utils'
+import { CoursesAPI } from '@pages/api/courses'
+import { cloneDeep, isEmpty, isUndefined, uniqueId } from 'lodash'
+import { useRouter } from 'next/router'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
 
-import { NotesOutline, PulsingExclamation } from '@lms/assets'
-import { BackToTop, FilterRadioGroup, HighlightableHTML, MatchQuizComponent, MultiChoiceQuestion, NewDragNDropQuestion, NewFillText, OneChoiceQuestion, Popover, SelectWord, SlotValue, TestWrapper } from '@lms/ui'
-import { Icon } from '@lms/assets'
 import Layout from '@components/layout'
-import { QuestionAPI } from '@pages/api/question'
-import { TestAPI } from '@pages/api/test'
-import { GradingPreference } from '@lms/core'
-import { trackGAEvent } from '@lms/utils'
-import { download } from '@utils/index'
-import { Tooltip } from 'antd'
-import clsx from 'clsx'
-import dayjs from 'dayjs'
+import { removeHighlights, serializeHighlights } from '@funktechno/texthighlighter/lib'
+import { Icon, NotesOutline, PulsingExclamation } from '@lms/assets'
 import { showPopupCompletedCourse } from '@lms/contexts'
 import {
   Answer,
   AnswerItem,
   AnswerList,
-  DragDropAnswerItem,
-  ScratchPad,
-  ScratchPadValue,
+  DragDropAnswerItem, GradingPreference, IRequirement, ScratchPad,
+  ScratchPadValue
 } from '@lms/core'
-import { IRequirement } from '@lms/core'
+import { ButtonContent } from '@lms/feature-courses'
+import { QuitTestModal, TabSlide, TestTimeOutModal, UnSubmitAnswerModal } from '@lms/feature-test'
+import { BackToTop, ButtonPrimary, ButtonSecondary, ButtonText, FilterRadioGroup, HighlightableHTML, MatchQuizComponent, MultiChoiceQuestion, NewDragNDropQuestion, NewFillText, OneChoiceQuestion, Popover, SelectWord, SlotValue, TestWrapper } from '@lms/ui'
+import { trackGAEvent } from '@lms/utils'
+import { QuestionAPI } from '@pages/api/question'
+import { TestAPI } from '@pages/api/test'
+import { download } from '@utils/index'
+import { Tooltip } from 'antd'
+import clsx from 'clsx'
+import dayjs from 'dayjs'
+import { PageLink } from 'src/constants/routes'
 import { checkTypeAndRenderTitle } from 'src/utils/helpers/quiz-test/helper'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import { ButtonPrimary, ButtonSecondary, ButtonText } from '@lms/ui'
-import { removeHighlights, serializeHighlights } from '@funktechno/texthighlighter/lib'
-import { PageLink } from 'src/constants/routes'
-import { ButtonContent } from '@lms/feature-courses'
-import { QuitTestModal, TabSlide, UnSubmitAnswerModal } from '@lms/feature-test'
 
 declare global {
   interface Window {

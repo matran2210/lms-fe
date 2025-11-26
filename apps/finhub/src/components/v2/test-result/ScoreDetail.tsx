@@ -1,6 +1,3 @@
-import SappTable from '@components/base/SappTable'
-import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
-import { truncateString } from '@utils/index'
 
 import { htmlToRaw } from '@components/common/timer'
 import { Collapse } from 'antd'
@@ -14,17 +11,14 @@ import React from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
 import Tooltip from '@components/common/Tooltip'
-import {
-  ANIMATION,
-  COMMON_TEXT_ENUM,
-  GRADE_STATUS,
-  PageLink,
-  QUESTION_TYPES,
-} from 'src/constants'
-import { IAnswer, IQuizAttempt, IQuizAttemptChartType } from 'src/type'
 import { CollapseArrowIcon } from '@lms/assets'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { ResultAPI } from '@pages/api/short-course/test-result'
+import { ANIMATION, COMMON_TEXT_ENUM, GRADE_STATUS, IAnswer, IQuizAttempt, QUESTION_TYPES } from '@lms/core'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { SappTable } from '@lms/ui/components/base'
+import { PageLink } from 'src/constants/routes'
+import { roundNumber, truncateString } from '@lms/utils'
+import { convertSecondsToMinutesSeconds } from '@utils/helpers'
 
 const commonHeaderClass = 'font-medium leading-6 text-gray py-2 pb-4 md:pb-6'
 
