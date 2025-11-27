@@ -18,9 +18,12 @@ import {
   RESPONSE_OPTION,
   ROUTES,
 } from '@lms/core'
+import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
 import { useMousePosition, useTailwindBreakpoint } from '@lms/hooks'
 import { AddWordPreview, Calculator, CaseStudyWrapper, EditorReader, EssayQuestionPreview, FileViewer, HookFormTextArea, MatchQuizComponent, ModalResizeable, MovableWindow, MultiChoiceQuestion, NewDragNDropQuestion, OneChoiceQuestion, SappLoadingGlobal, SelectWord, SlotValue } from '@lms/ui'
+import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight } from '@lms/utils'
+import { CaseStudyAPI } from '@pages/api/case-study'
 import { download } from '@utils/index'
 import { Popover } from 'antd'
 import clsx from 'clsx'
@@ -33,9 +36,6 @@ import { CoursesAPI } from '../api/courses/index'
 import { TestAPI } from '../api/test'
 import ConFirmSubmit from '../short-course/test/conFirmSubmit'
 import LimitQuizModal from '../short-course/test/limitQuizModal'
-import { CaseStudyAPI } from '@pages/api/case-study'
-import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 const CaseStudyDetail = ({ questions }: any) => {
   const editorRefs = useRef<any[]>([])
 
@@ -64,12 +64,12 @@ const CaseStudyDetail = ({ questions }: any) => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
-            // solution={solution}
+          // solution={solution}
           />
         )
       case QUESTION_TYPES.ONE_CHOICE:
@@ -81,7 +81,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -96,7 +96,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             name={`${index}_answer`}
             defaultValues={defaultValue}
             setValue={setValue}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -110,7 +110,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             data={data}
             // action={getAnswerMatching}
             ref={MatchQuizRef}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -127,7 +127,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           <AddWordPreview
             data={data}
             // action={getValueFillText}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -163,7 +163,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             ) => setValue?.(`${index}_answer`, value)}
             data={data}
             // action={getValueSelectText}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -184,7 +184,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             index={undefined}
             question_data={data}
             control={control}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -408,7 +408,7 @@ const CaseStudyDetail = ({ questions }: any) => {
         setClassId(res?.data?.class_id)
         setQuizAttempId(res.data.id)
       }
-    } catch (err) {}
+    } catch (err) { }
   }
   useEffect(() => {
     if (router.query.quiz_id && router.query.id && router.query.class_user_id) {
@@ -979,13 +979,13 @@ const CaseStudyDetail = ({ questions }: any) => {
                       if (e) {
                         if (allowHighLight) {
                           runHighlight(
-                            () => {},
+                            () => { },
                             allowHighLight || false,
                             'hightlight_area_topic',
                           )
                         } else if (allowUnHighLight) {
                           runHighlight(
-                            () => {},
+                            () => { },
                             allowUnHighLight || false,
                             'hightlight_area_topic',
                             { color: 'white' },
@@ -1073,13 +1073,13 @@ const CaseStudyDetail = ({ questions }: any) => {
                         if (e) {
                           if (allowHighLight) {
                             runHighlight(
-                              () => {},
+                              () => { },
                               allowHighLight || false,
                               'hightlight_area_topic',
                             )
                           } else if (allowUnHighLight) {
                             runHighlight(
-                              () => {},
+                              () => { },
                               allowUnHighLight || false,
                               'hightlight_area_topic',
                               { color: 'white' },
@@ -1219,9 +1219,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                     <div className="relative">
                       <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                         <div className="truncate">
-                          <span className="text-base font-semibold">{`${exhibitText} ${
-                            (i ?? 0) + 1
-                          }: `}</span>
+                          <span className="text-base font-semibold">{`${exhibitText} ${(i ?? 0) + 1
+                            }: `}</span>
                           {exhibitsDes?.name}
                         </div>
                       </div>

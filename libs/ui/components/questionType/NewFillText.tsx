@@ -1,5 +1,5 @@
+import { MY_COURSES } from "@lms/core";
 import { runHighlight } from "@lms/utils";
-import clsx from "clsx";
 import { Element, HTMLReactParserOptions } from "html-react-parser";
 import { useRouter } from "next/router";
 import {
@@ -11,7 +11,6 @@ import {
   useState,
 } from "react";
 import { FieldValues, UseFormWatch } from "react-hook-form";
-import { MY_COURSES } from "@lms/core";
 import { EditorReader, HookFormTextField, SappDivider } from "../base";
 import { SappTitleSolution } from "../common";
 

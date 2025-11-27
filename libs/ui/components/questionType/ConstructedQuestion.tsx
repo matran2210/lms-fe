@@ -1,10 +1,9 @@
 import { CloseIcon, UploadIcon } from "@lms/assets";
-import { SappDivider } from "../../components/base/divider";
-import { HighlightableHTML } from "../highlights";
+import { disableUnsavedChange, loginSlice, useAppDispatch, useFeature } from "@lms/contexts";
+import { DEFAULT_EDITOR_VALUE, DISPLAY_TYPE, generateSheetId, MY_COURSES, RESPONSE_OPTION, SheetData } from "@lms/core";
 import { runHighlight } from "@lms/utils";
 import clsx from "clsx";
 import { cloneDeep, isNull, isUndefined, uniqueId } from "lodash";
-import { useRouter } from "next/router";
 import React, {
   memo,
   useCallback,
@@ -15,12 +14,10 @@ import React, {
 } from "react";
 import { Controller } from "react-hook-form";
 import toast from "react-hot-toast";
-import { DISPLAY_TYPE, IUploadAPI, RESPONSE_OPTION } from "@lms/core";
-import { DEFAULT_EDITOR_VALUE, generateSheetId, SheetData } from "@lms/core";
-import { MY_COURSES } from "@lms/core";
+import { SappDivider } from "../../components/base/divider";
 import { EditorReader, HookFormEditor, HookFormExcel } from "../base";
 import { SappTitleSolution } from "../common";
-import { useAppDispatch, disableUnsavedChange, loginSlice, useFeature } from "@lms/contexts";
+import { HighlightableHTML } from "../highlights";
 
 export type IPreviewProp = {
   data: any;

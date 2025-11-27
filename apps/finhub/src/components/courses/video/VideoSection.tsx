@@ -1,16 +1,16 @@
+import { QuizComponentRef } from '@components/mycourses/activity/documents/QuizComponent'
+import { fetchQuestionById, IActivityStateQuestion } from '@lms/contexts'
+import { IQuestion, IVideo, video_url } from '@lms/core'
+import { SAPPVideo } from '@lms/ui'
+import { CoursesAPI } from '@pages/api/courses'
+import { QuestionAPI } from '@pages/api/question'
+import { debounce } from '@utils/helpers'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch } from 'src/redux/hook'
-import { QuizComponentRef } from '@components/mycourses/activity/documents/QuizComponent'
-import { debounce } from '@utils/helpers'
+import QuizModal from './QuizModal'
 import VideoSelector from './VideoSelector'
 import VideoTimeline from './VideoTimeLine'
-import QuizModal from './QuizModal'
-import { IQuestion, IVideo, video_url } from '@lms/core'
-import { fetchQuestionById, IActivityStateQuestion } from '@lms/contexts'
-import { QuestionAPI } from '@pages/api/question'
-import { CoursesAPI } from '@pages/api/courses'
-import { SAPPVideo } from '@lms/ui'
 
 type Props = {
   videos?: IVideo[]
@@ -152,7 +152,7 @@ const VideoSection = ({
         setModalOpen(false)
         setHideVideo(false)
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const [hideVideo, setHideVideo] = useState(false)
@@ -249,7 +249,7 @@ const VideoSection = ({
           },
         })
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const handleGoTimeline = (time: number) => {

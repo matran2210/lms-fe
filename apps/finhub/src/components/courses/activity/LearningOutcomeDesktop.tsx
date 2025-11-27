@@ -1,7 +1,7 @@
 import { ILearningOutcomeProps } from '@lms/core'
-import { ArrowDownIcon, ArrowUpIcon, StarIcon } from '../icons'
-import { useEffect, useRef, useState } from 'react'
 import { EditorReader } from '@lms/ui'
+import { useEffect, useRef, useState } from 'react'
+import { ArrowDownIcon, ArrowUpIcon, StarIcon } from '../icons'
 
 export default function LearningOutcomeDesktop({
   title,
@@ -32,9 +32,8 @@ export default function LearningOutcomeDesktop({
         </div>
         <div
           ref={contentRef}
-          className={`list-active overflow-hidden transition-all duration-300 ease-in-out ${
-            visible ? 'mt-6 opacity-100' : 'opacity-0'
-          }`}
+          className={`list-active overflow-hidden transition-all duration-300 ease-in-out ${visible ? 'mt-6 opacity-100' : 'opacity-0'
+            }`}
           style={{ maxHeight }}
           aria-hidden={!visible}
         >

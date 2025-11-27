@@ -1,6 +1,6 @@
-
 import SappIcon from '@components/common/SappIcon'
 import { clearFileEssay, confirmQuestion, IActivityStateQuestion, saveFileEssay, useAppDispatch } from '@lms/contexts'
+
 import { DEFAULT_EDITOR_VALUE, defaultSheetData, IEssayAnswer, IExhibit, IExhibitData, IFile, QUESTION_TYPES, RESPONSE_OPTION } from '@lms/core'
 import { AddWordPreview, EditorReader, EssayQuestionPreview, MatchQuizComponent, MultiChoiceQuestion, NewDragNDropQuestion, OneChoiceQuestion, SelectWord, SlotValue, useClickOutside } from '@lms/ui'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
@@ -17,12 +17,13 @@ import React, {
 } from 'react'
 import {
   FieldValues,
+  useForm,
   UseFormGetValues,
   UseFormReset,
   UseFormWatch,
-  useForm,
 } from 'react-hook-form'
 import toast from 'react-hot-toast'
+
 import { v4 as uuidv4 } from 'uuid'
 
 interface IRequirement {
@@ -748,7 +749,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 question_data={activeQuestion}
                 control={controlAnswer}
                 setValue={setValue}
-                handleSaveHighLight={() => {}}
+                handleSaveHighLight={() => { }}
                 forCaseStudy={true}
                 name={`${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`}
                 fullData={{
@@ -881,7 +882,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               <div className="my-6 border border-b-gray-2" />
             </div>
           )}
-          <React.Fragment>{renderQuestion()}</React.Fragment>
+          {renderQuestion()}
         </div>
         {/* <div>
           {activeQuestion?.confirmed &&

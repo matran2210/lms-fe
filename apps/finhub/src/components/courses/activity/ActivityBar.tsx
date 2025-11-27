@@ -1,15 +1,13 @@
-import React from 'react'
+import { activeNotesList3Level, pushNotes3Level } from '@lms/contexts'
+import { ActivityBarProps, IActivityTab } from '@lms/core'
+import clsx from 'clsx'
 import { useDispatch } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
-import clsx from 'clsx'
-import { ActivityBarProps, IActivityTab } from '@lms/core'
+import ButtonIcon from '../buttons/ButtonIcon'
+import { Soundwave } from '../icons'
+import { Archive } from '../icons/Archive'
 import { DocumentAdd } from '../icons/DocumentAdd'
 import { DocumentText } from '../icons/DocumentText'
-import { Archive } from '../icons/Archive'
-import { Soundwave } from '../icons'
-import { activeNotesList3Level, pushNotes3Level } from '@lms/contexts'
-import { List } from '../icons/List'
-import ButtonIcon from '../buttons/ButtonIcon'
 
 const tabs: IActivityTab[] = [
   { key: 'add-note', icon: <DocumentAdd /> },
@@ -65,7 +63,7 @@ export default function ActivityBar({
         className={clsx(getButtonClass('content'), 'gap-2')}
         classTitle="text-v2-sm font-normal"
       >
-        <List />
+        {/* <List /> */}
       </ButtonIcon>
     </div>
   )
