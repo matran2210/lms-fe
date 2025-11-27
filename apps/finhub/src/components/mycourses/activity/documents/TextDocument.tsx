@@ -1,4 +1,4 @@
-import EditorReader from '@components/base/editor/EditorReader'
+import { EditorReader } from "@lms/ui"
 
 type Props = {
   text_editor_content?: string

@@ -1,13 +1,12 @@
-import { Dispatch, SetStateAction } from 'react'
-import { useEffect } from 'react'
-import { useFormContext } from 'react-hook-form'
-import clsx from 'clsx'
-import { useSectionData } from 'src/hooks/useSectionData'
-import { isEmpty } from 'lodash'
-import { useInitialSections } from 'src/hooks/useInitialSections'
 import { DEFAULT_PAGE_SIZE, SectionField } from '@lms/core'
 import { useDynamicLoading } from '@lms/hooks'
 import { SAPPSelectV2 } from '@lms/ui'
+import clsx from 'clsx'
+import { isEmpty } from 'lodash'
+import { Dispatch, SetStateAction, useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
+import { useInitialSections } from 'src/hooks/useInitialSections'
+import { useSectionData } from 'src/hooks/useSectionData'
 
 const DEFAULT_SELECT = [{ label: 'All Section', value: '' }]
 

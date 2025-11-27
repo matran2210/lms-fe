@@ -1,20 +1,16 @@
-import SappButton from '@components/base/button/SappButton'
-import SappModal from '@components/base/modal/SappModal'
-import SAPPVideo from '@components/base/video/SAPPVideo'
+
 import { formatTime, htmlToRaw } from '@components/common/timer'
 import { Soundwave } from '@components/courses/icons'
 import TimeLineModal from '@components/courses/timeline/TimeLineModal'
-import { video_url } from '@utils/constants'
+import { fetchQuestionById, IActivityStateQuestion, useAppDispatch } from '@lms/contexts'
 import { debounce } from '@utils/helpers'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useAppDispatch } from '@lms/contexts'
-import {
-  IActivityStateQuestion,
-  fetchQuestionById,
-} from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
-import { IQuestion, IVideo } from 'src/type/course/Question'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
+import { IQuestion, IVideo, video_url } from '@lms/core'
+import { QuestionAPI } from '@pages/api/question'
+import { CoursesAPI } from '@pages/api/courses'
+import { SappButton, SappModal, SAPPVideo } from '@lms/ui'
 
 type Props = {
   videos?: IVideo[]
@@ -92,6 +88,8 @@ const VideoDocument = ({
           tabId: tabId,
           quizId: currentVideo?.quiz?.id || '',
           questionId: activeQuestion?.id,
+          api: QuestionAPI,
+          courseApi: CoursesAPI
         }),
       )
         .unwrap()
@@ -168,6 +166,8 @@ const VideoDocument = ({
             tabId: tabId,
             quizId: currentVideo?.quiz?.id || '',
             questionId: id,
+             api: QuestionAPI,
+          courseApi: CoursesAPI
           }),
         )
           .unwrap()
