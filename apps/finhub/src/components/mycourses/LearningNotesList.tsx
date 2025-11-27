@@ -1,13 +1,13 @@
-import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from '@lms/assets'
-import ActionCellV2 from '@components/base/action/ActionCellV2'
-import SappBreadcrumbNotLink from '@components/base/breadcrumb/SappBreadcrumbNotLink'
-import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import ListFilterMobile from '@components/common/ListFilterMobile'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
 import SortBy from '@components/common/SortBy'
 import FilterCourseSection from '@components/mycourses/FilterCourseSection'
-import { useCourseNoteContext } from '@contexts/CourseNoteContext'
-import { cleanParamsAPI } from '@utils/index'
+import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from '@lms/assets'
+import { pushNotes, resetNotesList, useAppDispatch, useAppSelector, useCourseNoteContext, userReducer } from '@lms/contexts'
+import { backTypeMap, getTypeName, ICourseSectionNoteItem, ICourseSectionPathItem, INotesListResponse, IOpenChooseItem, ISection, SectionDropdownFormValues, SectionField } from '@lms/core'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { ActionCellV2, SappBreadcrumbNotLink, SappDrawerV3 } from '@lms/ui'
+import { cleanParamsAPI } from '@lms/utils'
 import { format } from 'date-fns'
 import { isEmpty } from 'lodash'
 import getConfig from 'next/config'
@@ -16,26 +16,10 @@ import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import NoDataV2 from 'src/components/common/NodataV2'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { pushNotes, resetNotesList } from 'src/redux/slice/Course/NotesList'
-import { userReducer } from '@lms/contexts'
 import { UserType } from 'src/redux/types/User/urser'
-import { getTypeName } from 'src/type'
-import {
-  ICourseSectionNoteItem,
-  ICourseSectionPathItem,
-  INotesListResponse,
-} from 'src/type/course/activity'
-import {
-  backTypeMap,
-  IOpenChooseItem,
-  ISection,
-  SectionDropdownFormValues,
-  SectionField,
-} from 'src/type/courses'
 import { v4 as uuidv4 } from 'uuid'
+
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 
@@ -231,7 +215,7 @@ const LearningNotesList = () => {
       setPageIndex((prevPageIndex) => prevPageIndex + DEFAULT_PAGESIZE)
     } catch (error) {
       // Handle error if needed
-    } finally {
+    } finally { 
       setTimeout(() => {
         setLoading(false)
       }, 500)

@@ -1,3 +1,4 @@
+
 import {
   CloseIcon,
   CloseModalIcon,
@@ -7,58 +8,34 @@ import {
   PulsingExclamation,
   ResizeIcon,
 } from '@lms/assets'
-import { EditorReader } from '@lms/ui'
-import { FileViewer } from '@lms/ui'
-import { ModalResizeable } from '@lms/ui'
-import { HookFormTextArea } from '@lms/ui'
-import { MovableWindow } from '@lms/ui'
-import { Calculator } from '@lms/ui'
-import CaseStudyWrapper from '@components/casestudy/layout/CaseStudyWrapper'
-import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
-import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
-import AddWordPreview from '@components/questionType/FillText'
-import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
-import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
-import DragDropQuestion, {
-  SlotValue,
-} from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
-import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
-import SelectWord from '@components/questionType/SelectQuestion'
-import QuitTestModal from '@components/test/modals/QuizTestModal'
-import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
-import { useMousePosition } from '@lms/hooks'
+import { clearFileEssayCaseStudy, getTopicsCaseStudy, loadMoreQuestion, saveFileEssayCaseStudy, showPopupCompletedCourse, useAppDispatch, useAppSelector } from '@lms/contexts'
+import {
+  ESSAY_TYPE,
+  EXHIBIT_TEXT_REPLACE,
+  IExhibit, IRequirement,
+  PROGRAM,
+  QUESTION_TYPES,
+  RESPONSE_OPTION,
+  ROUTES,
+} from '@lms/core'
+import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
+import { useMousePosition, useTailwindBreakpoint } from '@lms/hooks'
+import { AddWordPreview, Calculator, CaseStudyWrapper, EditorReader, EssayQuestionPreview, FileViewer, HookFormTextArea, MatchQuizComponent, ModalResizeable, MovableWindow, MultiChoiceQuestion, NewDragNDropQuestion, OneChoiceQuestion, SappLoadingGlobal, SelectWord, SlotValue } from '@lms/ui'
+import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
+import { runHighlight } from '@lms/utils'
+import { CaseStudyAPI } from '@pages/api/case-study'
 import { download } from '@utils/index'
-import {runHighlight} from '@lms/utils'
+import { Popover } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
-import {
-  ESSAY_TYPE,
-  EXHIBIT_TEXT_REPLACE,
-  PROGRAM,
-  QUESTION_TYPES,
-  RESPONSE_OPTION,
-  ROUTES,
-} from '@lms/core'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { useAppDispatch, useAppSelector } from '@lms/contexts'
-import {
-  clearFileEssay,
-  getTopicsCaseStudy,
-  loadMoreQuestion,
-  saveFileEssay,
-} from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
-import { showPopupCompletedCourse } from '@lms/contexts'
-import {IExhibit, IRequirement } from '@lms/core'
 import { CoursesAPI } from '../api/courses/index'
 import { TestAPI } from '../api/test'
 import ConFirmSubmit from '../short-course/test/conFirmSubmit'
 import LimitQuizModal from '../short-course/test/limitQuizModal'
-import { Popover } from 'antd'
 const CaseStudyDetail = ({ questions }: any) => {
   const editorRefs = useRef<any[]>([])
 
@@ -87,12 +64,12 @@ const CaseStudyDetail = ({ questions }: any) => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
-            // solution={solution}
+          // solution={solution}
           />
         )
       case QUESTION_TYPES.ONE_CHOICE:
@@ -104,7 +81,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -119,7 +96,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             name={`${index}_answer`}
             defaultValues={defaultValue}
             setValue={setValue}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -133,7 +110,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             data={data}
             // action={getAnswerMatching}
             ref={MatchQuizRef}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -150,7 +127,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           <AddWordPreview
             data={data}
             // action={getValueFillText}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -164,7 +141,7 @@ const CaseStudyDetail = ({ questions }: any) => {
         )
       case QUESTION_TYPES.DRAG_DROP:
         return (
-          <DragDropQuestion
+          <NewDragNDropQuestion
             data={data}
             defaultValue={defaultValue}
             onChange={(data: SlotValue[]) => {
@@ -186,7 +163,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             ) => setValue?.(`${index}_answer`, value)}
             data={data}
             // action={getValueSelectText}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -207,7 +184,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             index={undefined}
             question_data={data}
             control={control}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -227,7 +204,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             }
             handleClearFile={() =>
               dispatch(
-                clearFileEssay({
+                clearFileEssayCaseStudy({
                   question_id: data.id,
                   topic_id: router.query.id as string,
                   requirement_id: data?.requirements?.[0]?.id,
@@ -397,6 +374,7 @@ const CaseStudyDetail = ({ questions }: any) => {
     if (router.query.id) {
       dispatch(
         getTopicsCaseStudy({
+          api: CaseStudyAPI,
           id: router.query.id,
           quiz_id: router.query.quiz_id,
         }),
@@ -430,7 +408,7 @@ const CaseStudyDetail = ({ questions }: any) => {
         setClassId(res?.data?.class_id)
         setQuizAttempId(res.data.id)
       }
-    } catch (err) {}
+    } catch (err) { }
   }
   useEffect(() => {
     if (router.query.quiz_id && router.query.id && router.query.class_user_id) {
@@ -858,7 +836,7 @@ const CaseStudyDetail = ({ questions }: any) => {
     requirement_id: string,
   ) => {
     dispatch(
-      saveFileEssay({
+      saveFileEssayCaseStudy({
         question_id: question_id,
         file: file,
         topic_id: topic_id,
@@ -1001,13 +979,13 @@ const CaseStudyDetail = ({ questions }: any) => {
                       if (e) {
                         if (allowHighLight) {
                           runHighlight(
-                            () => {},
+                            () => { },
                             allowHighLight || false,
                             'hightlight_area_topic',
                           )
                         } else if (allowUnHighLight) {
                           runHighlight(
-                            () => {},
+                            () => { },
                             allowUnHighLight || false,
                             'hightlight_area_topic',
                             { color: 'white' },
@@ -1095,13 +1073,13 @@ const CaseStudyDetail = ({ questions }: any) => {
                         if (e) {
                           if (allowHighLight) {
                             runHighlight(
-                              () => {},
+                              () => { },
                               allowHighLight || false,
                               'hightlight_area_topic',
                             )
                           } else if (allowUnHighLight) {
                             runHighlight(
-                              () => {},
+                              () => { },
                               allowUnHighLight || false,
                               'hightlight_area_topic',
                               { color: 'white' },
@@ -1241,9 +1219,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                     <div className="relative">
                       <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                         <div className="truncate">
-                          <span className="text-base font-semibold">{`${exhibitText} ${
-                            (i ?? 0) + 1
-                          }: `}</span>
+                          <span className="text-base font-semibold">{`${exhibitText} ${(i ?? 0) + 1
+                            }: `}</span>
                           {exhibitsDes?.name}
                         </div>
                       </div>

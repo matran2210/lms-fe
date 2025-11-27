@@ -225,6 +225,10 @@ export enum EAttemptStatus {
   FINISHED_GRADING = "FINISHED_GRADING",
   FINISHED = "FINISHED",
 }
+export enum AppType {
+  FINHUB = "FINHUB",
+  LMS_PRO = "LMS_PRO",
+}
 
 export * from "./Test";
 export * from "./Teacher";

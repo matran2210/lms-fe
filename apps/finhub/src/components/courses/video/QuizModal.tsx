@@ -1,10 +1,10 @@
-import SappModalV2 from '@components/base/modal/SappModalV2'
 import QuizComponent, {
   QuizComponentRef,
 } from '@components/mycourses/activity/documents/QuizComponent'
-import { useForm } from 'react-hook-form'
+import { IActivityStateQuestion } from '@lms/contexts'
+import { SappModalV2 } from '@lms/ui'
 import { RefObject } from 'react'
-import { IActivityStateQuestion } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
+import { useForm } from 'react-hook-form'
 
 type Props = {
   modalOpen: boolean
@@ -56,8 +56,8 @@ export default function QuizModal({
       closeAfterSubmit={false}
       cancelButtonCaption={`${finishAll ? '' : !isConfirmQuestion ? 'Skip' : ''}`}
       classNameModal="quiz-modal"
-      footer={null}
-      isCancelUnderLine={false}
+    // footer={null}
+    // isCancelUnderLine={false}
     >
       <div className="py-5">
         <QuizComponent

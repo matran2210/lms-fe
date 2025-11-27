@@ -1,18 +1,16 @@
+import { QuizComponentRef } from '@components/mycourses/activity/documents/QuizComponent'
+import { fetchQuestionById, IActivityStateQuestion } from '@lms/contexts'
+import { IQuestion, IVideo, video_url } from '@lms/core'
+import { SAPPVideo } from '@lms/ui'
+import { CoursesAPI } from '@pages/api/courses'
+import { QuestionAPI } from '@pages/api/question'
+import { debounce } from '@utils/helpers'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch } from 'src/redux/hook'
-import {
-  IActivityStateQuestion,
-  fetchQuestionById,
-} from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
-import SAPPVideo from '@components/base/video/SAPPVideo'
-import { QuizComponentRef } from '@components/mycourses/activity/documents/QuizComponent'
-import { video_url } from '@utils/constants'
-import { debounce } from '@utils/helpers'
-import { IQuestion, IVideo } from 'src/type/course/Question'
+import QuizModal from './QuizModal'
 import VideoSelector from './VideoSelector'
 import VideoTimeline from './VideoTimeLine'
-import QuizModal from './QuizModal'
 
 type Props = {
   videos?: IVideo[]
@@ -71,6 +69,8 @@ const VideoSection = ({
     if (activeQuestion?.id) {
       dispatch(
         fetchQuestionById({
+          api: QuestionAPI,
+          courseApi: CoursesAPI,
           activityId,
           tabId,
           quizId: currentVideo?.quiz?.id || '',
@@ -130,6 +130,8 @@ const VideoSection = ({
       if (open) {
         await dispatch(
           fetchQuestionById({
+            api: QuestionAPI,
+            courseApi: CoursesAPI,
             activityId: activityId,
             tabId: tabId,
             quizId: currentVideo?.quiz?.id || '',
@@ -150,7 +152,7 @@ const VideoSection = ({
         setModalOpen(false)
         setHideVideo(false)
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const [hideVideo, setHideVideo] = useState(false)
@@ -247,7 +249,7 @@ const VideoSection = ({
           },
         })
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const handleGoTimeline = (time: number) => {

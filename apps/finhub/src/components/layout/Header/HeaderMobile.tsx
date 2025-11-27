@@ -1,8 +1,8 @@
 import { CollapseArrowIcon } from '@lms/assets'
-import { truncateString } from '@utils/index'
 import clsx from 'clsx'
 import React from 'react'
 import Tooltip from '@components/common/Tooltip'
+import { truncateString } from '@lms/utils'
 
 interface IProps {
   extraActions?: React.ReactNode

@@ -1,4 +1,6 @@
+import { IExhibitData, MY_COURSES } from "@lms/core";
 import { runHighlight } from "@lms/utils";
+import { uniqueId } from "lodash";
 import {
   ForwardedRef,
   forwardRef,
@@ -8,11 +10,8 @@ import {
   useRef,
   useState,
 } from "react";
-import { MY_COURSES } from "@lms/core";
-import { IExhibitData } from "@lms/core";
 import { EditorReader, SappDivider } from "../base";
 import { SappTitleSolution } from "../common";
-import { uniqueId } from "lodash";
 
 interface IProps {
   data: any;

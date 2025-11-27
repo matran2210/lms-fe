@@ -1,5 +1,5 @@
-import FileViewer from '@components/base/fileViewer/FileViewer'
-import ModalResizeable from '@components/base/modal/ModalResizeable'
+
+import { FileViewer, ModalResizeable } from '@lms/ui'
 import { IPdfModal } from 'src/type/courses-3-level'
 
 export default function PdfModal({

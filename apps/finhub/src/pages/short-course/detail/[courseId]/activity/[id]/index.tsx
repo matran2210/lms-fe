@@ -23,8 +23,7 @@ import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
 import { CloseIcon, CloseModalIcon } from '@lms/assets'
-import { clearNote3Level, closeCalculator3Level, courseActivityAction3Level, showPopupCompletedCourse, useAppDispatch, useAppSelector, useCourseContext } from '@lms/contexts'
-import { shortCourseActivityReducer } from '@lms/contexts'
+import { clearNote3Level, closeCalculator3Level, courseActivityAction3Level, shortCourseActivityReducer, showPopupCompletedCourse, useAppDispatch, useAppSelector, useCourseContext } from '@lms/contexts'
 import { ACTIVE_TABS, ActivityFile, ANIMATION, IActivity3Level, IActivityResource, ISubSection } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { MovableWindow } from '@lms/ui'
@@ -56,9 +55,9 @@ export default function ActivityDetail() {
   const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
   const dispatch = useAppDispatch()
   const selector = useAppSelector(shortCourseActivityReducer)
-  const endActivityRef = useRef<HTMLDivElement>(null)
+  // const endActivityRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<Array<IntersectionObserver | null>>([])
-  const observerRef = useRef<IntersectionObserver>()
+  // const observerRef = useRef<IntersectionObserver>()
   const isFinishRef = useRef<boolean>(false)
   const [videoClicked, setVideoClicked] = useState<Array<VideoStateClicked>>([])
   const [isDoneActivity, setIsDoneActivity] = useState(false)
@@ -342,9 +341,9 @@ export default function ActivityDetail() {
     : activityIds?.[nextActivityIndex + 1]
 
   // Lấy danh sách trạng thái khóa của các hoạt động trong phiên làm việc
-  const activityPreviewLocks = sessionData?.map(
-    (activity: IActivity3Level) => activity?.is_preview_locked,
-  )
+  // const activityPreviewLocks = sessionData?.map(
+  //   (activity: IActivity3Level) => activity?.is_preview_locked,
+  // )
 
   // Kiểm tra xem hoạt động tiếp theo có bị khóa hay không
   const isNextActivityLocked =
