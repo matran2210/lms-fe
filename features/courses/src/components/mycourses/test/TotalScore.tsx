@@ -1,6 +1,6 @@
-import { GlobalAverage } from "@lms/feature-test";
 import { formatNumber } from "@lms/utils";
 import { isNull, isUndefined } from "lodash";
+import GlobalAverage from "./GlobalAverage";
 interface IProps {
   score?: number;
   className?: string;
