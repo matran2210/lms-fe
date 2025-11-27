@@ -34,7 +34,9 @@
       "@lms/feature-auth": ["features/auth/index.ts"],
       "@lms/feature-class": ["features/class/index.ts"],
       "@lms/feature-courses": ["features/courses/index.ts"],
-      "@lms/feature-notifications": ["features/notifications/index.ts"]
+      "@lms/feature-notifications": ["features/notifications/index.ts"],
+      "@lms/config-tailwind": ["tools/config-tailwind/tailwind.config.js"],
+      "@lms/typescript-config": ["tools/typescript-config/base.json"]
     }
   },
   "exclude": ["node_modules", "dist", ".next"]

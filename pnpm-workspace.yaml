@@ -3,6 +3,7 @@ packages:
   - "packages/*"
   - "features/*"
   - "libs/*"
+  - "tools/*"
 
 hoistPattern:
   - "react*"
