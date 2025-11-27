@@ -1,8 +1,8 @@
-import { isNull, isUndefined } from 'lodash'
-import { RefObject } from 'react'
 import GlobalAverage from '@components/v2/test-result/GlobalAverage'
 import MultipleQuestion from '@components/v2/test-result/multipleQuestion'
 import { GRADE_STATUS, IQuizAttempt } from '@lms/core'
+import { isNull, isUndefined } from 'lodash'
+import { RefObject } from 'react'
 
 interface IMultipleChoiceScore {
   questions: {

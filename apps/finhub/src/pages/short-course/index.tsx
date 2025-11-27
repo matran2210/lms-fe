@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import { ANIMATION } from '@lms/core'
+import { ANIMATION, AppType } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from '../api/courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
@@ -116,6 +116,7 @@ const MyCourse3Level = () => {
           isShowToggle
           isShowUserGuide
           redirectLink={PageLink.SHORT_COURSE}
+          appType={AppType.FINHUB}
         />
       </div>
       <div

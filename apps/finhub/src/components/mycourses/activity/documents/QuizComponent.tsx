@@ -1,5 +1,11 @@
 import SappIcon from '@components/common/SappIcon'
 import { clearFileEssay, confirmQuestion, IActivityStateQuestion, saveFileEssay, useAppDispatch } from '@lms/contexts'
+
+import { DEFAULT_EDITOR_VALUE, defaultSheetData, IEssayAnswer, IExhibit, IExhibitData, IFile, QUESTION_TYPES, RESPONSE_OPTION } from '@lms/core'
+import { AddWordPreview, EditorReader, EssayQuestionPreview, MatchQuizComponent, MultiChoiceQuestion, NewDragNDropQuestion, OneChoiceQuestion, SelectWord, SlotValue, useClickOutside } from '@lms/ui'
+import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
+import { CoursesAPI } from '@pages/api/courses'
+import { QuestionAPI } from '@pages/api/question'
 import { isEmpty, isUndefined } from 'lodash'
 import React, {
   forwardRef,
@@ -18,12 +24,6 @@ import {
 } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
-import { DEFAULT_EDITOR_VALUE, defaultSheetData, IEssayAnswer, IExhibitData, IFile, QUESTION_TYPES, RESPONSE_OPTION } from '@lms/core'
-import { AddWordPreview, EditorReader, EssayQuestionPreview, MatchQuizComponent, MultiChoiceQuestion, OneChoiceQuestion, SelectWord, useClickOutside } from '@lms/ui'
-import DragDropQuestion, { SlotValue } from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
-import { CoursesAPI } from '@pages/api/courses'
-import { QuestionAPI } from '@pages/api/question'
 import { v4 as uuidv4 } from 'uuid'
 
 interface IRequirement {
@@ -430,14 +430,14 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         try {
           dispatch(
             confirmQuestion({
+              api: QuestionAPI,
+              courseApi: CoursesAPI,
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
               questionId: activeQuestion?.id || '',
               myAnswers: myAnswers,
               time_spent: time_spent,
-              api: QuestionAPI,
-              courseApi: CoursesAPI
             }),
           )
             .unwrap()
@@ -529,7 +529,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         case QUESTION_TYPES.MATCHING:
           return (
             <MatchQuizComponent
-              // modalOpen={modalOpen}
               data={activeQuestion}
               action={getAnswerMatching}
               defaultAnswer={activeQuestion?.defaultValue}
@@ -560,7 +559,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
         case QUESTION_TYPES.DRAG_DROP:
           return (
-            <DragDropQuestion
+            <NewDragNDropQuestion
               data={activeQuestion as any}
               defaultValue={activeQuestion?.defaultValue}
               onChange={(data: SlotValue[]) => {

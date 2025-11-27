@@ -9,11 +9,28 @@ import {
   UnHighLightIcon,
 } from '@lms/assets'
 
+import { loadMoreQuestion, useAppDispatch } from '@lms/contexts'
+import {
+  EXHIBIT_TEXT_REPLACE,
+  IAnswerResult,
+  ICaseStudyResult,
+  ICratchPad,
+  IExhibit,
+  IQuestionResult,
+  IRequirement,
+  ITopic,
+  PROGRAM,
+  QUESTION_TYPES,
+  RESPONSE_OPTION,
+  ROUTES,
+} from '@lms/core'
+import { useMousePosition, useTailwindBreakpoint } from '@lms/hooks'
 import {
   AddWordPreview,
   ButtonPrimary,
   ButtonText,
   Calculator,
+  CaseStudyWrapper,
   EditorReader,
   EssayQuestionPreview,
   FileViewer,
@@ -24,37 +41,17 @@ import {
   MultiChoiceQuestion,
   NewDragNDropQuestion,
   OneChoiceQuestion,
+  SappLoadingGlobal,
   SelectWord,
   SlotValue,
 } from '@lms/ui'
-import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
-import {useMousePosition} from '@lms/hooks'
 import { runHighlight } from '@lms/utils'
 import clsx from 'clsx'
 import { isNull, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
-import { IFile } from 'preview-activity/dist/shared/interfaces'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import {
-  EXHIBIT_TEXT_REPLACE,
-  PROGRAM,
-  QUESTION_TYPES,
-  RESPONSE_OPTION,
-  ROUTES,
-} from '@lms/core'
-import { useTailwindBreakpoint } from '@lms/hooks'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { loadMoreQuestion, useAppDispatch } from '@lms/contexts'
-import {
-  IAnswerResult,
-  ICaseStudyResult,
-  ICratchPad,
-  IQuestionResult,
-  IRequirement,
-  ITopic,IExhibit
-} from '@lms/core'
-import CaseStudyWrapper from '../../../components/casestudy/layout/CaseStudyWrapper'
 
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])

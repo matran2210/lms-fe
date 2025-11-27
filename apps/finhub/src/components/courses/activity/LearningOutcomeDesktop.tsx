@@ -1,7 +1,7 @@
-import { ArrowDownIcon, ArrowUpIcon, StarIcon } from '../icons'
-import { ILearningOutcomeProps } from 'src/type/courses-3-level'
-import { useEffect, useRef, useState } from 'react'
+import { ILearningOutcomeProps } from '@lms/core'
 import { EditorReader } from '@lms/ui'
+import { useEffect, useRef, useState } from 'react'
+import { ArrowDownIcon, ArrowUpIcon, StarIcon } from '../icons'
 
 export default function LearningOutcomeDesktop({
   title,

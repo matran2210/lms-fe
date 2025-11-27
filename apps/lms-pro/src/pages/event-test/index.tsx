@@ -5,7 +5,7 @@ import {
   useAppDispatch,
   useCourseContext
 } from '@lms/contexts'
-import { ANIMATION, LANG_SIGNIN } from '@lms/core'
+import { ANIMATION, AppType, LANG_SIGNIN } from '@lms/core'
 import { Heading } from '@lms/feature-courses'
 import { EventTestFilter, EventTestList } from '@lms/feature-test'
 import { useTailwindBreakpoint } from '@lms/hooks'
@@ -72,6 +72,7 @@ const EventTest = () => {
           isShowToggle
           className="my-4"
           redirectLink={PageLink.COURSES}
+          appType={AppType.LMS_PRO}
         />
         <div className="my-0">
           {isLoading ? (

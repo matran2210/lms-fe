@@ -35,8 +35,10 @@ import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
 
+import { CalculatorIcon, DownloadIcon, ScratchPadIcon } from '@assets/icons'
 import Layout from '@components/layout'
 import { removeHighlights, serializeHighlights } from '@funktechno/texthighlighter/lib'
+import { PulsingExclamation } from '@lms/assets'
 import { ButtonContent } from '@lms/feature-courses'
 import { QuitTestModal, TabSlide, TestTimeOutModal, UnSubmitAnswerModal } from '@lms/feature-test'
 import { BackToTop, ButtonPrimary, ButtonSecondary, ButtonText, FilterRadioGroup, HighlightableHTML, MatchQuizComponent, MultiChoiceQuestion, NewDragNDropQuestion, NewFillText, OneChoiceQuestion, Popover, SelectWord, SlotValue, TestWrapper } from '@lms/ui'
@@ -52,7 +54,6 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import { CalculatorIcon, DownloadIcon, PulsingExclamation, ScratchPadIcon } from '@assets/icons'
 
 declare global {
   interface Window {

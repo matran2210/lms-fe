@@ -1,4 +1,9 @@
 import { QuizComponentRef } from '@components/mycourses/activity/documents/QuizComponent'
+import { fetchQuestionById, IActivityStateQuestion } from '@lms/contexts'
+import { IQuestion, IVideo, video_url } from '@lms/core'
+import { SAPPVideo } from '@lms/ui'
+import { CoursesAPI } from '@pages/api/courses'
+import { QuestionAPI } from '@pages/api/question'
 import { debounce } from '@utils/helpers'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -6,11 +11,6 @@ import { useAppDispatch } from 'src/redux/hook'
 import QuizModal from './QuizModal'
 import VideoSelector from './VideoSelector'
 import VideoTimeline from './VideoTimeLine'
-import { IQuestion, IVideo, video_url } from '@lms/core'
-import { fetchQuestionById, IActivityStateQuestion } from '@lms/contexts'
-import { SAPPVideo } from '@lms/ui'
-import { QuestionAPI } from '@pages/api/question'
-import { CoursesAPI } from '@pages/api/courses'
 
 type Props = {
   videos?: IVideo[]
@@ -69,12 +69,12 @@ const VideoSection = ({
     if (activeQuestion?.id) {
       dispatch(
         fetchQuestionById({
+          api: QuestionAPI,
+          courseApi: CoursesAPI,
           activityId,
           tabId,
           quizId: currentVideo?.quiz?.id || '',
           questionId: activeQuestion?.id,
-          api: QuestionAPI,
-          courseApi: CoursesAPI
         }),
       )
         .unwrap()
@@ -130,12 +130,12 @@ const VideoSection = ({
       if (open) {
         await dispatch(
           fetchQuestionById({
+            api: QuestionAPI,
+            courseApi: CoursesAPI,
             activityId: activityId,
             tabId: tabId,
             quizId: currentVideo?.quiz?.id || '',
             questionId: id,
-            api: QuestionAPI,
-            courseApi: CoursesAPI
           }),
         )
           .unwrap()
