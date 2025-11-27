@@ -15,8 +15,8 @@ const initialState: ConfirmDialogState = {
   message: '',
   cancelButtonTitle: 'No',
   okButtonTitle: 'Yes',
-  onCancel: () => {},
-  onConfirm: () => {},
+  onCancel: () => undefined,
+  onConfirm: () => undefined,
 }
 
 const confirmDialogSlice = createSlice({

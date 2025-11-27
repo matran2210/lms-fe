@@ -59,7 +59,7 @@ const ModalUploadFile = ({
   const [progress, setProgress] = useState<{ [key: string]: number }>({});
   const [loadingUpload, setLoadingUpload] = useState<boolean>(false);
   const [disabled, setDisabled] = useState(false);
-  const handleCancel = (closeModal: boolean = true, removedUid?: string) => {
+  const handleCancel = (closeModal = true, removedUid?: string) => {
     if (sourceRef.current) {
       sourceRef.current.cancel();
       isCancel.current = true;

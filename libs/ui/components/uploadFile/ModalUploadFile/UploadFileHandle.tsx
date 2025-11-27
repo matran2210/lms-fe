@@ -44,9 +44,9 @@ const UploadFileHandle = ({
   maxCount,
 }: Props) => {
   const findIconByJpg = (extension: string) => {
-    for (let key in UPLOAD_TYPE) {
+    for (const key in UPLOAD_TYPE) {
       if (key === "ALL" || key === "ALL_RESOURCE") continue;
-      let support = UPLOAD_TYPE[key].extension;
+      const support = UPLOAD_TYPE[key].extension;
       if (
         support.includes(extension.toUpperCase()) ||
         support.includes(extension)
@@ -63,7 +63,7 @@ const UploadFileHandle = ({
     _fileList: UploadFile[],
     actions: { remove: () => void },
   ) => {
-    let extension: string = "";
+    let extension = "";
     let newIcon = icon;
 
     if (fileType === "ALL" || fileType === "ALL_RESOURCE") {

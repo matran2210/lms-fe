@@ -42,7 +42,7 @@ const SappDrawer = ({
   widthDrawer,
   btnSubmitTile = 'Next Lesson',
   btnCancelTitle = 'Cancel',
-  handleSubmit = () => {},
+  handleSubmit = () => undefined,
   drawerSubId = '',
   confirmOnClose = true,
   showSubmitButton = true,
@@ -54,7 +54,7 @@ const SappDrawer = ({
   headerClassName,
   cancelButtonClassName,
   submitButtonClassName,
-  handleClickCancelButton = () => {},
+  handleClickCancelButton = () => undefined,
 }: IProps) => {
   const dispatch = useAppDispatch()
 

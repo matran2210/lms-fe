@@ -482,7 +482,7 @@ export const HighlightableHTML: React.FC<Props> = ({
       const modalElements = document.querySelectorAll(
         ".ant-modal, .ant-modal-content, .ant-modal-body",
       );
-      for (let modal of modalElements) {
+      for (const modal of modalElements) {
         if (modal.contains(target)) return; // ← Sửa lỗi ở đây
       }
 
@@ -497,7 +497,7 @@ export const HighlightableHTML: React.FC<Props> = ({
         ".ant-popover.highlight-popover",
       );
 
-      for (let popover of popoverElements) {
+      for (const popover of popoverElements) {
         if (popover.contains(target)) return;
       }
       // Kiểm tra nếu click vào button hoặc icon trong popover
@@ -966,7 +966,7 @@ export const HighlightableHTML: React.FC<Props> = ({
       const video = target?.previousSibling as any;
       const src = video?.querySelector("source")?.getAttribute("token");
       if (src && src !== "null" && video.tagName === "VIDEO") {
-        var iframe = document.createElement("iframe");
+        const iframe = document.createElement("iframe");
         iframe.src = `${video_url}${src}/iframe?autoplay=true`;
         iframe.id = video?.id;
         iframe.className = video?.className;

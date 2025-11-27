@@ -68,7 +68,9 @@ const HookFormExcel: React.FC<WorkbookFieldProps> = ({
         if (Array.isArray(parsed) && parsed.length !== initialData.length) {
           setInitialData(parsed)
         }
-      } catch (e) {}
+      } catch (e) {
+        // Ignored
+      }
     }
   }, [defaultValue, initialData.length])
 
@@ -126,7 +128,7 @@ const HookFormExcel: React.FC<WorkbookFieldProps> = ({
         onChange(JSON.stringify(allSheets))
       } else if (value) {
         // Fallback: nếu getAllSheets không hoạt động, dùng logic cũ
-        let old = [...JSON.parse(value)]
+        const old = [...JSON.parse(value)]
         const index = old?.findIndex((e: any) => e?.id === currentSheet?.id)
 
         if (index >= 0) {

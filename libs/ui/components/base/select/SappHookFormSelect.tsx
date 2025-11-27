@@ -17,7 +17,7 @@ interface IProps {
   onChange?: (select: any) => void;
   value?: string | null | undefined;
   isDisabled?: boolean;
-  defaultValue?: string | Object | undefined | null;
+  defaultValue?: string | object | undefined | null;
   label?: string;
   labelClass?: string;
   isSearchable?: boolean;

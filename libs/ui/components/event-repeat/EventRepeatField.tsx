@@ -188,7 +188,7 @@ const EventRepeatField = ({
     return reverseDaysOfWeek(initDate, convertDay);
   };
 
-  const cleanObject = useCallback((params: Object) => {
+  const cleanObject = useCallback((params: object) => {
     return Object.fromEntries(
       Object.entries(params).filter(
         ([_, value]) => value !== undefined && value !== "" && value !== null,

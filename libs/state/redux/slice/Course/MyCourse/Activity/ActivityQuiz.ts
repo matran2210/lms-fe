@@ -105,7 +105,7 @@ const fetchQuestionById = createAsyncThunk(
     }
 
     try {
-      if (!!attemptId) {
+      if (attemptId) {
         const res = await courseApi.getQuizAttemptsAnswer({
           attempt_id: attemptId || "",
           question_id: questionId,
@@ -208,7 +208,7 @@ const confirmQuestion = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      if (!!attemptId) {
+      if (attemptId) {
         const res = await courseApi.getQuizAttemptsAnswer({
           attempt_id: attemptId || "",
           question_id: questionId,
@@ -330,7 +330,7 @@ const submitQuiz = createAsyncThunk(
           answers:
             (data.answers || [])
               .map((e) => {
-                let value = e?.[0] || e;
+                const value = e?.[0] || e;
                 return value;
               })
               ?.filter(
@@ -617,7 +617,7 @@ const quizSlice: Slice = createSlice({
               ];
 
               break;
-            case QUESTION_TYPES.ESSAY:
+            case QUESTION_TYPES.ESSAY: {
               const answers = [
                 ...(questionToUpdate.myAnswers?.filter(
                   (q: { question_id: string | undefined }) =>
@@ -627,6 +627,7 @@ const quizSlice: Slice = createSlice({
               ].map((item) => ({ ...item, time_spent: payload.time_spent }));
               questionToUpdate.myAnswers = answers;
               break;
+            }
             default:
               break;
           }
@@ -830,7 +831,7 @@ const quizSlice: Slice = createSlice({
                     payload.question.question_matchings;
                   break;
 
-                case QUESTION_TYPES.DRAG_DROP:
+                case QUESTION_TYPES.DRAG_DROP: {
                   questionToUpdate.myAnswers = [
                     ...(questionToUpdate.myAnswers?.filter(
                       (q: { question_id: string | undefined }) =>
@@ -854,6 +855,7 @@ const quizSlice: Slice = createSlice({
                   );
 
                   break;
+                }
                 case QUESTION_TYPES.ESSAY:
                   questionToUpdate.myAnswers = [
                     ...(questionToUpdate.myAnswers?.filter(

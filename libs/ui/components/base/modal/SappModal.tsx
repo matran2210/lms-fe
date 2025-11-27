@@ -184,7 +184,6 @@ const SappModal: React.FC<IProps> = ({
       setLoading(true)
       try {
         await handleSubmit()
-      } catch (err) {
       } finally {
         setLoading(false)
       }

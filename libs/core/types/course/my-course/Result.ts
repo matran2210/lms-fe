@@ -6,9 +6,9 @@ export interface IGetCourseSectionList {
   data: Data
 }
 
-export interface IGetCourseSubSectionList extends IGetCourseSectionList {}
-export interface IGetCourseUnitList extends IGetCourseSectionList {}
-export interface IGetCourseActivityList extends IGetCourseSectionList {}
+export type IGetCourseSubSectionList = IGetCourseSectionList
+export type IGetCourseUnitList = IGetCourseSectionList
+export type IGetCourseActivityList = IGetCourseSectionList
 
 export interface ISelect {
   label: string

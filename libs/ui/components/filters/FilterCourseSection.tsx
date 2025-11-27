@@ -123,7 +123,7 @@ const FilterCourseSection = ({
     handleMenuScrollToBottom: handleMenuScrollToSubsections,
     setPage: setPageSubsection,
   } = useDynamicLoading(
-    showOnlySection ? () => {} : fetchSubsections,
+    showOnlySection ? () => undefined : fetchSubsections,
     DEFAULT_PAGE_SIZE,
   );
 
@@ -131,7 +131,7 @@ const FilterCourseSection = ({
     handleMenuScrollToBottom: handleMenuScrollToUnit,
     setPage: setPageUnit,
   } = useDynamicLoading(
-    showOnlySection ? () => {} : fetchUnits,
+    showOnlySection ? () => undefined : fetchUnits,
     DEFAULT_PAGE_SIZE,
   );
 
@@ -139,7 +139,7 @@ const FilterCourseSection = ({
     handleMenuScrollToBottom: handleMenuScrollToActivity,
     setPage: setPageActivity,
   } = useDynamicLoading(
-    showOnlySection ? () => {} : fetchActivities,
+    showOnlySection ? () => undefined : fetchActivities,
     DEFAULT_PAGE_SIZE,
   );
 

@@ -16,22 +16,22 @@ const ButtonSecondary = ({
   children,
   ...props
 }: IButtonBaseProps) => {
-  let textSizeClass =
+  const textSizeClass =
     size === 'small'
       ? 'text-sm'
       : size === 'medium'
         ? 'text-sm md:text-base'
         : 'text-sm md:text-lg'
-  let padding =
+  const padding =
     size === 'small'
       ? 'py-[7px] px-[15px]'
       : size === 'medium'
         ? 'py-[7px] px-[15px] md:py-[11px] md:px-[23px]'
         : 'py-[7px] px-[15px] md:py-[15px] md:px-[31px]'
 
-  let fullWidthClass = full ? 'block w-full' : 'inline-block'
+  const fullWidthClass = full ? 'block w-full' : 'inline-block'
 
-  let componentClass = clsx(
+  const componentClass = clsx(
     `
     text-center
     bg-transparent

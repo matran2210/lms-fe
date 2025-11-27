@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "types": ["./types/assets.d.ts"],
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Node",
@@ -10,9 +9,5 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true
-  },
-  "include": [
-    "./types/**/*",
-    "./icons/**/*"
-  ]
+  }
 }

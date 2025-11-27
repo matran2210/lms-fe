@@ -1,6 +1,6 @@
 import { DefaultOptionType } from 'antd/es/select'
 
-export const OPTIONS_PROGRESS_CLASS: DefaultOptionType[] = [
+export const OPTIONS_PROGRESS_CLASS:DefaultOptionType[] = [
   {
     label: 'Lớn hơn hoặc bằng 90%',
     value: 'gte_90',
@@ -10,4 +10,3 @@ export const OPTIONS_PROGRESS_CLASS: DefaultOptionType[] = [
     value: 'lt_90',
   },
 ]
-

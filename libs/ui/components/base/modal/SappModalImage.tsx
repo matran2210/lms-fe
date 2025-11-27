@@ -22,7 +22,7 @@ function SappModalImage({ src, setSrc }: Props) {
       showFooter={false}
       isContentFull={false}
       title=""
-      onOk={() => {}}
+      onOk={() => undefined}
       classNameModal="sapp-preview--image"
       width="95%"
     >

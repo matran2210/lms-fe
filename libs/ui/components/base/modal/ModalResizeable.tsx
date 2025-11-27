@@ -53,7 +53,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   bodyClassName,
   contentClassName,
   isInBody = false,
-  onClick = () => {},
+  onClick = () => undefined,
 }) => {
   const [size, setSize] = useState({ width, height });
 

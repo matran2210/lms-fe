@@ -79,6 +79,7 @@ import {
   MENU_ITEMS_EVENT,
 } from 'src/constants/menu-items'
 import { PinnedNotifications } from '@lms/ui'
+import { fetcher } from '@services/requestV2'
 dayjs.extend(utc)
 dayjs.extend(weekday)
 export const excludedPathsHelp = [
@@ -369,6 +370,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 menuItemsEvent: MENU_ITEMS_EVENT,
                 menuBottom: MENU_BOTTOM,
                 router: router,
+                fetcher: fetcher,
               }}
             >
               <CourseProvider

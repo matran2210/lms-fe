@@ -61,8 +61,8 @@ const FilterRadioGroup = ({
               }`}
             >
               {options.map((option, index) => {
-                let stateLabel: string = "";
-                let checked: boolean = option.value.toString() === field.value;
+                const stateLabel = "";
+                const checked: boolean = option.value.toString() === field.value;
 
                 return (
                   <div

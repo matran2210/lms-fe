@@ -64,7 +64,7 @@ export interface ICourseTabDocument {
 type CourseSectionType = "ACTIVITY" | "UNIT" | "CHAPTER_TEST" | "STORY";
 
 export interface ITimeLine {
-  time: String;
+  time: string;
   text: string;
 }
 

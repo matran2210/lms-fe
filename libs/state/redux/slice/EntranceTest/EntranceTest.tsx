@@ -47,7 +47,9 @@ export const entranceTestSlice = createSlice({
         state.shouldShowRemind = true;
       }
     });
-    builder.addCase(getEntranceCount.rejected, (state, action) => {});
+    builder.addCase(getEntranceCount.rejected, (state, action) => {
+      // state.loading = false
+    });
   },
 });
 

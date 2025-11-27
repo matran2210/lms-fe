@@ -1,4 +1,7 @@
 import { createContext, useContext } from "react";
+import {
+  AxiosRequestConfig,
+} from 'axios'
 import { QueryClient } from "react-query";
 import {
   IActivityAPI,
@@ -40,6 +43,7 @@ interface FeatureContextProps {
   menuItemsEvent: MenuItem[];
   menuBottom: MenuItem[];
   router: any;
+  fetcher: (url: string, config?: AxiosRequestConfig<any>) => Promise<any>
 }
 
 const FeatureContext = createContext<FeatureContextProps>(

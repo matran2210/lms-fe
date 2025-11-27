@@ -40,7 +40,7 @@ const initContext: Context = {
       updated_at: "",
     },
   },
-  getPinnedData: () => {},
+  getPinnedData: () => undefined,
 };
 
 const PinnedNotifyContext = createContext<Context>(initContext);
@@ -99,7 +99,7 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{
         setLocalStorageItem("pinnedStatus", res?.data?.status);
       }
     } else {
-      if (Boolean(oldPinnedFlag === "false")) {
+      if (oldPinnedFlag === "false") {
         setOpenPinned(false);
       } else {
         setOpenPinned(true);
