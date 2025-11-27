@@ -1,13 +1,12 @@
-import { CERTIFICATE_DETAIL } from "@lms/core";
+import { getMe, useAppDispatch, useAppSelector, useFeature, userReducer } from "@lms/contexts";
+import {
+  CERTIFICATE_DETAIL, COOKIE_INFO,
+  ENTRANCE_TEST_RESULT,
+  ENTRANCE_TEST_TABLE_RESULT
+} from "@lms/core";
 import { setCookie } from "@lms/utils";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import {
-  COOKIE_INFO,
-  ENTRANCE_TEST_RESULT,
-  ENTRANCE_TEST_TABLE_RESULT,
-} from "@lms/core";
-import { useAppDispatch, useAppSelector, getMe, userReducer, IUserAPI, useFeature } from "@lms/contexts";
 
 interface IProps {
   children: JSX.Element;
@@ -43,10 +42,9 @@ export const RouteGuard = ({ children }: IProps) => {
       return;
     }
 
-    try {
       await dispatch(getMe(userApi)).unwrap();
       setAuthorized(true);
-    } catch (error) {}
+
   };
 
   return authorized ? children : <></>;

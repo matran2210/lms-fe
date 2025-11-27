@@ -1,23 +1,17 @@
+import { SpinIcon, StatusDotIcon, ZoomIcon } from "@lms/assets";
+import { CALENDAR_FILTER_TYPE, CourseSectionType, ICalendarDetail, LEARNING_USER_STATUS, LearningMode, TEST_TYPE_ENUM } from "@lms/core";
+import { ButtonPrimary, SappDrawerV3, SappIcon } from "@lms/ui";
+import { buildQueryString } from "@lms/utils";
+import { Divider } from "antd";
+import clsx from "clsx";
+import dayjs, { Dayjs } from "dayjs";
+import getConfig from "next/config";
+import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { IEvent } from "sapp-common-package/dist/types";
-import { ICalendarDetail } from "@lms/core";
 import CourseTree from "./CourseTree";
-import SappIcon from "src/common/SappIcon";
-import dayjs, { Dayjs } from "dayjs";
-import { CALENDAR_FILTER_TYPE, LEARNING_USER_STATUS } from "@lms/core";
-import { useRouter } from "next/router";
-import { CourseSectionType, TEST_TYPE_ENUM } from "@lms/core";
-import { LearningMode } from "@lms/core";
-import { buildQueryString } from "@lms/utils";
-import getConfig from "next/config";
-import { StatusDotIcon, ZoomIcon } from "@lms/assets";
-import { Divider, Drawer } from "antd";
-import clsx from "clsx";
-import { ButtonPrimary } from "@lms/ui";
-import { SappDrawerV3 } from "@lms/ui";
 import FloatingCloseIcon from "./FloatingCloseIcon";
-import { useTailwindBreakpoint } from "@lms/hooks";
-import { SpinIcon } from "@lms/assets";
+import { useTailwindBreakpoint } from "../../../../libs/hooks";
 const { publicRuntimeConfig } = getConfig();
 export const { apiURL } = publicRuntimeConfig;
 
@@ -144,7 +138,6 @@ const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
         await import("@pages/api/calendar")
       ).default.getDetailEvent(open?.data?.id, open?.data?.type === "HOLIDAY");
       setData(res.data);
-    } catch {
     } finally {
       setLoading(false);
     }

@@ -4,7 +4,7 @@ import { useFeature } from '@lms/contexts'
 import { useCountdownTest } from '@lms/hooks'
 import { createRef, useEffect, useState } from 'react'
 
-interface IInputCodeFormProps {
+type IInputCodeFormProps = {
   error?: string
   email: string
   token: string
@@ -55,7 +55,7 @@ const InputCodeForm = ({ error = '', email, token, api }: IInputCodeFormProps) =
     }
 
     // Update the code
-    let newCode = [...code]
+    const newCode = [...code]
     newCode[index] = value
     setCode(newCode)
   }
