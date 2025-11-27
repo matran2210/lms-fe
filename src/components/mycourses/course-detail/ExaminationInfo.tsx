@@ -8,13 +8,13 @@ import { ClassKey } from '@pages/api/queryKey'
 import { getDuration } from '@utils/index'
 import { Avatar, GetProp, List, Skeleton, UploadFile, UploadProps } from 'antd'
 import clsx from 'clsx'
-import { isEmpty } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import { useRouter } from 'next/router'
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import NoDataV2 from 'src/common/NodataV2'
+import NoData from 'src/common/NoData'
 import Tooltip from 'src/common/Tooltip'
 import ChangeAnywayModal from 'src/components/mycourses/course-detail/ChangeAnywayModal'
 import { COURSE_TYPE, TitleSidebar } from 'src/constants'
@@ -24,6 +24,8 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { ExaminationForm } from 'src/redux/types/Course/MyCourse/ExamInformation'
 import { Data } from 'src/type/course'
 import { z } from 'zod'
+import SelectExamDate from './SelectExamDate'
+import CarouselSlideAnimation from 'src/common/animations/CarouselSlideAnimation'
 
 type Props = {
   open: boolean
@@ -55,9 +57,11 @@ const InfoItem = ({ label, value }: InfoItemProps) => {
 const ExamDate = ({
   data,
   setIsEdit,
+  setDirection,
 }: {
   data: Data
   setIsEdit: (isEdit: boolean) => void
+  setDirection: React.Dispatch<React.SetStateAction<1 | -1>>
 }) => (
   <>
     <div>{data?.exam?.examination?.name ?? '-'}</div>
@@ -71,10 +75,13 @@ const ExamDate = ({
     ) : (
       data?.remaining_changes > 0 &&
       data?.course.course_type === COURSE_TYPE.NORMAL_COURSE && (
-        <Tooltip showTooltip={true} title={'Change Exam Date'}>
+        <Tooltip showTooltip={false} title={'Change Exam Date'}>
           <div
             className="cursor-pointer text-primary"
-            onClick={() => setIsEdit(true)}
+            onClick={() => {
+              setIsEdit(true)
+              setDirection(1)
+            }}
           >
             <PencilV2Icon />
           </div>
@@ -95,18 +102,21 @@ const ExaminationInfo = ({
 }: Props) => {
   const { isTabletView, isMobileView } = useTailwindBreakpoint()
   const router = useRouter()
-  const [classId, setClassId] = useState(router.query.courseId as string)
+  const [direction, setDirection] = useState<1 | -1>(1)
+  const [isOpenSelectExam, setIsOpenSelectExam] = useState<boolean>(false)
+  const [classId, setClassId] = useState(router.query?.courseId as string)
+
   const { data, isLoading, isError, isSuccess, refetch } = useQuery({
     queryKey: [ClassKey.ExamInfo, classId],
     queryFn: () => ClassAPI.getExamInfo(classId),
-    refetchOnWindowFocus: false,
     select: (data) => data.data,
     retry: false,
-    enabled: !!classId && open,
+    enabled: !isUndefined(classId) && open && !isEditProps,
   })
+  const [itemSelected, setItemSelected] = useState('')
 
   useEffect(() => {
-    if (!open) return
+    if (!open || isUndefined(classId) || isEditProps) return
 
     refetch()
   }, [open])
@@ -127,7 +137,6 @@ const ExaminationInfo = ({
   const methods = useForm<ExaminationForm>({
     resolver: zodResolver(validationSchema),
   })
-
   const handleSuccess = () => {
     queryClient.invalidateQueries({
       queryKey: [ClassKey.ExamInfo],
@@ -145,7 +154,6 @@ const ExaminationInfo = ({
       const formData = new FormData()
       formData.append('examination_subject_id', examination_subject_id)
       note && formData.append('note', note[0] as FileType)
-
       return ClassAPI.changeExamDate(classId, formData)
     },
     onSuccess: (res) => {
@@ -165,19 +173,29 @@ const ExaminationInfo = ({
       note: data.note,
     })
   }
-  const handleBack = () => {
-    setIsEdit(false)
-    methods.reset()
+  const handleBack = (isCancel: boolean = false) => {
+    setDirection(-1)
+    if (isOpenSelectExam) {
+      setIsOpenSelectExam(false)
+    } else {
+      setIsEdit(isCancel)
+      methods.reset()
+    }
   }
   const handleCancel = () => {
     setOpen(false)
+    setIsOpenSelectExam(false)
     setTimeout(() => {
-      handleBack()
+      handleBack(isEditProps)
     }, 500)
   }
   const { exams } = useSelectExams(classId)
 
   const handleChangeExamDate = async () => {
+    if (isOpenSelectExam) {
+      handleBack()
+      return
+    }
     if (isEmpty(exams?.current_exam_name)) {
       methods.handleSubmit(onSubmit)()
     } else {
@@ -211,10 +229,11 @@ const ExaminationInfo = ({
     if (isError) {
       return (
         <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center">
-          <NoDataV2 />
+          <NoData />
         </div>
       )
     }
+
     if (isSuccess) {
       return (
         <div className="flex w-full flex-col gap-4 text-sm md:text-base">
@@ -222,7 +241,13 @@ const ExaminationInfo = ({
           <InfoItem label="Subject:" value={data?.subject?.name} />
           <InfoItem
             label="Scheduled Exam Date:"
-            value={<ExamDate data={data} setIsEdit={setIsEdit} />}
+            value={
+              <ExamDate
+                data={data}
+                setIsEdit={setIsEdit}
+                setDirection={setDirection}
+              />
+            }
           />
           <InfoItem
             label="Revision Class Code:"
@@ -237,7 +262,11 @@ const ExaminationInfo = ({
     }
   }
 
-  const title = isEdit ? 'Change Exam Date' : TitleSidebar.EXAM_INFORMATION
+  const title = isOpenSelectExam
+    ? 'Choose one option'
+    : isEdit
+      ? 'Change Exam Date'
+      : TitleSidebar.EXAM_INFORMATION
   const isShowCloseBtn = !isEdit || isExamList || isTabletView || isMobileView
   const isClosable = !isEdit || isExamList
   const isShowBackBtn = (isTabletView || isMobileView) && isEdit && !isExamList
@@ -258,9 +287,9 @@ const ExaminationInfo = ({
         handleCancel={handleCancel}
         title={title}
         isShowBtnClose={isShowCloseBtn}
-        closable={isClosable}
-        isShowBtnBack={isShowBackBtn}
-        isShowFooter={isEdit}
+        closable={isClosable && !isOpenSelectExam}
+        isShowBtnBack={isShowBackBtn || isOpenSelectExam}
+        isShowFooter={isEdit && !isEmpty(exams?.data)}
         btnSubmitTile={btnSubmitTile}
         cancelButtonCaption={cancelButtonCaption}
         handleBack={handleBack}
@@ -269,22 +298,33 @@ const ExaminationInfo = ({
         placement={placement}
         height={height}
         submitButtonClassName="w-full md:w-auto"
-        rootClassName={clsx('responsive-drawer-center', {
+        rootClassName={clsx('responsive-drawer-base', {
           'drawer-bottom-0': isMobileView,
         })}
       >
-        {isEdit ? (
-          <FormProvider {...methods}>
-            <ChangExamDate
-              isOpen={isEdit}
-              classId={classId}
-              remainingChanges={data?.remaining_changes}
-              currentValue={data?.exam?.id || currentValue}
-            />
-          </FormProvider>
-        ) : (
-          renderContent()
-        )}
+        <FormProvider {...methods}>
+          <CarouselSlideAnimation slideKey={title} direction={direction}>
+            {isMobileView && isOpenSelectExam ? (
+              <SelectExamDate
+                classId={classId}
+                currentValue={data?.exam?.id || currentValue}
+                itemSelected={itemSelected}
+                setItemSelected={setItemSelected}
+              />
+            ) : isEdit ? (
+              <ChangExamDate
+                isOpen={isEdit}
+                classId={classId}
+                remainingChanges={data?.remaining_changes}
+                currentValue={data?.exam?.id || currentValue}
+                setIsOpenSelectExam={setIsOpenSelectExam}
+                setDirection={setDirection}
+              />
+            ) : (
+              renderContent()
+            )}
+          </CarouselSlideAnimation>
+        </FormProvider>
       </SappDrawerV3>
       <ChangeAnywayModal
         openConfirmModal={openConfirmModal}

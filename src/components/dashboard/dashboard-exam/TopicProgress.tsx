@@ -1,17 +1,14 @@
 import EChart from '@components/base/chart/Chart'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import { DashboardAPI } from '@pages/api/dashboard'
-import { ICourseInfo, ITopicProgress } from 'src/type/dashboard'
+import { useEffect, useState } from 'react'
+import { ITopicProgress } from 'src/type/dashboard'
 import { EChartsOption } from 'echarts'
 import useReponsive from 'src/hooks/useReponsive'
 
 const TopicProgress = ({
-  setInfoCourse,
+  topicProgressData,
 }: {
-  setInfoCourse: Dispatch<SetStateAction<ICourseInfo>>
+  topicProgressData: ITopicProgress[] | null
 }) => {
-  const router = useRouter()
   const [option, setOption] = useState<EChartsOption>()
   const { isMobile } = useReponsive()
 
@@ -137,25 +134,13 @@ const TopicProgress = ({
     }
   }
 
-  const getTopicProgress = async (id: string) => {
-    try {
-      const res = await DashboardAPI.getTopicProgress(id)
-      if (res && res.success && res?.data) {
-        handleTopicProgress(res.data)
-        setInfoCourse({
-          course_type: res.data?.[0]?.course_type,
-          course_name: res.data?.[0]?.course_name,
-        })
-      }
-    } catch (error) {
+  useEffect(() => {
+    if (topicProgressData && topicProgressData.length > 0) {
+      handleTopicProgress(topicProgressData)
+    } else {
       setOption(undefined)
     }
-  }
-
-  useEffect(() => {
-    if (router?.query?.courseId)
-      getTopicProgress(router.query.courseId as string)
-  }, [router?.query?.courseId, isMobile])
+  }, [topicProgressData, isMobile])
 
   return (
     <div className="flex flex-col rounded-2xl bg-white p-4 shadow-small md:p-6 lg:h-full">

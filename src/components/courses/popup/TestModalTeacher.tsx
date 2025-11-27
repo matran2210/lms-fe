@@ -113,7 +113,7 @@ const TestModalTeacher = ({
           grading_method: results?.[0]?.quiz?.grading_method,
           created_at: new Date(results?.[0]?.created_at),
           number_of_attempt: Number(
-            (results?.[0]?.name ?? '').split('/').at(0) ?? 0,
+            (results?.[0]?.name ?? '').split('/')[0] ?? 0,
           ),
         })
         //check điều kiện xem có được tiếp tục làm bài hay không
@@ -564,8 +564,7 @@ const TestModalTeacher = ({
                             setSelectedResult({
                               ...selectedOption,
                               number_of_attempt: Number(
-                                (selectedOption?.name ?? '').split('/').at(0) ??
-                                  0,
+                                (selectedOption?.name ?? '').split('/')[0] ?? 0,
                               ),
                             })
                             setIsFocus(false)

@@ -68,9 +68,9 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
 
   const progress = data?.survey_attributes?.progress_percent
 
-  const completeMiddterm = progress >= 0.5 && progress < 0.9
+  const completeMiddterm = progress >= 0.5 && progress < 0.6
 
-  const completeFinal = progress >= 0.9 && progress <= 1
+  const completeFinal = progress >= 0.6 && progress <= 1
 
   const router = useRouter()
 

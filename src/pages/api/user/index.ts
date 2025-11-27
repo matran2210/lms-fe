@@ -8,7 +8,7 @@ export class UserApi {
     page_size: number,
   ): Promise<UserExamInformation> {
     return fetcher(
-      `${apiURL}/users/examination?page_index=${page_index}&page_size=${page_size}`,
+      `${apiURL}/users/examination?page_index=${page_index}&page_size=${page_size}&template=4`,
     )
   }
 

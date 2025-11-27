@@ -8,6 +8,8 @@ import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
 import { IExhibitData } from 'src/type/exhibit'
 import WarningSection from './WarningSection'
+import { HighlightableHTML } from '@components/highlights/HighlightHTML'
+import { useRouter } from 'next/router'
 export type IPreviewProp = {
   data: any
   control: any
@@ -34,6 +36,7 @@ export type IPreviewProp = {
   exhibitText?: string
   isShowWarning?: boolean
   explainClassname?: string
+  storageKey?: string
 }
 
 type IAnswers = {
@@ -57,7 +60,9 @@ const OneChoiceQuestion = ({
   exhibitText = 'Exhibit',
   isShowWarning = false,
   explainClassname,
+  storageKey,
 }: IPreviewProp) => {
+  const router = useRouter()
   useEffect(() => {
     if (defaultValues) {
       setValue(name, defaultValues)
@@ -114,11 +119,19 @@ const OneChoiceQuestion = ({
           }
         }}
       >
-        <EditorReader
+        <HighlightableHTML
+          initialHTML={data?.question_content || ''}
+          storageKey={
+            storageKey ||
+            `${router.query.id}-${data?.qType}-question-${data?.id}`
+          }
+          className="sapp-questions sapp-editor-reader mb-6"
+        />
+        {/* <EditorReader
           text_editor_content={data?.question_content}
           className={'sapp-questions sapp-editor-reader mb-6'}
           highlighted={highlighted}
-        />
+        /> */}
         <WarningSection isShowWarning={isShowWarning} className="mb-4" />
       </div>
       {data?.question_topic?.exhibits &&

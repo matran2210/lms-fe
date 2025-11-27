@@ -51,9 +51,10 @@ const TableListQuizInActivity = ({
       render: (record) => (
         <StatusQuizTag
           status={
-            (record?.attempts?.[0]?.status || 'UN_SUBMITTED') as
-              | QUIZ_ATTEMPT_GRADING_STATUS
-              | QUIZ_ATTEMPT_STATUS
+            ((record?.attempts?.[0]?.status === 'UN_SUBMITTED'
+              ? 'NOT_STARTED'
+              : record?.attempts?.[0]?.status) ||
+              'NOT_STARTED') as QUIZ_ATTEMPT_STATUS
           }
         />
       ),

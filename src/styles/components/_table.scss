@@ -112,24 +112,29 @@
   }
 
   .ant-table-content {
-    @apply p-6 lg:p-8 !overflow-x-hidden;
+    @apply p-6 lg:p-8;
   }
 }
 
 .style-table-quiz {
   .ant-table-thead > tr > th {
-    @apply bg-white text-base font-medium text-gray-400;
+    @apply bg-white text-ssm font-medium text-gray-400 sm:text-base;
 
     &::before {
       @apply hidden;
     }
   }
-
+  .ant-table-cell {
+    @apply text-center;
+  }
   // Loại bỏ border-bottom của row cuối cùng
   .last-row-no-border {
     .ant-table-cell {
       border-bottom: none !important;
     }
+  }
+  .ant-table-tbody > tr > td {
+    @apply text-ssm sm:text-base;
   }
 }
 .column-center {
