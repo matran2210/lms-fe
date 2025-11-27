@@ -1,7 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 const colors = require("tailwindcss/colors");
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  content: [
+    '../../apps/**/*.{js,ts,jsx,tsx}',
+    '../../libs/**/*.{js,ts,jsx,tsx}',
+    '../../features/**/*.{js,ts,jsx,tsx}',
+    '!../../**/node_modules',                 // bỏ node_modules
+    '!../../**/.next',                        // bỏ build output NextJS
+    '!../../**/dist',                         // bỏ dist
+  ],
   theme: {
     colors: {
       transparent: "transparent",
@@ -265,6 +272,7 @@ module.exports = {
       "gray-3": "#F8F8F8",
       "gray-4": "#F3F3F3",
       "gray-5": "#F1F1F4",
+      "gray-6": "#6B7280",
       "pinned-1": "#18355D",
       active: "#FFB800",
       "graded-finish": "#4077E0",
