@@ -1,13 +1,8 @@
 export { default as BreadcumbFilter } from "./BreadcrumbFilter";
-export { default as ChangExamDate } from "./ChangExamDate";
-export { default as ChangeAnywayModal } from "./ChangeAnywayModal";
 export { default as CourseParts } from "./CourseParts";
 export { default as CourseResult } from "./CourseResult";
-export { default as ExaminationInfo } from "./ExaminationInfo";
-export * from "./ExaminationInfo";
 export { default as ModalCongrats } from "./ModalCongrats";
 export { default as Part } from "./Part";
 export { default as PartFailed } from "./PartFailed";
-export { default as SelectExamDate } from "./SelectExamDate";
 export { default as SelectExamPopup } from "./SelectExamPopup";
 export { default as TestAnnouncementModal } from "./TestAnnoucementModal";

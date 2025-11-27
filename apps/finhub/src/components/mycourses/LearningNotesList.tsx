@@ -1,13 +1,8 @@
+import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from '@lms/assets'
 import ListFilterMobile from '@components/common/ListFilterMobile'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
 import SortBy from '@components/common/SortBy'
 import FilterCourseSection from '@components/mycourses/FilterCourseSection'
-import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from '@lms/assets'
-import { pushNotes, resetNotesList, useAppDispatch, useAppSelector, useCourseNoteContext, userReducer } from '@lms/contexts'
-import { backTypeMap, getTypeName, ICourseSectionNoteItem, ICourseSectionPathItem, INotesListResponse, IOpenChooseItem, ISection, SectionDropdownFormValues, SectionField } from '@lms/core'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { ActionCellV2, SappBreadcrumbNotLink, SappDrawerV3 } from '@lms/ui'
-import { cleanParamsAPI } from '@lms/utils'
 import { format } from 'date-fns'
 import { isEmpty } from 'lodash'
 import getConfig from 'next/config'
@@ -17,9 +12,12 @@ import { FormProvider, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import NoDataV2 from 'src/components/common/NodataV2'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { UserType } from 'src/redux/types/User/urser'
+import { pushNotes3Level, resetNotesList3Level, useAppDispatch, useAppSelector, useCourseNoteContext, userReducer, UserType } from '@lms/contexts'
 import { v4 as uuidv4 } from 'uuid'
-
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { backTypeMap, getTypeName, ICourseSectionNoteItem, ICourseSectionPathItem, INotesListResponse, IOpenChooseItem, ISection, SectionDropdownFormValues, SectionField } from '@lms/core'
+import { cleanParamsAPI } from '@lms/utils'
+import { ActionCellV2, SappBreadcrumbNotLink, SappDrawerV3 } from '@lms/ui'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 
@@ -191,7 +189,7 @@ const LearningNotesList = () => {
 
   const onClose = () => {
     document.body.style.overflow = 'auto'
-    dispatch(resetNotesList())
+    dispatch(resetNotesList3Level())
     resetFormFields(['section', 'subsection', 'unit', 'activity'])
     setIsPageStateVariables(true)
     setFirstLoadActity(false)
@@ -239,7 +237,7 @@ const LearningNotesList = () => {
     }
     const isExist = getNotesData.find((item) => item.id === note.id)
     if (!isExist) {
-      dispatch(pushNotes(note))
+      dispatch(pushNotes3Level(note))
     }
   }
 

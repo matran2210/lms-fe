@@ -1,8 +1,8 @@
-import { IAuthAPI, PageLink } from '@lms/core'
+import { IAuthAPI } from '@lms/core'
 import { ButtonText, SappButton, SAPPTextFiled } from '@lms/ui'
-import { useRouter } from 'next/router'
+import { useFeature } from '@lms/contexts'
+import { useCountdownTest } from '@lms/hooks'
 import { createRef, useEffect, useState } from 'react'
-import useCountdown from './Countdown'
 
 interface IInputCodeFormProps {
   error?: string
@@ -12,10 +12,10 @@ interface IInputCodeFormProps {
 }
 
 const InputCodeForm = ({ error = '', email, token, api }: IInputCodeFormProps) => {
-  const router = useRouter()
+  const {pageLink, router} = useFeature()
   const [code, setCode] = useState(Array(6).join('.').split('.'))
   const [canResend, setCanResend] = useState(false)
-  const [timeCountDown, setTimeCountDown, time] = useCountdown(5)
+  const [timeCountDown, setTimeCountDown, time] = useCountdownTest(5)
   const [timeCountDownResent, settimeCountDownResent] = useState<number>(285)
   const [errorMessage, setErrorMessage] = useState(error)
   const inputRefs = Array(6)
@@ -98,7 +98,7 @@ const InputCodeForm = ({ error = '', email, token, api }: IInputCodeFormProps) =
       })
       if (response.success && response.data.success) {
         setTimeout(() => {
-          router.push(PageLink.AUTH_CHANGE_PASSWORD)
+          router.push(pageLink.AUTH_CHANGE_PASSWORD)
         }, 1000)
       }
       setTimeCountDown(5)

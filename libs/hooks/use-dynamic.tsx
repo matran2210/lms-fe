@@ -1,11 +1,11 @@
-import { useRouter } from 'next/router'
+import { useFeature } from '@lms/contexts'
 import { useEffect, useState } from 'react'
 
 const useDynamicLoading = (
   getData: (page: number) => void,
   pageSize: number,
 ) => {
-  const router = useRouter()
+  const { router } = useFeature()
   const [isLoading, setIsLoading] = useState(false)
   const [page, setPage] = useState<number>(pageSize)
 

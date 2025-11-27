@@ -15,9 +15,8 @@ import {
   UserGuide,
 } from '@lms/core'
 import { CoursesList, FilterCourse, Heading } from '@lms/feature-courses'
-import { PopupStep, PopupWelcome } from '@lms/feature-user'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
+import { Layout, PopupStep, PopupWelcome, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
 import Aos from 'aos'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'

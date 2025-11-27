@@ -1,7 +1,7 @@
 import { useQuery, UseQueryResult } from 'react-query'
 import { TablePaginationConfig } from 'antd'
-import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useState, useEffect } from 'react'
+import { useFeature } from '@lms/contexts'
 
 interface UsePagingProps {
   uniqueKey: string
@@ -25,7 +25,7 @@ const useSappPaging = ({
   params,
   enabled = true,
 }: UsePagingProps): UsePagingResultSapp => {
-  const router = useRouter()
+  const { router } = useFeature()
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: Number(router.query.page_index) || 1,
     pageSize: Number(router.query.page_size) || 10,

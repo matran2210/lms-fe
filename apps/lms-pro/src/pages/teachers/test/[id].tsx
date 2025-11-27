@@ -56,9 +56,7 @@ import {
   RequirementItem,
   ScratchPadValue,
 } from '@lms/core'
-import { ConFirmSubmit, HeaderTest, QuitTestModal, TabSlide, TestTimeOutModal } from '@lms/feature-test'
-import ResetToAnswerTemplateModal from '@lms/feature-test/src/components/test/ResetToAnswerTemplateModal'
-import ShowAnswerTemplate from '@lms/feature-test/src/components/test/ShowAnswerTemplate'
+import { HeaderTest, QuitTestModal, TabSlide, TestTimeOutModal } from '@lms/feature-test'
 import { ButtonPrimaryV2, ButtonTextV2, SappLoading } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
 import { TestAPI } from '@pages/api/test'
@@ -74,6 +72,8 @@ import {
   isWorkbookEmpty,
 } from 'src/utils/helpers/quiz-test/helper'
 import { PageLink } from 'src/constants/routers'
+import { EventTestAPI } from '@pages/api/event-test'
+import { ButtonContent, ConFirmSubmit, ResetToAnswerTemplateModal, ShowAnswerTemplate } from '@lms/feature-courses'
 declare global {
   interface Window {
     userAgreed: any

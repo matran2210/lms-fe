@@ -5,19 +5,17 @@
   "main": "./index.ts",
   "type": "module",
   "types": "./index.ts",
-  "scripts": {
-    "lint": "eslint ."
+    "scripts": {
+    "lint": "eslint . --ext .ts,.tsx",
+    "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
     "react": "^18.2.0",
     "next": "^12.1.6"
   },
   "dependencies": {
-    "@lms/utils": "workspace:*",
     "@lms/core": "workspace:*",
-    "@lms/ui": "workspace:*",
     "@lms/hooks": "workspace:*",
-    "@lms/feature-courses": "workspace:*",
     "@lms/contexts": "workspace:*",
     "clsx": "^2.1.1",
     "lottie-react": "^2.4.1"

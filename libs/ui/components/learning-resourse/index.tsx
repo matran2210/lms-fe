@@ -11,24 +11,16 @@ import {
   SectionField,
 } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
-import {
-  CarouselSlideAnimation,
-  NoData,
-  SappDrawerV3,
-  SortBy,
-  Tooltip,
-} from "@lms/ui";
 import { cleanParamsAPI, formatBytes } from "@lms/utils";
 import { isEmpty } from "lodash";
-import getConfig from "next/config";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { CoursesAPI } from "src/pages/api/courses";
-import { UploadAPI } from "src/pages/api/upload";
-import { ListFilterMobile, ListItemFilterMobile } from "../course";
-import FilterCourseSection from "./FilterCourseSection";
-const { publicRuntimeConfig } = getConfig();
-export const { apiURL } = publicRuntimeConfig;
+import { SappDrawerV3 } from "../base";
+import { CarouselSlideAnimation } from "../animations";
+import { NoData, SortBy, Tooltip } from "../common";
+import FilterCourseSection from "../filters/FilterCourseSection";
+import ListItemFilterMobile from "../filters/ListItemFilterMobile";
+import ListFilterMobile from "../filters/ListFilterMobile";
 interface IProps {
   open: boolean;
   setOpenResource: Dispatch<SetStateAction<boolean>>;
@@ -38,7 +30,7 @@ const DEFAULT_PAGE_INDEX = 1;
 const DEFAULT_PAGESIZE = 20;
 
 const LearningResource = ({ open, setOpenResource }: IProps) => {
-  const { pageLink, router } = useFeature();
+  const { pageLink, router, courseApi, uploadApi } = useFeature();
   const [direction, setDirection] = useState<1 | -1>(1);
   const { isMobileView, isTabletView, isAlwaysShowSidebar } =
     useTailwindBreakpoint();
@@ -120,7 +112,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       setLoading(true);
 
       try {
-        const resources = await CoursesAPI.getCourseResource(
+        const resources = await courseApi.getCourseResource(
           courseId || queryId,
           params,
         );
@@ -174,7 +166,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       if (requestOngoingRef.current) return;
       requestOngoingRef.current = true;
       params.page_index = nextPageIndex;
-      const res = await CoursesAPI.getCourseResource(
+      const res = await courseApi.getCourseResource(
         courseId || queryId,
         params,
       );
@@ -216,7 +208,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   }, [fetchData, pageIndex]);
 
   const download = async (name: string, file_key: string) => {
-    await UploadAPI.downloadFile({
+    await uploadApi.downloadFile({
       files: [
         {
           name: name,

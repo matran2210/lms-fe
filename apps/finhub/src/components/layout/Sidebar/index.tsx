@@ -5,10 +5,10 @@ import { Dispatch, SetStateAction } from 'react'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
 
-import LearningResource from '@components/mycourses/LearningResource'
 import { Divider } from 'antd'
 import { useAppSelector } from '@lms/contexts'
 import { MENU_BOTTOM, MENU_ITEMS } from 'src/constants/menu-items'
+import { LearningResource } from '@lms/ui'
 type SidebarProps = {
   isOpened: boolean
   className: string

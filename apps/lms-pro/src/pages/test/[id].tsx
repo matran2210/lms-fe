@@ -23,8 +23,7 @@ import {
   RESPONSE_OPTION,
   TEST_TYPE,
 } from '@lms/core'
-import { ConFirmSubmit, UnSubmitAnswerModal } from '@lms/feature-test'
-import QuitTestModal from '@lms/feature-test/src/components/test/modal/quit-test-modal'
+import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
 import TestTimeOutModal from '@lms/feature-test/src/components/test/modal/test-timeout'
 import {
   BackToTop,
@@ -66,11 +65,9 @@ import {
   ScratchPad,
   ScratchPadValue,
 } from '@lms/core'
-import { ButtonContent } from '@lms/feature-courses'
+import { ButtonContent, ConFirmSubmit, ResetToAnswerTemplateModal, ShowAnswerTemplate } from '@lms/feature-courses'
 import { TabSlide } from '@lms/feature-test'
 import RequirementsTab from '@lms/feature-test/src/components/test/RequirementsTab'
-import ResetToAnswerTemplateModal from '@lms/feature-test/src/components/test/ResetToAnswerTemplateModal'
-import ShowAnswerTemplate from '@lms/feature-test/src/components/test/ShowAnswerTemplate'
 import {
   ButtonPrimary,
   ButtonSecondary,

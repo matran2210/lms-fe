@@ -1,6 +1,5 @@
 import { CollapseArrowIcon, DownloadIcon } from '@lms/assets'
 import { SUFFIX_TYPE } from '@lms/core'
-import { UploadAPI } from '@pages/api/upload'
 import { trackGAEvent } from '@lms/utils'
 import { Collapse } from 'antd'
 import clsx from 'clsx'
@@ -8,17 +7,9 @@ import React from 'react'
 import {Tooltip} from '@lms/ui'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { IActivity } from '@lms/core'
+import { useFeature } from '@lms/contexts'
 
-export const download = async (name: string, file_key: string) => {
-  await UploadAPI.downloadFile({
-    files: [
-      {
-        name: name,
-        file_key: file_key,
-      },
-    ],
-  });
-};
+
 interface IProps {
   activity: IActivity;
   handleOpenScratchPad: (
@@ -29,6 +20,18 @@ interface IProps {
   ) => void;
 }
 const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
+  const {uploadApi} = useFeature();
+const download = async (name: string, file_key: string) => {
+  await uploadApi.downloadFile({
+    files: [
+      {
+        name: name,
+        file_key: file_key,
+      },
+    ],
+  });
+};
+
   const { isAlwaysShowSidebar } = useTailwindBreakpoint();
   const getItemsActivityResource = [
     {

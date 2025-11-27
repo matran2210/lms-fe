@@ -1,7 +1,6 @@
 import { ConfirmIcon } from "@lms/assets";
 import { useCourseContext, useFeature } from "@lms/contexts";
 import { EAttemptStatus, GRADE_STATUS, GRADING_METHOD, IClassAPI, IMyCourseDetail, TEST_TYPE } from "@lms/core";
-import { TestModal, TestModalTeacher } from "@lms/feature-test";
 import { ButtonSecondary, ButtonText, SappModalV3 } from "@lms/ui";
 import { formatTimeMinToHhMm, getUserPrefix, roundNumber, trackGAEvent } from "@lms/utils";
 import clsx from "clsx";
@@ -9,6 +8,7 @@ import router from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { CardCourse } from "../../course";
 import ResultCourse from "./CourseResult";
+import { TestModal, TestModalTeacher } from "../test";
 
 const PartFailed = ({
   coursePart,

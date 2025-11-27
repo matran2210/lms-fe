@@ -4,6 +4,7 @@
   "private": true,
   "license": "MIT",
   "main": "base.json",
+  "type": "module",
   "files": [
     "base.json",
     "nextjs.json",

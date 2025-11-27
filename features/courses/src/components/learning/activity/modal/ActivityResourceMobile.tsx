@@ -2,9 +2,9 @@ import React from 'react'
 import { SappDrawerV3, NoData } from '@lms/ui'
 import { IActivity } from '@lms/core'
 import clsx from 'clsx'
-import { download } from '../ActivityResource'
 import { trackGAEvent } from '@lms/utils'
 import { DocumentTextIcon, DownloadIcon } from '@lms/assets'
+import { useFeature } from '@lms/contexts'
 
 interface IProps {
   open: boolean
@@ -23,6 +23,7 @@ const ActivityResourceMobile = ({
   activity,
   handleOpenScratchPad,
 }: IProps) => {
+  const { uploadApi } = useFeature()
   return (
     <SappDrawerV3
       open={open}
@@ -53,7 +54,14 @@ const ActivityResourceMobile = ({
                     <div
                       className="flex flex-1 cursor-pointer items-center gap-2 overflow-hidden text-xs text-gray-800 hover:text-primary hover:underline"
                       onClick={() => {
-                        download(e?.resource?.name, e?.resource?.file_key)
+                        uploadApi.downloadFile({
+                          files: [
+                            {
+                              name: e?.resource?.name,
+                              file_key: e?.resource?.file_key,
+                            },
+                          ],
+                        })
                         trackGAEvent('Click Open File Resource')
                       }}
                     >
@@ -65,7 +73,14 @@ const ActivityResourceMobile = ({
                     <div
                       className="shrink-0 cursor-pointer text-gray-800"
                       onClick={() => {
-                        download(e?.resource?.name, e?.resource?.file_key)
+                        uploadApi.downloadFile({
+                          files: [
+                            {
+                              name: e?.resource?.name,
+                              file_key: e?.resource?.file_key,
+                            },
+                          ],
+                        })
                         trackGAEvent('Click Button Download Resource Activity')
                       }}
                     >

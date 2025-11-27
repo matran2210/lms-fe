@@ -13,6 +13,9 @@ import {
 import { useTailwindBreakpoint } from "@lms/hooks";
 import {
   ActionCellV2,
+  FilterCourseSection,
+  ListFilterMobile,
+  ListItemFilterMobile,
   NoData,
   SappBreadcrumbNotLink,
   SappDrawerV3,
@@ -39,8 +42,6 @@ import { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
-import { ListFilterMobile, ListItemFilterMobile } from "../course";
-import FilterCourseSection from "./FilterCourseSection";
 const { publicRuntimeConfig } = getConfig();
 export const { apiURL } = publicRuntimeConfig;
 

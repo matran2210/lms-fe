@@ -6,7 +6,7 @@
   "types": "./index.ts",
   "type": "module",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint . --ext .ts,.tsx",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
@@ -14,11 +14,7 @@
     "@lms/utils": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/hooks": "workspace:*",
-    "@lms/feature-courses": "workspace:*",
     "@lms/contexts": "workspace:*",
-    "@lms/feature-auth": "workspace:*",
-    "@lms/feature-test": "workspace:*",
-    "@lms/feature-user": "workspace:*",
     "clsx": "^2.1.1",
     "antd": "^5.25.0",
     "framer-motion": "^12.23.12",
@@ -48,7 +44,9 @@
     "@xyflow/react": "^12.8.6",
     "@dnd-kit/utilities": "^3.2.2",
     "sapp-notification": "^1.0.15",
-    "@lottiefiles/react-lottie-player": "^3.5.3"
+    "@lottiefiles/react-lottie-player": "^3.5.3",
+    "zod": "^3.22.4",
+    "@ant-design/icons": "^5.6.1"
   },
   "peerDependencies": {
     "react-hook-form": "7.48.2",
@@ -57,7 +55,6 @@
     "next": "^12.1.6"
   },
   "devDependencies": {
-    "@types/react": "^18.0.14",
-    "@types/react-dom": "^18.2.17"
+    "@types/react": "^18.0.14"
   }
 }

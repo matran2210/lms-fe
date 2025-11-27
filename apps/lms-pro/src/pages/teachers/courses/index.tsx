@@ -1,8 +1,8 @@
 
 import { UserType } from '@lms/contexts'
 import { ANIMATION, ITabs, MY_COURSES } from '@lms/core'
-import { CoursesList, Filter, SearchForm } from '@lms/feature-courses'
-import { LayoutTeacher, SappLoadingGlobal } from '@lms/ui'
+import { CoursesList, Filter } from '@lms/feature-courses'
+import { LayoutTeacher, SappLoadingGlobal, SearchForm } from '@lms/ui'
 import { buildQueryString } from '@lms/utils'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
@@ -147,6 +147,7 @@ const MyCourseTeacher = () => {
                 handleSubmit={handleSubmit}
                 isTeacher
                 redirectLink={PageLink.COURSES}
+                control={methods.control}
               />
             </div>
           </div>

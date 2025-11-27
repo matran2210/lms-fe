@@ -1,5 +1,5 @@
-import useCountdown from '@components/auth/Countdown'
 import { formatTime } from '@components/common/timer'
+import { useCountdownTest } from '@lms/hooks'
 import {
   ForwardedRef,
   forwardRef,
@@ -11,7 +11,7 @@ import { CountDownProps } from 'src/type/courses-3-level'
 
 const CountDown = forwardRef(
   ({ remainTime, onTimeOut }: CountDownProps, ref: ForwardedRef<unknown>) => {
-    const time = useCountdown(remainTime)
+    const time = useCountdownTest(remainTime)
     useImperativeHandle(ref, () => ({
       handleGetTime() {
         return time?.[2]

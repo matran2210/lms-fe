@@ -1,10 +1,7 @@
 import { AlertTriagle } from '@lms/assets'
-import { SappModalV3 } from '@lms/ui'
-import {
-  ExaminationsResponse,
-  ExaminationForm,
-} from 'src/redux/types/Course/MyCourse/ExamInformation'
+import { ExaminationForm, ExaminationsResponse } from '@lms/contexts'
 import { UseFormReturn } from 'react-hook-form'
+import { SappModalV3 } from '../base'
 
 interface IProps {
   openConfirmModal: boolean

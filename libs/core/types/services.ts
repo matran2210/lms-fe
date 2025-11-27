@@ -1,20 +1,13 @@
-import {
-  ICreateDiscussionRequest,
-  ICreateDiscussionResReact,
-  ICreateDiscussionUploadRequest,
-} from "../../state/redux/types/Course/MyCourse/Activity/activity";
-import {
-  ChangePasswordReq,
-  SendEmailReq,
-  VerifyOtpReq,
-} from "../../state/redux/types/Login/login";
+
+import { ChangePasswordReq, ExaminationsResponse, ICreateDiscussionRequest, ICreateDiscussionResReact, ICreateDiscussionUploadRequest, SendEmailReq, VerifyOtpReq } from "../../state";
 import { IResponse } from "./api-response";
-import { IQuestion } from "./course";
+import { ExamInformation, IQuestion } from "./course";
 import {
   IAnswerQuizLastestAttempt,
   IQuizResultList,
   IScoreDetails,
 } from "./quiz";
+import { AxiosPromise } from "axios";
 
 export interface IAuthManager {
   getToken(): string;
@@ -102,6 +95,19 @@ export interface ICoursesAPI {
     id: string | undefined,
     params?: Object,
   ) => Promise<any>;
+  userGuideActive: () => Promise<any>;
+  getCourseResource: (
+    id: string | string[] | undefined,
+    params?: Object,
+  ) => Promise<any>;
+  getCourseResults: (id: string | string[], params: Object) => Promise<any>;
+  upgradeNowTrial: (id: string | string[] | undefined) => Promise<any>;
+  activeCourse: (params: Object) => Promise<any>;
+  extendCourse: (params: Object) => Promise<any>;
+  skipFoundation: (
+    class_id: string | undefined,
+  ) => Promise<{ success: boolean }>;
+  submitAllQuestion: (id: string, data?: any) => Promise<any>;
 }
 export interface IActivityAPI {
   createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<any>;
@@ -172,4 +178,10 @@ export interface IClassAPI {
     quiz_id: string,
     params?: { page_index: number; page_size: number },
   ) => Promise<IResponse<IQuizResultList>>;
+  getExamInfo: (id: string) => Promise<ExamInformation>;
+  changeExamDate: (id: string, data: FormData) => AxiosPromise<IResponse<any>>;
+  getExams: (
+    id: string,
+    params: { page_index: number; page_size: number },
+  ) => Promise<ExaminationsResponse>;
 }

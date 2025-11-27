@@ -9,5 +9,7 @@ export * from "./useTailwindBreakpoint";
 export * from "./useTooltipModal"
 export { default as useQueryAction } from "./useQueryAction";
 export * from "./course/useCourseSectionsData"
+export { default as useCountdownTest } from "./course/useCountdownTest";
 export { default as useReponsive } from "./useReponsive";
+export { default as useSelectExams } from "./useSelectExams";
 export * from "./useNotification"

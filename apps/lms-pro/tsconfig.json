@@ -52,7 +52,7 @@
     "../../features/test/src/components/test/modal/TestModalTeacher.tsx",
     "../../features/test/src/components/test/GlobalAverage.tsx",
     "../../features/test/src/components/test/countdown.tsx",
-    "../../features/test/src/components/test/StatusTestQuizBadge.tsx"
+    "../../features/courses/src/components/mycourses/test/StatusTestQuizBadge.tsx"
   ],
   "exclude": ["node_modules"]
 }

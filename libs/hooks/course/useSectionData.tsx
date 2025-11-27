@@ -1,10 +1,10 @@
 import { ICoursesAPI, ISection } from '@lms/core'
-import { useRouter } from 'next/router'
+import { useFeature } from '@lms/contexts'
 import { useState } from 'react'
 
 export const useSectionData = (sectionId: string | null, type: string, api: ICoursesAPI) => {
   const [sections, setSections] = useState<ISection[]>([])
-  const router = useRouter()
+  const { router } = useFeature()
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const fetchSections = async (page_size: number) => {

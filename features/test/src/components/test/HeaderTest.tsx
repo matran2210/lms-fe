@@ -2,7 +2,7 @@ import { disableUnsavedChange, useAppDispatch } from "@lms/contexts";
 import { ButtonCancelSubmit } from "@lms/ui";
 import dayjs from "dayjs";
 import { Dispatch, ForwardedRef, SetStateAction } from "react";
-import Countdown from "./countdown";
+import Countdown from "@lms/ui/components/count-down/Countdown";
 
 interface IProps {
   quizDetail: {

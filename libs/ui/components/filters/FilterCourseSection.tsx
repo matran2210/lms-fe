@@ -1,12 +1,13 @@
+import { useFeature } from "@lms/contexts";
 import { DEFAULT_PAGE_SIZE, SectionField } from "@lms/core";
 import { useDynamicLoading } from "@lms/hooks";
+import { useInitialSections } from "@lms/hooks/course/useInitialSections";
+import { useSectionData } from "@lms/hooks/course/useSectionData";
 import { SAPPSelectV2 } from "@lms/ui";
 import clsx from "clsx";
 import { isEmpty } from "lodash";
 import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { useInitialSections } from "src/hooks/useInitialSections";
-import { useSectionData } from "src/hooks/useSectionData";
 
 const DEFAULT_SELECT = [{ label: "All Section", value: "" }];
 
@@ -28,21 +29,22 @@ const FilterCourseSection = ({
   setDirection,
 }: FilterCourseSectionProps) => {
   const { control, watch, setValue } = useFormContext();
-
+  const {courseApi} = useFeature();
   const selectedSection = watch("section");
   const selectedSubsection = watch("subsection");
   const selectedUnit = watch("unit");
   const selectedActivity = watch("activity");
 
-  const { sections, fetchInitialSections } = useInitialSections();
+  const { sections, fetchInitialSections } = useInitialSections(courseApi);
   const { sections: subSections, fetchSections: fetchSubsections } =
-    useSectionData(showOnlySection ? null : selectedSection, "CHAPTER");
+    useSectionData(showOnlySection ? null : selectedSection, "CHAPTER", courseApi);
   const { sections: units, fetchSections: fetchUnits } = useSectionData(
     showOnlySection ? null : selectedSubsection,
     "UNIT",
+    courseApi,
   );
   const { sections: activities, fetchSections: fetchActivities } =
-    useSectionData(showOnlySection ? null : selectedUnit, "ACTIVITY");
+    useSectionData(showOnlySection ? null : selectedUnit, "ACTIVITY", courseApi);
 
   const resetFormFields = useCallback(
     (fields: SectionField[]) => {

@@ -5,14 +5,14 @@
   "main": "./index.ts",
   "types": "./index.ts",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint . --ext .ts,.tsx",
+    "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
     "react": "^18.2.0",
     "next": "^12.1.6"
   },
   "dependencies": {
-    "@lms/assets": "workspace:*",
     "@lms/contexts": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/utils": "workspace:*",

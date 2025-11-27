@@ -6,16 +6,16 @@ import toast from 'react-hot-toast'
 
 import { SappModalV3 } from '@lms/ui'
 import { SAPPSelectV2 } from '@lms/ui'
-import { ClassAPI } from '@pages/api/class'
-import useSelectExams from 'src/hooks/useSelectExams'
-import { RemindChoosingExam } from '@lms/core'
+import { ClassKey, RemindChoosingExam } from '@lms/core'
+import { useSelectExams } from '@lms/hooks'
+import { useFeature } from '@lms/contexts'
 
 interface ISelectExamPopup {
   courseData: any
 }
 
 const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
-  const router = useRouter()
+  const {router, classApi} = useFeature()
   const { control, watch } = useForm({ defaultValues: { exam_date: null } })
   const selectedExam = watch('exam_date')
   const [examModal, setExamModal] = useState(false)
@@ -23,13 +23,19 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
   const remindChoosingExam: RemindChoosingExam =
     courseData?.pages?.[0]?.courseDetail?.remind_choosing_exam
 
-  const { exams, hasNextPage, fetchNextPage } = useSelectExams(
-    router.query.courseId as string,
+  const { exams, hasNextPage, fetchNextPage } = useSelectExams({
+    classKey: ClassKey.ExamList,
+    api: {
+      getExams: classApi.getExams,
+    },
+    courseId: router.query.courseId as string
+  }
+    
   )
 
   const { mutate: updateExamDate, isLoading } = useMutation({
     mutationFn: (formData: FormData) =>
-      ClassAPI.changeExamDate(router.query.courseId as string, formData),
+      classApi.changeExamDate(router.query.courseId as string, formData),
     onSuccess: (res) => {
       if (res.data.success) {
         setExamModal(false)
