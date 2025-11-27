@@ -1,3 +1,4 @@
+import { video_url } from "@lms/core";
 import {
   DeserializeHighlight,
   replaceTextAlignCenterToWebKitCenter,
@@ -6,7 +7,6 @@ import {
 import parseHTML, { Element } from "html-react-parser";
 import { useEffect, useRef, useState } from "react";
 import SappModalImage from "../modal/SappModalImage";
-import { video_url } from "@lms/core";
 // import "src/utils/global.d.ts"; lỗi monorepo đừng xóa
 import clsx from "clsx";
 import React from "react";

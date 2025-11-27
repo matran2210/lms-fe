@@ -1,10 +1,11 @@
 import { CloseIcon } from '@lms/assets'
 import { ANIMATION, LAYOUT, QUESTION_TYPES } from '@lms/core'
-import { ButtonPrimary, ButtonSecondary, FullScreenLayout, SappTable } from '@lms/ui'
+import { ButtonPrimary, ButtonSecondary, FullScreenLayout } from '@lms/ui'
 import { roundNumber } from '@utils/helpers'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { CoursesAPI } from '../../api/courses/index'
+import { SappTable } from '@lms/ui/components/base'
 
 const headers = [
   {

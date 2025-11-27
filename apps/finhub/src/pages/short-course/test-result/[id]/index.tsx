@@ -1,16 +1,15 @@
-import { MenuDotsIcon } from '@lms/assets'
-import { CloseModalIcon } from '@lms/assets'
+import Tooltip from '@components/common/Tooltip'
+import Layout from '@components/layout'
+import TestResultPage from '@components/v2/test-result/testResultPage'
+import { CloseModalIcon, MenuDotsIcon } from '@lms/assets'
+import { GRADE_STATUS } from '@lms/core'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { ButtonSecondary, ModalNotMobileFriendly } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import Tooltip from '@components/common/Tooltip'
-import { GRADE_STATUS } from '@lms/core'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import TestResultPage from '@components/v2/test-result/testResultPage'
 import { ResultAPI } from 'src/pages/api/short-course/test-result'
-import Layout from '@components/layout'
-import { ButtonSecondary, ModalNotMobileFriendly } from '@lms/ui'
 
 const TestResultDetail = () => {
   const router = useRouter()
