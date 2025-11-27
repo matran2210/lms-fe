@@ -6,7 +6,8 @@
   "types": "./index.ts",
   "type": "module",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint . --ext .ts,.tsx",
+    "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
     "react": "^18.2.0",
@@ -16,6 +17,8 @@
     "antd": "^5.25.0",
     "rc-table": "^7.55.1",
     "react-hook-form": "7.48.2",
-    "dayjs": "^1.11.12"
+    "dayjs": "^1.11.12",
+    "sapp-common-package": "^1.5.2",
+    "axios": "^1.6.2"
   }
 }

@@ -1,12 +1,11 @@
-import { E_REQUEST_STATUS, REPEAT_TYPE } from '@lms/core'
 import { Dayjs } from 'dayjs'
-import { REQUEST_STATUS } from '@lms/core'
+import { E_REQUEST_STATUS, REPEAT_TYPE } from '../../enums';
 
 export type RecurringScheduleType = keyof Omit<
   typeof REPEAT_TYPE,
   'DOES_NOT_REPEAT' | 'FORMAT'
 >
-export interface IRequest {
+export interface IMyRequest {
   request_name: string
   request_type: { value: string; label: string }
   request_type_value: string

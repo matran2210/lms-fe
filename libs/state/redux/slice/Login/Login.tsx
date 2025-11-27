@@ -5,8 +5,7 @@ import {
   ChangePasswordRes,
   LoginState,
 } from '../../types/Login/login'
-import { IAuthAPI } from '../../types'
-import { IAuthManager } from '@lms/core'
+import { IAuthAPI, IAuthManager } from '@lms/core'
 
 const initialState: LoginState = {
   accessToken: '',

@@ -1,11 +1,9 @@
-import { IEvent } from 'sapp-common-package/dist/types'
-import {
-  EVENT_REPEAT_TYPES,
-  FREQUENCY_UNITS,
-  FREQUENCY_UNITS_OBJECT,
-} from '@lms/core'
+import { EVENT_REPEAT_TYPES, FREQUENCY_UNITS_OBJECT } from "../../constants"
+import { FREQUENCY_UNITS } from "../../enums"
+import { IEvent } from "sapp-common-package/dist/types";
 
-export type RecurringScheduleType = keyof typeof EVENT_REPEAT_TYPES
+
+export type RecurringScheduleCalendarType = keyof typeof EVENT_REPEAT_TYPES
 
 export interface INewSchedule {
   event_name: string
@@ -30,7 +28,7 @@ export interface IPopupDetails {
   events: IEvent[]
 }
 
-export interface IRecurringSchedule {
+export interface IRecurringScheduleCalendar {
   interval: number
   frequency: keyof typeof FREQUENCY_UNITS_OBJECT
   recurrence_end_date: Date
@@ -42,7 +40,7 @@ export interface IRecurringSchedule {
 
 export interface IEventRepeatFieldValues {
   repeat: boolean
-  recurring_schedule: IRecurringSchedule
+  recurring_schedule: IRecurringScheduleCalendar
 }
 
 export interface IRepeatFrequency {

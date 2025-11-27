@@ -1,16 +1,15 @@
-import { ButtonPrimary } from '@lms/ui'
-import { ButtonText, SappModal } from '@lms/ui'
 import { RefObject } from 'react'
 import { HandShake } from '@lms/assets'
 import { UserGuide } from '@lms/core'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { clearGuideState, increment, useAppDispatch } from '@lms/contexts'
+import { clearGuideState, increment, useAppDispatch, useFeature } from '@lms/contexts'
+import { ButtonPrimary, ButtonText, SappModal } from '../base'
 
 type Props = {
   confirmDialogOverLayRef: RefObject<HTMLDivElement>
 }
 
 const PopupWelcome = ({ confirmDialogOverLayRef }: Props) => {
+  const {courseApi} = useFeature()
   const dispatch = useAppDispatch()
   const handleNextStep = async () => {
     dispatch(increment())
@@ -19,7 +18,7 @@ const PopupWelcome = ({ confirmDialogOverLayRef }: Props) => {
 
   async function activeUserGuide() {
     try {
-      await CoursesAPI.userGuideActive()
+      await courseApi.userGuideActive()
     } catch (error) {}
   }
   const closeUserGuide = () => {

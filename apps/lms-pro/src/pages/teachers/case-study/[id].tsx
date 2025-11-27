@@ -22,7 +22,8 @@ import {
   PROGRAM,
   QUESTION_TYPES,
 } from '@lms/core'
-import { ConFirmSubmit, QuitTestModal } from '@lms/feature-test'
+import { ConFirmSubmit } from '@lms/feature-courses'
+import { QuitTestModal } from '@lms/feature-test'
 import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
 import { useMousePosition } from '@lms/hooks'
 import { Calculator, EditorReader, FileViewer, FullScreenLayout, HookFormTextArea, ModalResizeable, MovableWindow, SappButton, SappLoadingGlobal } from '@lms/ui'

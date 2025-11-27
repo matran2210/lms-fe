@@ -1,13 +1,12 @@
 import { ExpandIcon, TourGuideNotiAnimation, TourGuideSidebarAnimation } from "@lms/assets";
 import { useAppSelector, useFeature } from "@lms/contexts";
 import { UserGuide } from "@lms/core";
-import { ExaminationInfo, LearningResource } from "@lms/feature-courses";
-import { PopupStep } from "@lms/feature-user";
 import { trackGAEvent } from "@lms/utils";
 import { Divider } from "antd";
 import clsx from "clsx";
 import { Dispatch, SetStateAction } from "react";
 import MenuItemsList from "../MenuItemsList";
+import { ExaminationInfo, LearningResource, PopupStep } from "../../components";
 type SidebarProps = {
   isOpened: boolean;
   className: string;

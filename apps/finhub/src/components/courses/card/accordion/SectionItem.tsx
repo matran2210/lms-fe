@@ -1,10 +1,10 @@
 import TestModal from '@components/courses/popup/TestModal'
-import { TEST_TYPE_ENUM } from '@utils/constants'
-import { clearStylesHtml } from '@utils/index'
 import { useState } from 'react'
 import { ICourseSectionProps } from 'src/type/courses-3-level'
 import SectionActionButtons from './SectionActionButtons'
 import { renderBadge } from './utils'
+import { TEST_TYPE_ENUM } from '@lms/core'
+import { clearStylesHtml } from '@lms/utils'
 
 export default function SectionItem({
   section,

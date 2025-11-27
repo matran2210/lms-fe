@@ -1,8 +1,7 @@
 import type { QUESTION_TYPES } from "@lms/core";
 import { IAnswer } from "@lms/core";
 import { ButtonText } from "@lms/ui";
-import { htmlToRaw } from "@lms/utils";
-import { convertSecondsToMinutesSeconds } from "@utils/helpers";
+import { convertSecondsToMinutesSeconds, htmlToRaw } from "@lms/utils";
 import type { CollapseProps } from "antd";
 import clsx from "clsx";
 import React, { Fragment } from "react";

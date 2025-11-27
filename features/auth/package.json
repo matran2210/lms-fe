@@ -5,8 +5,9 @@
   "main": "./index.ts",
   "types": "./index.ts",
   "type": "module",
-  "scripts": {
-    "lint": "eslint ."
+    "scripts": {
+    "lint": "eslint . --ext .ts,.tsx",
+    "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
     "react": "^18.2.0",
@@ -18,6 +19,7 @@
     "@lms/utils": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/ui": "workspace:*",
-    "@lms/contexts": "workspace:*"
+    "@lms/contexts": "workspace:*",
+    "@lms/hooks": "workspace:*"
   }
 }

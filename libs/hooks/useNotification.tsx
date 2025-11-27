@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
 import { INotificationAPI, LOCAL_STORAGE_KEYS } from '@lms/core'
 import { useAppDispatch, useAppSelector ,getCountUnRead,
@@ -10,11 +9,12 @@ import { useAppDispatch, useAppSelector ,getCountUnRead,
   updateStatusAll,
   toggleStatusById,
   deleteNotificationById,
-  deleteAllNotifications,} from '@lms/contexts'
+  deleteAllNotifications,
+  useFeature,} from '@lms/contexts'
 import { useTailwindBreakpoint } from './useTailwindBreakpoint'
 
 export const useNotification = (notificationApi: INotificationAPI) => {
-  const router = useRouter()
+  const { router } = useFeature()
   const dispatch = useAppDispatch()
   const notifyDetail = useAppSelector((state) => state.notificationReducer)
   const notifyLists = useAppSelector(

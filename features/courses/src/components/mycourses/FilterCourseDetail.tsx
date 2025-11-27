@@ -6,7 +6,8 @@ import { useRouter } from 'next/router'
 import { defaultStatusDetail } from '@lms/core'
 import { useForm } from 'react-hook-form'
 import { SappHookFormSelect, TotalResullt } from '@lms/ui'
-import { getUserPrefix } from '@utils/helpers'
+import { getUserPrefix } from '@lms/utils'
+import { useFeature } from '@lms/contexts'
 
 const FilterCourseDetail = ({
   totalResult,
@@ -15,8 +16,9 @@ const FilterCourseDetail = ({
   totalResult: number
   isTeacher?: boolean
 }) => {
-  const router = useRouter()
-  let apiUrl = `${getUserPrefix(isTeacher)}/courses/my-course/${router.query.courseId}`
+      const {router, pageLink} = useFeature();
+  
+  let apiUrl = `${getUserPrefix(isTeacher, pageLink)}/courses/my-course/${router.query.courseId}`
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
 
   const { control, watch } = useForm()

@@ -1,10 +1,11 @@
 import { CheckIconV2 } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
+import { useSelectExams } from "@lms/hooks";
 import { NoData } from "@lms/ui";
 import clsx from "clsx";
 import { isEmpty } from "lodash";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import useSelectExams from "src/hooks/useSelectExams";
 
 const SelectExamDate = ({
   classId,
@@ -18,7 +19,13 @@ const SelectExamDate = ({
   setItemSelected: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const { watch, setValue } = useFormContext();
-  const { exams } = useSelectExams(classId);
+  const { classApi } = useFeature();
+  const { exams } = useSelectExams({
+    classKey: classId, api: {
+      getExams: classApi.getExams
+    },
+    courseId: undefined
+  });
   const options = exams?.data
     ?.map((exam) => ({
       label: exam?.examination?.name,

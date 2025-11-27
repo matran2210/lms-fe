@@ -5,15 +5,16 @@ import TableListQuizInActivity from "./TableListQuizInActivity";
 import { Results, QuizActivity } from "@lms/core";
 import clsx from "clsx";
 import { useSappPaging } from "@lms/hooks";
-import { CoursesAPI } from "@pages/api/courses";
 import router from "next/router";
 import { GRADE_STATUS, GRADING_METHOD } from "@lms/core";
+import { useFeature } from "@lms/contexts";
 
 interface CollapseActivityProps {
   resultData: Results;
 }
 
 const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
+  const {courseApi} = useFeature()
   const [activeKey, setActiveKey] = useState<string | string[]>([]);
   const [hasDataLoaded, setHasDataLoaded] = useState(false);
 
@@ -104,7 +105,7 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
   } = useSappPaging({
     uniqueKey: `course-results-${resultData?.id}`, // Unique key cho mỗi section
     queryFn: () => {
-      return CoursesAPI.getCourseResults(router.query.courseId as string, {
+      return courseApi.getCourseResults(router.query.courseId as string, {
         class_id: router.query.classId as string,
         section_id: resultData?.id,
         page_index: pagination.current,

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import Link from "next/link";
-import { useFeature } from "node_modules/@lms/contexts";
+import { useFeature } from "@lms/contexts";
 
 const LogoFull = ({ className }: { className?: string }) => {
   const { pageLink } = useFeature();

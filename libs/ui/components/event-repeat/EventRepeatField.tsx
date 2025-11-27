@@ -13,17 +13,14 @@ import {
   REPEAT_ON_MAPPED_PAYLOAD,
 } from "@lms/core";
 import { ISelect } from "@lms/core";
-import { IRecurringSchedule, RecurringScheduleType } from "src/type/my-request";
+import { IEventRepeatFieldValues,
+  IRepeatFrequency,IRecurringSchedule, RecurringScheduleType } from "@lms/core";
 
 import RepeatFrequency from "./RepeatFrequency";
 import RepeatOn from "./RepeatOn";
 import { REPEAT_TYPE } from "@lms/core";
 import clsx from "clsx";
 import utc from "dayjs/plugin/utc";
-import {
-  IEventRepeatFieldValues,
-  IRepeatFrequency,
-} from "src/type/my-calendar";
 import { SappIcon } from "../common";
 import { SAPPSelectV2 } from "../base";
 

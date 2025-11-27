@@ -1,12 +1,7 @@
 import { ButtonSecondary } from "@lms/ui";
 import { Icon, CourseTimeIcon, GraduationCapIcon } from '@lms/assets'
-import { useCourseContext } from "@lms/contexts";
-import { clearStylesHtml, trackGAEvent, truncateString } from "@lms/utils";
-import {
-  convertHourToDayLeft,
-  convertLocalTimeToUTC,
-  getUserPrefix,
-} from "@utils/helpers";
+import { useCourseContext, useFeature } from "@lms/contexts";
+import { clearStylesHtml, convertHourToDayLeft, convertLocalTimeToUTC, getUserPrefix, trackGAEvent, truncateString } from "@lms/utils";
 import { differenceInDays, parseISO, startOfDay } from "date-fns";
 import { isNull, round } from "lodash";
 import { useRouter } from "next/router";
@@ -28,7 +23,6 @@ import { useTailwindBreakpoint } from "@lms/hooks";
 import { Grid, Tooltip } from "antd";
 import clsx from "clsx";
 import dayjs from "dayjs";
-import { CoursesAPI } from "src/pages/api/courses";
 import { CardCourse } from "../course";
 import { ResultRowsModal } from "../learning";
 import ModalFoundationCompleted from "./ModalFoundationCompleted";
@@ -52,6 +46,7 @@ const Course = ({
   isTeacher?: boolean;
 }) => {
   const screens = useBreakpoint();
+  const {courseApi, pageLink} = useFeature();
   const [open, setOpen] = useState<boolean>(false);
   const [openExtend, setOpenExtend] = useState<boolean>(false);
   const [openActive, setOpenActive] = useState<boolean>(false);
@@ -63,7 +58,7 @@ const Course = ({
   const classInstance = course?.classes[0];
   const [daysDifference, setDaysDifference] = useState(0);
   const currentDate = useMemo(() => new Date(), []);
-  const userPrefix = getUserPrefix(isTeacher);
+  const userPrefix = getUserPrefix(isTeacher, pageLink);
   useEffect(() => {
     if (student?.finished_at) {
       const currentLocalDate = new Date();
@@ -222,7 +217,7 @@ const Course = ({
       const params = {
         classId: foundation_class_id ? foundation_class_id : classInstance?.id,
       };
-      const res = await CoursesAPI.activeCourse(params);
+      const res = await courseApi.activeCourse(params);
       if (res?.success) {
         router.push(
           `${userPrefix}/courses/my-course/${foundation_class_id || classInstance?.id}`,
@@ -237,7 +232,7 @@ const Course = ({
   }
   async function extendCourse() {
     try {
-      const res = await CoursesAPI.extendCourse({ classId: classInstance?.id });
+      const res = await courseApi.extendCourse({ classId: classInstance?.id });
       if (res?.success) {
         refetch();
         toast.success("Gia hạn hành công!");
@@ -439,7 +434,7 @@ const Course = ({
    */
   const handleSkipCourse = async () => {
     try {
-      await CoursesAPI.skipFoundation(course?.classes?.[0]?.id);
+      await courseApi.skipFoundation(course?.classes?.[0]?.id);
     } finally {
       setOpenContinue(false);
       handleCourseDetail();

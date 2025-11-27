@@ -6,7 +6,8 @@
   "types": "./index.ts",
   "type": "module",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint . --ext .ts,.tsx",
+    "type-check": "tsc --noEmit"
   },
   "peerDependencies": {},
   "dependencies": {

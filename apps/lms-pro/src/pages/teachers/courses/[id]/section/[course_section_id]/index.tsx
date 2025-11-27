@@ -1,7 +1,7 @@
 import { AlertInfoIcon, CloseIconPreview } from '@lms/assets'
 import { useCourseContext, UserType } from '@lms/contexts'
 import { ILearningOutcome, ITabs, TEST_TYPE } from '@lms/core'
-import { TestModalTeacher } from '@lms/feature-test'
+import { TestModalTeacher } from '@lms/feature-courses'
 import { LayoutTeacher, SappDrawer, TextSkeleton } from '@lms/ui'
 import { buildQueryString, formatDate } from '@lms/utils'
 import { ClassAPI } from '@pages/api/class'

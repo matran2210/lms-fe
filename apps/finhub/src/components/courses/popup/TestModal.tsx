@@ -8,9 +8,10 @@ import {
 } from '@lms/core'
 import {
   PopupCanNotRetakeTest,
+  StatusTestQuizBadge,
   TestAnnouncementModal,
+  TestPopup,
 } from '@lms/feature-courses'
-import { StatusTestQuizBadge, TestPopup } from '@lms/feature-test'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   ButtonPrimary,

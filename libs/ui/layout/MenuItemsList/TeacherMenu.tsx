@@ -12,13 +12,13 @@ import {
 } from "@lms/assets";
 import { activeNotesList, IUser, openCalculator, pushNotes, useAppDispatch, useAppSelector, useCourseContext, useFeature, userReducer } from "@lms/contexts";
 import { TitleSidebar, TitleTeacherSidebar } from "@lms/core";
-import { LearningResource } from "@lms/feature-courses";
 import { Layout, Menu, Tooltip } from "antd";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { LearningResource } from "../../components";
 const { Sider } = Layout;
 
 export default function TeacherMenu({

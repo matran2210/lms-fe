@@ -1,18 +1,15 @@
 import { ArrowRight } from "@lms/assets";
+import {
+  EAttemptStatus,
+  EDateTime,
+  GRADE_STATUS,
+  GRADING_METHOD
+} from "@lms/core";
 import { StatusQuizTag } from "@lms/core/types/quiz/StatusActionCell";
+import { useTailwindBreakpoint } from "@lms/hooks";
+import { Tooltip } from "@lms/ui";
 import { getTimeFromInput } from "@lms/utils";
 import dayjs from "dayjs";
-import router from "next/router";
-import { Tooltip } from "@lms/ui";
-import {
-  GRADE_STATUS,
-  GRADING_METHOD,
-  QUIZ_ATTEMPT_GRADING_STATUS,
-  QUIZ_ATTEMPT_STATUS,
-} from "@lms/core";
-import { EAttemptStatus } from "@lms/core";
-import { useTailwindBreakpoint } from "@lms/hooks";
-import { EDateTime } from "@lms/core";
 
 const CardResultTest = ({
   resultData,

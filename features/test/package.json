@@ -6,7 +6,8 @@
   "types": "./index.ts",
   "type": "module",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint . --ext .ts,.tsx",
+    "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
     "react": "^18.2.0",
@@ -21,7 +22,6 @@
     "@lms/feature-courses": "workspace:*",
     "@lms/contexts": "workspace:*",
     "@lms/feature-auth": "workspace:*",
-    "@lms/feature-test": "workspace:*",
     "dayjs": "^1.11.12",
     "antd": "^5.25.0",
     "react-hook-form": "7.48.2",

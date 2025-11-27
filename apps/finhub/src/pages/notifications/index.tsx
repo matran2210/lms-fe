@@ -1,9 +1,5 @@
 import Layout from '@components/layout'
-import SearchForm from '@components/mycourses/Search'
-import NotifyDetail from '@components/notification//NotifyDetail'
-import NotifyActions from '@components/notification/NotifyActions'
-import NotifyList from '@components/notification/NotifyList'
-import NotifyTab from '@components/notification/NotifyTab'
+
 import { trackGAEvent } from '@lms/utils'
 import Aos from 'aos'
 import Router, { useRouter } from 'next/router'
@@ -11,19 +7,13 @@ import { useEffect, useState } from 'react'
 import { ANIMATION, LOCAL_STORAGE_KEYS } from '@lms/core'
 import { MY_COURSES } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { useAppDispatch, useAppSelector } from '@lms/contexts'
-import {
-  getCountUnRead,
-  getNotification,
-  getNotificationDetail,
-  loadMoreNotification,
-  markAllNotifications,
-  notificationSlice,
-  updateStatus,
-  updateStatusAll,
-} from 'src/redux/slice/Notification/Notification'
-import { UserType } from 'src/redux/types/User/urser'
-import { ActionCell, SappDrawerV2 } from '@lms/ui'
+import { getCountUnRead, getNotification, getNotificationDetail, loadMoreNotification, markAllNotifications, notificationSlice, updateStatus, updateStatusAll, useAppDispatch, useAppSelector, UserType } from '@lms/contexts'
+import { ActionCell, SappDrawerV2, SearchForm } from '@lms/ui'
+import { NotificationAPI } from '@pages/api/notification'
+import NotifyActions from '@components/notification/NotifyActions'
+import NotifyTab from '@components/notification/NotifyTab'
+import NotifyList from '@components/notification/NotifyList'
+import NotifyDetail from '@components/notification/NotifyDetail'
 
 const Notifications = () => {
   const [openModel, setOpenModel] = useState<boolean>(false)
@@ -52,7 +42,7 @@ const Notifications = () => {
 
   const coutNotificationsUnRead = async () => {
     try {
-      await dispatch(getCountUnRead())
+      await dispatch(getCountUnRead(NotificationAPI))
     } catch (error) {}
   }
 
@@ -62,7 +52,7 @@ const Notifications = () => {
     content: string,
   ) => {
     try {
-      const res = await dispatch(getNotificationDetail(id))
+      const res = await dispatch(getNotificationDetail({  api: NotificationAPI, id }))
       if (res) {
         await coutNotificationsUnRead()
         dispatch(updateStatus({ id: id }))
@@ -76,7 +66,7 @@ const Notifications = () => {
 
   const markAllRead = async () => {
     try {
-      await dispatch(markAllNotifications())
+      await dispatch(markAllNotifications(NotificationAPI))
       dispatch(updateStatusAll())
       await coutNotificationsUnRead()
       Aos.refresh()
@@ -98,7 +88,7 @@ const Notifications = () => {
     const loadMore = async (params: Object) => {
       setLoading(true)
       try {
-        await dispatch(loadMoreNotification(params))
+        await dispatch(loadMoreNotification({ api: NotificationAPI, params }))
         await coutNotificationsUnRead()
       } catch (error) {
       } finally {
@@ -132,8 +122,8 @@ const Notifications = () => {
   useEffect(() => {
     const getNotifications = async (params: Object) => {
       try {
-        await dispatch(getCountUnRead())
-        await dispatch(getNotification(params))
+        await dispatch(getCountUnRead(NotificationAPI))
+        await dispatch(getNotification({  api: NotificationAPI, params }))
       } catch (error) {}
     }
 
@@ -162,11 +152,7 @@ const Notifications = () => {
 
   return (
     <Layout title="Notifications">
-      {/* {loadingRedirect && (
-        <div className="fixed left-0 top-0 right-0 bottom-0 w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[9999]">
-          Loading
-        </div>
-      )} */}
+
       <div className="border-default border-b bg-white px-4 lg:px-20">
         <div className="mx-auto my-0 flex max-w-xxl py-4.5">
           <SearchForm

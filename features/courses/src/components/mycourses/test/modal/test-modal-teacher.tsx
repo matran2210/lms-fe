@@ -5,22 +5,21 @@ import {
   IQuizResultList,
   TEST_TYPE
 } from "@lms/core";
-import {
-  PopupCanNotRetakeTest,
-  TestAnnouncementModal,
-} from "@lms/feature-courses";
-import { isQuizExpired, PopupSelectRetakeOrContinueAttempt } from "@lms/feature-test";
 import { HookFormSelect, SappModalV3 } from "@lms/ui";
 import {
   capitalizeFirstLetter,
   formatTimeMinToHhMm,
+  isQuizExpired,
   trackGAEvent
 } from "@lms/utils";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { isNull } from "lodash";
-import { useFeature } from "node_modules/@lms/contexts";
+import { useFeature } from "@lms/contexts";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { TestAnnouncementModal } from "../../course-detail";
+import PopupCanNotRetakeTest from "../../PogupCannotRetakeTest";
+import { PopupSelectRetakeOrContinueAttempt } from "../..";
 
 enum StatusQuizAttempt {
   Passed = "Passed",
