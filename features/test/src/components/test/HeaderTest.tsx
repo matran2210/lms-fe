@@ -1,8 +1,7 @@
 import { disableUnsavedChange, useAppDispatch } from "@lms/contexts";
-import { ButtonCancelSubmit } from "@lms/ui";
+import { ButtonCancelSubmit, CountDown } from "@lms/ui";
 import dayjs from "dayjs";
 import { Dispatch, ForwardedRef, SetStateAction } from "react";
-import Countdown from "@lms/ui/components/count-down/Countdown";
 
 interface IProps {
   quizDetail: {
@@ -76,7 +75,7 @@ const HeaderTest = ({
         {quizDetail?.name}
       </div>
       {quizDetail?.quiz_timed && quizAttempt.created_at && (
-        <Countdown
+        <CountDown
           remainTime={remainingTimeAttempt}
           onTimeOut={handleTimeoutSubmit}
           ref={timeRef}

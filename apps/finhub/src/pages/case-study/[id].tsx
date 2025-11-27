@@ -36,7 +36,7 @@ import { CoursesAPI } from '../api/courses/index'
 import { TestAPI } from '../api/test'
 import ConFirmSubmit from '../short-course/test/conFirmSubmit'
 import LimitQuizModal from '../short-course/test/limitQuizModal'
-const CaseStudyDetail = ({ questions }: any) => {
+const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
 
   const checkType = (

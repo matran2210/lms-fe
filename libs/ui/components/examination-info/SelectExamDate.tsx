@@ -1,11 +1,11 @@
 import { CheckIconV2 } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
 import { useSelectExams } from "@lms/hooks";
-import { NoData } from "@lms/ui";
 import clsx from "clsx";
 import { isEmpty } from "lodash";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
+import { NoData } from "../common";
 
 const SelectExamDate = ({
   classId,

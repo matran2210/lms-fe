@@ -4,7 +4,6 @@ import { PencilV2Icon } from "@lms/assets";
 import { ExaminationForm, useFeature } from "@lms/contexts";
 import { ClassKey, COURSE_TYPE, Data, TitleSidebar, zodMsg } from "@lms/core";
 import { useSelectExams, useTailwindBreakpoint } from "@lms/hooks";
-import { CarouselSlideAnimation, NoData, SappDrawerV3, Tooltip } from "@lms/ui";
 import { getDuration } from "@lms/utils";
 import { Avatar, GetProp, List, Skeleton, UploadFile, UploadProps } from "antd";
 import clsx from "clsx";
@@ -23,6 +22,10 @@ import { z } from "zod";
 import ChangExamDate from "./ChangExamDate";
 import ChangeAnywayModal from "./ChangeAnywayModal";
 import SelectExamDate from "./SelectExamDate";
+import Tooltip from "@components/common/Tooltip";
+import NoData from "@components/common/NoData";
+import { SappDrawerV3 } from "../base";
+import { CarouselSlideAnimation } from "../animations";
 
 type Props = {
   open: boolean;

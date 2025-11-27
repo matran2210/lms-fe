@@ -1,6 +1,6 @@
 import React from 'react'
 import SappIcon from './SappIcon'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION } from '@lms/core'
 
 const NoData = () => {
   return (
