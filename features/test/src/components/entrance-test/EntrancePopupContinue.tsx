@@ -3,8 +3,8 @@ import { ButtonPrimary, ButtonSecondary, ButtonText } from "@lms/ui";
 import { getNoOfAttemptEntranceTest, trackGAEvent } from "@lms/utils";
 import dayjs from "dayjs";
 import router from "next/router";
+import { TestPopup } from "@lms/feature-courses";
 import { Dispatch, SetStateAction } from "react";
-import TestPopup from "../TestPopup";
 
 interface EntrancePopupContinueProps {
   currentAttempt: IEntranceTestAttempt;

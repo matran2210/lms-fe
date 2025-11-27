@@ -14,7 +14,6 @@ import {
 import {
   CreateNote,
   Discussion,
-  LearningResource,
   PopupLockContent,
 } from '@lms/feature-courses'
 import {
@@ -23,6 +22,7 @@ import {
   EditorReader,
   FileViewer,
   Layout,
+  LearningResource,
   ModalResizeable,
   MovableWindow,
 } from '@lms/ui'

@@ -14,10 +14,10 @@ import {
   UserType
 } from '@lms/contexts'
 import { ANIMATION, ILearningOutcome, TEST_TYPE } from '@lms/core'
+import { CardMenuItem, PopupLockContent, TestModal } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { BottomMenu, CtaTrial, Layout, SappBreadCrumbs, SappDrawerV3 } from '@lms/ui'
+import { BottomMenu, CtaTrial, Layout, LearningResource, SappBreadCrumbs, SappDrawerV3 } from '@lms/ui'
 import { buildQueryString, formatDate } from '@lms/utils'
-import { NotificationAPI } from '@pages/api/notification'
 import { Alert, Divider, Skeleton } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
@@ -25,17 +25,10 @@ import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
-import {
-  MENU_BOTTOM,
-  MENU_ITEMS,
-  MENU_ITEMS_EVENT,
-} from 'src/constants/menu-items'
 import { PageLink } from 'src/constants/routers'
 import { TreeHelper } from 'src/helper/tree'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from '../../../../api/courses/index'
-import { CardMenuItem, LearningResource, PopupLockContent } from '@lms/feature-courses'
-import { TestModal } from '@lms/feature-test'
 
 interface IProps {
   course_section_type: string

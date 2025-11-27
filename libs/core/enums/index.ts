@@ -225,6 +225,15 @@ export enum EAttemptStatus {
   FINISHED_GRADING = "FINISHED_GRADING",
   FINISHED = "FINISHED",
 }
+export enum RequestStatus {
+  OPEN = "OPEN",
+  VIEWED = "Viewed",
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  REJECT = "REJECT",
+  CANCEL = "CANCEL",
+}
+
 export enum AppType {
   FINHUB = "FINHUB",
   LMS_PRO = "LMS_PRO",

@@ -1,4 +1,4 @@
-import {useCountdown} from '@lms/feature-auth'
+import { useCountdownTest } from '@lms/hooks'
 import { formatTimeMinToHhMm } from '@lms/utils'
 import {
   ForwardedRef,
@@ -10,7 +10,7 @@ import {
 
 const CountDown = forwardRef(
   ({ remainTime, onTimeOut }: any, ref: ForwardedRef<any>) => {
-    const time = useCountdown(0, remainTime)
+    const time = useCountdownTest(0, remainTime)
     useImperativeHandle(ref, () => ({
       handleGetTime() {
         return time?.[2]

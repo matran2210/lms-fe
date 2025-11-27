@@ -9,7 +9,6 @@ import { Breadcrumb3Level } from '@components/courses'
 import LearningOutComeModal from '@components/courses/popup/LearningOutComeModal'
 import TestModal from '@components/courses/popup/TestModal'
 import Layout from '@components/layout'
-import LearningResource from '@components/mycourses/LearningResource'
 import BottomMenu from '@components/v2/course-detail/BottomMenu'
 import CardMenuItem from '@components/v2/course-detail/CardMenuItem'
 import { CoursesAPI } from '@pages/api/courses'
@@ -34,7 +33,7 @@ import { ISubSection } from 'src/type/courses-3-level'
 import { isEmpty } from 'lodash'
 import { PageLink } from 'src/constants/routes'
 import { PopupLockContent } from '@lms/feature-courses'
-import { CtaTrial } from '@lms/ui'
+import { CtaTrial, LearningResource } from '@lms/ui'
 
 interface IProps {
   course_section_type: string

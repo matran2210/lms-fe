@@ -1,14 +1,10 @@
 import { CloseModalIcon } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
 import {
   ActivityInfo,
-  ICoursesAPI,
-  INotificationAPI,
-  LAYOUT,
-  MenuItem,
+  LAYOUT
 } from "@lms/core";
 import { FullScreenLayout, Layout } from "@lms/ui";
-import { useRouter } from "next/router";
-import { useFeature } from "node_modules/@lms/contexts";
 import { QuizResultComponent } from "quiz-result-package";
 import { IQuestionResultResponse } from "quiz-result-package/dist/type";
 import { useEffect, useState } from "react";

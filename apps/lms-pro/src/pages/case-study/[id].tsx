@@ -31,10 +31,7 @@ import {
   QUESTION_TYPES,
   RESPONSE_OPTION,
 } from '@lms/core'
-import ConFirmSubmit from '@lms/feature-test/src/components/test/conFirmSubmit'
 import QuitTestModal from '@lms/feature-test/src/components/test/modal/quit-test-modal'
-import ResetToAnswerTemplateModal from '@lms/feature-test/src/components/test/ResetToAnswerTemplateModal'
-import ShowAnswerTemplate from '@lms/feature-test/src/components/test/ShowAnswerTemplate'
 import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
@@ -72,6 +69,7 @@ import toast from 'react-hot-toast'
 import { CoursesAPI } from '../api/courses/index'
 import { TestAPI } from '../api/test'
 import LimitQuizModal from '../test/limitQuizModal'
+import { ConFirmSubmit, ResetToAnswerTemplateModal, ShowAnswerTemplate } from '@lms/feature-courses'
 
 const CaseStudyDetail = ({ questions }: any) => {
   const editorRefs = useRef<any[]>([])

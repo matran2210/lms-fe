@@ -1,13 +1,13 @@
 import { ICoursesAPI, ISection } from '@lms/core'
-import { useRouter } from 'next/router'
 import { useRef, useState } from 'react'
 import { DEFAULT_PAGE_SIZE } from '@lms/core'
 import { isEmpty } from 'lodash'
+import { useFeature } from '@lms/contexts'
 
 export const useInitialSections = (api: ICoursesAPI) => {
   const [sections, setSections] = useState<ISection[]>([])
   const isFetchingRef = useRef(false)
-  const router = useRouter()
+  const {router} = useFeature()
 
   const fetchInitialSections = async (page_size: number) => {
     try {

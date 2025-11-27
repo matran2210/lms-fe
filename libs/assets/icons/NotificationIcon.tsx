@@ -1,11 +1,13 @@
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
-import { useNotification } from 'src/hooks/useNotification'
 import { IIcon } from '@lms/core'
+import { useNotification } from '@lms/hooks'
+import { useFeature } from '@lms/contexts'
 
 const NotificationIcon = ({ className }: IIcon) => {
+  const { notificationApi } = useFeature();
   const [badgeClass, setBadgeClass] = useState('w-4 h-4 -top-[5px] -right-1.5') // Default width
-  const { notificationUnread } = useNotification()
+  const { notificationUnread } = useNotification(notificationApi)
 
   useEffect(() => {
     if (notificationUnread > 9) {

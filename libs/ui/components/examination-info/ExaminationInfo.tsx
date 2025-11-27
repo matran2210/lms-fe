@@ -2,12 +2,10 @@ import { CheckCircleTwoTone } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PencilV2Icon } from "@lms/assets";
 import { ExaminationForm, useFeature } from "@lms/contexts";
-import { COURSE_TYPE, Data, TitleSidebar, zodMsg } from "@lms/core";
-import { useTailwindBreakpoint } from "@lms/hooks";
+import { ClassKey, COURSE_TYPE, Data, TitleSidebar, zodMsg } from "@lms/core";
+import { useSelectExams, useTailwindBreakpoint } from "@lms/hooks";
 import { CarouselSlideAnimation, NoData, SappDrawerV3, Tooltip } from "@lms/ui";
 import { getDuration } from "@lms/utils";
-import { ClassAPI } from "@pages/api/class";
-import { ClassKey } from "@pages/api/queryKey";
 import { Avatar, GetProp, List, Skeleton, UploadFile, UploadProps } from "antd";
 import clsx from "clsx";
 import { isEmpty, isUndefined } from "lodash";
@@ -21,7 +19,6 @@ import {
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import useSelectExams from "src/hooks/useSelectExams";
 import { z } from "zod";
 import ChangExamDate from "./ChangExamDate";
 import ChangeAnywayModal from "./ChangeAnywayModal";
@@ -101,14 +98,14 @@ const ExaminationInfo = ({
   onSuccess,
 }: Props) => {
   const { isTabletView, isMobileView } = useTailwindBreakpoint();
-  const { router } = useFeature();
+  const { router, classApi } = useFeature();
   const [direction, setDirection] = useState<1 | -1>(1);
   const [isOpenSelectExam, setIsOpenSelectExam] = useState<boolean>(false);
   const [classId, setClassId] = useState(router.query?.courseId as string);
 
   const { data, isLoading, isError, isSuccess, refetch } = useQuery({
     queryKey: [ClassKey.ExamInfo, classId],
-    queryFn: () => ClassAPI.getExamInfo(classId),
+    queryFn: () => classApi.getExamInfo(classId),
     select: (data) => data.data,
     retry: false,
     enabled: !isUndefined(classId) && open && !isEditProps,
@@ -154,7 +151,7 @@ const ExaminationInfo = ({
       const formData = new FormData();
       formData.append("examination_subject_id", examination_subject_id);
       note && formData.append("note", note[0] as FileType);
-      return ClassAPI.changeExamDate(classId, formData);
+      return classApi.changeExamDate(classId, formData);
     },
     onSuccess: (res) => {
       if (res.data.success) {
@@ -189,7 +186,10 @@ const ExaminationInfo = ({
       handleBack(isEditProps);
     }, 500);
   };
-  const { exams } = useSelectExams(classId);
+  const { exams } = useSelectExams({classKey: classId, api: {
+    getExams: classApi.getExams
+  },
+  courseId: undefined});
 
   const handleChangeExamDate = async () => {
     if (isOpenSelectExam) {

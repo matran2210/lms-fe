@@ -1,12 +1,13 @@
 import { ArrowDownIcon } from "@lms/assets";
 import React from "react";
-import { useTailwindBreakpoint } from "@lms/hooks";
-import { ErrorMessage, SAPPSelectV2, UploadSingleFileV2 } from "@lms/ui";
+import { useSelectExams, useTailwindBreakpoint } from "@lms/hooks";
 import { message, Upload, UploadProps } from "antd";
 import { RcFile } from "antd/es/upload";
 import { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import useSelectExams from "src/hooks/useSelectExams";
+import { useFeature } from "@lms/contexts";
+import { SAPPSelectV2, UploadSingleFileV2 } from "../base";
+import { ErrorMessage } from "../common";
 interface IProps {
   classId: string;
   remainingChanges?: number;
@@ -27,8 +28,11 @@ const ChangExamDate = ({
   setDirection,
 }: IProps) => {
   const { control, reset, setValue, clearErrors } = useFormContext();
-  const { exams, hasNextPage, fetchNextPage, refetch } =
-    useSelectExams(classId);
+  const { classApi } = useFeature();
+  const { exams, hasNextPage, fetchNextPage, refetch } = useSelectExams({classKey: classId, api: {
+      getExams: classApi.getExams
+    },
+    courseId: undefined});
   const { isMobileView } = useTailwindBreakpoint();
 
   const options = exams?.data
@@ -83,7 +87,6 @@ const ChangExamDate = ({
             setDirection(1);
           }
         }}
-        isOpen={isMobileView ? false : undefined}
       />
       <div className="flex flex-col">
         <div className="mt-2 text-sm font-normal italic leading-snug text-gray-600">

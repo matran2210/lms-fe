@@ -1,4 +1,5 @@
 import { IEntranceTest, IEntranceTestAttempt, Sheet } from "@lms/core";
+import dayjs from "dayjs";
 
 const isHtmlEmpty = (s: string) =>
   s.replace(/<[^>]*>/g, "").trim().length === 0;
@@ -83,4 +84,12 @@ export const getNoOfAttemptEntranceTest = ({
         : "";
   }
   return searchParams;
+};
+const calculateEndTime = (createdAt: Date, quizTimed: number): Date => {
+  return dayjs(createdAt).add(quizTimed, "minutes").toDate();
+};
+
+export const isQuizExpired = (createdAt: Date, quizTimed: number): boolean => {
+  const endTime = calculateEndTime(createdAt, quizTimed);
+  return dayjs().isAfter(endTime);
 };

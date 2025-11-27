@@ -1,6 +1,5 @@
 import { FREQUENCY_UNITS, REPEAT_ON } from '@lms/core'
-import { RecurringScheduleType } from 'src/type/my-calendar'
-import { IRecurringSchedule } from 'src/type/my-request'
+import { RecurringScheduleCalendarType, IRecurringSchedule} from '@lms/core'
 
 export interface ICreateScheduleForm {
   event_name: string
@@ -14,7 +13,7 @@ export interface ICreateScheduleForm {
       day_of_week?: (typeof REPEAT_ON)[number][]
       month_of_year?: number[]
       day_of_month?: number[]
-      type: RecurringScheduleType
+      type: RecurringScheduleCalendarType
     }
   }
   description: string
@@ -30,7 +29,7 @@ export interface ICreateSchedulePayload {
   description: string
   repeat: boolean
   recurring_schedule?: {
-    type: RecurringScheduleType
+    type: RecurringScheduleCalendarType
     interval: number
     frequency: 'days' | 'weeks' | 'months' | 'years'
     recurrence_end_date: string

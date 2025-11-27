@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { IActivity3Level, IBreadcrumb, ICourseOutcomes, ICoursesAPI } from '@lms/core';
+import { ActivityFile, IActivity3Level, IBreadcrumb, ICourseOutcomes, ICoursesAPI } from '@lms/core';
 import { RootState } from "../../../../store";
 
 // Tạo một đối tượng activity với giá trị mặc định
@@ -35,7 +35,7 @@ const initialState: ICourseActivityState3Level = {
   display_icon: "TEXT",
   total_activity: 0,
   course_outcomes: [] as ICourseOutcomes[],
-  files: [] as File[],
+  files: [] as ActivityFile[],
   breadcumb: [] as IBreadcrumb[],
   user_course_section_progress: [],
   activity_count: 0,

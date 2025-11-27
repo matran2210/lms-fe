@@ -1,24 +1,19 @@
-import useCountdown from '@components/auth/Countdown'
-import { ButtonText } from '@lms/ui'
-import { SappModalV2 } from '@lms/ui'
-import { SAPPTextFiled } from '@lms/ui'
 import { Icon } from '@lms/assets'
-import React, {
-  createRef,
+import { useAppSelector, userReducer } from '@lms/contexts'
+import { ButtonPrimary, ButtonText, SappModalV2 } from '@lms/ui'
+import type { GetProps } from 'antd'
+import { Input } from 'antd'
+import {
   Dispatch,
   SetStateAction,
   useEffect,
-  useState,
+  useState
 } from 'react'
 import { UseFormGetValues, UseFormReset } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { AuthAPI } from 'src/pages/api/profile'
-import { useAppSelector } from '@lms/contexts'
-import { userReducer } from '@lms/contexts'
 import { IChangePassword } from './ChangePassword'
-import { ButtonPrimary } from '@lms/ui'
-import type { GetProps } from 'antd'
-import { Input } from 'antd'
+import { useCountdownTest } from '@lms/hooks'
 
 type OTPProps = GetProps<typeof Input.OTP>
 interface IProps {
@@ -33,7 +28,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
 
   const [code, setCode] = useState(Array(6).join('.').split('.'))
   const [canResend, setCanResend] = useState(false)
-  const [timeCountDown, setTimeCountDown, time] = useCountdown(5)
+  const [timeCountDown, setTimeCountDown, time] = useCountdownTest(5)
   const [timeCountDownResent, settimeCountDownResent] = useState<number>(285)
   const [errorMessage, setErrorMessage] = useState('')
   const [loading, setLoading] = useState<boolean>(false)

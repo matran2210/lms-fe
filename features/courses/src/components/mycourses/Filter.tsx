@@ -1,8 +1,7 @@
 // components/SearchForm.tsx
 
 import { SappHookFormSelect, TotalResullt } from '@lms/ui'
-import { getUserPrefix } from '@utils/helpers'
-import { buildQueryString } from '@lms/utils'
+import { buildQueryString, getUserPrefix } from '@lms/utils'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
@@ -10,6 +9,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { defaultStatusCourse } from '@lms/core'
 import { ICourseAll } from '@lms/core'
+import { useFeature } from '@lms/contexts'
 
 interface IProps {
   courses: ICourseAll
@@ -19,7 +19,8 @@ interface IProps {
 }
 
 const Filter = ({ courses, setPage, tourGuideActive, isTeacher }: IProps) => {
-  const router = useRouter()
+    const {router, pageLink} = useFeature();
+  
   const { control, watch, setValue } = useForm()
   const [activeStatus, setActiveStatus] = useState<boolean>(false)
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
@@ -31,7 +32,7 @@ const Filter = ({ courses, setPage, tourGuideActive, isTeacher }: IProps) => {
       value: '',
     },
   ]
-  let apiUrl = `${getUserPrefix(isTeacher)}/courses`
+  let apiUrl = `${getUserPrefix(isTeacher, pageLink)}/courses`
 
   const queryString = buildQueryString({
     status: watch('status')?.value || '',

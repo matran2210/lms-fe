@@ -3,10 +3,9 @@ import { useEffect, useState } from "react";
 import { ExplanationPackageV2 } from "explanation-package";
 // import 'explanation-package/dist/index.css'
 import { AltArrowLeft, CloseIconV2 } from "@lms/assets";
-import { UploadAPI } from "src/pages/api/upload";
-import { CoursesAPI } from "src/pages/api/courses";
 import { Modal } from "antd";
 import { SappLoading } from "@lms/ui";
+import { useFeature } from '@lms/contexts';
 
 export enum QUESTION_LEVELS {
   FUNDAMENTAL = "FUNDAMENTAL",
@@ -35,14 +34,15 @@ const ModalExplanationPackage = ({
   setOpen: () => void;
   document_id?: string;
 }) => {
+  const { activityApi, courseApi, uploadApi } = useFeature()
   const [activeQuestion, setActiveQuestion] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const getActiveQuestion = async (id: string) => {
     setLoading(true);
     try {
-      const resultResponse = await ActivityAPI.getQuizAttemptsAnswer(id);
-      const topicDescription = await CoursesAPI.getTopicDescription(
+      const resultResponse = await activityApi.getQuizAttemptsAnswer(id);
+      const topicDescription = await courseApi.getTopicDescription(
         resultResponse?.data?.answer?.question?.question_topic_id,
         resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
       );
@@ -115,7 +115,7 @@ const ModalExplanationPackage = ({
     files: { name: string; file_key: string }[];
   }) => {
     try {
-      await UploadAPI.downloadFile(data);
+      await uploadApi.downloadFile(data);
     } catch (error) {}
   };
 

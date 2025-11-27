@@ -1,4 +1,5 @@
 import { ArrowDownIcon } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
 import {
   EAttemptStatus,
   GRADE_STATUS,
@@ -6,21 +7,15 @@ import {
   IQuizResultList,
   TEST_TYPE,
 } from "@lms/core";
-import {
-  PopupCanNotRetakeTest,
-  TestAnnouncementModal,
-} from "@lms/feature-courses";
-import { TestPopup } from "@lms/feature-test";
 import { ButtonPrimary, ButtonSecondary, ButtonText } from "@lms/ui";
-import { capitalizeFirstLetter, formatTime, formatTimeMinToHhMm, trackGAEvent } from "@lms/utils";
-import { CoursesAPI } from "@pages/api/courses";
-import { isQuizExpired } from "@utils/helpers/quiz-test/helper";
+import { capitalizeFirstLetter, formatTimeMinToHhMm, isQuizExpired, trackGAEvent } from "@lms/utils";
 import { Select } from "antd";
 import dayjs from "dayjs";
 import { isNull } from "lodash";
-import { useRouter } from "next/router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ClassAPI } from "src/pages/api/class";
+import { TestAnnouncementModal } from "../../course-detail";
+import PopupCanNotRetakeTest from "../../PogupCannotRetakeTest";
+import TestPopup from "../TestPopup";
 import StatusTestQuizBadge from "../StatusTestQuizBadge";
 
 enum StatusQuizAttempt {
@@ -47,7 +42,7 @@ const TestModal = ({
   activeCourse,
   is_passed_course,
 }: IProps) => {
-  const router = useRouter();
+  const {router, courseApi, classApi, pageLink} = useFeature();
   const isSubmitted =
     data?.quiz?.attempt && data?.quiz?.attempt?.status === "SUBMITTED";
   const isUnsubmitted =
@@ -116,7 +111,7 @@ const TestModal = ({
 
   const fetchResult = async (pageIndex: number, pageSize: number) => {
     if (class_user_id && data?.quiz?.id) {
-      const response = await ClassAPI.getAllResultOfQuiz(
+      const response = await classApi.getAllResultOfQuiz(
         class_user_id,
         data?.quiz?.id,
         { page_index: pageIndex ?? 1, page_size: pageSize ?? 10 },
@@ -229,7 +224,7 @@ const TestModal = ({
     remainingTimeLastAttempt.current <= 0;
 
   const handleSubmitNow = async () => {
-    await CoursesAPI.submitAllQuestion(data?.quiz?.attempt?.id as string);
+    await courseApi.submitAllQuestion(data?.quiz?.attempt?.id as string);
     handleRedirectResult();
   };
 

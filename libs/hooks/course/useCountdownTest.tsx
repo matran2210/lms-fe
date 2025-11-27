@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, useRef } from 'react'
 
-function useCountdown(
+function useCountdownTest(
   minutes: number,
   seconds: number = 0,
   reset: boolean = false,
@@ -50,4 +50,4 @@ function useCountdown(
   return [formatTime(), resetTime, time]
 }
 
-export default useCountdown
+export default useCountdownTest

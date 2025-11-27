@@ -1,5 +1,4 @@
 import { ArrowActionSearchIcon, HamburgerMenuLargeIcon, CloseIconV2, TourGuideStartAnimation } from "@lms/assets";
-import { SearchForm } from "@lms/feature-courses";
 import { useAppSelector, useFeature } from "@lms/contexts";
 import { AppType, MY_COURSES, UserGuide } from "@lms/core";
 import { buildQueryString } from "@lms/utils";
@@ -7,7 +6,8 @@ import clsx from "clsx";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { PopupStep } from "@lms/feature-user";
+import { PopupStep } from "../../components";
+import SearchForm from "./SearchForm";
 
 interface IProps {
   handleOpenSidebar: () => void;

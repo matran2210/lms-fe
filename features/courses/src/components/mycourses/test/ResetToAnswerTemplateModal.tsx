@@ -1,6 +1,5 @@
 import { AlertTriagle } from '@lms/assets'
 import { SappModalV3 } from '@lms/ui'
-import { Dispatch, SetStateAction } from 'react'
 
 interface IProps {
   open: boolean

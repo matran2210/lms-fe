@@ -11,7 +11,7 @@ import {
 } from "@lms/core";
 import { useCourseSectionsData } from "@lms/hooks";
 import clsx from "clsx";
-import { useFeature } from "node_modules/@lms/contexts";
+import { useFeature } from "@lms/contexts";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 

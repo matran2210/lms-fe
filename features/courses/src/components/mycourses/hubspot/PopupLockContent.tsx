@@ -1,8 +1,8 @@
 import { SappModalV3 } from '@lms/ui'
-import { CoursesAPI } from '@pages/api/courses'
 import React, { Dispatch, SetStateAction } from 'react'
 import { useRouter } from 'next/router'
 import { LockSectionIcon, ThankYouIcon, UnlockIcon } from '@lms/assets'
+import { useFeature } from '@lms/contexts'
 
 export interface IPopupFormState {
   lockSection: boolean
@@ -47,7 +47,7 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
   showForm,
   setShowForm,
 }) => {
-  const router = useRouter()
+  const {courseApi, router}= useFeature()
 
   /**
    * Xử lý đóng modal bằng cách reset tất cả các trạng thái về false
@@ -82,7 +82,7 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
    */
 
   const handleUpgrade = async () => {
-    const res = await CoursesAPI.upgradeNowTrial(
+    const res = await courseApi.upgradeNowTrial(
       router.query.courseId || router.query.id,
     )
 

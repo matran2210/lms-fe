@@ -39,11 +39,6 @@ import {
   SOCIAL_LINK,
 } from "@lms/core";
 import {
-  ConFirmSubmit,
-  ResetToAnswerTemplateModal,
-  ShowAnswerTemplate,
-} from "@lms/feature-test";
-import {
   ButtonSecondary,
   SappButton,
   SappModalV3,
@@ -58,6 +53,9 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import LoadingQuizDocument from "./LoadingQuizDocument";
 import QuizComponent, { QuizComponentRef } from "./QuizComponent";
+import ConFirmSubmit from "../../test/conFirmSubmit";
+import ShowAnswerTemplate from "../../test/ShowAnswerTemplate";
+import ResetToAnswerTemplateModal from "../../test/ResetToAnswerTemplateModal";
 
 type Props = {
   questions: IQuestion[];

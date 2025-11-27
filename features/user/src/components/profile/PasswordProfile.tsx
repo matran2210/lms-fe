@@ -1,6 +1,5 @@
 import { Icon } from "@lms/assets";
 import { useAppSelector, userReducer } from "@lms/contexts";
-import { useCountdown } from "@lms/feature-auth";
 import { ButtonPrimary, ButtonText, SappModalV2 } from "@lms/ui";
 import type { GetProps } from "antd";
 import { Input } from "antd";
@@ -9,6 +8,7 @@ import { UseFormGetValues, UseFormReset } from "react-hook-form";
 import toast from "react-hot-toast";
 import { AuthAPI } from "src/pages/api/profile";
 import { IChangePassword } from "./ChangePassword";
+import { useCountdownTest } from "node_modules/@lms/hooks";
 
 type OTPProps = GetProps<typeof Input.OTP>;
 interface IProps {
@@ -24,7 +24,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
   const [code, setCode] = useState(Array(6).join(".").split("."));
   const [canResend, setCanResend] = useState(false);
   const [resetCountdown, setResetCountdown] = useState(false);
-  const [timeCountDown, setTimeCountDown, time] = useCountdown(
+  const [timeCountDown, setTimeCountDown, time] = useCountdownTest(
     0,
     0,
     resetCountdown,
