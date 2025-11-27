@@ -1,3 +1,4 @@
+import React from 'react';
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PencilV2Icon } from "@lms/assets";
@@ -22,10 +23,9 @@ import { z } from "zod";
 import ChangExamDate from "./ChangExamDate";
 import ChangeAnywayModal from "./ChangeAnywayModal";
 import SelectExamDate from "./SelectExamDate";
-import Tooltip from "@components/common/Tooltip";
-import NoData from "@components/common/NoData";
 import { SappDrawerV3 } from "../base";
 import { CarouselSlideAnimation } from "../animations";
+import { NoData, Tooltip } from '../common';
 
 type Props = {
   open: boolean;
