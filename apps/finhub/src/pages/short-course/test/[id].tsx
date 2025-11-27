@@ -1,66 +1,58 @@
+import SappLoading from '@components/common/SappLoading'
 import {
-  CalculatorIcon,
-  DownloadIcon,
   FileTextIcon,
   FlagIcon,
+  Icon,
+  NotesOutline,
   ResizeIcon,
-  ScratchPadIcon,
   ShowLessIcon,
   ShowMoreIcon,
 } from '@lms/assets'
-import SappLoading from '@components/common/SappLoading'
+import { CourseProvider, disableUnsavedChange, loginSlice, showPopupCompletedCourse, useAppDispatch, useAppSelector, useCourseContext } from '@lms/contexts'
+import {
+  Answer,
+  AnswerItem,
+  DISPLAY_TYPE,
+  DragDropAnswerItem,
+  EXHIBIT_TEXT_REPLACE,
+  GRADING_METHOD,
+  GradingPreference,
+  IExhibit,
+  IRequirement,
+  PROGRAM,
+  QUESTION_TYPES,
+  ScratchPad,
+  ScratchPadValue,
+  TEST_TYPE,
+} from '@lms/core'
+import { runHighlight, trackGAEvent } from '@lms/utils'
 import { CoursesAPI } from '@pages/api/courses'
-import { runHighlight } from '@lms/utils'
 import { cloneDeep, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import {
-  DISPLAY_TYPE,
-  EXHIBIT_TEXT_REPLACE,
-  GRADING_METHOD,
-  PROGRAM,
-  QUESTION_TYPES,
-  TEST_TYPE,
-} from '@lms/core'
-import { CourseProvider, disableUnsavedChange, loginSlice, useAppDispatch, useAppSelector, useCourseContext } from '@lms/contexts'
-import { IExhibit } from '@lms/core'
 import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
 
-import { NotesOutline, PulsingExclamation } from '@lms/assets'
-import { BackToTop, FilterRadioGroup, HighlightableHTML, MatchQuizComponent, MultiChoiceQuestion, NewDragNDropQuestion, NewFillText, OneChoiceQuestion, Popover, SelectWord, SlotValue, TestWrapper } from '@lms/ui'
-import { Icon } from '@lms/assets'
 import Layout from '@components/layout'
+import { removeHighlights, serializeHighlights } from '@funktechno/texthighlighter/lib'
+import { ButtonContent } from '@lms/feature-courses'
+import { QuitTestModal, TabSlide, TestTimeOutModal, UnSubmitAnswerModal } from '@lms/feature-test'
+import { BackToTop, ButtonPrimary, ButtonSecondary, ButtonText, FilterRadioGroup, HighlightableHTML, MatchQuizComponent, MultiChoiceQuestion, NewDragNDropQuestion, NewFillText, OneChoiceQuestion, Popover, SelectWord, SlotValue, TestWrapper } from '@lms/ui'
 import { QuestionAPI } from '@pages/api/question'
 import { TestAPI } from '@pages/api/test'
-import { GradingPreference } from '@lms/core'
-import { trackGAEvent } from '@lms/utils'
 import { download } from '@utils/index'
 import { Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { showPopupCompletedCourse } from '@lms/contexts'
-import {
-  Answer,
-  AnswerItem,
-  AnswerList,
-  DragDropAnswerItem,
-  ScratchPad,
-  ScratchPadValue,
-} from '@lms/core'
-import { IRequirement } from '@lms/core'
+import { PageLink } from 'src/constants/routes'
 import { checkTypeAndRenderTitle } from 'src/utils/helpers/quiz-test/helper'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import { ButtonPrimary, ButtonSecondary, ButtonText } from '@lms/ui'
-import { removeHighlights, serializeHighlights } from '@funktechno/texthighlighter/lib'
-import { PageLink } from 'src/constants/routes'
-import { ButtonContent } from '@lms/feature-courses'
-import { QuitTestModal, TabSlide, TestTimeOutModal, UnSubmitAnswerModal } from '@lms/feature-test'
+import { CalculatorIcon, DownloadIcon, PulsingExclamation, ScratchPadIcon } from '@assets/icons'
 
 declare global {
   interface Window {
@@ -76,7 +68,7 @@ interface Tab {
 const warningText = 'Are you sure you want to leave this page?'
 const TestDetail = () => {
   const [tooltipOpen, setTooltipOpen] = useState(false)
-  const answerListRef = useRef<AnswerList>({})
+  // const answerListRef = useRef<AnswerList>({})
   const { courseType, setSubmitEventTest } = useCourseContext()
   const scrollRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
@@ -84,11 +76,11 @@ const TestDetail = () => {
   const { questions } = useGetQuestionTabs(router.query.id as string)
   const type = router.query.type
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
-  const { control, watch, getValues, setValue, reset, resetField } = useForm()
+  const { control, watch, getValues, setValue } = useForm()
   const {
     control: controlFilter,
     watch: watchFilter,
-    setValue: setValueFilter,
+    // setValue: setValueFilter,
   } = useForm()
   const {
     getValues: getValuesExhibits,
@@ -97,7 +89,7 @@ const TestDetail = () => {
   } = useForm()
   const timeRef = useRef(null) as any
   const ref = useRef(null) as any
-  const refEditor = useRef(null) as any
+  // const refEditor = useRef(null) as any
   const currentTabIdRef = useRef(null)
   const dispatch = useAppDispatch()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
@@ -108,7 +100,7 @@ const TestDetail = () => {
   const [exhibitData, setExhibitData] = useState<IExhibit[]>()
   const [routeBack, setRouteBack] = useState(false)
   const [isQuizAttemptCreated, setIsQuizAttemptCreated] = useState(false)
-  const dropUpRequire = useRef(null)
+  // const dropUpRequire = useRef(null)
   const [startTime, setStartTime] = useState(Date.now())
   const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
   const [submited, setSubmited] = useState(false)
@@ -118,7 +110,7 @@ const TestDetail = () => {
   const [openQuit, setOpenQuit] = useState(false)
   const [loading, setLoading] = useState(false)
   const [openLimit, setOpenLimit] = useState(false)
-  const [openUpload, setOpenUpload] = useState<any>({})
+  // const [openUpload, setOpenUpload] = useState<any>({})
   const [startResize, setStartResize] = useState(false)
   const [currentMousePos, setCurrentMousePos] = useState(0)
   const [leftWidth, setLeftWidth] = useState(0)
@@ -159,12 +151,12 @@ const TestDetail = () => {
   const [openResetToTemplateModal, setOpenResetToTemplateModal] =
     useState(false)
   const quizAttempt = JSON.parse(localStorage.getItem('quizAttempt') || '{}')
-  const onOpenResetToTemplateModal = () => {
-    setOpenResetToTemplateModal(true)
-  }
-  const onCloseResetToTemplateModal = () => {
-    setOpenResetToTemplateModal(false)
-  }
+  // const onOpenResetToTemplateModal = () => {
+  //   setOpenResetToTemplateModal(true)
+  // }
+  // const onCloseResetToTemplateModal = () => {
+  //   setOpenResetToTemplateModal(false)
+  // }
   const [showWarning, setShowWarning] = useState(true)
   const [filteredTabs, setFilterTabs] = useState<any[]>([])
   const [trigger, setTrigger] = useState(false)

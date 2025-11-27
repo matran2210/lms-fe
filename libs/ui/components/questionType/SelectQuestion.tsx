@@ -1,3 +1,5 @@
+import { IExhibitData, MY_COURSES } from "@lms/core";
+import { useTooltipModal } from "@lms/hooks";
 import { replaceWhiteSpacePreWrapToNormal, runHighlight } from "@lms/utils";
 import { uniqueId } from "lodash";
 import React, {
@@ -8,12 +10,9 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { MY_COURSES } from "@lms/core";
-import { useTooltipModal } from "@lms/hooks";
-import { IExhibitData } from "@lms/core";
-import WarningSection from "./WarningSection";
 import { EditorReader, SappDivider } from "../base";
 import { SappTitleSolution } from "../common";
+import WarningSection from "./WarningSection";
 
 // Types
 interface IProps {
