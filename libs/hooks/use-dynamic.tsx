@@ -16,7 +16,6 @@ const useDynamicLoading = (
       // Fetch additional items from the API with an increased page_size
       getData(page)
       setPage(page + pageSize)
-    } catch (error) {
     } finally {
       setIsLoading(false)
     }

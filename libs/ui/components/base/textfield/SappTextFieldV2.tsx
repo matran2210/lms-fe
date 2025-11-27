@@ -75,7 +75,7 @@ const SappTextFieldV2 = ({
   addonBefore,
   className,
   isEdit = false,
-  handleEdit = () => {},
+  handleEdit = () => undefined,
   disabledEdit = false,
   ...props
 }: IFieldInputProps) => {

@@ -9,7 +9,7 @@ interface IProps {
 }
 const ActionItem = ({
   title,
-  onClick = () => {},
+  onClick = () => undefined,
   isShow = false,
   className,
 }: IProps) => {

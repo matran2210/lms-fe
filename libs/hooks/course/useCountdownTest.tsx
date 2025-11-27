@@ -2,13 +2,13 @@ import { useCallback, useEffect, useState, useRef } from 'react'
 
 function useCountdownTest(
   minutes: number,
-  seconds: number = 0,
-  reset: boolean = false,
-): [string, Function, number] {
+  seconds = 0,
+  reset = false,
+): [string, (newMinutes: number, newSeconds?: number) => void, number] {
   const [time, setTime] = useState(minutes * 60 + seconds)
   const endTimeRef = useRef<number | null>(null)
   const resetTime = useCallback(
-    (newMinutes: number, newSeconds: number = 0) => {
+    (newMinutes: number, newSeconds = 0) => {
       const newTime = newMinutes * 60 + newSeconds
       setTime(newTime)
       endTimeRef.current = Date.now() + newTime * 1000 // Cập nhật thời gian kết thúc
@@ -42,8 +42,8 @@ function useCountdownTest(
   }, [reset])
 
   const formatTime = () => {
-    let mins = Math.floor(time / 60)
-    let secs = time % 60
+    const mins = Math.floor(time / 60)
+    const secs = time % 60
     return `${mins.toString().padStart(2, '0')} : ${secs.toString().padStart(2, '0')}`
   }
 

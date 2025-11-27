@@ -19,10 +19,10 @@ const ButtonIcon = ({
   buttonType = 'rounded',
   ...props
 }: IButtonIconProps) => {
-  let padding = 'p-[7px]'
-  let borderRadius = buttonType === 'rounded' ? 'rounded-full' : 'rounded-md'
-  let disabledClass = disabled ? 'cursor-not-allowed' : 'cursor-pointer'
-  let componentClass = `text-center text-icon border border-gray-300 hover:!text-white hover:!bg-primary hover:!border-primary font-medium ${padding} ${borderRadius} ${disabledClass} ${className}`
+  const padding = 'p-[7px]'
+  const borderRadius = buttonType === 'rounded' ? 'rounded-full' : 'rounded-md'
+  const disabledClass = disabled ? 'cursor-not-allowed' : 'cursor-pointer'
+  const componentClass = `text-center text-icon border border-gray-300 hover:!text-white hover:!bg-primary hover:!border-primary font-medium ${padding} ${borderRadius} ${disabledClass} ${className}`
 
   return (
     <BaseButton

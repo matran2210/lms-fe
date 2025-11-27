@@ -637,7 +637,7 @@ const DragNDropPreview = forwardRef(
                   >
                     {data?.answers?.map((e: any) => {
                       if (answered) {
-                        for (let as of answered) {
+                        for (const as of answered) {
                           if (as?.idAnswer === e?.id || as?.id === e?.id) {
                             return null
                           }

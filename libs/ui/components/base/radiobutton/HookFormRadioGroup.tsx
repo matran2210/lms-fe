@@ -72,11 +72,11 @@ const HookFormRadioGroup = ({
             >
               {options.map((option, index) => {
                 let state: "error" | "default" | "success" | undefined;
-                let stateLabel: string = "";
-                let checked: boolean = option.value.toString() === field.value;
-                let correctCheck: boolean =
+                let stateLabel = "";
+                const checked: boolean = option.value.toString() === field.value;
+                const correctCheck: boolean =
                   corrects?.[option.value as string] || false;
-                if (!!corrects) {
+                if (corrects) {
                   if (corrects?.[option.value as string]) {
                     state = "success";
                     stateLabel = "text-success-600";

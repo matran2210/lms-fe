@@ -35,7 +35,7 @@ const ResponsiveTextTruncate: React.FC<ResponsiveTextTruncateProps> = ({
     text: string,
     width: number,
     fontSize: number,
-    isSlash: boolean = false,
+    isSlash = false,
   ): string => {
     if (!text || width <= 0 || fontSize <= 0) return "";
 

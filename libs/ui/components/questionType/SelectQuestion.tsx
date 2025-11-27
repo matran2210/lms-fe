@@ -143,7 +143,7 @@ const SelectWord = forwardRef(
     const createDropdownHTML = (
       index: number,
       defaultAnswerValue: string,
-      isCorrect: boolean = false,
+      isCorrect = false,
     ) => {
       const selectedAnswer = answerObj?.[+index + 1]?.find(
         (e: any) => e?.value === defaultAnswerValue,

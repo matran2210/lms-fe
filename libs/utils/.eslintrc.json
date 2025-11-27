@@ -1,6 +1,6 @@
 {
   "root": true,
-  "extends": ["../../tools/eslint-config/base.js"],
+  // "extends": ["../../tools/eslint-config/base.js"],
   "parserOptions": {
     "ecmaVersion": 2022,
     "sourceType": "module"

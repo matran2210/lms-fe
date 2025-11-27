@@ -69,7 +69,7 @@ const OneChoiceQuestion = ({
     }
   }, [defaultValues, name]);
   const convertAnswer = useMemo(() => {
-    let answers = [];
+    const answers = [];
     let number = 0;
 
     if (data?.answers) {
@@ -77,7 +77,7 @@ const OneChoiceQuestion = ({
       dataAnswers.sort(
         (a: IAnswers, b: IAnswers) => a?.answer_position - b?.answer_position,
       );
-      for (let e of dataAnswers) {
+      for (const e of dataAnswers) {
         number++;
         answers.push({
           label: `${getUppercaseByNumber(number)}. ${e?.answer}`,

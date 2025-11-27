@@ -164,7 +164,7 @@ export interface IBusyScheduleBase {
   description: string
 }
 
-export interface ICreateBusyScheduleData extends IBusyScheduleBase {}
+export type ICreateBusyScheduleData = IBusyScheduleBase
 
 export interface IEditBusyScheduleData extends Partial<IBusyScheduleBase> {
   status?: string
@@ -197,7 +197,7 @@ export interface ICreateTimeoffRequestData
   teacher_id: string
 }
 
-export interface IEditTimeoffRequestData extends ITimeoffRequestBase {}
+export type IEditTimeoffRequestData = ITimeoffRequestBase
 
 interface IStaffAssignee {
   id: string

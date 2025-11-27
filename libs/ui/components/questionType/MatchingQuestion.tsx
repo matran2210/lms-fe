@@ -133,7 +133,7 @@ const MatchingQuestion = forwardRef(
       dragParentIdRef = "";
 
       const questionId = ev?.dataTransfer.getData("questionId");
-      var data = ev?.dataTransfer?.getData("text");
+      const data = ev?.dataTransfer?.getData("text");
 
       let draggingItem;
 
@@ -232,10 +232,10 @@ const MatchingQuestion = forwardRef(
       return array;
     }
     useEffect(() => {
-      let obj = {} as any;
-      let objCorrect = {} as any;
+      const obj = {} as any;
+      const objCorrect = {} as any;
       let arr = [];
-      for (let quest of data?.question_matchings) {
+      for (const quest of data?.question_matchings) {
         arr.push(quest?.answer);
         if (defaultAnswer) {
           obj[quest?.id] = data?.question_matchings.find(
@@ -248,7 +248,7 @@ const MatchingQuestion = forwardRef(
       }
       shuffleArray(arr);
       if (corrects) {
-        for (let correct of corrects) {
+        for (const correct of corrects) {
           if (defaultAnswer || isAlwaysShowAnswer) {
             objCorrect[correct?.id] = correct?.answer;
           }
@@ -257,7 +257,7 @@ const MatchingQuestion = forwardRef(
       }
 
       if (defaultAnswer) {
-        for (let e of defaultAnswer) {
+        for (const e of defaultAnswer) {
           const foundAns = data?.answers?.find(
             (a: { id: string; answer: string; answer_position: string }) =>
               a.id === e.answer_id,

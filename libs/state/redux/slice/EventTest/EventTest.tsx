@@ -47,7 +47,9 @@ export const eventTestSlice = createSlice({
         state.shouldShowRemind = true;
       }
     });
-    builder.addCase(getEventCount.rejected, (state, action) => {});
+    builder.addCase(getEventCount.rejected, (state, action) => {
+      // state.loading = false
+    });
   },
 });
 

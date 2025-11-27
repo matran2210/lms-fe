@@ -57,6 +57,7 @@ import { AuthAPI } from './api/profile'
 import { QuestionAPI } from './api/question'
 import { UploadAPI } from './api/upload'
 import ErrorRedirectPage from './error-redirect'
+import { fetcher } from '@services/requestV2'
 
 export const excludedPathsHelp = [
   '/test/[id]',
@@ -336,6 +337,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
               menuItemsEvent: MENU_ITEMS_EVENT,
               menuBottom: MENU_BOTTOM,
               router: router,
+              fetcher: fetcher
             }}>
               <CourseProvider router={router}>
                 <QueryClientProvider client={queryClient}>

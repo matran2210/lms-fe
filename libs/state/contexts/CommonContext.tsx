@@ -34,26 +34,26 @@ type Context = {
 // initContext
 const initContext: Context = {
   openPopupCongrats: false,
-  setOpenPopupCongrats: () => {},
+  setOpenPopupCongrats: () => undefined,
   courseType: '',
-  setCourseType: () => {},
+  setCourseType: () => undefined,
   scoreQuestion: 0,
-  setScoreQuestion: () => {},
+  setScoreQuestion: () => undefined,
   submitTest: false,
-  setSubmitTest: () => {},
+  setSubmitTest: () => undefined,
   submitEventTest: false,
-  setSubmitEventTest: () => {},
+  setSubmitEventTest: () => undefined,
   showPinnedTrial: false,
-  setShowPinnedTrial: () => {},
+  setShowPinnedTrial: () => undefined,
   openPopupCTA: {
     lockSection: false,
     ctaUpgrade: false,
     thankYou: false,
     thankYouLater: false,
   },
-  setOpenPopupCTA: () => {},
+  setOpenPopupCTA: () => undefined,
   isOpenSidebar: false,
-  setOpenSidebar: () => {},
+  setOpenSidebar: () => undefined,
 }
 
 const CourseContext = createContext<Context>(initContext)
@@ -61,7 +61,7 @@ const CourseContext = createContext<Context>(initContext)
 export function CourseProvider(props: PropsWithChildren<{
   router: any
   api?: {
-    get?: (params: Object) => Promise<any>
+    get?: (params: object) => Promise<any>
   }
 }>) {
   const { router, api } = props

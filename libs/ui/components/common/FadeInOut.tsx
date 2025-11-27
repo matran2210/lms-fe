@@ -92,7 +92,7 @@ class FadeInOut extends Component<FadeInOutProps, FadeInOutState> {
   performEnter() {
     this.setState({ status: Status.ENTERING }, () => {
       setTimeout(() => {
-        this.setState({ status: Status.ENTERED }, () => {})
+        this.setState({ status: Status.ENTERED }, () => undefined)
       }, 100)
     })
   }
@@ -104,7 +104,7 @@ class FadeInOut extends Component<FadeInOutProps, FadeInOutState> {
     }
     this.setState({ status: Status.EXITING }, () => {
       setTimeout(() => {
-        this.setState({ status: Status.EXITED }, () => {})
+        this.setState({ status: Status.EXITED }, () => undefined)
       }, 0)
     })
   }

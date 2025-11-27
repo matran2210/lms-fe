@@ -26,17 +26,17 @@ type Context = {
 // initContext
 const initContext: Context = {
   openNote: false,
-  setOpenNote: () => {},
+  setOpenNote: () => undefined,
   noteData: undefined,
-  setNoteData: () => {},
+  setNoteData: () => undefined,
   modalPosition: null,
-  setModalPosition: () => {},
+  setModalPosition: () => undefined,
   noteInput: '',
-  setNoteInput: () => {},
+  setNoteInput: () => undefined,
   notesListData: undefined,
-  refetchNotesList: () => {},
+  refetchNotesList: () => undefined,
   isViewOnly: false,
-  setIsViewOnly: () => {},
+  setIsViewOnly: () => undefined,
 }
 
 const CourseNoteContext = createContext<Context>(initContext)
@@ -66,10 +66,8 @@ export function CourseNoteProvider(props: PropsWithChildren<{
 
   const refetchNotesList = async () => {
     if (!activityId) return
-    try {
       const res = await api.getNoteDetail(activityId as string)
       setNotesListData(res.data)
-    } catch (error) {}
   }
 
   useEffect(() => {

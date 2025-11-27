@@ -34,7 +34,7 @@ export const getTopicsCaseStudy = createAsyncThunk(
   ) => {
     try {
       const res = await api.getTopicQuiz(id, quiz_id);
-      let arr2 = [] as any;
+      const arr2 = [] as any;
       for (let j = 0; j < res.data.questions.length; j++) {
         arr2.push({
           [res.data.id]: res.data.questions[j],
@@ -75,11 +75,11 @@ export const caseStudyTestSlice = createSlice({
     saveFileEssayCaseStudy: (state, action) => {
       const { question_id, file, topic_id, requirement_id } = action.payload
       const arr = [...state.listQuestions]
-      let newData = [] as any
-      for (let item of arr) {
+      const newData = [] as any
+      for (const item of arr) {
         if (question_id === item[topic_id].id) {
           if (requirement_id) {
-            var newItem = {
+            const newItem = {
               [topic_id]: {
                 ...item[topic_id],
                 requirements: (item[topic_id].requirements || []).map(
@@ -100,7 +100,7 @@ export const caseStudyTestSlice = createSlice({
             }
             newData.push(newItem)
           } else {
-            var newItem = {
+            const newItem = {
               [topic_id]: {
                 ...item[topic_id],
                 answer_file: {
@@ -123,11 +123,11 @@ export const caseStudyTestSlice = createSlice({
     clearFileEssayCaseStudy: (state, action) => {
       const { question_id, topic_id, requirement_id } = action.payload
       const arr = [...state.listQuestions]
-      let newData = [] as any
-      for (let item of arr) {
+      const newData = [] as any
+      for (const item of arr) {
         if (question_id === item[topic_id]?.id) {
           if (requirement_id) {
-            var newItem = {
+            const newItem = {
               [topic_id]: {
                 ...item[topic_id],
                 requirements: (item[topic_id].requirements || []).map(
@@ -145,7 +145,7 @@ export const caseStudyTestSlice = createSlice({
             }
             newData.push(newItem)
           } else {
-            var newItem = {
+            const newItem = {
               [topic_id]: {
                 ...item[topic_id],
                 answer_file: undefined,

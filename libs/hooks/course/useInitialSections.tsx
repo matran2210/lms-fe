@@ -22,10 +22,9 @@ export const useInitialSections = (api: ICoursesAPI) => {
           page_size || DEFAULT_PAGE_SIZE,
         )
         if (!isEmpty(data?.sections)) {
-          setSections([...data?.sections].reverse())
+          setSections([...(data?.sections || [])].reverse())
         }
       }
-    } catch (error) {
     } finally {
       isFetchingRef.current = false
     }

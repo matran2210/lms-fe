@@ -1,6 +1,4 @@
-interface Props {}
-
-const SpinIcon = ({}: Props) => {
+const SpinIcon = () => {
   return (
     <svg
       aria-hidden="true"

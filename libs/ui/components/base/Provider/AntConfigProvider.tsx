@@ -1,6 +1,6 @@
 import { ConfigProvider } from 'antd'
 
-const AntConfigProvider = ({ children }: React.PropsWithChildren<{}>) => {
+const AntConfigProvider = ({ children }: React.PropsWithChildren) => {
   return (
     <ConfigProvider
       theme={{
