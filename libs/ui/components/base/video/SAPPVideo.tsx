@@ -1,21 +1,19 @@
-// import styles from "@styles/components/SAPPVideo.module.scss"; comment monorepo
-import { video_url } from "@lms/core";
-import { useEffect, useRef, useState, ReactNode } from "react";
+import { Stream } from "@cloudflare/stream-react";
+import { LoadingIcon, PiPIcon } from "@lms/assets";
 import { Icon } from "@lms/assets/icons";
+import { Thumbnail, video_url } from "@lms/core";
+import { useTailwindBreakpoint } from "@lms/hooks";
+import { fetcher } from "@services/requestV2";
 import {
   formatTimeToHourMinuteSecond,
   getResolution,
   isMobileOrTablet,
 } from "@utils/helpers";
 import Image from "next/image";
-import { Thumbnail } from "@lms/core";
-import { Stream } from "@cloudflare/stream-react";
-import { fetcher } from "@services/requestV2";
-import { LoadingIcon, PiPIcon } from "@lms/assets";
 import { useRouter } from "next/router";
-import { useTailwindBreakpoint } from "@lms/hooks";
-import { ArrowIcon } from "../pagination";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import useClickOutside from "../clickoutside/HookClick";
+import { ArrowIcon } from "../pagination";
 
 interface IProp {
   options: any;
@@ -841,9 +839,9 @@ const SAPPVideo = ({
         <>
           {cloudflarePlayer ? (
             <div
-            // className={`group ${
-            //   !hideVideo ? styles.wrapper : styles.hideWrapper comment monorepo
-            // } ${loading ? "hidden" : ""}`}
+            className={`group ${
+              !hideVideo ? 'sapp-wrapper' : 'sapp-hideWrapper'
+            } ${loading ? "hidden" : ""}`}
             >
               <div className={`popup-question`}>{children}</div>
               <Stream
@@ -863,8 +861,8 @@ const SAPPVideo = ({
             </div>
           ) : (
             <div
-              // className={`sapp-video-custom video-container group ${
-              //   !hideVideo ? styles.wrapper : styles.hideWrapper comment monorepo
+              className={`sapp-video-custom video-container group ${
+                !hideVideo ? 'sapp-wrapper' : 'sapp-hideWrapper'}`}
               ref={videoContainerRef}
             >
               <div className={`popup-question`}>{children}</div>
@@ -895,6 +893,7 @@ const SAPPVideo = ({
                 ref={streamRef}
                 controls={false}
                 // className={`${styles.content}`} comment monorepo
+                className="sapp-content"
                 poster={src}
                 onSeeking={() => {
                   if (streamRef?.current && pauseOnSeek && openQuestion) {
@@ -908,7 +907,7 @@ const SAPPVideo = ({
                 controlsList="nodownload"
               />
               <div
-                className="video-controls flex-center absolute bottom-0 left-0 right-0 hidden h-auto w-full px-4 py-1 sm:h-14 sm:py-3"
+                className="video-controls flex-center absolute bottom-0 left-0 right-0 h-14 w-full rounded-b-lg px-4 py-3"
                 ref={videoControlsRef}
               >
                 <div className="flex-center flex w-full items-center gap-6">
