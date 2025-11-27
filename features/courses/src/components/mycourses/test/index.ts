@@ -7,3 +7,4 @@ export * from "./modal"
 export { default as TestPopup } from "./TestPopup";
 export { default as PopupSelectRetakeOrContinueAttempt } from "./PopupSelectRetakeOrContinueAttempt";
 export { default as StatusTestQuizBadge } from "./StatusTestQuizBadge";
+export { default as GlobalAverage } from "./GlobalAverage";
