@@ -1,14 +1,10 @@
-import ClassProgress from "@components/progress/ClassProgress";
-import SappTabs from "src/components/tabs/SappTabs";
-import { ITabsTeacher } from "@lms/core";
-import { Typography } from "antd";
-import { GeoLocationIcon, CalendarIcon } from "@lms/assets";
+import { CalendarIcon, GeoLocationIcon } from "@lms/assets";
+import { IClassCard, ITabsTeacher, statusMap } from "@lms/core";
 import { formatDateFromUTC } from "@lms/utils";
-import { IClassCard } from "@lms/core";
-import {
-  StatusTag,
-  statusMap,
-} from "@components/teacher/myClass/class-detail/OverView";
+import { Typography } from "antd";
+import ClassProgress from "./ClassProgress";
+import { SappTabs } from "@lms/ui";
+
 const { Title } = Typography;
 interface IProps {
   dataDetail?: IClassCard | undefined;

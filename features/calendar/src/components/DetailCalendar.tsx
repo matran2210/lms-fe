@@ -144,7 +144,6 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
         await import("@pages/api/calendar")
       ).default.getDetailEvent(open?.data?.id, open?.data?.type === "HOLIDAY");
       setData(res.data);
-    } catch {
     } finally {
       setLoading(false);
     }
