@@ -1,51 +1,30 @@
-import useClickOutside from '@components/base/clickoutside/HookClick'
-import EditorReader from '@components/base/editor/EditorReader'
-import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
-import DragNDropPreivew from '@components/questionType/DragNDrop'
-import AddWordPreview from '@components/questionType/FillText'
-import MatchingQuestion from '@components/questionType/MatchingQuestion'
-import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
-import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
-import SelectWord from '@components/questionType/SelectQuestion'
-import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
+import SappIcon from '@components/common/SappIcon'
+import { clearFileEssay, confirmQuestion, IActivityStateQuestion, saveFileEssay, useAppDispatch } from '@lms/contexts'
 import { isEmpty, isUndefined } from 'lodash'
 import React, {
   forwardRef,
   memo,
-  useCallback,
   useEffect,
   useImperativeHandle,
-  useMemo,
   useRef,
-  useState,
+  useState
 } from 'react'
 import {
   FieldValues,
+  useForm,
   UseFormGetValues,
   UseFormReset,
   UseFormWatch,
-  useForm,
 } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import SappIcon from '@components/common/SappIcon'
-import { QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
-import { DEFAULT_EDITOR_VALUE, defaultSheetData } from 'src/constants/attempt'
-import { useAppDispatch } from '@lms/contexts'
-import {
-  IActivityStateQuestion,
-  clearFileEssay,
-  confirmQuestion,
-  saveFileEssay,
-} from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 
-import { IEssayAnswer } from 'src/type/answer'
-import { IFile } from 'src/type/course'
-import { IExhibit, IExhibitData } from 'src/type/exhibit'
+import { DEFAULT_EDITOR_VALUE, defaultSheetData, IEssayAnswer, IExhibitData, IFile, QUESTION_TYPES, RESPONSE_OPTION } from '@lms/core'
+import { AddWordPreview, EditorReader, EssayQuestionPreview, MatchQuizComponent, MultiChoiceQuestion, OneChoiceQuestion, SelectWord, useClickOutside } from '@lms/ui'
+import DragDropQuestion, { SlotValue } from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
+import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
+import { CoursesAPI } from '@pages/api/courses'
+import { QuestionAPI } from '@pages/api/question'
 import { v4 as uuidv4 } from 'uuid'
-import DragDropQuestion, {
-  SlotValue,
-} from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
-import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 
 interface IRequirement {
   id: string
@@ -457,6 +436,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               questionId: activeQuestion?.id || '',
               myAnswers: myAnswers,
               time_spent: time_spent,
+              api: QuestionAPI,
+              courseApi: CoursesAPI
             }),
           )
             .unwrap()
@@ -548,7 +529,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         case QUESTION_TYPES.MATCHING:
           return (
             <MatchQuizComponent
-              modalOpen={modalOpen}
+              // modalOpen={modalOpen}
               data={activeQuestion}
               action={getAnswerMatching}
               defaultAnswer={activeQuestion?.defaultValue}
@@ -769,7 +750,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 question_data={activeQuestion}
                 control={controlAnswer}
                 setValue={setValue}
-                handleSaveHighLight={() => {}}
+                handleSaveHighLight={() => { }}
                 forCaseStudy={true}
                 name={`${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`}
                 fullData={{
@@ -902,7 +883,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               <div className="my-6 border border-b-gray-2" />
             </div>
           )}
-          <React.Fragment>{renderQuestion()}</React.Fragment>
+          {renderQuestion()}
         </div>
         {/* <div>
           {activeQuestion?.confirmed &&

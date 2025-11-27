@@ -1,9 +1,8 @@
 import { isNull, isUndefined } from 'lodash'
 import { RefObject } from 'react'
-import { GRADE_STATUS } from 'src/constants'
-import { IQuizAttempt } from 'src/type'
 import GlobalAverage from '@components/v2/test-result/GlobalAverage'
 import MultipleQuestion from '@components/v2/test-result/multipleQuestion'
+import { GRADE_STATUS, IQuizAttempt } from '@lms/core'
 
 interface IMultipleChoiceScore {
   questions: {
@@ -37,7 +36,7 @@ const MultipleChoiceScore = ({
             >
               <div className="mb-4 text-lg font-semibold text-gray-800 md:text-xl">
                 {questions?.quizAttempt?.grading_status ===
-                GRADE_STATUS.FINISHED_GRADING
+                  GRADE_STATUS.FINISHED_GRADING
                   ? 'Overall Score'
                   : 'Multiple Choice Score'}
               </div>

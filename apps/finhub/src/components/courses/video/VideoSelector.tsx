@@ -1,5 +1,5 @@
-import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
-import { IVideo } from 'src/type/course/Question'
+import { IVideo } from "@lms/core"
+import { SAPPRadio } from "@lms/ui"
 
 type Props = {
   videos: IVideo[]

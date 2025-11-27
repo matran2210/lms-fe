@@ -6,13 +6,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { CoursesAPI } from 'src/pages/api/courses'
 import toast from 'react-hot-toast'
-import { closeNote } from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
 import { useAppDispatch } from 'src/redux/hook'
 import { IProps } from 'src/type/courses-3-level'
 import { NoteFormData } from 'src/type/courses-3-level'
 import CreateNoteDesktop from './CreateNoteDesktop'
 import CreateNoteMobile from './CreateNoteMobile'
 import { useTailwindBreakpoint } from '@lms/hooks'
+import { closeNote } from '@lms/contexts'
 
 const CreateNote = ({
   id,

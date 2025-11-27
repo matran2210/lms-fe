@@ -1,8 +1,9 @@
-import SappTable from '@components/base/SappTable'
 import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
-import { truncateString } from '@utils/index'
 
 import { htmlToRaw } from '@components/common/timer'
+import Tooltip from '@components/common/Tooltip'
+import { CollapseArrowIcon } from '@lms/assets'
+import { ResultAPI } from '@pages/api/short-course/test-result'
 import { Collapse } from 'antd'
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
@@ -13,18 +14,9 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
-import Tooltip from '@components/common/Tooltip'
-import {
-  ANIMATION,
-  COMMON_TEXT_ENUM,
-  GRADE_STATUS,
-  PageLink,
-  QUESTION_TYPES,
-} from 'src/constants'
-import { IAnswer, IQuizAttempt, IQuizAttemptChartType } from 'src/type'
-import { CollapseArrowIcon } from '@lms/assets'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-import { ResultAPI } from '@pages/api/short-course/test-result'
+import { ANIMATION, COMMON_TEXT_ENUM, GRADE_STATUS, IAnswer, IQuizAttempt, QUESTION_TYPES } from '@lms/core'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { SappTable } from '@lms/ui/components/base'
 
 const commonHeaderClass = 'font-medium leading-6 text-gray py-2 pb-4 md:pb-6'
 
@@ -45,7 +37,6 @@ const ScoreDetail = ({
   yourScoreDetailRef,
   quizAttempt,
   isTeacher,
-  isLoadingChart,
 }: ScoreDetailProps) => {
   const router = useRouter()
 
@@ -63,22 +54,22 @@ const ScoreDetail = ({
     ...(isMobileView
       ? []
       : [
-          {
-            label: 'Type',
-            className: clsx(commonHeaderClass, 'min-w-[120px] text-center'),
-          },
-          {
-            label: 'Result',
-            className: clsx(commonHeaderClass, 'text-center'),
-          },
-          {
-            label: 'Time Spent',
-            className: clsx(
-              commonHeaderClass,
-              ' min-w-[80px] !pr-0 text-center',
-            ),
-          },
-        ]),
+        {
+          label: 'Type',
+          className: clsx(commonHeaderClass, 'min-w-[120px] text-center'),
+        },
+        {
+          label: 'Result',
+          className: clsx(commonHeaderClass, 'text-center'),
+        },
+        {
+          label: 'Time Spent',
+          className: clsx(
+            commonHeaderClass,
+            ' min-w-[80px] !pr-0 text-center',
+          ),
+        },
+      ]),
   ]
 
   const {
@@ -148,7 +139,7 @@ const ScoreDetail = ({
       return gradingStatus === GRADE_STATUS.FINISHED_GRADING
         ? ' text-info bg-info-50'
         : data?.question?.qType === QUESTION_TYPES.ESSAY &&
-            data?.active === COMMON_TEXT_ENUM.SUBMITED
+          data?.active === COMMON_TEXT_ENUM.SUBMITED
           ? ' text-info bg-info-50'
           : ' text-gray-400 bg-gray-100'
     }
@@ -223,7 +214,7 @@ const ScoreDetail = ({
                           headers={headers}
                           loading={isLoading}
                           isCheckedAll={true}
-                          onChange={() => {}}
+                          onChange={() => { }}
                           hasCheck={false}
                           classTable="w-full"
                         >
@@ -325,7 +316,7 @@ const ScoreDetail = ({
                                         ) : (
                                           <>
                                             {gradingStatus ===
-                                            GRADE_STATUS.FINISHED_GRADING
+                                              GRADE_STATUS.FINISHED_GRADING
                                               ? 'Graded'
                                               : answer?.active === 'SUBMITED'
                                                 ? 'Completed'

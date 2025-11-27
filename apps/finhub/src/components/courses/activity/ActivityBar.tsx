@@ -7,12 +7,9 @@ import { List } from '../icons/List'
 import { ActivityBarProps, IActivityTab } from 'src/type/courses-3-level'
 import { useDispatch } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
-import {
-  activeNotesList,
-  pushNotes,
-} from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
 import { DocumentText } from '../icons/DocumentText'
 import clsx from 'clsx'
+import { activeNotesList, pushNotes } from '@lms/contexts'
 
 const tabs: IActivityTab[] = [
   { key: 'add-note', icon: <DocumentAdd /> },
@@ -68,7 +65,7 @@ export default function ActivityBar({
         className={clsx(getButtonClass('content'), 'gap-2')}
         classTitle="text-v2-sm font-normal"
       >
-        <List />
+        {/* <List /> */}
       </ButtonIcon>
     </div>
   )

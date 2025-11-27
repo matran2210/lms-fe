@@ -335,7 +335,7 @@ export interface ActivityBarProps {
 
 export type IActivityTab = {
   key: string
-  icon: ReactNode
+  icon: JSX.Element
 }
 
 export type Courses3LevelMenuProps = {
