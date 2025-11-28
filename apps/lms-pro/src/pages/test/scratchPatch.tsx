@@ -7,11 +7,6 @@ type ScratchPadValue = {
   value: string
 }
 
-type ScratchPad = {
-  question_id: string
-  id: string
-  scratch_pad: string
-}
 interface IProps {
   scratchPadValues?: ScratchPadValue | null | undefined
   control: Control<any>

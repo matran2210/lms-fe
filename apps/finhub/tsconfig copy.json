@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+     "baseUrl": "./",
     "paths": {
       "@adapters/*": ["src/adapters/*"],
       "@components/*": ["src/components/*"],
@@ -12,16 +12,14 @@
       "@i18n/*": ["src/i18n/*"],
       "@pages/*": ["src/pages/*"]
     },
-   "target": "ES2022",
+    "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Node",
     "strict": true,
     "jsx": "react-jsx",
     "esModuleInterop": true,
-    "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true
-  },
-  "exclude": ["node_modules"]
+  }
 }
