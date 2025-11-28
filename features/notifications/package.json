@@ -9,19 +9,15 @@
     "lint": "eslint . --ext .ts,.tsx",
     "type-check": "tsc --noEmit"
   },
-  "peerDependencies": {
-    "react": "^18.2.0",
-    "next": "^12.1.6"
-  },
   "devDependencies": {
     "@types/aos": "^3.0.7"
   },
   "dependencies": {
     "@lms/assets": "workspace:*",
-    "@lms/utils": "workspace:*",
+    "@lms/contexts": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/ui": "workspace:*",
-    "@lms/contexts": "workspace:*",
+    "@lms/utils": "workspace:*",
     "aos": "^2.3.4",
     "lodash": "^4.17.21"
   }

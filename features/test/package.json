@@ -9,26 +9,22 @@
     "lint": "eslint . --ext .ts,.tsx",
     "type-check": "tsc --noEmit"
   },
-  "peerDependencies": {
-    "react": "^18.2.0",
-    "next": "^12.1.6"
-  },
   "dependencies": {
+    "@hookform/resolvers": "^3.10.0",
     "@lms/assets": "workspace:*",
-    "@lms/utils": "workspace:*",
-    "@lms/core": "workspace:*",
-    "@lms/ui": "workspace:*",
-    "@lms/hooks": "workspace:*",
-    "@lms/feature-courses": "workspace:*",
     "@lms/contexts": "workspace:*",
+    "@lms/core": "workspace:*",
     "@lms/feature-auth": "workspace:*",
-    "dayjs": "^1.11.12",
+    "@lms/feature-courses": "workspace:*",
+    "@lms/hooks": "workspace:*",
+    "@lms/ui": "workspace:*",
+    "@lms/utils": "workspace:*",
     "antd": "^5.25.0",
-    "react-hook-form": "7.48.2",
-    "zod": "^3.22.4",
-    "lodash": "^4.17.21",
-    "date-fns": "^3.0.6",
     "clsx": "^2.1.1",
-    "@hookform/resolvers": "^3.10.0"
+    "date-fns": "^3.0.6",
+    "dayjs": "^1.11.12",
+    "lodash": "^4.17.21",
+    "react-hook-form": "7.48.2",
+    "zod": "^3.22.4"
   }
 }
