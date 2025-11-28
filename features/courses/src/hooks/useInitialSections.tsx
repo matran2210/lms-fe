@@ -38,7 +38,6 @@ export const useInitialSections = (props: {
           setSections([...data?.sections].reverse())
         }
       }
-    } catch (error) {
     } finally {
       isFetchingRef.current = false
     }

@@ -73,8 +73,8 @@ const ResultCourse = ({
   coursePart,
   selectedResult,
   setSelectedResult,
-  setOpenReport,
-  isTeacher,
+  // setOpenReport,
+  // isTeacher,
   setLabelResult,
 }: IProps) => {
   const [resultList, setResultList] = useState<IQuizResultList>({
@@ -95,7 +95,7 @@ const ResultCourse = ({
     }
   };
 
-  const fetchResult = async (pageIndex: number = 1, pageSize: number = 10) => {
+  const fetchResult = async (pageIndex = 1, pageSize = 10) => {
     if (!class_user_id || !coursePart?.quiz?.id) return;
 
     const response = await ClassAPI.getAllResultOfQuiz(

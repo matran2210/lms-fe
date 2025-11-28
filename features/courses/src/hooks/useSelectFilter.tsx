@@ -1,17 +1,15 @@
-import { useEffect, useState } from 'react'
-import { useInfiniteQuery } from 'react-query'
-import { ISection } from '@lms/core'
 import {
   IGetCourseActivityList,
   IGetCourseSectionList,
   IGetCourseSubSectionList,
-  IGetCourseUnitList,
-  ISelect,
+  IGetCourseUnitList, ISection, ISelect
 } from '@lms/core'
+import { useEffect, useState } from 'react'
+import { useInfiniteQuery } from 'react-query'
 
 const DEFAULT_PAGESIZE = 10
 
-const getNextPageFilterParam = (lastPage: any, pages: any) => {
+const getNextPageFilterParam = (lastPage: any) => {
   return lastPage?.meta.page_index < lastPage.meta.total_pages
     ? lastPage?.meta.page_index + 1
     : undefined
@@ -28,7 +26,7 @@ const useSelectFilter = ({ courseId, courseKey, api}: {
   }
   api: {
     getCourseSectionList: (id: string | string[] | undefined, page_size: number, page_index?: number | undefined) => Promise<any>
-    getCourseSubsectionList: (page_size: number, type: "CHAPTER" | "UNIT" | "ACTIVITY", parentId?: string | undefined, classId?: string | undefined, page_index?: number | undefined, params?: Object | undefined) => Promise<any>
+    getCourseSubsectionList: (page_size: number, type: "CHAPTER" | "UNIT" | "ACTIVITY", parentId?: string | undefined, classId?: string | undefined, page_index?: number | undefined, params?: object | undefined) => Promise<any>
   }
 }) => {
   const [selected, setSelected] = useState<ISelect | null>(null)
@@ -101,8 +99,10 @@ const useSelectFilter = ({ courseId, courseKey, api}: {
         setSelectedActivity(null)
       }
       return data
-    } catch (err) {}
+    } catch {
+    }
   }
+
   const {
     hasNextPage: hasNextSubsectionPage,
     fetchNextPage: fetchNextSubsectionPage,

@@ -34,13 +34,13 @@ const SolutionModalContent = ({
   solution,
   type1column,
 }: SolutionModalContentProps) => {
-  let classModalParent = type1column
+  const classModalParent = type1column
     ? 'max-w-[646px] mx-auto block'
     : 'w-full flex gap-x-6 bg-[#F1F1F1]'
 
-  let classModalContent = type1column ? '' : 'w-1/2 p-6 pb-0 bg-white'
+  const classModalContent = type1column ? '' : 'w-1/2 p-6 pb-0 bg-white'
 
-  let classModalSolutionGroup = type1column ? '' : 'max-h-full overflow-y-auto'
+  const classModalSolutionGroup = type1column ? '' : 'max-h-full overflow-y-auto'
 
   return (
     <div

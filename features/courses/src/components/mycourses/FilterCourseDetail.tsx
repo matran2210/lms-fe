@@ -1,13 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-// components/SearchForm.tsx
-
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
+import { useFeature } from '@lms/contexts'
 import { defaultStatusDetail } from '@lms/core'
-import { useForm } from 'react-hook-form'
 import { SappHookFormSelect, TotalResullt } from '@lms/ui'
 import { getUserPrefix } from '@lms/utils'
-import { useFeature } from '@lms/contexts'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 const FilterCourseDetail = ({
   totalResult,
@@ -18,7 +14,7 @@ const FilterCourseDetail = ({
 }) => {
       const {router, pageLink} = useFeature();
   
-  let apiUrl = `${getUserPrefix(isTeacher, pageLink)}/courses/my-course/${router.query.courseId}`
+  const apiUrl = `${getUserPrefix(isTeacher, pageLink)}/courses/my-course/${router.query.courseId}`
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
 
   const { control, watch } = useForm()

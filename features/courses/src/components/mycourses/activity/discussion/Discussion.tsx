@@ -218,7 +218,6 @@ const Discussion = ({ class_id,  }: Props) => {
       }
       try {
         await dispatch(reactDiscussion({ api: activityApi, data  }))
-      } catch (error) {
       } finally {
         await dispatch(getDiscussion({api: courseApi, id: class_id, sectionId: router.query.activityId as string}))
       }

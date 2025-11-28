@@ -1,11 +1,10 @@
-import React from 'react'
-import { useEffect, useState } from "react";
 import { ExplanationPackageV2 } from "explanation-package";
+import { useEffect, useState } from "react";
 // import 'explanation-package/dist/index.css'
 import { AltArrowLeft, CloseIconV2 } from "@lms/assets";
-import { Modal } from "antd";
-import { SappLoading } from "@lms/ui";
 import { useFeature } from '@lms/contexts';
+import { SappLoading } from "@lms/ui";
+import { Modal } from "antd";
 
 export enum QUESTION_LEVELS {
   FUNDAMENTAL = "FUNDAMENTAL",
@@ -77,7 +76,6 @@ const ModalExplanationPackage = ({
         short_answer: resultResponse?.data?.answer?.short_answer,
         response_option_answer: resultResponse?.data?.answer?.response_option,
       });
-    } catch (error) {
     } finally {
       setLoading(false);
     }
@@ -116,7 +114,7 @@ const ModalExplanationPackage = ({
   }) => {
     try {
       await uploadApi.downloadFile(data);
-    } catch (error) {}
+    } catch {}
   };
 
   useEffect(() => {

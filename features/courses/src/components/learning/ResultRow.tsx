@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Icon } from '@lms/assets'
+import { Icon } from '@lms/assets';
 import { formatTimeMinToHhMm } from "@lms/utils";
 
 interface ResultRowsProps {

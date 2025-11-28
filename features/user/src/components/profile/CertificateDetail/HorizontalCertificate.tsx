@@ -39,7 +39,6 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
 
         <div className="mb-6 flex w-full items-center justify-center overflow-hidden md:mb-0 md:flex-1">
           {certificate?.certificate_url ? (
-            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={certificate?.certificate_url || ""}
               alt={certificate?.course.name}

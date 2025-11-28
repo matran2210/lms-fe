@@ -1,11 +1,11 @@
-import React, { forwardRef } from "react";
-import { EAttemptStatus } from "@lms/core";
-import Badge from "./CardCourseBadge";
-import { Tooltip } from "@lms/ui";;
+import { LockClosedIcon } from "@lms/assets";
+import { ANIMATION, EAttemptStatus } from "@lms/core";
+import { Tooltip } from "@lms/ui";
 import { truncateString } from "@lms/utils";
 import clsx from "clsx";
-import { ANIMATION } from "@lms/core";
-import { LockClosedIcon } from "@lms/assets";
+import React, { forwardRef } from "react";
+import Badge from "./CardCourseBadge";
+;
 
 const mappingBadgeFromStatus: Partial<
   Record<EAttemptStatus, { badge: string; className: string }>
