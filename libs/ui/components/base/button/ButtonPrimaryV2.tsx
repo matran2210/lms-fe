@@ -15,13 +15,13 @@ const ButtonPrimaryV2 = ({
   children,
   ...props
 }: IButtonBaseProps) => {
-  let textSizeClass =
+  const textSizeClass =
     size === 'small'
       ? 'text-v2-sm'
       : size === 'medium'
         ? 'text-v2-sm md:text-v2-base'
         : 'text-v2-sm md:text-v2-lg'
-  let padding =
+  const padding =
     size === 'small'
       ? 'py-2 px-4'
       : size === 'medium'
@@ -31,7 +31,7 @@ const ButtonPrimaryV2 = ({
   // let disabledClass = disabled
   //   ? 'cursor-not-allowed !bg-gray-100 !text-gray-400 hover:!bg-gray-100 hover:!text-gray-400 hover:!border-gray-100'
   //   : 'cursor-pointer'
-  let componentClass = clsx(
+  const componentClass = clsx(
     `text-center font-medium border-none ${padding} ${textSizeClass}`,
     className,
     {

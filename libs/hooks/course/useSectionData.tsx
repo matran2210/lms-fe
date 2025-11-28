@@ -18,9 +18,8 @@ export const useSectionData = (sectionId: string | null, type: string, api: ICou
           sectionId,
           class_id as string,
         )
-        setSections([...res?.data?.sections].reverse())
+        setSections([...(res?.data?.sections || [])].reverse())
       }
-    } catch (error) {
     } finally {
       setIsLoading(false)
     }

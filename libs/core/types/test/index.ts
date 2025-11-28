@@ -3,7 +3,7 @@ export interface Answer {
     file_key?: string
     file_name?: string
   }
-  answer: string | string[] | Object[]
+  answer: string | string[] | unknown[]
   attempted?: boolean
   done?: boolean
   flag?: boolean

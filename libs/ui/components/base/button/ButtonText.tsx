@@ -17,21 +17,21 @@ const ButtonText = ({
   children,
   ...props
 }: IButtonBaseProps) => {
-  let textSizeClass =
+  const textSizeClass =
     size === "small"
       ? "text-sm"
       : size === "medium"
         ? "text-sm md:text-base"
         : "text-sm md:text-lg";
 
-  let fullWidthClass = full ? "block w-full" : "inline-block w-fit";
-  let disabledClass = disabled
+  const fullWidthClass = full ? "block w-full" : "inline-block w-fit";
+  const disabledClass = disabled
     ? "cursor-not-allowed !text-secondary-100 hover:!text-secondary-100"
     : "cursor-pointer";
 
-  let isUnderline = isUnderLine ? "underline" : "";
+  const isUnderline = isUnderLine ? "underline" : "";
 
-  let componentClass = `
+  const componentClass = `
     p-0
     text-center 
     font-medium

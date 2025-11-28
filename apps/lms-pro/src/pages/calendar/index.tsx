@@ -224,7 +224,11 @@ const Page = () => {
                     <DetailCalendarTablet open={open} setOpen={setOpen} />
                   )}
                   {isAlwaysShowSidebar && (
-                    <DetailCalendar open={open} setOpen={setOpen} />
+                    <DetailCalendar
+                      open={open}
+                      setOpen={setOpen}
+                      calendarAPI={CalendarApi}
+                    />
                   )}
                 </>
               )}

@@ -38,14 +38,14 @@ const MultiChoiceQuestion = ({
 }: IPreviewProp) => {
   const router = useRouter();
   const convertAnswer = useMemo(() => {
-    let answers = [];
+    const answers = [];
     let number = 0;
     if (data?.answers) {
       const oldData = [...data?.answers];
       const sorted = oldData?.sort(
         (a: any, b: any) => a?.answer_position - b?.answer_position,
       );
-      for (let e of sorted) {
+      for (const e of sorted) {
         number++;
         answers.push({
           label: `${getUppercaseByNumber(number)}. ${e?.answer}`,

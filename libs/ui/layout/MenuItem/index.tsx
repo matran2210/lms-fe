@@ -1,5 +1,4 @@
-import { AddNoteAnimation, BlankAvatarImage, CalculatorAnimation, CalendarAnimation, CourseContentAnimation, DashboardAnimation, EntranceTestAnimation, EventTestAnimation, ExamInfoAnimation, ExamListAnimation, MyCourseAnimation, NoteListAnimation, NotificationAnimation, ResourceAnimation, TestQuizListAnimation } from "@lms/assets";
-import { ExpandIcon } from "@lms/assets";
+import { AddNoteAnimation, BlankAvatarImage, CalculatorAnimation, CalendarAnimation, CourseContentAnimation, DashboardAnimation, EntranceTestAnimation, EventTestAnimation, ExamInfoAnimation, ExamListAnimation, ExpandIcon, MyCourseAnimation, NoteListAnimation, NotificationAnimation, ResourceAnimation, TestQuizListAnimation } from "@lms/assets";
 import {
   activeNotesList,
   clearNotifications,

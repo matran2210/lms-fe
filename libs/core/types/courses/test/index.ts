@@ -58,8 +58,8 @@ export interface IQuizAttempt {
   is_graded: boolean
   major_score: number
   number_of_attempts: number
-  quiz: Object
-  quiz_position_mapping: Array<Object>
+  quiz: object
+  quiz_position_mapping: Array<object>
   ratio_score: string
   score: number
   status: string

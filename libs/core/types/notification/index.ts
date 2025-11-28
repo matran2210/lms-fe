@@ -8,9 +8,9 @@ export interface INotifications {
   updated_at: Date
   deleted_at?: Date
   title: string
-  notification_user_instances: Object
-  notifications: any
-  meta: Object
+  notification_user_instances: object
+  notifications: unknown
+  meta: object
 }
 
 export interface INotificationDetail {
@@ -25,7 +25,7 @@ export interface INotificationDetail {
   action: string
   content: string
   send_time?: string
-  created_by: any
-  created_from: any
-  files: any
+  created_by: unknown
+  created_from: unknown
+  files: unknown
 }

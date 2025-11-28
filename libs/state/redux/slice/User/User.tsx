@@ -306,7 +306,7 @@ export const userSlice = createSlice({
       state.loadHistory = true
     })
     builder.addCase(loadMoreLoginHistory.fulfilled, (state, action) => {
-      let obj = { ...state.loginHistory }
+      const obj = { ...state.loginHistory }
       obj.meta = action.payload.meta
       obj.userActivities = obj.userActivities.concat(
         action.payload.userActivities,

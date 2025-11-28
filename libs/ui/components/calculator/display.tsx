@@ -16,7 +16,7 @@ const Display = (props: IProps) => {
   const { total, next, operation, lastExpression } = props;
   const { expression, result } = displayLogic(total, next, operation);
 
-  let classExpression = "display_expression";
+  const classExpression = "display_expression";
   let classResult = "display__next";
 
   if (isEmpty(total) && isEmpty(next) && isEmpty(operation)) {

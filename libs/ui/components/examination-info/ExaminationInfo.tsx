@@ -173,7 +173,7 @@ const ExaminationInfo = ({
       note: data.note,
     });
   };
-  const handleBack = (isCancel: boolean = false) => {
+  const handleBack = (isCancel = false) => {
     setDirection(-1);
     if (isOpenSelectExam) {
       setIsOpenSelectExam(false);

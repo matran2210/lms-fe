@@ -44,7 +44,7 @@ export const changePassword = createAsyncThunk(
 )
 export const disableUnsavedChange = createAsyncThunk(
   'loginReducer/disableUnsavedChange',
-  async ({}, thunkAPI) => {
+  async (_, thunkAPI) => {
     return false
   },
 )
@@ -56,7 +56,9 @@ export const loginSlice = createSlice({
       state.errors = {}
       state.loading = false
     },
-    resetAuthUserState: (state: LoginState, action) => {},
+    resetAuthUserState: (state: LoginState, action) => {
+      // state.user = action.payload
+    },
     enableUnsavedChange: (state: LoginState) => {
       state.unsavedChange = true
     },

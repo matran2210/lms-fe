@@ -3,17 +3,13 @@ import { LoadingIcon, PiPIcon } from "@lms/assets";
 import { Icon } from "@lms/assets/icons";
 import { Thumbnail, video_url } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
-import { fetcher } from "@services/requestV2";
-import {
-  formatTimeToHourMinuteSecond,
-  getResolution,
-  isMobileOrTablet,
-} from "@utils/helpers";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import useClickOutside from "../clickoutside/HookClick";
 import { ArrowIcon } from "../pagination";
+import { formatTimeToHourMinuteSecond, getResolution, isMobileOrTablet } from "@lms/utils";
+import { useFeature } from "@lms/contexts";
 
 interface IProp {
   options: any;
@@ -63,6 +59,7 @@ const SAPPVideo = ({
   thumbnail,
   children,
 }: IProp) => {
+  const {fetcher} = useFeature();
   const [playerFunction, setPlayerFunction] = useState<any>();
   const [valueVolume, setValueVolume] = useState<number>(1);
   const [playbackRate, setPlaybackRate] = useState<number>(1);
@@ -222,7 +219,9 @@ const SAPPVideo = ({
         };
       });
       setlistCaptions(newlistCaptions);
-    } catch (error) {}
+    } catch (error) {
+      // ignore
+    }
   };
 
   useEffect(() => {
@@ -754,7 +753,9 @@ const SAPPVideo = ({
         await video.play();
         await video.requestPictureInPicture();
       }
-    } catch (err) {}
+    } catch (err) {
+      // ignore
+    }
   };
   const router = useRouter();
 

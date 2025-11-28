@@ -10,8 +10,9 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from '../api/courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { useCourseContext, UserType } from '@lms/contexts'
-import { Layout, SearchWithMenuToggle } from '@lms/ui'
+import { SearchWithMenuToggle } from '@lms/ui'
 import { PageLink } from 'src/constants/routes'
+import Layout from '@components/layout'
 
 const DEFAULT_PAGESIZE = 9
 

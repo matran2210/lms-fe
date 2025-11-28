@@ -7,14 +7,12 @@
   "scripts": {
     "lint": "eslint . --ext .ts,.tsx"
   },
-  "peerDependencies": {
-    "react": "^18.2.0"
-  },
   "dependencies": {
     "@lms/core": "workspace:*",
     "@lms/utils": "workspace:*",
     "@reduxjs/toolkit": "^1.9.7",
     "antd": "^5.25.0",
+    "axios": "^1.6.2",
     "next-redux-wrapper": "^8.1.0",
     "react-hook-form": "7.48.2",
     "react-hot-toast": "^2.4.1",

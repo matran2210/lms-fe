@@ -66,8 +66,12 @@ const EditorReader = ({
 
     if (element && viewer) {
       try {
-        await viewer.parseElement(element, true, function () {});
-      } catch (error) {}
+        await viewer.parseElement(element, true, function () {
+          // Do something
+        });
+      } catch (error) {
+        // Log the error
+      }
     }
   };
 
@@ -117,7 +121,7 @@ const EditorReader = ({
       const video = target?.previousSibling as any;
       const src = video?.querySelector("source")?.getAttribute("token");
       if (src && src !== "null" && video.tagName === "VIDEO") {
-        var iframe = document.createElement("iframe");
+        const iframe = document.createElement("iframe");
         iframe.src = `${video_url}${src}/iframe?autoplay=true`;
         iframe.id = video?.id;
         iframe.className = video?.className;
@@ -171,7 +175,7 @@ const EditorReader = ({
       <div
         className={`mce-content-body editor-wrap text-base ${className}`}
         id={id || ""}
-        onMouseUp={onMouseUp ? onMouseUp : () => {}}
+        onMouseUp={onMouseUp ? onMouseUp : () => undefined}
         ref={editorRef}
       >
         <div
@@ -203,7 +207,7 @@ const EditorReader = ({
                       <SAPPVideo
                         key={videoToken}
                         options={{
-                          onTimeUpdate: () => {},
+                          onTimeUpdate: () => undefined,
                           src: videoToken,
                         }}
                         streamRef={videoRefs.current[videoToken]}

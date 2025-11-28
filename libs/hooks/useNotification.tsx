@@ -82,13 +82,10 @@ export const useNotification = (notificationApi: INotificationAPI) => {
   }
 
   const countNotificationsUnRead = async () => {
-    try {
       await dispatch(getCountUnRead(notificationApi))
-    } catch (error) {}
   }
 
   const markAllRead = async (selectedTab: number) => {
-    try {
       await dispatch(markAllNotifications(notificationApi))
       if (selectedTab === 2) {
         dispatch(deleteAllNotifications())
@@ -96,7 +93,6 @@ export const useNotification = (notificationApi: INotificationAPI) => {
         dispatch(updateStatusAll())
       }
       await countNotificationsUnRead()
-    } catch (error) {}
   }
 
   const handleMarkAll = (tab: number) => {
@@ -104,7 +100,6 @@ export const useNotification = (notificationApi: INotificationAPI) => {
   }
 
   const handleMarkById = async (ids: string[], selectedTab: number) => {
-    try {
       const res = await notificationApi.markById(ids, true)
       if (!res?.data) {
         return
@@ -117,11 +112,9 @@ export const useNotification = (notificationApi: INotificationAPI) => {
           dispatch(toggleStatusById(id))
         }
       })
-    } catch (error) {}
   }
 
   const handleUnMarkById = async (ids: string[], selectedTab: number) => {
-    try {
       const res = await notificationApi.markById(ids, false)
       if (!res?.data) {
         return
@@ -130,7 +123,6 @@ export const useNotification = (notificationApi: INotificationAPI) => {
         dispatch(toggleStatusById(id))
       })
       dispatch(getCountUnRead(notificationApi))
-    } catch (error) {}
   }
 
   const getApiNotificationDetail = async (
@@ -138,7 +130,6 @@ export const useNotification = (notificationApi: INotificationAPI) => {
     redirect: string | null,
     content: string,
   ) => {
-    try {
       if (id !== notifyDetail?.id) {
         const res = await dispatch(getNotificationDetail({ api: notificationApi, id }))
         if (res) {
@@ -148,7 +139,6 @@ export const useNotification = (notificationApi: INotificationAPI) => {
       if (!isEmpty(redirect)) {
         router.replace(`/${content}`)
       }
-    } catch (error) {}
   }
 
   const handleViewDetail = async (
@@ -209,7 +199,6 @@ export const useNotification = (notificationApi: INotificationAPI) => {
               }),
             )
             await countNotificationsUnRead()
-          } catch (err) {
           } finally {
             isFetching.current = false
           }

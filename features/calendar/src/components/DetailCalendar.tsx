@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { IEvent } from "sapp-common-package/dist/types";
 import { ICalendarDetail } from "@lms/core";
 import CourseTree from "./CourseTree";
-import SappIcon from "src/common/SappIcon";
 import dayjs, { Dayjs } from "dayjs";
 import {
   ANIMATION,
@@ -17,7 +16,7 @@ import getConfig from "next/config";
 import { CloseDetailIcon, StatusDotIcon, ZoomIcon } from "@lms/assets";
 import { Divider } from "antd";
 import clsx from "clsx";
-import { ButtonPrimary } from "@lms/ui";
+import { ButtonPrimary, SappIcon } from "@lms/ui";
 import { SpinIcon } from "@lms/assets";
 const { publicRuntimeConfig } = getConfig();
 export const { apiURL } = publicRuntimeConfig;
@@ -25,9 +24,13 @@ export const { apiURL } = publicRuntimeConfig;
 interface IProps {
   open: { isOpen: boolean; data: IEvent | null };
   setOpen: Dispatch<SetStateAction<{ isOpen: boolean; data: IEvent | null }>>;
+  calendarAPI: {
+    getEventSchedule: (params?: object | undefined) => Promise<any>;
+    getDetailEvent: (id: string, is_holiday: boolean) => Promise<any>;
+  };
 }
 
-const DetailCalendar = ({ open, setOpen }: IProps) => {
+const DetailCalendar = ({ open, setOpen, calendarAPI }: IProps) => {
   const router = useRouter();
   const [data, setData] = useState<ICalendarDetail>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -140,9 +143,10 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
     setLoading(true);
     try {
       if (!open?.data?.id) return;
-      const res = await (
-        await import("@pages/api/calendar")
-      ).default.getDetailEvent(open?.data?.id, open?.data?.type === "HOLIDAY");
+      const res = await calendarAPI.getDetailEvent(
+        open?.data?.id,
+        open?.data?.type === "HOLIDAY",
+      );
       setData(res.data);
     } finally {
       setLoading(false);

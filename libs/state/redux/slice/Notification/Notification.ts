@@ -15,7 +15,7 @@ export interface INotifications {
     is_read: boolean
   }
   notifications: any
-  meta: Object
+  meta: object
   created_by?: string | null
   avatar: { [key: string]: string }
 }
@@ -104,7 +104,7 @@ export const getCountUnRead = createAsyncThunk(
 
 export const getNotification = createAsyncThunk(
   'notificationReducer/getNotification',
-  async ({api, params}: {api: INotificationAPI; params: Object}, thunkAPI) => {
+  async ({api, params}: {api: INotificationAPI; params: object}, thunkAPI) => {
     try {
       const res = await api.getNotification(params)
       if (!res?.data) {
@@ -120,7 +120,7 @@ export const getNotification = createAsyncThunk(
 export const loadMoreNotification = createAsyncThunk(
   "notificationReducer/loadMoreNotification",
   async (
-    { api, params }: { api: INotificationAPI; params: Object },
+    { api, params }: { api: INotificationAPI; params: object },
     thunkAPI,
   ) => {
     try {

@@ -5,6 +5,7 @@ import '@fortune-sheet/react/dist/index.css'
 import { CourseProvider, FeatureProvider, PinnedNotifyProvider, SocketContext, store, useAppDispatch, wrapper } from '@lms/contexts'
 import {
   ANIMATION,
+  AppType,
   CERTIFICATE_DETAIL,
   ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
@@ -57,6 +58,7 @@ import { AuthAPI } from './api/profile'
 import { QuestionAPI } from './api/question'
 import { UploadAPI } from './api/upload'
 import ErrorRedirectPage from './error-redirect'
+import { fetcher } from '@services/requestV2'
 
 export const excludedPathsHelp = [
   '/test/[id]',
@@ -336,6 +338,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
               menuItemsEvent: MENU_ITEMS_EVENT,
               menuBottom: MENU_BOTTOM,
               router: router,
+              fetcher: fetcher
             }}>
               <CourseProvider router={router}>
                 <QueryClientProvider client={queryClient}>
@@ -360,7 +363,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                             <Help showHelp={showHelp} />
                           </>
                         )}
-                        <LearningNotesList />
+                        <LearningNotesList appType={AppType.FINHUB} />
                         <PopupCompletedCourse />
                       </>
                     </RouteGuard>

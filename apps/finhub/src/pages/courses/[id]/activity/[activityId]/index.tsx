@@ -30,7 +30,7 @@ import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { UploadAPI } from 'src/pages/api/upload'
-import { clearNote, closeCalculator, courseActivityAction, courseActivityReducer, getCourseActivityTapById, getDiscussion, resetQuizActivity, useAppDispatch, useAppSelector, useCourseContext } from '@lms/contexts'
+import { clearNote, closeCalculator, courseActivityAction, courseActivityReducer, getCourseActivityTapById, getDiscussion, resetQuizActivity, useAppDispatch, useAppSelector, useCourseContext, UserType } from '@lms/contexts'
 import { showPopupCompletedCourse } from '@lms/contexts'
 import {
   ActivitySkeleton,

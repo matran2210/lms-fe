@@ -18,13 +18,13 @@ interface IProps {
 const SappActionCell = ({
   isShowViewButton = true,
   labelButtonView = 'View',
-  handleClickView = () => {},
+  handleClickView = () => undefined,
   isShowEditButton = false,
   labelButtonEdit = 'Edit',
-  handleClickEdit = () => {},
+  handleClickEdit = () => undefined,
   isShowDeleteButton = false,
   labelButtonDelete = 'Delete',
-  handleClickDelete = () => {},
+  handleClickDelete = () => undefined,
 }: IProps) => {
   const handleDelayAction = (actionFunc: () => void) => {
     setTimeout(() => {
