@@ -1,5 +1,6 @@
 import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from "@lms/assets";
 import {
+  AppType,
   backTypeMap,
   DEFAULT_PAGE_NUMBER,
   getTypeName,
@@ -47,15 +48,18 @@ export const { apiURL } = publicRuntimeConfig;
 
 const DEFAULT_PAGESIZE = 20;
 
-const LearningNotesList = () => {
+type Props = {
+  appType: AppType
+};
+const LearningNotesList = ({ appType }: Props) => {
   const [direction, setDirection] = useState<1 | -1>(1);
   const { courseApi, pageLink, router } = useFeature();
   const { isMobileView, isAlwaysShowSidebar } = useTailwindBreakpoint();
   const notesListStatus = useAppSelector(
-    (state) => state.notesListReducer?.status,
+    (state) => appType === AppType.LMS_PRO ? state.notesListReducer?.status : state.shortNotesListReducer?.status,
   );
   const getNotesData = useAppSelector(
-    (state) => state.notesListReducer?.note_data,
+    (state) => appType === AppType.LMS_PRO ? state.notesListReducer?.note_data: state.shortNotesListReducer?.note_data,
   );
   const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false);
   const [openChooseItem, setOpenChooseItem] = useState<IOpenChooseItem>({

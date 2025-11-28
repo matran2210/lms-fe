@@ -16,6 +16,7 @@ import {
 } from '@lms/contexts'
 import {
   ANIMATION,
+  AppType,
   CERTIFICATE_DETAIL,
   ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
@@ -401,7 +402,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                             <MKTInApp showMKTInApp={showMKTInApp} />
                             <div id="floating-btn-divider" />
                             <Help showHelp={showHelp} />
-                            <LearningNotesList />
+                            <LearningNotesList appType={AppType.LMS_PRO} />
                             <PopupCompletedCourse />
                           </>
                         </RouteGuard>
