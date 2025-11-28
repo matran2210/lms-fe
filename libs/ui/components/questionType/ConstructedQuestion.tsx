@@ -63,7 +63,7 @@ const EssayQuestionPreview = ({
   index,
   question_data,
   control,
-  handleSaveHighLight = () => {},
+  handleSaveHighLight = () => undefined,
   highlighted,
   allowHighLight,
   forCaseStudy = false,
@@ -76,7 +76,7 @@ const EssayQuestionPreview = ({
   handleClearFile,
   setOpenPdf,
   allowUnHighLight,
-  handleSaveHighLightRequirement = () => {},
+  handleSaveHighLightRequirement = () => undefined,
   setUnsavedChanges,
   handleChange,
   isShowContent = true,
@@ -357,6 +357,7 @@ const EssayQuestionPreview = ({
       dispatch(disableUnsavedChange());
       await uploadApi.downloadFile(data);
     } catch (error) {
+      // do nothing
     } finally {
       setUnsavedChanges && setUnsavedChanges(true);
       dispatch(loginSlice.actions.enableUnsavedChange());

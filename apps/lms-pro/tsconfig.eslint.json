@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["**/*.ts", "**/*.tsx"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-empty": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "no-extra-boolean-cast": "off"
+  }
+}

@@ -83,14 +83,6 @@ import { PinnedNotifications } from '@lms/ui'
 import { fetcher } from '@services/requestV2'
 dayjs.extend(utc)
 dayjs.extend(weekday)
-export const excludedPathsHelp = [
-  '/test/[id]',
-  '/case-study/[id]',
-  '/certificates/[id]',
-  '/case-study/result/[id]',
-  '/teachers',
-  '/courses/[id]/activity/[activityId]',
-]
 
 const showSupportWidget = [
   '/courses',

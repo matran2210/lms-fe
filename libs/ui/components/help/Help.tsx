@@ -1,13 +1,12 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { IconClose } from "@lms/assets";
 import { useTailwindBreakpoint } from "@lms/hooks";
-import { excludedPathsHelp } from "@pages/_app";
 import { Popover } from "antd";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { Tooltip } from "../common";
 import PopupSupportCenter from "./PopupSupportCenter";
 import { usePinnedNotifyContext } from "@lms/contexts";
+import { excludedPathsHelp } from "@lms/core";
 const Help = ({ showHelp }: { showHelp: boolean }) => {
   // All hooks need to be at the top level, before any conditional returns
   const [visible, setVisible] = useState(false);

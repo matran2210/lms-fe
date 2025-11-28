@@ -346,7 +346,6 @@ const MatchQuiz = forwardRef(
       });
 
       setEdges(newEdges);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [defaultAnswer, corrects]);
 
     const [isNodeReady, setNodeReady] = useState(false);

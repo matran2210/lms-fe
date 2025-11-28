@@ -8,7 +8,6 @@ interface LayoutProps {
   title: string
 }
 
-// eslint-disable-next-line import/no-unused-modules
 export default function SingleDialogLayout(props: LayoutProps): ReactElement {
   const { children, title } = props
 

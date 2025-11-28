@@ -19,7 +19,9 @@ const PopupWelcome = ({ confirmDialogOverLayRef }: Props) => {
   async function activeUserGuide() {
     try {
       await courseApi.userGuideActive()
-    } catch (error) {}
+    } catch {
+      // ignore
+    }
   }
   const closeUserGuide = () => {
     if (confirmDialogOverLayRef.current) {

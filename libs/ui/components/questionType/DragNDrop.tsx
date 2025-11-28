@@ -144,7 +144,6 @@ const DragNDropPreview = forwardRef(
     useEffect(() => {
       if (isDropEnd) {
         handleGetData?.(action())
-      } else {
       }
     }, [isDropEnd])
 

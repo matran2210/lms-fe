@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { DownloadIcon } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
 import {
@@ -36,7 +35,6 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     useTailwindBreakpoint();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [resources, setResources] = useState<IResourceDetail>();
-  const {} = useFeature();
   //Tạo các biến để lấy id trên thanh url
   const isCourseDetail = pageLink.COURSE_DETAIL === router.pathname;
   const isCoursePartDetail = router.pathname.includes("/section");
@@ -146,6 +144,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           );
         });
       } catch (err) {
+        // Handle error
       } finally {
         // Đảm bảo reset trạng thái sau khi API hoàn tất
         setIsFirstCallApi(true);
