@@ -47,7 +47,9 @@ export default function TeacherMenu({
   const handleLogout = useCallback(async () => {
     try {
       await authManager.logout();
-    } catch {}
+    } catch {
+      // ignore
+    }
   }, []);
 
   const actionHandlers: Record<string, () => void> = {

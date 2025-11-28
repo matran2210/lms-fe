@@ -1,8 +1,7 @@
 import { PointerIcon, ShowCommentIcon } from "@lms/assets";
-import { useCourseNoteContext } from "@lms/contexts";
+import { useCourseNoteContext, useFeature } from "@lms/contexts";
 import { doHighlight, optionsImpl } from "@funktechno/texthighlighter/lib";
 import { video_url } from "@lms/core";
-import { CoursesAPI } from "@pages/api/courses";
 import {
   replaceTextAlignCenterToWebKitCenter,
   replaceWhiteSpacePreWrapToNormal,
@@ -46,7 +45,7 @@ export const HighlightableHTML: React.FC<Props> = ({
   isShowNote = false,
   className,
 }) => {
-  const router = useRouter();
+  const {router, courseApi} = useFeature();
   const activityId = router.query.activityId;
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRefs = useRef<Record<string, React.RefObject<HTMLVideoElement>>>(
@@ -290,7 +289,9 @@ export const HighlightableHTML: React.FC<Props> = ({
 
           try {
             range.surroundContents(span);
-          } catch (e) {}
+          } catch (e) {
+            // ignore
+          }
         } else {
           // Complex case: spans multiple text nodes
           // We need to wrap each text node segment separately to avoid wrapping block elements
@@ -362,10 +363,14 @@ export const HighlightableHTML: React.FC<Props> = ({
               span.setAttribute("data-tracked", "true");
 
               nodeRange.surroundContents(span);
-            } catch (e) {}
+            } catch (e) {
+              // ignore
+            }
           });
         }
-      } catch (error) {}
+      } catch (error) {
+        // ignore
+      }
     });
 
     // Final cleanup: normalize all text nodes in container
@@ -603,7 +608,7 @@ export const HighlightableHTML: React.FC<Props> = ({
     // Prevent event from bubbling
     e.stopPropagation();
 
-    // 👉 Lấy rect của từ đầu tiên (ở dòng đầu tiên)
+    // Lấy rect của từ đầu tiên (ở dòng đầu tiên)
     const rects = highlightSpan.getClientRects();
     const firstRect = rects[0] ?? highlightSpan.getBoundingClientRect();
     setHighlightRect(firstRect);
@@ -761,7 +766,7 @@ export const HighlightableHTML: React.FC<Props> = ({
         name: `Note-${highlightId}`,
         description: data,
       };
-      const res = await CoursesAPI.createNote(params);
+      const res = await courseApi.createNote(params);
       toast.success("Tạo thành công!");
     } catch (error) {
       toast.error("Tạo không thành công!");
@@ -776,7 +781,7 @@ export const HighlightableHTML: React.FC<Props> = ({
         name: noteData?.name,
         description: data,
       };
-      await CoursesAPI.updateCourseNotesList(noteId, params);
+      await courseApi.updateCourseNotesList(noteId, params);
       toast.success("Cập nhật thành công!");
     } catch (error) {
       toast.error("Cập nhật không thành công!");
@@ -915,8 +920,12 @@ export const HighlightableHTML: React.FC<Props> = ({
 
     if (element && viewer) {
       try {
-        await viewer.parseElement(element, true, function () {});
-      } catch (error) {}
+        await viewer.parseElement(element, true, function () {
+          // Do nothing
+        });
+      } catch (error) {
+        // Log the error
+      }
     }
   };
 
@@ -1167,7 +1176,7 @@ export const HighlightableHTML: React.FC<Props> = ({
                     <SAPPVideo
                       key={videoToken}
                       options={{
-                        onTimeUpdate: () => {},
+                        onTimeUpdate: () => undefined,
                         src: videoToken,
                       }}
                       streamRef={videoRefs.current[videoToken]}
