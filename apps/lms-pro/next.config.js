@@ -23,7 +23,22 @@ let nextConfig = {
   productionBrowserSourceMaps: true,
   optimizeFonts: false,
   swcMinify: false, // BƯỚC 1: transpilePackages vẫn phải giữ để hỗ trợ
-
+transpilePackages: [
+    '@lms/ui',
+    '@lms/core',
+    '@lms/hooks',
+    '@lms/assets',
+    '@lms/utils',
+    '@lms/contexts',
+    '@lms/feature-user',
+    '@lms/feature-class',
+    '@lms/feature-auth',
+    '@lms/feature-dashboard',
+    '@lms/feature-courses',
+    '@lms/feature-notifications',
+    '@lms/feature-test',
+    '@lms/feature-calendar',
+  ],
   webpack: (config, { isServer, defaultLoaders }) => {
     config.resolve.alias.canvas = false // RULE MỚI: Dùng Next.js's default Babel loader cho libs/ và features/
     config.resolve.alias['styled-components'] = require.resolve('styled-components');
@@ -74,9 +89,13 @@ let nextConfig = {
 
   poweredByHeader: false,
 
+  logging: {
+    fetches: { fullUrl: true },
+  }, // Tối ưu hóa lại Experimental
   experimental: {
     optimizeCss: true,
     forceSwcTransforms: true,
+    instrumentationHook: true,
   },
 }
 

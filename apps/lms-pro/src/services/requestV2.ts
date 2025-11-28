@@ -13,7 +13,6 @@ import {
   COOKIE_INFO,
   ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
-  PageLink,
 } from '@lms/core'
 import { apiURL } from 'src/redux/services/httpService'
 import { deleteCookie, getCookie, setCookie } from '@lms/utils'

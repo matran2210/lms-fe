@@ -34,7 +34,6 @@ const TestScratchPads = ({
 }: IProps) => {
   const handleChangeScratchPad = (
     e: ChangeEvent<HTMLInputElement>,
-    id?: string,
   ) => {
     const { value } = e.target
 
@@ -128,7 +127,7 @@ const TestScratchPads = ({
             scratchPads={scratchPads}
             handleChangeScratchPad={(event: ChangeEvent<HTMLInputElement>) => {
               setScratchPads(event.target.value)
-              handleChangeScratchPad(event, currentPage)
+              handleChangeScratchPad(event)
             }}
             className="!h-fit"
           />
