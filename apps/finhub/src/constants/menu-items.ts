@@ -1,11 +1,12 @@
 import { LANG_SIGNIN, TitleSidebar } from "@lms/core"
 import { PageLink } from "./routes"
+import { makeMenuLevel } from "@utils/helpers"
 
 
 const MENU_OPTIONS: MenuOption[] = [
   {
     name: TitleSidebar.COURSES,
-    icon: 'union',
+    icon: 'book-mark',
     url: PageLink.SHORT_COURSE,
     type: 'level-1',
   },
@@ -93,18 +94,6 @@ type MenuOption = {
   url: string
   type: string
   subItems?: MenuOption[]
-}
-
-function makeMenuLevel(options: MenuOption[], depth = 0): MenuItem[] {
-  return options.map((option, idx) => ({
-    ...option,
-    id: depth === 0 ? idx.toString() : `${depth}.${idx}`,
-    depth,
-    subItems:
-      option.subItems && option.subItems.length > 0
-        ? makeMenuLevel(option.subItems, depth + 1)
-        : undefined,
-  }))
 }
 
 export const MENU_ITEMS: MenuItem[] = makeMenuLevel(MENU_OPTIONS)

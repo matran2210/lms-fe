@@ -1,4 +1,4 @@
-import { BlankAvatarImage, ExpandIcon } from '@lms/assets'
+import { BlankAvatarImage } from '@lms/assets'
 import { activeNotesList3Level, clearNotifications, openCalculator3Level, pushNotes3Level, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
 import { CourseInfo, LANG_SIGNIN, MenuItemProps, ROUTES, TitleSidebar } from '@lms/core'
 import { useNotification } from '@lms/hooks'
@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from 'uuid'
 import MenuItemsList from './MenuItemsList'
 import { NotificationAPI } from '@pages/api/notification'
 import { PageLink } from 'src/constants/routes'
+import ExpandIcon from '@components/layout/ExpandIcon'
 export default function MenuItem({
   menuItem: { name, icon: Icon, url, type, subItems },
   closeSideBar,

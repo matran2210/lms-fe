@@ -5,6 +5,7 @@ import '@fortune-sheet/react/dist/index.css'
 import { CourseProvider, FeatureProvider, PinnedNotifyProvider, SocketContext, store, useAppDispatch, wrapper } from '@lms/contexts'
 import {
   ANIMATION,
+  AppType,
   CERTIFICATE_DETAIL,
   ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
@@ -362,7 +363,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                             <Help showHelp={showHelp} />
                           </>
                         )}
-                        <LearningNotesList />
+                        <LearningNotesList appType={AppType.FINHUB} />
                         <PopupCompletedCourse />
                       </>
                     </RouteGuard>
