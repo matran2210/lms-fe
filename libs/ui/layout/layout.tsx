@@ -15,7 +15,6 @@ interface LayoutProps {
   childClassName?: string;
 }
 
-// eslint-disable-next-line import/no-unused-modules
 export default function Layout(props: LayoutProps): ReactElement {
   const {
     children,

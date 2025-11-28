@@ -235,7 +235,7 @@ const MatchingQuestion = forwardRef(
       const obj = {} as any;
       const objCorrect = {} as any;
       let arr = [];
-      for (const quest of data?.question_matchings) {
+      for (const quest of data?.question_matchings ?? []) {
         arr.push(quest?.answer);
         if (defaultAnswer) {
           obj[quest?.id] = data?.question_matchings.find(

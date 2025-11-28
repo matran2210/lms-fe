@@ -9,6 +9,7 @@ import {
   CERTIFICATE_DETAIL,
   ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
+  excludedPathsHelp,
   LOCAL_STORAGE_KEYS,
   SOCKET_EVENTS,
 } from '@lms/core'
@@ -60,13 +61,6 @@ import { UploadAPI } from './api/upload'
 import ErrorRedirectPage from './error-redirect'
 import { fetcher } from '@services/requestV2'
 
-export const excludedPathsHelp = [
-  '/test/[id]',
-  '/case-study/[id]',
-  '/certificates/[id]',
-  '/case-study/result/[id]',
-  '/teachers',
-]
 type MyAppProps = AppProps & {
   Component: {
     layout?: String

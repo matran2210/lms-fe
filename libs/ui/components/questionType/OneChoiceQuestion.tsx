@@ -73,7 +73,7 @@ const OneChoiceQuestion = ({
     let number = 0;
 
     if (data?.answers) {
-      const dataAnswers = [...data?.answers];
+      const dataAnswers = [...(data?.answers || [])];
       dataAnswers.sort(
         (a: IAnswers, b: IAnswers) => a?.answer_position - b?.answer_position,
       );

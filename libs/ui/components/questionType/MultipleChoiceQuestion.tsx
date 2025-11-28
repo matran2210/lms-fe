@@ -41,7 +41,7 @@ const MultiChoiceQuestion = ({
     const answers = [];
     let number = 0;
     if (data?.answers) {
-      const oldData = [...data?.answers];
+      const oldData = [...(data?.answers || [])];
       const sorted = oldData?.sort(
         (a: any, b: any) => a?.answer_position - b?.answer_position,
       );
