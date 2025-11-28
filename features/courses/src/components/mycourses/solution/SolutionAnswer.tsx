@@ -11,7 +11,7 @@ const SolutionAnswer = ({
   isYourAnswer,
   isCorrect,
 }: SolutionAnswerProps) => {
-  let classParent = isYourAnswer
+  const classParent = isYourAnswer
     ? isCorrect
       ? "text-success-600"
       : "text-error"

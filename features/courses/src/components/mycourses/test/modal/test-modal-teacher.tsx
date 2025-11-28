@@ -250,7 +250,7 @@ const TestModalTeacher = ({
       status
         ? () => trackGAEvent("Click Button Retake Modal Test")
         : () => trackGAEvent("Click Button Start Modal Test");
-    } catch (err) {}
+    } catch {}
   };
 
   const handleFinishTest = async () => {

@@ -1,14 +1,14 @@
 import { ConfirmIcon } from "@lms/assets";
 import { useCourseContext, useFeature } from "@lms/contexts";
-import { EAttemptStatus, GRADE_STATUS, GRADING_METHOD, IClassAPI, IMyCourseDetail, TEST_TYPE } from "@lms/core";
+import { EAttemptStatus, GRADE_STATUS, GRADING_METHOD, IMyCourseDetail, TEST_TYPE } from "@lms/core";
 import { ButtonSecondary, ButtonText, SappModalV3 } from "@lms/ui";
 import { formatTimeMinToHhMm, getUserPrefix, roundNumber, trackGAEvent } from "@lms/utils";
 import clsx from "clsx";
 import router from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { CardCourse } from "../../course";
-import ResultCourse from "./CourseResult";
 import { TestModal, TestModalTeacher } from "../test";
+import ResultCourse from "./CourseResult";
 
 const PartFailed = ({
   coursePart,
@@ -263,7 +263,7 @@ const PartFailed = ({
                   //     : '--'
                   // }
                   value={
-                    !!selectedResult?.total_attempt_time
+                    selectedResult?.total_attempt_time
                       ? formatTimeMinToHhMm(selectedResult?.total_attempt_time)
                       : "--"
                   }
@@ -388,7 +388,6 @@ const PartFailed = ({
           data={coursePart}
           class_user_id={class_user_id}
           is_passed_course={is_passed_course}
-          activeCourse={() => {}}
         />
       ) : (
         <TestModal
@@ -398,7 +397,6 @@ const PartFailed = ({
           data={coursePart}
           class_user_id={class_user_id}
           is_passed_course={is_passed_course}
-          activeCourse={() => {}}
         />
       )}
       <SappModalV3

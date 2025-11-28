@@ -65,7 +65,6 @@ const QuizResults = ({
         status: true,
         questions: newQuestionResponse,
       }));
-    } catch (error) {
     } finally {
       setLoading(false);
     }

@@ -39,7 +39,6 @@ export const useSectionData = ({
       )
 
       setSections([...(res?.data?.sections ?? [])].reverse())
-    } catch (e) {
     } finally {
       setIsLoading(false)
     }

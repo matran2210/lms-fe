@@ -129,8 +129,7 @@ function DiscussionElement({
         handleEditDiscussionElement(false);
         setSelectFile([]);
       }
-    } catch (error) {
-    } finally {
+    }finally {
       setIsLoading(false);
     }
   };
@@ -154,7 +153,7 @@ function DiscussionElement({
         setIsDelete(false);
         setLoading(false);
       }
-    } catch (error) { }
+    } catch { }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -279,7 +278,7 @@ function DiscussionElement({
         phone: data?.student_info?.user_contacts?.[0]?.phone,
         avatar: data?.student_info?.detail.avatar?.["50x50"] || BlankAvatarImage,
       });
-    } catch (error: any) { }
+    } catch { }
   };
 
   const handleMouseEnter = () => {

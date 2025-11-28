@@ -1,15 +1,13 @@
-import { SappHookFormSelect } from "@lms/ui";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { getMe, useAppDispatch, useAppSelector, useFeature, userReducer } from "@lms/contexts";
+import { SappHookFormSelect, SappModalV2 } from "@lms/ui";
+import { VALIDATE_REQUIRED } from "@lms/utils";
+import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { VALIDATE_REQUIRED } from "@lms/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { getMe, userReducer, useAppDispatch, useAppSelector, IUserAPI, useFeature } from "@lms/contexts";
-import { useRouter } from "next/router";
-import { SappModalV2 } from "@lms/ui";
 // import { EntranceTestAPI } from 'src/pages/api/entrance-test'
 import { entranceTestReducer } from "@lms/contexts";
-import { IEntranceTestAPI } from "@lms/core";
 
 interface IProps {
   open: boolean;
@@ -30,7 +28,6 @@ const EntranceTestFillForm = ({
   const [listMajors, setListMajors] = useState<any>();
   const [listEngLevel, setListEngLevel] = useState<any>();
   const { user } = useAppSelector(userReducer);
-  const router = useRouter();
   const schema = z.object({
     univers_id: z
       .object({

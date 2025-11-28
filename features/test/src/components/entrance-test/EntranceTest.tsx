@@ -104,7 +104,7 @@ const EntranceTest = ({
   //     EAttemptStatus.UN_SUBMITTED,
   //   ].includes(data?.attempt_status)
 
-  const handleSubmitQuestion = async (redirectToResult: boolean = false) => {
+  const handleSubmitQuestion = async (redirectToResult = false) => {
     //to do: start test
     localStorage.removeItem("quizAttempt");
     localStorage.setItem(

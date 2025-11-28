@@ -19,12 +19,9 @@ import {
 import {
   ANIMATION,
   DEFAULT_EDITOR_VALUE,
-  ICoursesAPI,
-  IQuestionAPI,
-  IUploadAPI,
   QUESTION_TYPES,
   RESPONSE_OPTION,
-  defaultSheetData,
+  defaultSheetData
 } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import {
@@ -119,9 +116,9 @@ export type QuizComponentRef = {
   onResetAnswerEssayToTemplate: () => void;
   getEssayData: () =>
     | {
-        req?: IRequirement;
-        index?: number;
-      }
+      req?: IRequirement;
+      index?: number;
+    }
     | undefined;
 };
 
@@ -175,12 +172,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }: Props,
     ref,
   ) => {
-        const { uploadApi,
-          questionApi,
-          courseApi,
-          activityApi,
-          courseActivityApi, pageLink,
-          submitQuizTest, router } = useFeature();
+    const { uploadApi,
+      questionApi,
+      courseApi,
+    } = useFeature();
     const isAFTEREACHQUESTION = grading_preference === "AFTER_EACH_QUESTION";
     const questionRef = useRef<HTMLDivElement>(null);
     const isShowIconButtonInBottom = [
@@ -192,7 +187,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     const dispatch = useAppDispatch();
     const { isMobileView } = useTailwindBreakpoint();
 
-    const DragDropRef = useRef(null) as any;
+    // const DragDropRef = useRef(null) as any;
     const MatchQuizRef = useRef(null) as any;
 
     const [showListRequirement, setShowListRequirement] =
@@ -231,23 +226,23 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     const refEditor = useRef(null) as any;
     const essayDataRef = useRef(essayData);
 
-    const handleResetEssay = async (
-      name: string,
-      defaultValue?: string | null,
-    ) => {
-      if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
-        const content = defaultValue ?? "";
-        onResetFormatEssay(name, content);
-        refEditor?.current?.reset(content);
-        await new Promise((resolve) => setTimeout(resolve, 10));
-      } else if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
-        onResetFormatEssay(name, defaultValue ?? defaultSheetData);
-        // refEditor?.current?.resetSheet()
-        if (refEditor?.current?.clear) {
-          refEditor.current.clear(defaultValue ?? defaultSheetData);
-        }
-      }
-    };
+    // const handleResetEssay = async (
+    //   name: string,
+    //   defaultValue?: string | null,
+    // ) => {
+    //   if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
+    //     const content = defaultValue ?? "";
+    //     onResetFormatEssay(name, content);
+    //     refEditor?.current?.reset(content);
+    //     await new Promise((resolve) => setTimeout(resolve, 10));
+    //   } else if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
+    //     onResetFormatEssay(name, defaultValue ?? defaultSheetData);
+    //     // refEditor?.current?.resetSheet()
+    //     if (refEditor?.current?.clear) {
+    //       refEditor.current.clear(defaultValue ?? defaultSheetData);
+    //     }
+    //   }
+    // };
 
     const onResetWord = async (
       name: string,
@@ -295,41 +290,41 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       setShowListRequirement(false);
       setShowRequirement(data);
       const name = `${activeQuestion?.id}_${data?.id}_essay`;
-      const getDefaultValue = (id: string) => {
-        switch (activeQuestion?.response_option) {
-          case RESPONSE_OPTION.WORD:
-            const answer = activeQuestion?.myAnswers?.find(
-              (ans: IEssayAnswer) => {
-                if (ans.requirement_id === id) {
-                  return ans;
-                }
-              },
-            );
+      // const getDefaultValue = (id: string) => {
+      //   switch (activeQuestion?.response_option) {
+      //     case RESPONSE_OPTION.WORD:
+      //       const answer = activeQuestion?.myAnswers?.find(
+      //         (ans: IEssayAnswer) => {
+      //           if (ans.requirement_id === id) {
+      //             return ans;
+      //           }
+      //         },
+      //       );
 
-            const requirement = activeQuestion?.requirements?.[data.index - 1];
-            return (
-              getValues?.(name) ||
-              answer?.short_answer ||
-              requirement?.answer_template
-            );
-          case RESPONSE_OPTION.SHEET:
-            const answerSheet = activeQuestion?.myAnswers?.find(
-              (ans: IEssayAnswer) => {
-                if (ans.requirement_id === id) {
-                  return ans;
-                }
-              },
-            );
-            const requirementSheet =
-              activeQuestion?.requirements?.[data.index - 1];
+      //       const requirement = activeQuestion?.requirements?.[data.index - 1];
+      //       return (
+      //         getValues?.(name) ||
+      //         answer?.short_answer ||
+      //         requirement?.answer_template
+      //       );
+      //     case RESPONSE_OPTION.SHEET:
+      //       const answerSheet = activeQuestion?.myAnswers?.find(
+      //         (ans: IEssayAnswer) => {
+      //           if (ans.requirement_id === id) {
+      //             return ans;
+      //           }
+      //         },
+      //       );
+      //       const requirementSheet =
+      //         activeQuestion?.requirements?.[data.index - 1];
 
-            return (
-              // getValues?.(name) ||
-              answerSheet?.short_answer || requirementSheet?.answer_template
-            );
-        }
-      };
-      const defaultValue = getDefaultValue(data.id);
+      //       return (
+      //         // getValues?.(name) ||
+      //         answerSheet?.short_answer || requirementSheet?.answer_template
+      //       );
+      //   }
+      // };
+      // const defaultValue = getDefaultValue(data.id);
 
       // setValue?.(name, defaultValue)
       // handleResetEssay(name, defaultValue)
@@ -380,8 +375,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           switch (activeQuestion?.qType) {
             case QUESTION_TYPES.ONE_CHOICE:
             case QUESTION_TYPES.TRUE_FALSE: {
-              setValue &&
-                setValue(
+                setValue?.(
                   `${activeQuestion?.id}_${document_id}_answer`,
                   activeQuestion?.defaultValue,
                 );
@@ -390,8 +384,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             }
 
             case QUESTION_TYPES.MULTIPLE_CHOICE: {
-              setValue &&
-                setValue(
+                setValue?.(
                   `${activeQuestion?.id}_${document_id}_answer`,
                   activeQuestion?.defaultValue,
                 );
@@ -435,7 +428,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     // Lift onSubmit using useImperativeHandle
     useImperativeHandle(ref, () => ({
       onSubmit: onSubmit,
-      reset: reset ?? (() => {}),
+      reset: reset ?? (() => { }),
       onSaveAnswer: handleGetAnswer,
       onResetWord: onResetWord,
       onResetSheet: onResetSheet,
@@ -882,7 +875,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       question_data={activeQuestion}
                       control={controlAnswer}
                       setValue={setValue}
-                      handleSaveHighLight={() => {}}
+                      handleSaveHighLight={() => { }}
                       forCaseStudy={true}
                       name={`${activeQuestion?.id}_${e?.id}_essay`}
                       fullData={{
@@ -1056,7 +1049,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       question_data={activeQuestion}
                       control={controlAnswer}
                       setValue={setValue}
-                      handleSaveHighLight={() => {}}
+                      handleSaveHighLight={() => { }}
                       forCaseStudy={true}
                       name={`${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`}
                       fullData={{
@@ -1268,34 +1261,34 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const exhibitItems: CollapseProps["items"] = exhibitData?.length
       ? exhibitData?.map((item: IExhibit, index) => ({
-          key: item?.id,
-          label: (
-            <p className="mb-[10px] flex items-center gap-2 text-xs font-semibold text-gray-800">
-              <NotesOutline className="h-5 w-5 shrink-0 text-icon" />
-              {`${exhibitText} ${index + 1}: ${item?.name}`}
-            </p>
-          ),
-          children: (
-            <div className="text-xs">
-              <EditorReader
-                text_editor_content={item?.description}
-                className="w-full"
-              />
-              {item?.files?.length > 0 &&
-                item?.files.map((e: any, index: number) => {
-                  return (
-                    <div key={index} className="h-full cursor-pointer">
-                      <FileViewer
-                        fileName={e?.resource?.name}
-                        fileUrl={e?.resource?.url}
-                      />
-                    </div>
-                  );
-                })}
-            </div>
-          ),
-          className: "mb-2 p-2 !border-none !rounded-md bg-gray-100",
-        }))
+        key: item?.id,
+        label: (
+          <p className="mb-[10px] flex items-center gap-2 text-xs font-semibold text-gray-800">
+            <NotesOutline className="h-5 w-5 shrink-0 text-icon" />
+            {`${exhibitText} ${index + 1}: ${item?.name}`}
+          </p>
+        ),
+        children: (
+          <div className="text-xs">
+            <EditorReader
+              text_editor_content={item?.description}
+              className="w-full"
+            />
+            {item?.files?.length > 0 &&
+              item?.files.map((e: any, index: number) => {
+                return (
+                  <div key={index} className="h-full cursor-pointer">
+                    <FileViewer
+                      fileName={e?.resource?.name}
+                      fileUrl={e?.resource?.url}
+                    />
+                  </div>
+                );
+              })}
+          </div>
+        ),
+        className: "mb-2 p-2 !border-none !rounded-md bg-gray-100",
+      }))
       : [];
 
     return (

@@ -237,7 +237,6 @@ const LearningNotesList = () => {
           );
         });
       })
-      .catch(() => {})
       .finally(() => {
         setIsFirstCallApi(true);
         isFetchingRef.current = false;
@@ -277,7 +276,7 @@ const LearningNotesList = () => {
     resetFormFields(["section", "subsection", "unit", "activity"]);
     setIsPageStateVariables(true);
   };
-  const fetchData = async (pageIndexNext: number, params?: Object) => {
+  const fetchData = async (pageIndexNext: number, params?: object) => {
     setLoading(true);
     try {
       const res = await courseApi.getCourseNotesList(
@@ -291,7 +290,6 @@ const LearningNotesList = () => {
         meta: res?.data?.meta ?? prevResources?.meta,
       }));
       setPageIndex(pageIndexNext);
-    } catch (error) {
     } finally {
       isFetchingRef.current = false;
       setLoading(false);
@@ -304,7 +302,7 @@ const LearningNotesList = () => {
       fetchData(pageIndex, params);
       refetchNotesList();
       toast.success("Xóa thành công!");
-    } catch (error) {}
+    } catch {}
   };
   const handleEditNote = (id: string, description: string, index: number) => {
     const note = {
