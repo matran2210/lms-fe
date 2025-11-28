@@ -94,7 +94,7 @@ const CourseTabDocument = ({
         { shallow: true },
       )
       //   setActiveButtonId(id)
-    } catch (error) {}
+    } catch {}
   }
   const handleRefreshCurrentTab = () => {
     try {
@@ -108,7 +108,7 @@ const CourseTabDocument = ({
         }),
       )
       //   setActiveButtonId(selector?.currentTabId)
-    } catch (error) {}
+    } catch {}
   }
 
   /**

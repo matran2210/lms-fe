@@ -194,7 +194,7 @@ const QuizDocument = ({
 
           // Restore corrects if available
           // No restore here; corrects fetched lazily per-question when finished
-        } catch (error) {}
+        } catch {}
       }
     })();
   }, [questions, grading_preference, activityId, tabId, quizId, dispatch]);
@@ -586,7 +586,7 @@ const QuizDocument = ({
         .unwrap()
         .then((e: any) => {
           const isCompletedCourse = e?.data?.progress;
-          if (!!isCompletedCourse?.is_completed) {
+          if (isCompletedCourse?.is_completed) {
             setTimeout(() => {
               dispatch(
                 showPopupCompletedCourse(isCompletedCourse?.content || ""),
@@ -1147,7 +1147,7 @@ const QuizDocument = ({
                 onClick={() => {
                   setFocusOnlyQuiz({
                     open: !focusOnlyQuiz.open,
-                    id: !!focusOnlyQuiz.id ? "" : quizId,
+                    id: focusOnlyQuiz.id ? "" : quizId,
                   });
                   scrollToQuiz(`quiz-toggle-${quizId}`);
                 }}

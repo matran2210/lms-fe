@@ -45,7 +45,6 @@ const Course = ({
   refetch: () => void;
   isTeacher?: boolean;
 }) => {
-  const screens = useBreakpoint();
   const {courseApi, pageLink} = useFeature();
   const [open, setOpen] = useState<boolean>(false);
   const [openExtend, setOpenExtend] = useState<boolean>(false);
@@ -228,7 +227,7 @@ const Course = ({
           toast.success("Active thành công!");
         }
       }
-    } catch (error) {}
+    } catch {}
   }
   async function extendCourse() {
     try {
@@ -237,7 +236,7 @@ const Course = ({
         refetch();
         toast.success("Gia hạn hành công!");
       }
-    } catch (error) {}
+    } catch {}
   }
 
   const { courseType } = useCourseContext();

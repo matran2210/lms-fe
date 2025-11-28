@@ -1,12 +1,9 @@
-import { QuizActivity } from "@lms/core";
-import { ColumnsType, TablePaginationConfig } from "antd/es/table";
-import { Tooltip } from "antd";
+import { EDateTime, QUIZ_ATTEMPT_STATUS, QuizActivity, StatusQuizTag } from "@lms/core";
 import { SappTable } from "@lms/ui";
-import { StatusQuizTag } from "@lms/core";
-import { QUIZ_ATTEMPT_GRADING_STATUS, QUIZ_ATTEMPT_STATUS } from "@lms/core";
 import { getTimeFromInput } from "@lms/utils";
+import { Tooltip } from "antd";
+import { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import dayjs from "dayjs";
-import { EDateTime } from "@lms/core";
 // import { GradingMethod } from '@lms/core'
 import { Dispatch, SetStateAction } from "react";
 

@@ -13,7 +13,7 @@ interface IProps {
   setOpen: any;
   handleSubmit: any;
   handleCancel: any;
-  message?: String;
+  message?: string;
   title?: string | undefined;
   okButtonCaption?: string | undefined;
   isTest?: boolean;

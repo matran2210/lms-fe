@@ -1,15 +1,11 @@
-import React from 'react';
-import { ButtonSecondary } from "@lms/ui";
-import { Icon } from '@lms/assets'
+import { Icon } from '@lms/assets';
 import { useCourseContext } from "@lms/contexts";
-import { formatTimeMinToHhMm, trackGAEvent } from "@lms/utils";
-import { getUserPrefix } from "@utils/helpers";
-import { buildQueryString, formatTime, handleReplaceText } from "@lms/utils";
+import { CLASS_USER_STATUS, IMyCourseDetail } from "@lms/core";
+import { useTailwindBreakpoint } from "@lms/hooks";
+import { ButtonSecondary, Tooltip } from "@lms/ui";
+import { buildQueryString, formatTimeMinToHhMm, getUserPrefix, handleReplaceText, trackGAEvent } from "@lms/utils";
 import { round } from "lodash";
 import { useRouter } from "next/router";
-import { Tooltip } from "@lms/ui";
-import { useTailwindBreakpoint } from "@lms/hooks";
-import { CLASS_USER_STATUS, IMyCourseDetail } from "@lms/core";
 import { CardCourse } from "../../course";
 
 const Part = ({
@@ -117,13 +113,13 @@ const Part = ({
     }
   };
 
-  const transformAllFontSize = (html: string = "") => {
-    if (!html) return "";
-    return html.replace(
-      /font-size\s*:\s*[^;"]+/gi,
-      isMobileView ? "font-size: 14px" : "font-size: 16px",
-    );
-  };
+  // const transformAllFontSize = (html: string = "") => {
+  //   if (!html) return "";
+  //   return html.replace(
+  //     /font-size\s*:\s*[^;"]+/gi,
+  //     isMobileView ? "font-size: 14px" : "font-size: 16px",
+  //   );
+  // };
 
   const description = handleReplaceText(course?.description);
 

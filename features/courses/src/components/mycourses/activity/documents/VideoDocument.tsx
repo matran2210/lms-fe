@@ -46,11 +46,11 @@ const VideoDocument = ({
   quizId,
   grading_preference,
   handleSetCurrentVideoCallback,
-  activeTab,
-  activeVideo,
-  handleCloseTab,
+  // activeTab,
+  // activeVideo,
+  // handleCloseTab,
   onUpdateActiveVideo,
-  newQuizModal,
+  // newQuizModal,
 
 }: Props) => {
   const { questionApi,
@@ -58,10 +58,10 @@ const VideoDocument = ({
 
   const {
     control: controlAnswer,
-    setValue,
-    reset: resetAnswer,
-    getValues,
-    watch,
+    // setValue,
+    // reset: resetAnswer,
+    // getValues,
+    // watch,
   } = useForm({})
   const [currentVideo, setCurrentVideo] = useState<IVideo>(
     videos && videos.length > 0 ? videos[0] : ({} as IVideo),
@@ -200,7 +200,7 @@ const VideoDocument = ({
         setModalOpen(false)
         setHideVideo(false)
       }
-    } catch (error) {}
+    } catch {}
   }
 
   /**
@@ -301,7 +301,7 @@ const VideoDocument = ({
    * Handles form submission.
    * @param {boolean} isCorrect - Check the correct or incorrect answers.
    */
-  const onSubmit = async (isCorrect: boolean = false) => {
+  const onSubmit = async (isCorrect = false) => {
     try {
       if (isConfirmQuestion || isCorrect) {
         handleClose({
@@ -318,7 +318,7 @@ const VideoDocument = ({
           },
         })
       }
-    } catch (error) {}
+    } catch {}
   }
 
   const handleGoTimeline = (time: number) => {

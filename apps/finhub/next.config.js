@@ -42,7 +42,7 @@ let nextConfig = {
 
   webpack: (config, { isServer, defaultLoaders }) => {
     config.resolve.alias.canvas = false
-
+    config.resolve.alias['styled-components'] = require.resolve('styled-components');
     config.module.rules.push({
       test: /\.(ts|tsx)$/,
       include: [

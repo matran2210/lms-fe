@@ -31,8 +31,7 @@ fileToBase64: (file: File) => Promise<string>;
         throw new Error("Upload failed: No URL returned");
       }
       return response.url;
-    } catch (err) {
-      throw err;
+    } catch {
     }
   };
 

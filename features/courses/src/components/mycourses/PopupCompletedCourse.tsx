@@ -1,11 +1,8 @@
 import { IRibbon } from '@lms/assets'
-import { EditorReader } from '@lms/ui'
-import { SappModalV3 } from '@lms/ui'
-import { useAppDispatch, useAppSelector, hidePopup } from '@lms/contexts'
+import { hidePopup, useAppDispatch, useAppSelector } from '@lms/contexts'
+import { EditorReader, SappModalV3 } from '@lms/ui'
 
-interface IProps {}
-
-const PopupCert = ({}: IProps) => {
+const PopupCert = () => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector((state) => state.popupReducer)
 

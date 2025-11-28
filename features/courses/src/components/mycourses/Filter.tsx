@@ -32,7 +32,7 @@ const Filter = ({ courses, setPage, tourGuideActive, isTeacher }: IProps) => {
       value: '',
     },
   ]
-  let apiUrl = `${getUserPrefix(isTeacher, pageLink)}/courses`
+  const apiUrl = `${getUserPrefix(isTeacher, pageLink)}/courses`
 
   const queryString = buildQueryString({
     status: watch('status')?.value || '',
