@@ -1,10 +1,7 @@
+import { QUESTION_TYPES, Sheet, TEST_TYPE } from '@lms/core'
 import { TestAPI } from '@pages/api/test'
 import dayjs from 'dayjs'
 import { FieldValues, UseFormGetValues } from 'react-hook-form'
-import { QUESTION_TYPES, TEST_TYPE } from '@lms/core'
-import { Sheet } from '@lms/core'
-import crypto from 'crypto'
-import { IEntranceTest, IEntranceTestAttempt } from '@lms/core'
 
 export const getResult = async (currentTabContent: any) => {
   const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
@@ -62,7 +59,7 @@ export const checkTypeAndRenderTitle = (type: string) => {
       return (pageTitle = 'Part Test')
     case TEST_TYPE.ENTRANCE_TEST:
       return (pageTitle = 'Entrance Test')
-    case TEST_TYPE.ENTRANCE_TEST:
+    case TEST_TYPE.EVENT_TEST:
       return (pageTitle = 'Event Test')
     default:
       return pageTitle

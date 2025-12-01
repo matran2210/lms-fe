@@ -9,7 +9,6 @@ export const useSappEditorImageUpload = () => {
     file: File,
     location: string,
   ): Promise<string> => {
-    try {
       // Đọc file dưới dạng base64
       const base64String = (await fileToBase64(file)) as string
       // Chuyển base64 thành File để tải lên S3
@@ -23,9 +22,6 @@ export const useSappEditorImageUpload = () => {
         throw new Error('Upload failed: No URL returned')
       }
       return response.url
-    } catch (err) {
-      throw err
-    }
   }
 
   return {
