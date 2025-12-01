@@ -888,7 +888,7 @@ const ActivityPage = () => {
             </div>
             <BackToTop
               scrollContainerRef={scrollRef}
-              className={clsx('!bottom-[230px] !right-4')}
+              className={clsx('!bottom-[230px] !right-4 md:hidden')}
             />
             <PopupLockContent
               showForm={openPopupCTA}

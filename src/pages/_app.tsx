@@ -175,10 +175,10 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       window.GA_INITIALIZED = true
     }
   }, [])
-
-  const showBackToTop = !activityPath.some((path) =>
+  const isActivityPage = !activityPath.some((path) =>
     router.pathname.includes(path),
   )
+  const showBackToTop = isMobileView ? isActivityPage : true
 
   const showHelp = showSupportWidget.includes(router.pathname) && !isTeacherPage // Add condition to hide help on teacher pages
   const showMKTInApp = showHelp && !isMobileView
@@ -343,7 +343,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                           </div>
                           {showBackToTop && <BackToTop />}
                           <MKTInApp showMKTInApp={showMKTInApp} />
-                          <div id="floating-btn-divider" />
+                          {showHelp && <div id="floating-btn-divider" />}
                           <Help showHelp={showHelp} />
                           <LearningNotesList />
                           <PopupCompletedCourse />
