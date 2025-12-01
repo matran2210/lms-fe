@@ -34,7 +34,7 @@ const TestScratchPads = ({
 }: IProps) => {
   const handleChangeScratchPad = (
     e: ChangeEvent<HTMLInputElement>,
-    id?: string,
+    // id?: string,
   ) => {
     const { value } = e.target
 

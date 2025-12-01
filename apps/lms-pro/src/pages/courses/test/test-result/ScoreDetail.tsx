@@ -1,7 +1,4 @@
-import { SappTable } from '@lms/ui'
-import { truncateString } from '@lms/utils'
-import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
-
+import { convertSecondsToMinutesSeconds, roundNumber, truncateString } from '@lms/utils'
 import { CollapseArrowIcon } from '@lms/assets'
 import {
   ANIMATION,
@@ -24,6 +21,7 @@ import React from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
 import { CoursesAPI } from '../../../api/courses/index'
+import { SappTable } from '@lms/ui/components/base'
 
 const commonHeaderClass = 'font-medium leading-6 text-gray py-2 pb-4 md:pb-6'
 

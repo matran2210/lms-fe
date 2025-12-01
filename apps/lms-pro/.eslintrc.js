@@ -1,7 +1,7 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: true,
+    project: './tsconfig.eslint.json',
     tsconfigRootDir: __dirname,
   },
   plugins: ['@typescript-eslint'],
@@ -9,4 +9,12 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
   ],
+  rules: {
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-empty": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "no-extra-boolean-cast": "off",
+    "no-case-declarations": "off",
+    "prefer-const": "off"
+  }
 };

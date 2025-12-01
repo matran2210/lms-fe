@@ -116,7 +116,7 @@ const TestDetail = () => {
   const [editorReady, setEditorReady] = useState(true)
   const [tooltipOpen, setTooltipOpen] = useState(false)
   const answerListRef = useRef<AnswerList>({})
-  const { setScoreQuestion, setSubmitTest, courseType, setSubmitEventTest } =
+  const { courseType, setSubmitEventTest } =
     useCourseContext()
   const scrollRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
@@ -124,11 +124,10 @@ const TestDetail = () => {
   const { questions } = useGetQuestionTabs(router.query.id as string)
   const type = router.query.type
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
-  const { control, watch, getValues, setValue, reset, resetField } = useForm()
+  const { control, watch, getValues, setValue, resetField } = useForm()
   const {
     control: controlFilter,
     watch: watchFilter,
-    setValue: setValueFilter,
   } = useForm()
   const {
     getValues: getValuesExhibits,
@@ -186,7 +185,7 @@ const TestDetail = () => {
   const [scratchPadValues, setScratchPadValues] = useState<ScratchPadValue[]>(
     [],
   )
-  const [scoreFinalTest, setScoreFinalTest] = useState(0)
+  // const [scoreFinalTest, setScoreFinalTest] = useState(0)
   const [scratchPads, setScratchPads] = useState<string>('')
   // const [listQuestionDone, setListQuestionDone] = useState<string[]>([])
   const [listSubmitError, setListSubmitError] = useState<
@@ -2202,7 +2201,7 @@ const TestDetail = () => {
               )
             }, 2000)
           }
-          setScoreFinalTest(res?.data?.score)
+          // setScoreFinalTest(res?.data?.score)
           setQuizResultId(() => {
             setOpenTimeOut(true)
             return res?.data?.id

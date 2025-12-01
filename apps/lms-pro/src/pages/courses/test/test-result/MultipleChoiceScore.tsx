@@ -8,10 +8,10 @@ import { GlobalAverage } from '@lms/feature-courses'
 interface IMultipleChoiceScore {
   questions: {
     class_id: string
-    constructedResponseAnswers: Array<Object>
-    course: Object
+    constructedResponseAnswers: Array<object>
+    course: object
     quizAttempt: IQuizAttempt
-    selectedResponseAnswers: Array<Object>
+    selectedResponseAnswers: Array<object>
   }
   score: number
   globalAverage: number

@@ -6,8 +6,8 @@ import { SappLoading, Tooltip } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
-import { CoursesAPI } from 'src/pages/api/courses'
-import TestResultPage from 'src/pages/courses/test/test-result/testResultPage'
+import { CoursesAPI } from '../../../api/courses'
+import TestResultPage from './testResultPage'
 
 const TestResultDetail = () => {
   const router = useRouter()
