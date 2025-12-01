@@ -205,7 +205,7 @@ export const useNotification = () => {
   }, [isAlwaysShowSidebar])
 
   useEffect(() => {
-    window.addEventListener('storage', (e) => {
+    window.addEventListener('storage', () => {
       const count = localStorage.getItem(LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT)
       setNotificationUnread(parseInt(count ?? '0', 10))
     })

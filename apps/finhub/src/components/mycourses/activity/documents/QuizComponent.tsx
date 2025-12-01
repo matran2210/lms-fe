@@ -96,9 +96,9 @@ type Props = {
   modalOpen?: boolean
 }
 
-type RefEditor = {
-  reset: () => void
-}
+// type RefEditor = {
+//   reset: () => void
+// }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
   (
@@ -115,7 +115,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       isHideExhibit = true,
       saveAnswer,
       exhibitText = 'Exhibit',
-      modalOpen = true,
+      // modalOpen = true,
     }: Props,
     ref,
   ) => {

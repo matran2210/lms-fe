@@ -10,7 +10,7 @@ import {
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
 import DOMPurify from 'dompurify'
-import _, { isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'

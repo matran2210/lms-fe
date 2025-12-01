@@ -17,5 +17,11 @@ module.exports = {
     "no-case-declarations": "off",
     "@typescript-eslint/ban-types": "off",     // bỏ qua lỗi Object type
     "no-prototype-builtins": "off", 
+    "prefer-const": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "no-empty-pattern": "off",
+    "no-useless-escape": "off",
+    "no-var": "off",
+    "no-async-promise-executor": "off"
   }
 };

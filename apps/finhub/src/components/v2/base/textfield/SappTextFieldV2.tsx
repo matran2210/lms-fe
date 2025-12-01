@@ -28,12 +28,12 @@ export interface IBaseInputProps extends Omit<InputProps, 'onChange'> {
   onEnter?: (e: React.KeyboardEvent<HTMLInputElement>) => void
   autofocus?: boolean
   showPassword?: boolean
-  addonBefore?: ReactNode
+  // addonBefore?: ReactNode
   addonAfter?: ReactNode
   isListScreen?: boolean
   isEdit?: boolean
-  disabledEdit?: boolean
-  handleEdit?: () => void
+  // disabledEdit?: boolean
+  // handleEdit?: () => void
 }
 
 export interface IFieldInputProps extends IBaseInputProps {
@@ -72,11 +72,11 @@ const SappTextFieldV2 = ({
   required = false,
   isListScreen = false,
   label,
-  addonBefore,
+  // addonBefore,
   className,
-  isEdit = false,
-  handleEdit = () => {},
-  disabledEdit = false,
+  // isEdit = false,
+  // handleEdit = () => {},
+  // disabledEdit = false,
   ...props
 }: IFieldInputProps) => {
   const [passwordVisible, setPasswordVisible] = useState(false)

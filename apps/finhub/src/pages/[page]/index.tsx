@@ -71,25 +71,25 @@ const ProfilePage = () => {
     })
   }
 
-  const NotFound = () => (
-    <div className="grid h-full place-items-center p-6">
-      <div className="justifycenter flex flex-col items-center">
-        <Image
-          src={'/assets/images/image_404.jpg'}
-          alt="Image_404"
-          width="320"
-          height="260"
-        />
-        <h1 className="mt-3 text-2xl font-bold text-[#050505] md:text-4xl">
-          Tab Not Found
-        </h1>
-      </div>
-    </div>
-  )
+  // const NotFound = () => (
+  //   <div className="grid h-full place-items-center p-6">
+  //     <div className="justifycenter flex flex-col items-center">
+  //       <Image
+  //         src={'/assets/images/image_404.jpg'}
+  //         alt="Image_404"
+  //         width="320"
+  //         height="260"
+  //       />
+  //       <h1 className="mt-3 text-2xl font-bold text-[#050505] md:text-4xl">
+  //         Tab Not Found
+  //       </h1>
+  //     </div>
+  //   </div>
+  // )
   /**
    * @description handle open and close sidebar
    */
-  const handleOpenSidebar = () => {
+const handleOpenSidebar = () => {
     setShowSidebar(true)
     setOpenSidebar(true)
   }
