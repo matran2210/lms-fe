@@ -1,6 +1,5 @@
 import { SappBaseTable } from '@lms/ui'
-import { truncateString } from '@lms/utils'
-import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
+import { convertSecondsToMinutesSeconds, roundNumber, truncateString } from '@lms/utils'
 
 import { CollapseArrowIcon } from '@lms/assets'
 import {

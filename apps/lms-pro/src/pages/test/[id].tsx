@@ -186,7 +186,7 @@ const TestDetail = () => {
   const [scratchPadValues, setScratchPadValues] = useState<ScratchPadValue[]>(
     [],
   )
-  const [, setScoreFinalTest] = useState(0)
+  // const [, setScoreFinalTest] = useState(0)
   const [scratchPads, setScratchPads] = useState<string>('')
   // const [listQuestionDone, setListQuestionDone] = useState<string[]>([])
   const [listSubmitError, setListSubmitError] = useState<
@@ -2179,7 +2179,7 @@ const TestDetail = () => {
               )
             }, 2000)
           }
-          setScoreFinalTest(res?.data?.score)
+          // setScoreFinalTest(res?.data?.score)
           setQuizResultId(() => {
             setOpenTimeOut(true)
             return res?.data?.id
