@@ -137,7 +137,7 @@ const LearningNotesList = () => {
             }, 1000)
           }
         })
-        .catch((err) => {})
+        // .catch((err) => {})
         .finally(() => {
           setTimeout(() => {
             setLoading(false)
@@ -156,7 +156,7 @@ const LearningNotesList = () => {
         .then((res) => {
           setNotesListData(res?.data)
         })
-        .catch((err) => {})
+        // .catch((err) => {})
         .finally(() => {
           setTimeout(() => {
             setLoading(false)
@@ -177,7 +177,7 @@ const LearningNotesList = () => {
         (courseId || queryId) &&
         notesListStatus
       ) {
-        ;(notesListData?.meta?.total_records ?? 0) > pageIndex &&
+        (notesListData?.meta?.total_records ?? 0) > pageIndex &&
           fetchData(params)
       }
     }
@@ -211,8 +211,6 @@ const LearningNotesList = () => {
       const res = await CoursesAPI.getCourseNotesList(pageIndex, params)
       setNotesListData(res?.data)
       setPageIndex((prevPageIndex) => prevPageIndex + DEFAULT_PAGESIZE)
-    } catch (error) {
-      // Handle error if needed
     } finally { 
       setTimeout(() => {
         setLoading(false)
@@ -226,7 +224,7 @@ const LearningNotesList = () => {
       fetchData(params)
       refetchNotesList()
       toast.success('Xóa thành công!')
-    } catch (error) {}
+    } catch {}
   }
   const handleEditNote = (id: string, description: string, index: number) => {
     const note = {

@@ -6,11 +6,11 @@ import { ButtonPrimary, ButtonSecondary, ButtonText } from '@lms/ui'
 
 export default function SectionActionButtons({
   section,
-  class_user_id,
+  // class_user_id,
   setOpenTest,
 }: ICourseSectionButtonProps) {
   const router = useRouter()
-  const courseId = router.query.courseId
+  // const courseId = router.query.courseId
   const checkFinished = useMemo(() => {
     if (section?.quiz?.attempt) {
       return true

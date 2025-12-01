@@ -62,7 +62,7 @@ const VideoDocument = ({
   const [modalOpen, setModalOpen] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState<IActivityStateQuestion>()
   const [isConfirmQuestion, setIsConfirmQuestion] = useState<boolean>(false)
-  const [lastQuestion, setLastQuestion] = useState<IQuestion>()
+  // const [lastQuestion, setLastQuestion] = useState<IQuestion>()
   const { handleSubmit, reset } = useForm()
   const internalRef = useRef<IntersectionObserver>()
   const streamRef = streamRefProp?.current ? streamRefProp : internalRef
@@ -119,9 +119,9 @@ const VideoDocument = ({
       ...(v?.quiz?.multiple_choice_questions || []),
     ]
 
-    if (listQuestion.length) {
-      setLastQuestion(listQuestion[listQuestion.length - 1])
-    }
+    // if (listQuestion.length) {
+    //   setLastQuestion(listQuestion[listQuestion.length - 1])
+    // }
     // setDefaultListQuestion(listQuestion)
     setCurrentVideo(v)
     onUpdateActiveVideo?.(v?.file?.id)
@@ -297,7 +297,7 @@ const VideoDocument = ({
           activityId: activityId,
           tabId: tabId,
           quizId: currentVideo?.quiz?.id || '',
-          then: (event: any) => {
+          then: () => {
             setIsConfirmQuestion(true)
           },
         })

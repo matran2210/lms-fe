@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { Select } from 'antd'
-import { IAttempt, ICourseAttemptProps } from 'src/type/courses-3-level'
-import { SelectArrow } from '@components/courses/icons'
-import { roundNumber } from '@utils/helpers'
-import { ClassAPI } from '@pages/api/class'
 import { formatTime } from '@components/common/timer'
-import { formatNumber } from '@utils/formatNumber'
+import { SelectArrow } from '@components/courses/icons'
+import { formatNumber } from '@lms/utils'
+import { ClassAPI } from '@pages/api/class'
+import { Select } from 'antd'
+import { useEffect, useState } from 'react'
+import { IAttempt, ICourseAttemptProps } from 'src/type/courses-3-level'
 
 export default function SectionAttempts({
   class_user_id,

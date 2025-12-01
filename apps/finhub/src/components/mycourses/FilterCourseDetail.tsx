@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 // components/SearchForm.tsx
 
 import TotalResullt from '@components/common/TotalResullt'

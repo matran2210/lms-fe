@@ -8,16 +8,15 @@ import Sidebar from './Sidebar'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { useAppSelector, useCourseContext, usePinnedNotifyContext } from '@lms/contexts'
 interface LayoutProps {
-  children: ReactNode
-  title: string
-  size?: 'sm' | 'md' | 'xl' | '2xl'
-  showSidebar?: boolean
-  fullWidth?: boolean
-  handleToggleSidebar?: () => void
-  className?: string
+  readonly children: ReactNode
+  readonly title: string
+  readonly size?: 'sm' | 'md' | 'xl' | '2xl'
+  readonly showSidebar?: boolean
+  readonly fullWidth?: boolean
+  readonly handleToggleSidebar?: () => void
+  readonly className?: string
 }
 
-// eslint-disable-next-line import/no-unused-modules
 export default function Layout(props: LayoutProps): ReactElement {
   const {
     children,

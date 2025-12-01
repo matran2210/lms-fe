@@ -512,7 +512,6 @@ const TestDetail = () => {
           : EXHIBIT_TEXT_REPLACE.EXHIBIT,
       )
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTabContent?.id])
 
   const checkCalExist = useMemo(() => {
@@ -1742,7 +1741,7 @@ const TestDetail = () => {
     return (
       <div>
         <div className="flex items-center justify-end gap-2">
-          {[, QUESTION_TYPES.ONE_CHOICE].includes(currentTabContent?.qType) &&
+          {[QUESTION_TYPES.ONE_CHOICE].includes(currentTabContent?.qType) &&
             !currentTabContent?.is_viewed_answer && (
               <ButtonSecondary
                 className="border !border-secondary !bg-white !font-semibold !text-secondary hover:!bg-gray-100"
@@ -2544,5 +2543,4 @@ const TestDetail = () => {
   )
 }
 
-// eslint-disable-next-line import/no-unused-modules
 export default TestDetail

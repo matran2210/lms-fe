@@ -44,8 +44,7 @@ export const htmlToRaw = (html: string): string => {
   }
   let result = ''
   let inTag = false
-  for (let i = 0; i < html.length; i++) {
-    let char = html[i]
+  for (const char of html) {
     if (char === '<') {
       inTag = true
     } else if (char === '>') {

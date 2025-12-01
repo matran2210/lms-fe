@@ -137,54 +137,54 @@ const MultipleQuestion = ({
     )
   }
 
-  const renderLines = (type: string, data: any, totalBefore: number) => {
-    const renderBoxItems = data?.map((item: IAnswer, index: number) => {
-      return (
-        <button
-          key={item?.id}
-          disabled={
-            questions?.quizAttempt?.status === 'UN_SUBMITTED' || !item.id
-          }
-          onClick={() => {
-            if (
-              questions?.quizAttempt?.status === 'UN_SUBMITTED' ||
-              !item?.id
-            ) {
-              return
-            } else {
-              router.push(
-                `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${item?.id}?title=My Course`,
-              )
-            }
-          }}
-          className={`flex h-8 w-8 flex-none flex-row items-center justify-center rounded border border-solid text-sm font-medium
-            leading-[33px] xl:h-[38px] xl:w-[38px]
-            ${renderBoxesAndLineClass(type, item)}
-          `}
-        >
-          {index + totalBefore + 1}
-        </button>
-      )
-    })
+  // const renderLines = (type: string, data: any, totalBefore: number) => {
+  //   const renderBoxItems = data?.map((item: IAnswer, index: number) => {
+  //     return (
+  //       <button
+  //         key={item?.id}
+  //         disabled={
+  //           questions?.quizAttempt?.status === 'UN_SUBMITTED' || !item.id
+  //         }
+  //         onClick={() => {
+  //           if (
+  //             questions?.quizAttempt?.status === 'UN_SUBMITTED' ||
+  //             !item?.id
+  //           ) {
+  //             return
+  //           } else {
+  //             router.push(
+  //               `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${item?.id}?title=My Course`,
+  //             )
+  //           }
+  //         }}
+  //         className={`flex h-8 w-8 flex-none flex-row items-center justify-center rounded border border-solid text-sm font-medium
+  //           leading-[33px] xl:h-[38px] xl:w-[38px]
+  //           ${renderBoxesAndLineClass(type, item)}
+  //         `}
+  //       >
+  //         {index + totalBefore + 1}
+  //       </button>
+  //     )
+  //   })
 
-    return (
-      <>
-        {data.length > 0 && (
-          <>
-            <div
-              className={`flex w-auto flex-row items-start gap-3 overflow-x-auto overflow-y-hidden ${
-                type === 'Constructed Questions' && totalBefore > 0
-                  ? 'border-l border-[#DCDDDD] pl-3'
-                  : ''
-              }`}
-            >
-              {renderBoxItems}
-            </div>
-          </>
-        )}
-      </>
-    )
-  }
+  //   return (
+  //     <>
+  //       {data.length > 0 && (
+  //         <>
+  //           <div
+  //             className={`flex w-auto flex-row items-start gap-3 overflow-x-auto overflow-y-hidden ${
+  //               type === 'Constructed Questions' && totalBefore > 0
+  //                 ? 'border-l border-[#DCDDDD] pl-3'
+  //                 : ''
+  //             }`}
+  //           >
+  //             {renderBoxItems}
+  //           </div>
+  //         </>
+  //       )}
+  //     </>
+  //   )
+  // }
 
   const annotationsMultipleChoiceQuestions = [
     {

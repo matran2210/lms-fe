@@ -12,7 +12,7 @@ type MenuItemsListProps = {
 export default function MenuItemsList({
   options,
   closeSideBar,
-  setOpenExaminationInfo,
+  // setOpenExaminationInfo,
   isVisible,
 }: MenuItemsListProps) {
   return (

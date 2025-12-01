@@ -1,7 +1,5 @@
-import { useState } from 'react'
 import { IActivityResource } from 'src/type/courses-3-level'
 import { Docs, IconDownload } from '../icons'
-import PdfModal from '../popup/PdfModal'
 
 export default function ActivityResourceDesktop({
   title,
