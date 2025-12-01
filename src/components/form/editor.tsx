@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { Spin } from 'antd'
 import { VALID_UPLOAD_EDITOR } from 'src/constants'
 import { useSappEditorImageUpload } from 'src/hooks/useSappEditorImageUpload'
-import { SAPPEditor } from 'sapp-common-package'
+import { SAPPEditorV2 } from 'sapp-common-package'
 import { SAPPEditorHandle } from 'src/type'
 interface IProps {
   onChange: (event: any) => void
@@ -36,7 +36,7 @@ const Editor = ({
   return (
     <div key={key}>
       <Spin spinning={loading}>
-        <SAPPEditor
+        <SAPPEditorV2
           ref={editorRef}
           {...(key && { key: key })}
           content={valueText}
