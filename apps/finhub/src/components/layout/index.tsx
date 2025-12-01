@@ -1,4 +1,3 @@
-
 import clsx from 'clsx'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -6,7 +5,11 @@ import { ReactElement, ReactNode, useState } from 'react'
 import { PageLink } from 'src/constants/routes'
 import Sidebar from './Sidebar'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { useAppSelector, useCourseContext, usePinnedNotifyContext } from '@lms/contexts'
+import {
+  useAppSelector,
+  useCourseContext,
+  usePinnedNotifyContext,
+} from '@lms/contexts'
 interface LayoutProps {
   readonly children: ReactNode
   readonly title: string

@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { PageLink } from 'src/constants/routes'
 
 export const LogoMobile = ({ className = '' }: { className?: string }) => {
-
   return (
     <Link href={PageLink.SHORT_COURSE}>
       <svg

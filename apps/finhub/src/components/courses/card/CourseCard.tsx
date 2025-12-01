@@ -3,12 +3,7 @@ import PopupExtend from '@components/mycourses/PopupExtend'
 import PopupLesson from '@components/mycourses/PopupLesson'
 import PopupOpenClass from '@components/mycourses/PopupOpenClass'
 import { useCourseContext } from '@lms/contexts'
-import {
-  ANIMATION,
-  CLASS_USER_STATUS,
-  ICourse,
-  ROUTES
-} from '@lms/core'
+import { ANIMATION, CLASS_USER_STATUS, ICourse, ROUTES } from '@lms/core'
 import { useCourseStatus } from '@lms/hooks'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { useRouter } from 'next/router'

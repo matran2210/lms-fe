@@ -4,6 +4,6 @@ module.exports = {
   presets: [tailwindConfig],
   content: [
     './src/**/*.{js,ts,jsx,tsx}', // chỉ scan riêng app này
-    ...tailwindConfig.content // vẫn giữ scan các libs, features
+    ...tailwindConfig.content, // vẫn giữ scan các libs, features
   ],
 }

@@ -26,15 +26,18 @@ import {
 import { RouteGuard } from '@lms/feature-auth'
 import { LearningNotesList, PopupCompletedCourse } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
+import '@lms/styles'
 import {
   AntConfigProvider,
   BackToTop,
   Help,
+  PinnedNotifications,
   SappConfirmDialogContainer,
 } from '@lms/ui'
 import { initializeGA, onMessageListener, pageview } from '@lms/utils'
 import { ErrorBoundary } from '@sentry/nextjs'
-import '@lms/styles'
+import { fetcher } from '@services/requestV2'
+import '@styles/index.scss'
 import '@xyflow/react/dist/style.css'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
@@ -56,31 +59,29 @@ import 'sapp-notification/dist/index.css'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import { io } from 'socket.io-client'
-import UserApi from 'src/redux/services/User/user'
-import { injectStore } from 'src/redux/services/httpService'
-import 'src/utils/helpers/keycloak'
-import { AuthenticationManager } from 'src/utils/helpers/keycloak'
-import { URL } from 'url'
-import { CoursesAPI, submitQuizTest } from './api/courses'
-import { EventTestAPI } from './api/event-test'
-import { NotificationAPI } from './api/notification'
-import ErrorRedirectPage from './error-redirect'
-import { PageLink } from 'src/constants/routers'
-import { QuestionAPI } from './api/question'
-import { UploadAPI } from './api/upload'
-import { ClassAPI } from './api/class'
-import { ActivityAPI } from './api/activity'
-import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
-import { CaseStudyAPI } from './api/case-study'
-import { EntranceTestAPI } from './api/entrance-test'
-import { AuthAPI } from './api/profile'
 import {
   MENU_BOTTOM,
   MENU_ITEMS,
   MENU_ITEMS_EVENT,
 } from 'src/constants/menu-items'
-import { PinnedNotifications } from '@lms/ui'
-import { fetcher } from '@services/requestV2'
+import { PageLink } from 'src/constants/routers'
+import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
+import UserApi from 'src/redux/services/User/user'
+import { injectStore } from 'src/redux/services/httpService'
+import 'src/utils/helpers/keycloak'
+import { AuthenticationManager } from 'src/utils/helpers/keycloak'
+import { URL } from 'url'
+import { ActivityAPI } from './api/activity'
+import { CaseStudyAPI } from './api/case-study'
+import { ClassAPI } from './api/class'
+import { CoursesAPI, submitQuizTest } from './api/courses'
+import { EntranceTestAPI } from './api/entrance-test'
+import { EventTestAPI } from './api/event-test'
+import { NotificationAPI } from './api/notification'
+import { AuthAPI } from './api/profile'
+import { QuestionAPI } from './api/question'
+import { UploadAPI } from './api/upload'
+import ErrorRedirectPage from './error-redirect'
 dayjs.extend(utc)
 dayjs.extend(weekday)
 
@@ -162,8 +163,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   useEffect(() => {
     if (socket) {
-      socket.on('connect', () => { })
-      socket.on('disconnect', () => { })
+      socket.on('connect', () => {})
+      socket.on('disconnect', () => {})
       socket?.on(SOCKET_EVENTS.NOTIFICATION_UNREAD, (data: any) => {
         localStorage.setItem(
           LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
@@ -306,7 +307,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     ) {
       try {
         dispatch(getCountUnRead(NotificationAPI))
-      } catch (error) { }
+      } catch (error) {}
     }
   }, [])
 

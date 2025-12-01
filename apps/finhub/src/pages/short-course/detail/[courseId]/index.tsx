@@ -20,15 +20,15 @@ import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import PreviewPartDetail from 'preview-part'
-import {
-  ANIMATION,
-  DEFAULT_PAGESIZE,
-  ROUTES,
-  TEST_TYPE,
-} from '@lms/core'
+import { ANIMATION, DEFAULT_PAGESIZE, ROUTES, TEST_TYPE } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { activeNotesList, useAppDispatch, useCourseContext, UserType } from '@lms/contexts'
+import {
+  activeNotesList,
+  useAppDispatch,
+  useCourseContext,
+  UserType,
+} from '@lms/contexts'
 import { ISubSection } from 'src/type/courses-3-level'
 import { isEmpty } from 'lodash'
 import { PageLink } from 'src/constants/routes'

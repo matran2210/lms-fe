@@ -65,9 +65,7 @@ export class UploadAPI {
       //   const responseFile = await ResourcesAPI.getFileFromResource(response.data[0].id, source)
       //   return responseFile.data
       // }
-    } catch {
-      
-    }
+    } catch {}
   }
   static downloadFile = async (data: {
     files: { name: string; file_key: string }[]
@@ -165,8 +163,7 @@ const uploadFile = async (
           headers: { 'Content-Type': fileBlob.type },
           onUploadProgress,
         })
-      } catch {
-      }
+      } catch {}
       return
     }
 
@@ -194,8 +191,7 @@ const uploadFile = async (
       parts: uploadPartsArray,
       uploadId: uploadId,
     })
-  } catch {
-  }
+  } catch {}
 }
 
 type UploadMultipartParams = {
@@ -249,8 +245,7 @@ async function uploadMultipart(
         source,
       )
       batchUploadPromises.push(uploadPromise)
-    } catch {
-    }
+    } catch {}
   }
 
   const batchUploadResults = await Promise.allSettled(batchUploadPromises)

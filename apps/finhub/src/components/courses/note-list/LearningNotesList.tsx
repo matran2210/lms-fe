@@ -5,8 +5,19 @@ import SortBy from '@components/common/SortBy'
 import ActionCellV2 from '@components/courses/action/ActionCellV2'
 import FilterCourseSection from '@components/courses/note-list/FilterCourseSection'
 import BaseModal from '@components/courses/popup/BaseModal'
-import { AltArrowLeft, DeleteIcon, EllipsisIconV2, PencilV2Icon } from '@lms/assets'
-import { pushNotes3Level, resetNotesList3Level, useAppDispatch, useAppSelector, useCourseNoteContext } from '@lms/contexts'
+import {
+  AltArrowLeft,
+  DeleteIcon,
+  EllipsisIconV2,
+  PencilV2Icon,
+} from '@lms/assets'
+import {
+  pushNotes3Level,
+  resetNotesList3Level,
+  useAppDispatch,
+  useAppSelector,
+  useCourseNoteContext,
+} from '@lms/contexts'
 import { DEFAULT_PAGESIZE, ISection } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { ButtonPrimary, SappBreadcrumbNotLink, SappDrawerV3 } from '@lms/ui'
