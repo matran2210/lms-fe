@@ -1,12 +1,8 @@
-import {FullScreenLayout} from '@lms/ui'
-import { TEST_TYPE } from '@lms/core'
+import { EYourAnswerType, ITabs, TEST_TYPE } from '@lms/core'
+import { FullScreenLayout, SappBreadCrumbs, SappLoading } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import { useRouter } from 'next/router'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { EYourAnswerType, ITabs } from '@lms/core'
-import {TableQuestions} from '@lms/feature-courses'
-import {SappLoading} from '@lms/ui'
-import { SappBreadCrumbs } from '@lms/ui'
 
 const TestResultDetail = () => {
   const router = useRouter()
@@ -21,14 +17,14 @@ const TestResultDetail = () => {
     )
   }
 
-  const useGetQuizAttemptsChart = (queryKey: string, params: Object) => {
-    return useGetDataQuery(
-      queryKey,
-      params,
-      () => CoursesAPI.getQuizAttemptsChartData(router.query.id),
-      router.query.id !== undefined,
-    )
-  }
+  // const useGetQuizAttemptsChart = (queryKey: string, params: Object) => {
+  //   return useGetDataQuery(
+  //     queryKey,
+  //     params,
+  //     () => CoursesAPI.getQuizAttemptsChartData(router.query.id),
+  //     router.query.id !== undefined,
+  //   )
+  // }
 
   // Sử dụng hook useGetQuizDetail trong component
   const { data: questions } = useGetQuizAttempts('quiz-attempts', {})

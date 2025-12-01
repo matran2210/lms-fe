@@ -30,11 +30,11 @@ interface IProps {
   children?: ReactNode
   headerClassName?: string
   isClosable?: boolean
-  isUnderLine?: boolean
+  // isUnderLine?: boolean
   customFooter?: ReactNode
   className?: string
   gapContent?: string
-  startIcon?: React.ReactNode
+  // startIcon?: React.ReactNode
   // Các props còn lại sẽ được gom vào otherProps
   [key: string]: any
 }
@@ -42,8 +42,8 @@ interface IProps {
 const ShortCourseModal = ({
   showFooter = true,
   footerButtonClassName = 'flex flex-col gap-3 items-center justify-between',
-  color,
-  colorCancel,
+  // color,
+  // colorCancel,
   showOkButton,
   showCancelButton,
   revertFunction,
@@ -65,11 +65,11 @@ const ShortCourseModal = ({
   children,
   headerClassName,
   isClosable = false,
-  isUnderLine = false,
+  // isUnderLine = false,
   className,
   customFooter,
   gapContent = 'gap-4 md:gap-8',
-  startIcon,
+  // startIcon,
   ...otherProps
 }: IProps) => {
   const onCancel = isClosable && handleClose ? handleClose : handleCancel

@@ -37,7 +37,7 @@ const SappDrawerV3: React.FC<IProps> = ({
   isShowFooter = false,
   isShowHeader = true,
   loading = false,
-  className,
+  // className,
   btnSubmitTile,
   handleSubmit,
   sizeTextBtn = 'medium',

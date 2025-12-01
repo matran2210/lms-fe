@@ -48,7 +48,7 @@ const VideoSection = ({
   const [activeQuestion, setActiveQuestion] = useState<IActivityStateQuestion>()
   const [isConfirmQuestion, setIsConfirmQuestion] = useState<boolean>(false)
 
-  const { handleSubmit, reset } = useForm()
+  const { reset } = useForm()
   const internalRef = useRef<HTMLVideoElement>(null)
   const streamRef = streamRefProp?.current ? streamRefProp : internalRef
   const dispatch = useAppDispatch()
@@ -152,7 +152,7 @@ const VideoSection = ({
         setModalOpen(false)
         setHideVideo(false)
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const [hideVideo, setHideVideo] = useState(false)
@@ -244,12 +244,12 @@ const VideoSection = ({
           activityId: activityId,
           tabId: tabId,
           quizId: currentVideo?.quiz?.id || '',
-          then: (event) => {
+          then: () => {
             setIsConfirmQuestion(true)
           },
         })
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const handleGoTimeline = (time: number) => {

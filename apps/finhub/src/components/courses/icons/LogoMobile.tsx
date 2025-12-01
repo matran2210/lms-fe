@@ -1,11 +1,7 @@
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { PageLink } from 'src/constants/routes'
 
 export const LogoMobile = ({ className = '' }: { className?: string }) => {
-  const router = useRouter()
-  const pathname = router.pathname
-
   return (
     <Link href={PageLink.SHORT_COURSE}>
       <svg

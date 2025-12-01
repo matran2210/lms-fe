@@ -2,26 +2,19 @@ import PopupActive from '@components/mycourses/PopupActive'
 import PopupExtend from '@components/mycourses/PopupExtend'
 import PopupLesson from '@components/mycourses/PopupLesson'
 import PopupOpenClass from '@components/mycourses/PopupOpenClass'
-import {
-  ANIMATION,
-  CLASS_USER_STATUS,
-  COURSES_STATUS_BADGE,
-  ICourse,
-  ROUTES,
-} from '@lms/core'
+import { useCourseContext } from '@lms/contexts'
+import { ANIMATION, CLASS_USER_STATUS, ICourse, ROUTES } from '@lms/core'
 import { useCourseStatus } from '@lms/hooks'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { CoursesAPI } from 'src/pages/api/courses'
-import Badge from './Badge'
 import CourseAction from './course/CourseAction'
 import CourseClass from './course/CourseClass'
 import CourseDescription from './course/CourseDescription'
 import CourseProgress from './course/CourseProgress'
 import CourseTitle from './course/CourseTitle'
-import { useCourseContext } from '@lms/contexts'
 
 export default function CourseCard({
   course,
@@ -53,7 +46,7 @@ export default function CourseCard({
       await CoursesAPI.activeCourse({ classId: classInstance?.id })
       refetch()
       toast.success('Active thành công!')
-    } catch (error) {}
+    } catch {}
   }
 
   const handleCourseDetail = () => {
@@ -113,20 +106,20 @@ export default function CourseCard({
   }
   const iconType = renderStatusIcon(classUserStatus ?? '')
 
-  const renderBadge = (course: ICourse) => {
-    if (determineButtonToShow === 'Extend') {
-      return (
-        <Badge badgeType={COURSES_STATUS_BADGE['FAILURE']} label={'Expired'} />
-      )
-    }
-    return (
-      <Badge
-        badgeType={COURSES_STATUS_BADGE['RECEIVED']}
-        label={course?.course_categories[0]?.name}
-        isBold={true}
-      />
-    )
-  }
+  // const renderBadge = (course: ICourse) => {
+  //   if (determineButtonToShow === 'Extend') {
+  //     return (
+  //       <Badge badgeType={COURSES_STATUS_BADGE['FAILURE']} label={'Expired'} />
+  //     )
+  //   }
+  //   return (
+  //     <Badge
+  //       badgeType={COURSES_STATUS_BADGE['RECEIVED']}
+  //       label={course?.course_categories[0]?.name}
+  //       isBold={true}
+  //     />
+  //   )
+  // }
 
   const progressPart = percentProgress > 100 ? 100 : percentProgress
 

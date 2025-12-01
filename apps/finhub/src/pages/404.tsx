@@ -1,8 +1,7 @@
+import { useAppSelector, userReducer } from '@lms/contexts'
 import { LAYOUT } from '@lms/core'
-import Link from 'next/link'
-import { useAppSelector } from '@lms/contexts'
-import { userReducer } from '@lms/contexts'
 import { SappButton } from '@lms/ui'
+import Link from 'next/link'
 import { PageLink } from 'src/constants/routes'
 
 const ErrorPage = () => {
@@ -32,8 +31,8 @@ const ErrorPage = () => {
         PAGE NOT FOUND
       </h1>
       <span className="mt-3 max-w-dl px-4 text-base text-gray-1">
-        We are very sorry for the inconvenience. It looks like you&apos;re trying to
-        access a page that has been deleted or never even existed.
+        We are very sorry for the inconvenience. It looks like you&apos;re
+        trying to access a page that has been deleted or never even existed.
       </span>
       <Link href={getRedirectPath()}>
         <div className="mt-8">

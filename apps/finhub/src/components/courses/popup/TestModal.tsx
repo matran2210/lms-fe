@@ -19,7 +19,11 @@ import {
   ButtonText,
   ModalNotMobileFriendly,
 } from '@lms/ui'
-import { capitalizeFirstLetter, formatTime, formatTimeMinToHhMm, trackGAEvent } from '@lms/utils'
+import {
+  capitalizeFirstLetter,
+  formatTimeMinToHhMm,
+  trackGAEvent,
+} from '@lms/utils'
 import { CoursesAPI } from '@pages/api/courses'
 import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
 import { Select } from 'antd'

@@ -1,8 +1,11 @@
-
 import { formatTime, htmlToRaw } from '@components/common/timer'
 import { Soundwave } from '@components/courses/icons'
 import TimeLineModal from '@components/courses/timeline/TimeLineModal'
-import { fetchQuestionById, IActivityStateQuestion, useAppDispatch } from '@lms/contexts'
+import {
+  fetchQuestionById,
+  IActivityStateQuestion,
+  useAppDispatch,
+} from '@lms/contexts'
 import { debounce } from '@utils/helpers'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -62,7 +65,7 @@ const VideoDocument = ({
   const [modalOpen, setModalOpen] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState<IActivityStateQuestion>()
   const [isConfirmQuestion, setIsConfirmQuestion] = useState<boolean>(false)
-  const [lastQuestion, setLastQuestion] = useState<IQuestion>()
+  // const [lastQuestion, setLastQuestion] = useState<IQuestion>()
   const { handleSubmit, reset } = useForm()
   const internalRef = useRef<IntersectionObserver>()
   const streamRef = streamRefProp?.current ? streamRefProp : internalRef
@@ -89,7 +92,7 @@ const VideoDocument = ({
           quizId: currentVideo?.quiz?.id || '',
           questionId: activeQuestion?.id,
           api: QuestionAPI,
-          courseApi: CoursesAPI
+          courseApi: CoursesAPI,
         }),
       )
         .unwrap()
@@ -119,9 +122,9 @@ const VideoDocument = ({
       ...(v?.quiz?.multiple_choice_questions || []),
     ]
 
-    if (listQuestion.length) {
-      setLastQuestion(listQuestion[listQuestion.length - 1])
-    }
+    // if (listQuestion.length) {
+    //   setLastQuestion(listQuestion[listQuestion.length - 1])
+    // }
     // setDefaultListQuestion(listQuestion)
     setCurrentVideo(v)
     onUpdateActiveVideo?.(v?.file?.id)
@@ -166,8 +169,8 @@ const VideoDocument = ({
             tabId: tabId,
             quizId: currentVideo?.quiz?.id || '',
             questionId: id,
-             api: QuestionAPI,
-          courseApi: CoursesAPI
+            api: QuestionAPI,
+            courseApi: CoursesAPI,
           }),
         )
           .unwrap()
@@ -297,7 +300,7 @@ const VideoDocument = ({
           activityId: activityId,
           tabId: tabId,
           quizId: currentVideo?.quiz?.id || '',
-          then: (event: any) => {
+          then: () => {
             setIsConfirmQuestion(true)
           },
         })

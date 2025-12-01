@@ -24,7 +24,9 @@ export const useSappEditorImageUpload = () => {
       }
       return response.url
     } catch (err) {
-      throw err
+      throw new Error(
+        `Image upload failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+      )
     }
   }
 

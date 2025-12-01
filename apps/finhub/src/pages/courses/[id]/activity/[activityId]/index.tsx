@@ -1,6 +1,5 @@
 import { CloseIcon, DownloadIcon, LinkIcon } from '@lms/assets'
 
-import { Calculator } from '@lms/ui'
 import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
 import Layout from '@components/layout'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
@@ -9,8 +8,36 @@ import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
 import { CourseSectionType, IActivity, SUFFIX_TYPE } from '@lms/core'
-import {truncateBySpace, truncateString , trackGAEvent } from '@lms/utils'
+import { Calculator } from '@lms/ui'
+import { trackGAEvent, truncateBySpace, truncateString } from '@lms/utils'
 
+import SAPPBorder from '@components/common/SAPPBorder'
+import SappIcon from '@components/common/SappIcon'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
+import Tooltip from '@components/common/Tooltip'
+import {
+  clearNote,
+  closeCalculator,
+  courseActivityAction,
+  courseActivityReducer,
+  getCourseActivityTapById,
+  getDiscussion,
+  resetQuizActivity,
+  showPopupCompletedCourse,
+  useAppDispatch,
+  useAppSelector,
+  useCourseContext,
+  UserType,
+} from '@lms/contexts'
+import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from '@lms/core'
+import {
+  ActivitySkeleton,
+  EditorReader,
+  FileViewer,
+  ModalResizeable,
+  MovableWindow,
+  SappButton,
+} from '@lms/ui'
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -22,24 +49,9 @@ import React, {
   useState,
 } from 'react'
 import { useQuery } from 'react-query'
-import SAPPBorder from '@components/common/SAPPBorder'
-import SappIcon from '@components/common/SappIcon'
-import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
-import Tooltip from '@components/common/Tooltip'
-import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { UploadAPI } from 'src/pages/api/upload'
-import { clearNote, closeCalculator, courseActivityAction, courseActivityReducer, getCourseActivityTapById, getDiscussion, resetQuizActivity, useAppDispatch, useAppSelector, useCourseContext, UserType } from '@lms/contexts'
-import { showPopupCompletedCourse } from '@lms/contexts'
-import {
-  ActivitySkeleton,
-  EditorReader,
-  FileViewer,
-  ModalResizeable,
-  MovableWindow,
-  SappButton,
-} from '@lms/ui'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string
@@ -95,13 +107,13 @@ const ActivityPage = () => {
   const [videoClicked, setVideoClicked] = useState<Array<VideoStateClicked>>([])
   const [isDoneActivity, setIsDoneActivity] = useState(false)
   // const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const [onFocusingPad, setOnFocusingPad] = useState('')
+  // const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [fetch_progress, setFetch_progress] = useState<string[]>([])
-  const [exhibitsPopupPosition, setExhibitsPopupPosition] = useState({
-    top: 'calc(50% - 250px)',
-    left: 'calc(50% - 200px)',
-  })
+  // const [exhibitsPopupPosition, setExhibitsPopupPosition] = useState({
+  //   top: 'calc(50% - 250px)',
+  //   left: 'calc(50% - 200px)',
+  // })
   const [exhibitText, setExhibitText] = useState<string>('')
 
   const settingDoneProcessActivity = (activity: IActivity) => {
@@ -171,7 +183,13 @@ const ActivityPage = () => {
       CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION = {}
       try {
         dispatch(courseActivityAction.setActivityState(activity))
-        dispatch(getDiscussion({ api: CoursesAPI, id: router.query?.id as string, sectionId: sectionId }))
+        dispatch(
+          getDiscussion({
+            api: CoursesAPI,
+            id: router.query?.id as string,
+            sectionId: sectionId,
+          }),
+        )
       } catch (error) {}
     }
 
@@ -343,12 +361,12 @@ const ActivityPage = () => {
     fileName?: string,
     event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
-    if (event) {
-      var mouseY = event?.pageY - 300
-      setExhibitsPopupPosition({ top: mouseY + 'px', left: '33%' })
-    }
+    // if (event) {
+    //   var mouseY = event?.pageY - 300
+    //   setExhibitsPopupPosition({ top: mouseY + 'px', left: '33%' })
+    // }
 
-    setOnFocusingPad('')
+    // setOnFocusingPad('')
     setOpenScratchPad((prev) => {
       let arr = [...prev]
       if (data?.type === 'file') {
@@ -469,7 +487,7 @@ const ActivityPage = () => {
                 <li
                   title={e?.name}
                   onClick={() => {
-                    ;['CHAPTER', 'UNIT', 'PART'].includes(
+                    ['CHAPTER', 'UNIT', 'PART'].includes(
                       e.course_section_type,
                     ) && localStorage.setItem('course_chapter_id', chapterId)
                     router.push(url)
@@ -502,32 +520,32 @@ const ActivityPage = () => {
     (breadcumb: IBreadCrumbs) => breadcumb?.course_section_type === 'ACTIVITY',
   )
 
-  const [sessionData, setSessionData] = useState<Array<any>>([])
+  // const [sessionData, setSessionData] = useState<Array<any>>([])
 
   // Tạo một mảng chứa các id của các hoạt động từ sessionData
-  const activityIds = sessionData?.map((activity: IActivity) => activity.id)
+  // const activityIds = sessionData?.map((activity: IActivity) => activity.id)
 
   // Lấy id của hoạt động tiếp theo
-  const nextActivityId = activity?.next_activity?.id
+  // const nextActivityId = activity?.next_activity?.id
 
   // Tìm vị trí của hoạt động tiếp theo trong mảng activityIds
-  const nextActivityIndex = activityIds?.indexOf(
-    nextActivityId || router.query?.activityId,
-  )
+  // const nextActivityIndex = activityIds?.indexOf(
+  //   nextActivityId || router.query?.activityId,
+  // )
 
   // Lấy id của hoạt động trước đó
-  const previousActivityId = activity?.previous_activity?.id
+  // const previousActivityId = activity?.previous_activity?.id
 
   // Tìm vị trí của hoạt động trước đó trong mảng activityIds
-  const previousActivityIndex = activityIds?.indexOf(
-    previousActivityId || router.query?.activityId,
-  )
+  // const previousActivityIndex = activityIds?.indexOf(
+  //   previousActivityId || router.query?.activityId,
+  // )
 
-  const findActivityByIndex = (previousIndex: number) => {
-    return sessionData?.find(
-      (activity: IActivity) => activity?.id === activityIds?.[previousIndex],
-    )
-  }
+  // const findActivityByIndex = (previousIndex: number) => {
+  //   return sessionData?.find(
+  //     (activity: IActivity) => activity?.id === activityIds?.[previousIndex],
+  //   )
+  // }
 
   const download = async (name: string, file_key: string) => {
     await UploadAPI.downloadFile({
@@ -686,7 +704,7 @@ const ActivityPage = () => {
             {/* Tabs */}
             <div className="bg-gray-3">
               <div className="flex flex-wrap gap-2 px-6">
-                {selector?.tabs?.map((e, index) => {
+                {selector?.tabs?.map((e) => {
                   return (
                     <SappButton
                       key={e?.id}
@@ -1034,7 +1052,7 @@ const ActivityPage = () => {
           </div>
 
           {/* Sratchpad */}
-          {openScratchPad.map((e, index: number) => {
+          {openScratchPad.map((e) => {
             if (e.type === 'file') {
               return (
                 <ModalResizeable

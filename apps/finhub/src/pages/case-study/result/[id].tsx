@@ -89,7 +89,6 @@ const CaseStudyResult = () => {
    * Declare form to handle exhibit
    */
   const {
-    control: controlExhibits,
     getValues: getValuesExhibits,
     setValue: setValueExhibits,
     watch,
@@ -544,7 +543,7 @@ const CaseStudyResult = () => {
 
   const handleChangeScratchPad = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
-    id?: string,
+    // id?: string,
   ) => {
     const { value } = e.target
     setScratchPadValues((prevState: { value: string }) => ({
@@ -659,9 +658,9 @@ const CaseStudyResult = () => {
     scrollToQuestion(prev)
   }
 
-  const isScatchPadEnabled = useMemo(() => {
-    return openScratchPad.some((item) => item.type === 'scratch_pad') || false
-  }, [openScratchPad])
+  // const isScatchPadEnabled = useMemo(() => {
+  //   return openScratchPad.some((item) => item.type === 'scratch_pad') || false
+  // }, [openScratchPad])
 
   const { isDesktopView } = useTailwindBreakpoint()
 
@@ -1012,7 +1011,7 @@ const CaseStudyResult = () => {
                 <button
                   className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
                   onClick={() => {
-                    ;(setAllowUnHighLight(!allowUnHighLight),
+                    (setAllowUnHighLight(!allowUnHighLight),
                       setAllowHighLight(false))
                   }}
                 >

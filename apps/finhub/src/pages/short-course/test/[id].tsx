@@ -8,7 +8,15 @@ import {
   ShowLessIcon,
   ShowMoreIcon,
 } from '@lms/assets'
-import { CourseProvider, disableUnsavedChange, loginSlice, showPopupCompletedCourse, useAppDispatch, useAppSelector, useCourseContext } from '@lms/contexts'
+import {
+  CourseProvider,
+  disableUnsavedChange,
+  loginSlice,
+  showPopupCompletedCourse,
+  useAppDispatch,
+  useAppSelector,
+  useCourseContext,
+} from '@lms/contexts'
 import {
   Answer,
   AnswerItem,
@@ -37,11 +45,35 @@ import styles from './test.module.scss'
 
 import { CalculatorIcon, DownloadIcon, ScratchPadIcon } from '@assets/icons'
 import Layout from '@components/layout'
-import { removeHighlights, serializeHighlights } from '@funktechno/texthighlighter/lib'
+import {
+  removeHighlights,
+  serializeHighlights,
+} from '@funktechno/texthighlighter/lib'
 import { PulsingExclamation } from '@lms/assets'
 import { ButtonContent } from '@lms/feature-courses'
-import { QuitTestModal, TabSlide, TestTimeOutModal, UnSubmitAnswerModal } from '@lms/feature-test'
-import { BackToTop, ButtonPrimary, ButtonSecondary, ButtonText, FilterRadioGroup, HighlightableHTML, MatchQuizComponent, MultiChoiceQuestion, NewDragNDropQuestion, NewFillText, OneChoiceQuestion, Popover, SelectWord, SlotValue, TestWrapper } from '@lms/ui'
+import {
+  QuitTestModal,
+  TabSlide,
+  TestTimeOutModal,
+  UnSubmitAnswerModal,
+} from '@lms/feature-test'
+import {
+  BackToTop,
+  ButtonPrimary,
+  ButtonSecondary,
+  ButtonText,
+  FilterRadioGroup,
+  HighlightableHTML,
+  MatchQuizComponent,
+  MultiChoiceQuestion,
+  NewDragNDropQuestion,
+  NewFillText,
+  OneChoiceQuestion,
+  Popover,
+  SelectWord,
+  SlotValue,
+  TestWrapper,
+} from '@lms/ui'
 import { QuestionAPI } from '@pages/api/question'
 import { TestAPI } from '@pages/api/test'
 import { download } from '@utils/index'
@@ -364,8 +396,8 @@ const TestDetail = () => {
               savedData =
                 answersSubmitted.answer && answersSubmitted?.answer.length > 0
                   ? answersSubmitted.answer.find(
-                    (item: AnswerItem) => item.question_id === objTab.id,
-                  )
+                      (item: AnswerItem) => item.question_id === objTab.id,
+                    )
                   : undefined
 
               currentAnswer = answer
@@ -374,9 +406,9 @@ const TestDetail = () => {
               savedData =
                 answersSubmitted.answer && answersSubmitted?.answer.length > 0
                   ? answersSubmitted.answer.find(
-                    (item: AnswerItem) =>
-                      item.question_id === answer.question_id,
-                  )
+                      (item: AnswerItem) =>
+                        item.question_id === answer.question_id,
+                    )
                   : undefined
 
               currentAnswer = answer.answer_id ?? savedData?.answer_id
@@ -481,11 +513,11 @@ const TestDetail = () => {
 
   const remainingTimeinSeconds = quizDetail?.quiz_timed
     ? (dayjs(
-      dayjs(new Date(quizAttempt.created_at ?? '')).add(
-        quizDetail?.quiz_timed,
-        'minutes',
-      ),
-    ).diff(dayjs(), 'seconds') ?? 0)
+        dayjs(new Date(quizAttempt.created_at ?? '')).add(
+          quizDetail?.quiz_timed,
+          'minutes',
+        ),
+      ).diff(dayjs(), 'seconds') ?? 0)
     : null
 
   useEffect(() => {
@@ -512,7 +544,6 @@ const TestDetail = () => {
           : EXHIBIT_TEXT_REPLACE.EXHIBIT,
       )
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTabContent?.id])
 
   const checkCalExist = useMemo(() => {
@@ -849,7 +880,7 @@ const TestDetail = () => {
     }
   }
   // TODO: Implement this
-  const getValueFillText = () => { }
+  const getValueFillText = () => {}
   const getValueSelectText = () => {
     const value = getValues(`${currentPage}_answer`) || []
     return value
@@ -1160,7 +1191,7 @@ const TestDetail = () => {
           tab.id === question_id ? { ...tab, flag: !tab.flag } : tab,
         ),
       )
-    } catch (error) { }
+    } catch (error) {}
   }
   // Helper function to format answer based on question type
   const formatAnswerItem = (question: any) => {
@@ -1588,8 +1619,8 @@ const TestDetail = () => {
               setRouteBack(true)
               setIsQuizAttemptCreated(true) // Mark the attempt as created even on error
               switch (
-              quizDetail?.quiz_type ||
-              quizDetail?.quiz_type === undefined
+                quizDetail?.quiz_type ||
+                quizDetail?.quiz_type === undefined
               ) {
                 case TEST_TYPE.MID_TERM_TEST:
                 case TEST_TYPE.FINAL_TEST:
@@ -1742,7 +1773,7 @@ const TestDetail = () => {
     return (
       <div>
         <div className="flex items-center justify-end gap-2">
-          {[, QUESTION_TYPES.ONE_CHOICE].includes(currentTabContent?.qType) &&
+          {[QUESTION_TYPES.ONE_CHOICE].includes(currentTabContent?.qType) &&
             !currentTabContent?.is_viewed_answer && (
               <ButtonSecondary
                 className="border !border-secondary !bg-white !font-semibold !text-secondary hover:!bg-gray-100"
@@ -1757,12 +1788,12 @@ const TestDetail = () => {
           <Tooltip
             title={
               currentTabContent?.is_viewed_answer ||
-                ![
-                  QUESTION_TYPES.TRUE_FALSE,
-                  QUESTION_TYPES.ONE_CHOICE,
-                  QUESTION_TYPES.MULTIPLE_CHOICE,
-                ].includes(currentTabContent?.qType) ||
-                !!watch(`${currentPage}_answer`)
+              ![
+                QUESTION_TYPES.TRUE_FALSE,
+                QUESTION_TYPES.ONE_CHOICE,
+                QUESTION_TYPES.MULTIPLE_CHOICE,
+              ].includes(currentTabContent?.qType) ||
+              !!watch(`${currentPage}_answer`)
                 ? null
                 : 'You should select an answer before click'
             }
@@ -1775,8 +1806,8 @@ const TestDetail = () => {
             color={'#404041'}
           >
             {isGradingAfterEachQuestion &&
-              currentTabContent?.is_viewed_answer &&
-              indexTab < filteredTabs.length - 1 ? (
+            currentTabContent?.is_viewed_answer &&
+            indexTab < filteredTabs.length - 1 ? (
               <ButtonText
                 className="bg-gray-100 hover:!bg-gray-100"
                 onClick={() => {
@@ -1853,7 +1884,7 @@ const TestDetail = () => {
       showSidebar={false}
       fullWidth
     >
-      <CourseProvider router={router} >
+      <CourseProvider router={router}>
         <SappLoading
           className={loading || !currentTabContent?.id ? 'block' : 'hidden'}
         />
@@ -1882,11 +1913,11 @@ const TestDetail = () => {
               if (!submited && !quizAttempt?.is_submitted) {
                 const remainingTimeinSeconds = quizDetail?.quiz_timed
                   ? dayjs(
-                    dayjs(new Date(quizAttempt.created_at ?? '')).add(
-                      quizDetail?.quiz_timed,
-                      'minutes',
-                    ),
-                  ).diff(dayjs(), 'seconds')
+                      dayjs(new Date(quizAttempt.created_at ?? '')).add(
+                        quizDetail?.quiz_timed,
+                        'minutes',
+                      ),
+                    ).diff(dayjs(), 'seconds')
                   : null
 
                 // No call when time out > 60s
@@ -1932,8 +1963,9 @@ const TestDetail = () => {
                   placement="top"
                 >
                   <button
-                    className={`h-fit rounded-lg ${isScatchPadEnabled && 'bg-primary'
-                      }`}
+                    className={`h-fit rounded-lg ${
+                      isScatchPadEnabled && 'bg-primary'
+                    }`}
                     onClick={() => {
                       handleOpenScratchPad('scratch_pad')
                       trackGAEvent('Click Button ScratchPad Test')
@@ -1955,8 +1987,9 @@ const TestDetail = () => {
                   placement="top"
                 >
                   <button
-                    className={`h-fit rounded-lg ${checkCalExist > -1 && 'bg-primary'
-                      }`}
+                    className={`h-fit rounded-lg ${
+                      checkCalExist > -1 && 'bg-primary'
+                    }`}
                     onClick={() => {
                       handleOpenScratchPad('calculator')
                       trackGAEvent('Click Button Calculator Test')
@@ -1985,7 +2018,9 @@ const TestDetail = () => {
                       handleChangeTab(id)
                     }}
                     activeShowAll={activeShowAll}
-                    isScrollCenter={false} setHasScrollBar={undefined} />
+                    isScrollCenter={false}
+                    setHasScrollBar={undefined}
+                  />
                   <div
                     className={clsx(
                       `flex items-center justify-center lg:justify-start`,
@@ -2020,7 +2055,7 @@ const TestDetail = () => {
                           setActiveShowAll(!activeShowAll)
                           setTooltipOpen(false)
                         }}
-                      // onMouseUp={() => setTooltipOpen(true)}
+                        // onMouseUp={() => setTooltipOpen(true)}
                       >
                         {!activeShowAll ? (
                           <ShowLessIcon size={24} />
@@ -2061,7 +2096,7 @@ const TestDetail = () => {
             {!isUndefined(currentTabContent) && (
               <>
                 {currentTabContent?.data?.display_type ===
-                  DISPLAY_TYPE.VERTICAL ? (
+                DISPLAY_TYPE.VERTICAL ? (
                   <div
                     className={`flex flex-1 overflow-auto bg-[#F1F1F1]`}
                     id={'preview-question'}
@@ -2488,7 +2523,7 @@ const TestDetail = () => {
           >
             <div
               className={clsx(
-                'shadow-icon group grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white hover:bg-blend-overlay',
+                'group grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
                 {
                   'bottom-0': isShowIconButtonInBottom,
                 },
@@ -2544,5 +2579,4 @@ const TestDetail = () => {
   )
 }
 
-// eslint-disable-next-line import/no-unused-modules
 export default TestDetail

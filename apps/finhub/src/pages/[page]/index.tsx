@@ -5,7 +5,8 @@ import {
   AppType,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
-  IDeviceItem, NOTIFICATION_STATUS,
+  IDeviceItem,
+  NOTIFICATION_STATUS,
 } from '@lms/core'
 import {
   convertSlugToTitle,
@@ -18,12 +19,37 @@ import Image, { StaticImageData } from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import withAuthorization from 'src/HOC/withAuthorization'
 
-import { getLoginHistory, getLogoutUser, useAppDispatch, useAppSelector, useCourseContext, userReducer, UserType } from '@lms/contexts'
+import {
+  getLoginHistory,
+  getLogoutUser,
+  useAppDispatch,
+  useAppSelector,
+  useCourseContext,
+  userReducer,
+  UserType,
+} from '@lms/contexts'
 
 import { CollapseArrowIcon } from '@lms/assets'
-import { Certificate, ChangePassword, DeviceList, LoginHistoryList, MyPasword, MyProfile, OverviewItemCard, ProfileHeader, ProfileList, Settings } from '@lms/feature-user'
+import {
+  Certificate,
+  ChangePassword,
+  DeviceList,
+  LoginHistoryList,
+  MyPasword,
+  MyProfile,
+  OverviewItemCard,
+  ProfileHeader,
+  ProfileList,
+  Settings,
+} from '@lms/feature-user'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { Footer, FullScreenMobile, HeaderMobile, SearchWithMenuToggle, TabHeaderItem } from '@lms/ui'
+import {
+  Footer,
+  FullScreenMobile,
+  HeaderMobile,
+  SearchWithMenuToggle,
+  TabHeaderItem,
+} from '@lms/ui'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { PageLink } from 'src/constants/routes'
@@ -71,21 +97,21 @@ const ProfilePage = () => {
     })
   }
 
-  const NotFound = () => (
-    <div className="grid h-full place-items-center p-6">
-      <div className="justifycenter flex flex-col items-center">
-        <Image
-          src={'/assets/images/image_404.jpg'}
-          alt="Image_404"
-          width="320"
-          height="260"
-        />
-        <h1 className="mt-3 text-2xl font-bold text-[#050505] md:text-4xl">
-          Tab Not Found
-        </h1>
-      </div>
-    </div>
-  )
+  // const NotFound = () => (
+  //   <div className="grid h-full place-items-center p-6">
+  //     <div className="justifycenter flex flex-col items-center">
+  //       <Image
+  //         src={'/assets/images/image_404.jpg'}
+  //         alt="Image_404"
+  //         width="320"
+  //         height="260"
+  //       />
+  //       <h1 className="mt-3 text-2xl font-bold text-[#050505] md:text-4xl">
+  //         Tab Not Found
+  //       </h1>
+  //     </div>
+  //   </div>
+  // )
   /**
    * @description handle open and close sidebar
    */
@@ -103,9 +129,11 @@ const ProfilePage = () => {
 
   const handleLogout = async () => {
     try {
-      await dispatch(getLogoutUser({
-        authManager: new AuthenticationManager(),
-      })).then(() => {
+      await dispatch(
+        getLogoutUser({
+          authManager: new AuthenticationManager(),
+        }),
+      ).then(() => {
         const pinnedStatus = getLocalStorageItem('pinnedStatus')
         if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
           removeLocalStorageItem('pinnedId')

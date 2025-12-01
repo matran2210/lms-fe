@@ -4,9 +4,7 @@ import { EditorReader } from '@lms/ui'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { hidePopup } from 'src/redux/slice/Popup/Result-test'
 
-interface IProps {}
-
-const PopupCert = ({}: IProps) => {
+const PopupCert = () => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector((state) => state.popupReducer)
 

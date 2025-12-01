@@ -1,23 +1,35 @@
-import { BlankAvatarImage, BlankAvatarNotificationImage, CloseIconPreview, IconSend, VerifiedIcon } from '@lms/assets'
+import SappDisplayText from '@components/common/SappDisplayText'
+import SappIcon from '@components/common/SappIcon'
+import {
+  BlankAvatarImage,
+  BlankAvatarNotificationImage,
+  CloseIconPreview,
+  VerifiedIcon,
+} from '@lms/assets'
+import {
+  getDiscussion,
+  ICreateDiscussionResReact,
+  IDiscussion,
+  IDiscussionFile,
+  IUser,
+  useAppDispatch,
+} from '@lms/contexts'
+import { HookFormTextArea, SappButton, SappButtonIcon } from '@lms/ui'
+import { trackGAEvent } from '@lms/utils'
+import { CoursesAPI } from '@pages/api/courses'
 import { calculateTimeAgo } from '@utils/helpers'
+import { Popover } from 'antd'
+import clsx from 'clsx'
+import { isEmpty } from 'lodash'
 import Image from 'next/image'
 import { SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import SappIcon from '@components/common/SappIcon'
 import { ActivityAPI } from 'src/pages/api/activity'
-import { getDiscussion, ICreateDiscussionResReact, IDiscussion, IDiscussionFile, IUser, useAppDispatch } from '@lms/contexts'
-import ModalDeleteComment from './ModalDeleteComment'
-import clsx from 'clsx'
-import ActionDiscussion from './ActionDiscussion'
-import SappDisplayText from '@components/common/SappDisplayText'
-import SendComment from './SendComment'
-import { Popover } from 'antd'
-import { CoursesAPI } from '@pages/api/courses'
-import { isEmpty } from 'lodash'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
-import { trackGAEvent } from '@lms/utils'
-import { HookFormTextArea, SappButton, SappButtonIcon } from '@lms/ui'
+import ActionDiscussion from './ActionDiscussion'
+import ModalDeleteComment from './ModalDeleteComment'
+import SendComment from './SendComment'
 
 type Props = {
   rank?: number
@@ -52,7 +64,7 @@ function DiscussionElement({
   setLoading,
   isSappSupporterUserCurrent = false,
 }: Props) {
-  const [isLike, setIsLike] = useState<boolean>(discussion.is_like)
+  // const [isLike, setIsLike] = useState<boolean>(discussion.is_like)
   const [timeAgo, setTimeAgo] = useState<string>('')
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [isDelete, setIsDelete] = useState<boolean>(false)
@@ -191,7 +203,7 @@ function DiscussionElement({
   }
 
   useEffect(() => {
-    setIsLike(discussion.is_like)
+    // setIsLike(discussion.is_like)
     setTimeAgo(() => calculateTimeAgo(discussion.created_at))
     setDiscussionFile(discussion.course_discussion_files)
   }, [discussion])
@@ -241,7 +253,8 @@ function DiscussionElement({
         name: data?.student_info?.detail?.full_name,
         email: data?.student_info?.user_contacts?.[0]?.email,
         phone: data?.student_info?.user_contacts?.[0]?.phone,
-        avatar: data?.student_info?.detail.avatar?.['50x50'] || BlankAvatarImage,
+        avatar:
+          data?.student_info?.detail.avatar?.['50x50'] || BlankAvatarImage,
       })
     } catch (error: any) {}
   }
@@ -297,7 +310,7 @@ function DiscussionElement({
                     discussion.is_sapp_supporter
                       ? discussion?.avatar?.['50x50'] ||
                         discussion?.avatar?.['ORIGIN'] ||
-                      BlankAvatarNotificationImage
+                        BlankAvatarNotificationImage
                       : discussion?.avatar?.['50x50'] ||
                         discussion?.avatar?.['ORIGIN'] ||
                         BlankAvatarImage

@@ -42,7 +42,7 @@ export const formatNumberWithDot = (value, decimals = 5) => {
     .replace(/,/g, ' ,')
   return formattedInteger
   // Trả về phần nguyên + phần thập phân giữ nguyên
-  return formattedInteger + decimalPart
+  // return formattedInteger + decimalPart
 }
 
 // Format biểu thức, thay thế từng số trong chuỗi

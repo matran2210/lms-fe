@@ -9,5 +9,6 @@
     "**/*.tsx",
     "**/*.js",
     "**/*.jsx"
-  ]
+  ],
+  "ignorePatterns": ["tailwind.config.js", "postcss.config.js"]
 }

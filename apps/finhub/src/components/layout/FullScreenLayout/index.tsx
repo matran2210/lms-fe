@@ -8,8 +8,9 @@ interface LayoutProps {
   className?: string
 }
 
-// eslint-disable-next-line import/no-unused-modules
-export default function FullScreenLayout(props: LayoutProps): ReactElement {
+export default function FullScreenLayout(
+  props: Readonly<LayoutProps>,
+): ReactElement {
   const { children, title, className } = props
   return (
     <>

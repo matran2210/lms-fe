@@ -1,17 +1,14 @@
-import {
-  IActivityResource,
-  IActivityResourceProps,
-} from 'src/type/courses-3-level'
-import { Docs, IconDownload } from '../icons'
 import BaseModal from '@components/courses/popup/BaseModal'
+import { IActivityResourceProps } from 'src/type/courses-3-level'
+import { Docs, IconDownload } from '../icons'
 
 export default function ActivityResourcesMobile({
   title,
   items,
   visible,
   onClose,
-  setDataModal,
-  setIsOpen,
+  // setDataModal,
+  // setIsOpen,
 }: IActivityResourceProps) {
   return (
     <BaseModal

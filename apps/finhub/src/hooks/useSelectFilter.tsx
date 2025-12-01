@@ -8,12 +8,12 @@ import {
   IGetCourseSubSectionList,
   IGetCourseUnitList,
   ISelect,
-  ISection
+  ISection,
 } from '@lms/core'
 
 const DEFAULT_PAGESIZE = 10
 
-const getNextPageFilterParam = (lastPage: any, pages: any) => {
+const getNextPageFilterParam = (lastPage: any) => {
   return lastPage?.meta.page_index < lastPage.meta.total_pages
     ? lastPage?.meta.page_index + 1
     : undefined
