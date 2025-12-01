@@ -27,7 +27,7 @@ export default function Layout(props: LayoutProps): ReactElement {
     childClassName,
 
   } = props;
-  const { pageLink, menuItems, menuItemsEvent, menuBottom, router } = useFeature();
+  const { pageLink, router } = useFeature();
 
   const { isShowMenuContent } = useTailwindBreakpoint();
 
