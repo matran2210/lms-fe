@@ -1,22 +1,22 @@
-import { useEffect, useRef, useState } from 'react'
 import { courseActivityQuizReducer, fetchQuestionById, removeQuizFinished, saveAnswer, selectQuestions, submitQuiz, useAppDispatch, useAppSelector } from '@lms/contexts'
+import { useEffect, useRef, useState } from 'react'
 
 import { CloseIcon, ConfirmIcon } from '@lms/assets'
+import { showPopupCompletedCourse } from '@lms/contexts'
+import { ANIMATION, FINISHED_TEST_TITLE, GRADE_STATUS, GRADING_METHOD, IQuestion, IQuestionResult, IQuestionResultResponse, IQuizSetting, RESPONSE_OPTION, SOCIAL_LINK } from '@lms/core'
+import { SappButton, SappIcon, SappModal, SappModalV3 } from '@lms/ui'
+import { isValidatedAnswer, trackGAEvent } from '@lms/utils'
+import { QuestionAPI } from '@pages/api/question'
+import ConFirmSubmit from '@pages/short-course/test/conFirmSubmit'
 import dayjs from 'dayjs'
+import { isNull } from 'lodash'
+import { useRouter } from 'next/router'
 import { QuizResultComponent } from 'quiz-result-package'
 import toast from 'react-hot-toast'
-import ConFirmSubmit from '@pages/short-course/test/conFirmSubmit'
-import { showPopupCompletedCourse } from '@lms/contexts'
+import { PageLink } from 'src/constants/routes'
 import { CoursesAPI, submitQuizTest } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import { isNull } from 'lodash'
-import { useRouter } from 'next/router'
-import { ANIMATION, FINISHED_TEST_TITLE, GRADE_STATUS, GRADING_METHOD, IQuestion, IQuestionResult, IQuestionResultResponse, IQuizSetting, RESPONSE_OPTION, SOCIAL_LINK } from '@lms/core'
-import { QuestionAPI } from '@pages/api/question'
-import { isValidatedAnswer, trackGAEvent } from '@lms/utils'
-import { PageLink } from 'src/constants/routes'
-import { SappButton, SappIcon, SappModal, SappModalV3 } from '@lms/ui'
 
 type Props = {
   questions: IQuestion[]
@@ -58,9 +58,9 @@ interface IAnswer {
   }
 }
 
-interface IAnswers {
-  answers: IAnswer[]
-}
+// interface IAnswers {
+//   answers: IAnswer[]
+// }
 
 const QuizDocument = ({
   questions,
@@ -75,7 +75,7 @@ const QuizDocument = ({
   quizSetting,
   gradeStatus,
   quizName,
-  reload,
+  // reload,
   grading_method,
   refreshTab,
   exhibitText,
@@ -118,7 +118,7 @@ const QuizDocument = ({
   }>()
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       if (questions?.[0]?.id) {
         setStartWorkTime(Date.now())
         // Load the first question when the component mounts
@@ -133,7 +133,7 @@ const QuizDocument = ({
               questionId: questions?.[0]?.id || '',
             }),
           )
-        } catch (error) {}
+        } catch {}
       }
     })()
   }, [questions?.[0]?.id])

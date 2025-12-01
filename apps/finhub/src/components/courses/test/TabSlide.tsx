@@ -25,10 +25,10 @@ const TabSlide = ({
   currentTab,
   handleChangeTab,
   activeShowAll,
-  setActiveShowAll,
-  setValueFilter,
+  // setActiveShowAll,
+  // setValueFilter,
   isScrollCenter = true,
-  hasScrollBar,
+  // hasScrollBar,
   setHasScrollBar,
 }: IProps) => {
   const MAX_ITEMS_PER_ROW = 25
@@ -146,7 +146,7 @@ const TabSlide = ({
   }, [sortedData, activeShowAll, numberDisplayData])
 
   const firstEssayPosition = useMemo(() => {
-    for (let e of sortedData) {
+    for (const e of sortedData) {
       if (e.qType === QUESTION_TYPES.ESSAY) {
         return e.index
       }
@@ -156,26 +156,26 @@ const TabSlide = ({
 
   // const [arrowDisable, setArrowDisable] = useState(true);
 
-  const handleHorizantalScroll = (
-    element: HTMLElement,
-    speed: number,
-    distance: number,
-    step: number,
-  ) => {
-    let scrollAmount = 0
-    const slideTimer = setInterval(() => {
-      element.scrollLeft += step
-      scrollAmount += Math.abs(step)
-      if (scrollAmount >= distance) {
-        clearInterval(slideTimer)
-      }
-      // if (element.scrollLeft === 0) {
-      //   setArrowDisable(true);
-      // } else {
-      //   setArrowDisable(false);
-      // }
-    }, speed)
-  }
+  // const handleHorizantalScroll = (
+  //   element: HTMLElement,
+  //   speed: number,
+  //   distance: number,
+  //   step: number,
+  // ) => {
+  //   let scrollAmount = 0
+  //   const slideTimer = setInterval(() => {
+  //     element.scrollLeft += step
+  //     scrollAmount += Math.abs(step)
+  //     if (scrollAmount >= distance) {
+  //       clearInterval(slideTimer)
+  //     }
+  //     // if (element.scrollLeft === 0) {
+  //     //   setArrowDisable(true);
+  //     // } else {
+  //     //   setArrowDisable(false);
+  //     // }
+  //   }, speed)
+  // }
 
   /**
    * @description Sử dụng state để theo dõi trạng thái của việc kéo

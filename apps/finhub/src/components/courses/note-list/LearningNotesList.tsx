@@ -1,42 +1,40 @@
-import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from '@lms/assets'
-import { SappBreadcrumbNotLink } from '@lms/ui'
+import ListFilterMobile from '@components/common/ListFilterMobile'
+import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
+import NoDataV2 from '@components/common/NodataV2'
+import SortBy from '@components/common/SortBy'
+import ActionCellV2 from '@components/courses/action/ActionCellV2'
+import FilterCourseSection from '@components/courses/note-list/FilterCourseSection'
+import BaseModal from '@components/courses/popup/BaseModal'
+import { AltArrowLeft, DeleteIcon, EllipsisIconV2, PencilV2Icon } from '@lms/assets'
+import { pushNotes3Level, resetNotesList3Level, useAppDispatch, useAppSelector, useCourseNoteContext } from '@lms/contexts'
+import { DEFAULT_PAGESIZE, ISection } from '@lms/core'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { ButtonPrimary, SappBreadcrumbNotLink, SappDrawerV3 } from '@lms/ui'
+import { cleanParamsAPI } from '@lms/utils'
+import { format } from 'date-fns'
+import { isEmpty } from 'lodash'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState, useRef, useCallback } from 'react'
+import { useEffect, useState } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { PageLink } from 'src/constants/routes'
 import { CoursesAPI } from 'src/pages/api/courses'
 import {
+  ICourseSectionNoteItem,
+  ICourseSectionPathItem,
+  INotesListResponse,
+} from 'src/type/courses-3-level/activity'
+import {
   backTypeMap,
+  getTypeName,
   IOpenChooseItem,
   SectionDropdownFormValues,
   SectionField,
-  getTypeName,
 } from 'src/type/courses-3-level/course'
+import { v4 as uuidv4 } from 'uuid'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
-import toast from 'react-hot-toast'
-import { format } from 'date-fns'
-import { debounce, isEmpty } from 'lodash'
-import { FormProvider, useForm } from 'react-hook-form'
-import FilterCourseSection from '@components/courses/note-list/FilterCourseSection'
-import {
-  ICourseSectionNoteItem,
-  INotesListResponse,
-  ICourseSectionPathItem,
-} from 'src/type/courses-3-level/activity'
-import NoDataV2 from '@components/common/NodataV2'
-import SortBy from '@components/common/SortBy'
-import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
-import ListFilterMobile from '@components/common/ListFilterMobile'
-import ActionCellV2 from '@components/courses/action/ActionCellV2'
-import BaseModal from '@components/courses/popup/BaseModal'
-import { v4 as uuidv4 } from 'uuid'
-import { DEFAULT_PAGESIZE, ISection } from '@lms/core'
-import { cleanParamsAPI } from '@lms/utils'
-import { AltArrowLeft } from '@lms/assets'
-import { ButtonPrimary, SappDrawerV3 } from '@lms/ui'
-import { PageLink } from 'src/constants/routes'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { pushNotes3Level, resetNotesList3Level, useAppDispatch, useAppSelector, useCourseNoteContext } from '@lms/contexts'
 
 export default function LearningNotesList({
   onClose,
@@ -203,7 +201,6 @@ export default function LearningNotesList({
             }, 1000)
           }
         })
-        .catch((err) => {})
         .finally(() => {
           setTimeout(() => {
             setLoading(false)
@@ -214,7 +211,7 @@ export default function LearningNotesList({
     }
   }, [notesListStatus])
 
-  const handleEditNote = (id: string, description: string, index: number) => {
+  const handleEditNote = (id: string, description: string) => {
     const note = {
       uuid: uuidv4(),
       id: id,
@@ -235,7 +232,6 @@ export default function LearningNotesList({
         .then((res) => {
           setNotesListData(res?.data)
         })
-        .catch((err) => {})
         .finally(() => {
           setTimeout(() => {
             setLoading(false)
@@ -256,7 +252,7 @@ export default function LearningNotesList({
         (courseId || queryId) &&
         notesListStatus
       ) {
-        ;(notesListData?.meta?.total_records ?? 0) > pageIndex &&
+        (notesListData?.meta?.total_records ?? 0) > pageIndex &&
           fetchData(params)
       }
     }

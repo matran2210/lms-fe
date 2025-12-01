@@ -35,37 +35,37 @@ import { PageLink } from 'src/constants/routes'
 import { PopupLockContent } from '@lms/feature-courses'
 import { CtaTrial, LearningResource } from '@lms/ui'
 
-interface IProps {
-  course_section_type: string
-  description: string
-  duration: number
-  id: string
-  learning_progress: {
-    duration: number
-    time_spent: number
-    total_course_sections: number
-    total_course_sections_completed: number
-  }
-  quiz: {
-    case_study_story: null
-    id: string
-    is_graded: boolean
-    is_limited: boolean
-    limit_count: number
-    number_of_essay_questions: number
-    number_of_multiple_choice_questions: number
-    quiz_timed: number
-    required_percent_score: number
-    attempt: {
-      id: string
-      number_of_attempts: number
-      score: number
-      ratio_score: string
-      total_attempt_time: number
-    }
-  }
-  parent_id: string
-}
+// interface IProps {
+//   course_section_type: string
+//   description: string
+//   duration: number
+//   id: string
+//   learning_progress: {
+//     duration: number
+//     time_spent: number
+//     total_course_sections: number
+//     total_course_sections_completed: number
+//   }
+//   quiz: {
+//     case_study_story: null
+//     id: string
+//     is_graded: boolean
+//     is_limited: boolean
+//     limit_count: number
+//     number_of_essay_questions: number
+//     number_of_multiple_choice_questions: number
+//     quiz_timed: number
+//     required_percent_score: number
+//     attempt: {
+//       id: string
+//       number_of_attempts: number
+//       score: number
+//       ratio_score: string
+//       total_attempt_time: number
+//     }
+//   }
+//   parent_id: string
+// }
 
 const CourseDetail = () => {
   const dispatch = useAppDispatch()
@@ -91,10 +91,10 @@ const CourseDetail = () => {
   const [showSidebar, setShowSidebar] = useState(false)
   const { setOpenSidebar } = useCourseContext()
 
-  const handleOpenSidebar = () => {
-    setShowSidebar(true)
-    setOpenSidebar(true)
-  }
+  // const handleOpenSidebar = () => {
+  //   setShowSidebar(true)
+  //   setOpenSidebar(true)
+  // }
   const handleCloseSidebar = () => {
     setShowSidebar(false)
     setOpenSidebar(false)

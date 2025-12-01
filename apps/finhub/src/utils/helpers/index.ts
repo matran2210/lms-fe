@@ -1,9 +1,7 @@
-import _, { uniqBy } from 'lodash'
+import { MenuItem, MenuOption } from '@lms/core'
 import dayjs from 'dayjs'
-import { round } from 'lodash'
-import { MenuOption } from '@lms/core'
-import { MenuItem } from '@lms/core'
-import { PageLink } from '@lms/core'
+import _, { round } from 'lodash'
+import { PageLink } from 'src/constants/routes'
 
 export function isMobile() {
   const toMatch = [

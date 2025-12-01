@@ -17,7 +17,7 @@ const CreateNote = ({
   id,
   content,
   uuid,
-  count,
+  // count,
   isActiveTab,
   handleCloseTab,
   countNote,

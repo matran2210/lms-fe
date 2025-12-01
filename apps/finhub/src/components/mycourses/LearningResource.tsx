@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { DownloadIcon } from '@lms/assets'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'

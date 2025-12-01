@@ -1,3 +1,8 @@
+import { CompletedIcon } from '@assets/icons'
+import Tooltip from '@components/common/Tooltip'
+import { LockClosedIcon } from '@lms/assets'
+import { useCourseContext } from '@lms/contexts'
+import { ROUTES, TEST_TYPE_ENUM } from '@lms/core'
 import { Collapse } from 'antd'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
@@ -11,18 +16,13 @@ import {
 } from '../card/accordion/utils'
 import { ArrowDownIcon } from '../icons'
 import TestModal from '../popup/TestModal'
-import Tooltip from '@components/common/Tooltip'
-import { LockClosedIcon } from '@lms/assets'
-import { useCourseContext } from '@lms/contexts'
-import { ROUTES, TEST_TYPE_ENUM } from '@lms/core'
-import { CompletedIcon } from '@assets/icons'
 
 const { Panel } = Collapse
 
 export default function SectionContentAccoridior({
   sections,
   class_user_id,
-  refetch,
+  // refetch,
 }: SectionContentProps) {
   const router = useRouter()
   const courseId = router.query.courseId
@@ -34,7 +34,7 @@ export default function SectionContentAccoridior({
     return `${count} ${count === 1 ? singular : plural || `${singular}s`}`
   }
 
-  const activeKey = sections.findIndex((section, index) => {
+  const activeKey = sections.findIndex((section) => {
     if (section.children.length > 0) {
       return section.children.some((child) => child.id === router.query.id)
     }
@@ -85,7 +85,7 @@ export default function SectionContentAccoridior({
               <Panel
                 header={
                   <div
-                    onClick={(e) => {
+                    onClick={() => {
                       if (
                         section?.course_section_type ==
                         TEST_TYPE_ENUM.TOPIC_TEST

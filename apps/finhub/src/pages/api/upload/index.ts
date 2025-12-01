@@ -20,7 +20,7 @@ export class UploadAPI {
     name,
     size,
     blob,
-    description,
+    // description,
     getProgress,
     location,
   }: {
@@ -28,7 +28,7 @@ export class UploadAPI {
     name: string
     size: string
     blob: Blob
-    description: string
+    // description: string
     getProgress: (percent: number) => void
     location: string
   }) {
@@ -65,8 +65,8 @@ export class UploadAPI {
       //   const responseFile = await ResourcesAPI.getFileFromResource(response.data[0].id, source)
       //   return responseFile.data
       // }
-    } catch (error) {
-      throw error
+    } catch {
+      
     }
   }
   static downloadFile = async (data: {
@@ -89,7 +89,7 @@ export class UploadAPI {
         link.click()
         document.body.removeChild(link)
       }
-    } catch (error) {}
+    } catch {}
   }
   static getUrlFile = async (
     file_key: string,
@@ -165,8 +165,7 @@ const uploadFile = async (
           headers: { 'Content-Type': fileBlob.type },
           onUploadProgress,
         })
-      } catch (error) {
-        throw error
+      } catch {
       }
       return
     }
@@ -195,8 +194,7 @@ const uploadFile = async (
       parts: uploadPartsArray,
       uploadId: uploadId,
     })
-  } catch (error) {
-    throw error
+  } catch {
   }
 }
 
@@ -251,8 +249,7 @@ async function uploadMultipart(
         source,
       )
       batchUploadPromises.push(uploadPromise)
-    } catch (error) {
-      throw error
+    } catch {
     }
   }
 

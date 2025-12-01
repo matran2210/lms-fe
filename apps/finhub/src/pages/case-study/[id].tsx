@@ -236,14 +236,14 @@ const CaseStudyDetail = () => {
   const [openSubmit, setOpenSubmit] = useState(false)
   const [openQuit, setOpenQuit] = useState(false)
   const dispatch = useAppDispatch()
-  const { topics, listFullQuestions, listQuestions, loading } = useAppSelector(
+  const { topics, listQuestions, loading } = useAppSelector(
     (state) => state.caseStudyTestReducer,
   )
   const [quizAttempId, setQuizAttempId] = useState('')
   const [classId, setClassId] = useState('')
   const [startTime, setStartTime] = useState(Date.now())
   const [openUpload, setOpenUpload] = useState<any>({})
-  const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
+  // const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
   const [breadCrumb, setBreadCrumb] = useState<any>()
   const [unsavedChanges, setUnsavedChanges] = useState(true)
   const [openLimit, setOpenLimit] = useState(false)
@@ -292,7 +292,7 @@ const CaseStudyDetail = () => {
     const questionList = listQuestions.map(
       (item: any) => Object.values(item)[0],
     )
-    getAllValue().map((item, index) => {
+    getAllValue().map((item) => {
       //** bỏ qua nếu là câu tự luận nếu có file */
       if (item?.answer_file?.file_key) return
       //** Ghi nhận chưa trả lời nếu trường answer rỗng */
@@ -424,11 +424,11 @@ const CaseStudyDetail = () => {
    * Declare form to handle exhibit
    */
   const {
-    control: controlExhibits,
+    // control: controlExhibits,
     getValues: getValuesExhibits,
     setValue: setValueExhibits,
     watch,
-    reset,
+    // reset,
   } = useForm()
 
   /**
@@ -522,21 +522,21 @@ const CaseStudyDetail = () => {
     }
     return value
   }
-  const getValueSelectText = (index: number) => {
-    let value = [] as any
-    if (valueRef?.current?.[index]) {
-      const inputs = document.querySelectorAll(
-        'div.sapp-select--question',
-      ) as any
+  // const getValueSelectText = (index: number) => {
+  //   let value = [] as any
+  //   if (valueRef?.current?.[index]) {
+  //     const inputs = document.querySelectorAll(
+  //       'div.sapp-select--question',
+  //     ) as any
 
-      for (let e of inputs) {
-        value.push(e?.dataset.value)
-      }
-    } else {
-      value.push('')
-    }
-    return value
-  }
+  //     for (let e of inputs) {
+  //       value.push(e?.dataset.value)
+  //     }
+  //   } else {
+  //     value.push('')
+  //   }
+  //   return value
+  // }
   const getAnswerMatching = () => {
     const value = MatchQuizRef?.current?.getMatchedPairs?.()
     return value || []
@@ -844,15 +844,15 @@ const CaseStudyDetail = () => {
       }),
     )
   }
-  const checkCalExist = useMemo(() => {
-    for (let i in openScratchPad) {
-      if (openScratchPad[i].type === 'calculator') {
-        return +i
-      }
-    }
-    return -1
-    // if (!arr.includes('calculator')) {
-  }, [openScratchPad])
+  // const checkCalExist = useMemo(() => {
+  //   for (let i in openScratchPad) {
+  //     if (openScratchPad[i].type === 'calculator') {
+  //       return +i
+  //     }
+  //   }
+  //   return -1
+  //   // if (!arr.includes('calculator')) {
+  // }, [openScratchPad])
   const warningText =
     'You have unsaved changes - are you sure you wish to leave this page?'
   useEffect(() => {
@@ -1282,7 +1282,7 @@ const CaseStudyDetail = () => {
                 getPopupContainer={() => document.body}
                 content={
                   <div className="flex flex-col gap-2">
-                    {topics?.files?.map((e: any, index: number) => {
+                    {topics?.files?.map((e: any) => {
                       return (
                         <div
                           className={clsx(
@@ -1457,5 +1457,4 @@ const CaseStudyDetail = () => {
   )
 }
 
-// eslint-disable-next-line import/no-unused-modules
 export default CaseStudyDetail

@@ -89,7 +89,6 @@ const ModalExplanationPackage = ({
         short_answer: resultResponse?.data?.answer?.short_answer,
         response_option_answer: resultResponse?.data?.answer?.response_option,
       })
-    } catch (error) {
     } finally {
       setLoading(false)
     }

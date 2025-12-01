@@ -47,24 +47,21 @@ export const getResult = async (currentTabContent: any) => {
 }
 
 export const checkTypeAndRenderTitle = (type: string) => {
-  let pageTitle = ''
   switch (type) {
     case TEST_TYPE.MID_TERM_TEST:
-      return (pageTitle = 'Midterm Test')
+      return 'Midterm Test'
     case TEST_TYPE.FINAL_TEST:
-      return (pageTitle = 'Final Test')
+      return 'Final Test'
     case TEST_TYPE.TOPIC_TEST:
-      return (pageTitle = 'Topic Test')
+      return 'Topic Test'
     case TEST_TYPE.CHAPTER_TEST:
-      return (pageTitle = 'Chapter Test')
+      return 'Chapter Test'
     case TEST_TYPE.PART_TEST:
-      return (pageTitle = 'Part Test')
+      return 'Part Test'
     case TEST_TYPE.ENTRANCE_TEST:
-      return (pageTitle = 'Entrance Test')
-    case TEST_TYPE.ENTRANCE_TEST:
-      return (pageTitle = 'Event Test')
+      return 'Entrance Test'
     default:
-      return pageTitle
+      return 'Event Test'
   }
 }
 
