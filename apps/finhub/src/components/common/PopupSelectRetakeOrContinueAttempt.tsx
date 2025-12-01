@@ -34,7 +34,7 @@ const PopupSelectRetakeOrContinueAttempt = ({
         await handleRetake().then(() => {
           setOpen(false)
         })
-        
+
         break
       default:
         setOpen(false)

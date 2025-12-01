@@ -152,7 +152,7 @@ const VideoSection = ({
         setModalOpen(false)
         setHideVideo(false)
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const [hideVideo, setHideVideo] = useState(false)
@@ -249,7 +249,7 @@ const VideoSection = ({
           },
         })
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const handleGoTimeline = (time: number) => {

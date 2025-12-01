@@ -8,7 +8,7 @@ import {
   IGetCourseSubSectionList,
   IGetCourseUnitList,
   ISelect,
-  ISection
+  ISection,
 } from '@lms/core'
 
 const DEFAULT_PAGESIZE = 10

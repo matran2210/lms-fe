@@ -1,11 +1,6 @@
 import type { ComponentType } from 'react'
 import type { Settings } from 'react-slick'
-// Use require to avoid type conflicts between react-slick types and React types
-// const SlickSlider: ComponentType<Settings> =
-//   (require('react-slick') as { default?: ComponentType<Settings> }).default ??
-//   (require('react-slick') as ComponentType<Settings>)
 import ReactSlick from 'react-slick'
-const SlickSlider = ReactSlick as unknown as ComponentType<Settings>
 import Image from 'next/image'
 import { ButtonPrimary } from '@lms/ui'
 import { ButtonText } from '@lms/ui'
@@ -14,6 +9,7 @@ import { useTailwindBreakpoint } from '@lms/hooks'
 import { linkCdnMktInApp } from '@pages/lms-pro-new-version'
 import { motion, AnimatePresence } from 'framer-motion'
 
+const SlickSlider = ReactSlick as unknown as ComponentType<Settings>
 const ModalMarketingInApp = ({
   open,
   setOpen,

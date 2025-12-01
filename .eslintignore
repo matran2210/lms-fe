@@ -10,4 +10,5 @@ apps/lms-desktop/src/pages/*.tsx
 apps/lms-desktop/next-seo.config.js
 apps/lms-desktop/src/i18n/locales/*
 postcss.config.js
+tailwind.config.js
 scripts/*.js

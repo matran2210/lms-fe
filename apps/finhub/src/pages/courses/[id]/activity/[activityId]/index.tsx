@@ -15,7 +15,20 @@ import SAPPBorder from '@components/common/SAPPBorder'
 import SappIcon from '@components/common/SappIcon'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import Tooltip from '@components/common/Tooltip'
-import { clearNote, closeCalculator, courseActivityAction, courseActivityReducer, getCourseActivityTapById, getDiscussion, resetQuizActivity, showPopupCompletedCourse, useAppDispatch, useAppSelector, useCourseContext, UserType } from '@lms/contexts'
+import {
+  clearNote,
+  closeCalculator,
+  courseActivityAction,
+  courseActivityReducer,
+  getCourseActivityTapById,
+  getDiscussion,
+  resetQuizActivity,
+  showPopupCompletedCourse,
+  useAppDispatch,
+  useAppSelector,
+  useCourseContext,
+  UserType,
+} from '@lms/contexts'
 import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from '@lms/core'
 import {
   ActivitySkeleton,
@@ -170,7 +183,13 @@ const ActivityPage = () => {
       CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION = {}
       try {
         dispatch(courseActivityAction.setActivityState(activity))
-        dispatch(getDiscussion({ api: CoursesAPI, id: router.query?.id as string, sectionId: sectionId }))
+        dispatch(
+          getDiscussion({
+            api: CoursesAPI,
+            id: router.query?.id as string,
+            sectionId: sectionId,
+          }),
+        )
       } catch (error) {}
     }
 

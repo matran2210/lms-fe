@@ -1,7 +1,19 @@
 import SappDisplayText from '@components/common/SappDisplayText'
 import SappIcon from '@components/common/SappIcon'
-import { BlankAvatarImage, BlankAvatarNotificationImage, CloseIconPreview, VerifiedIcon } from '@lms/assets'
-import { getDiscussion, ICreateDiscussionResReact, IDiscussion, IDiscussionFile, IUser, useAppDispatch } from '@lms/contexts'
+import {
+  BlankAvatarImage,
+  BlankAvatarNotificationImage,
+  CloseIconPreview,
+  VerifiedIcon,
+} from '@lms/assets'
+import {
+  getDiscussion,
+  ICreateDiscussionResReact,
+  IDiscussion,
+  IDiscussionFile,
+  IUser,
+  useAppDispatch,
+} from '@lms/contexts'
 import { HookFormTextArea, SappButton, SappButtonIcon } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
 import { CoursesAPI } from '@pages/api/courses'
@@ -241,7 +253,8 @@ function DiscussionElement({
         name: data?.student_info?.detail?.full_name,
         email: data?.student_info?.user_contacts?.[0]?.email,
         phone: data?.student_info?.user_contacts?.[0]?.phone,
-        avatar: data?.student_info?.detail.avatar?.['50x50'] || BlankAvatarImage,
+        avatar:
+          data?.student_info?.detail.avatar?.['50x50'] || BlankAvatarImage,
       })
     } catch (error: any) {}
   }
@@ -297,7 +310,7 @@ function DiscussionElement({
                     discussion.is_sapp_supporter
                       ? discussion?.avatar?.['50x50'] ||
                         discussion?.avatar?.['ORIGIN'] ||
-                      BlankAvatarNotificationImage
+                        BlankAvatarNotificationImage
                       : discussion?.avatar?.['50x50'] ||
                         discussion?.avatar?.['ORIGIN'] ||
                         BlankAvatarImage

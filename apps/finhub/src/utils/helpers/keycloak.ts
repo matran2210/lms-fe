@@ -1,8 +1,10 @@
 import { CERTIFICATE, COOKIE_INFO } from '@lms/core'
 import {
   deleteCookie,
-  getCookie, getMessagingToken, getSessionIdFromToken,
-  setCookie
+  getCookie,
+  getMessagingToken,
+  getSessionIdFromToken,
+  setCookie,
 } from '@lms/utils'
 import { UserApi } from '@pages/api/user'
 import AsyncStorage from '@react-native-async-storage/async-storage'

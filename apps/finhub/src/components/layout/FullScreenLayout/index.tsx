@@ -8,7 +8,9 @@ interface LayoutProps {
   className?: string
 }
 
-export default function FullScreenLayout(props: Readonly<LayoutProps>): ReactElement {
+export default function FullScreenLayout(
+  props: Readonly<LayoutProps>,
+): ReactElement {
   const { children, title, className } = props
   return (
     <>

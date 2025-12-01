@@ -9,3 +9,6 @@ src/assets/*
 src/pages/*.tsx
 next-seo.config.js
 src/i18n/locales/*
+.eslintrc.js
+tailwind.config.js
+postcss.config.js

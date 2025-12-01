@@ -12,10 +12,28 @@ import { FormProvider, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import NoDataV2 from 'src/components/common/NodataV2'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { pushNotes3Level, resetNotesList3Level, useAppDispatch, useAppSelector, useCourseNoteContext, userReducer, UserType } from '@lms/contexts'
+import {
+  pushNotes3Level,
+  resetNotesList3Level,
+  useAppDispatch,
+  useAppSelector,
+  useCourseNoteContext,
+  userReducer,
+  UserType,
+} from '@lms/contexts'
 import { v4 as uuidv4 } from 'uuid'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { backTypeMap, getTypeName, ICourseSectionNoteItem, ICourseSectionPathItem, INotesListResponse, IOpenChooseItem, ISection, SectionDropdownFormValues, SectionField } from '@lms/core'
+import {
+  backTypeMap,
+  getTypeName,
+  ICourseSectionNoteItem,
+  ICourseSectionPathItem,
+  INotesListResponse,
+  IOpenChooseItem,
+  ISection,
+  SectionDropdownFormValues,
+  SectionField,
+} from '@lms/core'
 import { cleanParamsAPI } from '@lms/utils'
 import { ActionCellV2, SappBreadcrumbNotLink, SappDrawerV3 } from '@lms/ui'
 const { publicRuntimeConfig } = getConfig()
@@ -211,7 +229,7 @@ const LearningNotesList = () => {
       const res = await CoursesAPI.getCourseNotesList(pageIndex, params)
       setNotesListData(res?.data)
       setPageIndex((prevPageIndex) => prevPageIndex + DEFAULT_PAGESIZE)
-    } finally { 
+    } finally {
       setTimeout(() => {
         setLoading(false)
       }, 500)

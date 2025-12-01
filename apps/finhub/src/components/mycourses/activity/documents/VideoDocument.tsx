@@ -1,8 +1,11 @@
-
 import { formatTime, htmlToRaw } from '@components/common/timer'
 import { Soundwave } from '@components/courses/icons'
 import TimeLineModal from '@components/courses/timeline/TimeLineModal'
-import { fetchQuestionById, IActivityStateQuestion, useAppDispatch } from '@lms/contexts'
+import {
+  fetchQuestionById,
+  IActivityStateQuestion,
+  useAppDispatch,
+} from '@lms/contexts'
 import { debounce } from '@utils/helpers'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -89,7 +92,7 @@ const VideoDocument = ({
           quizId: currentVideo?.quiz?.id || '',
           questionId: activeQuestion?.id,
           api: QuestionAPI,
-          courseApi: CoursesAPI
+          courseApi: CoursesAPI,
         }),
       )
         .unwrap()
@@ -166,8 +169,8 @@ const VideoDocument = ({
             tabId: tabId,
             quizId: currentVideo?.quiz?.id || '',
             questionId: id,
-             api: QuestionAPI,
-          courseApi: CoursesAPI
+            api: QuestionAPI,
+            courseApi: CoursesAPI,
           }),
         )
           .unwrap()

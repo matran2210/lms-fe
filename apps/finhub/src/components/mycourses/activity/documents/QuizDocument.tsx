@@ -1,9 +1,29 @@
-import { courseActivityQuizReducer, fetchQuestionById, removeQuizFinished, saveAnswer, selectQuestions, submitQuiz, useAppDispatch, useAppSelector } from '@lms/contexts'
+import {
+  courseActivityQuizReducer,
+  fetchQuestionById,
+  removeQuizFinished,
+  saveAnswer,
+  selectQuestions,
+  submitQuiz,
+  useAppDispatch,
+  useAppSelector,
+} from '@lms/contexts'
 import { useEffect, useRef, useState } from 'react'
 
 import { CloseIcon, ConfirmIcon } from '@lms/assets'
 import { showPopupCompletedCourse } from '@lms/contexts'
-import { ANIMATION, FINISHED_TEST_TITLE, GRADE_STATUS, GRADING_METHOD, IQuestion, IQuestionResult, IQuestionResultResponse, IQuizSetting, RESPONSE_OPTION, SOCIAL_LINK } from '@lms/core'
+import {
+  ANIMATION,
+  FINISHED_TEST_TITLE,
+  GRADE_STATUS,
+  GRADING_METHOD,
+  IQuestion,
+  IQuestionResult,
+  IQuestionResultResponse,
+  IQuizSetting,
+  RESPONSE_OPTION,
+  SOCIAL_LINK,
+} from '@lms/core'
 import { SappButton, SappIcon, SappModal, SappModalV3 } from '@lms/ui'
 import { isValidatedAnswer, trackGAEvent } from '@lms/utils'
 import { QuestionAPI } from '@pages/api/question'
@@ -616,13 +636,13 @@ const QuizDocument = ({
     switch (status) {
       case GRADE_STATUS.FINISHED_GRADING:
         return (
-          <div className="rounded bg-blur-green px-2 font-medium text-green-800">
+          <div className="bg-blur-green text-green-800 rounded px-2 font-medium">
             Finished Grading
           </div>
         )
       case GRADE_STATUS.AWAITING_GRADING:
         return (
-          <div className="rounded  bg-blur-yellow px-2 font-medium text-amber-400">
+          <div className="bg-blur-yellow  text-amber-400 rounded px-2 font-medium">
             Awaiting Grading
           </div>
         )
