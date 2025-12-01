@@ -2,13 +2,14 @@
 const colors = require("tailwindcss/colors");
 module.exports = {
   content: [
-    '../../apps/**/*.{js,ts,jsx,tsx}',
-    '../../libs/**/*.{js,ts,jsx,tsx}',
-    '../../features/**/*.{js,ts,jsx,tsx}',
-    '!../../**/node_modules',                 // bỏ node_modules
-    '!../../**/.next',                        // bỏ build output NextJS
-    '!../../**/dist',                         // bỏ dist
+    "../../apps/**/*.{js,ts,jsx,tsx}",
+    "../../libs/**/*.{js,ts,jsx,tsx}",
+    "../../features/**/*.{js,ts,jsx,tsx}",
+    "!../../**/node_modules", // bỏ node_modules
+    "!../../**/.next", // bỏ build output NextJS
+    "!../../**/dist", // bỏ dist
   ],
+
   theme: {
     colors: {
       transparent: "transparent",
@@ -386,7 +387,8 @@ module.exports = {
         strong:
           "rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px",
       },
-      minWidth: {
+      minWidth: (theme) => ({
+        ...theme("spacing"),
         4: "16px",
         6: "24px",
         8: "30px",
@@ -408,8 +410,9 @@ module.exports = {
         "20px": "20px",
         "50px": "50px",
         "150px": "150px",
-      },
-      minHeight: {
+      }),
+      minHeight: (theme) => ({
+        ...theme("spacing"),
         4: "16px",
         5.5: "22px",
         6: "24px",
@@ -420,12 +423,14 @@ module.exports = {
         large: "56px",
         "237px": "237px",
         352: "352px",
-      },
-      maxHeight: {
+      }),
+      maxHeight: (theme) => ({
+        ...theme("spacing"),
         0: 0,
         5.5: "22px",
-      },
-      maxWidth: {
+      }),
+      maxWidth: (theme) => ({
+        ...theme("spacing"),
         27: "110px",
         78: "304px",
         40: "40px",
@@ -443,7 +448,7 @@ module.exports = {
         "8xl": "1920px",
         1570: "1570px",
         1524: "1524px",
-      },
+      }),
       lineHeight: {
         0: "0",
         4.5: "17px",
@@ -466,7 +471,8 @@ module.exports = {
       content: {
         empty: '""',
       },
-      width: {
+      width: (theme) => ({
+        ...theme("spacing"),
         5.5: "22px",
         11.25: "45px",
         12.5: "50px",
@@ -482,8 +488,9 @@ module.exports = {
         3.6: "36%",
         6.5: "65%",
         "624px": "624px",
-      },
-      padding: {
+      }),
+      padding: (theme) => ({
+        ...theme("spacing"),
         1.25: "0.3125rem", // 5px
         1.5: "0.375rem", // 6px
         1.75: "0.4375rem", // 7px
@@ -504,17 +511,20 @@ module.exports = {
         22: "5.375rem", //86px
         25: "6rem", //96px
         29.2: "7.3rem",
-      },
-      margin: {
+      }),
+      margin: (theme) => ({
+        ...theme("spacing"),
         4.5: "1.125rem", // 18px
         8.25: "2.0625rem", // 33px
         13: "3.25rem", // 52px
         15: "3.75rem", // 60px
-      },
-      inset: {
+      }),
+      inset: (theme) => ({
+        ...theme("spacing"),
         27: "108px",
-      },
-      height: {
+      }),
+      height: (theme) => ({
+        ...theme("spacing"),
         4.5: "1.125rem", // 18px
         5.5: "22px",
         8.5: "2.125rem",
@@ -526,7 +536,7 @@ module.exports = {
         30: "7.5rem", // 120px
         42.5: "170px",
         45: "180px",
-      },
+      }),
       opacity: {
         55: "0.55",
       },
