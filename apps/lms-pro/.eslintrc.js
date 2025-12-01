@@ -17,5 +17,7 @@ module.exports = {
     "no-case-declarations": "off",
     "@typescript-eslint/ban-types": "off",     // bỏ qua lỗi Object type
     "no-prototype-builtins": "off", 
+    '@typescript-eslint/no-unused-vars': "off",
+    "no-dupe-else-if": "off",
   }
 };

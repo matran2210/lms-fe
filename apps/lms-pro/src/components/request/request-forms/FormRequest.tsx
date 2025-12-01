@@ -1,16 +1,13 @@
-import { IconMinusSquared, IconPlusSquared } from '@lms/assets'
-import { SAPPButtonV2 } from '@lms/ui'
-import { HookFormDateRangeV2 } from '@lms/ui'
-import { SAPPSelectV2 } from '@lms/ui'
 import SappTeacherTextField from '@components/teacher/components/sapp-textfield/SappTeacherTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { IconMinusSquared, IconPlusSquared } from '@lms/assets'
+import { confirmDialog, getUserInformation, IResponse, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
+import { ANT_THEME_CONFIG, CONFIRM_CANCEL, IMyRequest, IRecurringSchedule, ISelect, IWeeklyNorm, REPEAT_TYPE, REQUEST_STATUS, REQUEST_TYPE } from '@lms/core'
+import { HookFormDateRangeV2, SAPPButtonV2, SappIcon, SAPPSelectV2 } from '@lms/ui'
+import HookFormEventRepeat from '@lms/ui/components/event-repeat/HookFormEventRepeatField'
+import { capitalizeFirstLetter, formatDateTimeWithTimeZone, VALIDATE_REQUIRED } from '@lms/utils'
 import { MyRequestAPI } from '@pages/api/my-request'
-import { REPEAT_TYPE } from '@lms/core'
-import { getSelectOptions } from '@utils/helpers'
-import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
-import { capitalizeFirstLetter, formatDateTimeWithTimeZone } from '@lms/utils'
-import { formatRecurringSchedule, getRecurringSchedule } from '@utils/request'
-import { requestValidationSchema } from '@utils/validation/my-request-validation'
+import { formatRecurringSchedule, getRecurringSchedule, getSelectOptions, requestValidationSchema } from '@utils/index'
 import { ConfigProvider, Drawer } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import { isEmpty, isInteger } from 'lodash'
@@ -18,15 +15,8 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import {SappIcon} from '@lms/ui'
-import { ANT_THEME_CONFIG, CONFIRM_CANCEL } from '@lms/core'
-import { REQUEST_STATUS, REQUEST_TYPE } from '@lms/core'
 import useSelectClassCode from 'src/hooks/useSelectClassCode'
 import useLesson from 'src/hooks/useSelectLesson'
-import { IResponse, useAppDispatch, useAppSelector, confirmDialog, getUserInformation, userReducer } from '@lms/contexts'
-import { ISelect } from '@lms/core'
-import { IRecurringSchedule, IRequest, IWeeklyNorm } from 'src/type/my-request'
-import HookFormEventRepeat from '@lms/ui/components/event-repeat/HookFormEventRepeatField'
 import UserApi from 'src/redux/services/User/user'
 
 
@@ -49,7 +39,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
   const [detailSchedule, setDetailSchedule] = useState<any>(null)
   const { user } = useAppSelector(userReducer)
 
-  const useFormProp = useForm<IRequest>({
+  const useFormProp = useForm<IMyRequest>({
     resolver: zodResolver(requestValidationSchema),
     mode: 'onSubmit',
     defaultValues: {
@@ -165,7 +155,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     }
   }
 
-  const onSubmit = async (data: IRequest) => {
+  const onSubmit = async (data: IMyRequest) => {
     let recurring_schedule: IRecurringSchedule | undefined = undefined
     if (requestType == REQUEST_TYPE.BUSY_SCHEDULE.value) {
       validateRepeatData()
@@ -481,9 +471,9 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
           } else if (data.type == REQUEST_TYPE.WEEKLY_NORM.value) {
             setValue(
               'request_weekly_norm',
-              data.teacher_weekly_norms.map((item) => {
-                let startTime = new Date(`${item.start_date}`).toISOString()
-                let endTime = new Date(`${item.end_date}`).toISOString()
+              data.teacher_weekly_norms.map((item: { start_date: any; end_date: any; max_shift: any }) => {
+                const startTime = new Date(`${item.start_date}`).toISOString()
+                const endTime = new Date(`${item.end_date}`).toISOString()
                 return {
                   date_range: [startTime, endTime],
                   quantity: item.max_shift,
@@ -502,7 +492,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
             )
             setValue(
               'request_time_off',
-              data.teacher_schedules.map((item) => ({
+              data.teacher_schedules.map((item: { schedule: { id: any }; request_reason: any }) => ({
                 lessonId: item.schedule.id,
                 reason: item.request_reason,
               })),

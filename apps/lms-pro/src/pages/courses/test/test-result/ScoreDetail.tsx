@@ -1,4 +1,4 @@
-import { SappTable } from '@lms/ui'
+import { SappBaseTable } from '@lms/ui'
 import { truncateString } from '@lms/utils'
 import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
 
@@ -41,11 +41,9 @@ interface ScoreDetailProps {
 
 const ScoreDetail = ({
   className,
-  type,
   gradingStatus,
   yourScoreDetailRef,
   quizAttempt,
-  isTeacher,
   numberSelectedResponse,
 }: ScoreDetailProps) => {
   const router = useRouter()
@@ -227,7 +225,7 @@ const ScoreDetail = ({
                     ),
                     children: (
                       <div>
-                        <SappTable
+                        <SappBaseTable
                           headers={headers}
                           loading={isLoading}
                           isCheckedAll={true}
@@ -381,7 +379,7 @@ const ScoreDetail = ({
                               </React.Fragment>
                             )
                           })}
-                        </SappTable>
+                        </SappBaseTable>
                       </div>
                     ),
                   },

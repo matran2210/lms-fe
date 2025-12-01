@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import {
   removeHighlights,
   serializeHighlights,
@@ -56,11 +57,14 @@ import {
   RequirementItem,
   ScratchPadValue,
 } from '@lms/core'
+import { ButtonContent, ConFirmSubmit, ResetToAnswerTemplateModal, ShowAnswerTemplate } from '@lms/feature-courses'
 import { HeaderTest, QuitTestModal, TabSlide, TestTimeOutModal } from '@lms/feature-test'
 import { ButtonPrimaryV2, ButtonTextV2, SappLoading } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
+import { EventTestAPI } from '@pages/api/event-test'
 import { TestAPI } from '@pages/api/test'
 import dayjs from 'dayjs'
+import { PageLink } from 'src/constants/routers'
 import { QuestionAPI } from 'src/pages/api/question'
 import SuccessSubmittedConstructorModal from 'src/pages/test/SuccessSubmittedConstructorModal'
 import TestScratchPads from 'src/pages/test/TestScratchPads'
@@ -71,9 +75,6 @@ import {
   isValuesEqual,
   isWorkbookEmpty,
 } from 'src/utils/helpers/quiz-test/helper'
-import { PageLink } from 'src/constants/routers'
-import { EventTestAPI } from '@pages/api/event-test'
-import { ButtonContent, ConFirmSubmit, ResetToAnswerTemplateModal, ShowAnswerTemplate } from '@lms/feature-courses'
 declare global {
   interface Window {
     userAgreed: any
@@ -346,7 +347,7 @@ const TestDetail = () => {
    */
   const checkUnSubmitAnswer = (): number[] => {
     const answers = handleSaveCurrentAnswer(tabs, currentTabContent)
-    let result: number[] = []
+    const result: number[] = []
     answers?.map((item: Answer, index: number) => {
       if (!item.attempted) {
         result.push(index + 1)
@@ -934,7 +935,6 @@ const TestDetail = () => {
       const oldCurrentTabData = cloneDeep(currentTabContent)
       setOldCurrentTabData(oldCurrentTabData)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTabContent?.id])
 
   const checkCalExist = useMemo(() => {
@@ -953,7 +953,7 @@ const TestDetail = () => {
   ) => {
     setOnFocusingPad('')
     setOpenScratchPad((prev) => {
-      let arr = [...prev]
+      const arr = [...prev]
       if (type === 'scratch_pad') {
         arr.push({ id: currentPage, type: type })
       } else if (type === 'calculator') {
@@ -985,7 +985,7 @@ const TestDetail = () => {
 
   const handleCloseScratchPad = (pad: any) => {
     setOpenScratchPad((prev) => {
-      let arr = [...prev]
+      const arr = [...prev]
       const newArr = arr.filter((e) => e.id !== pad.id)
       if (pad.type === 'exhibits') {
         setValueExhibits(
@@ -1042,14 +1042,14 @@ const TestDetail = () => {
       }
       return false
     } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
-      for (let e of getAnswerMatching()) {
+      for (const e of getAnswerMatching()) {
         if (e.answer_id && e.answer_id !== '') {
           return true
         }
       }
       return false
     } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
-      for (let e of getValues(`${currentPage}_drag_drop_answer`) ??
+      for (const e of getValues(`${currentPage}_drag_drop_answer`) ??
         getAnswerDragNDrop()) {
         if (e.idAnswer && e.idAnswer !== '') {
           return true
@@ -1057,7 +1057,7 @@ const TestDetail = () => {
       }
       return false
     } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
-      for (let e of getValueSelectText()) {
+      for (const e of getValueSelectText()) {
         if (e && e !== '') {
           return true
         }
@@ -1069,7 +1069,7 @@ const TestDetail = () => {
         getValues(`${currentContent?.id}_fillword`) &&
         getValues(`${currentContent?.id}_fillword`)?.length > 0
       ) {
-        for (let e of getValues(`${currentContent?.id}_fillword`)) {
+        for (const e of getValues(`${currentContent?.id}_fillword`)) {
           if (e) {
             return true
           }
@@ -1079,7 +1079,7 @@ const TestDetail = () => {
       return false
     } else if (currentContent?.qType === QUESTION_TYPES.ESSAY) {
       if (Array.isArray(currentContent.data?.requirements)) {
-        for (let req of currentContent.data?.requirements) {
+        for (const req of currentContent.data?.requirements) {
           if (
             req?.answer_file?.file_key ||
             answerListRef?.current?.[req?.id || '']
@@ -1102,7 +1102,7 @@ const TestDetail = () => {
         if (currentContent?.data?.response_option === RESPONSE_OPTION.SHEET) {
           if (value) {
             const data = JSON.parse(value)
-            for (let e of data) {
+            for (const e of data) {
               if (e?.celldata && e?.celldata?.length > 0) {
                 return true
               }
@@ -1120,7 +1120,7 @@ const TestDetail = () => {
         if (currentContent.response_type === 1) {
           if (value) {
             const data = JSON.parse(value)
-            for (let e of data) {
+            for (const e of data) {
               if (e?.celldata && e?.celldata?.length > 0) {
                 return true
               }
@@ -1165,9 +1165,9 @@ const TestDetail = () => {
   }
 
   const getAnswerMatching = () => {
-    let value = [] as any
+    const value = [] as any
     const inputs = document.querySelectorAll('.sapp-match-result') as any
-    for (let e of inputs) {
+    for (const e of inputs) {
       const childId = e.querySelector('.sapp-notched-container')
       value.push({ question_id: e.id, answer_id: childId?.id || undefined })
     }
@@ -1176,9 +1176,9 @@ const TestDetail = () => {
   }
 
   const getAnswerDragNDrop = () => {
-    let value = [] as any
+    const value = [] as any
     const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
-    for (let e of inputs) {
+    for (const e of inputs) {
       const idAnswer = e.querySelector('.answer-box')
       value.push({ id: e?.id, value: e?.innerText, idAnswer: idAnswer?.id })
     }
@@ -1873,10 +1873,10 @@ const TestDetail = () => {
   const handleSubmitQuestions = async (typeSubmit: 'timeout' | 'submit') => {
     if (currentTabContent) {
       const allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
-      let quiz_position_mapping = []
+      const quiz_position_mapping = []
       // let reformTabs: any[] = []
       setLoading(true)
-      for (let e of allQuest) {
+      for (const e of allQuest) {
         // reformTabs.push({ ...e, done: true })
         quiz_position_mapping.push({
           question_id: e.id,
@@ -2135,7 +2135,7 @@ const TestDetail = () => {
   }
 
   const exhibits = useMemo(() => {
-    let exhibitsOptions = []
+    const exhibitsOptions = []
     const topics = currentTabContent?.topicDescription
 
     const exhibitTopic = topics?.exhibits?.map((exhibit: IExhibit) => exhibit)
@@ -2145,7 +2145,7 @@ const TestDetail = () => {
     }
 
     if (topics?.question?.length) {
-      for (let question of topics?.questions) {
+      for (const question of topics?.questions) {
         if (question.exhibits?.length) {
           exhibitsOptions.push(...question.exhibits)
         }
@@ -2227,11 +2227,11 @@ const TestDetail = () => {
   useEffect(() => {
     if (watch('exhibits')) {
       setOpenScratchPad((prev) => {
-        let arr = [...prev]
+        const arr = [...prev]
         const newArr = arr.filter((e) => {
           return e.type !== 'exhibits'
         })
-        for (let e of watch('exhibits')) {
+        for (const e of watch('exhibits')) {
           setOnFocusingPad(e)
           newArr.push({ id: e, type: 'exhibits' })
         }
@@ -2810,8 +2810,8 @@ const TestDetail = () => {
               <button
                 className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
                 onClick={() => {
-                  ;(setAllowUnHighLight(!allowUnHighLight),
-                    setAllowHighLight(false))
+                  setAllowUnHighLight(!allowUnHighLight)
+                    setAllowHighLight(false)
                   trackGAEvent('Click Button Unhighlight Test')
                 }}
               >
@@ -3279,5 +3279,4 @@ const TestDetail = () => {
   )
 }
 
-// eslint-disable-next-line import/no-unused-modules
 export default TestDetail

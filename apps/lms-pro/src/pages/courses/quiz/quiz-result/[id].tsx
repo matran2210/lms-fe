@@ -1,13 +1,12 @@
-import { CloseIcon } from '@lms/assets'
-import {FullScreenLayout} from '@lms/ui'
-import QuizResult from '@components/quiz/quiz-result'
-import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from '@lms/contexts'
+import { QuizResults } from '@lms/feature-courses'
+import { FullScreenLayout } from '@lms/ui'
+import withAuthorization from 'src/HOC/withAuthorization'
 
 const QuizResultPage = () => {
   return (
     <FullScreenLayout title="Quiz result">
-      <QuizResult />
+      <QuizResults />
     </FullScreenLayout>
   )
 }

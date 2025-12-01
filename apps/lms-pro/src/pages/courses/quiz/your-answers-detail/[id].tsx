@@ -18,15 +18,6 @@ const TestResultDetail = () => {
     )
   }
 
-  const useGetQuizAttemptsChart = (queryKey: string, params: Object) => {
-    return useGetDataQuery(
-      queryKey,
-      params,
-      () => CoursesAPI.getQuizAttemptsChartData(router.query.id),
-      router.query.id !== undefined,
-    )
-  }
-
   // Sử dụng hook useGetQuizDetail trong component
   const { data: questions } = useGetQuizAttempts('quiz-attempts', {})
   let linkTest = `/test/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}`
@@ -48,7 +39,7 @@ const TestResultDetail = () => {
     },
     {
       link: linkTest,
-      title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type]}`,
+      title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type as keyof typeof TEST_TYPE]}`,
       disable: true,
     },
     {

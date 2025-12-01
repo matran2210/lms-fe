@@ -1,33 +1,27 @@
-import { SappTable } from '@lms/ui'
+import { SappBaseTable } from '@lms/ui'
 import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
+import { CloseIcon } from '@lms/assets'
 import {
-  convertSlugToTitle,
-  handleReplaceText,
-  removeHtmlTags,
-  truncateString,
-} from '@utils/index'
-
+  ANIMATION,
+  COMMON_TEXT_ENUM,
+  GRADE_STATUS,
+  IAnswer, IQuizAttemptChartType,
+  QUESTION_TYPES,
+} from '@lms/core'
+import { Tooltip } from "@lms/ui"
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
 import DOMPurify from 'dompurify'
-import _, { isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
-import {
-  ANIMATION,
-  COMMON_TEXT_ENUM,
-  GRADE_STATUS,
-  PageLink,
-  QUESTION_TYPES,
-} from '@lms/core'
-import { IAnswer, IQuizAttemptChartType } from '@lms/core'
 import { CoursesAPI } from '../../../api/courses/index'
-import { CloseIcon } from '@lms/assets'
-import { Tooltip } from "@lms/ui";
-import ListScoreCollapse from '@components/quiz/your-answer-detail/ListScoreCollapse'
+import { PageLink } from 'src/constants/routers'
+import { convertSlugToTitle, handleReplaceText, removeHtmlTags, truncateString } from '@lms/utils'
+import { ListScoreCollapse } from '@lms/feature-courses'
 
 const commonHeaderClass = 'text-left p-0 text-base font-medium text-gray'
 
@@ -43,7 +37,6 @@ interface ScoreDetailProps {
 
 const TableQuestions = ({
   className,
-  type,
   gradingStatus,
   yourScoreDetailRef,
   isTeacher,
@@ -244,7 +237,7 @@ const TableQuestions = ({
         <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
       </div>
       <div className="hidden rounded-xl bg-white p-8 md:block md:shadow-medium">
-        <SappTable
+        <SappBaseTable
           headers={headers}
           loading={isLoading}
           isCheckedAll={true}
@@ -343,7 +336,7 @@ const TableQuestions = ({
               </React.Fragment>
             )
           })}
-        </SappTable>
+        </SappBaseTable>
       </div>
       <ListScoreCollapse
         data={allData}
