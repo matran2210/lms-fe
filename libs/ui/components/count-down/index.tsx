@@ -1,5 +1,5 @@
-import { formatTimeMinToHhMm } from "@lms/utils";
 import { useCountdownTest } from "@lms/hooks";
+import { formatTimer } from "@lms/utils";
 import {
   ForwardedRef,
   forwardRef,
@@ -23,7 +23,7 @@ const CountDown = forwardRef(
     }, [time[2]]);
     return (
       <div className="flex justify-center text-xl font-medium text-gray-800">
-        {formatTimeMinToHhMm(time[2])}
+        {formatTimer(time[2])}
       </div>
     );
   },

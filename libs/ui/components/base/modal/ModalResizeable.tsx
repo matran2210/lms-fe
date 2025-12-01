@@ -1,42 +1,41 @@
-import { CloseIcon } from "@lms/assets";
-// import styles from '@styles/components/ModalResizeable.module.scss' comment monorepo
-import clsx from "clsx";
-import React, { ReactNode, useEffect, useState } from "react";
-import { createPortal } from "react-dom";
-import { Rnd } from "react-rnd";
+import { CloseIcon } from '@lms/assets'
+import clsx from 'clsx'
+import React, { ReactNode, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
+import { Rnd } from 'react-rnd'
 
 interface ModalResizeableProps {
-  title?: string | ReactNode;
-  children: ReactNode;
-  width?: number;
-  height?: number;
-  minWidth?: number;
-  minHeight?: number;
-  dragHandleClassName?: string;
-  header?: ReactNode;
-  handleCloseScratchPad?: (pad: any) => void;
+  title?: string | ReactNode
+  children: ReactNode
+  width?: number
+  height?: number
+  minWidth?: number
+  minHeight?: number
+  dragHandleClassName?: string
+  header?: ReactNode
+  handleCloseScratchPad?: (pad: any) => void
   position?:
-    | "top left"
-    | "top middle"
-    | "top right"
-    | "bottom left"
-    | "bottom middle"
-    | "bottom right"
-    | "center left"
-    | "center right"
-    | "center";
-  className?: string;
-  draggableFull?: boolean;
-  modalIndex?: number;
-  rootClassName?: string;
-  bodyClassName?: string;
-  contentClassName?: string;
-  isInBody?: boolean;
-  onClick?: () => void;
+  | 'top left'
+  | 'top middle'
+  | 'top right'
+  | 'bottom left'
+  | 'bottom middle'
+  | 'bottom right'
+  | 'center left'
+  | 'center right'
+  | 'center'
+  className?: string
+  draggableFull?: boolean
+  modalIndex?: number
+  rootClassName?: string
+  bodyClassName?: string
+  contentClassName?: string
+  isInBody?: boolean
+  onClick?: () => void
 }
 
 const ModalResizeable: React.FC<ModalResizeableProps> = ({
-  title = "Title",
+  title = 'Title',
   children,
   width = 600,
   height = 400,
@@ -45,7 +44,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   header,
   dragHandleClassName, //Determine the drag handle class name
   handleCloseScratchPad,
-  position = "center",
+  position = 'center',
   className,
   draggableFull = false,
   modalIndex = 0,
@@ -53,9 +52,9 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   bodyClassName,
   contentClassName,
   isInBody = false,
-  onClick = () => undefined,
+  onClick = () => { },
 }) => {
-  const [size, setSize] = useState({ width, height });
+  const [size, setSize] = useState({ width, height })
 
   //Hàm tính vị trí của Modal
   const calculatePosition = (
@@ -64,11 +63,11 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
     modalHeight: number,
     offset = 0,
   ) => {
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
-    const scrollX = window.scrollX;
-    const scrollY = window.scrollY;
-    const shift = offset * 20; // mỗi modal lệch 20px
+    const windowWidth = window.innerWidth
+    const windowHeight = window.innerHeight
+    const scrollX = window.scrollX
+    const scrollY = window.scrollY
+    const shift = offset * 20 // mỗi modal lệch 20px
     // const positions = {
     //   'top left': { x: 0, y: 0 },
     //   'top middle': { x: (windowWidth - modalWidth) / 2, y: 0 },
@@ -93,17 +92,17 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
     //   },
     // }
     const positions = {
-      "top left": { x: shift, y: shift },
-      "top middle": {
+      'top left': { x: shift, y: shift },
+      'top middle': {
         x: (windowWidth - modalWidth) / 2 + shift,
         y: shift,
       },
-      "top right": {
+      'top right': {
         x: windowWidth - modalWidth - shift,
         y: shift,
       },
 
-      "center left": {
+      'center left': {
         x: shift,
         y: (windowHeight - modalHeight) / 2 + shift,
       },
@@ -111,37 +110,37 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
         x: (windowWidth - modalWidth) / 2 + shift,
         y: (windowHeight - modalHeight) / 2 + shift,
       },
-      "center right": {
+      'center right': {
         x: windowWidth - modalWidth - shift,
         y: (windowHeight - modalHeight) / 2 + shift,
       },
 
-      "bottom left": {
+      'bottom left': {
         x: shift,
         y: windowHeight - modalHeight - shift,
       },
-      "bottom middle": {
+      'bottom middle': {
         x: (windowWidth - modalWidth) / 2 + shift,
         y: windowHeight - modalHeight - shift,
       },
-      "bottom right": {
+      'bottom right': {
         x: windowWidth - modalWidth - shift,
         y: windowHeight - modalHeight - shift,
       },
-    };
+    }
 
-    return positions[pos as keyof typeof positions] || positions.center;
-  };
+    return positions[pos as keyof typeof positions] || positions.center
+  }
 
   const [modalPosition, setModalPosition] = useState(() =>
     calculatePosition(position, width, height, modalIndex),
-  );
+  )
 
   useEffect(() => {
     setModalPosition(
       calculatePosition(position, size.width, size.height, modalIndex),
-    );
-  }, []);
+    )
+  }, [])
 
   const renderContent = () => {
     return (
@@ -150,45 +149,45 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
           size={{ width: size.width, height: size.height }}
           position={modalPosition}
           onDragStop={(e, d) => {
-            const maxX = window.innerWidth - size.width;
-            const maxY = window.innerHeight - size.height;
+            const maxX = window.innerWidth - size.width
+            const maxY = window.innerHeight - size.height
             setModalPosition({
               x: Math.min(Math.max(0, d.x), maxX),
               y: Math.min(Math.max(0, d.y), maxY),
-            });
+            })
           }}
           onResizeStop={(e, direction, ref, delta, newPos) => {
-            const newWidth = parseInt(ref.style.width);
-            const newHeight = parseInt(ref.style.height);
-            const maxX = window.innerWidth - newWidth;
-            const maxY = window.innerHeight - newHeight;
+            const newWidth = parseInt(ref.style.width)
+            const newHeight = parseInt(ref.style.height)
+            const maxX = window.innerWidth - newWidth
+            const maxY = window.innerHeight - newHeight
 
-            setSize({ width: newWidth, height: newHeight });
+            setSize({ width: newWidth, height: newHeight })
             setModalPosition({
               x: Math.min(Math.max(0, newPos.x), maxX),
               y: Math.min(Math.max(0, newPos.y), maxY),
-            });
+            })
           }}
           minWidth={minWidth}
           minHeight={minHeight}
           bounds="window"
           style={{
-            background: "white",
-            boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-            border: "1px solid #DCDDDD",
-            position: "fixed",
-            pointerEvents: "auto",
+            background: 'white',
+            boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+            border: '1px solid #DCDDDD',
+            position: 'fixed',
+            pointerEvents: 'auto',
           }}
           dragHandleClassName={
             draggableFull
               ? undefined
               : dragHandleClassName
                 ? dragHandleClassName
-                : "modal-dragger"
+                : 'modal-dragger'
           }
           className={clsx(
-            // styles.modalResizeable, comment monorepo
-            "overflow-hidden rounded-xl",
+            'modalResizeable',
+            'overflow-hidden rounded-xl',
             className,
             rootClassName,
           )}
@@ -197,15 +196,14 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
         >
           <div
             className={clsx(
-              "absolute left-0 top-0 h-full w-full",
+              'absolute left-0 top-0 h-full w-full',
               bodyClassName,
             )}
           >
             {header ? (
               header
             ) : (
-              // <div className={styles.modalHeader}> comment monorepo
-              <div>
+              <div className={'modalHeader'}>
                 <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between px-5">
                   <div className="truncate">{title}</div>
                 </div>
@@ -217,16 +215,17 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
                 </button>
               </div>
             )}
-            {/* <div className={clsx(styles.modalContent, contentClassName)}> comment monorepo */}
-            <div>{children}</div>
+            <div className={clsx('modalContent', contentClassName)}>
+              {children}
+            </div>
           </div>
         </Rnd>
       </div>
-    );
-  };
+    )
+  }
   return isInBody
     ? createPortal(renderContent(), document.body)
-    : renderContent();
-};
+    : renderContent()
+}
 
-export default ModalResizeable;
+export default ModalResizeable

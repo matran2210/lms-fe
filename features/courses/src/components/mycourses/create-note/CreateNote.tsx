@@ -134,6 +134,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
         position="center"
         width={isMobileView ? 340 : 412}
         height={350}
+        isInBody
       >
         <div className="flex h-full flex-col p-4">
           <HookFormTextArea
