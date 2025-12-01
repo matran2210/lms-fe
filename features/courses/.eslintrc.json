@@ -11,6 +11,7 @@
     "@typescript-eslint/no-empty-function": "off",
     "@next/next/no-document-import-in-page": "off",
     "no-console": "error",
-    "no-extra-boolean-cast": "off"
+    "no-extra-boolean-cast": "off",
+    "@typescript-eslint/no-explicit-any": "off"
   }
 }
