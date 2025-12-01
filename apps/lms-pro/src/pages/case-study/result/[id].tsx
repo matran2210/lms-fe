@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import {
   CalculatorIconV2,
   CloseModalIcon,
@@ -59,13 +60,12 @@ const CaseStudyResult = () => {
   const containerRef = useRef(null)
   const { control, setValue, getValues } = useForm()
   const { control: controlScratch } = useForm()
-  const [allowHighLight, setAllowHighLight] = useState(false)
-  const [allowUnHighLight, setAllowUnHighLight] = useState(false)
+  const allowHighLight = false
+  const allowUnHighLight = false
   const [activeQuestionIndex, setActiveQuestionIndex] = useState<number>(0)
   const questionsScrollRef = useRef<HTMLDivElement | null>(null)
 
   // handle show exhibit list
-  const [showListExhibits, setShowListExhibits] = useState(false)
   const [exhibitData, setExhibitData] = useState<IExhibit[]>([])
   const [openScratchPad, setOpenScratchPad] = useState<Array<ICratchPad>>([])
   const [onFocusingPad, setOnFocusingPad] = useState('')
@@ -299,42 +299,6 @@ const CaseStudyResult = () => {
     })
   }
 
-  /**
-   * handle go to next Topic
-   */
-  const handleNextTopic = () => {
-    resetEssayBeforeAction()
-    if (!result?.next_topic) {
-      backToPart()
-      return
-    }
-    if (result?.next_topic?.attempt) {
-      router.replace(
-        `/case-study/result/${result?.next_topic?.attempt.id}?class_user_id=${router.query.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}`,
-      )
-    } else {
-      router.push(
-        `/case-study/${result?.next_topic?.question_topic_id}?quiz_id=${result?.quiz_id}&class_user_id=${router?.query?.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}&caseStudyId=${result?.next_topic?.id}`,
-      )
-    }
-  }
-
-  /**
-   * go to next Topic
-   */
-  const handlePeriousTopic = () => {
-    resetEssayBeforeAction()
-    if (result?.previous_topic?.attempt) {
-      router.replace(
-        `/case-study/result/${result?.previous_topic?.attempt.id}?class_user_id=${router.query.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}`,
-      )
-    } else {
-      router.push(
-        `/case-study/${result?.previous_topic?.question_topic_id}?quiz_id=${result?.quiz_id}&class_user_id=${router?.query?.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}&caseStudyId=${result?.previous_topic?.id}`,
-      )
-    }
-  }
-
   const { x } = useMousePosition()
 
   useEffect(() => {
@@ -438,11 +402,11 @@ const CaseStudyResult = () => {
   useEffect(() => {
     if (watch('exhibits')) {
       setOpenScratchPad((prev) => {
-        let arr = [...prev]
+        const arr = [...prev]
         const newArr = arr.filter((e) => {
           return e.type !== 'exhibits'
         })
-        for (let e of watch('exhibits')) {
+        for (const e of watch('exhibits')) {
           setOnFocusingPad(e)
           newArr.push({ id: e, type: 'exhibits' })
         }
@@ -504,7 +468,7 @@ const CaseStudyResult = () => {
 
   const handleCloseScratchPad = (pad: ICratchPad) => {
     setOpenScratchPad((prev) => {
-      let arr = [...prev]
+      const arr = [...prev]
       const newArr = arr.filter((e) => e?.id !== pad.id)
       if (pad.type === 'exhibits') {
         setValueExhibits(
@@ -525,12 +489,12 @@ const CaseStudyResult = () => {
     fileName?: string,
   ) => {
     setOpenScratchPad((prev) => {
-      let arr = [...prev]
+      const arr = [...prev]
       if (type === 'scratch_pad') {
         arr.push({ id: uniqueId('scratchPad'), type: type })
         setIsScratchPadOpen(true)
       } else if (type === 'calculator') {
-        for (let e of arr) {
+        for (const e of arr) {
           if (e.type === 'calculator') {
             return arr
           }
@@ -551,7 +515,6 @@ const CaseStudyResult = () => {
 
   const handleChangeScratchPad = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
-    id?: string,
   ) => {
     const { value } = e.target
     setScratchPadValues((prevState: { value: string }) => ({
@@ -667,16 +630,6 @@ const CaseStudyResult = () => {
     scrollToQuestion(prev)
   }
 
-  const isScatchPadEnabled = useMemo(() => {
-    return openScratchPad.some((item) => item.type === 'scratch_pad') || false
-  }, [openScratchPad])
-
-  const isShowIconButtonInBottom = [
-    QUESTION_TYPES.FILL_WORD,
-    QUESTION_TYPES.TRUE_FALSE,
-    QUESTION_TYPES.ONE_CHOICE,
-    QUESTION_TYPES.SELECT_WORD,
-  ].includes(topics?.qType as QUESTION_TYPES)
   const { isDesktopView } = useTailwindBreakpoint()
 
   return (
@@ -866,7 +819,7 @@ const CaseStudyResult = () => {
                       placeholder="Take a note..."
                       control={controlScratch}
                       name={e?.id as string}
-                      onChange={(event) => handleChangeScratchPad(event, e?.id)}
+                      onChange={(event) => handleChangeScratchPad(event)}
                       className="sapp-text-area not-resizer h-full w-full rounded-b-xl rounded-t-none px-5 py-3 placeholder:text-sm placeholder:font-normal"
                     />
                     {/* </div> */}
@@ -1020,7 +973,7 @@ const CaseStudyResult = () => {
                   getPopupContainer={() => document.body}
                   content={
                     <div className="flex flex-col gap-2">
-                      {topics?.files?.map((e: any, index: number) => {
+                      {topics?.files?.map((e: any) => {
                         return (
                           <div
                             className={clsx(

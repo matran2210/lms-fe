@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import {
   CalculatorIcon,
   CloseIcon,
@@ -374,11 +375,11 @@ const CaseStudyResultTeacher = () => {
   useEffect(() => {
     if (watch('exhibits')) {
       setOpenScratchPad((prev) => {
-        let arr = [...prev]
+        const arr = [...prev]
         const newArr = arr.filter((e) => {
           return e.type !== 'exhibits'
         })
-        for (let e of watch('exhibits')) {
+        for (const e of watch('exhibits')) {
           setOnFocusingPad(e)
           newArr.push({ id: e, type: 'exhibits' })
         }
@@ -439,7 +440,7 @@ const CaseStudyResultTeacher = () => {
 
   const handleCloseScratchPad = (pad: ICratchPad) => {
     setOpenScratchPad((prev) => {
-      let arr = [...prev]
+      const arr = [...prev]
       const newArr = arr.filter((e) => e?.id !== pad.id)
       if (pad.type === 'exhibits') {
         setValueExhibits(
@@ -456,11 +457,11 @@ const CaseStudyResultTeacher = () => {
     fileName?: string,
   ) => {
     setOpenScratchPad((prev) => {
-      let arr = [...prev]
+      const arr = [...prev]
       if (type === 'scratch_pad') {
         arr.push({ id: uniqueId('scratchPad'), type: type })
       } else if (type === 'calculator') {
-        for (let e of arr) {
+        for (const e of arr) {
           if (e.type === 'calculator') {
             return arr
           }
@@ -878,8 +879,8 @@ const CaseStudyResultTeacher = () => {
                 <button
                   className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
                   onClick={() => {
-                    ;(setAllowUnHighLight(!allowUnHighLight),
-                      setAllowHighLight(false))
+                    setAllowUnHighLight(!allowUnHighLight)
+                      setAllowHighLight(false)
                   }}
                 >
                   <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6 ">

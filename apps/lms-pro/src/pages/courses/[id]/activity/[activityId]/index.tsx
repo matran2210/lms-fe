@@ -136,13 +136,8 @@ const ActivityPage = () => {
   const [focusOnlyDiscussion, setFocusOnlyDiscussion] = useState(false)
 
   // const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [fetch_progress, setFetch_progress] = useState<string[]>([])
-  const [exhibitsPopupPosition, setExhibitsPopupPosition] = useState({
-    top: 'calc(50% - 250px)',
-    left: 'calc(50% - 200px)',
-  })
   const [exhibitText, setExhibitText] = useState<string>('')
   const [openResource, setOpenResource] = useState(false)
 
@@ -326,13 +321,10 @@ const ActivityPage = () => {
     event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     if (event) {
-      var mouseY = event?.pageY - 300
-      setExhibitsPopupPosition({ top: mouseY + 'px', left: '33%' })
     }
 
-    setOnFocusingPad('')
     setOpenScratchPad((prev) => {
-      let arr = [...prev]
+      const arr = [...prev]
       if (data.type === 'calculator') {
         const hasCalculator = arr.some(
           (e) =>
@@ -379,7 +371,7 @@ const ActivityPage = () => {
 
   const handleCloseScratchPad = (pad: any) => {
     setOpenScratchPad((prev) => {
-      let arr = [...prev]
+      const arr = [...prev]
       const newArr = arr?.filter((e) => e?.id !== pad?.id)
       return newArr
     })
@@ -423,7 +415,6 @@ const ActivityPage = () => {
 
   const breadcrumbsData: ITabs[] = breadcrumbsMenu?.data
     ? breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
-        let url = ''
         const urlCourseDetail = `/courses/${router.query?.id}/section/${partId}`
         switch (e.course_section_type) {
           case 'PART':

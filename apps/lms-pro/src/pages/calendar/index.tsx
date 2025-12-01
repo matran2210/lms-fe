@@ -15,19 +15,12 @@ import {
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { HeaderMobile, Layout } from '@lms/ui'
 import CalendarApi from '@pages/api/calendar'
-import { CoursesAPI } from '@pages/api/courses'
-import { NotificationAPI } from '@pages/api/notification'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { SAPPCalendarV2 } from 'sapp-common-package'
 import { IEvent, IFilter } from 'sapp-common-package/dist/types'
-import {
-  MENU_BOTTOM,
-  MENU_ITEMS,
-  MENU_ITEMS_EVENT,
-} from 'src/constants/menu-items'
 import { PageLink } from 'src/constants/routers'
 
 const Page = () => {

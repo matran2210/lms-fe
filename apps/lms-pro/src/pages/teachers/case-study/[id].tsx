@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import {
   CalculatorIcon,
   CloseIcon,
@@ -296,7 +297,7 @@ const CaseStudyDetailTeacher = () => {
       ) {
         let hasAnswer = false
         const data = JSON.parse(item?.answer)
-        for (let el of data) {
+        for (const el of data) {
           if (el.celldata && el.celldata.length > 0) {
             hasAnswer = true
             break
@@ -418,14 +419,14 @@ const CaseStudyDetailTeacher = () => {
    * Handle generate exhibit selections for exhibit button
    */
   const exhibits = useMemo(() => {
-    let exhibitsOptions = []
+    const exhibitsOptions = []
     const exhibitTopic = topics?.exhibits?.map((exhibit: IExhibit) => exhibit)
 
     if (exhibitTopic?.length) {
       exhibitsOptions.push(...exhibitTopic)
     }
     if (topics?.questions && topics?.questions?.length > 0) {
-      for (let question of topics?.questions) {
+      for (const question of topics?.questions) {
         if (question?.exhibits?.length) {
           exhibitsOptions.push(...question.exhibits)
         }
@@ -446,11 +447,11 @@ const CaseStudyDetailTeacher = () => {
   useEffect(() => {
     if (watch('exhibits')) {
       setOpenScratchPad((prev) => {
-        let arr = [...prev]
+        const arr = [...prev]
         const newArr = arr.filter((e) => {
           return e.type !== 'exhibits'
         })
-        for (let e of watch('exhibits')) {
+        for (const e of watch('exhibits')) {
           setOnFocusingPad(e)
           newArr.push({ id: e, type: 'exhibits' })
         }
@@ -480,12 +481,12 @@ const CaseStudyDetailTeacher = () => {
   }
 
   const getValueFillText = (index: number) => {
-    let value = []
+    const value = []
     if (valueRef?.current?.[index]) {
       const inputs = valueRef?.current?.[index]?.querySelectorAll(
         'input[stringHTML="true"]',
       ) as any
-      for (let e of inputs) {
+      for (const e of inputs) {
         value.push(e?.value)
       }
     } else {
@@ -494,13 +495,13 @@ const CaseStudyDetailTeacher = () => {
     return value
   }
   const getValueSelectText = (index: number) => {
-    let value = [] as any
+    const value = [] as any
     if (valueRef?.current?.[index]) {
       const inputs = document.querySelectorAll(
         'div.sapp-select--question',
       ) as any
 
-      for (let e of inputs) {
+      for (const e of inputs) {
         value.push(e?.dataset.value)
       }
     } else {
@@ -509,12 +510,12 @@ const CaseStudyDetailTeacher = () => {
     return value
   }
   const getAnswerMatching = (index: number) => {
-    let value = [] as any
+    const value = [] as any
     if (valueRef.current?.[index]) {
       const inputs = valueRef?.current?.[index].querySelectorAll(
         '.sapp-match-result',
       ) as any
-      for (let e of inputs) {
+      for (const e of inputs) {
         const childId = e.querySelector('.sapp-notched-container')
         value.push({ question_id: e?.id, answer_id: childId?.id || undefined })
       }
@@ -528,12 +529,12 @@ const CaseStudyDetailTeacher = () => {
     return value
   }
   const getAnswerDragNDrop = (index: number) => {
-    let value = [] as any
+    const value = [] as any
     if (valueRef?.current?.[index]) {
       const inputs = valueRef?.current?.[index].querySelectorAll(
         '.sapp-input-dragNDrop',
       ) as any
-      for (let e of inputs) {
+      for (const e of inputs) {
         const idAnswer = e.querySelector('span')
         value.push({ id: e?.id, value: e?.innerText, idAnswer: idAnswer?.id })
       }
@@ -547,7 +548,7 @@ const CaseStudyDetailTeacher = () => {
     return value
   }
   const getAllValue = () => {
-    let arrAnswer = []
+    const arrAnswer = []
     for (let i = 0; i < questionData.length; i++) {
       const question = questionData?.[i]
       if (
@@ -607,11 +608,11 @@ const CaseStudyDetailTeacher = () => {
   }
 
   const handleSubmitQuestion = async () => {
-    let allQuest = getAllValue()
-    let quiz_position_mapping = []
-    let answers = []
-    let reformTabs: any[] = []
-    for (let e of allQuest) {
+    const allQuest = getAllValue()
+    const quiz_position_mapping = []
+    const answers = []
+    const reformTabs: any[] = []
+    for (const e of allQuest) {
       reformTabs.push({ ...e, done: true })
       if (e?.answer || e?.answer !== '') {
         if (
@@ -623,9 +624,9 @@ const CaseStudyDetailTeacher = () => {
             question_answer_id: e?.answer || '',
           })
         } else if (e?.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
-          let answer = []
+          const answer = []
           if (e?.answer) {
-            for (let el of e?.answer) {
+            for (const el of e?.answer) {
               if (el) {
                 answer.push({ answer_id: el })
               }
@@ -635,7 +636,7 @@ const CaseStudyDetailTeacher = () => {
         } else if (e?.qType === QUESTION_TYPES.MATCHING) {
           answers.push({ question_id: e?.id, answer: e?.answer })
         } else if (e?.qType === QUESTION_TYPES.DRAG_DROP) {
-          let answer = []
+          const answer = []
           for (let i in e?.answer) {
             if (e?.answer[i].idAnswer) {
               answer.push({
@@ -648,7 +649,7 @@ const CaseStudyDetailTeacher = () => {
         } else if (e?.qType === QUESTION_TYPES.SELECT_WORD) {
           answers.push({ question_id: e?.id, answer: e?.answer || [] })
         } else if (e?.qType === QUESTION_TYPES.FILL_WORD) {
-          let answer = []
+          const answer = []
           for (let i in e?.answer) {
             if (e?.answer[i] && e?.answer[i] !== '') {
               answer.push({
@@ -693,7 +694,7 @@ const CaseStudyDetailTeacher = () => {
                 } else {
                   const data = JSON.parse(e?.answer)
                   //** check qua từng cell của excel để xem có đáp án không  */
-                  for (let el of data) {
+                  for (const el of data) {
                     if (el.celldata && el.celldata.length > 0) {
                       answers.push({
                         question_id: e?.id,
@@ -767,7 +768,7 @@ const CaseStudyDetailTeacher = () => {
   }
   const handleCloseScratchPad = (pad: any) => {
     setOpenScratchPad((prev) => {
-      let arr = [...prev]
+      const arr = [...prev]
       const newArr = arr.filter((e) => e?.id !== pad.id)
       if (pad.type === 'exhibits') {
         setValueExhibits(
@@ -784,11 +785,11 @@ const CaseStudyDetailTeacher = () => {
     fileName?: string,
   ) => {
     setOpenScratchPad((prev) => {
-      let arr = [...prev]
+      const arr = [...prev]
       if (type === 'scratch_pad') {
         arr.push({ id: uniqueId('scratchPad'), type: type })
       } else if (type === 'calculator') {
-        for (let e of arr) {
+        for (const e of arr) {
           if (e.type === 'calculator') {
             return arr
           }
@@ -1261,8 +1262,8 @@ const CaseStudyDetailTeacher = () => {
                 <button
                   className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
                   onClick={() => {
-                    ;(setAllowUnHighLight(!allowUnHighLight),
-                      setAllowHighLight(false))
+                    setAllowUnHighLight(!allowUnHighLight)
+                      setAllowHighLight(false)
                   }}
                 >
                   <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6">
@@ -1414,5 +1415,4 @@ const CaseStudyDetailTeacher = () => {
   )
 }
 
-// eslint-disable-next-line import/no-unused-modules
 export default withAuthorization([UserType.TEACHER])(CaseStudyDetailTeacher)

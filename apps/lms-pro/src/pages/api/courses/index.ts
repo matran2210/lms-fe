@@ -598,20 +598,15 @@ export const getActivityById = async (
     return responseActivity.data
   }
   responseActivity.data.tabs = []
-  const promises = []
-  for (const tab of responseTabs.data) {
-    promises.push(
-      new Promise(async (resolve, reject) => {
-        const responseTab = await fetcher(
-          `course-sections/${course_id}/tab/${tab.id}`,
-        )
-        if (responseTab?.data) {
-          return resolve(responseTab.data)
-        }
-        return reject('Tab Not Found')
-      }),
-    )
+const promises = responseTabs.data.map(async (tab: any) => {
+  const responseTab = await fetcher(
+    `course-sections/${course_id}/tab/${tab.id}`,
+  )
+  if (responseTab?.data) {
+    return responseTab.data
   }
+  throw new Error("Tab Not Found")
+})
   responseActivity.data.tabs = await Promise.all(promises)
   return responseActivity.data
 }

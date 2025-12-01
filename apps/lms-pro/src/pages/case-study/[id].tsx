@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import {
   CalculatorIconV2,
   DownloadIcon,
@@ -31,6 +32,7 @@ import {
   QUESTION_TYPES,
   RESPONSE_OPTION,
 } from '@lms/core'
+import { ConFirmSubmit, ResetToAnswerTemplateModal, ShowAnswerTemplate } from '@lms/feature-courses'
 import QuitTestModal from '@lms/feature-test/src/components/test/modal/quit-test-modal'
 import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
 import { useTailwindBreakpoint } from '@lms/hooks'
@@ -69,9 +71,8 @@ import toast from 'react-hot-toast'
 import { CoursesAPI } from '../api/courses/index'
 import { TestAPI } from '../api/test'
 import LimitQuizModal from '../test/limitQuizModal'
-import { ConFirmSubmit, ResetToAnswerTemplateModal, ShowAnswerTemplate } from '@lms/feature-courses'
 
-const CaseStudyDetail = ({ questions }: any) => {
+const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
 
   const checkType = (
@@ -244,7 +245,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             defaultValue={defaultValue}
             fullData={{ data }}
             response_option_custom={0}
-            openChooseFile={(e: any) =>
+            openChooseFile={() =>
               setOpenUpload({
                 status: true,
                 question_id: data.id,
@@ -278,8 +279,8 @@ const CaseStudyDetail = ({ questions }: any) => {
   const questionsScrollRef = useRef<HTMLDivElement | null>(null)
   const { control, getValues, setValue, resetField } = useForm()
   const { control: controlScratch } = useForm()
-  const [allowHighLight, setAllowHighLight] = useState(false)
-  const [allowUnHighLight, setAllowUnHighLight] = useState(false)
+  const allowHighLight = false
+  const allowUnHighLight = false
   // handle show exhibit list
   const [exhibitData, setExhibitData] = useState<IExhibit[]>()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
@@ -287,19 +288,15 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [openSubmit, setOpenSubmit] = useState(false)
   const [openQuit, setOpenQuit] = useState(false)
   const dispatch = useAppDispatch()
-  const { topics, listFullQuestions, listQuestions, loading } = useAppSelector(
+  const { topics, listQuestions, loading } = useAppSelector(
     (state) => state.caseStudyTestReducer,
   )
   const [quizAttempId, setQuizAttempId] = useState('')
-  const [classId, setClassId] = useState('')
-  const [startTime, setStartTime] = useState(Date.now())
+  const startTime = Date.now()
   const [openUpload, setOpenUpload] = useState<any>({})
-  const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
-  const [breadCrumb, setBreadCrumb] = useState<any>()
   const [unsavedChanges, setUnsavedChanges] = useState(true)
   const [openLimit, setOpenLimit] = useState(false)
   const [startResize, setStartResize] = useState(false)
-  const [currentMousePos, setCurrentMousePos] = useState(0)
   const [leftWidth, setLeftWidth] = useState(0)
   const [currentLeftWidth, setCurrentLeftWidth] = useState(0)
   const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
@@ -376,7 +373,7 @@ const CaseStudyDetail = ({ questions }: any) => {
     const questionList = listQuestions.map(
       (item: any) => Object.values(item)[0],
     )
-    getAllValue().map((item, index) => {
+    getAllValue().map((item) => {
       //** bỏ qua nếu là câu tự luận nếu có file */
       if (item?.answer_file?.file_key) return
       //** Ghi nhận chưa trả lời nếu trường answer rỗng */
@@ -397,7 +394,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       ) {
         let hasAnswer = false
         const data = JSON.parse(item?.answer)
-        for (let el of data) {
+        for (const el of data) {
           if ((el.celldata && el.celldata.length > 0) || el?.data?.length > 0) {
             hasAnswer = true
             break
@@ -447,13 +444,6 @@ const CaseStudyDetail = ({ questions }: any) => {
     return result
   }
 
-  // const { x } = useMousePosition()
-  // useEffect(() => {
-  //   if (startResize) {
-  //     const temp = currentLeftWidth
-  //     setLeftWidth(temp + (currentMousePos - (x || 0)))
-  //   }
-  // }, [x, startResize])
   useEffect(() => {
     if (router.query.id) {
       dispatch(
@@ -483,13 +473,9 @@ const CaseStudyDetail = ({ questions }: any) => {
           : EXHIBIT_TEXT_REPLACE.EXHIBIT,
       )
       if (res?.success === false) {
-        setBreadCrumb(res?.data?.breadcumb)
-        setClassId(res?.data?.class_id)
         setUnsavedChanges(false)
         setOpenLimit(true)
       } else {
-        setBreadCrumb(res?.data?.breadcumb)
-        setClassId(res?.data?.class_id)
         setQuizAttempId(res.data.id)
       }
     } catch (err) {}
@@ -512,25 +498,23 @@ const CaseStudyDetail = ({ questions }: any) => {
    * Declare form to handle exhibit
    */
   const {
-    control: controlExhibits,
     getValues: getValuesExhibits,
     setValue: setValueExhibits,
     watch,
-    reset,
   } = useForm()
 
   /**
    * Handle generate exhibit selections for exhibit button
    */
   const exhibits = useMemo(() => {
-    let exhibitsOptions = []
+    const exhibitsOptions = []
     const exhibitTopic = topics?.exhibits?.map((exhibit: IExhibit) => exhibit)
 
     if (exhibitTopic?.length) {
       exhibitsOptions.push(...exhibitTopic)
     }
     if (topics?.questions && topics?.questions?.length > 0) {
-      for (let question of topics?.questions) {
+      for (const question of topics?.questions) {
         if (question?.exhibits?.length) {
           exhibitsOptions.push(...question.exhibits)
         }
@@ -551,11 +535,11 @@ const CaseStudyDetail = ({ questions }: any) => {
   useEffect(() => {
     if (watch('exhibits')) {
       setOpenScratchPad((prev) => {
-        let arr = [...prev]
+        const arr = [...prev]
         const newArr = arr.filter((e) => {
           return e.type !== 'exhibits'
         })
-        for (let e of watch('exhibits')) {
+        for (const e of watch('exhibits')) {
           setOnFocusingPad(e)
           newArr.push({ id: e, type: 'exhibits' })
         }
@@ -585,28 +569,13 @@ const CaseStudyDetail = ({ questions }: any) => {
   }
 
   const getValueFillText = (index: number) => {
-    let value = []
+    const value = []
     if (valueRef?.current?.[index]) {
       const inputs = valueRef?.current?.[index]?.querySelectorAll(
         'input[stringHTML="true"]',
       ) as any
-      for (let e of inputs) {
+      for (const e of inputs) {
         value.push(e?.value)
-      }
-    } else {
-      value.push('')
-    }
-    return value
-  }
-  const getValueSelectText = (index: number) => {
-    let value = [] as any
-    if (valueRef?.current?.[index]) {
-      const inputs = document.querySelectorAll(
-        'div.sapp-select--question',
-      ) as any
-
-      for (let e of inputs) {
-        value.push(e?.dataset.value)
       }
     } else {
       value.push('')
@@ -618,27 +587,8 @@ const CaseStudyDetail = ({ questions }: any) => {
     return value || []
   }
 
-  const getAnswerDragNDrop = (index: number) => {
-    let value = [] as any
-    if (valueRef?.current?.[index]) {
-      const inputs = valueRef?.current?.[index].querySelectorAll(
-        '.sapp-input-dragNDrop',
-      ) as any
-      for (let e of inputs) {
-        const idAnswer = e.querySelector('span')
-        value.push({ id: e?.id, value: e?.innerText, idAnswer: idAnswer?.id })
-      }
-    } else {
-      value.push({
-        id: listFullQuestions?.[index]?.id,
-        value: '',
-        idAnswer: '',
-      })
-    }
-    return value
-  }
   const getAllValue = () => {
-    let arrAnswer = []
+    const arrAnswer = []
     for (let i = 0; i < questionData.length; i++) {
       const question = questionData?.[i]
       if (
@@ -717,18 +667,12 @@ const CaseStudyDetail = ({ questions }: any) => {
     const prev = Math.max(activeQuestionIndex - 1, 0)
     scrollToQuestion(prev)
   }
-  const isShowIconButtonInBottom = [
-    QUESTION_TYPES.FILL_WORD,
-    QUESTION_TYPES.TRUE_FALSE,
-    QUESTION_TYPES.ONE_CHOICE,
-    QUESTION_TYPES.SELECT_WORD,
-  ].includes(topics?.qType as QUESTION_TYPES)
   const handleSubmitQuestion = async () => {
-    let allQuest = getAllValue()
-    let quiz_position_mapping = []
-    let answers = []
-    let reformTabs: any[] = []
-    for (let e of allQuest) {
+    const allQuest = getAllValue()
+    const quiz_position_mapping = []
+    const answers = []
+    const reformTabs: any[] = []
+    for (const e of allQuest) {
       reformTabs.push({ ...e, done: true })
       if (e?.answer || e?.answer !== '') {
         if (
@@ -740,9 +684,9 @@ const CaseStudyDetail = ({ questions }: any) => {
             question_answer_id: e?.answer || '',
           })
         } else if (e?.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
-          let answer = []
+          const answer = []
           if (e?.answer) {
-            for (let el of e?.answer) {
+            for (const el of e?.answer) {
               if (el) {
                 answer.push({ answer_id: el })
               }
@@ -762,7 +706,7 @@ const CaseStudyDetail = ({ questions }: any) => {
         } else if (e?.qType === QUESTION_TYPES.SELECT_WORD) {
           answers.push({ question_id: e?.id, answer: e?.answer || [] })
         } else if (e?.qType === QUESTION_TYPES.FILL_WORD) {
-          let answer = []
+          const answer = []
           for (let i in e?.answer) {
             if (e?.answer[i] && e?.answer[i] !== '') {
               answer.push({
@@ -807,7 +751,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 } else {
                   const data = JSON.parse(e?.answer)
                   //** check qua từng cell của excel để xem có đáp án không  */
-                  for (let el of data) {
+                  for (const el of data) {
                     if (
                       (el.celldata && el.celldata.length > 0) ||
                       el?.data?.length > 0
@@ -884,7 +828,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   }
   const handleCloseScratchPad = (pad: any) => {
     setOpenScratchPad((prev) => {
-      let arr = [...prev]
+      const arr = [...prev]
       const newArr = arr.filter((e) => e?.id !== pad.id)
       if (pad.type === 'exhibits') {
         setValueExhibits(
@@ -905,12 +849,12 @@ const CaseStudyDetail = ({ questions }: any) => {
     fileName?: string,
   ) => {
     setOpenScratchPad((prev) => {
-      let arr = [...prev]
+      const arr = [...prev]
       if (type === 'scratch_pad') {
         arr.push({ id: uniqueId('scratchPad'), type: type })
         setIsScratchPadOpen(true)
       } else if (type === 'calculator') {
-        for (let e of arr) {
+        for (const e of arr) {
           if (e.type === 'calculator') {
             return arr
           }
@@ -990,7 +934,7 @@ const CaseStudyDetail = ({ questions }: any) => {
     }
   }, [startResize])
   const [scratchPadValues, setScratchPadValues] = useState<any>({})
-  const handleChangeScratchPad = (e: any, id: any) => {
+  const handleChangeScratchPad = (e: any) => {
     const { value } = e.target
     setScratchPadValues((prevState: any) => ({
       ...prevState,
@@ -1446,7 +1390,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                         control={controlScratch}
                         name={e?.id}
                         onChange={(event) =>
-                          handleChangeScratchPad(event, e?.id)
+                          handleChangeScratchPad(event)
                         }
                         className="sapp-text-area not-resizer h-full w-full rounded-b-xl rounded-t-none px-5 py-3 placeholder:text-sm placeholder:font-normal"
                       />
@@ -1669,7 +1613,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                   getPopupContainer={() => document.body}
                   content={
                     <div className="flex flex-col gap-2">
-                      {topics?.files?.map((e: any, index: number) => {
+                      {topics?.files?.map((e: any) => {
                         return (
                           <div
                             className={clsx(
@@ -1791,5 +1735,4 @@ const CaseStudyDetail = ({ questions }: any) => {
   )
 }
 
-// eslint-disable-next-line import/no-unused-modules
 export default CaseStudyDetail
