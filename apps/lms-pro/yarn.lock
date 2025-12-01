@@ -10008,10 +10008,10 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@1.6.3:
-  version "1.6.3"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.6.3.tgz#adba8ff4855d2f44c29fd34fafdc76ac4961701f"
-  integrity sha512-z1sHoWU3E/CbiqIvncMz0DmTFX+IIanOTYJz2JiyYYNVbxZ3nqKTAeNggjXiFh7dodXqfIKthaFiTdpTTZ36OA==
+preview-part@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.7.0.tgz#9962d6d7be2642fe7773e34064797ee3491d67e4"
+  integrity sha512-5bly+PLzCXGABefa919gn6u1Hw/vsLzW8f+2uEn+/9t5glWwIh40vuXvzQcN9Zwz3SdtWgAx2ehQgtN9IoCxJA==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@react-hook/resize-observer" "^2.0.2"
@@ -10292,10 +10292,10 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-quiz-result-package@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.4.1.tgz#408e1636182e56456122aebcde64dc4b63362b27"
-  integrity sha512-8G52MDPQu/J+IToubTPHW7OhTnZr/AJ4Z5Ln/q0/c+zYh/zJI7noGA3JUI0Ackv0S6JPIBtlXq33OxYpN3qHkg==
+quiz-result-package@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.5.0.tgz#2903688e0f0ea083f130d501a525c3f42f105b78"
+  integrity sha512-/49nsyirUf5ar5ZaZ/BThVItZ1ivY3Uon5IOEDIScUg42z41+h95hwu2zbtspBG2o8ElZRNh4U7AMm/kvS3efw==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     lodash "^4.17.21"
@@ -11387,10 +11387,10 @@ sapp-common-package@^1.4.1:
     sass-loader "^13"
     tailwindcss "3.4.17"
 
-sapp-common-package@^1.5.2:
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.5.2.tgz#9dc2391c21cdbffe9e957022a1ac9901df94e404"
-  integrity sha512-V8CY3aV1TjlMubuxmgYycA0I8vtKAF7S6MLMIHWqD2BcBj4oP/ycjdtJfNG3bE5VtHFLoB8DvJog+RMzHuVwJQ==
+sapp-common-package@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.6.0.tgz#465a0ea97bf67e7b0eaa49acb0b1ff000edf2ee1"
+  integrity sha512-P9gasAfzS46/gYsG2uvt/4weeJjxdaKG6ct+BXgAnnytSOIcoYgRGzE62M3dOks6YTmP3Gfy7LlFGVp6yIVpDA==
   dependencies:
     "@_ueberdosis/prosemirror-tables" "^1.1.3"
     "@floating-ui/react" "^0.27.8"
@@ -11423,31 +11423,16 @@ sapp-common-package@^1.5.2:
     sass-loader "^13"
     tailwindcss "3.4.17"
 
-sapp-notification@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/sapp-notification/-/sapp-notification-1.1.1.tgz#8532a913daa183deab2ccc457b23f3250f5ca0e3"
-  integrity sha512-7kbt11Jqg0A1iN0MPGktz5fP5e64VxqJfA9Isd/0zKMbT2ChhGRG48LsMEz7v76ieNeFR0dP+53lxlrKCz8pEQ==
+sapp-notification@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/sapp-notification/-/sapp-notification-1.2.0.tgz#0de049602a6ff6308c8438c90533ee425b7ffd8e"
+  integrity sha512-T5cSSY5oYpaH/OUvIJbtkQB2R//I5LQ6kRNlKMEyvsJiv1DTSZl5lHP2D4Tt8iEp3Xi/xy/9AP7lPFVjZtYR5g==
   dependencies:
     "@tailwindcss/line-clamp" "^0.4.4"
     antd "^5.21.1"
     clsx "^2.1.1"
     dayjs "^1.11.12"
     tailwind-scrollbar "^4.0.2"
-
-sapp-preview-part-test@1.4.7-test:
-  version "1.4.7-test"
-  resolved "https://registry.yarnpkg.com/sapp-preview-part-test/-/sapp-preview-part-test-1.4.7-test.tgz#ac5d6915c16c4d65185fae6316c6dd8d9edd98b9"
-  integrity sha512-fQ9B4T+I86JOGLv9AEg0smtSayPJj/aQxnT6X+acZs4DJlYHyexcPEfLE5utOtNUzIx3Rxma3mV0kfgNMr804g==
-  dependencies:
-    "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
-    "@react-hook/resize-observer" "^2.0.2"
-    "@types/aos" "^3.0.7"
-    "@types/lodash" "^4.14.202"
-    "@types/react-lines-ellipsis" "^0.15.6"
-    antd "5.25.0"
-    aos "^2.3.4"
-    dayjs "^1.11.13"
-    lodash "^4.17.21"
 
 sass-loader@^13:
   version "13.3.3"

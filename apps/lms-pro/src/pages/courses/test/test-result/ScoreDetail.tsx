@@ -180,7 +180,7 @@ const ScoreDetail = ({
       })}
     >
       <div className="mb-4 flex items-center gap-x-3">
-        <div className="text-lg md:text-xl font-semibold">
+        <div className="text-lg font-semibold md:text-xl">
           Score Details{' '}
           {!router?.query?.attempt && quizAttempt?.number_of_attempts && (
             <span className="text-sm text-gray-400 md:text-base">
