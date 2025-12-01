@@ -1,24 +1,13 @@
-import { Collapse, CollapseProps } from 'antd'
-import React from 'react'
-import {
-  ClassStandardScheduleItem,
-  IScheduleRequestItem,
-  ScheduleRequestDetail,
-} from 'src/type/teachers/request-schedule.interface'
-import {
-  capitalizeFirstLetter,
-  convertSlugToTitle,
-  sappFormatDate,
-  truncateString,
-} from '@utils/index'
-import { ScheduleSkeleton } from '@lms/ui'
-import PrimaryInfoItem from '@components/teacher/my-request/schedule-request/PrimaryInfoItem'
-import { formatTimeOnlyHourMinute } from '@utils/helpers'
-import { CONSTRUCTION_MODE, TYPE_TEACHING_REQUEST } from '@lms/core'
+
 import { CollapseArrowIcon } from '@lms/assets'
+import { ClassStandardScheduleItem, CONSTRUCTION_MODE, TYPE_TEACHING_REQUEST } from '@lms/core'
+import { ScheduleSkeleton, TooltipParagraph } from '@lms/ui'
+import { Collapse, CollapseProps } from 'antd'
 import Link from 'next/link'
-import { Tooltip } from "@lms/ui";
-import TooltipParagraph from 'src/common/TooltipParagraph'
+import { IScheduleRequestItem, ScheduleRequestDetail } from '../../../../type/teachers/request-schedule.interface'
+import { capitalizeFirstLetter, convertSlugToTitle, sappFormatDate, truncateString } from '@lms/utils'
+import PrimaryInfoItem from './PrimaryInfoItem'
+import { formatTimeOnlyHourMinute } from '../../../../utils'
 
 interface IProps {
   dataDetail: ScheduleRequestDetail | undefined
