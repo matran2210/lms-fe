@@ -1,14 +1,13 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { UserApi } from '@pages/api/user'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { fetcher } from '@services/requestV2'
 import { CERTIFICATE } from '@lms/core'
 import { getMessagingToken } from '@lms/utils'
 import Keycloak from 'keycloak-js'
-import { isNull } from 'lodash'
-import { COOKIE_INFO, PageLink } from '@lms/core'
+import { COOKIE_INFO } from '@lms/core'
 import { EntranceTestAPI } from 'src/pages/api/entrance-test'
 import { deleteCookie, getCookie, getSessionIdFromToken, setCookie } from '@lms/utils'
+import { PageLink } from 'src/constants/routers'
 
 const handleFirebaseToken = async () => {
   const accessDeviceToken = await AsyncStorage.getItem('firebaseDeviceToken')

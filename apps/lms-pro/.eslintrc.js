@@ -19,5 +19,9 @@ module.exports = {
     "no-prototype-builtins": "off", 
     '@typescript-eslint/no-unused-vars': "off",
     "no-dupe-else-if": "off",
+     "prefer-const": "off",
+     "no-empty-pattern": "off",
+    "no-useless-escape": "off",
+    "no-var": "off"
   }
 };
