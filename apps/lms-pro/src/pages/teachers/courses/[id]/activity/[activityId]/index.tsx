@@ -16,9 +16,6 @@ import { ANIMATION, EXHIBIT_TEXT_REPLACE, IActivity, ITabs, PROGRAM, SUFFIX_TYPE
 import { CreateNote, Discussion, QuizDocument, TextDocument, VideoDocument } from '@lms/feature-courses'
 import { ActivitySkeleton, Calculator, EditorReader, FileViewer, LayoutTeacher, ModalResizeable, MovableWindow, SAPPBorder, SappButton, SappIcon, SappLoadingGlobal, Tooltip } from '@lms/ui'
 import { trackGAEvent, truncateBySpace, truncateString } from '@lms/utils'
-import { ActivityAPI } from '@pages/api/activity'
-import { QuestionAPI } from '@pages/api/question'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import React, {
@@ -31,9 +28,8 @@ import React, {
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { CoursesAPI, getActivityById, submitQuizTest } from 'src/pages/api/courses'
+import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { UploadAPI } from 'src/pages/api/upload'
-import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -335,7 +331,7 @@ const ActivityTeacherPage = () => {
     event?: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     setOpenScratchPad((prev) => {
-      let arr = [...prev]
+      const arr = [...prev]
       if (data?.type === 'file') {
         arr?.push({
           type: data.type,
@@ -355,7 +351,7 @@ const ActivityTeacherPage = () => {
 
   const handleCloseScratchPad = (pad: any) => {
     setOpenScratchPad((prev) => {
-      let arr = [...prev]
+      const arr = [...prev]
       const newArr = arr?.filter((e) => e?.id !== pad?.id)
       return newArr
     })

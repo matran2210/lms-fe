@@ -18,7 +18,7 @@ interface IProps {
   classString?: string
 }
 
-const SappTable = ({
+const SappBaseTable = ({
   children,
   headers,
   isCheckedAll,
@@ -74,4 +74,4 @@ const SappTable = ({
   )
 }
 
-export default SappTable
+export default SappBaseTable

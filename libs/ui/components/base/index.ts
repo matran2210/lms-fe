@@ -6,7 +6,7 @@ export { default as SAPPLabel } from "./Label/SAPPLabel";
 export { default as AntConfigProvider } from "./Provider/AntConfigProvider";
 export { default as SAPPRangePicker } from "./RangePicker/SAPPRangePicker";
 export { default as SappDrawer } from "./SappDrawer";
-export { default as SappTable } from "./SappTable";
+export { default as SappBaseTable } from "./SappBaseTable";
 export * from "./breadcrumb/index";
 export * from "./button/index";
 export { default as EChart } from "./chart/Chart";

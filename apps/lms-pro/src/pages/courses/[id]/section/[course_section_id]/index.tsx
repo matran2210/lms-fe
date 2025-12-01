@@ -74,13 +74,10 @@ const CoursePartDetail = () => {
   const [readMore, setReadMore] = useState<boolean>(false)
   const [open, setOpen] = useState<boolean>(false)
   const [chapterData, setChapterData] = useState<any>({})
-  const [chapterTestId, setChapterTestId] = useState<string>()
   const [defaultActive, setDefaultActive] = useState<string>()
   const courseChapterId = localStorage.getItem('course_chapter_id')
   const [isPassedCourse, setIsPassedCourse] = useState<boolean>(false)
   const [isOpenChapter, setIsOpenChapter] = useState<boolean>(false)
-  const [loadingLearningOutcome, setLoadingLearningOutcome] =
-    useState<boolean>(false)
   const [loadingScreen, setLoadingScreen] = useState<boolean>(true)
   const [openResource, setOpenResource] = useState<boolean>(false)
   const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
@@ -179,7 +176,6 @@ const CoursePartDetail = () => {
   }
 
   async function getLearningOutcome() {
-    setLoadingLearningOutcome(true)
     try {
       const res = await CoursesAPI.getCourseLearningOutcome(
         chapterDetail?.course_learning_outcome?.id,
@@ -187,10 +183,6 @@ const CoursePartDetail = () => {
       )
       setLearningOutcome(res?.data)
     } catch (error) {
-    } finally {
-      setTimeout(() => {
-        setLoadingLearningOutcome(false)
-      }, 500)
     }
   }
 
@@ -324,10 +316,8 @@ const CoursePartDetail = () => {
     )
     if (partData?.length > 0) {
       setChapterData(partData?.[0])
-      setChapterTestId(partData?.[0]?.id)
     } else {
       setChapterData(filteredData?.[0])
-      setChapterTestId(filteredData?.[0]?.id)
     }
 
     if (
@@ -436,7 +426,7 @@ const CoursePartDetail = () => {
     courseId: string,
     caseStudyId: string,
   ) => {
-    const res = await CoursesAPI.caseStudyProgress(
+    await CoursesAPI.caseStudyProgress(
       router.query.id,
       courseId,
       caseStudyId,
@@ -474,26 +464,6 @@ const CoursePartDetail = () => {
     }
   }, [router?.asPath, partDetail?.id])
 
-  // Tạo một mảng chứa tất cả các child của chapterDetail (nếu có)
-  const childArrays = chapterDetail?.children?.map(
-    (child: any) => child?.children,
-  )
-
-  // Kết hợp tất cả các mảng con thành một mảng lớn
-  const concatenatedArray: any[] = chapterDetail
-    ? [].concat(...childArrays)
-    : []
-
-  // Tạo một mảng mới chỉ chứa các trường cần thiết từ mỗi phần tử trong concatenatedArray
-  const transformedArray = concatenatedArray?.map((item: any) => {
-    return {
-      id: item.id,
-      name: item.name,
-      display_icon: item.display_icon,
-      is_preview_locked:
-        item?.course_section_link_parents?.[0]?.is_preview_locked,
-    }
-  })
   const handleGoBack = () => {
     router.push({
       pathname: PageLink.COURSE_DETAIL.replace(

@@ -10,7 +10,6 @@ import {
   CardResultTest,
   CollapseActivity,
 } from '@lms/feature-courses'
-import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   CarouselSlideAnimation,
   FilterCourseSection,
@@ -44,10 +43,8 @@ const ResultsTable = ({
   setOpenFilter: Dispatch<SetStateAction<boolean>>
 }) => {
   const router = useRouter()
-  const { isMobileView } = useTailwindBreakpoint()
   const [direction, setDirection] = useState<1 | -1>(1)
-  const [currentPage, setCurrentPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(10)
+  const pageSize = 10
   const [openReport, setOpenReport] = useState<boolean>(false)
   const [params, setParams] = useState<string>('')
   const observer = useRef<IntersectionObserver>()
@@ -61,7 +58,6 @@ const ResultsTable = ({
   const [listSubsection, setListSubsection] = useState<ISection[]>([])
   const [listUnit, setListUnit] = useState<ISection[]>([])
   const [listActivity, setListActivity] = useState<ISection[]>([])
-  const queryParams = [params, pageSize, currentPage, router.query.courseId]
   const methods = useForm<SectionDropdownFormValues>({
     defaultValues: {
       section: null,
@@ -155,7 +151,6 @@ const ResultsTable = ({
       ...openChooseItem,
       isOpen: false,
     })
-    setCurrentPage(1)
     refetch()
   }
 

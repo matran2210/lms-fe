@@ -21,7 +21,6 @@ const ActivityResourceMobile = ({
   open,
   onClose,
   activity,
-  handleOpenScratchPad,
 }: IProps) => {
   const { uploadApi } = useFeature()
   return (

@@ -1,4 +1,6 @@
+import { SappBaseTable } from '@lms/ui'
 import { convertSecondsToMinutesSeconds, roundNumber, truncateString } from '@lms/utils'
+
 import { CollapseArrowIcon } from '@lms/assets'
 import {
   ANIMATION,
@@ -21,7 +23,6 @@ import React from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
 import { CoursesAPI } from '../../../api/courses/index'
-import { SappTable } from '@lms/ui/components/base'
 
 const commonHeaderClass = 'font-medium leading-6 text-gray py-2 pb-4 md:pb-6'
 
@@ -39,11 +40,9 @@ interface ScoreDetailProps {
 
 const ScoreDetail = ({
   className,
-  type,
   gradingStatus,
   yourScoreDetailRef,
   quizAttempt,
-  isTeacher,
   numberSelectedResponse,
 }: ScoreDetailProps) => {
   const router = useRouter()
@@ -225,7 +224,7 @@ const ScoreDetail = ({
                     ),
                     children: (
                       <div>
-                        <SappTable
+                        <SappBaseTable
                           headers={headers}
                           loading={isLoading}
                           isCheckedAll={true}
@@ -379,7 +378,7 @@ const ScoreDetail = ({
                               </React.Fragment>
                             )
                           })}
-                        </SappTable>
+                        </SappBaseTable>
                       </div>
                     ),
                   },

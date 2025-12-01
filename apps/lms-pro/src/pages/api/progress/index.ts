@@ -1,6 +1,5 @@
+import { IProgressList, IRequestCreateProgress, IResponse } from '@lms/core'
 import { fetcher } from '@services/requestV2'
-import { IQueryParams, IResponse } from '@lms/core'
-import { IProgressList, IRequestCreateProgress } from '@lms/core'
 
 export class ProgressAPI {
   static getProgressList({

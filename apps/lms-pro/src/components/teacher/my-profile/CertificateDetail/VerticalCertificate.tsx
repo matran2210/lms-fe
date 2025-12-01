@@ -27,7 +27,6 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
       <div className="flex h-full items-center gap-12 xl:gap-20">
         <div className="flex-2 flex h-full w-[55%] items-center justify-center">
           {certificate?.certificate_url ? (
-            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={certificate?.certificate_url || ''}
               alt={certificate?.course.name}
