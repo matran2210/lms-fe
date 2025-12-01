@@ -1,33 +1,18 @@
-import {SappTable} from '@lms/ui'
-import { TeacherAPI } from '@pages/api/teacher'
-import { StatusRequestSchedule } from '@lms/core'
-import { TablePaginationConfig } from 'antd'
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, StatusRequestSchedule, TeacherKey } from '@lms/core'
+import { ActionCell, SappTable, TooltipParagraph } from '@lms/ui'
+import { ColumnsType } from 'antd/es/table'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
-import ActionCell from 'src/components/base/action/SappActionCell'
-import DetailRequestModal from 'src/components/teacher/my-request/schedule-request/DetailRequestModal'
-import ReasonModal from 'src/components/teacher/my-request/schedule-request/ReasonModal'
-import SuccessModal from 'src/components/teacher/my-request/schedule-request/SuccessModal'
-import TableCell from 'src/components/teacher/my-request/schedule-request/TableCell'
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '@lms/core'
-import {
-  FilterRequestScheduleParams,
-  IScheduleRequestItem,
-  RequestScheduleParams,
-  StatusRequestScheduleParams,
-} from 'src/type/teachers/request-schedule.interface'
-import {
-  convertSlugToTitle,
-  convertSnakeCaseToHumanReadable,
-  formatDateFromUTC,
-} from 'src/utils/index'
+
+import { useSappPaging } from '@lms/hooks'
+import { convertSlugToTitle, convertSnakeCaseToHumanReadable, formatDateFromUTC } from '@lms/utils'
+import { TeacherAPI } from '../../../../pages/api/teacher'
+import { FilterRequestScheduleParams, IScheduleRequestItem, StatusRequestScheduleParams } from '../../../../type/teachers/request-schedule.interface'
+import DetailRequestModal from './DetailRequestModal'
+import ReasonModal from './ReasonModal'
 import StatusItem from './StatusItem'
-import { ColumnsType } from 'antd/es/table'
-import { Tooltip } from "@lms/ui";
-import TooltipParagraph from 'src/common/TooltipParagraph'
-import useSappPaging from 'src/hooks/useSappPaging'
-import { TeacherKey } from '@pages/api/queryKey'
+import SuccessModal from './SuccessModal'
+import TableCell from './TableCell'
 
 export const statusColor = (data: IScheduleRequestItem) => {
   switch (data?.status) {
@@ -269,7 +254,6 @@ export default function TableContainer({ params }: IProps) {
        * Refetch dữ liệu sau khi cập nhật trạng thái thành công.
        */
       refetch()
-    } catch (error) {
     } finally {
     }
   }
