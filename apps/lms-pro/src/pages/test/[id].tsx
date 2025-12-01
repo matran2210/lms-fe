@@ -112,7 +112,7 @@ interface Tab {
 }
 const warningText = 'Are you sure you want to leave this page?'
 const TestDetail = () => {
-  const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
+  const [, setHasScrollBar] = useState(undefined) as any
   const [editorReady, setEditorReady] = useState(true)
   const [tooltipOpen, setTooltipOpen] = useState(false)
   const answerListRef = useRef<AnswerList>({})
@@ -185,7 +185,7 @@ const TestDetail = () => {
   const [scratchPadValues, setScratchPadValues] = useState<ScratchPadValue[]>(
     [],
   )
-  // const [scoreFinalTest, setScoreFinalTest] = useState(0)
+  // const [, setScoreFinalTest] = useState(0)
   const [scratchPads, setScratchPads] = useState<string>('')
   // const [listQuestionDone, setListQuestionDone] = useState<string[]>([])
   const [listSubmitError, setListSubmitError] = useState<
@@ -694,7 +694,6 @@ const TestDetail = () => {
           : EXHIBIT_TEXT_REPLACE.EXHIBIT,
       )
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTabContent?.id])
 
   const checkCalExist = useMemo(() => {
@@ -1161,7 +1160,7 @@ const TestDetail = () => {
    */
   const checkUnSubmitAnswer = (): number[] => {
     const answers = handleSaveCurrentAnswer(tabs, currentTabContent)
-    let result: number[] = []
+    const result: number[] = []
     answers?.map((item: Answer, index: number) => {
       if (!item.attempted) {
         result.push(index + 1)
@@ -1231,7 +1230,7 @@ const TestDetail = () => {
   ) => {
     setOnFocusingPad('')
     setOpenScratchPad((prev) => {
-      let arr = [...prev]
+      const arr = [...prev]
       if (type === 'scratch_pad') {
         if (isScatchPadEnabled) {
           return arr
@@ -1259,7 +1258,7 @@ const TestDetail = () => {
   }
   const handleCloseScratchPad = (pad: any) => {
     setOpenScratchPad((prev) => {
-      let arr = [...prev]
+      const arr = [...prev]
       const newArr = arr.filter((e) => e.id !== pad.id)
       if (pad.type === 'exhibits') {
         setValueExhibits(
@@ -1313,7 +1312,7 @@ const TestDetail = () => {
       return false
     } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
       if (getValues(`${currentContent?.id}_drag_drop_answer`)) {
-        for (let e of getValues(`${currentContent?.id}_drag_drop_answer`)) {
+        for (const e of getValues(`${currentContent?.id}_drag_drop_answer`)) {
           if (e?.idAnswer && e?.value !== '') {
             return true
           }
@@ -1322,7 +1321,7 @@ const TestDetail = () => {
 
       return false
     } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
-      for (let e of getValueSelectText()) {
+      for (const e of getValueSelectText()) {
         if (e && e !== '') {
           return true
         }
@@ -1334,7 +1333,7 @@ const TestDetail = () => {
         getValues(`${currentContent?.id}_fillword`) &&
         getValues(`${currentContent?.id}_fillword`)?.length > 0
       ) {
-        for (let e of getValues(`${currentContent?.id}_fillword`)) {
+        for (const e of getValues(`${currentContent?.id}_fillword`)) {
           if (e) {
             return true
           }
@@ -1344,7 +1343,7 @@ const TestDetail = () => {
       return false
     } else if (currentContent?.qType === QUESTION_TYPES.ESSAY) {
       if (Array.isArray(currentContent.data?.requirements)) {
-        for (let req of currentContent.data?.requirements) {
+        for (const req of currentContent.data?.requirements) {
           if (
             req?.answer_file?.file_key ||
             answerListRef?.current?.[req?.id || '']
@@ -1829,28 +1828,6 @@ const TestDetail = () => {
     setTabs(newTabs)
   }
 
-  const handleChangeTypeEssay = (value: number) => {
-    const newTabs = tabs.map((tab: any) => {
-      if (tab.id === currentPage) {
-        return {
-          ...tab,
-          data: {
-            ...tab?.data,
-            requirements: currentTabContent?.data?.requirements?.map(
-              (req: any, idx: number) => {
-                return {
-                  ...req,
-                  response_type: value,
-                }
-              },
-            ),
-          },
-        }
-      }
-      return tab
-    })
-    setTabs(newTabs)
-  }
 
   // Initialize answerListRef values once when component mounts
   useEffect(() => {
@@ -2112,10 +2089,10 @@ const TestDetail = () => {
   const handleSubmitQuestions = async (typeSubmit: 'timeout' | 'submit') => {
     if (currentTabContent) {
       const allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
-      let quiz_position_mapping = []
+      const quiz_position_mapping = []
       // let reformTabs: any[] = []
       setLoading(true)
-      for (let e of allQuest) {
+      for (const e of allQuest) {
         // reformTabs.push({ ...e, done: true })
         quiz_position_mapping.push({
           question_id: e.id,
@@ -2375,7 +2352,7 @@ const TestDetail = () => {
   }
 
   const exhibits = useMemo(() => {
-    let exhibitsOptions = []
+    const exhibitsOptions = []
     const topics = currentTabContent?.topicDescription
 
     const exhibitTopic = topics?.exhibits?.map((exhibit: IExhibit) => exhibit)
@@ -2385,7 +2362,7 @@ const TestDetail = () => {
     }
 
     if (topics?.question?.length) {
-      for (let question of topics?.questions) {
+      for (const question of topics?.questions) {
         if (question.exhibits?.length) {
           exhibitsOptions.push(...question.exhibits)
         }
@@ -2491,11 +2468,11 @@ const TestDetail = () => {
   useEffect(() => {
     if (watchExhibits('exhibits')) {
       setOpenScratchPad((prev) => {
-        let arr = [...prev]
+        const arr = [...prev]
         const newArr = arr.filter((e) => {
           return e.type !== 'exhibits'
         })
-        for (let e of watchExhibits('exhibits')) {
+        for (const e of watchExhibits('exhibits')) {
           setOnFocusingPad(e)
           newArr.push({ id: e, type: 'exhibits' })
         }
@@ -2736,7 +2713,7 @@ const TestDetail = () => {
                 />
               </div>
             )}
-          {[, QUESTION_TYPES.ONE_CHOICE].includes(currentTabContent?.qType) &&
+          {[QUESTION_TYPES.ONE_CHOICE].includes(currentTabContent?.qType) &&
             !currentTabContent?.is_viewed_answer && (
               <ButtonSecondary
                 className={clsx({ '!bg-white !font-semibold': currentAnswer })}
@@ -2881,7 +2858,7 @@ const TestDetail = () => {
     const response_option = currentTabContent?.data?.response_option
 
     switch (response_option) {
-      case RESPONSE_OPTION.WORD:
+      case RESPONSE_OPTION.WORD: {
         const templateValueWord = getTemplateValueForWord()
         // Reset form value
         onResetFormatEssay(key, templateValueWord)
@@ -2890,7 +2867,8 @@ const TestDetail = () => {
           refEditor.current.reset(templateValueWord)
         }
         break
-      case RESPONSE_OPTION.SHEET:
+      }  
+      case RESPONSE_OPTION.SHEET: {
         const templateValue = getTemplateValueForSheet()
         // Reset form value
         onResetFormatEssay(key, templateValue)
@@ -2899,6 +2877,7 @@ const TestDetail = () => {
           refEditor.current.clear(templateValue)
         }
         break
+      }
     }
   }
   const resetWordBeforeAction = async () => {
@@ -2909,8 +2888,8 @@ const TestDetail = () => {
         const response_option = currentTabContent?.data?.response_option
 
         switch (response_option) {
-          case RESPONSE_OPTION.WORD:
-            if (valueFromForm !== undefined && valueFromForm !== null) {
+          case RESPONSE_OPTION.WORD: {
+              if (valueFromForm !== undefined && valueFromForm !== null) {
               return valueFromForm
             }
             const requirement =
@@ -2930,9 +2909,9 @@ const TestDetail = () => {
             }
 
             return currentTabContent?.data?.answer_template
-
-          case RESPONSE_OPTION.SHEET:
-            const valueFromSheetForm = getValues(key)
+          }
+          case RESPONSE_OPTION.SHEET: {
+             const valueFromSheetForm = getValues(key)
             if (valueFromSheetForm) {
               const isEmptyWorkbook = isWorkbookEmpty(
                 JSON.parse(valueFromSheetForm),
@@ -2970,6 +2949,7 @@ const TestDetail = () => {
             }
             if (currentTabContent.answer) return currentTabContent.answer
             return currentTabContent?.data?.answer_template || defaultSheetData
+          }
         }
       }
       const defaultValue = defaultValueEssay()
@@ -3459,7 +3439,7 @@ const TestDetail = () => {
                   case 'entrance':
                     router.replace(`/entrance-test`)
                     break
-                  default:
+                  default: {
                     const class_id = router.query.class_id
                     if (class_id) {
                       router.push(`/courses/my-course/${class_id}`)
@@ -3467,6 +3447,7 @@ const TestDetail = () => {
                       router.back()
                     }
                     break
+                  }  
                 }
                 // if (type === 'event-test') {
                 //
@@ -3626,7 +3607,7 @@ const TestDetail = () => {
             content={
               <div className="flex flex-col gap-2">
                 {currentTabContent?.topicDescription?.files?.map(
-                  (e: any, index: number) => {
+                  (e: any) => {
                     return (
                       <div
                         className={clsx(
@@ -3742,5 +3723,4 @@ const TestDetail = () => {
   )
 }
 
-// eslint-disable-next-line import/no-unused-modules
 export default TestDetail

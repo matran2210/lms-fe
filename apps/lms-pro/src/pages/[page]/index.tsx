@@ -1,14 +1,12 @@
-import { CollapseArrowIcon } from '@lms/assets'
-import { Icon } from '@lms/assets'
+import { CollapseArrowIcon, Icon } from '@lms/assets'
+import { UserType, getLoginHistory, getLogoutUser, useAppDispatch, useAppSelector, useCourseContext, userReducer } from '@lms/contexts'
 import {
   ANIMATION,
   AppType,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   IDeviceItem,
-  ITabs,
-  NOTIFICATION_STATUS,
-  ProfilePages,
+  NOTIFICATION_STATUS
 } from '@lms/core'
 import {
   Certificate,
@@ -37,23 +35,15 @@ import {
   getLocalStorageItem,
   removeLocalStorageItem,
 } from '@lms/utils'
-import { CoursesAPI } from '@pages/api/courses'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { Collapse, CollapseProps, Divider, Tabs } from 'antd'
 import clsx from 'clsx'
-import Image, { StaticImageData } from 'next/image'
+import { StaticImageData } from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
-import {
-  MENU_BOTTOM,
-  MENU_ITEMS,
-  MENU_ITEMS_EVENT,
-} from 'src/constants/menu-items'
+import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import UserApi from 'src/redux/services/User/user'
-import { UserType, useAppDispatch, useAppSelector, getLogoutUser, getLoginHistory, userReducer, useCourseContext } from '@lms/contexts'
-import { PageLink } from 'src/constants/routers'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
-import { NotificationAPI } from '@pages/api/notification'
 
 interface IFullScreenMobile {
   open: boolean
@@ -97,21 +87,6 @@ const ProfilePage = () => {
     })
   }
 
-  const NotFound = () => (
-    <div className="grid h-full place-items-center p-6">
-      <div className="justifycenter flex flex-col items-center">
-        <Image
-          src={'/assets/images/image_404.jpg'}
-          alt="Image_404"
-          width="320"
-          height="260"
-        />
-        <h1 className="mt-3 text-2xl font-bold text-[#050505] md:text-4xl">
-          Tab Not Found
-        </h1>
-      </div>
-    </div>
-  )
   /**
    * @description handle open and close sidebar
    */
@@ -135,7 +110,9 @@ const ProfilePage = () => {
           removeLocalStorageItem('pinnedId')
         }
       })
-    } catch (error) {}
+    } catch (error) {
+      // ignore
+    }
   }
   const getListDevices = async () => {
     const res = await UserApi.getListDevices()
@@ -153,16 +130,7 @@ const ProfilePage = () => {
     )
     getListDevices()
   }, [])
-  let breadcrumbs: ITabs[] = [
-    {
-      link: `/${ProfilePages.OVERVIEW}`,
-      title: 'Profile',
-    },
-    {
-      link: `/${ProfilePages.OVERVIEW}`,
-      title: 'Details',
-    },
-  ]
+
   const items = [
     {
       key: 'my-profile',
