@@ -278,7 +278,7 @@ const EventRepeatField = ({
           day_of_week: getDayOfWeek(),
           day_of_month: getDayOfMonth(),
           month_of_year: getMonthOfYear(),
-        }) as IRecurringSchedule,
+        }) as any,
       });
     });
 

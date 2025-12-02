@@ -14,6 +14,6 @@ export { default as ButtonTextV2 } from "./ButtonTextV2";
 export { default as SappButton } from "./SappButton";
 export { default as SappButtonIcon } from "./SappButtonIcon";
 export { default as SAPPButtonV2 } from "./SAPPButtonV2";
-export { default as SappFilterButton } from "./SAPPFilterButton";
+// export { default as SappFilterButton } from "./SAPPFilterButton";
 export { default as SpinIcon } from "./SpinIcon";
 export { default as UploadSingleFileV2 } from "./UploadSingleFileV2";

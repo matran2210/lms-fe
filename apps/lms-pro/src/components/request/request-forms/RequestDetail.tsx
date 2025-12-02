@@ -20,7 +20,7 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 
-import { confirmDialog, useAppDispatch } from '@Lms/contexts'
+import { confirmDialog, useAppDispatch } from '@lms/contexts'
 import { REQUEST_TYPE } from '@lms/core'
 import { SAPPBadge } from '@lms/ui'
 import { formatRecurringSchedule } from '@utils/request'

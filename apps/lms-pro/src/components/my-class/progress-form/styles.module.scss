@@ -1,4 +1,5 @@
-@import "src/styles/variables";
+//TODO: check nhé
+// @import "src/styles/variables";
 .lessonFormTree {
   @apply w-full;
 }
@@ -11,9 +12,10 @@
   @apply flex items-center justify-center;
 }
 
-.lessonFormTree :global(.ant-tree-switcher:hover) {
-  color: $color-display;
-}
+// TODO: check lỗi color: $color-warning nhé
+// .lessonFormTree :global(.ant-tree-switcher:hover) {
+//   color: $color-display;
+// }
 
 .lessonFormTree :global(.ant-tree-switcher_close) {
   @apply text-[#181c32];
@@ -65,7 +67,8 @@
 }
 
 /* Error message */
-.errorMessage {
-  color: $color-warning;
-  margin-top: 8px;
-}
+// TODO: check lỗi color: $color-warning nhé
+// .errorMessage {
+//   color: $color-warning;
+//   margin-top: 8px;
+// }
