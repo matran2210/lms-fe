@@ -1,30 +1,29 @@
-import { useLayoutEffect, useMemo, useState } from 'react'
 import { SappDrawer } from '@lms/ui'
+import { useLayoutEffect, useMemo, useState } from 'react'
 
-import { CollapseBox } from '@lms/ui'
-import { CollapseItem } from '@lms/ui'
-import { MyRequestAPI } from '@pages/api/my-request'
-import { capitalizeFirstLetter, formatDateTimeWithTimeZone } from '@lms/utils'
-import dayjs from 'dayjs'
-import { useRouter } from 'next/router'
-import toast from 'react-hot-toast'
 import {
   DATE_FORMAT_DMY,
   DATE_TIME_FORMAT_DMY,
   E_REQUEST_STATUS,
   EVENT_REPEAT_LABEL,
   EVENT_REPEAT_TYPES,
-  REQUEST_STATUS,
+  IBusyRequestDetailResponse,
+  IWeeklyNorms,
+  RequestStatus,
   requestStatusToBadge,
   requestStatusToTitle,
 } from '@lms/core'
+import { CollapseBox, CollapseItem } from '@lms/ui'
+import { capitalizeFirstLetter, formatDateTimeWithTimeZone } from '@lms/utils'
+import { MyRequestAPI } from '@pages/api/my-request'
+import dayjs from 'dayjs'
+import { useRouter } from 'next/router'
+import toast from 'react-hot-toast'
 
-import { REQUEST_TYPE } from '@lms/core'
-import { IBusyRequestDetailResponse, IWeeklyNorms } from 'src/type/my-request'
 import { confirmDialog, useAppDispatch } from '@Lms/contexts'
+import { REQUEST_TYPE } from '@lms/core'
 import { SAPPBadge } from '@lms/ui'
 import { formatRecurringSchedule } from '@utils/request'
-import { RequestStatus } from 'src/type/my-request/enum'
 
 export interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>

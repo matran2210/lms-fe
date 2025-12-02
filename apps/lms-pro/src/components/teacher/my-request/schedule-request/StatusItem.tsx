@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter } from '@utils/index'
+import { capitalizeFirstLetter } from '@lms/utils'
 import clsx from 'clsx'
 import React from 'react'
 

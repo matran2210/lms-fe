@@ -15,11 +15,11 @@ import { StatusRequestSchedule } from '@lms/core'
 import { useQuery } from 'react-query'
 import { TeacherAPI } from '@pages/api/teacher'
 import clsx from 'clsx'
-import { sappFormatDate } from '@utils/index'
 import InfoItem from './InfoItem'
 import StatusItem from './StatusItem'
 import { useRouter } from 'next/router'
 import { SappDrawer } from '@lms/ui'
+import { sappFormatDate } from '@lms/utils'
 
 interface IProps {
   open: boolean

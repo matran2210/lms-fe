@@ -1,13 +1,10 @@
-import { SappBreadCrumbs } from '@lms/ui'
-import {FullScreenLayout} from '@lms/ui'
-import { TEST_TYPE } from '@lms/core'
-import { useRouter } from 'next/router'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { ITabs } from '@lms/core'
-import TableQuestions from 'src/pages/courses/quiz/your-answers-detail/TableQuestions'
-import {SappLoading } from '@lms/ui'
+import { ITabs, TEST_TYPE } from '@lms/core'
+import { FullScreenLayout, SappBreadCrumbs, SappLoading } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
+import { useRouter } from 'next/router'
 import { PageLink } from 'src/constants/routers'
+import { CoursesAPI } from 'src/pages/api/courses'
+import TableQuestions from 'src/pages/courses/quiz/your-answers-detail/TableQuestions'
 
 const TestResultDetail = () => {
   const router = useRouter()
@@ -55,7 +52,7 @@ const TestResultDetail = () => {
     },
     {
       link: linkTest,
-      title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type]}`,
+      title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type as keyof typeof TEST_TYPE] ?? ''}`,
     },
     {
       link: '#',
