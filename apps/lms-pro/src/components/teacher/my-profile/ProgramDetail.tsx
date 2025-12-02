@@ -1,15 +1,13 @@
+import { Icon } from '@lms/assets'
+import { ISubjectItem, IUser, useAppSelector, userReducer } from '@lms/contexts'
+import { PROGRAM } from '@lms/core'
+import { SappCollapse } from '@lms/ui'
+import { UserApi } from '@pages/api/user'
+import { Divider } from 'antd'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import MyProfileAPI from 'src/pages/api/profile'
-import { useAppSelector } from '@lms/contexts'
-import { userReducer } from '@lms/contexts'
-import { Icon } from '@lms/assets'
-import { Divider } from 'antd'
 import AttempItem from './SubjectInformation/AttempItem'
-import { ISubjectItem, IUser } from '@lms/contexts'
-import { UserApi } from '@pages/api/user'
-import { PROGRAM } from '@lms/core'
-import { SappCollapse } from '@lms/ui'
 
 interface IProps {
   typeProgram: PROGRAM
@@ -126,7 +124,7 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
       <div>
         {subjects?.subjects?.map((subject: ISubjectItem, index: number) => {
           const courseTabData = user.course_tab_groups?.[
-            typeProgram
+            typeProgram as keyof typeof user.course_tab_groups
           ]?.user_hubspot_examination_subjects?.find(
             (item) => item.examination_subject.subject.id === subject.id,
           )

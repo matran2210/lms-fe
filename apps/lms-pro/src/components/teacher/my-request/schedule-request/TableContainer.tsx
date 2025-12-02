@@ -4,12 +4,7 @@ import {
   StatusRequestSchedule,
   TeacherKey,
 } from '@lms/core'
-import {
-  ActionCell,
-  SappActionCell,
-  SappTable,
-  TooltipParagraph,
-} from '@lms/ui'
+import { SappActionCell, SappTable, TooltipParagraph } from '@lms/ui'
 import { ColumnsType } from 'antd/es/table'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'

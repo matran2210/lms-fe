@@ -1,15 +1,12 @@
-import { SappBreadCrumbs } from '@lms/ui'
-import {FullScreenLayout} from '@lms/ui'
-import { TEST_TYPE } from '@lms/core'
-import { useRouter } from 'next/router'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { ITabs } from '@lms/core'
-import TestResultPage from 'src/pages/courses/test/test-result/testResultPage'
-import { GRADE_STATUS, TitleSidebar } from '@lms/core'
 import { UserType } from '@lms/contexts'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { GRADE_STATUS, ITabs, TEST_TYPE, TitleSidebar } from '@lms/core'
+import { FullScreenLayout, SappBreadCrumbs } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
+import { useRouter } from 'next/router'
 import { PageLink } from 'src/constants/routers'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { CoursesAPI } from 'src/pages/api/courses'
+import TestResultPage from 'src/pages/courses/test/test-result/testResultPage'
 
 const TestResultDetailTeacher = () => {
   const router = useRouter()
@@ -56,7 +53,7 @@ const TestResultDetailTeacher = () => {
     },
     {
       link: linkTest,
-      title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type]}`,
+      title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type as keyof typeof TEST_TYPE]}`,
     },
     {
       link: '#',
