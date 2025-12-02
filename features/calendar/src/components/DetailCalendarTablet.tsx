@@ -12,6 +12,7 @@ import { IEvent } from "sapp-common-package/dist/types";
 import CourseTree from "./CourseTree";
 import FloatingCloseIcon from "./FloatingCloseIcon";
 import { useTailwindBreakpoint } from "../../../../libs/hooks";
+import { useFeature } from "../../../../libs/state";
 const { publicRuntimeConfig } = getConfig();
 export const { apiURL } = publicRuntimeConfig;
 
@@ -21,7 +22,7 @@ interface IProps {
 }
 
 const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
-  const router = useRouter();
+  const {router, calendarApi} = useFeature();
   const [data, setData] = useState<ICalendarDetail>();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -134,9 +135,7 @@ const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
     setLoading(true);
     try {
       if (!open?.data?.id) return;
-      const res = await (
-        await import("@pages/api/calendar")
-      ).default.getDetailEvent(open?.data?.id, open?.data?.type === "HOLIDAY");
+      const res = await calendarApi?.getDetailEvent(open?.data?.id, open?.data?.type === "HOLIDAY");
       setData(res.data);
     } finally {
       setLoading(false);
