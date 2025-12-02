@@ -1,6 +1,20 @@
 import { BlankAvatarImage } from '@lms/assets'
-import { activeNotesList3Level, clearNotifications, openCalculator3Level, pushNotes3Level, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
-import { CourseInfo, LANG_SIGNIN, MenuItemProps, ROUTES, TitleSidebar } from '@lms/core'
+import {
+  activeNotesList3Level,
+  clearNotifications,
+  openCalculator3Level,
+  pushNotes3Level,
+  useAppDispatch,
+  useAppSelector,
+  userReducer,
+} from '@lms/contexts'
+import {
+  CourseInfo,
+  LANG_SIGNIN,
+  MenuItemProps,
+  ROUTES,
+  TitleSidebar,
+} from '@lms/core'
 import { useNotification } from '@lms/hooks'
 import { trackGAEvent } from '@lms/utils'
 import { Divider } from 'antd'
@@ -380,7 +394,9 @@ export default function MenuItem({
           setSelectedTab={setSelectedTab}
           handleMarkAll={() => handleMarkAll(selectedTab)}
           handleMarkById={(ids: string[]) => handleMarkById(ids, selectedTab)}
-          handleUnMarkById={(ids: string[]) => handleUnMarkById(ids, selectedTab)}
+          handleUnMarkById={(ids: string[]) =>
+            handleUnMarkById(ids, selectedTab)
+          }
           handleBack={handleBack}
           isViewDetail={isViewDetail}
           setOpenNotification={setOpenNotification}

@@ -1,5 +1,12 @@
-
-import { ChangePasswordReq, ExaminationsResponse, ICreateDiscussionRequest, ICreateDiscussionResReact, ICreateDiscussionUploadRequest, SendEmailReq, VerifyOtpReq } from "../../state";
+import {
+  ChangePasswordReq,
+  ExaminationsResponse,
+  ICreateDiscussionRequest,
+  ICreateDiscussionResReact,
+  ICreateDiscussionUploadRequest,
+  SendEmailReq,
+  VerifyOtpReq,
+} from "../../state";
 import { IResponse } from "./api-response";
 import { ExamInformation, IQuestion } from "./course";
 import {
@@ -35,7 +42,10 @@ export interface ICaseStudyAPI {
 }
 export interface ICoursesAPI {
   getCourseActivityTapById: (courseId: string, id: string) => Promise<unknown>;
-  getDiscussion: (class_id: string, course_section_id: string) => Promise<unknown>;
+  getDiscussion: (
+    class_id: string,
+    course_section_id: string,
+  ) => Promise<unknown>;
   getQuizAttemptsAnswer: ({
     attempt_id,
     question_id,
@@ -100,7 +110,16 @@ export interface ICoursesAPI {
     id: string | string[] | undefined,
     params?: object,
   ) => Promise<unknown>;
-  getCourseResults: (id: string | string[], params: object) => Promise<unknown>;
+  getCourseResults?: (
+    id: string | string[],
+    params: object,
+  ) => Promise<unknown>;
+  getCourseResults3Level?: (
+    id: string | string[],
+    page_index: number,
+    page_size: number,
+    params: object,
+  ) => Promise<unknown>;
   upgradeNowTrial: (id: string | string[] | undefined) => Promise<unknown>;
   activeCourse: (params: object) => Promise<unknown>;
   extendCourse: (params: object) => Promise<unknown>;
@@ -110,7 +129,9 @@ export interface ICoursesAPI {
   submitAllQuestion: (id: string, data?: unknown) => Promise<unknown>;
 }
 export interface IActivityAPI {
-  createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<unknown>;
+  createDiscussionComment: (
+    request: ICreateDiscussionRequest,
+  ) => Promise<unknown>;
   reactDiscussion: (data: ICreateDiscussionResReact) => Promise<unknown>;
   getQuizAttemptsAnswer: (id: string) => Promise<unknown>;
   updateDiscussionComment: (
@@ -179,7 +200,10 @@ export interface IClassAPI {
     params?: { page_index: number; page_size: number },
   ) => Promise<IResponse<IQuizResultList>>;
   getExamInfo: (id: string) => Promise<ExamInformation>;
-  changeExamDate: (id: string, data: FormData) => AxiosPromise<IResponse<unknown>>;
+  changeExamDate: (
+    id: string,
+    data: FormData,
+  ) => AxiosPromise<IResponse<unknown>>;
   getExams: (
     id: string,
     params: { page_index: number; page_size: number },

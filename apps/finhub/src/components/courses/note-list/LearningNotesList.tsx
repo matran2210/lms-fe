@@ -261,10 +261,10 @@ export default function LearningNotesList({
         containerDiv.clientHeight + containerDiv.scrollTop ===
           containerDiv.scrollHeight &&
         (courseId || queryId) &&
-        notesListStatus
+        notesListStatus &&
+        (notesListData?.meta?.total_records ?? 0) > pageIndex
       ) {
-        (notesListData?.meta?.total_records ?? 0) > pageIndex &&
-          fetchData(params)
+        fetchData(params)
       }
     }
 
@@ -405,147 +405,145 @@ export default function LearningNotesList({
           <div className="result-scroll mt-6 flex h-[calc(100vh-10rem)] flex-col gap-6 md:mt-4 md:gap-0">
             {!isEmpty(notesListData?.notes) ? (
               <>
-                {notesListData?.notes?.map(
-                  (note: ICourseSectionNoteItem, index) => {
-                    const isExpanded = expandedNotes.includes(note?.id)
-                    const isEdit = queryId === note?.course_section_id
-                    const handleEdit = () => {
-                      if (
-                        !getNotesData.some((item) => item.id.includes(note?.id))
-                      ) {
-                        handleOpenNote(note, false)
-                        handleEditNote(note?.id, note?.description, index)
-                        onClose?.()
-                      }
+                {notesListData?.notes?.map((note: ICourseSectionNoteItem) => {
+                  const isExpanded = expandedNotes.includes(note?.id)
+                  const isEdit = queryId === note?.course_section_id
+                  const handleEdit = () => {
+                    if (
+                      !getNotesData.some((item) => item.id.includes(note?.id))
+                    ) {
+                      handleOpenNote(note, false)
+                      handleEditNote(note?.id, note?.description)
+                      onClose?.()
                     }
-                    const handleView = async () => {
-                      const pathname = `${PageLink.SHORT_COURSE}/detail/${courseId}/activity/${note?.course_section_id}`
-                      await router.push({
-                        pathname,
-                        query: {
-                          note_id: note?.id,
-                        },
-                      })
-
-                      const noteForModal = {
-                        uuid: uuidv4(),
-                        id: note?.id,
-                        name: 'Note',
-                        description: note?.description,
-                      }
-                      const isExist = getNotesData.find(
-                        (item) => item.id === note?.id,
-                      )
-                      if (!isExist) {
-                        dispatch(pushNotes3Level(noteForModal))
-                      }
-                      handleOpenNote(note, true)
-                      handleDrawerClose()
-                    }
-
-                    const listAction = [
-                      ...(isEdit
-                        ? [
-                            {
-                              icon: <PencilV2Icon className="h-5 w-5" />,
-                              nameAction: 'Edit',
-                              action: handleEdit,
-                            },
-                          ]
-                        : []),
-                      {
-                        icon: <DeleteIcon />,
-                        nameAction: 'Delete',
-                        action: () => handleDelete(note?.id),
+                  }
+                  const handleView = async () => {
+                    const pathname = `${PageLink.SHORT_COURSE}/detail/${courseId}/activity/${note?.course_section_id}`
+                    await router.push({
+                      pathname,
+                      query: {
+                        note_id: note?.id,
                       },
-                    ]
+                    })
 
-                    return (
-                      <div
-                        className="cursor-pointer rounded-2xl hover:bg-primary-50 md:p-4"
-                        key={note?.id}
-                        onClick={handleView}
-                      >
-                        <div className="flex justify-between">
-                          <div className="mr-4 line-clamp-1 text-sm font-semibold text-gray-800 md:text-base">
-                            {note?.name}
-                          </div>
-                          <div onClick={(e) => e.stopPropagation()}>
-                            <ActionCellV2
-                              icon={<EllipsisIconV2 />}
-                              listAction={listAction}
-                            />
-                          </div>
+                    const noteForModal = {
+                      uuid: uuidv4(),
+                      id: note?.id,
+                      name: 'Note',
+                      description: note?.description,
+                    }
+                    const isExist = getNotesData.find(
+                      (item) => item.id === note?.id,
+                    )
+                    if (!isExist) {
+                      dispatch(pushNotes3Level(noteForModal))
+                    }
+                    handleOpenNote(note, true)
+                    handleDrawerClose()
+                  }
+
+                  const listAction = [
+                    ...(isEdit
+                      ? [
+                          {
+                            icon: <PencilV2Icon className="h-5 w-5" />,
+                            nameAction: 'Edit',
+                            action: handleEdit,
+                          },
+                        ]
+                      : []),
+                    {
+                      icon: <DeleteIcon />,
+                      nameAction: 'Delete',
+                      action: () => handleDelete(note?.id),
+                    },
+                  ]
+
+                  return (
+                    <div
+                      className="cursor-pointer rounded-2xl hover:bg-primary-50 md:p-4"
+                      key={note?.id}
+                      onClick={handleView}
+                    >
+                      <div className="flex justify-between">
+                        <div className="mr-4 line-clamp-1 text-sm font-semibold text-gray-800 md:text-base">
+                          {note?.name}
                         </div>
-                        <div
-                          className="mt-1 hidden items-center text-sm font-normal text-gray-400 md:flex "
-                          onClick={() => handleDrawerClose()}
-                        >
-                          <SappBreadcrumbNotLink
-                            paths={[...note?.course_section_path].reverse()}
+                        <div onClick={(e) => e.stopPropagation()}>
+                          <ActionCellV2
+                            icon={<EllipsisIconV2 />}
+                            listAction={listAction}
                           />
                         </div>
-                        <div className="mt-1 text-sm font-normal text-gray-800 md:mt-4 md:text-base">
-                          <div
-                            ref={(el) => {
-                              if (
-                                el &&
-                                note?.description?.length > 230 &&
-                                !noteHeights[note?.id]
-                              ) {
-                                // Đo chiều cao ngay khi component mount
-                                setTimeout(() => {
-                                  measureNoteHeight(note?.id, el)
-                                }, 0)
-                              }
-                            }}
-                            className="overflow-hidden transition-all duration-300 ease-in-out"
-                            style={{
-                              maxHeight:
-                                note?.description?.length > 230
-                                  ? isExpanded
-                                    ? noteHeights[note?.id]?.full
-                                      ? `${noteHeights[note?.id].full}px`
-                                      : 'none'
-                                    : noteHeights[note?.id]?.collapsed
-                                      ? `${noteHeights[note?.id].collapsed}px`
-                                      : '4.5rem'
-                                  : undefined,
+                      </div>
+                      <div
+                        className="mt-1 hidden items-center text-sm font-normal text-gray-400 md:flex "
+                        onClick={() => handleDrawerClose()}
+                      >
+                        <SappBreadcrumbNotLink
+                          paths={[...note?.course_section_path].reverse()}
+                        />
+                      </div>
+                      <div className="mt-1 text-sm font-normal text-gray-800 md:mt-4 md:text-base">
+                        <div
+                          ref={(el) => {
+                            if (
+                              el &&
+                              note?.description?.length > 230 &&
+                              !noteHeights[note?.id]
+                            ) {
+                              // Đo chiều cao ngay khi component mount
+                              setTimeout(() => {
+                                measureNoteHeight(note?.id, el)
+                              }, 0)
+                            }
+                          }}
+                          className="overflow-hidden transition-all duration-300 ease-in-out"
+                          style={{
+                            maxHeight:
+                              note?.description?.length > 230
+                                ? isExpanded
+                                  ? noteHeights[note?.id]?.full
+                                    ? `${noteHeights[note?.id].full}px`
+                                    : 'none'
+                                  : noteHeights[note?.id]?.collapsed
+                                    ? `${noteHeights[note?.id].collapsed}px`
+                                    : '4.5rem'
+                                : undefined,
+                          }}
+                        >
+                          <span
+                            className={`whitespace-pre-wrap break-all ${
+                              !isExpanded &&
+                              note?.description?.length > 230 &&
+                              !noteHeights[note?.id]
+                                ? 'line-clamp-3'
+                                : ''
+                            }`}
+                          >
+                            {note?.description}
+                          </span>
+                        </div>
+                        {note?.description?.length > 230 && (
+                          <button
+                            className="block text-sm font-normal text-gray-400 transition-colors duration-200 hover:text-gray-600 md:text-base"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              toggleExpand(note?.id)
                             }}
                           >
-                            <span
-                              className={`whitespace-pre-wrap break-all ${
-                                !isExpanded &&
-                                note?.description?.length > 230 &&
-                                !noteHeights[note?.id]
-                                  ? 'line-clamp-3'
-                                  : ''
-                              }`}
-                            >
-                              {note?.description}
-                            </span>
-                          </div>
-                          {note?.description?.length > 230 && (
-                            <button
-                              className="block text-sm font-normal text-gray-400 transition-colors duration-200 hover:text-gray-600 md:text-base"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                toggleExpand(note?.id)
-                              }}
-                            >
-                              {isExpanded ? 'Show less' : 'Show more'}
-                            </button>
-                          )}
-                        </div>
-                        <div className="mt-2 flex md:mt-4">
-                          <div className="text-sm font-normal text-gray-400">
-                            {format(note?.updated_at, 'dd/MM/yyyy HH:mm')}
-                          </div>
+                            {isExpanded ? 'Show less' : 'Show more'}
+                          </button>
+                        )}
+                      </div>
+                      <div className="mt-2 flex md:mt-4">
+                        <div className="text-sm font-normal text-gray-400">
+                          {format(note?.updated_at, 'dd/MM/yyyy HH:mm')}
                         </div>
                       </div>
-                    )
-                  },
-                )}
+                    </div>
+                  )
+                })}
               </>
             ) : (
               <div className="flex min-h-[calc(100vh-40rem)] items-center justify-center lg:min-h-[calc(100vh-14rem)]">
