@@ -1,6 +1,13 @@
 import { AltArrowLeft, MenuDotsIcon, CloseIconV2 } from '@lms/assets'
 import { UserType } from '@lms/contexts'
-import { GRADING_METHOD, IAtempt, IRequirement, LAYOUT, QUESTION_TYPES, TEST_ATTEMPT_TYPE } from '@lms/core'
+import {
+  GRADING_METHOD,
+  IAtempt,
+  IRequirement,
+  LAYOUT,
+  QUESTION_TYPES,
+  TEST_ATTEMPT_TYPE,
+} from '@lms/core'
 import { FullScreenLayout, SappLoadingGlobal, Tooltip } from '@lms/ui'
 import { ExplanationPackageV2 } from 'explanation-package'
 import { useRouter } from 'next/router'
@@ -179,24 +186,26 @@ const Explanation = () => {
             </button>
           </Tooltip>
         </div>
-        <ExplanationPackageV2
-          getActiveQuestion={getActiveQuestion}
-          activeQuestion={{
-            ...activeQuestion,
-            solution: activeQuestion?.solution,
-            requirements: activeQuestion?.requirements.map(
-              (req: IRequirement) => ({
-                ...req,
-                explanation: req.explanation,
-              }),
-            ),
-            // ...(isUserViewAnswersDetailAndEssay && {
-            //   grading_method: GRADING_METHOD.MANUAL,
-            // }),
-          }}
-          document_id={''}
-          handleDownload={handleDownload}
-        />
+        {!loading && activeQuestion && (
+          <ExplanationPackageV2
+            getActiveQuestion={getActiveQuestion}
+            activeQuestion={{
+              ...activeQuestion,
+              solution: activeQuestion?.solution,
+              requirements: activeQuestion?.requirements.map(
+                (req: IRequirement) => ({
+                  ...req,
+                  explanation: req.explanation,
+                }),
+              ),
+              // ...(isUserViewAnswersDetailAndEssay && {
+              //   grading_method: GRADING_METHOD.MANUAL,
+              // }),
+            }}
+            document_id={''}
+            handleDownload={handleDownload}
+          />
+        )}
       </FullScreenLayout>
     </SappLoadingGlobal>
   )

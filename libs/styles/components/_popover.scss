@@ -39,3 +39,10 @@
     }
   }
 }
+
+.support-center-popover {
+  .ant-popover-content {
+    @apply -bottom-7 right-14;
+  }
+}
+

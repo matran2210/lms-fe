@@ -1,17 +1,17 @@
-import dynamic from 'next/dynamic'
-import { AnimationImage } from '@lms/assets'
+import dynamic from "next/dynamic";
+import { AnimationImage } from "@lms/assets";
 
 const Player = dynamic(
-  () => import('@lottiefiles/react-lottie-player').then((mod) => mod.Player),
+  () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
   {
     ssr: false,
   },
-)
+);
 
 const SappLoading = ({ className }: { className?: string }) => {
   return (
     <div
-      className={`fixed z-[9999] block h-full w-full bg-white backdrop-blur-[2000px] ${className ?? ''}`}
+      className={`fixed z-[9999] block h-full w-full bg-white backdrop-blur-[2000px] ${className ?? ""}`}
     >
       <Player
         src={AnimationImage}
@@ -21,7 +21,7 @@ const SappLoading = ({ className }: { className?: string }) => {
         speed={3}
       />
     </div>
-  )
-}
+  );
+};
 
-export default SappLoading
+export default SappLoading;
