@@ -191,7 +191,7 @@ const ExaminationInfo = ({
   };
   const { exams } = useSelectExams({classKey: classId, api: {
     getExams: classApi.getExams
-  },
+    },
   courseId: undefined});
 
   const handleChangeExamDate = async () => {
@@ -295,7 +295,7 @@ const ExaminationInfo = ({
         isShowFooter={isEdit && !isEmpty(exams?.data)}
         btnSubmitTile={btnSubmitTile}
         cancelButtonCaption={cancelButtonCaption}
-        handleBack={handleBack}
+        handleBack={() => handleBack()}
         handleSubmit={handleChangeExamDate}
         loading={isChangingLoad}
         placement={placement}
