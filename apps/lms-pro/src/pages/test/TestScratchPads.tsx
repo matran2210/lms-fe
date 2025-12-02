@@ -1,10 +1,16 @@
 import { CloseIconNote, CloseModalIcon, Triangle } from '@lms/assets'
 import { IExhibit, ScratchPadValue } from '@lms/core'
-import { EditorReader, FileViewer, ModalResizeable, MovableWindow } from '@lms/ui'
+import {
+  EditorReader,
+  FileViewer,
+  ModalResizeable,
+  MovableWindow,
+} from '@lms/ui'
 import Calculator from '@lms/ui/components/calculator/index'
 import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
 import ScratchPatch from './scratchPatch'
+import { CalculatorModal } from '@lms/feature-courses'
 interface IProps {
   openScratchPad: any[]
   onFocusingPad: string
@@ -32,9 +38,7 @@ const TestScratchPads = ({
   setScratchPadValues,
   exhibitText = 'Exhibit',
 }: IProps) => {
-  const handleChangeScratchPad = (
-    e: ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleChangeScratchPad = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
 
     const index = scratchPadValues?.findIndex(
@@ -61,34 +65,11 @@ const TestScratchPads = ({
   return openScratchPad.map((e, index: number) => {
     if (e.type === 'calculator') {
       return (
-        <MovableWindow
-          position={{
-            width: '344px',
-            height: 'fit-content',
-            top: 'calc(25% - 150px)',
-            left: 'calc(25% - 200px)',
-          }}
+        <CalculatorModal
           key={e.id}
           onClick={() => setOnFocusingPad(e.id)}
-          zIndex={
-            onFocusingPad === e?.id ? openScratchPad?.length + 500 : index + 500
-          }
-        >
-          <div className="absolute left-0 top-0 h-full w-fit rounded-xl">
-            <div
-              className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-gray-300 bg-gray-100 px-4 py-3"
-              style={{
-                boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-              }}
-            >
-              <div className="text-sm font-bold">Calculator</div>
-              <button onClick={() => handleCloseScratchPad(e)}>
-                <CloseModalIcon />
-              </button>
-            </div>
-            <Calculator />
-          </div>
-        </MovableWindow>
+          onClose={() => handleCloseScratchPad(e)}
+        />
       )
     } else if (e.type === 'scratch_pad') {
       return (
