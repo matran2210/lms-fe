@@ -8,7 +8,7 @@ import {
   TEST_TYPE,
 } from "@lms/core";
 import { ButtonPrimary, ButtonSecondary, ButtonText } from "@lms/ui";
-import { capitalizeFirstLetter, formatTimeMinToHhMm, isQuizExpired, trackGAEvent } from "@lms/utils";
+import { capitalizeFirstLetter, formatTimer, isQuizExpired, trackGAEvent } from "@lms/utils";
 import { Select } from "antd";
 import dayjs from "dayjs";
 import { isNull } from "lodash";
@@ -42,7 +42,7 @@ const TestModal = ({
   activeCourse,
   is_passed_course,
 }: IProps) => {
-  const {router, courseApi, classApi, pageLink} = useFeature();
+  const {router, courseApi, classApi } = useFeature();
   const isSubmitted =
     data?.quiz?.attempt && data?.quiz?.attempt?.status === "SUBMITTED";
   const isUnsubmitted =
@@ -69,11 +69,10 @@ const TestModal = ({
     created_at?: Date;
     number_of_attempt?: number;
   }>();
-  const [isFocus, setIsFocus] = useState<boolean>(false);
+  const [isFocus] = useState<boolean>(false);
   const [openResource, setOpenPopup] = useState(false);
   const [remainingTime, setRemainingTime] = useState<number>();
   const remainingTimeLastAttempt = useRef<number | null>(null);
-  const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false);
 
   const quiz = data?.quiz;
   const isLimited = !!quiz.is_limited;
@@ -151,7 +150,6 @@ const TestModal = ({
           );
         }
 
-        setIsExpiredLastAttempt(isExpired);
         const isContinueAttempt = results?.[0]?.status === "IN_PROGRESS";
         if (isContinueAttempt && !isExpired) {
           localStorage.setItem(
@@ -683,7 +681,7 @@ const TestModal = ({
                   label="Time Allowed:"
                   value={
                     data?.quiz?.quiz_timed
-                      ? formatTimeMinToHhMm(data?.quiz?.quiz_timed * 60)
+                      ? formatTimer(data?.quiz?.quiz_timed * 60)
                       : "Unlimited"
                   }
                 />

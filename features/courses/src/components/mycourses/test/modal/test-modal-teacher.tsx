@@ -9,7 +9,7 @@ import {
 import { HookFormSelect, SappModalV3 } from "@lms/ui";
 import {
   capitalizeFirstLetter,
-  formatTimeMinToHhMm,
+  formatTimer,
   isQuizExpired,
   trackGAEvent
 } from "@lms/utils";
@@ -75,7 +75,7 @@ const TestModalTeacher = ({
   }>();
   const [isFocus, setIsFocus] = useState<boolean>(false);
   const [openResource, setOpenPopup] = useState(false);
-  const [openLastAttempt, setOpenLastAttempt] = useState(false);
+  const [setOpenLastAttempt] = useState<boolean>(false);
   const [remainingTime, setRemainingTime] = useState<number>();
   const remainingTimeLastAttempt = useRef<number>(0);
   const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false);
@@ -461,7 +461,7 @@ const TestModalTeacher = ({
                       />
                     </div>
                     <div className="text-[20px]">
-                      {formatTimeMinToHhMm(
+                      {formatTimer(
                         remainingTimeLastAttempt.current > 0
                           ? remainingTimeLastAttempt.current
                           : 0,
@@ -525,7 +525,7 @@ const TestModalTeacher = ({
                 <div className="text-gray-1">Time Allowed:</div>
                 <div className="pr-0.5 font-medium text-bw-1">
                   {data?.quiz?.quiz_timed
-                    ? formatTimeMinToHhMm(data?.quiz?.quiz_timed * 60)
+                    ? formatTimer(data?.quiz?.quiz_timed * 60)
                     : "Unlimited"}
                 </div>
               </div>
@@ -590,10 +590,10 @@ const TestModalTeacher = ({
                           }}
                           isResultSelect
                           maxMenuHeight={130}
-                          onFocus={(e) => {
+                          onFocus={() => {
                             setIsFocus(true);
                           }}
-                          onBlur={(e) => {
+                          onBlur={() => {
                             setIsFocus(false);
                           }}
                           isSearchable={false}
@@ -679,7 +679,7 @@ const TestModalTeacher = ({
                       <ClockIcon />
                     </div>
                     <div className="text-[20px]">
-                      {formatTimeMinToHhMm(
+                      {formatTimer(
                         remainingTimeLastAttempt?.current >= 0
                           ? remainingTimeLastAttempt.current
                           : 0,
