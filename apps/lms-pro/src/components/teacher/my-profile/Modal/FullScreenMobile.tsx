@@ -1,5 +1,4 @@
 import { SappDrawerV3 } from '@lms/ui'
-import Footer from '@components/layout/Footer'
 import React, { PropsWithChildren } from 'react'
 
 interface IProps {
