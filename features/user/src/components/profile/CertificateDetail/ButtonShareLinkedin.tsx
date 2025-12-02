@@ -1,7 +1,6 @@
 import { LinkedinIcon } from '@lms/assets'
 
 export const LinkedInShareButton = ({
-  certificateUrl,
   onOpenModalShare,
 }: {
   certificateUrl: string
@@ -29,7 +28,7 @@ export const LinkedInShareButton = ({
   return (
     <button
       onClick={onOpenModalShare}
-      className="items-centertext-base flex gap-2 font-semibold"
+      className="flex items-center gap-2 whitespace-nowrap text-base font-semibold underline"
     >
       <LinkedinIcon className="shrink-0" /> <span>Share with Linkedin</span>
     </button>
