@@ -189,7 +189,6 @@ export * from "./v2";
 export * from "./exam-infomation";
 export * from "./services";
 export * from "./file/index";
-export * from "./menu/index";
 export * from "./courses-3-level"
 export * from "./my-calendar"
 export * from "./my-request"

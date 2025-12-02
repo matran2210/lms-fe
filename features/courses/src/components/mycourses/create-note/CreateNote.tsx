@@ -51,7 +51,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
         name: 'Note',
         description: data?.[`description_${id ? id : uuid}`],
       }
-      const res = await courseApi.createNote(params)
+      const res = await courseApi.createNote(params) as { data: { id: string } }
       setActiveSectionId(res?.data?.id)
       // Cập nhật baseline để lần gõ tiếp theo hiển thị nút Save chính xác
       const savedValue = data?.[`description_${id ? id : uuid}`] || ''

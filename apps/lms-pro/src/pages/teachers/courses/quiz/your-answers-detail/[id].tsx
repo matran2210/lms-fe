@@ -49,7 +49,7 @@ const TestResultDetail = () => {
     },
     {
       link: linkTest,
-      title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type]}`,
+      title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type as keyof typeof TEST_TYPE]}`,
       disable: true,
     },
     {

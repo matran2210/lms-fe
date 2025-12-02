@@ -20,3 +20,4 @@ export { default as LearningResource } from "./learning-resourse";
 export * from "./filters"
 export * from "./examination-info"
 export * from './uploadFile/ModalUploadFile'
+export * from './tag/StatusTag'

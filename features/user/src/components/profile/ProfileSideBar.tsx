@@ -364,7 +364,6 @@ const ProfileSideBar = ({ page, children, authManager}: IProps) => {
                           }
                           type={"ontoggle"}
                           className={""}
-
                         />
                       </div>
                     )}

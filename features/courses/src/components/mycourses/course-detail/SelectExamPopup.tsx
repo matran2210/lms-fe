@@ -1,14 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
-import { useMutation } from 'react-query'
 import toast from 'react-hot-toast'
+import { useMutation } from 'react-query'
 
-import { SappModalV3 } from '@lms/ui'
-import { SAPPSelectV2 } from '@lms/ui'
+import { useFeature } from '@lms/contexts'
 import { ClassKey, RemindChoosingExam } from '@lms/core'
 import { useSelectExams } from '@lms/hooks'
-import { useFeature } from '@lms/contexts'
+import { SappModalV3, SAPPSelectV2 } from '@lms/ui'
 
 interface ISelectExamPopup {
   courseData: any
@@ -36,10 +34,10 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
   const { mutate: updateExamDate, isLoading } = useMutation({
     mutationFn: (formData: FormData) =>
       classApi.changeExamDate(router.query.courseId as string, formData),
-    onSuccess: (res) => {
+    onSuccess: (res: any) => {
       if (res.data.success) {
         setExamModal(false)
-        toast.success(res.data.data.message)
+        toast.success(res.data.data?.message)
       }
     },
   })
