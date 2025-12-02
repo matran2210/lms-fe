@@ -43,11 +43,7 @@ const TestEntranceResult = () => {
         >
           <CloseIcon className="h-4.5 w-4.5 transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary md:h-6 md:w-6" />
         </div>
-        <Layout
-          size="xl"
-          title="Entrance Test Detail"
-          showSidebar={false}
-        >
+        <Layout size="xl" title="Entrance Test Detail" showSidebar={false}>
           <div className="relative mt-4 md:mt-12" data-aos={ANIMATION.DATA_AOS}>
             {chartData && (
               <QuizResult

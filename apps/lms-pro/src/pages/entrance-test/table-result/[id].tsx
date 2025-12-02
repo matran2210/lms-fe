@@ -92,6 +92,7 @@ const TableEntranceResult = () => {
         fullWidth
         title="Entrance Test Result"
         showSidebar={false}
+        className="h-full"
       >
         <div className="">
           {modalResult?.questions?.data?.length > 0 && (

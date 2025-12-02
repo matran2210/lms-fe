@@ -4,19 +4,26 @@ import {
   CloseIconPreview,
   DocumentTextIcon,
   ResourceIcon,
-  StarCircleIcon
+  StarCircleIcon,
 } from '@lms/assets'
 import {
   activeNotesList,
   resetNotesList,
   useAppDispatch,
   useCourseContext,
-  UserType
+  UserType,
 } from '@lms/contexts'
 import { ANIMATION, ILearningOutcome, TEST_TYPE } from '@lms/core'
 import { CardMenuItem, PopupLockContent, TestModal } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { BottomMenu, CtaTrial, Layout, LearningResource, SappBreadCrumbs, SappDrawerV3 } from '@lms/ui'
+import {
+  BottomMenu,
+  CtaTrial,
+  Layout,
+  LearningResource,
+  SappBreadCrumbs,
+  SappDrawerV3,
+} from '@lms/ui'
 import { buildQueryString, formatDate } from '@lms/utils'
 import { Alert, Divider, Skeleton } from 'antd'
 import clsx from 'clsx'
@@ -182,8 +189,7 @@ const CoursePartDetail = () => {
         router?.query?.id || undefined,
       )
       setLearningOutcome(res?.data)
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   const handleOpenNotesList = () => {
@@ -426,11 +432,7 @@ const CoursePartDetail = () => {
     courseId: string,
     caseStudyId: string,
   ) => {
-    await CoursesAPI.caseStudyProgress(
-      router.query.id,
-      courseId,
-      caseStudyId,
-    )
+    await CoursesAPI.caseStudyProgress(router.query.id, courseId, caseStudyId)
   }
 
   useEffect(() => {
@@ -509,10 +511,7 @@ const CoursePartDetail = () => {
     }
   }, [isLoading, loadingChapter])
   return (
-    <Layout
-      title="Course Part Detail"
-      showSidebar={isAlwaysShowSidebar}
-    >
+    <Layout title="Course Part Detail" showSidebar={isAlwaysShowSidebar}>
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
         <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
           <Alert
