@@ -174,6 +174,7 @@ const ProfilePage = () => {
             avatar={avatar}
             handleSetAvatar={handleSetAvatar}
             setReViewImageSrc={setReViewImageSrc}
+            appType={AppType.FINHUB}
           />
           <ProfileList isEdit={isEdit} />
         </>
@@ -197,7 +198,7 @@ const ProfilePage = () => {
     {
       key: 'sercurity',
       label: (
-        <TabHeaderItem icon={<Icon type="sercurity" />} title="Sercurity" />
+        <TabHeaderItem icon={<Icon type="sercurity" />} title="Security" />
       ),
       children: (
         <>
@@ -226,6 +227,7 @@ const ProfilePage = () => {
           avatar={avatar}
           handleSetAvatar={handleSetAvatar}
           setReViewImageSrc={setReViewImageSrc}
+          appType={AppType.FINHUB}
         />
       ),
       className:
@@ -315,7 +317,7 @@ const ProfilePage = () => {
     {
       key: 'sercurity',
       label: (
-        <TabHeaderItem icon={<Icon type="sercurity" />} title="Sercurity" />
+        <TabHeaderItem icon={<Icon type="sercurity" />} title="Security" />
       ),
       children: loginHistory && (
         <Collapse
@@ -373,6 +375,7 @@ const ProfilePage = () => {
                 isEdit={isEdit}
                 inputFileRef={inputFileRef}
                 setIsEdit={setIsEdit}
+                appType={AppType.FINHUB}
               />
               <div>
                 <Tabs
