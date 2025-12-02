@@ -26,6 +26,7 @@
     "@funktechno/texthighlighter": "^2.1.2",
     "@hookform/resolvers": "^3.3.2",
     "@lms/assets": "workspace:*",
+    "@lms/config-tailwind": "workspace:*",
     "@lms/contexts": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/feature-auth": "workspace:*",
@@ -41,6 +42,7 @@
     "@lms/utils": "workspace:*",
     "@lottiefiles/react-lottie-player": "^3.5.3",
     "@next/third-parties": "^14.2.5",
+    "@react-hook/resize-observer": "^2.0.2",
     "@react-native-async-storage/async-storage": "^1.19.5",
     "@reduxjs/toolkit": "^1.9.7",
     "@sentry/nextjs": "8",
@@ -74,6 +76,7 @@
     "keycloak-js": "^25.0.1",
     "lodash": "^4.17.21",
     "lottie-react": "^2.4.1",
+    "next": "^12.3.7",
     "next-compose-plugins": "^2.2.1",
     "next-i18next": "^13.2.2",
     "next-redux-wrapper": "^8.1.0",
@@ -102,9 +105,7 @@
     "socket.io-client": "^4.7.5",
     "usehooks-ts": "^3.1.0",
     "uuid": "13.0.0",
-    "zod": "^3.22.4",
-    "next": "^12.3.7",
-    "@lms/config-tailwind": "workspace:*"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",

@@ -23,7 +23,7 @@ let nextConfig = {
   productionBrowserSourceMaps: true,
   optimizeFonts: false,
   swcMinify: false, // BƯỚC 1: transpilePackages vẫn phải giữ để hỗ trợ
-transpilePackages: [
+  transpilePackages: [
     '@lms/ui',
     '@lms/core',
     '@lms/hooks',
@@ -41,7 +41,8 @@ transpilePackages: [
   ],
   webpack: (config, { isServer, defaultLoaders }) => {
     config.resolve.alias.canvas = false // RULE MỚI: Dùng Next.js's default Babel loader cho libs/ và features/
-    config.resolve.alias['styled-components'] = require.resolve('styled-components');
+    config.resolve.alias['styled-components'] =
+      require.resolve('styled-components')
     config.module.rules.push({
       test: /\.(ts|tsx)$/,
       include: [

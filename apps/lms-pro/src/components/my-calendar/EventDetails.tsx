@@ -1,10 +1,9 @@
-import { SappModal } from '@lms/ui'
 import { memo } from 'react'
-import { IEvent } from 'sapp-common-package/dist/types'
-import {SappIcon} from '@lms/ui'
+import { SappIcon } from '@lms/ui'
 import EventRowDetails from './EventRowDetails'
 import { SappModalV3 } from '@lms/ui'
-import { IPopupDetails } from 'src/type/my-calendar'
+import { IPopupDetails } from '@lms/core'
+import { IEvent } from 'sapp-common-package/dist/types'
 
 interface IProps {
   details: IPopupDetails | null
