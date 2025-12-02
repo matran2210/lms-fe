@@ -1,5 +1,5 @@
 import { AlertIcon } from '@lms/assets'
-import SappModalV2 from '@components/base/modal/SappModalV2'
+import { SappModalV2 } from '@lms/ui'
 import React, { Dispatch, SetStateAction } from 'react'
 
 interface IProps {

@@ -14,6 +14,7 @@ import {
   NumberToDayOfWeekMap,
   ProfilePages,
 } from '@lms/core'
+import { ClassCard } from '@lms/feature-class'
 import { LayoutTeacher } from '@lms/ui'
 import { Space } from 'antd'
 import dayjs from 'dayjs'

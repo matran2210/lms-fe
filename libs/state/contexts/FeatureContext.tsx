@@ -7,6 +7,7 @@ import {
   IActivityAPI,
   IAuthAPI,
   IAuthManager,
+  ICalendarAPI,
   ICaseStudyAPI,
   IClassAPI,
   ICourseActivityAPI,
@@ -32,6 +33,7 @@ interface FeatureContextProps {
   caseStudyApi: ICaseStudyAPI;
   entranceTestApi?: IEntranceTestAPI;
   eventTestApi?: IEventTestAPI;
+  calendarApi?: ICalendarAPI;
   submitQuizTest: (
     id: string,
     data: any,

@@ -17,21 +17,28 @@ export const ProfilePages = {
   ACCA: "acca",
 } as const;
 
-export type IProfilePages = (typeof ProfilePages)[keyof typeof ProfilePages]
+export type IProfilePages = (typeof ProfilePages)[keyof typeof ProfilePages];
 export interface IDeviceItem {
-  id: string
-  created_at: string
-  updated_at: string
-  ip: string
-  location: string
-  user_agent: UserAgent
-  user_id: string
-  is_current: boolean
+  id: string;
+  created_at: string;
+  updated_at: string;
+  ip: string;
+  location: string;
+  user_agent: UserAgent;
+  user_id: string;
+  is_current: boolean;
 }
 export interface UserAgent {
-  browserName: string
-  browserVersion: string
-  osName: string
-  osVersion: string
-  deviceType: string
+  browserName: string;
+  browserVersion: string;
+  osName: string;
+  osVersion: string;
+  deviceType: string;
+}
+export interface ICertificate {
+  certificate_url: string;
+  course: {
+    name: string;
+  };
+  id: string;
 }

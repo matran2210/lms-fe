@@ -5,23 +5,19 @@ import { buildQueryString } from "@lms/utils";
 import { Divider } from "antd";
 import clsx from "clsx";
 import dayjs, { Dayjs } from "dayjs";
-import getConfig from "next/config";
-import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { IEvent } from "sapp-common-package/dist/types";
 import CourseTree from "./CourseTree";
 import FloatingCloseIcon from "./FloatingCloseIcon";
 import { useTailwindBreakpoint } from "../../../../libs/hooks";
-const { publicRuntimeConfig } = getConfig();
-export const { apiURL } = publicRuntimeConfig;
-
+import { useFeature } from "../../../../libs/state";
 interface IProps {
   open: { isOpen: boolean; data: IEvent | null };
   setOpen: Dispatch<SetStateAction<{ isOpen: boolean; data: IEvent | null }>>;
 }
 
 const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
-  const router = useRouter();
+  const {router, calendarApi} = useFeature();
   const [data, setData] = useState<ICalendarDetail>();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -134,9 +130,7 @@ const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
     setLoading(true);
     try {
       if (!open?.data?.id) return;
-      const res = await (
-        await import("@pages/api/calendar")
-      ).default.getDetailEvent(open?.data?.id, open?.data?.type === "HOLIDAY");
+      const res = await calendarApi?.getDetailEvent(open?.data?.id, open?.data?.type === "HOLIDAY");
       setData(res.data);
     } finally {
       setLoading(false);
