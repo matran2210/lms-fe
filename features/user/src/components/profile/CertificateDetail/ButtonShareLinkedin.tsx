@@ -30,7 +30,7 @@ export const LinkedInShareButton = ({
       onClick={onOpenModalShare}
       className="flex items-center gap-2 whitespace-nowrap text-base font-semibold underline"
     >
-      <LinkedinIcon className="shrink-0" /> <span>Share with Linkedin1</span>
+      <LinkedinIcon className="shrink-0" /> <span>Share with Linkedin</span>
     </button>
   )
 }
