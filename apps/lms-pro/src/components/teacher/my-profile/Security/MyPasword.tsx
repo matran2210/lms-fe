@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import FullScreenMobile from '../Modal/FullScreenMobile'
 import ChangePassword from '../ChangePassword'
-import TeacherProfileCard from '@components/card/TeacherProfileCard'
 import { PencilFillV2Icon } from '@lms/assets'
+import TeacherProfileCard from '@components/common/TeacherProfileCard'
 
 interface IProps {
   setIsChangePassword: (isChangePassword: boolean) => void

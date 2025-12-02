@@ -1,10 +1,10 @@
-import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatField'
 import SappTeacherTextField from '@components/teacher/components/sapp-textfield/SappTeacherTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   confirmDialog,
   ICreateScheduleForm,
-  ICreateSchedulePayload, useAppDispatch
+  ICreateSchedulePayload,
+  useAppDispatch,
 } from '@lms/contexts'
 import {
   ANT_THEME_CONFIG,
@@ -14,9 +14,11 @@ import {
   CALENDAR_SIDEBAR_TITLE,
   CONFIRM_CANCEL,
   EVENT_REPEAT_TYPES,
-  EVENT_TYPES, REPEAT_TYPE
+  EVENT_TYPES,
+  REPEAT_TYPE,
 } from '@lms/core'
 import { HookFormDateRangeV2, SAPPButtonV2, SappIcon } from '@lms/ui'
+import HookFormEventRepeat from '@lms/ui/components/event-repeat/HookFormEventRepeatField'
 import { handleDisableDate, handleDisableTime } from '@lms/utils'
 import { SchedulesAPI } from '@pages/api/schedules'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'

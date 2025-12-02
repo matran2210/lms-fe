@@ -1,18 +1,14 @@
 import Calendar from '@components/my-calendar/Calendar'
 import EventDetails from '@components/my-calendar/EventDetails'
 import NewEventSidebar from '@components/my-calendar/NewEventSidebar'
+import { UserType } from '@lms/contexts'
+import { DATE_TIME_FORMAT, IPopupDetails, TitleSidebar } from '@lms/core'
+import { LayoutTeacher } from '@lms/ui'
 import dayjs from 'dayjs'
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { IEvent } from 'sapp-common-package/dist/types'
-import { DATE_TIME_FORMAT, TitleSidebar } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from '@lms/contexts'
-import { IPopupDetails } from 'src/type/my-calendar'
-import { LayoutTeacher } from '@lms/ui'
-import { CoursesAPI } from '@pages/api/courses'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
-import { PageLink } from 'src/constants/routers'
 
 const breadcrumbs = [
   {

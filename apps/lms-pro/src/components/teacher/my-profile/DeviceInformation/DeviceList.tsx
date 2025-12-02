@@ -1,12 +1,11 @@
-import { useEffect, useMemo, useState } from 'react'
-import { MY_COURSES } from '@lms/core'
-import UserApi from 'src/redux/services/User/user'
-import DeviceItem from './DeviceItem'
 import { Icon } from '@lms/assets'
-import { IDeviceItem } from '@lms/core'
+import { IDeviceItem, MY_COURSES } from '@lms/core'
 import { SappDrawerV2 } from '@lms/ui'
 import { calculateTimeAgo } from '@utils/helpers'
-import TeacherProfileCard from '@components/card/TeacherProfileCard'
+import { useEffect, useMemo, useState } from 'react'
+import UserApi from 'src/redux/services/User/user'
+import DeviceItem from './DeviceItem'
+import TeacherProfileCard from '@components/common/TeacherProfileCard'
 
 const DeviceList = () => {
   const [listDevices, setListDevices] = useState<IDeviceItem[]>()
