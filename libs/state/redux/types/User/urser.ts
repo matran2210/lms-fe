@@ -1,4 +1,4 @@
-import { IDeviceItem, IMetaData, IResponse, PinnedNotifications } from '@lms/core'
+import { IDeviceItem, IMetaData, IResponse, PinnedNotifications, PROGRAM } from '@lms/core'
 
 export interface ITemplateConfig {
   template_full: number
@@ -34,13 +34,7 @@ export interface IUser {
   main_class?: string[]
   reserve_retook_class?: string[]
   user_hubspot_program_infos?: IUserHubspotProgramInfo[]
-  course_tab_groups?:
-    | {
-        CMA?: ICourseTabGroup | undefined
-        ACCA?: ICourseTabGroup | undefined
-        CFA?: ICourseTabGroup | undefined
-      }
-    | undefined
+  course_tab_groups?: Partial<Record<PROGRAM, ICourseTabGroup>>;
   course_category_id?: string | undefined
   keycloak_user_id: string
   hubspot_contact_id?: string
@@ -248,4 +242,5 @@ export interface IUserAPI {
     getListDevicesV2: () => Promise<IDeviceItem[]>;
     getListHistory: ({ page_index, page_size, type }: any) => Promise<any>;
     getPinnedNotifications: () => Promise<PinnedNotifications>;
+    getUserPrograms?: (course_category_id: string | undefined) => Promise<any>;
 }

@@ -4,7 +4,7 @@ import { disableUnsavedChange } from 'src/redux/slice/Login/Login'
 import Countdown from './Countdown'
 import { IHeaderTestProps } from 'src/type/courses-3-level'
 import { Close } from '../icons'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import { ButtonSecondary } from '@lms/ui'
 
 export default function HeaderTest({
   checkUnSubmitAnswer,
@@ -23,7 +23,7 @@ export default function HeaderTest({
   return (
     <div className="relative z-50 flex min-h-[76px] items-center justify-between gap-4 bg-white px-4 py-3 shadow-search lg:px-8">
       <span
-        className="cursor-pointer overflow-hidden rounded-md bg-gray-17 p-2 text-bw-13"
+        className="bg-gray-17 cursor-pointer overflow-hidden rounded-md p-2 text-bw-13"
         onClick={(e) => {
           e.preventDefault()
           setOpenQuit(true)

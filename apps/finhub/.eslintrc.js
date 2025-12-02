@@ -1,3 +1,5 @@
+const { env } = require('process')
+
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -20,5 +22,9 @@ module.exports = {
     'no-empty-pattern': 'off',
     'no-useless-escape': 'off',
     'no-var': 'off',
+  },
+  env: {
+    browser: true,
+    es2021: true,
   },
 }

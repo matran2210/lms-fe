@@ -1,4 +1,4 @@
-import { ICourse } from '../courses'
+import { ICourse } from '@lms/core'
 
 export const allTypes = ['section', 'subsection', 'activity'] as const
 

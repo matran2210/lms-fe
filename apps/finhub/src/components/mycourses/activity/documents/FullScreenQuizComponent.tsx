@@ -1,8 +1,8 @@
-import React, { useRef, useEffect } from 'react'
+import { IActivityStateQuestion } from '@lms/contexts'
+import { GRADING_PREFERENCE, QUIZ_MODAL_WIDTH } from '@lms/core'
+import { ButtonCancelSubmit } from '@lms/ui'
+import React, { useEffect, useRef } from 'react'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
-import { IActivityStateQuestion } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
-import { GRADING_PREFERENCE, QUIZ_MODAL_WIDTH } from 'src/constants'
 
 interface FullScreenQuizComponentProps {
   modalOpen?: boolean

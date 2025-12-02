@@ -5,7 +5,6 @@ import axios, {
   Method,
 } from 'axios'
 import { toast } from 'react-hot-toast'
-import exceptions from './en.exceptions.json'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
 import Router from 'next/router'
 import {
@@ -13,7 +12,7 @@ import {
   COOKIE_INFO,
   ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
-  PageLink,
+  ExceptionErrorCode,
 } from '@lms/core'
 import { apiURL } from 'src/redux/services/httpService'
 import { deleteCookie, getCookie, setCookie } from '@lms/utils'
@@ -163,7 +162,7 @@ const toastExceptions = [
 ]
 
 // Map exceptions
-const formattedExceptions: { [key: string]: string } = exceptions.reduce(
+const formattedExceptions: { [key: string]: string } = ExceptionErrorCode.reduce(
   (acc: any, { code, message }) => {
     acc[code] = message
     return acc

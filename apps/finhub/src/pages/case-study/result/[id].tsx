@@ -16,6 +16,7 @@ import {
   ICaseStudyResult,
   ICratchPad,
   IExhibit,
+  IFile,
   IQuestionResult,
   IRequirement,
   ITopic,
@@ -543,7 +544,6 @@ const CaseStudyResult = () => {
 
   const handleChangeScratchPad = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
-    // id?: string,
   ) => {
     const { value } = e.target
     setScratchPadValues((prevState: { value: string }) => ({
@@ -908,7 +908,7 @@ const CaseStudyResult = () => {
                           event: React.ChangeEvent<
                             HTMLTextAreaElement | HTMLInputElement
                           >,
-                        ) => handleChangeScratchPad(event, e?.id)}
+                        ) => handleChangeScratchPad(event)}
                         className="sapp-text-area not-resizer h-[calc(100%-48px)] w-full rounded-b-xl rounded-t-none px-5 py-3 placeholder:text-sm placeholder:font-normal"
                       />
                       {/* </div> */}

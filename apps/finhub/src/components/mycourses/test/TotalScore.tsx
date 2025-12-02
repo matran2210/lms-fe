@@ -1,4 +1,4 @@
-import { formatNumber } from '@utils/formatNumber'
+import { formatNumber } from '@lms/utils'
 import { isNull, isUndefined } from 'lodash'
 import Image from 'next/image'
 interface IProps {

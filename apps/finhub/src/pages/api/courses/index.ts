@@ -1,7 +1,12 @@
 import { fetcher } from '@services/requestV2'
 import url from 'src/redux/services/Course/MyCourse/Test/url'
 import { apiURL } from 'src/redux/services/httpService'
-import { CourseDetail, IAnswerQuizLastestAttempt, IResponse, IScoreDetails } from '@lms/core'
+import {
+  CourseDetail,
+  IAnswerQuizLastestAttempt,
+  IResponse,
+  IScoreDetails,
+} from '@lms/core'
 export class CoursesAPI {
   static getNoteDetail(
     course_section_id: string | number,
@@ -414,7 +419,7 @@ export class CoursesAPI {
     })
   }
 
-  static getCourseResults(
+  static getCourseResults3Level(
     id: string | string[],
     page_index: number,
     page_size: number,
@@ -587,20 +592,18 @@ export const getActivityById = async (
     return responseActivity.data
   }
   responseActivity.data.tabs = []
-  const promises = []
-  for (const tab of responseTabs.data) {
-    promises.push(
-      new Promise(async (resolve, reject) => {
-        const responseTab = await fetcher(
-          `course-sections/${course_id}/tab/${tab.id}`,
-        )
-        if (responseTab?.data) {
-          return resolve(responseTab.data)
-        }
-        return reject('Tab Not Found')
-      }),
+  const promises = responseTabs.data.map(async (tab: any) => {
+    const responseTab = await fetcher(
+      `course-sections/${course_id}/tab/${tab.id}`,
     )
-  }
+
+    if (!responseTab?.data) {
+      throw new Error('Tab Not Found')
+    }
+
+    return responseTab.data
+  })
+
   responseActivity.data.tabs = await Promise.all(promises)
   return responseActivity.data
 }

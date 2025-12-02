@@ -1,11 +1,12 @@
-import { CertificateImg, Icon, NoCertificationIcon } from '@lms/assets';
-import { useDownloadImage } from '@lms/hooks';
-import { Divider, Table, TableProps } from 'antd';
-import React, { useLayoutEffect, useState } from 'react';
+import React from 'react';
+import { useLayoutEffect, useState } from 'react'
+import { Divider, Table, TableProps } from 'antd'
+import { CertificateImg, Icon, NoCertificationIcon } from '@lms/assets'
+import {useDownloadImage} from '@lms/hooks'
 
-import { sappFormatDate } from '@lms/utils';
-import clsx from 'clsx';
-import Image from 'next/image';
+import Image from 'next/image'
+import { sappFormatDate } from '@lms/utils'
+import clsx from 'clsx'
 import { useFeature } from '@lms/contexts';
 import PopUpCertificate from './popupCertificate/PopupCertificare';
 
@@ -29,8 +30,8 @@ interface ICertificate {
 }
 
 const Certificate = () => {
-  const { downloadImage } = useDownloadImage()
   const {authApi} = useFeature()
+  const { downloadImage } = useDownloadImage()
   const [certificateData, setCertificateData] = useState<
     ICertificate[] | undefined
   >(undefined)
@@ -50,7 +51,7 @@ const Certificate = () => {
   useLayoutEffect(() => {
     fetchChapterDetail()
   }, [])
-  const [certificateDataPopup, setCertificateDataPopup] = useState<any>()
+  const [certificateDataPopup, setCertificateDataPopup] = useState<unknown>()
 
   const columns: TableProps<ICertificate>['columns'] = [
     {

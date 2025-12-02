@@ -1,15 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { VALIDATE_PASSWORD } from "@lms/core";
-import { ButtonCancelSubmit, HookFormTextField } from "@lms/ui";
+import { ExceptionErrorCode, VALIDATE_PASSWORD } from "@lms/core";
 import { isEmpty } from "lodash";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-// import exceptions from "../../services/en.exceptions.json"; comment monorepo
-import { ButtonPrimary, ButtonSecondary } from "@lms/ui";
-import PasswordProfile from "./PasswordProfile";
-import { VALIDATE_MIN_LENGTH_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG, VALIDATE_REQUIRED } from "@lms/utils";
+import { ButtonCancelSubmit, ButtonSecondary, HookFormTextField } from "@lms/ui";
+import { ButtonPrimary } from "@lms/ui";
 import { useFeature } from "@lms/contexts";
+import { VALIDATE_MIN_LENGTH_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG, VALIDATE_REQUIRED } from "@lms/utils";
+import PasswordProfile from "./PasswordProfile";
 
 export interface IChangePassword {
   password: string;
@@ -82,7 +81,16 @@ const ChangePassword = ({ handleCancel }: IProp) => {
     try {
       await authApi.changeUserPassword(data.password);
       setOpenPopup(true);
-    } finally {
+    }catch (error: any) {
+      const errorCode = error?.response?.data?.error?.code
+      const errorMessage = ExceptionErrorCode.find(
+        (exception) => exception.code === errorCode,
+      )
+
+      setError('password', {
+        message: errorMessage?.message || '',
+      })
+    }  finally {
       setLoading(false);
     }
   };

@@ -3205,5 +3205,4 @@ export const OutgoingCallIcon = ({ className }: IIconProps) => {
   )
 }
 
-export { default as NotificationIcon } from './NotificationIcon'
 export { SadIcon } from './SadIcon'

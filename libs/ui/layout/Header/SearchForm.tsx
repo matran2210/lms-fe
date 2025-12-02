@@ -1,6 +1,6 @@
 import React, { useEffect, Dispatch, SetStateAction } from "react";
 import router, { useRouter } from "next/router";
-import { CourseSearchIcon } from '@lms/assets'
+import { CourseSearchIcon } from "@lms/assets";
 import { Controller, useFormContext } from "react-hook-form";
 
 interface IProps {
@@ -14,7 +14,7 @@ interface IProps {
   isCoursePage?: boolean;
   isTeacher?: boolean;
   redirectLink: string;
-  control: any
+  control: any;
 }
 
 const SearchForm = ({
@@ -28,11 +28,10 @@ const SearchForm = ({
   isCoursePage,
   isTeacher = false,
   redirectLink,
-  control
+  control,
 }: IProps) => {
-
   const { query, push } = useRouter();
-  const {  watch, setValue } = useFormContext();
+  const { watch, setValue } = useFormContext();
 
   useEffect(() => {
     if (!isTeacher) {

@@ -27,7 +27,7 @@
 @import './components/_input.scss';
 @import './components/_tooltip.scss';
 @import './components/drag-n-drop-question.scss';
-@import './components/sapp-modal-v3.scss';                          
+@import './components/sapp-modal-v3.scss';
 @import './components/_drawer.scss';
 @import './components/video.scss';
 @import './components/modalResizeable.scss';
@@ -1017,6 +1017,10 @@ p a {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+#floating-btn-divider {
+  @apply fixed bottom-[160px] right-[31px] hidden  h-[1px] w-[30px] items-center justify-center bg-gray-300 md:flex;
 }
 
 #floating-button-mkt-in-app {

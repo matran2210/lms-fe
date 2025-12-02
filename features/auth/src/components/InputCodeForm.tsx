@@ -65,7 +65,7 @@ const InputCodeForm = ({ error = '', email, token, api }: IInputCodeFormProps) =
     setLoading(true)
     try {
       const response = await api.sendEmail({ email })
-      if (!(response as any).success) {
+      if (!response?.success) {
         setErrorMessage('Resend code failed. Please try again')
         return
       }

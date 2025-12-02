@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { PageLink } from "@lms/core";
 import { Tooltip } from "../../common";
+import { useFeature } from "@lms/contexts";
 
 type IProps = {
   id: string;
@@ -16,7 +15,7 @@ const SappBreadcrumbNotLink = ({
   paths: IProps[];
   isTeacher?: boolean;
 }) => {
-  const router = useRouter();
+  const { router, pageLink } = useFeature();
   const getCourseId = router?.query?.courseId ?? router.query.id;
   const displayPaths = paths.filter((p) => p.type !== "ACTIVITY");
 
@@ -27,17 +26,17 @@ const SappBreadcrumbNotLink = ({
         switch (path.type) {
           case "PART":
             url = `${
-              isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
+              isTeacher ? pageLink.TEACHER_MY_COURSE : pageLink.COURSES
             }/${getCourseId}/section/${path?.id}`;
             break;
           case "CHAPTER":
             url = `${
-              isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
+              isTeacher ? pageLink.TEACHER_MY_COURSE : pageLink.COURSES
             }/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${path?.id}`;
             break;
           case "UNIT":
             url = `${
-              isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
+              isTeacher ? pageLink.TEACHER_MY_COURSE : pageLink.COURSES
             }/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`;
             break;
         }

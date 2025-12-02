@@ -1,7 +1,7 @@
 import { AlertTriagle } from '@lms/assets'
-import SappModalV3 from '@components/base/modal/SappModalV3'
+import { SOCIAL_LINK } from '@lms/core'
+import { SappModalV3 } from '@lms/ui'
 import dayjs from 'dayjs'
-import { SOCIAL_LINK } from 'src/constants'
 
 interface IProps {
   open: boolean

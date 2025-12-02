@@ -2,13 +2,13 @@ import { Dispatch, SetStateAction } from 'react'
 import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 import clsx from 'clsx'
-import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
-import { ANIMATION, DEFAULT_PAGE_SIZE } from 'src/constants'
 import { SectionField } from 'src/type/courses-3-level/course'
-import useDynamicLoading from 'src/hooks/use-dynamic'
 import { useInitialSections } from 'src/hooks/useInitialSections'
 import { useSectionData } from 'src/hooks/useSectionData'
 import { isEmpty } from 'lodash'
+import { ANIMATION, DEFAULT_PAGE_SIZE } from '@lms/core'
+import { useDynamicLoading } from '@lms/hooks'
+import { SAPPSelectV2 } from '@lms/ui'
 
 const DEFAULT_SELECT = [{ label: 'All Section', value: '' }]
 

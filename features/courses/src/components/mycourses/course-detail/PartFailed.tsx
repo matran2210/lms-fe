@@ -2,7 +2,7 @@ import { ConfirmIcon } from "@lms/assets";
 import { useCourseContext, useFeature } from "@lms/contexts";
 import { EAttemptStatus, GRADE_STATUS, GRADING_METHOD, IMyCourseDetail, TEST_TYPE } from "@lms/core";
 import { ButtonSecondary, ButtonText, SappModalV3 } from "@lms/ui";
-import { formatTimeMinToHhMm, getUserPrefix, roundNumber, trackGAEvent } from "@lms/utils";
+import { formatTimer, getUserPrefix, trackGAEvent } from "@lms/utils";
 import clsx from "clsx";
 import router from "next/router";
 import { useEffect, useMemo, useState } from "react";
@@ -59,7 +59,7 @@ const PartFailed = ({
     quizAttempt?.grading_method === GRADING_METHOD.MANUAL &&
     quizAttempt?.attempt?.grading_status === GRADE_STATUS.AWAITING_GRADING;
   const formattedTime = coursePart?.quiz?.quiz_timed
-    ? formatTimeMinToHhMm(coursePart?.quiz?.quiz_timed * 60)
+    ? formatTimer(coursePart?.quiz?.quiz_timed * 60)
     : "Unlimited";
 
   const checkFinished = useMemo(() => {
@@ -69,12 +69,12 @@ const PartFailed = ({
     return false;
   }, [coursePart?.quiz?.attempt]);
 
-  const countTimeSpent = (ratio_score: string) => {
-    const parts = ratio_score?.split("/");
-    const firstPoint = parseInt(parts?.[0] || "0", 10);
-    const secondPoint = parseInt(parts?.[1] || "0", 10);
-    return roundNumber((firstPoint / secondPoint) * 100) || 0;
-  };
+  // const countTimeSpent = (ratio_score: string) => {
+  //   const parts = ratio_score?.split("/");
+  //   const firstPoint = parseInt(parts?.[0] || "0", 10);
+  //   const secondPoint = parseInt(parts?.[1] || "0", 10);
+  //   return roundNumber((firstPoint / secondPoint) * 100) || 0;
+  // };
 
   const runOutAttemp =
     Number(
@@ -212,7 +212,7 @@ const PartFailed = ({
   //   trackGAEvent(`Click Title ${showTitleFinalTest}`)
   // }
 
-  const [labelResult, setLabelResult] = useState<string>("");
+  const [setLabelResult] = useState<string>("");
   const getAttemptStatus = () => {
     if (coursePart?.quiz?.grading_method === GRADING_METHOD.MANUAL) {
       if (coursePart?.quiz?.attempt?.status === EAttemptStatus.SUBMITTED) {
@@ -264,7 +264,7 @@ const PartFailed = ({
                   // }
                   value={
                     selectedResult?.total_attempt_time
-                      ? formatTimeMinToHhMm(selectedResult?.total_attempt_time)
+                      ? formatTimer(selectedResult?.total_attempt_time)
                       : "--"
                   }
                 />

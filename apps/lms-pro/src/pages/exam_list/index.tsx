@@ -2,7 +2,15 @@ import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { PencilV2Icon } from '@lms/assets'
 import { IExamInformation, TitleSidebar } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { ActionCellV2, ExaminationInfo, HeaderMobile, InfoItemProps, Layout, PaginationSappV2, SappTable } from '@lms/ui'
+import {
+  ActionCellV2,
+  ExaminationInfo,
+  HeaderMobile,
+  InfoItemProps,
+  Layout,
+  PaginationSappV2,
+  SappTable,
+} from '@lms/ui'
 import { getDuration } from '@lms/utils'
 import { UserKey } from '@pages/api/queryKey'
 import { UserApi } from '@pages/api/user'
@@ -12,7 +20,6 @@ import { useRouter } from 'next/router'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery, useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
-
 
 const ExamInformation = () => {
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =
@@ -226,11 +233,8 @@ const ExamInformation = () => {
     )
   }
   return (
-    <Layout
-      title={TitleSidebar.EXAM_LIST}
-      showSidebar={isAlwaysShowSidebar}
-    >
-      <div className="mb-4 mt-4 md:mb-0">
+    <Layout title={TitleSidebar.EXAM_LIST} showSidebar={isAlwaysShowSidebar}>
+      <div className="my-4">
         <HeaderMobile
           title={TitleSidebar.EXAM_LIST}
           showIcon={isTabletView || isMobileView}

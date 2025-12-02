@@ -18,7 +18,6 @@ import {
   GRADE_STATUS,
   GRADING_METHOD,
   IQuestion,
-  IQuestionResult,
   IQuestionResultResponse,
   IQuizSetting,
   RESPONSE_OPTION,
@@ -37,6 +36,7 @@ import { PageLink } from 'src/constants/routes'
 import { CoursesAPI, submitQuizTest } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
+import { IQuestionResult } from 'quiz-result-package/dist/type'
 
 type Props = {
   questions: IQuestion[]

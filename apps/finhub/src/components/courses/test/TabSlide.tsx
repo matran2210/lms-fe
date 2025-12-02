@@ -1,6 +1,6 @@
 import { ArrowIcon } from '@lms/assets'
 import { QUESTION_TYPES } from '@lms/core'
-import { PageLinkPagination } from '@lms/ui'
+import { ArrowIconV2, PageLinkPagination } from '@lms/ui'
 import clsx from 'clsx'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { FieldValues, UseFormSetValue } from 'react-hook-form'
@@ -243,7 +243,7 @@ const TabSlide = ({
                 'cursor-pointer',
               )}
             >
-              <ArrowIcon iconType={'teeny'}></ArrowIcon>
+              <ArrowIconV2></ArrowIconV2>
             </PageLinkPagination>
           </div>
         )}
@@ -374,7 +374,7 @@ const TabSlide = ({
                 'cursor-pointer',
               )}
             >
-              <ArrowIcon iconType={'teeny'} right={true}></ArrowIcon>
+              <ArrowIconV2 right={true}></ArrowIconV2>
             </PageLinkPagination>
           </div>
         )}

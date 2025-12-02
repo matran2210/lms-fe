@@ -4,6 +4,9 @@ import { SappBaseTable, SappModal } from "@lms/ui";
 import { trackGAEvent } from "@lms/utils";
 import { Dispatch, FC, SetStateAction } from "react";
 import ResultTableRows from "./ResultTableRows";
+import { Icon } from '@lms/assets'
+import { trackGAEvent } from "@lms/utils";
+import { SappBaseTable } from '@lms/ui/components/base';
 
 // define the props for the confirm dialog component
 export type ResultRowsModalProps = {

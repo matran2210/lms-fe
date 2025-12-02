@@ -1,3 +1,4 @@
+import TableQuestions from '@components/your-answers-detail/TableQuestions'
 import { EYourAnswerType, ITabs, TEST_TYPE } from '@lms/core'
 import { FullScreenLayout, SappBreadCrumbs, SappLoading } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
@@ -47,7 +48,7 @@ const TestResultDetail = () => {
     },
     {
       link: linkTest,
-      title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type]}`,
+      title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type as keyof typeof TEST_TYPE]}`,
       disable: true,
     },
     {

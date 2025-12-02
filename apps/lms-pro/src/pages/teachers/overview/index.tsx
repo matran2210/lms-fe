@@ -16,8 +16,6 @@ import { RequestProvider, UserType } from '@lms/contexts'
 import { ITabs } from '@lms/core'
 import { PageLink } from 'src/constants/routers'
 import { LayoutTeacher, TabHeaderItem } from '@lms/ui'
-import { CoursesAPI } from '@pages/api/courses'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
 
 const breadcrumbs: ITabs[] = [
   {
