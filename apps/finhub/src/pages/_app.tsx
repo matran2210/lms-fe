@@ -2,7 +2,17 @@ import Metadata from '@components/common/Metadata'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
 import PopupCompletedCourse from '@components/mycourses/PopupCompletedCourse'
 import '@fortune-sheet/react/dist/index.css'
-import { CourseProvider, FeatureProvider, PinnedNotifyProvider, SocketContext, store, useAppDispatch, wrapper } from '@lms/contexts'
+import {
+  CourseProvider,
+  FeatureProvider,
+  getCountUnRead,
+  PinnedNotifyProvider,
+  showNotification,
+  SocketContext,
+  store,
+  useAppDispatch,
+  wrapper,
+} from '@lms/contexts'
 import {
   ANIMATION,
   AppType,
@@ -38,15 +48,15 @@ import 'sapp-common-package/dist/index.css'
 import 'sapp-common-package/dist/sapp-editor.css'
 import 'sapp-notification/dist/index.css'
 import { io } from 'socket.io-client'
-import { MENU_BOTTOM, MENU_ITEMS, MENU_ITEMS_EVENT } from 'src/constants/menu-items'
+import {
+  MENU_BOTTOM,
+  MENU_ITEMS,
+  MENU_ITEMS_EVENT,
+} from 'src/constants/menu-items'
 import { PageLink } from 'src/constants/routes'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import { injectStore } from 'src/redux/services/httpService'
 import UserApi from 'src/redux/services/User/user'
-import {
-  getCountUnRead,
-  showNotification,
-} from 'src/redux/slice/Notification/Notification'
 import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
@@ -129,8 +139,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   useEffect(() => {
     if (socket) {
-      socket.on('connect', () => { })
-      socket.on('disconnect', () => { })
+      socket.on('connect', () => {})
+      socket.on('disconnect', () => {})
       socket?.on(SOCKET_EVENTS.NOTIFICATION_UNREAD, (data: any) => {
         localStorage.setItem(
           LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
@@ -271,8 +281,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       ].includes(router.pathname)
     ) {
       try {
-        dispatch(getCountUnRead())
-      } catch (error) { }
+        dispatch(getCountUnRead(NotificationAPI))
+      } catch (error) {}
     }
   }, [])
 
@@ -309,31 +319,34 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       <main>
         <Metadata />
         <AntConfigProvider>
-          <PinnedNotifyProvider router={router} api={{
-
-            getPinnedNotifications: UserApi.getPinnedNotifications,
-
-          }}>
-            <FeatureProvider value={{
-              courseApi: CoursesAPI,
-              questionApi: QuestionAPI,
-              uploadApi: UploadAPI,
-              userApi: UserApi,
-              notificationApi: NotificationAPI,
-              authApi: AuthAPI,
-              classApi: ClassAPI,
-              activityApi: ActivityAPI,
-              courseActivityApi: CourseActivityApi,
-              caseStudyApi: CaseStudyAPI,
-              submitQuizTest: submitQuizTest,
-              authManager: new AuthenticationManager(),
-              pageLink: PageLink,
-              menuItems: MENU_ITEMS,
-              menuItemsEvent: MENU_ITEMS_EVENT,
-              menuBottom: MENU_BOTTOM,
-              router: router,
-              fetcher: fetcher
-            }}>
+          <PinnedNotifyProvider
+            router={router}
+            api={{
+              getPinnedNotifications: UserApi.getPinnedNotifications,
+            }}
+          >
+            <FeatureProvider
+              value={{
+                courseApi: CoursesAPI,
+                questionApi: QuestionAPI,
+                uploadApi: UploadAPI,
+                userApi: UserApi,
+                notificationApi: NotificationAPI,
+                authApi: AuthAPI,
+                classApi: ClassAPI,
+                activityApi: ActivityAPI,
+                courseActivityApi: CourseActivityApi,
+                caseStudyApi: CaseStudyAPI,
+                submitQuizTest: submitQuizTest,
+                authManager: new AuthenticationManager(),
+                pageLink: PageLink,
+                menuItems: MENU_ITEMS,
+                menuItemsEvent: MENU_ITEMS_EVENT,
+                menuBottom: MENU_BOTTOM,
+                router: router,
+                fetcher: fetcher,
+              }}
+            >
               <CourseProvider router={router}>
                 <QueryClientProvider client={queryClient}>
                   <SocketContext.Provider value={socket}>

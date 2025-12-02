@@ -22,30 +22,30 @@ export interface IAuthManager {
   logout(): Promise<void>;
 }
 export interface IEventTestAPI {
-  get: (params: object) => Promise<unknown>;
-  getCount: () => Promise<unknown>;
+  get: (params: object) => Promise<any>;
+  getCount: () => Promise<any>;
 }
 export interface IEntranceTestAPI {
-  getEntranceCount: () => Promise<unknown>;
-  getListUnivers: () => Promise<unknown>;
-  getListUniversProgram: () => Promise<unknown>;
-  getListMajors: () => Promise<unknown>;
-  getListEngLevel: () => Promise<unknown>;
-  putLevel: (data: unknown) => Promise<unknown>;
+  getEntranceCount: () => Promise<any>;
+  getListUnivers: () => Promise<any>;
+  getListUniversProgram: () => Promise<any>;
+  getListMajors: () => Promise<any>;
+  getListEngLevel: () => Promise<any>;
+  putLevel: (data: any) => Promise<any>;
 }
 
 export interface ICaseStudyAPI {
   getTopicQuiz: (
     id: string | string[] | undefined,
     quiz_id: string | string[] | undefined,
-  ) => Promise<unknown>;
+  ) => Promise<any>;
 }
 export interface ICoursesAPI {
-  getCourseActivityTapById: (courseId: string, id: string) => Promise<unknown>;
+  getCourseActivityTapById: (courseId: string, id: string) => Promise<any>;
   getDiscussion: (
     class_id: string,
     course_section_id: string,
-  ) => Promise<unknown>;
+  ) => Promise<any>;
   getQuizAttemptsAnswer: ({
     attempt_id,
     question_id,
@@ -63,18 +63,18 @@ export interface ICoursesAPI {
     classId?: string,
     page_index?: number,
     params?: object,
-  ) => Promise<unknown>;
+  ) => Promise<any>;
   getCourseSectionList: (
     id: string | string[] | undefined,
     page_size: number,
     page_index?: number,
-  ) => Promise<unknown>;
+  ) => Promise<any>;
   getTopicDescription: (
     id: string | string[] | undefined,
     quiz_id?: string,
     class_user_id?: string,
     cache?: boolean,
-  ) => Promise<unknown>;
+  ) => Promise<any>;
   getQuizAttemptsTable: (
     id: string,
     {
@@ -87,58 +87,58 @@ export interface ICoursesAPI {
     data: IScoreDetails;
   }>;
   CACHE_GET_TOPIC_DESCRIPTION: {
-    [key: string]: unknown;
+    [key: string]: any;
   };
   getCourseNotesList: (
     page_index: number,
     page_size: number,
     params?: object,
-  ) => Promise<unknown>;
-  deleteCourseNoteList: (id: string) => Promise<unknown>;
+  ) => Promise<any>;
+  deleteCourseNoteList: (id: string) => Promise<any>;
   getDiscussionStudentInfo: (
     course_section_id: string,
     class_id: string,
     user_id: string,
-  ) => Promise<unknown>;
-  createNote: (params: object) => Promise<unknown>;
+  ) => Promise<any>;
+  createNote: (params: object) => Promise<any>;
   updateCourseNotesList: (
     id: string | undefined,
     params?: object,
-  ) => Promise<unknown>;
-  userGuideActive: () => Promise<unknown>;
+  ) => Promise<any>;
+  userGuideActive: () => Promise<any>;
   getCourseResource: (
     id: string | string[] | undefined,
     params?: object,
-  ) => Promise<unknown>;
+  ) => Promise<any>;
   getCourseResults?: (
     id: string | string[],
     params: object,
-  ) => Promise<unknown>;
+  ) => Promise<any>;
   getCourseResults3Level?: (
     id: string | string[],
     page_index: number,
     page_size: number,
     params: object,
-  ) => Promise<unknown>;
-  upgradeNowTrial: (id: string | string[] | undefined) => Promise<unknown>;
-  activeCourse: (params: object) => Promise<unknown>;
-  extendCourse: (params: object) => Promise<unknown>;
+  ) => Promise<any>;
+  upgradeNowTrial: (id: string | string[] | undefined) => Promise<any>;
+  activeCourse: (params: object) => Promise<any>;
+  extendCourse: (params: object) => Promise<any>;
   skipFoundation: (
     class_id: string | undefined,
   ) => Promise<{ success: boolean }>;
-  submitAllQuestion: (id: string, data?: unknown) => Promise<any>;
+  submitAllQuestion: (id: string, data?: any) => Promise<any>;
 }
 export interface IActivityAPI {
   createDiscussionComment: (
     request: ICreateDiscussionRequest,
-  ) => Promise<unknown>;
-  reactDiscussion: (data: ICreateDiscussionResReact) => Promise<unknown>;
-  getQuizAttemptsAnswer: (id: string) => Promise<unknown>;
+  ) => Promise<any>;
+  reactDiscussion: (data: ICreateDiscussionResReact) => Promise<any>;
+  getQuizAttemptsAnswer: (id: string) => Promise<any>;
   updateDiscussionComment: (
     id: string | undefined,
     params?: object,
-  ) => Promise<unknown>;
-  deleteDiscussion: (id: string) => Promise<unknown>;
+  ) => Promise<any>;
+  deleteDiscussion: (id: string) => Promise<any>;
 }
 
 export interface ICourseActivityAPI {
@@ -146,7 +146,7 @@ export interface ICourseActivityAPI {
     discussion_id,
     new_discussion_file,
     discussion_file_ids,
-  }: ICreateDiscussionUploadRequest) => Promise<unknown>;
+  }: ICreateDiscussionUploadRequest) => Promise<any>;
 }
 type QuestionDetailQueryDTO = {
   after_test: boolean;
@@ -159,29 +159,29 @@ export interface IQuestionAPI {
 }
 
 export interface INotificationAPI {
-  getCountUnRead: () => Promise<unknown>;
-  getNotification: (params: object) => Promise<unknown>;
-  getDetail: (id: string) => Promise<unknown>;
-  markAll: () => Promise<unknown>;
-  markById: (ids: string[], markRead: boolean) => Promise<unknown>;
+  getCountUnRead: () => Promise<any>;
+  getNotification: (params: object) => Promise<any>;
+  getDetail: (id: string) => Promise<any>;
+  markAll: () => Promise<any>;
+  markById: (ids: string[], markRead: boolean) => Promise<any>;
 }
 
 export interface IAuthAPI {
-  sendEmail: (request: SendEmailReq) => Promise<unknown>;
-  verifyOtp: (data: VerifyOtpReq) => Promise<unknown>;
-  changePassword: (data: ChangePasswordReq) => Promise<unknown>;
+  sendEmail: (request: SendEmailReq) => Promise<any>;
+  verifyOtp: (data: VerifyOtpReq) => Promise<any>;
+  changePassword: (data: ChangePasswordReq) => Promise<any>;
   updateUser: (
     full_name: string,
     avatar?: { [key: string]: string } | null,
   ) => Promise<IResponse<{ message: string }>>;
-  makeContactDefault: (id: string) => Promise<unknown>;
-  removeDevice: (session_id: string) => Promise<unknown>;
-  changeUserPassword: (current_password: string) => Promise<unknown>;
+  makeContactDefault: (id: string) => Promise<any>;
+  removeDevice: (session_id: string) => Promise<any>;
+  changeUserPassword: (current_password: string) => Promise<any>;
   verifyOTPPassword: (
     current_password: string,
     new_password: string,
     otp_code: string,
-  ) => Promise<unknown>;
+  ) => Promise<any>;
 }
 
 export interface IUploadAPI {
@@ -203,7 +203,7 @@ export interface IClassAPI {
   changeExamDate: (
     id: string,
     data: FormData,
-  ) => AxiosPromise<IResponse<unknown>>;
+  ) => AxiosPromise<IResponse<any>>;
   getExams: (
     id: string,
     params: { page_index: number; page_size: number },

@@ -1,14 +1,17 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react'
-import Icon from '@components/icons'
 import blankAvatar from '@assets/images/blank_avatar_notification.png'
 import Image from 'next/image'
 import { calculateTimeAgo } from '@utils/helpers'
-import { ANIMATION } from 'src/constants'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
 import NoData from '@components/common/NoData'
-import { trackGAEvent } from '@utils/google-analytics'
-import { containsKeyword, formatNotificationHTML } from 'src/utils/index'
+import { ANIMATION } from '@lms/core'
+import {
+  containsKeyword,
+  formatNotificationHTML,
+  trackGAEvent,
+} from '@lms/utils'
+import { Icon } from '@lms/assets'
 
 interface IProps {
   notifyLists: any[]

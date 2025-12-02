@@ -1,4 +1,4 @@
-import {FullScreenLayout} from '@lms/ui'
+import { FullScreenLayout } from '@lms/ui'
 import { TEST_TYPE } from '@lms/core'
 import { useGetDataQuery } from '@lms/utils'
 import { useRouter } from 'next/router'
@@ -43,7 +43,7 @@ const TestResultDetail = () => {
     },
     {
       link: linkTest,
-      title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type]}`,
+      title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type as keyof typeof TEST_TYPE]}`,
       disable: true,
     },
     {
