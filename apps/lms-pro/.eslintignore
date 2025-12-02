@@ -12,3 +12,4 @@ src/i18n/locales/*
 .eslintrc.js
 tailwind.config.js
 postcss.config.js
+next.config.js

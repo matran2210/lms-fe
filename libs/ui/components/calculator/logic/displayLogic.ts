@@ -1,4 +1,12 @@
-const displayLogic = (total, next, operation) => {
+interface DisplayResult {
+  expression: string;
+  result: string;
+}
+const displayLogic = (
+  total: string | null | undefined,
+  next: string | null | undefined,
+  operation: string | null | undefined,
+) => {
   let expression = "";
   let result = "0";
 
@@ -18,7 +26,7 @@ const displayLogic = (total, next, operation) => {
   return { expression, result };
 };
 
-export const formatNumberWithDot = (value) => {
+export const formatNumberWithDot = (value: string) => {
   if (!value) return "";
 
   // Nếu chuỗi không đúng định dạng số (vd: có chữ), trả về nguyên bản
@@ -40,14 +48,14 @@ export const formatNumberWithDot = (value) => {
 };
 
 // Format biểu thức, thay thế từng số trong chuỗi
-export const formatExpression = (expression) => {
+export const formatExpression = (expression?: string) => {
   if (!expression) return "";
 
   return expression.replace(/\d+(\.\d*)?/g, (num) => formatNumberWithDot(num));
 };
 
 // Format result
-export const formatResult = (value) => {
+export const formatResult = (value: string) => {
   if (!value) return "";
 
   // Nếu value không phải số hợp lệ, trả về nguyên bản

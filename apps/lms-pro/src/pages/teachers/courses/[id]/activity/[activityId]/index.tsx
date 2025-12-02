@@ -8,13 +8,41 @@ import {
   getDiscussion,
   resetQuizActivity,
   showPopupCompletedCourse,
-  useAppDispatch, useAppSelector,
+  useAppDispatch,
+  useAppSelector,
   useCourseContext,
-  UserType
+  UserType,
 } from '@lms/contexts'
-import { ANIMATION, EXHIBIT_TEXT_REPLACE, IActivity, ITabs, PROGRAM, SUFFIX_TYPE } from '@lms/core'
-import { CreateNote, Discussion, QuizDocument, TextDocument, VideoDocument } from '@lms/feature-courses'
-import { ActivitySkeleton, Calculator, EditorReader, FileViewer, LayoutTeacher, ModalResizeable, MovableWindow, SAPPBorder, SappButton, SappIcon, SappLoadingGlobal, Tooltip } from '@lms/ui'
+import {
+  ANIMATION,
+  EXHIBIT_TEXT_REPLACE,
+  IActivity,
+  ITabs,
+  PROGRAM,
+  SUFFIX_TYPE,
+} from '@lms/core'
+import {
+  CalculatorModal,
+  CreateNote,
+  Discussion,
+  QuizDocument,
+  TextDocument,
+  VideoDocument,
+} from '@lms/feature-courses'
+import {
+  ActivitySkeleton,
+  Calculator,
+  EditorReader,
+  FileViewer,
+  LayoutTeacher,
+  ModalResizeable,
+  MovableWindow,
+  SAPPBorder,
+  SappButton,
+  SappIcon,
+  SappLoadingGlobal,
+  Tooltip,
+} from '@lms/ui'
 import { trackGAEvent, truncateBySpace, truncateString } from '@lms/utils'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
@@ -156,8 +184,14 @@ const ActivityTeacherPage = () => {
       CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION = {}
       try {
         dispatch(courseActivityAction.setActivityState(activity))
-        dispatch(getDiscussion({api: CoursesAPI, id: router.query.id as string, sectionId: sectionId }))
-      } catch (error) { }
+        dispatch(
+          getDiscussion({
+            api: CoursesAPI,
+            id: router.query.id as string,
+            sectionId: sectionId,
+          }),
+        )
+      } catch (error) {}
     }
 
     return () => {
@@ -182,7 +216,7 @@ const ActivityTeacherPage = () => {
     }
   }, [router.events])
 
-  useEffect(() => { }, [
+  useEffect(() => {}, [
     endActivityRef.current,
     quizDocumentRef.current,
     observerRef.current,
@@ -263,7 +297,7 @@ const ActivityTeacherPage = () => {
         }),
       )
       setActiveButtonId(selector?.currentTabId)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
@@ -274,7 +308,7 @@ const ActivityTeacherPage = () => {
     try {
       dispatch(getCourseActivityTapById({ api: CoursesAPI, courseId, id }))
       setActiveButtonId(id)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   /**
@@ -419,27 +453,27 @@ const ActivityTeacherPage = () => {
 
   const breadcrumbsData: ITabs[] = breadcrumbsMenu?.data
     ? breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
-      const urlCourseDetail = `${PageLink.TEACHER_MY_COURSE}/${router.query.id}/section/${partId}`
-      switch (e.course_section_type) {
-        case 'PART':
-        case 'CHAPTER':
-        case 'UNIT':
-          return {
-            title: e?.name,
-            link: urlCourseDetail,
-          }
-        case 'ACTIVITY':
-          return {
-            title: e?.name,
-            link: '#',
-          }
-        default:
-          return {
-            title: e?.name,
-            link: `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query.id}`,
-          }
-      }
-    })
+        const urlCourseDetail = `${PageLink.TEACHER_MY_COURSE}/${router.query.id}/section/${partId}`
+        switch (e.course_section_type) {
+          case 'PART':
+          case 'CHAPTER':
+          case 'UNIT':
+            return {
+              title: e?.name,
+              link: urlCourseDetail,
+            }
+          case 'ACTIVITY':
+            return {
+              title: e?.name,
+              link: '#',
+            }
+          default:
+            return {
+              title: e?.name,
+              link: `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query.id}`,
+            }
+        }
+      })
     : []
 
   // const [sessionData, setSessionData] = useState<Array<any>>([])
@@ -502,35 +536,7 @@ const ActivityTeacherPage = () => {
             })}
             <>
               {selector?.calculator_status && (
-                <MovableWindow
-                  position={{
-                    width: '400px',
-                    height: '300px',
-                    top: 'calc(25% - 150px)',
-                    left: 'calc(25% - 200px)',
-                  }}
-                  zIndex={500}
-                  fixed
-                >
-                  <div className="absolute left-0 top-0  h-full w-full">
-                    <div
-                      className="flex h-10 w-full items-center justify-between rounded-t-md bg-gray-2 px-5"
-                      style={{
-                        boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-                      }}
-                    >
-                      <div className="text-sm font-normal">Calculator</div>
-                      <button
-                        onClick={() => {
-                          dispatch(closeCalculator())
-                        }}
-                      >
-                        <CloseIcon />
-                      </button>
-                    </div>
-                    <Calculator />
-                  </div>
-                </MovableWindow>
+                <CalculatorModal onClose={() => dispatch(closeCalculator())} />
               )}
             </>
           </>
@@ -539,10 +545,11 @@ const ActivityTeacherPage = () => {
             {/* Header */}
             <div className="bg-gray-3 px-6 ">
               <div
-                className={`flex w-full select-none items-center justify-between gap-4 py-6 ${activity?.course_outcomes?.length > 0
+                className={`flex w-full select-none items-center justify-between gap-4 py-6 ${
+                  activity?.course_outcomes?.length > 0
                     ? 'borderColor-default border-b'
                     : ''
-                  }`}
+                }`}
               >
                 <div className="text-2xl font-medium ">
                   <Tooltip
@@ -646,10 +653,9 @@ const ActivityTeacherPage = () => {
                               exhibitText={exhibitText}
                               attemptId={e?.quiz?.attempt?.id}
                               focusOnlyQuiz={{ id: '', open: false }}
-                              setFocusOnlyQuiz={() => { }}
+                              setFocusOnlyQuiz={() => {}}
                               isTeacher
                               number_of_attempts={0}
-        
                             />
                           </div>
                         )
@@ -699,21 +705,23 @@ const ActivityTeacherPage = () => {
                     <>
                       <SAPPBorder />
                       <div
-                        className={`pt-8 ${getPreviousTabId() ? 'pb-4' : 'pb-0'
-                          } `}
+                        className={`pt-8 ${
+                          getPreviousTabId() ? 'pb-4' : 'pb-0'
+                        } `}
                       >
                         <div className="text-base font-semibold">Resource:</div>
                         <ul className="list-disc text-base">
                           {activity?.files.map((e: any, index: number) => {
                             const isPreviewFile =
                               e.resource.suffix_type !==
-                              SUFFIX_TYPE.GENERAL_FILE &&
+                                SUFFIX_TYPE.GENERAL_FILE &&
                               e.resource.name.slice(-4) !== '.csv'
 
                             return (
                               <div
-                                className={`flex justify-between ${index === 0 ? 'mt-4' : 'mt-5'
-                                  }`}
+                                className={`flex justify-between ${
+                                  index === 0 ? 'mt-4' : 'mt-5'
+                                }`}
                                 key={index}
                               >
                                 <div className="flex">
@@ -734,16 +742,16 @@ const ActivityTeacherPage = () => {
                                       onClick={() => {
                                         isPreviewFile
                                           ? handleOpenScratchPad(
-                                            {
-                                              type: 'file',
-                                            },
-                                            e?.resource?.url,
-                                            e?.resource?.name,
-                                          )
+                                              {
+                                                type: 'file',
+                                              },
+                                              e?.resource?.url,
+                                              e?.resource?.name,
+                                            )
                                           : download(
-                                            e?.resource?.name,
-                                            e?.resource?.file_key,
-                                          )
+                                              e?.resource?.name,
+                                              e?.resource?.file_key,
+                                            )
 
                                         trackGAEvent('Click Open File Resource')
                                       }}
@@ -964,8 +972,9 @@ const ActivityTeacherPage = () => {
                     <div className="relative">
                       <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                         <div className="truncate">
-                          <span className="text-base font-semibold text-bw-1">{`${exhibitText} ${e?.index + 1
-                            }: `}</span>
+                          <span className="text-base font-semibold text-bw-1">{`${exhibitText} ${
+                            e?.index + 1
+                          }: `}</span>
                           {e?.name}
                         </div>
                       </div>

@@ -1,1 +1,1 @@
-export { default } from "./RequirementsTab";
+export { default as RequirementsTab } from "./RequirementsTab";

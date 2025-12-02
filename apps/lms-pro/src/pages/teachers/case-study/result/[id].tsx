@@ -20,8 +20,19 @@ import {
   PROGRAM,
   QUESTION_TYPES,
 } from '@lms/core'
+import { CalculatorModal } from '@lms/feature-courses'
 import { useMousePosition } from '@lms/hooks'
-import { Calculator, EditorReader, FileViewer, FullScreenLayout, HookFormTextArea, ModalResizeable, MovableWindow, SappButton, SappLoadingGlobal } from '@lms/ui'
+import {
+  Calculator,
+  EditorReader,
+  FileViewer,
+  FullScreenLayout,
+  HookFormTextArea,
+  ModalResizeable,
+  MovableWindow,
+  SappButton,
+  SappLoadingGlobal,
+} from '@lms/ui'
 import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@lms/ui/components/questionType/DragNDrop'
 import AddWordPreview from '@lms/ui/components/questionType/FillText'
@@ -712,36 +723,11 @@ const CaseStudyResultTeacher = () => {
             {openScratchPad?.map((e, index: number) => {
               if (e.type === 'calculator') {
                 return (
-                  <MovableWindow
-                    position={{
-                      width: '400px',
-                      height: 'fit-content',
-                      top: 'calc(25% - 150px)',
-                      left: 'calc(25% - 200px)',
-                    }}
-                    key={e?.id}
+                  <CalculatorModal
+                    key={e.id}
                     onClick={() => setOnFocusingPad(e?.id ?? '')}
-                    zIndex={
-                      onFocusingPad === e?.id
-                        ? openScratchPad?.length + 500
-                        : index + 500
-                    }
-                  >
-                    <div className="absolute left-0 top-0  h-full w-full border">
-                      <div
-                        className="flex h-10 w-full items-center justify-between bg-gray-2 px-5"
-                        style={{
-                          boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-                        }}
-                      >
-                        <div>Calculator</div>
-                        <button onClick={() => handleCloseScratchPad(e)}>
-                          <CloseIcon />
-                        </button>
-                      </div>
-                      <Calculator />
-                    </div>
-                  </MovableWindow>
+                    onClose={() => handleCloseScratchPad(e)}
+                  />
                 )
               } else if (e.type === 'scratch_pad') {
                 return (
@@ -880,7 +866,7 @@ const CaseStudyResultTeacher = () => {
                   className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
                   onClick={() => {
                     setAllowUnHighLight(!allowUnHighLight)
-                      setAllowHighLight(false)
+                    setAllowHighLight(false)
                   }}
                 >
                   <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6 ">

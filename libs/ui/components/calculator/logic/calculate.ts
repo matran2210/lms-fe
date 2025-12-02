@@ -1,10 +1,15 @@
 import operate from "./operate";
-
-function isNumber(item) {
+type Operator = "+" | "-" | "x" | "÷" | "%" | null;
+  interface CalcState {
+    total: string | null;
+    next: string | null;
+    operation: Operator;
+  }
+function isNumber(item: string) {
   return !!item.match(/[0-9]+/);
 }
 
-function calculate(obj, buttonName) {
+function calculate(obj: CalcState, buttonName: string) {
   if (buttonName === undefined) {
     return {};
   }
