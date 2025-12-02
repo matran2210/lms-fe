@@ -1,11 +1,12 @@
 import { CertificateImg, CopyIcon, Icon, SappLogoImage } from "@lms/assets";
 import { ButtonPrimary, ClickToCopyButton } from "@lms/ui";
-import { ICertificate } from "@pages/certificates/[id]";
 import Image from "next/image";
 import React, { useState } from "react";
 import { LinkedInShareButton } from "./ButtonShareLinkedin";
 import CertificateCard from "./CertificateCard";
 import ModalShareToLinkedin from "./ModalShareToLinkedin";
+import { ICertificate } from "@lms/core";
+import { Divider } from "antd";
 
 interface CertificateVerticalProps {
   certificate?: ICertificate;
@@ -29,7 +30,6 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
       <div className="flex h-full items-center gap-12 xl:gap-20">
         <div className="flex h-full w-[55%] items-center justify-center">
           {certificate?.certificate_url ? (
-            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={certificate?.certificate_url || ""}
               alt={certificate?.course.name}
@@ -67,7 +67,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
                 <p>issued by {issuedBy}!</p>
               </div>
             </div>
-            <div className="flex items-center justify-center gap-4">
+            <div className="flex items-center justify-center">
               <ButtonPrimary
                 size="medium"
                 icon={<Icon type="download" />}
@@ -77,15 +77,17 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
               >
                 Download
               </ButtonPrimary>
+              <Divider type="vertical" className="mx-4 !h-5 !border-gray-300" />
               <LinkedInShareButton
                 certificateUrl={certificate?.certificate_url || ""}
                 onOpenModalShare={onOpenModalShare}
               />
+              <Divider type="vertical" className="mx-4 !h-5 !border-gray-300" />
               <ClickToCopyButton
                 className="h-auto"
                 link={`${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`}
               >
-                <div className="cursor-pointer rounded-full hover:bg-gray-200">
+                <div className="cursor-pointer rounded-full bg-gray-200 p-2 ">
                   <CopyIcon />
                 </div>
               </ClickToCopyButton>

@@ -12,26 +12,20 @@ import { useRouter } from "next/router";
 import { CourseSectionType, TEST_TYPE_ENUM } from "@lms/core";
 import { LearningMode } from "@lms/core";
 import { buildQueryString } from "@lms/utils";
-import getConfig from "next/config";
 import { CloseDetailIcon, StatusDotIcon, ZoomIcon } from "@lms/assets";
 import { Divider } from "antd";
 import clsx from "clsx";
 import { ButtonPrimary, SappIcon } from "@lms/ui";
 import { SpinIcon } from "@lms/assets";
-const { publicRuntimeConfig } = getConfig();
-export const { apiURL } = publicRuntimeConfig;
+import { useFeature } from "../../../../libs/state";
 
 interface IProps {
   open: { isOpen: boolean; data: IEvent | null };
   setOpen: Dispatch<SetStateAction<{ isOpen: boolean; data: IEvent | null }>>;
-  calendarAPI: {
-    getEventSchedule: (params?: object | undefined) => Promise<any>;
-    getDetailEvent: (id: string, is_holiday: boolean) => Promise<any>;
-  };
 }
 
-const DetailCalendar = ({ open, setOpen, calendarAPI }: IProps) => {
-  const router = useRouter();
+const DetailCalendar = ({ open, setOpen }: IProps) => {
+  const { calendarApi, router } = useFeature();
   const [data, setData] = useState<ICalendarDetail>();
   const [loading, setLoading] = useState<boolean>(false);
   const [collapse, setCollapse] = useState<{ top: boolean; bottom: boolean }>({
@@ -143,7 +137,7 @@ const DetailCalendar = ({ open, setOpen, calendarAPI }: IProps) => {
     setLoading(true);
     try {
       if (!open?.data?.id) return;
-      const res = await calendarAPI.getDetailEvent(
+      const res = await calendarApi?.getDetailEvent(
         open?.data?.id,
         open?.data?.type === "HOLIDAY",
       );

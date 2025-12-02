@@ -5,17 +5,12 @@ import { buildQueryString } from "@lms/utils";
 import { Divider } from "antd";
 import clsx from "clsx";
 import dayjs, { Dayjs } from "dayjs";
-import getConfig from "next/config";
-import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { IEvent } from "sapp-common-package/dist/types";
 import CourseTree from "./CourseTree";
 import FloatingCloseIcon from "./FloatingCloseIcon";
 import { useTailwindBreakpoint } from "../../../../libs/hooks";
 import { useFeature } from "../../../../libs/state";
-const { publicRuntimeConfig } = getConfig();
-export const { apiURL } = publicRuntimeConfig;
-
 interface IProps {
   open: { isOpen: boolean; data: IEvent | null };
   setOpen: Dispatch<SetStateAction<{ isOpen: boolean; data: IEvent | null }>>;
