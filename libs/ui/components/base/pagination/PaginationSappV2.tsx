@@ -76,6 +76,7 @@ const PaginationSappV2 = ({
             onChange={(value) => handlePageChange(1, value)}
             options={options}
             className="custom-ant-select"
+            popupClassName="select-card-course"
             suffixIcon={<AntSelectIcon />}
             dropdownStyle={{ minWidth: 60 }}
           />
