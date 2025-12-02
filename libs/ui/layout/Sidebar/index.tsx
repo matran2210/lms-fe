@@ -27,8 +27,6 @@ export default function Sidebar({
   setOpenExaminationInfo,
 }: SidebarProps) {
   const {
-    courseApi,
-    notificationApi,
     pageLink,
     menuItems,
     menuItemsEvent,
