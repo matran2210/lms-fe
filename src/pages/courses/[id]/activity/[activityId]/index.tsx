@@ -685,6 +685,7 @@ const ActivityPage = () => {
                     setFocusOnlyQuiz,
                     handleSetCurrentVideo,
                     focusOnlyDiscussion,
+                    scrollRef,
                   }}
                 />
                 {/* Next/Prev Activities */}

@@ -45,6 +45,7 @@ interface IProps {
   setFocusOnlyQuiz: React.Dispatch<React.SetStateAction<IFocusQuiz>>
   handleSetCurrentVideo: (video: IVideo) => void
   focusOnlyDiscussion: boolean
+  scrollRef: React.RefObject<HTMLElement>
 }
 const CourseTabDocument = ({
   activity,
@@ -59,6 +60,7 @@ const CourseTabDocument = ({
   setFocusOnlyQuiz,
   handleSetCurrentVideo,
   focusOnlyDiscussion,
+  scrollRef,
 }: IProps) => {
   const selector = useAppSelector(courseActivityReducer)
   const quizDocumentRef = useRef<HTMLDivElement>(null)
@@ -79,6 +81,13 @@ const CourseTabDocument = ({
   const currentIndex = selector?.tabs?.findIndex(
     (tab) => tab?.id === selector?.currentTabId,
   )
+  const scrollToTop = () => {
+    if (scrollRef?.current) {
+      scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
   /**
    * Hàm xử lý khi thay đổi tab.
    * @param {string} id - ID của tab.
@@ -94,6 +103,7 @@ const CourseTabDocument = ({
         undefined,
         { shallow: true },
       )
+      scrollToTop()
       //   setActiveButtonId(id)
     } catch (error) {}
   }
