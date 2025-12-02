@@ -9,9 +9,9 @@ import {
   EVENT_REPEAT_TYPES,
   IBusyRequestDetailResponse,
   IWeeklyNorms,
-  RequestStatus,
-  requestStatusToBadge,
+   requestStatusToBadge,
   requestStatusToTitle,
+  ERequestStatus
 } from '@lms/core'
 import { CollapseBox, CollapseItem } from '@lms/ui'
 import { capitalizeFirstLetter, formatDateTimeWithTimeZone } from '@lms/utils'
@@ -47,7 +47,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
       />
     )
   }
-  const handleChangeRequestStatus = async (status: string) => {
+  const handleChangeERequestStatus = async (status: string) => {
     const schedule = requestDetail?.teacher_schedules?.[0]?.schedule
     const formattedBusyScheduleData = {
       event_name: requestDetail?.name ?? '',
@@ -168,7 +168,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
   const hasActionButton = useMemo(
     () =>
       [
-        requestStatusToTitle[E_REQUEST_STATUS.APPROVED].toLowerCase(),
+        requestStatusToTitle[E_REQUEST_STATUS.APPROVED]?.toLowerCase(),
         requestStatusToTitle[E_REQUEST_STATUS.PENDING].toLowerCase(),
       ].includes(requestDetail?.status.toLowerCase() ?? ''),
     [requestDetail?.status],
@@ -181,22 +181,22 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
     dispatch(
       confirmDialog.open({
         message: 'Do you want to cancel this request?',
-        onConfirm: () => handleChangeRequestStatus(RequestStatus.CANCEL),
+        onConfirm: () => handleChangeERequestStatus(ERequestStatus.CANCEL),
       }),
     )
   }
   const handleSubmit = () => {
     if (
-      requestDetail?.status.toLowerCase() == RequestStatus.PENDING.toLowerCase()
+      requestDetail?.status.toLowerCase() == ERequestStatus.PENDING.toLowerCase()
     ) {
       handleEdit()
     } else if (
       requestDetail?.status.toLowerCase() ==
-      RequestStatus.APPROVED.toLowerCase()
+      ERequestStatus.APPROVED.toLowerCase()
     ) {
       handleCancel()
     } else {
-      handleChangeRequestStatus(RequestStatus.APPROVED)
+      handleChangeERequestStatus(ERequestStatus.APPROVED)
     }
   }
 
@@ -217,21 +217,21 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
           message="Bạn có chắc chắn muốn hủy không"
           btnSubmitTile={
             requestDetail?.status.toLowerCase() ==
-            RequestStatus.PENDING.toLowerCase()
+            ERequestStatus.PENDING.toLowerCase()
               ? 'Edit'
               : 'Cancel'
           }
           btnCancelTitle={'Cancel'}
           showSubmitButton={
             requestDetail?.status.toLowerCase() ==
-              RequestStatus.PENDING.toLowerCase() ||
+              ERequestStatus.PENDING.toLowerCase() ||
             requestDetail?.status.toLowerCase() ==
-              RequestStatus.APPROVED.toLowerCase()
+              ERequestStatus.APPROVED.toLowerCase()
           }
           showCancelButton={
             ![
-              RequestStatus.PENDING.toLowerCase(),
-              RequestStatus.APPROVED.toLowerCase(),
+              ERequestStatus.PENDING.toLowerCase(),
+              ERequestStatus.APPROVED.toLowerCase(),
             ].includes(requestDetail?.status?.toLowerCase() ?? '')
           }
           confirmOnClose

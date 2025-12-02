@@ -1,21 +1,15 @@
-import { ButtonCancelSubmit } from "@lms/ui";
-import { HookFormTextField } from "@lms/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { VALIDATE_PASSWORD } from "@lms/core";
-import {
-  VALIDATE_MIN_LENGTH_PASSWORD,
-  VALIDATE_PASSWORD_REGEX_MSG,
-  VALIDATE_REQUIRED,
-} from "@utils/helpers/ValidateMessage";
+import { ButtonCancelSubmit, HookFormTextField } from "@lms/ui";
 import { isEmpty } from "lodash";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { AuthAPI } from "src/pages/api/profile";
 import { z } from "zod";
 // import exceptions from "../../services/en.exceptions.json"; comment monorepo
+import { ButtonPrimary, ButtonSecondary } from "@lms/ui";
 import PasswordProfile from "./PasswordProfile";
-import { ButtonSecondary } from "@lms/ui";
-import { ButtonPrimary } from "@lms/ui";
+import { VALIDATE_MIN_LENGTH_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG, VALIDATE_REQUIRED } from "@lms/utils";
+import { useFeature } from "@lms/contexts";
 
 export interface IChangePassword {
   password: string;
@@ -29,6 +23,7 @@ interface IProp {
 
 const ChangePassword = ({ handleCancel }: IProp) => {
   const [loading, setLoading] = useState(false);
+  const { authApi } = useFeature()
 
   /**
    * @description validate password
@@ -85,18 +80,8 @@ const ChangePassword = ({ handleCancel }: IProp) => {
   const onSubmit = async (data: IChangePassword) => {
     setLoading(true);
     try {
-      await AuthAPI.changeUserPassword(data.password);
+      await authApi.changeUserPassword(data.password);
       setOpenPopup(true);
-    } catch (error: any) {
-      const errorCode = error?.response?.data?.error?.code;
-      // const errorMessage = exceptions.find(
-      //   (exception) => exception.code === errorCode,
-      // );
-
-      const errorMessage = "";
-      setError("password", {
-        message: errorMessage?.message || "",
-      });
     } finally {
       setLoading(false);
     }

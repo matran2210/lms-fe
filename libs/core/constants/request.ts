@@ -1,5 +1,5 @@
-import { ISelect } from '@lms/core'
 import { E_REQUEST_STATUS, E_REQUEST_TYPE } from '../enums'
+import { ISelect } from '../types'
 
 export const requestStatusToTitle = {
   [E_REQUEST_STATUS.APPROVED]: 'Approved',

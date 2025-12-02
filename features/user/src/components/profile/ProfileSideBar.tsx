@@ -74,7 +74,7 @@ type Child =
   | ChildWithCMA
   | ChildWithCFA;
 
-const ProfileSideBar = ({ page, children, authManager, pageLink }: IProps) => {
+const ProfileSideBar = ({ page, children, authManager }: IProps) => {
   const router = useRouter();
 
   const getLabelFromChild = (child: Child): string => {
@@ -357,7 +357,6 @@ const ProfileSideBar = ({ page, children, authManager, pageLink }: IProps) => {
                           }
                           type={"ontoggle"}
                           className={""}
-
                         />
                       </div>
                     )}

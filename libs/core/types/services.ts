@@ -19,7 +19,7 @@ export interface IEventTestAPI {
   getCount: () => Promise<unknown>;
 }
 export interface IEntranceTestAPI {
-  getEntranceCount: () => Promise<unknown>;
+  getEntranceCount: () => Promise<any>;
   getListUnivers: () => Promise<unknown>;
   getListUniversProgram: () => Promise<unknown>;
   getListMajors: () => Promise<unknown>;
@@ -31,11 +31,11 @@ export interface ICaseStudyAPI {
   getTopicQuiz: (
     id: string | string[] | undefined,
     quiz_id: string | string[] | undefined,
-  ) => Promise<unknown>;
+  ) => Promise<any>;
 }
 export interface ICoursesAPI {
-  getCourseActivityTapById: (courseId: string, id: string) => Promise<unknown>;
-  getDiscussion: (class_id: string, course_section_id: string) => Promise<unknown>;
+  getCourseActivityTapById: (courseId: string, id: string) => Promise<any>;
+  getDiscussion: (class_id: string, course_section_id: string) => Promise<any>;
   getQuizAttemptsAnswer: ({
     attempt_id,
     question_id,
@@ -53,18 +53,18 @@ export interface ICoursesAPI {
     classId?: string,
     page_index?: number,
     params?: object,
-  ) => Promise<unknown>;
+  ) => Promise<any>;
   getCourseSectionList: (
     id: string | string[] | undefined,
     page_size: number,
     page_index?: number,
-  ) => Promise<unknown>;
+  ) => Promise<any>;
   getTopicDescription: (
     id: string | string[] | undefined,
     quiz_id?: string,
     class_user_id?: string,
     cache?: boolean,
-  ) => Promise<unknown>;
+  ) => Promise<any>;
   getQuizAttemptsTable: (
     id: string,
     {
@@ -83,23 +83,23 @@ export interface ICoursesAPI {
     page_index: number,
     page_size: number,
     params?: object,
-  ) => Promise<unknown>;
+  ) => Promise<any>;
   deleteCourseNoteList: (id: string) => Promise<unknown>;
   getDiscussionStudentInfo: (
     course_section_id: string,
     class_id: string,
     user_id: string,
-  ) => Promise<unknown>;
-  createNote: (params: object) => Promise<unknown>;
+  ) => Promise<any>;
+  createNote: (params: object) => Promise<any>;
   updateCourseNotesList: (
     id: string | undefined,
     params?: object,
-  ) => Promise<unknown>;
-  userGuideActive: () => Promise<unknown>;
+  ) => Promise<any>;
+  userGuideActive: () => Promise<any>;
   getCourseResource: (
     id: string | string[] | undefined,
     params?: object,
-  ) => Promise<unknown>;
+  ) => Promise<any>;
   getCourseResults: (id: string | string[], params: object) => Promise<unknown>;
   upgradeNowTrial: (id: string | string[] | undefined) => Promise<unknown>;
   activeCourse: (params: object) => Promise<unknown>;
@@ -107,17 +107,17 @@ export interface ICoursesAPI {
   skipFoundation: (
     class_id: string | undefined,
   ) => Promise<{ success: boolean }>;
-  submitAllQuestion: (id: string, data?: unknown) => Promise<unknown>;
+  submitAllQuestion: (id: string, data?: unknown) => Promise<any>;
 }
 export interface IActivityAPI {
-  createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<unknown>;
-  reactDiscussion: (data: ICreateDiscussionResReact) => Promise<unknown>;
-  getQuizAttemptsAnswer: (id: string) => Promise<unknown>;
+  createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<any>;
+  reactDiscussion: (data: ICreateDiscussionResReact) => Promise<any>;
+  getQuizAttemptsAnswer: (id: string) => Promise<any>;
   updateDiscussionComment: (
     id: string | undefined,
     params?: object,
-  ) => Promise<unknown>;
-  deleteDiscussion: (id: string) => Promise<unknown>;
+  ) => Promise<any>;
+  deleteDiscussion: (id: string) => Promise<any>;
 }
 
 export interface ICourseActivityAPI {
@@ -125,7 +125,7 @@ export interface ICourseActivityAPI {
     discussion_id,
     new_discussion_file,
     discussion_file_ids,
-  }: ICreateDiscussionUploadRequest) => Promise<unknown>;
+  }: ICreateDiscussionUploadRequest) => Promise<any>;
 }
 type QuestionDetailQueryDTO = {
   after_test: boolean;
@@ -142,7 +142,7 @@ export interface INotificationAPI {
   getNotification: (params: object) => Promise<unknown>;
   getDetail: (id: string) => Promise<unknown>;
   markAll: () => Promise<unknown>;
-  markById: (ids: string[], markRead: boolean) => Promise<unknown>;
+  markById: (ids: string[], markRead: boolean) => Promise<any>;
 }
 
 export interface IAuthAPI {
@@ -161,6 +161,7 @@ export interface IAuthAPI {
     new_password: string,
     otp_code: string,
   ) => Promise<unknown>;
+  getCertificate(pageSize: number, pageIndex: number): Promise<any>
 }
 
 export interface IUploadAPI {

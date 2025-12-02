@@ -225,7 +225,7 @@ export enum EAttemptStatus {
   FINISHED_GRADING = "FINISHED_GRADING",
   FINISHED = "FINISHED",
 }
-export enum RequestStatus {
+export enum ERequestStatus {
   OPEN = "OPEN",
   VIEWED = "Viewed",
   PENDING = "PENDING",

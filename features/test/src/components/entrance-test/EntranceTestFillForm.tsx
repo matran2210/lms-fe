@@ -59,7 +59,7 @@ const EntranceTestFillForm = ({
       .refine((data) => data?.value && data?.label, VALIDATE_REQUIRED),
   });
   const getListUniversities = async () => {
-    const res = await entranceTestApi?.getListUnivers();
+    const res = await entranceTestApi?.getListUnivers() as any
     let optionUnivers = [];
     for (let e of res?.data) {
       optionUnivers?.push({ value: e?.id, label: e?.name });
@@ -68,7 +68,7 @@ const EntranceTestFillForm = ({
     // return res?.data?.[0]
   };
   const getListUniverPrograms = async () => {
-    const res = await entranceTestApi?.getListUniversProgram();
+    const res = await entranceTestApi?.getListUniversProgram() as any
     let optionUniverProgram = [];
     for (let e of res?.data) {
       optionUniverProgram?.push({ value: e?.id, label: e?.name });
@@ -77,7 +77,7 @@ const EntranceTestFillForm = ({
     // return res?.data?.[0]
   };
   const getListMajors = async () => {
-    const res = await entranceTestApi?.getListMajors();
+    const res = await entranceTestApi?.getListMajors() as any
     let optionMajors = [];
     for (let e of res?.data) {
       optionMajors?.push({ value: e?.id, label: e?.name });
@@ -86,7 +86,7 @@ const EntranceTestFillForm = ({
     // return res?.data?.[0]
   };
   const getListEngLevel = async () => {
-    const res = await entranceTestApi?.getListEngLevel();
+    const res = await entranceTestApi?.getListEngLevel() as any
     let optionEngLevel = [];
     for (let e of res?.data) {
       optionEngLevel?.push({ value: e?.id, label: e?.name });
@@ -149,7 +149,7 @@ const EntranceTestFillForm = ({
       major_id: dataValue?.majors_id?.value,
       english_level_id: dataValue?.englishLevel_id?.value,
       university_id: dataValue?.univers_id?.value,
-    });
+    }) as any
 
     if (res?.success) {
       await dispatch(getMe(userApi)).unwrap();

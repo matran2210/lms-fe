@@ -37,8 +37,8 @@ export const debounce = <T extends (...args: any[]) => void>(
 };
 export const getUserPrefix = (
   isTeacher: boolean,
-  pageLink: { [key: string]: string },
-) => (isTeacher ? pageLink.TEACHERS : "");
+  pageLink?: { [key: string]: string },
+) => (isTeacher ? pageLink?.TEACHERS : "");
 
 /**
  * @description Return number percent with type: 80

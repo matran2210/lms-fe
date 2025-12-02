@@ -216,7 +216,7 @@ const Course = ({
       const params = {
         classId: foundation_class_id ? foundation_class_id : classInstance?.id,
       };
-      const res = await courseApi.activeCourse(params);
+      const res = await courseApi.activeCourse(params) as { success: boolean };
       if (res?.success) {
         router.push(
           `${userPrefix}/courses/my-course/${foundation_class_id || classInstance?.id}`,
@@ -231,7 +231,7 @@ const Course = ({
   }
   async function extendCourse() {
     try {
-      const res = await courseApi.extendCourse({ classId: classInstance?.id });
+      const res = await courseApi.extendCourse({ classId: classInstance?.id }) as { success: boolean };
       if (res?.success) {
         refetch();
         toast.success("Gia hạn hành công!");

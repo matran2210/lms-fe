@@ -1,9 +1,8 @@
-import { SappTable } from '@lms/ui'
-import { TEST_TYPE } from '@lms/core'
-import { getTimeFromInput } from '@utils/index'
+import { QuizActivity, TEST_TYPE } from '@lms/core'
+import { SappBaseTable } from '@lms/ui'
+import { getTimeFromInput } from '@lms/utils'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { QuizActivity } from '@lms/core'
 
 interface ResultQuizModalProps {
   quizActivities: QuizActivity[]
@@ -49,7 +48,7 @@ const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {
   }[]
 
   return (
-    <SappTable
+    <SappBaseTable
       headers={headers}
       hasCheck={false}
       isCheckedAll={false}
@@ -79,7 +78,7 @@ const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {
                 'font-medium text-[#050505]',
               )}
             >
-              {TEST_TYPE[row?.quiz_type]}
+              {TEST_TYPE[row?.quiz_type as keyof typeof TEST_TYPE]}
             </td>
 
             {/* Graded Activity */}
@@ -130,7 +129,7 @@ const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {
           </tr>
         )
       })}
-    </SappTable>
+    </SappBaseTable>
   )
 }
 

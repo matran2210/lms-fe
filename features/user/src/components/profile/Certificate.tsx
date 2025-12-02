@@ -1,14 +1,13 @@
-import React from 'react';
-import { useLayoutEffect, useState } from 'react'
-import { AuthAPI } from 'src/pages/api/profile'
-import PopUpCertificate from './popupCertificate'
-import { Divider, Table, TableProps } from 'antd'
-import { CertificateImg, Icon, NoCertificationIcon } from '@lms/assets'
-import {useDownloadImage} from '@lms/hooks'
+import { CertificateImg, Icon, NoCertificationIcon } from '@lms/assets';
+import { useDownloadImage } from '@lms/hooks';
+import { Divider, Table, TableProps } from 'antd';
+import React, { useLayoutEffect, useState } from 'react';
 
-import Image from 'next/image'
-import { sappFormatDate } from '@lms/utils'
-import clsx from 'clsx'
+import { sappFormatDate } from '@lms/utils';
+import clsx from 'clsx';
+import Image from 'next/image';
+import { useFeature } from '@lms/contexts';
+import PopUpCertificate from './popupCertificate/PopupCertificare';
 
 interface ICertificate {
   certificate: {
@@ -31,6 +30,7 @@ interface ICertificate {
 
 const Certificate = () => {
   const { downloadImage } = useDownloadImage()
+  const {authApi} = useFeature()
   const [certificateData, setCertificateData] = useState<
     ICertificate[] | undefined
   >(undefined)
@@ -39,7 +39,7 @@ const Certificate = () => {
 
   const fetchChapterDetail = async () => {
     try {
-      const res = await AuthAPI.getCertificate(1, 30)
+      const res = await authApi.getCertificate(1, 30)
       const certificate = res.data.certificates
       const userDetail = res.username
       setCertificateData(certificate)
@@ -56,7 +56,7 @@ const Certificate = () => {
     {
       title: 'Certificate',
       className: 'max-w-sm',
-      render: (record) => (
+    render: (record) => (
         <div
           className="group flex cursor-pointer items-center gap-2"
           onClick={() =>

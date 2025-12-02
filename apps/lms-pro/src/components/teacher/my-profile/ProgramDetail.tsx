@@ -123,7 +123,7 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
       <Divider className="my-4 md:my-6" />
       <div>
         {subjects?.subjects?.map((subject: ISubjectItem, index: number) => {
-          const courseTabData = user.course_tab_groups?.[
+          const courseTabData = user?.course_tab_groups?.[
             typeProgram as keyof typeof user.course_tab_groups
           ]?.user_hubspot_examination_subjects?.find(
             (item) => item.examination_subject.subject.id === subject.id,

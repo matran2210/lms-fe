@@ -1,15 +1,11 @@
 import { AlertIcon, IconCongrats } from "@lms/assets";
-import { useCourseContext } from "@lms/contexts";
+import { useCourseContext, useFeature } from "@lms/contexts";
 import { EAttemptStatus, IEventTest, MY_COURSES } from "@lms/core";
 import { CardCourse } from "@lms/feature-courses";
 import { ButtonSecondary, SappModalV3 } from "@lms/ui";
-import { formatTime } from "@lms/utils";
-import { CoursesAPI } from "@pages/api/courses";
-import { formatDate } from "@utils/helpers";
-import { isQuizExpired } from "@utils/helpers/quiz-test/helper";
+import { formatDate, formatTimer, isQuizExpired } from "@lms/utils";
 import { compareAsc } from "date-fns";
 import dayjs from "dayjs";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import ContentTestCongratution from "./ContentTestCongratution";
 
@@ -20,7 +16,7 @@ const EventTest = ({
   data: IEventTest;
   onRefetch: () => void;
 }) => {
-  const router = useRouter();
+  const {router, courseApi} = useFeature();
   const [open, setOpen] = useState<boolean>(false);
   const { setSubmitEventTest, submitEventTest } = useCourseContext();
   const [remainingTimeLastAttempt, setRemainingTimeLastAttempt] =
@@ -57,9 +53,9 @@ const EventTest = ({
 
   const handleSubmitQuestion = async () => {
     try {
-      const res = await CoursesAPI.submitAllQuestion(
+      const res = await courseApi.submitAllQuestion(
         data?.quiz_attempt_id as string,
-      );
+      )
       if (res.success) {
         await onRefetch();
         setSubmitEventTest(true);
@@ -72,10 +68,10 @@ const EventTest = ({
   };
 
   const timeTakenFormatted = data?.total_attempt_time
-    ? formatTime(data?.total_attempt_time)
+    ? formatTimer(data?.total_attempt_time)
     : 0;
   const timeAllowFormatted = data?.quiz_timed
-    ? formatTime(data?.quiz_timed * 60)
+    ? formatTimer(data?.quiz_timed * 60)
     : "Unlimited";
 
   const currentTime = Date.now();
@@ -245,7 +241,7 @@ const EventTest = ({
           <p
             className={`font-medium ${remainingTimeLastAttempt > 0 ? "text-gray-800" : "text-error"}`}
           >
-            {formatTime(
+           {formatTimer(
               remainingTimeLastAttempt > 0 ? remainingTimeLastAttempt : 0,
             )}
           </p>
@@ -339,9 +335,7 @@ const EventTest = ({
                     </div>
                     <div className="text-[20px]">
                       {formatTime(
-                        remainingTimeLastAttempt > 0
-                          ? remainingTimeLastAttempt
-                          : 0,
+                        new Date(Math.max(remainingTimeLastAttempt, 0) * 1000),
                       )}
                     </div>
                   </div>
