@@ -5,8 +5,8 @@ import {
 } from '@lms/contexts'
 import { ANIMATION, IQuestion, IVideo, video_url } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { SAPPRadio, SAPPVideo, SappModal } from '@lms/ui'
-import { debounce, formatTime, htmlToRaw } from '@lms/utils'
+import { SAPPRadio, SAPPVideo, SappIcon, SappModal } from '@lms/ui'
+import { debounce, formatTimer, htmlToRaw } from '@lms/utils'
 import clsx from 'clsx'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -351,85 +351,82 @@ const VideoDocument = ({
 
   return (
     <div data-aos={ANIMATION.DATA_AOS}>
-      {(videos as IVideo[])?.length > 1 && (
-        <div
-          className={clsx(
-            'mb-6 flex items-center justify-between gap-x-10 gap-y-2',
-          )}
-        >
-          <div className="flex items-center gap-8">
-            {(videos as IVideo[])?.length > 1 &&
-              videos?.map((v, i) => {
-                return (
-                  <label
-                    className=" flex cursor-pointer select-none items-center gap-2"
-                    key={v?.file?.id ?? i}
+      <div
+        className={clsx(
+          'mb-6 flex items-center justify-between gap-x-10 gap-y-2',
+        )}
+      >
+        <div className="flex items-center gap-8">
+          {(videos as IVideo[])?.length > 1 &&
+            videos?.map((v, i) => {
+              return (
+                <label
+                  className=" flex cursor-pointer select-none items-center gap-2"
+                  key={v?.file?.id ?? i}
+                >
+                  {/* Radio button for video selection */}
+                  <SAPPRadio
+                    onChange={() => debouncedHandleSetCurrentVideo.current(v)}
+                    {...(v?.file?.id === currentVideo?.file?.id
+                      ? {
+                          checked: true,
+                        }
+                      : { checked: false })}
+                    size={'small'}
+                  ></SAPPRadio>
+                  <span
+                    className={`radio-item-label  ${
+                      v?.file?.id === currentVideo?.file?.id
+                        ? 'text-bw-1'
+                        : 'text-gray-1'
+                    }`}
                   >
-                    {/* Radio button for video selection */}
-                    <SAPPRadio
-                      onChange={() => debouncedHandleSetCurrentVideo.current(v)}
-                      {...(v?.file?.id === currentVideo?.file?.id
-                        ? {
-                            checked: true,
-                          }
-                        : { checked: false })}
-                      size={'small'}
-                    ></SAPPRadio>
-                    <span
-                      className={`radio-item-label  ${
-                        v?.file?.id === currentVideo?.file?.id
-                          ? 'text-bw-1'
-                          : 'text-gray-1'
-                      }`}
-                    >
-                      Video {i + 1}
-                    </span>
-                  </label>
+                    Video {i + 1}
+                  </span>
+                </label>
+              )
+            })}
+        </div>
+        <div className="group relative z-30 hidden cursor-pointer select-none items-center md:flex">
+          {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (
+            <>
+              {/* Icon for course video timeline */}
+              <SappIcon
+                className="fill-bw-1 group-hover:text-primary"
+                icon="course_video_timeline"
+              ></SappIcon>
+              <span className="ml-2 text-bw-1 group-hover:text-primary">
+                Timeline
+              </span>
+            </>
+          ) : (
+            <></>
+          )}
+
+          <div className="z-50 max-w-[6.25rem]: absolute right-0 bottom-0 hidden w-[25.75rem] py-1 !bg-transparent translate-y-full animate-fade-in-overlay group-hover:block">
+            <div className="h-full max-h-[25.75rem] relative rounded-lg py-4 flex-1 snap-y overflow-y-auto bg-white border border-gray-17 shadow-single-dialog overflow-hidden ">
+              {timeLine?.map((e, i) => {
+                return (
+                  <div
+                    key={i}
+                    className="mx-3 grid grid-cols-[1.3fr,6fr] rounded-[4px] gap-3 p-3 text-sm text-[#050505] hover:bg-[#F9F9F9] hover:text-primary-2"
+                    onClick={() => {
+                      handleGoTimeline(e?.time)
+                    }}
+                  >
+                    <div className="mim-w-[62px] text-[#3964EA]">
+                      {formatTimer(e?.time)}
+                    </div>
+                    <div className="text-inherit line-clamp-2 text-[#050505]">
+                      {htmlToRaw(e?.text)}
+                    </div>
+                  </div>
                 )
               })}
-          </div>
-          <div className="group relative z-30 hidden cursor-pointer select-none items-center md:flex">
-            {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (
-              <>
-                {/* Icon for course video timeline */}
-                {/* lỗi monorepo dừng xóa */}
-                {/* <SappIcon
-                  className="fill-bw-1 group-hover:text-primary"
-                  icon="course_video_timeline"
-                ></SappIcon> */}
-                <span className="ml-2 text-bw-1 group-hover:text-primary">
-                  Timeline
-                </span>
-              </>
-            ) : (
-              <></>
-            )}
-
-            <div className="max-w-[6.25rem]: absolute -right-[0.1875rem] bottom-0 hidden w-[25.75rem] translate-y-full animate-fade-in-overlay overflow-hidden bg-white py-3 shadow-single-dialog group-hover:block">
-              <div className="h-full max-h-[25.75rem] flex-1 snap-y overflow-y-auto bg-white">
-                {timeLine?.map((e, i) => {
-                  return (
-                    <div
-                      key={i}
-                      className="mx-3 grid grid-cols-[1.3fr,6fr] gap-3 p-3 text-sm text-[#050505] hover:bg-[#F9F9F9] hover:text-primary-2"
-                      onClick={() => {
-                        handleGoTimeline(e?.time)
-                      }}
-                    >
-                      <div className="mim-w-[62px] text-[#3964EA]">
-                        {formatTime(e?.time)}
-                      </div>
-                      <div className="text-inherit line-clamp-2 text-[#050505]">
-                        {htmlToRaw(e?.text)}
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
             </div>
           </div>
         </div>
-      )}
+      </div>
       <div className="relative overflow-hidden rounded-lg shadow-small">
         <SAPPVideo
           streamRef={streamRef}

@@ -1009,13 +1009,19 @@ p a {
 }
 
 #floating-button {
-  @apply fixed h-[48px] w-[48px] cursor-pointer rounded-full bg-white;
+  @apply fixed h-[60px] w-[60px] cursor-pointer rounded-full bg-white;
   box-shadow:
     rgba(0, 0, 0, 0.1) 0px 1px 4px,
     rgba(0, 0, 0, 0.2) 0px 2px 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+#floating-button-mkt-in-app {
+  @apply fixed flex h-[60px] w-[60px] cursor-pointer items-center justify-center 
+    rounded-xl bg-gray-800 p-2 
+    shadow-strong;
 }
 
 .sapp-pinned-noti-header {
@@ -1125,7 +1131,6 @@ p a {
 }
 
 #lms-pro #hubspot-messages-iframe-container {
-  z-index: 999 !important;
   display: initial;
   &.show {
     display: block !important;

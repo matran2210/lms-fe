@@ -42,7 +42,7 @@ const BackToTop = ({
   return (
     <div
       className={clsx(
-        `fixed bottom-[250px] right-4 z-50 cursor-pointer`,
+        `fixed bottom-[250px] right-4 cursor-pointer`,
         className,
         {
           hidden: !isVisible,
