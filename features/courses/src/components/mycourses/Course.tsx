@@ -1,6 +1,6 @@
-import { ButtonSecondary } from "@lms/ui";
-import { Icon, CourseTimeIcon, GraduationCapIcon } from '@lms/assets'
+import { CourseTimeIcon, GraduationCapIcon, Icon } from '@lms/assets';
 import { useCourseContext, useFeature } from "@lms/contexts";
+import { ButtonSecondary } from "@lms/ui";
 import { clearStylesHtml, convertHourToDayLeft, convertLocalTimeToUTC, getUserPrefix, trackGAEvent, truncateString } from "@lms/utils";
 import { differenceInDays, parseISO, startOfDay } from "date-fns";
 import { isNull, round } from "lodash";
@@ -20,17 +20,15 @@ import {
   PROGRAM,
 } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
-import { Grid, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { CardCourse } from "../course";
-import { ResultRowsModal } from "../learning";
 import ModalFoundationCompleted from "./ModalFoundationCompleted";
 import PopupActive from "./PopupActive";
 import PopupExtend from "./PopupExtend";
 import PopupLesson from "./PopupLesson";
 import PopupOpenClass from "./PopupOpenClass";
-const { useBreakpoint } = Grid;
 
 const Course = ({
   course,
@@ -46,7 +44,6 @@ const Course = ({
   isTeacher?: boolean;
 }) => {
   const {courseApi, pageLink} = useFeature();
-  const [open, setOpen] = useState<boolean>(false);
   const [openExtend, setOpenExtend] = useState<boolean>(false);
   const [openActive, setOpenActive] = useState<boolean>(false);
   const [timeActive, setTimeActive] = useState<number>();
@@ -317,9 +314,9 @@ const Course = ({
   const isPendingLesson =
     classInstance?.type === "LESSON" && !student?.is_passed;
   const isAccaCourse = category === "ACCA";
-  const isFixedDuration =
-    classInstance?.duration_type === "FIXED" ||
-    classInstance?.duration_type === "FLEXIBLE";
+  // const isFixedDuration =
+  //   classInstance?.duration_type === "FIXED" ||
+  //   classInstance?.duration_type === "FLEXIBLE";
   const isFlexibleDuration = classInstance?.duration_type === "FLEXIBLE";
   const hasNotStarted = dayjs(utcNow).isBefore(
     classInstance?.class_user_instances?.[0]?.started_at,
@@ -631,7 +628,7 @@ const Course = ({
               </div>
             </div>
           </div>
-          <ResultRowsModal open={open} setOpen={setOpen} />
+          {/* <ResultRowsModal open={open} setOpen={setOpen} /> */}
         </CardCourse>
       )}
       <PopupExtend

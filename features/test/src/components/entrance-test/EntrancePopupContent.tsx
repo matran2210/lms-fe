@@ -1,25 +1,21 @@
-import React, { useState } from "react";
-import { formatTimeMinToHhMm } from "@lms/utils";
 import { ResultRowsModal } from "@lms/feature-courses";
+import { formatTimer } from "@lms/utils";
+import { useState } from "react";
 
 interface EntrancePopupContentProps {
   name: string;
   timeAllow: number;
-  attemps: string;
-  limit_count: number;
   total_question: number;
 }
 
 const EntrancePopupContent = ({
   name,
   timeAllow,
-  attemps,
-  limit_count,
   total_question,
 }: EntrancePopupContentProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const timeAllowFormatted = timeAllow
-    ? formatTimeMinToHhMm(timeAllow * 60)
+    ? formatTimer(timeAllow * 60)
     : "Unlimited";
 
   return (

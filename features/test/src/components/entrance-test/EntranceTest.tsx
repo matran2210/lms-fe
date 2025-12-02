@@ -2,15 +2,14 @@ import { ArrowDownIcon } from "@lms/assets";
 import { EAttemptStatus, IEntranceTest, IEntranceTestAttempt } from "@lms/core";
 import { CardCourse } from "@lms/feature-courses";
 import { ButtonSecondary, ButtonText } from "@lms/ui";
-import { formatTime, formatTimeMinToHhMm, getNoOfAttemptEntranceTest } from "@lms/utils";
-import { CoursesAPI } from "@pages/api/courses";
+import { formatTimer, getNoOfAttemptEntranceTest } from "@lms/utils";
 import { Select } from "antd";
 import dayjs from "dayjs";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import PopUpRemindEntrance from "../popUpRemindEntrance";
 import EntrancePopup from "./EntrancePopup";
 import EntrancePopupContinue from "./EntrancePopupContinue";
+import { useFeature } from "@lms/contexts";
 
 interface EntranceTestProps {
   data: {
@@ -41,7 +40,7 @@ const EntranceTest = ({
   isShowEntranceTestPopup,
 }: EntranceTestProps) => {
   const [openFillForn, setOpenFillForm] = useState(false);
-  const router = useRouter();
+  const { router, courseApi } = useFeature();
   const [open, setOpen] = useState<boolean>(false);
   const [isOpenPopupLastAttempt, setIsOpenPopupLastAttempt] =
     useState<boolean>(false);
@@ -82,10 +81,10 @@ const EntranceTest = ({
   }, [data, currentAttempt]);
 
   const timeTakenFormatted = currentAttempt?.total_attempt_time
-    ? formatTimeMinToHhMm(currentAttempt?.total_attempt_time)
+    ? formatTimer(currentAttempt?.total_attempt_time)
     : 0;
   const timeAllowFormatted = data?.quiz_timed
-    ? formatTimeMinToHhMm(data?.quiz_timed * 60)
+    ? formatTimer(data?.quiz_timed * 60)
     : "Unlimited";
 
   /**
@@ -118,7 +117,7 @@ const EntranceTest = ({
       }),
     );
     try {
-      const res = await CoursesAPI.submitAllQuestion(
+      const res = await courseApi.submitAllQuestion(
         currentAttempt?.id as string,
       );
       if (res.success) {
@@ -227,7 +226,7 @@ const EntranceTest = ({
             <p
               className={`font-medium ${remainingTimeLastAttempt > 0 ? "text-gray-800" : "text-error"}`}
             >
-              {formatTimeMinToHhMm(
+              {formatTimer(
                 remainingTimeLastAttempt > 0 ? remainingTimeLastAttempt : 0,
               )}
             </p>

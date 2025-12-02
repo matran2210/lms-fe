@@ -19,11 +19,7 @@ import {
   ButtonText,
   ModalNotMobileFriendly,
 } from '@lms/ui'
-import {
-  capitalizeFirstLetter,
-  formatTimeMinToHhMm,
-  trackGAEvent,
-} from '@lms/utils'
+import { capitalizeFirstLetter, formatTimer, trackGAEvent } from '@lms/utils'
 import { CoursesAPI } from '@pages/api/courses'
 import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
 import { Select } from 'antd'
@@ -710,7 +706,7 @@ const TestModal = ({
                     label="Time Allowed:"
                     value={
                       data?.quiz?.quiz_timed
-                        ? formatTimeMinToHhMm(data?.quiz?.quiz_timed * 60)
+                        ? formatTimer(data?.quiz?.quiz_timed * 60)
                         : 'Unlimited'
                     }
                   />
