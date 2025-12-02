@@ -10008,10 +10008,10 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@^1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.7.0.tgz#9962d6d7be2642fe7773e34064797ee3491d67e4"
-  integrity sha512-5bly+PLzCXGABefa919gn6u1Hw/vsLzW8f+2uEn+/9t5glWwIh40vuXvzQcN9Zwz3SdtWgAx2ehQgtN9IoCxJA==
+preview-part@^1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.7.1.tgz#844e7a3e175307f290e4dc5861a2689b21220110"
+  integrity sha512-Gwx+HJOwYWJy8xpeMYCpo/bNbirc3fmqFRkON5J/U5+JZPJHMBlnqmDw3xb01PzUE5Ogf0MQvjdgOzs8j/SRLw==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@react-hook/resize-observer" "^2.0.2"
@@ -11387,10 +11387,10 @@ sapp-common-package@^1.4.1:
     sass-loader "^13"
     tailwindcss "3.4.17"
 
-sapp-common-package@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.6.0.tgz#465a0ea97bf67e7b0eaa49acb0b1ff000edf2ee1"
-  integrity sha512-P9gasAfzS46/gYsG2uvt/4weeJjxdaKG6ct+BXgAnnytSOIcoYgRGzE62M3dOks6YTmP3Gfy7LlFGVp6yIVpDA==
+sapp-common-package@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.6.1.tgz#2f8f704a0dd8b43a13ae9ef31f35c592a16ec423"
+  integrity sha512-RMJlH77ERESgmq71e61zoQauVvJpCdORxrWMkDWEQ3H4uMXQiebt+cv0ZohjbxAMcd28RifW6TNFy6kd4BVoYQ==
   dependencies:
     "@_ueberdosis/prosemirror-tables" "^1.1.3"
     "@floating-ui/react" "^0.27.8"
