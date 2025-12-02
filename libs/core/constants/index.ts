@@ -525,6 +525,19 @@ export const excludedPathsHelp = [
   "/courses/[id]/activity/[activityId]",
 ];
 export const CERTIFICATE = "certificates";
+
+export const TEST_TYPE = {
+  QUIZ: "Quiz",
+  MID_TERM_TEST: "Midterm Test",
+  FINAL_TEST: "Final Test",
+  MOCK_TEST: "Mock Test",
+  ENTRANCE_TEST: "Entrance Test",
+  // STORY = 'STORY',
+  TOPIC_TEST: "Part/Topic Test",
+  CHAPTER_TEST: "Chapter/Module Test",
+  ACTIVITY: "Quiz",
+} as any;
+
 export * from "./localStorageKeys";
 export * from "./upload";
 export * from "./repeat/index";
