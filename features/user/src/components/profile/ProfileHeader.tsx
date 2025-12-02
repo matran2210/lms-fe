@@ -9,6 +9,7 @@ import {
   useFeature,
   userReducer
 } from '@lms/contexts'
+import { AppType } from '@lms/core'
 import { ProfileSkeleton } from '@lms/ui'
 import { Divider, Tag } from 'antd'
 import clsx from 'clsx'
@@ -31,6 +32,7 @@ interface IProps {
     SetStateAction<string | StaticImageData | undefined>
   >
   setIsEdit: (edit: boolean) => void
+  appType: AppType
 }
 const ProfileHeader = ({
   isEdit,
@@ -39,7 +41,8 @@ const ProfileHeader = ({
   inputFileRef,
   reViewImageSrc,
   setReViewImageSrc,
-  setIsEdit
+  setIsEdit,
+  appType
 }: IProps) => {
   const dispatch = useAppDispatch()
   const { userApi, authManager } = useFeature();
@@ -365,7 +368,7 @@ const ProfileHeader = ({
                 fill="currentColor"
               />
             </svg>
-            {user.courses?.template_full ?? 0} Enrolled Courses
+            {(appType === AppType.LMS_PRO ? user.courses?.template_full : user?.courses?.template_short_course) ?? 0} Enrolled Courses
           </div>
           <Divider type="vertical" className="m-0 bg-gray-300" />
           <div className="flex items-center justify-start gap-1">
@@ -383,7 +386,7 @@ const ProfileHeader = ({
                 fill="currentColor"
               />
             </svg>
-            {user.certificates?.template_full ?? 0} Certificates
+            {(appType === AppType.LMS_PRO ? user.certificates?.template_full : user?.certificates?.template_short_course) ?? 0} Certificates
           </div>
         </div>
       </div>
