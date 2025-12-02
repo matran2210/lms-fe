@@ -384,7 +384,7 @@ const VideoDocument = ({
             </div>
           )}
         </div>
-        <div className="group relative z-30 hidden cursor-pointer select-none items-center md:flex">
+        <div className="group relative z-[1051] hidden cursor-pointer select-none items-center md:flex">
           {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (
             <>
               <span className="mr-2 text-bw-15 group-hover:text-primary">
@@ -404,13 +404,13 @@ const VideoDocument = ({
             onClose={() => handleCloseTab?.('')}
             onGoTimeline={handleGoTimeline}
           />
-          <div className="absolute bottom-0 right-0 hidden w-[407px] translate-y-full animate-fade-in-overlay overflow-hidden rounded border border-[#E5E7EB] bg-white  py-3  shadow-single-dialog group-hover:block">
+          <div className="absolute bottom-0 right-0 hidden w-[407px] translate-y-full animate-fade-in-overlay overflow-hidden rounded-lg border border-[#E5E7EB] bg-white py-3 shadow-single-dialog group-hover:block">
             <div className="h-full max-h-[412px] flex-1 snap-y overflow-y-auto bg-white">
               {timeLine?.map((e, i) => {
                 return (
                   <div
                     key={i}
-                    className="mx-3 grid grid-cols-[1.3fr,6fr] gap-3 p-3 text-medium-sm text-bw-1 hover:bg-gray-4 hover:text-primary-2"
+                    className="mx-3 grid grid-cols-[1.3fr,6fr] gap-3 rounded-[4px] p-3 text-medium-sm text-bw-1 hover:bg-gray-4 hover:text-primary-2"
                     onClick={() => {
                       handleGoTimeline(e?.time)
                     }}

@@ -393,7 +393,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                             </div>
                             {showBackToTop && <BackToTop />}
                             <MKTInApp showMKTInApp={showMKTInApp} />
-                            <div id="floating-btn-divider" />
+                            {showHelp && <div id="floating-btn-divider" />}
                             <Help showHelp={showHelp} />
                             <LearningNotesList appType={AppType.LMS_PRO} />
                             <PopupCompletedCourse />
