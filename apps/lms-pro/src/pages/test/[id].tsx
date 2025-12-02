@@ -13,7 +13,14 @@ import {
   ShowLessIcon,
   ShowMoreIcon,
 } from '@lms/assets'
-import { CourseProvider, disableUnsavedChange, loginSlice, useAppDispatch, useAppSelector, useCourseContext } from '@lms/contexts'
+import {
+  CourseProvider,
+  disableUnsavedChange,
+  loginSlice,
+  useAppDispatch,
+  useAppSelector,
+  useCourseContext,
+} from '@lms/contexts'
 import {
   DISPLAY_TYPE,
   EXHIBIT_TEXT_REPLACE,
@@ -24,22 +31,24 @@ import {
   RESPONSE_OPTION,
   TEST_TYPE,
 } from '@lms/core'
-import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
-import TestTimeOutModal from '@lms/feature-test/src/components/test/modal/test-timeout'
+import {
+  QuitTestModal,
+  TestTimeOutModal,
+  UnSubmitAnswerModal,
+} from '@lms/feature-test'
 import {
   BackToTop,
+  EssayQuestionPreview,
   FilterRadioGroup,
   Layout,
+  MultiChoiceQuestion,
+  NewFillText,
+  OneChoiceQuestion,
+  Popover,
   SappLoading,
+  SelectWord,
   useClickOutside,
 } from '@lms/ui'
-import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
-import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
-import NewFilltext from '@lms/ui/components/questionType/NewFillText'
-import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
-import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
-import { Popover } from "antd"
 import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -48,7 +57,13 @@ import { CoursesAPI } from '../api/courses'
 import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
 
-import { CheckCircleOutlineYellow, FlagIconV2, Icon, NotesOutline, PulsingExclamation } from '@lms/assets'
+import {
+  CheckCircleOutlineYellow,
+  FlagIconV2,
+  Icon,
+  NotesOutline,
+  PulsingExclamation,
+} from '@lms/assets'
 import { showPopupCompletedCourse } from '@lms/contexts'
 import {
   Answer,
@@ -66,21 +81,24 @@ import {
   ScratchPad,
   ScratchPadValue,
 } from '@lms/core'
-import { ButtonContent, ConFirmSubmit, ResetToAnswerTemplateModal, ShowAnswerTemplate } from '@lms/feature-courses'
-import { TabSlide } from '@lms/feature-test'
-import RequirementsTab from '@lms/feature-test/src/components/test/RequirementsTab'
+import {
+  ButtonContent,
+  ConFirmSubmit,
+  ResetToAnswerTemplateModal,
+  ShowAnswerTemplate,
+} from '@lms/feature-courses'
+import { RequirementsTab, TabSlide } from '@lms/feature-test'
 import {
   ButtonPrimary,
   ButtonSecondary,
   ButtonText,
   ButtonTextV2,
   HighlightableHTML,
+  ModalUploadFile,
 } from '@lms/ui'
-import MatchQuizComponent from '@lms/ui/components/questionType/MatchQuiz/MatchQuiz'
-import DragDropQuestion, {
-  SlotValue,
-} from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
-import TestWrapper from '@lms/ui/layout/TestLayout/TestWrapper'
+import { MatchQuizComponent } from '@lms/ui'
+import { SlotValue, NewDragNDropQuestion } from '@lms/ui'
+import { TestWrapper } from '@lms/ui'
 import { checkSheetAnswered, runHighlight, trackGAEvent } from '@lms/utils'
 import { EventTestAPI } from '@pages/api/event-test'
 import { TestAPI } from '@pages/api/test'
@@ -117,8 +135,7 @@ const TestDetail = () => {
   const [editorReady, setEditorReady] = useState(true)
   const [tooltipOpen, setTooltipOpen] = useState(false)
   const answerListRef = useRef<AnswerList>({})
-  const { courseType, setSubmitEventTest } =
-    useCourseContext()
+  const { courseType, setSubmitEventTest } = useCourseContext()
   const scrollRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const { quizDetail } = useGetQuizDetail(router.query.id as string)
@@ -126,10 +143,7 @@ const TestDetail = () => {
   const type = router.query.type
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
   const { control, watch, getValues, setValue, resetField } = useForm()
-  const {
-    control: controlFilter,
-    watch: watchFilter,
-  } = useForm()
+  const { control: controlFilter, watch: watchFilter } = useForm()
   const {
     getValues: getValuesExhibits,
     setValue: setValueExhibits,
@@ -952,7 +966,7 @@ const TestDetail = () => {
         )
       case QUESTION_TYPES.FILL_WORD:
         return (
-          <NewFilltext
+          <NewFillText
             control={control}
             name={`${currentTabID}_fillword`}
             data={data}
@@ -974,7 +988,7 @@ const TestDetail = () => {
         )
       case QUESTION_TYPES.DRAG_DROP:
         return (
-          <DragDropQuestion
+          <NewDragNDropQuestion
             data={data}
             defaultValue={defaultValue}
             onChange={(data: SlotValue[]) => {
@@ -1828,7 +1842,6 @@ const TestDetail = () => {
     })
     setTabs(newTabs)
   }
-
 
   // Initialize answerListRef values once when component mounts
   useEffect(() => {
@@ -2868,7 +2881,7 @@ const TestDetail = () => {
           refEditor.current.reset(templateValueWord)
         }
         break
-      }  
+      }
       case RESPONSE_OPTION.SHEET: {
         const templateValue = getTemplateValueForSheet()
         // Reset form value
@@ -2890,7 +2903,7 @@ const TestDetail = () => {
 
         switch (response_option) {
           case RESPONSE_OPTION.WORD: {
-              if (valueFromForm !== undefined && valueFromForm !== null) {
+            if (valueFromForm !== undefined && valueFromForm !== null) {
               return valueFromForm
             }
             const requirement =
@@ -2912,7 +2925,7 @@ const TestDetail = () => {
             return currentTabContent?.data?.answer_template
           }
           case RESPONSE_OPTION.SHEET: {
-             const valueFromSheetForm = getValues(key)
+            const valueFromSheetForm = getValues(key)
             if (valueFromSheetForm) {
               const isEmptyWorkbook = isWorkbookEmpty(
                 JSON.parse(valueFromSheetForm),
@@ -3448,7 +3461,7 @@ const TestDetail = () => {
                       router.back()
                     }
                     break
-                  }  
+                  }
                 }
                 // if (type === 'event-test') {
                 //
@@ -3607,49 +3620,47 @@ const TestDetail = () => {
             getPopupContainer={() => document.body}
             content={
               <div className="flex flex-col gap-2">
-                {currentTabContent?.topicDescription?.files?.map(
-                  (e: any) => {
-                    return (
+                {currentTabContent?.topicDescription?.files?.map((e: any) => {
+                  return (
+                    <div
+                      className={clsx(
+                        `flex items-start justify-between gap-8 p-2`,
+                      )}
+                      key={e?.value}
+                    >
                       <div
-                        className={clsx(
-                          `flex items-start justify-between gap-8 p-2`,
-                        )}
                         key={e?.value}
+                        className={clsx(
+                          'min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-white underline hover:text-primary',
+                        )}
+                        onClick={() =>
+                          handleOpenScratchPad(
+                            'file',
+                            e?.resource?.url,
+                            e?.resource?.name,
+                          )
+                        }
                       >
-                        <div
-                          key={e?.value}
-                          className={clsx(
-                            'min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-white underline hover:text-primary',
-                          )}
-                          onClick={() =>
-                            handleOpenScratchPad(
-                              'file',
-                              e?.resource?.url,
-                              e?.resource?.name,
-                            )
-                          }
-                        >
-                          {e?.resource?.name}
-                        </div>
-                        <div
-                          className="cursor-pointer text-white"
-                          onClick={() => {
-                            UploadAPI.downloadFile({
-                              files: [
-                                {
-                                  name: e?.resource?.name,
-                                  file_key: e?.resource?.file_key,
-                                },
-                              ],
-                            })
-                          }}
-                        >
-                          <DownloadIcon color="currentColor" />
-                        </div>
+                        {e?.resource?.name}
                       </div>
-                    )
-                  },
-                )}
+                      <div
+                        className="cursor-pointer text-white"
+                        onClick={() => {
+                          UploadAPI.downloadFile({
+                            files: [
+                              {
+                                name: e?.resource?.name,
+                                file_key: e?.resource?.file_key,
+                              },
+                            ],
+                          })
+                        }}
+                      >
+                        <DownloadIcon color="currentColor" />
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             }
             zIndex={1050}
@@ -3711,7 +3722,7 @@ const TestDetail = () => {
         }}
         className="group fixed bottom-[422px] right-8 grid cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden"
       >
-        <FlagIconV2 isActive={currentTabContent?.flag} className="size-8" />
+        <FlagIconV2 isActive={currentTabContent?.flag} />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <BackToTop
