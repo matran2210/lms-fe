@@ -1,13 +1,31 @@
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, StatusRequestSchedule, TeacherKey } from '@lms/core'
-import { ActionCell, SappTable, TooltipParagraph } from '@lms/ui'
+import {
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  StatusRequestSchedule,
+  TeacherKey,
+} from '@lms/core'
+import {
+  ActionCell,
+  SappActionCell,
+  SappTable,
+  TooltipParagraph,
+} from '@lms/ui'
 import { ColumnsType } from 'antd/es/table'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
 import { useSappPaging } from '@lms/hooks'
-import { convertSlugToTitle, convertSnakeCaseToHumanReadable, formatDateFromUTC } from '@lms/utils'
+import {
+  convertSlugToTitle,
+  convertSnakeCaseToHumanReadable,
+  formatDateFromUTC,
+} from '@lms/utils'
 import { TeacherAPI } from '../../../../pages/api/teacher'
-import { FilterRequestScheduleParams, IScheduleRequestItem, StatusRequestScheduleParams } from '../../../../type/teachers/request-schedule.interface'
+import {
+  FilterRequestScheduleParams,
+  IScheduleRequestItem,
+  StatusRequestScheduleParams,
+} from '../../../../type/teachers/request-schedule.interface'
 import DetailRequestModal from './DetailRequestModal'
 import ReasonModal from './ReasonModal'
 import StatusItem from './StatusItem'
@@ -203,7 +221,7 @@ export default function TableContainer({ params }: IProps) {
       title: '',
       fixed: 'right',
       render: (_, record: IScheduleRequestItem) => (
-        <ActionCell handleClickView={() => Action(record)} />
+        <SappActionCell handleClickView={() => Action(record)} />
       ),
     },
   ]
