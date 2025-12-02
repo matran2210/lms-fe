@@ -1019,6 +1019,10 @@ p a {
   justify-content: center;
 }
 
+#floating-btn-divider {
+  @apply fixed bottom-[160px] right-[31px] hidden  h-[1px] w-[30px] items-center justify-center bg-gray-300 md:flex;
+}
+
 #floating-button-mkt-in-app {
   @apply fixed flex h-[60px] w-[60px] cursor-pointer items-center justify-center 
     rounded-xl bg-gray-800 p-2 

@@ -1,11 +1,15 @@
 import { CloseIcon } from '@lms/assets'
 import { ANIMATION, LAYOUT, QUESTION_TYPES } from '@lms/core'
-import { ButtonPrimary, ButtonSecondary, FullScreenLayout } from '@lms/ui'
+import {
+  ButtonPrimary,
+  ButtonSecondary,
+  FullScreenLayout,
+  SappBaseTable,
+} from '@lms/ui'
 import { roundNumber } from '@utils/helpers'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { CoursesAPI } from '../../api/courses/index'
-import { SappTable } from '@lms/ui/components/base'
 
 const headers = [
   {
@@ -225,7 +229,7 @@ const TableCaseStudyResult = () => {
           </div>
 
           <div className="block px-6 xl:pl-4 xl:pr-0">
-            <SappTable
+            <SappBaseTable
               headers={headers}
               loading={true}
               isCheckedAll={true}
@@ -297,7 +301,7 @@ const TableCaseStudyResult = () => {
                   )
                 })}
               </>
-            </SappTable>
+            </SappBaseTable>
           </div>
         </div>
       </div>

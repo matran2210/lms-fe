@@ -1,10 +1,16 @@
-
 import { htmlToRaw } from '@components/common/timer'
 import Tooltip from '@components/common/Tooltip'
 import { CollapseArrowIcon } from '@lms/assets'
-import { ANIMATION, COMMON_TEXT_ENUM, GRADE_STATUS, IAnswer, IQuizAttempt, QUESTION_TYPES } from '@lms/core'
+import {
+  ANIMATION,
+  COMMON_TEXT_ENUM,
+  GRADE_STATUS,
+  IAnswer,
+  IQuizAttempt,
+  QUESTION_TYPES,
+} from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { SappTable } from '@lms/ui/components/base'
+import { SappBaseTable } from '@lms/ui'
 import { roundNumber, truncateString } from '@lms/utils'
 import { ResultAPI } from '@pages/api/short-course/test-result'
 import { convertSecondsToMinutesSeconds } from '@utils/helpers'
@@ -56,22 +62,22 @@ const ScoreDetail = ({
     ...(isMobileView
       ? []
       : [
-        {
-          label: 'Type',
-          className: clsx(commonHeaderClass, 'min-w-[120px] text-center'),
-        },
-        {
-          label: 'Result',
-          className: clsx(commonHeaderClass, 'text-center'),
-        },
-        {
-          label: 'Time Spent',
-          className: clsx(
-            commonHeaderClass,
-            ' min-w-[80px] !pr-0 text-center',
-          ),
-        },
-      ]),
+          {
+            label: 'Type',
+            className: clsx(commonHeaderClass, 'min-w-[120px] text-center'),
+          },
+          {
+            label: 'Result',
+            className: clsx(commonHeaderClass, 'text-center'),
+          },
+          {
+            label: 'Time Spent',
+            className: clsx(
+              commonHeaderClass,
+              ' min-w-[80px] !pr-0 text-center',
+            ),
+          },
+        ]),
   ]
 
   const {
@@ -141,7 +147,7 @@ const ScoreDetail = ({
       return gradingStatus === GRADE_STATUS.FINISHED_GRADING
         ? ' text-info bg-info-50'
         : data?.question?.qType === QUESTION_TYPES.ESSAY &&
-          data?.active === COMMON_TEXT_ENUM.SUBMITED
+            data?.active === COMMON_TEXT_ENUM.SUBMITED
           ? ' text-info bg-info-50'
           : ' text-gray-400 bg-gray-100'
     }
@@ -212,11 +218,11 @@ const ScoreDetail = ({
                     ),
                     children: (
                       <div>
-                        <SappTable
+                        <SappBaseTable
                           headers={headers}
                           loading={isLoading}
                           isCheckedAll={true}
-                          onChange={() => { }}
+                          onChange={() => {}}
                           hasCheck={false}
                           classTable="w-full"
                         >
@@ -318,7 +324,7 @@ const ScoreDetail = ({
                                         ) : (
                                           <>
                                             {gradingStatus ===
-                                              GRADE_STATUS.FINISHED_GRADING
+                                            GRADE_STATUS.FINISHED_GRADING
                                               ? 'Graded'
                                               : answer?.active === 'SUBMITED'
                                                 ? 'Completed'
@@ -363,7 +369,7 @@ const ScoreDetail = ({
                               </React.Fragment>
                             )
                           })}
-                        </SappTable>
+                        </SappBaseTable>
                       </div>
                     ),
                   },

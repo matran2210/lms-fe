@@ -1,4 +1,4 @@
-import { statusMap } from 'src/constants'
+import { statusMap } from '@lms/core'
 
 export const StatusTag = ({ status }: { status: keyof typeof statusMap }) => {
   const { label, color, bg } = statusMap[status] || statusMap.COMPLETED

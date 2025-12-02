@@ -1,12 +1,23 @@
-import SappTable from '@components/base/SappTable'
 import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
+
+import Tooltip from '@components/common/Tooltip'
+import { CloseIcon } from '@lms/assets'
+import {
+  ANIMATION,
+  COMMON_TEXT_ENUM,
+  EYourAnswerType,
+  GRADE_STATUS,
+  IAnswer,
+  QUESTION_TYPES,
+} from '@lms/core'
+import { ListScoreCollapse } from '@lms/feature-courses'
+import { SappBaseTable } from '@lms/ui'
 import {
   convertSlugToTitle,
   handleReplaceText,
   removeHtmlTags,
   truncateString,
-} from '@utils/index'
-
+} from '@lms/utils'
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
 import DOMPurify from 'dompurify'
@@ -16,18 +27,8 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
-import {
-  ANIMATION,
-  COMMON_TEXT_ENUM,
-  GRADE_STATUS,
-  PageLink,
-  QUESTION_TYPES,
-} from 'src/constants'
-import { EYourAnswerType, IAnswer } from 'src/type'
+import { PageLink } from 'src/constants/routes'
 import { CoursesAPI } from '../../pages/api/courses/index'
-import { CloseIcon } from '@lms/assets'
-import Tooltip from '@components/common/Tooltip'
-import ListScoreCollapse from '@components/quiz/your-answer-detail/ListScoreCollapse'
 
 const commonHeaderClass = 'text-left p-0 text-base font-medium text-gray'
 
@@ -250,7 +251,7 @@ const TableQuestions = ({
         <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
       </div>
       <div className="hidden rounded-xl bg-white p-8 md:block">
-        <SappTable
+        <SappBaseTable
           headers={headers}
           loading={isLoading}
           isCheckedAll={true}
@@ -349,7 +350,7 @@ const TableQuestions = ({
               </React.Fragment>
             )
           })}
-        </SappTable>
+        </SappBaseTable>
       </div>
       <ListScoreCollapse
         data={allData}
