@@ -76,7 +76,6 @@ const VideoDocument = ({
   const [modalOpen, setModalOpen] = useState(false)
   const [activeQuestion, setActiveQuestion] = useState<IActivityStateQuestion>()
   const [isConfirmQuestion, setIsConfirmQuestion] = useState<boolean>(false)
-  const [lastQuestion, setLastQuestion] = useState<IQuestion>()
   const { handleSubmit, reset } = useForm()
   const internalRef = useRef<any>()
   const streamRef = streamRefProp?.current ? streamRefProp : internalRef
@@ -133,11 +132,6 @@ const VideoDocument = ({
       ...(v?.quiz?.constructed_questions || []),
       ...(v?.quiz?.multiple_choice_questions || []),
     ]
-
-    if (listQuestion.length) {
-      setLastQuestion(listQuestion[listQuestion.length - 1])
-    }
-    // setDefaultListQuestion(listQuestion)
     setCurrentVideo(v)
     handleSetCurrentVideoCallback?.(v)
     onUpdateActiveVideo?.(v.file.id)
@@ -313,7 +307,7 @@ const VideoDocument = ({
           activityId: activityId,
           tabId: tabId,
           quizId: currentVideo?.quiz?.id || '',
-          then: (event: any) => {
+          then: () => {
             setIsConfirmQuestion(true)
           },
         })
@@ -387,7 +381,7 @@ const VideoDocument = ({
               )
             })}
         </div>
-        <div className="group relative z-30 hidden cursor-pointer select-none items-center md:flex">
+        <div className="group relative z-[1051] hidden cursor-pointer select-none items-center md:flex">
           {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (
             <>
               {/* Icon for course video timeline */}
@@ -460,7 +454,7 @@ const VideoDocument = ({
             okButtonClass="!w-20 h-8.5 !px-0"
             cancelButtonClass="!w-20 h-8.5 !px-0 !w-fit"
             footerButtonClassName="!justify-between items-center flex"
-            handleSubmit={handleSubmit((e) =>
+            handleSubmit={handleSubmit(() =>
               onSubmit(activeQuestion?.corrects ? true : false),
             )}
             handleCancel={() => {

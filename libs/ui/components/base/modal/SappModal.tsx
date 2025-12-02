@@ -125,7 +125,7 @@ const SappModal: React.FC<IProps> = ({
   closeAfterSubmit = true,
   showOkButton = true,
   showCancelButton = true,
-  zIndex = 'z-[1500]',
+  zIndex = 'z-[1050]',
   scrollbale = true,
   footerClassName,
   externalLoading,

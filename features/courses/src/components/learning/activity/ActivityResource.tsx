@@ -52,40 +52,44 @@ const download = async (name: string, file_key: string) => {
                   e.resource.name.slice(-4) !== ".csv";
 
                 return (
-                  <div
-                    className={clsx(
-                      "group flex w-min cursor-pointer items-center gap-3",
-                      { "mb-3": index < activity?.files?.length - 1 },
-                    )}
-                    key={index}
-                    onClick={() => {
-                      isPreviewFile
-                        ? handleOpenScratchPad(
-                            { type: "file" },
-                            e?.resource?.url,
-                            e?.resource?.name,
-                          )
-                        : download(e?.resource?.name, e?.resource?.file_key);
-
-                      trackGAEvent("Click Open File Resource");
-                    }}
-                  >
-                    {/* Text */}
-                    <Tooltip title="Preview File">
-                      <p className="text-info-600 underline group-hover:text-primary">
-                        {e?.resource?.name}
-                      </p>
-                    </Tooltip>
-
-                    {/* Icon */}
+                  <div key={index} className=''>
                     <div
-                      className="block cursor-pointer text-icon group-hover:block group-hover:text-primary lg:hidden"
-                      onClick={() => {
-                        download(e?.resource?.name, e?.resource?.file_key);
-                        trackGAEvent("Click Button Download Resource Activity");
-                      }}
+                      className={clsx(
+                        "group inline-flex cursor-pointer items-center gap-3",
+                        { "mb-3": index < activity?.files?.length - 1 },
+                      )}
+                
                     >
-                      <DownloadIcon color="currentColor" />
+                      {/* Text */}
+                      <Tooltip title="Preview File">
+                        <p 
+                          className="text-info-600 underline group-hover:text-primary  transition-all"
+                          onClick={() => {
+                            isPreviewFile
+                              ? handleOpenScratchPad(
+                                  { type: "file" },
+                                  e?.resource?.url,
+                                  e?.resource?.name,
+                                )
+                              : download(e?.resource?.name, e?.resource?.file_key);
+    
+                            trackGAEvent("Click Open File Resource");
+                          }}
+                        >
+                          {e?.resource?.name}
+                        </p>
+                      </Tooltip>
+
+                      {/* Icon */}
+                      <div
+                        className="block cursor-pointer text-icon group-hover:block group-hover:text-primary lg:hidden"
+                        onClick={() => {
+                          download(e?.resource?.name, e?.resource?.file_key);
+                          trackGAEvent("Click Button Download Resource Activity");
+                        }}
+                      >
+                        <DownloadIcon color="currentColor" />
+                      </div>
                     </div>
                   </div>
                 );
