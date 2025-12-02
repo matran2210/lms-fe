@@ -12,6 +12,7 @@ import {
   TimeLineIcon,
 } from '@lms/assets'
 import {
+  CalculatorModal,
   CreateNote,
   Discussion,
   PopupLockContent,
@@ -577,33 +578,9 @@ const ActivityPage = () => {
                 })}
                 <>
                   {selector?.calculator_status && (
-                    <MovableWindow
-                      position={{
-                        top: 'calc(25% - 150px)',
-                        left: 'calc(25% - 200px)',
-                      }}
-                      zIndex={500}
-                      fixed
-                    >
-                      <div className="absolute left-0 top-0">
-                        <div
-                          className="flex h-10 w-full items-center justify-between rounded-t-md bg-[#DCDDDD] px-5"
-                          style={{
-                            boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-                          }}
-                        >
-                          <div className="text-sm font-normal">Calculator</div>
-                          <button
-                            onClick={() => {
-                              dispatch(closeCalculator())
-                            }}
-                          >
-                            <CloseIcon />
-                          </button>
-                        </div>
-                        <Calculator />
-                      </div>
-                    </MovableWindow>
+                    <CalculatorModal
+                      onClose={() => dispatch(closeCalculator())}
+                    />
                   )}
                 </>
               </>
@@ -769,31 +746,11 @@ const ActivityPage = () => {
               {openScratchPad.map((e, index) => {
                 if (e.type === 'calculator') {
                   return (
-                    <MovableWindow
+                    <CalculatorModal
                       key={e.id}
-                      position={{
-                        top: '30% - 150px',
-                        left: '10px',
-                      }}
-                      className="lg:hidden"
-                      zIndex={40}
-                      fixed
-                    >
-                      <div className="absolute left-0 top-0 h-full w-64 rounded-xl">
-                        <div
-                          className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-gray-300 bg-gray-100 px-4 py-3"
-                          style={{
-                            boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-                          }}
-                        >
-                          <div className="text-sm font-bold">Calculator</div>
-                          <button onClick={() => handleCloseScratchPad(e)}>
-                            <CloseModalIcon />
-                          </button>
-                        </div>
-                        <Calculator isMobileCalc />
-                      </div>
-                    </MovableWindow>
+                      isMobileCalc
+                      onClose={() => handleCloseScratchPad(e)}
+                    />
                   )
                 } else if (e.type === 'file') {
                   return (
