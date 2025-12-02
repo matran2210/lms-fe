@@ -1,8 +1,8 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import getConfig from 'next/config'
-import exceptions from 'src/services/en.exceptions.json'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
 import toast from 'react-hot-toast'
+import { ExceptionErrorCode } from '@lms/core'
 
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
@@ -91,7 +91,7 @@ const toastException = [
   '400|010008',
 ]
 
-const formatedExceptions = exceptions.reduce(
+const formatedExceptions = ExceptionErrorCode.reduce(
   (acc: { [key: string]: string }, { code, message }) => {
     acc[code] = message
     return acc

@@ -1,4 +1,5 @@
 import { ClockIcon } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
 import {
   GRADE_STATUS,
   GRADING_METHOD,
@@ -15,11 +16,10 @@ import {
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { isNull } from "lodash";
-import { useFeature } from "@lms/contexts";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { PopupSelectRetakeOrContinueAttempt } from "../..";
 import { TestAnnouncementModal } from "../../course-detail";
 import PopupCanNotRetakeTest from "../../PogupCannotRetakeTest";
-import { PopupSelectRetakeOrContinueAttempt } from "../..";
 
 enum StatusQuizAttempt {
   Passed = "Passed",
@@ -77,7 +77,7 @@ const TestModalTeacher = ({
   const [openResource, setOpenPopup] = useState(false);
   const [openLastAttempt, setOpenLastAttempt] = useState(false);
   const [remainingTime, setRemainingTime] = useState<number>();
-  let remainingTimeLastAttempt = useRef<number>(0);
+  const remainingTimeLastAttempt = useRef<number>(0);
   const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false);
 
   const onCancel = () => {
@@ -458,12 +458,6 @@ const TestModalTeacher = ({
                   >
                     <div className="m-auto">
                       <ClockIcon
-                        color={
-                          remainingTimeLastAttempt.current > 0
-                            ? "#3964EA"
-                            : "#B90E0A"
-                        }
-                        size={24}
                       />
                     </div>
                     <div className="text-[20px]">
@@ -682,7 +676,7 @@ const TestModalTeacher = ({
                     })}
                   >
                     <div className="m-auto">
-                      <ClockIcon size={24} />
+                      <ClockIcon />
                     </div>
                     <div className="text-[20px]">
                       {formatTimeMinToHhMm(

@@ -78,7 +78,7 @@ import { CoursesAPI, submitQuizTest } from './api/courses'
 import { EntranceTestAPI } from './api/entrance-test'
 import { EventTestAPI } from './api/event-test'
 import { NotificationAPI } from './api/notification'
-import { AuthAPI } from './api/profile'
+import MyProfileAPI, { AuthAPI } from './api/profile'
 import { QuestionAPI } from './api/question'
 import { UploadAPI } from './api/upload'
 import ErrorRedirectPage from './error-redirect'
@@ -359,6 +359,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 entranceTestApi: EntranceTestAPI,
                 eventTestApi: EventTestAPI,
                 calendarApi: CalendarApi,
+                 myProfileApi: MyProfileAPI,
                 submitQuizTest: submitQuizTest,
                 authManager: new AuthenticationManager(),
                 pageLink: PageLink,

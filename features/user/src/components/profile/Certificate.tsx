@@ -1,7 +1,5 @@
 import React from 'react';
 import { useLayoutEffect, useState } from 'react'
-import { AuthAPI } from 'src/pages/api/profile'
-import PopUpCertificate from './popupCertificate'
 import { Divider, Table, TableProps } from 'antd'
 import { CertificateImg, Icon, NoCertificationIcon } from '@lms/assets'
 import {useDownloadImage} from '@lms/hooks'
@@ -9,6 +7,8 @@ import {useDownloadImage} from '@lms/hooks'
 import Image from 'next/image'
 import { sappFormatDate } from '@lms/utils'
 import clsx from 'clsx'
+import { useFeature } from '@lms/contexts';
+import PopUpCertificate from './popupCertificate/PopupCertificare';
 
 interface ICertificate {
   certificate: {
@@ -30,6 +30,7 @@ interface ICertificate {
 }
 
 const Certificate = () => {
+  const {authApi} = useFeature()
   const { downloadImage } = useDownloadImage()
   const [certificateData, setCertificateData] = useState<
     ICertificate[] | undefined
@@ -39,7 +40,7 @@ const Certificate = () => {
 
   const fetchChapterDetail = async () => {
     try {
-      const res = await AuthAPI.getCertificate(1, 30)
+      const res = await authApi.getCertificate(1, 30)
       const certificate = res.data.certificates
       const userDetail = res.username
       setCertificateData(certificate)
@@ -50,7 +51,7 @@ const Certificate = () => {
   useLayoutEffect(() => {
     fetchChapterDetail()
   }, [])
-  const [certificateDataPopup, setCertificateDataPopup] = useState<any>()
+  const [certificateDataPopup, setCertificateDataPopup] = useState<unknown>()
 
   const columns: TableProps<ICertificate>['columns'] = [
     {

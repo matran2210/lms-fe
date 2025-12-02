@@ -74,7 +74,7 @@ type Child =
   | ChildWithCMA
   | ChildWithCFA;
 
-const ProfileSideBar = ({ page, children, authManager, pageLink }: IProps) => {
+const ProfileSideBar = ({ page, children, authManager}: IProps) => {
   const router = useRouter();
 
   const getLabelFromChild = (child: Child): string => {
@@ -144,7 +144,7 @@ const ProfileSideBar = ({ page, children, authManager, pageLink }: IProps) => {
 
     handleSetStatusActiveChild(childLabel);
     // Chuyển trang
-    let formattedChildLabel = childLabel?.toLowerCase();
+    const formattedChildLabel = childLabel?.toLowerCase();
 
     router.push(`/${formattedChildLabel}`);
   };
@@ -199,7 +199,9 @@ const ProfileSideBar = ({ page, children, authManager, pageLink }: IProps) => {
          * @param {string} parentKey - Khóa của trang hiện tại.
          * @returns {array} - Danh sách trang con.
          */
+        // eslint-disable-next-line no-case-declarations
         const parentKey = urlPage.toUpperCase();
+        // eslint-disable-next-line no-case-declarations
         const listChildren =
           PROFILE_PAGES[parentKey as keyof typeof PROFILE_PAGES].children;
         /**
@@ -208,6 +210,7 @@ const ProfileSideBar = ({ page, children, authManager, pageLink }: IProps) => {
          * @param {array} listChildren - Danh sách trang con.
          * @returns {object} - Trang con đầu tiên.
          */
+        // eslint-disable-next-line no-case-declarations
         const firstChild = listChildren[0];
         /**
          * Lấy nhãn của trang con đầu tiên.
@@ -215,9 +218,12 @@ const ProfileSideBar = ({ page, children, authManager, pageLink }: IProps) => {
          * @param {object} firstChild - Trang con đầu tiên.
          * @returns {string} - Nhãn của trang con đầu tiên.
          */
+        // eslint-disable-next-line no-case-declarations
         const firstChildKey = Object.keys(firstChild)[0];
+        // eslint-disable-next-line no-case-declarations
         const firstChildLabel =
           firstChild?.[firstChildKey as keyof typeof firstChild];
+        // eslint-disable-next-line no-case-declarations
         const firstChildLabelValue = getLabelFromChild(
           firstChildLabel as ChildWithLabel,
         );
@@ -227,6 +233,7 @@ const ProfileSideBar = ({ page, children, authManager, pageLink }: IProps) => {
          * @param {string} firstChildLabelValue - Nhãn của trang con đầu tiên.
          * @returns {string} - Nhãn định dạng.
          */
+        // eslint-disable-next-line no-case-declarations
         const formattedChildLabel = firstChildLabelValue
           .toLowerCase()
           .replace(/\s+/g, "_");

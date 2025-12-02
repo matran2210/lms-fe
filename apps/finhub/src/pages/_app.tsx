@@ -65,7 +65,7 @@ import { CaseStudyAPI } from './api/case-study'
 import { ClassAPI } from './api/class'
 import { CoursesAPI, submitQuizTest } from './api/courses'
 import { NotificationAPI } from './api/notification'
-import { AuthAPI } from './api/profile'
+import MyProfileAPI, { AuthAPI } from './api/profile'
 import { QuestionAPI } from './api/question'
 import { UploadAPI } from './api/upload'
 import ErrorRedirectPage from './error-redirect'
@@ -337,6 +337,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 activityApi: ActivityAPI,
                 courseActivityApi: CourseActivityApi,
                 caseStudyApi: CaseStudyAPI,
+                myProfileApi: MyProfileAPI,
                 submitQuizTest: submitQuizTest,
                 authManager: new AuthenticationManager(),
                 pageLink: PageLink,

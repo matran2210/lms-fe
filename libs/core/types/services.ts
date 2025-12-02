@@ -182,6 +182,7 @@ export interface IAuthAPI {
     new_password: string,
     otp_code: string,
   ) => Promise<any>;
+  getCertificate: (pageSize: number, pageIndex: number) => Promise<any>;
 }
 
 export interface IUploadAPI {

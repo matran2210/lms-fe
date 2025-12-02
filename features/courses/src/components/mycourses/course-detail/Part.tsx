@@ -1,11 +1,9 @@
 import { Icon } from '@lms/assets';
-import { useCourseContext } from "@lms/contexts";
+import { useCourseContext, useFeature } from "@lms/contexts";
 import { CLASS_USER_STATUS, IMyCourseDetail } from "@lms/core";
-import { useTailwindBreakpoint } from "@lms/hooks";
 import { ButtonSecondary, Tooltip } from "@lms/ui";
 import { buildQueryString, formatTimeMinToHhMm, getUserPrefix, handleReplaceText, trackGAEvent } from "@lms/utils";
 import { round } from "lodash";
-import { useRouter } from "next/router";
 import { CardCourse } from "../../course";
 
 const Part = ({
@@ -25,8 +23,7 @@ const Part = ({
   lastElementRef: (node: HTMLDivElement) => void;
   isTeacher?: boolean;
 }) => {
-  const router = useRouter();
-  const { isMobileView } = useTailwindBreakpoint();
+  const {pageLink, router} = useFeature()
   const total = course?.learning_progress?.total_course_sections ?? 0;
   const completed =
     course?.learning_progress?.total_course_sections_completed ?? 0;
@@ -40,7 +37,7 @@ const Part = ({
       deadline,
     });
     router.push(
-      `${getUserPrefix(isTeacher)}/courses/${router.query.courseId}/section/${id}?${searchParams}`,
+      `${getUserPrefix(isTeacher, pageLink)}/courses/${router.query.courseId}/section/${id}?${searchParams}`,
     );
   };
 

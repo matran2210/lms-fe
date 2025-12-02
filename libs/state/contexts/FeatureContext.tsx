@@ -34,6 +34,21 @@ interface FeatureContextProps {
   entranceTestApi?: IEntranceTestAPI;
   eventTestApi?: IEventTestAPI;
   calendarApi?: ICalendarAPI;
+  myProfileApi?: {
+      getProfile: () => Promise<any>;
+    getSubjectOfhubspot: (courseCategoryName: string) => Promise<any>;
+    getExamBySubjectId: ({ pageIndex, pageSize, params, }: {
+        pageIndex: number;
+        pageSize: number;
+        params?: Object | undefined;
+    }) => Promise<any>;
+    updateProgram: (data: {
+        course_category_id?: string | undefined;
+        user_hubspot_examination_subjects?: {
+            examination_subject_id?: string | undefined;
+        }[] | undefined;
+    }) => Promise<any>;
+  };
   submitQuizTest: (
     id: string,
     data: any,

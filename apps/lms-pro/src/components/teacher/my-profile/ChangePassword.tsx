@@ -1,7 +1,7 @@
 import { ButtonCancelSubmit } from '@lms/ui'
 import { HookFormTextField } from '@lms/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { VALIDATE_PASSWORD } from '@lms/core'
+import { ExceptionErrorCode, VALIDATE_PASSWORD } from '@lms/core'
 import {
   VALIDATE_MIN_LENGTH_PASSWORD,
   VALIDATE_PASSWORD_REGEX_MSG,
@@ -15,7 +15,6 @@ import { z } from 'zod'
 import PasswordProfile from './PasswordProfile'
 import { ButtonSecondary } from '@lms/ui'
 import { ButtonPrimary } from '@lms/ui'
-import exceptions from '../../../services/en.exceptions.json'
 export interface IChangePassword {
   password: string
   newPassword: string
@@ -88,7 +87,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
       setOpenPopup(true)
     } catch (error: any) {
       const errorCode = error?.response?.data?.error?.code
-      const errorMessage = exceptions.find(
+      const errorMessage = ExceptionErrorCode.find(
         (exception) => exception.code === errorCode,
       )
 

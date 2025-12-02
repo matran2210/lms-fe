@@ -5,7 +5,7 @@ import { Dispatch, FC, SetStateAction } from "react";
 import ResultTableRows from "./ResultTableRows";
 import { Icon } from '@lms/assets'
 import { trackGAEvent } from "@lms/utils";
-import { SappTable } from '@lms/ui/components/base';
+import { SappBaseTable } from '@lms/ui/components/base';
 
 // define the props for the confirm dialog component
 export type ResultRowsModalProps = {
@@ -232,7 +232,7 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
       >
         <Icon type="cross" />
       </div>
-      <SappTable
+      <SappBaseTable
         headers={headers}
         loading={false}
         isCheckedAll={false}
@@ -244,7 +244,7 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
         onChange={() => { }}
       >
         <ResultTableRows resultTablerows={listResults} />
-      </SappTable>
+      </SappBaseTable>
     </SappModal>
   );
 };

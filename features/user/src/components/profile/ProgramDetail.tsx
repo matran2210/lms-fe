@@ -1,16 +1,13 @@
-import React from 'react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import MyProfileAPI from 'src/pages/api/profile'
-import { useAppSelector } from '@lms/contexts'
+import { useAppSelector, useFeature } from '@lms/contexts'
 import { userReducer } from '@lms/contexts'
 import { Icon } from '@lms/assets'
 import { Divider } from 'antd'
 import AttempItem from './SubjectInformation/AttempItem'
 import { ISubjectItem, IUser } from '@lms/contexts'
-import { UserApi } from '@pages/api/user'
 import { PROGRAM } from '@lms/core'
-import { SappCollapse } from 'node_modules/@lms/ui'
+import { SappCollapse } from '@lms/ui'
 
 interface IProps {
   typeProgram: PROGRAM
@@ -29,12 +26,15 @@ interface ISubject {
   course_category_id: string
 }
 
-const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
+const ProgramDetail = ({ typeProgram }: IProps) => {
   const [subjects, setSubjects] = useState<ISubject>()
   const { user } = useAppSelector(userReducer)
   const [typeOfProgram, setTypeOfProgram] = useState<string>('')
   const [userProgram, setUserProgram] = useState<IUser>()
-
+const {
+  myProfileApi,
+  userApi
+} = useFeature()
   const { setValue, control, resetField } = useForm({
     mode: 'onSubmit',
   })
@@ -46,7 +46,7 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
   const fetchSubjectOfHub = async () => {
     try {
       // Gọi API để lấy danh sách môn học dựa trên typeProgram
-      const res = await MyProfileAPI.getSubjectOfhubspot(typeProgram)
+      const res = await myProfileApi?.getSubjectOfhubspot(typeProgram)
 
       // Cập nhật danh sách môn học vào state
       setSubjects(res)
@@ -90,7 +90,7 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
   async function getUserProgram() {
     try {
       // Gọi API để lấy thông tin chương trình học dựa trên course_category_id
-      const res = await UserApi.getUserPrograms(subjects?.course_category_id)
+      const res = await userApi?.getUserPrograms!(subjects?.course_category_id)
       setUserProgram(res) // Cập nhật thông tin chương trình học vào state
     } catch (err) {}
   }
@@ -127,7 +127,7 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
       <div>
         {subjects?.subjects?.map((subject: ISubjectItem, index: number) => {
           const courseTabData = user.course_tab_groups?.[
-            typeProgram
+            typeProgram 
           ]?.user_hubspot_examination_subjects?.find(
             (item) => item.examination_subject.subject.id === subject.id,
           )
