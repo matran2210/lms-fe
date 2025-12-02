@@ -526,7 +526,7 @@ export const excludedPathsHelp = [
 ];
 export const CERTIFICATE = "certificates";
 
-export const TEST_TYPE = {
+export const TEST_TYPE_LABELS = {
   QUIZ: "Quiz",
   MID_TERM_TEST: "Midterm Test",
   FINAL_TEST: "Final Test",
