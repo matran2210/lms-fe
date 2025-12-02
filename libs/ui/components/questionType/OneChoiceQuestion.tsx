@@ -59,7 +59,6 @@ const OneChoiceQuestion = ({
   explainClassname,
   storageKey,
 }: IPreviewProp) => {
-  console.log("control", control);
   const { router } = useFeature();
   useEffect(() => {
     if (defaultValues) {

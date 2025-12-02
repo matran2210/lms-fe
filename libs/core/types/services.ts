@@ -107,7 +107,7 @@ export interface ICoursesAPI {
   skipFoundation: (
     class_id: string | undefined,
   ) => Promise<{ success: boolean }>;
-  submitAllQuestion: (id: string, data?: unknown) => Promise<unknown>;
+  submitAllQuestion: (id: string, data?: unknown) => Promise<any>;
 }
 export interface IActivityAPI {
   createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<unknown>;
