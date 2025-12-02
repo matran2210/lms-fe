@@ -3,10 +3,19 @@ import Overview from '@components/teacher/myClass/class-detail/OverView'
 import Students from '@components/teacher/myClass/class-detail/Students'
 import StudentsTestResult from '@components/teacher/myClass/class-detail/StudentsTestResult'
 import { UserType } from '@lms/contexts'
-import { ANIMATION, DATE_FORMAT_HM, DATE_FORMAT_YMD, ICertificateData, IMyClass, IProfilePages, ITabs, NumberToDayOfWeekMap, ProfilePages } from '@lms/core'
-import { ClassCard, LayoutTeacher } from '@lms/ui'
-import { CoursesAPI } from '@pages/api/courses'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
+import {
+  ANIMATION,
+  DATE_FORMAT_HM,
+  DATE_FORMAT_YMD,
+  ICertificateData,
+  IMyClass,
+  IProfilePages,
+  ITabs,
+  NumberToDayOfWeekMap,
+  ProfilePages,
+} from '@lms/core'
+import { ClassCard } from '@lms/feature-class'
+import { LayoutTeacher } from '@lms/ui'
 import { Space } from 'antd'
 import dayjs from 'dayjs'
 import { capitalize } from 'lodash'

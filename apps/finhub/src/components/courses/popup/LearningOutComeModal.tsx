@@ -1,15 +1,14 @@
-import SappDrawerV3 from '@components/v2/base/drawer/SappDrawerV3'
-import clsx from 'clsx'
-import { CollapseProps } from 'antd'
-import { ISubSection } from 'src/type/courses-3-level'
-import { useEffect, useState } from 'react'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { useCourseContext } from '@lms/contexts'
-import { ILearningOutcome } from '@lms/core'
 import { BlackStarIcon } from '../icons/BlackStartIcon'
-import { EditorReader } from '@lms/ui'
-import { BaseCollapse } from '@lms/feature-courses'
+import SappDrawerV3 from '@components/v2/base/drawer/SappDrawerV3'
 import { ArrowDownIcon } from '@lms/assets'
+import { useCourseContext } from '@lms/contexts'
+import { ILearningOutcome, ISubSection } from '@lms/core'
+import { BaseCollapse } from '@lms/feature-courses'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { EditorReader } from '@lms/ui'
+import { CollapseProps } from 'antd'
+import clsx from 'clsx'
+import { useEffect, useState } from 'react'
 
 interface IProps {
   open: boolean
@@ -164,7 +163,7 @@ const LearningOutComeModal: React.FC<IProps> = ({
                 })}
               />
             )}
-            // classNameProp="learning-outcome-collapse bg-white"
+            classNameProp="learning-outcome-collapse bg-white"
           />
         </div>
       </SappDrawerV3>
