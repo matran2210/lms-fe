@@ -1,10 +1,10 @@
 import { CertificateImg, Icon, SappLogoImage } from "@lms/assets";
 import { ButtonPrimary, ClickToCopyButton } from "@lms/ui";
-import { ICertificate } from "@pages/certificates/[id]";
 import { Button } from "antd";
 import Image from "next/image";
 import React from "react";
 import CertificateCard from "./CertificateCard";
+import { ICertificate } from "@lms/core";
 
 interface HorizontalCertificateProps {
   certificate?: ICertificate;
@@ -81,7 +81,7 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
                 <Button
                   icon={<Icon type="share" />}
                   type="text"
-                  className="h-full px-0 underline"
+                  className="h-full px-0 text-base font-semibold text-secondary underline"
                 >
                   Share Certificate
                 </Button>

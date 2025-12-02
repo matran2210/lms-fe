@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { ClassAPI } from "src/pages/api/class";
 import { IQuizResultList } from "@lms/core";
 import { Select } from "antd";
 import { ArrowDownIcon } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
 interface IQuizAttempt {
   attempt?: {
     grading_status?: string;
@@ -77,6 +77,7 @@ const ResultCourse = ({
   // isTeacher,
   setLabelResult,
 }: IProps) => {
+  const {classApi} = useFeature()
   const [resultList, setResultList] = useState<IQuizResultList>({
     metadata: {
       page_index: 1,
@@ -98,7 +99,7 @@ const ResultCourse = ({
   const fetchResult = async (pageIndex = 1, pageSize = 10) => {
     if (!class_user_id || !coursePart?.quiz?.id) return;
 
-    const response = await ClassAPI.getAllResultOfQuiz(
+    const response = await classApi.getAllResultOfQuiz(
       class_user_id,
       coursePart.quiz.id,
       {

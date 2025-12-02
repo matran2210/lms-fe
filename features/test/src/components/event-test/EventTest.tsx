@@ -1,17 +1,12 @@
-import { AlertIcon, IconCongrats } from "@lms/assets";
-import { useCourseContext } from "@lms/contexts";
+import { AlertIcon } from "@lms/assets";
+import { useCourseContext, useFeature } from "@lms/contexts";
 import { EAttemptStatus, IEventTest, MY_COURSES } from "@lms/core";
 import { CardCourse } from "@lms/feature-courses";
 import { ButtonSecondary, SappModalV3 } from "@lms/ui";
-import { formatTime } from "@lms/utils";
-import { CoursesAPI } from "@pages/api/courses";
-import { formatDate } from "@utils/helpers";
-import { isQuizExpired } from "@utils/helpers/quiz-test/helper";
+import { formatDate, formatTimer, isQuizExpired } from "@lms/utils";
 import { compareAsc } from "date-fns";
 import dayjs from "dayjs";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import ContentTestCongratution from "./ContentTestCongratution";
 
 const EventTest = ({
   data,
@@ -20,9 +15,9 @@ const EventTest = ({
   data: IEventTest;
   onRefetch: () => void;
 }) => {
-  const router = useRouter();
+  const { router, courseApi } = useFeature();
   const [open, setOpen] = useState<boolean>(false);
-  const { setSubmitEventTest, submitEventTest } = useCourseContext();
+  const { setSubmitEventTest } = useCourseContext();
   const [remainingTimeLastAttempt, setRemainingTimeLastAttempt] =
     useState<number>(0);
 
@@ -57,7 +52,7 @@ const EventTest = ({
 
   const handleSubmitQuestion = async () => {
     try {
-      const res = await CoursesAPI.submitAllQuestion(
+      const res = await courseApi.submitAllQuestion(
         data?.quiz_attempt_id as string,
       );
       if (res.success) {
@@ -67,15 +62,11 @@ const EventTest = ({
     } catch (err) {}
   };
 
-  const handleCancelModalSubmitTest = () => {
-    setSubmitEventTest(false);
-  };
-
   const timeTakenFormatted = data?.total_attempt_time
-    ? formatTime(data?.total_attempt_time)
+    ? formatTimer(data?.total_attempt_time)
     : 0;
   const timeAllowFormatted = data?.quiz_timed
-    ? formatTime(data?.quiz_timed * 60)
+    ? formatTimer(data?.quiz_timed * 60)
     : "Unlimited";
 
   const currentTime = Date.now();
@@ -97,58 +88,6 @@ const EventTest = ({
         ? textEnd
         : "";
   }
-
-  const renderContentPopup = (type: string) => {
-    switch (type) {
-      case "ACCA":
-        return (
-          <ContentTestCongratution
-            text1="Your test results will"
-            text2="be emailed to you on November 11, 2025"
-            text3="Please check your email regularly to receive the earliest update."
-          />
-        );
-      case "CMA":
-        return (
-          <ContentTestCongratution
-            text1="Your results will"
-            text2="be emailed to you on October 14, 2025"
-            text3="Please remember to check your inbox to ensure you don’t miss the update."
-          />
-        );
-      case "CFA":
-        return (
-          <ContentTestCongratution
-            text1="Your results for Round 2 will"
-            text2="be emailed to you on June 28, 2025"
-            text3="Please remember to check your inbox to ensure you don’t miss the update."
-          />
-        );
-      default:
-        return (
-          <ContentTestCongratution
-            text1="Your test results will"
-            text2="be emailed to you on October 04, 2024"
-            text3="Please check your email regularly to receive the earliest update."
-          />
-        );
-    }
-  };
-
-  // const resultDate = (category: string) => {
-  //   switch (category) {
-  //     case 'ACCA':
-  //       return '04/10/2024'
-
-  //     case 'CFA':
-  //       return '28/06/2025'
-
-  //     case 'CMA':
-  //       return '30/09/2025'
-  //     default:
-  //       break
-  //   }
-  // }
 
   const handleClickBegin = () => {
     if (resultStartAt === -1 || resultFinishAt === 1) {
@@ -245,7 +184,7 @@ const EventTest = ({
           <p
             className={`font-medium ${remainingTimeLastAttempt > 0 ? "text-gray-800" : "text-error"}`}
           >
-            {formatTime(
+            {formatTimer(
               remainingTimeLastAttempt > 0 ? remainingTimeLastAttempt : 0,
             )}
           </p>
@@ -408,25 +347,6 @@ const EventTest = ({
           . Please come back later or contact our Support at{" "}
           {MY_COURSES.hotline}.
         </div>
-      </SappModalV3>
-
-      <SappModalV3
-        open={submitEventTest}
-        okButtonCaption="Back"
-        handleCancel={handleCancelModalSubmitTest}
-        onOk={handleCancelModalSubmitTest}
-        fullWidthBtn={true}
-        buttonSize="medium"
-        icon={<IconCongrats />}
-        header={
-          <div className={`flex items-center justify-center`}>
-            Congratulations
-          </div>
-        }
-      >
-        {renderContentPopup(
-          JSON.parse(localStorage.getItem("category") as any),
-        )}
       </SappModalV3>
     </>
   );

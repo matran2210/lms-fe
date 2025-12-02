@@ -82,6 +82,7 @@ import { AuthAPI } from './api/profile'
 import { QuestionAPI } from './api/question'
 import { UploadAPI } from './api/upload'
 import ErrorRedirectPage from './error-redirect'
+import CalendarApi from './api/calendar'
 dayjs.extend(utc)
 dayjs.extend(weekday)
 
@@ -357,6 +358,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 caseStudyApi: CaseStudyAPI,
                 entranceTestApi: EntranceTestAPI,
                 eventTestApi: EventTestAPI,
+                calendarApi: CalendarApi,
                 submitQuizTest: submitQuizTest,
                 authManager: new AuthenticationManager(),
                 pageLink: PageLink,

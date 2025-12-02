@@ -126,7 +126,7 @@ export interface ICoursesAPI {
   skipFoundation: (
     class_id: string | undefined,
   ) => Promise<{ success: boolean }>;
-  submitAllQuestion: (id: string, data?: unknown) => Promise<unknown>;
+  submitAllQuestion: (id: string, data?: unknown) => Promise<any>;
 }
 export interface IActivityAPI {
   createDiscussionComment: (
@@ -208,4 +208,8 @@ export interface IClassAPI {
     id: string,
     params: { page_index: number; page_size: number },
   ) => Promise<ExaminationsResponse>;
+}
+export interface ICalendarAPI {
+  getEventSchedule: (params?: object | undefined) => Promise<any>;
+  getDetailEvent: (id: string, is_holiday: boolean) => Promise<any>;
 }
