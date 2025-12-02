@@ -548,7 +548,7 @@ export default function MenuItem({
   return (
     <>
       {isActivity && name === TitleSidebar.NEW_NOTE && (
-        <div className="mx-auto w-[calc(100%-70px)] text-center">
+        <div className="mx-auto w-[calc(100%-48px)] min-w-[50px] text-center">
           <Divider className="my-2 bg-[#DCDDDD]" />
         </div>
       )}
