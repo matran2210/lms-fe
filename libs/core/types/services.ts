@@ -185,3 +185,7 @@ export interface IClassAPI {
     params: { page_index: number; page_size: number },
   ) => Promise<ExaminationsResponse>;
 }
+export interface ICalendarAPI {
+  getEventSchedule: (params?: object | undefined) => Promise<any>;
+  getDetailEvent: (id: string, is_holiday: boolean) => Promise<any>;
+}
