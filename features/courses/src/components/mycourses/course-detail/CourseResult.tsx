@@ -65,7 +65,7 @@ interface IProps {
     >
   >;
   isTeacher: boolean;
-  setLabelResult: Dispatch<SetStateAction<string>>;
+  setLabelResult?: Dispatch<SetStateAction<string>>;
 }
 
 const ResultCourse = ({
@@ -133,7 +133,7 @@ const ResultCourse = ({
             index === self.findIndex((t) => t.id === item.id),
         ),
       }));
-      setLabelResult(resultList?.data?.[0]?.name);
+      // setLabelResult(resultList?.data?.[0]?.name);
     }
   };
 

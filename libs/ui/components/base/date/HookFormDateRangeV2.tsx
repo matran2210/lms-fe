@@ -3,7 +3,7 @@ import { DatePicker, Skeleton } from "antd";
 import clsx from "clsx";
 import dayjs, { Dayjs } from "dayjs";
 import { Control, Controller } from "react-hook-form";
-import { ErrorMessage } from "../../common";
+import { ErrorMessage, SappIcon } from "../../common";
 
 type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
 

@@ -60,19 +60,20 @@ const EditorReader = ({
   }, [text_editor_content]);
 
   const convertMathToImage = async (element: any) => {
-    if (typeof com === "undefined") return;
+    // TODO: check lại này
+    // if (typeof com === "undefined") return;
 
-    const viewer = com?.wiris?.js?.JsPluginViewer;
+    // const viewer = com?.wiris?.js?.JsPluginViewer;
 
-    if (element && viewer) {
-      try {
-        await viewer.parseElement(element, true, function () {
-          // Do something
-        });
-      } catch (error) {
-        // Log the error
-      }
-    }
+    // if (element && viewer) {
+    //   try {
+    //     await viewer.parseElement(element, true, function () {
+    //       // Do something
+    //     });
+    //   } catch (error) {
+    //     // Log the error
+    //   }
+    // }
   };
 
   useEffect(() => {
