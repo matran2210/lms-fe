@@ -24,7 +24,7 @@ import { ANIMATION, DEFAULT_PAGESIZE, ROUTES, TEST_TYPE } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
-  activeNotesList,
+  activeNotesList3Level,
   useAppDispatch,
   useCourseContext,
   UserType,
@@ -191,7 +191,7 @@ const CourseDetail = () => {
   }
 
   const handleOpenNotesList = () => {
-    dispatch(activeNotesList())
+    dispatch(activeNotesList3Level())
     document.body.style.overflow = 'hidden'
   }
   const handleDefaultActiveItem = () => {
