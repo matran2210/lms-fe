@@ -1,4 +1,4 @@
-import { ITabs, TEST_TYPE } from '@lms/core'
+import { ITabs, TEST_TYPE_LABELS } from '@lms/core'
 import { FullScreenLayout, SappBreadCrumbs, SappLoading } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import { useRouter } from 'next/router'
@@ -49,7 +49,7 @@ const TestResultDetail = () => {
     },
     {
       link: linkTest,
-      title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type as keyof typeof TEST_TYPE]}`,
+      title: `${TEST_TYPE_LABELS[questions?.quizAttempt?.quiz?.quiz_type as keyof typeof TEST_TYPE_LABELS]}`,
       disable: true,
     },
     {

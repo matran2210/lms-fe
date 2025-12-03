@@ -5,7 +5,7 @@ import {
   GRADE_STATUS,
   GRADING_METHOD,
   IQuizResultList,
-  TEST_TYPE,
+  TEST_TYPE_LABELS,
 } from "@lms/core";
 import { ButtonPrimary, ButtonSecondary, ButtonText } from "@lms/ui";
 import { capitalizeFirstLetter, formatTimer, isQuizExpired, trackGAEvent } from "@lms/utils";
@@ -658,7 +658,7 @@ const TestModal = ({
         setOpen={setOpen}
         title={
           <div className="flex items-center justify-center">
-            {TEST_TYPE[data?.course_section_type as keyof typeof TEST_TYPE]}
+            {TEST_TYPE_LABELS[data?.course_section_type as keyof typeof TEST_TYPE_LABELS]}
           </div>
         }
         time={displayTime}
