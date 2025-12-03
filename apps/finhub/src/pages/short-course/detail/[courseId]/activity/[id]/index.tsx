@@ -14,7 +14,6 @@ import { Arrows } from '@components/courses/icons'
 import { AltArrowLeft } from '@components/courses/icons/AltArrowLeft'
 import PdfModal from '@components/courses/popup/PdfModal'
 import Layout from '@components/layout'
-import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import {
   ActivityLeftSkeleton,
   ActivityRightSkeleton,
@@ -23,8 +22,24 @@ import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
 import { CloseIcon, CloseModalIcon } from '@lms/assets'
-import { clearNote3Level, closeCalculator3Level, courseActivityAction3Level, shortCourseActivityReducer, showPopupCompletedCourse, useAppDispatch, useAppSelector, useCourseContext } from '@lms/contexts'
-import { ACTIVE_TABS, ActivityFile, ANIMATION, IActivity3Level, IActivityResource, ISubSection } from '@lms/core'
+import {
+  clearNote3Level,
+  closeCalculator3Level,
+  courseActivityAction3Level,
+  shortCourseActivityReducer,
+  showPopupCompletedCourse,
+  useAppDispatch,
+  useAppSelector,
+  useCourseContext,
+} from '@lms/contexts'
+import {
+  ACTIVE_TABS,
+  ActivityFile,
+  ANIMATION,
+  IActivity3Level,
+  IActivityResource,
+  ISubSection,
+} from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { MovableWindow } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
@@ -319,7 +334,9 @@ export default function ActivityDetail() {
   }, [])
 
   // Tạo một mảng chứa các id của các hoạt động từ sessionData
-  const activityIds = sessionData?.map((activity: IActivity3Level) => activity.id)
+  const activityIds = sessionData?.map(
+    (activity: IActivity3Level) => activity.id,
+  )
 
   // Lấy id của hoạt động tiếp theo
   const nextActivityId = activity?.next_activity?.id || ACTIVITYID
@@ -658,7 +675,6 @@ export default function ActivityDetail() {
         ></PdfModal>
       )}
       <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />
-      <CtaTrial />
     </Layout>
   )
 }

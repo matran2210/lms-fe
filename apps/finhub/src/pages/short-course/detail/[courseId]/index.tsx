@@ -33,7 +33,8 @@ import { ISubSection } from 'src/type/courses-3-level'
 import { isEmpty } from 'lodash'
 import { PageLink } from 'src/constants/routes'
 import { PopupLockContent } from '@lms/feature-courses'
-import { CtaTrial, LearningResource } from '@lms/ui'
+import { LearningResource } from '@lms/ui'
+import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 
 // interface IProps {
 //   course_section_type: string
