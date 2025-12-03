@@ -144,7 +144,7 @@ const LearningOutComeModal: React.FC<IProps> = ({
         closable
         isShowBtnClose
         submitButtonClassName={isMobileView ? 'w-full' : ''}
-        rootClassName={'responsive-drawer-center'}
+        rootClassName={'responsive-drawer-base'}
       >
         <div
           className="overflow-y-auto"

@@ -446,7 +446,7 @@ function DiscussionElement({
                           className="sapp-custom-hover h-fit !min-w-1 cursor-pointer border-none bg-transparent"
                           classTitle={"!m-0"}
                         >
-                          <SendComment />
+                          <SendComment isLoading={isLoading} />
                         </SappButtonIcon>
                         <div
                           className={`relative h-5 select-none hover:text-primary ${clsx({ hidden: discussionFile?.length > 0 || selectFile?.length > 0 })}`}

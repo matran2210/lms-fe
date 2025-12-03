@@ -1,10 +1,16 @@
-import { IconSend } from "@lms/assets";
+import { IconSend, LoadingButtonAnimation } from "@lms/assets";
 
-const SendComment = () => {
+const SendComment = ({ isLoading = false }: { isLoading?: boolean }) => {
   return (
-    <div className="cursor-pointer hover:text-primary">
-      <IconSend />
-    </div>
+    <>
+      {isLoading ? (
+        <LoadingButtonAnimation />
+      ) : (
+        <div className="cursor-pointer hover:text-primary">
+          <IconSend />
+        </div>
+      )}
+    </>
   );
 };
 
