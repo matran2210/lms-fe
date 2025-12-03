@@ -926,10 +926,10 @@ const CaseStudyResult = () => {
                   <ModalResizeable
                     key={e.id}
                     handleCloseScratchPad={() => handleCloseScratchPad(e)}
-                    position="bottom left"
+                    position="center left"
                     header={
                       <div className="relative">
-                        <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
+                        <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                           <div className="truncate">
                             <span className="text-base font-semibold ">{`${exhibitText} ${
                               (i ?? 0) + 1
@@ -1011,8 +1011,8 @@ const CaseStudyResult = () => {
                 <button
                   className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
                   onClick={() => {
-                    (setAllowUnHighLight(!allowUnHighLight),
-                      setAllowHighLight(false))
+                    setAllowUnHighLight(!allowUnHighLight)
+                    setAllowHighLight(false)
                   }}
                 >
                   <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6 ">

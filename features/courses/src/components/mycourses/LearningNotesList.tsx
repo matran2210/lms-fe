@@ -111,7 +111,6 @@ const LearningNotesList = ({ appType }: Props) => {
   const [noteHeights, setNoteHeights] = useState<{
     [key: string]: { full: number; collapsed: number };
   }>({});
-  const [loading, setLoading] = useState<boolean>(false);
   const [paramsCourseSectionId, setCourseSectionId] = useState<string>("");
   const [isPageStateVariables, setIsPageStateVariables] =
     useState<boolean>(false);
@@ -212,7 +211,6 @@ const LearningNotesList = ({ appType }: Props) => {
       return;
 
     isFetchingRef.current = true;
-    setLoading(true);
 
     courseApi
       .getCourseNotesList(DEFAULT_PAGE_NUMBER, DEFAULT_PAGESIZE, params)
@@ -245,9 +243,6 @@ const LearningNotesList = ({ appType }: Props) => {
       .finally(() => {
         setIsFirstCallApi(true);
         isFetchingRef.current = false;
-        setTimeout(() => {
-          setLoading(false);
-        }, 500);
       });
   }, [notesListStatus, router, paramsCourseSectionId]);
 
@@ -282,7 +277,6 @@ const LearningNotesList = ({ appType }: Props) => {
     setIsPageStateVariables(true);
   };
   const fetchData = async (pageIndexNext: number, params?: object) => {
-    setLoading(true);
     try {
       const res = await courseApi.getCourseNotesList(
         pageIndexNext,
@@ -297,19 +291,18 @@ const LearningNotesList = ({ appType }: Props) => {
       setPageIndex(pageIndexNext);
     } finally {
       isFetchingRef.current = false;
-      setLoading(false);
     }
   };
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await courseApi.deleteCourseNoteList(id);
+      await courseApi.deleteCourseNoteList(id);
       fetchData(pageIndex, params);
       refetchNotesList();
       toast.success("Xóa thành công!");
     } catch {}
   };
-  const handleEditNote = (id: string, description: string, index: number) => {
+  const handleEditNote = (id: string, description: string) => {
     const note = {
       uuid: uuidv4(),
       id: id,
@@ -428,7 +421,7 @@ const LearningNotesList = ({ appType }: Props) => {
                 {!isEmpty(notesListData?.notes) ? (
                   <>
                     {notesListData?.notes?.map(
-                      (note: ICourseSectionNoteItem, index) => {
+                      (note: ICourseSectionNoteItem) => {
                         const isExpanded = expandedNotes.includes(note?.id);
                         const isEdit = activityId === note?.course_section_id;
                         const handleEdit = () => {
@@ -438,7 +431,7 @@ const LearningNotesList = ({ appType }: Props) => {
                             )
                           ) {
                             handleOpenNote(note, false);
-                            handleEditNote(note?.id, note?.description, index);
+                            handleEditNote(note?.id, note?.description);
                             onClose();
                           }
                         };
@@ -450,7 +443,7 @@ const LearningNotesList = ({ appType }: Props) => {
                             },
                           });
                           handleOpenNote(note, true);
-                          handleEditNote(note?.id, note?.description, index);
+                          handleEditNote(note?.id, note?.description);
                           onClose();
                         };
 
@@ -494,7 +487,7 @@ const LearningNotesList = ({ appType }: Props) => {
                             >
                               <SappBreadcrumbNotLink
                                 isTeacher={userType === UserType.TEACHER}
-                                paths={[...note?.course_section_path].reverse()}
+                                paths={[...(note?.course_section_path || [])].reverse()}
                               />
                             </div>
                             <div className="mt-1 text-sm font-normal text-gray-800 md:mt-4 md:text-base">
