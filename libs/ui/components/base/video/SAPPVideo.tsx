@@ -863,7 +863,7 @@ const SAPPVideo = ({
           ) : (
             <div
               className={`sapp-video-custom video-container group ${
-                !hideVideo ? 'sapp-wrapper' : 'sapp-hideWrapper'}`}
+                !hideVideo ? 'sapp-wrapper' : 'sapp-hideWrapper'}  ${loading ? 'hidden' : ''}`}
               ref={videoContainerRef}
             >
               <div className={`popup-question`}>{children}</div>
