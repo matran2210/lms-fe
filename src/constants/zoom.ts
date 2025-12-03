@@ -8,13 +8,6 @@ export const ZOOM_CONFIG = {
   // Meeting container
   MEETING_CONTAINER_ID: '#zmmtg-root', // Default by zoom-sdk
 
-  MEETING_FULL_SCREEN_WIDGET: '.full-screen-widget',
-  MEETING_FULL_SCREEN_DROPDOWN: '#full-screen-dropdown',
-  MEETING_FULL_SCREEN_DROPDOWN_POP_MENU: '.full-screen-widget__pop-menu > a:last-of-type',
-
-  MEETING_FULL_SCREEN_WIDGET_EXIT: 'Exit Full Screen',
-  MEETING_FULL_SCREEN_DROPDOWN_EXIT: 'Thoát khỏi Chế độ toàn màn hình',
-
   MEETING_VIDEO_SHARE_LAYOUT: '.video-share-layout',
   MEETING_VIDEO_SHARE_LAYOUT_STANDARD: 'video-share-standrad',
   MEETING_VIDEO_SHARE_LAYOUT_PANE_1: '.Pane.Pane1',
@@ -32,6 +25,8 @@ export const ZOOM_CONFIG = {
 
   MEETING_MULTI_SPEAKER_ACTIVE_CONTAINER_MAIN_VIEW: '.multi-speaker-active-container__main-view',
 
+  NOTIFICATION_MANAGER_HEADER_VISIBLE_TOP: '176px',
+
   // Error messages
   ERROR_MESSAGES: {
     SDK_NOT_LOADED: 'Zoom SDK not loaded',
@@ -40,8 +35,3 @@ export const ZOOM_CONFIG = {
     FAILED_TO_INIT_SDK: 'Failed to initialize Zoom SDK',
   } as const,
 } as const
-
-export const ZOOM_ARIA_LABELS: string[] = [
-  ZOOM_CONFIG.MEETING_FULL_SCREEN_WIDGET_EXIT,
-  ZOOM_CONFIG.MEETING_FULL_SCREEN_DROPDOWN_EXIT,
-]

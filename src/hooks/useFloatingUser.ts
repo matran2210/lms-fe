@@ -1,3 +1,4 @@
+import { FLOATING_USER_POSITION_INTERVAL } from '@/constants'
 import { ZOOM_CONFIG } from '@/constants/zoom'
 import { RefObject, useEffect, useRef, useState } from 'react'
 
@@ -11,10 +12,8 @@ export const useFloatingUser = ({ floatingRef }: UseFloatingUserProps) => {
 
   useEffect(() => {
     const removeMeetingContainer = () => {
-      const meetingContainer = document.getElementById(ZOOM_CONFIG.MEETING_CONTAINER_ID)
-      if (meetingContainer) {
-        meetingContainer.remove()
-      }
+      const meetingContainer = document.querySelector(ZOOM_CONFIG.MEETING_CONTAINER_ID) as HTMLElement
+      meetingContainer?.remove()
     }
 
     const parseStyleStringToMap = (styleString: string) => {
@@ -69,31 +68,20 @@ export const useFloatingUser = ({ floatingRef }: UseFloatingUserProps) => {
         return
       }
 
-      const containerRect = container.getBoundingClientRect()
-      const floatingRect = floatingRef.current.getBoundingClientRect()
+      // Generate random position in percentage (10% - 90%)
+      const minPercent = 10
+      const maxPercent = 90
+      const newTopPercent = Math.round(minPercent + Math.random() * (maxPercent - minPercent))
+      const newLeftPercent = Math.round(minPercent + Math.random() * (maxPercent - minPercent))
 
-      const floatingWidth = floatingRect.width
-      const floatingHeight = floatingRect.height
-
-      // Calculate boundaries based on provided area or container
-      const minLeft = containerRect.left || 0
-      const minTop = containerRect.top || 0
-      const maxLeft = (containerRect.right || containerRect.width) - floatingWidth
-      const maxTop = (containerRect.bottom || containerRect.height) - floatingHeight
-
-      // Generate random position within boundaries
-      const newTop = Math.max(minTop, Math.min(maxTop, Math.floor(minTop + Math.random() * (maxTop - minTop))))
-      const newLeft = Math.max(minLeft, Math.min(maxLeft, Math.floor(minLeft + Math.random() * (maxLeft - minLeft))))
-
-      // Store the code-driven position as px strings for comparison
       allowedTopLeftRef.current = {
-        top: `${newTop}px`,
-        left: `${newLeft}px`,
+        top: `${newTopPercent}%`,
+        left: `${newLeftPercent}%`,
       }
 
       setPosition({
-        top: newTop,
-        left: newLeft,
+        top: newTopPercent,
+        left: newLeftPercent,
       })
     }
 
@@ -154,7 +142,7 @@ export const useFloatingUser = ({ floatingRef }: UseFloatingUserProps) => {
     const observer = createElementObserver()
     const floatingObserver = createFloatingRefObserver()
     changePosition()
-    const intervalId = setInterval(changePosition, 30000)
+    const intervalId = setInterval(changePosition, FLOATING_USER_POSITION_INTERVAL)
 
     return () => {
       clearInterval(intervalId)

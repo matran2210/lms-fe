@@ -1,7 +1,7 @@
 'use client'
 
 import { HEADER_HEIGHT, SHOW_FULL_SCREEN_CLASS } from '@/constants'
-import { ZOOM_ARIA_LABELS, ZOOM_CONFIG } from '@/constants/zoom'
+import { ZOOM_CONFIG } from '@/constants/zoom'
 import { useLayoutContext } from '@/contexts/LayoutContext'
 import { useCallback, useEffect, useRef } from 'react'
 
@@ -17,75 +17,14 @@ export const useZoomElementAdjustment = (isJoined: boolean) => {
     }
   }, [])
 
-  const handleAriaChange = useCallback(
-    (target: HTMLElement | null) => {
-      if (!target) return
-      const currentAriaLabel = target.getAttribute('aria-label') as string
-      if (ZOOM_ARIA_LABELS.includes(currentAriaLabel)) {
-        setIsShowHeader(false)
-        toggleFullScreen(true)
-        return
-      }
+  const handleFullScreenChange = useCallback(() => {
+    if (typeof document === 'undefined') return
 
-      setIsShowHeader(true)
-      toggleFullScreen(false)
-    },
-    [setIsShowHeader, toggleFullScreen]
-  )
+    const isHtmlFullScreen = document.fullscreenElement === document.documentElement
 
-  const createObserverForTarget = useCallback(
-    (target: HTMLElement | null) => {
-      if (!target) {
-        return null
-      }
-
-      const observer = new MutationObserver(mutations => {
-        mutations.forEach(mutation => {
-          if (mutation.type === 'attributes' && mutation.attributeName === 'aria-label') {
-            handleAriaChange(target)
-          }
-        })
-      })
-
-      handleAriaChange(target)
-
-      observer.observe(target, {
-        attributes: true,
-        attributeFilter: ['aria-label'],
-      })
-
-      observerRef.current.push(observer)
-
-      return observer
-    },
-    [handleAriaChange]
-  )
-
-  const setupObserverForWidget = useCallback(() => {
-    const widget = document.querySelector(ZOOM_CONFIG.MEETING_FULL_SCREEN_WIDGET) as HTMLElement | null
-    return createObserverForTarget(widget)
-  }, [createObserverForTarget])
-
-  const setupObserverForPopMenu = useCallback(() => {
-    const icon = document.querySelector(ZOOM_CONFIG.MEETING_FULL_SCREEN_DROPDOWN) as HTMLElement | null
-    if (!icon) return
-
-    const handleClick = () => {
-      setTimeout(() => {
-        const popMenuItem = document.querySelector(ZOOM_CONFIG.MEETING_FULL_SCREEN_DROPDOWN_POP_MENU) as HTMLElement
-        if (!popMenuItem) return
-
-        createObserverForTarget(popMenuItem)
-      }, 0)
-    }
-
-    icon.addEventListener('click', handleClick)
-  }, [createObserverForTarget])
-
-  const setupFullScreenObserver = useCallback(() => {
-    setupObserverForWidget()
-    setupObserverForPopMenu()
-  }, [setupObserverForPopMenu, setupObserverForWidget])
+    setIsShowHeader(!isHtmlFullScreen)
+    toggleFullScreen(isHtmlFullScreen)
+  }, [setIsShowHeader, toggleFullScreen])
 
   const updateMaxHeight = useCallback((targetElement: HTMLElement) => {
     const cssHeight = targetElement.style.height
@@ -166,7 +105,8 @@ export const useZoomElementAdjustment = (isJoined: boolean) => {
   useEffect(() => {
     if (!isJoined) return
 
-    setupFullScreenObserver()
+    handleFullScreenChange()
+    document.addEventListener('fullscreenchange', handleFullScreenChange)
 
     // Start Video Share Layout
     observeElementWhenAvailable(ZOOM_CONFIG.MEETING_VIDEO_SHARE_LAYOUT, element => {
@@ -213,9 +153,34 @@ export const useZoomElementAdjustment = (isJoined: boolean) => {
     observeElementWhenAvailable(ZOOM_CONFIG.MEETING_SPEAKER_ACTIVE_CONTAINER, element => {
       const parentElement = element.parentElement
       parentElement && observeElementHeightChange(parentElement)
-    })
-    observeElementWhenAvailable(ZOOM_CONFIG.MEETING_SPEAKER_ACTIVE_CONTAINER_VIDEO_FRAME, element => {
-      observeElementHeightChange(element)
+
+      const setupSpeakerObservers = () => {
+        const activeVideoFrame = element.querySelector(
+          ZOOM_CONFIG.MEETING_SPEAKER_ACTIVE_CONTAINER_VIDEO_FRAME
+        ) as HTMLElement
+
+        if (activeVideoFrame) {
+          observeElementHeightChange(activeVideoFrame)
+        } else {
+          const closedChildElement = element.children?.[0] as HTMLElement | undefined
+          closedChildElement && observeElementHeightChange(closedChildElement)
+        }
+      }
+
+      setupSpeakerObservers()
+
+      const speakerClassObserver = new MutationObserver(() => {
+        setupSpeakerObservers()
+      })
+
+      speakerClassObserver.observe(element, {
+        attributes: true,
+        attributeFilter: ['class'],
+        childList: true,
+        subtree: true,
+      })
+
+      observerRef.current.push(speakerClassObserver)
     })
     // Start Gallery Video Container
     observeElementWhenAvailable(ZOOM_CONFIG.MEETING_GALLERY_VIDEO_CONTAINER, element => {
@@ -242,6 +207,7 @@ export const useZoomElementAdjustment = (isJoined: boolean) => {
     })
 
     return () => {
+      document.removeEventListener('fullscreenchange', handleFullScreenChange)
       observerRef.current.forEach(observer => observer.disconnect())
       observerRef.current = []
       observedElementsRef.current.clear()
@@ -250,7 +216,7 @@ export const useZoomElementAdjustment = (isJoined: boolean) => {
     isJoined,
     observeElementWhenAvailable,
     observeElementHeightChange,
-    setupFullScreenObserver,
+    handleFullScreenChange,
     updateMaxHeight,
     removeMaxHeight,
     isShowHeader,
