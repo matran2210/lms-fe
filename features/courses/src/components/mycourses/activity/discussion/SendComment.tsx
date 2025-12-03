@@ -1,10 +1,18 @@
 import { IconSend } from "@lms/assets";
+import { Spin } from "antd";
 
-const SendComment = () => {
+const SendComment = ({ isLoading = false }: { isLoading?: boolean }) => {
+
   return (
-    <div className="cursor-pointer hover:text-primary">
-      <IconSend />
-    </div>
+    <>
+      {isLoading ? (
+        <Spin tip="Loading" className="!text-warning" />
+      ) : (
+        <div className="cursor-pointer hover:text-primary">
+          <IconSend />
+        </div>
+      )}
+    </>
   );
 };
 

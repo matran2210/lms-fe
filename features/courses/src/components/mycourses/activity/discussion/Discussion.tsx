@@ -76,6 +76,7 @@ const Discussion = ({ class_id,  }: Props) => {
     isRoot?: boolean,
   ) => {
     if (router.query.activityId) {
+      setLoading(true)
       let parent_id = idReply
       let content = comment
       let fieldToReset
@@ -195,6 +196,8 @@ const Discussion = ({ class_id,  }: Props) => {
           type: 'manual',
           message: 'Có lỗi xảy ra khi gửi bình luận',
         })
+      } finally {
+        setLoading(false)
       }
     }
   }
@@ -495,7 +498,7 @@ const Discussion = ({ class_id,  }: Props) => {
                                   className="sapp-custom-hover h-fit !min-w-1 cursor-pointer select-none border-none bg-transparent"
                                   classTitle="!m-0"
                                 >
-                                  <SendComment />
+                                  <SendComment isLoading={loading} />
                                 </SappButtonIcon>
                                 <div
                                   className={clsx(
@@ -636,7 +639,7 @@ const Discussion = ({ class_id,  }: Props) => {
                     className="sapp-custom-hover h-fit !min-w-1 cursor-pointer select-none border-none bg-transparent"
                     classTitle="!m-0"
                   >
-                    <SendComment />
+                    <SendComment isLoading={loading}/>
                   </SappButtonIcon>
                   <div
                     className={`relative h-5 select-none hover:text-primary ${clsx(
