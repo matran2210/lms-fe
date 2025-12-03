@@ -1,10 +1,3 @@
-import {
-  deserializeHighlights,
-  doHighlight,
-  optionsImpl,
-  removeHighlights,
-  serializeHighlights,
-} from '@/../node_modules/@funktechno/texthighlighter/lib/index'
 import dayjs from 'dayjs'
 import weekday from 'dayjs/plugin/weekday'
 import DOMPurify from 'dompurify'
@@ -18,7 +11,6 @@ import { formatDateFromUTC } from '@lms/utils'
 dayjs.extend(utc)
 
 dayjs.extend(weekday)
-
 
 export const bytesToKilobyte = (bytes: number, suffix = 'Kb') => {
   return `${(bytes / 1024).toFixed(2)}${suffix}` // 1 kilobyte = 1024 bytes
