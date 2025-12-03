@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { closeNote } from '@lms/contexts'
+import { closeNote3Level } from '@lms/contexts'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { useRouter } from 'next/router'
@@ -108,8 +108,7 @@ const CreateNote = ({
   }
 
   const removeNote = () => {
-    dispatch(closeNote(uuid))
-
+    dispatch(closeNote3Level(uuid))
     if (isActiveTab && countNote <= 1) {
       handleCloseTab()
     }
