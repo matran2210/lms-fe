@@ -1,6 +1,6 @@
-import axios, { AxiosResponse, CancelTokenSource } from 'axios'
-import { IResponse } from 'src/redux/types'
+import { IResponse } from '@lms/core'
 import request, { fetcher, getBaseUrl } from '@services/requestV2'
+import axios, { AxiosResponse, CancelTokenSource } from 'axios'
 
 type PartUploadDto = { part_number: number; upload_url: string }
 
@@ -20,7 +20,6 @@ export class UploadAPI {
     name,
     size,
     blob,
-    // description,
     getProgress,
     location,
   }: {
@@ -28,44 +27,27 @@ export class UploadAPI {
     name: string
     size: string
     blob: Blob
-    // description: string
+    description: string
     getProgress: (percent: number) => void
     location: string
   }) {
-    try {
-      const responsePreUpload = await preUpload({
-        content_type,
-        name: name || '',
-        location: location || '',
-        size,
-      })
-
-      await uploadFile(
-        {
-          upload_url: responsePreUpload.data.upload_url,
-          file_key: responsePreUpload.data.file_key,
-          type: responsePreUpload.data.type as 'SINGLE_PART' | 'MULTIPLE_PART',
-          contentType: content_type,
-          blob,
-        },
-        getProgress,
-      )
-
-      // const response = await addFileResource({
-      //   name,
-      //   file_key: responsePreUpload.data.file_key,
-      //   location: location || '',
-      //   description,
-      //   size,
-      //   parent_id: null,
-      // })
-      // return response?.data?.[0]?.id
-      return responsePreUpload
-      // if (response?.data?.[0]?.id) {
-      //   const responseFile = await ResourcesAPI.getFileFromResource(response.data[0].id, source)
-      //   return responseFile.data
-      // }
-    } catch {}
+    const responsePreUpload = await preUpload({
+      content_type,
+      name: name || '',
+      location: location || '',
+      size,
+    })
+    await uploadFile(
+      {
+        upload_url: responsePreUpload.data.upload_url,
+        file_key: responsePreUpload.data.file_key,
+        type: responsePreUpload.data.type as 'SINGLE_PART' | 'MULTIPLE_PART',
+        contentType: content_type,
+        blob,
+      },
+      getProgress,
+    )
+    return responsePreUpload
   }
   static downloadFile = async (data: {
     files: { name: string; file_key: string }[]
@@ -87,7 +69,7 @@ export class UploadAPI {
         link.click()
         document.body.removeChild(link)
       }
-    } catch {}
+    } catch (error) {}
   }
   static getUrlFile = async (
     file_key: string,
@@ -148,50 +130,46 @@ const uploadFile = async (
   getProgress?: (percent: number) => void,
 ) => {
   const fileBlob = file.blob
-  try {
-    if (file.type === 'SINGLE_PART') {
-      const onUploadProgress = (progressEvent: any) => {
-        const percent = Math.round(
-          (progressEvent.loaded * 100) / progressEvent.total,
-        )
-        if (getProgress) {
-          getProgress(percent)
-        }
+  if (file.type === 'SINGLE_PART') {
+    const onUploadProgress = (progressEvent: any) => {
+      const percent = Math.round(
+        (progressEvent.loaded * 100) / progressEvent.total,
+      )
+      if (getProgress) {
+        getProgress(percent)
       }
-      try {
-        await axios.put(file.upload_url, fileBlob, {
-          headers: { 'Content-Type': fileBlob.type },
-          onUploadProgress,
-        })
-      } catch {}
-      return
     }
-
-    const startResp = await request.post(`/resources/upload/start`, {
-      file_key: file.file_key,
-      content_type: fileBlob.type,
-      size: fileBlob.size,
+    await axios.put(file.upload_url, fileBlob, {
+      headers: { 'Content-Type': fileBlob.type },
+      onUploadProgress,
     })
-    const startMultipartResponse: StartMultipartResponse = startResp.data.data
-    const { uploadId, metadata, parts } = startMultipartResponse
+    return
+  }
 
-    const batchSize = 2
-    percent = 0
-    const uploadPartsArray: PartUploadedDto[] = await uploadMultipart({
-      batchSize,
-      chunkSize: metadata.partSize,
-      fileBlob,
-      numberOfChunks: metadata.numberOfParts,
-      parts,
-      ...(getProgress ? { getProgress } : { getProgress: () => {} }),
-    })
+  const startResp = await request.post(`/resources/upload/start`, {
+    file_key: file.file_key,
+    content_type: fileBlob.type,
+    size: fileBlob.size,
+  })
+  const startMultipartResponse: StartMultipartResponse = startResp.data.data
+  const { uploadId, metadata, parts } = startMultipartResponse
 
-    await request.post(`/resources/upload/complete`, {
-      file_key: file.file_key,
-      parts: uploadPartsArray,
-      uploadId: uploadId,
-    })
-  } catch {}
+  const batchSize = 2
+  percent = 0
+  const uploadPartsArray: PartUploadedDto[] = await uploadMultipart({
+    batchSize,
+    chunkSize: metadata.partSize,
+    fileBlob,
+    numberOfChunks: metadata.numberOfParts,
+    parts,
+    ...(getProgress ? { getProgress } : { getProgress: () => {} }),
+  })
+
+  await request.post(`/resources/upload/complete`, {
+    file_key: file.file_key,
+    parts: uploadPartsArray,
+    uploadId: uploadId,
+  })
 }
 
 type UploadMultipartParams = {
@@ -231,29 +209,27 @@ async function uploadMultipart(
         : fileBlob.slice(start)
 
     const uploadUrl = parts[partNumbers.indexOf(index)]?.upload_url
-    try {
-      const uploadPromise = getUploadPromise(
-        {
-          blob,
-          contentType: fileBlob.type,
-          index,
-          uploadUrl,
-          fileSize: fileBlob.size,
-          chunkSize: blob.size,
-          getProgress,
-        },
-        source,
-      )
-      batchUploadPromises.push(uploadPromise)
-    } catch {}
+    const uploadPromise = getUploadPromise(
+      {
+        blob,
+        contentType: fileBlob.type,
+        index,
+        uploadUrl,
+        fileSize: fileBlob.size,
+        chunkSize: blob.size,
+        getProgress,
+      },
+      source,
+    )
+    batchUploadPromises.push(uploadPromise)
   }
 
   const batchUploadResults = await Promise.allSettled(batchUploadPromises)
   const partsUploadResults: PartUploadedDto[] = []
 
-  for (let result of batchUploadResults) {
+  for (const result of batchUploadResults) {
     if (result.status === 'fulfilled') {
-      let { response, index: part_number } = result.value
+      const { response, index: part_number } = result.value
       partsUploadResults.push({
         eTag: response.headers.etag,
         part_number,
@@ -304,7 +280,7 @@ function getUploadPromise(
           ...(source && { cancelToken: source.token }),
         })
         .then((response) => {
-          let percentCompleted = Math.round((chunkSize / fileSize) * 100)
+          const percentCompleted = Math.round((chunkSize / fileSize) * 100)
           percent += percentCompleted
           getProgress(percent >= 100 ? 100 : percent)
           resolve({ response, index })
