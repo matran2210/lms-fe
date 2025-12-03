@@ -44,6 +44,7 @@ import { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
+
 const { publicRuntimeConfig } = getConfig();
 export const { apiURL } = publicRuntimeConfig;
 
@@ -69,8 +70,11 @@ const LearningNotesList = ({ appType }: Props) => {
     name: "",
     params: "",
   });
+
   const isNotBottomDrawer =
-    router.pathname === "/courses/[id]/section/[course_section_id]" ||
+    router.pathname === "/courses/[id]/section/[course_section_id]" ||  
+    router.pathname === "/short-course/detail/[courseId]" ||
+    router.pathname === "/short-course/detail/[courseId]/activity/[id]" ||
     (router.pathname === "/courses/[id]/activity/[activityId]" &&
       !isMobileView);
 
