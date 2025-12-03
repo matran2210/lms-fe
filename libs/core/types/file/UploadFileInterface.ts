@@ -1,10 +1,37 @@
-import { VideoIconImage, ImageIconImage, DocumentIconImage } from "../../../assets"
 import {
   MAX_UPLOAD_SIZE,
   MAX_UPLOAD_VIDEO_SIZE,
   VALID_UPLOAD_FILES,
 } from "../../constants";
 
+// -------------------------------------
+// Safe dynamic import for asset icons (SSR + monorepo safe)
+// -------------------------------------
+let assetIcons = {
+  video: "",
+  image: "",
+  document: "",
+};
+
+// SSR-safe require
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const Icons = require("../../../assets");
+
+  assetIcons = {
+    video: Icons?.VideoIconImage ?? "",
+    image: Icons?.ImageIconImage ?? "",
+    document: Icons?.DocumentIconImage ?? "",
+  };
+} catch {
+  // fallback giữ empty string
+}
+
+const toIconList = (...icons: string[]) => icons.filter(Boolean) as string[];
+
+// -------------------------------------
+// Interfaces / Types
+// -------------------------------------
 export interface IResourceFile {
   id: string;
   created_at: string;
@@ -38,23 +65,28 @@ export enum RESOURCE_LOCATION {
   certificate = "certificate",
   essay = "essay",
 }
+
 export enum SUFFIX_TYPE {
-  "FOLDER" = "FOLDER",
-  "GENERAL_FILE" = "GENERAL_FILE",
-  "IMAGE" = "IMAGE",
-  "VIDEO" = "VIDEO",
-  "POWER_POINT" = "POWER_POINT",
-  "PDF" = "PDF",
-  "DOCUMENT_VIEWER" = "DOCUMENT_VIEWER",
-  "WORD_DOCUMENT" = "WORD_DOCUMENT",
-  "SHEET" = "SHEET",
-  "NOT_A_FILE" = "NOT_A_FILE",
-  "TEXT" = "TEXT",
-  "ZIP" = "ZIP",
+  FOLDER = "FOLDER",
+  GENERAL_FILE = "GENERAL_FILE",
+  IMAGE = "IMAGE",
+  VIDEO = "VIDEO",
+  POWER_POINT = "POWER_POINT",
+  PDF = "PDF",
+  DOCUMENT_VIEWER = "DOCUMENT_VIEWER",
+  WORD_DOCUMENT = "WORD_DOCUMENT",
+  SHEET = "SHEET",
+  NOT_A_FILE = "NOT_A_FILE",
+  TEXT = "TEXT",
+  ZIP = "ZIP",
 }
 
-export const UPLOAD_TYPE: {
-  [key: string]: {
+// -------------------------------------
+// UPLOAD_TYPE Config
+// -------------------------------------
+export const UPLOAD_TYPE: Record<
+  string,
+  {
     type: "VIDEO" | "IMAGE" | "DOCUMENT" | "ALL" | "ALL_RESOURCE";
     icon: string | string[];
     accept: string;
@@ -62,29 +94,31 @@ export const UPLOAD_TYPE: {
     acceptFiles: { type: string; size: number }[];
     suffixType: string;
     note: string[];
-  };
-} = {
+  }
+> = {
   VIDEO: {
     type: "VIDEO",
-    icon: VideoIconImage,
+    icon: assetIcons.video,
     accept: ".mp4",
     extension: "MP4",
     note: ["MP4"],
     acceptFiles: [{ type: "video/mp4", size: MAX_UPLOAD_VIDEO_SIZE }],
     suffixType: "VIDEO",
   },
+
   IMAGE: {
     type: "IMAGE",
-    icon: ImageIconImage,
+    icon: assetIcons.image,
     accept: "image/*",
     extension: ".jpg, .jpeg, .png, .gif, .webp",
     note: [".jpg, .jpeg, .png, .gif, .webp"],
     acceptFiles: [{ type: "image/*", size: MAX_UPLOAD_SIZE }],
     suffixType: "IMAGE",
   },
+
   DOCUMENT: {
     type: "DOCUMENT",
-    icon: DocumentIconImage,
+    icon: assetIcons.document,
     accept: ".pdf,.docx,.doc,.xls,.xlsx,.csv,.txt,.ppt,.pptx",
     extension: ".pdf, .docx, .doc, .xls, .xlsx, .csv, .txt, .ppt, .pptx",
     note: [
@@ -92,11 +126,19 @@ export const UPLOAD_TYPE: {
       "và dung lượng tối đa mỗi file là 20MB.",
     ],
     acceptFiles: VALID_UPLOAD_FILES,
-    suffixType: `${SUFFIX_TYPE.PDF},${SUFFIX_TYPE.WORD_DOCUMENT},${SUFFIX_TYPE.DOCUMENT_VIEWER},${SUFFIX_TYPE.SHEET},${SUFFIX_TYPE.POWER_POINT},${SUFFIX_TYPE.TEXT}`,
+    suffixType: [
+      SUFFIX_TYPE.PDF,
+      SUFFIX_TYPE.WORD_DOCUMENT,
+      SUFFIX_TYPE.DOCUMENT_VIEWER,
+      SUFFIX_TYPE.SHEET,
+      SUFFIX_TYPE.POWER_POINT,
+      SUFFIX_TYPE.TEXT,
+    ].join(","),
   },
+
   ESSAY: {
     type: "DOCUMENT",
-    icon: DocumentIconImage,
+    icon: assetIcons.document,
     accept: ".pdf,.docx,.doc,.xls,.xlsx,.csv,.ppt,.pptx,.zip",
     extension: ".pdf, .docx, .doc, .xls, .xlsx, .csv, .ppt, .pptx, .zip",
     note: [
@@ -104,11 +146,20 @@ export const UPLOAD_TYPE: {
       "và dung lượng tối đa mỗi file là 20MB.",
     ],
     acceptFiles: VALID_UPLOAD_FILES,
-    suffixType: `${SUFFIX_TYPE.PDF},${SUFFIX_TYPE.WORD_DOCUMENT},${SUFFIX_TYPE.DOCUMENT_VIEWER},${SUFFIX_TYPE.SHEET},${SUFFIX_TYPE.POWER_POINT},${SUFFIX_TYPE.TEXT} ${SUFFIX_TYPE.ZIP}`,
+    suffixType: [
+      SUFFIX_TYPE.PDF,
+      SUFFIX_TYPE.WORD_DOCUMENT,
+      SUFFIX_TYPE.DOCUMENT_VIEWER,
+      SUFFIX_TYPE.SHEET,
+      SUFFIX_TYPE.POWER_POINT,
+      SUFFIX_TYPE.TEXT,
+      SUFFIX_TYPE.ZIP,
+    ].join(","),
   },
+
   ALL: {
     type: "ALL",
-    icon: [DocumentIconImage, VideoIconImage, ImageIconImage],
+    icon: toIconList(assetIcons.document, assetIcons.video, assetIcons.image),
     accept: "image/*,.mp4,.pdf,.docx,.xls,.xlsx,.csv,.txt",
     extension:
       ".jpg, .jpeg, .png, .gif, .webp, .mp4, .pdf, .docx, .doc, .xls, .xlsx, .csv, .txt, .ppt, .pptx",
@@ -122,11 +173,11 @@ export const UPLOAD_TYPE: {
     ],
     suffixType: "",
   },
+
   ALL_RESOURCE: {
     type: "ALL_RESOURCE",
-    icon: [DocumentIconImage, VideoIconImage, ImageIconImage],
-    accept:
-      "image/*,.mp4, .pdf, .docx, .doc, .xls, .xlsx, .csv, .txt, .ppt, .pptx",
+    icon: toIconList(assetIcons.document, assetIcons.video, assetIcons.image),
+    accept: "image/*,.mp4,.pdf,.docx,.doc,.xls,.xlsx,.csv,.txt,.ppt,.pptx",
     extension:
       ".jpg, .jpeg, .png, .gif, .webp, .mp4, .pdf, .docx, .doc, .xls, .xlsx, .csv, .txt, .ppt, .pptx",
     note: [
@@ -137,10 +188,7 @@ export const UPLOAD_TYPE: {
       ...VALID_UPLOAD_FILES,
       { type: "video/mp4", size: MAX_UPLOAD_VIDEO_SIZE },
       { type: "image/*", size: MAX_UPLOAD_SIZE },
-      {
-        type: "application/vnd.ms-powerpoint",
-        size: MAX_UPLOAD_SIZE,
-      },
+      { type: "application/vnd.ms-powerpoint", size: MAX_UPLOAD_SIZE },
       {
         type: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
         size: MAX_UPLOAD_SIZE,
