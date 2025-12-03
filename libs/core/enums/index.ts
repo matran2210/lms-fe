@@ -231,6 +231,16 @@ export enum AppType {
   LMS_PRO = "LMS_PRO",
 }
 
+export enum ERequestStatus {
+  OPEN = "OPEN",
+  VIEWED = "Viewed",
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  REJECT = "REJECT",
+  CANCEL = "CANCEL",
+}
+
+
 export * from "./Test";
 export * from "./Teacher";
 export * from "./socketEvents";
