@@ -29,9 +29,9 @@ export interface IPopupDetails {
 }
 
 export interface IRecurringScheduleCalendar {
-  interval: number
+  interval?: number
   frequency: keyof typeof FREQUENCY_UNITS_OBJECT
-  recurrence_end_date: Date
+  recurrence_end_date?: Date
   day_of_week?: number[]
   month_of_year?: number[]
   day_of_month?: number[]

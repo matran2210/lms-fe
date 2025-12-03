@@ -202,28 +202,30 @@ const Explanation = () => {
             </button>
           </Tooltip>
         </div>
-        <ExplanationPackageV2
-          getActiveQuestion={getActiveQuestion}
-          activeQuestion={{
-            ...activeQuestion,
-            solution: isUserViewAnswersDetailAndEssay
-              ? null
-              : activeQuestion?.solution,
-            requirements: activeQuestion?.requirements.map(
-              (req: IRequirement) => ({
-                ...req,
-                explanation: isUserViewAnswersDetailAndEssay
-                  ? null
-                  : req.explanation,
+        {!loading && activeQuestion && (
+          <ExplanationPackageV2
+            getActiveQuestion={getActiveQuestion}
+            activeQuestion={{
+              ...activeQuestion,
+              solution: isUserViewAnswersDetailAndEssay
+                ? null
+                : activeQuestion?.solution,
+              requirements: activeQuestion?.requirements.map(
+                (req: IRequirement) => ({
+                  ...req,
+                  explanation: isUserViewAnswersDetailAndEssay
+                    ? null
+                    : req.explanation,
+                }),
+              ),
+              ...(isUserViewAnswersDetailAndEssay && {
+                grading_method: GRADING_METHOD.MANUAL,
               }),
-            ),
-            ...(isUserViewAnswersDetailAndEssay && {
-              grading_method: GRADING_METHOD.MANUAL,
-            }),
-          }}
-          document_id={''}
-          handleDownload={handleDownload}
-        />
+            }}
+            document_id={''}
+            handleDownload={handleDownload}
+          />
+        )}
       </FullScreenLayout>
     </SappLoadingGlobal>
   )

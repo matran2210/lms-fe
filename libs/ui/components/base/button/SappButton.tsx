@@ -1,4 +1,4 @@
-import { LoadingBtnAnimation } from "@lms/assets";
+import { LoadingButtonAnimation } from "@lms/assets";
 import { IButtonProps } from "@lms/core";
 import Link from "next/link";
 import { Tooltip } from "../../common";
@@ -107,7 +107,7 @@ const SappButton = ({
     ${isDisabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}
   `.trim();
 
-  const loadingIndicator = <LoadingBtnAnimation className="!size-[18px]" />;
+  const loadingIndicator = <LoadingButtonAnimation className="!size-[18px]" />;
 
   const buttonContent = (
     <Tooltip title={toolTipTitle} showTooltip={showTooltip}>

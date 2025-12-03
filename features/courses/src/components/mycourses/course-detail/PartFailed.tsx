@@ -5,7 +5,7 @@ import { ButtonSecondary, ButtonText, SappModalV3 } from "@lms/ui";
 import { formatTimer, getUserPrefix, trackGAEvent } from "@lms/utils";
 import clsx from "clsx";
 import router from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import {  useEffect, useMemo, useState } from "react";
 import { CardCourse } from "../../course";
 import { TestModal, TestModalTeacher } from "../test";
 import ResultCourse from "./CourseResult";
@@ -212,7 +212,8 @@ const PartFailed = ({
   //   trackGAEvent(`Click Title ${showTitleFinalTest}`)
   // }
 
-  const [setLabelResult] = useState<string>("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [labelResult,setLabelResult] = useState<string>("");
   const getAttemptStatus = () => {
     if (coursePart?.quiz?.grading_method === GRADING_METHOD.MANUAL) {
       if (coursePart?.quiz?.attempt?.status === EAttemptStatus.SUBMITTED) {

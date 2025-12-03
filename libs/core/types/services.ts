@@ -4,10 +4,10 @@ import {
   ICreateDiscussionRequest,
   ICreateDiscussionResReact,
   ICreateDiscussionUploadRequest,
+  IResponse,
   SendEmailReq,
   VerifyOtpReq,
 } from "../../state";
-import { IResponse } from "./api-response";
 import { ExamInformation, IQuestion } from "./course";
 import {
   IAnswerQuizLastestAttempt,
@@ -192,6 +192,12 @@ export interface IUploadAPI {
       file_key: string;
     }[];
   }) => Promise<void>;
+ startUpload(data: any): Promise<IResponse<{ 
+      type: string; 
+      file_key: string; 
+      upload_url: string; 
+      name: string; 
+  }> | undefined>;
 }
 
 export interface IClassAPI {

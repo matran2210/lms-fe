@@ -19,7 +19,7 @@ import {
   SAPPVideo,
 } from "../base";
 import { AvatarCard } from "../card";
-
+declare var com: any;
 const { TextArea } = Input;
 const DEBOUNCE_DELAY = 100;
 

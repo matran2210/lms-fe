@@ -1,5 +1,4 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react'
-import blankAvatar from '@assets/images/blank_avatar_notification.png'
 import Image from 'next/image'
 import { calculateTimeAgo } from '@utils/helpers'
 import Aos from 'aos'
@@ -11,7 +10,7 @@ import {
   formatNotificationHTML,
   trackGAEvent,
 } from '@lms/utils'
-import { Icon } from '@lms/assets'
+import { BlankAvatarImage, Icon } from '@lms/assets'
 
 interface IProps {
   notifyLists: any[]
@@ -92,7 +91,7 @@ const NotifyList = ({
                   />
                 ) : (
                   <Image
-                    src={blankAvatar}
+                    src={BlankAvatarImage}
                     alt="avatar"
                     className={`rounded-full`}
                     width={56}

@@ -82,10 +82,10 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         <EntrancePopupContent
           name={count === 1 ? entranceTest?.name : data?.name || ""}
           timeAllow={count === 1 ? entranceTest?.quiz_timed : data?.quiz_timed}
-          attemps={`${count === 1 ? entranceTest?.attempt_times || 0 : data?.attempt_times || "0"}`}
-          limit_count={
-            count === 1 ? entranceTest?.limit_count : data?.limit_count
-          }
+          // attempts={`${count === 1 ? entranceTest?.attempt_times || 0 : data?.attempt_times || "0"}`}
+          // limit_count={
+          //   count === 1 ? entranceTest?.limit_count : data?.limit_count
+          // }
           total_question={
             count === 1 ? entranceTest?.total_question : data?.total_question
           }

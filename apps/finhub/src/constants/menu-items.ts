@@ -1,7 +1,6 @@
-import { LANG_SIGNIN, TitleSidebar } from "@lms/core"
-import { PageLink } from "./routes"
-import { makeMenuLevel } from "@utils/helpers"
-
+import { LANG_SIGNIN, MenuItem, MenuOption, TitleSidebar } from '@lms/core'
+import { PageLink } from './routes'
+import { makeMenuLevel } from '@utils/helpers'
 
 const MENU_OPTIONS: MenuOption[] = [
   {
@@ -77,24 +76,6 @@ const MENU_OPTIONS_BOTTOM: MenuOption[] = [
     type: 'level-1',
   },
 ]
-
-export type MenuItem = {
-  name: string
-  icon: string
-  url: string
-  type?: string
-  id: string
-  depth: number
-  subItems?: MenuItem[]
-}
-
-type MenuOption = {
-  name: string
-  icon: string
-  url: string
-  type: string
-  subItems?: MenuOption[]
-}
 
 export const MENU_ITEMS: MenuItem[] = makeMenuLevel(MENU_OPTIONS)
 export const MENU_ITEMS_EVENT: MenuItem[] = makeMenuLevel(

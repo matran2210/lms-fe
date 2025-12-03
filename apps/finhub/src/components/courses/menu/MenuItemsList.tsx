@@ -1,5 +1,5 @@
+import { MenuItem as MenuItemType } from '@lms/core'
 import { Dispatch, SetStateAction } from 'react'
-import { MenuItem as MenuItemType } from '../../../constants/menu-items'
 import MenuItem from './MenuItem'
 
 type MenuItemsListProps = {

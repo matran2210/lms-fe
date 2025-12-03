@@ -9,6 +9,8 @@ import {
   EVENT_REPEAT_LABEL,
   EVENT_REPEAT_TYPES,
   FREQUENCY_UNITS,
+  FREQUENCY_UNITS_OBJECT,
+  IRecurringScheduleCalendar,
   REPEAT_ON,
   REPEAT_ON_MAPPED_PAYLOAD,
 } from "@lms/core";
@@ -278,8 +280,8 @@ const EventRepeatField = ({
           day_of_week: getDayOfWeek(),
           day_of_month: getDayOfMonth(),
           month_of_year: getMonthOfYear(),
-        }) as IRecurringSchedule,
-      });
+        }) as IRecurringScheduleCalendar
+      }) ;
     });
 
     return () => subscription.unsubscribe();

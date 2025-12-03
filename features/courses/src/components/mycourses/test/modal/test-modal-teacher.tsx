@@ -75,7 +75,8 @@ const TestModalTeacher = ({
   }>();
   const [isFocus, setIsFocus] = useState<boolean>(false);
   const [openResource, setOpenPopup] = useState(false);
-  const [setOpenLastAttempt] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [openLastAttempt,setOpenLastAttempt] = useState<boolean>(false);
   const [remainingTime, setRemainingTime] = useState<number>();
   const remainingTimeLastAttempt = useRef<number>(0);
   const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false);

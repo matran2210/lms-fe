@@ -11,7 +11,7 @@ import SappModalImage from "../modal/SappModalImage";
 import clsx from "clsx";
 import React from "react";
 import { SAPPVideo } from "../video";
-
+declare var com: any;
 type Props = {
   text_editor_content: string | undefined;
   className?: string;

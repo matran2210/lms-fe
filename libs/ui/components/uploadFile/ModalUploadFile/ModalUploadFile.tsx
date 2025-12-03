@@ -3,13 +3,13 @@ import axios, { CancelTokenSource } from "axios";
 import { capitalize } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { UploadAPI } from "src/pages/api/upload";
 import UploadFileHandle from "./UploadFileHandle";
 import {
   IResourceFile,
   UPLOAD_TYPE,
 } from "@lms/core/types/file/UploadFileInterface";
 import { SappModalV3 } from "../../base";
+import { useFeature } from "@lms/contexts";
 
 interface IModalUploadProps {
   open: boolean;
@@ -52,6 +52,7 @@ const ModalUploadFile = ({
   maxCount,
   location,
 }: IModalUploadProps) => {
+  const {uploadApi} = useFeature()
   const sourceRef = useRef<CancelTokenSource>();
   const isCancel = useRef<boolean>();
   const [uploadFile, setUploadFile] = useState<UploadFile[] | undefined>();
@@ -120,13 +121,13 @@ const ModalUploadFile = ({
         }
         try {
           getProgress(7, u.uid);
-          const response = await UploadAPI.startUpload({
+          const response = await uploadApi.startUpload({
             content_type: u?.originFileObj?.type,
             blob: u?.originFileObj,
             size: u?.originFileObj.size?.toString() || "",
             description: "",
             name: u?.originFileObj?.name || "undefined",
-            getProgress: (percent) => getProgress(percent, u?.uid),
+            getProgress: (percent: any) => getProgress(percent, u?.uid),
             location: location,
           });
           if (response) {
