@@ -48,7 +48,7 @@ export const handleUploadFileToS3 = async (
       content_type: convertedFile.type,
       blob: convertedFile,
       size: convertedFile.size.toString(),
-      // description: '',
+      description: '',
       name: convertHumanReadableToSnakeCase(convertedFile.name),
       getProgress: getProgress ? getProgress : () => {},
       location: location,
