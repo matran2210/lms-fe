@@ -1,5 +1,5 @@
 import { UserType } from '@lms/contexts'
-import { GRADE_STATUS, ITabs, TEST_TYPE, TitleSidebar } from '@lms/core'
+import { GRADE_STATUS, ITabs, TEST_TYPE_LABELS, TitleSidebar } from '@lms/core'
 import { FullScreenLayout, SappBreadCrumbs } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import { useRouter } from 'next/router'
@@ -53,7 +53,7 @@ const TestResultDetailTeacher = () => {
     },
     {
       link: linkTest,
-      title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type as keyof typeof TEST_TYPE]}`,
+      title: `${TEST_TYPE_LABELS[questions?.quizAttempt?.quiz?.quiz_type as keyof typeof TEST_TYPE_LABELS]}`,
     },
     {
       link: '#',

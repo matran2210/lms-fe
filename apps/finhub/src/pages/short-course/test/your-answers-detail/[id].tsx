@@ -1,5 +1,5 @@
 import { FullScreenLayout } from '@lms/ui'
-import { TEST_TYPE } from '@lms/core'
+import { TEST_TYPE_LABELS } from '@lms/core'
 import { useGetDataQuery } from '@lms/utils'
 import { useRouter } from 'next/router'
 import { CoursesAPI } from 'src/pages/api/courses'
@@ -43,7 +43,7 @@ const TestResultDetail = () => {
     },
     {
       link: linkTest,
-      title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type as keyof typeof TEST_TYPE]}`,
+      title: `${TEST_TYPE_LABELS[questions?.quizAttempt?.quiz?.quiz_type as keyof typeof TEST_TYPE_LABELS]}`,
       disable: true,
     },
     {

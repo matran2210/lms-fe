@@ -1,4 +1,4 @@
-import { QuizActivity, TEST_TYPE } from '@lms/core'
+import { QuizActivity, TEST_TYPE_LABELS } from '@lms/core'
 import { SappBaseTable } from '@lms/ui'
 import { getTimeFromInput } from '@lms/utils'
 import clsx from 'clsx'
@@ -78,7 +78,7 @@ const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {
                 'font-medium text-[#050505]',
               )}
             >
-              {TEST_TYPE[row?.quiz_type as keyof typeof TEST_TYPE]}
+              {TEST_TYPE_LABELS[row?.quiz_type as keyof typeof TEST_TYPE_LABELS]}
             </td>
 
             {/* Graded Activity */}

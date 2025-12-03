@@ -4,7 +4,7 @@ import {
   GRADE_STATUS,
   GRADING_METHOD,
   IQuizResultList,
-  TEST_TYPE
+  TEST_TYPE_LABELS
 } from "@lms/core";
 import { HookFormSelect, SappModalV3 } from "@lms/ui";
 import {
@@ -448,7 +448,7 @@ const TestModalTeacher = ({
           title={
             <div className="flex items-center justify-between gap-2">
               <div>
-                {TEST_TYPE[data?.course_section_type as keyof typeof TEST_TYPE]}
+                {TEST_TYPE_LABELS[data?.course_section_type as keyof typeof TEST_TYPE_LABELS]}
               </div>
               {!!data?.quiz?.quiz_timed &&
                 !!remainingTimeLastAttempt.current &&
@@ -665,7 +665,7 @@ const TestModalTeacher = ({
           title={
             <div className="flex items-center justify-between gap-2">
               <div>
-                {TEST_TYPE[data?.course_section_type as keyof typeof TEST_TYPE]}
+                {TEST_TYPE_LABELS[data?.course_section_type as keyof typeof TEST_TYPE_LABELS]}
               </div>
               {!!data?.quiz?.quiz_timed &&
                 (remainingTime !== undefined && remainingTime >= 0 ? (

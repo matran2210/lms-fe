@@ -24,7 +24,7 @@ import { ANIMATION, DEFAULT_PAGESIZE, ROUTES, TEST_TYPE } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
-  activeNotesList,
+  activeNotesList3Level,
   useAppDispatch,
   useCourseContext,
   UserType,
@@ -33,7 +33,8 @@ import { ISubSection } from 'src/type/courses-3-level'
 import { isEmpty } from 'lodash'
 import { PageLink } from 'src/constants/routes'
 import { PopupLockContent } from '@lms/feature-courses'
-import { CtaTrial, LearningResource } from '@lms/ui'
+import { LearningResource } from '@lms/ui'
+import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 
 // interface IProps {
 //   course_section_type: string
@@ -191,7 +192,7 @@ const CourseDetail = () => {
   }
 
   const handleOpenNotesList = () => {
-    dispatch(activeNotesList())
+    dispatch(activeNotesList3Level())
     document.body.style.overflow = 'hidden'
   }
   const handleDefaultActiveItem = () => {

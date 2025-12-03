@@ -4,7 +4,7 @@ import {
   GRADING_METHOD,
   IQuizResultList,
   STATUS_QUIZ_TEST,
-  TEST_TYPE,
+  TEST_TYPE_LABELS,
 } from '@lms/core'
 import {
   PopupCanNotRetakeTest,
@@ -683,7 +683,7 @@ const TestModal = ({
           setOpen={setOpen}
           title={
             <div className="flex items-center justify-center">
-              {TEST_TYPE[data?.course_section_type as keyof typeof TEST_TYPE]}
+              {TEST_TYPE_LABELS[data?.course_section_type as keyof typeof TEST_TYPE_LABELS]}
             </div>
           }
           time={displayTime}

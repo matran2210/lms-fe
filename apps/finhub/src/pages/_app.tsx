@@ -76,6 +76,13 @@ type MyAppProps = AppProps & {
     layout?: String
   }
 }
+const showSupportWidget = [
+  '/courses',
+  '/entrance-test',
+  '/calendar',
+  '/exam_list',
+  '/overview',
+]
 
 function MyApp({ Component, pageProps }: MyAppProps) {
   injectStore(store)
@@ -168,12 +175,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [])
 
-  const showHelp =
-    !excludedPathsHelp.some((path) => router.pathname.includes(path)) &&
-    !isTeacherPage // Add condition to hide help on teacher pages
-  const hiddenChatbot =
-    excludedPathsHelp.some((path) => router.pathname.includes(path)) ||
-    isTeacherPage
+  const showHelp = showSupportWidget.includes(router.pathname) && !isTeacherPage // Add condition to hide help on teacher pages
+  const hiddenChatbot = !showHelp
   // Handle HubSpot widget visibility based on URL
   useEffect(() => {
     const hideHubspotWidget = () => {
@@ -365,12 +368,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                           <PinnedNotifications />
                           <Component {...pageProps} />
                         </div>
-                        {showHelp && (
-                          <>
-                            <BackToTop />
-                            <Help showHelp={showHelp} />
-                          </>
-                        )}
+                        <BackToTop />
+                        <Help showHelp={showHelp} />
                         <LearningNotesList appType={AppType.FINHUB} />
                         <PopupCompletedCourse />
                       </>
