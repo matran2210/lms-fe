@@ -42,14 +42,15 @@ let nextConfig = {
 
   webpack: (config, { isServer, defaultLoaders }) => {
     config.resolve.alias.canvas = false
-    
+
     // ✅ Fix lỗi duplicate styled-components (Mất style)
     try {
-      config.resolve.alias['styled-components'] = require.resolve('styled-components');
+      config.resolve.alias['styled-components'] =
+        require.resolve('styled-components')
     } catch (e) {}
 
     // ✅ Fix lỗi crash do source map hỏng
-    config.ignoreWarnings = [/Failed to parse source map/, /Invalid mapping/];
+    config.ignoreWarnings = [/Failed to parse source map/, /Invalid mapping/]
 
     // ❌ ĐÃ XÓA: config.module.rules thủ công (withTM đã lo việc này rồi)
 
@@ -57,9 +58,7 @@ let nextConfig = {
   },
 
   sassOptions: {
-    includePaths: [
-      path.join(__dirname, 'styles'),
-    ],
+    includePaths: [path.join(__dirname, 'styles')],
   },
 
   output: 'standalone',
@@ -70,7 +69,7 @@ let nextConfig = {
 
   images: {
     minimumCacheTTL: 43200,
-    domains: ['**'], 
+    domains: ['**'],
     unoptimized: true,
   },
 

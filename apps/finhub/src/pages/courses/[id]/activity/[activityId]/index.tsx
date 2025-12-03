@@ -1080,10 +1080,10 @@ const ActivityPage = () => {
                   key={e.id}
                   dragHandleClassName="modal-header"
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
-                  position="bottom left"
+                  position="center left"
                   header={
                     <div className="relative">
-                      <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
+                      <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                         <div className="truncate">
                           <span className="text-base font-semibold text-bw-1">{`${exhibitText} ${
                             e?.index + 1
