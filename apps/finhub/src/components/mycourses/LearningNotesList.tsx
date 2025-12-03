@@ -25,6 +25,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   backTypeMap,
+  DEFAULT_PAGE_NUMBER,
   getTypeName,
   ICourseSectionNoteItem,
   ICourseSectionPathItem,
@@ -125,7 +126,11 @@ const LearningNotesList = () => {
       (router?.query?.course_section_id && notesListStatus)
     ) {
       setLoading(true)
-      CoursesAPI.getCourseNotesList(DEFAULT_PAGESIZE, objectParams)
+      CoursesAPI.getCourseNotesList(
+        DEFAULT_PAGE_NUMBER,
+        DEFAULT_PAGESIZE,
+        objectParams,
+      )
         .then((res) => {
           setNotesListData(res?.data)
           const course_section_path = res?.data?.notes?.[0]?.course_section_path
@@ -170,7 +175,11 @@ const LearningNotesList = () => {
   useEffect(() => {
     if (notesListStatus && (courseId || queryId) && firstLoadActity) {
       setLoading(true)
-      CoursesAPI.getCourseNotesList(DEFAULT_PAGESIZE, params)
+      CoursesAPI.getCourseNotesList(
+        DEFAULT_PAGE_NUMBER,
+        DEFAULT_PAGESIZE,
+        params,
+      )
         .then((res) => {
           setNotesListData(res?.data)
         })
@@ -226,7 +235,11 @@ const LearningNotesList = () => {
   const fetchData = async (params?: Object) => {
     setLoading(true)
     try {
-      const res = await CoursesAPI.getCourseNotesList(pageIndex, params)
+      const res = await CoursesAPI.getCourseNotesList(
+        DEFAULT_PAGE_NUMBER,
+        pageIndex,
+        params,
+      )
       setNotesListData(res?.data)
       setPageIndex((prevPageIndex) => prevPageIndex + DEFAULT_PAGESIZE)
     } finally {
