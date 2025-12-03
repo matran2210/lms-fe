@@ -62,7 +62,7 @@ export const useFloatingUser = ({ floatingRef }: UseFloatingUserProps) => {
 
     const changePosition = () => {
       const container = document.querySelector(
-        `#${ZOOM_CONFIG.MEETING_CONTAINER_ID} .${ZOOM_CONFIG.MEETING_VIDEO_FRAME}`
+        `${ZOOM_CONFIG.MEETING_CONTAINER_ID} ${ZOOM_CONFIG.MEETING_VIDEO_SHARE_LAYOUT}`
       )
 
       if (!container || !floatingRef?.current) {
