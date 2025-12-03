@@ -146,6 +146,12 @@ const CourseDashboard = ({
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 xl:gap-8">
           {dashboardStats.map((data) => {
+            let totalCompleted = 0;
+            const total = data?.total || 0;
+            if (!isUndefined(data.completed) && !isUndefined(data.total)) {
+              totalCompleted =
+                data?.completed >= data?.total ? data?.total : data?.completed;
+            }
             let bgColorClass = "";
             if (data.id === 1) bgColorClass = "bg-primary";
             else if (data.id === 2) bgColorClass = "bg-info-500";
@@ -186,18 +192,16 @@ const CourseDashboard = ({
                         "Complete course to get certificate"
                       )}
                     </div>
-                    {!isUndefined(data?.completed) &&
-                      !isUndefined(data?.total) &&
-                      data.total !== 0 && (
-                        <div className="mt-2 h-1.5 w-full rounded-full bg-gray-200 xl:mt-1">
-                          <div
-                            className="h-full rounded-full bg-primary"
-                            style={{
-                              width: `${Math.floor((data?.completed / data?.total) * 100)}%`,
-                            }}
-                          ></div>
-                        </div>
-                      )}
+                    {totalCompleted !== 0 && total !== 0 && (
+                      <div className="mt-2 h-1.5 w-full rounded-full bg-gray-200 xl:mt-1">
+                        <div
+                          className="h-full rounded-full bg-primary"
+                          style={{
+                            width: `${Math.floor((totalCompleted / total) * 100)}%`,
+                          }}
+                        ></div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
