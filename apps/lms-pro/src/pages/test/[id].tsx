@@ -1,8 +1,3 @@
-/* eslint-disable prefer-const */
-import {
-  removeHighlights,
-  serializeHighlights,
-} from '@/../node_modules/@funktechno/texthighlighter/lib/index'
 import {
   CalculatorIconV2,
   DownloadIcon,
@@ -118,6 +113,10 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
+import {
+  removeHighlights,
+  serializeHighlights,
+} from '@funktechno/texthighlighter/lib'
 declare global {
   interface Window {
     userAgreed: any

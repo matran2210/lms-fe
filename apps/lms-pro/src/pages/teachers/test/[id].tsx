@@ -1,8 +1,3 @@
-/* eslint-disable prefer-const */
-import {
-  removeHighlights,
-  serializeHighlights,
-} from '@/../node_modules/@funktechno/texthighlighter/lib/index'
 import {
   ArrowUpIcon,
   CalculatorIcon,
@@ -15,7 +10,15 @@ import {
   UnHighLightIcon,
   WordIcon,
 } from '@lms/assets'
-import { confirmDialog, CourseProvider, disableUnsavedChange, loginSlice, useAppDispatch, useAppSelector, useCourseContext } from '@lms/contexts'
+import {
+  confirmDialog,
+  CourseProvider,
+  disableUnsavedChange,
+  loginSlice,
+  useAppDispatch,
+  useAppSelector,
+  useCourseContext,
+} from '@lms/contexts'
 import {
   DISPLAY_TYPE,
   EXHIBIT_TEXT_REPLACE,
@@ -27,7 +30,12 @@ import {
   TEST_TYPE,
 } from '@lms/core'
 import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
-import { EditorReader, FullScreenLayout, HookFormCheckBoxGroup, useClickOutside } from '@lms/ui'
+import {
+  EditorReader,
+  FullScreenLayout,
+  HookFormCheckBoxGroup,
+  useClickOutside,
+} from '@lms/ui'
 import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@lms/ui/components/questionType/DragNDrop'
 import MatchingQuestion from '@lms/ui/components/questionType/MatchingQuestion'
@@ -49,7 +57,8 @@ import {
   Answer,
   AnswerItem,
   AnswerList,
-  DEFAULT_EDITOR_VALUE, defaultSheetData,
+  DEFAULT_EDITOR_VALUE,
+  defaultSheetData,
   DragDropAnswerItem,
   IDataQuestion,
   IRequirement,
@@ -57,8 +66,18 @@ import {
   RequirementItem,
   ScratchPadValue,
 } from '@lms/core'
-import { ButtonContent, ConFirmSubmit, ResetToAnswerTemplateModal, ShowAnswerTemplate } from '@lms/feature-courses'
-import { HeaderTest, QuitTestModal, TabSlide, TestTimeOutModal } from '@lms/feature-test'
+import {
+  ButtonContent,
+  ConFirmSubmit,
+  ResetToAnswerTemplateModal,
+  ShowAnswerTemplate,
+} from '@lms/feature-courses'
+import {
+  HeaderTest,
+  QuitTestModal,
+  TabSlide,
+  TestTimeOutModal,
+} from '@lms/feature-test'
 import { ButtonPrimaryV2, ButtonTextV2, SappLoading } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
 import { EventTestAPI } from '@pages/api/event-test'
@@ -75,6 +94,10 @@ import {
   isValuesEqual,
   isWorkbookEmpty,
 } from 'src/utils/helpers/quiz-test/helper'
+import {
+  removeHighlights,
+  serializeHighlights,
+} from '@funktechno/texthighlighter/lib'
 declare global {
   interface Window {
     userAgreed: any
@@ -2811,7 +2834,7 @@ const TestDetail = () => {
                 className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
                 onClick={() => {
                   setAllowUnHighLight(!allowUnHighLight)
-                    setAllowHighLight(false)
+                  setAllowHighLight(false)
                   trackGAEvent('Click Button Unhighlight Test')
                 }}
               >
