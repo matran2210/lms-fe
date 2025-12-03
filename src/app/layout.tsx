@@ -1,7 +1,9 @@
 import { AppProvider } from '@/components/AppProvider'
 import { Header } from '@/components/layout/Header'
+import SAPPLoading from '@/components/loading/SAPPLoading'
 import '@/styles/global.css'
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
@@ -36,11 +38,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <div id="zoom-app">
-          <AppProvider>
-            <Header />
-            {children}
-            <Toaster />
-          </AppProvider>
+          <Suspense fallback={<SAPPLoading />}>
+            <AppProvider>
+              <Header />
+              {children}
+              <Toaster />
+            </AppProvider>
+          </Suspense>
         </div>
       </body>
     </html>

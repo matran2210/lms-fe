@@ -6,10 +6,26 @@ export const ZOOM_CONFIG = {
   } as const,
 
   // Meeting container
-  MEETING_CONTAINER_ID: 'zmmtg-root', // Default by zoom-sdk
-  MEETING_VIDEO_FRAME: 'single-main-container__video-frame',
-  MEETING_FULL_SCREEN_WIDGET: 'full-screen-widget',
-  MEETING_FULL_SCREEN_WIDGET_EXIT: 'Exit Full Screen',
+  MEETING_CONTAINER_ID: '#zmmtg-root', // Default by zoom-sdk
+
+  MEETING_VIDEO_SHARE_LAYOUT: '.video-share-layout',
+  MEETING_VIDEO_SHARE_LAYOUT_STANDARD: 'video-share-standrad',
+  MEETING_VIDEO_SHARE_LAYOUT_PANE_1: '.Pane.Pane1',
+  MEETING_VIDEO_SHARE_LAYOUT_SHARER_CONTAINER: '.sharee-container__viewport',
+
+  MEETING_SPEAKER_ACTIVE_CONTAINER: '.speaker-active-container__wrap',
+  MEETING_SPEAKER_ACTIVE_CONTAINER_VIDEO_FRAME: '.speaker-active-container__video-frame',
+
+  MEETING_GALLERY_VIDEO_CONTAINER: '.gallery-video-container__main-view',
+  MEETING_GALLERY_VIDEO_CONTAINER_VIDEO_FRAME: '.gallery-video-container__video-frame',
+
+  MEETING_MULTI_SPEAKER_CONTAINER: '.multi-speaker-container',
+  MEETING_MULTI_SPEAKER_CONTAINER_MAIN_VIEW: '.multi-speaker-main-container__main-view',
+  MEETING_MULTI_SPEAKER_CONTAINER_VIDEO_FRAME: '.multi-speaker-container__video-frame',
+
+  MEETING_MULTI_SPEAKER_ACTIVE_CONTAINER_MAIN_VIEW: '.multi-speaker-active-container__main-view',
+
+  NOTIFICATION_MANAGER_HEADER_VISIBLE_TOP: '176px',
 
   // Error messages
   ERROR_MESSAGES: {

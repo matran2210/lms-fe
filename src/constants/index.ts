@@ -15,4 +15,6 @@ export const FLOATING_USER_ID = 'floating-user'
 
 export const SHOW_FULL_SCREEN_CLASS = 'show-full-screen'
 
+export const FLOATING_USER_POSITION_INTERVAL = 30 * 1000 // 30 seconds
+
 export const HOME_LMS_URL = process.env.NEXT_PUBLIC_LMS_FE_URL || '/'
