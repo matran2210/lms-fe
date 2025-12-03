@@ -281,7 +281,7 @@ const TableCaseStudyResult = () => {
                               : 'Unfinished'}
                           </>
                         )}
-                      </td>
+                        </td>
                       <td className="m-6 pr-4 text-start text-gray-1">
                         {e?.question?.qType !== 'ESSAY' && (
                           <div className="ml-1 flex items-center">

@@ -79,7 +79,7 @@ const InputCodeForm = ({ error = '', email, token, api }: IInputCodeFormProps) =
         }
         return time - 15
       })
-      setCurrentToken(response.data.token)
+      setCurrentToken((response as any).data.token)
 
       setCode(Array(6).join('.').split('.'))
     } catch (error) {
@@ -96,7 +96,7 @@ const InputCodeForm = ({ error = '', email, token, api }: IInputCodeFormProps) =
         code: code?.join(''),
         token: currentToken,
       })
-      if (response.success && response.data.success) {
+      if ((response as any).success && (response as any).data.success) {
         setTimeout(() => {
           router.push(pageLink.AUTH_CHANGE_PASSWORD)
         }, 1000)

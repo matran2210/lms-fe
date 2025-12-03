@@ -1,12 +1,10 @@
-import { ButtonCancelSubmit } from "@lms/ui";
-import { HookFormTextField } from "@lms/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ExceptionErrorCode, VALIDATE_PASSWORD } from "@lms/core";
 import { isEmpty } from "lodash";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { ButtonSecondary } from "@lms/ui";
+import { ButtonCancelSubmit, ButtonSecondary, HookFormTextField } from "@lms/ui";
 import { ButtonPrimary } from "@lms/ui";
 import { useFeature } from "@lms/contexts";
 import { VALIDATE_MIN_LENGTH_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG, VALIDATE_REQUIRED } from "@lms/utils";
@@ -24,6 +22,7 @@ interface IProp {
 
 const ChangePassword = ({ handleCancel }: IProp) => {
   const [loading, setLoading] = useState(false);
+  const { authApi } = useFeature()
 
   /**
    * @description validate password
@@ -73,7 +72,6 @@ const ChangePassword = ({ handleCancel }: IProp) => {
    * @description state này dùng để mở popup khi submit thành công mật khẩu hiện tại
    */
   const [openPopup, setOpenPopup] = useState(false);
-  const {authApi} = useFeature()
 
   /**
    * @description call API submit mật khẩu hiện tại

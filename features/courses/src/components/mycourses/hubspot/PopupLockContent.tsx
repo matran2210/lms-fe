@@ -1,8 +1,7 @@
-import { SappModalV3 } from '@lms/ui'
-import React, { Dispatch, SetStateAction } from 'react'
-import { useRouter } from 'next/router'
 import { LockSectionIcon, ThankYouIcon, UnlockIcon } from '@lms/assets'
 import { useFeature } from '@lms/contexts'
+import { SappModalV3 } from '@lms/ui'
+import React, { Dispatch, SetStateAction } from 'react'
 
 export interface IPopupFormState {
   lockSection: boolean
@@ -84,7 +83,7 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
   const handleUpgrade = async () => {
     const res = await courseApi.upgradeNowTrial(
       router.query.courseId || router.query.id,
-    )
+    ) as { data?: { upgrade_now_available: boolean } }
 
     const isAvailable = !!res?.data?.upgrade_now_available
 

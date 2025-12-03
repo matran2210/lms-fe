@@ -98,7 +98,7 @@ const MyProfilePage = () => {
     {
       key: 'sercurity',
       label: (
-        <TabHeaderItem icon={<Icon type="sercurity" />} title="Sercurity" />
+        <TabHeaderItem icon={<Icon type="sercurity" />} title="Security" />
       ),
       children: (
         <>

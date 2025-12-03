@@ -2763,7 +2763,6 @@ export const HourglassIcon = ({ className }: { className?: string }) => {
   );
 };
 
-
 export const StarCircleIcon = ({ color } : { color?: string }) => {
   return (
     <svg

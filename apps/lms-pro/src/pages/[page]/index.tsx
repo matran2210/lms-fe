@@ -1,12 +1,20 @@
 import { CollapseArrowIcon, Icon } from '@lms/assets'
-import { UserType, getLoginHistory, getLogoutUser, useAppDispatch, useAppSelector, useCourseContext, userReducer } from '@lms/contexts'
+import {
+  UserType,
+  getLoginHistory,
+  getLogoutUser,
+  useAppDispatch,
+  useAppSelector,
+  useCourseContext,
+  userReducer,
+} from '@lms/contexts'
 import {
   ANIMATION,
   AppType,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   IDeviceItem,
-  NOTIFICATION_STATUS
+  NOTIFICATION_STATUS,
 } from '@lms/core'
 import {
   Certificate,
@@ -104,7 +112,9 @@ const ProfilePage = () => {
 
   const handleLogout = async () => {
     try {
-      await dispatch(getLogoutUser({ authManager : new AuthenticationManager()})).then(() => {
+      await dispatch(
+        getLogoutUser({ authManager: new AuthenticationManager() }),
+      ).then(() => {
         const pinnedStatus = getLocalStorageItem('pinnedStatus')
         if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
           removeLocalStorageItem('pinnedId')
@@ -145,6 +155,7 @@ const ProfilePage = () => {
             avatar={avatar}
             handleSetAvatar={handleSetAvatar}
             setReViewImageSrc={setReViewImageSrc}
+            appType={AppType.LMS_PRO}
           />
           <SubjectList isEdit={isEdit} />
           <ProfileList isEdit={isEdit} />
@@ -169,7 +180,7 @@ const ProfilePage = () => {
     {
       key: 'sercurity',
       label: (
-        <TabHeaderItem icon={<Icon type="sercurity" />} title="Sercurity" />
+        <TabHeaderItem icon={<Icon type="sercurity" />} title="Security" />
       ),
       children: (
         <>
@@ -198,6 +209,7 @@ const ProfilePage = () => {
           avatar={avatar}
           handleSetAvatar={handleSetAvatar}
           setReViewImageSrc={setReViewImageSrc}
+          appType={AppType.LMS_PRO}
         />
       ),
       className:
@@ -294,7 +306,7 @@ const ProfilePage = () => {
     {
       key: 'sercurity',
       label: (
-        <TabHeaderItem icon={<Icon type="sercurity" />} title="Sercurity" />
+        <TabHeaderItem icon={<Icon type="sercurity" />} title="Security" />
       ),
       children: loginHistory && (
         <Collapse
@@ -347,6 +359,7 @@ const ProfilePage = () => {
                 isEdit={isEdit}
                 inputFileRef={inputFileRef}
                 setIsEdit={setIsEdit}
+                appType={AppType.LMS_PRO}
               />
               <div>
                 <Tabs

@@ -3,7 +3,7 @@ import { IClassCard, ITabsTeacher, statusMap } from "@lms/core";
 import { formatDateFromUTC } from "@lms/utils";
 import { Typography } from "antd";
 import ClassProgress from "./ClassProgress";
-import { SappTabs } from "@lms/ui";
+import { SappTabs, StatusTag } from "@lms/ui";
 
 const { Title } = Typography;
 interface IProps {

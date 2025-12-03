@@ -40,11 +40,11 @@ const ModalExplanationPackage = ({
   const getActiveQuestion = async (id: string) => {
     setLoading(true);
     try {
-      const resultResponse = await activityApi.getQuizAttemptsAnswer(id);
+      const resultResponse = await activityApi.getQuizAttemptsAnswer(id) as any
       const topicDescription = await courseApi.getTopicDescription(
         resultResponse?.data?.answer?.question?.question_topic_id,
         resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
-      );
+      ) as any
       setActiveQuestion({
         ...resultResponse?.data?.answer?.question,
         answer_file: resultResponse.data.answer.answer_file,

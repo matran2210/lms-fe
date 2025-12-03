@@ -192,7 +192,7 @@ const LearningNotesList = ({ appType }: Props) => {
     }));
   };
 
-  const params = cleanParamsAPI({
+  const params: Record<string, any> = cleanParamsAPI({
     class_id: courseId || queryId,
     course_section_id: isFirstCallApi
       ? paramsCourseSectionId
@@ -215,7 +215,7 @@ const LearningNotesList = ({ appType }: Props) => {
 
     courseApi
       .getCourseNotesList(DEFAULT_PAGE_NUMBER, DEFAULT_PAGESIZE, params)
-      .then((res) => {
+      .then((res: any) => {
         setNotesListData(res?.data);
         // Các điều kiện không auto fill filter
         if (isFirstCallApi && !paramsCourseSectionId) return;
@@ -287,12 +287,12 @@ const LearningNotesList = ({ appType }: Props) => {
         pageIndexNext,
         DEFAULT_PAGESIZE,
         params,
-      );
+      ) as any
       setNotesListData((prevResources) => ({
         ...prevResources,
         notes: [...(prevResources?.notes ?? []), ...(res?.data?.notes ?? [])],
         meta: res?.data?.meta ?? prevResources?.meta,
-      }));
+      } as INotesListResponse));
       setPageIndex(pageIndexNext);
     } finally {
       isFetchingRef.current = false;

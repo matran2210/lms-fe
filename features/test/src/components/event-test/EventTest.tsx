@@ -54,7 +54,7 @@ const EventTest = ({
     try {
       const res = await courseApi.submitAllQuestion(
         data?.quiz_attempt_id as string,
-      );
+      )
       if (res.success) {
         await onRefetch();
         setSubmitEventTest(true);
@@ -278,9 +278,7 @@ const EventTest = ({
                     </div>
                     <div className="text-[20px]">
                       {formatTime(
-                        remainingTimeLastAttempt > 0
-                          ? remainingTimeLastAttempt
-                          : 0,
+                        new Date(Math.max(remainingTimeLastAttempt, 0) * 1000),
                       )}
                     </div>
                   </div>

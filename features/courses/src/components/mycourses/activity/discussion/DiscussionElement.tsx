@@ -83,7 +83,7 @@ function DiscussionElement({
   const [isDelete, setIsDelete] = useState<boolean>(false);
   const [editValue, setEditValue] = useState("");
   const [discussionContent, setDiscussionContent] = useState(
-    discussion?.content,
+    discussion?.content ?? "",
   );
   const dispatch = useAppDispatch();
   const [selectFile, setSelectFile] = useState<File[]>([]);
@@ -121,10 +121,10 @@ function DiscussionElement({
       const res = await activityApi.updateDiscussionComment(
         discussion?.id,
         params,
-      );
+      ) as { success?: boolean; data?: { content: string } };
       handleRefresh();
       if (res?.success) {
-        setDiscussionContent(res?.data?.content);
+        setDiscussionContent(res?.data?.content ?? "");
         setIsEdit(false);
         handleEditDiscussionElement(false);
         setSelectFile([]);
@@ -269,7 +269,7 @@ function DiscussionElement({
         discussion?.course_section_id,
         classId as string,
         discussion?.user_id,
-      );
+      ) as { data?: any };
       const { data } = res;
       if (isEmpty(data)) return;
       setUserInfo({

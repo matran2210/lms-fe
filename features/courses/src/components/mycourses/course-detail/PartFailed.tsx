@@ -296,7 +296,7 @@ const PartFailed = ({
               selectedResult={selectedResult}
               setSelectedResult={setSelectedResult}
               isTeacher={isTeacher}
-              setLabelResult={setLabelResult}
+              // setLabelResult={setLabelResult}
             />
           </div>
 

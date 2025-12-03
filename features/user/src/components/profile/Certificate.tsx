@@ -57,7 +57,7 @@ const Certificate = () => {
     {
       title: 'Certificate',
       className: 'max-w-sm',
-      render: (record) => (
+    render: (record) => (
         <div
           className="group flex cursor-pointer items-center gap-2"
           onClick={() =>
