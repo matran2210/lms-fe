@@ -4,7 +4,7 @@ import { fetcher } from '@/services/request'
 import { getMessagingToken } from '@/utils/firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Keycloak from 'keycloak-js'
-import { COOKIE_INFO } from 'src/constants'
+import { COOKIE_INFO, HOME_LMS_URL } from 'src/constants'
 import { deleteCookie, getCookie, getSessionIdFromToken, setCookie } from '../index'
 
 const handleFirebaseToken = async () => {
@@ -104,7 +104,7 @@ export class AuthenticationManager {
       deleteCookie(COOKIE_INFO.KEYCLOAK_REFRESH_TOKEN)
       deleteCookie(COOKIE_INFO.SESSION_ID)
       deleteCookie(COOKIE_INFO.KEYCLOAK_USER_ID)
-      window.location.reload()
+      window.location.href = HOME_LMS_URL
     }
   }
 

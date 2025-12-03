@@ -36,7 +36,7 @@ export function getSessionIdFromToken(token: string): string | null {
 }
 
 export function toggleMeetingContainer(display: 'block' | 'none') {
-  const zoomContainer = document.getElementById(ZOOM_CONFIG.MEETING_CONTAINER_ID)
+  const zoomContainer = document.querySelector(ZOOM_CONFIG.MEETING_CONTAINER_ID) as HTMLElement
   if (zoomContainer) {
     zoomContainer.style.display = display
   }

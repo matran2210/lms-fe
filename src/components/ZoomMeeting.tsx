@@ -1,33 +1,25 @@
 'use client'
 
 import { ZoomApi } from '@/api/zoom'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { useZoomElementAdjustment } from '@/hooks/useZoomElementAdjustment'
 import { useZoomSDK } from '@/hooks/useZoomSDK'
 import { ZoomMeetingConfig } from '@/types/zoom'
-import { getToken, toggleMeetingContainer } from '@/utils'
-import { notFound, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { toggleMeetingContainer } from '@/utils'
+import { notFound, usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import FloatingUser from './FloatingUser'
 import SAPPLoading from './loading/SAPPLoading'
 
 export const ZoomMeeting = () => {
+  const { meetingToken, loadingMeetingToken } = useAuthContext()
   const { isSDKLoaded, isJoining, isJoined, error, joinMeeting } = useZoomSDK()
   const [meetingConfig, setMeetingConfig] = useState<ZoomMeetingConfig | null>(null)
-  const [isLoadingToken, setIsLoadingToken] = useState(true)
   const [isLoadingMeetingData, setIsLoadingMeetingData] = useState(true)
-  const [token, setToken] = useState<string | null>(null)
   const router = useRouter()
   const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const tokenFromParams = searchParams.get('token')
 
   useZoomElementAdjustment(isJoined)
-
-  useEffect(() => {
-    const currentToken = getToken(tokenFromParams)
-    setToken(currentToken)
-    setIsLoadingToken(false)
-  }, [tokenFromParams])
 
   const getZoomMeeting = async (token: string) => {
     const userInfoData = await ZoomApi.getZoomToken(token)
@@ -41,17 +33,17 @@ export const ZoomMeeting = () => {
 
   // Process token and prepare meeting data
   useEffect(() => {
-    if (isLoadingToken) return
+    if (loadingMeetingToken) return
 
     const processMeetingToken = async () => {
-      if (!token) {
+      if (!meetingToken) {
         notFound()
       }
 
       try {
         setIsLoadingMeetingData(true)
 
-        const decodedToken = decodeURIComponent(token)
+        const decodedToken = decodeURIComponent(meetingToken)
         const meetingData = await getZoomMeeting(decodedToken)
 
         if (!meetingData.userInfo || !meetingData.signature) {
@@ -79,17 +71,17 @@ export const ZoomMeeting = () => {
     }
 
     processMeetingToken()
-  }, [isLoadingToken])
+  }, [loadingMeetingToken])
 
   // Auto join meeting when SDK is loaded and meeting config is ready
   useEffect(() => {
     if (isSDKLoaded && meetingConfig && !isJoining && !error) {
-      if (tokenFromParams) {
+      if (meetingToken) {
         router.replace(pathname, { scroll: false })
       }
       handleJoinMeeting()
     }
-  }, [isSDKLoaded, meetingConfig, isJoining, error, tokenFromParams, router, pathname])
+  }, [isSDKLoaded, meetingConfig, isJoining, error, meetingToken, router, pathname])
 
   const handleJoinMeeting = async () => {
     if (!meetingConfig) return
@@ -101,7 +93,7 @@ export const ZoomMeeting = () => {
     return <SAPPLoading />
   }
 
-  if (!token || !meetingConfig) {
+  if (!meetingToken || !meetingConfig) {
     return <p className="p-8 text-center text-gray-600">Không có thông tin cuộc họp</p>
   }
 
