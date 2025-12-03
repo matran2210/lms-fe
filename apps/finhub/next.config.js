@@ -1,13 +1,27 @@
 /** @type {import('next').NextConfig} */
 const path = require('path')
-// --- EXTERNAL WRAPPERS ---
+
+// ✅ 1. BẮT BUỘC DÙNG CÁI NÀY CHO NEXT 12
+const withTM = require('next-transpile-modules')([
+  '@lms/ui',
+  '@lms/core',
+  '@lms/hooks',
+  '@lms/assets',
+  '@lms/utils',
+  '@lms/contexts',
+  '@lms/feature-user',
+  '@lms/feature-class',
+  '@lms/feature-auth',
+  '@lms/feature-dashboard',
+  '@lms/feature-courses',
+  '@lms/feature-notifications',
+  '@lms/feature-test',
+  '@lms/feature-calendar',
+  // 'sapp-common-package', // Bỏ comment nếu vẫn lỗi css package này
+])
+
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
-})
-
-const removeImports = require('next-remove-imports')({
-  test: /node_modules([\s\S]*?)\.(tsx|ts|js|mjs|jsx)$/,
-  matchImports: '\\.(less|css|scss|sass|styl)$',
 })
 
 const securityHeaders = [
@@ -19,38 +33,26 @@ const securityHeaders = [
 
 let nextConfig = {
   reactStrictMode: false,
-  productionBrowserSourceMaps: true,
+  productionBrowserSourceMaps: false, // ✅ Tắt map để không crash
   optimizeFonts: false,
-  swcMinify: false, // BƯỚC 1: transpilePackages vẫn phải giữ để hỗ trợ
+  swcMinify: true, // ✅ Nên bật true để nhanh
+  staticPageGenerationTimeout: 1000,
 
-  transpilePackages: [
-    '@lms/ui',
-    '@lms/core',
-    '@lms/hooks',
-    '@lms/assets',
-    '@lms/utils',
-    '@lms/contexts',
-    '@lms/feature-user',
-    '@lms/feature-class',
-    '@lms/feature-auth',
-    '@lms/feature-dashboard',
-    '@lms/feature-courses',
-    '@lms/feature-notifications',
-    '@lms/feature-test',
-    '@lms/feature-calendar',
-  ],
+  // ❌ ĐÃ XÓA: transpilePackages (Vô dụng ở Next 12)
 
   webpack: (config, { isServer, defaultLoaders }) => {
     config.resolve.alias.canvas = false
-    config.resolve.alias['styled-components'] = require.resolve('styled-components');
-    config.module.rules.push({
-      test: /\.(ts|tsx)$/,
-      include: [
-        path.resolve(__dirname, '../../features'),
-        path.resolve(__dirname, '../../libs'),
-      ],
-      use: [defaultLoaders.babel],
-    })
+
+    // ✅ Fix lỗi duplicate styled-components (Mất style)
+    try {
+      config.resolve.alias['styled-components'] =
+        require.resolve('styled-components')
+    } catch (e) {}
+
+    // ✅ Fix lỗi crash do source map hỏng
+    config.ignoreWarnings = [/Failed to parse source map/, /Invalid mapping/]
+
+    // ❌ ĐÃ XÓA: config.module.rules thủ công (withTM đã lo việc này rồi)
 
     return config
   },
@@ -67,7 +69,7 @@ let nextConfig = {
 
   images: {
     minimumCacheTTL: 43200,
-    remotePatterns: [{ protocol: 'https', hostname: '**' }],
+    domains: ['**'],
     unoptimized: true,
   },
 
@@ -86,18 +88,16 @@ let nextConfig = {
 
   poweredByHeader: false,
 
-  logging: {
-    fetches: { fullUrl: true },
-  }, // Tối ưu hóa lại Experimental
+  // ❌ ĐÃ XÓA: logging (Next 12 không có)
 
   experimental: {
-    optimizeCss: true,
+    optimizeCss: false, // ⛔ BẮT BUỘC FALSE ĐỂ KHÔNG TREO MÁY
     forceSwcTransforms: true,
-    instrumentationHook: true,
+    instrumentationHook: false, // Tắt đi cho nhẹ
+    esmExternals: 'loose',
   },
 }
 
-// --- Inject Sentry wrapper ---
 const { withSentryConfig } = require('@sentry/nextjs')
 
 nextConfig = withSentryConfig(nextConfig, {
@@ -111,5 +111,5 @@ nextConfig = withSentryConfig(nextConfig, {
   automaticVercelMonitors: true,
 })
 
-// --- wrap removeImports + bundle analyzer ---
-module.exports = removeImports(withBundleAnalyzer(nextConfig))
+// ✅ BỌC withTM RA NGOÀI CÙNG (Quan trọng nhất)
+module.exports = withBundleAnalyzer(withTM(nextConfig))
