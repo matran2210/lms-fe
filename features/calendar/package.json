@@ -17,6 +17,6 @@
     "antd": "^5.25.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.12",
-    "sapp-common-package": "^1.5.2"
+    "sapp-common-package": "^1.6.1"
   }
 }
