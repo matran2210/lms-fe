@@ -12,6 +12,8 @@
     "check-types": "turbo run check-types",
     "dev:lms-pro": "pnpm --filter ./apps/lms-pro dev",
     "dev:finhub": "pnpm --filter ./apps/finhub dev",
+    "start:lms-pro": "pnpm --filter ./apps/lms-pro start",
+    "start:finhub": "pnpm --filter ./apps/finhub start",
     "prepare": "husky install",
     "lint-staged": "lint-staged",
     "gen:assets": "node scripts/generate-assets-index.js"
