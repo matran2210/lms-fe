@@ -49,7 +49,7 @@ export default function CourseClass({
                     ? 1
                     : 0}{' '}
               </div>
-              <div className="text-xs font-normal text-gray md:text-sm">
+              <div className={`text-xs font-normal md:text-sm ${enableCourse ? 'text-gray' : 'text-gray-300'}`}>
                 {daysDifference > 1 ? 'days left' : 'day left'}
               </div>
             </div>
