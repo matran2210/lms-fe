@@ -5,7 +5,7 @@ import { Thumbnail, video_url } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import useClickOutside from "../clickoutside/HookClick";
 import { ArrowIcon } from "../pagination";
 import { formatTimeToHourMinuteSecond, getResolution, isMobileOrTablet } from "@lms/utils";
@@ -71,7 +71,7 @@ const SAPPVideo = ({
   const [activeSettings, setActiveSettings] = useState<boolean>(false);
   const [activeQuality, setActiveQuality] = useState<boolean>(false);
   const [activeSpeed, setActiveSpeed] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [canPlay, setCanPlay] = useState<boolean>(false);
   const [loadingPercentage, setLoadingPercentage] = useState<number>(0);
   const [cloudflarePlayer, setCloudflarePlayer] = useState<boolean>(false);
@@ -107,10 +107,17 @@ const SAPPVideo = ({
 
   let dashjs: any;
 
+  // ⭐ useMemo để đảm bảo src là giá trị ổn định
+const stableVideoSrc = useMemo(() => {
+  return options?.src || null;
+}, [options?.src]);
+
+
+let player: any;
   useEffect(() => {
-    let player: any;
+    
     const initTerminal = async () => {
-      if (options?.src) {
+      if (stableVideoSrc) {
         dashjs = await import("dashjs");
 
         if (dashjs) {
@@ -195,7 +202,7 @@ const SAPPVideo = ({
         );
       }
     };
-  }, [options?.src]);
+  }, [stableVideoSrc]);
 
   // Get list captions of video
   const fetchCaptions = async (url: string) => {
