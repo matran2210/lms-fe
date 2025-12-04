@@ -92,11 +92,27 @@ const LearningNotesList = ({ appType }: Props) => {
     setNoteInput,
     refetchNotesList,
     setIsViewOnly,
+    notesListData: notesListDataFromContext,
   } = useCourseNoteContext();
   const dispatch = useAppDispatch();
   const [notesListData, setNotesListData] = useState<
     INotesListResponse | undefined
   >();
+
+  useEffect(() => {
+    if (notesListDataFromContext) {
+      setNotesListData((prev) => ({
+        notes: notesListDataFromContext,
+        meta: prev?.meta ?? {
+          total_records: 0,
+          total_pages: DEFAULT_PAGE_NUMBER,
+          page_index: DEFAULT_PAGE_NUMBER,
+          page_size: DEFAULT_PAGESIZE,
+        },
+      }));
+    }
+  }, [notesListDataFromContext]);
+
 
   //Tạo các biến để lấy id trên thanh url
   const isCourseDetail = pageLink.COURSE_DETAIL === router.pathname;
