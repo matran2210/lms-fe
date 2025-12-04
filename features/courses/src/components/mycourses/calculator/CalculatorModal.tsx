@@ -18,7 +18,7 @@ const CalculatorModal = ({ onClose, isMobileCalc = false, onClick }: IProps) => 
         position="center"
         isInBody
         header={<></>}
-        draggableFull
+        // draggableFull
         height={isMobileCalc ? 518 : 634}
         width={isMobileCalc ? 256 : 344}
         className={clsx({
@@ -30,7 +30,7 @@ const CalculatorModal = ({ onClose, isMobileCalc = false, onClick }: IProps) => 
         <div className="flex h-full flex-col p-4">
           <div className="absolute inset-0">
             <div
-              className="flex h-10 w-full items-center justify-between rounded-t-md bg-[#DCDDDD] px-5"
+              className="modal-header modal-dragger cursor-move flex h-10 w-full items-center justify-between rounded-t-md bg-[#DCDDDD] px-5"
               style={{
                 boxShadow: '0 0 10px rgba(0,0,0,0.1)',
               }}

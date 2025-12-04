@@ -99,13 +99,14 @@ export default function MobileFilter3Level({
             ))}
           </div>
         </div>
-
-        <ButtonPrimary
-          title={'Confirm'}
-          full={true}
-          size={'medium'}
-          onClick={confirmFilter}
-        />
+        <div className="absolute bottom-0 left-0 right-0 flex items-center justify-end px-4 pb-4">
+          <ButtonPrimary
+            title={'Confirm'}
+            full={true}
+            size={'medium'}
+            onClick={confirmFilter}
+          />
+        </div>
       </BaseDrawer>
     </>
   )
