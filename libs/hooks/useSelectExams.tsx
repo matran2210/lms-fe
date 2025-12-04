@@ -1,9 +1,8 @@
 import { useInfiniteQuery } from 'react-query'
-import { DEFAULT_PAGE_NUMBER } from '@lms/core'
+import { ClassKey, DEFAULT_PAGE_NUMBER } from '@lms/core'
 import { ExaminationsResponse } from '@lms/contexts';
 
-const useSelectExams = ({ classKey, courseId, api}: {
-  classKey: string;
+const useSelectExams = ({ courseId, api}: {
   courseId: string | undefined;
   api: {
     getExams: (id: string, params: {
@@ -23,7 +22,7 @@ const useSelectExams = ({ classKey, courseId, api}: {
 
   const { data, hasNextPage, fetchNextPage, isLoading, refetch } =
     useInfiniteQuery({
-      queryKey: [classKey, courseId],
+      queryKey: [ClassKey.ExamList, courseId],
       queryFn: getExams,
       enabled: !!courseId, // Vẫn cần, để ngăn không khởi động truy vấn
       getNextPageParam: (lastPage) => {

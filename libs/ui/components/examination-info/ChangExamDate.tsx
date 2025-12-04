@@ -29,10 +29,10 @@ const ChangExamDate = ({
 }: IProps) => {
   const { control, reset, setValue, clearErrors } = useFormContext();
   const { classApi } = useFeature();
-  const { exams, hasNextPage, fetchNextPage, refetch } = useSelectExams({classKey: classId, api: {
+  const { exams, hasNextPage, fetchNextPage, refetch } = useSelectExams({ api: {
       getExams: classApi.getExams
     },
-    courseId: undefined});
+    courseId: classId});
   const { isMobileView } = useTailwindBreakpoint();
 
   const options = exams?.data

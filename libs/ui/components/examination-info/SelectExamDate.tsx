@@ -21,10 +21,10 @@ const SelectExamDate = ({
   const { watch, setValue } = useFormContext();
   const { classApi } = useFeature();
   const { exams } = useSelectExams({
-    classKey: classId, api: {
+    api: {
       getExams: classApi.getExams
     },
-    courseId: undefined
+    courseId: classId
   });
   const options = exams?.data
     ?.map((exam) => ({

@@ -8,7 +8,6 @@ import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
 import { CourseSectionType, IActivity, SUFFIX_TYPE } from '@lms/core'
-import { Calculator } from '@lms/ui'
 import { trackGAEvent, truncateBySpace, truncateString } from '@lms/utils'
 
 import SAPPBorder from '@components/common/SAPPBorder'
@@ -30,12 +29,12 @@ import {
   UserType,
 } from '@lms/contexts'
 import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from '@lms/core'
+import { CalculatorModal } from '@lms/feature-courses'
 import {
   ActivitySkeleton,
   EditorReader,
   FileViewer,
   ModalResizeable,
-  MovableWindow,
   SappButton,
 } from '@lms/ui'
 import { uniqueId } from 'lodash'
@@ -623,35 +622,7 @@ const ActivityPage = () => {
             })}
             <>
               {selector?.calculator_status && (
-                <MovableWindow
-                  position={{
-                    width: '344px',
-                    height: 'fit-content',
-                    top: 'calc(25% - 150px)',
-                    left: 'calc(25% - 200px)',
-                  }}
-                  zIndex={1001}
-                  fixed
-                >
-                  <div className="absolute left-0 top-0  h-full w-full">
-                    <div
-                      className="flex h-10 w-full items-center justify-between rounded-t-md bg-gray-2 px-5"
-                      style={{
-                        boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-                      }}
-                    >
-                      <div className="text-sm font-normal">Calculator</div>
-                      <button
-                        onClick={() => {
-                          dispatch(closeCalculator())
-                        }}
-                      >
-                        <CloseIcon />
-                      </button>
-                    </div>
-                    <Calculator />
-                  </div>
-                </MovableWindow>
+                <CalculatorModal onClose={() => dispatch(closeCalculator())} />
               )}
             </>
           </>
