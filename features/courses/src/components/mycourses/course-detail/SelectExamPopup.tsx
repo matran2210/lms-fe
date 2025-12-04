@@ -22,7 +22,6 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
     courseData?.pages?.[0]?.courseDetail?.remind_choosing_exam
 
   const { exams, hasNextPage, fetchNextPage } = useSelectExams({
-    classKey: ClassKey.ExamList,
     api: {
       getExams: classApi.getExams,
     },

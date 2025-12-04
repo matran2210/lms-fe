@@ -1,6 +1,6 @@
 import { CourseTimeIcon, GraduationCapIcon, Icon } from '@lms/assets';
 import { useCourseContext, useFeature } from "@lms/contexts";
-import { ButtonSecondary } from "@lms/ui";
+import { ButtonSecondary, Tooltip } from "@lms/ui";
 import { clearStylesHtml, convertHourToDayLeft, convertLocalTimeToUTC, getUserPrefix, trackGAEvent, truncateString } from "@lms/utils";
 import { differenceInDays, parseISO, startOfDay } from "date-fns";
 import { isNull, round } from "lodash";
@@ -20,7 +20,6 @@ import {
   PROGRAM,
 } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
-import { Tooltip } from "antd";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { CardCourse } from "../course";
