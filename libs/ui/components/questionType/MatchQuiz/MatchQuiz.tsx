@@ -107,6 +107,8 @@ const MatchQuiz = forwardRef(
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
+
+    console.log("corrects", corrects)
     const router = useRouter();
     const [edges, setEdges] = useState<Edge[]>([]);
     const flowRef = useRef<HTMLDivElement>(null);
@@ -486,18 +488,22 @@ const MatchQuiz = forwardRef(
     const correctFlow = useMemo(() => {
       if (!corrects || nodes.length === 0) return { nodes: [], edges: [] };
 
-      const allAnswersCorrect = (defaultAnswer ?? [])?.every((pair: any) =>
+      const allAnswersCorrect = (defaultAnswer?.length > 0) ? (defaultAnswer)?.every((pair: any) =>
         corrects.some(
           (c: any) =>
             String(c.id) === String(pair.question_id) &&
             String(c?.answer?.id) === String(pair.answer_id),
         ),
-      );
+      ): false;
 
       if (allAnswersCorrect) return { nodes: [], edges: [] };
 
+      console.log('generateCorrectFlow',generateCorrectFlow(corrects, nodes))
+
       return generateCorrectFlow(corrects, nodes);
     }, [corrects, nodes, defaultAnswer]);
+
+    console.log('nodes', nodes)
 
     useEffect(() => {
       setCorrectEdges(correctFlow.edges);
