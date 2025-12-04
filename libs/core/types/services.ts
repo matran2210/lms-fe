@@ -200,12 +200,22 @@ export interface IUploadAPI {
     description: string;
     getProgress: (percent: number) => void;
     location: string;
-}) => Promise<IResponse<{
-    type: string;
-    file_key: string;
-    upload_url: string;
-    name: string;
-}>>
+  }) => Promise<
+    IResponse<{
+      type: string;
+      file_key: string;
+      upload_url: string;
+      name: string;
+    }>
+  >;
+  getUrlFile: (file_key: string) => Promise<
+    IResponse<{
+      cloudflare_video_token: string | null;
+      url_expired_in: string | null;
+      url: string;
+      sub_url: string | null;
+    }>
+  >;
 }
 
 export interface IClassAPI {

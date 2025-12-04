@@ -20,6 +20,7 @@ const CalculatorModal = ({ onClose, isMobileCalc = false, onClick }: IProps) => 
         header={<></>}
         draggableFull
         height={isMobileCalc ? 518 : 634}
+        width={isMobileCalc ? 256 : 344}
         className={clsx({
           "!max-h-[634px] !w-[344px]": !isMobileCalc,
           "!max-h-[518px] !w-64": isMobileCalc,
@@ -37,6 +38,7 @@ const CalculatorModal = ({ onClose, isMobileCalc = false, onClick }: IProps) => 
               <div className="text-sm font-bold">Calculator</div>
               <button
                 onClick={onClose}
+                onTouchEnd={onClose} 
               >
                 <CloseIcon />
               </button>

@@ -1,7 +1,7 @@
-import { UploadAPI } from '@pages/api/upload'
 import axios from 'axios'
 import toast from 'react-hot-toast'
-import { convertHumanReadableToSnakeCase } from '@lms/utils'
+import { convertHumanReadableToSnakeCase } from '../common'
+import { IUploadAPI } from '@lms/core'
 // Hàm chuyển base64 thành File
 export function base64ToFile(
   base64String: string,
@@ -31,6 +31,7 @@ export function base64ToFile(
  * @returns {Promise<{ url: string } | undefined>} - Promise trả về URL của file sau khi tải lên hoặc undefined nếu tải lên thất bại.
  */
 export const handleUploadFileToS3 = async (
+  uploadApi: IUploadAPI,
   convertedFile: File,
   location: string,
   getProgress?: (progress: number) => void,
@@ -44,17 +45,19 @@ export const handleUploadFileToS3 = async (
   })
 
   try {
-    const response = await UploadAPI.startUpload({
+    const response = await uploadApi.startUpload({
       content_type: convertedFile.type,
       blob: convertedFile,
       size: convertedFile.size.toString(),
-      description: '',
+      description: "",
       name: convertHumanReadableToSnakeCase(convertedFile.name),
       getProgress: getProgress ? getProgress : () => {},
       location: location,
-    })
+    });
 
-    const uploadUrlRes = await UploadAPI.getUrlFile(response.data.file_key)
+    const uploadUrlRes = await uploadApi.getUrlFile(
+      response?.data?.file_key || "",
+    );
 
     return {
       url: uploadUrlRes.data?.url,
