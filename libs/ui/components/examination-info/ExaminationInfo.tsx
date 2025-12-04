@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PencilV2Icon } from "@lms/assets";
@@ -25,7 +25,7 @@ import ChangeAnywayModal from "./ChangeAnywayModal";
 import SelectExamDate from "./SelectExamDate";
 import { SappDrawerV3 } from "../base";
 import { CarouselSlideAnimation } from "../animations";
-import { NoData, Tooltip } from '../common';
+import { NoData, Tooltip } from "../common";
 
 type Props = {
   open: boolean;
@@ -189,10 +189,12 @@ const ExaminationInfo = ({
       handleBack(isEditProps);
     }, 500);
   };
-  const { exams } = useSelectExams({classKey: classId, api: {
-    getExams: classApi.getExams
+  const { exams } = useSelectExams({
+    api: {
+      getExams: classApi.getExams,
     },
-  courseId: undefined});
+    courseId: classId,
+  }); 
 
   const handleChangeExamDate = async () => {
     if (isOpenSelectExam) {
