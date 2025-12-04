@@ -13,3 +13,4 @@ export { default as useCountdownTest } from "./course/useCountdownTest";
 export { default as useReponsive } from "./useReponsive";
 export { default as useSelectExams } from "./useSelectExams";
 export * from "./useNotification"
+export * from "./useSappEditorImageUpload";
