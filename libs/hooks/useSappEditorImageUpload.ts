@@ -1,10 +1,9 @@
-import {
-  base64ToFile,
-  fileToBase64,
-  handleUploadFileToS3,
-} from 'src/utils/helpers/tiptap'
+import { useFeature } from "@lms/contexts"
+import { base64ToFile, fileToBase64, handleUploadFileToS3 } from "@lms/utils"
+
 
 export const useSappEditorImageUpload = () => {
+  const {uploadApi} = useFeature()
   const handleImageUpload = async (
     file: File,
     location: string,
@@ -17,7 +16,10 @@ export const useSappEditorImageUpload = () => {
         base64String as string,
         file.name || 'image.png',
       )
-      const response = await handleUploadFileToS3(convertedFile, location)
+      const response = await handleUploadFileToS3(
+        uploadApi, convertedFile,
+        location,
+      ); 
 
       if (!response?.url) {
         throw new Error('Upload failed: No URL returned')

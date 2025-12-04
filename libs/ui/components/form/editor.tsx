@@ -4,6 +4,7 @@ import { VALID_UPLOAD_EDITOR } from '@lms/core'
 // import { useSappEditorImageUpload } from 'src/hooks/useSappEditorImageUpload' comment monorepo
 import { SAPPEditorV2 } from 'sapp-common-package'
 import { SAPPEditorHandle } from '@lms/core'
+import { useSappEditorImageUpload } from '@lms/hooks'
 interface IProps {
   onChange: (event: any) => void
   valueText?: string
