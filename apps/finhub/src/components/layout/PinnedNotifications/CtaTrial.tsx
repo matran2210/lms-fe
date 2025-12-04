@@ -52,7 +52,7 @@ function CtaTrial() {
   return (
     <>
       {isEnablePinnedNotiPages && openPinned && (
-        <div className="z-2 sticky inset-x-0 bottom-24 md:bottom-4">
+        <div className="z-2 sticky inset-x-0 bottom-24 md:bottom-27 lg:bottom-4">
           <div className="flex w-full flex-col gap-4">
             <PinnedNotificationsV2
               bgColor="bg-info-100"

@@ -166,7 +166,10 @@
 
 .filter-mobile-course-3lv {
   .ant-drawer-content-wrapper {
-    @apply mx-4 mb-8;
+    @apply mx-4 mb-8 !h-[400px];
+    .ant-drawer-body {
+      @apply mb-13 !rounded-none;
+    }
   }
 
   .ant-drawer-header {
