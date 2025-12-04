@@ -3,18 +3,14 @@ import Layout from '@components/layout'
 import TestResultPage from '@components/v2/test-result/testResultPage'
 import { CloseModalIcon, MenuDotsIcon } from '@lms/assets'
 import { GRADE_STATUS } from '@lms/core'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { ButtonSecondary, ModalNotMobileFriendly } from '@lms/ui'
+import { ButtonSecondary } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
 import { ResultAPI } from 'src/pages/api/short-course/test-result'
 
 const TestResultDetail = () => {
   const router = useRouter()
-  const { isMobileView } = useTailwindBreakpoint()
-  const [open, setOpen] = useState(false)
   const useGetQuizAttempts = (queryKey: string, params: Object) => {
     return useGetDataQuery(
       queryKey,
@@ -79,14 +75,7 @@ const TestResultDetail = () => {
         />
         <Tooltip
           placement="left"
-          title={
-            <span
-              className="cursor-pointer text-sm"
-              onClick={() => setOpen(true)}
-            >
-              Retake
-            </span>
-          }
+          title={<span className="cursor-pointer text-sm">Retake</span>}
           className={clsx('block md:hidden', { hidden: !isShowRetakeButton })}
         >
           <button className="text-icon">
@@ -111,9 +100,6 @@ const TestResultDetail = () => {
           />
         </div>
       </Layout>
-      {isMobileView && (
-        <ModalNotMobileFriendly open={open} onClose={() => setOpen(false)} />
-      )}
     </div>
   )
 }

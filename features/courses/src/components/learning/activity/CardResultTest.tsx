@@ -1,4 +1,5 @@
 import { ArrowRight } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
 import {
   EAttemptStatus,
   EDateTime,
@@ -8,7 +9,7 @@ import {
 import { StatusQuizTag } from "@lms/core/types/quiz/StatusActionCell";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import { Tooltip } from "@lms/ui";
-import { getTimeFromInput } from "@lms/utils";
+import { getTimeFromInput, isQuizExpired } from "@lms/utils";
 import dayjs from "dayjs";
 
 const CardResultTest = ({
@@ -18,6 +19,7 @@ const CardResultTest = ({
 }: any) => {
   // }: ITestQuizProps) => {
   const { isMobileView } = useTailwindBreakpoint();
+  const {router} = useFeature();
   if (!resultData) return null;
 
   const dateSubmitted = resultData?.quiz?.attempts?.[0]?.updated_at;
@@ -57,11 +59,51 @@ const CardResultTest = ({
     </div>
   );
 
-  const openInNewTab = (url: string) => {
-    if (typeof window === "undefined") return;
-    window.open(url, "_blank");
+  const openInNewTab = ({url, isNewTab = true}:{url: string, isNewTab?: boolean}) => {
+    if(isNewTab) {
+      if (typeof window === "undefined") return;
+      window.open(url, "_blank");
+    } else {
+      router.push(url);
+    }
   };
 
+  const handleCheckQuizAttempt = (data: any) => {
+    let isExpired = false
+    if (data?.quiz?.quiz_timed) {
+      isExpired = isQuizExpired(
+        new Date(resultData?.quiz?.attempts?.[0]?.started_at),
+        data?.quiz?.quiz_timed,
+      )
+    }
+
+    const isContinueAttempt = resultData?.quiz?.attempts?.[0]?.status === EAttemptStatus.IN_PROGRESS
+    if (isContinueAttempt && !isExpired) {
+      localStorage.setItem(
+        'quizAttempt',
+        JSON.stringify({
+          id: resultData?.quiz?.attempts?.[0]?.id,
+          number_of_attempts:
+            data?.attempt?.number_of_attempts ||
+            data?.quiz?.attempt?.number_of_attempts,
+          is_limited: data?.is_limited,
+          quiz_timed: data?.quiz?.quiz_timed,
+          created_at: resultData?.quiz?.attempts?.[0]?.started_at,
+        }),
+      )
+    } else {
+      localStorage.removeItem('quizAttempt')
+    }
+  }
+  const handleOpenTest = () => {
+    handleCheckQuizAttempt(resultData)
+    openInNewTab({
+      url: `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
+      isNewTab: false
+    }
+      
+    );
+  }
   const handleViewResult = () => {
     if (resultData?.quiz?.attempts?.length > 0) {
       if (resultData?.quiz?.grading_method === GRADING_METHOD.MANUAL) {
@@ -73,51 +115,35 @@ const CardResultTest = ({
               resultData?.quiz?.attempts?.[0]?.grading_status ===
               GRADE_STATUS.FINISHED_GRADING
             ) {
-              openInNewTab(
-                `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
-              );
+              openInNewTab({url: `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,});
             } else {
-              openInNewTab(
-                `/courses/test/your-answers-detail/${resultData?.quiz?.attempts?.[0]?.id}`,
-              );
+              openInNewTab({url: `/courses/test/your-answers-detail/${resultData?.quiz?.attempts?.[0]?.id}`,});
             }
           } else if (
             resultData?.quiz?.attempts?.[0]?.status ===
             EAttemptStatus.IN_PROGRESS
           ) {
-            openInNewTab(
-              `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
-            );
+            handleOpenTest()
           } else if (
             resultData?.quiz?.attempts?.[0]?.status ===
             EAttemptStatus.UN_SUBMITTED
           ) {
-            openInNewTab(
-              `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
-            );
+            openInNewTab({url: `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,});
           }
         } else {
-          openInNewTab(
-            `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
-          );
+          handleOpenTest()
         }
       } else {
         if (
           resultData?.quiz?.attempts?.[0]?.status === EAttemptStatus.IN_PROGRESS
         ) {
-          openInNewTab(
-            `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
-          );
+          handleOpenTest()
         } else {
-          openInNewTab(
-            `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
-          );
+          openInNewTab({url: `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,});
         }
       }
     } else {
-      openInNewTab(
-        `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
-      );
+      handleOpenTest()
     }
   };
 
