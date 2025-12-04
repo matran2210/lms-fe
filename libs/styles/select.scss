@@ -189,6 +189,9 @@
   .ant-select-selection-placeholder {
     @apply text-left text-gray-800;
   }
+  .ant-select-selection-item {
+    @apply text-left;
+  }
 
   /* Khi bị disabled */
   &.ant-select-outlined.ant-select-disabled:not(.ant-select-customize-input) {

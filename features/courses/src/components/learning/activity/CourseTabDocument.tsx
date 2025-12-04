@@ -19,7 +19,6 @@ import { ActivitySkeleton, HighlightableHTML } from '@lms/ui'
 import { trackGAEvent, truncateBySpace } from '@lms/utils'
 import { Tabs, Tooltip } from 'antd'
 import clsx from 'clsx'
-import { useRouter } from 'next/router'
 import React, { useMemo, useRef } from 'react'
 import { Discussion, QuizDocument, VideoDocument } from '../../mycourses'
 
@@ -41,6 +40,7 @@ interface IProps {
   setFocusOnlyQuiz: React.Dispatch<React.SetStateAction<IFocusQuiz>>
   handleSetCurrentVideo: (video: IVideo) => void
   focusOnlyDiscussion: boolean
+  scrollRef: React.RefObject<HTMLElement>
 }
 const CourseTabDocument = ({
   activity,
@@ -55,8 +55,7 @@ const CourseTabDocument = ({
   setFocusOnlyQuiz,
   handleSetCurrentVideo,
   focusOnlyDiscussion,
-
-  
+  scrollRef,
 }: IProps) => {
   const selector = useAppSelector(courseActivityReducer)
   const { courseApi,  router } = useFeature();
@@ -78,6 +77,13 @@ const CourseTabDocument = ({
   const currentIndex = selector?.tabs?.findIndex(
     (tab) => tab?.id === selector?.currentTabId,
   )
+  const scrollToTop = () => {
+    if (scrollRef?.current) {
+      scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
   /**
    * Hàm xử lý khi thay đổi tab.
    * @param {string} id - ID của tab.
@@ -93,8 +99,9 @@ const CourseTabDocument = ({
         undefined,
         { shallow: true },
       )
+      scrollToTop()
       //   setActiveButtonId(id)
-    } catch {}
+    } catch (error) {}
   }
   const handleRefreshCurrentTab = () => {
     try {
@@ -108,7 +115,7 @@ const CourseTabDocument = ({
         }),
       )
       //   setActiveButtonId(selector?.currentTabId)
-    } catch {}
+    } catch (error) {}
   }
 
   /**
@@ -247,7 +254,6 @@ const CourseTabDocument = ({
                                   ?.number_of_attempts || 0
                               }
                               isQuizFinished={isQuizFinished}
-                             
                             />
                           </div>
                         )
