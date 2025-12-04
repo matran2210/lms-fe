@@ -8,6 +8,7 @@ import { Soundwave } from '../icons'
 import { Archive } from '../icons/Archive'
 import { DocumentAdd } from '../icons/DocumentAdd'
 import { DocumentText } from '../icons/DocumentText'
+import { List } from '../icons/List'
 
 const tabs: IActivityTab[] = [
   { key: 'add-note', icon: <DocumentAdd /> },
@@ -63,7 +64,7 @@ export default function ActivityBar({
         className={clsx(getButtonClass('content'), 'gap-2')}
         classTitle="text-v2-sm font-normal"
       >
-        {/* <List /> */}
+        <List />
       </ButtonIcon>
     </div>
   )
