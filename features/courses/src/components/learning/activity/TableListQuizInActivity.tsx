@@ -1,7 +1,6 @@
 import { EDateTime, QUIZ_ATTEMPT_STATUS, QuizActivity, StatusQuizTag } from "@lms/core";
-import { SappTable } from "@lms/ui";
+import { SappTable, Tooltip } from "@lms/ui";
 import { getTimeFromInput } from "@lms/utils";
-import { Tooltip } from "antd";
 import { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import dayjs from "dayjs";
 // import { GradingMethod } from '@lms/core'
