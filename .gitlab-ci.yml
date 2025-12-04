@@ -19,7 +19,7 @@ deploy_staging_lms:
     - staging
   script:
     - npm install -g vercel
-    - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_V2
+    - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID
     - vercel deploy --prod --token=$VERCEL_TOKEN
 
 # Job deploy cho Finhub

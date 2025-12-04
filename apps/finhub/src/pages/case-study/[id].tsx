@@ -1307,19 +1307,19 @@ const CaseStudyDetail = () => {
                 trigger="click"
                 getPopupContainer={() => document.body}
                 content={
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 py-3">
                     {topics?.files?.map((e: any) => {
                       return (
                         <div
                           className={clsx(
-                            `flex items-start justify-between gap-8 p-2`,
+                            `flex items-start justify-between gap-8 px-4 py-2`,
                           )}
                           key={e?.value}
                         >
                           <div
                             key={e?.value}
                             className={clsx(
-                              'min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-blue-7 underline',
+                              'min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-state-info underline hover:text-primary',
                             )}
                             onClick={() =>
                               handleOpenScratchPad(
