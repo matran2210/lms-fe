@@ -492,7 +492,7 @@ const LearningNotesList = ({ appType }: Props) => {
                           >
                             <div className="flex justify-between">
                               <div className="text-sm font-semibold text-gray-800 md:text-base">
-                                {note?.course_section_path[0]?.name}
+                                {note?.course_section_path?.length > 0 ?  note?.course_section_path[0]?.name : ''}
                               </div>
                               <div onClick={(e) => e.stopPropagation()}>
                                 <ActionCellV2
