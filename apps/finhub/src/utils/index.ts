@@ -1,12 +1,7 @@
-import dayjs from 'dayjs'
-import weekday from 'dayjs/plugin/weekday'
-import DOMPurify from 'dompurify'
-import { isEmpty, isNull, isUndefined } from 'lodash'
-import { useQuery } from 'react-query'
-import utc from 'dayjs/plugin/utc'
-import { DATE_FORMAT } from '@lms/core'
 import { UploadAPI } from '@pages/api/short-course/upload'
-import { formatDateFromUTC } from '@lms/utils'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import weekday from 'dayjs/plugin/weekday'
 
 dayjs.extend(utc)
 

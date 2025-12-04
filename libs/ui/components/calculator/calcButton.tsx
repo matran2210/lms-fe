@@ -1,5 +1,5 @@
 import {
-  DeleteIcon,
+  DeleteCalculatorIcon,
   DivideIcon,
   EqualIcon,
   MinusIcon,
@@ -25,7 +25,7 @@ const CalcButton = (props: IProps) => {
   const convertValueToIcon = (val: any) => {
     switch (val) {
       case "delete":
-        return <DeleteIcon />;
+        return <DeleteCalculatorIcon />;
       case "+":
         return <PlusIcon />;
       case "-":

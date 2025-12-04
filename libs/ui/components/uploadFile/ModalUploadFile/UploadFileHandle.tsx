@@ -4,11 +4,12 @@ import dynamic from "next/dynamic";
 // import Dragger from 'antd/es/upload/Dragger'
 import React, { ReactElement } from "react";
 import toast from "react-hot-toast";
-import { validateFile } from "src/utils/upload";
 // import ButtonIconOnly from '../../button/ButtonIconOnly'
 // import ButtonPrimary from '../../button/ButtonPrimary'
 import { UPLOAD_TYPE } from "@lms/core/types/file/UploadFileInterface";
 import { ButtonSecondary } from "../../base";
+import { validateFile } from "@lms/utils";
+import { isArray } from "lodash";
 // import { ResourceAPI } from 'src/apis/resource-bank'
 
 type Props = {
@@ -144,10 +145,8 @@ const UploadFileHandle = ({
         <div className="scroll-y px-lg-15 px-10 pb-10 pt-10">
           <div className="flex flex-col items-center justify-center">
             <div className="mb-3 flex justify-center">
-              {typeof icon === "object" ? (
-                <img width={64} height={64} src={icon.src} alt="Icon" />
-              ) : (
-                <div className="flex items-center justify-center gap-5">
+              {isArray(icon) ? (
+                  <div className="flex items-center justify-center gap-5">
                   {icon?.map((e: any, i: number) => {
                     return (
                       <img
@@ -160,6 +159,8 @@ const UploadFileHandle = ({
                     );
                   })}
                 </div>
+              ) : (
+                <img width={64} height={64} src={icon?.src || icon} alt="Icon" />
               )}
             </div>
             <p>Drag & Drop your file here</p>
