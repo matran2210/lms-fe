@@ -58,7 +58,7 @@
     "antd": "^5.25.0",
     "critters": "^0.0.19",
     "eslint-plugin-react": "^7.37.5",
-    "explanation-package": "link:../../../AppData/Local/pnpm/global/5/node_modules/explanation-package",
+    "explanation-package": "^1.4.2",
     "globals": "^16.0.0",
     "lodash": "^4.17.21",
     "next": "12.3.7",
