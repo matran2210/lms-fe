@@ -58,6 +58,7 @@
     "antd": "^5.25.0",
     "critters": "^0.0.19",
     "eslint-plugin-react": "^7.37.5",
+    "explanation-package": "link:../../../AppData/Local/pnpm/global/5/node_modules/explanation-package",
     "globals": "^16.0.0",
     "lodash": "^4.17.21",
     "next": "12.3.7",
@@ -65,7 +66,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "7.48.2",
     "react-query": "3.39.3",
-    "sapp-common-package": "^1.6.1",
+    "sapp-common-package": "^1.6.2",
     "styled-components": "^6.1.19"
   }
 }

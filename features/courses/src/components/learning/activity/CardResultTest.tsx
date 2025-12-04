@@ -59,9 +59,13 @@ const CardResultTest = ({
     </div>
   );
 
-  const openInNewTab = (url: string) => {
-    if (typeof window === "undefined") return;
-    router.push(url);
+  const openInNewTab = ({url, isNewTab = true}:{url: string, isNewTab?: boolean}) => {
+    if(isNewTab) {
+      if (typeof window === "undefined") return;
+      window.open(url, "_blank");
+    } else {
+      router.push(url);
+    }
   };
 
   const handleCheckQuizAttempt = (data: any) => {
@@ -93,8 +97,11 @@ const CardResultTest = ({
   }
   const handleOpenTest = () => {
     handleCheckQuizAttempt(resultData)
-    openInNewTab(
-      `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
+    openInNewTab({
+      url: `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
+      isNewTab: false
+    }
+      
     );
   }
   const handleViewResult = () => {
@@ -108,13 +115,9 @@ const CardResultTest = ({
               resultData?.quiz?.attempts?.[0]?.grading_status ===
               GRADE_STATUS.FINISHED_GRADING
             ) {
-              openInNewTab(
-                `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
-              );
+              openInNewTab({url: `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,});
             } else {
-              openInNewTab(
-                `/courses/test/your-answers-detail/${resultData?.quiz?.attempts?.[0]?.id}`,
-              );
+              openInNewTab({url: `/courses/test/your-answers-detail/${resultData?.quiz?.attempts?.[0]?.id}`,});
             }
           } else if (
             resultData?.quiz?.attempts?.[0]?.status ===
@@ -125,9 +128,7 @@ const CardResultTest = ({
             resultData?.quiz?.attempts?.[0]?.status ===
             EAttemptStatus.UN_SUBMITTED
           ) {
-            openInNewTab(
-              `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
-            );
+            openInNewTab({url: `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,});
           }
         } else {
           handleOpenTest()
@@ -138,9 +139,7 @@ const CardResultTest = ({
         ) {
           handleOpenTest()
         } else {
-          openInNewTab(
-            `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
-          );
+          openInNewTab({url: `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,});
         }
       }
     } else {
