@@ -77,7 +77,7 @@ type MyAppProps = AppProps & {
   }
 }
 const showSupportWidget = [
-  '/courses',
+  '/short-course',
   '/entrance-test',
   '/calendar',
   '/exam_list',
