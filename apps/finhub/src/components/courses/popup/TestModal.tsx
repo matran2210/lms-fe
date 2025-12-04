@@ -13,12 +13,7 @@ import {
   TestPopup,
 } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import {
-  ButtonPrimary,
-  ButtonSecondary,
-  ButtonText,
-  ModalNotMobileFriendly,
-} from '@lms/ui'
+import { ButtonPrimary, ButtonSecondary, ButtonText } from '@lms/ui'
 import { capitalizeFirstLetter, formatTimer, trackGAEvent } from '@lms/utils'
 import { CoursesAPI } from '@pages/api/courses'
 import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
@@ -82,7 +77,6 @@ const TestModal = ({
   activeCourse,
   is_passed_course,
 }: IProps) => {
-  const { isMobileView } = useTailwindBreakpoint()
   const router = useRouter()
   const isSubmitted =
     data?.quiz?.attempt && data?.quiz?.attempt?.status === 'SUBMITTED'
@@ -674,185 +668,179 @@ const TestModal = ({
   }
 
   return (
-    <>
-      {isMobileView ? (
-        <ModalNotMobileFriendly open={open} onClose={() => setOpen(false)} />
-      ) : (
-        <TestPopup
-          open={open}
-          setOpen={setOpen}
-          title={
-            <div className="flex items-center justify-center">
-              {TEST_TYPE_LABELS[data?.course_section_type as keyof typeof TEST_TYPE_LABELS]}
-            </div>
+    <TestPopup
+      open={open}
+      setOpen={setOpen}
+      title={
+        <div className="flex items-center justify-center">
+          {
+            TEST_TYPE_LABELS[
+              data?.course_section_type as keyof typeof TEST_TYPE_LABELS
+            ]
           }
-          time={displayTime}
-          otherContent={
-            !isContinue && (
-              <>
-                <div className="flex flex-col gap-6">
-                  <TestInfoItem label="Name:" value={data?.name} />
-                  <TestInfoItem
-                    label="Pass Point:"
-                    value={
-                      data?.quiz?.is_graded ? (
-                        <>{data?.quiz?.required_percent_score ?? '_ _'}</>
-                      ) : (
-                        <>_ _</>
-                      )
-                    }
-                  />
-                  <TestInfoItem
-                    label="Time Allowed:"
-                    value={
-                      data?.quiz?.quiz_timed
-                        ? formatTimer(data?.quiz?.quiz_timed * 60)
-                        : 'Unlimited'
-                    }
-                  />
-                  <TestInfoItem
-                    label="Grading Method:"
-                    value={
-                      capitalizeFirstLetter(selectedResult?.grading_method) ??
-                      capitalizeFirstLetter(data?.quiz?.grading_method)
-                    }
-                  />
-                  <TestInfoItem
-                    label="No of Attempts:"
-                    value={`${data?.quiz?.attempt?.number_of_attempts || 0}/${
-                      data?.quiz?.is_limited
-                        ? data?.quiz?.limit_count
-                        : 'Unlimited'
-                    }`}
-                  />
+        </div>
+      }
+      time={displayTime}
+      otherContent={
+        !isContinue && (
+          <>
+            <div className="flex flex-col gap-6">
+              <TestInfoItem label="Name:" value={data?.name} />
+              <TestInfoItem
+                label="Pass Point:"
+                value={
+                  data?.quiz?.is_graded ? (
+                    <>{data?.quiz?.required_percent_score ?? '_ _'}</>
+                  ) : (
+                    <>_ _</>
+                  )
+                }
+              />
+              <TestInfoItem
+                label="Time Allowed:"
+                value={
+                  data?.quiz?.quiz_timed
+                    ? formatTimer(data?.quiz?.quiz_timed * 60)
+                    : 'Unlimited'
+                }
+              />
+              <TestInfoItem
+                label="Grading Method:"
+                value={
+                  capitalizeFirstLetter(selectedResult?.grading_method) ??
+                  capitalizeFirstLetter(data?.quiz?.grading_method)
+                }
+              />
+              <TestInfoItem
+                label="No of Attempts:"
+                value={`${data?.quiz?.attempt?.number_of_attempts || 0}/${
+                  data?.quiz?.is_limited ? data?.quiz?.limit_count : 'Unlimited'
+                }`}
+              />
 
-                  {data?.quiz && (
-                    <div className="flex justify-between gap-8 text-base">
-                      <div className="flex items-center gap-2 hover:text-primary">
-                        <div
-                          className={`forcus-group:text-primary text-gray ${isFocus ? 'text-primary' : ''}`}
-                        >
-                          Result:
-                        </div>
-                        {resultList?.data?.length >= 1 && (
-                          <Select
-                            // classNames={{
-                            //   root: 'select-result-attempt',
-                            //   popup: { root: 'select-result-attempt-option' },
-                            // }}
-                            className="custom-select-v2 h-8 pr-2"
-                            popupClassName="select-card-course"
-                            variant="borderless"
-                            value={selectedResult?.value}
-                            onChange={(selectedOption) => {
-                              if (selectedOption) {
-                                const tempSelectedResult =
-                                  resultList?.data?.find(
-                                    (item) => item?.id === selectedOption,
-                                  )
-                                if (tempSelectedResult) {
-                                  setSelectedResult({
-                                    label: tempSelectedResult?.name,
-                                    value: tempSelectedResult?.id,
-                                    ratio_score:
-                                      tempSelectedResult?.ratio_score,
-                                    status: tempSelectedResult?.status,
-                                    grading_method:
-                                      tempSelectedResult?.quiz?.grading_method,
-                                  })
-                                }
-                              }
-                            }}
-                            options={resultList?.data?.map((item, index) => ({
-                              name: item?.name,
-                              value: item?.id,
-                              label: item?.name,
-                              status: item?.status,
-                              ratio_score: item?.ratio_score,
-                              number_of_attempt: 3 - index,
-                            }))}
-                            onPopupScroll={(e) => {
-                              const target = e.target as HTMLDivElement
-                              if (
-                                target.scrollTop + target.offsetHeight >=
-                                target.scrollHeight
-                              ) {
-                                handleNextPage()
-                              }
-                            }}
-                            suffixIcon={<ArrowDownIcon />}
-                          />
-                        )}
-                      </div>
-                      <div className="flex flex-row items-center">
-                        <div className={`pr-0.5 font-medium`}>
-                          {getResultOfTest()}
-                        </div>
-                        {isShowDetail() && (
-                          <div
-                            className="ml-2 cursor-pointer font-semibold text-primary underline"
-                            onClick={() => {
-                              if (isManualGradingAndNotFinishedGrading) {
-                                router.push(
-                                  `/short-course/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
-                                )
-                              } else {
-                                router.push({
-                                  pathname: `/short-course/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
-                                  query: { attempt: selectedResult?.label },
-                                })
-                              }
-
-                              trackGAEvent('Click Button View Modal Result')
-                            }}
-                          >
-                            {isManualGradingAndNotFinishedGrading
-                              ? 'Your Answers'
-                              : 'Detail'}
-                          </div>
-                        )}
-                      </div>
+              {data?.quiz && (
+                <div className="flex justify-between gap-8 text-base">
+                  <div className="flex items-center gap-2 hover:text-primary">
+                    <div
+                      className={`forcus-group:text-primary text-gray ${isFocus ? 'text-primary' : ''}`}
+                    >
+                      Result:
                     </div>
-                  )}
-                  <div className="flex justify-between gap-8 text-base">
-                    <div className="text-gray">Status:</div>
-                    {data?.quiz?.is_graded &&
-                    data?.quiz?.grading_method === GRADING_METHOD.MANUAL ? (
-                      <StatusTestQuizBadge
-                        status={data?.quiz?.attempt?.grading_status}
-                      />
-                    ) : (
-                      <StatusTestQuizBadge
-                        status={
-                          status?.toUpperCase() as keyof typeof STATUS_QUIZ_TEST
-                        }
+                    {resultList?.data?.length >= 1 && (
+                      <Select
+                        // classNames={{
+                        //   root: 'select-result-attempt',
+                        //   popup: { root: 'select-result-attempt-option' },
+                        // }}
+                        className="custom-select-v2 h-8 pr-2"
+                        popupClassName="select-card-course"
+                        variant="borderless"
+                        value={selectedResult?.value}
+                        onChange={(selectedOption) => {
+                          if (selectedOption) {
+                            const tempSelectedResult = resultList?.data?.find(
+                              (item) => item?.id === selectedOption,
+                            )
+                            if (tempSelectedResult) {
+                              setSelectedResult({
+                                label: tempSelectedResult?.name,
+                                value: tempSelectedResult?.id,
+                                ratio_score: tempSelectedResult?.ratio_score,
+                                status: tempSelectedResult?.status,
+                                grading_method:
+                                  tempSelectedResult?.quiz?.grading_method,
+                              })
+                            }
+                          }
+                        }}
+                        options={resultList?.data?.map((item, index) => ({
+                          name: item?.name,
+                          value: item?.id,
+                          label: item?.name,
+                          status: item?.status,
+                          ratio_score: item?.ratio_score,
+                          number_of_attempt: 3 - index,
+                        }))}
+                        onPopupScroll={(e) => {
+                          const target = e.target as HTMLDivElement
+                          if (
+                            target.scrollTop + target.offsetHeight >=
+                            target.scrollHeight
+                          ) {
+                            handleNextPage()
+                          }
+                        }}
+                        suffixIcon={<ArrowDownIcon />}
                       />
                     )}
                   </div>
+                  <div className="flex flex-row items-center">
+                    <div className={`pr-0.5 font-medium`}>
+                      {getResultOfTest()}
+                    </div>
+                    {isShowDetail() && (
+                      <div
+                        className="ml-2 cursor-pointer font-semibold text-primary underline"
+                        onClick={() => {
+                          if (isManualGradingAndNotFinishedGrading) {
+                            router.push(
+                              `/short-course/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
+                            )
+                          } else {
+                            router.push({
+                              pathname: `/short-course/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
+                              query: { attempt: selectedResult?.label },
+                            })
+                          }
+
+                          trackGAEvent('Click Button View Modal Result')
+                        }}
+                      >
+                        {isManualGradingAndNotFinishedGrading
+                          ? 'Your Answers'
+                          : 'Detail'}
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <PopupCanNotRetakeTest
-                  open={openResource}
-                  setOpen={setOpenPopup}
-                  onCancel={() => onCancel()}
-                />
-              </>
-            )
-          }
-          customFooter={
-            <div className="flex w-full flex-col items-center justify-center gap-3">
-              {renderCustomFooter()}
+              )}
+              <div className="flex justify-between gap-8 text-base">
+                <div className="text-gray">Status:</div>
+                {data?.quiz?.is_graded &&
+                data?.quiz?.grading_method === GRADING_METHOD.MANUAL ? (
+                  <StatusTestQuizBadge
+                    status={data?.quiz?.attempt?.grading_status}
+                  />
+                ) : (
+                  <StatusTestQuizBadge
+                    status={
+                      status?.toUpperCase() as keyof typeof STATUS_QUIZ_TEST
+                    }
+                  />
+                )}
+              </div>
             </div>
-          }
-          isClosable={
-            isNoAttemptOrLimitReached &&
-            (!isLimited ||
-              (isLimited && (isNoAttempt || isSubmitted || isUnsubmitted)))
-              ? false
-              : true
-          }
-        />
-      )}
-    </>
+            <PopupCanNotRetakeTest
+              open={openResource}
+              setOpen={setOpenPopup}
+              onCancel={() => onCancel()}
+            />
+          </>
+        )
+      }
+      customFooter={
+        <div className="flex w-full flex-col items-center justify-center gap-3">
+          {renderCustomFooter()}
+        </div>
+      }
+      isClosable={
+        isNoAttemptOrLimitReached &&
+        (!isLimited ||
+          (isLimited && (isNoAttempt || isSubmitted || isUnsubmitted)))
+          ? false
+          : true
+      }
+    />
   )
 }
 
