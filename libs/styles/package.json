@@ -1,0 +1,8 @@
+{
+  "name": "@lms/styles",
+  "version": "1.0.0",
+  "main": "globals.scss",
+  "style": "globals.scss",
+  "files": ["**/*.scss"],
+  "license": "MIT"
+}

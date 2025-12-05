@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  next-app:
+    image: gitlab.sapp.edu.vn:5050/lms-pro/lms-fe/lms-fe-next
+    container_name: lms-fe-app
+    build:
+      context: ./
+      dockerfile: prod.Dockerfile
+    restart: always
+    ports:
+      - '3000:3000'
+    networks:
+      - local
+
+  nginx:
+    image: nginx:latest
+    depends_on:
+      next-app:
+        condition: service_started
+    container_name: nginx
+    restart: always
+    ports:
+      - '80:80'
+      - '443:443'
+    networks:
+      - local
+    volumes:
+      - /var/www/vhost:/etc/nginx/conf.d
+      - /var/www/cert/uat-ops-be.sapp.edu.vn.crt:/etc/nginx/uat-ops-be.sapp.edu.vn.crt
+      - /var/www/cert/uat-ops-be.sapp.edu.vn.key:/etc/nginx/uat-ops-be.sapp.edu.vn.key
+
+networks:
+  local:

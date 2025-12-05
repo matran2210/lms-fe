@@ -1,2 +1,6 @@
 .next/*
+dist/*
+build/*
+coverage/*
 public/*
+node_modules/*

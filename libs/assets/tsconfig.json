@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "types": ["./types/assets.d.ts"],
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "./types/**/*",
+    "./icons/**/*"
+  ]
+}
