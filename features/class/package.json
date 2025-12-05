@@ -1,0 +1,20 @@
+{
+  "name": "@lms/feature-class",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . --ext .ts,.tsx",
+    "type-check": "tsc --noEmit"
+  },
+  "peerDependencies": {},
+  "dependencies": {
+    "@lms/assets": "workspace:*",
+    "@lms/utils": "workspace:*",
+    "@lms/core": "workspace:*",
+    "@lms/ui": "workspace:*",
+    "antd": "^5.25.0"
+  }
+}

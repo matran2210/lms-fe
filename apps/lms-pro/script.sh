@@ -1,0 +1,2 @@
+# docker-compose -f docker-compose.prod.yml up -d --build
+COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.prod.yml build --parallel && docker-compose -f docker-compose.prod.yml up -d

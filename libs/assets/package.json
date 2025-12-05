@@ -1,0 +1,19 @@
+{
+  "name": "@lms/assets",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./index.ts",
+  "type": "module",
+  "types": "./index.ts",
+  "scripts": {
+    "lint": "eslint . --ext .ts,.tsx",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@lms/contexts": "workspace:*",
+    "@lms/core": "workspace:*",
+    "@lms/hooks": "workspace:*",
+    "clsx": "^2.1.1",
+    "lottie-react": "^2.4.1"
+  }
+}

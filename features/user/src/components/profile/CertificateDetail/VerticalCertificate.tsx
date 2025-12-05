@@ -1,0 +1,109 @@
+import { CertificateImg, CopyIcon, Icon, SappLogoImage } from "@lms/assets";
+import { ButtonPrimary, ClickToCopyButton } from "@lms/ui";
+import Image from "next/image";
+import React, { useState } from "react";
+import { LinkedInShareButton } from "./ButtonShareLinkedin";
+import CertificateCard from "./CertificateCard";
+import ModalShareToLinkedin from "./ModalShareToLinkedin";
+import { ICertificate } from "@lms/core";
+import { Divider } from "antd";
+
+interface CertificateVerticalProps {
+  certificate?: ICertificate;
+  issuedBy?: string;
+  onDownload?: () => void;
+}
+
+const CertificateVertical: React.FC<CertificateVerticalProps> = ({
+  certificate,
+  issuedBy = "SAPP Academy",
+  onDownload,
+}) => {
+  const [openModalShare, setOpenModalShare] = useState(false);
+  const onOpenModalShare = () => setOpenModalShare(true);
+  const onCloseModalShare = () => setOpenModalShare(false);
+  return (
+    <CertificateCard
+      bodyClassName="2xl:px-[373px] py-[138px] px-[70px] justify-center"
+      className=" hidden lg:block"
+    >
+      <div className="flex h-full items-center gap-12 xl:gap-20">
+        <div className="flex h-full w-[55%] items-center justify-center">
+          {certificate?.certificate_url ? (
+            <img
+              src={certificate?.certificate_url || ""}
+              alt={certificate?.course.name}
+              className="max-h-full max-w-full object-contain"
+            />
+          ) : (
+            <CertificateImg
+              size={800}
+              className=" max-w-[500px] border-none text-[#A1A1A1] group-hover:text-primary"
+            />
+          )}
+        </div>
+        <div className="flex flex-col items-center gap-12">
+          <div
+            className="flex w-full cursor-pointer items-end"
+            onClick={() => window.open("https://sapp.edu.vn", "_blank")}
+          >
+            <div className="mx-auto my-auto block w-1/2 overflow-hidden sm:max-w-[14rem]">
+              <Image
+                src={SappLogoImage}
+                alt="SAPP Logo"
+                priority={true}
+                layout="responsive"
+              />
+            </div>
+          </div>
+          <div className="flex flex-col items-center gap-8">
+            <div className="flex flex-col items-center gap-4">
+              <div className="text-5xl font-bold text-primary">
+                Congratulation!
+              </div>
+              <div className="text-center">
+                <p>Congratulations, you have achieved the</p>
+                <p className="font-bold">{certificate?.course?.name}</p>
+                <p>issued by {issuedBy}!</p>
+              </div>
+            </div>
+            <div className="flex items-center justify-center">
+              <ButtonPrimary
+                size="medium"
+                icon={<Icon type="download" />}
+                iconPosition="end"
+                onClick={onDownload}
+                className="!px-[29px]"
+              >
+                Download
+              </ButtonPrimary>
+              <Divider type="vertical" className="mx-4 !h-5 !border-gray-300" />
+              <LinkedInShareButton
+                certificateUrl={certificate?.certificate_url || ""}
+                onOpenModalShare={onOpenModalShare}
+              />
+              <Divider type="vertical" className="mx-4 !h-5 !border-gray-300" />
+              <ClickToCopyButton
+                className="h-auto"
+                link={`${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`}
+              >
+                <div className="cursor-pointer rounded-full bg-gray-200 p-2 ">
+                  <CopyIcon />
+                </div>
+              </ClickToCopyButton>
+            </div>
+          </div>
+        </div>
+      </div>
+      {certificate && (
+        <ModalShareToLinkedin
+          open={openModalShare}
+          onClose={onCloseModalShare}
+          certificate={certificate}
+        />
+      )}
+    </CertificateCard>
+  );
+};
+
+export default CertificateVertical;

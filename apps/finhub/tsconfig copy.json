@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+     "baseUrl": "./",
+    "paths": {
+      "@adapters/*": ["src/adapters/*"],
+      "@components/*": ["src/components/*"],
+      "@contexts/*": ["src/contexts/*"],
+      "@services/*": ["src/services/*"],
+      "@styles/*": ["src/styles/*"],
+      "@utils/*": ["src/utils/*"],
+      "@assets/*": ["src/assets/*"],
+      "@i18n/*": ["src/i18n/*"],
+      "@pages/*": ["src/pages/*"]
+    },
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true
+  }
+}

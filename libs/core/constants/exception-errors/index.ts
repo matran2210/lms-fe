@@ -1,0 +1,1 @@
+export {default as ExceptionErrorCode } from './en.exceptions.json'

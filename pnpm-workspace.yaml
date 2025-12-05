@@ -1,0 +1,11 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "features/*"
+  - "libs/*"
+  - "tools/*"
+
+hoistPattern:
+  - "react*"
+  - "antd"
+  - "@ant-design/*"

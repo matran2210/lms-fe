@@ -1,0 +1,74 @@
+//TODO: check nhé
+// @import "src/styles/variables";
+.lessonFormTree {
+  @apply w-full;
+}
+
+.lessonFormTree :global(.ant-tree-treenode) {
+  @apply py-1 leading-[40px];
+}
+
+.lessonFormTree :global(.ant-tree-switcher) {
+  @apply flex items-center justify-center;
+}
+
+// TODO: check lỗi color: $color-warning nhé
+// .lessonFormTree :global(.ant-tree-switcher:hover) {
+//   color: $color-display;
+// }
+
+.lessonFormTree :global(.ant-tree-switcher_close) {
+  @apply text-[#181c32];
+}
+
+.lessonFormTree :global(.ant-tree-switcher::before) {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Checkbox styles */
+.lessonFormTree
+  :global(
+    .ant-tree-checkbox:not(.ant-tree-checkbox-disabled):hover
+      .ant-tree-checkbox-inner
+  ) {
+  @apply border-primary bg-primary;
+}
+
+.lessonFormTree :global(.ant-tree-checkbox-checked .ant-tree-checkbox-inner) {
+  @apply border-primary bg-primary text-white;
+}
+.lessonFormTree
+  :global(
+    .ant-tree-checkbox:not(.ant-tree-checkbox-disabled):not(
+        .ant-tree-checkbox-checked
+      ):hover
+      .ant-tree-checkbox-inner
+  ) {
+  background-color: transparent;
+  @apply border-primary text-white;
+}
+
+.lessonFormTree
+  :global(.ant-tree-checkbox-checked .ant-tree-checkbox-inner::after) {
+  top: 45%;
+  width: 8px;
+  height: 12px;
+}
+
+.lessonFormTree
+  :global(.ant-tree-checkbox-indeterminate .ant-tree-checkbox-inner::after) {
+  @apply border-primary bg-primary text-white;
+}
+
+.lessonFormTree :global(.ant-tree-list-holder-inner .ant-tree-checkbox-inner) {
+  width: 24px;
+  height: 24px;
+}
+
+/* Error message */
+// TODO: check lỗi color: $color-warning nhé
+// .errorMessage {
+//   color: $color-warning;
+//   margin-top: 8px;
+// }
