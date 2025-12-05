@@ -89,7 +89,7 @@ const Certificate = () => {
       title: 'Grade Achieved',
       align: 'center',
       render: (record) => (
-        <div className="text-base text-secondary">{record?.pass_point}%</div>
+        <div className="text-base text-secondary">{record?.pass_point ? `${record?.pass_point}%` : "-"}</div>
       ),
     },
     {
