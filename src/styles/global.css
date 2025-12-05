@@ -13,9 +13,11 @@
   @apply !-right-16;
 }
 
-#zmmtg-root .chat-rtf-box__chat-textarea-wrapper,
-#zmmtg-root .ax-outline-blue {
-  @apply focus-within:outline-none focus:outline-none;
+/* Zoom Chat */
+.chat-rtf-box__chat-textarea-wrapper,
+.chat-item__chat-info,
+.chat-rtf-box__editor-outer {
+  @apply focus-within:!outline-none focus:!outline-none;
 }
 
 #zmmtg-root:not(.show-full-screen) {
