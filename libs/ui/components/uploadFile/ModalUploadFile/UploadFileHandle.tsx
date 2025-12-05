@@ -10,6 +10,7 @@ import { UPLOAD_TYPE } from "@lms/core/types/file/UploadFileInterface";
 import { ButtonSecondary } from "../../base";
 import { validateFile } from "@lms/utils";
 import { isArray } from "lodash";
+import { DocumentIconImage, ImageIconImage, VideoIconImage } from "@lms/assets";
 // import { ResourceAPI } from 'src/apis/resource-bank'
 
 type Props = {
@@ -130,6 +131,25 @@ const UploadFileHandle = ({
     setUploadFile(e.fileList);
   };
 
+  const renderIcon = () => {
+    switch (UPLOAD_TYPE[fileType].type) {
+      case "ALL":
+      case "ALL_RESOURCE":
+        return [VideoIconImage, DocumentIconImage, ImageIconImage];
+
+      case "VIDEO":
+        return [VideoIconImage];
+
+      case "IMAGE":
+        return [ImageIconImage];
+
+      case "DOCUMENT":
+        return [DocumentIconImage];
+    
+      default:
+        break;
+    }
+  };
   return (
     <div>
       <Dragger
@@ -145,9 +165,9 @@ const UploadFileHandle = ({
         <div className="scroll-y px-lg-15 px-10 pb-10 pt-10">
           <div className="flex flex-col items-center justify-center">
             <div className="mb-3 flex justify-center">
-              {isArray(icon) ? (
+              {isArray(renderIcon()) && (
                   <div className="flex items-center justify-center gap-5">
-                  {icon?.map((e: any, i: number) => {
+                  {renderIcon()?.map((e: any, i: number) => {
                     return (
                       <img
                         width={64}
@@ -159,8 +179,6 @@ const UploadFileHandle = ({
                     );
                   })}
                 </div>
-              ) : (
-                <img width={64} height={64} src={icon?.src || icon} alt="Icon" />
               )}
             </div>
             <p>Drag & Drop your file here</p>

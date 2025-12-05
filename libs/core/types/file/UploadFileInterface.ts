@@ -4,28 +4,28 @@ import {
   VALID_UPLOAD_FILES,
 } from "../../constants";
 
-// -------------------------------------
-// Safe dynamic import for asset icons (SSR + monorepo safe)
-// -------------------------------------
-let assetIcons = {
-  video: "",
-  image: "",
-  document: "",
-};
+// // -------------------------------------
+// // Safe dynamic import for asset icons (SSR + monorepo safe)
+// // -------------------------------------
+// let assetIcons = {
+//   video: "",
+//   image: "",
+//   document: "",
+// };
 
-// SSR-safe require
-try {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const Icons = require("../../../assets");
+// // SSR-safe require
+// try {
+//   // eslint-disable-next-line @typescript-eslint/no-var-requires
+//   const Icons = require("../../../assets");
 
-  assetIcons = {
-    video: Icons?.VideoIconImage ?? "",
-    image: Icons?.ImageIconImage ?? "",
-    document: Icons?.DocumentIconImage ?? "",
-  };
-} catch {
-  // fallback giữ empty string
-}
+//   assetIcons = {
+//     video: Icons?.VideoIconImage ?? "",
+//     image: Icons?.ImageIconImage ?? "",
+//     document: Icons?.DocumentIconImage ?? "",
+//   };
+// } catch {
+//   // fallback giữ empty string
+// }
 
 const toIconList = (...icons: string[]) => icons.filter(Boolean) as string[];
 
@@ -98,7 +98,7 @@ export const UPLOAD_TYPE: Record<
 > = {
   VIDEO: {
     type: "VIDEO",
-    icon: assetIcons.video,
+    icon: [],
     accept: ".mp4",
     extension: "MP4",
     note: ["MP4"],
@@ -108,7 +108,7 @@ export const UPLOAD_TYPE: Record<
 
   IMAGE: {
     type: "IMAGE",
-    icon: assetIcons.image,
+    icon: [],
     accept: "image/*",
     extension: ".jpg, .jpeg, .png, .gif, .webp",
     note: [".jpg, .jpeg, .png, .gif, .webp"],
@@ -118,7 +118,7 @@ export const UPLOAD_TYPE: Record<
 
   DOCUMENT: {
     type: "DOCUMENT",
-    icon: assetIcons.document,
+    icon: [],
     accept: ".pdf,.docx,.doc,.xls,.xlsx,.csv,.txt,.ppt,.pptx",
     extension: ".pdf, .docx, .doc, .xls, .xlsx, .csv, .txt, .ppt, .pptx",
     note: [
@@ -138,7 +138,7 @@ export const UPLOAD_TYPE: Record<
 
   ESSAY: {
     type: "DOCUMENT",
-    icon: assetIcons.document,
+    icon: [],
     accept: ".pdf,.docx,.doc,.xls,.xlsx,.csv,.ppt,.pptx,.zip",
     extension: ".pdf, .docx, .doc, .xls, .xlsx, .csv, .ppt, .pptx, .zip",
     note: [
@@ -159,7 +159,7 @@ export const UPLOAD_TYPE: Record<
 
   ALL: {
     type: "ALL",
-    icon: toIconList(assetIcons.document, assetIcons.video, assetIcons.image),
+    icon: [],
     accept: "image/*,.mp4,.pdf,.docx,.xls,.xlsx,.csv,.txt",
     extension:
       ".jpg, .jpeg, .png, .gif, .webp, .mp4, .pdf, .docx, .doc, .xls, .xlsx, .csv, .txt, .ppt, .pptx",
@@ -176,7 +176,7 @@ export const UPLOAD_TYPE: Record<
 
   ALL_RESOURCE: {
     type: "ALL_RESOURCE",
-    icon: toIconList(assetIcons.document, assetIcons.video, assetIcons.image),
+    icon: [],
     accept: "image/*,.mp4,.pdf,.docx,.doc,.xls,.xlsx,.csv,.txt,.ppt,.pptx",
     extension:
       ".jpg, .jpeg, .png, .gif, .webp, .mp4, .pdf, .docx, .doc, .xls, .xlsx, .csv, .txt, .ppt, .pptx",
