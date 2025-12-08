@@ -78,5 +78,9 @@
   {
     "code": "400|020501",
     "message": "Email Already Exists"
+  },
+  {
+    "code": "400|550001",
+    "message": "Link hết hạn. Vui lòng kiểm tra lịch học để lấy link mới."
   }
 ]
