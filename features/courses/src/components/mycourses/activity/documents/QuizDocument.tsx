@@ -1114,7 +1114,7 @@ const QuizDocument = ({
                 className={clsx(
                   "flex w-full items-center gap-3 md:w-fit justify-between",
                   {
-                    "mx-auto justify-center": !is_graded,
+                    "!mx-auto !justify-center": !is_graded || isAlwaysShowSidebar,
                   },
                 )}
               >
