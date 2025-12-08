@@ -382,7 +382,7 @@ const TestModal = ({
   const renderCustomFooter = () => {
     if (!quiz) return null;
 
-    // ✅ Trường hợp: có thể hiển thị nút Start hoặc Retake
+    // Trường hợp: có thể hiển thị nút Start hoặc Retake
     const shouldShowButtonStartOrRetake =
       !(
         selectedResult &&
@@ -396,13 +396,13 @@ const TestModal = ({
             currentAttemptNum < limitCount ||
             (currentAttemptNum === limitCount && !isSubmitted))));
 
-    // 🟡 Trường hợp: chưa từng làm hoặc đã làm đủ số lượt cho phép
+    // Trường hợp: chưa từng làm hoặc đã làm đủ số lượt cho phép
 
     if (isNoAttemptOrLimitReached) {
       if (!isLimited) {
-        // 🔵 Quiz KHÔNG giới hạn số lượt làm
+        // Quiz KHÔNG giới hạn số lượt làm
         if (isNoAttempt) {
-          // ✅ Chưa từng làm → bắt đầu mới
+          // Chưa từng làm → bắt đầu mới
           return (
             <>
               {shouldShowButtonStartOrRetake && (
@@ -419,7 +419,7 @@ const TestModal = ({
         }
 
         if (isContinue) {
-          // ✅ Có bài đang làm dở → tiếp tục hoặc làm mới
+          // Có bài đang làm dở → tiếp tục hoặc làm mới
           return (
             <>
               <ButtonPrimary
@@ -439,7 +439,7 @@ const TestModal = ({
           );
         }
 
-        // ✅ Đã làm xong → được làm lại
+        // Đã làm xong → được làm lại
         return (
           <>
             {shouldShowButtonStartOrRetake && (
@@ -454,9 +454,9 @@ const TestModal = ({
           </>
         );
       } else {
-        // 🔴 Quiz CÓ giới hạn số lượt làm
+        // Quiz CÓ giới hạn số lượt làm
         if (isFinalAttemptTimeout) {
-          // ✅ Lần làm cuối cùng bị hết thời gian → chỉ xem kết quả
+          // Lần làm cuối cùng bị hết thời gian → chỉ xem kết quả
           return (
             <ButtonPrimary
               size="medium"
@@ -468,7 +468,7 @@ const TestModal = ({
         }
 
         if (isNoAttempt || isSubmitted || isUnsubmitted) {
-          // ✅ Chưa làm hoặc đã nộp → được làm bài mới
+          // Chưa làm hoặc đã nộp → được làm bài mới
           return (
             <>
               {shouldShowButtonStartOrRetake && (
@@ -486,7 +486,7 @@ const TestModal = ({
 
         if (attempt.number_of_attempts === limitCount) {
           if (isContinue) {
-            // ✅ Là lần cuối và bài đang làm → tiếp tục bài đó
+            // Là lần cuối và bài đang làm → tiếp tục bài đó
             return (
               <>
                 <ButtonPrimary
@@ -504,7 +504,7 @@ const TestModal = ({
               </>
             );
           } else {
-            // ✅ Là lần cuối và đã nộp → chỉ xem kết quả
+            // Là lần cuối và đã nộp → chỉ xem kết quả
             return (
               <ButtonPrimary
                 size="medium"
@@ -516,7 +516,7 @@ const TestModal = ({
           }
         }
 
-        // ✅ Còn lượt làm → tiếp tục bài cũ, nộp luôn hoặc làm mới
+        // Còn lượt làm → tiếp tục bài cũ, nộp luôn hoặc làm mới
         return (
           <div className="flex flex-col items-center gap-3">
             <ButtonPrimary
@@ -545,10 +545,10 @@ const TestModal = ({
       }
     }
 
-    // 🟢 Trường hợp khác: đã làm nhưng chưa hết lượt
+    // Trường hợp khác: đã làm nhưng chưa hết lượt
     if (isContinue) {
       if (isTimeOut) {
-        // ✅ Hết thời gian làm bài → chỉ xem kết quả hoặc bắt đầu lại
+        // Hết thời gian làm bài → chỉ xem kết quả hoặc bắt đầu lại
         return (
           <>
             <ButtonPrimary
@@ -567,7 +567,7 @@ const TestModal = ({
         );
       }
 
-      // ✅ Còn thời gian → tiếp tục bài cũ, nộp hoặc bắt đầu mới
+      // Còn thời gian → tiếp tục bài cũ, nộp hoặc bắt đầu mới
       return (
         <>
           <ButtonPrimary
@@ -592,7 +592,7 @@ const TestModal = ({
       );
     }
 
-    // ⚪ Trường hợp không xác định → không hiển thị footer
+    //Trường hợp không xác định → không hiển thị footer
     return null;
   };
 
