@@ -52,22 +52,6 @@
   }
 }
 
-.drawer-activity-included {
-  .ant-drawer-content-wrapper {
-    @apply fixed inset-0 my-auto h-[101px] rounded-xl;
-
-    .ant-drawer-content {
-      @apply rounded-xl;
-    }
-  }
-  // Thêm class mới để override bottom
-  &.drawer-bottom-0 {
-    .ant-drawer-content-wrapper {
-      @apply bottom-0;
-    }
-  }
-}
-
 .responsive-drawer-center-mobile-lo {
   .ant-drawer-content-wrapper {
     @apply fixed inset-0 mx-4 my-auto !h-[521px] rounded-xl;
