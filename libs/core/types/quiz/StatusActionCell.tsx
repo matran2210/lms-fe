@@ -17,7 +17,7 @@ export const statusQuizMap = {
     bg: "bg-[#025eff0D]",
   },
   UN_SUBMITTED: {
-    label: "Not Submitted",
+    label: "Not Started",
     color: "text-warning",
     bg: "bg-warning-50",
   },
@@ -32,15 +32,25 @@ export const statusQuizMap = {
     bg: "bg-[#D35563]-5",
   },
   AWAITING_GRADING: {
-    label: "Awaiting grading",
+    label: "Awaiting Grading",
     color: "text-[#F89707]",
     bg: "bg-[#F897070D]",
+  },
+  REGRADING: {
+    label: "Regrading",
+    color: "text-[#025eff]",
+    bg: "bg-[#025eff0D]",
   },
   IN_REVIEW: {
-    label: "In Review",
+    label: "Awaiting Grading",
     color: "text-[#F89707]",
     bg: "bg-[#F897070D]",
   },
+  // IN_REVIEW: {
+  //   label: "In Review",
+  //   color: "text-[#F89707]",
+  //   bg: "bg-[#F897070D]",
+  // },
   FINISHED_GRADING: {
     label: "Finished Grading",
     color: "text-[#176CDD]",
@@ -59,7 +69,7 @@ export const StatusQuizTag = ({
   status: keyof typeof statusQuizMap;
 }) => {
   const { label, color, bg } = statusQuizMap[status] || {
-    label: "Not started",
+    label: "Not Started",
     color: "text-info",
     bg: "bg-info-50",
   };

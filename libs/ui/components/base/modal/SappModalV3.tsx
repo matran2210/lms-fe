@@ -79,7 +79,10 @@ const SappModalV3 = ({
       footer={false}
       centered
       closeIcon={false}
-      onCancel={onCancel}
+      onCancel={(e) => {
+        e.stopPropagation()
+        onCancel()
+      }}
       maskClosable={true}
       closable={isClosable}
       {...otherProps}

@@ -29,6 +29,7 @@ export interface QuizActivity {
   quiz_path?: string;
   activity_id?: string;
   tab_id?: string;
+  is_limited: boolean;
 }
 
 export interface QuizResult {
@@ -51,6 +52,7 @@ export interface Attempt {
   score: number;
   ratio_score: string;
   multiple_choice_score: number;
+  number_of_attempts: number;
   constructed_score: number;
   status: string;
   grading_status: (typeof GRADE_STATUS)[keyof typeof GRADE_STATUS] | null;

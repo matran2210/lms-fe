@@ -1,13 +1,14 @@
 import { CollapseArrowIcon } from "@lms/assets";
-import { Collapse } from "antd";
-import React, { useState, useEffect } from "react";
-import TableListQuizInActivity from "./TableListQuizInActivity";
-import { Results, QuizActivity } from "@lms/core";
-import clsx from "clsx";
-import { useSappPaging } from "@lms/hooks";
-import router from "next/router";
-import { GRADE_STATUS, GRADING_METHOD } from "@lms/core";
 import { useFeature } from "@lms/contexts";
+import { EAttemptStatus, GRADE_STATUS, GRADING_METHOD, QuizActivity, Results } from "@lms/core";
+import { useSappPaging } from "@lms/hooks";
+import { isQuizExpired } from "@lms/utils";
+import { Collapse } from "antd";
+import clsx from "clsx";
+import router from "next/router";
+import { useEffect, useState } from "react";
+import TableListQuizInActivity from "./TableListQuizInActivity";
+import ModalActionTest from "./ModalActionTest";
 
 interface CollapseActivityProps {
   resultData: Results;
@@ -17,6 +18,10 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
   const { courseApi } = useFeature();
   const [activeKey, setActiveKey] = useState<string | string[]>([]);
   const [hasDataLoaded, setHasDataLoaded] = useState(false);
+  const [open, setOpen] = useState<{ status: boolean; data: QuizActivity | null }>({
+    status: false,
+    data: null
+  })
 
   const handleChange = (key: string | string[]) => {
     setActiveKey(key);
@@ -31,18 +36,54 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
       setHasDataLoaded(true);
     }
   };
-  const openInNewTab = (url: string) => {
-    if (typeof window === "undefined") return;
-    window.open(url, "_blank");
+  const openInNewTab = ({ url, isNewTab = true }: { url: string, isNewTab?: boolean }) => {
+    if (isNewTab) {
+      if (typeof window === "undefined") return;
+      window.open(url, "_blank");
+    } else {
+      router.push(url);
+    }
   };
 
+  const handleCheckQuizAttempt = (data: QuizActivity) => {
+    let isExpired = false
+    if (data?.quiz_timed) {
+      isExpired = isQuizExpired(
+        new Date(data?.attempts?.[0]?.started_at),
+        data?.quiz_timed,
+      )
+    }
+
+    const isContinueAttempt = data?.attempts?.[0]?.status === EAttemptStatus.IN_PROGRESS
+    if (isContinueAttempt && !isExpired) {
+      localStorage.setItem(
+        'quizAttempt',
+        JSON.stringify({
+          id: data?.attempts?.[0]?.id,
+          number_of_attempts:
+            data?.attempts?.[0]?.number_of_attempts,
+          is_limited: data?.is_limited,
+          quiz_timed: data?.quiz_timed,
+          created_at: data?.attempts?.[0]?.started_at,
+        }),
+      )
+    } else {
+      localStorage.removeItem('quizAttempt')
+    }
+  }
+  const handleOpenTest = (record: QuizActivity) => {
+    handleCheckQuizAttempt(record)
+    openInNewTab({
+      url: `/test/${record?.id}?class_user_id=${resultData?.class_user_id}`,
+      isNewTab: false
+    });
+  }
   const handleViewActivity = (record: QuizActivity) => {
     if (!record?.id) return;
 
     const courseId = router.query.courseId as string;
     const quiz = record;
     const attempt = quiz?.attempts?.[0];
-
     // Logic điều hướng theo yêu cầu:
     // 1. Bài Quiz chấm điểm (tính trọng số) nhưng chấm tự động hoặc bài Quiz không chấm điểm: màn Activity detail
     // 2. Bài Quiz chấm điểm và chấm bằng tay nhưng chưa chấm xong: /quiz/your-answers-detail
@@ -52,13 +93,27 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
     if (!quiz.is_graded || quiz.grading_method === GRADING_METHOD.AUTO) {
       // Điều hướng đến màn Activity detail
       if (record.activity_id) {
-        openInNewTab(
-          `/courses/${courseId}/activity/${record.activity_id}?tabId=${record?.tab_id}`,
+        openInNewTab({
+          url: `/courses/${courseId}/activity/${record.activity_id}?tabId=${record?.tab_id}`
+        }
         );
       } else {
-        openInNewTab(
-          `/test/${record?.id}?class_user_id=${resultData?.class_user_id}`,
-        );
+        if (record?.attempts) {
+        if (
+          record?.attempts?.[0]?.status === EAttemptStatus.IN_PROGRESS
+        ) {
+          // handleOpenTest(record)
+          setOpen({
+            status: true,
+            data: record
+          })
+        } else {
+          openInNewTab({ url: `/courses/test/test-result/${record?.attempts?.[0]?.id}`, });
+        }
+      } else {
+        handleOpenTest(record)
+      }
+        // handleOpenTest(record)
       }
       return;
     }
@@ -71,27 +126,47 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
         attempt?.grading_status === GRADE_STATUS.REGRADING
       ) {
         // Case 2: Chưa chấm xong - điều hướng đến your-answers-detail
-        openInNewTab(`/courses/quiz/your-answers-detail/${attempt.id}`);
+        openInNewTab({ url: `/courses/quiz/your-answers-detail/${attempt.id}` });
         return;
       }
 
       if (attempt?.grading_status === GRADE_STATUS.FINISHED_GRADING) {
         // Case 3: Đã chấm xong - điều hướng đến quiz-result
-        openInNewTab(
-          `/courses/quiz/quiz-result/${attempt.id}?courseId=${courseId}`,
-        );
+        openInNewTab({ url: `/courses/quiz/quiz-result/${attempt.id}?courseId=${courseId}`, });
         return;
       }
 
       // Fallback: Nếu chưa có attempt hoặc grading_status không xác định
       if (record.activity_id) {
-        openInNewTab(
-          `/courses/${courseId}/activity/${record.activity_id}?tabId=${record?.tab_id}`,
-        );
+        openInNewTab({ url: `/courses/${courseId}/activity/${record.activity_id}?tabId=${record?.tab_id}`, });
       } else {
-        openInNewTab(
-          `/test/${record?.id}?class_user_id=${resultData?.class_user_id}`,
-        );
+        // handleOpenTest(record)
+        if (record?.attempts) {
+          if (
+            record?.attempts?.[0]?.status === EAttemptStatus.SUBMITTED
+          ) {
+            if (
+              record?.attempts?.[0]?.grading_status ===
+              GRADE_STATUS.FINISHED_GRADING
+            ) {
+              openInNewTab({ url: `/courses/test/test-result/${record?.attempts?.[0]?.id}`, });
+            } else {
+              openInNewTab({ url: `/courses/test/your-answers-detail/${record?.attempts?.[0]?.id}`, });
+            }
+          } else if (
+            record?.attempts?.[0]?.status ===
+            EAttemptStatus.IN_PROGRESS
+          ) {
+            handleOpenTest(record)
+          } else if (
+            record?.attempts?.[0]?.status ===
+            EAttemptStatus.UN_SUBMITTED
+          ) {
+            openInNewTab({ url: `/courses/test/test-result/${record?.attempts?.[0]?.id}`, });
+          }
+        } else {
+          handleOpenTest(record)
+        }
       }
       return;
     }
@@ -154,6 +229,7 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
     },
   ];
   return (
+    <>
     <Collapse
       className="rounded-xl bg-white p-0 py-1 shadow-small md:p-2 md:py-3"
       bordered={false}
@@ -168,6 +244,16 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
       )}
       items={getItemsActivity}
     />
+
+      {open.status && open.data && <ModalActionTest
+        open={open.status}
+        setOpen={(data: boolean) => setOpen({ status: data, data: null })}
+        title={resultData?.name}
+        data={{...resultData, quiz: open.data}}
+        class_user_id={resultData?.class_user_id}
+      />}
+    </>
+    
   );
 };
 

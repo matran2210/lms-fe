@@ -1,4 +1,4 @@
-import { EDateTime, QUIZ_ATTEMPT_STATUS, QuizActivity, StatusQuizTag } from "@lms/core";
+import { EAttemptStatus, EDateTime, GRADING_METHOD, QuizActivity, StatusQuizTag } from "@lms/core";
 import { SappTable, Tooltip } from "@lms/ui";
 import { getTimeFromInput } from "@lms/utils";
 import { ColumnsType, TablePaginationConfig } from "antd/es/table";
@@ -29,6 +29,20 @@ const TableListQuizInActivity = ({
     return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
   };
 
+  const getAttemptStatus = (resultData: any) => {
+    if (resultData?.grading_method === GRADING_METHOD.MANUAL) {
+      if (
+        resultData?.attempts?.[0]?.status === EAttemptStatus.SUBMITTED
+      ) {
+        return resultData?.attempts?.[0]?.grading_status;
+      }
+      return resultData?.attempts?.[0]?.status || "NOT_STARTED";
+    }
+
+    if (resultData?.grading_method === GRADING_METHOD.AUTO) {
+      return resultData?.attempts?.[0]?.status || "NOT_STARTED";
+    }
+  };
   const columnsValue: ColumnsType<QuizActivity> = [
     {
       title: "Type",
@@ -44,16 +58,9 @@ const TableListQuizInActivity = ({
       title: "Status",
       align: "center",
       className: "column-center",
-      render: (record) => (
-        <StatusQuizTag
-          status={
-            ((record?.attempts?.[0]?.status === "UN_SUBMITTED"
-              ? "NOT_STARTED"
-              : record?.attempts?.[0]?.status) ||
-              "NOT_STARTED") as QUIZ_ATTEMPT_STATUS
-          }
-        />
-      ),
+      render: (record) => <StatusQuizTag
+        status={getAttemptStatus(record)}
+      />, 
     },
     {
       title: "Score",
