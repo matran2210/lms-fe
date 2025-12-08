@@ -1096,7 +1096,7 @@ const QuizDocument = ({
                   </div>
                   {is_graded && (
                     <div
-                      className="text-info lg:hidden"
+                      className="text-info lg:hidden font-medium"
                       onClick={() => setIsOpenActivityIncluded(true)}
                     >
                       +1
@@ -1120,7 +1120,7 @@ const QuizDocument = ({
               >
                 {is_graded && (
                   <div
-                    className="text-info md:hidden flex justify-start"
+                    className="text-info md:hidden flex justify-start font-medium"
                     onClick={() => setIsOpenActivityIncluded(true)}
                   >
                     {grading_method === GRADING_METHOD.MANUAL ? "+2 " : "+1 "}
