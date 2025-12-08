@@ -151,7 +151,7 @@ const formattedExceptions: { [key: string]: string } = exceptions.reduce((acc: a
 request.interceptors.response.use(
   response => response,
   error => {
-    const errorCode: string = error?.response?.data?.error?.code
+    const errorCode: string = error?.response?.data?.error?.code || error?.response?.data?.code
     const errorMessage =
       formattedExceptions[errorCode] || error?.response?.statusText || error?.message || 'Unknown error!'
 
