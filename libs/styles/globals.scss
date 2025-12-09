@@ -205,7 +205,7 @@ img.Wirisformula {
   }
 
   a {
-    @apply font-semibold text-primary;
+    // @apply font-semibold text-primary;
   }
 
   table {
@@ -222,7 +222,10 @@ img.Wirisformula {
   }
 
   p {
-    @apply mb-2 break-words;
+    @apply my-4 break-words;
+    img {
+        @apply inline-block
+      }
   }
 
   p:empty {
