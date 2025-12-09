@@ -849,15 +849,15 @@ export const HighlightableHTML: React.FC<Props> = ({
 
   const convertMathToImage = async (element: any) => {
     // TODO: check lỗi này
-    // if (typeof com === "undefined") return;
+    if (typeof com === "undefined") return;
 
-    // const viewer = com?.wiris?.js?.JsPluginViewer;
+    const viewer = com?.wiris?.js?.JsPluginViewer;
 
-    // if (element && viewer) {
-    //   try {
-    //     await viewer.parseElement(element, true, function () {});
-    //   } catch (error) {}
-    // }
+    if (element && viewer) {
+      try {
+        await viewer.parseElement(element, true, function () {});
+      } catch (error) {}
+    }
   };
 
   useEffect(() => {
