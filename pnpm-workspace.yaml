@@ -1,11 +1,14 @@
 packages:
-  - "apps/*"
-  - "packages/*"
-  - "features/*"
-  - "libs/*"
-  - "tools/*"
+  - apps/*
+  - packages/*
+  - features/*
+  - libs/*
+  - tools/*
 
 hoistPattern:
-  - "react*"
-  - "antd"
-  - "@ant-design/*"
+  - react*
+  - antd
+  - '@ant-design/*'
+
+overrides:
+  sapp-common-package: link:../../../AppData/Local/pnpm/global/5/node_modules/sapp-common-package
