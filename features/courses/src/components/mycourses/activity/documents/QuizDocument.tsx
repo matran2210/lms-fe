@@ -1114,7 +1114,8 @@ const QuizDocument = ({
                 className={clsx(
                   "flex w-full items-center gap-3 md:w-fit justify-between",
                   {
-                    "!mx-auto !justify-center": !is_graded || isAlwaysShowSidebar,
+                    "mx-auto !justify-center":
+                      !is_graded || isAlwaysShowSidebar,
                   },
                 )}
               >
@@ -1457,27 +1458,25 @@ const QuizDocument = ({
           handleClose={onCloseResetToTemplateModal}
         />
       )}
-      {isOpenActivityIncluded && (
-        <Modal
-          open={isOpenActivityIncluded}
-          onCancel={() => setIsOpenActivityIncluded(false)}
-          title="This Activity Include"
-          centered
-          className="sapp-modal-activity-include"
-          footer={null}
-        >
-          <div className="flex-wrap items-center gap-2 flex mt-2">
-            <div
-              className={` ${is_graded || "invisible"} whitespace-nowrap rounded bg-info-50 px-2 py-[2px] text-center text-sm font-normal text-info`}
-            >
-              Graded Activity
-            </div>
-            {is_graded &&
-              grading_method === GRADING_METHOD.MANUAL &&
-              getGradedLabel(gradeStatus)}
+      <Modal
+        open={isOpenActivityIncluded}
+        onCancel={() => setIsOpenActivityIncluded(false)}
+        title="This Activity Include"
+        centered
+        className="sapp-modal-activity-include"
+        footer={null}
+      >
+        <div className="flex-wrap items-center gap-2 flex mt-2">
+          <div
+            className={` ${is_graded || "invisible"} whitespace-nowrap rounded bg-info-50 px-2 py-[2px] text-center text-sm font-normal text-info`}
+          >
+            Graded Activity
           </div>
-        </Modal>
-      )}
+          {is_graded &&
+            grading_method === GRADING_METHOD.MANUAL &&
+            getGradedLabel(gradeStatus)}
+        </div>
+      </Modal>
     </div>
   );
 };
