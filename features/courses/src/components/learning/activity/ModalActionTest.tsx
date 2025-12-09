@@ -1,22 +1,15 @@
-import { ArrowDownIcon } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
 import {
-  EAttemptStatus,
-  GRADE_STATUS,
-  GRADING_METHOD,
-  IQuizResultList,
-  TEST_TYPE_LABELS,
+    GRADE_STATUS,
+    GRADING_METHOD,
+    IQuizResultList,
+    TEST_TYPE_LABELS
 } from "@lms/core";
 import { ButtonPrimary, ButtonSecondary, ButtonText } from "@lms/ui";
-import { capitalizeFirstLetter, formatTimer, isQuizExpired, trackGAEvent } from "@lms/utils";
-import { Select } from "antd";
+import { isQuizExpired, trackGAEvent } from "@lms/utils";
 import dayjs from "dayjs";
-import { isNull } from "lodash";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { TestAnnouncementModal } from "../../course-detail";
-import PopupCanNotRetakeTest from "../../PogupCannotRetakeTest";
-import TestPopup from "../TestPopup";
-import StatusTestQuizBadge from "../StatusTestQuizBadge";
+import { TestPopup } from "../../mycourses";
 
 enum StatusQuizAttempt {
   Passed = "PASSED",
@@ -30,26 +23,23 @@ interface IProps {
   title?: string;
   data?: any;
   class_user_id?: string;
-  activeCourse?: any;
-  is_passed_course: boolean;
 }
 
-const TestModal = ({
+const ModalActionTest = ({
   open,
   setOpen,
   data,
   class_user_id,
-  activeCourse,
-  is_passed_course,
 }: IProps) => {
   const {router, courseApi, classApi } = useFeature();
+    const attempt = data?.quiz?.attempts?.[0]
   const isSubmitted =
-    data?.quiz?.attempt && data?.quiz?.attempt?.status === "SUBMITTED";
+    attempt && attempt?.status === "SUBMITTED";
   const isUnsubmitted =
-    data?.quiz?.attempt && data?.quiz?.attempt?.status === "UN_SUBMITTED";
+    attempt && attempt?.status === "UN_SUBMITTED";
   const isContinue =
-    // !data?.quiz?.attempt ||
-    data?.quiz?.attempt && data?.quiz?.attempt?.status === "IN_PROGRESS";
+    // !attempt ||
+    attempt && attempt?.status === "IN_PROGRESS";
 
   const [resultList, setResultList] = useState<IQuizResultList>({
     metadata: {
@@ -69,17 +59,14 @@ const TestModal = ({
     created_at?: Date;
     number_of_attempt?: number;
   }>();
-  const [isFocus] = useState<boolean>(false);
-  const [openResource, setOpenPopup] = useState(false);
   const [remainingTime, setRemainingTime] = useState<number>();
   const remainingTimeLastAttempt = useRef<number | null>(null);
 
   const quiz = data?.quiz;
   const isLimited = !!quiz.is_limited;
-  const attempt = quiz.attempt;
   const limitCount = quiz.limit_count;
   const currentAttemptNum = attempt?.number_of_attempts;
-  const isNoAttempt = !data?.quiz?.attempt;
+    const isNoAttempt = data?.quiz?.attempts?.length === 0
 
   const isNoAttemptOrLimitReached =
     isSubmitted ||
@@ -101,12 +88,6 @@ const TestModal = ({
             "second",
           )
       : "";
-
-  const onCancel = () => {
-    setTimeout(() => {
-      setOpen(false);
-    });
-  };
 
   const fetchResult = async (pageIndex: number, pageSize: number) => {
     if (class_user_id && data?.quiz?.id) {
@@ -156,9 +137,7 @@ const TestModal = ({
             "quizAttempt",
             JSON.stringify({
               id: results?.[0]?.id,
-              number_of_attempts:
-                data?.attempt?.number_of_attempts ||
-                data?.quiz?.attempt?.number_of_attempts,
+              number_of_attempts: attempt?.number_of_attempts,
               is_limited: data?.is_limited,
               quiz_timed: data?.quiz?.quiz_timed,
               created_at: results?.[0]?.created_at,
@@ -222,7 +201,7 @@ const TestModal = ({
     remainingTimeLastAttempt.current <= 0;
 
   const handleSubmitNow = async () => {
-    await courseApi.submitAllQuestion(data?.quiz?.attempt?.id as string);
+    await courseApi.submitAllQuestion(attempt?.id as string);
     handleRedirectResult();
   };
 
@@ -231,14 +210,6 @@ const TestModal = ({
       handleSubmitNow();
     }
   }, [isTimeOut]);
-
-  const handleNextPage = () => {
-    const pageIndex = resultList.metadata.page_index;
-    const totalPage = resultList.metadata.total_pages;
-    if (pageIndex < totalPage) {
-      fetchResult(pageIndex + 1, 10);
-    }
-  };
 
   const handleCheckStatus = (
     attempt: { status: string; score: number },
@@ -258,14 +229,14 @@ const TestModal = ({
   };
 
   const can_retake = useMemo(() => {
-    if (!data?.quiz?.attempt) {
+    if (!attempt) {
       return true;
     }
-    if (data.quiz.is_graded && is_passed_course) {
+    if (attempt?.is_graded) {
       return false;
     }
     return true;
-  }, [data?.quiz?.attempt]);
+  }, [attempt]);
 
   const status = useMemo(() => {
     if (selectedResult?.value) {
@@ -276,14 +247,13 @@ const TestModal = ({
         return handleCheckStatus(result, result?.quiz);
       }
     } else {
-      return handleCheckStatus(data?.quiz?.attempt, data?.quiz);
+      return handleCheckStatus(attempt, data?.quiz);
     }
-  }, [selectedResult?.value, data?.quiz?.attempt]);
+  }, [selectedResult?.value, attempt]);
 
   const handleStartANewAttempt = async () => {
     //to do: start test
     try {
-      activeCourse && (await activeCourse());
       router.push({
         pathname: `/test/${data.quiz.id}`,
         query: {
@@ -301,71 +271,20 @@ const TestModal = ({
       "quizAttempt",
       JSON.stringify({
         id: selectedResult?.value,
-        number_of_attempts: data?.quiz?.attempt?.number_of_attempts,
-        is_limited: data?.is_limited,
-        quiz_timed: data?.quiz?.quiz_timed,
+        number_of_attempts: attempt?.number_of_attempts,
+          is_limited: isLimited,
+        quiz_timed: quiz?.quiz_timed,
         created_at: selectedResult?.created_at,
       }),
     );
     handleStartANewAttempt();
   };
 
-  const startTime = data?.quiz?.quiz_setting?.start_time;
-  // Test Unopend or Expired
-  if (
-    !isNull(data?.quiz?.quiz_setting) &&
-    !data?.quiz?.quiz_setting?.allow_attempt
-  ) {
-    return (
-      <TestAnnouncementModal
-        open={open}
-        handleCancel={() => {
-          setOpen(false);
-          trackGAEvent("Click Button Cancel Modal Test");
-        }}
-        type={data?.quiz?.quiz_setting?.reason_for_reject}
-        start_time={startTime}
-      />
-    );
-  }
-
-  const getResultOfTest = () => {
-    if (
-      data?.quiz?.is_graded &&
-      data?.quiz?.grading_method === GRADING_METHOD.MANUAL
-    ) {
-      if (
-        data?.quiz?.attempt?.grading_status === GRADE_STATUS.FINISHED_GRADING
-      ) {
-        return data?.quiz?.required_percent_score > data?.quiz?.attempt?.score
-          ? StatusQuizAttempt.Failed
-          : StatusQuizAttempt.Passed;
-      }
-      return "_ _";
-    }
-    return (
-      selectedResult?.ratio_score ?? data?.quiz?.attempt?.ratio_score ?? "_ _"
-    );
-  };
-
   const isManualGradingAndNotFinishedGrading =
     data?.quiz?.grading_method === GRADING_METHOD.MANUAL &&
-    data?.quiz?.attempt?.grading_status !== GRADE_STATUS.FINISHED_GRADING &&
-    data?.quiz?.attempt &&
-    data?.quiz?.attempt?.status === "SUBMITTED";
-
-  const isShowDetail = () => {
-    if (isManualGradingAndNotFinishedGrading) {
-      return true;
-    }
-    if (data?.quiz?.grading_method == GRADING_METHOD.MANUAL) {
-      return (
-        data?.quiz?.attempt?.grading_status === GRADE_STATUS.FINISHED_GRADING
-      );
-    } else {
-      return status !== StatusQuizAttempt.Unsubmitted;
-    }
-  };
+    attempt?.grading_status !== GRADE_STATUS.FINISHED_GRADING &&
+    attempt &&
+    attempt?.status === "SUBMITTED";
 
   const renderBackButton = () => (
     <ButtonText
@@ -592,7 +511,7 @@ const TestModal = ({
       );
     }
 
-    //Trường hợp không xác định → không hiển thị footer
+    // Trường hợp không xác định → không hiển thị footer
     return null;
   };
 
@@ -615,7 +534,6 @@ const TestModal = ({
 
   const handleRetakeNewAttempt = async () => {
     if (!can_retake) {
-      setOpenPopup(true);
       return;
     }
     localStorage.removeItem("quizAttempt");
@@ -625,34 +543,18 @@ const TestModal = ({
   const handleRedirectResult = () => {
     if (isManualGradingAndNotFinishedGrading) {
       router.push(
-        `/courses/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
+        `/courses/test/your-answers-detail/${attempt?.id}`,
       );
     } else {
       router.push({
-        pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
+        pathname: `/courses/test/test-result/${selectedResult?.value ?? attempt?.id}`,
         query: { attempt: selectedResult?.label },
       });
     }
   };
 
-  const getAttemptStatus = () => {
-    if (data?.quiz?.grading_method === GRADING_METHOD.MANUAL) {
-      if (data?.quiz?.attempt?.status === EAttemptStatus.SUBMITTED) {
-        return data?.quiz?.attempt?.grading_status;
-      }
-      return data?.quiz?.attempt?.status;
-    }
-
-    if (data?.quiz?.grading_method === GRADING_METHOD.AUTO) {
-      return data?.quiz?.attempt?.status;
-    }
-  };
-
   return (
     <>
-      {/* {isMobileView ? (
-        <ModalNotMobileFriendly open={open} onClose={() => setOpen(false)} />
-      ) : ( */}
       <TestPopup
         open={open}
         setOpen={setOpen}
@@ -662,173 +564,17 @@ const TestModal = ({
           </div>
         }
         time={displayTime}
-        otherContent={
-          !isContinue && (
-            <>
-              <div className="flex flex-col gap-6">
-                <TestInfoItem label="Name:" value={data?.name} />
-                <TestInfoItem
-                  label="Pass Point:"
-                  value={
-                    data?.quiz?.is_graded ? (
-                      <>{data?.quiz?.required_percent_score ?? "_ _"}</>
-                    ) : (
-                      <>_ _</>
-                    )
-                  }
-                />
-                <TestInfoItem
-                  label="Time Allowed:"
-                  value={
-                    data?.quiz?.quiz_timed
-                      ? formatTimer(data?.quiz?.quiz_timed * 60)
-                      : "Unlimited"
-                  }
-                />
-                <TestInfoItem
-                  label="Grading Method:"
-                  value={
-                    capitalizeFirstLetter(selectedResult?.grading_method) ??
-                    capitalizeFirstLetter(data?.quiz?.grading_method)
-                  }
-                />
-                <TestInfoItem
-                  label="No of Attempts:"
-                  value={`${data?.quiz?.attempt?.number_of_attempts || 0}/${
-                    data?.quiz?.is_limited
-                      ? data?.quiz?.limit_count
-                      : "Unlimited"
-                  }`}
-                />
-
-                {data?.quiz && (
-                  <div className="flex justify-between gap-8 text-base">
-                    <div className="flex items-center gap-2 hover:text-primary">
-                      <div
-                        className={`forcus-group:text-primary text-gray ${isFocus ? "text-primary" : ""}`}
-                      >
-                        Result:
-                      </div>
-                      {resultList?.data?.length >= 1 && (
-                        <Select
-                          classNames={{
-                            root: "select-result-attempt",
-                            popup: { root: "select-result-attempt-option" },
-                          }}
-                          variant="borderless"
-                          value={selectedResult?.value}
-                          onChange={(selectedOption) => {
-                            if (selectedOption) {
-                              const tempSelectedResult = resultList?.data?.find(
-                                (item) => item?.id === selectedOption,
-                              );
-                              if (tempSelectedResult) {
-                                setSelectedResult({
-                                  label: tempSelectedResult?.name,
-                                  value: tempSelectedResult?.id,
-                                  ratio_score: tempSelectedResult?.ratio_score,
-                                  status: tempSelectedResult?.status,
-                                  grading_method:
-                                    tempSelectedResult?.quiz?.grading_method,
-                                });
-                              }
-                            }
-                          }}
-                          options={resultList?.data?.map((item, index) => ({
-                            name: item?.name,
-                            value: item?.id,
-                            label: item?.name,
-                            status: item?.status,
-                            ratio_score: item?.ratio_score,
-                            number_of_attempt: 3 - index,
-                          }))}
-                          onPopupScroll={(e) => {
-                            const target = e.target as HTMLDivElement;
-                            if (
-                              target.scrollTop + target.offsetHeight >=
-                              target.scrollHeight
-                            ) {
-                              handleNextPage();
-                            }
-                          }}
-                          suffixIcon={<ArrowDownIcon />}
-                        />
-                      )}
-                    </div>
-                    <div className="flex flex-row items-center">
-                      <div className={`pr-0.5 font-medium`}>
-                        {getResultOfTest()}
-                      </div>
-                      {isShowDetail() && (
-                        <div
-                          className="ml-2 cursor-pointer font-semibold text-primary underline"
-                          onClick={() => {
-                            if (isManualGradingAndNotFinishedGrading) {
-                              router.push(
-                                `/courses/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
-                              );
-                            } else {
-                              router.push({
-                                pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
-                                query: { attempt: selectedResult?.label },
-                              });
-                            }
-
-                            trackGAEvent("Click Button View Modal Result");
-                          }}
-                        >
-                          {isManualGradingAndNotFinishedGrading
-                            ? "Your Answers"
-                            : "Detail"}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-                <div className="flex justify-between gap-8 text-base">
-                  <div className="text-gray">Status:</div>
-
-                  <StatusTestQuizBadge status={getAttemptStatus()} />
-                </div>
-              </div>
-              <PopupCanNotRetakeTest
-                open={openResource}
-                setOpen={setOpenPopup}
-                onCancel={() => onCancel()}
-              />
-            </>
-          )
-        }
+        
         customFooter={
           <div className="flex w-full flex-col items-center justify-center gap-3">
             {renderCustomFooter()}
           </div>
         }
-        isClosable={
-          isNoAttemptOrLimitReached &&
-          (!isLimited ||
-            (isLimited && (isNoAttempt || isSubmitted || isUnsubmitted)))
-            ? false
-            : true
-        }
+        isClosable
       />
       {/* )} */}
     </>
   );
 };
 
-const TestInfoItem = ({
-  label,
-  value,
-}: {
-  label: React.ReactNode;
-  value: React.ReactNode;
-}) => {
-  return (
-    <div className="flex justify-between gap-8 text-base">
-      <div className="text-gray">{label}</div>
-      <div className="pr-0.5 text-start font-medium text-gray-800">{value}</div>
-    </div>
-  );
-};
-export default TestModal;
+export default ModalActionTest;
