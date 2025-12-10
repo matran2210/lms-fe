@@ -10,7 +10,7 @@ import { debounce } from '@utils/helpers'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import { IQuestion, IVideo, video_url } from '@lms/core'
+import { IQuestion, IVideo } from '@lms/core'
 import { QuestionAPI } from '@pages/api/question'
 import { CoursesAPI } from '@pages/api/courses'
 import { SappButton, SappModal, SAPPVideo } from '@lms/ui'
@@ -435,7 +435,7 @@ const VideoDocument = ({
             onTimeUpdate: handleOnTimeUpdate,
             src:
               currentVideo?.file?.resource?.url
-                ?.replace(video_url || '', '')
+                ?.replace(process.env.NEXT_PUBLIC_VIDEO_URL || '', '')
                 .replace('/manifest/video.m3u8', '') || '',
           }}
           pauseOnSeek={true}

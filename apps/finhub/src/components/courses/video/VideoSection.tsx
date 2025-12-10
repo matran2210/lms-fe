@@ -1,6 +1,6 @@
 import { QuizComponentRef } from '@components/mycourses/activity/documents/QuizComponent'
 import { fetchQuestionById, IActivityStateQuestion } from '@lms/contexts'
-import { IQuestion, IVideo, video_url } from '@lms/core'
+import { IQuestion, IVideo } from '@lms/core'
 import { SAPPVideo } from '@lms/ui'
 import { CoursesAPI } from '@pages/api/courses'
 import { QuestionAPI } from '@pages/api/question'
@@ -295,7 +295,7 @@ const VideoSection = ({
             onTimeUpdate: handleOnTimeUpdate,
             src:
               currentVideo?.file?.resource?.url
-                ?.replace(video_url || '', '')
+                ?.replace(process.env.NEXT_PUBLIC_VIDEO_URL || '', '')
                 .replace('/manifest/video.m3u8', '') || '',
           }}
           pauseOnSeek={true}

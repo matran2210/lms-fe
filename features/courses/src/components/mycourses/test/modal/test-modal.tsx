@@ -73,6 +73,7 @@ const TestModal = ({
   const [openResource, setOpenPopup] = useState(false);
   const [remainingTime, setRemainingTime] = useState<number>();
   const remainingTimeLastAttempt = useRef<number | null>(null);
+  const [isCallSubmit, setIsCallSubmit] = useState(false)
 
   const quiz = data?.quiz;
   const isLimited = !!quiz.is_limited;
@@ -220,6 +221,15 @@ const TestModal = ({
   const isTimeOut =
     remainingTimeLastAttempt?.current != null &&
     remainingTimeLastAttempt.current <= 0;
+  
+    useEffect(() => {
+    if (
+      remainingTimeLastAttempt?.current != null &&
+      remainingTimeLastAttempt.current <= 0
+    ) {
+      setIsCallSubmit(true)
+    }
+  }, [remainingTimeLastAttempt?.current])
 
   const handleSubmitNow = async () => {
     await courseApi.submitAllQuestion(data?.quiz?.attempt?.id as string);
@@ -227,10 +237,10 @@ const TestModal = ({
   };
 
   useEffect(() => {
-    if (isTimeOut) {
+    if (isCallSubmit) {
       handleSubmitNow();
     }
-  }, [isTimeOut]);
+  }, [isCallSubmit]);
 
   const handleNextPage = () => {
     const pageIndex = resultList.metadata.page_index;

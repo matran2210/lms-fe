@@ -181,7 +181,7 @@ const CourseTabDocument = ({
               classNames={{ body: '!py-1 !shadow-medium' }}
               title={tab?.name?.split(' ')?.length > 5 ? tab?.name : undefined}
             >
-              {truncateBySpace(tab?.name, 5)?.toLowerCase()}
+              {truncateBySpace(tab?.name, 5)}
             </Tooltip>
           </div>
         ),
