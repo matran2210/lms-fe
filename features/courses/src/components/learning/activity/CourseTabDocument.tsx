@@ -192,7 +192,7 @@ const CourseTabDocument = ({
                 <div>
                   <div
                     className={clsx(
-                      'tab-content mt-6 flex flex-col gap-4 overflow-x-auto overflow-y-hidden md:gap-6',
+                      'tab-content mt-6 flex flex-col gap-4 overflow-x-hidden overflow-y-hidden md:gap-6',
                       { '!mt-0': focusOnlyQuiz.open },
                     )}
                   >
