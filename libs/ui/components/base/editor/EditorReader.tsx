@@ -61,19 +61,19 @@ const EditorReader = ({
 
   const convertMathToImage = async (element: any) => {
     // TODO: check lại này
-    // if (typeof com === "undefined") return;
+    if (typeof com === "undefined") return;
 
-    // const viewer = com?.wiris?.js?.JsPluginViewer;
+    const viewer = com?.wiris?.js?.JsPluginViewer;
 
-    // if (element && viewer) {
-    //   try {
-    //     await viewer.parseElement(element, true, function () {
-    //       // Do something
-    //     });
-    //   } catch (error) {
-    //     // Log the error
-    //   }
-    // }
+    if (element && viewer) {
+      try {
+        await viewer.parseElement(element, true, function () {
+          // Do something
+        });
+      } catch (error) {
+        // Log the error
+      }
+    }
   };
 
   useEffect(() => {
