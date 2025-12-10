@@ -61,6 +61,7 @@ interface FeatureContextProps {
   menuBottom: MenuItem[];
   router: any;
   fetcher: (url: string, config?: AxiosRequestConfig<any>) => Promise<any>
+  videoUrl: string;
 }
 
 const FeatureContext = createContext<FeatureContextProps>(

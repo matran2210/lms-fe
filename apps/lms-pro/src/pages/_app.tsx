@@ -368,6 +368,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 menuBottom: MENU_BOTTOM,
                 router: router,
                 fetcher: fetcher,
+                videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
               }}
             >
               <CourseProvider

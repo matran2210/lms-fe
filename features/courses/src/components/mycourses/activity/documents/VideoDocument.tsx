@@ -3,7 +3,7 @@ import {
   fetchQuestionById, useAppDispatch,
   useFeature
 } from '@lms/contexts'
-import { ANIMATION, IQuestion, IVideo, video_url } from '@lms/core'
+import { ANIMATION, IQuestion, IVideo } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { SAPPRadio, SAPPVideo, SappIcon, SappModal } from '@lms/ui'
 import { debounce, formatTimer, htmlToRaw } from '@lms/utils'
@@ -54,7 +54,7 @@ const VideoDocument = ({
 
 }: Props) => {
   const { questionApi,
-    courseApi } = useFeature();
+    courseApi, videoUrl } = useFeature();
 
   const {
     control: controlAnswer,
@@ -194,7 +194,7 @@ const VideoDocument = ({
         setModalOpen(false)
         setHideVideo(false)
       }
-    } catch {}
+    } catch { }
   }
 
   /**
@@ -312,7 +312,7 @@ const VideoDocument = ({
           },
         })
       }
-    } catch {}
+    } catch { }
   }
 
   const handleGoTimeline = (time: number) => {
@@ -363,17 +363,16 @@ const VideoDocument = ({
                     onChange={() => debouncedHandleSetCurrentVideo.current(v)}
                     {...(v?.file?.id === currentVideo?.file?.id
                       ? {
-                          checked: true,
-                        }
+                        checked: true,
+                      }
                       : { checked: false })}
                     size={'small'}
                   ></SAPPRadio>
                   <span
-                    className={`radio-item-label  ${
-                      v?.file?.id === currentVideo?.file?.id
+                    className={`radio-item-label  ${v?.file?.id === currentVideo?.file?.id
                         ? 'text-bw-1'
                         : 'text-gray-1'
-                    }`}
+                      }`}
                   >
                     Video {i + 1}
                   </span>
@@ -428,7 +427,7 @@ const VideoDocument = ({
             onTimeUpdate: handleOnTimeUpdate,
             src:
               currentVideo?.file?.resource?.url
-                ?.replace(video_url || '', '')
+                ?.replace(videoUrl || '', '')
                 .replace('/manifest/video.m3u8', '') || '',
           }}
           pauseOnSeek={true}
