@@ -3,10 +3,11 @@ import DOMPurify from "dompurify";
 import { isEmpty, isNull, isUndefined } from "lodash";
 import { useQuery } from "react-query";
 import dayjs, { Dayjs } from "dayjs";
-import { DATE_FORMAT, DAYS_IN_WEEK } from "@lms/core";
+import { DATE_FORMAT, DAYS_IN_WEEK, GRADE_STATUS } from '@lms/core';
 import weekday from "dayjs/plugin/weekday";
 import utc from "dayjs/plugin/utc";
 import { deserializeHighlights, doHighlight, optionsImpl, removeHighlights, serializeHighlights } from "@funktechno/texthighlighter/lib";
+
 dayjs.extend(utc);
 dayjs.extend(weekday);
 
@@ -672,4 +673,17 @@ export const isEmptyParagraph = (html: string) => {
   const cleaned = normalized.replace(/[\s\u00A0]+/g, "");
 
   return cleaned.length === 0;
+};
+
+export const getGradingStatusLabel = (status: string) => {
+  switch (status) {
+    case GRADE_STATUS.AWAITING_GRADING:
+      return "Awaiting Grading";
+    case GRADE_STATUS.FINISHED_GRADING:
+      return "Finished Grading";
+    case GRADE_STATUS.IN_REVIEW:
+      return "In Review";
+    default:
+      return "Awaiting Grading";
+  }
 };
