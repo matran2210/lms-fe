@@ -41,8 +41,8 @@ const EventTestList = ({
       case "CFA":
         return (
           <ContentTestCongratution
-            text1="Your results for Round 2 will"
-            text2="be emailed to you on June 28, 2025"
+            text1="Your results will"
+            text2="be emailed to you on December 19 - 22, 2025"
             text3="Please remember to check your inbox to ensure you don’t miss the update."
           />
         );
