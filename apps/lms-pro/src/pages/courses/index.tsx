@@ -344,7 +344,7 @@ const MyCourse = () => {
           )}
         </div>
 
-        {guideStatus && guideStep == 0 && (
+        {guideStatus && guideStep === 0 && (
           <PopupWelcome confirmDialogOverLayRef={confirmDialogOverLayRef} />
         )}
         {guideStatus && (

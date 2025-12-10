@@ -1,12 +1,11 @@
-import { ExpandIcon, TourGuideNotiAnimation, TourGuideSidebarAnimation } from "@lms/assets";
+import { ExpandIcon } from "@lms/assets";
 import { useAppSelector, useFeature } from "@lms/contexts";
-import { UserGuide } from "@lms/core";
 import { trackGAEvent } from "@lms/utils";
 import { Divider } from "antd";
 import clsx from "clsx";
 import { Dispatch, SetStateAction } from "react";
 import MenuItemsList from "../MenuItemsList";
-import { ExaminationInfo, LearningResource, PopupStep } from "../../components";
+import { ExaminationInfo, LearningResource } from "../../components";
 type SidebarProps = {
   isOpened: boolean;
   className: string;
@@ -26,13 +25,8 @@ export default function Sidebar({
   openExaminationInfo,
   setOpenExaminationInfo,
 }: SidebarProps) {
-  const {
-    pageLink,
-    menuItems,
-    menuItemsEvent,
-    menuBottom,
-    router,
-  } = useFeature();
+  const { pageLink, menuItems, menuItemsEvent, menuBottom, router } =
+    useFeature();
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status);
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step);
   /**
@@ -63,7 +57,7 @@ export default function Sidebar({
       >
         <div
           className={`max-h-[calc(100vh-145px) relative rounded-xl pb-6 pt-[25PX] ${
-            guideStatus && guideStep == 2
+            guideStatus && guideStep === 2
               ? "z-50 bg-white"
               : "overflow-y-auto overflow-x-hidden"
           }`}
@@ -99,20 +93,10 @@ export default function Sidebar({
             closeSideBar={closeSideBar}
             setOpenExaminationInfo={setOpenExaminationInfo}
           />
-          {guideStatus && guideStep == 2 && (
-            <PopupStep
-              title="Sidebar"
-              content={UserGuide.CONTENT_STEP_2}
-              className="left-full top-1/2 ml-5"
-              index={2}
-              total={6}
-              imgSrc={TourGuideSidebarAnimation}
-            />
-          )}
         </div>
         <div
           className={`absolute bottom-0 w-full rounded-xl bg-white pb-6
-          ${guideStatus && guideStep == 3 ? "z-50" : ""}`}
+          ${guideStatus && guideStep === 3 ? "z-50" : ""}`}
         >
           {isLevel1 && (
             <div className="mx-auto w-[calc(100%-48px)] bg-[#DCDDDD] text-center">
@@ -125,7 +109,7 @@ export default function Sidebar({
             closeSideBar={closeSideBar}
             setOpenExaminationInfo={setOpenExaminationInfo}
           />
-          {guideStatus && guideStep == 3 && (
+          {/* {guideStatus && guideStep === 3 && (
             <PopupStep
               content={UserGuide.CONTENT_STEP_3}
               className="bottom-0 left-full ml-5"
@@ -134,7 +118,7 @@ export default function Sidebar({
               index={3}
               total={6}
             />
-          )}
+          )} */}
         </div>
         {guideStatus && (guideStep === 2 || guideStep === 3) && (
           <div

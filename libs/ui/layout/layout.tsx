@@ -1,9 +1,21 @@
-import { useAppSelector, useCourseContext, useFeature, usePinnedNotifyContext } from "@lms/contexts";
+import {
+  useAppSelector,
+  useCourseContext,
+  useFeature,
+  usePinnedNotifyContext,
+} from "@lms/contexts";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import clsx from "clsx";
 import Head from "next/head";
 import { ReactElement, ReactNode, useState } from "react";
 import Sidebar from "./Sidebar";
+import { PopupStep } from "../components";
+import { UserGuide } from "@lms/core";
+import {
+  TourGuideNotiAnimation,
+  TourGuideSidebarAnimation,
+  TourGuideStartAnimation,
+} from "@lms/assets";
 interface LayoutProps {
   children: ReactNode;
   title: string;
@@ -14,6 +26,44 @@ interface LayoutProps {
   className?: string;
   childClassName?: string;
 }
+export const getGuideStepConfig = (step: number) => {
+  switch (step) {
+    case 1:
+      return {
+        title: "Search box",
+        content: UserGuide.CONTENT_STEP_1,
+        className: "left-[358px] lg:top-24",
+        imgSrc: TourGuideStartAnimation,
+        imgType: "animation",
+      };
+
+    case 2:
+      return {
+        title: "Sidebar",
+        content: UserGuide.CONTENT_STEP_2,
+        className: "left-64 lg:top-[140px]",
+        imgSrc: TourGuideSidebarAnimation,
+        imgType: "animation",
+      };
+    case 3:
+      return {
+        title: "Notification & Profile",
+        content: UserGuide.CONTENT_STEP_3,
+        className: "bottom-0 left-full ml-5",
+        imgSrc: TourGuideNotiAnimation,
+      };
+    // content={UserGuide.CONTENT_STEP_3}
+    //               className="bottom-0 left-full ml-5"
+    //               title="Notification & Profile"
+    //               imgSrc={TourGuideNotiAnimation}
+    //               index={3}
+    //               total={6}
+    // thêm các step khác ở đây…
+
+    default:
+      return null;
+  }
+};
 
 export default function Layout(props: LayoutProps): ReactElement {
   const {
@@ -25,7 +75,6 @@ export default function Layout(props: LayoutProps): ReactElement {
     handleToggleSidebar,
     className,
     childClassName,
-
   } = props;
   const { pageLink, router } = useFeature();
 
@@ -63,6 +112,8 @@ export default function Layout(props: LayoutProps): ReactElement {
   }
 
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step);
+
+  const stepConfig = getGuideStepConfig(guideStep);
 
   return (
     <>
@@ -116,6 +167,18 @@ export default function Layout(props: LayoutProps): ReactElement {
         </div>
       </div>
       {/* <ModalMobile /> */}
+      {/* 🚀 POPUP STEP — luôn render 1 lần duy nhất */}
+      {guideStatus && stepConfig && (
+        <PopupStep
+          index={guideStep}
+          total={6}
+          title={stepConfig.title}
+          content={stepConfig.content}
+          className={stepConfig.className}
+          imgSrc={stepConfig.imgSrc}
+          imgType={stepConfig.imgType as "animation" | "static"}
+        />
+      )}
     </>
   );
 }
