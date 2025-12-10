@@ -122,8 +122,8 @@ const EventTest = ({
       case 'CFA':
         return (
           <ContentTestCongratution
-            text1="Your results for Round 2 will"
-            text2="be emailed to you on June 28, 2025"
+            text1="Your results will"
+            text2="be emailed to you on December 19 - 22, 2025"
             text3="Please remember to check your inbox to ensure you don’t miss the update."
           />
         )
@@ -317,6 +317,12 @@ const EventTest = ({
                 <span className="text-gray-800">--</span>
               )}
             </div>
+            {/* <div className="flex justify-between pt-2 text-sm capitalize text-gray md:pt-4 md:text-base">
+              <p>Result Release Date:</p>
+              <p className="font-medium text-gray-800">
+              19-22/12/2025
+              </p>
+            </div> */}
           </div>
         </div>
       </CardCourse>
