@@ -41,7 +41,6 @@ const Tooltip: React.FC<ITooltip> = ({
     >
       <AntdTooltip
         title={title}
-        open={true}
         color={color}
         placement={placement}
         className={className}
