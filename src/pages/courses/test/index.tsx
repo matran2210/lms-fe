@@ -83,6 +83,7 @@ const TestModal = ({
   const [remainingTime, setRemainingTime] = useState<number>()
   const remainingTimeLastAttempt = useRef<number | null>(null)
   const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false)
+  const [isCallSubmit, setIsCallSubmit] = useState(false)
 
   const quiz = data?.quiz
   const isLimited = !!quiz.is_limited
@@ -232,16 +233,25 @@ const TestModal = ({
     remainingTimeLastAttempt?.current != null &&
     remainingTimeLastAttempt.current <= 0
 
+  useEffect(() => {
+    if (
+      remainingTimeLastAttempt?.current != null &&
+      remainingTimeLastAttempt.current <= 0
+    ) {
+      setIsCallSubmit(true)
+    }
+  }, [remainingTimeLastAttempt?.current])
+
   const handleSubmitNow = async () => {
     await CoursesAPI.submitAllQuestion(data?.quiz?.attempt?.id as string)
     handleRedirectResult()
   }
 
   useEffect(() => {
-    if (isTimeOut) {
+    if (isCallSubmit) {
       handleSubmitNow()
     }
-  }, [isTimeOut])
+  }, [isCallSubmit])
 
   const handleNextPage = () => {
     const pageIndex = resultList.metadata.page_index
