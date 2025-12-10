@@ -34,6 +34,12 @@ const MENU_OPTIONS: MenuOption[] = [
     type: 'level-1',
   },
   {
+    name: `${TitleSidebar.CLASS_RESOURCE}`,
+    icon: 'class-resource',
+    url: `${PageLink.CLASS_RESOURCE}`,
+    type: 'level-1',
+  },
+  {
     name: `${TitleSidebar.ENTRANCE_TEST}`,
     icon: 'entrance-test',
     url: `${PageLink.ENTRANCE_TEST}`,
