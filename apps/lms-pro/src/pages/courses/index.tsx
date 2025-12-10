@@ -225,6 +225,8 @@ const MyCourse = () => {
         showSidebar={showSidebar || isAlwaysShowSidebar}
         handleToggleSidebar={handleCloseSidebar}
         className="relative"
+        isEndGuide={isEndGuide}
+        closeUserGuide={closeUserGuide}
       >
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}
@@ -259,17 +261,7 @@ const MyCourse = () => {
                 </span>
               }
             />
-            {guideStatus && guideStep === 4 && (
-              <PopupStep
-                content={UserGuide.CONTENT_STEP_4}
-                className="left-0 top-full mt-5"
-                index={4}
-                total={6}
-                isEnd={isEndGuide}
-                title="Welcome"
-                handleCancel={closeUserGuide}
-              />
-            )}
+            
           </div>
           <div
             className={`hidden items-center rounded-md bg-white p-3 md:flex md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 5 ? ' z-50 h-auto' : ''}`}

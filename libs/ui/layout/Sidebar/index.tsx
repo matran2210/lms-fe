@@ -109,16 +109,6 @@ export default function Sidebar({
             closeSideBar={closeSideBar}
             setOpenExaminationInfo={setOpenExaminationInfo}
           />
-          {/* {guideStatus && guideStep === 3 && (
-            <PopupStep
-              content={UserGuide.CONTENT_STEP_3}
-              className="bottom-0 left-full ml-5"
-              title="Notification & Profile"
-              imgSrc={TourGuideNotiAnimation}
-              index={3}
-              total={6}
-            />
-          )} */}
         </div>
         {guideStatus && (guideStep === 2 || guideStep === 3) && (
           <div
