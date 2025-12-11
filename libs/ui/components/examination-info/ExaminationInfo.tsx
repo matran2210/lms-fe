@@ -256,7 +256,7 @@ const ExaminationInfo = ({
           />
           <InfoItem
             label="Revision Class Code:"
-            value={data?.exam?.code_exam}
+            value={data?.revision_class?.code}
           />
           <InfoItem
             label="Revision Class Duration"
