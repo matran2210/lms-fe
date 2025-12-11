@@ -233,7 +233,7 @@ const TestModal = ({
 
   const handleSubmitNow = async () => {
     await courseApi.submitAllQuestion(data?.quiz?.attempt?.id as string);
-    handleRedirectResult();
+    // handleRedirectResult();
   };
 
   useEffect(() => {
