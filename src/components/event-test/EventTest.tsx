@@ -43,7 +43,7 @@ const EventTest = ({
         const remainingTimeInterval = setInterval(() => {
           setRemainingTimeLastAttempt((prev) => {
             if (prev === 0) {
-              handleSubmitQuestion()
+              // handleSubmitQuestion()
               clearInterval(remainingTimeInterval)
               return 0
             }
@@ -202,6 +202,16 @@ const EventTest = ({
 
   const renderButton = () => {
     if (data?.attempt_status === EAttemptStatus['IN_PROGRESS']) {
+      if (remainingTimeLastAttempt <= 0) {
+        return (
+          <ButtonSecondary
+            title="Submit"
+            size="small"
+            className="ml-auto"
+            onClick={handleSubmitQuestion}
+          />
+        )
+      }
       return (
         <ButtonSecondary
           title="Resume"
