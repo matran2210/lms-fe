@@ -202,7 +202,7 @@ const ModalActionTest = ({
 
   const handleSubmitNow = async () => {
     await courseApi.submitAllQuestion(attempt?.id as string);
-    handleRedirectResult();
+    // handleRedirectResult();
   };
 
   useEffect(() => {
