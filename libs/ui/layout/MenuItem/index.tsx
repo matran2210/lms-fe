@@ -1,4 +1,21 @@
-import { AddNoteAnimation, BlankAvatarImage, CalculatorAnimation, CalendarAnimation, CourseContentAnimation, DashboardAnimation, EntranceTestAnimation, EventTestAnimation, ExamInfoAnimation, ExamListAnimation, ExpandIcon, MyCourseAnimation, NoteListAnimation, NotificationAnimation, ResourceAnimation, TestQuizListAnimation } from "@lms/assets";
+import {
+  AddNoteAnimation,
+  BlankAvatarImage,
+  CalculatorAnimation,
+  CalendarAnimation,
+  CourseContentAnimation,
+  DashboardAnimation,
+  EntranceTestAnimation,
+  EventTestAnimation,
+  ExamInfoAnimation,
+  ExamListAnimation,
+  ExpandIcon,
+  MyCourseAnimation,
+  NoteListAnimation,
+  NotificationAnimation,
+  ResourceAnimation,
+  TestQuizListAnimation,
+} from "@lms/assets";
 import {
   activeNotesList,
   clearNotifications,
@@ -9,11 +26,7 @@ import {
   useFeature,
   userReducer,
 } from "@lms/contexts";
-import {
-  LANG_SIGNIN,
-  MenuItem as MenuItemType,
-  TitleSidebar,
-} from "@lms/core";
+import { LANG_SIGNIN, MenuItem as MenuItemType, TitleSidebar } from "@lms/core";
 import { useNotification } from "@lms/hooks";
 import { trackGAEvent } from "@lms/utils";
 import { Divider } from "antd";
@@ -24,7 +37,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import SappNotificationComponent from "sapp-notification";
+import SappNotificationComponent from "@sapp-fe/sapp-notification";
 import { v4 as uuidv4 } from "uuid";
 import MenuItemsList from "../MenuItemsList";
 
@@ -41,8 +54,7 @@ export default function MenuItem({
   closeSideBar,
   setOpenExaminationInfo,
 }: MenuItemProps) {
-  const { notificationApi,
-    pageLink } = useFeature();
+  const { notificationApi, pageLink } = useFeature();
   const {
     isViewDetail,
     openNotification,
@@ -412,7 +424,7 @@ export default function MenuItem({
               />
             ) : (
               <Image
-                  src={BlankAvatarImage}
+                src={BlankAvatarImage}
                 alt="avatar"
                 className="rounded-full"
                 width={40}

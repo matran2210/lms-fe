@@ -9,7 +9,7 @@ import {
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
 import { FullScreenLayout, SappLoadingGlobal, Tooltip } from '@lms/ui'
-import { ExplanationPackageV2 } from 'explanation-package'
+import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import withAuthorization from 'src/HOC/withAuthorization'

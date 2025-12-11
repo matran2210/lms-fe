@@ -30,13 +30,13 @@ import ConFirmSubmit from '@pages/short-course/test/conFirmSubmit'
 import dayjs from 'dayjs'
 import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
-import { QuizResultComponent } from 'quiz-result-package'
+import { QuizResultComponent } from '@sapp-fe/quiz-result-package'
 import toast from 'react-hot-toast'
 import { PageLink } from 'src/constants/routes'
 import { CoursesAPI, submitQuizTest } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import { IQuestionResult } from 'quiz-result-package/dist/type'
+import { IQuestionResult } from '@sapp-fe/quiz-result-package/dist/type'
 
 type Props = {
   questions: IQuestion[]

@@ -1,28 +1,28 @@
-import { useRef, useState } from 'react'
-import { Spin } from 'antd'
-import { VALID_UPLOAD_EDITOR } from '@lms/core'
+import { useRef, useState } from "react";
+import { Spin } from "antd";
+import { VALID_UPLOAD_EDITOR } from "@lms/core";
 // import { useSappEditorImageUpload } from 'src/hooks/useSappEditorImageUpload' comment monorepo
-import { SAPPEditorV2 } from 'sapp-common-package'
-import { SAPPEditorHandle } from '@lms/core'
-import { useSappEditorImageUpload } from '@lms/hooks'
+import { SAPPEditorV2 } from "@sapp-fe/sapp-common-package";
+import { SAPPEditorHandle } from "@lms/core";
+import { useSappEditorImageUpload } from "@lms/hooks";
 interface IProps {
-  onChange: (event: any) => void
-  valueText?: string
-  className?: string
-  height?: number
-  math?: boolean
-  placeholder?: string
-  getContent?: (e: string) => void
-  acceptFiles?: { type: string; size: number }[]
-  disabled?: boolean
-  key?: number | string
-  editorRef?: React.RefObject<SAPPEditorHandle>
+  onChange: (event: any) => void;
+  valueText?: string;
+  className?: string;
+  height?: number;
+  math?: boolean;
+  placeholder?: string;
+  getContent?: (e: string) => void;
+  acceptFiles?: { type: string; size: number }[];
+  disabled?: boolean;
+  key?: number | string;
+  editorRef?: React.RefObject<SAPPEditorHandle>;
 }
 
 const Editor = ({
   onChange,
   valueText,
-  className = '',
+  className = "",
   height,
   math,
   placeholder,
@@ -33,7 +33,7 @@ const Editor = ({
   editorRef,
 }: IProps) => {
   // const { handleImageUpload } = useSappEditorImageUpload()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   return (
     <div key={key}>
       <Spin spinning={loading}>
@@ -50,7 +50,7 @@ const Editor = ({
         />
       </Spin>
     </div>
-  )
-}
+  );
+};
 
-export default Editor
+export default Editor;

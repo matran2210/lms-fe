@@ -23,6 +23,12 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.10.0
         version: 3.10.0(react-hook-form@7.48.2(react@18.2.0))
+      '@sapp-fe/explanation-package':
+        specifier: ^1.4.9
+        version: 1.4.9(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)
+      '@sapp-fe/sapp-common-package':
+        specifier: ^1.6.6
+        version: 1.6.6(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)
       antd:
         specifier: ^5.25.0
         version: 5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -32,9 +38,6 @@ importers:
       eslint-plugin-react:
         specifier: ^7.37.5
         version: 7.37.5(eslint@8.57.1)
-      explanation-package:
-        specifier: ^1.4.2
-        version: 1.4.2(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)
       globals:
         specifier: ^16.0.0
         version: 16.5.0
@@ -43,7 +46,7 @@ importers:
         version: 4.17.21
       next:
         specifier: 12.3.7
-        version: 12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0)
+        version: 12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -56,9 +59,6 @@ importers:
       react-query:
         specifier: 3.39.3
         version: 3.39.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      sapp-common-package:
-        specifier: 1.6.3
-        version: 1.6.3(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -194,7 +194,7 @@ importers:
         version: 3.6.0(react@18.2.0)
       '@next/third-parties':
         specifier: ^14.2.5
-        version: 14.2.33(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0))(react@18.2.0)
+        version: 14.2.33(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1))(react@18.2.0)
       '@react-hook/resize-observer':
         specifier: ^2.0.2
         version: 2.0.2(react@18.2.0)
@@ -204,9 +204,30 @@ importers:
       '@reduxjs/toolkit':
         specifier: ^1.9.7
         version: 1.9.7(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0)
+      '@sapp-fe/entrance-test-result-package':
+        specifier: ^1.4.1
+        version: 1.4.1(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@sapp-fe/explanation-package':
+        specifier: ^1.4.9
+        version: 1.4.9(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0)
+      '@sapp-fe/preview-activity':
+        specifier: ^1.1.43
+        version: 1.1.43(@babel/core@7.28.5)(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.103.0)
+      '@sapp-fe/preview-part':
+        specifier: ^1.7.2
+        version: 1.7.2(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@sapp-fe/quiz-result-package':
+        specifier: ^1.5.1
+        version: 1.5.1(@babel/core@7.28.5)(antd@5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
+      '@sapp-fe/sapp-common-package':
+        specifier: ^1.6.6
+        version: 1.6.6(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0)
+      '@sapp-fe/sapp-notification':
+        specifier: ^1.2.2
+        version: 1.2.2(antd@5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))
       '@sentry/nextjs':
         specifier: '8'
-        version: 8.55.0(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.57.2(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0))(encoding@0.1.13)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0))(react@18.2.0)(webpack@5.103.0)
+        version: 8.55.0(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.57.2(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0))(encoding@0.1.13)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1))(react@18.2.0)(webpack@5.103.0)
       '@tinymce/tinymce-react':
         specifier: ^4.3.0
         version: 4.3.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -270,12 +291,6 @@ importers:
       echarts:
         specifier: ^5.6.0
         version: 5.6.0
-      entrance-test-result-package:
-        specifier: ^1.3.4
-        version: 1.4.0(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      explanation-package:
-        specifier: ^1.4.2
-        version: 1.4.2(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0)
       file-saver:
         specifier: ^2.0.5
         version: 2.0.5
@@ -299,37 +314,28 @@ importers:
         version: 2.4.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       next:
         specifier: ^12.3.7
-        version: 12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0)
+        version: 12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1)
       next-compose-plugins:
         specifier: ^2.2.1
         version: 2.2.1
       next-i18next:
         specifier: ^13.2.2
-        version: 13.3.0(@types/react@18.2.21)(i18next@22.5.1)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0))(react-i18next@12.3.1(i18next@22.5.1)(react-dom@18.2.0(react@18.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0))(react@18.2.0)
+        version: 13.3.0(@types/react@18.2.21)(i18next@22.5.1)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1))(react-i18next@12.3.1(i18next@22.5.1)(react-dom@18.2.0(react@18.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0))(react@18.2.0)
       next-redux-wrapper:
         specifier: ^8.1.0
-        version: 8.1.0(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0))(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0)
+        version: 8.1.0(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1))(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0)
       next-remove-imports:
         specifier: ^1.0.12
         version: 1.0.12(webpack@5.103.0)
       next-with-less:
         specifier: ^3.0.1
-        version: 3.0.1(less-loader@12.3.0(less@4.4.2)(webpack@5.103.0))(less@4.4.2)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0))
+        version: 3.0.1(less-loader@12.3.0(less@4.4.2)(webpack@5.103.0))(less@4.4.2)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1))
       postcss-flexbugs-fixes:
         specifier: ^5.0.2
         version: 5.0.2(postcss@8.5.6)
       postcss-preset-env:
         specifier: ^9.3.0
         version: 9.6.0(postcss@8.5.6)
-      preview-activity:
-        specifier: ^1.1.39
-        version: 1.1.43(@babel/core@7.28.5)(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.103.0)
-      preview-part:
-        specifier: ^1.7.1
-        version: 1.7.1(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      quiz-result-package:
-        specifier: ^1.5.0
-        version: 1.5.0(@babel/core@7.28.5)(antd@5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
       react-countdown:
         specifier: ^2.3.5
         version: 2.3.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -363,15 +369,9 @@ importers:
       react-select:
         specifier: ^5.8.0
         version: 5.10.2(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      sapp-common-package:
-        specifier: 1.6.3
-        version: 1.6.3(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0)
-      sapp-notification:
-        specifier: ^1.0.15
-        version: 1.2.0(antd@5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))
       sass:
         specifier: ^1.53.0
-        version: 1.95.0
+        version: 1.95.1
       sharp:
         specifier: ^0.30.7
         version: 0.30.7
@@ -531,16 +531,37 @@ importers:
         version: 3.6.0(react@18.2.0)
       '@next/third-parties':
         specifier: ^14.2.5
-        version: 14.2.33(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0))(react@18.2.0)
+        version: 14.2.33(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1))(react@18.2.0)
       '@react-native-async-storage/async-storage':
         specifier: ^1.19.5
         version: 1.24.0(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))
       '@reduxjs/toolkit':
         specifier: ^1.9.7
         version: 1.9.7(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0)
+      '@sapp-fe/entrance-test-result-package':
+        specifier: ^1.4.1
+        version: 1.4.1(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@sapp-fe/explanation-package':
+        specifier: ^1.4.9
+        version: 1.4.9(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0)
+      '@sapp-fe/preview-activity':
+        specifier: ^1.1.43
+        version: 1.1.43(@babel/core@7.28.5)(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.103.0)
+      '@sapp-fe/preview-part':
+        specifier: ^1.7.2
+        version: 1.7.2(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@sapp-fe/quiz-result-package':
+        specifier: ^1.5.1
+        version: 1.5.1(@babel/core@7.28.5)(antd@5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
+      '@sapp-fe/sapp-common-package':
+        specifier: 1.6.6
+        version: 1.6.6(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0)
+      '@sapp-fe/sapp-notification':
+        specifier: ^1.2.2
+        version: 1.2.2(antd@5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))
       '@sentry/nextjs':
         specifier: '8'
-        version: 8.55.0(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.57.2(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0))(encoding@0.1.13)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0))(react@18.2.0)(webpack@5.103.0)
+        version: 8.55.0(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.57.2(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0))(encoding@0.1.13)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1))(react@18.2.0)(webpack@5.103.0)
       '@tinymce/tinymce-react':
         specifier: ^4.3.0
         version: 4.3.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -604,12 +625,6 @@ importers:
       echarts:
         specifier: ^5.6.0
         version: 5.6.0
-      entrance-test-result-package:
-        specifier: ^1.3.4
-        version: 1.4.0(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      explanation-package:
-        specifier: ^1.4.2
-        version: 1.4.2(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0)
       file-saver:
         specifier: ^2.0.5
         version: 2.0.5
@@ -639,37 +654,28 @@ importers:
         version: 2.4.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       next:
         specifier: ^12.3.7
-        version: 12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0)
+        version: 12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1)
       next-compose-plugins:
         specifier: ^2.2.1
         version: 2.2.1
       next-i18next:
         specifier: ^13.2.2
-        version: 13.3.0(@types/react@18.2.21)(i18next@22.5.1)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0))(react-i18next@12.3.1(i18next@22.5.1)(react-dom@18.2.0(react@18.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0))(react@18.2.0)
+        version: 13.3.0(@types/react@18.2.21)(i18next@22.5.1)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1))(react-i18next@12.3.1(i18next@22.5.1)(react-dom@18.2.0(react@18.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0))(react@18.2.0)
       next-redux-wrapper:
         specifier: ^8.1.0
-        version: 8.1.0(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0))(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0)
+        version: 8.1.0(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1))(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0)
       next-remove-imports:
         specifier: ^1.0.12
         version: 1.0.12(webpack@5.103.0)
       next-with-less:
         specifier: ^3.0.1
-        version: 3.0.1(less-loader@12.3.0(less@4.4.2)(webpack@5.103.0))(less@4.4.2)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0))
+        version: 3.0.1(less-loader@12.3.0(less@4.4.2)(webpack@5.103.0))(less@4.4.2)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1))
       postcss-flexbugs-fixes:
         specifier: ^5.0.2
         version: 5.0.2(postcss@8.5.6)
       postcss-preset-env:
         specifier: ^9.3.0
         version: 9.6.0(postcss@8.5.6)
-      preview-activity:
-        specifier: ^1.1.39
-        version: 1.1.43(@babel/core@7.28.5)(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.103.0)
-      preview-part:
-        specifier: ^1.7.1
-        version: 1.7.1(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      quiz-result-package:
-        specifier: ^1.5.0
-        version: 1.5.0(@babel/core@7.28.5)(antd@5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -718,15 +724,9 @@ importers:
       recharts:
         specifier: ^3.2.1
         version: 3.5.1(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1)
-      sapp-common-package:
-        specifier: 1.6.3
-        version: 1.6.3(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0)
-      sapp-notification:
-        specifier: ^1.2.0
-        version: 1.2.0(antd@5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))
       sass:
         specifier: ^1.53.0
-        version: 1.95.0
+        version: 1.95.1
       sharp:
         specifier: ^0.30.7
         version: 0.30.7
@@ -860,6 +860,9 @@ importers:
       '@lms/utils':
         specifier: workspace:*
         version: link:../../libs/utils
+      '@sapp-fe/sapp-common-package':
+        specifier: ^1.6.6
+        version: 1.6.6(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)
       antd:
         specifier: ^5.25.0
         version: 5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -869,9 +872,6 @@ importers:
       dayjs:
         specifier: ^1.11.12
         version: 1.11.19
-      sapp-common-package:
-        specifier: 1.6.3
-        version: 1.6.3(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)
 
   features/class:
     dependencies:
@@ -917,6 +917,12 @@ importers:
       '@lms/utils':
         specifier: workspace:*
         version: link:../../libs/utils
+      '@sapp-fe/explanation-package':
+        specifier: ^1.4.9
+        version: 1.4.9(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)
+      '@sapp-fe/quiz-result-package':
+        specifier: ^1.5.0
+        version: 1.5.1(@babel/core@7.28.5)(antd@5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
       antd:
         specifier: ^5.25.0
         version: 5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -929,9 +935,6 @@ importers:
       dayjs:
         specifier: ^1.11.12
         version: 1.11.19
-      explanation-package:
-        specifier: ^1.4.2
-        version: 1.4.2(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)
       framer-motion:
         specifier: ^12.23.12
         version: 12.23.25(@emotion/is-prop-valid@1.4.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -941,9 +944,6 @@ importers:
       lottie-react:
         specifier: ^2.4.1
         version: 2.4.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      quiz-result-package:
-        specifier: ^1.5.0
-        version: 1.5.0(@babel/core@7.28.5)(antd@5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
       react-hook-form:
         specifier: 7.48.2
         version: 7.48.2(react@18.2.0)
@@ -1147,6 +1147,9 @@ importers:
 
   libs/core:
     dependencies:
+      '@sapp-fe/sapp-common-package':
+        specifier: ^1.6.6
+        version: 1.6.6(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)
       antd:
         specifier: ^5.25.0
         version: 5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -1162,9 +1165,6 @@ importers:
       react-hook-form:
         specifier: 7.48.2
         version: 7.48.2(react@18.2.0)
-      sapp-common-package:
-        specifier: ^1.5.2
-        version: 1.6.3(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)
 
   libs/hooks:
     dependencies:
@@ -1206,7 +1206,7 @@ importers:
         version: 1.13.2
       next-redux-wrapper:
         specifier: ^8.1.0
-        version: 8.1.0(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0))(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0)
+        version: 8.1.0(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1))(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0)
       react-hook-form:
         specifier: 7.48.2
         version: 7.48.2(react@18.2.0)
@@ -1269,6 +1269,12 @@ importers:
       '@react-hook/resize-observer':
         specifier: ^2.0.2
         version: 2.0.2(react@18.2.0)
+      '@sapp-fe/sapp-common-package':
+        specifier: ^1.6.6
+        version: 1.6.6(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)
+      '@sapp-fe/sapp-notification':
+        specifier: ^1.2.2
+        version: 1.2.2(antd@5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6)))
       '@xyflow/react':
         specifier: ^12.8.6
         version: 12.10.0(@types/react@18.2.21)(immer@10.2.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -1326,12 +1332,6 @@ importers:
       react-select:
         specifier: ^5.8.0
         version: 5.10.2(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      sapp-common-package:
-        specifier: 1.6.3
-        version: 1.6.3(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)
-      sapp-notification:
-        specifier: ^1.0.15
-        version: 1.2.0(antd@5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6)))
       uuid:
         specifier: 13.0.0
         version: 13.0.0
@@ -3532,6 +3532,52 @@ packages:
   '@rushstack/eslint-patch@1.15.0':
     resolution: {integrity: sha512-ojSshQPKwVvSMR8yT2L/QtUkV5SXi/IfDiJ4/8d6UbTPjiHVmxZzUAzGD8Tzks1b9+qQkZa0isUOvYObedITaw==}
 
+  '@sapp-fe/entrance-test-result-package@1.4.1':
+    resolution: {integrity: sha1-IgjX1VjYIF7OSKCh9WahZGE/Brc=, tarball: https://gitlab.sapp.edu.vn/api/v4/projects/1/packages/npm/@sapp-fe/entrance-test-result-package/-/@sapp-fe/entrance-test-result-package-1.4.1.tgz}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: ^16.0.0
+
+  '@sapp-fe/explanation-package@1.4.9':
+    resolution: {integrity: sha1-TyRWD+SYIM8w/07trXfNwdCpuMk=, tarball: https://gitlab.sapp.edu.vn/api/v4/projects/2/packages/npm/@sapp-fe/explanation-package/-/@sapp-fe/explanation-package-1.4.9.tgz}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: ^16.13.1
+      react-dom: ^16.13.1
+
+  '@sapp-fe/preview-activity@1.1.43':
+    resolution: {integrity: sha1-3O0M0VlE/mdQAAR7isGW3AeebBg=, tarball: https://gitlab.sapp.edu.vn/api/v4/projects/5/packages/npm/@sapp-fe/preview-activity/-/@sapp-fe/preview-activity-1.1.43.tgz}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: ^16.0.0
+
+  '@sapp-fe/preview-part@1.7.2':
+    resolution: {integrity: sha1-+Pf5ERjA7VFRfEJTKz4uwI91gDk=, tarball: https://gitlab.sapp.edu.vn/api/v4/projects/7/packages/npm/@sapp-fe/preview-part/-/@sapp-fe/preview-part-1.7.2.tgz}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: ^16.0.0
+
+  '@sapp-fe/quiz-result-package@1.5.1':
+    resolution: {integrity: sha1-MOPvb2/bOn98TXyvUvvHeF+qnME=, tarball: https://gitlab.sapp.edu.vn/api/v4/projects/9/packages/npm/@sapp-fe/quiz-result-package/-/@sapp-fe/quiz-result-package-1.5.1.tgz}
+    engines: {node: '>=10'}
+    peerDependencies:
+      antd: ^5.25.0
+      react: ^16.0.0
+
+  '@sapp-fe/sapp-common-package@1.6.6':
+    resolution: {integrity: sha1-aYX7aVhhBhk+ggQtQKPHwTOhYgU=, tarball: https://gitlab.sapp.edu.vn/api/v4/projects/22/packages/npm/@sapp-fe/sapp-common-package/-/@sapp-fe/sapp-common-package-1.6.6.tgz}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+
+  '@sapp-fe/sapp-notification@1.2.2':
+    resolution: {integrity: sha1-hJYYui2QclXWTZQU+0WXpCs7Ln4=, tarball: https://gitlab.sapp.edu.vn/api/v4/projects/32/packages/npm/@sapp-fe/sapp-notification/-/@sapp-fe/sapp-notification-1.2.2.tgz}
+    engines: {node: '>=10'}
+    peerDependencies:
+      antd: ^5.21.1
+      react: ^16.0.0
+
   '@sentry-internal/browser-utils@8.55.0':
     resolution: {integrity: sha512-ROgqtQfpH/82AQIpESPqPQe0UyWywKJsmVIqi3c5Fh+zkds5LUxnssTj3yNd1x+kxaPDVB023jAP+3ibNgeNDw==}
     engines: {node: '>=14.18'}
@@ -5651,12 +5697,6 @@ packages:
     resolution: {integrity: sha512-aN97NXWF6AWBTahfVOIrB/NShkzi5H7F9r1s9mD3cDj4Ko5f2qhhVoYMibXF7GlLveb/D2ioWay8lxI97Ven3g==}
     engines: {node: '>=0.12'}
 
-  entrance-test-result-package@1.4.0:
-    resolution: {integrity: sha512-89TDW6I4Cvo2J9a+gG3jgaWKm3sjU/enfXfxWtBy2KinwWcniwFdmHf320JIwMQRqBlvJHXLsXQSEwoXdtUojA==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      react: ^16.0.0
-
   environment@1.1.0:
     resolution: {integrity: sha512-xUtoPkMggbz0MPyPiIWr1Kp4aeWJjDZ6SMvURhimjdZgsRuDplF5/s9hcgGhyXMhs+6vpnuoiZ2kFiu3FMnS8Q==}
     engines: {node: '>=18'}
@@ -6048,13 +6088,6 @@ packages:
   expand-tilde@2.0.2:
     resolution: {integrity: sha512-A5EmesHW6rfnZ9ysHQjPdJRni0SRar0tjtG5MNtm9n5TUvsYU8oozprtRD4AqHxcZWWlVuAmQo2nWKfN9oyjTw==}
     engines: {node: '>=0.10.0'}
-
-  explanation-package@1.4.2:
-    resolution: {integrity: sha512-8dqzHl/awYuOhS8i/2JUsylGrE8lVfWQx0/W9HQsyy07zucuPsncn4NLcImdA6utlPSyD7rVl4QV8IIGgTEgUA==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      react: ^16.13.1
-      react-dom: ^16.13.1
 
   exponential-backoff@3.1.3:
     resolution: {integrity: sha512-ZgEeZXj30q+I0EN+CbSSpIyPaJ5HVQD18Z1m+u1FXbAeT94mr1zw50q4q6jiiC447Nl/YTcIYSAftiGqetwXCA==}
@@ -8347,18 +8380,6 @@ packages:
     resolution: {integrity: sha512-973driJZvxiGOQ5ONsFhOF/DtzPMOMtgC11kCpUrPGMTgqp2q/1gwzCquocrN33is0VZ5GFHXZYMM9l6h67v2Q==}
     engines: {node: '>=10'}
 
-  preview-activity@1.1.43:
-    resolution: {integrity: sha512-x6+vn2dYg2kxDDTG3xYccfZRd4tzLNq7YEn+38NERfaH5pSX5feoZrmq3Ee9DxvW94SRsFqBLSwGhEvA0SWO3Q==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      react: ^16.0.0
-
-  preview-part@1.7.1:
-    resolution: {integrity: sha512-Gwx+HJOwYWJy8xpeMYCpo/bNbirc3fmqFRkON5J/U5+JZPJHMBlnqmDw3xb01PzUE5Ogf0MQvjdgOzs8j/SRLw==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      react: ^16.0.0
-
   preview-question-bank@1.1.67:
     resolution: {integrity: sha512-XzM6jxFWtSPEeCpABS4Ld5Ukk5XxYhpylx5FD9+vDtlmsFrCkUpjDWCKlr73BoVS2F55YGmVMp0p1ASKw0EmuQ==}
     engines: {node: '>=10'}
@@ -8483,13 +8504,6 @@ packages:
   quick-lru@4.0.1:
     resolution: {integrity: sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==}
     engines: {node: '>=8'}
-
-  quiz-result-package@1.5.0:
-    resolution: {integrity: sha512-/49nsyirUf5ar5ZaZ/BThVItZ1ivY3Uon5IOEDIScUg42z41+h95hwu2zbtspBG2o8ElZRNh4U7AMm/kvS3efw==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      antd: ^5.25.0
-      react: ^16.0.0
 
   randombytes@2.1.0:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
@@ -9222,13 +9236,6 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
 
-  sapp-notification@1.2.0:
-    resolution: {integrity: sha512-T5cSSY5oYpaH/OUvIJbtkQB2R//I5LQ6kRNlKMEyvsJiv1DTSZl5lHP2D4Tt8iEp3Xi/xy/9AP7lPFVjZtYR5g==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      antd: ^5.21.1
-      react: ^16.0.0
-
   sass-loader@13.3.3:
     resolution: {integrity: sha512-mt5YN2F1MOZr3d/wBRcZxeFgwgkH44wVc2zohO2YF6JiOMkiXe4BYRZpSu2sO1g71mo/j16txzUhsKZlqjVGzA==}
     engines: {node: '>= 14.15.0'}
@@ -9253,8 +9260,8 @@ packages:
     engines: {node: '>=12.0.0'}
     hasBin: true
 
-  sass@1.95.0:
-    resolution: {integrity: sha512-9QMjhLq+UkOg/4bb8Lt8A+hJZvY3t+9xeZMKSBtBEgxrXA3ed5Ts4NDreUkYgJP1BTmrscQE/xYhf7iShow6lw==}
+  sass@1.95.1:
+    resolution: {integrity: sha512-uPoDh5NIEZV4Dp5GBodkmNY9tSQfXY02pmCcUo+FR1P+x953HGkpw+vV28D4IqYB6f8webZtwoSaZaiPtpTeMg==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -12316,7 +12323,7 @@ snapshots:
       consola: 3.4.2
       detect-libc: 2.1.2
       https-proxy-agent: 7.0.6
-      node-fetch: 2.7.0(encoding@0.1.13)
+      node-fetch: 2.6.9(encoding@0.1.13)
       nopt: 8.1.0
       semver: 7.7.3
       tar: 7.5.2
@@ -12380,9 +12387,9 @@ snapshots:
   '@next/swc-win32-x64-msvc@12.3.4':
     optional: true
 
-  '@next/third-parties@14.2.33(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0))(react@18.2.0)':
+  '@next/third-parties@14.2.33(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1))(react@18.2.0)':
     dependencies:
-      next: 12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0)
+      next: 12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1)
       react: 18.2.0
       third-party-capital: 1.0.20
 
@@ -13020,6 +13027,274 @@ snapshots:
 
   '@rushstack/eslint-patch@1.15.0': {}
 
+  '@sapp-fe/entrance-test-result-package@1.4.1(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
+      '@types/dompurify': 3.2.0
+      antd: 5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      caniuse-lite: 1.0.30001760
+      dompurify: 3.3.1
+      react: 18.2.0
+      sass: 1.95.1
+    transitivePeerDependencies:
+      - '@babel/core'
+      - date-fns
+      - luxon
+      - moment
+      - react-dom
+
+  '@sapp-fe/explanation-package@1.4.9(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0)':
+    dependencies:
+      '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
+      '@cloudflare/stream-react': 1.9.3(react@18.2.0)
+      '@cyntler/react-doc-viewer': 1.10.4(@babel/core@7.28.5)(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.103.0)
+      '@fortune-sheet/react': 0.19.18(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@funktechno/texthighlighter': 2.1.2
+      '@tailwindcss/aspect-ratio': 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))
+      '@tailwindcss/forms': 0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))
+      '@types/styled-components': 5.1.34
+      '@xyflow/react': 12.10.0(@types/react@18.2.21)(immer@10.2.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      antd: 5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      autoprefixer: 10.4.22(postcss@8.5.6)
+      clsx: 2.1.1
+      css-loader: 6.11.0(webpack@5.103.0)
+      dashjs: 4.7.4
+      html-react-parser: 5.2.10(@types/react@18.2.21)(react@18.2.0)
+      lodash: 4.17.21
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-hook-form: 7.46.0(react@18.2.0)
+      react-shadow: 20.6.0(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      sapp-common-package: 1.6.3(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.9.3))(webpack@5.103.0)
+      sass: 1.95.1
+      styled-components: 5.3.11(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@rspack/core'
+      - '@tiptap/core'
+      - '@types/react'
+      - date-fns
+      - fibers
+      - immer
+      - luxon
+      - moment
+      - node-sass
+      - postcss
+      - prop-types
+      - react-is
+      - sass-embedded
+      - ts-node
+      - webpack
+      - worker-loader
+
+  '@sapp-fe/explanation-package@1.4.9(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)':
+    dependencies:
+      '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
+      '@cloudflare/stream-react': 1.9.3(react@18.2.0)
+      '@cyntler/react-doc-viewer': 1.10.4(@babel/core@7.28.5)(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.103.0)
+      '@fortune-sheet/react': 0.19.18(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@funktechno/texthighlighter': 2.1.2
+      '@tailwindcss/aspect-ratio': 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6)))
+      '@tailwindcss/forms': 0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6)))
+      '@types/styled-components': 5.1.34
+      '@xyflow/react': 12.10.0(@types/react@18.2.21)(immer@10.2.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      antd: 5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      autoprefixer: 10.4.22(postcss@8.5.6)
+      clsx: 2.1.1
+      css-loader: 6.11.0(webpack@5.103.0)
+      dashjs: 4.7.4
+      html-react-parser: 5.2.10(@types/react@18.2.21)(react@18.2.0)
+      lodash: 4.17.21
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-hook-form: 7.46.0(react@18.2.0)
+      react-shadow: 20.6.0(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      sapp-common-package: 1.6.3(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)
+      sass: 1.95.1
+      styled-components: 5.3.11(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@rspack/core'
+      - '@tiptap/core'
+      - '@types/react'
+      - date-fns
+      - fibers
+      - immer
+      - luxon
+      - moment
+      - node-sass
+      - postcss
+      - prop-types
+      - react-is
+      - sass-embedded
+      - ts-node
+      - webpack
+      - worker-loader
+
+  '@sapp-fe/preview-activity@1.1.43(@babel/core@7.28.5)(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.103.0)':
+    dependencies:
+      '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
+      '@cloudflare/stream-react': 1.9.3(react@18.2.0)
+      '@types/lodash': 4.17.21
+      '@types/video.js': 7.3.58
+      lodash: 4.17.21
+      preview-question-bank: 1.1.67(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.103.0)
+      react: 18.2.0
+      react-bootstrap: 2.10.10(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      sass: 1.50.1
+      video.js: 8.23.4
+      videojs-markers: 1.0.1(video.js@8.23.4)
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@types/react'
+      - react-dom
+      - react-is
+      - supports-color
+      - webpack
+      - worker-loader
+
+  '@sapp-fe/preview-part@1.7.2(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
+      '@react-hook/resize-observer': 2.0.2(react@18.2.0)
+      '@types/aos': 3.0.7
+      '@types/lodash': 4.17.21
+      '@types/react-lines-ellipsis': 0.15.6
+      antd: 5.25.0(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      aos: 2.3.4
+      dayjs: 1.11.19
+      lodash: 4.17.21
+      react: 18.2.0
+    transitivePeerDependencies:
+      - '@babel/core'
+      - date-fns
+      - luxon
+      - moment
+      - react-dom
+
+  '@sapp-fe/quiz-result-package@1.5.1(@babel/core@7.28.5)(antd@5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
+      antd: 5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      lodash: 4.17.21
+      react: 18.2.0
+    transitivePeerDependencies:
+      - '@babel/core'
+
+  '@sapp-fe/sapp-common-package@1.6.6(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0)':
+    dependencies:
+      '@_ueberdosis/prosemirror-tables': 1.1.3
+      '@floating-ui/react': 0.27.16(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@tippyjs/react': 4.2.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@tiptap/extension-color': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@tiptap/extension-text-style@2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1)))
+      '@tiptap/extension-font-family': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@tiptap/extension-text-style@2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1)))
+      '@tiptap/extension-highlight': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-image': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-link': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@tiptap/pm@2.27.1)
+      '@tiptap/extension-placeholder': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@tiptap/pm@2.27.1)
+      '@tiptap/extension-subscript': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-superscript': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-table': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@tiptap/pm@2.27.1)
+      '@tiptap/extension-table-cell': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-table-header': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-table-row': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-task-item': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@tiptap/pm@2.27.1)
+      '@tiptap/extension-task-list': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-text-align': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-text-style': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-typography': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-underline': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/pm': 2.27.1
+      '@tiptap/react': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@tiptap/pm@2.27.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@tiptap/starter-kit': 2.27.1
+      antd: 5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      clsx: 1.2.1
+      dayjs: 1.11.19
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      sass: 1.95.1
+      sass-loader: 13.3.3(sass@1.95.1)(webpack@5.103.0)
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))
+    transitivePeerDependencies:
+      - '@tiptap/core'
+      - date-fns
+      - fibers
+      - luxon
+      - moment
+      - node-sass
+      - sass-embedded
+      - ts-node
+      - webpack
+
+  '@sapp-fe/sapp-common-package@1.6.6(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)':
+    dependencies:
+      '@_ueberdosis/prosemirror-tables': 1.1.3
+      '@floating-ui/react': 0.27.16(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@tippyjs/react': 4.2.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@tiptap/extension-color': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@tiptap/extension-text-style@2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1)))
+      '@tiptap/extension-font-family': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@tiptap/extension-text-style@2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1)))
+      '@tiptap/extension-highlight': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-image': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-link': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@tiptap/pm@2.27.1)
+      '@tiptap/extension-placeholder': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@tiptap/pm@2.27.1)
+      '@tiptap/extension-subscript': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-superscript': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-table': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@tiptap/pm@2.27.1)
+      '@tiptap/extension-table-cell': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-table-header': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-table-row': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-task-item': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@tiptap/pm@2.27.1)
+      '@tiptap/extension-task-list': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-text-align': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-text-style': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-typography': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/extension-underline': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))
+      '@tiptap/pm': 2.27.1
+      '@tiptap/react': 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@tiptap/pm@2.27.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@tiptap/starter-kit': 2.27.1
+      antd: 5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      clsx: 1.2.1
+      dayjs: 1.11.19
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      sass: 1.95.1
+      sass-loader: 13.3.3(sass@1.95.1)(webpack@5.103.0)
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))
+    transitivePeerDependencies:
+      - '@tiptap/core'
+      - date-fns
+      - fibers
+      - luxon
+      - moment
+      - node-sass
+      - sass-embedded
+      - ts-node
+      - webpack
+
+  '@sapp-fe/sapp-notification@1.2.2(antd@5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))':
+    dependencies:
+      '@tailwindcss/line-clamp': 0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))
+      antd: 5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      clsx: 2.1.1
+      dayjs: 1.11.19
+      react: 18.2.0
+      tailwind-scrollbar: 4.0.2(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))
+    transitivePeerDependencies:
+      - tailwindcss
+
+  '@sapp-fe/sapp-notification@1.2.2(antd@5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6)))':
+    dependencies:
+      '@tailwindcss/line-clamp': 0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6)))
+      antd: 5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      clsx: 2.1.1
+      dayjs: 1.11.19
+      react: 18.2.0
+      tailwind-scrollbar: 4.0.2(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6)))
+    transitivePeerDependencies:
+      - tailwindcss
+
   '@sentry-internal/browser-utils@8.55.0':
     dependencies:
       '@sentry/core': 8.55.0
@@ -13104,7 +13379,7 @@ snapshots:
 
   '@sentry/core@8.55.0': {}
 
-  '@sentry/nextjs@8.55.0(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.57.2(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0))(encoding@0.1.13)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0))(react@18.2.0)(webpack@5.103.0)':
+  '@sentry/nextjs@8.55.0(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.57.2(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0))(encoding@0.1.13)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1))(react@18.2.0)(webpack@5.103.0)':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/semantic-conventions': 1.38.0
@@ -13117,7 +13392,7 @@ snapshots:
       '@sentry/vercel-edge': 8.55.0
       '@sentry/webpack-plugin': 2.22.7(encoding@0.1.13)(webpack@5.103.0)
       chalk: 3.0.0
-      next: 12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0)
+      next: 12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1)
       resolve: 1.22.8
       rollup: 3.29.5
       stacktrace-parser: 0.1.11
@@ -15667,22 +15942,6 @@ snapshots:
 
   entities@6.0.1: {}
 
-  entrance-test-result-package@1.4.0(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
-    dependencies:
-      '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
-      '@types/dompurify': 3.2.0
-      antd: 5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      caniuse-lite: 1.0.30001760
-      dompurify: 3.3.1
-      react: 18.2.0
-      sass: 1.95.0
-    transitivePeerDependencies:
-      - '@babel/core'
-      - date-fns
-      - luxon
-      - moment
-      - react-dom
-
   environment@1.1.0: {}
 
   errno@0.1.8:
@@ -16235,96 +16494,6 @@ snapshots:
   expand-tilde@2.0.2:
     dependencies:
       homedir-polyfill: 1.0.3
-
-  explanation-package@1.4.2(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0):
-    dependencies:
-      '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
-      '@cloudflare/stream-react': 1.9.3(react@18.2.0)
-      '@cyntler/react-doc-viewer': 1.10.4(@babel/core@7.28.5)(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.103.0)
-      '@fortune-sheet/react': 0.19.18(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@funktechno/texthighlighter': 2.1.2
-      '@tailwindcss/aspect-ratio': 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))
-      '@tailwindcss/forms': 0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))
-      '@types/styled-components': 5.1.34
-      '@xyflow/react': 12.10.0(@types/react@18.2.21)(immer@10.2.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      antd: 5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      autoprefixer: 10.4.22(postcss@8.5.6)
-      clsx: 2.1.1
-      css-loader: 6.11.0(webpack@5.103.0)
-      dashjs: 4.7.4
-      html-react-parser: 5.2.10(@types/react@18.2.21)(react@18.2.0)
-      lodash: 4.17.21
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      react-hook-form: 7.46.0(react@18.2.0)
-      react-shadow: 20.6.0(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      sapp-common-package: 1.6.3(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0)
-      sass: 1.95.0
-      styled-components: 5.3.11(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))
-    transitivePeerDependencies:
-      - '@babel/core'
-      - '@rspack/core'
-      - '@tiptap/core'
-      - '@types/react'
-      - date-fns
-      - fibers
-      - immer
-      - luxon
-      - moment
-      - node-sass
-      - postcss
-      - prop-types
-      - react-is
-      - sass-embedded
-      - ts-node
-      - webpack
-      - worker-loader
-
-  explanation-package@1.4.2(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0):
-    dependencies:
-      '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
-      '@cloudflare/stream-react': 1.9.3(react@18.2.0)
-      '@cyntler/react-doc-viewer': 1.10.4(@babel/core@7.28.5)(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.103.0)
-      '@fortune-sheet/react': 0.19.18(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@funktechno/texthighlighter': 2.1.2
-      '@tailwindcss/aspect-ratio': 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6)))
-      '@tailwindcss/forms': 0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6)))
-      '@types/styled-components': 5.1.34
-      '@xyflow/react': 12.10.0(@types/react@18.2.21)(immer@10.2.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      antd: 5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      autoprefixer: 10.4.22(postcss@8.5.6)
-      clsx: 2.1.1
-      css-loader: 6.11.0(webpack@5.103.0)
-      dashjs: 4.7.4
-      html-react-parser: 5.2.10(@types/react@18.2.21)(react@18.2.0)
-      lodash: 4.17.21
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      react-hook-form: 7.46.0(react@18.2.0)
-      react-shadow: 20.6.0(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      sapp-common-package: 1.6.3(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)
-      sass: 1.95.0
-      styled-components: 5.3.11(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))
-    transitivePeerDependencies:
-      - '@babel/core'
-      - '@rspack/core'
-      - '@tiptap/core'
-      - '@types/react'
-      - date-fns
-      - fibers
-      - immer
-      - luxon
-      - moment
-      - node-sass
-      - postcss
-      - prop-types
-      - react-is
-      - sass-embedded
-      - ts-node
-      - webpack
-      - worker-loader
 
   exponential-backoff@3.1.3: {}
 
@@ -17965,7 +18134,7 @@ snapshots:
 
   next-compose-plugins@2.2.1: {}
 
-  next-i18next@13.3.0(@types/react@18.2.21)(i18next@22.5.1)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0))(react-i18next@12.3.1(i18next@22.5.1)(react-dom@18.2.0(react@18.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0))(react@18.2.0):
+  next-i18next@13.3.0(@types/react@18.2.21)(i18next@22.5.1)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1))(react-i18next@12.3.1(i18next@22.5.1)(react-dom@18.2.0(react@18.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0))(react@18.2.0):
     dependencies:
       '@babel/runtime': 7.28.4
       '@types/hoist-non-react-statics': 3.3.7(@types/react@18.2.21)
@@ -17973,15 +18142,15 @@ snapshots:
       hoist-non-react-statics: 3.3.2
       i18next: 22.5.1
       i18next-fs-backend: 2.6.1
-      next: 12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0)
+      next: 12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1)
       react: 18.2.0
       react-i18next: 12.3.1(i18next@22.5.1)(react-dom@18.2.0(react@18.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)
     transitivePeerDependencies:
       - '@types/react'
 
-  next-redux-wrapper@8.1.0(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0))(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0):
+  next-redux-wrapper@8.1.0(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1))(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0):
     dependencies:
-      next: 12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0)
+      next: 12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1)
       react: 18.2.0
       react-redux: 8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1)
 
@@ -17998,14 +18167,14 @@ snapshots:
     dependencies:
       enhanced-resolve: 5.18.3
 
-  next-with-less@3.0.1(less-loader@12.3.0(less@4.4.2)(webpack@5.103.0))(less@4.4.2)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0)):
+  next-with-less@3.0.1(less-loader@12.3.0(less@4.4.2)(webpack@5.103.0))(less@4.4.2)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1)):
     dependencies:
       clone-deep: 4.0.1
       less: 4.4.2
       less-loader: 12.3.0(less@4.4.2)(webpack@5.103.0)
-      next: 12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0)
+      next: 12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1)
 
-  next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.0):
+  next@12.3.7(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.95.1):
     dependencies:
       '@next/env': 12.3.7
       '@swc/helpers': 0.4.11
@@ -18029,7 +18198,7 @@ snapshots:
       '@next/swc-win32-arm64-msvc': 12.3.4
       '@next/swc-win32-ia32-msvc': 12.3.4
       '@next/swc-win32-x64-msvc': 12.3.4
-      sass: 1.95.0
+      sass: 1.95.1
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
@@ -18732,45 +18901,6 @@ snapshots:
     dependencies:
       parse-ms: 2.1.0
 
-  preview-activity@1.1.43(@babel/core@7.28.5)(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.103.0):
-    dependencies:
-      '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
-      '@cloudflare/stream-react': 1.9.3(react@18.2.0)
-      '@types/video.js': 7.3.58
-      preview-question-bank: 1.1.67(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.103.0)
-      react: 18.2.0
-      react-bootstrap: 2.10.10(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      sass: 1.50.1
-      video.js: 8.23.4
-      videojs-markers: 1.0.1(video.js@8.23.4)
-    transitivePeerDependencies:
-      - '@babel/core'
-      - '@types/react'
-      - react-dom
-      - react-is
-      - supports-color
-      - webpack
-      - worker-loader
-
-  preview-part@1.7.1(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
-    dependencies:
-      '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
-      '@react-hook/resize-observer': 2.0.2(react@18.2.0)
-      '@types/aos': 3.0.7
-      '@types/lodash': 4.17.21
-      '@types/react-lines-ellipsis': 0.15.6
-      antd: 5.25.0(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      aos: 2.3.4
-      dayjs: 1.11.19
-      lodash: 4.17.21
-      react: 18.2.0
-    transitivePeerDependencies:
-      - '@babel/core'
-      - date-fns
-      - luxon
-      - moment
-      - react-dom
-
   preview-question-bank@1.1.67(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.103.0):
     dependencies:
       '@babel/cli': 7.28.3(@babel/core@7.28.5)
@@ -18784,7 +18914,7 @@ snapshots:
       '@wiris/mathtype-tinymce6': 8.14.0
       react: 18.2.0
       react-bootstrap: 2.10.10(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      sass: 1.95.0
+      sass: 1.95.1
       video.js: 8.23.4
       x-data-spreadsheet: 1.1.9
     transitivePeerDependencies:
@@ -18964,15 +19094,6 @@ snapshots:
       inherits: 2.0.4
 
   quick-lru@4.0.1: {}
-
-  quiz-result-package@1.5.0(@babel/core@7.28.5)(antd@5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0):
-    dependencies:
-      '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
-      antd: 5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      lodash: 4.17.21
-      react: 18.2.0
-    transitivePeerDependencies:
-      - '@babel/core'
 
   randombytes@2.1.0:
     dependencies:
@@ -19908,7 +20029,7 @@ snapshots:
 
   safer-buffer@2.1.2: {}
 
-  sapp-common-package@1.6.3(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0):
+  sapp-common-package@1.6.3(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.9.3))(webpack@5.103.0):
     dependencies:
       '@_ueberdosis/prosemirror-tables': 1.1.3
       '@floating-ui/react': 0.27.16(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -19939,8 +20060,8 @@ snapshots:
       dayjs: 1.11.19
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      sass: 1.95.0
-      sass-loader: 13.3.3(sass@1.95.0)(webpack@5.103.0)
+      sass: 1.95.1
+      sass-loader: 13.3.3(sass@1.95.1)(webpack@5.103.0)
       tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))
     transitivePeerDependencies:
       - '@tiptap/core'
@@ -19984,8 +20105,8 @@ snapshots:
       dayjs: 1.11.19
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      sass: 1.95.0
-      sass-loader: 13.3.3(sass@1.95.0)(webpack@5.103.0)
+      sass: 1.95.1
+      sass-loader: 13.3.3(sass@1.95.1)(webpack@5.103.0)
       tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))
     transitivePeerDependencies:
       - '@tiptap/core'
@@ -19998,34 +20119,12 @@ snapshots:
       - ts-node
       - webpack
 
-  sapp-notification@1.2.0(antd@5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))):
-    dependencies:
-      '@tailwindcss/line-clamp': 0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))
-      antd: 5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      clsx: 2.1.1
-      dayjs: 1.11.19
-      react: 18.2.0
-      tailwind-scrollbar: 4.0.2(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))
-    transitivePeerDependencies:
-      - tailwindcss
-
-  sapp-notification@1.2.0(antd@5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))):
-    dependencies:
-      '@tailwindcss/line-clamp': 0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6)))
-      antd: 5.29.1(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      clsx: 2.1.1
-      dayjs: 1.11.19
-      react: 18.2.0
-      tailwind-scrollbar: 4.0.2(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6)))
-    transitivePeerDependencies:
-      - tailwindcss
-
-  sass-loader@13.3.3(sass@1.95.0)(webpack@5.103.0):
+  sass-loader@13.3.3(sass@1.95.1)(webpack@5.103.0):
     dependencies:
       neo-async: 2.6.2
       webpack: 5.103.0
     optionalDependencies:
-      sass: 1.95.0
+      sass: 1.95.1
 
   sass@1.50.1:
     dependencies:
@@ -20033,7 +20132,7 @@ snapshots:
       immutable: 4.3.7
       source-map-js: 1.2.1
 
-  sass@1.95.0:
+  sass@1.95.1:
     dependencies:
       chokidar: 4.0.3
       immutable: 5.1.4

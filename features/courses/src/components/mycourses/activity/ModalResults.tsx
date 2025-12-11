@@ -1,15 +1,15 @@
-import { CloseIcon } from '@lms/assets'
-import { Modal } from 'antd'
-import { QuizResultComponent } from 'quiz-result-package'
-import React from 'react'
+import { CloseIcon } from "@lms/assets";
+import { Modal } from "antd";
+import { QuizResultComponent } from "@sapp-fe/quiz-result-package";
+import React from "react";
 interface IProps {
-  open: boolean
-  handleOk: () => void
-  handleCancel: () => void
-  loading: boolean
-  modalResult: any
-  getTable: any
-  handleShowQuestionResultDetail: any
+  open: boolean;
+  handleOk: () => void;
+  handleCancel: () => void;
+  loading: boolean;
+  modalResult: any;
+  getTable: any;
+  handleShowQuestionResultDetail: any;
 }
 const ModalResults = ({
   open,
@@ -32,15 +32,15 @@ const ModalResults = ({
         top: 0,
         left: 0,
         padding: 0,
-        maxWidth: '100%',
-        height: '100%',
+        maxWidth: "100%",
+        height: "100%",
       }}
       width="100vw"
       className="style-modal-result"
       centered={false}
       classNames={{
         content:
-          'w-screen h-screen !max-w-none !rounded-none overflow-hidden !p-0',
+          "w-screen h-screen !max-w-none !rounded-none overflow-hidden !p-0",
       }}
     >
       <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6 xl:px-0">
@@ -59,7 +59,7 @@ const ModalResults = ({
         />
       </div>
     </Modal>
-  )
-}
+  );
+};
 
-export default ModalResults
+export default ModalResults;

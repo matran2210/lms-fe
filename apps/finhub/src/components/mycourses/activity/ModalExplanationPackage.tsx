@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 
 import { SappModal } from '@lms/ui'
-import { ExplanationPackageV2 } from 'explanation-package'
-// import 'explanation-package/dist/index.css'
+import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
+// import '@sapp-fe/explanation-package/dist/index.css'
 import { CloseIcon } from '@lms/assets'
 import { UploadAPI } from 'src/pages/api/upload'
 import { CoursesAPI } from 'src/pages/api/courses'
