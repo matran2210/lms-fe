@@ -312,9 +312,6 @@ export const getSelectOptions = (
     .uniqBy(key) // loại trùng theo key
     .value()
 }
-export const isPdfFile = (fileName: string) => {
-  return fileName.toLowerCase().endsWith('.pdf')
-}
 
 /**
  * Hàm phân tích chuỗi thời gian thành đối tượng thời gian.
