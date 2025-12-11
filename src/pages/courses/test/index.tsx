@@ -244,7 +244,7 @@ const TestModal = ({
 
   const handleSubmitNow = async () => {
     await CoursesAPI.submitAllQuestion(data?.quiz?.attempt?.id as string)
-    handleRedirectResult()
+    // handleRedirectResult()
   }
 
   useEffect(() => {
