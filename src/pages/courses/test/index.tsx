@@ -242,14 +242,19 @@ const TestModal = ({
     }
   }, [remainingTimeLastAttempt?.current])
 
-  const handleSubmitNow = async () => {
-    await CoursesAPI.submitAllQuestion(data?.quiz?.attempt?.id as string)
-    // handleRedirectResult()
+  const handleSubmitNow = async (isRedirect = true) => {
+    const res = await CoursesAPI.submitAllQuestion(
+      data?.quiz?.attempt?.id as string,
+    )
+    if (res?.success && data?.quiz?.attempt) {
+      data.quiz.attempt.status = 'SUBMITTED'
+    }
+    isRedirect && handleRedirectResult()
   }
 
   useEffect(() => {
     if (isCallSubmit) {
-      handleSubmitNow()
+      handleSubmitNow(false)
     }
   }, [isCallSubmit])
 
@@ -520,7 +525,7 @@ const TestModal = ({
                   title="Submit now"
                   size="medium"
                   full
-                  onClick={handleSubmitNow}
+                  onClick={() => handleSubmitNow()}
                 />
               </>
             )
@@ -550,7 +555,7 @@ const TestModal = ({
               title="Submit now"
               size="medium"
               full
-              onClick={handleSubmitNow}
+              onClick={() => handleSubmitNow()}
             />
             <ButtonText
               title="Start a new attempt"
@@ -601,7 +606,7 @@ const TestModal = ({
             title="Submit now"
             size="medium"
             full
-            onClick={handleSubmitNow}
+            onClick={() => handleSubmitNow()}
           />
           <ButtonText
             title="Start a new attempt"
