@@ -57,21 +57,6 @@ const EventTestList = ({
     }
   };
 
-  // const resultDate = (category: string) => {
-  //   switch (category) {
-  //     case 'ACCA':
-  //       return '04/10/2024'
-
-  //     case 'CFA':
-  //       return '28/06/2025'
-
-  //     case 'CMA':
-  //       return '30/09/2025'
-  //     default:
-  //       break
-  //   }
-  // }
-
   return (
     <>
       <div
