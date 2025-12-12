@@ -385,3 +385,17 @@ export const formatTimeOnlyHourMinute = (rawTime: string) => {
 
 export const getUserPrefix = (isTeacher: boolean) =>
   isTeacher ? PageLink.TEACHERS : ''
+
+export const downloadFileByURL = async (url: string, fileName?: string) => {
+  const res = await fetch(url);
+  const blob = await res.blob();
+
+  const fileURL = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = fileURL;
+  a.download = fileName || "download";
+  a.click();
+
+  URL.revokeObjectURL(fileURL);
+};
