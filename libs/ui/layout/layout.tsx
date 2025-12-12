@@ -87,7 +87,6 @@ export default function Layout(props: LayoutProps): ReactElement {
           content: UserGuide.CONTENT_STEP_1,
           className: "left-[358px] top-24",
           imgSrc: TourGuideStartAnimation,
-          imgType: "animation",
         };
 
       case 2:
@@ -96,7 +95,6 @@ export default function Layout(props: LayoutProps): ReactElement {
           content: UserGuide.CONTENT_STEP_2,
           className: "left-64 top-[140px]",
           imgSrc: TourGuideSidebarAnimation,
-          imgType: "animation",
         };
       case 3:
         return {
@@ -118,8 +116,6 @@ export default function Layout(props: LayoutProps): ReactElement {
           title: "Courses",
           content: UserGuide.CONTENT_STEP_5,
           className: "left-[796px] top-[444px]",
-          isEnd: isEndGuide,
-          handleCancel: closeUserGuide,
           imgSrc: TourGuideCoursesAnimation,
         };
 
@@ -198,7 +194,6 @@ export default function Layout(props: LayoutProps): ReactElement {
           content={stepConfig.content}
           className={stepConfig.className}
           imgSrc={stepConfig.imgSrc}
-          imgType={stepConfig.imgType as "animation" | "static"}
           isEnd={stepConfig.isEnd}
           handleCancel={stepConfig.handleCancel}
           titleButtonNext={stepConfig.titleButtonNext}
