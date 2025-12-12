@@ -71,9 +71,14 @@ export default function Sidebar({
               onClick={() => trackGAEvent("Click Logo SAPP Menu")}
             >
               <ExpandIcon
-                type={"logo-default"}
+                type="logo-default"
                 className={clsx(
-                  "transition-transform duration-300 ease-out lg:translate-x-[70%] lg:transform lg:group-hover:left-0 lg:group-hover:translate-x-0",
+                  "transition-transform duration-300 ease-out lg:translate-x-[70%]",
+                  // Active on hover
+                  "lg:group-hover:left-0 lg:group-hover:translate-x-0",
+                  // Active when guideStep is 2 or 3
+                  (guideStep === 2 || guideStep === 3) &&
+                    "lg:left-0 lg:translate-x-0",
                 )}
               />
               <ExpandIcon type={"logo-full"} />
