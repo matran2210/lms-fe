@@ -1,7 +1,6 @@
 import Image from "next/image";
-import { useRouter } from "next/router";
 import { useEffect, useMemo, useState, useCallback } from "react";
-import { useCourseContext, useFeature } from "@lms/contexts";
+import { useCourseContext } from "@lms/contexts";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import { CloseIconNote } from "@lms/assets";
 
@@ -80,11 +79,8 @@ const TimeBox = ({
 );
 
 const PromotionalBanner = () => {
-  const router = useRouter();
-  const { courseApi } = useFeature();
   const { setOpenPopupCTA } = useCourseContext();
   const { isMobileView } = useTailwindBreakpoint();
-
   const [isShowBanner, setIsShowBanner] = useState(false);
 
   // Countdown
@@ -103,7 +99,8 @@ const PromotionalBanner = () => {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const hasOpened = localStorage.getItem("openBannerPromotional");
-    if (!hasOpened) setIsShowBanner(true);
+    const isTrialCourse = localStorage.getItem("showPinTrial") === "true";
+    if (!hasOpened && isTrialCourse) setIsShowBanner(true);
   }, []);
 
   const onClose = useCallback(() => {
@@ -128,7 +125,7 @@ const PromotionalBanner = () => {
   const seconds = String(timeLeft % 60).padStart(2, "0");
 
   return (
-    <div className="relative mb-4 lg:mb-0">
+    <div className="relative mb-4 lg:mb-0 lg:mt-[10px]">
       <button
         onClick={onClose}
         className="absolute right-2 top-2 z-10 md:right-3"
