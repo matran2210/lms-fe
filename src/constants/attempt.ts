@@ -9,6 +9,7 @@ export enum EAttemptStatus {
   IN_REVIEW = 'IN_REVIEW',
   FINISHED_GRADING = 'FINISHED_GRADING',
   FINISHED = 'FINISHED',
+  EXPIRED = 'EXPIRED',
 }
 
 export type SheetData = {

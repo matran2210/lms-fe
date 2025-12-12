@@ -43,7 +43,7 @@ const EventTest = ({
         const remainingTimeInterval = setInterval(() => {
           setRemainingTimeLastAttempt((prev) => {
             if (prev === 0) {
-              handleSubmitQuestion()
+              // handleSubmitQuestion()
               clearInterval(remainingTimeInterval)
               return 0
             }
@@ -122,8 +122,8 @@ const EventTest = ({
       case 'CFA':
         return (
           <ContentTestCongratution
-            text1="Your results for Round 2 will"
-            text2="be emailed to you on June 28, 2025"
+            text1="Your results will"
+            text2="be emailed to you on December 19 - 22, 2025"
             text3="Please remember to check your inbox to ensure you don’t miss the update."
           />
         )
@@ -138,20 +138,31 @@ const EventTest = ({
     }
   }
 
-  // const resultDate = (category: string) => {
-  //   switch (category) {
-  //     case 'ACCA':
-  //       return '04/10/2024'
+  const resultDate = (category: string) => {
+    switch (category) {
+      case 'ACCA':
+        return '11/11/2025'
 
-  //     case 'CFA':
-  //       return '28/06/2025'
+      case 'CFA':
+        return '19-22/12/2025'
 
-  //     case 'CMA':
-  //       return '30/09/2025'
-  //     default:
-  //       break
-  //   }
-  // }
+      case 'CMA':
+        return '14/10/2025'
+      default:
+        break
+    }
+  }
+
+  const getEventTestStatus = (
+    textDoneAttempt: string | number | any,
+    textNotAttempt: string | number,
+  ) => {
+    if (data?.attempt_status === EAttemptStatus['SUBMITTED']) {
+      return textDoneAttempt
+    } else {
+      return textNotAttempt
+    }
+  }
 
   const handleClickBegin = () => {
     if (resultStartAt === -1 || resultFinishAt === 1) {
@@ -202,6 +213,16 @@ const EventTest = ({
 
   const renderButton = () => {
     if (data?.attempt_status === EAttemptStatus['IN_PROGRESS']) {
+      if (remainingTimeLastAttempt <= 0) {
+        return (
+          <ButtonSecondary
+            title="Submit"
+            size="small"
+            className="ml-auto"
+            onClick={handleSubmitQuestion}
+          />
+        )
+      }
       return (
         <ButtonSecondary
           title="Resume"
@@ -275,7 +296,11 @@ const EventTest = ({
     <>
       <CardCourse
         title={data?.name || ''}
-        attemptStatus={data?.attempt_status as EAttemptStatus}
+        attemptStatus={
+          resultFinishAt === 1 && !data?.attempt_times
+            ? EAttemptStatus.EXPIRED
+            : (data?.attempt_status as EAttemptStatus)
+        }
         footer={cardFooter}
       >
         <div>
@@ -300,7 +325,7 @@ const EventTest = ({
                 </p>
               </>
             </div>
-            <div className="flex justify-between pt-2 text-sm capitalize text-gray-800 md:pt-4 md:text-base">
+            {/* <div className="flex justify-between pt-2 text-sm capitalize text-gray-800 md:pt-4 md:text-base">
               <div className="flex items-center">
                 <>
                   <span className={`text-gray`}>Result of Attempts:</span>
@@ -316,6 +341,19 @@ const EventTest = ({
               ) : (
                 <span className="text-gray-800">--</span>
               )}
+            </div> */}
+            <div
+              className={`flex justify-between pt-4 text-base capitalize text-gray`}
+            >
+              <p>
+                {getEventTestStatus('Result Release Date:', 'No of Questions:')}
+              </p>
+              <p className={`font-medium text-gray-800`}>
+                {getEventTestStatus(
+                  resultDate(data?.course_category?.name),
+                  data?.total_question || data?.quiz_question_instances?.length,
+                )}
+              </p>
             </div>
           </div>
         </div>
