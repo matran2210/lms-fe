@@ -83,6 +83,7 @@ const TestModal = ({
   const [remainingTime, setRemainingTime] = useState<number>()
   const remainingTimeLastAttempt = useRef<number | null>(null)
   const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false)
+  const [isCallSubmit, setIsCallSubmit] = useState(false)
 
   const quiz = data?.quiz
   const isLimited = !!quiz.is_limited
@@ -232,16 +233,30 @@ const TestModal = ({
     remainingTimeLastAttempt?.current != null &&
     remainingTimeLastAttempt.current <= 0
 
-  const handleSubmitNow = async () => {
-    await CoursesAPI.submitAllQuestion(data?.quiz?.attempt?.id as string)
-    handleRedirectResult()
+  useEffect(() => {
+    if (
+      remainingTimeLastAttempt?.current != null &&
+      remainingTimeLastAttempt.current <= 0
+    ) {
+      setIsCallSubmit(true)
+    }
+  }, [remainingTimeLastAttempt?.current])
+
+  const handleSubmitNow = async (isRedirect = true) => {
+    const res = await CoursesAPI.submitAllQuestion(
+      data?.quiz?.attempt?.id as string,
+    )
+    if (res?.success && data?.quiz?.attempt) {
+      data.quiz.attempt.status = 'SUBMITTED'
+    }
+    isRedirect && handleRedirectResult()
   }
 
   useEffect(() => {
-    if (isTimeOut) {
-      handleSubmitNow()
+    if (isCallSubmit) {
+      handleSubmitNow(false)
     }
-  }, [isTimeOut])
+  }, [isCallSubmit])
 
   const handleNextPage = () => {
     const pageIndex = resultList.metadata.page_index
@@ -510,7 +525,7 @@ const TestModal = ({
                   title="Submit now"
                   size="medium"
                   full
-                  onClick={handleSubmitNow}
+                  onClick={() => handleSubmitNow()}
                 />
               </>
             )
@@ -540,7 +555,7 @@ const TestModal = ({
               title="Submit now"
               size="medium"
               full
-              onClick={handleSubmitNow}
+              onClick={() => handleSubmitNow()}
             />
             <ButtonText
               title="Start a new attempt"
@@ -591,7 +606,7 @@ const TestModal = ({
             title="Submit now"
             size="medium"
             full
-            onClick={handleSubmitNow}
+            onClick={() => handleSubmitNow()}
           />
           <ButtonText
             title="Start a new attempt"

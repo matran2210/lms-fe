@@ -46,6 +46,10 @@ const mappingBadgeFromStatus: Partial<
     badge: 'Finished Grading',
     className: 'bg-success-50 text-success',
   },
+  [EAttemptStatus.EXPIRED]: {
+    badge: 'Expired',
+    className: 'bg-error-50 text-error',
+  },
 }
 
 const CardCourse = forwardRef<

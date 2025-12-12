@@ -396,15 +396,19 @@ const PartFailed = ({
           activeCourse={() => {}}
         />
       ) : (
-        <TestModal
-          open={open}
-          setOpen={setOpen}
-          title={coursePart?.name}
-          data={coursePart}
-          class_user_id={class_user_id}
-          is_passed_course={is_passed_course}
-          activeCourse={() => {}}
-        />
+        <>
+          {open && (
+            <TestModal
+              open={open}
+              setOpen={setOpen}
+              title={coursePart?.name}
+              data={coursePart}
+              class_user_id={class_user_id}
+              is_passed_course={is_passed_course}
+              activeCourse={() => {}}
+            />
+          )}
+        </>
       )}
       <SappModalV3
         open={openReport}
