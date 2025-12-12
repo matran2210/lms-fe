@@ -5,7 +5,7 @@ import { truncateString } from "@lms/utils";
 import clsx from "clsx";
 import React, { forwardRef } from "react";
 import Badge from "./CardCourseBadge";
-;
+
 
 const mappingBadgeFromStatus: Partial<
   Record<EAttemptStatus, { badge: string; className: string }>
@@ -45,6 +45,10 @@ const mappingBadgeFromStatus: Partial<
   [EAttemptStatus.FINISHED_GRADING]: {
     badge: "Finished Grading",
     className: "bg-success-50 text-success",
+  },
+  [EAttemptStatus.EXPIRED]: {
+    badge: 'Expired',
+    className: 'bg-error-50 text-error',
   },
 };
 

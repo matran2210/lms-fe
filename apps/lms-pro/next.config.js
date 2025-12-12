@@ -102,17 +102,20 @@ let nextConfig = {
 
 // --- Inject Sentry wrapper ---
 const { withSentryConfig } = require('@sentry/nextjs')
+const isSentryDisabled = true // Disable Sentry for lms-pro app
 
-nextConfig = withSentryConfig(nextConfig, {
-  org: process.env.NEXT_PUBLIC_SENTRY_NAME,
-  project: process.env.NEXT_PUBLIC_SENTRY_PROJECT,
-  silent: !process.env.CI,
-  widenClientFileUpload: true,
-  tunnelRoute: '/monitoring',
-  hideSourceMaps: true,
-  disableLogger: true,
-  automaticVercelMonitors: true,
-})
+if (!isSentryDisabled) {
+  nextConfig = withSentryConfig(nextConfig, {
+    org: process.env.NEXT_PUBLIC_SENTRY_NAME,
+    project: process.env.NEXT_PUBLIC_SENTRY_PROJECT,
+    silent: !process.env.CI,
+    widenClientFileUpload: true,
+    tunnelRoute: '/monitoring',
+    hideSourceMaps: true,
+    disableLogger: true,
+    automaticVercelMonitors: true,
+  })
+}
 
 // --- wrap removeImports + bundle analyzer ---
 module.exports = removeImports(withBundleAnalyzer(nextConfig))
