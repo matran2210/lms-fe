@@ -33,8 +33,8 @@ importers:
         specifier: ^7.37.5
         version: 7.37.5(eslint@8.57.1)
       explanation-package:
-        specifier: ^1.4.2
-        version: 1.4.2(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)
+        specifier: ^1.4.3
+        version: 1.4.3(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)
       globals:
         specifier: ^16.0.0
         version: 16.5.0
@@ -274,8 +274,8 @@ importers:
         specifier: ^1.3.4
         version: 1.4.0(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       explanation-package:
-        specifier: ^1.4.2
-        version: 1.4.2(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0)
+        specifier: ^1.4.3
+        version: 1.4.3(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0)
       file-saver:
         specifier: ^2.0.5
         version: 2.0.5
@@ -608,8 +608,8 @@ importers:
         specifier: ^1.3.4
         version: 1.4.0(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       explanation-package:
-        specifier: ^1.4.2
-        version: 1.4.2(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0)
+        specifier: ^1.4.3
+        version: 1.4.3(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0)
       file-saver:
         specifier: ^2.0.5
         version: 2.0.5
@@ -930,8 +930,8 @@ importers:
         specifier: ^1.11.12
         version: 1.11.19
       explanation-package:
-        specifier: ^1.4.2
-        version: 1.4.2(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)
+        specifier: ^1.4.3
+        version: 1.4.3(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0)
       framer-motion:
         specifier: ^12.23.12
         version: 12.23.25(@emotion/is-prop-valid@1.4.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -6049,8 +6049,8 @@ packages:
     resolution: {integrity: sha512-A5EmesHW6rfnZ9ysHQjPdJRni0SRar0tjtG5MNtm9n5TUvsYU8oozprtRD4AqHxcZWWlVuAmQo2nWKfN9oyjTw==}
     engines: {node: '>=0.10.0'}
 
-  explanation-package@1.4.2:
-    resolution: {integrity: sha512-8dqzHl/awYuOhS8i/2JUsylGrE8lVfWQx0/W9HQsyy07zucuPsncn4NLcImdA6utlPSyD7rVl4QV8IIGgTEgUA==}
+  explanation-package@1.4.3:
+    resolution: {integrity: sha512-1IFNxag4MMXa6a0nb4jZFzrFjB8IxPjWCSnZM8alZDbsLiTEicxI9U7ECAYusQBMmBZKHhrhYH8EwsAAYqq4Pw==}
     engines: {node: '>=10'}
     peerDependencies:
       react: ^16.13.1
@@ -16236,7 +16236,7 @@ snapshots:
     dependencies:
       homedir-polyfill: 1.0.3
 
-  explanation-package@1.4.2(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0):
+  explanation-package@1.4.3(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.103.0):
     dependencies:
       '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
       '@cloudflare/stream-react': 1.9.3(react@18.2.0)
@@ -16281,7 +16281,7 @@ snapshots:
       - webpack
       - worker-loader
 
-  explanation-package@1.4.2(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0):
+  explanation-package@1.4.3(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.2)(typescript@5.1.6))(webpack@5.103.0):
     dependencies:
       '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
       '@cloudflare/stream-react': 1.9.3(react@18.2.0)
