@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { OFFICE_VIEWER_URL } from "@lms/core";
-import { isPdfFile } from "@lms/utils";
+import { downloadFileByURL, isPdfFile } from "@lms/utils";
 
 const MAX_SIZE = 20 * 1024 * 1024;
 
@@ -29,10 +29,17 @@ const FileViewer = ({
   }, [fileUrl]);
 
   if (shouldDownload) {
-    window.location.href = fileUrl;
-
     return (
-      <div className="p-4">File lớn hơn 20MB. Vui lòng tải xuống để xem.</div>
+      <span>
+        Dung lượng file &quot;{fileName}&quot; quá lớn,&nbsp;
+        <span
+          className="font-semibold cursor-pointer text-state-info hover:underline"
+          onClick={() => downloadFileByURL(fileUrl, fileName)}
+        >
+          vui lòng click vào đây để tải xuống và xem
+        </span>
+        .
+      </span>
     );
   }
 
