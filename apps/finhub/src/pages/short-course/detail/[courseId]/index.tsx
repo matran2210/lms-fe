@@ -34,39 +34,8 @@ import { isEmpty } from 'lodash'
 import { PageLink } from 'src/constants/routes'
 import { PopupLockContent } from '@lms/feature-courses'
 import { LearningResource } from '@lms/ui'
-import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
-
-// interface IProps {
-//   course_section_type: string
-//   description: string
-//   duration: number
-//   id: string
-//   learning_progress: {
-//     duration: number
-//     time_spent: number
-//     total_course_sections: number
-//     total_course_sections_completed: number
-//   }
-//   quiz: {
-//     case_study_story: null
-//     id: string
-//     is_graded: boolean
-//     is_limited: boolean
-//     limit_count: number
-//     number_of_essay_questions: number
-//     number_of_multiple_choice_questions: number
-//     quiz_timed: number
-//     required_percent_score: number
-//     attempt: {
-//       id: string
-//       number_of_attempts: number
-//       score: number
-//       ratio_score: string
-//       total_attempt_time: number
-//     }
-//   }
-//   parent_id: string
-// }
+// import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
+import PromotionalBanner from '@lms/ui/components/banner/PromotionalBanner'
 
 const CourseDetail = () => {
   const dispatch = useAppDispatch()
@@ -447,6 +416,7 @@ const CourseDetail = () => {
             )}
           </>
         )}
+        <PromotionalBanner/>
         <div data-aos={ANIMATION.DATA_AOS}>
           <PreviewPartDetail
             chapterMenu={partDetail}
@@ -530,7 +500,7 @@ const CourseDetail = () => {
         />
       </div>
       <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />
-      <CtaTrial />
+      {/* <CtaTrial /> */}
     </Layout>
   )
 }
