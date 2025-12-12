@@ -12,6 +12,8 @@ import Sidebar from "./Sidebar";
 import { PopupStep } from "../components";
 import { UserGuide } from "@lms/core";
 import {
+  TourGuideCoursesAnimation,
+  TourGuideFilterAnimation,
   TourGuideNotiAnimation,
   TourGuideSidebarAnimation,
   TourGuideStartAnimation,
@@ -111,7 +113,25 @@ export default function Layout(props: LayoutProps): ReactElement {
           isEnd: isEndGuide,
           handleCancel: closeUserGuide,
         };
+      case 5:
+        return {
+          title: "Courses",
+          content: UserGuide.CONTENT_STEP_5,
+          className: "left-[796px] top-[444px]",
+          isEnd: isEndGuide,
+          handleCancel: closeUserGuide,
+          imgSrc: TourGuideCoursesAnimation,
+        };
 
+      case 6:
+        return {
+          title: "Filter",
+          content: UserGuide.CONTENT_STEP_6,
+          className: "right-[425px] top-[318px]",
+          handleCancel: closeUserGuide,
+          imgSrc: TourGuideFilterAnimation,
+          titleButtonNext: "Finish",
+        };
       default:
         return null;
     }
@@ -169,8 +189,7 @@ export default function Layout(props: LayoutProps): ReactElement {
           </div>
         </div>
       </div>
-      {/* <ModalMobile /> */}
-      {/* 🚀 POPUP STEP — luôn render 1 lần duy nhất */}
+
       {guideStatus && stepConfig && (
         <PopupStep
           index={guideStep}
@@ -182,6 +201,7 @@ export default function Layout(props: LayoutProps): ReactElement {
           imgType={stepConfig.imgType as "animation" | "static"}
           isEnd={stepConfig.isEnd}
           handleCancel={stepConfig.handleCancel}
+          titleButtonNext={stepConfig.titleButtonNext}
         />
       )}
     </>
