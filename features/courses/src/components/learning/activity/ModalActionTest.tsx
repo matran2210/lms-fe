@@ -211,7 +211,7 @@ const ModalActionTest = ({
   }, [remainingTimeLastAttempt?.current])
   const handleSubmitNow = async (isRedirect = true) => {
     const res = await courseApi.submitAllQuestion(attempt?.id as string);
-    if (res?.success && attempt && attempt?.status) {
+    if (!isRedirect && res?.success && attempt && attempt?.status) {
       attempt.status = "SUBMITTED";
     }
     isRedirect && handleRedirectResult();
