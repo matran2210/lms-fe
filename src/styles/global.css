@@ -24,7 +24,7 @@
   @apply md:mt-header-height md:!h-[calc(100%-var(--header-height))];
 }
 
-#meeting-app .meeting-info-container__wrapper {
+#meeting-app .meeting-info-container .meeting-info-container__wrapper {
   @apply hidden;
 }
 
@@ -41,7 +41,13 @@
   @apply !h-full;
 }
 
-#zmmtg-root:not(.show-full-screen) .video-avatar__avatar-footer {
+#zmmtg-root:not(.show-full-screen) .speaker-active-container__video-frame:has(video-player) .video-avatar__group {
+  @apply left-remove-pin;
+}
+
+#zmmtg-root:not(.show-full-screen)
+  .speaker-active-container__video-frame:has(video-player)
+  .video-avatar__avatar-footer {
   @apply left-14;
 }
 
