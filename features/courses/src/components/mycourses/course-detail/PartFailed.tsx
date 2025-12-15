@@ -226,6 +226,7 @@ const PartFailed = ({
     }
   };
   const isRetake = renderOkButtonCaption() === "Retake";
+
   return (
     <>
       <CardCourse
@@ -397,6 +398,7 @@ const PartFailed = ({
           data={coursePart}
           class_user_id={class_user_id}
           is_passed_course={is_passed_course}
+          selectedResultCourse={selectedResult}
         />
         }</>
       )}

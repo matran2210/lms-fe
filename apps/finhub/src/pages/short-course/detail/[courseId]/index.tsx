@@ -416,7 +416,7 @@ const CourseDetail = () => {
             )}
           </>
         )}
-        <PromotionalBanner/>
+        <PromotionalBanner />
         <div data-aos={ANIMATION.DATA_AOS}>
           <PreviewPartDetail
             chapterMenu={partDetail}
