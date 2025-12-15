@@ -42,3 +42,17 @@ export const validateFile = (
 export const isPdfFile = (fileName: string) => {
   return fileName.toLowerCase().endsWith(".pdf");
 };
+
+export const downloadFileByURL = async (url: string, fileName?: string) => {
+  const res = await fetch(url);
+  const blob = await res.blob();
+
+  const fileURL = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = fileURL;
+  a.download = fileName || "download";
+  a.click();
+
+  URL.revokeObjectURL(fileURL);
+};
