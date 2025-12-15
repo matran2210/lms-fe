@@ -42,7 +42,7 @@
 }
 
 #zmmtg-root:not(.show-full-screen) .speaker-active-container__video-frame:has(video-player) .video-avatar__group {
-  @apply left-remove-pin;
+  @apply left-remove-pin-btn;
 }
 
 #zmmtg-root:not(.show-full-screen)

@@ -25,7 +25,9 @@ export default {
       },
       spacing: {
         'header-height': 'var(--header-height)',
-        'remove-pin': '4.125rem', // 3.5rem (left-14) + 10px (old left)
+      },
+      inset: {
+        'remove-pin-btn': '4.125rem', // 3.5rem (left-14) + 10px (old left)
       },
     },
   },
