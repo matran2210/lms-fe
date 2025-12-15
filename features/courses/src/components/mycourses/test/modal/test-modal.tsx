@@ -32,7 +32,7 @@ interface IProps {
   class_user_id?: string;
   activeCourse?: any;
   is_passed_course: boolean;
-  selectedResultCourse: {
+  selectedResultCourse?: {
     label: string;
     value: string;
     ratio_score?: string | undefined;
