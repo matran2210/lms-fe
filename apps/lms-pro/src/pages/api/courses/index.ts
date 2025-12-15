@@ -176,18 +176,6 @@ export class CoursesAPI {
     })
   }
 
-  /**
-   * @deprecated use QuestionAPI.getQuestionDetail (cached api)
-   */
-  static getQuestionsDetail(id: string): Promise<any> {
-    const uri = url.getQuestionDetail
-    return fetcher(`${uri}`, {
-      params: {
-        question_ids: id,
-      },
-    })
-  }
-
   static getQuizAttemptsChartData(
     id: string | string[] | undefined,
   ): Promise<any> {
@@ -276,14 +264,6 @@ export class CoursesAPI {
 
   static submitAnswer(id: string, data: any): Promise<any> {
     const uri = url.submitQuestion + `/${id}` + '/submit-answer'
-    return fetcher(`${uri}`, {
-      data: data,
-      method: 'POST',
-    })
-  }
-
-  static submitCaseStudy(id: string, data: any): Promise<any> {
-    const uri = url.submitCaseStudy + `/${id}` + '/submit'
     return fetcher(`${uri}`, {
       data: data,
       method: 'POST',
@@ -598,15 +578,15 @@ export const getActivityById = async (
     return responseActivity.data
   }
   responseActivity.data.tabs = []
-const promises = responseTabs.data.map(async (tab: any) => {
-  const responseTab = await fetcher(
-    `course-sections/${course_id}/tab/${tab.id}`,
-  )
-  if (responseTab?.data) {
-    return responseTab.data
-  }
-  throw new Error("Tab Not Found")
-})
+  const promises = responseTabs.data.map(async (tab: any) => {
+    const responseTab = await fetcher(
+      `course-sections/${course_id}/tab/${tab.id}`,
+    )
+    if (responseTab?.data) {
+      return responseTab.data
+    }
+    throw new Error('Tab Not Found')
+  })
   responseActivity.data.tabs = await Promise.all(promises)
   return responseActivity.data
 }

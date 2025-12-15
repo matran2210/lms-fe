@@ -34,6 +34,7 @@ import {
   IQuestion,
   IQuizSetting,
   IRequirment,
+  ITestServiceAPI,
   QUESTION_TYPES,
   RESPONSE_OPTION,
   SOCIAL_LINK,
@@ -112,7 +113,7 @@ const QuizDocument = ({
   isQuizFinished = false,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
-  const { questionApi, courseApi, pageLink, submitQuizTest, router } =
+  const { questionApi, courseApi, pageLink, testServiceApi, router } =
     useFeature();
   const { isAlwaysShowSidebar } = useTailwindBreakpoint();
   const [isOpenActivityIncluded, setIsOpenActivityIncluded] =
@@ -186,7 +187,7 @@ const QuizDocument = ({
         try {
           await dispatch(
             fetchQuestionById({
-              api: questionApi,
+              api: testServiceApi as ITestServiceAPI,
               courseApi: courseApi,
               activityId: activityId,
               tabId: tabId,
@@ -278,7 +279,7 @@ const QuizDocument = ({
         try {
           const nextQuestion = await dispatch(
             fetchQuestionById({
-              api: questionApi,
+              api: testServiceApi as ITestServiceAPI,
               courseApi: courseApi,
               activityId: activityId,
               tabId: tabId,
@@ -407,7 +408,7 @@ const QuizDocument = ({
       try {
         await dispatch(
           fetchQuestionById({
-            api: questionApi,
+            api: testServiceApi as ITestServiceAPI,
             courseApi: courseApi,
             activityId: activityId,
             tabId: tabId,
@@ -453,7 +454,7 @@ const QuizDocument = ({
         try {
           const prevQuestion = await dispatch(
             fetchQuestionById({
-              api: questionApi,
+              api: testServiceApi as ITestServiceAPI,
               courseApi: courseApi,
               activityId: activityId,
               tabId: tabId,
@@ -581,7 +582,7 @@ const QuizDocument = ({
     try {
       await dispatch(
         submitQuiz({
-          submitQuizTest,
+          submitQuizTest: testServiceApi.submitQuizTest,
           id: quizId,
           data: { answers, quiz_position_mapping },
           class_user_id,

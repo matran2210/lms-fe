@@ -14,6 +14,7 @@ import { IAtempt, IRequirement, QUESTION_TYPES } from '@lms/core'
 import { CoursesAPI } from '../api/courses'
 import { EYourAnswerType } from '@lms/core'
 import { PageLink } from 'src/constants/routes'
+import { TestServiceAPI } from '@pages/api/test-api'
 
 const Explanation = () => {
   const router = useRouter()
@@ -53,7 +54,7 @@ const Explanation = () => {
       // const quizAttempts = axiosInstance.get('')
       // const selectedResponseAnswers = data.data.selectedResponseAnswers
       const resultResponse = await CoursesAPI.getQuizAttempt(id)
-      const topicDescription = await CoursesAPI.getTopicDescription(
+      const topicDescription = await TestServiceAPI.getTopicDescription(
         resultResponse?.data?.answer?.question?.question_topic_id,
         resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
       ) // const newActiveQuestion = { ...selectedResponseAnswers[0].question }

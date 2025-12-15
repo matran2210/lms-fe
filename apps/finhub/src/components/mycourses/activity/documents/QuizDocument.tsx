@@ -37,6 +37,7 @@ import { CoursesAPI, submitQuizTest } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import { IQuestionResult } from 'quiz-result-package/dist/type'
+import { TestServiceAPI } from '@pages/api/test-api'
 
 type Props = {
   questions: IQuestion[]
@@ -145,7 +146,7 @@ const QuizDocument = ({
         try {
           dispatch(
             fetchQuestionById({
-              api: QuestionAPI,
+              api: TestServiceAPI,
               courseApi: CoursesAPI,
               activityId: activityId,
               tabId: tabId,
@@ -195,7 +196,7 @@ const QuizDocument = ({
         try {
           const nextQuestion = await dispatch(
             fetchQuestionById({
-              api: QuestionAPI,
+              api: TestServiceAPI,
               courseApi: CoursesAPI,
               activityId: activityId,
               tabId: tabId,
@@ -266,7 +267,7 @@ const QuizDocument = ({
       try {
         await dispatch(
           fetchQuestionById({
-            api: QuestionAPI,
+            api: TestServiceAPI,
             courseApi: CoursesAPI,
             activityId: activityId,
             tabId: tabId,
@@ -311,7 +312,7 @@ const QuizDocument = ({
         try {
           const prevQuestion = await dispatch(
             fetchQuestionById({
-              api: QuestionAPI,
+              api: TestServiceAPI,
               courseApi: CoursesAPI,
               activityId: activityId,
               tabId: tabId,
@@ -419,7 +420,7 @@ const QuizDocument = ({
     try {
       await dispatch(
         submitQuiz({
-          submitQuizTest: submitQuizTest,
+          submitQuizTest: TestServiceAPI.submitQuizTest,
           id: quizId,
           data: { answers, quiz_position_mapping },
           class_user_id,
