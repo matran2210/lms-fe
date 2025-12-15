@@ -1,5 +1,3 @@
-import { MeetingInfoType, ZoomMtgLang } from '@zoom/meetingsdk'
-
 export interface ZoomMeetingConfig {
   userId: string
   meetingNumber: string
@@ -41,35 +39,7 @@ export interface ZoomTokenResponse {
   meetingInfo: DecryptedZoomUserInfo
 }
 
-export interface ZoomMeetingSDK {
-  preLoadWasm: () => void
-  prepareWebSDK: () => void
-  init: (config: ZoomInitConfig) => void
-  join: (config: ZoomJoinConfig) => void
-  i18n: typeof ZoomMtgLang
-}
-
-export interface ZoomInitConfig {
-  leaveUrl: string
-  patchJsMedia?: boolean
-  leaveOnPageUnload?: boolean
-  success: (success: unknown) => void
-  error: (error: unknown) => void
-  meetingInfo?: MeetingInfoType[]
-  disableInvite?: boolean
-}
-
-export interface ZoomJoinConfig {
-  signature: string
-  sdkKey: string
-  meetingNumber: string
-  passWord: string
-  userName: string
-  userEmail: string
-  tk?: string
-  success: (success: unknown) => void
-  error: (error: unknown) => void
-}
+export type ZoomMeetingSDK = typeof import('@zoom/meetingsdk').ZoomMtg
 
 declare global {
   interface Window {

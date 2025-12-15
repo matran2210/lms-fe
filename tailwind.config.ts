@@ -26,6 +26,9 @@ export default {
       spacing: {
         'header-height': 'var(--header-height)',
       },
+      inset: {
+        'remove-pin-btn': '4.125rem', // 3.5rem (left-14) + 10px (old left)
+      },
     },
   },
   important: '#zoom-app',
