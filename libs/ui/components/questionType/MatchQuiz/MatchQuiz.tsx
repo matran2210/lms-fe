@@ -540,7 +540,7 @@ const MatchQuiz = forwardRef(
     );
 
     return (
-      <div style={{ width: CONTAINER_WIDTH + "px" }} key={key} ref={extenalRef}>
+      <div key={key} ref={extenalRef}>
         <div
           id="hightlight_area"
           className={clsx(
