@@ -8,7 +8,7 @@ import CorrectAnswer from "./CorrectAnswer";
 import DraggableItem from "./DraggableItem";
 import DroppableSlot from "./DroppableSlot";
 import { SappTitleSolution } from "../../common";
-import { EditorReader } from "../../base";
+import { EditorReader, SappModalImage } from "../../base";
 declare var com: any;
 
 interface Answer {
@@ -111,7 +111,8 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
   const contentRef = React.useRef<HTMLSpanElement | null>(null);
   const [slots, setSlots] = useState<SlotValue[]>([]);
   const [items, setItems] = useState<Answer[]>([]);
-
+const [src, setSrc] = useState<string>();
+  const [type, setType] = useState<"VIDEO" | "IMG">("VIDEO");
   // Tạo slots từ question_content
   const parsedSlots = useMemo(() => {
     const parser = new DOMParser();
@@ -150,8 +151,21 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
     Array.isArray(corrects) &&
     corrects.length > 0
   );
+
+  const handleOnclick = async (e: React.MouseEvent<HTMLDivElement>) => {
+      const target = e?.target as HTMLElement;
+     if (target?.tagName === "IMG") {
+        const imageSrc = target?.getAttribute("src");
+        if (imageSrc) {
+          setSrc(() => {
+            setType("IMG");
+            return imageSrc;
+          });
+        }
+      }
+    };
   const renderedContent = useMemo(() => {
-    return parse(data.question_content, {
+    return <div onClick={handleOnclick}>{parse(data.question_content, {
       replace: (domNode) => {
         if (
           domNode instanceof Element &&
@@ -206,7 +220,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
         }
         return undefined;
       },
-    });
+    })}</div>;
   }, [data.question_content, slots, corrects]);
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -439,6 +453,9 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
               <EditorReader className="mt-4" text_editor_content={solution} />
             </div>
           </>
+        )}
+        {type === "IMG" && (
+          <SappModalImage src={src} setSrc={setSrc}></SappModalImage>
         )}
       </div>
     </DndContext>
