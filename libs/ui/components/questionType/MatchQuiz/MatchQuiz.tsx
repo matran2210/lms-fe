@@ -498,8 +498,6 @@ const MatchQuiz = forwardRef(
 
       if (allAnswersCorrect) return { nodes: [], edges: [] };
 
-      console.log('generateCorrectFlow',generateCorrectFlow(corrects, nodes))
-
       return generateCorrectFlow(corrects, nodes);
     }, [corrects, nodes, defaultAnswer]);
 
