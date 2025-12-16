@@ -26,7 +26,7 @@ export const convertMathHtmlToImage = async (html: string): Promise<string> => {
   const viewer = (window as any)?.com?.wiris?.js?.JsPluginViewer
   if (!viewer) return html
 
-  // 👉 DOM tạm (không attach vào body)
+  // DOM tạm (không attach vào body)
   const container = document.createElement('div')
   container.innerHTML = html
 
