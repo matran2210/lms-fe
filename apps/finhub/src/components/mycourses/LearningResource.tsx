@@ -252,9 +252,9 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
               ) : (
                 <div
                   ref={scrollRef}
-                  className="mt-6 flex flex-col gap-4 overflow-y-auto md:mt-8"
+                  className="mt-6 flex flex-col gap-4 overflow-y-auto pb-3 md:mt-8"
                   style={{
-                    maxHeight: `calc(100% - ${heightContent})`,
+                    height: `calc(100vh - ${heightContent})`,
                   }}
                 >
                   {resources?.resources?.map((resource) => (
