@@ -1158,9 +1158,14 @@ p a {
 #hubspot-messages-iframe-container .visible-icon {
   display: none !important;
 }
+
 #hubspot-messages-iframe-container.visible-icon,
 #hubspot-messages-iframe-container .visible-icon {
   position: inherit !important;
+}
+
+#hubspot-messages-iframe-container.widget-align-right {
+  z-index: 20 !important;
 }
 
 #floating-button:hover,
