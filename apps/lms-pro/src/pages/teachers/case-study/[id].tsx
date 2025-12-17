@@ -382,7 +382,7 @@ const CaseStudyDetailTeacher = () => {
     class_user_id: string,
   ) {
     try {
-      const res = await TestAPI.createTopicAttempt(
+      const res = await TestServiceAPI.createTopicAttempt(
         quiz_id,
         id,
         class_user_id,

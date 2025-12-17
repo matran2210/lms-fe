@@ -172,7 +172,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     ref,
   ) => {
     const { uploadApi,
-      questionApi,
+      testServiceApi,
       courseApi,
     } = useFeature();
     const isAFTEREACHQUESTION = grading_preference === "AFTER_EACH_QUESTION";
@@ -542,7 +542,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         try {
           dispatch(
             confirmQuestion({
-              api: questionApi,
+              api: testServiceApi,
               courseApi: courseApi,
               activityId: activityId,
               tabId: tabId,

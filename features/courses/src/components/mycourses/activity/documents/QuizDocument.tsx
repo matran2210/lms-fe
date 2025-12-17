@@ -113,7 +113,7 @@ const QuizDocument = ({
   isQuizFinished = false,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
-  const { questionApi, courseApi, pageLink, testServiceApi, router } =
+  const { courseApi, pageLink, testServiceApi, router } =
     useFeature();
   const { isAlwaysShowSidebar } = useTailwindBreakpoint();
   const [isOpenActivityIncluded, setIsOpenActivityIncluded] =
@@ -224,7 +224,7 @@ const QuizDocument = ({
       if (!hasCorrects) {
         dispatch(
           confirmQuestion({
-            api: questionApi,
+            api: testServiceApi,
             courseApi: courseApi,
             activityId,
             tabId,
