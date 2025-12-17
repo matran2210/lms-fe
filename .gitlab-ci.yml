@@ -48,7 +48,7 @@ stages:
       alias: docker_in_docker
 
 variables:
-  IMAGE_BASE: "lms-fe"
+  IMAGE_BASE: "sappacademy/lms-be"
 
 # Build template
 .build_template:
