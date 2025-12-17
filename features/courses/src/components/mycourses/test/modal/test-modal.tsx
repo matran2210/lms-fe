@@ -12,11 +12,11 @@ import { capitalizeFirstLetter, formatTimer, isQuizExpired, trackGAEvent } from 
 import { Select } from "antd";
 import dayjs from "dayjs";
 import { isNull } from "lodash";
-import { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { TestAnnouncementModal } from "../../course-detail";
 import PopupCanNotRetakeTest from "../../PogupCannotRetakeTest";
-import TestPopup from "../TestPopup";
 import StatusTestQuizBadge from "../StatusTestQuizBadge";
+import TestPopup from "../TestPopup";
 
 enum StatusQuizAttempt {
   Passed = "PASSED",
@@ -32,6 +32,14 @@ interface IProps {
   class_user_id?: string;
   activeCourse?: any;
   is_passed_course: boolean;
+  selectedResultCourse?: {
+    label: string;
+    value: string;
+    ratio_score?: string | undefined;
+    status: string;
+    score: number;
+    total_attempt_time: number;
+  } | undefined
 }
 
 const TestModal = ({
@@ -41,6 +49,7 @@ const TestModal = ({
   class_user_id,
   activeCourse,
   is_passed_course,
+  selectedResultCourse
 }: IProps) => {
   const {router, courseApi, classApi } = useFeature();
   const isSubmitted =
@@ -233,8 +242,15 @@ const TestModal = ({
 
   const handleSubmitNow = async (isRedirect = true) => {
     const res =await courseApi.submitAllQuestion(data?.quiz?.attempt?.id as string);    
-    if(res?.success && data?.quiz?.attempt){
+    if (!isRedirect && res?.success && data?.quiz?.attempt) {
       data.quiz.attempt.status = "SUBMITTED";
+      if (selectedResultCourse) {
+        selectedResultCourse.ratio_score = res?.data?.ratio_score,
+        selectedResultCourse.status = res?.data?.status,
+        selectedResultCourse.score = res?.data?.score,
+        selectedResultCourse.total_attempt_time = res?.data?.total_attempt_time
+      
+      }
     }
     isRedirect && handleRedirectResult();
   };
@@ -844,4 +860,4 @@ const TestInfoItem = ({
     </div>
   );
 };
-export default TestModal;
+export default React.memo(TestModal);

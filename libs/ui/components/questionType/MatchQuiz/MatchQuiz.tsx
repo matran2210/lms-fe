@@ -498,8 +498,6 @@ const MatchQuiz = forwardRef(
 
       if (allAnswersCorrect) return { nodes: [], edges: [] };
 
-      console.log('generateCorrectFlow',generateCorrectFlow(corrects, nodes))
-
       return generateCorrectFlow(corrects, nodes);
     }, [corrects, nodes, defaultAnswer]);
 
@@ -540,7 +538,7 @@ const MatchQuiz = forwardRef(
     );
 
     return (
-      <div style={{ width: CONTAINER_WIDTH + "px" }} key={key} ref={extenalRef}>
+      <div key={key} ref={extenalRef}>
         <div
           id="hightlight_area"
           className={clsx(

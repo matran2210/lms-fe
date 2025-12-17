@@ -204,7 +204,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     const scrollEl = scrollRef.current;
     scrollEl?.addEventListener("scroll", handleScroll);
     return () => scrollEl?.removeEventListener("scroll", handleScroll);
-  }, [fetchData, pageIndex]);
+   }, [fetchData, pageIndex]);
 
   const download = async (name: string, file_key: string) => {
     await uploadApi.downloadFile({
@@ -313,9 +313,9 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
                 ) : (
                   <div
                     ref={scrollRef}
-                    className="mt-6 flex flex-col gap-4 overflow-y-auto md:mt-8"
+                    className="mt-6 flex flex-col gap-4 overflow-y-auto md:mt-8 pb-3"
                     style={{
-                      maxHeight: `calc(100% - ${heightContent})`,
+                      height: `calc(100vh - ${heightContent})`,
                     }}
                   >
                     {resources?.resources?.map((resource) => (
