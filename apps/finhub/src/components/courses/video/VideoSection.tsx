@@ -3,7 +3,7 @@ import { fetchQuestionById, IActivityStateQuestion } from '@lms/contexts'
 import { IQuestion, IVideo } from '@lms/core'
 import { SAPPVideo } from '@lms/ui'
 import { CoursesAPI } from '@pages/api/courses'
-import { QuestionAPI } from '@pages/api/question'
+import { TestServiceAPI } from '@pages/api/test-api'
 import { debounce } from '@utils/helpers'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -69,7 +69,7 @@ const VideoSection = ({
     if (activeQuestion?.id) {
       dispatch(
         fetchQuestionById({
-          api: QuestionAPI,
+          api: TestServiceAPI,
           courseApi: CoursesAPI,
           activityId,
           tabId,
@@ -130,7 +130,7 @@ const VideoSection = ({
       if (open) {
         await dispatch(
           fetchQuestionById({
-            api: QuestionAPI,
+            api: TestServiceAPI,
             courseApi: CoursesAPI,
             activityId: activityId,
             tabId: tabId,
