@@ -1274,10 +1274,9 @@ const CaseStudyDetail = () => {
                             'mb-8 flex w-full flex-col gap-8 rounded-xl bg-gray-100 p-8',
                             {
                               'min-w-[350px] bg-white px-0 py-8':
-                                question?.data?.qType === QUESTION_TYPES.ESSAY,
+                                question?.qType === QUESTION_TYPES.ESSAY,
                               '!w-fit':
-                                question?.data?.qType ===
-                                QUESTION_TYPES.MATCHING,
+                                question?.qType === QUESTION_TYPES.MATCHING,
                               'relative pr-4': isShowTemplate,
                             },
                           )}

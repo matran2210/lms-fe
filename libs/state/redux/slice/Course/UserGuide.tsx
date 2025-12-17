@@ -9,9 +9,9 @@ export interface GuideState {
 }
 
 const initialState: GuideState = {
-  status: false,
-  step: 0,
-  isActive: false,
+  status: true,
+  step: 1,
+  isActive: true,
 }
 
 export const userGuideSlice = createSlice({

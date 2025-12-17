@@ -1,0 +1,45 @@
+# --- Node modules ---
+node_modules
+**/node_modules
+.pnpm-store
+**/.pnpm-store
+
+# --- Build outputs ---
+**/.next
+**/.turbo
+**/dist
+**/build
+
+# --- Logs ---
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# --- Env ---
+.env
+.env.*
+!.env.example
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+
+# --- IDE ---
+.vscode
+.idea
+
+# --- Version control ---
+.git
+.gitattributes
+.gitignore
+
+# --- Docker ---
+docker-compose*
+.dockerignore
+
+# --- Cache ---
+**/.cache
+
+# --- DO NOT IGNORE .md FILES ---
+# (Turbo and many packages need their markdown metadata)

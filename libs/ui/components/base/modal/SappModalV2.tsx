@@ -50,6 +50,7 @@ interface IProps {
   classNameModal?: string | undefined
   width?: number | string
   handleClose?: () => void
+  closeIcon?: boolean
 }
 
 const SappModalV2 = ({
@@ -77,6 +78,7 @@ const SappModalV2 = ({
   classNameModal,
   width = 560,
   handleClose,
+  closeIcon = false
 }: IProps) => {
   return (
     <Modal
@@ -84,7 +86,7 @@ const SappModalV2 = ({
       title={title}
       centered
       open={open}
-      closeIcon={false}
+      closeIcon={closeIcon}
       className={classNameModal ?? 'sapp-modal'}
       onCancel={handleClose || handleCancel}
       width={width}

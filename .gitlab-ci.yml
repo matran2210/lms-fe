@@ -12,7 +12,7 @@
     - shell-docker
   resource_group: lms-fe
 
-# Job deploy cho LMS
+# Job deploy staging cho LMS
 deploy_staging_lms:
   extends: .deploy_staging_template
   only: 
@@ -22,7 +22,7 @@ deploy_staging_lms:
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID
     - vercel deploy --prod --token=$VERCEL_TOKEN
 
-# Job deploy cho Finhub
+# Job deploy staging cho Finhub
 deploy_staging_finhub:
   extends: .deploy_staging_template
   only: 
@@ -31,3 +31,132 @@ deploy_staging_finhub:
     - npm install -g vercel
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_FINHUB
     - vercel deploy --prod --token=$VERCEL_TOKEN
+
+# =================== PRODUCTION ZONE =========================
+# Prod environment
+stages:
+  - build
+  - deploy
+
+.prepare:
+  variables:
+    GIT_DEPTH: 10
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ''
+  services:
+    - name: docker:dind
+      alias: docker_in_docker
+
+variables:
+  IMAGE_BASE: "$CI_REGISTRY_IMAGE"
+
+# Build template
+.build_template:
+  stage: build
+  extends: .prepare
+  image: docker:latest
+  script:
+    - docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD
+    - docker build \
+      --build-arg APP_NAME=$APP_NAME \
+      -t "$IMAGE_BASE:$IMAGE_TAG" \
+      .
+    - docker push "$IMAGE_BASE:$IMAGE_TAG"
+  tags:
+  - shell-docker
+  environment: production
+  resource_group: lms-fe
+
+# Build LMS-PRO
+build_lms_pro:
+  extends: .build_template
+  variables:
+    APP_NAME: lms-pro
+    IMAGE_TAG: lms-pro-$CI_COMMIT_SHORT_SHA
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+      changes:
+        - apps/lms-pro/**/*
+        - libs/**/*
+        - features/**/*
+        - tools/**/*
+        - scripts/**/*
+        - package.json
+        - pnpm-lock.yaml
+        - pnpm-workspace.yaml
+        - turbo.json
+        - tsconfig.json
+        - .babelrc
+        - .npmrc
+        - .dockerignore
+        - Dockerfile
+
+# Deploy LMS-PRO
+
+# Build Finhub
+build_finhub:
+  extends: .build_template
+  variables:
+    APP_NAME: finhub
+    IMAGE_TAG: finhub-$CI_COMMIT_SHORT_SHA
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+      changes:
+        - apps/finhub/**/*
+        - libs/**/*
+        - features/**/*
+        - tools/**/*
+        - scripts/**/*
+        - package.json
+        - pnpm-lock.yaml
+        - pnpm-workspace.yaml
+        - turbo.json
+        - tsconfig.json
+        - .babelrc
+        - .npmrc
+        - .dockerignore
+        - Dockerfile
+
+# Deploy LMS-PRO
+deploy_lms_pro:
+  stage: deploy
+  needs:
+    - build_lms_pro
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+  script:
+    - chmod 600 "$TEST_SSH_KEY_PROD"
+    - cp "$TEST_SSH_KEY_PROD" key.pem
+    - |
+      ssh -o StrictHostKeyChecking=no -i key.pem root@$TEST_PROD_IP "
+        docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
+        cd /var/www/lms-pro &&
+        docker compose -f docker-compose.lms-pro.yml pull &&
+        docker compose -f docker-compose.lms-pro.yml up -d
+      "
+  environment: production
+  tags:
+  - shell
+  resource_group: lms-fe
+
+# Deploy Finhub
+deploy_finhub:
+  stage: deploy
+  needs:
+    - build_finhub
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+  script:
+    - chmod 600 "$SSH_KEY_PROD_SHORT_COURSE"
+    - cp "$SSH_KEY_PROD_SHORT_COURSE" key.pem
+    - |
+      ssh -o StrictHostKeyChecking=no -i key.pem root@$PROD_SHORT_COURSE_IP "
+        docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
+        cd /var/www/lms-pro &&
+        docker compose -f docker-compose.lms-pro.yml pull &&
+        docker compose -f docker-compose.lms-pro.yml up -d
+      "
+  environment: production
+  tags:
+  - shell
+  resource_group: lms-fe
