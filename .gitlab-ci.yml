@@ -57,11 +57,9 @@ variables:
   image: docker:latest
   script:
     - docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD
-    - docker build \
-      --build-arg APP_NAME=$APP_NAME \
-      -t "$IMAGE_BASE:$IMAGE_TAG" \
-      .
-    - docker push "$IMAGE_BASE:$IMAGE_TAG"
+    - docker build --build-arg APP_NAME=$APP_NAME -t $IMAGE_NAME:lms-pro-$CI_PIPELINE_IID .
+    - docker push $IMAGE_NAME:lms-pro-$CI_PIPELINE_IID
+    - echo "$IMAGE_NAME:lms-fe-$CI_PIPELINE_IID build success"
   tags:
   - shell-docker
   environment: production
