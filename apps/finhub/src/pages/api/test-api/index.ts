@@ -31,7 +31,7 @@ export class TestServiceAPI {
   static getQuestionTabsById(id: string | string[] | undefined): Promise<any> {
     return fetcher(`${BASE_TEST_URL_API}/quiz/${id}/shuffle`)
   }
-  static submitAllQuestion(id: string, data: any): Promise<any> {
+  static submitAllQuestion(id: string, data?: any): Promise<any> {
     //is submit test
     return fetcher(`${BASE_TEST_URL_API}/quiz/${id}/submit`, {
       data: data,

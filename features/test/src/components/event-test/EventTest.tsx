@@ -15,7 +15,7 @@ const EventTest = ({
   data: IEventTest;
   onRefetch: () => void;
 }) => {
-  const { router, courseApi } = useFeature();
+  const { router, testServiceApi } = useFeature();
   const [open, setOpen] = useState<boolean>(false);
   const { setSubmitEventTest } = useCourseContext();
   const [remainingTimeLastAttempt, setRemainingTimeLastAttempt] =
@@ -52,7 +52,7 @@ const EventTest = ({
 
   const handleSubmitQuestion = async () => {
     try {
-      const res = await courseApi.submitAllQuestion(
+      const res = await testServiceApi.submitAllQuestion(
         data?.quiz_attempt_id as string,
       )
       if (res.success) {

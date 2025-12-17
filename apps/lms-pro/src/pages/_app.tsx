@@ -74,7 +74,7 @@ import { URL } from 'url'
 import { ActivityAPI } from './api/activity'
 import { CaseStudyAPI } from './api/case-study'
 import { ClassAPI } from './api/class'
-import { CoursesAPI, submitQuizTest } from './api/courses'
+import { CoursesAPI } from './api/courses'
 import { EntranceTestAPI } from './api/entrance-test'
 import { EventTestAPI } from './api/event-test'
 import { NotificationAPI } from './api/notification'
@@ -361,7 +361,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 eventTestApi: EventTestAPI,
                 calendarApi: CalendarApi,
                 myProfileApi: MyProfileAPI,
-                submitQuizTest: submitQuizTest,
+                submitQuizTest: TestServiceAPI.submitQuizTest,
                 authManager: new AuthenticationManager(),
                 pageLink: PageLink,
                 menuItems: MENU_ITEMS,
