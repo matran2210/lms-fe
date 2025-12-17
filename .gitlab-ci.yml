@@ -71,23 +71,28 @@ build_lms_pro:
   variables:
     APP_NAME: lms-pro
     IMAGE_NAME: lms-pro-$CI_PIPELINE_IID
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-      changes:
-        - apps/lms-pro/**/*
-        - libs/**/*
-        - features/**/*
-        - tools/**/*
-        - scripts/**/*
-        - package.json
-        - pnpm-lock.yaml
-        - pnpm-workspace.yaml
-        - turbo.json
-        - tsconfig.json
-        - .babelrc
-        - .npmrc
-        - .dockerignore
-        - Dockerfile
+  only:
+    # variables:
+    #   - $CI_COMMIT_MESSAGE =~ /build/
+    refs:
+      - master-test-build
+  # rules:
+  #   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+  #     changes:
+  #       - apps/lms-pro/**/*
+  #       - libs/**/*
+  #       - features/**/*
+  #       - tools/**/*
+  #       - scripts/**/*
+  #       - package.json
+  #       - pnpm-lock.yaml
+  #       - pnpm-workspace.yaml
+  #       - turbo.json
+  #       - tsconfig.json
+  #       - .babelrc
+  #       - .npmrc
+  #       - .dockerignore
+  #       - Dockerfile
 
 # Deploy LMS-PRO
 
@@ -97,23 +102,28 @@ build_finhub:
   variables:
     APP_NAME: finhub
     IMAGE_TAG: finhub-$CI_PIPELINE_IID
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-      changes:
-        - apps/finhub/**/*
-        - libs/**/*
-        - features/**/*
-        - tools/**/*
-        - scripts/**/*
-        - package.json
-        - pnpm-lock.yaml
-        - pnpm-workspace.yaml
-        - turbo.json
-        - tsconfig.json
-        - .babelrc
-        - .npmrc
-        - .dockerignore
-        - Dockerfile
+  only:
+    # variables:
+    #   - $CI_COMMIT_MESSAGE =~ /build/
+    refs:
+      - master-test-build
+  # rules:
+  #   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+  #     changes:
+  #       - apps/finhub/**/*
+  #       - libs/**/*
+  #       - features/**/*
+  #       - tools/**/*
+  #       - scripts/**/*
+  #       - package.json
+  #       - pnpm-lock.yaml
+  #       - pnpm-workspace.yaml
+  #       - turbo.json
+  #       - tsconfig.json
+  #       - .babelrc
+  #       - .npmrc
+  #       - .dockerignore
+  #       - Dockerfile
 
 # Deploy LMS-PRO
 deploy_lms_pro:
