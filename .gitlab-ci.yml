@@ -56,7 +56,8 @@ variables:
   extends: .prepare
   image: docker:latest
   script:
-    - cp $TEST_ENV_PRODUCT_FILE apps/$APP_NAME/.env
+    - cp $ENV_PRODUCT_FILE .env
+    - source .env
     - docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD
     - docker build --build-arg APP_NAME=$APP_NAME -t $IMAGE_BASE:$IMAGE_NAME .
     - docker push $IMAGE_BASE:$IMAGE_NAME
@@ -98,33 +99,33 @@ build_lms_pro:
 # Deploy LMS-PRO
 
 # Build Finhub
-build_finhub:
-  extends: .build_template
-  variables:
-    APP_NAME: finhub
-    IMAGE_NAME: finhub-$CI_PIPELINE_IID
-  only:
-    # variables:
-    #   - $CI_COMMIT_MESSAGE =~ /build/
-    refs:
-      - master-test-build
-  # rules:
-  #   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-  #     changes:
-  #       - apps/finhub/**/*
-  #       - libs/**/*
-  #       - features/**/*
-  #       - tools/**/*
-  #       - scripts/**/*
-  #       - package.json
-  #       - pnpm-lock.yaml
-  #       - pnpm-workspace.yaml
-  #       - turbo.json
-  #       - tsconfig.json
-  #       - .babelrc
-  #       - .npmrc
-  #       - .dockerignore
-  #       - Dockerfile
+# build_finhub:
+#   extends: .build_template
+#   variables:
+#     APP_NAME: finhub
+#     IMAGE_NAME: finhub-$CI_PIPELINE_IID
+#   only:
+#     # variables:
+#     #   - $CI_COMMIT_MESSAGE =~ /build/
+#     refs:
+#       - master-test-build
+# rules:
+#   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+#     changes:
+#       - apps/finhub/**/*
+#       - libs/**/*
+#       - features/**/*
+#       - tools/**/*
+#       - scripts/**/*
+#       - package.json
+#       - pnpm-lock.yaml
+#       - pnpm-workspace.yaml
+#       - turbo.json
+#       - tsconfig.json
+#       - .babelrc
+#       - .npmrc
+#       - .dockerignore
+#       - Dockerfile
 
 # Deploy LMS-PRO
 deploy_lms_pro:
@@ -136,12 +137,17 @@ deploy_lms_pro:
   script:
     - chmod 600 "$TEST_SSH_KEY_PROD"
     - cp "$TEST_SSH_KEY_PROD" key.pem
+    - cp $ENV_PRODUCT_FILE .env
+    - source .env
     - |
       ssh -o StrictHostKeyChecking=no -i key.pem root@$TEST_PROD_IP "
         docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
-        cd /var/www/lms-pro &&
-        docker compose -f docker-compose.lms-pro.yml pull &&
-        docker compose -f docker-compose.lms-pro.yml up -d
+        cd /var/www/lms-fe &&
+        git fetch origin --prune &&
+        git reset --hard origin/master &&
+        sed -i '/^\s*next-app\s*:/,/^ *[^[:space:]]/ s@^\(\s*image\s*:\s*\)[^[:space:]]*@\1"sappacademy/lms-be:lms-fe-$CI_PIPELINE_IID"@' docker-compose.prod.yml &&
+        docker compose -f docker-compose.prod.yml pull next-app && 
+        docker compose -f docker-compose.prod.yml up -d"
       "
   environment: production
   tags:
@@ -149,23 +155,23 @@ deploy_lms_pro:
   resource_group: lms-fe
 
 # Deploy Finhub
-deploy_finhub:
-  stage: deploy
-  needs:
-    - build_finhub
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-  script:
-    - chmod 600 "$SSH_KEY_PROD_SHORT_COURSE"
-    - cp "$SSH_KEY_PROD_SHORT_COURSE" key.pem
-    - |
-      ssh -o StrictHostKeyChecking=no -i key.pem root@$PROD_SHORT_COURSE_IP "
-        docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
-        cd /var/www/lms-pro &&
-        docker compose -f docker-compose.lms-pro.yml pull &&
-        docker compose -f docker-compose.lms-pro.yml up -d
-      "
-  environment: production
-  tags:
-  - shell
-  resource_group: lms-fe
+# deploy_finhub:
+#   stage: deploy
+#   needs:
+#     - build_finhub
+#   rules:
+#     - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+#   script:
+#     - chmod 600 "$SSH_KEY_PROD_SHORT_COURSE"
+#     - cp "$SSH_KEY_PROD_SHORT_COURSE" key.pem
+#     - |
+#       ssh -o StrictHostKeyChecking=no -i key.pem root@$PROD_SHORT_COURSE_IP "
+#         docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
+#         cd /var/www/lms-pro &&
+#         docker compose -f docker-compose.lms-pro.yml pull &&
+#         docker compose -f docker-compose.lms-pro.yml up -d
+#       "
+#   environment: production
+#   tags:
+#   - shell
+#   resource_group: lms-fe
