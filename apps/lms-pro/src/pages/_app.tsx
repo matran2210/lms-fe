@@ -83,6 +83,7 @@ import { QuestionAPI } from './api/question'
 import { UploadAPI } from './api/upload'
 import ErrorRedirectPage from './error-redirect'
 import CalendarApi from './api/calendar'
+import { TestServiceAPI } from './api/test-api'
 dayjs.extend(utc)
 dayjs.extend(weekday)
 
@@ -369,6 +370,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 router: router,
                 fetcher: fetcher,
                 videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
+                testServiceApi: TestServiceAPI,
               }}
             >
               <CourseProvider

@@ -16,7 +16,13 @@ import {
 } from '@lms/core'
 import { CoursesList, FilterCourse, Heading } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { Layout, PopupStep, PopupWelcome, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
+import {
+  Layout,
+  PopupStep,
+  PopupWelcome,
+  SappLoadingGlobal,
+  SearchWithMenuToggle,
+} from '@lms/ui'
 import Aos from 'aos'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
@@ -26,7 +32,11 @@ import { useInfiniteQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from '../api/courses'
-import { TourGuideCoursesAnimation, TourGuideCourseTabAnimation, TourGuideFilterAnimation } from '@lms/assets'
+import {
+  TourGuideCoursesAnimation,
+  TourGuideCourseTabAnimation,
+  TourGuideFilterAnimation,
+} from '@lms/assets'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -261,7 +271,6 @@ const MyCourse = () => {
                 </span>
               }
             />
-            
           </div>
         </div>
         <div

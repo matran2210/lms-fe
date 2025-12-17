@@ -238,3 +238,50 @@ export interface ICalendarAPI {
   getEventSchedule: (params?: object | undefined) => Promise<any>;
   getDetailEvent: (id: string, is_holiday: boolean) => Promise<any>;
 }
+export interface ITestServiceAPI {
+  getQuestionAnswer: (id: string) => Promise<any>;
+  getQuestionDetail: (
+    questionId: string,
+    query?: QuestionDetailQueryDTO | undefined,
+  ) => Promise<IResponse<IQuestion>>;
+  getDetailQuizById: (id: string | string[] | undefined) => Promise<any>;
+  getQuestionTabsById: (id: string | string[] | undefined) => Promise<any>;
+  submitAllQuestion: (id: string, data: any) => Promise<any>;
+  submitAnswer: (id: string, data: any) => Promise<any>;
+  updateFlagInQuestion: (
+    quiz_attempt_id: string,
+    payload: {
+      question_id: string;
+      flag: boolean;
+      answer?:
+        | {
+            question_id: string;
+            requirement_id: string;
+          }[]
+        | undefined;
+    },
+  ) => Promise<any>;
+  createQuizAttempt: (
+    id: string | string[] | undefined,
+    class_user_id: string | undefined,
+  ) => Promise<any>;
+  createTopicAttempt(
+    quiz_id: string,
+    question_topic_id: string,
+    class_user_id?: string | undefined,
+    story_topic_id?: string | string[] | undefined,
+  ): Promise<any>;
+  submitCaseStudy: (id: string, data: any) => Promise<any>;
+  getTopicDescription:(
+    id: string | string[] | undefined,
+    quiz_id?: string | undefined,
+    class_user_id?: string | undefined,
+    cache?: boolean,
+  ) => Promise<any>;
+  getAnswersSubmitted: (id: string) => Promise<any>;
+  submitQuizTest: (
+    id: string,
+    data: any,
+    class_user_id?: string | undefined,
+  ) => Promise<any>;
+}
