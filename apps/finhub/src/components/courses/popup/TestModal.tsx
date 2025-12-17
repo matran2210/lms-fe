@@ -16,6 +16,7 @@ import { useTailwindBreakpoint } from '@lms/hooks'
 import { ButtonPrimary, ButtonSecondary, ButtonText } from '@lms/ui'
 import { capitalizeFirstLetter, formatTimer, trackGAEvent } from '@lms/utils'
 import { CoursesAPI } from '@pages/api/courses'
+import { TestServiceAPI } from '@pages/api/test-api'
 import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
 import { Select } from 'antd'
 import dayjs from 'dayjs'
@@ -245,7 +246,7 @@ const TestModal = ({
     remainingTimeLastAttempt.current <= 0
 
   const handleSubmitNow = async () => {
-    await CoursesAPI.submitAllQuestion(data?.quiz?.attempt?.id as string)
+    await TestServiceAPI.submitAllQuestion(data?.quiz?.attempt?.id as string)
     handleRedirectResult()
   }
 

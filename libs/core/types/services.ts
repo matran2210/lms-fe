@@ -69,12 +69,6 @@ export interface ICoursesAPI {
     page_size: number,
     page_index?: number,
   ) => Promise<any>;
-  getTopicDescription: (
-    id: string | string[] | undefined,
-    quiz_id?: string,
-    class_user_id?: string,
-    cache?: boolean,
-  ) => Promise<any>;
   getQuizAttemptsTable: (
     id: string,
     {
@@ -126,7 +120,6 @@ export interface ICoursesAPI {
   skipFoundation: (
     class_id: string | undefined,
   ) => Promise<{ success: boolean }>;
-  submitAllQuestion: (id: string, data?: any) => Promise<any>;
 }
 export interface IActivityAPI {
   createDiscussionComment: (
@@ -152,10 +145,6 @@ type QuestionDetailQueryDTO = {
   after_test: boolean;
 };
 export interface IQuestionAPI {
-  getQuestionDetail: (
-    questionId: string,
-    query?: QuestionDetailQueryDTO,
-  ) => Promise<IResponse<IQuestion>>;
 }
 
 export interface INotificationAPI {
@@ -246,7 +235,7 @@ export interface ITestServiceAPI {
   ) => Promise<IResponse<IQuestion>>;
   getDetailQuizById: (id: string | string[] | undefined) => Promise<any>;
   getQuestionTabsById: (id: string | string[] | undefined) => Promise<any>;
-  submitAllQuestion: (id: string, data: any) => Promise<any>;
+  submitAllQuestion: (id: string, data?: any) => Promise<any>;
   submitAnswer: (id: string, data: any) => Promise<any>;
   updateFlagInQuestion: (
     quiz_attempt_id: string,
@@ -272,12 +261,6 @@ export interface ITestServiceAPI {
     story_topic_id?: string | string[] | undefined,
   ): Promise<any>;
   submitCaseStudy: (id: string, data: any) => Promise<any>;
-  getTopicDescription:(
-    id: string | string[] | undefined,
-    quiz_id?: string | undefined,
-    class_user_id?: string | undefined,
-    cache?: boolean,
-  ) => Promise<any>;
   getAnswersSubmitted: (id: string) => Promise<any>;
   submitQuizTest: (
     id: string,

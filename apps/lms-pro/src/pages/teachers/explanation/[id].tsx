@@ -1,7 +1,15 @@
 import { CloseIcon } from '@lms/assets'
 import { UserType } from '@lms/contexts'
-import { GRADING_METHOD, IAtempt, IRequirement, LAYOUT, QUESTION_TYPES, TEST_ATTEMPT_TYPE } from '@lms/core'
+import {
+  GRADING_METHOD,
+  IAtempt,
+  IRequirement,
+  LAYOUT,
+  QUESTION_TYPES,
+  TEST_ATTEMPT_TYPE,
+} from '@lms/core'
 import { FullScreenLayout, SappLoadingGlobal } from '@lms/ui'
+import { TestServiceAPI } from '@pages/api/test-api'
 import { ExplanationPackage } from 'explanation-package'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -48,7 +56,7 @@ const Explanation = () => {
       // const quizAttempts = axiosInstance.get('')
       // const selectedResponseAnswers = data.data.selectedResponseAnswers
       const resultResponse = await CoursesAPI.getQuizAttempt(id)
-      const topicDescription = await CoursesAPI.getTopicDescription(
+      const topicDescription = await TestServiceAPI.getTopicDescription(
         resultResponse?.data?.answer?.question?.question_topic_id,
         resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
       ) // const newActiveQuestion = { ...selectedResponseAnswers[0].question }

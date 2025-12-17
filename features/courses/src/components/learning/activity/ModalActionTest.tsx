@@ -31,7 +31,7 @@ const ModalActionTest = ({
   data,
   class_user_id,
 }: IProps) => {
-  const {router, courseApi, classApi } = useFeature();
+  const {router, courseApi, classApi, testServiceApi } = useFeature();
     const attempt = data?.quiz?.attempts?.[0]
   const isSubmitted =
     attempt && attempt?.status === "SUBMITTED";
@@ -210,7 +210,7 @@ const ModalActionTest = ({
     }
   }, [remainingTimeLastAttempt?.current])
   const handleSubmitNow = async (isRedirect = true) => {
-    const res = await courseApi.submitAllQuestion(attempt?.id as string);
+    const res = await testServiceApi.submitAllQuestion(attempt?.id as string);
     if (!isRedirect && res?.success && attempt && attempt?.status) {
       attempt.status = "SUBMITTED";
     }
