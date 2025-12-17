@@ -48,7 +48,7 @@ stages:
       alias: docker_in_docker
 
 variables:
-  IMAGE_BASE: "sappacademy/lms-be"
+  # IMAGE_BASE: "sappacademy/lms-be"
 
 # Build template
 .build_template:
@@ -59,9 +59,9 @@ variables:
     - cp $ENV_PRODUCT_FILE .env
     - source .env
     - docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD
-    - docker build --build-arg APP_NAME=$APP_NAME -t $IMAGE_BASE:$IMAGE_NAME .
-    - docker push $IMAGE_BASE:$IMAGE_NAME
-    - echo "$IMAGE_NAME:lms-fe-$CI_PIPELINE_IID build success"
+    - docker build --build-arg APP_NAME=$APP_NAME -t $IMAGE_NAME:$IMAGE_VER .
+    - docker push $IMAGE_NAME:$IMAGE_VER
+    - echo "$IMAGE_NAME:$IMAGE_VER build success"
   tags:
   - shell-docker
   environment: production
@@ -72,7 +72,7 @@ build_lms_pro:
   extends: .build_template
   variables:
     APP_NAME: lms-pro
-    IMAGE_NAME: lms-fe-$CI_PIPELINE_IID
+    IMAGE_VER: lms-fe-$CI_PIPELINE_IID
   only:
     # variables:
     #   - $CI_COMMIT_MESSAGE =~ /build/
