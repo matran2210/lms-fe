@@ -48,7 +48,7 @@ stages:
       alias: docker_in_docker
 
 variables:
-  IMAGE_BASE: "$CI_REGISTRY_IMAGE"
+  IMAGE_BASE: "lms-fe"
 
 # Build template
 .build_template:
@@ -57,8 +57,8 @@ variables:
   image: docker:latest
   script:
     - docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD
-    - docker build --build-arg APP_NAME=$APP_NAME -t $IMAGE_NAME:lms-pro-$CI_PIPELINE_IID .
-    - docker push $IMAGE_NAME:lms-pro-$CI_PIPELINE_IID
+    - docker build --build-arg APP_NAME=$APP_NAME -t $IMAGE_BASE:$IMAGE_NAME .
+    - docker push $IMAGE_BASE:$IMAGE_NAME
     - echo "$IMAGE_NAME:lms-fe-$CI_PIPELINE_IID build success"
   tags:
   - shell-docker
@@ -70,7 +70,7 @@ build_lms_pro:
   extends: .build_template
   variables:
     APP_NAME: lms-pro
-    IMAGE_TAG: lms-pro-$CI_COMMIT_SHORT_SHA
+    IMAGE_NAME: lms-pro-$CI_PIPELINE_IID
   rules:
     - if: '$CI_COMMIT_BRANCH == "master-test-build"'
       changes:
@@ -96,7 +96,7 @@ build_finhub:
   extends: .build_template
   variables:
     APP_NAME: finhub
-    IMAGE_TAG: finhub-$CI_COMMIT_SHORT_SHA
+    IMAGE_TAG: finhub-$CI_PIPELINE_IID
   rules:
     - if: '$CI_COMMIT_BRANCH == "master-test-build"'
       changes:
