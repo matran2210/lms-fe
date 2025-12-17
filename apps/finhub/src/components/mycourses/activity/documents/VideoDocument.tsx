@@ -14,6 +14,7 @@ import { IQuestion, IVideo } from '@lms/core'
 import { QuestionAPI } from '@pages/api/question'
 import { CoursesAPI } from '@pages/api/courses'
 import { SappButton, SappModal, SAPPVideo } from '@lms/ui'
+import { TestServiceAPI } from '@pages/api/test-api'
 
 type Props = {
   videos?: IVideo[]
@@ -91,7 +92,7 @@ const VideoDocument = ({
           tabId: tabId,
           quizId: currentVideo?.quiz?.id || '',
           questionId: activeQuestion?.id,
-          api: QuestionAPI,
+          api: TestServiceAPI,
           courseApi: CoursesAPI,
         }),
       )
@@ -169,7 +170,7 @@ const VideoDocument = ({
             tabId: tabId,
             quizId: currentVideo?.quiz?.id || '',
             questionId: id,
-            api: QuestionAPI,
+            api: TestServiceAPI,
             courseApi: CoursesAPI,
           }),
         )
