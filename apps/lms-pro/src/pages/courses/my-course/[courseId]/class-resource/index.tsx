@@ -1,7 +1,19 @@
 import { UserType } from '@lms/contexts'
-import { DEFAULT_PAGE_SIZE, TEST_AND_QUIZ_TITLE } from '@lms/core'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { HeaderMobile, Layout, SappBreadCrumbs } from '@lms/ui'
+import {
+  AppType,
+  ClassKey,
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  IListClassResourceParams,
+  TEST_AND_QUIZ_TITLE,
+} from '@lms/core'
+import { useSappPaging, useTailwindBreakpoint } from '@lms/hooks'
+import {
+  HeaderMobile,
+  Layout,
+  SappBreadCrumbs,
+  SearchWithMenuToggle,
+} from '@lms/ui'
 import { CoursesAPI } from '@pages/api/courses'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
@@ -12,17 +24,16 @@ import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import ClassResourceTable from './ClassResourceTable'
 import FilterClassResource from './FilterClassResource'
+import { ClassAPI } from '@pages/api/class'
+import SearchClassResource from './SearchClassResource'
 
 const ClassResource = () => {
   const router = useRouter()
-  const { isAlwaysShowSidebar, isTabletView, isMobileView } =
-    useTailwindBreakpoint()
-  const [openFilter, setOpenFilter] = useState(false)
-  const handleBack = () => {
-    if (router.query.courseId)
-      router.push(`/courses/my-course/${router.query.courseId}`)
-  }
-
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const [params, setParams] = useState<IListClassResourceParams>({
+    page_size: DEFAULT_PAGE_SIZE,
+    page_index: DEFAULT_PAGE_NUMBER,
+  })
   /**
    * @description config API course detail
    */
@@ -45,14 +56,23 @@ const ClassResource = () => {
     }
   }
 
-  const params = {
+  const { data, pagination, isLoading, handleChangeParams, setPagination } =
+    useSappPaging({
+      uniqueKey: ClassKey.ClassResource,
+      queryFn: () =>
+        ClassAPI.getClassResource(router.query.courseId as string, params),
+      params,
+    })
+
+  const paramsCourseDetail = {
     user_section_learning_status:
       router.query.user_section_learning_status || undefined,
   }
 
   const { data: courseData } = useQuery({
     queryKey: ['courseDetail'],
-    queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
+    queryFn: ({ pageParam }) =>
+      fetchCourseDetail({ pageParam, params: paramsCourseDetail }),
     refetchOnWindowFocus: true,
     retry: false,
   })
@@ -88,23 +108,27 @@ const ClassResource = () => {
           />
         </div>
       )}
-      <HeaderMobile
-        title={'Class Resource'}
-        showIcon={isTabletView || isMobileView}
-        onBack={handleBack}
-        className={clsx({ 'mt-4': isMobileView, 'mt-8': isTabletView })}
-        extraActions={
-          isMobileView && (
-            <div onClick={() => setOpenFilter((prev) => !prev)}>
-              <FilterCourseIcon />
-            </div>
-          )
-        }
-      />
-      <FilterClassResource />
+      <div className="mb-8">
+        <SearchClassResource
+          handleOpenSidebar={() => {}}
+          isShowToggle
+          redirectLink={PageLink.COURSES}
+          appType={AppType.LMS_PRO}
+        />
+      </div>
+      <div className="mb-6 flex w-full justify-end">
+        <FilterClassResource
+          setFilter={setParams}
+          filter={params}
+          totalResult={pagination?.total || 0}
+        />
+      </div>
       <ClassResourceTable
-        openFilter={openFilter}
-        setOpenFilter={setOpenFilter}
+        data={data}
+        pagination={pagination}
+        setPagination={setPagination}
+        isLoading={isLoading}
+        setParams={setParams}
       />
     </Layout>
   )

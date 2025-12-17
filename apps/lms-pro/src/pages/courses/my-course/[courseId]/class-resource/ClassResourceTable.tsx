@@ -1,134 +1,162 @@
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
-import StudentCell from '@components/teacher/components/StudentCell'
-import { ConfirmIcon } from '@lms/assets'
-import { reset } from '@lms/contexts'
+import { DownloadIcon } from '@lms/assets'
 import {
-  FOUNDATION,
-  IOpenChooseItem,
-  ISection,
-  IStudentClassDetail,
-  SectionDropdownFormValues,
-  StudentKey,
-  backTypeMap,
-  getTypeName,
+  CLASS_SUFFIX_TYPE,
+  DEFAULT_PAGE_NUMBER,
+  IClassResource,
+  IListClassResourceParams,
 } from '@lms/core'
-import { CardResultTest, CollapseActivity } from '@lms/feature-courses'
-import { useSappPaging } from '@lms/hooks'
-import {
-  CarouselSlideAnimation,
-  FilterCourseSection,
-  ListFilterMobile,
-  ListItemFilterMobile,
-  NoCoursesAvailable,
-  SappBaseTable,
-  SappDrawerV3,
-  SappModalV3,
-  SappTable,
-} from '@lms/ui'
-import { formatDateFromUTC } from '@lms/utils'
-import { TeacherAPI } from '@pages/api/teacher'
-import { Avatar, List, Skeleton } from 'antd'
+import { ActionCellV2, PaginationSappV2, SappTable } from '@lms/ui'
+import { UploadAPI } from '@pages/api/upload'
+import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import clsx from 'clsx'
-import { isEmpty, round } from 'lodash'
-import { useRouter } from 'next/router'
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
-import { useInfiniteQuery } from 'react-query'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { CourseKey } from 'src/pages/api/queryKey'
+import { Dispatch, SetStateAction } from 'react'
 
 const ClassResourceTable = ({
-  openFilter,
-  setOpenFilter,
+  data,
+  pagination,
+  isLoading,
+  setPagination,
+  setParams,
 }: {
-  openFilter: boolean
-  setOpenFilter: Dispatch<SetStateAction<boolean>>
+  data: any
+  pagination: TablePaginationConfig
+  isLoading: boolean
+  setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
+  setParams: Dispatch<SetStateAction<IListClassResourceParams>>
 }) => {
-  const router = useRouter()
-  const [direction, setDirection] = useState<1 | -1>(1)
-  const pageSize = 10
-  const studentId = ''
-  const params = {}
-  const { data, pagination, isLoading, handleChangeParams, setPagination } =
-    useSappPaging({
-      uniqueKey: StudentKey.Student,
-      queryFn: () =>
-        TeacherAPI.getStudentById(
-          studentId,
-          pagination.current as number,
-          pagination.pageSize as number,
-          params,
-        ),
-      params,
+  const textStyle = 'text-base font-medium text-gray-800'
+  const className = 'custom-column-table'
+  const textTruncateStyle = `${textStyle} overflow-hidden text-ellipsis whitespace-nowrap w-[300px]`
+  const columns: ColumnsType<IClassResource> = [
+    {
+      title: '#',
+      dataIndex: 'index',
+      key: 'index',
+      className: className,
+      width: 60,
+      align: 'center',
+      render: (_, __, index) => (
+        <NameNoActionCell
+          dataColumn={index + 1}
+          className="text-base text-gray-400"
+          isCenter
+        />
+      ),
+    },
+    {
+      title: 'File name',
+      dataIndex: 'name',
+      key: 'name',
+      className: clsx(className),
+      render: (name) => (
+        <NameNoActionCell dataColumn={name} className={textTruncateStyle} />
+      ),
+    },
+    {
+      title: 'Type',
+      dataIndex: 'suffix_type',
+      key: 'type',
+      className: clsx(className, 'text-center'),
+      align: 'center',
+      render: (_, record) => (
+        <NameNoActionCell
+          isCenter
+          dataColumn={
+            CLASS_SUFFIX_TYPE?.find((item) => item.value === record.suffix_type)
+              ?.label
+          }
+          className="text-base text-gray-400"
+        />
+      ),
+      width: 100,
+    },
+    {
+      title: 'Lesson',
+      dataIndex: 'lesson',
+      key: 'lesson',
+      className: clsx(className, 'text-center'),
+      align: 'center',
+      render: (_, record) =>
+        record?.class_resource_permissions?.schedules.map((item) => (
+          <div className="text-base text-gray-400">{item?.name}</div>
+        )),
+      width: 400,
+    },
+    {
+      title: 'Location',
+      dataIndex: 'location',
+      key: 'location',
+      className: clsx(className),
+      align: 'center',
+      render: (location) => (
+        <NameNoActionCell
+          isCenter
+          dataColumn={location}
+          className="text-base text-gray-400"
+        />
+      ),
+      width: 300,
+    },
+    {
+      title: '',
+      key: 'actions',
+      className: className,
+      render: (_, record) => {
+        return (
+          <div className="flex justify-end">
+            <ActionCellV2
+              className=""
+              listAction={[
+                {
+                  icon: <DownloadIcon className="h-5 w-5" />,
+                  nameAction: 'Download',
+                  action: () => download(record.name, record.file_key),
+                },
+              ]}
+            />
+          </div>
+        )
+      },
+    },
+  ]
+
+  const download = async (name: string, file_key: string) => {
+    await UploadAPI.downloadFile({
+      files: [
+        {
+          name: name,
+          file_key: file_key,
+        },
+      ],
     })
-
-  // Hàm tính toán tiến độ học tập của học viên
-  const calculateProgress = (record: IStudentClassDetail): number => {
-    // Lấy tổng số phần trong khóa học, nếu không có thì gán mặc định là 0
-    const totalSections = record?.learning_progress?.total_course_sections ?? 0
-
-    // Lấy số phần đã hoàn thành trong khóa học, nếu không có thì gán mặc định là 0
-    const completedSections =
-      record?.learning_progress?.total_course_sections_completed ?? 0
-
-    // Nếu tổng số phần lớn hơn 0, tính tiến độ học tập dưới dạng phần trăm
-    return totalSections > 0
-      ? // Tính tiến độ (completedSections / totalSections) và nhân với 100 để có phần trăm, sau đó làm tròn kết quả đến 2 chữ số thập phân
-        round((completedSections / totalSections) * 100, 2)
-      : // Nếu không có phần nào trong khóa học (totalSections = 0), trả về tiến độ là 0%
-        0
   }
 
-  const commonHeaderCellStyle =
-    'text-left text-base font-medium text-[#6b7280] pb-3 min-w-16 h-14 '
-
-  const headers = [
-    {
-      label: 'Q#',
-      className: clsx(commonHeaderCellStyle),
-    },
-    {
-      label: 'File name',
-      className: clsx(commonHeaderCellStyle, 'min-w-28'),
-    },
-    {
-      label: 'Type',
-      className: clsx(commonHeaderCellStyle, 'min-w-40 text-center'),
-    },
-    {
-      label: 'Lesson',
-      className: clsx(commonHeaderCellStyle),
-    },
-    {
-      label: 'Location',
-      className: clsx(commonHeaderCellStyle, 'text-center'),
-    },
-  ] as {
-    label: string
-    className: string
-  }[]
-
   return (
-    <div className="mt-6 rounded-2xl  bg-white p-8">
-      <SappBaseTable
-        headers={headers}
-        hasCheck={false}
-        isCheckedAll={false}
-        classTable="w-full"
-        theadClass="sticky top-0 bg-white divide-y divide-[#e5e7eb] border-b border-gray-300"
-        tbodyClass="divide-y divide-[#e5e7eb]"
-        classTableRes="max-h-96 overflow-y-auto"
-      >
-        sappbase
-      </SappBaseTable>
-    </div>
+    <>
+      <SappTable
+        columns={columns}
+        data={data?.data}
+        loading={isLoading}
+        rowKey="id"
+        pagination={pagination}
+        className="style-table-v2 rounded-xl bg-white"
+        isShowPagination={false}
+      />
+      <PaginationSappV2
+        currentPage={pagination?.current || DEFAULT_PAGE_NUMBER}
+        pageSize={pagination?.pageSize || 10}
+        totalItems={pagination?.total || 0}
+        setCurrentPage={(page) => {
+          setPagination((prev) => ({ ...prev, current: page as number }))
+          setParams((prev) => ({ ...prev, page_index: page as number }))
+        }}
+        setPageSize={(page) => {
+          setParams((prev) => ({ ...prev, page_size: page as number }))
+          setPagination((prev) => ({ ...prev, pageSize: page as number }))
+        }}
+      />
+    </>
   )
 }
 
