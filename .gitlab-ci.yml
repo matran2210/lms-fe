@@ -103,7 +103,7 @@ build_finhub:
   extends: .build_template
   variables:
     APP_NAME: finhub
-    IMAGE_TAG: finhub-$CI_PIPELINE_IID
+    IMAGE_NAME: finhub-$CI_PIPELINE_IID
   only:
     # variables:
     #   - $CI_COMMIT_MESSAGE =~ /build/
