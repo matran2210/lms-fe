@@ -42,7 +42,7 @@ const BackToTop = ({
   return (
     <div
       className={clsx(
-        `fixed bottom-[250px] right-4 cursor-pointer`,
+        `fixed bottom-[250px] right-4 cursor-pointer sm:me-0 mr-1.5`,
         className,
         {
           hidden: !isVisible,
@@ -52,7 +52,7 @@ const BackToTop = ({
     >
       <div
         className={clsx(
-          "flex size-[60px] items-center justify-center rounded-full bg-white p-2 shadow-card",
+          "flex size-[48px] sm:size-[60px] items-center justify-center rounded-full bg-white p-2 shadow-card",
           iconWrapperClassName,
         )}
       >
