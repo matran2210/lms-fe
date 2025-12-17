@@ -235,8 +235,6 @@ const MyCourse = () => {
         showSidebar={showSidebar || isAlwaysShowSidebar}
         handleToggleSidebar={handleCloseSidebar}
         className="relative"
-        isEndGuide={isEndGuide}
-        closeUserGuide={closeUserGuide}
       >
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}
@@ -271,6 +269,34 @@ const MyCourse = () => {
                 </span>
               }
             />
+            {guideStatus && guideStep === 4 && (
+              <PopupStep
+                content={UserGuide.CONTENT_STEP_4}
+                className="left-0 top-full mt-5"
+                index={4}
+                total={6}
+                isEnd={isEndGuide}
+                title="Welcome"
+                handleCancel={closeUserGuide}
+              />
+            )}
+          </div>
+          <div
+            className={`hidden items-center rounded-md bg-white p-3 md:flex md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 5 ? ' z-50 h-auto' : ''}`}
+            data-aos={ANIMATION.DATA_AOS}
+          >
+            {guideStatus && guideStep === 5 && (
+              <PopupStep
+                content={UserGuide.CONTENT_STEP_5}
+                className="left-[-400px] top-full mt-5"
+                index={5}
+                total={7}
+                isEnd={isEndGuide}
+                imgSrc={TourGuideCourseTabAnimation}
+                title="Course Tab"
+                handleCancel={closeUserGuide}
+              />
+            )}
           </div>
         </div>
         <div
@@ -287,6 +313,18 @@ const MyCourse = () => {
           </h1>
           <div className="relative">
             <FilterCourse totalResult={totalRecords} listFilter={listFilter} />
+            {guideStatus && guideStep === 6 && (
+              <PopupStep
+                content={UserGuide.CONTENT_STEP_6}
+                className="right-1/2 top-full mt-5"
+                index={6}
+                total={6}
+                titleButtonNext="Finish"
+                title="Filter"
+                handleCancel={closeUserGuide}
+                imgSrc={TourGuideFilterAnimation}
+              />
+            )}
           </div>
         </div>
         <div
@@ -304,6 +342,16 @@ const MyCourse = () => {
             isFetchingNextPage={isFetchingNextPage}
             guideIsActive={guideStatus === true && !isEndGuide}
           />
+          {guideStatus && guideStep === 5 && (
+            <PopupStep
+              content={UserGuide.CONTENT_STEP_5}
+              className="left-[50%] top-[20px] mt-6 xl:left-[33.5%]"
+              index={5}
+              total={6}
+              title="Courses"
+              imgSrc={TourGuideCoursesAnimation}
+            />
+          )}
         </div>
 
         {guideStatus && guideStep === 0 && (
