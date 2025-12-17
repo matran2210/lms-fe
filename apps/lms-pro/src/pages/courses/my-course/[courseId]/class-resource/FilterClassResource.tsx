@@ -1,5 +1,6 @@
 import { CLASS_SUFFIX_TYPE } from '@lms/core'
 import { SappSelectMultiple, SAPPSelectV2 } from '@lms/ui'
+import { cleanArray, normalizeToArray } from '@lms/utils'
 import { getSelectOptions } from '@utils/helpers'
 import { debounce } from 'lodash'
 import { useRouter } from 'next/router'
@@ -7,47 +8,68 @@ import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import useSelectClassSchedule from 'src/hooks/useSelectClassSchedule'
 
-export interface IClassSchedule {
-  class_schedule_id: string
-  class_id: string
-  mode: string
-  is_holiday: boolean
-  event_name: string
-  schedule_id: string
-  lesson_date: Date
-  start_time: string
-  end_time: string
-  is_test: boolean
-  is_case_study: boolean
-  is_cancelled: boolean
-  has_key_content_before: boolean
-  dead_line: Date
-}
-
 const FilterClassResource = ({
-  filter,
-  setFilter,
   totalResult,
 }: {
-  filter: any
-  setFilter: any
   totalResult: number
 }) => {
-  const { control, watch } = useForm()
   const router = useRouter()
+  const { control, watch, reset } = useForm({
+  defaultValues: {
+    suffix_types: router.query.suffix_types,
+    schedule_ids: normalizeToArray(router.query.schedule_ids),
+  },
+})
   const { courseId } = router.query
 
   useEffect(() => {
-    const subscription = watch((values) => {
-      setFilter((prev: any) => ({
-        ...prev,
-        ...values,
-      }))
-    })
+  if (!router.isReady) return
 
-    return () => subscription.unsubscribe()
-  }, [watch])
+  reset({
+    suffix_types:
+      typeof router.query.suffix_types === 'string'
+        ? router.query.suffix_types
+        : undefined,
 
+    schedule_ids: normalizeToArray(router.query.schedule_ids),
+  })
+}, [
+  router.isReady,
+  router.query.suffix_types,
+  router.query.schedule_ids,
+  reset,
+])
+
+  /**
+   * 🔥 Watch filter → push URL
+   */
+useEffect(() => {
+  const subscription = watch((values) => {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          ...router.query,
+          page_index: 1,
+          suffix_types:
+            typeof values.suffix_types === 'string'
+              ? values.suffix_types
+              : undefined,
+
+          schedule_ids: cleanArray(values.schedule_ids),
+        },
+      },
+      undefined,
+      { shallow: true },
+    )
+  })
+
+  return () => subscription.unsubscribe()
+}, [watch])
+
+  /**
+   * ===== Schedule search =====
+   */
   const [search, setSearch] = useState('')
 
   const { classSchedule, hasNextPage, fetchNextPage, isLoading, refetch } =
@@ -74,6 +96,7 @@ const FilterClassResource = ({
       <div className="shrink-0 text-sm font-normal text-gray-800">
         {totalResult || 0} Results
       </div>
+
       <div className="flex justify-end gap-4">
         <div className="flex gap-2">
           <SAPPSelectV2
@@ -84,11 +107,11 @@ const FilterClassResource = ({
             className="min-w-36"
             heightCustom="h-10"
           />
+
           <SappSelectMultiple
             allowClear
             control={control}
             onSearch={handleSearch}
-            required
             name="schedule_ids"
             isLoading={isLoading}
             onMenuScrollToBottom={() => hasNextPage && fetchNextPage()}

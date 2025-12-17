@@ -5,27 +5,23 @@ import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   IListClassResourceParams,
-  TEST_AND_QUIZ_TITLE,
 } from '@lms/core'
 import { useSappPaging, useTailwindBreakpoint } from '@lms/hooks'
 import {
-  HeaderMobile,
   Layout,
-  SappBreadCrumbs,
-  SearchWithMenuToggle,
+  SappBreadCrumbs
 } from '@lms/ui'
+import { ClassAPI } from '@pages/api/class'
 import { CoursesAPI } from '@pages/api/courses'
-import clsx from 'clsx'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { FilterCourseIcon } from '@lms/assets'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import ClassResourceTable from './ClassResourceTable'
 import FilterClassResource from './FilterClassResource'
-import { ClassAPI } from '@pages/api/class'
 import SearchClassResource from './SearchClassResource'
+import { normalizeToArray } from '@lms/utils'
 
 const ClassResource = () => {
   const router = useRouter()
@@ -82,6 +78,31 @@ const ClassResource = () => {
    */
   const courseNameDetail = courseData?.courseDetail?.data?.name
 
+useEffect(() => {
+  if (!router.isReady) return
+
+  setParams(prev => ({
+    ...prev,
+    page_index: router.query.page_index
+      ? Number(router.query.page_index)
+      : DEFAULT_PAGE_NUMBER,
+
+    suffix_types:  normalizeToArray(router.query.suffix_types),
+     schedule_ids: normalizeToArray(router.query.schedule_ids),
+
+    search_key: typeof router.query.search_key === 'string'
+      ? router.query.search_key
+      : undefined,
+  }))
+}, [
+  router.isReady,
+  router.query.page_index,
+  router.query.suffix_types,
+  router.query.schedule_ids,
+  router.query.search_key,
+])
+
+
   return (
     <Layout title={'Class Resource'} showSidebar={isAlwaysShowSidebar}>
       {isAlwaysShowSidebar && (
@@ -118,8 +139,6 @@ const ClassResource = () => {
       </div>
       <div className="mb-6 flex w-full justify-end">
         <FilterClassResource
-          setFilter={setParams}
-          filter={params}
           totalResult={pagination?.total || 0}
         />
       </div>
@@ -128,7 +147,6 @@ const ClassResource = () => {
         pagination={pagination}
         setPagination={setPagination}
         isLoading={isLoading}
-        setParams={setParams}
       />
     </Layout>
   )

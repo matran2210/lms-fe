@@ -198,6 +198,5 @@ export interface IListClassResourceParams {
   page_size: number;
   page_index: number;
   search_key?: string;
-  target_group?: string;
-  suffix_types?: string;
+  suffix_types?: string[];
 }

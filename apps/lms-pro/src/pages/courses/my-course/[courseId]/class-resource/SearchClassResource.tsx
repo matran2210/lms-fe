@@ -11,6 +11,7 @@ import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { PageLink } from 'src/constants/routers'
 
 interface IProps {
   handleOpenSidebar: () => void
@@ -35,11 +36,8 @@ const SearchClassResource = ({
   redirectLink,
   appType,
 }: IProps) => {
-  const { pageLink } = useFeature()
-  const { status: guideStatus, step: guideStep } = useAppSelector(
-    (state) => state.userGuideReducer,
-  )
   const { query, push } = useRouter()
+   const courseId = query.courseId
   const methods = useForm<{ name: string }>({
     defaultValues: {
       name: '',
@@ -54,18 +52,23 @@ const SearchClassResource = ({
     type: query.type ?? '',
   })
 
-  const appCourseLink =
-    appType === AppType.LMS_PRO ? pageLink.COURSES : pageLink.SHORT_COURSE
-  const handleSubmit = () => {
-    // Redirect to the search results page with the query as a query parameter
-    push(
-      `${appCourseLink}${
-        methods.watch('name')?.trim()?.length
-          ? `?name=${methods.watch('name')}`
-          : ''
-      }${queryString}`,
-    )
-  }
+
+
+const handleSubmit = () => {
+  const courseId = query.courseId
+
+  if (!courseId) return 
+
+  push({
+    pathname: PageLink.CLASS_RESOURCE, 
+    query: {
+      ...query,
+      courseId,
+      search_key: methods.watch('name')?.trim() || undefined,
+    },
+  })
+}
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === '/' && document.activeElement?.tagName !== 'INPUT') {
@@ -118,7 +121,7 @@ const SearchClassResource = ({
                   icon: <ArrowActionSearchIcon />,
                   className: 'p-1',
                   action: () => {
-                    methods.handleSubmit(handleSubmit)
+                    methods.handleSubmit(handleSubmit)()
                   },
                 },
                 {

@@ -91,6 +91,16 @@ export const getResolution = (bitrate: number) => {
   }
 }
 
+export const normalizeToArray = (
+  value?: string | string[],
+): string[] | undefined => {
+  if (!value) return undefined
+  return Array.isArray(value) ? value : [value]
+}
+
+export const cleanArray = (arr?: (string | undefined)[]) =>
+  arr?.filter((v): v is string => typeof v === 'string')
+
 export * from "./timer";
 export * from "./date";
 export * from "./quiz-test";

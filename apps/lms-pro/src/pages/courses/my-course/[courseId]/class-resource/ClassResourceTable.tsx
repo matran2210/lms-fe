@@ -3,13 +3,13 @@ import { DownloadIcon } from '@lms/assets'
 import {
   CLASS_SUFFIX_TYPE,
   DEFAULT_PAGE_NUMBER,
-  IClassResource,
-  IListClassResourceParams,
+  IClassResource
 } from '@lms/core'
 import { ActionCellV2, PaginationSappV2, SappTable } from '@lms/ui'
 import { UploadAPI } from '@pages/api/upload'
 import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import clsx from 'clsx'
+import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction } from 'react'
 
 const ClassResourceTable = ({
@@ -17,14 +17,13 @@ const ClassResourceTable = ({
   pagination,
   isLoading,
   setPagination,
-  setParams,
 }: {
   data: any
   pagination: TablePaginationConfig
   isLoading: boolean
   setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
-  setParams: Dispatch<SetStateAction<IListClassResourceParams>>
 }) => {
+  const router = useRouter()
   const textStyle = 'text-base font-medium text-gray-800'
   const className = 'custom-column-table'
   const textTruncateStyle = `${textStyle} overflow-hidden text-ellipsis whitespace-nowrap w-[300px]`
@@ -149,11 +148,24 @@ const ClassResourceTable = ({
         totalItems={pagination?.total || 0}
         setCurrentPage={(page) => {
           setPagination((prev) => ({ ...prev, current: page as number }))
-          setParams((prev) => ({ ...prev, page_index: page as number }))
+           router.push({
+    pathname: router.pathname,
+    query: {
+      ...router.query,
+      page_index: page as number,
+    },
+  })
         }}
         setPageSize={(page) => {
-          setParams((prev) => ({ ...prev, page_size: page as number }))
           setPagination((prev) => ({ ...prev, pageSize: page as number }))
+           router.push({
+    pathname: router.pathname,
+    query: {
+      ...router.query,
+      page_size: page as number,
+      page_index: DEFAULT_PAGE_NUMBER, 
+    },
+  })
         }}
       />
     </>
