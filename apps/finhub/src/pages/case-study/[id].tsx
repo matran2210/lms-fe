@@ -49,6 +49,7 @@ import {
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight } from '@lms/utils'
 import { CaseStudyAPI } from '@pages/api/case-study'
+import { TestServiceAPI } from '@pages/api/test-api'
 import { download } from '@utils/index'
 import { Popover } from 'antd'
 import clsx from 'clsx'
@@ -57,8 +58,6 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { CoursesAPI } from '../api/courses/index'
-import { TestAPI } from '../api/test'
 import ConFirmSubmit from '../short-course/test/conFirmSubmit'
 import LimitQuizModal from '../short-course/test/limitQuizModal'
 const CaseStudyDetail = () => {
@@ -412,7 +411,7 @@ const CaseStudyDetail = () => {
     class_user_id: string,
   ) {
     try {
-      const res = await TestAPI.createTopicAttempt(
+      const res = await TestServiceAPI.createTopicAttempt(
         quiz_id,
         id,
         class_user_id,
@@ -789,12 +788,15 @@ const CaseStudyDetail = () => {
     const total_attempt_time = Math.ceil((Date.now() - startTime) / 1000)
     if (quizAttempId) {
       try {
-        const res = await CoursesAPI.submitCaseStudy(quizAttempId as string, {
-          answers: answers,
-          quiz_position_mapping: quiz_position_mapping,
-          total_attempt_time: total_attempt_time,
-          topic_scratch_pad: scratchPadValues.value,
-        })
+        const res = await TestServiceAPI.submitCaseStudy(
+          quizAttempId as string,
+          {
+            answers: answers,
+            quiz_position_mapping: quiz_position_mapping,
+            total_attempt_time: total_attempt_time,
+            topic_scratch_pad: scratchPadValues.value,
+          },
+        )
         toast.success('Submission successful')
         const isCompletedCourse = res?.data?.progress
         if (!!isCompletedCourse?.is_completed) {

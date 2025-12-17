@@ -53,7 +53,7 @@ const VideoDocument = ({
   // newQuizModal,
 
 }: Props) => {
-  const { questionApi,
+  const { questionApi, testServiceApi,
     courseApi, videoUrl } = useFeature();
 
   const {
@@ -98,7 +98,7 @@ const VideoDocument = ({
     if (activeQuestion?.id) {
       dispatch(
         fetchQuestionById({
-          api: questionApi,
+          api: testServiceApi,
           courseApi: courseApi,
           activityId: activityId,
           tabId: tabId,
@@ -172,7 +172,7 @@ const VideoDocument = ({
       if (open) {
         await dispatch(
           fetchQuestionById({
-            api: questionApi,
+            api: testServiceApi,
             courseApi: courseApi,
             activityId: activityId,
             tabId: tabId,

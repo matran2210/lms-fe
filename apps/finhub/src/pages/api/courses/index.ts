@@ -179,18 +179,6 @@ export class CoursesAPI {
     })
   }
 
-  /**
-   * @deprecated use QuestionAPI.getQuestionDetail (cached api)
-   */
-  static getQuestionsDetail(id: string): Promise<any> {
-    const uri = url.getQuestionDetail
-    return fetcher(`${uri}`, {
-      params: {
-        question_ids: id,
-      },
-    })
-  }
-
   static getQuizAttemptsChartData(
     id: string | string[] | undefined,
   ): Promise<any> {
@@ -278,14 +266,6 @@ export class CoursesAPI {
 
   static submitAnswer(id: string, data: any): Promise<any> {
     const uri = url.submitQuestion + `/${id}` + '/submit-answer'
-    return fetcher(`${uri}`, {
-      data: data,
-      method: 'POST',
-    })
-  }
-
-  static submitCaseStudy(id: string, data: any): Promise<any> {
-    const uri = url.submitCaseStudy + `/${id}` + '/submit'
     return fetcher(`${uri}`, {
       data: data,
       method: 'POST',
