@@ -41,7 +41,7 @@ const ModalExplanationPackage = ({
     setLoading(true);
     try {
       const resultResponse = await activityApi.getQuizAttemptsAnswer(id) as any
-      const topicDescription = await testServiceApi?.getTopicDescription(
+      const topicDescription = await testServiceApi.getTopicDescription(
         resultResponse?.data?.answer?.question?.question_topic_id,
         resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
       ) as any

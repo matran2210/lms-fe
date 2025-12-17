@@ -195,7 +195,7 @@ const confirmQuestion = createAsyncThunk(
       myAnswers,
       time_spent,
     }: {
-      api: IQuestionAPI;
+      api: ITestServiceAPI;
       courseApi: ICoursesAPI;
       activityId: string;
       tabId: string;

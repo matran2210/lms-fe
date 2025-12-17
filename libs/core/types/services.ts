@@ -267,4 +267,10 @@ export interface ITestServiceAPI {
     data: any,
     class_user_id?: string | undefined,
   ) => Promise<any>;
+  getTopicDescription: (
+    id: string | string[] | undefined,
+    quiz_id?: string | undefined,
+    class_user_id?: string | undefined,
+    cache?: boolean,
+  ) => Promise<any>;
 }
