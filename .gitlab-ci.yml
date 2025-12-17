@@ -56,8 +56,7 @@ variables:
   extends: .prepare
   image: docker:latest
   script:
-    - cp $TEST_ENV_PRODUCT_FILE .env
-    - source .env
+    - cp $TEST_ENV_PRODUCT_FILE apps/$APP_NAME/.env
     - docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD
     - docker build --build-arg APP_NAME=$APP_NAME -t $IMAGE_BASE:$IMAGE_NAME .
     - docker push $IMAGE_BASE:$IMAGE_NAME
