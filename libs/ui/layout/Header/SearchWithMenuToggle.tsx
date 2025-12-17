@@ -1,12 +1,15 @@
-import { ArrowActionSearchIcon, HamburgerMenuLargeIcon, CloseIconV2, TourGuideStartAnimation } from "@lms/assets";
+import {
+  ArrowActionSearchIcon,
+  HamburgerMenuLargeIcon,
+  CloseIconV2,
+} from "@lms/assets";
 import { useAppSelector, useFeature } from "@lms/contexts";
-import { AppType, MY_COURSES, UserGuide } from "@lms/core";
+import { AppType, MY_COURSES } from "@lms/core";
 import { buildQueryString } from "@lms/utils";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { PopupStep } from "../../components";
 import SearchForm from "./SearchForm";
 
 interface IProps {
@@ -17,7 +20,7 @@ interface IProps {
   className?: string;
   isCoursePage?: boolean;
   redirectLink: string;
-  appType: AppType
+  appType: AppType;
 }
 interface IListIcon {
   icon: React.ReactNode;
@@ -31,14 +34,13 @@ const SearchWithMenuToggle = ({
   isShowToggle = false,
   className,
   isCoursePage = false,
-  redirectLink, 
-  appType
+  redirectLink,
+  appType,
 }: IProps) => {
-  const { pageLink } = useFeature();  
-  const {
-    status: guideStatus,
-    step: guideStep,
-  } = useAppSelector((state) => state.userGuideReducer);
+  const { pageLink } = useFeature();
+  const { status: guideStatus, step: guideStep } = useAppSelector(
+    (state) => state.userGuideReducer,
+  );
   const { query, push } = useRouter();
   const methods = useForm<{ name: string }>({
     defaultValues: {
@@ -54,7 +56,8 @@ const SearchWithMenuToggle = ({
     type: query.type ?? "",
   });
 
-  const appCourseLink = appType === AppType.LMS_PRO ? pageLink.COURSES : pageLink.SHORT_COURSE 
+  const appCourseLink =
+    appType === AppType.LMS_PRO ? pageLink.COURSES : pageLink.SHORT_COURSE;
   const handleSubmit = () => {
     // Redirect to the search results page with the query as a query parameter
     push(
@@ -201,16 +204,6 @@ const SearchWithMenuToggle = ({
           )}
         </div>
       </FormProvider>
-      {isShowUserGuide && guideStatus && guideStep === 1 && (
-        <PopupStep
-          content={UserGuide.CONTENT_STEP_1}
-          className="left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-0 md:top-[68px] md:-translate-x-0 md:-translate-y-0 lg:top-[78px]"
-          title={"Search box"}
-          index={1}
-          total={6}
-          imgSrc={TourGuideStartAnimation}
-        />
-      )}
     </>
   );
 };

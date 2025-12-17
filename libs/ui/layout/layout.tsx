@@ -1,9 +1,23 @@
-import { useAppSelector, useCourseContext, useFeature, usePinnedNotifyContext } from "@lms/contexts";
+import {
+  useAppSelector,
+  useCourseContext,
+  useFeature,
+  usePinnedNotifyContext,
+} from "@lms/contexts";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import clsx from "clsx";
 import Head from "next/head";
 import { ReactElement, ReactNode, useState } from "react";
 import Sidebar from "./Sidebar";
+import { PopupStep } from "../components";
+import { UserGuide } from "@lms/core";
+import {
+  TourGuideCoursesAnimation,
+  TourGuideFilterAnimation,
+  TourGuideNotiAnimation,
+  TourGuideSidebarAnimation,
+  TourGuideStartAnimation,
+} from "@lms/assets";
 interface LayoutProps {
   children: ReactNode;
   title: string;
@@ -13,6 +27,8 @@ interface LayoutProps {
   handleToggleSidebar?: () => void;
   className?: string;
   childClassName?: string;
+  isEndGuide?: boolean;
+  closeUserGuide?: () => void;
 }
 
 export default function Layout(props: LayoutProps): ReactElement {
@@ -25,10 +41,10 @@ export default function Layout(props: LayoutProps): ReactElement {
     handleToggleSidebar,
     className,
     childClassName,
-
+    isEndGuide = false,
+    closeUserGuide,
   } = props;
   const { pageLink, router } = useFeature();
-
   const { isShowMenuContent } = useTailwindBreakpoint();
 
   const { isOpenSidebar, setOpenSidebar } = useCourseContext();
@@ -63,6 +79,60 @@ export default function Layout(props: LayoutProps): ReactElement {
   }
 
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step);
+  const getGuideStepConfig = (step: number) => {
+    switch (step) {
+      case 1:
+        return {
+          title: "Search box",
+          content: UserGuide.CONTENT_STEP_1,
+          className: "left-[358px] top-24",
+          imgSrc: TourGuideStartAnimation,
+        };
+
+      case 2:
+        return {
+          title: "Sidebar",
+          content: UserGuide.CONTENT_STEP_2,
+          className: "left-64 top-[140px]",
+          imgSrc: TourGuideSidebarAnimation,
+        };
+      case 3:
+        return {
+          title: "Notification & Profile",
+          content: UserGuide.CONTENT_STEP_3,
+          className: "left-64 bottom-4",
+          imgSrc: TourGuideNotiAnimation,
+        };
+      case 4:
+        return {
+          title: "Welcome",
+          content: UserGuide.CONTENT_STEP_4,
+          className: "left-[357px] top-[234px]",
+          isEnd: isEndGuide,
+          handleCancel: closeUserGuide,
+        };
+      case 5:
+        return {
+          title: "Courses",
+          content: UserGuide.CONTENT_STEP_5,
+          className: "left-[796px] top-[444px]",
+          imgSrc: TourGuideCoursesAnimation,
+        };
+
+      case 6:
+        return {
+          title: "Filter",
+          content: UserGuide.CONTENT_STEP_6,
+          className: "right-[425px] top-[318px]",
+          handleCancel: closeUserGuide,
+          imgSrc: TourGuideFilterAnimation,
+          titleButtonNext: "Finish",
+        };
+      default:
+        return null;
+    }
+  };
+  const stepConfig = getGuideStepConfig(guideStep);
 
   return (
     <>
@@ -115,7 +185,20 @@ export default function Layout(props: LayoutProps): ReactElement {
           </div>
         </div>
       </div>
-      {/* <ModalMobile /> */}
+
+      {guideStatus && stepConfig && (
+        <PopupStep
+          index={guideStep}
+          total={6}
+          title={stepConfig.title}
+          content={stepConfig.content}
+          className={stepConfig.className}
+          imgSrc={stepConfig.imgSrc}
+          isEnd={stepConfig.isEnd}
+          handleCancel={stepConfig.handleCancel}
+          titleButtonNext={stepConfig.titleButtonNext}
+        />
+      )}
     </>
   );
 }

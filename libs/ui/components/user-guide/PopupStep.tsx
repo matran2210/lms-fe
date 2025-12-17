@@ -1,8 +1,9 @@
-import Lottie from 'lottie-react'
-import Image, { StaticImageData } from 'next/image'
-import { useRef } from 'react'
-import { decrement, increment, useAppDispatch} from '@lms/contexts'
-import { ButtonPrimary, ButtonText } from '../base';
+import Lottie from "lottie-react";
+import Image, { StaticImageData } from "next/image";
+import { useRef } from "react";
+import { decrement, increment, useAppDispatch } from "@lms/contexts";
+import { ButtonPrimary, ButtonText } from "../base";
+import { motion } from "framer-motion";
 
 type Props = {
   content: string;
@@ -52,9 +53,13 @@ const PopupStep = ({
 
   return (
     <>
-      <div
-        ref={confirmDialogRef}
-        className={`absolute z-50 animate-jump-in rounded-xl bg-white p-4 ${className} w-[315px] text-gray-800`}
+      <motion.div
+        layout
+        transition={{
+          duration: 0.3,
+          ease: "easeOut",
+        }}
+        className={`absolute z-50 rounded-xl bg-white p-4 ${className} w-[315px] text-gray-800`}
       >
         <div>
           <div className={imgSrc && `mb-4`}>
@@ -116,7 +121,7 @@ const PopupStep = ({
             ))}
           </div>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };

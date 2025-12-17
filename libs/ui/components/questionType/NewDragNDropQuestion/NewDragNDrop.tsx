@@ -8,7 +8,8 @@ import CorrectAnswer from "./CorrectAnswer";
 import DraggableItem from "./DraggableItem";
 import DroppableSlot from "./DroppableSlot";
 import { SappTitleSolution } from "../../common";
-import { EditorReader } from "../../base";
+import { EditorReader, SappModalImage } from "../../base";
+declare var com: any;
 
 interface Answer {
   id: string;
@@ -107,9 +108,11 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
   solution,
   explainClassname,
 }) => {
+  const contentRef = React.useRef<HTMLSpanElement | null>(null);
   const [slots, setSlots] = useState<SlotValue[]>([]);
   const [items, setItems] = useState<Answer[]>([]);
-
+const [src, setSrc] = useState<string>();
+  const [type, setType] = useState<"VIDEO" | "IMG">("VIDEO");
   // Tạo slots từ question_content
   const parsedSlots = useMemo(() => {
     const parser = new DOMParser();
@@ -148,8 +151,21 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
     Array.isArray(corrects) &&
     corrects.length > 0
   );
+
+  const handleOnclick = async (e: React.MouseEvent<HTMLDivElement>) => {
+      const target = e?.target as HTMLElement;
+     if (target?.tagName === "IMG") {
+        const imageSrc = target?.getAttribute("src");
+        if (imageSrc) {
+          setSrc(() => {
+            setType("IMG");
+            return imageSrc;
+          });
+        }
+      }
+    };
   const renderedContent = useMemo(() => {
-    return parse(data.question_content, {
+    return <div onClick={handleOnclick}>{parse(data.question_content, {
       replace: (domNode) => {
         if (
           domNode instanceof Element &&
@@ -204,7 +220,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
         }
         return undefined;
       },
-    });
+    })}</div>;
   }, [data.question_content, slots, corrects]);
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -355,11 +371,70 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
     setItems((prev) => prev.filter((item) => item.id !== rawId));
     onChange?.(newSlots);
   };
+  const convertMathToImage = async (element: any) => {
+    // TODO: check lại này
+    if (typeof com === "undefined") return;
+
+    const viewer = com?.wiris?.js?.JsPluginViewer;
+
+    if (element && viewer) {
+      try {
+        await viewer.parseElement(element, true, function () {
+          // Do something
+        });
+      } catch (error) {
+        // Log the error
+      }
+    }
+  };
+
+  useEffect(() => {
+    const container = contentRef.current;
+    if (!container) return;
+
+    // delay nhẹ để html-react-parser mount xong
+    const timer = setTimeout(() => {
+      // Fix mfenced
+      const mfencedElements = container.querySelectorAll("mfenced");
+      mfencedElements.forEach((el: any) => {
+        const openAttr = el?.getAttribute("open");
+        const closeAttr = el?.getAttribute("close");
+        if (openAttr !== null && closeAttr) {
+          const replacements: Record<string, string> = {
+            "|": "|",
+            "||": "||",
+            ">": "<",
+            "}": "{",
+            "]": "[",
+            "&#62;": "&#60;",
+          };
+          if (replacements[closeAttr]) {
+            el.setAttribute("open", replacements[closeAttr]);
+          }
+        }
+      });
+
+      // Fix style quote trong math
+      const mathElements = container.querySelectorAll("math");
+      mathElements.forEach((el: any) => {
+        if (el.hasAttribute("style")) {
+          let styleValue = el.getAttribute("style");
+          styleValue = styleValue?.replaceAll('"', "");
+          el.setAttribute("style", styleValue);
+        }
+      });
+
+      // Convert math -> image
+      convertMathToImage(container);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [renderedContent]);
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
       <div>
-        <span className="dragNdrop-question">{renderedContent}</span>
+        <span ref={contentRef} className="editor-wrap dragNdrop-question">{renderedContent}</span>
         {!isDisabled && <BankArea items={items} />}
         {corrects && (
           <>
@@ -378,6 +453,9 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
               <EditorReader className="mt-4" text_editor_content={solution} />
             </div>
           </>
+        )}
+        {type === "IMG" && (
+          <SappModalImage src={src} setSrc={setSrc}></SappModalImage>
         )}
       </div>
     </DndContext>
