@@ -55,7 +55,7 @@ export default function Sidebar({
       >
         <div
           className={`max-h-[calc(100vh-145px) relative rounded-xl pb-6 pt-[25PX] ${
-            guideStatus && guideStep == 2
+            guideStatus && guideStep === 2
               ? 'z-50 bg-white'
               : 'overflow-y-auto overflow-x-hidden'
           }`}
@@ -90,7 +90,7 @@ export default function Sidebar({
         </div>
         <div
           className={`absolute bottom-0 w-full rounded-xl bg-white pb-6
-          ${guideStatus && guideStep == 3 ? 'z-50' : ''}`}
+          ${guideStatus && guideStep === 3 ? 'z-50' : ''}`}
         >
           <div className="mx-auto w-[calc(100%-48px)] bg-[#DCDDDD] text-center">
             <Divider className="mb-8 mt-0 bg-[#DCDDDD]" />
