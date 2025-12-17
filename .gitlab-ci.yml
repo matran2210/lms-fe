@@ -71,7 +71,7 @@ build_lms_pro:
   extends: .build_template
   variables:
     APP_NAME: lms-pro
-    IMAGE_NAME: lms-pro-$CI_PIPELINE_IID
+    IMAGE_NAME: lms-fe-$CI_PIPELINE_IID
   only:
     # variables:
     #   - $CI_COMMIT_MESSAGE =~ /build/
