@@ -38,8 +38,6 @@ services:
     depends_on:
       lms-pro:
         condition: service_started
-      finhub:
-        condition: service_started
     container_name: nginx
     restart: always
     ports:
