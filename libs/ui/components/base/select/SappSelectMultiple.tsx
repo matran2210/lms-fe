@@ -50,46 +50,6 @@ const SAPPSelectMultiple = ({
   heightCustom = "h-12",
   allowClear = false,
 }: SAPPSelectMultipleProps) => {
-  /* -------- Tooltip xử lý ellipsis -------- */
-  const EllipsisTooltip = ({ text }: { text: string }) => {
-    const ref = useRef<HTMLDivElement>(null);
-    const [isOverflow, setIsOverflow] = useState(false);
-
-    useEffect(() => {
-      const el = ref.current;
-      if (!el) return;
-
-      const checkOverflow = () => {
-        setIsOverflow(el.scrollWidth > el.clientWidth);
-      };
-
-      requestAnimationFrame(checkOverflow);
-    }, [text]);
-
-    const content = (
-      <div className="w-full truncate" ref={ref}>
-        {text}
-      </div>
-    );
-
-    return isOverflow ? (
-      <Tooltip title={text} placement="right">
-        {content}
-      </Tooltip>
-    ) : (
-      content
-    );
-  };
-
-  const customizedOptions = useMemo(
-    () =>
-      options.map((option) => ({
-        ...option,
-        title: option.label as string,
-        label: <EllipsisTooltip text={option.label as string} />,
-      })),
-    [options],
-  );
 
   return (
     <div className="float-label">
@@ -103,7 +63,7 @@ const SAPPSelectMultiple = ({
               mode="multiple"
               {...field}
               value={field.value ?? []}
-              options={customizedOptions}
+              options={options}
               className={clsx(
                 "custom-select-v2 w-full",
                 heightCustom,
@@ -113,32 +73,6 @@ const SAPPSelectMultiple = ({
               maxTagPlaceholder={(omitted) => `Đã chọn ${omitted.length}`}
               placeholder={placeholder}
               size={size}
-              tagRender={(props) => {
-                const { label, closable, onClose } = props;
-
-                return (
-                  <span
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
-                    className="ant-select-selection-item"
-                  >
-                    {label}
-                    {closable && (
-                      <span
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onClose();
-                        }}
-                        className="ant-select-selection-item-remove"
-                      >
-                        <CloseCircleIcon />
-                      </span>
-                    )}
-                  </span>
-                );
-              }}
               suffixIcon={suffixIcon}
               disabled={disabled}
               showSearch={isSearchable}

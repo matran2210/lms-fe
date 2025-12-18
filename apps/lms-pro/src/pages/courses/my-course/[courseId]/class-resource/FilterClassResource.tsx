@@ -1,83 +1,41 @@
 import { CLASS_SUFFIX_TYPE, DEFAULT_PAGE_NUMBER } from '@lms/core'
 import { SappSelectMultiple, SAPPSelectV2 } from '@lms/ui'
-import { cleanArray, normalizeStringQuery, normalizeToArray } from '@lms/utils'
+import { normalizeToArray } from '@lms/utils'
 import { getSelectOptions } from '@utils/helpers'
 import { debounce } from 'lodash'
 import { useRouter } from 'next/router'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import useSelectClassSchedule from 'src/hooks/useSelectClassSchedule'
 
+type FilterFormValues = {
+  suffix_types?: string
+  schedule_ids?: string[]
+}
+
 const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
   const router = useRouter()
-  const { control, watch, reset } = useForm({
-    defaultValues: {
-      suffix_types: router.query.suffix_types,
-      schedule_ids: normalizeToArray(router.query.schedule_ids),
-    },
-  })
   const { courseId } = router.query
-
-  useEffect(() => {
-    if (!router.isReady) return
-
-    reset({
-      suffix_types:
-        typeof router.query.suffix_types === 'string'
-          ? router.query.suffix_types
-          : undefined,
-
-      schedule_ids: normalizeToArray(router.query.schedule_ids),
-    })
-  }, [
-    router.isReady,
-    router.query.suffix_types,
-    router.query.schedule_ids,
-    reset,
-  ])
-
-  /**
-   * 🔥 Watch filter → push URL
-   */
-  useEffect(() => {
-    const subscription = watch((values) => {
-      const nextQuery = { ...router.query }
-
-      // reset page
-      nextQuery.page_index = String(DEFAULT_PAGE_NUMBER)
-
-      /* ===== suffix_types ===== */
-      if (values.suffix_types) {
-        nextQuery.suffix_types = String(values.suffix_types)
-      } else {
-        delete nextQuery.suffix_types
-      }
-
-      /* ===== schedule_ids ===== */
-      const schedules = cleanArray(values.schedule_ids)
-      if (schedules?.length) {
-        nextQuery.schedule_ids = schedules
-      } else {
-        delete nextQuery.schedule_ids
-      }
-
-      router.push(
-        {
-          pathname: router.pathname,
-          query: nextQuery,
-        },
-        undefined,
-        { shallow: true },
-      )
-    })
-
-    return () => subscription.unsubscribe()
-  }, [watch])
-
-  /**
-   * ===== Schedule search =====
-   */
   const [search, setSearch] = useState('')
+
+const { control, reset } = useForm<FilterFormValues>({
+  defaultValues: {
+    suffix_types: undefined,
+    schedule_ids: [],
+  },
+})
+
+useEffect(() => {
+  reset({
+    suffix_types:
+      typeof router.query.suffix_types === 'string' &&
+      router.query.suffix_types.trim() !== ''
+        ? router.query.suffix_types
+        : undefined,
+
+    schedule_ids: normalizeToArray(router.query.schedule_ids),
+  })
+}, [router.query.suffix_types, router.query.schedule_ids, reset])
 
   const { classSchedule, hasNextPage, fetchNextPage, isLoading, refetch } =
     useSelectClassSchedule(courseId as string, search)
@@ -89,14 +47,52 @@ const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
   ).current
 
   useEffect(() => {
-    return () => {
-      debouncedSearch.cancel()
-    }
+    return () => debouncedSearch.cancel()
   }, [debouncedSearch])
 
   const handleSearch = (value: string) => {
     debouncedSearch(value)
   }
+
+  const scheduleOptions = useMemo(() => {
+    return getSelectOptions(
+      classSchedule.map((item) => ({
+        value: item.id,
+        label: item.name,
+      })),
+    )
+  }, [classSchedule])
+
+  const pushQuery = (next: Record<string, any>) => {
+  router.push(
+    {
+      pathname: router.pathname,
+      query: cleanQuery({
+        ...router.query,
+        ...next,
+        page_index: DEFAULT_PAGE_NUMBER,
+      }),
+    },
+    undefined,
+    { shallow: true },
+  )
+}
+
+  const cleanQuery = (query: Record<string, any>) => {
+  const result: Record<string, any> = {}
+
+  Object.entries(query).forEach(([key, value]) => {
+    if (
+      value !== undefined &&
+      value !== null &&
+      !(typeof value === 'string' && value.trim() === '')
+    ) {
+      result[key] = value
+    }
+  })
+
+  return result
+}
 
   return (
     <div className="flex shrink-0 items-center gap-4">
@@ -106,6 +102,7 @@ const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
 
       <div className="flex justify-end gap-4">
         <div className="flex gap-2">
+          {/* ===== Suffix type ===== */}
           <SAPPSelectV2
             control={control}
             name="suffix_types"
@@ -114,27 +111,36 @@ const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
             className="min-w-36"
             heightCustom="h-10"
             allowClear
+           onChange={(value) => {
+              pushQuery({
+                suffix_types:
+                  value === undefined || value === null || value === ''
+                    ? undefined
+                    : value,
+              })
+}}
           />
 
+          {/* ===== Schedule multi ===== */}
           <SappSelectMultiple
-            allowClear
             control={control}
-            onSearch={handleSearch}
             name="schedule_ids"
+            placeholder="Lesson: All"
+            allowClear
             isLoading={isLoading}
+            options={scheduleOptions}
+            className="min-w-36"
+            heightCustom="h-10"
+            onSearch={handleSearch}
             onMenuScrollToBottom={() => hasNextPage && fetchNextPage()}
             onDropdownVisibleChange={(open) => {
               open && refetch()
             }}
-            placeholder="Lesson: All"
-            options={getSelectOptions(
-              classSchedule.map((item) => ({
-                value: item?.id,
-                label: item?.name,
-              })),
-            )}
-            className="min-w-36"
-            heightCustom="h-10"
+            onChange={(values) => {
+              pushQuery({
+                schedule_ids: values?.length ? values : undefined,
+              })
+            }}
           />
         </div>
       </div>
