@@ -12,7 +12,6 @@ import {
   ModalResizeable,
   PaginationSappV2,
   SappModalImage,
-  SappModalVideo,
   SappTable,
   SAPPVideo,
   Tooltip,
@@ -178,17 +177,10 @@ const ClassResourceTable = ({
 
   const renderPreviewContent = (resource: IClassResource) => {
     switch (resource.suffix_type) {
-      case 'IMAGE':
-        return (
-          <SappModalImage
-            src={resource.url || resource.sub_url}
-            setSrc={() => setOpenPreview(false)}
-          />
-        )
-
       case 'VIDEO':
         return (
           <SAPPVideo
+            isFetchCaptions={false}
             streamRef={internalRef}
             options={{ src: resource.sub_url }}
           ></SAPPVideo>
@@ -230,7 +222,6 @@ const ClassResourceTable = ({
         pageSize={pagination?.pageSize || 10}
         totalItems={pagination?.total || 0}
         setCurrentPage={(page) => {
-          setPagination((prev) => ({ ...prev, current: page as number }))
           router.push({
             pathname: router.pathname,
             query: {
@@ -238,9 +229,9 @@ const ClassResourceTable = ({
               page_index: page as number,
             },
           })
+          setPagination((prev) => ({ ...prev, current: page as number }))
         }}
         setPageSize={(page) => {
-          setPagination((prev) => ({ ...prev, pageSize: page as number }))
           router.push({
             pathname: router.pathname,
             query: {
@@ -249,42 +240,54 @@ const ClassResourceTable = ({
               page_index: DEFAULT_PAGE_NUMBER,
             },
           })
+          setPagination((prev) => ({ ...prev, pageSize: page as number }))
         }}
       />
-      {openPreview && previewResource && (
-        <ModalResizeable
-          key={previewResource.url}
-          modalIndex={1}
-          title={previewResource.name}
-          width={900}
-          height={548}
-          className="!z-40 max-h-[546px] !rounded-lg"
-          position="center"
-          handleCloseScratchPad={() => {
-            setOpenPreview(false)
-            setPreviewResource(null)
-          }}
-          header={
-            <div className="modal-header modal-dragger flex h-10 w-full items-center justify-between px-5">
-              <div className="truncate font-semibold">
-                {previewResource.name}
+      {openPreview &&
+        previewResource &&
+        previewResource.suffix_type !== 'IMAGE' && (
+          <ModalResizeable
+            bodyClassName={clsx('px-5')}
+            key={previewResource.url}
+            modalIndex={1}
+            title={previewResource.name}
+            width={900}
+            height={548}
+            className={clsx('!z-40 !rounded-lg')}
+            position="center"
+            handleCloseScratchPad={() => {
+              setOpenPreview(false)
+              setPreviewResource(null)
+            }}
+            header={
+              <div className="modal-header modal-dragger flex h-10 w-full items-center justify-between">
+                <div className="truncate font-semibold">
+                  {previewResource.name}
+                </div>
+                <button
+                  onClick={() => {
+                    setOpenPreview(false)
+                    setPreviewResource(null)
+                  }}
+                >
+                  <CloseIcon />
+                </button>
               </div>
-              <button
-                onClick={() => {
-                  setOpenPreview(false)
-                  setPreviewResource(null)
-                }}
-              >
-                <CloseIcon />
-              </button>
+            }
+          >
+            <div className="h-full bg-white">
+              {renderPreviewContent(previewResource)}
             </div>
-          }
-        >
-          <div className="h-full bg-white">
-            {renderPreviewContent(previewResource)}
-          </div>
-        </ModalResizeable>
-      )}
+          </ModalResizeable>
+        )}
+      {openPreview &&
+        previewResource &&
+        previewResource.suffix_type === 'IMAGE' && (
+          <SappModalImage
+            src={previewResource.url}
+            setSrc={() => setOpenPreview(false)}
+          />
+        )}
     </>
   )
 }

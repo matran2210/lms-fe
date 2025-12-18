@@ -7,10 +7,7 @@ import {
   IListClassResourceParams,
 } from '@lms/core'
 import { useSappPaging, useTailwindBreakpoint } from '@lms/hooks'
-import {
-  Layout,
-  SappBreadCrumbs
-} from '@lms/ui'
+import { Layout, SappBreadCrumbs } from '@lms/ui'
 import { ClassAPI } from '@pages/api/class'
 import { CoursesAPI } from '@pages/api/courses'
 import { useRouter } from 'next/router'
@@ -78,30 +75,30 @@ const ClassResource = () => {
    */
   const courseNameDetail = courseData?.courseDetail?.data?.name
 
-useEffect(() => {
-  if (!router.isReady) return
+  useEffect(() => {
+    if (!router.isReady) return
 
-  setParams(prev => ({
-    ...prev,
-    page_index: router.query.page_index
-      ? Number(router.query.page_index)
-      : DEFAULT_PAGE_NUMBER,
+    setParams((prev) => ({
+      ...prev,
+      page_index: router.query.page_index
+        ? Number(router.query.page_index)
+        : DEFAULT_PAGE_NUMBER,
 
-    suffix_types:  normalizeToArray(router.query.suffix_types),
-     schedule_ids: normalizeToArray(router.query.schedule_ids),
+      suffix_types: normalizeToArray(router.query.suffix_types),
+      schedule_ids: normalizeToArray(router.query.schedule_ids),
 
-    search_key: typeof router.query.search_key === 'string'
-      ? router.query.search_key
-      : undefined,
-  }))
-}, [
-  router.isReady,
-  router.query.page_index,
-  router.query.suffix_types,
-  router.query.schedule_ids,
-  router.query.search_key,
-])
-
+      search_key:
+        typeof router.query.search_key === 'string'
+          ? router.query.search_key
+          : undefined,
+    }))
+  }, [
+    router.isReady,
+    router.query.page_index,
+    router.query.suffix_types,
+    router.query.schedule_ids,
+    router.query.search_key,
+  ])
 
   return (
     <Layout title={'Class Resource'} showSidebar={isAlwaysShowSidebar}>
@@ -137,10 +134,11 @@ useEffect(() => {
           appType={AppType.LMS_PRO}
         />
       </div>
-      <div className="mb-6 flex w-full justify-end">
-        <FilterClassResource
-          totalResult={pagination?.total || 0}
-        />
+      <div className="mb-6 flex w-full justify-between">
+        <div className="text-2xl font-semibold text-gray-800">
+          Class Resource
+        </div>
+        <FilterClassResource totalResult={pagination?.total || 0} />
       </div>
       <ClassResourceTable
         data={data}
