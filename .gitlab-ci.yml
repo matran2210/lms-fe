@@ -146,7 +146,7 @@ deploy_lms_pro:
         cd /var/www/lms-fe &&
         git fetch origin --prune &&
         git reset --hard origin/master-test-build &&
-        # sed -i '/^\s*lms-pro\s*:/,/^ *[^[:space:]]/ s@^\(\s*image\s*:\s*\)[^[:space:]]*@\1"$IMAGE_NAME:lms-fe-$CI_PIPELINE_IID"@' docker-compose.yaml &&
+        sed -i '/^\s*lms-pro\s*:/,/^ *[^[:space:]]/ s@^\(\s*image\s*:\s*\)[^[:space:]]*@\1"$IMAGE_NAME:lms-fe-$CI_PIPELINE_IID"@' docker-compose.yaml &&
         docker compose -f docker-compose.yaml pull lms-pro && 
         docker compose -f docker-compose.yaml up -d lms-pro nginx"
       "
