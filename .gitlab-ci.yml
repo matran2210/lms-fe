@@ -51,34 +51,34 @@ variables:
   # IMAGE_BASE: "sappacademy/lms-be"
 
 # Build template
-# .build_template:
-#   stage: build
-#   extends: .prepare
-#   image: docker:latest
-#   script:
-#     - cp $TEST_ENV_PRODUCT_FILE apps/$APP_NAME/.env
-#     - cp $ENV_PRODUCT_FILE .env
-#     - source .env
-#     - docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD
-#     - docker build --build-arg APP_NAME=$APP_NAME -t $IMAGE_NAME:$IMAGE_VER .
-#     - docker push $IMAGE_NAME:$IMAGE_VER
-#     - echo "$IMAGE_NAME:$IMAGE_VER build success"
-#   tags:
-#   - shell-docker
-#   environment: production
-#   resource_group: lms-fe
+.build_template:
+  stage: build
+  extends: .prepare
+  image: docker:latest
+  script:
+    - cp $TEST_ENV_PRODUCT_FILE apps/$APP_NAME/.env
+    - cp $ENV_PRODUCT_FILE .env
+    - source .env
+    - docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD
+    - docker build --build-arg APP_NAME=$APP_NAME -t $IMAGE_NAME:$IMAGE_VER .
+    - docker push $IMAGE_NAME:$IMAGE_VER
+    - echo "$IMAGE_NAME:$IMAGE_VER build success"
+  tags:
+  - shell-docker
+  environment: production
+  resource_group: lms-fe
 
-# # Build LMS-PRO
-# build_lms_pro:
-#   extends: .build_template
-#   variables:
-#     APP_NAME: lms-pro
-#     IMAGE_VER: lms-fe-$CI_PIPELINE_IID
-#   only:
-#     # variables:
-#     #   - $CI_COMMIT_MESSAGE =~ /build/
-#     refs:
-#       - master-test-build
+# Build LMS-PRO
+build_lms_pro:
+  extends: .build_template
+  variables:
+    APP_NAME: lms-pro
+    IMAGE_VER: lms-fe-$CI_PIPELINE_IID
+  only:
+    # variables:
+    #   - $CI_COMMIT_MESSAGE =~ /build/
+    refs:
+      - master-test-build
   # rules:
   #   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
   #     changes:
