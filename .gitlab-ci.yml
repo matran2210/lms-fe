@@ -146,9 +146,9 @@ deploy_lms_pro:
         cd /var/www/lms-fe &&
         git fetch origin --prune &&
         git reset --hard origin/master-test-build &&
-        sed -i '/^\s*next-app\s*:/,/^ *[^[:space:]]/ s@^\(\s*image\s*:\s*\)[^[:space:]]*@\1"$IMAGE_NAME:lms-fe-$CI_PIPELINE_IID"@' docker-compose.prod.yml &&
-        docker compose -f docker-compose.prod.yml pull next-app && 
-        docker compose -f docker-compose.prod.yml up -d"
+        sed -i '/^\s*next-app\s*:/,/^ *[^[:space:]]/ s@^\(\s*image\s*:\s*\)[^[:space:]]*@\1"$IMAGE_NAME:lms-fe-$CI_PIPELINE_IID"@' docker-compose.yml &&
+        docker compose -f docker-compose.yml pull next-app && 
+        docker compose -f docker-compose.yml up -d"
       "
   environment: production
   tags:
