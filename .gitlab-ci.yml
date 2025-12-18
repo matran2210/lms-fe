@@ -131,8 +131,8 @@ variables:
 # Deploy LMS-PRO
 deploy_lms_pro:
   stage: deploy
-  needs:
-    - build_lms_pro
+  # needs:
+  #   - build_lms_pro
   rules:
     - if: '$CI_COMMIT_BRANCH == "master-test-build"'
   script:
