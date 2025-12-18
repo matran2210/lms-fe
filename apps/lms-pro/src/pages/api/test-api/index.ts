@@ -135,7 +135,6 @@ export class TestServiceAPI {
       class_user_id,
     )
     const quizAttemptId = quizAttemptResponse.data?.id
-    console.log('quizAttemptId', quizAttemptId)
     if (quizAttemptId) {
       const response = await fetcher(
         `${BASE_TEST_URL_API}/quiz/${quizAttemptId}/submit-with-all-answer`,
