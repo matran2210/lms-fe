@@ -56,13 +56,13 @@ variables:
   extends: .prepare
   image: docker:latest
   script:
-    - cp $TEST_ENV_PRODUCT_FILE apps/$APP_NAME/.env
+    - cp $ENV_PRODUCT_FILE apps/$APP_NAME/.env
     - cp $ENV_PRODUCT_FILE .env
     - source .env
     - docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD
-    - docker build --build-arg APP_NAME=$APP_NAME -t $IMAGE_NAME:$IMAGE_TAG .
-    - docker push $IMAGE_NAME:$IMAGE_TAG
-    - echo "$IMAGE_NAME:$IMAGE_TAG build success"
+    - docker build --build-arg APP_NAME=$APP_NAME -t $IMAGE_FULL .
+    - docker push $IMAGE_FULL
+    - echo "$IMAGE_FULL build success"
   tags:
   - shell-docker
   environment: production
@@ -73,7 +73,8 @@ build_lms_pro:
   extends: .build_template
   variables:
     APP_NAME: lms-pro
-    IMAGE_TAG: lms-fe-$CI_PIPELINE_IID
+    IMAGE_TAG: "lms-fe-${CI_PIPELINE_IID}"
+    IMAGE_FULL: "$IMAGE_NAME:${IMAGE_TAG}"
   only:
     # variables:
     #   - $CI_COMMIT_MESSAGE =~ /build/
