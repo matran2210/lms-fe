@@ -7,7 +7,7 @@ services:
     #   dockerfile: ./Dockerfile
     #   args:
     #     APP_NAME: "lms-pro"
-    image: $IMAGE_NAME:lms-fe-$CI_PIPELINE_IID
+    image: 
     container_name: lms-pro
     ports:
       - "3000:3000"
@@ -23,7 +23,7 @@ services:
     #   dockerfile: ./Dockerfile
     #   args:
     #     APP_NAME: "finhub"
-    image: $IMAGE_NAME:lms-fe-$CI_PIPELINE_IID
+    image: 
     container_name: finhub
     ports:
       - "3001:3000"

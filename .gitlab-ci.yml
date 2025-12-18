@@ -138,7 +138,8 @@ deploy_lms_pro:
   script:
     - chmod 600 "$TEST_SSH_KEY_PROD"
     - cp "$TEST_SSH_KEY_PROD" key.pem
-    - cp $ENV_PRODUCT_FILE .env
+    - cp $TEST_ENV_PRODUCT_FILE apps/$APP_NAME/.env
+    - cp $TEST_ENV_PRODUCT_FILE .env
     - source .env
     - |
       ssh -o StrictHostKeyChecking=no -i key.pem root@$TEST_PROD_IP "
