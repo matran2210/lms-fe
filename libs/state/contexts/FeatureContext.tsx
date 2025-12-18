@@ -16,6 +16,7 @@ import {
   IEventTestAPI,
   INotificationAPI,
   IQuestionAPI,
+  ITestServiceAPI,
   IUploadAPI,
   MenuItem,
 } from "@lms/core";
@@ -61,6 +62,8 @@ interface FeatureContextProps {
   menuBottom: MenuItem[];
   router: any;
   fetcher: (url: string, config?: AxiosRequestConfig<any>) => Promise<any>
+  videoUrl: string;
+  testServiceApi: ITestServiceAPI;
 }
 
 const FeatureContext = createContext<FeatureContextProps>(

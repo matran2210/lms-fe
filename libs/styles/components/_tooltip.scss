@@ -24,3 +24,7 @@
     bottom: 1px !important;
   }
 }
+
+.sapp-tooltip .ant-tooltip-inner {
+  @apply py-1 px-2;
+}

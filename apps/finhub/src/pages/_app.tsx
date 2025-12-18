@@ -63,13 +63,14 @@ import { URL } from 'url'
 import { ActivityAPI } from './api/activity'
 import { CaseStudyAPI } from './api/case-study'
 import { ClassAPI } from './api/class'
-import { CoursesAPI, submitQuizTest } from './api/courses'
+import { CoursesAPI } from './api/courses'
 import { NotificationAPI } from './api/notification'
 import MyProfileAPI, { AuthAPI } from './api/profile'
 import { QuestionAPI } from './api/question'
 import { UploadAPI } from './api/upload'
 import ErrorRedirectPage from './error-redirect'
 import { fetcher } from '@services/requestV2'
+import { TestServiceAPI } from './api/test-api'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -341,7 +342,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 courseActivityApi: CourseActivityApi,
                 caseStudyApi: CaseStudyAPI,
                 myProfileApi: MyProfileAPI,
-                submitQuizTest: submitQuizTest,
+                submitQuizTest: TestServiceAPI.submitQuizTest,
                 authManager: new AuthenticationManager(),
                 pageLink: PageLink,
                 menuItems: MENU_ITEMS,
@@ -349,6 +350,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 menuBottom: MENU_BOTTOM,
                 router: router,
                 fetcher: fetcher,
+                videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
+                testServiceApi: TestServiceAPI,
               }}
             >
               <CourseProvider router={router}>

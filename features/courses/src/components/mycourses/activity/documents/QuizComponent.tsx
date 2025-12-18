@@ -160,7 +160,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       setOpenFile,
       grading_preference,
       showQuestionContent = true,
-      isHideExhibit = true,
       saveAnswer,
       exhibitText = "Exhibit",
       controlAnswer,
@@ -173,7 +172,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     ref,
   ) => {
     const { uploadApi,
-      questionApi,
+      testServiceApi,
       courseApi,
     } = useFeature();
     const isAFTEREACHQUESTION = grading_preference === "AFTER_EACH_QUESTION";
@@ -289,45 +288,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       saveAnswer && saveAnswer();
       setShowListRequirement(false);
       setShowRequirement(data);
-      const name = `${activeQuestion?.id}_${data?.id}_essay`;
-      // const getDefaultValue = (id: string) => {
-      //   switch (activeQuestion?.response_option) {
-      //     case RESPONSE_OPTION.WORD:
-      //       const answer = activeQuestion?.myAnswers?.find(
-      //         (ans: IEssayAnswer) => {
-      //           if (ans.requirement_id === id) {
-      //             return ans;
-      //           }
-      //         },
-      //       );
-
-      //       const requirement = activeQuestion?.requirements?.[data.index - 1];
-      //       return (
-      //         getValues?.(name) ||
-      //         answer?.short_answer ||
-      //         requirement?.answer_template
-      //       );
-      //     case RESPONSE_OPTION.SHEET:
-      //       const answerSheet = activeQuestion?.myAnswers?.find(
-      //         (ans: IEssayAnswer) => {
-      //           if (ans.requirement_id === id) {
-      //             return ans;
-      //           }
-      //         },
-      //       );
-      //       const requirementSheet =
-      //         activeQuestion?.requirements?.[data.index - 1];
-
-      //       return (
-      //         // getValues?.(name) ||
-      //         answerSheet?.short_answer || requirementSheet?.answer_template
-      //       );
-      //   }
-      // };
-      // const defaultValue = getDefaultValue(data.id);
-
-      // setValue?.(name, defaultValue)
-      // handleResetEssay(name, defaultValue)
       essayDataRef.current = {
         req: data,
         index: data.index - 1,
@@ -339,11 +299,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     };
 
     const getValueFillText = () => {
-      let value = [];
+      const value = [];
       const inputs = questionRef?.current?.querySelectorAll(
         'input[stringHTML="true"]',
       ) as any;
-      for (let e of inputs) {
+      for (const e of inputs) {
         value?.push(e?.value);
       }
       return value;
@@ -468,7 +428,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 return true;
               } else if (value) {
                 const data = JSON.parse(value);
-                for (let e of data) {
+                for (const e of data) {
                   if (e?.celldata && e?.celldata?.length > 0) {
                     return true;
                   }
@@ -493,13 +453,13 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             active = "SUBMITED";
           }
           if (activeQuestion?.requirements?.length) {
-            let answers: IEssayAnswer[] = [];
+            const answers: IEssayAnswer[] = [];
             activeQuestion?.requirements?.forEach((req, i) => {
               const fieldName = `${activeQuestion?.id}_${req.id}_essay`;
               const savedData = activeQuestion?.myAnswers?.find(
                 (ans: IEssayAnswer) => ans?.requirement_id === req?.id,
               );
-              let answer = getValues?.(fieldName) || savedData?.short_answer;
+              const answer = getValues?.(fieldName) || savedData?.short_answer;
               if (!!answer) {
                 answers.push({
                   question_id: activeQuestion?.id || "",
@@ -576,13 +536,13 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       onFinally?: () => void;
     }) => {
       if (activeQuestion) {
-        let myAnswers = handleGetAnswer(activeQuestion);
+        const myAnswers = handleGetAnswer(activeQuestion);
 
         // DragDropRef?.current?.handleReset()
         try {
           dispatch(
             confirmQuestion({
-              api: questionApi,
+              api: testServiceApi,
               courseApi: courseApi,
               activityId: activityId,
               tabId: tabId,
@@ -976,7 +936,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 <div className="mb-6">
                   <div>
                     <EditorReader
-                      className="text-lg font-semibold"
+                      className="text-lg"
                       text_editor_content={activeQuestion?.question_content}
                     />
                   </div>
@@ -1125,7 +1085,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           index: 0,
         });
       }
-      let exhibitOption = [];
+      const exhibitOption = [];
 
       if (
         activeQuestion?.exhibits?.length &&

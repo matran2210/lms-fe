@@ -7,13 +7,4 @@ type QuestionDetailQueryDTO = {
 
 const baseURL = 'question'
 
-export class QuestionAPI {
-  static getQuestionDetail(
-    questionId: string,
-    query?: QuestionDetailQueryDTO,
-  ): Promise<IResponse<IQuestion>> {
-    return fetcher(`${baseURL}/${questionId}`, {
-      params: query,
-    })
-  }
-}
+export class QuestionAPI {}

@@ -1,5 +1,8 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { OFFICE_VIEWER_URL } from "@lms/core";
+import { downloadFileByURL, isPdfFile } from "@lms/utils";
+
+const MAX_SIZE = 20 * 1024 * 1024;
 
 const FileViewer = ({
   fileName,
@@ -8,11 +11,37 @@ const FileViewer = ({
   fileName: string;
   fileUrl: string;
 }) => {
-  const isPdfFile = (fileName: string) => {
-    return fileName.toLowerCase().endsWith(".pdf");
-  };
+  const [shouldDownload, setShouldDownload] = useState(false);
 
-  console.log("fileUrl", fileUrl);
+  useEffect(() => {
+    const checkSize = async () => {
+      try {
+        const res = await fetch(fileUrl, { method: "HEAD" });
+        const size = res.headers.get("content-length");
+
+        if (size && Number(size) > MAX_SIZE) {
+          setShouldDownload(true);
+        }
+      } catch (err) {}
+    };
+
+    checkSize();
+  }, [fileUrl]);
+
+  if (shouldDownload) {
+    return (
+      <span>
+        Dung lượng file &quot;{fileName}&quot; quá lớn,&nbsp;
+        <span
+          className="font-semibold cursor-pointer text-state-info hover:underline"
+          onClick={() => downloadFileByURL(fileUrl, fileName)}
+        >
+          vui lòng click vào đây để tải xuống và xem
+        </span>
+        .
+      </span>
+    );
+  }
 
   return (
     <>

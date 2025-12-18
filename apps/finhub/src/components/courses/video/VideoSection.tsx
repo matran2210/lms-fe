@@ -1,9 +1,9 @@
 import { QuizComponentRef } from '@components/mycourses/activity/documents/QuizComponent'
 import { fetchQuestionById, IActivityStateQuestion } from '@lms/contexts'
-import { IQuestion, IVideo, video_url } from '@lms/core'
+import { IQuestion, IVideo } from '@lms/core'
 import { SAPPVideo } from '@lms/ui'
 import { CoursesAPI } from '@pages/api/courses'
-import { QuestionAPI } from '@pages/api/question'
+import { TestServiceAPI } from '@pages/api/test-api'
 import { debounce } from '@utils/helpers'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -69,7 +69,7 @@ const VideoSection = ({
     if (activeQuestion?.id) {
       dispatch(
         fetchQuestionById({
-          api: QuestionAPI,
+          api: TestServiceAPI,
           courseApi: CoursesAPI,
           activityId,
           tabId,
@@ -130,7 +130,7 @@ const VideoSection = ({
       if (open) {
         await dispatch(
           fetchQuestionById({
-            api: QuestionAPI,
+            api: TestServiceAPI,
             courseApi: CoursesAPI,
             activityId: activityId,
             tabId: tabId,
@@ -295,7 +295,7 @@ const VideoSection = ({
             onTimeUpdate: handleOnTimeUpdate,
             src:
               currentVideo?.file?.resource?.url
-                ?.replace(video_url || '', '')
+                ?.replace(process.env.NEXT_PUBLIC_VIDEO_URL || '', '')
                 .replace('/manifest/video.m3u8', '') || '',
           }}
           pauseOnSeek={true}

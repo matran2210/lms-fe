@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react'
 import { SappModal } from '@lms/ui'
 import { ExplanationPackageV2 } from 'explanation-package'
 // import 'explanation-package/dist/index.css'
-import { CloseIcon } from '@lms/assets'
-import { UploadAPI } from 'src/pages/api/upload'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { ActivityAPI } from '../../../pages/api/activity/index'
 import SappLoading from '@components/common/SappLoading'
+import { CloseIcon } from '@lms/assets'
+import { TestServiceAPI } from '@pages/api/test-api'
+import { UploadAPI } from 'src/pages/api/upload'
+import { ActivityAPI } from '../../../pages/api/activity/index'
 
 export enum QUESTION_LEVELS {
   FUNDAMENTAL = 'FUNDAMENTAL',
@@ -54,7 +54,7 @@ const ModalExplanationPackage = ({
     setLoading(true)
     try {
       const resultResponse = await ActivityAPI.getQuizAttemptsAnswer(id)
-      const topicDescription = await CoursesAPI.getTopicDescription(
+      const topicDescription = await TestServiceAPI.getTopicDescription(
         resultResponse?.data?.answer?.question?.question_topic_id,
         resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
       )

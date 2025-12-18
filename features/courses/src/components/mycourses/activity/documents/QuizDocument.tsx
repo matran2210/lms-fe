@@ -34,6 +34,7 @@ import {
   IQuestion,
   IQuizSetting,
   IRequirment,
+  ITestServiceAPI,
   QUESTION_TYPES,
   RESPONSE_OPTION,
   SOCIAL_LINK,
@@ -45,7 +46,7 @@ import {
   Tooltip as SappTooltip,
 } from "@lms/ui";
 import { isValidatedAnswer, trackGAEvent } from "@lms/utils";
-import { Tooltip } from "antd";
+import { Modal, Tooltip } from "antd";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { every, isEmpty, isNull, isUndefined } from "lodash";
@@ -56,6 +57,7 @@ import QuizComponent, { QuizComponentRef } from "./QuizComponent";
 import ConFirmSubmit from "../../test/conFirmSubmit";
 import ShowAnswerTemplate from "../../test/ShowAnswerTemplate";
 import ResetToAnswerTemplateModal from "../../test/ResetToAnswerTemplateModal";
+import { useTailwindBreakpoint } from "@lms/hooks";
 
 type Props = {
   questions: IQuestion[];
@@ -111,8 +113,11 @@ const QuizDocument = ({
   isQuizFinished = false,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
-  const { questionApi, courseApi, pageLink, submitQuizTest, router } =
+  const { courseApi, pageLink, testServiceApi, router } =
     useFeature();
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint();
+  const [isOpenActivityIncluded, setIsOpenActivityIncluded] =
+    useState<boolean>(false);
   const selector = useAppSelector(courseActivityQuizReducer);
   const isAFTERAllQUESTION = grading_preference !== "AFTER_EACH_QUESTION";
   const isAFTEREACHQUESTION = grading_preference === "AFTER_EACH_QUESTION";
@@ -182,7 +187,7 @@ const QuizDocument = ({
         try {
           await dispatch(
             fetchQuestionById({
-              api: questionApi,
+              api: testServiceApi as ITestServiceAPI,
               courseApi: courseApi,
               activityId: activityId,
               tabId: tabId,
@@ -219,7 +224,7 @@ const QuizDocument = ({
       if (!hasCorrects) {
         dispatch(
           confirmQuestion({
-            api: questionApi,
+            api: testServiceApi,
             courseApi: courseApi,
             activityId,
             tabId,
@@ -274,7 +279,7 @@ const QuizDocument = ({
         try {
           const nextQuestion = await dispatch(
             fetchQuestionById({
-              api: questionApi,
+              api: testServiceApi as ITestServiceAPI,
               courseApi: courseApi,
               activityId: activityId,
               tabId: tabId,
@@ -403,7 +408,7 @@ const QuizDocument = ({
       try {
         await dispatch(
           fetchQuestionById({
-            api: questionApi,
+            api: testServiceApi as ITestServiceAPI,
             courseApi: courseApi,
             activityId: activityId,
             tabId: tabId,
@@ -449,7 +454,7 @@ const QuizDocument = ({
         try {
           const prevQuestion = await dispatch(
             fetchQuestionById({
-              api: questionApi,
+              api: testServiceApi as ITestServiceAPI,
               courseApi: courseApi,
               activityId: activityId,
               tabId: tabId,
@@ -577,7 +582,7 @@ const QuizDocument = ({
     try {
       await dispatch(
         submitQuiz({
-          submitQuizTest,
+          submitQuizTest: testServiceApi.submitQuizTest,
           id: quizId,
           data: { answers, quiz_position_mapping },
           class_user_id,
@@ -1079,67 +1084,97 @@ const QuizDocument = ({
         message="Are you sure you are done here and ready to view the report?"
       />
       <div className={clsx({ "mb-[10px]": is_graded })}>
-        <div className="mb-8 flex items-center gap-3 rounded-md bg-white px-6 py-2">
+        <div className="mb-8 flex items-center gap-3 rounded-md bg-white p-2 lg:px-6">
           {((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
             isNull(quizSetting)) && (
             <div className="grid w-full grid-cols-1 md:grid-cols-3">
               {is_graded ? (
-                <div className="hidden flex-wrap items-center gap-3 md:flex">
+                <div className="hidden flex-wrap items-center gap-2 md:flex">
                   <div
                     className={` ${is_graded || "invisible"} whitespace-nowrap rounded bg-info-50 px-2 py-[2px] text-center text-sm font-normal text-info`}
                   >
                     Graded Activity
                   </div>
+                  {is_graded && (
+                    <div
+                      className="text-info lg:hidden font-medium"
+                      onClick={() => setIsOpenActivityIncluded(true)}
+                    >
+                      +1
+                    </div>
+                  )}
                   {is_graded &&
+                    isAlwaysShowSidebar &&
                     grading_method === GRADING_METHOD.MANUAL &&
                     getGradedLabel(gradeStatus)}
                 </div>
               ) : (
                 <div className="invisible hidden md:block">Graded</div>
               )}
-              <div className="mx-auto flex w-full items-center justify-center gap-3 md:w-fit">
-                {questions?.length > 1 && (
-                  <button
-                    disabled={activeQuestionIndex === 0 || loading}
-                    className={`cursor-pointer select-none  ${
-                      activeQuestionIndex === 0 || loading ? "opacity-50" : ""
-                    }`}
-                    onClick={() => {
-                      if (loading) {
-                        return;
-                      }
-                      handlePrevQuestion();
-                      trackGAEvent("Click Prev Question Quiz Activity");
-                    }}
-                  >
-                    <span className="text-[#1C274C]">
-                      <CircleArrowLeftIcon />
-                    </span>
-                  </button>
+              <div
+                className={clsx(
+                  "flex w-full items-center gap-3 md:w-fit justify-between",
+                  {
+                    "mx-auto !justify-center":
+                      !is_graded || isAlwaysShowSidebar,
+                  },
                 )}
-                <div className="text-sm text-bw-13 md:text-base">
-                  Question: {activeQuestionIndex + 1} of{" "}
-                  {questions?.length || 0}
+              >
+                {is_graded && (
+                  <div
+                    className="text-info md:hidden flex justify-start font-medium"
+                    onClick={() => setIsOpenActivityIncluded(true)}
+                  >
+                    {grading_method === GRADING_METHOD.MANUAL ? "+2 " : "+1 "}
+                    tag
+                  </div>
+                )}
+
+                <div className="flex items-center justify-center gap-2 md:gap-3">
+                  {questions?.length > 1 && (
+                    <button
+                      disabled={activeQuestionIndex === 0 || loading}
+                      className={`cursor-pointer select-none  ${
+                        activeQuestionIndex === 0 || loading ? "opacity-50" : ""
+                      }`}
+                      onClick={() => {
+                        if (loading) {
+                          return;
+                        }
+                        handlePrevQuestion();
+                        trackGAEvent("Click Prev Question Quiz Activity");
+                      }}
+                    >
+                      <span className="text-[#1C274C]">
+                        <CircleArrowLeftIcon />
+                      </span>
+                    </button>
+                  )}
+                  <div className="text-sm text-bw-13 md:text-base">
+                    Question: {activeQuestionIndex + 1} of{" "}
+                    {questions?.length || 0}
+                  </div>
+                  {questions?.length > 1 && (
+                    <button
+                      disabled={isLastQuestion || loading}
+                      className={`cursor-pointer select-none ${
+                        isLastQuestion || loading ? "opacity-50" : ""
+                      }`}
+                      onClick={() => {
+                        if (loading) {
+                          return;
+                        }
+                        handleNextQuestion();
+                        trackGAEvent("Click Next Question Quiz Activity");
+                      }}
+                    >
+                      <span className="text-[#1C274C]">
+                        <CircleArrowRightIcon />
+                      </span>
+                    </button>
+                  )}
                 </div>
-                {questions?.length > 1 && (
-                  <button
-                    disabled={isLastQuestion || loading}
-                    className={`cursor-pointer select-none ${
-                      isLastQuestion || loading ? "opacity-50" : ""
-                    }`}
-                    onClick={() => {
-                      if (loading) {
-                        return;
-                      }
-                      handleNextQuestion();
-                      trackGAEvent("Click Next Question Quiz Activity");
-                    }}
-                  >
-                    <span className="text-[#1C274C]">
-                      <CircleArrowRightIcon />
-                    </span>
-                  </button>
-                )}
+                {is_graded && <div className="w-10 md:hidden" />}
               </div>
               <div
                 id={`quiz-toggle-${quizId}`}
@@ -1424,6 +1459,25 @@ const QuizDocument = ({
           handleClose={onCloseResetToTemplateModal}
         />
       )}
+      <Modal
+        open={isOpenActivityIncluded}
+        onCancel={() => setIsOpenActivityIncluded(false)}
+        title="This Activity Include"
+        centered
+        className="sapp-modal-activity-include"
+        footer={null}
+      >
+        <div className="flex-wrap items-center gap-2 flex mt-2">
+          <div
+            className={` ${is_graded || "invisible"} whitespace-nowrap rounded bg-info-50 px-2 py-[2px] text-center text-sm font-normal text-info`}
+          >
+            Graded Activity
+          </div>
+          {is_graded &&
+            grading_method === GRADING_METHOD.MANUAL &&
+            getGradedLabel(gradeStatus)}
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -8,6 +8,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { PopupStep } from "../../components";
 import SearchForm from "./SearchForm";
+import { useTailwindBreakpoint } from "@lms/hooks";
 
 interface IProps {
   handleOpenSidebar: () => void;
@@ -35,6 +36,7 @@ const SearchWithMenuToggle = ({
   appType
 }: IProps) => {
   const { pageLink } = useFeature();  
+  const {isMobileView} = useTailwindBreakpoint()
   const {
     status: guideStatus,
     step: guideStep,
@@ -204,7 +206,7 @@ const SearchWithMenuToggle = ({
       {isShowUserGuide && guideStatus && guideStep === 1 && (
         <PopupStep
           content={UserGuide.CONTENT_STEP_1}
-          className="left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-0 md:top-[68px] md:-translate-x-0 md:-translate-y-0 lg:top-[78px]"
+          className="left-1/2 top-[85%] sm:top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-0 md:top-[68px] md:-translate-x-0 md:-translate-y-0 lg:top-[78px]"
           title={"Search box"}
           index={1}
           total={6}

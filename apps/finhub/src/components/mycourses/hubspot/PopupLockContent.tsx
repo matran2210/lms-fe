@@ -20,13 +20,13 @@ const MODAL_CONTENT = {
   lockSection: {
     header: 'This content is locked',
     content:
-      'Sorry, you do not have access to this content. Click ‘Upgrade Now’ to receive a personalized learning consultation call from our admissions conslutant.',
+      'Sorry, you do not have access to this content. Click ‘Upgrade Now’ to receive a personalized learning consultation call from our admissions consultant .',
     icon: <LockSectionIcon />,
   },
   ctaUpgrade: {
     header: 'Unlock Your Learning Journey',
     content:
-      "Click 'Upgrade Now' to receive a personalized learning consultation call from our admissions conslutant.",
+      "Click 'Upgrade Now' to receive a personalized learning consultation call from our admissions consultant .",
     icon: <UnlockIcon />,
   },
   thankYou: {

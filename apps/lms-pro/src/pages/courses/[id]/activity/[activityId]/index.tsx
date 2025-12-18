@@ -84,6 +84,7 @@ import { useQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { v4 as uuidv4 } from 'uuid'
+import { createPortal } from 'react-dom'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -842,10 +843,13 @@ const ActivityPage = () => {
                 <CtaTrial />
               </div>
             </div>
-            <BackToTop
-              scrollContainerRef={scrollRef}
-              className={clsx('!bottom-[230px] !right-4 md:hidden')}
-            />
+            {createPortal(
+              <BackToTop
+                scrollContainerRef={scrollRef}
+                className={clsx('!bottom-[230px] !right-4 md:hidden')}
+              />,
+              document.body,
+            )}
             <PopupLockContent
               showForm={openPopupCTA}
               setShowForm={setOpenPopupCTA}

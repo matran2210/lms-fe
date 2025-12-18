@@ -5,10 +5,11 @@ import {
   ANIMATION,
   COMMON_TEXT_ENUM,
   GRADE_STATUS,
-  IAnswer, IQuizAttemptChartType,
+  IAnswer,
+  IQuizAttemptChartType,
   QUESTION_TYPES,
 } from '@lms/core'
-import { Tooltip } from "@lms/ui"
+import { Tooltip } from '@lms/ui'
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
 import DOMPurify from 'dompurify'
@@ -20,7 +21,13 @@ import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
 import { CoursesAPI } from '../../../api/courses/index'
 import { PageLink } from 'src/constants/routers'
-import { convertSlugToTitle, handleReplaceText, removeHtmlTags, truncateString } from '@lms/utils'
+import {
+  convertSlugToTitle,
+  getGradingStatusLabel,
+  handleReplaceText,
+  removeHtmlTags,
+  truncateString,
+} from '@lms/utils'
 import { ListScoreCollapse } from '@lms/feature-courses'
 
 const commonHeaderClass = 'text-left p-0 text-base font-medium text-gray'
@@ -215,8 +222,15 @@ const TableQuestions = ({
       <div className="flex items-center gap-x-3">
         <div className="mb-6 text-base font-semibold text-[#050505] md:text-lg xl:text-xl xl:font-medium">
           Your Answer Details{' '}
-          <span className="ml-5 rounded-sm bg-[#FFB8001A] px-1 py-1.5 text-sm text-[#FFB800] md:text-base">
-            Awaiting Grading
+          <span
+            className={clsx(
+              'ml-5 rounded-sm px-1 py-1.5 text-sm md:text-base',
+              gradingStatus === GRADE_STATUS.FINISHED_GRADING
+                ? 'bg-[#176CDD0D] text-blue-7'
+                : 'bg-[#FFB8001A] text-[#FFB800]',
+            )}
+          >
+            {getGradingStatusLabel(gradingStatus || '')}
           </span>
         </div>
         {router?.query?.attempt && (

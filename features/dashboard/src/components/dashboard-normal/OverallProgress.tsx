@@ -157,12 +157,12 @@ const OverallProgress = ({
         </div>
         {option && (
           <>
-            <div className="flex-row justify-around gap-2 md:flex 4xl:gap-8">
+            <div className="flex flex-col items-center justify-around gap-2 md:flex md:flex-row 4xl:gap-8">
               <EChart
                 option={option}
-                width={isMobile ? "350px" : "250px"}
-                height={isMobile ? "240px" : "250px"}
-                minHeight={isMobile ? "240px" : "270px"}
+                width={isMobile ? '200px' : '250px'}
+                height={isMobile ? '200px' : '250px'}
+                minHeight={isMobile ? '200px' : '270px'}
               />
               <div className="flex min-w-[180px] flex-col justify-center gap-1 text-sm tracking-tight 2xl:tracking-normal 3xl:gap-3">
                 {/* Responsive wrapper for top 2 items */}

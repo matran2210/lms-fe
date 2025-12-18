@@ -584,8 +584,8 @@ const CaseStudyResult = () => {
             'mb-8 flex w-full flex-col gap-8 rounded-xl bg-gray-100 p-8',
             {
               'min-w-[350px] bg-white px-0 py-8':
-                question?.data?.qType === QUESTION_TYPES.ESSAY,
-              '!w-fit': question?.data?.qType === QUESTION_TYPES.MATCHING,
+                question?.qType === QUESTION_TYPES.ESSAY,
+              '!w-fit': question?.qType === QUESTION_TYPES.MATCHING,
             },
           )}
         >

@@ -1,7 +1,6 @@
 import { PointerIcon, ShowCommentIcon } from "@lms/assets";
 import { useCourseNoteContext, useFeature } from "@lms/contexts";
 import { doHighlight, optionsImpl } from "@funktechno/texthighlighter/lib";
-import { video_url } from "@lms/core";
 import {
   replaceTextAlignCenterToWebKitCenter,
   replaceWhiteSpacePreWrapToNormal,
@@ -45,7 +44,7 @@ export const HighlightableHTML: React.FC<Props> = ({
   isShowNote = false,
   className,
 }) => {
-  const { router, courseApi } = useFeature();
+  const { router, courseApi, videoUrl } = useFeature();
   const activityId = router.query.activityId;
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRefs = useRef<Record<string, React.RefObject<HTMLVideoElement>>>(
@@ -849,15 +848,15 @@ export const HighlightableHTML: React.FC<Props> = ({
 
   const convertMathToImage = async (element: any) => {
     // TODO: check lỗi này
-    // if (typeof com === "undefined") return;
+    if (typeof com === "undefined") return;
 
-    // const viewer = com?.wiris?.js?.JsPluginViewer;
+    const viewer = com?.wiris?.js?.JsPluginViewer;
 
-    // if (element && viewer) {
-    //   try {
-    //     await viewer.parseElement(element, true, function () {});
-    //   } catch (error) {}
-    // }
+    if (element && viewer) {
+      try {
+        await viewer.parseElement(element, true, function () {});
+      } catch (error) {}
+    }
   };
 
   useEffect(() => {
@@ -906,7 +905,7 @@ export const HighlightableHTML: React.FC<Props> = ({
       const src = video?.querySelector("source")?.getAttribute("token");
       if (src && src !== "null" && video.tagName === "VIDEO") {
         var iframe = document.createElement("iframe");
-        iframe.src = `${video_url}${src}/iframe?autoplay=true`;
+        iframe.src = `${videoUrl}${src}/iframe?autoplay=true`;
         iframe.id = video?.id;
         iframe.className = video?.className;
         iframe.style.cssText = video?.style.cssText;
@@ -1114,10 +1113,11 @@ export const HighlightableHTML: React.FC<Props> = ({
                       streamRef={videoRefs.current[videoToken]}
                       pauseOnSeek={true}
                       thumbnail={{
-                        "311x175": `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=175`,
-                        "656x369": `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=369`,
-                        "1270x716": `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=716`,
+                        "311x175": `${videoUrl}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=175`,
+                        "656x369": `${videoUrl}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=369`,
+                        "1270x716": `${videoUrl}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=716`,
                       }}
+                      videoAttribs={domNode.attribs}
                     />
                   );
                 }

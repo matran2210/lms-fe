@@ -1,7 +1,7 @@
 import { Stream } from "@cloudflare/stream-react";
 import { LoadingIcon, PiPIcon } from "@lms/assets";
 import { Icon } from "@lms/assets/icons";
-import { Thumbnail, video_url } from "@lms/core";
+import { Thumbnail } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -10,6 +10,7 @@ import useClickOutside from "../clickoutside/HookClick";
 import { ArrowIcon } from "../pagination";
 import { formatTimeToHourMinuteSecond, getResolution, isMobileOrTablet } from "@lms/utils";
 import { useFeature } from "@lms/contexts";
+import clsx from "clsx";
 
 interface IProp {
   options: any;
@@ -20,6 +21,7 @@ interface IProp {
   timeQuiz?: any;
   thumbnail?: Thumbnail;
   children?: ReactNode;
+  videoAttribs?: {[key: string]: string};
 }
 
 type ResolutionTypes =
@@ -58,8 +60,9 @@ const SAPPVideo = ({
   timeQuiz,
   thumbnail,
   children,
+  videoAttribs
 }: IProp) => {
-  const {fetcher} = useFeature();
+  const {fetcher, videoUrl} = useFeature();
   const [playerFunction, setPlayerFunction] = useState<any>();
   const [valueVolume, setValueVolume] = useState<number>(1);
   const [playbackRate, setPlaybackRate] = useState<number>(1);
@@ -129,11 +132,11 @@ let player: any;
 
             player.initialize(
               streamRef.current,
-              `${video_url}${options?.src}/manifest/video.mpd`,
+              `${videoUrl}${options?.src}/manifest/video.mpd`,
               false,
             );
             await fetchCaptions(
-              `${video_url}${options?.src}/manifest/video.mpd`,
+              `${videoUrl}${options?.src}/manifest/video.mpd`,
             );
 
             player.updateSettings({
@@ -817,7 +820,7 @@ let player: any;
   };
 
   const { src, width, height } = getThumbnail();
-
+  const isSmallVideo = videoAttribs && Number(videoAttribs.width) < 346;
   return (
     <>
       <div
@@ -859,6 +862,7 @@ let player: any;
                 controls
                 responsive={false}
                 // className={`${styles.content}`} comment monorepo
+                className="sapp-content"
                 onSeeking={() => {
                   if (streamRef.current && pauseOnSeek) {
                     streamRef.current.pause();
@@ -869,8 +873,14 @@ let player: any;
             </div>
           ) : (
             <div
-              className={`sapp-video-custom video-container group ${
-                !hideVideo ? 'sapp-wrapper' : 'sapp-hideWrapper'}  ${loading ? 'hidden' : ''}`}
+                style={videoAttribs ? {
+                  height: `${videoAttribs?.height}px`,
+                  width: `${videoAttribs?.width}px`,
+            } : {}}
+              className={clsx(`sapp-video-custom video-container group ${
+                !hideVideo ? 'sapp-wrapper' : 'sapp-hideWrapper'}  ${loading ? 'hidden' : ''}`, {
+                  "inline-block pt-0": videoAttribs
+                })}
               ref={videoContainerRef}
             >
               <div className={`popup-question`}>{children}</div>
@@ -918,7 +928,10 @@ let player: any;
                 className="video-controls flex-center absolute bottom-0 left-0 right-0 h-14 w-full rounded-b-lg px-4 py-3"
                 ref={videoControlsRef}
               >
-                <div className="flex-center flex w-full items-center gap-6">
+                <div className={clsx("flex-center flex w-full items-center gap-6", {
+                  "justify-between": isSmallVideo,
+                  "justify-center": !isSmallVideo
+                })}>
                   <div className="left-controls flex items-center gap-4 text-white">
                     <button
                       className="btn-video flex size-6 items-center justify-center rounded bg-[#E5E7EB] before:-right-4 sm:mr-4 sm:size-8"
@@ -941,13 +954,17 @@ let player: any;
                       </svg>
                     </button>
 
-                    <div className="time flex-center hidden gap-1 text-xsm font-normal leading-normal text-[#E3E3E3] sm:mr-4 sm:flex">
+                    <div className={clsx("time flex-center hidden gap-1 text-xsm font-normal leading-normal text-[#E3E3E3] sm:mr-4 sm:flex", {
+                      "!hidden": isSmallVideo
+                    })}>
                       <time ref={timeElapsedRef}>00:00</time>
                       <span> / </span>
                       <time ref={durationRef}>00:00</time>
                     </div>
                   </div>
-                  <div className="relative h-[6px] w-full text-justify">
+                  <div className={clsx("relative h-[6px] w-full text-justify", {
+                    hidden: isSmallVideo
+                  })}>
                     <progress
                       className="pointer-events-none absolute top-0 h-[6px] w-full"
                       ref={progressBarRef}
@@ -981,7 +998,9 @@ let player: any;
                   </div>
 
                   <div className="right-controls flex-center flex items-center gap-4">
-                    <div className="volume-controls relative flex h-8 items-center">
+                    <div className={clsx("volume-controls relative flex h-8 items-center", {
+                      hidden: isSmallVideo
+                    })}>
                       <button
                         data-title="Mute"
                         className="btn-video volume-button"
@@ -1108,7 +1127,7 @@ let player: any;
                         />
                       </div>
                     </div>
-                    <div className="volume-controls relative hidden h-8 items-center sm:flex">
+                    <div className={clsx("volume-controls relative hidden h-8 items-center sm:flex", {"!hidden": isSmallVideo})}>
                       <button
                         data-title="pip"
                         className="btn-video volume-button text-white"
@@ -1118,9 +1137,11 @@ let player: any;
                       </button>
                     </div>
                     <div
-                      className={`settings-control icon-svg relative text-white ${
+                      className={clsx(`settings-control icon-svg relative text-white ${
                         activeSettings ? "active" : ""
-                      }`}
+                      }`, {
+                        hidden: isSmallVideo
+                      })}
                       ref={listSettingsRef}
                     >
                       <svg

@@ -32,6 +32,7 @@ import {
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CoursesAPI } from '@pages/api/courses'
 import { QuestionAPI } from '@pages/api/question'
+import { TestServiceAPI } from '@pages/api/test-api'
 import { isEmpty, isUndefined } from 'lodash'
 import React, {
   forwardRef,
@@ -456,7 +457,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         try {
           dispatch(
             confirmQuestion({
-              api: QuestionAPI,
+              api: TestServiceAPI,
               courseApi: CoursesAPI,
               activityId: activityId,
               tabId: tabId,

@@ -1,4 +1,4 @@
-import { CoursesAPI } from '@pages/api/courses'
+import { TestServiceAPI } from '@pages/api/test-api'
 import { useEffect, useState } from 'react'
 
 const useGetQuestionTabs = (id: string) => {
@@ -10,7 +10,7 @@ const useGetQuestionTabs = (id: string) => {
       if (id) {
         try {
           setLoading(true)
-          const response = await CoursesAPI.getQuestionTabsById(id)
+          const response = await TestServiceAPI.getQuestionTabsById(id)
           setQuestionTabs(response.data)
         } catch (err) {
         } finally {
