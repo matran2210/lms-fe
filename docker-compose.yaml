@@ -14,6 +14,8 @@ services:
     environment:
       NODE_ENV: production
     restart: always
+    networks:
+      - local
 
   finhub:
     # build:
@@ -28,11 +30,15 @@ services:
     environment:
       NODE_ENV: production
     restart: always
+    networks:
+      - local
 
   nginx:
     image: nginx:latest
     depends_on:
-      next-app:
+      lms-pro:
+        condition: service_started
+      finhub:
         condition: service_started
     container_name: nginx
     restart: always
