@@ -1,4 +1,4 @@
-import { useCourseContext } from '@contexts/index'
+import { useCourseContext } from '@lms/contexts'
 import { useEffect, useState } from 'react'
 
 const COUNTDOWN_SECONDS = 6 * 60 * 60
