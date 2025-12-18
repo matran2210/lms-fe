@@ -1,16 +1,27 @@
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
-import { DownloadIcon } from '@lms/assets'
+import { CloseIcon, DownloadIcon } from '@lms/assets'
 import {
   CLASS_SUFFIX_TYPE,
   DEFAULT_PAGE_NUMBER,
-  IClassResource
+  IClassResource,
 } from '@lms/core'
-import { ActionCellV2, PaginationSappV2, SappTable } from '@lms/ui'
+import { useUserRole } from '@lms/hooks'
+import {
+  ActionCellV2,
+  FileViewer,
+  ModalResizeable,
+  PaginationSappV2,
+  SappModalImage,
+  SappModalVideo,
+  SappTable,
+  SAPPVideo,
+  Tooltip,
+} from '@lms/ui'
 import { UploadAPI } from '@pages/api/upload'
 import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useRef, useState } from 'react'
 
 const ClassResourceTable = ({
   data,
@@ -26,7 +37,28 @@ const ClassResourceTable = ({
   const router = useRouter()
   const textStyle = 'text-base font-medium text-gray-800'
   const className = 'custom-column-table'
-  const textTruncateStyle = `${textStyle} overflow-hidden text-ellipsis whitespace-nowrap w-[300px]`
+  const textTruncateStyle = `${textStyle} overflow-hidden text-ellipsis whitespace-nowrap max-w-[300px]`
+  const { isTeacher } = useUserRole()
+  const internalRef = useRef<HTMLVideoElement>(null)
+  const [previewResource, setPreviewResource] = useState<IClassResource | null>(
+    null,
+  )
+  const [openPreview, setOpenPreview] = useState(false)
+
+  const handleOpenPreview = (resource: IClassResource) => {
+    if (!resource?.url && !resource?.sub_url) return
+    setPreviewResource(resource)
+    setOpenPreview(true)
+  }
+  const canDownload = (record: IClassResource, isTeacher: boolean) => {
+    const perms = record?.class_resource_permissions
+
+    if (!perms) return false
+
+    return isTeacher
+      ? perms.teacher === 'DOWNLOAD'
+      : perms.student === 'DOWNLOAD'
+  }
   const columns: ColumnsType<IClassResource> = [
     {
       title: '#',
@@ -48,8 +80,16 @@ const ClassResourceTable = ({
       dataIndex: 'name',
       key: 'name',
       className: clsx(className),
-      render: (name) => (
-        <NameNoActionCell dataColumn={name} className={textTruncateStyle} />
+      render: (name, resource) => (
+        <Tooltip placement="bottomLeft" title={name}>
+          <div
+            onClick={() => handleOpenPreview(resource)}
+            className={textTruncateStyle}
+          >
+            {' '}
+            {name}
+          </div>
+        </Tooltip>
       ),
     },
     {
@@ -102,8 +142,13 @@ const ClassResourceTable = ({
       key: 'actions',
       className: className,
       render: (_, record) => {
+        const allowDownload = canDownload(record, isTeacher)
         return (
-          <div className="flex justify-end">
+          <div
+            className={clsx('flex justify-end', {
+              'pointer-events-none opacity-40': !allowDownload,
+            })}
+          >
             <ActionCellV2
               className=""
               listAction={[
@@ -131,6 +176,44 @@ const ClassResourceTable = ({
     })
   }
 
+  const renderPreviewContent = (resource: IClassResource) => {
+    switch (resource.suffix_type) {
+      case 'IMAGE':
+        return (
+          <SappModalImage
+            src={resource.url || resource.sub_url}
+            setSrc={() => setOpenPreview(false)}
+          />
+        )
+
+      case 'VIDEO':
+        return (
+          <SAPPVideo
+            streamRef={internalRef}
+            options={{ src: resource.sub_url }}
+          ></SAPPVideo>
+        )
+      case 'SHEET':
+      case 'WORD_DOCUMENT':
+      case 'POWER_POINT':
+        return <FileViewer fileName={resource.name} fileUrl={resource.url} />
+
+      case 'ZIP':
+        return (
+          <div className="text-gray-500 flex h-full items-center justify-center text-base font-medium">
+            Không thể hiển thị file ZIP, vui lòng tải xuống
+          </div>
+        )
+
+      default:
+        return (
+          <div className="flex h-full items-center justify-center text-base text-gray-400">
+            Không hỗ trợ xem trước định dạng này
+          </div>
+        )
+    }
+  }
+
   return (
     <>
       <SappTable
@@ -148,26 +231,60 @@ const ClassResourceTable = ({
         totalItems={pagination?.total || 0}
         setCurrentPage={(page) => {
           setPagination((prev) => ({ ...prev, current: page as number }))
-           router.push({
-    pathname: router.pathname,
-    query: {
-      ...router.query,
-      page_index: page as number,
-    },
-  })
+          router.push({
+            pathname: router.pathname,
+            query: {
+              ...router.query,
+              page_index: page as number,
+            },
+          })
         }}
         setPageSize={(page) => {
           setPagination((prev) => ({ ...prev, pageSize: page as number }))
-           router.push({
-    pathname: router.pathname,
-    query: {
-      ...router.query,
-      page_size: page as number,
-      page_index: DEFAULT_PAGE_NUMBER, 
-    },
-  })
+          router.push({
+            pathname: router.pathname,
+            query: {
+              ...router.query,
+              page_size: page as number,
+              page_index: DEFAULT_PAGE_NUMBER,
+            },
+          })
         }}
       />
+      {openPreview && previewResource && (
+        <ModalResizeable
+          key={previewResource.url}
+          modalIndex={1}
+          title={previewResource.name}
+          width={900}
+          height={548}
+          className="!z-40 max-h-[546px] !rounded-lg"
+          position="center"
+          handleCloseScratchPad={() => {
+            setOpenPreview(false)
+            setPreviewResource(null)
+          }}
+          header={
+            <div className="modal-header modal-dragger flex h-10 w-full items-center justify-between px-5">
+              <div className="truncate font-semibold">
+                {previewResource.name}
+              </div>
+              <button
+                onClick={() => {
+                  setOpenPreview(false)
+                  setPreviewResource(null)
+                }}
+              >
+                <CloseIcon />
+              </button>
+            </div>
+          }
+        >
+          <div className="h-full bg-white">
+            {renderPreviewContent(previewResource)}
+          </div>
+        </ModalResizeable>
+      )}
     </>
   )
 }

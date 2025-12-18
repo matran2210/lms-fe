@@ -1,4 +1,4 @@
-import { ArrowDownIcon } from "@lms/assets";
+import { ArrowDownIcon, CloseCircleIcon, CloseIcon } from "@lms/assets";
 import { Select } from "antd";
 import { ButtonSize } from "antd/es/button";
 import { DefaultOptionType } from "antd/es/select";
@@ -81,11 +81,11 @@ const SAPPSelectMultiple = ({
     );
   };
 
-  /* -------- Custom label -------- */
   const customizedOptions = useMemo(
     () =>
       options.map((option) => ({
         ...option,
+        title: option.label as string,
         label: <EllipsisTooltip text={option.label as string} />,
       })),
     [options],
@@ -113,12 +113,42 @@ const SAPPSelectMultiple = ({
               maxTagPlaceholder={(omitted) => `Đã chọn ${omitted.length}`}
               placeholder={placeholder}
               size={size}
+              tagRender={(props) => {
+                const { label, closable, onClose } = props;
+
+                return (
+                  <span
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    className="ant-select-selection-item"
+                  >
+                    {label}
+                    {closable && (
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onClose();
+                        }}
+                        className="ant-select-selection-item-remove"
+                      >
+                        <CloseCircleIcon />
+                      </span>
+                    )}
+                  </span>
+                );
+              }}
+              dropdownRender={(menu) => (
+                <div onMouseDown={(e) => e.preventDefault()}>{menu}</div>
+              )}
               suffixIcon={suffixIcon}
               disabled={disabled}
               showSearch={isSearchable}
               onSearch={onSearch}
               loading={isLoading}
               allowClear={allowClear}
+              optionFilterProp="title"
               onDropdownVisibleChange={onDropdownVisibleChange}
               onChange={(values) => {
                 field.onChange(values ?? []);

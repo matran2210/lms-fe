@@ -1,14 +1,19 @@
-import { isPdfFile } from '@utils/helpers'
-import React from 'react'
-import { OFFICE_VIEWER_URL } from '@lms/core'
+import React from "react";
+import { OFFICE_VIEWER_URL } from "@lms/core";
 
 const FileViewer = ({
   fileName,
   fileUrl,
 }: {
-  fileName: string
-  fileUrl: string
+  fileName: string;
+  fileUrl: string;
 }) => {
+  const isPdfFile = (fileName: string) => {
+    return fileName.toLowerCase().endsWith(".pdf");
+  };
+
+  console.log("fileUrl", fileUrl);
+
   return (
     <>
       {isPdfFile(fileName) ? (
@@ -20,7 +25,7 @@ const FileViewer = ({
         />
       )}
     </>
-  )
-}
+  );
+};
 
-export default FileViewer
+export default FileViewer;

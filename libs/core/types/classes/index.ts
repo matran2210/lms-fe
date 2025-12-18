@@ -180,6 +180,8 @@ export interface IClassResource extends IResource {
     };
     id: string;
   };
+  url: string;
+  sub_url: string;
 }
 
 export interface IClassResourceList {

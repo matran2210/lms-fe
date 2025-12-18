@@ -1,6 +1,6 @@
-import { CLASS_SUFFIX_TYPE } from '@lms/core'
+import { CLASS_SUFFIX_TYPE, DEFAULT_PAGE_NUMBER } from '@lms/core'
 import { SappSelectMultiple, SAPPSelectV2 } from '@lms/ui'
-import { cleanArray, normalizeToArray } from '@lms/utils'
+import { cleanArray, normalizeStringQuery, normalizeToArray } from '@lms/utils'
 import { getSelectOptions } from '@utils/helpers'
 import { debounce } from 'lodash'
 import { useRouter } from 'next/router'
@@ -8,64 +8,71 @@ import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import useSelectClassSchedule from 'src/hooks/useSelectClassSchedule'
 
-const FilterClassResource = ({
-  totalResult,
-}: {
-  totalResult: number
-}) => {
+const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
   const router = useRouter()
   const { control, watch, reset } = useForm({
-  defaultValues: {
-    suffix_types: router.query.suffix_types,
-    schedule_ids: normalizeToArray(router.query.schedule_ids),
-  },
-})
+    defaultValues: {
+      suffix_types: router.query.suffix_types,
+      schedule_ids: normalizeToArray(router.query.schedule_ids),
+    },
+  })
   const { courseId } = router.query
 
   useEffect(() => {
-  if (!router.isReady) return
+    if (!router.isReady) return
 
-  reset({
-    suffix_types:
-      typeof router.query.suffix_types === 'string'
-        ? router.query.suffix_types
-        : undefined,
+    reset({
+      suffix_types:
+        typeof router.query.suffix_types === 'string'
+          ? router.query.suffix_types
+          : undefined,
 
-    schedule_ids: normalizeToArray(router.query.schedule_ids),
-  })
-}, [
-  router.isReady,
-  router.query.suffix_types,
-  router.query.schedule_ids,
-  reset,
-])
+      schedule_ids: normalizeToArray(router.query.schedule_ids),
+    })
+  }, [
+    router.isReady,
+    router.query.suffix_types,
+    router.query.schedule_ids,
+    reset,
+  ])
 
   /**
    * 🔥 Watch filter → push URL
    */
-useEffect(() => {
-  const subscription = watch((values) => {
-    router.push(
-      {
-        pathname: router.pathname,
-        query: {
-          ...router.query,
-          page_index: 1,
-          suffix_types:
-            typeof values.suffix_types === 'string'
-              ? values.suffix_types
-              : undefined,
+  useEffect(() => {
+    const subscription = watch((values) => {
+      const nextQuery = { ...router.query }
 
-          schedule_ids: cleanArray(values.schedule_ids),
+      // reset page
+      nextQuery.page_index = String(DEFAULT_PAGE_NUMBER)
+
+      /* ===== suffix_types ===== */
+      if (values.suffix_types) {
+        nextQuery.suffix_types = String(values.suffix_types)
+      } else {
+        delete nextQuery.suffix_types
+      }
+
+      /* ===== schedule_ids ===== */
+      const schedules = cleanArray(values.schedule_ids)
+      if (schedules?.length) {
+        nextQuery.schedule_ids = schedules
+      } else {
+        delete nextQuery.schedule_ids
+      }
+
+      router.push(
+        {
+          pathname: router.pathname,
+          query: nextQuery,
         },
-      },
-      undefined,
-      { shallow: true },
-    )
-  })
+        undefined,
+        { shallow: true },
+      )
+    })
 
-  return () => subscription.unsubscribe()
-}, [watch])
+    return () => subscription.unsubscribe()
+  }, [watch])
 
   /**
    * ===== Schedule search =====
@@ -106,6 +113,7 @@ useEffect(() => {
             options={CLASS_SUFFIX_TYPE}
             className="min-w-36"
             heightCustom="h-10"
+            allowClear
           />
 
           <SappSelectMultiple
