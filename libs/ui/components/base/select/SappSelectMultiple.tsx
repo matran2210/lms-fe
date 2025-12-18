@@ -139,9 +139,6 @@ const SAPPSelectMultiple = ({
                   </span>
                 );
               }}
-              dropdownRender={(menu) => (
-                <div onMouseDown={(e) => e.preventDefault()}>{menu}</div>
-              )}
               suffixIcon={suffixIcon}
               disabled={disabled}
               showSearch={isSearchable}

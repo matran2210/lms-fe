@@ -30,18 +30,15 @@ const useSelectClassSchedule = (id?: string, search_key?: string) => {
       return fetchClasses(pageParam, 10, id) // Fetch with pageParam and a fixed page size
     },
     getNextPageParam: (lastPage) => {
-      return lastPage?.data.meta_data?.page_index <
-        lastPage?.data.meta_data?.total_pages
-        ? lastPage?.data.meta_data?.page_index + 1
-        : undefined
+      const { page_index, total_pages } = lastPage.metadata
+      return page_index < total_pages ? page_index + 1 : undefined
     },
     enabled: true,
     refetchOnWindowFocus: false,
   })
 
-  console.log('classschedule', data)
   return {
-    classSchedule: data?.pages.flatMap((page) => page.data) ?? [], // Flatten subjects from all pages
+    classSchedule: data?.pages.flatMap((page) => page.data) ?? [],
     isLoading,
     fetchNextPage,
     hasNextPage,

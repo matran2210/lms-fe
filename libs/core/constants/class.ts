@@ -19,4 +19,8 @@ export const CLASS_SUFFIX_TYPE = [
     label: "ZIP",
     value: "ZIP",
   },
+  {
+    label: "Sheet",
+    value: "SHEET",
+  },
 ];

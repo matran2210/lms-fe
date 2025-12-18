@@ -61,18 +61,23 @@ const ClassResourceTable = ({
   const columns: ColumnsType<IClassResource> = [
     {
       title: '#',
-      dataIndex: 'index',
       key: 'index',
-      className: className,
       width: 60,
       align: 'center',
-      render: (_, __, index) => (
-        <NameNoActionCell
-          dataColumn={index + 1}
-          className="text-base text-gray-400"
-          isCenter
-        />
-      ),
+      className: className,
+      render: (_, __, index) => {
+        const currentPage = pagination?.current || 1
+        const pageSize = pagination?.pageSize || 10
+        const order = (currentPage - 1) * pageSize + index + 1
+
+        return (
+          <NameNoActionCell
+            dataColumn={order}
+            className="text-base text-gray-400"
+            isCenter
+          />
+        )
+      },
     },
     {
       title: 'File name',
