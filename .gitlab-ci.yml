@@ -138,11 +138,8 @@ deploy_lms_pro:
   script:
     - chmod 600 "$TEST_SSH_KEY_PROD"
     - cp "$TEST_SSH_KEY_PROD" key.pem
-    - cp $TEST_ENV_PRODUCT_FILE apps/$APP_NAME/.env
-    - cp $TEST_ENV_PRODUCT_FILE .env
-    - set -a
+    - cp $ENV_PRODUCT_FILE .env
     - source .env
-    - set +a
 
     - export IMAGE_TAG="lms-fe-${CI_PIPELINE_IID}"
     - export LMS_PRO_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
