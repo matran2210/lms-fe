@@ -189,8 +189,8 @@ const Course = ({
         return false;
       case CLASS_USER_TYPES.TRANSFERED_TO:
         return false;
-      case CLASS_USER_TYPES.CANCELED:
-        return false;
+      // case CLASS_USER_TYPES.CANCELED:
+      //   return false;
       default:
         return true;
     }
