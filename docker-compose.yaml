@@ -7,7 +7,7 @@ services:
     #   dockerfile: ./Dockerfile
     #   args:
     #     APP_NAME: "lms-pro"
-    image: sappacademy/lms-be:lms-fe-1556
+    image:
     container_name: lms-pro
     ports:
       - "3000:3000"
@@ -21,11 +21,31 @@ services:
     #   dockerfile: ./Dockerfile
     #   args:
     #     APP_NAME: "finhub"
-    image: gitlab.sapp.edu.vn:5050/frontend/lms-fe/finhub
+    image:
     container_name: finhub
     ports:
       - "3001:3000"
     environment:
       NODE_ENV: production
     restart: always
+
+  nginx:
+    image: nginx:latest
+    depends_on:
+      next-app:
+        condition: service_started
+    container_name: nginx
+    restart: always
+    ports:
+      - '80:80'
+      - '443:443'
+    networks:
+      - local
+    volumes:
+      - /var/www/vhost:/etc/nginx/conf.d
+      - /var/www/cert/uat-ops-be.sapp.edu.vn.crt:/etc/nginx/uat-ops-be.sapp.edu.vn.crt
+      - /var/www/cert/uat-ops-be.sapp.edu.vn.key:/etc/nginx/uat-ops-be.sapp.edu.vn.key
+
+networks:
+  local:
  
