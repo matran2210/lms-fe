@@ -7,7 +7,7 @@ services:
     #   dockerfile: ./Dockerfile
     #   args:
     #     APP_NAME: "lms-pro"
-    image: $IMAGE_NAME:lms-fe-$CI_PIPELINE_IID
+    image: ${LMS_PRO_IMAGE}
     container_name: lms-pro
     ports:
       - "3000:3000"
