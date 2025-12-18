@@ -7,7 +7,7 @@ services:
     #   dockerfile: ./Dockerfile
     #   args:
     #     APP_NAME: "lms-pro"
-    image: gitlab.sapp.edu.vn:5050/lms-pro/lms-fe/lms-fe-next
+    image: sappacademy/lms-be:lms-fe-1556
     container_name: lms-pro
     ports:
       - "3000:3000"
