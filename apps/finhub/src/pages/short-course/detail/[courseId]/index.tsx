@@ -357,6 +357,7 @@ const CourseDetail = () => {
       className="relative"
       title="Course Detail"
     >
+      <PromotionalBanner />
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
         <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
           <Alert
@@ -400,7 +401,7 @@ const CourseDetail = () => {
           <>
             {isAlwaysShowSidebar && (
               <Breadcrumb3Level
-                className="!pb-2 !pt-0"
+                className="!pt-0"
                 currentPage={previewPart?.courseDetail?.name}
                 tabs={[
                   {
@@ -416,7 +417,7 @@ const CourseDetail = () => {
             )}
           </>
         )}
-        <PromotionalBanner />
+
         <div data-aos={ANIMATION.DATA_AOS}>
           <PreviewPartDetail
             chapterMenu={partDetail}
