@@ -6,9 +6,7 @@ interface IProps {
   control: Control<any>
 }
 
-const ClassResourceTeacherFilter: React.FC<IProps> = ({
-  control,
-}) => {
+const ClassResourceTeacherFilter: React.FC<IProps> = ({ control }) => {
   return (
     <div className="grid grid-cols-4 gap-4">
       <HookFormTextField

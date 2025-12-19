@@ -17,7 +17,7 @@ interface IProps {
   onChange?: (select: any) => void;
   value?: string | null | undefined;
   isDisabled?: boolean;
-  defaultValue?: string | string[] | null;
+  defaultValue?: string | object | undefined | null;
   label?: string;
   labelClass?: string;
   isSearchable?: boolean;
@@ -52,7 +52,6 @@ const SappHookFormSelect = ({
   isLoading = false,
   isSelectCustom = false,
   onSearch,
-  isMulti,
 }: IProps) => {
   const handleChange = useCallback(
     (selectedOption: OptionType | null) => {
@@ -86,21 +85,14 @@ const SappHookFormSelect = ({
                 isSelectCustom && "select-single-custom",
                 className,
               )}
-              isMulti={isMulti}
               classNamePrefix="select"
               instanceId="selectInstanceId"
               placeholder={placeholder}
               isDisabled={isDisabled}
               isClearable={isClearable}
-              onChange={(selected) => {
-                if (isMulti) {
-                  field.onChange(
-                    (selected as OptionType[])?.map((o) => o.value),
-                  );
-                } else {
-                  field.onChange((selected as OptionType)?.value ?? null);
-                }
-                handleChange(selected as any);
+              onChange={(selectedOption) => {
+                field.onChange(selectedOption);
+                handleChange(selectedOption);
               }}
               onMenuOpen={handleMenuOpen}
               onMenuClose={onMenuClose}

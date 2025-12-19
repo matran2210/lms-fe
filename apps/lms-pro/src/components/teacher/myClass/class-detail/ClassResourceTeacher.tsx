@@ -1,17 +1,31 @@
 import ClassResourceTeacherFilter from '@components/teacher/components/ClassResourceTeacherFilter'
-import NameActionCell from '@components/teacher/components/NameActionCell'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
-import StudentsTestResultFilter from '@components/teacher/components/StudentsTestResultFilter'
-import { DownloadIcon } from '@lms/assets'
-import { ClassKey, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, IClassResource, IListClassResourceParams } from '@lms/core'
+import { CloseIcon, DownloadIcon } from '@lms/assets'
+import {
+  CLASS_SUFFIX_TYPE,
+  ClassKey,
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  IClassResource,
+  IListClassResourceParams,
+} from '@lms/core'
 import { useSappPaging, useUserRole } from '@lms/hooks'
-import { ActionCellV2, LayoutFilter, SappTable } from '@lms/ui'
+import {
+  ActionCellV2,
+  FileViewer,
+  LayoutFilter,
+  ModalResizeable,
+  SappModalImage,
+  SappTable,
+  SAPPVideo,
+  Tooltip,
+} from '@lms/ui'
 import { formatDate } from '@lms/utils'
 import { ClassAPI } from '@pages/api/class'
 import { UploadAPI } from '@pages/api/upload'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 interface FilterParams {
@@ -20,47 +34,57 @@ interface FilterParams {
   quiz_type?: string
 }
 
-const initialValues: FilterParams = {
-  quiz_name: undefined,
-  quiz_type: undefined,
-  grading_method: undefined,
-}
-
 export default function ClassResourceTeacher() {
   const router = useRouter()
+  const internalRef = useRef<HTMLVideoElement>(null)
   const { control, reset, getValues } = useForm()
   const [params, setParams] = useState<IListClassResourceParams>({
     page_size: DEFAULT_PAGE_SIZE,
     page_index: DEFAULT_PAGE_NUMBER,
   })
 
+  const [previewResource, setPreviewResource] = useState<IClassResource | null>(
+    null,
+  )
+  const [openPreview, setOpenPreview] = useState(false)
+
+  const handleOpenPreview = (resource: IClassResource) => {
+    if (!resource?.url && !resource?.sub_url) return
+    setPreviewResource(resource)
+    setOpenPreview(true)
+  }
+
   const { data, pagination, isLoading, handleChangeParams, setPagination } =
     useSappPaging({
       uniqueKey: ClassKey.ClassResource,
       queryFn: () =>
-        ClassAPI.getClassResource(router.query.id as string, params),
+        ClassAPI.getClassResource(router.query.id as string, {
+          ...params,
+          page_index: pagination.current as number,
+          page_size: pagination.pageSize as number,
+        }),
       params,
     })
 
-    const { isTeacher } = useUserRole()
+  const { isTeacher } = useUserRole()
 
   const handleResetFilter = () => {
     reset({ search_key: '', suffix_types: '' })
     setParams({
       page_size: DEFAULT_PAGE_SIZE,
-    page_index: DEFAULT_PAGE_NUMBER,
+      page_index: DEFAULT_PAGE_NUMBER,
     })
   }
 
   const onSubmit = () => {
-    setParams( (prev) => ({
+    setParams((prev) => ({
       ...prev,
       search_key: getValues('search_key') || undefined,
       suffix_types: getValues('suffix_types')?.value || undefined,
     }))
   }
 
-    const canDownload = (record: IClassResource, isTeacher: boolean) => {
+  const canDownload = (record: IClassResource, isTeacher: boolean) => {
     const perms = record?.class_resource_permissions
 
     if (!perms) return false
@@ -69,14 +93,21 @@ export default function ClassResourceTeacher() {
       ? perms.teacher === 'DOWNLOAD'
       : perms.student === 'DOWNLOAD'
   }
+  const textStyle = 'text-base font-medium text-gray-800'
+  const textTruncateStyle = `${textStyle} overflow-hidden text-ellipsis whitespace-nowrap max-w-[300px]`
 
   const columnsValue = [
     {
       title: 'File name',
       render: (record: IClassResource) => (
-        <NameActionCell
-          dataColumn={record?.name}
-        />
+        <Tooltip placement="bottomLeft" title={record?.name}>
+          <div
+            onClick={() => handleOpenPreview(record)}
+            className={textTruncateStyle}
+          >
+            {record?.name}
+          </div>
+        </Tooltip>
       ),
       onCell: () => ({
         style: { cursor: 'pointer' },
@@ -85,31 +116,42 @@ export default function ClassResourceTeacher() {
     {
       title: 'Type',
       render: (record: IClassResource) => (
-        <NameNoActionCell dataColumn={record?.suffix_type} />
+        <NameNoActionCell
+          dataColumn={
+            CLASS_SUFFIX_TYPE?.find((item) => item.value === record.suffix_type)
+              ?.label
+          }
+        />
       ),
     },
     {
       title: 'Owner',
       render: (record: IClassResource) => (
-        <NameNoActionCell dataColumn={record?.created_by_staff?.detail?.full_name} />
+        <NameNoActionCell
+          dataColumn={record?.created_by_staff?.detail?.full_name}
+        />
       ),
     },
     {
       title: 'Date',
       render: (record: IClassResource) => (
-         <>
+        <>
           {record?.created_at && (
-            <div>Created: {formatDate(record?.created_at, 'DD-MM-YYYY HH:mm')}</div>
+            <div>
+              Created: {formatDate(record?.created_at, 'DD-MM-YYYY HH:mm')}
+            </div>
           )}
           {record?.updated_at && (
-            <div>Updated: {formatDate(record?.updated_at, 'DD-MM-YYYY HH:mm')}</div>
+            <div>
+              Updated: {formatDate(record?.updated_at, 'DD-MM-YYYY HH:mm')}
+            </div>
           )}
         </>
       ),
     },
     {
       title: '',
-     render: (record: IClassResource) => {
+      render: (record: IClassResource) => {
         const allowDownload = canDownload(record, isTeacher)
         return (
           <div
@@ -133,17 +175,47 @@ export default function ClassResourceTeacher() {
     },
   ]
 
-    const download = async (name: string, file_key: string) => {
-      await UploadAPI.downloadFile({
-        files: [
-          {
-            name: name,
-            file_key: file_key,
-          },
-        ],
-      })
+  const download = async (name: string, file_key: string) => {
+    await UploadAPI.downloadFile({
+      files: [
+        {
+          name: name,
+          file_key: file_key,
+        },
+      ],
+    })
+  }
+
+  const renderPreviewContent = (resource: IClassResource) => {
+    switch (resource.suffix_type) {
+      case 'VIDEO':
+        return (
+          <SAPPVideo
+            isFetchCaptions={false}
+            streamRef={internalRef}
+            options={{ src: resource.sub_url }}
+          ></SAPPVideo>
+        )
+      case 'SHEET':
+      case 'WORD_DOCUMENT':
+      case 'POWER_POINT':
+        return <FileViewer fileName={resource.name} fileUrl={resource.url} />
+
+      case 'ZIP':
+        return (
+          <div className="text-gray-500 flex h-full items-center justify-center text-base font-medium">
+            Không thể hiển thị file ZIP, vui lòng tải xuống
+          </div>
+        )
+
+      default:
+        return (
+          <div className="flex h-full items-center justify-center text-base text-gray-400">
+            Không hỗ trợ xem trước định dạng này
+          </div>
+        )
     }
-  
+  }
 
   return (
     <div>
@@ -166,6 +238,51 @@ export default function ClassResourceTeacher() {
         }}
         isShowIndex
       />
+      {openPreview &&
+        previewResource &&
+        previewResource.suffix_type !== 'IMAGE' && (
+          <ModalResizeable
+            bodyClassName={clsx('px-5')}
+            key={previewResource.url}
+            modalIndex={1}
+            title={previewResource.name}
+            width={900}
+            height={548}
+            className={clsx('!z-40 !rounded-lg')}
+            position="center"
+            handleCloseScratchPad={() => {
+              setOpenPreview(false)
+              setPreviewResource(null)
+            }}
+            header={
+              <div className="modal-header modal-dragger flex h-10 w-full items-center justify-between">
+                <div className="truncate font-semibold">
+                  {previewResource.name}
+                </div>
+                <button
+                  onClick={() => {
+                    setOpenPreview(false)
+                    setPreviewResource(null)
+                  }}
+                >
+                  <CloseIcon />
+                </button>
+              </div>
+            }
+          >
+            <div className="h-full bg-white">
+              {renderPreviewContent(previewResource)}
+            </div>
+          </ModalResizeable>
+        )}
+      {openPreview &&
+        previewResource &&
+        previewResource.suffix_type === 'IMAGE' && (
+          <SappModalImage
+            src={previewResource.url}
+            setSrc={() => setOpenPreview(false)}
+          />
+        )}
     </div>
   )
 }
