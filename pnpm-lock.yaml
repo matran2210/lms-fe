@@ -12207,7 +12207,7 @@ snapshots:
       consola: 3.4.2
       detect-libc: 2.1.2
       https-proxy-agent: 7.0.6
-      node-fetch: 2.6.9(encoding@0.1.13)
+      node-fetch: 2.7.0(encoding@0.1.13)
       nopt: 8.1.0
       semver: 7.7.3
       tar: 7.5.2
@@ -15757,7 +15757,7 @@ snapshots:
       '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
       '@types/dompurify': 3.2.0
       antd: 5.29.3(date-fns@3.6.0)(react@18.3.1)
-      caniuse-lite: 1.0.30001760
+      caniuse-lite: 1.0.30001761
       dompurify: 3.3.1
       react: 18.3.1
       sass: 1.97.0
