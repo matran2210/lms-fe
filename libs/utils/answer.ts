@@ -1,3 +1,4 @@
+import { checkSheetAnswered } from './helpers/quiz-test/index';
 import { ESSAY_TYPE, QUESTION_TYPES } from '@lms/core'
 interface IOneChoiceAnswer {
   question_id?: string
@@ -96,7 +97,9 @@ export const isValidatedAnswer = (
             if (hasAnswer) return item
           }
         }
-        if (!!item?.answer_file?.file_key || !!item.short_answer) return item
+        if (!!item?.answer_file?.file_key || !!checkSheetAnswered(item.short_answer)) {
+          return item;
+        }
       })
       return !!value?.length
     default:

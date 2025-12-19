@@ -113,8 +113,7 @@ const QuizDocument = ({
   isQuizFinished = false,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
-  const { courseApi, pageLink, testServiceApi, router } =
-    useFeature();
+  const { courseApi, pageLink, testServiceApi, router } = useFeature();
   const { isAlwaysShowSidebar } = useTailwindBreakpoint();
   const [isOpenActivityIncluded, setIsOpenActivityIncluded] =
     useState<boolean>(false);
@@ -338,15 +337,136 @@ const QuizDocument = ({
 
   const [unsubittedQuestions, setUnsubittedQuestions] = useState<number[]>([]);
 
+  const formatMyAnswerFromForm = (
+    rawAnswer: any,
+    question: any,
+    time_spent: number = 0,
+  ): any[] => {
+    if (!rawAnswer) return [];
+
+    switch (question?.qType as QUESTION_TYPES) {
+      case QUESTION_TYPES.ONE_CHOICE:
+      case QUESTION_TYPES.TRUE_FALSE:
+        return [
+          {
+            question_id: question.id,
+            question_answer_id: rawAnswer,
+            time_spent: time_spent,
+          },
+        ];
+
+      case QUESTION_TYPES.MULTIPLE_CHOICE:
+        return [
+          {
+            question_id: question.id,
+            answer: (rawAnswer || []).map((e: string) => ({
+              answer_id: e,
+            })),
+            time_spent: time_spent,
+          },
+        ];
+
+      case QUESTION_TYPES.FILL_WORD:
+        return [
+          {
+            question_id: question.id,
+            answer: (rawAnswer || []).map((e: string, i: number) => ({
+              answer_text: e,
+              answer_position: i + 1,
+            })),
+            time_spent: time_spent,
+          },
+        ];
+
+      case QUESTION_TYPES.SELECT_WORD:
+        return [
+          {
+            question_id: question.id,
+            answer: rawAnswer || [],
+            time_spent: time_spent,
+          },
+        ];
+
+      case QUESTION_TYPES.MATCHING:
+        return [
+          {
+            question_id: question.id,
+            answer:
+              Array.isArray(rawAnswer) &&
+              (rawAnswer || []).map(
+                (e: { question_id: string; answer_id: string }) => ({
+                  question_id: e.question_id,
+                  answer_id: e.answer_id,
+                }),
+              ),
+            time_spent: time_spent,
+          },
+        ];
+
+      case QUESTION_TYPES.DRAG_DROP:
+        return [
+          {
+            question_id: question.id,
+            answer: (rawAnswer || []).map((e: any, i: number) => ({
+              answer_id: e.idAnswer,
+              answer_position: e.position,
+            })),
+            time_spent: time_spent,
+          },
+        ];
+
+      case QUESTION_TYPES.ESSAY:
+        return (rawAnswer || []).map((item: any) => ({
+          ...item,
+          time_spent: time_spent,
+        }));
+
+      default:
+        return [];
+    }
+  };
+
   const handleQuizFinish = async () => {
-    const quizQuestion = selectQuestions(
-      selector,
-      activityId,
-      tabId,
-      quizId || "",
-    );
+    const isLastQuestionAfterAllQuestion = isAFTERAllQUESTION && isLastQuestion && !isQuestionConfirmed;
+      // Lấy đáp án từ form ( câu cuối người dùng vừa chọn (nếu có) để dùng cho case câu cuối của after all question)
+      const answerFromForm = questionRef.current?.onSaveAnswer(activeQuestion);
+      const quizQuestion = selectQuestions(
+        selector,
+        activityId,
+        tabId,
+        quizId || "",
+      );
+      const quizQuestionMapped = isLastQuestionAfterAllQuestion ? quizQuestion?.map(
+        (item: any, index: number) => {
+          if (index === activeQuestionIndex && activeQuestion) {
+            // Check neeus store chưa có mà form có thì gán myAnswers từ form vào
+            const hasValidAnswerInStore =
+              item?.myAnswers &&
+              isValidatedAnswer(item.myAnswers, activeQuestion?.qType || "");
+            if (!hasValidAnswerInStore && answerFromForm) {
+              const formattedAnswer = formatMyAnswerFromForm(
+                answerFromForm,
+                activeQuestion,
+                calculateWorkTime(),
+              );
+              if (
+                formattedAnswer.length > 0 &&
+                isValidatedAnswer(formattedAnswer, activeQuestion?.qType || "")
+              ) {
+                return {
+                  ...item,
+                  myAnswers: formattedAnswer,
+                };
+              }
+            }
+          }
+          return item;
+        },
+      ) : quizQuestion;
+      console.log('quizQuestionMapped', quizQuestionMapped);
+
     // Lọc hoặc giữ nguyên câu hỏi (ở đây hàm bạn gọi `isValidatedAnswer` đang return cùng item)
-    const availableQuestions = quizQuestion?.map((item: any) => {
+    const availableQuestions = quizQuestionMapped?.map((item: any) => {
       return {
         ...item,
         isValidAnswer: isValidatedAnswer(item.myAnswers, item.qType),
@@ -354,23 +474,25 @@ const QuizDocument = ({
     });
 
     // Hàm helper: lấy giá trị trả lời hợp lệ từ câu trả lời
-    const extractAnswerValue = (ans: any) => {
-      const answerQuestion = ans?.[0];
-      const answerObj = answerQuestion?.answer?.[0];
-      return (
-        answerObj?.answer_id ||
-        answerObj?.answer_text ||
-        answerQuestion?.question_answer_id ||
-        (answerQuestion?.short_answer !== DEFAULT_EDITOR_VALUE &&
-          answerQuestion?.short_answer) ||
-        !isNull(answerQuestion?.answer_file)
-      );
-    };
+    // Comment để sử dụng isValidAnswer để check hợp lệ thay vì extractAnswerValue
+    // const extractAnswerValue = (ans: any) => {
+    //   const answerQuestion = ans?.[0];
+    //   const answerObj = answerQuestion?.answer?.[0];
+    //   return (
+    //     answerObj?.answer_id ||
+    //     answerObj?.answer_text ||
+    //     answerQuestion?.question_answer_id ||
+    //     (answerQuestion?.short_answer !== DEFAULT_EDITOR_VALUE &&
+    //       answerQuestion?.short_answer) ||
+    //     !isNull(answerQuestion?.answer_file)
+    //   );
+    // };
 
     // Map qua toàn bộ câu hỏi để check hợp lệ
     const validityList = availableQuestions?.map((item) =>
-      isValid(extractAnswerValue(item?.myAnswers)),
+      item?.isValidAnswer,
     );
+    
 
     const allValid = every(validityList);
     if (allValid) {
@@ -908,14 +1030,6 @@ const QuizDocument = ({
     return "Submit & View Answer";
   };
 
-  useEffect(() => {
-    if (!isQuestionConfirmed) return;
-
-    if (isQuestionConfirmed && isLastQuestion && isAFTERAllQUESTION) {
-      handleQuizFinish();
-    }
-  }, [isQuestionConfirmed]);
-
   const handleSubmit = () => {
     if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
       if (gradeStatus === GRADE_STATUS.AWAITING_GRADING) {
@@ -961,7 +1075,7 @@ const QuizDocument = ({
       }
 
       if (isAFTERAllQUESTION && isLastQuestion && !isQuestionConfirmed) {
-        handleConfirmQuestion();
+        handleQuizFinish();
       }
 
       if (isAFTEREACHQUESTION && !isLastQuestion) {
