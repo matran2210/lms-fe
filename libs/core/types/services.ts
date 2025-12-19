@@ -272,5 +272,6 @@ export interface ITestServiceAPI {
     quiz_id?: string | undefined,
     class_user_id?: string | undefined,
     cache?: boolean,
+    include_questions?: boolean,
   ) => Promise<any>;
 }

@@ -104,8 +104,9 @@ export class TestServiceAPI {
     quiz_id?: string,
     class_user_id?: string,
     cache = false,
+    include_questions = false,
   ): Promise<any> {
-    let uri = `${BASE_TEST_URL_API}/question-topic/${id}?quiz_id=${quiz_id}&include_questions=false`
+    let uri = `${BASE_TEST_URL_API}/question-topic/${id}?quiz_id=${quiz_id}&include_questions=${include_questions}`
     if (class_user_id) {
       uri += `&class_user_id=${class_user_id}`
     }

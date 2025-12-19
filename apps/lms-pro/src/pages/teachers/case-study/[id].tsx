@@ -48,7 +48,6 @@ import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight } from '@lms/utils'
-import { CaseStudyAPI } from '@pages/api/case-study'
 import { TestServiceAPI } from '@pages/api/test-api'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
@@ -58,7 +57,6 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { TestAPI } from 'src/pages/api/test'
 import LimitQuizModal from 'src/pages/test/limitQuizModal'
 
 const CaseStudyDetailTeacher = () => {
@@ -369,7 +367,7 @@ const CaseStudyDetailTeacher = () => {
     if (router.query.id) {
       dispatch(
         getTopicsCaseStudy({
-          api: CaseStudyAPI,
+          api: TestServiceAPI,
           id: router.query.id,
           quiz_id: router.query.quiz_id,
         }),

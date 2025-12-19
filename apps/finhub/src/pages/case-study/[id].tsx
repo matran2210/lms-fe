@@ -48,7 +48,6 @@ import {
 } from '@lms/ui'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight } from '@lms/utils'
-import { CaseStudyAPI } from '@pages/api/case-study'
 import { TestServiceAPI } from '@pages/api/test-api'
 import { download } from '@utils/index'
 import { Popover } from 'antd'
@@ -398,7 +397,7 @@ const CaseStudyDetail = () => {
     if (router.query.id) {
       dispatch(
         getTopicsCaseStudy({
-          api: CaseStudyAPI,
+          api: TestServiceAPI,
           id: router.query.id,
           quiz_id: router.query.quiz_id,
         }),
