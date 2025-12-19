@@ -48,7 +48,7 @@ stages:
       alias: docker_in_docker
 
 variables:
-  IMAGE_BASE: "$CI_REGISTRY_IMAGE"
+  # IMAGE_BASE: "sappacademy/lms-be"
 
 # Build template
 .build_template:
@@ -56,83 +56,104 @@ variables:
   extends: .prepare
   image: docker:latest
   script:
+    - cp $ENV_PRODUCT_FILE apps/$APP_NAME/.env
+    - cp $ENV_PRODUCT_FILE .env
+    - source .env
     - docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD
-    - docker build \
-      --build-arg APP_NAME=$APP_NAME \
-      -t "$IMAGE_BASE:$IMAGE_TAG" \
-      .
-    - docker push "$IMAGE_BASE:$IMAGE_TAG"
+    - docker build --build-arg APP_NAME=$APP_NAME -t $IMAGE_NAME:$IMAGE_TAG .
+    - docker push $IMAGE_NAME:$IMAGE_TAG
+    - echo "$IMAGE_NAME:$IMAGE_TAG build success"
   tags:
   - shell-docker
   environment: production
   resource_group: lms-fe
 
-# Build LMS-PRO
+# # Build LMS-PRO
 build_lms_pro:
   extends: .build_template
   variables:
     APP_NAME: lms-pro
-    IMAGE_TAG: lms-pro-$CI_COMMIT_SHORT_SHA
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-      changes:
-        - apps/lms-pro/**/*
-        - libs/**/*
-        - features/**/*
-        - tools/**/*
-        - scripts/**/*
-        - package.json
-        - pnpm-lock.yaml
-        - pnpm-workspace.yaml
-        - turbo.json
-        - tsconfig.json
-        - .babelrc
-        - .npmrc
-        - .dockerignore
-        - Dockerfile
+    IMAGE_TAG: lms-fe-$CI_PIPELINE_IID
+  only:
+    # variables:
+    #   - $CI_COMMIT_MESSAGE =~ /build/
+    refs:
+      - master-test-build
+  # rules:
+  #   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+  #     changes:
+  #       - apps/lms-pro/**/*
+  #       - libs/**/*
+  #       - features/**/*
+  #       - tools/**/*
+  #       - scripts/**/*
+  #       - package.json
+  #       - pnpm-lock.yaml
+  #       - pnpm-workspace.yaml
+  #       - turbo.json
+  #       - tsconfig.json
+  #       - .babelrc
+  #       - .npmrc
+  #       - .dockerignore
+  #       - Dockerfile
 
 # Deploy LMS-PRO
 
 # Build Finhub
-build_finhub:
-  extends: .build_template
-  variables:
-    APP_NAME: finhub
-    IMAGE_TAG: finhub-$CI_COMMIT_SHORT_SHA
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-      changes:
-        - apps/finhub/**/*
-        - libs/**/*
-        - features/**/*
-        - tools/**/*
-        - scripts/**/*
-        - package.json
-        - pnpm-lock.yaml
-        - pnpm-workspace.yaml
-        - turbo.json
-        - tsconfig.json
-        - .babelrc
-        - .npmrc
-        - .dockerignore
-        - Dockerfile
+# build_finhub:
+#   extends: .build_template
+#   variables:
+#     APP_NAME: finhub
+#     IMAGE_NAME: finhub-$CI_PIPELINE_IID
+#   only:
+#     # variables:
+#     #   - $CI_COMMIT_MESSAGE =~ /build/
+#     refs:
+#       - master-test-build
+# rules:
+#   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+#     changes:
+#       - apps/finhub/**/*
+#       - libs/**/*
+#       - features/**/*
+#       - tools/**/*
+#       - scripts/**/*
+#       - package.json
+#       - pnpm-lock.yaml
+#       - pnpm-workspace.yaml
+#       - turbo.json
+#       - tsconfig.json
+#       - .babelrc
+#       - .npmrc
+#       - .dockerignore
+#       - Dockerfile
 
 # Deploy LMS-PRO
 deploy_lms_pro:
   stage: deploy
-  needs:
-    - build_lms_pro
+  # needs:
+  #   - build_lms_pro
   rules:
     - if: '$CI_COMMIT_BRANCH == "master-test-build"'
   script:
     - chmod 600 "$TEST_SSH_KEY_PROD"
     - cp "$TEST_SSH_KEY_PROD" key.pem
+    - cp $ENV_PRODUCT_FILE .env
+    - source .env
+
+    - export IMAGE_TAG="lms-fe-${CI_PIPELINE_IID}"
+    - export LMS_PRO_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
+
     - |
       ssh -o StrictHostKeyChecking=no -i key.pem root@$TEST_PROD_IP "
         docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
-        cd /var/www/lms-pro &&
-        docker compose -f docker-compose.lms-pro.yml pull &&
-        docker compose -f docker-compose.lms-pro.yml up -d
+        cd /var/www/lms-fe &&
+        git fetch origin --prune &&
+        git reset --hard origin/master-test-build &&
+        export LMS_PRO_IMAGE='${LMS_PRO_IMAGE}' &&
+        docker compose stop lms-pro &&
+        docker compose -f docker-compose.yaml pull lms-pro && 
+        docker compose -f docker-compose.yaml up -d lms-pro nginx
       "
   environment: production
   tags:
@@ -140,23 +161,23 @@ deploy_lms_pro:
   resource_group: lms-fe
 
 # Deploy Finhub
-deploy_finhub:
-  stage: deploy
-  needs:
-    - build_finhub
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-  script:
-    - chmod 600 "$SSH_KEY_PROD_SHORT_COURSE"
-    - cp "$SSH_KEY_PROD_SHORT_COURSE" key.pem
-    - |
-      ssh -o StrictHostKeyChecking=no -i key.pem root@$PROD_SHORT_COURSE_IP "
-        docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
-        cd /var/www/lms-pro &&
-        docker compose -f docker-compose.lms-pro.yml pull &&
-        docker compose -f docker-compose.lms-pro.yml up -d
-      "
-  environment: production
-  tags:
-  - shell
-  resource_group: lms-fe
+# deploy_finhub:
+#   stage: deploy
+#   needs:
+#     - build_finhub
+#   rules:
+#     - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+#   script:
+#     - chmod 600 "$SSH_KEY_PROD_SHORT_COURSE"
+#     - cp "$SSH_KEY_PROD_SHORT_COURSE" key.pem
+#     - |
+#       ssh -o StrictHostKeyChecking=no -i key.pem root@$PROD_SHORT_COURSE_IP "
+#         docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
+#         cd /var/www/lms-pro &&
+#         docker compose -f docker-compose.lms-pro.yml pull &&
+#         docker compose -f docker-compose.lms-pro.yml up -d
+#       "
+#   environment: production
+#   tags:
+#   - shell
+#   resource_group: lms-fe
