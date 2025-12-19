@@ -10,6 +10,7 @@ import {
   useAppDispatch,
   useAppSelector,
   useFeature,
+  IActivityStateQuestion,
 } from "@lms/contexts";
 import { useEffect, useRef, useState } from "react";
 
@@ -30,6 +31,7 @@ import {
   FINISHED_TEST_TITLE,
   GRADE_STATUS,
   GRADING_METHOD,
+  IEssayAnswer,
   IFocusQuiz,
   IQuestion,
   IQuizSetting,
@@ -339,7 +341,7 @@ const QuizDocument = ({
 
   const formatMyAnswerFromForm = (
     rawAnswer: any,
-    question: any,
+    question: IActivityStateQuestion,
     time_spent: number = 0,
   ): any[] => {
     if (!rawAnswer) return [];
@@ -359,7 +361,7 @@ const QuizDocument = ({
         return [
           {
             question_id: question.id,
-            answer: (rawAnswer || []).map((e: string) => ({
+            answer: rawAnswer?.map((e: string) => ({
               answer_id: e,
             })),
             time_spent: time_spent,
@@ -370,7 +372,7 @@ const QuizDocument = ({
         return [
           {
             question_id: question.id,
-            answer: (rawAnswer || []).map((e: string, i: number) => ({
+            answer: rawAnswer?.map((e: string, i: number) => ({
               answer_text: e,
               answer_position: i + 1,
             })),
@@ -393,7 +395,7 @@ const QuizDocument = ({
             question_id: question.id,
             answer:
               Array.isArray(rawAnswer) &&
-              (rawAnswer || []).map(
+              rawAnswer?.map(
                 (e: { question_id: string; answer_id: string }) => ({
                   question_id: e.question_id,
                   answer_id: e.answer_id,
@@ -407,7 +409,7 @@ const QuizDocument = ({
         return [
           {
             question_id: question.id,
-            answer: (rawAnswer || []).map((e: any, i: number) => ({
+            answer: rawAnswer?.map((e: { idAnswer: string; position: number }, i: number) => ({
               answer_id: e.idAnswer,
               answer_position: e.position,
             })),
@@ -416,7 +418,7 @@ const QuizDocument = ({
         ];
 
       case QUESTION_TYPES.ESSAY:
-        return (rawAnswer || []).map((item: any) => ({
+        return rawAnswer?.map((item: IEssayAnswer) => ({
           ...item,
           time_spent: time_spent,
         }));
@@ -429,20 +431,20 @@ const QuizDocument = ({
   const handleQuizFinish = async () => {
     const isLastQuestionAfterAllQuestion = isAFTERAllQUESTION && isLastQuestion && !isQuestionConfirmed;
       // Lấy đáp án từ form ( câu cuối người dùng vừa chọn (nếu có) để dùng cho case câu cuối của after all question)
-      const answerFromForm = questionRef.current?.onSaveAnswer(activeQuestion);
+      const answerFromForm = questionRef?.current?.onSaveAnswer(activeQuestion);
       const quizQuestion = selectQuestions(
         selector,
         activityId,
         tabId,
         quizId || "",
       );
-      const quizQuestionMapped = isLastQuestionAfterAllQuestion ? quizQuestion?.map(
-        (item: any, index: number) => {
-          if (index === activeQuestionIndex && activeQuestion) {
+    const quizQuestionMapped = isLastQuestionAfterAllQuestion ? quizQuestion?.map(
+        (item, index: number) => {
+          if (index === activeQuestionIndex) {
             // Check neeus store chưa có mà form có thì gán myAnswers từ form vào
             const hasValidAnswerInStore =
               item?.myAnswers &&
-              isValidatedAnswer(item.myAnswers, activeQuestion?.qType || "");
+              isValidatedAnswer(item.myAnswers, activeQuestion?.qType);
             if (!hasValidAnswerInStore && answerFromForm) {
               const formattedAnswer = formatMyAnswerFromForm(
                 answerFromForm,
@@ -451,7 +453,7 @@ const QuizDocument = ({
               );
               if (
                 formattedAnswer.length > 0 &&
-                isValidatedAnswer(formattedAnswer, activeQuestion?.qType || "")
+                isValidatedAnswer(formattedAnswer, activeQuestion?.qType)
               ) {
                 return {
                   ...item,
@@ -463,7 +465,6 @@ const QuizDocument = ({
           return item;
         },
       ) : quizQuestion;
-      console.log('quizQuestionMapped', quizQuestionMapped);
 
     // Lọc hoặc giữ nguyên câu hỏi (ở đây hàm bạn gọi `isValidatedAnswer` đang return cùng item)
     const availableQuestions = quizQuestionMapped?.map((item: any) => {
