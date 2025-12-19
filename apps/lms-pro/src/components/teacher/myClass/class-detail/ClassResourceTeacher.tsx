@@ -226,7 +226,7 @@ export default function ClassResourceTeacher() {
   }
 
   return (
-    <div>
+    <div onContextMenu={(e) => e.preventDefault()}>
       <LayoutFilter
         listFilter={<ClassResourceTeacherFilter control={control} />}
         loading={isLoading}
