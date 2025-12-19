@@ -1,5 +1,5 @@
 import { ArrowDownIcon, SearchIcon } from '@lms/assets'
-import { CLASS_SUFFIX_TYPE } from '@lms/core'
+import { CLASS_SUFFIX_TYPE, CLASS_SUFFIX_TYPE_FILTER } from '@lms/core'
 import {
   HookFormTextField,
   SappHookFormSelect,
@@ -31,8 +31,8 @@ const ClassResourceTeacherFilter: React.FC<IProps> = ({ control }) => {
     return () => debouncedSearch.cancel()
   }, [debouncedSearch])
 
-  const handleSearch = (value: string) => {
-    debouncedSearch(value)
+  const handleSearch = (value?: string) => {
+    debouncedSearch(value!)
   }
 
   const scheduleOptions = useMemo(() => {
@@ -61,7 +61,7 @@ const ClassResourceTeacherFilter: React.FC<IProps> = ({ control }) => {
         name="suffix_types"
         isSelectCustom
         placeholder="Type"
-        options={CLASS_SUFFIX_TYPE}
+        options={CLASS_SUFFIX_TYPE_FILTER}
       />
       <SappSelectMultipleTeacher
         isSelectCustom
@@ -77,7 +77,6 @@ const ClassResourceTeacherFilter: React.FC<IProps> = ({ control }) => {
         }
         isLoading={isLoading}
         className="min-w-36"
-        isSelectCustom
         onSearch={handleSearch}
         onMenuScrollToBottom={() => hasNextPage && fetchNextPage()}
         onFocus={() => refetch()}

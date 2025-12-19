@@ -1,4 +1,4 @@
-import { CLASS_SUFFIX_TYPE, DEFAULT_PAGE_NUMBER } from '@lms/core'
+import { CLASS_SUFFIX_TYPE_FILTER, DEFAULT_PAGE_NUMBER } from '@lms/core'
 import { SappSelectMultiple, SAPPSelectV2 } from '@lms/ui'
 import { normalizeToArray } from '@lms/utils'
 import { getSelectOptions } from '@utils/helpers'
@@ -107,7 +107,7 @@ const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
             control={control}
             name="suffix_types"
             placeholder="Type"
-            options={CLASS_SUFFIX_TYPE}
+            options={CLASS_SUFFIX_TYPE_FILTER}
             className="min-w-36"
             heightCustom="h-10"
             allowClear

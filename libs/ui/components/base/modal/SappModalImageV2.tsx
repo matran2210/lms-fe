@@ -45,7 +45,6 @@ function SappModalImageV2({ src, setSrc }: Props) {
       handleCancel={() => setSrc(undefined)}
       showFooter={false}
       width={modalWidth}
-      closeIcon
       classNameModal="sapp-preview--image-v2"
       onOk={() => {}}
     >
