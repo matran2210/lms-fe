@@ -1,10 +1,10 @@
 import { QUESTION_TYPES, Sheet, TEST_TYPE } from '@lms/core'
-import { TestAPI } from '@pages/api/test'
+import { TestServiceAPI } from '@pages/api/test-api'
 import dayjs from 'dayjs'
 import { FieldValues, UseFormGetValues } from 'react-hook-form'
 
 export const getResult = async (currentTabContent: any) => {
-  const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
+  const res = await TestServiceAPI.getQuestionAnswer(currentTabContent.id)
   let corrects = {} as any
   if (
     currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
@@ -234,4 +234,3 @@ export function hasEditorValueFromHtml(
 
   return text.length > 0
 }
-
