@@ -448,7 +448,6 @@ const CaseStudyDetail = () => {
 
   useEffect(() => {
     if (router.query.id) {
-      console.log('call đay à')
       dispatch(
         getTopicsCaseStudy({
           api: TestServiceAPI,
