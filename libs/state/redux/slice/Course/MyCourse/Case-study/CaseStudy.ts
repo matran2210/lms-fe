@@ -1,6 +1,6 @@
+import { ITestServiceAPI } from '@lms/core'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../../../../store'
-import { ICaseStudyAPI } from '@lms/core'
 
 export interface ICaseStudyTest {
   loading: boolean
@@ -26,14 +26,14 @@ export const getTopicsCaseStudy = createAsyncThunk(
       id,
       quiz_id,
     }: {
-      api: ICaseStudyAPI;
+      api: ITestServiceAPI;
       id: any;
       quiz_id: any;
     },
     thunkAPI,
   ) => {
     try {
-      const res = await api.getTopicQuiz(id, quiz_id);
+      const res = await api.getTopicDescription(id, quiz_id, undefined, false, true);
       const arr2 = [] as any;
       for (let j = 0; j < res.data.questions.length; j++) {
         arr2.push({

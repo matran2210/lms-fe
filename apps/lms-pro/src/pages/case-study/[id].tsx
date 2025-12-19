@@ -63,7 +63,6 @@ import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import CaseStudyWrapper from '@lms/ui/layout/CaseStudyLayout/CaseStudyWrapper'
 import { runHighlight } from '@lms/utils'
-import { CaseStudyAPI } from '@pages/api/case-study'
 import { TestServiceAPI } from '@pages/api/test-api'
 import { UploadAPI } from '@pages/api/upload'
 import { Divider } from 'antd'
@@ -449,9 +448,10 @@ const CaseStudyDetail = () => {
 
   useEffect(() => {
     if (router.query.id) {
+      console.log('call đay à')
       dispatch(
         getTopicsCaseStudy({
-          api: CaseStudyAPI,
+          api: TestServiceAPI,
           id: router.query.id,
           quiz_id: router.query.quiz_id,
         }),

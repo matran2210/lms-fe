@@ -31,7 +31,7 @@ export class TestServiceAPI {
   static getQuestionTabsById(id: string | string[] | undefined): Promise<any> {
     return fetcher(`${BASE_TEST_URL_API}/quiz/${id}/shuffle`)
   }
-  static submitAllQuestion(id: string, data?: any): Promise<any> {
+  static submitAllQuestion(id: string, data: any): Promise<any> {
     //is submit test
     return fetcher(`${BASE_TEST_URL_API}/quiz/${id}/submit`, {
       data: data,
@@ -104,18 +104,19 @@ export class TestServiceAPI {
     quiz_id?: string,
     class_user_id?: string,
     cache = false,
+    include_questions = false,
   ): Promise<any> {
-    let uri = `${BASE_TEST_URL_API}/question-topic/${id}?quiz_id=${quiz_id}&include_questions=false`
+    let uri = `${BASE_TEST_URL_API}/question-topic/${id}?quiz_id=${quiz_id}&include_questions=${include_questions}`
     if (class_user_id) {
       uri += `&class_user_id=${class_user_id}`
     }
     if (!cache) return fetcher(uri)
 
-    if (!this.CACHE_GET_TOPIC_DESCRIPTION[uri]) {
-      this.CACHE_GET_TOPIC_DESCRIPTION[uri] = await fetcher(uri)
+    if (!TestServiceAPI.CACHE_GET_TOPIC_DESCRIPTION[uri]) {
+      TestServiceAPI.CACHE_GET_TOPIC_DESCRIPTION[uri] = await fetcher(uri)
     }
 
-    return this.CACHE_GET_TOPIC_DESCRIPTION[uri]
+    return TestServiceAPI.CACHE_GET_TOPIC_DESCRIPTION[uri]
   }
 
   // Quiz Attempt
@@ -130,9 +131,11 @@ export class TestServiceAPI {
     data: any,
     class_user_id?: string,
   ): Promise<any> {
-    const quizAttemptResponse = await this.createQuizAttempt(id, class_user_id)
+    const quizAttemptResponse = await TestServiceAPI.createQuizAttempt(
+      id,
+      class_user_id,
+    )
     const quizAttemptId = quizAttemptResponse.data?.id
-
     if (quizAttemptId) {
       const response = await fetcher(
         `${BASE_TEST_URL_API}/quiz/${quizAttemptId}/submit-with-all-answer`,
