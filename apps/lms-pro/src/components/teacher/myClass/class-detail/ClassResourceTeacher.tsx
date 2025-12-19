@@ -19,6 +19,7 @@ import {
   SappTable,
   SAPPVideo,
   Tooltip,
+  TextPreview,
 } from '@lms/ui'
 import { formatDate } from '@lms/utils'
 import { ClassAPI } from '@pages/api/class'
@@ -27,12 +28,6 @@ import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-
-interface FilterParams {
-  quiz_name?: string
-  grading_method?: string
-  quiz_type?: string
-}
 
 export default function ClassResourceTeacher() {
   const router = useRouter()
@@ -81,6 +76,7 @@ export default function ClassResourceTeacher() {
       ...prev,
       search_key: getValues('search_key') || undefined,
       suffix_types: getValues('suffix_types')?.value || undefined,
+      schedule_ids: getValues('schedule_ids') || undefined,
     }))
   }
 
@@ -100,10 +96,14 @@ export default function ClassResourceTeacher() {
     {
       title: 'File name',
       render: (record: IClassResource) => (
-        <Tooltip placement="bottomLeft" title={record?.name}>
+        <Tooltip
+          placement="bottomLeft"
+          title={record?.name}
+          className="cursor-pointer"
+        >
           <div
             onClick={() => handleOpenPreview(record)}
-            className={textTruncateStyle}
+            className={clsx(textTruncateStyle, 'cursor-pointer')}
           >
             {record?.name}
           </div>
@@ -199,8 +199,16 @@ export default function ClassResourceTeacher() {
       case 'SHEET':
       case 'WORD_DOCUMENT':
       case 'POWER_POINT':
-        return <FileViewer fileName={resource.name} fileUrl={resource.url} />
-
+      case 'PDF':
+        return (
+          <FileViewer
+            fileName={resource.name}
+            fileUrl={resource.url}
+            onlyView
+          />
+        )
+      case 'TEXT':
+        return <TextPreview url={resource.url} />
       case 'ZIP':
         return (
           <div className="text-gray-500 flex h-full items-center justify-center text-base font-medium">

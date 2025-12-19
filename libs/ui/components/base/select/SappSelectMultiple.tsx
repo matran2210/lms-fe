@@ -50,7 +50,6 @@ const SAPPSelectMultiple = ({
   heightCustom = "h-12",
   allowClear = false,
 }: SAPPSelectMultipleProps) => {
-
   return (
     <div className="float-label">
       <Controller

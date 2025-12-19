@@ -7,9 +7,11 @@ const MAX_SIZE = 20 * 1024 * 1024;
 const FileViewer = ({
   fileName,
   fileUrl,
+  onlyView = false,
 }: {
   fileName: string;
   fileUrl: string;
+  onlyView?: boolean;
 }) => {
   const [shouldDownload, setShouldDownload] = useState(false);
 
@@ -46,7 +48,10 @@ const FileViewer = ({
   return (
     <>
       {isPdfFile(fileName) ? (
-        <iframe src={fileUrl} className="h-full w-full border-none" />
+        <iframe
+          src={onlyView ? `${fileUrl}#toolbar=0` : fileUrl}
+          className="h-full w-full border-none"
+        />
       ) : (
         <iframe
           src={`${OFFICE_VIEWER_URL}?src=${encodeURIComponent(fileUrl)}`}

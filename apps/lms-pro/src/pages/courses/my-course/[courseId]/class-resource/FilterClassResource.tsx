@@ -18,24 +18,24 @@ const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
   const { courseId } = router.query
   const [search, setSearch] = useState('')
 
-const { control, reset } = useForm<FilterFormValues>({
-  defaultValues: {
-    suffix_types: undefined,
-    schedule_ids: [],
-  },
-})
-
-useEffect(() => {
-  reset({
-    suffix_types:
-      typeof router.query.suffix_types === 'string' &&
-      router.query.suffix_types.trim() !== ''
-        ? router.query.suffix_types
-        : undefined,
-
-    schedule_ids: normalizeToArray(router.query.schedule_ids),
+  const { control, reset } = useForm<FilterFormValues>({
+    defaultValues: {
+      suffix_types: undefined,
+      schedule_ids: [],
+    },
   })
-}, [router.query.suffix_types, router.query.schedule_ids, reset])
+
+  useEffect(() => {
+    reset({
+      suffix_types:
+        typeof router.query.suffix_types === 'string' &&
+        router.query.suffix_types.trim() !== ''
+          ? router.query.suffix_types
+          : undefined,
+
+      schedule_ids: normalizeToArray(router.query.schedule_ids),
+    })
+  }, [router.query.suffix_types, router.query.schedule_ids, reset])
 
   const { classSchedule, hasNextPage, fetchNextPage, isLoading, refetch } =
     useSelectClassSchedule(courseId as string, search)
@@ -64,35 +64,35 @@ useEffect(() => {
   }, [classSchedule])
 
   const pushQuery = (next: Record<string, any>) => {
-  router.push(
-    {
-      pathname: router.pathname,
-      query: cleanQuery({
-        ...router.query,
-        ...next,
-        page_index: DEFAULT_PAGE_NUMBER,
-      }),
-    },
-    undefined,
-    { shallow: true },
-  )
-}
+    router.push(
+      {
+        pathname: router.pathname,
+        query: cleanQuery({
+          ...router.query,
+          ...next,
+          page_index: DEFAULT_PAGE_NUMBER,
+        }),
+      },
+      undefined,
+      { shallow: true },
+    )
+  }
 
   const cleanQuery = (query: Record<string, any>) => {
-  const result: Record<string, any> = {}
+    const result: Record<string, any> = {}
 
-  Object.entries(query).forEach(([key, value]) => {
-    if (
-      value !== undefined &&
-      value !== null &&
-      !(typeof value === 'string' && value.trim() === '')
-    ) {
-      result[key] = value
-    }
-  })
+    Object.entries(query).forEach(([key, value]) => {
+      if (
+        value !== undefined &&
+        value !== null &&
+        !(typeof value === 'string' && value.trim() === '')
+      ) {
+        result[key] = value
+      }
+    })
 
-  return result
-}
+    return result
+  }
 
   return (
     <div className="flex shrink-0 items-center gap-4">
@@ -111,14 +111,14 @@ useEffect(() => {
             className="min-w-36"
             heightCustom="h-10"
             allowClear
-           onChange={(value) => {
+            onChange={(value) => {
               pushQuery({
                 suffix_types:
                   value === undefined || value === null || value === ''
                     ? undefined
                     : value,
               })
-}}
+            }}
           />
 
           {/* ===== Schedule multi ===== */}

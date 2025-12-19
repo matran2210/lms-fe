@@ -11,9 +11,10 @@ import {
   FileViewer,
   ModalResizeable,
   PaginationSappV2,
-  SappModalImage,
+  SappModalImageV2,
   SappTable,
   SAPPVideo,
+  TextPreview,
   Tooltip,
 } from '@lms/ui'
 import { UploadAPI } from '@pages/api/upload'
@@ -88,9 +89,8 @@ const ClassResourceTable = ({
         <Tooltip placement="bottomLeft" title={name}>
           <div
             onClick={() => handleOpenPreview(resource)}
-            className={textTruncateStyle}
+            className={clsx(textTruncateStyle, 'cursor-pointer')}
           >
-            {' '}
             {name}
           </div>
         </Tooltip>
@@ -193,8 +193,16 @@ const ClassResourceTable = ({
       case 'SHEET':
       case 'WORD_DOCUMENT':
       case 'POWER_POINT':
-        return <FileViewer fileName={resource.name} fileUrl={resource.url} />
-
+      case 'PDF':
+        return (
+          <FileViewer
+            fileName={resource.name}
+            fileUrl={resource.url}
+            onlyView
+          />
+        )
+      case 'TEXT':
+        return <TextPreview url={resource.url} />
       case 'ZIP':
         return (
           <div className="text-gray-500 flex h-full items-center justify-center text-base font-medium">
@@ -212,7 +220,7 @@ const ClassResourceTable = ({
   }
 
   return (
-    <>
+    <div onContextMenu={(e) => e.preventDefault()}>
       <SappTable
         columns={columns}
         data={data?.data}
@@ -288,12 +296,12 @@ const ClassResourceTable = ({
       {openPreview &&
         previewResource &&
         previewResource.suffix_type === 'IMAGE' && (
-          <SappModalImage
+          <SappModalImageV2
             src={previewResource.url}
             setSrc={() => setOpenPreview(false)}
           />
         )}
-    </>
+    </div>
   )
 }
 
