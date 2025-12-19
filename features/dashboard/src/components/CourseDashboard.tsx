@@ -1,12 +1,12 @@
 import { Icon } from "@lms/assets";
 import { ANIMATION, ITopicProgress, IWeeklyReport } from "@lms/core";
 import { isUndefined } from "lodash";
-import { useRouter } from "next/router";
 import { memo, useState } from "react";
 import { TopicProgress } from "./dashboard-exam";
 import { WeeklyReport } from "./dashboard-normal";
 import LearningResult from "./dashboard-normal/LearningResult";
 import OverallProgress from "./dashboard-normal/OverallProgress";
+import { useFeature } from "@lms/contexts";
 export interface IActivityProgress {
   completed: number;
   total: number;
@@ -28,7 +28,7 @@ const CourseDashboard = ({
   overallProgressData: any;
   weeklyReportData: IWeeklyReport | null;
 }) => {
-  const router = useRouter();
+  const { router } = useFeature();
   const [activities, setActivities] = useState<IActivities | undefined>(
     undefined,
   );

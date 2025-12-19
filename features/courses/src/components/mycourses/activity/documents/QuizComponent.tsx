@@ -1349,7 +1349,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                               <div
                                 className="cursor-pointer text-white"
                                 onClick={() =>
-                                  uploadApi.downloadFile({
+                                  testServiceApi.downloadFile({
                                     files: [
                                       {
                                         name: e?.resource?.name,

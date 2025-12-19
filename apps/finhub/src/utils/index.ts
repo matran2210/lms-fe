@@ -1,4 +1,4 @@
-import { UploadAPI } from '@pages/api/short-course/upload'
+import { TestServiceAPI } from '@pages/api/test-api'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import weekday from 'dayjs/plugin/weekday'
@@ -12,7 +12,7 @@ export const bytesToKilobyte = (bytes: number, suffix = 'Kb') => {
 }
 
 export const download = async (name: string, file_key: string) => {
-  await UploadAPI.downloadFile({
+  await TestServiceAPI.downloadFile({
     files: [
       {
         name: name,
