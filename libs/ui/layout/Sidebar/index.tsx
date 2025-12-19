@@ -108,7 +108,7 @@ export default function Sidebar({
             <PopupStep
               title="Sidebar"
               content={UserGuide.CONTENT_STEP_2}
-              className="left-full top-1/2 ml-5"
+              className="left-full top-[41%] sm:top-1/2 ml-5"
               index={2}
               total={6}
               imgSrc={TourGuideSidebarAnimation}
@@ -133,7 +133,7 @@ export default function Sidebar({
           {guideStatus && guideStep == 3 && (
             <PopupStep
               content={UserGuide.CONTENT_STEP_3}
-              className="bottom-0 left-full ml-5"
+              className="sm:bottom-0 bottom-[122%] left-full ml-5"
               title="Notification & Profile"
               imgSrc={TourGuideNotiAnimation}
               index={3}

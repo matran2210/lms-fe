@@ -61,7 +61,6 @@ import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { ActivityAPI } from './api/activity'
-import { CaseStudyAPI } from './api/case-study'
 import { ClassAPI } from './api/class'
 import { CoursesAPI } from './api/courses'
 import { NotificationAPI } from './api/notification'
@@ -340,7 +339,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 classApi: ClassAPI,
                 activityApi: ActivityAPI,
                 courseActivityApi: CourseActivityApi,
-                caseStudyApi: CaseStudyAPI,
                 myProfileApi: MyProfileAPI,
                 submitQuizTest: TestServiceAPI.submitQuizTest,
                 authManager: new AuthenticationManager(),
