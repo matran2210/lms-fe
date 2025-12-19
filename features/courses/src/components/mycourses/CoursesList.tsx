@@ -33,6 +33,9 @@ const CoursesList: React.FC<CoursesProps> = ({
   const { status: guideStatus, step: guideStep } = useAppSelector(
     (state) => state.userGuideReducer,
   );
+
+  const { isMobileView } = useTailwindBreakpoint();
+  
   if (isFetching && !isFetchingNextPage) {
     return (
       <div className="mb-6 grid w-full gap-6 sm:grid-cols-2 xl:grid-cols-3 xl-max:px-6">
@@ -63,8 +66,6 @@ const CoursesList: React.FC<CoursesProps> = ({
   }
 
   if (isEmpty(courses) && !guideIsActive) return <NoCoursesAvailable />;
-
-        const {isMobileView} = useTailwindBreakpoint()
 
   return (
     <>
@@ -139,9 +140,12 @@ const CoursesList: React.FC<CoursesProps> = ({
                         <p className="text-sm font-normal text-[#050505]">0%</p>
                       </div>
                     </div>
-                    <div className={clsx('progressbar h-[6px] rounded-[100px] ', {
-                      'bg-gray-200': !isMobileView && guideStatus && guideStep === 5,
-                    })}>
+                    <div
+                      className={clsx("progressbar h-[6px] rounded-[100px] ", {
+                        "bg-gray-200":
+                          !isMobileView && guideStatus && guideStep === 5,
+                      })}
+                    >
                       <div
                         className="progress-percentage h-[6px] rounded-[100px] bg-primary"
                         style={{ width: "0%" }}
