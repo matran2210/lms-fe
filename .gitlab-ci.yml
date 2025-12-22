@@ -56,8 +56,8 @@ variables:
   extends: .prepare
   image: docker:latest
   script:
-    - cp $ENV_PRODUCT_FILE apps/$APP_NAME/.env
-    - cp $ENV_PRODUCT_FILE .env
+    - cp $TEST_ENV_PRODUCT_FILE apps/$APP_NAME/.env
+    - cp $TEST_ENV_PRODUCT_FILE .env
     - source .env
     - docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD
     - docker build --build-arg APP_NAME=$APP_NAME -t $IMAGE_NAME:$IMAGE_TAG -f prod.Dockerfile .
@@ -138,7 +138,7 @@ deploy_lms_pro:
   script:
     - chmod 600 "$TEST_SSH_KEY_PROD"
     - cp "$TEST_SSH_KEY_PROD" key.pem
-    - cp $ENV_PRODUCT_FILE .env
+    - cp $TEST_ENV_PRODUCT_FILE .env
     - source .env
 
     - export IMAGE_TAG="lms-fe-${CI_PIPELINE_IID}"
