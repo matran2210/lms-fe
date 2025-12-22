@@ -52,10 +52,23 @@ const SearchClassResource = ({
     type: query.type ?? '',
   })
 
+  const handleClearSearch = () => {
+    methods.setValue('name', '')
+
+    const { search_key, ...restQuery } = query
+
+    push(
+      {
+        pathname: PageLink.CLASS_RESOURCE,
+        query: restQuery,
+      },
+      undefined,
+      { shallow: true },
+    )
+  }
+
   const handleSubmit = () => {
     const courseId = query.courseId
-
-    if (!courseId) return
 
     if (!courseId) return
 
@@ -130,7 +143,7 @@ const SearchClassResource = ({
                   icon: <CloseIconV2 />,
                   className: 'p-1',
                   action: () => {
-                    methods.setValue('name', '')
+                    handleClearSearch()
                   },
                 },
               ],
