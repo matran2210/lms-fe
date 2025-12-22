@@ -90,17 +90,18 @@ const CardCourse = forwardRef<
     ref,
   ) => {
     const { status: guideStatus, step: guideStep } = useAppSelector(
-        (state) => state.userGuideReducer,
-      );
-      const {isMobileView} = useTailwindBreakpoint()
+      (state) => state.userGuideReducer,
+    );
+    const { isMobileView } = useTailwindBreakpoint();
     return (
       <div data-aos={ANIMATION.DATA_AOS}>
         <div
           className={clsx(
-            "border-transparent relative flex flex-col rounded-xl border  p-4 shadow-card transition-colors duration-300 ease-in-out hover:border-primary hover:shadow-md md:p-6 lg:rounded-2xl lg:p-8",
+            "relative flex flex-col rounded-xl bg-white p-4 shadow-card transition-colors duration-300 ease-in-out hover:border hover:border-primary hover:shadow-md md:p-6 lg:rounded-2xl lg:p-8",
             {
-              'border-white bg-white': !isMobileView && guideStatus && guideStep === 5,
-              'border-none': isMobileView && guideStatus && guideStep === 5,
+              "border-white bg-white":
+                !isMobileView && guideStatus && guideStep === 5,
+              "border-none": isMobileView && guideStatus && guideStep === 5,
             },
             classNameCard,
           )}

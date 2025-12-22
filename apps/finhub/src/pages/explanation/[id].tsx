@@ -1,20 +1,23 @@
-import { MenuDotsIcon } from '@lms/assets'
 import { AltArrowLeft } from '@components/courses/icons/AltArrowLeft'
-import { CloseIconV2 } from '@lms/assets'
+import { CloseIconV2, MenuDotsIcon } from '@lms/assets'
+import {
+  EYourAnswerType,
+  GRADING_METHOD,
+  IAtempt,
+  IRequirement,
+  LAYOUT,
+  QUESTION_TYPES,
+  TEST_ATTEMPT_TYPE,
+} from '@lms/core'
 import { FullScreenLayout, SappLoadingGlobal, Tooltip } from '@lms/ui'
-import { LAYOUT } from '@lms/core'
+import { TestServiceAPI } from '@pages/api/test-api'
 import { ExplanationPackageV2 } from 'explanation-package'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { GRADING_METHOD, TEST_ATTEMPT_TYPE } from '@lms/core'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { UploadAPI } from 'src/pages/api/upload'
-import { UserType } from 'src/redux/types/User/urser'
-import { IAtempt, IRequirement, QUESTION_TYPES } from '@lms/core'
-import { CoursesAPI } from '../api/courses'
-import { EYourAnswerType } from '@lms/core'
 import { PageLink } from 'src/constants/routes'
-import { TestServiceAPI } from '@pages/api/test-api'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
+import { CoursesAPI } from '../api/courses'
 
 const Explanation = () => {
   const router = useRouter()
@@ -111,7 +114,7 @@ const Explanation = () => {
     files: { name: string; file_key: string }[]
   }) => {
     try {
-      await UploadAPI.downloadFile(data)
+      await TestServiceAPI.downloadFile(data)
     } catch (error) {}
   }
 

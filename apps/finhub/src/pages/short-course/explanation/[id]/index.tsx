@@ -116,7 +116,7 @@ const Explanation = () => {
     files: { name: string; file_key: string }[]
   }) => {
     try {
-      await UploadAPI.downloadFile(data)
+      await TestServiceAPI.downloadFile(data)
     } catch (error) {}
   }
 

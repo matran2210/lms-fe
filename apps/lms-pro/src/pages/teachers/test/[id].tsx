@@ -1210,7 +1210,7 @@ const TestDetail = () => {
   }
 
   const getResult = async (currentTabContent: any) => {
-    const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
+    const res = await TestServiceAPI.getQuestionAnswer(currentTabContent.id)
     let corrects = {} as any
     if (
       currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||

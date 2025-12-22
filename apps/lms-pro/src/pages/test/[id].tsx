@@ -3649,7 +3649,7 @@ const TestDetail = () => {
                       <div
                         className="cursor-pointer text-white"
                         onClick={() => {
-                          UploadAPI.downloadFile({
+                          TestServiceAPI.downloadFile({
                             files: [
                               {
                                 name: e?.resource?.name,

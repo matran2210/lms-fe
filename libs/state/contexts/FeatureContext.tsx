@@ -31,7 +31,6 @@ interface FeatureContextProps {
   classApi: IClassAPI;
   activityApi: IActivityAPI;
   courseActivityApi: ICourseActivityAPI;
-  caseStudyApi: ICaseStudyAPI;
   entranceTestApi?: IEntranceTestAPI;
   eventTestApi?: IEventTestAPI;
   calendarApi?: ICalendarAPI;
