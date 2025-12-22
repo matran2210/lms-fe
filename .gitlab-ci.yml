@@ -151,8 +151,8 @@ deploy_lms_pro:
         git fetch origin --prune &&
         git reset --hard origin/master-test-build &&
         export LMS_PRO_IMAGE='${LMS_PRO_IMAGE}' &&
-        docker compose -f docker-compose.build_lms_pro.yml pull && 
-        docker compose -f docker-compose.build_lms_pro.yml up -d lms-pro nginx
+        docker compose -f docker-compose.lms.yml pull && 
+        docker compose -f docker-compose.lms.yml up -d lms-pro nginx
       "
   environment: production
   tags:
@@ -182,8 +182,8 @@ deploy_lms_finhub:
         git fetch origin --prune &&
         git reset --hard origin/master-test-build &&
         export LMS_FINHUB_IMAGE='${LMS_FINHUB_IMAGE}' &&
-        docker compose -f docker-compose.build_lms_finhub.yml pull && 
-        docker compose -f docker-compose.build_lms_finhub.yml up -d lms-finhub nginx
+        docker compose -f docker-compose.finhub.yml pull && 
+        docker compose -f docker-compose.finhub.yml up -d lms-finhub nginx
       "
   environment: production
   tags:
