@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  lms-pro:
+    build:
+      context: .
+      dockerfile: ./local.Dockerfile
+      args:
+        APP_NAME: "lms-pro"
+    container_name: lms-pro
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+    restart: always
+    networks:
+      - local
+
+  finhub:
+    build:
+      context: .
+      dockerfile: ./local.Dockerfile
+      args:
+        APP_NAME: "finhub"
+    container_name: finhub
+    ports:
+      - "3001:3000"
+    environment:
+      NODE_ENV: production
+    restart: always
+    networks:
+      - local
+networks:
+  local:
+ 
