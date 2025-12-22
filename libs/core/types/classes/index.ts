@@ -166,7 +166,7 @@ export interface ISubjectList {
   success?: boolean;
 }
 
-export interface IClassSchedule {
+export interface IClassScheduleForResource {
   end_date: string;
   end_time: string;
   id: string;
@@ -177,7 +177,7 @@ export interface IClassSchedule {
 
 export interface IClassResource extends IResource {
   class_resource_permissions: {
-    schedules: IClassSchedule[];
+    schedules: IClassScheduleForResource[];
     student: string;
     teacher: string;
   };
