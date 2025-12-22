@@ -82,6 +82,7 @@ const SappSelectMultipleTeacher = (props: IProps) => {
     onFocus,
     onMenuClose, 
     name,
+    isSelectCustom
   } = props;
 
   const CustomComponents = useMemo(
@@ -118,9 +119,11 @@ const SappSelectMultipleTeacher = (props: IProps) => {
                 components={CustomComponents}
                 onInputChange={onInputChange}
                 onMenuScrollToBottom={onMenuScrollToBottom}
-                className={clsx("select-single", "select-single-custom", props.className)}
+                className={clsx("select-single", isSelectCustom && "select-single-custom", props.className)}
                 classNamePrefix="select"
                 onFocus={onFocus}
+                closeMenuOnSelect={false} 
+                blurInputOnSelect={false} 
                 onMenuClose={onMenuClose}
                 onMenuOpen={onFocus}
                 onChange={(selected) => {
