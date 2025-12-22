@@ -159,7 +159,11 @@ export default function ClassResourceTeacher() {
     {
       title: 'Location',
       render: (record: IClassResource) => (
-        <Tooltip title={record?.location ?? ''} max_length={8} isLink={false} />
+        <Tooltip placement="bottomLeft" title={record?.location}>
+          <div className={clsx(textTruncateStyle, 'font-normal')}>
+            {record?.location}
+          </div>
+        </Tooltip>
       ),
     },
     {
