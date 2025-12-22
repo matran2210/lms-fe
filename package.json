@@ -5,15 +5,15 @@
   "scripts": {
     "build": "turbo run build",
     "build:lms-pro": "pnpm --filter ./apps/lms-pro build",
-    "build:finhub": "pnpm --filter ./apps/finhub build",
+    "build:lms-finhub": "pnpm --filter ./apps/lms-finhub build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "dev:lms-pro": "pnpm --filter ./apps/lms-pro dev",
-    "dev:finhub": "pnpm --filter ./apps/finhub dev",
+    "dev:lms-finhub": "pnpm --filter ./apps/lms-finhub dev",
     "start:lms-pro": "pnpm --filter ./apps/lms-pro start",
-    "start:finhub": "pnpm --filter ./apps/finhub start",
+    "start:lms-finhub": "pnpm --filter ./apps/lms-finhub start",
     "prepare": "husky install",
     "lint-staged": "lint-staged",
     "gen:assets": "node scripts/generate-assets-index.js"

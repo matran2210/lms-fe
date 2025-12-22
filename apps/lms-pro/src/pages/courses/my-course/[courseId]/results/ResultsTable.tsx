@@ -6,10 +6,7 @@ import {
   backTypeMap,
   getTypeName,
 } from '@lms/core'
-import {
-  CardResultTest,
-  CollapseActivity,
-} from '@lms/feature-courses'
+import { CardResultTest, CollapseActivity } from '@lms/feature-courses'
 import {
   CarouselSlideAnimation,
   FilterCourseSection,

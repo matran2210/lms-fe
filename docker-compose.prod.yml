@@ -12,21 +12,23 @@ services:
     networks:
       - local
 
-  # finhub:
-  #   image: $IMAGE_NAME:lms-fe-$CI_PIPELINE_IID
-  #   container_name: finhub
-  #   ports:
-  #     - "3001:3000"
-  #   environment:
-  #     NODE_ENV: production
-  #   restart: always
-  #   networks:
-  #     - local
+  lms-finhub:
+    image: ${LMS_FINHUB_IMAGE}
+    container_name: lms-finhub
+    ports:
+      - "3001:3000"
+    environment:
+      NODE_ENV: production
+    restart: always
+    networks:
+      - local
 
   nginx:
     image: nginx:latest
     depends_on:
       lms-pro:
+        condition: service_started
+      lms-finhub:
         condition: service_started
     container_name: nginx
     restart: always

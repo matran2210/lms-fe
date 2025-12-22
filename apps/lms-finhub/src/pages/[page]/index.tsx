@@ -174,7 +174,7 @@ const ProfilePage = () => {
             avatar={avatar}
             handleSetAvatar={handleSetAvatar}
             setReViewImageSrc={setReViewImageSrc}
-            appType={AppType.FINHUB}
+            appType={AppType.LMS_FINHUB}
           />
           <ProfileList isEdit={isEdit} />
         </>
@@ -227,7 +227,7 @@ const ProfilePage = () => {
           avatar={avatar}
           handleSetAvatar={handleSetAvatar}
           setReViewImageSrc={setReViewImageSrc}
-          appType={AppType.FINHUB}
+          appType={AppType.LMS_FINHUB}
         />
       ),
       className:
@@ -349,7 +349,7 @@ const ProfilePage = () => {
           isShowToggle
           className={'mb-4 hidden md:flex'}
           redirectLink={PageLink.SHORT_COURSE}
-          appType={AppType.FINHUB}
+          appType={AppType.LMS_FINHUB}
         />
         <div className="mx-auto my-0 flex w-full grow flex-col">
           <div className="main hidden sm:mx-4 md:mb-6 md:block lg:mx-0 lg:mb-4">
@@ -375,7 +375,7 @@ const ProfilePage = () => {
                 isEdit={isEdit}
                 inputFileRef={inputFileRef}
                 setIsEdit={setIsEdit}
-                appType={AppType.FINHUB}
+                appType={AppType.LMS_FINHUB}
               />
               <div>
                 <Tabs

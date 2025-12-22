@@ -16,13 +16,13 @@ services:
     networks:
       - local
 
-  finhub:
+  lms-finhub:
     build:
       context: .
       dockerfile: ./local.Dockerfile
       args:
-        APP_NAME: "finhub"
-    container_name: finhub
+        APP_NAME: "lms-finhub"
+    container_name: lms-finhub
     ports:
       - "3001:3000"
     environment:
