@@ -18,8 +18,9 @@ interface IProps {
 const ClassResourceTeacherFilter: React.FC<IProps> = ({ control }) => {
   const router = useRouter()
   const [search, setSearch] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
   const { classSchedule, hasNextPage, fetchNextPage, isLoading, refetch } =
-    useSelectClassSchedule(router.query.id as string, search)
+    useSelectClassSchedule(router.query.id as string, search, isOpen)
 
   const debouncedSearch = useRef(
     debounce((value: string) => {
@@ -76,11 +77,14 @@ const ClassResourceTeacherFilter: React.FC<IProps> = ({ control }) => {
             isDisabled?: boolean
           }>
         }
+        onFocus={() => {
+          setIsOpen(true)
+        }}
         isLoading={isLoading}
         className="min-w-36"
         onSearch={handleSearch}
+        onInputChange={(val) => handleSearch(val)}
         onMenuScrollToBottom={() => hasNextPage && fetchNextPage()}
-        onFocus={() => refetch()}
       />
     </div>
   )

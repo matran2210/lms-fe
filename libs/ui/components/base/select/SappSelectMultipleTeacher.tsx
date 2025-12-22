@@ -1,11 +1,11 @@
 import clsx from "clsx";
-import React, { memo, ReactNode, useCallback, useMemo } from "react";
+import React, { memo, ReactNode, useMemo } from "react";
 import { Control, Controller } from "react-hook-form";
 import Select, {
   components,
+  GroupBase,
   MultiValue,
   ValueContainerProps,
-  GroupBase,
 } from "react-select";
 import { ErrorMessage } from "../../common";
 
@@ -38,6 +38,7 @@ interface IProps {
   isSelectCustom?: boolean;
   onSearch?: (value?: string) => void;
   maxShownValues?: number;
+  onInputChange: (e: string) => void
 }
 
 const CustomValueContainer = ({
@@ -63,7 +64,7 @@ const CustomValueContainer = ({
   return (
     <components.ValueContainer {...props}>
       <div className="flex items-center w-full overflow-hidden">
-        <span className="whitespace-nowrap bg-[#2a353c] px-2 py-0.5 rounded text-sm font-medium mr-2 border text-white">
+        <span className="whitespace-nowrap bg-[#404041] px-2 py-0.5 rounded text-sm font-medium mr-2 border text-white">
           {count} mục đã chọn
         </span>
         {input}
@@ -74,9 +75,12 @@ const CustomValueContainer = ({
 
 const SappSelectMultipleTeacher = (props: IProps) => {
   const {
-    // ... giải nén các props như cũ ...
+    onInputChange,
     maxShownValues = 2,
+    onMenuScrollToBottom,
     placeholder,
+    onFocus,
+    onMenuClose, 
     name,
   } = props;
 
@@ -85,7 +89,6 @@ const SappSelectMultipleTeacher = (props: IProps) => {
       ValueContainer: (p: any) => (
         <CustomValueContainer {...p} maxShownValues={maxShownValues} />
       ),
-      // Bỏ IndicatorSeparator cho sạch giao diện
       IndicatorSeparator: () => null,
     }),
     [maxShownValues],
@@ -108,51 +111,18 @@ const SappSelectMultipleTeacher = (props: IProps) => {
             <>
               <Select<SelectOption, true>
                 ref={ref}
+                hideSelectedOptions={false}
                 isMulti
                 options={props.options}
                 value={selectedOptions}
                 components={CustomComponents}
-                className={clsx("select-custom-wrapper", props.className)}
+                onInputChange={onInputChange}
+                onMenuScrollToBottom={onMenuScrollToBottom}
+                className={clsx("select-single", "select-single-custom", props.className)}
                 classNamePrefix="select"
-                styles={{
-                  valueContainer: (base) => ({
-                    ...base,
-                    flexWrap: "nowrap",
-                    padding: "2px 8px",
-                    minHeight: "38px",
-                  }),
-                  input: (base) => ({
-                    ...base,
-                    margin: 0,
-                    padding: 0,
-                    "& input": {
-                      font: "inherit",
-                    },
-                  }),
-                  placeholder: (base) => ({
-                    ...base,
-                    whiteSpace: "nowrap",
-                  }),
-                  option: (base, state) => ({
-                    ...base,
-                    backgroundColor: state.isFocused
-                      ? "#2a353c"
-                      : "transparent",
-                    color: state.isFocused ? "#f8b830" : "",
-                  }),
-                  control: (base, state) => ({
-                    ...base,
-                    borderRadius: "6px",
-                    borderColor: state.isFocused ? "#f8b830" : "",
-                    // boxShadow: state.isFocused ? "0 0 0 0.5px #f8b830" : "none",
-                    boxShadow: "none",
-                    outline: "none",
-                    "&:hover": {
-                      borderColor: "#f8b830",
-                    },
-                  }),
-                }}
-                // ... các props khác giữ nguyên ...
+                onFocus={onFocus}
+                onMenuClose={onMenuClose}
+                onMenuOpen={onFocus}
                 onChange={(selected) => {
                   const ids = (selected as MultiValue<SelectOption>).map(
                     (item) => item.value,
