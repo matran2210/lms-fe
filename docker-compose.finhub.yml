@@ -1,24 +1,9 @@
 version: "3.9"
 
 services:
-  lms-pro:
-    image: ${LMS_PRO_IMAGE}
-    container_name: lms-pro
-    profiles:
-      - lms-pro
-    ports:
-      - "3000:3000"
-    environment:
-      NODE_ENV: production
-    restart: always
-    networks:
-      - local
-
   lms-finhub:
     image: ${LMS_FINHUB_IMAGE}
     container_name: lms-finhub
-    profiles:
-      - lms-finhub
     ports:
       - "3001:3000"
     environment:
@@ -30,8 +15,6 @@ services:
   nginx:
     image: nginx:latest
     depends_on:
-      lms-pro:
-        condition: service_started
       lms-finhub:
         condition: service_started
     container_name: nginx

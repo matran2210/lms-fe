@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  lms-pro:
+    image: ${LMS_PRO_IMAGE}
+    container_name: lms-pro
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+    restart: always
+    networks:
+      - local
+
+  nginx:
+    image: nginx:latest
+    depends_on:
+      lms-pro:
+        condition: service_started
+    container_name: nginx
+    restart: always
+    ports:
+      - '80:80'
+      - '443:443'
+    networks:
+      - local
+    volumes:
+      - /var/www/vhost:/etc/nginx/conf.d
+      - /var/www/cert/uat-ops-be.sapp.edu.vn.crt:/etc/nginx/uat-ops-be.sapp.edu.vn.crt
+      - /var/www/cert/uat-ops-be.sapp.edu.vn.key:/etc/nginx/uat-ops-be.sapp.edu.vn.key
+
+networks:
+  local:
+ 
