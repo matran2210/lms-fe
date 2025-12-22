@@ -60,7 +60,11 @@ variables:
     - cp $ENV_PRODUCT_FILE .env
     - source .env
     - docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD
+<<<<<<< HEAD
     - docker build --build-arg APP_NAME=$APP_NAME -t $IMAGE_NAME:$IMAGE_TAG -f prod.Dockerfile
+=======
+    - docker build --build-arg APP_NAME=$APP_NAME -t $IMAGE_NAME:$IMAGE_TAG .
+>>>>>>> 8ea405aa104177761d65c250856e9271fc0cce49
     - docker push $IMAGE_NAME:$IMAGE_TAG
     - echo "$IMAGE_NAME:$IMAGE_TAG build success"
   tags:
