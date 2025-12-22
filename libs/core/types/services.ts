@@ -274,4 +274,26 @@ export interface ITestServiceAPI {
     cache?: boolean,
     include_questions?: boolean,
   ) => Promise<any>;
+  downloadFile: (data: {
+    files: {
+      name: string;
+      file_key: string;
+    }[];
+  }) => Promise<void>;
+  startUpload: (data: {
+    content_type: string;
+    name: string;
+    size: string;
+    blob: Blob;
+    description: string;
+    getProgress: (percent: number) => void;
+    location: string;
+  }) => Promise<
+    IResponse<{
+      type: string;
+      file_key: string;
+      upload_url: string;
+      name: string;
+    }>
+  >
 }
