@@ -35,7 +35,6 @@ Thumbs.db
 .gitignore
 
 # --- Docker ---
-docker-compose*
 .dockerignore
 
 # --- Cache ---

@@ -141,7 +141,7 @@ deploy_lms_pro:
     - cp $TEST_ENV_PRODUCT_FILE .env
     - source .env
 
-    - export IMAGE_TAG="lms-fe-${CI_PIPELINE_IID}"
+    - export IMAGE_TAG="lms-pro-${CI_PIPELINE_IID}"
     - export LMS_PRO_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
 
     - |
@@ -150,8 +150,9 @@ deploy_lms_pro:
         cd /var/www/lms-fe &&
         git fetch origin --prune &&
         git reset --hard origin/master-test-build &&
-        export LMS_PRO_IMAGE='${LMS_PRO_IMAGE}' &&
+        LMS_PRO_IMAGE='${IMAGE_NAME}:${IMAGE_TAG}' \
         docker compose -f docker-compose.prod.yml pull lms-pro && 
+        LMS_PRO_IMAGE='${IMAGE_NAME}:${IMAGE_TAG}' \
         docker compose -f docker-compose.prod.yml up -d lms-pro nginx
       "
   environment: production
@@ -181,8 +182,9 @@ deploy_lms_finhub:
         cd /var/www/lms-fe &&
         git fetch origin --prune &&
         git reset --hard origin/master-test-build &&
-        export LMS_FINHUB_IMAGE='${LMS_FINHUB_IMAGE}' &&
+        LMS_FINHUB_IMAGE='${IMAGE_NAME}:${IMAGE_TAG}' \
         docker compose -f docker-compose.prod.yml pull lms-finhub && 
+        LMS_FINHUB_IMAGE='${IMAGE_NAME}:${IMAGE_TAG}' \
         docker compose -f docker-compose.prod.yml up -d lms-finhub nginx
       "
   environment: production
