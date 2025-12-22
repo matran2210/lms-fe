@@ -151,7 +151,6 @@ deploy_lms_pro:
         git fetch origin --prune &&
         git reset --hard origin/master-test-build &&
         export LMS_PRO_IMAGE='${LMS_PRO_IMAGE}' &&
-        docker -f docker-compose.prod.yml stop lms-pro &&
         docker compose -f docker-compose.prod.yml pull lms-pro && 
         docker compose -f docker-compose.prod.yml up -d lms-pro nginx
       "
