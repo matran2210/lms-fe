@@ -150,9 +150,9 @@ deploy_lms_pro:
         cd /var/www/lms-fe &&
         git fetch origin --prune &&
         git reset --hard origin/master-test-build &&
-        LMS_PRO_IMAGE='${IMAGE_NAME}:${IMAGE_TAG}' \
+        COMPOSE_PROFILES=lms-pro \
+        export LMS_PRO_IMAGE='${LMS_PRO_IMAGE}' &&
         docker compose -f docker-compose.prod.yml pull lms-pro && 
-        LMS_PRO_IMAGE='${IMAGE_NAME}:${IMAGE_TAG}' \
         docker compose -f docker-compose.prod.yml up -d lms-pro nginx
       "
   environment: production
@@ -182,9 +182,9 @@ deploy_lms_finhub:
         cd /var/www/lms-fe &&
         git fetch origin --prune &&
         git reset --hard origin/master-test-build &&
-        LMS_FINHUB_IMAGE='${IMAGE_NAME}:${IMAGE_TAG}' \
+        COMPOSE_PROFILES=lms-finhub \
+        export LMS_FINHUB_IMAGE='${LMS_FINHUB_IMAGE}' &&
         docker compose -f docker-compose.prod.yml pull lms-finhub && 
-        LMS_FINHUB_IMAGE='${IMAGE_NAME}:${IMAGE_TAG}' \
         docker compose -f docker-compose.prod.yml up -d lms-finhub nginx
       "
   environment: production
