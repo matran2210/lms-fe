@@ -69,16 +69,16 @@ variables:
   resource_group: lms-fe
 
 # # Build LMS-PRO
-build_lms_pro:
-  extends: .build_template
-  variables:
-    APP_NAME: lms-pro
-    IMAGE_TAG: lms-fe-$CI_PIPELINE_IID
-  only:
-    # variables:
-    #   - $CI_COMMIT_MESSAGE =~ /build/
-    refs:
-      - master-test-build
+# build_lms_pro:
+#   extends: .build_template
+#   variables:
+#     APP_NAME: lms-pro
+#     IMAGE_TAG: lms-fe-$CI_PIPELINE_IID
+#   only:
+#     # variables:
+#     #   - $CI_COMMIT_MESSAGE =~ /build/
+#     refs:
+#       - master-test-build
   # rules:
   #   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
   #     changes:
@@ -100,16 +100,16 @@ build_lms_pro:
 # Deploy LMS-PRO
 
 # Build lms-finhub
-build_lms_finhub:
-  extends: .build_template
-  variables:
-    APP_NAME: lms-finhub
-    IMAGE_TAG: lms-finhub-$CI_PIPELINE_IID
-  only:
-    # variables:
-    #   - $CI_COMMIT_MESSAGE =~ /build/
-    refs:
-      - master-test-build
+# build_lms_finhub:
+#   extends: .build_template
+#   variables:
+#     APP_NAME: lms-finhub
+#     IMAGE_TAG: lms-finhub-$CI_PIPELINE_IID
+#   only:
+#     # variables:
+#     #   - $CI_COMMIT_MESSAGE =~ /build/
+#     refs:
+#       - master-test-build
 # rules:
 #   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
 #     changes:
@@ -141,7 +141,7 @@ deploy_lms_pro:
     - cp $TEST_ENV_PRODUCT_FILE .env
     - source .env
 
-    - export IMAGE_TAG="lms-pro-${CI_PIPELINE_IID}"
+    - export IMAGE_TAG="lms-pro-1614"
     - export LMS_PRO_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
 
     - |
@@ -150,10 +150,9 @@ deploy_lms_pro:
         cd /var/www/lms-fe &&
         git fetch origin --prune &&
         git reset --hard origin/master-test-build &&
-        COMPOSE_PROFILES=lms-pro \
         export LMS_PRO_IMAGE='${LMS_PRO_IMAGE}' &&
-        docker compose -f docker-compose.prod.yml pull lms-pro && 
-        docker compose -f docker-compose.prod.yml up -d lms-pro nginx
+        docker compose -f docker-compose.build_lms_pro pull && 
+        docker compose -f docker-compose.build_lms_pro.yml up -d lms-pro nginx
       "
   environment: production
   tags:
@@ -173,7 +172,7 @@ deploy_lms_finhub:
     - cp $TEST_ENV_PRODUCT_FILE .env
     - source .env
 
-    - export IMAGE_TAG="lms-finhub-${CI_PIPELINE_IID}"
+    - export IMAGE_TAG="lms-finhub-1614"
     - export LMS_FINHUB_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
 
     - |
@@ -182,10 +181,9 @@ deploy_lms_finhub:
         cd /var/www/lms-fe &&
         git fetch origin --prune &&
         git reset --hard origin/master-test-build &&
-        COMPOSE_PROFILES=lms-finhub \
         export LMS_FINHUB_IMAGE='${LMS_FINHUB_IMAGE}' &&
-        docker compose -f docker-compose.prod.yml pull lms-finhub && 
-        docker compose -f docker-compose.prod.yml up -d lms-finhub nginx
+        docker compose -f docker-compose.build_lms_finhub.yml pull && 
+        docker compose -f docker-compose.build_lms_finhub.yml up -d lms-finhub nginx
       "
   environment: production
   tags:
