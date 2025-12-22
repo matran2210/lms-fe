@@ -141,7 +141,7 @@ deploy_lms_pro:
     - cp $TEST_ENV_PRODUCT_FILE .env
     - source .env
 
-    - export IMAGE_TAG="lms-pro-1614"
+    - export IMAGE_TAG="lms-fe-1614"
     - export LMS_PRO_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
 
     - |
