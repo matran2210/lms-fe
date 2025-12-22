@@ -60,6 +60,7 @@ import ConFirmSubmit from "../../test/conFirmSubmit";
 import ShowAnswerTemplate from "../../test/ShowAnswerTemplate";
 import ResetToAnswerTemplateModal from "../../test/ResetToAnswerTemplateModal";
 import { useTailwindBreakpoint } from "@lms/hooks";
+import { myAnswer, myAnswerDragDrop, myAnswerFillWord, myAnswerMatching, myAnswerMultipleChoice, myAnswerSelectWord } from "@lms/core/types/answer";
 
 type Props = {
   questions: IQuestion[];
@@ -340,10 +341,15 @@ const QuizDocument = ({
   const [unsubittedQuestions, setUnsubittedQuestions] = useState<number[]>([]);
 
   const formatMyAnswerFromForm = (
-    rawAnswer: any,
+    rawAnswer:
+      | string
+      | string[]
+      | { question_id: string; answer_id: string }[]
+      | { idAnswer: string; position: number }[]
+      | IEssayAnswer[],
     question: IActivityStateQuestion,
     time_spent: number = 0,
-  ): any[] => {
+  ): myAnswer[] => {
     if (!rawAnswer) return [];
 
     switch (question?.qType as QUESTION_TYPES) {
@@ -352,7 +358,7 @@ const QuizDocument = ({
         return [
           {
             question_id: question.id,
-            question_answer_id: rawAnswer,
+            question_answer_id: rawAnswer as string,
             time_spent: time_spent,
           },
         ];
@@ -361,24 +367,24 @@ const QuizDocument = ({
         return [
           {
             question_id: question.id,
-            answer: rawAnswer?.map((e: string) => ({
+            answer: (rawAnswer as string[]).map((e: string) => ({
               answer_id: e,
             })),
             time_spent: time_spent,
           },
-        ];
+        ] as myAnswerMultipleChoice[];
 
       case QUESTION_TYPES.FILL_WORD:
         return [
           {
             question_id: question.id,
-            answer: rawAnswer?.map((e: string, i: number) => ({
+            answer: (rawAnswer as string[]).map((e: string, i: number) => ({
               answer_text: e,
               answer_position: i + 1,
             })),
             time_spent: time_spent,
           },
-        ];
+        ] as myAnswerFillWord[];
 
       case QUESTION_TYPES.SELECT_WORD:
         return [
@@ -387,38 +393,38 @@ const QuizDocument = ({
             answer: rawAnswer || [],
             time_spent: time_spent,
           },
-        ];
+        ] as myAnswerSelectWord[];
 
       case QUESTION_TYPES.MATCHING:
         return [
           {
             question_id: question.id,
-            answer:
-              Array.isArray(rawAnswer) &&
-              rawAnswer?.map(
-                (e: { question_id: string; answer_id: string }) => ({
-                  question_id: e.question_id,
-                  answer_id: e.answer_id,
-                }),
-              ),
+            answer: (rawAnswer as { question_id: string; answer_id: string }[]).map(
+              (e) => ({
+                question_id: e.question_id,
+                answer_id: e.answer_id,
+              }),
+            ),
             time_spent: time_spent,
           },
-        ];
+        ] as myAnswerMatching[];
 
       case QUESTION_TYPES.DRAG_DROP:
         return [
           {
             question_id: question.id,
-            answer: rawAnswer?.map((e: { idAnswer: string; position: number }, i: number) => ({
-              answer_id: e.idAnswer,
-              answer_position: e.position,
-            })),
+            answer: (rawAnswer as { idAnswer: string; position: number }[]).map(
+              (e) => ({
+                answer_id: e.idAnswer,
+                answer_position: e.position,
+              }),
+            ),
             time_spent: time_spent,
           },
-        ];
+        ] as myAnswerDragDrop[];
 
       case QUESTION_TYPES.ESSAY:
-        return rawAnswer?.map((item: IEssayAnswer) => ({
+        return (rawAnswer as IEssayAnswer[]).map((item) => ({
           ...item,
           time_spent: time_spent,
         }));
