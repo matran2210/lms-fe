@@ -117,7 +117,7 @@ const MyCourse3Level = () => {
           isShowToggle
           isShowUserGuide
           redirectLink={PageLink.SHORT_COURSE}
-          appType={AppType.FINHUB}
+          appType={AppType.LMS_FINHUB}
         />
       </div>
       <div

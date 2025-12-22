@@ -50,7 +50,7 @@ lms-fe/
 │   │   ├── tsconfig.json
 │   │   └── ...
 │   │
-│   └── finhub/                       # Finhub Application (Shour Course)
+│   └── lms-finhub/                       # Lms-Finhub Application (Shour Course)
 │       ├── src/
 │       │   ├── pages/                # Next.js pages
 │       │   │   ├── courses/

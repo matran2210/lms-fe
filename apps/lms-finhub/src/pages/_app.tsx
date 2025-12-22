@@ -371,7 +371,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                         </div>
                         <BackToTop />
                         <Help showHelp={showHelp} />
-                        <LearningNotesList appType={AppType.FINHUB} />
+                        <LearningNotesList appType={AppType.LMS_FINHUB} />
                         <PopupCompletedCourse />
                       </>
                     </RouteGuard>

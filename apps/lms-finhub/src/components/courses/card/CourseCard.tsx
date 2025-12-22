@@ -39,7 +39,7 @@ export default function CourseCard({
     percentProgress,
     determineButtonToShow,
     isActiveStudent,
-  } = useCourseStatus(course, 'finhub')
+  } = useCourseStatus(course, 'lms-finhub')
   const [daysDifference, setDaysDifference] = useState(365)
   const activeCourse = async () => {
     try {
