@@ -52,9 +52,7 @@ export interface myAnswerDragDrop {
   }[]
   time_spent: number
 }
-export interface myAnswerEssay {
-  question_id: string
-  answer: IEssayAnswer[]
+export interface myAnswerEssay extends IEssayAnswer {
   time_spent: number
 }
 
