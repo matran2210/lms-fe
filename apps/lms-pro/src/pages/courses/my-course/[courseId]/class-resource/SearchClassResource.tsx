@@ -3,7 +3,6 @@ import {
   CloseIconV2,
   HamburgerMenuLargeIcon,
 } from '@lms/assets'
-import { useAppSelector, useFeature } from '@lms/contexts'
 import { AppType, MY_COURSES } from '@lms/core'
 import { SearchForm } from '@lms/ui'
 import { buildQueryString } from '@lms/utils'
@@ -12,6 +11,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants/routers'
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '@lms/core'
 
 interface IProps {
   handleOpenSidebar: () => void
@@ -37,7 +37,7 @@ const SearchClassResource = ({
   appType,
 }: IProps) => {
   const { query, push } = useRouter()
-   const courseId = query.courseId
+  const courseId = query.courseId
   const methods = useForm<{ name: string }>({
     defaultValues: {
       name: '',
@@ -52,22 +52,24 @@ const SearchClassResource = ({
     type: query.type ?? '',
   })
 
+  const handleSubmit = () => {
+    const courseId = query.courseId
 
+    if (!courseId) return
 
-const handleSubmit = () => {
-  const courseId = query.courseId
+    if (!courseId) return
 
-  if (!courseId) return 
-
-  push({
-    pathname: PageLink.CLASS_RESOURCE, 
-    query: {
-      ...query,
-      courseId,
-      search_key: methods.watch('name')?.trim() || undefined,
-    },
-  })
-}
+    push({
+      pathname: PageLink.CLASS_RESOURCE,
+      query: {
+        ...query,
+        page_index: DEFAULT_PAGE_NUMBER,
+        page_size: DEFAULT_PAGE_SIZE,
+        courseId,
+        search_key: methods.watch('name')?.trim() || undefined,
+      },
+    })
+  }
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

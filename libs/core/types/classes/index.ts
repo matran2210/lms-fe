@@ -1,7 +1,6 @@
 import { QUIZ_ATTEMPT_GRADING_STATUS, QUIZ_ATTEMPT_STATUS } from "../../enums";
 import { IMetaData } from "../api-response";
 import { IResource } from "../courses";
-import { IClassSchedule } from "../request";
 
 export interface IUniversityProgram {
   value: string;
@@ -167,9 +166,18 @@ export interface ISubjectList {
   success?: boolean;
 }
 
+export interface IClassSchedule {
+  end_date: string;
+  end_time: string;
+  id: string;
+  name: string;
+  start_date: string;
+  start_time: string;
+}
+
 export interface IClassResource extends IResource {
   class_resource_permissions: {
-    schedules: any[];
+    schedules: IClassSchedule[];
     student: string;
     teacher: string;
   };

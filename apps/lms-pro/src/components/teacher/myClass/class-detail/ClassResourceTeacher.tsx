@@ -150,6 +150,19 @@ export default function ClassResourceTeacher() {
       ),
     },
     {
+      title: 'Lesson',
+      render: (record: IClassResource) =>
+        record?.class_resource_permissions?.schedules.map((item) => (
+          <div>{item?.name}</div>
+        )),
+    },
+    {
+      title: 'Location',
+      render: (record: IClassResource) => (
+        <Tooltip title={record?.location ?? ''} max_length={8} isLink={false} />
+      ),
+    },
+    {
       title: '',
       render: (record: IClassResource) => {
         const allowDownload = canDownload(record, isTeacher)
