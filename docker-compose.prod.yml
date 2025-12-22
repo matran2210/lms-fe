@@ -4,6 +4,8 @@ services:
   lms-pro:
     image: ${LMS_PRO_IMAGE}
     container_name: lms-pro
+    profiles:
+      - lms-pro
     ports:
       - "3000:3000"
     environment:
@@ -15,6 +17,8 @@ services:
   lms-finhub:
     image: ${LMS_FINHUB_IMAGE}
     container_name: lms-finhub
+    profiles:
+      - lms-finhub
     ports:
       - "3001:3000"
     environment:
