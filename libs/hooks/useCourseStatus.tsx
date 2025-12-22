@@ -10,7 +10,7 @@ import { convertHourToDayLeft, convertLocalTimeToUTC } from '@lms/utils'
 import { round } from 'lodash'
 import { useEffect, useMemo, useState } from 'react'
 
-export const useCourseStatus = (course: ICourse, typeSrc: 'lms-pro' | 'finhub') => {
+export const useCourseStatus = (course: ICourse, typeSrc: 'lms-pro' | 'lms-finhub') => {
   const student = course?.classes?.[0]?.class_user_instances?.[0]
   const classInstance = course?.classes?.[0]
   const currentDate = useMemo(() => new Date(), [])

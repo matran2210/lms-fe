@@ -228,7 +228,7 @@ export enum EAttemptStatus {
 }
 
 export enum AppType {
-  FINHUB = "FINHUB",
+  LMS_FINHUB = "LMS_FINHUB",
   LMS_PRO = "LMS_PRO",
 }
 

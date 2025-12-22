@@ -64,7 +64,7 @@ const tabs = [
     title: 'Students Test Result',
     urlTitle: ProfilePages.STUDENTS_TEST_RESULT,
   },
-   {
+  {
     id: 5,
     title: 'Class Resource',
     urlTitle: ProfilePages.CLASS_RESOURCE,
@@ -159,7 +159,7 @@ const ClassDetail = () => {
       case ProfilePages.STUDENTS_TEST_RESULT:
         return <StudentsTestResult />
       case ProfilePages.CLASS_RESOURCE:
-        return <ClassResourceTeacher/>
+        return <ClassResourceTeacher />
       default:
         return <Overview certificateData={certificateData} />
     }
