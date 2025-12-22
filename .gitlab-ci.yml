@@ -151,7 +151,7 @@ deploy_lms_pro:
         git fetch origin --prune &&
         git reset --hard origin/master-test-build &&
         export LMS_PRO_IMAGE='${LMS_PRO_IMAGE}' &&
-        docker compose -f docker-compose.build_lms_pro pull && 
+        docker compose -f docker-compose.build_lms_pro.yml pull && 
         docker compose -f docker-compose.build_lms_pro.yml up -d lms-pro nginx
       "
   environment: production
