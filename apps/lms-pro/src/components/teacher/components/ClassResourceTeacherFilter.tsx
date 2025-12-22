@@ -1,5 +1,5 @@
-import { ArrowDownIcon, SearchIcon } from '@lms/assets'
-import { CLASS_SUFFIX_TYPE, CLASS_SUFFIX_TYPE_FILTER } from '@lms/core'
+import { SearchIcon } from '@lms/assets'
+import { CLASS_SUFFIX_TYPE_FILTER } from '@lms/core'
 import {
   HookFormTextField,
   SappHookFormSelect,
@@ -64,6 +64,7 @@ const ClassResourceTeacherFilter: React.FC<IProps> = ({ control }) => {
         options={CLASS_SUFFIX_TYPE_FILTER}
       />
       <SappSelectMultipleTeacher
+        maxShownValues={1}
         isSelectCustom
         control={control}
         name="schedule_ids"
