@@ -65,35 +65,49 @@ export const isMobileOrTablet = () => {
 export const getResolution = (bitrate: number) => {
   switch (true) {
     case bitrate <= 135440:
-      return '144p'
+      return "144p";
     case bitrate <= 200792:
-      return '240p'
+      return "240p";
     case bitrate <= 282126:
-      return '360p'
+      return "360p";
     case bitrate <= 400000:
-      return '480p'
+      return "480p";
     case bitrate <= 700000:
-      return '720p'
+      return "720p";
     case bitrate <= 1000000:
-      return '900p'
+      return "900p";
     case bitrate <= 1500000:
-      return '1080p'
+      return "1080p";
     case bitrate <= 2000000:
-      return '1440p'
+      return "1440p";
     case bitrate <= 3000000:
-      return '2k'
+      return "2k";
     case bitrate <= 4000000:
-      return '2k+'
+      return "2k+";
     case bitrate <= 6000000:
-      return '4k'
+      return "4k";
     default:
-      return '4k+'
+      return "4k+";
   }
-}
+};
+
+export const normalizeToArray = (
+  value?: string | string[],
+): string[] | undefined => {
+  if (!value) return undefined;
+  return Array.isArray(value) ? value : [value];
+};
+
+export const normalizeStringQuery = (value: any) => {
+  return typeof value === "string" && value.trim() !== "" ? value : undefined;
+};
+
+export const cleanArray = (arr?: (string | undefined)[]) =>
+  arr?.filter((v): v is string => typeof v === "string");
 
 export * from "./timer";
 export * from "./date";
 export * from "./quiz-test";
 export * from "./ValidateMessage";
 export * from "./tiptap";
-export * from './upload'
+export * from "./upload";

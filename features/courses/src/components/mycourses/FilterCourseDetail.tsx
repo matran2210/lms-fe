@@ -1,24 +1,26 @@
-import { useFeature } from '@lms/contexts'
-import { defaultStatusDetail } from '@lms/core'
-import { SappHookFormSelect, TotalResullt } from '@lms/ui'
-import { getUserPrefix } from '@lms/utils'
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useFeature } from "@lms/contexts";
+import { defaultStatusDetail } from "@lms/core";
+import { SappHookFormSelect, TotalResullt } from "@lms/ui";
+import { getUserPrefix } from "@lms/utils";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 const FilterCourseDetail = ({
   totalResult,
   isTeacher = false,
 }: {
-  totalResult: number
-  isTeacher?: boolean
+  totalResult: number;
+  isTeacher?: boolean;
 }) => {
-      const {router, pageLink} = useFeature();
-  
-  const apiUrl = `${getUserPrefix(isTeacher, pageLink)}/courses/my-course/${router.query.courseId}`
-  const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
+  const { router, pageLink } = useFeature();
 
-  const { control, watch } = useForm()
-  const userSectionLearningStatus = watch('user_section_learning_status')?.value
+  const apiUrl = `${getUserPrefix(isTeacher, pageLink)}/courses/my-course/${router.query.courseId}`;
+  const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
+
+  const { control, watch } = useForm();
+  const userSectionLearningStatus = watch(
+    "user_section_learning_status",
+  )?.value;
 
   useEffect(() => {
     if (!isFirstRender) {
@@ -26,18 +28,18 @@ const FilterCourseDetail = ({
         userSectionLearningStatus !== undefined
           ? `${apiUrl}?user_section_learning_status=${userSectionLearningStatus}`
           : apiUrl,
-      )
+      );
     }
-  }, [watch('user_section_learning_status')])
+  }, [watch("user_section_learning_status")]);
 
   useEffect(() => {
-    setIsFirstRender(false)
-  }, [setIsFirstRender])
+    setIsFirstRender(false);
+  }, [setIsFirstRender]);
 
   // defailtvalue của status
   const statusDetail = defaultStatusDetail?.find(
     (item) => item?.value === router.query.user_section_learning_status,
-  )
+  );
 
   return (
     <div className="flex filter">
@@ -47,14 +49,14 @@ const FilterCourseDetail = ({
           control={control}
           name="user_section_learning_status"
           options={defaultStatusDetail}
-          className={'status-course'}
+          className={"status-course"}
           placeholder="Status"
           isSearchable={false}
-          defaultValue={statusDetail}
+          defaultValue={statusDetail?.value}
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default FilterCourseDetail
+export default FilterCourseDetail;
