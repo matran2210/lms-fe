@@ -113,7 +113,7 @@ const ModalExplanationPackage = ({
     files: { name: string; file_key: string }[];
   }) => {
     try {
-      await uploadApi.downloadFile(data);
+      await testServiceApi.downloadFile(data);
     } catch {}
   };
 

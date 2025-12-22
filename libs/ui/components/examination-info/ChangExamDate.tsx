@@ -82,7 +82,7 @@ const ChangExamDate = ({
         options={options ?? []}
         required
         placeholder="Choose one option"
-        suffixIcon={<ArrowDownIcon className={isMobileView ? 'rotate-[0deg]' : 'rotate-[-90deg]'} />}
+        suffixIcon={<ArrowDownIcon className={!isMobileView ? 'rotate-[0deg]' : 'rotate-[-90deg]'} />}
         onDropdownVisibleChange={() => {
           if (isMobileView) {
             setIsOpenSelectExam(true);

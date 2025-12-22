@@ -4,9 +4,10 @@ import { FieldValues, UseFormGetValues } from 'react-hook-form'
 import { QUESTION_TYPES, TEST_TYPE } from '@lms/core'
 import { Sheet } from '@lms/core'
 import crypto from 'crypto'
+import { TestServiceAPI } from '@pages/api/test-api'
 
 export const getResult = async (currentTabContent: any) => {
-  const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
+  const res = await TestServiceAPI.getQuestionAnswer(currentTabContent.id)
   let corrects = {} as any
   if (
     currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||

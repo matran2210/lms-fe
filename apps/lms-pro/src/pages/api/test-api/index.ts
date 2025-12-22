@@ -1,8 +1,21 @@
 import { IQuestion, IResponse } from '@lms/core'
-import { fetcher } from '@services/requestV2'
+import request, { fetcher, getBaseUrl } from '@services/requestV2'
+import axios, { AxiosResponse, CancelTokenSource } from 'axios'
 
 type QuestionDetailQueryDTO = {
   after_test: boolean
+}
+type PartUploadDto = { part_number: number; upload_url: string }
+
+type PartUploadedDto = { eTag: string; part_number: number }
+
+type StartMultipartResponse = {
+  uploadId: string
+  parts: PartUploadDto[]
+  metadata: {
+    partSize: number
+    numberOfParts: number
+  }
 }
 const BASE_TEST_URL_API = process.env.NEXT_PUBLIC_TEST_API_URL
 export class TestServiceAPI {
@@ -104,8 +117,9 @@ export class TestServiceAPI {
     quiz_id?: string,
     class_user_id?: string,
     cache = false,
+    include_questions = false,
   ): Promise<any> {
-    let uri = `${BASE_TEST_URL_API}/question-topic/${id}?quiz_id=${quiz_id}&include_questions=false`
+    let uri = `${BASE_TEST_URL_API}/question-topic/${id}?quiz_id=${quiz_id}&include_questions=${include_questions}`
     if (class_user_id) {
       uri += `&class_user_id=${class_user_id}`
     }
@@ -150,5 +164,119 @@ export class TestServiceAPI {
         progress: quizAttemptResponse?.data?.progress,
       }
     }
+  }
+
+  // Upload / Download file
+  static async startUpload({
+    content_type,
+    name,
+    size,
+    blob,
+    getProgress,
+    location,
+  }: {
+    content_type: string
+    name: string
+    size: string
+    blob: Blob
+    description: string
+    getProgress: (percent: number) => void
+    location: string
+  }) {
+    const responsePreUpload = await preUpload({
+      content_type,
+      name: name || '',
+      location: location || '',
+      size,
+    })
+    await uploadFile(
+      {
+        upload_url: responsePreUpload.data.upload_url,
+        file_key: responsePreUpload.data.file_key,
+        type: responsePreUpload.data.type as 'SINGLE_PART' | 'MULTIPLE_PART',
+        contentType: content_type,
+        blob,
+      },
+      getProgress,
+    )
+    return responsePreUpload
+  }
+  static downloadFile = async (data: {
+    files: { name: string; file_key: string }[]
+  }) => {
+    try {
+      const responseToken: IResponse<{
+        data: string
+        success: boolean
+      }> = await request(`${BASE_TEST_URL_API}/resource/get-token-download`, {
+        data: data,
+        method: 'POST',
+      })
+      if (responseToken?.data?.success) {
+        const link = document.createElement('a')
+        link.href = `${BASE_TEST_URL_API}/resource/download?token=${responseToken?.data?.data}`
+        link.download = data.files[0].name
+        link.style.display = 'none'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      }
+    } catch (error) {}
+  }
+}
+
+const preUpload = async ({
+  content_type,
+  name,
+  location,
+  size,
+}: {
+  content_type: string
+  name: string
+  location: string | null
+  size: string
+}): Promise<
+  IResponse<{
+    type: string
+    file_key: string
+    upload_url: string
+    name: string
+  }>
+> => {
+  return fetcher(`${BASE_TEST_URL_API}/resource/pre-upload/metadata`, {
+    params: {
+      content_type,
+      name,
+      location,
+      size,
+    },
+  })
+}
+
+const uploadFile = async (
+  file: {
+    contentType: string
+    file_key: string
+    upload_url: string
+    blob: Blob
+    type: 'SINGLE_PART' | 'MULTIPLE_PART'
+  },
+  getProgress?: (percent: number) => void,
+) => {
+  const fileBlob = file.blob
+  if (file.type === 'SINGLE_PART') {
+    const onUploadProgress = (progressEvent: any) => {
+      const percent = Math.round(
+        (progressEvent.loaded * 100) / progressEvent.total,
+      )
+      if (getProgress) {
+        getProgress(percent)
+      }
+    }
+    await axios.put(file.upload_url, fileBlob, {
+      headers: { 'Content-Type': fileBlob.type },
+      onUploadProgress,
+    })
+    return
   }
 }
