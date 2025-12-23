@@ -1,5 +1,5 @@
-import { ArrowDownIcon, SearchIcon } from '@lms/assets'
-import { CLASS_SUFFIX_TYPE, CLASS_SUFFIX_TYPE_FILTER } from '@lms/core'
+import { SearchIcon } from '@lms/assets'
+import { CLASS_SUFFIX_TYPE_FILTER } from '@lms/core'
 import {
   HookFormTextField,
   SappHookFormSelect,
@@ -18,8 +18,9 @@ interface IProps {
 const ClassResourceTeacherFilter: React.FC<IProps> = ({ control }) => {
   const router = useRouter()
   const [search, setSearch] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
   const { classSchedule, hasNextPage, fetchNextPage, isLoading, refetch } =
-    useSelectClassSchedule(router.query.id as string, search)
+    useSelectClassSchedule(router.query.id as string, search, isOpen)
 
   const debouncedSearch = useRef(
     debounce((value: string) => {
@@ -64,6 +65,7 @@ const ClassResourceTeacherFilter: React.FC<IProps> = ({ control }) => {
         options={CLASS_SUFFIX_TYPE_FILTER}
       />
       <SappSelectMultipleTeacher
+        maxShownValues={1}
         isSelectCustom
         control={control}
         name="schedule_ids"
@@ -75,11 +77,14 @@ const ClassResourceTeacherFilter: React.FC<IProps> = ({ control }) => {
             isDisabled?: boolean
           }>
         }
+        onFocus={() => {
+          setIsOpen(true)
+        }}
         isLoading={isLoading}
         className="min-w-36"
         onSearch={handleSearch}
+        onInputChange={(val) => handleSearch(val)}
         onMenuScrollToBottom={() => hasNextPage && fetchNextPage()}
-        onFocus={() => refetch()}
       />
     </div>
   )

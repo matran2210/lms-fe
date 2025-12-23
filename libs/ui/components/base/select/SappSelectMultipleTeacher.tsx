@@ -1,21 +1,31 @@
-import { OptionType } from "@lms/core";
 import clsx from "clsx";
-import { memo, ReactNode, useCallback } from "react";
+import React, { memo, ReactNode, useMemo } from "react";
 import { Control, Controller } from "react-hook-form";
-import Select, { MultiValue } from "react-select";
+import Select, {
+  components,
+  GroupBase,
+  MultiValue,
+  ValueContainerProps,
+} from "react-select";
 import { ErrorMessage } from "../../common";
+
+export interface SelectOption {
+  label: string;
+  value: string;
+  isDisabled?: boolean;
+}
 
 interface IProps {
   name: string;
   control: Control<any>;
   required?: boolean;
   className?: string;
-  options?: Array<{ label: string; value: string; isDisabled?: boolean }>;
+  options?: SelectOption[];
   children?: ReactNode;
   placeholder?: string;
-  onChange?: (select: OptionType[]) => void;
+  onChange?: (select: SelectOption[]) => void;
   isDisabled?: boolean;
-  defaultValue?: OptionType[] | null;
+  defaultValue?: string[];
   label?: string;
   labelClass?: string;
   isSearchable?: boolean;
@@ -27,86 +37,111 @@ interface IProps {
   isLoading?: boolean;
   isSelectCustom?: boolean;
   onSearch?: (value?: string) => void;
+  maxShownValues?: number;
+  onInputChange: (e: string) => void
 }
 
-const SappSelectMultipleTeacher = ({
-  control,
-  name,
-  className,
-  isDisabled,
-  defaultValue = [],
-  options,
-  placeholder,
-  onChange: onSelectChange,
-  labelClass = "text-base block font-medium mb-2",
-  label,
-  required,
-  isSearchable = true,
-  onMenuScrollToBottom,
-  onFocus,
-  isClearable = true,
-  onMenuClose,
-  onBlur,
-  isLoading = false,
-  isSelectCustom = false,
-  onSearch,
-}: IProps) => {
-  const handleChange = useCallback(
-    (selectedOptions: MultiValue<OptionType>) => {
-      onSelectChange?.(selectedOptions as OptionType[]);
-    },
-    [onSelectChange],
-  );
+const CustomValueContainer = ({
+  maxShownValues,
+  ...props
+}: ValueContainerProps<SelectOption, true, GroupBase<SelectOption>> & {
+  maxShownValues: number;
+}) => {
+  const { children, getValue, hasValue } = props;
+  const count = getValue().length;
 
-  const handleMenuOpen = useCallback(() => {
-    onSearch?.();
-  }, [onSearch]);
+  if (!maxShownValues || !hasValue || count <= maxShownValues) {
+    return (
+      <components.ValueContainer {...props}>
+        {children}
+      </components.ValueContainer>
+    );
+  }
+
+  const childrenArray = React.Children.toArray(children);
+  const input = childrenArray[childrenArray.length - 1];
+
+  return (
+    <components.ValueContainer {...props}>
+      <div className="flex items-center w-full overflow-hidden">
+        <span className="whitespace-nowrap bg-[#404041] px-2 py-0.5 rounded text-sm font-medium mr-2 border text-white">
+          {count} mục đã chọn
+        </span>
+        {input}
+      </div>
+    </components.ValueContainer>
+  );
+};
+
+const SappSelectMultipleTeacher = (props: IProps) => {
+  const {
+    onInputChange,
+    maxShownValues = 2,
+    onMenuScrollToBottom,
+    placeholder,
+    onFocus,
+    onMenuClose, 
+    name,
+    isSelectCustom
+  } = props;
+
+  const CustomComponents = useMemo(
+    () => ({
+      ValueContainer: (p: any) => (
+        <CustomValueContainer {...p} maxShownValues={maxShownValues} />
+      ),
+      IndicatorSeparator: () => null,
+    }),
+    [maxShownValues],
+  );
 
   return (
     <>
-      {label && (
-        <label className={labelClass}>
-          <span className={required ? "required" : ""}>{label}</span>
-        </label>
-      )}
-
       <Controller
         name={name}
-        control={control}
-        defaultValue={defaultValue}
-        render={({ field, fieldState: { error } }) => (
-          <>
-            <Select
-              {...field}
-              isMulti
-              options={options}
-              value={field.value || []}
-              className={clsx(
-                "select-single",
-                isSelectCustom && "select-single-custom",
-                className,
-              )}
-              classNamePrefix="select"
-              instanceId={`multi-select-${name}`}
-              placeholder={placeholder}
-              isDisabled={isDisabled}
-              isClearable={isClearable}
-              isSearchable={isSearchable}
-              isLoading={isLoading}
-              onChange={(selected) => {
-                field.onChange(selected);
-                handleChange(selected);
-              }}
-              onMenuOpen={handleMenuOpen}
-              onMenuClose={onMenuClose}
-              onMenuScrollToBottom={onMenuScrollToBottom}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              onInputChange={onSearch}
-            />
-            <ErrorMessage>{error?.message}</ErrorMessage>
-          </>
-        )}
+        control={props.control}
+        render={({
+          field: { onChange: formChange, onBlur: formBlur, value, ref },
+          fieldState: { error },
+        }) => {
+          const selectedOptions =
+            props.options?.filter((opt) => (value || []).includes(opt.value)) ||
+            [];
+
+          return (
+            <>
+              <Select<SelectOption, true>
+                ref={ref}
+                hideSelectedOptions={false}
+                isMulti
+                options={props.options}
+                value={selectedOptions}
+                components={CustomComponents}
+                onInputChange={onInputChange}
+                onMenuScrollToBottom={onMenuScrollToBottom}
+                className={clsx("select-single", isSelectCustom && "select-single-custom", props.className)}
+                classNamePrefix="select"
+                onFocus={onFocus}
+                closeMenuOnSelect={false} 
+                blurInputOnSelect={false} 
+                onMenuClose={onMenuClose}
+                onMenuOpen={onFocus}
+                onChange={(selected) => {
+                  const ids = (selected as MultiValue<SelectOption>).map(
+                    (item) => item.value,
+                  );
+                  formChange(ids);
+                  props.onChange?.(selected as SelectOption[]);
+                }}
+                onBlur={() => {
+                  formBlur();
+                  props.onBlur?.();
+                }}
+              />
+              <ErrorMessage>{error?.message}</ErrorMessage>
+            </>
+          );
+        }}
       />
     </>
   );
