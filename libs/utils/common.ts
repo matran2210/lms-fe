@@ -1,12 +1,17 @@
-
 import DOMPurify from "dompurify";
 import { isEmpty, isNull, isUndefined } from "lodash";
 import { useQuery } from "react-query";
 import dayjs, { Dayjs } from "dayjs";
-import { DATE_FORMAT, DAYS_IN_WEEK, GRADE_STATUS } from '@lms/core';
+import { DATE_FORMAT, DAYS_IN_WEEK, GRADE_STATUS } from "@lms/core";
 import weekday from "dayjs/plugin/weekday";
 import utc from "dayjs/plugin/utc";
-import { deserializeHighlights, doHighlight, optionsImpl, removeHighlights, serializeHighlights } from "@funktechno/texthighlighter/lib";
+import {
+  deserializeHighlights,
+  doHighlight,
+  optionsImpl,
+  removeHighlights,
+  serializeHighlights,
+} from "@funktechno/texthighlighter/lib";
 
 dayjs.extend(utc);
 dayjs.extend(weekday);
@@ -682,4 +687,20 @@ export const getGradingStatusLabel = (status: string) => {
     default:
       return "Awaiting Grading";
   }
+};
+
+export const handleMultipleCorrectAnswer = (
+  dragDropAnswers: any,
+  answers: any[],
+) => {
+  answers?.forEach((item: any) => {
+    dragDropAnswers?.forEach((correctItem: any) => {
+      if (correctItem?.answer_ids?.includes(item?.id)) {
+        item.answer_position = correctItem?.answer_position;
+        item.is_correct = true;
+      }
+    });
+  });
+
+  return answers;
 };

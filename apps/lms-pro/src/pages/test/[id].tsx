@@ -311,6 +311,7 @@ const TestDetail = () => {
             solution,
             is_self_reflection,
             requirements,
+            drag_drop_answers,
           } = answerSubmitted?.[0]
 
           // Handle different question types
@@ -364,6 +365,7 @@ const TestDetail = () => {
                 corrects: (answers || []).sort(
                   (a: any, b: any) => a?.answer_position - b?.answer_position,
                 ),
+                dragDropAnswers: drag_drop_answers || [],
               },
               solution,
               isSelfReflection: is_self_reflection || false,
