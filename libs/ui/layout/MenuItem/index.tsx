@@ -15,6 +15,7 @@ import {
   NotificationAnimation,
   ResourceAnimation,
   TestQuizListAnimation,
+  OpenBookAnimation,
 } from "@lms/assets";
 import {
   activeNotesList,
@@ -205,7 +206,9 @@ export default function MenuItem({
                   ? `/courses/my-course/${router.query.courseId || router.query.id}/dashboard`
                   : name === TitleSidebar.COURSE_CONTENT
                     ? `/courses/my-course/${router.query.courseId || router.query.id}`
-                    : url;
+                    : name === TitleSidebar.CLASS_RESOURCE
+                      ? `/courses/my-course/${router.query.courseId || router.query.id}/class-resource`
+                      : url;
 
             router.push({ pathname: targetUrl });
           }
@@ -381,6 +384,15 @@ export default function MenuItem({
               </span>
             )}
           </div>
+        );
+      case "class-resource":
+        return (
+          <Lottie
+            animationData={OpenBookAnimation}
+            loop
+            autoplay
+            className={animationClass}
+          />
         );
 
       default:
@@ -585,6 +597,7 @@ export default function MenuItem({
             name === TitleSidebar.RESULTS ||
             name === TitleSidebar.EXAM ||
             name === TitleSidebar.DASHBOARD ||
+            name === TitleSidebar.CLASS_RESOURCE ||
             Icon === "stats-chart-sharp" ||
             Icon === "profile-detail")
             ? "hidden"
@@ -628,9 +641,11 @@ export default function MenuItem({
                   ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/results`
                   : url === pageLink.DASHBOARD
                     ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/dashboard`
-                    : name === TitleSidebar.COURSE_CONTENT
-                      ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}`
-                      : url
+                    : name === TitleSidebar.CLASS_RESOURCE
+                      ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/class-resource`
+                      : name === TitleSidebar.COURSE_CONTENT
+                        ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}`
+                        : url
               }
               // passHref
             >

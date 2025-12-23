@@ -224,10 +224,11 @@ export enum EAttemptStatus {
   IN_REVIEW = "IN_REVIEW",
   FINISHED_GRADING = "FINISHED_GRADING",
   FINISHED = "FINISHED",
+  EXPIRED = 'EXPIRED'
 }
 
 export enum AppType {
-  FINHUB = "FINHUB",
+  LMS_FINHUB = "LMS_FINHUB",
   LMS_PRO = "LMS_PRO",
 }
 

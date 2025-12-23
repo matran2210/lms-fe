@@ -29,10 +29,12 @@ const ChangExamDate = ({
 }: IProps) => {
   const { control, reset, setValue, clearErrors } = useFormContext();
   const { classApi } = useFeature();
-  const { exams, hasNextPage, fetchNextPage, refetch } = useSelectExams({ api: {
+  const { exams, refetch } = useSelectExams({
+    api: {
       getExams: classApi.getExams
     },
-    courseId: classId});
+    courseId: classId
+  });
   const { isMobileView } = useTailwindBreakpoint();
 
   const options = exams?.data
@@ -80,7 +82,7 @@ const ChangExamDate = ({
         options={options ?? []}
         required
         placeholder="Choose one option"
-        suffixIcon={<ArrowDownIcon className="rotate-[-90deg]" />}
+        suffixIcon={<ArrowDownIcon className={!isMobileView ? 'rotate-[0deg]' : 'rotate-[-90deg]'} />}
         onDropdownVisibleChange={() => {
           if (isMobileView) {
             setIsOpenSelectExam(true);

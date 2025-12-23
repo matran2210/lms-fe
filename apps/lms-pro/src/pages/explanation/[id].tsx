@@ -1,7 +1,6 @@
-import { AltArrowLeft, MenuDotsIcon, CloseIconV2 } from '@lms/assets'
+import { AltArrowLeft, CloseIconV2, MenuDotsIcon } from '@lms/assets'
 import { UserType } from '@lms/contexts'
 import {
-  GRADING_METHOD,
   IAtempt,
   IRequirement,
   LAYOUT,
@@ -9,13 +8,14 @@ import {
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
 import { FullScreenLayout, SappLoadingGlobal, Tooltip } from '@lms/ui'
+import { TestServiceAPI } from '@pages/api/test-api'
 import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UploadAPI } from 'src/pages/api/upload'
 import { CoursesAPI } from '../api/courses'
-import { PageLink } from 'src/constants/routers'
 
 const Explanation = () => {
   const router = useRouter()
@@ -56,7 +56,7 @@ const Explanation = () => {
       // const quizAttempts = axiosInstance.get('')
       // const selectedResponseAnswers = data.data.selectedResponseAnswers
       const resultResponse = await CoursesAPI.getQuizAttempt(id)
-      const topicDescription = await CoursesAPI.getTopicDescription(
+      const topicDescription = await TestServiceAPI.getTopicDescription(
         resultResponse?.data?.answer?.question?.question_topic_id,
         resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
       ) // const newActiveQuestion = { ...selectedResponseAnswers[0].question }
@@ -113,7 +113,7 @@ const Explanation = () => {
     files: { name: string; file_key: string }[]
   }) => {
     try {
-      await UploadAPI.downloadFile(data)
+      await TestServiceAPI.downloadFile(data)
     } catch (error) {}
   }
 

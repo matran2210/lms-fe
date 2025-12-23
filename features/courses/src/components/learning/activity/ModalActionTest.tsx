@@ -31,7 +31,7 @@ const ModalActionTest = ({
   data,
   class_user_id,
 }: IProps) => {
-  const {router, courseApi, classApi } = useFeature();
+  const {router, courseApi, classApi, testServiceApi } = useFeature();
     const attempt = data?.quiz?.attempts?.[0]
   const isSubmitted =
     attempt && attempt?.status === "SUBMITTED";
@@ -61,6 +61,7 @@ const ModalActionTest = ({
   }>();
   const [remainingTime, setRemainingTime] = useState<number>();
   const remainingTimeLastAttempt = useRef<number | null>(null);
+  const [isCallSubmit, setIsCallSubmit] = useState(false)
 
   const quiz = data?.quiz;
   const isLimited = !!quiz.is_limited;
@@ -200,16 +201,27 @@ const ModalActionTest = ({
     remainingTimeLastAttempt?.current != null &&
     remainingTimeLastAttempt.current <= 0;
 
-  const handleSubmitNow = async () => {
-    await courseApi.submitAllQuestion(attempt?.id as string);
-    handleRedirectResult();
+  useEffect(() => {
+    if (
+      remainingTimeLastAttempt?.current != null &&
+      remainingTimeLastAttempt.current <= 0
+    ) {
+      setIsCallSubmit(true)
+    }
+  }, [remainingTimeLastAttempt?.current])
+  const handleSubmitNow = async (isRedirect = true) => {
+    const res = await testServiceApi.submitAllQuestion(attempt?.id as string);
+    if (!isRedirect && res?.success && attempt && attempt?.status) {
+      attempt.status = "SUBMITTED";
+    }
+    isRedirect && handleRedirectResult();
   };
 
   useEffect(() => {
-    if (isTimeOut) {
-      handleSubmitNow();
+    if (isCallSubmit) {
+      handleSubmitNow(false);
     }
-  }, [isTimeOut]);
+  }, [isCallSubmit]);
 
   const handleCheckStatus = (
     attempt: { status: string; score: number },
@@ -418,7 +430,7 @@ const ModalActionTest = ({
                   title="Submit now"
                   size="medium"
                   full
-                  onClick={handleSubmitNow}
+                  onClick={() => handleSubmitNow()}
                 />
               </>
             );
@@ -448,7 +460,7 @@ const ModalActionTest = ({
               title="Submit now"
               size="medium"
               full
-              onClick={handleSubmitNow}
+              onClick={() => handleSubmitNow()}
             />
             <ButtonText
               title="Start a new attempt"
@@ -499,7 +511,7 @@ const ModalActionTest = ({
             title="Submit now"
             size="medium"
             full
-            onClick={handleSubmitNow}
+            onClick={() => handleSubmitNow()}
           />
           <ButtonText
             title="Start a new attempt"

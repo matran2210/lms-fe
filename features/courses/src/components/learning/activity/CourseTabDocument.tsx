@@ -181,7 +181,7 @@ const CourseTabDocument = ({
               classNames={{ body: '!py-1 !shadow-medium' }}
               title={tab?.name?.split(' ')?.length > 5 ? tab?.name : undefined}
             >
-              {truncateBySpace(tab?.name, 5)?.toLowerCase()}
+              {truncateBySpace(tab?.name, 5)}
             </Tooltip>
           </div>
         ),
@@ -192,7 +192,7 @@ const CourseTabDocument = ({
                 <div>
                   <div
                     className={clsx(
-                      'tab-content mt-6 flex flex-col gap-4 overflow-x-auto overflow-y-hidden md:gap-6',
+                      'tab-content mt-6 flex flex-col gap-4 overflow-x-hidden overflow-y-hidden md:gap-6',
                       { '!mt-0': focusOnlyQuiz.open },
                     )}
                   >

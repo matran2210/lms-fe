@@ -229,7 +229,6 @@ export const convertHourToDayLeft = (hours: number) => {
   return days
 }
 
-
 export const isAppleDevice = () => {
   return /Mac|iPod|iPhone|iPad/.test(navigator.platform)
 }
@@ -261,9 +260,6 @@ export const getSelectOptions = (
     .filter((item) => item[key]) // lọc item có key
     .uniqBy(key) // loại trùng theo key
     .value()
-}
-export const isPdfFile = (fileName: string) => {
-  return fileName.toLowerCase().endsWith('.pdf')
 }
 
 /**

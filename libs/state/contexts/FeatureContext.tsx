@@ -16,6 +16,7 @@ import {
   IEventTestAPI,
   INotificationAPI,
   IQuestionAPI,
+  ITestServiceAPI,
   IUploadAPI,
   MenuItem,
 } from "@lms/core";
@@ -30,7 +31,6 @@ interface FeatureContextProps {
   classApi: IClassAPI;
   activityApi: IActivityAPI;
   courseActivityApi: ICourseActivityAPI;
-  caseStudyApi: ICaseStudyAPI;
   entranceTestApi?: IEntranceTestAPI;
   eventTestApi?: IEventTestAPI;
   calendarApi?: ICalendarAPI;
@@ -61,6 +61,8 @@ interface FeatureContextProps {
   menuBottom: MenuItem[];
   router: any;
   fetcher: (url: string, config?: AxiosRequestConfig<any>) => Promise<any>
+  videoUrl: string;
+  testServiceApi: ITestServiceAPI;
 }
 
 const FeatureContext = createContext<FeatureContextProps>(

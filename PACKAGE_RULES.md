@@ -74,7 +74,7 @@ pnpm remove <package> -w
 ## 2.2. Gỡ trong 1 app/lib
 
 ```
-pnpm remove <package> --filter ./apps/finhub
+pnpm remove <package> --filter ./apps/lms-finhub
 ```
 
 ---
@@ -122,7 +122,7 @@ pnpm update <package> --filter ./apps/lms-pro
 
 ```
 apps/lms-pro: axios 1.6.2
-apps/finhub: axios 1.7.0
+apps/lms-finhub: axios 1.7.0
 libs/api: axios 1.6.0
 ```
 
@@ -147,7 +147,7 @@ Cấu trúc đúng:
 ```
 /apps
   /lms-pro
-  /finhub
+  /lms-finhub
 /libs
   /ui
   /utils

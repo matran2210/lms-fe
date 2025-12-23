@@ -52,7 +52,7 @@ const ModalUploadFile = ({
   maxCount,
   location,
 }: IModalUploadProps) => {
-  const {uploadApi} = useFeature()
+  const {testServiceApi} = useFeature()
   const sourceRef = useRef<CancelTokenSource>();
   const isCancel = useRef<boolean>();
   const [uploadFile, setUploadFile] = useState<UploadFile[] | undefined>();
@@ -121,7 +121,7 @@ const ModalUploadFile = ({
         }
         try {
           getProgress(7, u.uid);
-          const response = await uploadApi.startUpload({
+          const response = await testServiceApi.startUpload({
             content_type: u?.originFileObj?.type,
             blob: u?.originFileObj,
             size: u?.originFileObj.size?.toString() || "",

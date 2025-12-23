@@ -41,8 +41,8 @@ const EventTestList = ({
       case "CFA":
         return (
           <ContentTestCongratution
-            text1="Your results for Round 2 will"
-            text2="be emailed to you on June 28, 2025"
+            text1="Your results will"
+            text2="be emailed to you on December 19 - 22, 2025"
             text3="Please remember to check your inbox to ensure you don’t miss the update."
           />
         );
@@ -56,21 +56,6 @@ const EventTestList = ({
         );
     }
   };
-
-  // const resultDate = (category: string) => {
-  //   switch (category) {
-  //     case 'ACCA':
-  //       return '04/10/2024'
-
-  //     case 'CFA':
-  //       return '28/06/2025'
-
-  //     case 'CMA':
-  //       return '30/09/2025'
-  //     default:
-  //       break
-  //   }
-  // }
 
   return (
     <>
