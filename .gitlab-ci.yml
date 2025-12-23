@@ -32,6 +32,16 @@ deploy_staging_finhub:
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_FINHUB
     - vercel deploy --prod --token=$VERCEL_TOKEN
 
+# Job deploy staging cho Lms-zoom
+deploy_staging_zoom:
+  extends: .deploy_staging_template
+  only: 
+    - staging
+  script:
+    - npm install -g vercel
+    - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_ZOOM
+    - vercel deploy --prod --token=$VERCEL_TOKEN
+
 # =================== PRODUCTION ZONE =========================
 # Prod environment
 stages:
