@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { IEvent } from 'sapp-common-package/dist/types'
+import { IEvent } from '@sapp-fe/sapp-common-package/dist/types'
 import { SappIcon } from '@lms/ui'
 import { EVENT_TYPES, EVENT_TYPES_LABEL, POPUP_EVENT_DETAILS } from '@lms/core'
 import clsx from 'clsx'
