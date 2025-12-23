@@ -2,7 +2,11 @@ import { ClassKey } from '@lms/core'
 import { ClassAPI } from '@pages/api/class'
 import { useInfiniteQuery } from 'react-query' // Import useInfiniteQuery
 
-const useSelectClassSchedule = (id?: string, search_key?: string) => {
+const useSelectClassSchedule = (
+  id?: string,
+  search_key?: string,
+  enabled = false,
+) => {
   const fetchClasses = async (
     page_index: number,
     page_size: number,
@@ -33,7 +37,7 @@ const useSelectClassSchedule = (id?: string, search_key?: string) => {
       const { page_index, total_pages } = lastPage.metadata
       return page_index < total_pages ? page_index + 1 : undefined
     },
-    enabled: true,
+    enabled: enabled && !!id,
     refetchOnWindowFocus: false,
   })
 
