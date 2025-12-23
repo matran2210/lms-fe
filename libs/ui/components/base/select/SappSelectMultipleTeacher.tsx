@@ -38,7 +38,7 @@ interface IProps {
   isSelectCustom?: boolean;
   onSearch?: (value?: string) => void;
   maxShownValues?: number;
-  onInputChange: (e: string) => void
+  onInputChange: (e: string) => void;
 }
 
 const CustomValueContainer = ({
@@ -80,9 +80,9 @@ const SappSelectMultipleTeacher = (props: IProps) => {
     onMenuScrollToBottom,
     placeholder,
     onFocus,
-    onMenuClose, 
+    onMenuClose,
     name,
-    isSelectCustom
+    isSelectCustom,
   } = props;
 
   const CustomComponents = useMemo(
@@ -111,6 +111,7 @@ const SappSelectMultipleTeacher = (props: IProps) => {
           return (
             <>
               <Select<SelectOption, true>
+                placeholder={placeholder}
                 ref={ref}
                 hideSelectedOptions={false}
                 isMulti
@@ -119,11 +120,15 @@ const SappSelectMultipleTeacher = (props: IProps) => {
                 components={CustomComponents}
                 onInputChange={onInputChange}
                 onMenuScrollToBottom={onMenuScrollToBottom}
-                className={clsx("select-single", isSelectCustom && "select-single-custom", props.className)}
+                className={clsx(
+                  "select-single",
+                  isSelectCustom && "select-single-custom",
+                  props.className,
+                )}
                 classNamePrefix="select"
                 onFocus={onFocus}
-                closeMenuOnSelect={false} 
-                blurInputOnSelect={false} 
+                closeMenuOnSelect={false}
+                blurInputOnSelect={false}
                 onMenuClose={onMenuClose}
                 onMenuOpen={onFocus}
                 onChange={(selected) => {
