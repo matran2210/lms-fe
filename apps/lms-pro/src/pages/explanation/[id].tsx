@@ -9,7 +9,7 @@ import {
 } from '@lms/core'
 import { FullScreenLayout, SappLoadingGlobal, Tooltip } from '@lms/ui'
 import { TestServiceAPI } from '@pages/api/test-api'
-import { ExplanationPackageV2 } from 'explanation-package'
+import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routers'

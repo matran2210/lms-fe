@@ -19,8 +19,8 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
-import { SAPPCalendarV2 } from 'sapp-common-package'
-import { IEvent, IFilter } from 'sapp-common-package/dist/types'
+import { SAPPCalendarV2 } from '@sapp-fe/sapp-common-package'
+import { IEvent, IFilter } from '@sapp-fe/sapp-common-package/dist/types'
 import { PageLink } from 'src/constants/routers'
 
 const Page = () => {

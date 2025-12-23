@@ -38,7 +38,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import SappNotificationComponent from "sapp-notification";
+import SappNotificationComponent from "@sapp-fe/sapp-notification";
 import { v4 as uuidv4 } from "uuid";
 import MenuItemsList from "../MenuItemsList";
 

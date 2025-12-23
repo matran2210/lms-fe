@@ -1,4 +1,13 @@
-import { activeNotesList3Level, getCountUnRead, loadMoreNotification, openCalculator3Level, pushNotes3Level, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
+import {
+  activeNotesList3Level,
+  getCountUnRead,
+  loadMoreNotification,
+  openCalculator3Level,
+  pushNotes3Level,
+  useAppDispatch,
+  useAppSelector,
+  userReducer,
+} from '@lms/contexts'
 import { MenuItem as MenuItemType, TitleSidebar } from '@lms/core'
 import { useNotification } from '@lms/hooks'
 import { trackGAEvent } from '@lms/utils'
@@ -10,7 +19,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
-import SappNotificationComponent from 'sapp-notification'
+import SappNotificationComponent from '@sapp-fe/sapp-notification'
 import { PageLink } from 'src/constants/routes'
 import { v4 as uuidv4 } from 'uuid'
 import ExpandIcon from '../ExpandIcon'
@@ -212,12 +221,11 @@ export default function MenuItem({
                 api: NotificationAPI,
                 params: {
                   page_index: page_index + 1,
-                page_size,
-                ...(selectedTab === 2 && {
-                  is_read: false,
-                }),
-                }
-                
+                  page_size,
+                  ...(selectedTab === 2 && {
+                    is_read: false,
+                  }),
+                },
               }),
             )
             await countNotificationsUnRead()
@@ -277,7 +285,7 @@ export default function MenuItem({
                   src={
                     user.detail.avatar?.['40x40'] ||
                     user.detail.avatar?.['ORIGIN'] ||
-                      BlankAvatarImage
+                    BlankAvatarImage
                   }
                   alt="avatar"
                   className="h-10 w-10 rounded-full object-cover"

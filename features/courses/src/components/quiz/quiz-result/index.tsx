@@ -1,19 +1,12 @@
 import { CloseModalIcon } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
-import {
-  ActivityInfo,
-  LAYOUT
-} from "@lms/core";
+import { ActivityInfo, LAYOUT } from "@lms/core";
 import { FullScreenLayout, Layout } from "@lms/ui";
-import { QuizResultComponent } from "quiz-result-package";
-import { IQuestionResultResponse } from "quiz-result-package/dist/type";
+import { QuizResultComponent } from "@sapp-fe/quiz-result-package";
+import { IQuestionResultResponse } from "@sapp-fe/quiz-result-package/dist/type";
 import { useEffect, useState } from "react";
 
-const QuizResults = ({
-  isTeacher = false,
-}: {
-  isTeacher?: boolean;
-}) => {
+const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
   const { router, pageLink, courseApi } = useFeature();
 
   const [activityInfo, setActivitiInfo] = useState<ActivityInfo | null>(null);
@@ -102,7 +95,6 @@ const QuizResults = ({
           title="Quiz Result"
           showSidebar={false}
           className="bg-gray-4"
-        
         >
           <div className="m-auto">
             {modalResult?.questions?.data?.length > 0 && (
