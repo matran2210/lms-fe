@@ -56,7 +56,7 @@ export interface IResponseSchedule {
   event_type: 'TEACHING' | 'BUSY' | 'HOLIDAY' | 'OTHER' | 'LIVE_ONLINE'
   classroom_address: string | null
   classroom_name: string | null
-  meeting_link: string | null
+  link_meeting: string | null
   repeat?: string
   recurring_pattern: IRecurringSchedule
 }
