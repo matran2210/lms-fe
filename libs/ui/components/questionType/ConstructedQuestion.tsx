@@ -90,7 +90,7 @@ const EssayQuestionPreview = ({
   storageKey,
   
 }: IPreviewProp) => {
-  const { uploadApi, router } = useFeature();
+  const { testServiceApi, router } = useFeature();
 
   const dispatch = useAppDispatch();
   const refSheet = useRef(null) as any;
@@ -355,7 +355,7 @@ const EssayQuestionPreview = ({
     try {
       setUnsavedChanges && setUnsavedChanges(false);
       dispatch(disableUnsavedChange());
-      await uploadApi.downloadFile(data);
+      await testServiceApi.downloadFile(data);
     } catch (error) {
       // do nothing
     } finally {

@@ -16,7 +16,13 @@ import {
 } from '@lms/core'
 import { CoursesList, FilterCourse, Heading } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { Layout, PopupStep, PopupWelcome, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
+import {
+  Layout,
+  PopupStep,
+  PopupWelcome,
+  SappLoadingGlobal,
+  SearchWithMenuToggle,
+} from '@lms/ui'
 import Aos from 'aos'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
@@ -26,7 +32,11 @@ import { useInfiniteQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from '../api/courses'
-import { TourGuideCoursesAnimation, TourGuideCourseTabAnimation, TourGuideFilterAnimation } from '@lms/assets'
+import {
+  TourGuideCoursesAnimation,
+  TourGuideCourseTabAnimation,
+  TourGuideFilterAnimation,
+} from '@lms/assets'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -61,6 +71,7 @@ const MyCourse = () => {
 
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
   const observer = useRef<IntersectionObserver>()
+  const { isMobileView } = useTailwindBreakpoint()
 
   /**
    * @description handle open and close sidebar
@@ -234,44 +245,58 @@ const MyCourse = () => {
           redirectLink={PageLink.COURSES}
           appType={AppType.LMS_PRO}
         />
-
-        <div
-          className={
-            'mt-2 flex justify-center rounded-md bg-white shadow-medium md:mt-4 md:justify-between lg:rounded-xl'
-          }
-          data-aos={!guideStatus ? ANIMATION.DATA_AOS : ''}
-        >
-          <div
-            className={`relative flex items-center rounded-md bg-white p-3 md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 4 ? 'z-50' : ''}`}
-          >
-            <Heading
-              greeting="Welcome to"
-              title={'My Course'}
-              showShadow={false}
-              showWavingHand
-              des={
-                <span>
-                  Here you can find all your courses, each packed with{' '}
-                  <strong>
-                    expert lessons, study materials, and interactive exercises
-                  </strong>
-                  . Select a course to start learning!
-                </span>
-              }
-            />
+        {isMobileView ? (
+          <>
             {guideStatus && guideStep === 4 && (
               <PopupStep
                 content={UserGuide.CONTENT_STEP_4}
-                className="left-0 top-full mt-5"
                 index={4}
                 total={6}
                 isEnd={isEndGuide}
                 title="Welcome"
                 handleCancel={closeUserGuide}
+                className="top-[55%]"
               />
             )}
-          </div>
+          </>
+        ) : (
           <div
+            className="mt-2 flex justify-center rounded-md bg-white shadow-medium md:mt-4 md:justify-between lg:rounded-xl"
+            data-aos={!guideStatus ? ANIMATION.DATA_AOS : ''}
+          >
+            <div
+              className={`relative flex items-center rounded-md bg-white p-3 md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 4 ? 'z-50' : ''}`}
+            >
+              <Heading
+                greeting="Welcome to"
+                title={'My Course'}
+                showShadow={false}
+                showWavingHand
+                des={
+                  <span>
+                    Here you can find all your courses, each packed with{' '}
+                    <strong>
+                      expert lessons, study materials, and interactive exercises
+                    </strong>
+                    . Select a course to start learning!
+                  </span>
+                }
+              />
+
+              {guideStatus && guideStep === 4 && (
+                <PopupStep
+                  content={UserGuide.CONTENT_STEP_4}
+                  className="left-[10%] top-full mt-14 sm:left-0 sm:mt-5"
+                  index={4}
+                  total={6}
+                  isEnd={isEndGuide}
+                  title="Welcome"
+                  handleCancel={closeUserGuide}
+                />
+              )}
+            </div>
+
+            {/* <div
             className={`hidden items-center rounded-md bg-white p-3 md:flex md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 5 ? ' z-50 h-auto' : ''}`}
             data-aos={ANIMATION.DATA_AOS}
           >
@@ -287,8 +312,10 @@ const MyCourse = () => {
                 handleCancel={closeUserGuide}
               />
             )}
+          </div> */}
           </div>
-        </div>
+        )}
+
         <div
           className={clsx(
             'mx-auto mb-6 mt-8 flex items-center justify-between lg:mt-11',
@@ -306,7 +333,7 @@ const MyCourse = () => {
             {guideStatus && guideStep === 6 && (
               <PopupStep
                 content={UserGuide.CONTENT_STEP_6}
-                className="right-1/2 top-full mt-5"
+                className="right-0 top-full mt-[65px]"
                 index={6}
                 total={6}
                 titleButtonNext="Finish"
@@ -335,7 +362,7 @@ const MyCourse = () => {
           {guideStatus && guideStep === 5 && (
             <PopupStep
               content={UserGuide.CONTENT_STEP_5}
-              className="left-[50%] top-[20px] mt-6 xl:left-[33.5%]"
+              className="left-0 top-[20px] mt-6 xl:left-[33.5%]"
               index={5}
               total={6}
               title="Courses"
@@ -344,7 +371,7 @@ const MyCourse = () => {
           )}
         </div>
 
-        {guideStatus && guideStep == 0 && (
+        {guideStatus && guideStep === 0 && (
           <PopupWelcome confirmDialogOverLayRef={confirmDialogOverLayRef} />
         )}
         {guideStatus && (

@@ -30,7 +30,6 @@ import { QuitTestModal } from '@lms/feature-test'
 import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
 import { useMousePosition } from '@lms/hooks'
 import {
-  Calculator,
   EditorReader,
   FileViewer,
   FullScreenLayout,
@@ -49,7 +48,7 @@ import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight } from '@lms/utils'
-import { CaseStudyAPI } from '@pages/api/case-study'
+import { TestServiceAPI } from '@pages/api/test-api'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
@@ -58,8 +57,6 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { TestAPI } from 'src/pages/api/test'
 import LimitQuizModal from 'src/pages/test/limitQuizModal'
 
 const CaseStudyDetailTeacher = () => {
@@ -370,7 +367,7 @@ const CaseStudyDetailTeacher = () => {
     if (router.query.id) {
       dispatch(
         getTopicsCaseStudy({
-          api: CaseStudyAPI,
+          api: TestServiceAPI,
           id: router.query.id,
           quiz_id: router.query.quiz_id,
         }),
@@ -383,7 +380,7 @@ const CaseStudyDetailTeacher = () => {
     class_user_id: string,
   ) {
     try {
-      const res = await TestAPI.createTopicAttempt(
+      const res = await TestServiceAPI.createTopicAttempt(
         quiz_id,
         id,
         class_user_id,
@@ -753,12 +750,15 @@ const CaseStudyDetailTeacher = () => {
     const total_attempt_time = Math.ceil((Date.now() - startTime) / 1000)
     if (quizAttempId) {
       try {
-        const res = await CoursesAPI.submitCaseStudy(quizAttempId as string, {
-          answers: answers,
-          quiz_position_mapping: quiz_position_mapping,
-          total_attempt_time: total_attempt_time,
-          topic_scratch_pad: scratchPadValues.value,
-        })
+        const res = await TestServiceAPI.submitCaseStudy(
+          quizAttempId as string,
+          {
+            answers: answers,
+            quiz_position_mapping: quiz_position_mapping,
+            total_attempt_time: total_attempt_time,
+            topic_scratch_pad: scratchPadValues.value,
+          },
+        )
         toast.success('Submission successful')
         const isCompletedCourse = res?.data?.progress
         if (!!isCompletedCourse?.is_completed) {

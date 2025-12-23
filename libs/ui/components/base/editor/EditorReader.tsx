@@ -1,4 +1,3 @@
-import { video_url } from "@lms/core";
 import {
   DeserializeHighlight,
   replaceTextAlignCenterToWebKitCenter,
@@ -11,6 +10,7 @@ import SappModalImage from "../modal/SappModalImage";
 import clsx from "clsx";
 import React from "react";
 import { SAPPVideo } from "../video";
+import { useFeature } from "@lms/contexts";
 declare var com: any;
 type Props = {
   text_editor_content: string | undefined;
@@ -35,6 +35,7 @@ const EditorReader = ({
   highlighArea = "hightlight_area",
   pinned,
 }: Props) => {
+  const {videoUrl} = useFeature();
   const [src, setSrc] = useState<string>();
   const [type, setType] = useState<"VIDEO" | "IMG">("VIDEO");
   const [content, setContent] = useState<any>();
@@ -61,19 +62,19 @@ const EditorReader = ({
 
   const convertMathToImage = async (element: any) => {
     // TODO: check lại này
-    // if (typeof com === "undefined") return;
+    if (typeof com === "undefined") return;
 
-    // const viewer = com?.wiris?.js?.JsPluginViewer;
+    const viewer = com?.wiris?.js?.JsPluginViewer;
 
-    // if (element && viewer) {
-    //   try {
-    //     await viewer.parseElement(element, true, function () {
-    //       // Do something
-    //     });
-    //   } catch (error) {
-    //     // Log the error
-    //   }
-    // }
+    if (element && viewer) {
+      try {
+        await viewer.parseElement(element, true, function () {
+          // Do something
+        });
+      } catch (error) {
+        // Log the error
+      }
+    }
   };
 
   useEffect(() => {
@@ -123,7 +124,7 @@ const EditorReader = ({
       const src = video?.querySelector("source")?.getAttribute("token");
       if (src && src !== "null" && video.tagName === "VIDEO") {
         const iframe = document.createElement("iframe");
-        iframe.src = `${video_url}${src}/iframe?autoplay=true`;
+        iframe.src = `${videoUrl}${src}/iframe?autoplay=true`;
         iframe.id = video?.id;
         iframe.className = video?.className;
         iframe.style.cssText = video?.style.cssText;
@@ -214,10 +215,11 @@ const EditorReader = ({
                         streamRef={videoRefs.current[videoToken]}
                         pauseOnSeek={true}
                         thumbnail={{
-                          "311x175": `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=175`,
-                          "656x369": `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=369`,
-                          "1270x716": `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=716`,
+                          "311x175": `${videoUrl}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=175`,
+                          "656x369": `${videoUrl}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=369`,
+                          "1270x716": `${videoUrl}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=716`,
                         }}
+                        videoAttribs={domNode.attribs}
                       />
                     );
                   }

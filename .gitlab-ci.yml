@@ -12,7 +12,7 @@
     - shell-docker
   resource_group: lms-fe
 
-# Job deploy cho LMS
+# Job deploy staging cho LMS
 deploy_staging_lms:
   extends: .deploy_staging_template
   only: 
@@ -22,7 +22,7 @@ deploy_staging_lms:
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID
     - vercel deploy --prod --token=$VERCEL_TOKEN
 
-# Job deploy cho Finhub
+# Job deploy staging cho Lms-finhub
 deploy_staging_finhub:
   extends: .deploy_staging_template
   only: 
@@ -31,3 +31,161 @@ deploy_staging_finhub:
     - npm install -g vercel
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_FINHUB
     - vercel deploy --prod --token=$VERCEL_TOKEN
+
+# =================== PRODUCTION ZONE =========================
+# Prod environment
+stages:
+  - build
+  - deploy
+
+.prepare:
+  variables:
+    GIT_DEPTH: 10
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ''
+  services:
+    - name: docker:dind
+      alias: docker_in_docker
+
+variables:
+  # IMAGE_BASE: "sappacademy/lms-be"
+
+# Build template
+.build_template:
+  stage: build
+  extends: .prepare
+  image: docker:latest
+  script:
+    - cp $TEST_ENV_PRODUCT_FILE apps/$APP_NAME/.env
+    - cp $TEST_ENV_PRODUCT_FILE .env
+    - source .env
+    - docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD
+    - docker build --build-arg APP_NAME=$APP_NAME -t $IMAGE_NAME:$IMAGE_TAG -f prod.Dockerfile .
+    - docker push $IMAGE_NAME:$IMAGE_TAG
+    - echo "$IMAGE_NAME:$IMAGE_TAG build success"
+  tags:
+  - shell-docker
+  environment: production
+  resource_group: lms-fe
+
+# # Build LMS-PRO
+build_lms_pro:
+  extends: .build_template
+  variables:
+    APP_NAME: lms-pro
+    IMAGE_TAG: lms-pro-$CI_PIPELINE_IID
+  only:
+    # variables:
+    #   - $CI_COMMIT_MESSAGE =~ /build/
+    refs:
+      - master-test-build
+  # rules:
+  #   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+  #     changes:
+  #       - apps/lms-pro/**/*
+  #       - libs/**/*
+  #       - features/**/*
+  #       - tools/**/*
+  #       - scripts/**/*
+  #       - package.json
+  #       - pnpm-lock.yaml
+  #       - pnpm-workspace.yaml
+  #       - turbo.json
+  #       - tsconfig.json
+  #       - .babelrc
+  #       - .npmrc
+  #       - .dockerignore
+  #       - Dockerfile
+
+# Deploy LMS-PRO
+
+# Build lms-finhub
+build_lms_finhub:
+  extends: .build_template
+  variables:
+    APP_NAME: lms-finhub
+    IMAGE_TAG: lms-finhub-$CI_PIPELINE_IID
+  only:
+    # variables:
+    #   - $CI_COMMIT_MESSAGE =~ /build/
+    refs:
+      - master-test-build
+# rules:
+#   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+#     changes:
+#       - apps/lms-finhub/**/*
+#       - libs/**/*
+#       - features/**/*
+#       - tools/**/*
+#       - scripts/**/*
+#       - package.json
+#       - pnpm-lock.yaml
+#       - pnpm-workspace.yaml
+#       - turbo.json
+#       - tsconfig.json
+#       - .babelrc
+#       - .npmrc
+#       - .dockerignore
+#       - Dockerfile
+
+# Deploy LMS-PRO
+deploy_lms_pro:
+  stage: deploy
+  # needs:
+  #   - build_lms_pro
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+  script:
+    - chmod 600 "$TEST_SSH_KEY_PROD"
+    - cp "$TEST_SSH_KEY_PROD" key.pem
+    - cp $TEST_ENV_PRODUCT_FILE .env
+    - source .env
+
+    - export IMAGE_TAG="lms-pro-${CI_PIPELINE_IID}"
+    - export LMS_PRO_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
+
+    - |
+      ssh -o StrictHostKeyChecking=no -i key.pem root@$TEST_PROD_IP "
+        docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
+        cd /var/www/lms-fe &&
+        git fetch origin --prune &&
+        git reset --hard origin/master-test-build &&
+        export LMS_PRO_IMAGE='${LMS_PRO_IMAGE}' &&
+        docker compose -f docker-compose.lms.yml pull && 
+        docker compose -f docker-compose.lms.yml up -d lms-pro nginx
+      "
+  environment: production
+  tags:
+  - shell
+  resource_group: lms-fe
+
+# Deploy lms-finhub
+deploy_lms_finhub:
+  stage: deploy
+  # needs:
+  #   - build_lms_finhub
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+  script:
+    - chmod 600 "$TEST_SSH_KEY_PROD"
+    - cp "$TEST_SSH_KEY_PROD" key.pem
+    - cp $TEST_ENV_PRODUCT_FILE .env
+    - source .env
+
+    - export IMAGE_TAG="lms-finhub-${CI_PIPELINE_IID}"
+    - export LMS_FINHUB_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
+
+    - |
+      ssh -o StrictHostKeyChecking=no -i key.pem root@$TEST_PROD_FINHUB_IP "
+        docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
+        cd /var/www/lms-fe &&
+        git fetch origin --prune &&
+        git reset --hard origin/master-test-build &&
+        export LMS_FINHUB_IMAGE='${LMS_FINHUB_IMAGE}' &&
+        docker compose -f docker-compose.finhub.yml pull && 
+        docker compose -f docker-compose.finhub.yml up -d lms-finhub nginx
+      "
+  environment: production
+  tags:
+  - shell
+  resource_group: lms-fe

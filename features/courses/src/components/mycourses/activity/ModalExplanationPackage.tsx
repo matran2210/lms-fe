@@ -33,7 +33,7 @@ const ModalExplanationPackage = ({
   setOpen: () => void;
   document_id?: string;
 }) => {
-  const { activityApi, courseApi, uploadApi } = useFeature()
+  const { activityApi, testServiceApi, uploadApi } = useFeature()
   const [activeQuestion, setActiveQuestion] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -41,7 +41,7 @@ const ModalExplanationPackage = ({
     setLoading(true);
     try {
       const resultResponse = await activityApi.getQuizAttemptsAnswer(id) as any
-      const topicDescription = await courseApi.getTopicDescription(
+      const topicDescription = await testServiceApi.getTopicDescription(
         resultResponse?.data?.answer?.question?.question_topic_id,
         resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
       ) as any
@@ -113,7 +113,7 @@ const ModalExplanationPackage = ({
     files: { name: string; file_key: string }[];
   }) => {
     try {
-      await uploadApi.downloadFile(data);
+      await testServiceApi.downloadFile(data);
     } catch {}
   };
 

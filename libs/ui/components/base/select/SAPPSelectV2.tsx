@@ -117,7 +117,11 @@ const SAPPSelectV2 = ({
                     className,
                   )}
                   placeholder={placeholder || ""}
-                  value={field?.value}
+                  value={
+                    field.value === '' || field.value === null
+                      ? undefined
+                      : field.value
+                  }
                   options={customizedOptions}
                   size={size}
                   suffixIcon={suffixIcon}

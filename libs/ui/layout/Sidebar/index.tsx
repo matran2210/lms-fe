@@ -77,9 +77,14 @@ export default function Sidebar({
               onClick={() => trackGAEvent("Click Logo SAPP Menu")}
             >
               <ExpandIcon
-                type={"logo-default"}
+                type="logo-default"
                 className={clsx(
-                  "transition-transform duration-300 ease-out lg:translate-x-[70%] lg:transform lg:group-hover:left-0 lg:group-hover:translate-x-0",
+                  "transition-transform duration-300 ease-out lg:translate-x-[70%]",
+                  // Active on hover
+                  "lg:group-hover:left-0 lg:group-hover:translate-x-0",
+                  // Active when guideStep is 2 or 3
+                  (guideStep === 2 || guideStep === 3) &&
+                    "lg:left-0 lg:translate-x-0",
                 )}
               />
               <ExpandIcon type={"logo-full"} />
@@ -103,7 +108,7 @@ export default function Sidebar({
             <PopupStep
               title="Sidebar"
               content={UserGuide.CONTENT_STEP_2}
-              className="left-full top-1/2 ml-5"
+              className="left-full top-[41%] sm:top-1/2 ml-5"
               index={2}
               total={6}
               imgSrc={TourGuideSidebarAnimation}
@@ -128,7 +133,7 @@ export default function Sidebar({
           {guideStatus && guideStep == 3 && (
             <PopupStep
               content={UserGuide.CONTENT_STEP_3}
-              className="bottom-0 left-full ml-5"
+              className="sm:bottom-0 bottom-[122%] left-full ml-5"
               title="Notification & Profile"
               imgSrc={TourGuideNotiAnimation}
               index={3}

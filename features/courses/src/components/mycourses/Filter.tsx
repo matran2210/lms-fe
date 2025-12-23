@@ -1,88 +1,88 @@
 // components/SearchForm.tsx
 
-import { SappHookFormSelect, TotalResullt } from '@lms/ui'
-import { buildQueryString, getUserPrefix } from '@lms/utils'
-import clsx from 'clsx'
-import { isEmpty } from 'lodash'
-import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { defaultStatusCourse } from '@lms/core'
-import { ICourseAll } from '@lms/core'
-import { useFeature } from '@lms/contexts'
+import { SappHookFormSelect, TotalResullt } from "@lms/ui";
+import { buildQueryString, getUserPrefix } from "@lms/utils";
+import clsx from "clsx";
+import { isEmpty } from "lodash";
+import { useRouter } from "next/router";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { defaultStatusCourse } from "@lms/core";
+import { ICourseAll } from "@lms/core";
+import { useFeature } from "@lms/contexts";
 
 interface IProps {
-  courses: ICourseAll
-  setPage?: Dispatch<SetStateAction<number>>
-  tourGuideActive?: boolean
-  isTeacher: boolean
+  courses: ICourseAll;
+  setPage?: Dispatch<SetStateAction<number>>;
+  tourGuideActive?: boolean;
+  isTeacher: boolean;
 }
 
 const Filter = ({ courses, setPage, tourGuideActive, isTeacher }: IProps) => {
-    const {router, pageLink} = useFeature();
-  
-  const { control, watch, setValue } = useForm()
-  const [activeStatus, setActiveStatus] = useState<boolean>(false)
-  const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
-  const totalResults = courses?.metadata?.total_records || 0
+  const { router, pageLink } = useFeature();
+
+  const { control, watch, setValue } = useForm();
+  const [activeStatus, setActiveStatus] = useState<boolean>(false);
+  const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
+  const totalResults = courses?.metadata?.total_records || 0;
 
   const defaultCategory = [
     {
       label: `All`,
-      value: '',
+      value: "",
     },
-  ]
-  const apiUrl = `${getUserPrefix(isTeacher, pageLink)}/courses`
+  ];
+  const apiUrl = `${getUserPrefix(isTeacher, pageLink)}/courses`;
 
   const queryString = buildQueryString({
-    status: watch('status')?.value || '',
-    type: watch('type')?.value || '',
-  })
+    status: watch("status")?.value || "",
+    type: watch("type")?.value || "",
+  });
 
   useEffect(() => {
-    const userSectionLearningType = watch('type')?.value
-    const userSectionLearningStatus = watch('status')?.value
+    const userSectionLearningType = watch("type")?.value;
+    const userSectionLearningStatus = watch("status")?.value;
     // Check undefined vì nếu để rỗng thì ko filter theo all được
     if (
       !isFirstRender &&
       (userSectionLearningType !== undefined ||
         userSectionLearningStatus !== undefined)
     ) {
-      router.push(`${apiUrl}?name=${router.query.name || ''}${queryString}`)
-      setPage && setPage(9)
+      router.push(`${apiUrl}?name=${router.query.name || ""}${queryString}`);
+      setPage && setPage(9);
     }
-  }, [apiUrl, queryString, watch])
+  }, [apiUrl, queryString, watch]);
 
   useEffect(() => {
-    setIsFirstRender(false)
-  }, [setIsFirstRender])
+    setIsFirstRender(false);
+  }, [setIsFirstRender]);
 
   /**
    * @description set lại value của status khi router query rỗng
    */
   useEffect(() => {
     if (isEmpty(router?.query?.status)) {
-      setValue('status', '')
+      setValue("status", "");
     }
-  }, [router?.query?.status])
+  }, [router?.query?.status]);
 
   /**
    * @description set lại value của type khi router query rỗng
    */
   useEffect(() => {
     if (isEmpty(router?.query?.type)) {
-      setValue('type', '')
+      setValue("type", "");
     }
-  }, [router?.query?.type])
+  }, [router?.query?.type]);
 
   return (
     <div className="flex items-center font-normal filter">
       <TotalResullt total={totalResults} className="border-r-0" />
       <div
         className={clsx({
-          'mr-1 border-x border-[#A1A1A1] py-2 pl-5 pr-6': true,
-          'inactive-filter': !activeStatus,
-          'z-50 rounded-lg bg-white ': tourGuideActive,
+          "mr-1 border-x border-[#A1A1A1] py-2 pl-5 pr-6": true,
+          "inactive-filter": !activeStatus,
+          "z-50 rounded-lg bg-white ": tourGuideActive,
         })}
       >
         <SappHookFormSelect
@@ -94,7 +94,7 @@ const Filter = ({ courses, setPage, tourGuideActive, isTeacher }: IProps) => {
               value: category?.categoryName,
             })),
           )}
-          defaultValue={{ label: `All`, value: '' }}
+          defaultValue={[]}
           onChange={() => setActiveStatus(true)}
           placeholder="Category"
           className="status-course"
@@ -105,7 +105,7 @@ const Filter = ({ courses, setPage, tourGuideActive, isTeacher }: IProps) => {
         className={clsx(
           `ml-1 flex self-center rounded-lg py-2 pl-5 pr-6 filter`,
           {
-            'z-50  bg-white': tourGuideActive,
+            "z-50  bg-white": tourGuideActive,
           },
         )}
       >
@@ -119,7 +119,7 @@ const Filter = ({ courses, setPage, tourGuideActive, isTeacher }: IProps) => {
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Filter
+export default Filter;

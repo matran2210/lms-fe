@@ -10,6 +10,11 @@ export interface Data {
   exam: Exam
   is_final_examination_subject: boolean
   remaining_changes: number
+  revision_class: {
+    id: string
+    name: string
+    code: string
+  }
 }
 
 export interface Course {

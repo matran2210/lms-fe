@@ -12,6 +12,7 @@ export const ProfilePages = {
   STUDENTS: "students",
   TEACHING_PROGRESS: "teaching_progress",
   STUDENTS_TEST_RESULT: "students_test_result",
+  CLASS_RESOURCE: 'class_resource',
   CMA: "cma",
   CFA: "cfa",
   ACCA: "acca",

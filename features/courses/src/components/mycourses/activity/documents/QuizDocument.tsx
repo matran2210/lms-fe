@@ -10,6 +10,7 @@ import {
   useAppDispatch,
   useAppSelector,
   useFeature,
+  IActivityStateQuestion,
 } from "@lms/contexts";
 import { useEffect, useRef, useState } from "react";
 
@@ -30,10 +31,12 @@ import {
   FINISHED_TEST_TITLE,
   GRADE_STATUS,
   GRADING_METHOD,
+  IEssayAnswer,
   IFocusQuiz,
   IQuestion,
   IQuizSetting,
   IRequirment,
+  ITestServiceAPI,
   QUESTION_TYPES,
   RESPONSE_OPTION,
   SOCIAL_LINK,
@@ -45,7 +48,7 @@ import {
   Tooltip as SappTooltip,
 } from "@lms/ui";
 import { isValidatedAnswer, trackGAEvent } from "@lms/utils";
-import { Tooltip } from "antd";
+import { Modal, Tooltip } from "antd";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { every, isEmpty, isNull, isUndefined } from "lodash";
@@ -56,6 +59,8 @@ import QuizComponent, { QuizComponentRef } from "./QuizComponent";
 import ConFirmSubmit from "../../test/conFirmSubmit";
 import ShowAnswerTemplate from "../../test/ShowAnswerTemplate";
 import ResetToAnswerTemplateModal from "../../test/ResetToAnswerTemplateModal";
+import { useTailwindBreakpoint } from "@lms/hooks";
+import { myAnswer, myAnswerDragDrop, myAnswerFillWord, myAnswerMatching, myAnswerMultipleChoice, myAnswerSelectWord } from "@lms/core/types/answer";
 
 type Props = {
   questions: IQuestion[];
@@ -111,8 +116,10 @@ const QuizDocument = ({
   isQuizFinished = false,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
-  const { questionApi, courseApi, pageLink, submitQuizTest, router } =
-    useFeature();
+  const { courseApi, pageLink, testServiceApi, router } = useFeature();
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint();
+  const [isOpenActivityIncluded, setIsOpenActivityIncluded] =
+    useState<boolean>(false);
   const selector = useAppSelector(courseActivityQuizReducer);
   const isAFTERAllQUESTION = grading_preference !== "AFTER_EACH_QUESTION";
   const isAFTEREACHQUESTION = grading_preference === "AFTER_EACH_QUESTION";
@@ -182,7 +189,7 @@ const QuizDocument = ({
         try {
           await dispatch(
             fetchQuestionById({
-              api: questionApi,
+              api: testServiceApi as ITestServiceAPI,
               courseApi: courseApi,
               activityId: activityId,
               tabId: tabId,
@@ -219,7 +226,7 @@ const QuizDocument = ({
       if (!hasCorrects) {
         dispatch(
           confirmQuestion({
-            api: questionApi,
+            api: testServiceApi,
             courseApi: courseApi,
             activityId,
             tabId,
@@ -274,7 +281,7 @@ const QuizDocument = ({
         try {
           const nextQuestion = await dispatch(
             fetchQuestionById({
-              api: questionApi,
+              api: testServiceApi as ITestServiceAPI,
               courseApi: courseApi,
               activityId: activityId,
               tabId: tabId,
@@ -333,15 +340,140 @@ const QuizDocument = ({
 
   const [unsubittedQuestions, setUnsubittedQuestions] = useState<number[]>([]);
 
+  const formatMyAnswerFromForm = (
+    rawAnswer:
+      | string
+      | string[]
+      | { question_id: string; answer_id: string }[]
+      | { idAnswer: string; position: number }[]
+      | IEssayAnswer[],
+    question: IActivityStateQuestion,
+    time_spent: number = 0,
+  ): myAnswer[] => {
+    if (!rawAnswer) return [];
+
+    switch (question?.qType as QUESTION_TYPES) {
+      case QUESTION_TYPES.ONE_CHOICE:
+      case QUESTION_TYPES.TRUE_FALSE:
+        return [
+          {
+            question_id: question.id,
+            question_answer_id: rawAnswer as string,
+            time_spent: time_spent,
+          },
+        ];
+
+      case QUESTION_TYPES.MULTIPLE_CHOICE:
+        return [
+          {
+            question_id: question.id,
+            answer: (rawAnswer as string[]).map((e: string) => ({
+              answer_id: e,
+            })),
+            time_spent: time_spent,
+          },
+        ] as myAnswerMultipleChoice[];
+
+      case QUESTION_TYPES.FILL_WORD:
+        return [
+          {
+            question_id: question.id,
+            answer: (rawAnswer as string[]).map((e: string, i: number) => ({
+              answer_text: e,
+              answer_position: i + 1,
+            })),
+            time_spent: time_spent,
+          },
+        ] as myAnswerFillWord[];
+
+      case QUESTION_TYPES.SELECT_WORD:
+        return [
+          {
+            question_id: question.id,
+            answer: rawAnswer || [],
+            time_spent: time_spent,
+          },
+        ] as myAnswerSelectWord[];
+
+      case QUESTION_TYPES.MATCHING:
+        return [
+          {
+            question_id: question.id,
+            answer: (rawAnswer as { question_id: string; answer_id: string }[]).map(
+              (e) => ({
+                question_id: e.question_id,
+                answer_id: e.answer_id,
+              }),
+            ),
+            time_spent: time_spent,
+          },
+        ] as myAnswerMatching[];
+
+      case QUESTION_TYPES.DRAG_DROP:
+        return [
+          {
+            question_id: question.id,
+            answer: (rawAnswer as { idAnswer: string; position: number }[]).map(
+              (e) => ({
+                answer_id: e.idAnswer,
+                answer_position: e.position,
+              }),
+            ),
+            time_spent: time_spent,
+          },
+        ] as myAnswerDragDrop[];
+
+      case QUESTION_TYPES.ESSAY:
+        return (rawAnswer as IEssayAnswer[]).map((item) => ({
+          ...item,
+          time_spent: time_spent,
+        }));
+
+      default:
+        return [];
+    }
+  };
+
   const handleQuizFinish = async () => {
-    const quizQuestion = selectQuestions(
-      selector,
-      activityId,
-      tabId,
-      quizId || "",
-    );
+    const isLastQuestionAfterAllQuestion = isAFTERAllQUESTION && isLastQuestion && !isQuestionConfirmed;
+      // Lấy đáp án từ form ( câu cuối người dùng vừa chọn (nếu có) để dùng cho case câu cuối của after all question)
+      const answerFromForm = questionRef?.current?.onSaveAnswer(activeQuestion);
+      const quizQuestion = selectQuestions(
+        selector,
+        activityId,
+        tabId,
+        quizId || "",
+      );
+    const quizQuestionMapped = isLastQuestionAfterAllQuestion ? quizQuestion?.map(
+        (item, index: number) => {
+          if (index === activeQuestionIndex) {
+            // Check neeus store chưa có mà form có thì gán myAnswers từ form vào
+            const hasValidAnswerInStore =
+              item?.myAnswers &&
+              isValidatedAnswer(item.myAnswers, activeQuestion?.qType);
+            if (!hasValidAnswerInStore && answerFromForm) {
+              const formattedAnswer = formatMyAnswerFromForm(
+                answerFromForm,
+                activeQuestion,
+                calculateWorkTime(),
+              );
+              if (
+                formattedAnswer.length > 0 &&
+                isValidatedAnswer(formattedAnswer, activeQuestion?.qType)
+              ) {
+                return {
+                  ...item,
+                  myAnswers: formattedAnswer,
+                };
+              }
+            }
+          }
+          return item;
+        },
+      ) : quizQuestion;
+
     // Lọc hoặc giữ nguyên câu hỏi (ở đây hàm bạn gọi `isValidatedAnswer` đang return cùng item)
-    const availableQuestions = quizQuestion?.map((item: any) => {
+    const availableQuestions = quizQuestionMapped?.map((item: any) => {
       return {
         ...item,
         isValidAnswer: isValidatedAnswer(item.myAnswers, item.qType),
@@ -349,23 +481,25 @@ const QuizDocument = ({
     });
 
     // Hàm helper: lấy giá trị trả lời hợp lệ từ câu trả lời
-    const extractAnswerValue = (ans: any) => {
-      const answerQuestion = ans?.[0];
-      const answerObj = answerQuestion?.answer?.[0];
-      return (
-        answerObj?.answer_id ||
-        answerObj?.answer_text ||
-        answerQuestion?.question_answer_id ||
-        (answerQuestion?.short_answer !== DEFAULT_EDITOR_VALUE &&
-          answerQuestion?.short_answer) ||
-        !isNull(answerQuestion?.answer_file)
-      );
-    };
+    // Comment để sử dụng isValidAnswer để check hợp lệ thay vì extractAnswerValue
+    // const extractAnswerValue = (ans: any) => {
+    //   const answerQuestion = ans?.[0];
+    //   const answerObj = answerQuestion?.answer?.[0];
+    //   return (
+    //     answerObj?.answer_id ||
+    //     answerObj?.answer_text ||
+    //     answerQuestion?.question_answer_id ||
+    //     (answerQuestion?.short_answer !== DEFAULT_EDITOR_VALUE &&
+    //       answerQuestion?.short_answer) ||
+    //     !isNull(answerQuestion?.answer_file)
+    //   );
+    // };
 
     // Map qua toàn bộ câu hỏi để check hợp lệ
     const validityList = availableQuestions?.map((item) =>
-      isValid(extractAnswerValue(item?.myAnswers)),
+      item?.isValidAnswer,
     );
+    
 
     const allValid = every(validityList);
     if (allValid) {
@@ -403,7 +537,7 @@ const QuizDocument = ({
       try {
         await dispatch(
           fetchQuestionById({
-            api: questionApi,
+            api: testServiceApi as ITestServiceAPI,
             courseApi: courseApi,
             activityId: activityId,
             tabId: tabId,
@@ -449,7 +583,7 @@ const QuizDocument = ({
         try {
           const prevQuestion = await dispatch(
             fetchQuestionById({
-              api: questionApi,
+              api: testServiceApi as ITestServiceAPI,
               courseApi: courseApi,
               activityId: activityId,
               tabId: tabId,
@@ -577,7 +711,7 @@ const QuizDocument = ({
     try {
       await dispatch(
         submitQuiz({
-          submitQuizTest,
+          submitQuizTest: testServiceApi.submitQuizTest,
           id: quizId,
           data: { answers, quiz_position_mapping },
           class_user_id,
@@ -903,14 +1037,6 @@ const QuizDocument = ({
     return "Submit & View Answer";
   };
 
-  useEffect(() => {
-    if (!isQuestionConfirmed) return;
-
-    if (isQuestionConfirmed && isLastQuestion && isAFTERAllQUESTION) {
-      handleQuizFinish();
-    }
-  }, [isQuestionConfirmed]);
-
   const handleSubmit = () => {
     if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
       if (gradeStatus === GRADE_STATUS.AWAITING_GRADING) {
@@ -956,7 +1082,7 @@ const QuizDocument = ({
       }
 
       if (isAFTERAllQUESTION && isLastQuestion && !isQuestionConfirmed) {
-        handleConfirmQuestion();
+        handleQuizFinish();
       }
 
       if (isAFTEREACHQUESTION && !isLastQuestion) {
@@ -1079,67 +1205,97 @@ const QuizDocument = ({
         message="Are you sure you are done here and ready to view the report?"
       />
       <div className={clsx({ "mb-[10px]": is_graded })}>
-        <div className="mb-8 flex items-center gap-3 rounded-md bg-white px-6 py-2">
+        <div className="mb-8 flex items-center gap-3 rounded-md bg-white p-2 lg:px-6">
           {((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
             isNull(quizSetting)) && (
             <div className="grid w-full grid-cols-1 md:grid-cols-3">
               {is_graded ? (
-                <div className="hidden flex-wrap items-center gap-3 md:flex">
+                <div className="hidden flex-wrap items-center gap-2 md:flex">
                   <div
                     className={` ${is_graded || "invisible"} whitespace-nowrap rounded bg-info-50 px-2 py-[2px] text-center text-sm font-normal text-info`}
                   >
                     Graded Activity
                   </div>
+                  {is_graded && (
+                    <div
+                      className="text-info lg:hidden font-medium"
+                      onClick={() => setIsOpenActivityIncluded(true)}
+                    >
+                      +1
+                    </div>
+                  )}
                   {is_graded &&
+                    isAlwaysShowSidebar &&
                     grading_method === GRADING_METHOD.MANUAL &&
                     getGradedLabel(gradeStatus)}
                 </div>
               ) : (
                 <div className="invisible hidden md:block">Graded</div>
               )}
-              <div className="mx-auto flex w-full items-center justify-center gap-3 md:w-fit">
-                {questions?.length > 1 && (
-                  <button
-                    disabled={activeQuestionIndex === 0 || loading}
-                    className={`cursor-pointer select-none  ${
-                      activeQuestionIndex === 0 || loading ? "opacity-50" : ""
-                    }`}
-                    onClick={() => {
-                      if (loading) {
-                        return;
-                      }
-                      handlePrevQuestion();
-                      trackGAEvent("Click Prev Question Quiz Activity");
-                    }}
-                  >
-                    <span className="text-[#1C274C]">
-                      <CircleArrowLeftIcon />
-                    </span>
-                  </button>
+              <div
+                className={clsx(
+                  "flex w-full items-center gap-3 md:w-fit justify-between",
+                  {
+                    "mx-auto !justify-center":
+                      !is_graded || isAlwaysShowSidebar,
+                  },
                 )}
-                <div className="text-sm text-bw-13 md:text-base">
-                  Question: {activeQuestionIndex + 1} of{" "}
-                  {questions?.length || 0}
+              >
+                {is_graded && (
+                  <div
+                    className="text-info md:hidden flex justify-start font-medium"
+                    onClick={() => setIsOpenActivityIncluded(true)}
+                  >
+                    {grading_method === GRADING_METHOD.MANUAL ? "+2 " : "+1 "}
+                    tag
+                  </div>
+                )}
+
+                <div className="flex items-center justify-center gap-2 md:gap-3">
+                  {questions?.length > 1 && (
+                    <button
+                      disabled={activeQuestionIndex === 0 || loading}
+                      className={`cursor-pointer select-none  ${
+                        activeQuestionIndex === 0 || loading ? "opacity-50" : ""
+                      }`}
+                      onClick={() => {
+                        if (loading) {
+                          return;
+                        }
+                        handlePrevQuestion();
+                        trackGAEvent("Click Prev Question Quiz Activity");
+                      }}
+                    >
+                      <span className="text-[#1C274C]">
+                        <CircleArrowLeftIcon />
+                      </span>
+                    </button>
+                  )}
+                  <div className="text-sm text-bw-13 md:text-base">
+                    Question: {activeQuestionIndex + 1} of{" "}
+                    {questions?.length || 0}
+                  </div>
+                  {questions?.length > 1 && (
+                    <button
+                      disabled={isLastQuestion || loading}
+                      className={`cursor-pointer select-none ${
+                        isLastQuestion || loading ? "opacity-50" : ""
+                      }`}
+                      onClick={() => {
+                        if (loading) {
+                          return;
+                        }
+                        handleNextQuestion();
+                        trackGAEvent("Click Next Question Quiz Activity");
+                      }}
+                    >
+                      <span className="text-[#1C274C]">
+                        <CircleArrowRightIcon />
+                      </span>
+                    </button>
+                  )}
                 </div>
-                {questions?.length > 1 && (
-                  <button
-                    disabled={isLastQuestion || loading}
-                    className={`cursor-pointer select-none ${
-                      isLastQuestion || loading ? "opacity-50" : ""
-                    }`}
-                    onClick={() => {
-                      if (loading) {
-                        return;
-                      }
-                      handleNextQuestion();
-                      trackGAEvent("Click Next Question Quiz Activity");
-                    }}
-                  >
-                    <span className="text-[#1C274C]">
-                      <CircleArrowRightIcon />
-                    </span>
-                  </button>
-                )}
+                {is_graded && <div className="w-10 md:hidden" />}
               </div>
               <div
                 id={`quiz-toggle-${quizId}`}
@@ -1424,6 +1580,25 @@ const QuizDocument = ({
           handleClose={onCloseResetToTemplateModal}
         />
       )}
+      <Modal
+        open={isOpenActivityIncluded}
+        onCancel={() => setIsOpenActivityIncluded(false)}
+        title="This Activity Include"
+        centered
+        className="sapp-modal-activity-include"
+        footer={null}
+      >
+        <div className="flex-wrap items-center gap-2 flex mt-2">
+          <div
+            className={` ${is_graded || "invisible"} whitespace-nowrap rounded bg-info-50 px-2 py-[2px] text-center text-sm font-normal text-info`}
+          >
+            Graded Activity
+          </div>
+          {is_graded &&
+            grading_method === GRADING_METHOD.MANUAL &&
+            getGradedLabel(gradeStatus)}
+        </div>
+      </Modal>
     </div>
   );
 };

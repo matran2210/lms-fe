@@ -1,42 +1,41 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
-@import 'variables.scss';
-@import 'fonts.scss';
-@import 'select.scss';
-@import 'datetime-picker.scss';
-@import 'sidebar.scss';
-@import 'my-course.scss';
-@import 'my-profile.scss';
-@import 'video.scss';
-@import 'activity.scss';
-@import 'test.scss';
-@import './course-3-level.scss';
-@import './components/_calculator.scss';
-@import './components/_event-repeat.scss';
-@import './components/_select.scss';
-@import './components/_datepicker.scss';
-@import './components/_collapse.scss';
-@import './components/_sapp-modal-short-course.scss';
-@import './components/_popover.scss';
-@import './components/_container.scss';
-@import './components/_table.scss';
-@import 'progress.scss';
-@import './components/_input.scss';
-@import './components/_tooltip.scss';
-@import './components/drag-n-drop-question.scss';
-@import './components/sapp-modal-v3.scss';
-@import './components/_drawer.scss';
-@import './components/video.scss';
-@import './components/ModalResizeable.scss';
-@import './components/_pagination.scss';
-
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css");
+@import "variables.scss";
+@import "fonts.scss";
+@import "select.scss";
+@import "datetime-picker.scss";
+@import "sidebar.scss";
+@import "my-course.scss";
+@import "my-profile.scss";
+@import "video.scss";
+@import "activity.scss";
+@import "test.scss";
+@import "./course-3-level.scss";
+@import "./components/_calculator.scss";
+@import "./components/_event-repeat.scss";
+@import "./components/_select.scss";
+@import "./components/_datepicker.scss";
+@import "./components/_collapse.scss";
+@import "./components/_sapp-modal-short-course.scss";
+@import "./components/_popover.scss";
+@import "./components/_container.scss";
+@import "./components/_table.scss";
+@import "progress.scss";
+@import "./components/_input.scss";
+@import "./components/_tooltip.scss";
+@import "./components/drag-n-drop-question.scss";
+@import "./components/sapp-modal-v3.scss";
+@import "./components/_drawer.scss";
+@import "./components/video.scss";
+@import "./components/ModalResizeable.scss";
+@import "./components/_pagination.scss";
 
 @font-face {
   font-family: techNology;
-  src: url('../assets/fonts/Technology/Technology.ttf');
+  src: url("../assets/fonts/Technology/Technology.ttf");
 }
 
 #globalLoader {
@@ -68,7 +67,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -82,7 +81,7 @@
 
 * .fa,
 * .fa::before {
-  font-family: 'Font Awesome 5 Free';
+  font-family: "Font Awesome 5 Free";
 }
 
 html {
@@ -186,7 +185,7 @@ img.Wirisformula {
     @apply m-0 break-words text-xl font-semibold text-gray-800;
   }
   span {
-    font-family: 'Roboto', sans-serif !important;
+    font-family: "Roboto", sans-serif !important;
     background-color: transparent !important;
     font-size: 16px !important;
     font-weight: 400 !important;
@@ -205,7 +204,7 @@ img.Wirisformula {
   }
 
   a {
-    @apply font-semibold text-primary;
+    // @apply font-semibold text-primary;
   }
 
   table {
@@ -222,7 +221,10 @@ img.Wirisformula {
   }
 
   p {
-    @apply mb-2 break-words;
+    @apply my-4 break-words;
+    img {
+      @apply inline-block;
+    }
   }
 
   p:empty {
@@ -269,7 +271,7 @@ img.Wirisformula {
 
     &::before {
       color: white;
-      content: '\25B6';
+      content: "\25B6";
       opacity: 0.5;
       cursor: pointer;
       text-shadow: 0 3px black;
@@ -335,7 +337,7 @@ img.Wirisformula {
     text-overflow: ellipsis;
   }
 
-  option[value=''][disabled] {
+  option[value=""][disabled] {
     display: none;
   }
 
@@ -364,7 +366,7 @@ img.Wirisformula {
 }
 
 .sapp-notched-container:before {
-  content: '';
+  content: "";
   left: 0;
   /* top: 50%; */
   width: 30px;
@@ -380,7 +382,7 @@ img.Wirisformula {
 
 .sapp-arrowed-container:before {
   border: 1px dashed rgb(224, 221, 227);
-  content: '';
+  content: "";
   right: -1px;
   /* top: 50%; */
   width: 30px;
@@ -396,7 +398,7 @@ img.Wirisformula {
 
 .sapp-arrowed-container-corrects:before {
   border: 1px dashed rgb(224, 221, 227);
-  content: '';
+  content: "";
   right: -1px;
   /* top: 50%; */
   width: 30px;
@@ -411,13 +413,13 @@ img.Wirisformula {
 }
 
 .sapp-notched-container-corrects:before {
-  content: '';
+  content: "";
   left: -1.2px;
   /* top: 50%; */
   width: 30px;
   height: 30px;
   transform: translate(-50%, 0) rotate(-135deg);
-  clipPath: polygon(0px 0px, 0% 100%, 100% 100%);
+  clippath: polygon(0px 0px, 0% 100%, 100% 100%);
   @apply absolute z-0 border-solid border-[#397839] bg-[#F9FAFC];
 }
 
@@ -427,7 +429,7 @@ img.Wirisformula {
 
 .sapp-arrowed-container-incorrects:before {
   border: 1px dashed rgb(224, 221, 227);
-  content: '';
+  content: "";
   right: -1px;
   /* top: 50%; */
   width: 30px;
@@ -442,14 +444,14 @@ img.Wirisformula {
 }
 
 .sapp-notched-container-incorrects:before {
-  content: '';
+  content: "";
   left: -1.2px;
   /* top: 50%; */
   width: 30px;
   height: 30px;
   border: 0;
   transform: translate(-50%, 0) rotate(-135deg);
-  clipPath: polygon(0px 0px, 0% 100%, 100% 100%);
+  clippath: polygon(0px 0px, 0% 100%, 100% 100%);
   @apply absolute z-0 border-solid border-[#B90E0A] bg-[#F9FAFC];
 }
 
@@ -469,7 +471,7 @@ img.Wirisformula {
 }
 
 .answer-box.drag-icon::before {
-  content: '';
+  content: "";
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'><path d='M9.3776 4.58333C9.3776 5.38875 8.72469 6.04167 7.91927 6.04167C7.11386 6.04167 6.46094 5.38875 6.46094 4.58333C6.46094 3.77792 7.11386 3.125 7.91927 3.125C8.72469 3.125 9.3776 3.77792 9.3776 4.58333Z' fill='%239CA3AF'/><path d='M9.3776 15.4167C9.3776 16.2221 8.72469 16.875 7.91927 16.875C7.11386 16.875 6.46094 16.2221 6.46094 15.4167C6.46094 14.6113 7.11386 13.9583 7.91927 13.9583C8.72469 13.9583 9.3776 14.6113 9.3776 15.4167Z' fill='%239CA3AF'/><path d='M9.3776 10C9.3776 10.8054 8.72469 11.4583 7.91927 11.4583C7.11386 11.4583 6.46094 10.8054 6.46094 10C6.46094 9.19458 7.11386 8.54167 7.91927 8.54167C8.72469 8.54167 9.3776 9.19458 9.3776 10Z' fill='%239CA3AF'/><path d='M13.5443 4.58333C13.5443 5.38875 12.8914 6.04167 12.0859 6.04167C11.2805 6.04167 10.6276 5.38875 10.6276 4.58333C10.6276 3.77792 11.2805 3.125 12.0859 3.125C12.8914 3.125 13.5443 3.77792 13.5443 4.58333Z' fill='%239CA3AF'/><path d='M13.5443 15.4167C13.5443 16.2221 12.8914 16.875 12.0859 16.875C11.2805 16.875 10.6276 16.2221 10.6276 15.4167C10.6276 14.6113 11.2805 13.9583 12.0859 13.9583C12.8914 13.9583 13.5443 14.6113 13.5443 15.4167Z' fill='%239CA3AF'/><path d='M13.5443 10C13.5443 10.8054 12.8914 11.4583 12.0859 11.4583C11.2805 11.4583 10.6276 10.8054 10.6276 10C10.6276 9.19458 11.2805 8.54167 12.0859 8.54167C12.8914 8.54167 13.5443 9.19458 13.5443 10Z' fill='%239CA3AF'/></svg>");
   background-repeat: no-repeat;
   background-size: contain;
@@ -486,7 +488,7 @@ img.Wirisformula {
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box))::after {
-  content: ' (' attr(indexBox) ')';
+  content: " (" attr(indexBox) ")";
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -623,7 +625,7 @@ img.Wirisformula {
   /* Set the position to absolute */
   position: absolute;
   /* Set the content to a circle icon */
-  content: '\25cf';
+  content: "\25cf";
   /* Set the font size to 12px */
   font-size: 12px;
   /* Set the color to white */
@@ -641,7 +643,7 @@ img.Wirisformula {
   /* Set the position to absolute */
   position: absolute;
   /* Set the content to a star icon */
-  content: '\2605';
+  content: "\2605";
   /* Set the font size to 12px */
   font-size: 12px;
   /* Set the color to yellow */
@@ -656,7 +658,7 @@ img.Wirisformula {
 
 .required {
   &:after {
-    content: '*';
+    content: "*";
     position: relative;
     font-size: inherit;
     color: #d35563;
@@ -679,7 +681,7 @@ img.Wirisformula {
   position: relative;
 
   ::after {
-    content: '';
+    content: "";
     @apply bg-[#F1F1F1];
     // background: white;
     opacity: 0.6;
@@ -822,6 +824,12 @@ textarea.is-invalid:focus {
   @apply max-w-[calc(100vw-2rem)] md:max-w-[calc(100vw-1rem)];
   .ant-modal-content {
     @apply rounded-2xl p-6 md:p-10;
+  }
+}
+.sapp-modal-activity-include.ant-modal {
+  @apply max-w-[calc(100vw-2rem)] md:max-w-[calc(100vw-1rem)];
+  .ant-modal-content {
+    @apply rounded-xl p-4;
   }
 }
 .sapp-custom-modal.success-modal {
@@ -998,7 +1006,7 @@ textarea {
 }
 
 :where(.css-dev-only-do-not-override-1xg9z9n).ant-modal {
-  font-family: 'Roboto' !important;
+  font-family: "Roboto" !important;
 }
 
 p a {
@@ -1132,7 +1140,7 @@ p a {
 }
 
 .ant-popover {
-  font-family: 'Roboto', sans-serif !important;
+  font-family: "Roboto", sans-serif !important;
 }
 
 #lms-pro #hubspot-messages-iframe-container {
@@ -1149,9 +1157,14 @@ p a {
 #hubspot-messages-iframe-container .visible-icon {
   display: none !important;
 }
+
 #hubspot-messages-iframe-container.visible-icon,
 #hubspot-messages-iframe-container .visible-icon {
   position: inherit !important;
+}
+
+#hubspot-messages-iframe-container.widget-align-right {
+  z-index: 20 !important;
 }
 
 #floating-button:hover,
@@ -1166,7 +1179,7 @@ p a {
 }
 
 .ant-modal {
-  font-family: 'Roboto', sans-serif !important;
+  font-family: "Roboto", sans-serif !important;
 }
 
 .content-course div strong {
@@ -1239,7 +1252,7 @@ p a {
 }
 
 br {
-  content: '';
+  content: "";
   @apply m-2 block text-sm;
 }
 
@@ -1340,7 +1353,7 @@ td.sapp-border {
 }
 
 .tooltip-text::after {
-  content: '';
+  content: "";
   @apply absolute bg-[#404041];
   top: -5px;
   left: 20px;
@@ -1432,10 +1445,10 @@ fieldset.form-columns-1 .hs-input {
   display: block;
 }
 
-[type='text']:focus,
-[type='email']:focus,
-[type='tel']:focus,
-[type='number']:focus,
+[type="text"]:focus,
+[type="email"]:focus,
+[type="tel"]:focus,
+[type="number"]:focus,
 select:focus {
   --tw-ring-color: #ffb800;
 }
@@ -1478,7 +1491,7 @@ select:focus {
   @apply bg-gray-4 text-bw-15;
 }
 
-[type='search']:focus {
+[type="search"]:focus {
   --tw-ring-color: none;
 }
 
@@ -1561,6 +1574,37 @@ mark {
     padding: 8px 15px !important;
     .ant-select-item-option-content {
       @apply text-center text-sm font-normal text-gray-800;
+    }
+  }
+}
+
+.sapp-preview--image {
+  @apply max-w-[500px] lg:max-w-[40%] !w-auto;
+  .ant-modal-content {
+    @apply p-0;
+    .ant-modal-header {
+      @apply my-0 py-5 border-b border-solid border-b-gray-5;
+      .ant-modal-title {
+        @apply text-lg font-semibold text-gray-800 mx-5;
+      }
+    }
+    .ant-modal-body {
+      @apply mx-8 py-8;
+    }
+  }
+}
+.sapp-preview--image-v2 {
+  @apply max-w-[500px] lg:max-w-[40%] !w-auto;
+  .ant-modal-content {
+    @apply p-0;
+    .ant-modal-header {
+      @apply my-0 py-5 border-b border-solid border-b-gray-5;
+      .ant-modal-title {
+        @apply text-lg font-semibold text-gray-800 mx-5;
+      }
+    }
+    .ant-modal-body {
+      @apply mx-10 py-10;
     }
   }
 }

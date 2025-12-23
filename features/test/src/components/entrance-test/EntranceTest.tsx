@@ -40,7 +40,7 @@ const EntranceTest = ({
   isShowEntranceTestPopup,
 }: EntranceTestProps) => {
   const [openFillForn, setOpenFillForm] = useState(false);
-  const { router, courseApi } = useFeature();
+  const { router, testServiceApi } = useFeature();
   const [open, setOpen] = useState<boolean>(false);
   const [isOpenPopupLastAttempt, setIsOpenPopupLastAttempt] =
     useState<boolean>(false);
@@ -117,7 +117,7 @@ const EntranceTest = ({
       }),
     );
     try {
-      const res = await courseApi.submitAllQuestion(
+      const res = await testServiceApi.submitAllQuestion(
         currentAttempt?.id as string,
       );
       if (res.success) {

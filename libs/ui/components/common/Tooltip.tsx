@@ -45,7 +45,7 @@ const Tooltip: React.FC<ITooltip> = ({
         placement={placement}
         className={className}
         arrow={arrow}
-        rootClassName={rootClassName}
+        rootClassName={`sapp-tooltip ${rootClassName || ""}`}
       >
         {children}
       </AntdTooltip>

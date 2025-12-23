@@ -15,7 +15,7 @@ const EventTest = ({
   data: IEventTest;
   onRefetch: () => void;
 }) => {
-  const { router, courseApi } = useFeature();
+  const { router, testServiceApi } = useFeature();
   const [open, setOpen] = useState<boolean>(false);
   const { setSubmitEventTest } = useCourseContext();
   const [remainingTimeLastAttempt, setRemainingTimeLastAttempt] =
@@ -35,7 +35,7 @@ const EventTest = ({
         const remainingTimeInterval = setInterval(() => {
           setRemainingTimeLastAttempt((prev) => {
             if (prev === 0) {
-              handleSubmitQuestion();
+              // handleSubmitQuestion();
               clearInterval(remainingTimeInterval);
               return 0;
             }
@@ -52,7 +52,7 @@ const EventTest = ({
 
   const handleSubmitQuestion = async () => {
     try {
-      const res = await courseApi.submitAllQuestion(
+      const res = await testServiceApi.submitAllQuestion(
         data?.quiz_attempt_id as string,
       )
       if (res.success) {
@@ -138,6 +138,16 @@ const EventTest = ({
 
   const renderButton = () => {
     if (data?.attempt_status === EAttemptStatus["IN_PROGRESS"]) {
+      if (remainingTimeLastAttempt <= 0) {
+        return (
+          <ButtonSecondary
+            title="Submit"
+            size="small"
+            className="ml-auto"
+            onClick={handleSubmitQuestion}
+          />
+        )
+      }
       return (
         <ButtonSecondary
           title="Resume"
@@ -207,11 +217,40 @@ const EventTest = ({
     }
   };
 
+
+  const getEventTestStatus = (
+    textDoneAttempt: string | number | any,
+    textNotAttempt: string | number,
+  ) => {
+    if (data?.attempt_status === EAttemptStatus['SUBMITTED']) {
+      return textDoneAttempt
+    } else {
+      return textNotAttempt
+    }
+  }
+  
+  const resultDate = (category: string) => {
+    switch (category) {
+      case 'ACCA':
+        return '11/11/2025'
+      case 'CFA':
+        return '19-22/12/2025'
+      case 'CMA':
+        return '14/10/2025'
+      default:
+        break
+    }
+  }
+
   return (
     <>
       <CardCourse
         title={data?.name || ""}
-        attemptStatus={data?.attempt_status as EAttemptStatus}
+        attemptStatus={
+          resultFinishAt === 1 && !data?.attempt_times
+            ? EAttemptStatus.EXPIRED
+            : (data?.attempt_status as EAttemptStatus)
+        }
         footer={cardFooter}
       >
         <div>
@@ -236,22 +275,18 @@ const EventTest = ({
                 </p>
               </>
             </div>
-            <div className="flex justify-between pt-2 text-sm capitalize text-gray-800 md:pt-4 md:text-base">
-              <div className="flex items-center">
-                <>
-                  <span className={`text-gray`}>Result of Attempts:</span>
-                  <span className="ml-1 text-gray">
-                    {data?.attempt_times || ""}
-                  </span>
-                </>
-              </div>
-              {data?.attempt_status === EAttemptStatus["SUBMITTED"] ? (
-                <p className="flex items-center font-medium text-info">
-                  {data?.total_correct_answer + "/" + data?.total_question}
-                </p>
-              ) : (
-                <span className="text-gray-800">--</span>
-              )}
+            <div
+              className={`flex justify-between pt-4 text-base capitalize text-gray`}
+            >
+              <p>
+                {getEventTestStatus('Result Release Date:', 'No of Questions:')}
+              </p>
+              <p className={`font-medium text-gray-800`}>
+                {getEventTestStatus(
+                  resultDate(data?.course_category?.name),
+                  data?.total_question || data?.quiz_question_instances?.length,
+                )}
+              </p>
             </div>
           </div>
         </div>
