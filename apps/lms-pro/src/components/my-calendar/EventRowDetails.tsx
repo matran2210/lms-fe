@@ -1,11 +1,8 @@
 import { memo, useMemo } from 'react'
 import { IEvent } from 'sapp-common-package/dist/types'
-import {SappIcon} from '@lms/ui'
-import {
-  EVENT_TYPES,
-  EVENT_TYPES_LABEL,
-  POPUP_EVENT_DETAILS,
-} from '@lms/core'
+import { SappIcon } from '@lms/ui'
+import { EVENT_TYPES, EVENT_TYPES_LABEL, POPUP_EVENT_DETAILS } from '@lms/core'
+import clsx from 'clsx'
 
 const EventRowDetails = ({ event }: { event: IEvent }) => {
   const getEventTime = useMemo(() => {
@@ -40,7 +37,14 @@ const EventRowDetails = ({ event }: { event: IEvent }) => {
       <div className="min-w-[169px] text-sm leading-[21px] tracking-normal text-[#99A1B7]">
         {label}
       </div>
-      <div className="flex-1 text-sm leading-[21px] tracking-normal text-gray-800">
+      <div
+        className={clsx(
+          'flex-1 text-sm leading-[21px] tracking-normal text-gray-800',
+          {
+            'line-clamp-1': label === POPUP_EVENT_DETAILS.MEETING_LINK,
+          },
+        )}
+      >
         {value}
       </div>
     </div>

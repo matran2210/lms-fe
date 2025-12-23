@@ -1,5 +1,5 @@
 {
-  "name": "next-js-zoom",
+  "name": "lms-zoom",
   "version": "1.0.0",
   "author": "SAPP",
   "scripts": {
@@ -42,7 +42,7 @@
     "@next/bundle-analyzer": "^14.2.9",
     "@next/eslint-plugin-next": "^15.4.5",
     "@sentry/nextjs": "^8.29.0",
-    "@types/react": "19.1.8",
+    "@types/react": "18.2.21",
     "add": "^2.0.6",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.0",
