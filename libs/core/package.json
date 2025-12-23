@@ -10,11 +10,11 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@sapp-fe/sapp-common-package": "^1.6.10",
     "antd": "^5.25.0",
     "axios": "^1.6.2",
     "dayjs": "^1.11.12",
     "rc-table": "^7.55.1",
-    "react-hook-form": "7.48.2",
-    "@sapp-fe/sapp-common-package": "^1.6.9"
+    "react-hook-form": "7.48.2"
   }
 }
