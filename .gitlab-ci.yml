@@ -159,7 +159,7 @@ build_lms_zoom:
         - prod.zoom.Dockerfile
 
 # Deploy
-deploy_template:
+.deploy_template:
   stage: deploy
   rules:
     - if: '$CI_COMMIT_BRANCH == "master-test-build"'
