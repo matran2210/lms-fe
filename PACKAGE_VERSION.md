@@ -47,23 +47,14 @@ feature/* fix/*  →  staging
 
 ---
 
-### Bước 2: Tạo release branch từ `staging`
+### Bước 2: Chuẩn bị release
 
 ```bash
 git checkout staging
 git pull
-git checkout -b release/x.y.z
 ```
 
-Ví dụ:
-
-```bash
-git checkout -b release/1.4.9
-```
-
----
-
-### Bước 3: Bump version (CHỈ ở release branch)
+### Bước 3: Bump version (Trực tiếp trên staging)
 
 ```bash
 npm version patch   # hoặc minor / major
@@ -79,42 +70,23 @@ Lệnh này sẽ **tự động**:
 
 ---
 
-### Bước 4: Push release branch + tag
+### Bước 4: Push origin + tag
 
 ```bash
-git push origin release/x.y.z --follow-tags
+git push origin staging --follow-tags
 ```
 
 ---
 
-### Bước 5: Merge release vào `staging`
-
-```text
-release/x.y.z  →  staging
-```
-
-- Tạo Pull Request
-- Review
-- Merge
-
-Sau bước này:
-
-- `staging` có commit bump version
-- tag `vX.Y.Z` trỏ đúng code release
-
----
-
-### Bước 6: Publish
+### Bước 5: Publish package
 
 ```bash
 npm publish
 ```
 
-(Thực hiện sau khi PR release đã merge)
-
 ---
 
-### Bước 7: update lên version mới nhất của package ở monorepo
+### Bước 6: update lên version mới nhất của package ở monorepo
 
 ```bash
 pnpm -r up @sapp-fe/explanation-package --latest
@@ -142,7 +114,3 @@ pnpm -r up @sapp-fe/explanation-package --latest
 - [ ] PR `release → staging` đã merge
 
 ---
-
-## 7. Ghi nhớ cốt lõi
-
-> **Code merge một lần – Version merge một lần** > **Release là sự kiện đặc biệt, không làm tuỳ tiện**
