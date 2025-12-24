@@ -1,5 +1,5 @@
 import { checkSheetAnswered } from './helpers/quiz-test/index';
-import { ESSAY_TYPE, QUESTION_TYPES } from '@lms/core'
+import { DEFAULT_EDITOR_VALUE, ESSAY_TYPE, QUESTION_TYPES } from '@lms/core'
 interface IOneChoiceAnswer {
   question_id?: string
   question_answer_id?: string
@@ -97,7 +97,9 @@ export const isValidatedAnswer = (
             if (hasAnswer) return item
           }
         }
-        if (!!item?.answer_file?.file_key || !!checkSheetAnswered(item.short_answer)) {
+        if (!!item?.answer_file?.file_key
+          || (item.response_option === ESSAY_TYPE.SHEET && !!checkSheetAnswered(item.short_answer))
+          || (item.response_option === ESSAY_TYPE.WORD && item.short_answer !== DEFAULT_EDITOR_VALUE)) {
           return item;
         }
       })
