@@ -184,7 +184,7 @@ deploy_template:
       "
   environment: production
   tags:
-    - shell
+  - shell
   resource_group: lms-fe
 
 # Deploy lms-pro
@@ -214,32 +214,51 @@ deploy_lms_zoom:
     PROFILE: lms-zoom
     IMAGE_ENV: LMS_ZOOM_IMAGE
 
-# deploy_lms_pro:
-#   stage: deploy
-#   # needs:
-#   #   - build_lms_pro
-#   rules:
-#     - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-#   script:
-#     - chmod 600 "$TEST_SSH_KEY_PROD"
-#     - cp "$TEST_SSH_KEY_PROD" key.pem
-#     - cp $TEST_ENV_PRODUCT_FILE .env
-#     - source .env
+    - export IMAGE_TAG="lms-finhub-${CI_PIPELINE_IID}"
+    - export LMS_FINHUB_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
 
-#     - export IMAGE_TAG="lms-pro-${CI_PIPELINE_IID}"
-#     - export LMS_PRO_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
+    - |
+      ssh -o StrictHostKeyChecking=no -i key.pem root@$TEST_PROD_FINHUB_IP "
+        docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
+        cd /var/www/lms-fe &&
+        git fetch origin --prune &&
+        git reset --hard origin/master-test-build &&
+        export LMS_FINHUB_IMAGE='${LMS_FINHUB_IMAGE}' &&
+        docker compose -f docker-compose.finhub.yml pull && 
+        docker compose -f docker-compose.finhub.yml up -d lms-finhub nginx
+      "
+  environment: production
+  tags:
+  - shell
+  resource_group: lms-fe
 
-#     - |
-#       ssh -o StrictHostKeyChecking=no -i key.pem root@$TEST_PROD_IP "
-#         docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
-#         cd /var/www/lms-fe &&
-#         git fetch origin --prune &&
-#         git reset --hard origin/master-test-build &&
-#         export LMS_PRO_IMAGE='${LMS_PRO_IMAGE}' &&
-#         docker compose -f docker-compose.lms.yml pull && 
-#         docker compose -f docker-compose.lms.yml up -d lms-pro nginx
-#       "
-#   environment: production
-#   tags:
-#   - shell
-#   resource_group: lms-fe
+# Deploy lms-zoom
+deploy_lms_zoom:
+  stage: deploy
+  # needs:
+  #   - build_lms_finhub
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+  script:
+    - chmod 600 "$TEST_SSH_KEY_PROD"
+    - cp "$TEST_SSH_KEY_PROD" key.pem
+    - cp $TEST_ENV_PRODUCT_FILE .env
+    - source .env
+
+    - export IMAGE_TAG="lms-zoom-${CI_PIPELINE_IID}"
+    - export LMS_ZOOM_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
+
+    - |
+      ssh -o StrictHostKeyChecking=no -i key.pem root@$TEST_PROD_FINHUB_IP "
+        docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
+        cd /var/www/lms-fe &&
+        git fetch origin --prune &&
+        git reset --hard origin/master-test-build &&
+        export LMS_ZOOM_IMAGE='${LMS_ZOOM_IMAGE}' &&
+        docker compose -f docker-compose.zoom.yml pull && 
+        docker compose -f docker-compose.zoom.yml up -d lms-zoom nginx
+      "
+  environment: production
+  tags:
+  - shell
+  resource_group: lms-fe
