@@ -84,28 +84,28 @@ build_lms_pro:
   variables:
     APP_NAME: lms-pro
     IMAGE_TAG: lms-pro-$CI_PIPELINE_IID
-  # only:
+  only:
   #   # variables:
   #   #   - $CI_COMMIT_MESSAGE =~ /build/
-  #   refs:
-  #     - master-test-build
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-      changes:
-        - apps/lms-pro/**/*
-        - libs/**/*
-        - features/**/*
-        - tools/**/*
-        - scripts/**/*
-        - package.json
-        - pnpm-lock.yaml
-        - pnpm-workspace.yaml
-        - turbo.json
-        - tsconfig.json
-        - .babelrc
-        - .npmrc
-        - .dockerignore
-        - Dockerfile
+    refs:
+      - master-test-build
+  # rules:
+  #   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+  #     changes:
+  #       - apps/lms-pro/**/*
+  #       - libs/**/*
+  #       - features/**/*
+  #       - tools/**/*
+  #       - scripts/**/*
+  #       - package.json
+  #       - pnpm-lock.yaml
+  #       - pnpm-workspace.yaml
+  #       - turbo.json
+  #       - tsconfig.json
+  #       - .babelrc
+  #       - .npmrc
+  #       - .dockerignore
+  #       - Dockerfile
 
 # Deploy LMS-PRO
 
@@ -115,28 +115,28 @@ build_lms_finhub:
   variables:
     APP_NAME: lms-finhub
     IMAGE_TAG: lms-finhub-$CI_PIPELINE_IID
-  # only:
+  only:
   #   # variables:
   #   #   - $CI_COMMIT_MESSAGE =~ /build/
-  #   refs:
-  #     - master-test-build
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-      changes:
-        - apps/lms-finhub/**/*
-        - libs/**/*
-        - features/**/*
-        - tools/**/*
-        - scripts/**/*
-        - package.json
-        - pnpm-lock.yaml
-        - pnpm-workspace.yaml
-        - turbo.json
-        - tsconfig.json
-        - .babelrc
-        - .npmrc
-        - .dockerignore
-        - Dockerfile
+    refs:
+      - master-test-build
+  # rules:
+  #   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+  #     changes:
+  #       - apps/lms-finhub/**/*
+  #       - libs/**/*
+  #       - features/**/*
+  #       - tools/**/*
+  #       - scripts/**/*
+  #       - package.json
+  #       - pnpm-lock.yaml
+  #       - pnpm-workspace.yaml
+  #       - turbo.json
+  #       - tsconfig.json
+  #       - .babelrc
+  #       - .npmrc
+  #       - .dockerignore
+  #       - Dockerfile
 
 # Build LMS-ZOOM
 build_lms_zoom:
@@ -144,28 +144,28 @@ build_lms_zoom:
   variables:
     APP_NAME: lms-zoom
     IMAGE_TAG: lms-zoom-$CI_PIPELINE_IID
-  # only:
+  only:
   #   # variables:
   #   #   - $CI_COMMIT_MESSAGE =~ /build/
-  #   refs:
-  #     - master-test-build
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-      changes:
-        - apps/lms-zoom/**/*
-        - libs/**/*
-        - features/**/*
-        - tools/**/*
-        - scripts/**/*
-        - package.json
-        - pnpm-lock.yaml
-        - pnpm-workspace.yaml
-        - turbo.json
-        - tsconfig.json
-        - .babelrc
-        - .npmrc
-        - .dockerignore
-        - Dockerfile
+    refs:
+      - master-test-build
+  # rules:
+  #   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+  #     changes:
+  #       - apps/lms-zoom/**/*
+  #       - libs/**/*
+  #       - features/**/*
+  #       - tools/**/*
+  #       - scripts/**/*
+  #       - package.json
+  #       - pnpm-lock.yaml
+  #       - pnpm-workspace.yaml
+  #       - turbo.json
+  #       - tsconfig.json
+  #       - .babelrc
+  #       - .npmrc
+  #       - .dockerignore
+  #       - Dockerfile
 
 # Deploy LMS-PRO
 deploy_lms_pro:
