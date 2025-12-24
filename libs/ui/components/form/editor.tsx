@@ -67,7 +67,7 @@ const Editor = ({
   key,
   editorRef,
 }: IProps) => {
-  const [editorContent, setEditorContent] = useState<string>();
+  const [editorContent, setEditorContent] = useState<string | undefined>("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -75,11 +75,11 @@ const Editor = ({
 
     const run = async () => {
       if (!valueText) {
-        setEditorContent(valueText);
+        setEditorContent(valueText || "");
         return;
       }
 
-      const converted = await convertMathHtmlToImage(valueText);
+      const converted = await convertMathHtmlToImage(valueText || "");
 
       if (mounted) {
         setEditorContent(converted);
@@ -93,7 +93,7 @@ const Editor = ({
     };
   }, [valueText]);
 
-  if (!editorContent) return null;
+  if (editorContent === undefined) return null;
   // const { handleImageUpload } = useSappEditorImageUpload()
   return (
     <div key={key}>
