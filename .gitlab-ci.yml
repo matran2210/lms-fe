@@ -90,23 +90,28 @@ build_lms_pro:
     APP_NAME: lms-pro
     IMAGE_TAG: lms-pro-$CI_PIPELINE_IID
     DOCKERFILE: prod.Dockerfile
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-      changes:
-        - apps/lms-pro/**/*
-        - libs/**/*
-        - features/**/*
-        - tools/**/*
-        - scripts/**/*
-        - package.json
-        - pnpm-lock.yaml
-        - pnpm-workspace.yaml
-        - turbo.json
-        - tsconfig.json
-        - .babelrc
-        - .npmrc
-        - .dockerignore
-        - prod.Dockerfile
+  only:
+    # variables:
+    #   - $CI_COMMIT_MESSAGE =~ /build/
+    refs:
+      - master-test-build
+  # rules:
+  #   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+  #     changes:
+  #       - apps/lms-pro/**/*
+  #       - libs/**/*
+  #       - features/**/*
+  #       - tools/**/*
+  #       - scripts/**/*
+  #       - package.json
+  #       - pnpm-lock.yaml
+  #       - pnpm-workspace.yaml
+  #       - turbo.json
+  #       - tsconfig.json
+  #       - .babelrc
+  #       - .npmrc
+  #       - .dockerignore
+  #       - prod.Dockerfile
 
 # Build lms-finhub
 build_lms_finhub:
@@ -115,23 +120,28 @@ build_lms_finhub:
     APP_NAME: lms-finhub
     IMAGE_TAG: lms-finhub-$CI_PIPELINE_IID
     DOCKERFILE: prod.Dockerfile
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-      changes:
-        - apps/lms-finhub/**/*
-        - libs/**/*
-        - features/**/*
-        - tools/**/*
-        - scripts/**/*
-        - package.json
-        - pnpm-lock.yaml
-        - pnpm-workspace.yaml
-        - turbo.json
-        - tsconfig.json
-        - .babelrc
-        - .npmrc
-        - .dockerignore
-        - prod.Dockerfile
+  only:
+    # variables:
+    #   - $CI_COMMIT_MESSAGE =~ /build/
+    refs:
+      - master-test-build
+  # rules:
+  #   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+  #     changes:
+  #       - apps/lms-finhub/**/*
+  #       - libs/**/*
+  #       - features/**/*
+  #       - tools/**/*
+  #       - scripts/**/*
+  #       - package.json
+  #       - pnpm-lock.yaml
+  #       - pnpm-workspace.yaml
+  #       - turbo.json
+  #       - tsconfig.json
+  #       - .babelrc
+  #       - .npmrc
+  #       - .dockerignore
+  #       - prod.Dockerfile
 
 # Build lms-zoom
 build_lms_zoom:
@@ -140,23 +150,28 @@ build_lms_zoom:
     APP_NAME: lms-zoom
     IMAGE_TAG: lms-zoom-$CI_PIPELINE_IID
     DOCKERFILE: prod.zoom.Dockerfile
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-      changes:
-        - apps/lms-zoom/**/*
-        - libs/**/*
-        - features/**/*
-        - tools/**/*
-        - scripts/**/*
-        - package.json
-        - pnpm-lock.yaml
-        - pnpm-workspace.yaml
-        - turbo.json
-        - tsconfig.json
-        - .babelrc
-        - .npmrc
-        - .dockerignore
-        - prod.zoom.Dockerfile
+  only:
+    # variables:
+    #   - $CI_COMMIT_MESSAGE =~ /build/
+    refs:
+      - master-test-build
+  # rules:
+  #   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+  #     changes:
+  #       - apps/lms-zoom/**/*
+  #       - libs/**/*
+  #       - features/**/*
+  #       - tools/**/*
+  #       - scripts/**/*
+  #       - package.json
+  #       - pnpm-lock.yaml
+  #       - pnpm-workspace.yaml
+  #       - turbo.json
+  #       - tsconfig.json
+  #       - .babelrc
+  #       - .npmrc
+  #       - .dockerignore
+  #       - prod.zoom.Dockerfile
 
 # Deploy
 .deploy_template:
