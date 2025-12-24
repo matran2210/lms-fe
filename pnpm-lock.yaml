@@ -5091,8 +5091,8 @@ packages:
   '@videojs/xhr@2.7.0':
     resolution: {integrity: sha512-giab+EVRanChIupZK7gXjHy90y3nncA2phIOyG3Ne5fvpiMJzvqYwiTOnEVW2S4CoYcuKJkomat7bMXA/UoUZQ==}
 
-  '@vitest/eslint-plugin@1.6.3':
-    resolution: {integrity: sha512-2h4GQ113DR2KGQkZyXXXyKpAv9L130YCe/0be44VeSUsYXdh9XGt0+snCPTijNxG0vJo0YDrdFvpY1bOUfx5ng==}
+  '@vitest/eslint-plugin@1.6.4':
+    resolution: {integrity: sha512-+qw32ux8HMVNrJnQOYgdjrMYmCn9vsiKnJUv5MoOg40e18WOvhWurzHdbRB3vXLfUrP7+jYyQbd6TuRhL23AkQ==}
     engines: {node: '>=18'}
     peerDependencies:
       eslint: '>=8.57.0'
@@ -12125,7 +12125,7 @@ snapshots:
       '@stylistic/eslint-plugin': 5.6.1(eslint@8.57.1)
       '@typescript-eslint/eslint-plugin': 8.50.1(@typescript-eslint/parser@8.50.1(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
       '@typescript-eslint/parser': 8.50.1(eslint@8.57.1)(typescript@5.9.3)
-      '@vitest/eslint-plugin': 1.6.3(eslint@8.57.1)(typescript@5.9.3)
+      '@vitest/eslint-plugin': 1.6.4(eslint@8.57.1)(typescript@5.9.3)
       ansis: 4.2.0
       cac: 6.7.14
       eslint: 8.57.1
@@ -14532,7 +14532,7 @@ snapshots:
       consola: 3.4.2
       detect-libc: 2.1.2
       https-proxy-agent: 7.0.6
-      node-fetch: 2.7.0(encoding@0.1.13)
+      node-fetch: 2.6.9(encoding@0.1.13)
       nopt: 8.1.0
       semver: 7.7.3
       tar: 7.5.2
@@ -16859,7 +16859,7 @@ snapshots:
       global: 4.4.0
       is-function: 1.0.2
 
-  '@vitest/eslint-plugin@1.6.3(eslint@8.57.1)(typescript@5.9.3)':
+  '@vitest/eslint-plugin@1.6.4(eslint@8.57.1)(typescript@5.9.3)':
     dependencies:
       '@typescript-eslint/scope-manager': 8.50.1
       '@typescript-eslint/utils': 8.50.1(eslint@8.57.1)(typescript@5.9.3)
