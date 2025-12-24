@@ -35,10 +35,6 @@ services:
   nginx:
     image: nginx:latest
     container_name: nginx
-    depends_on:
-      - lms-pro
-      - lms-finhub
-      - lms-zoom
     ports:
       - "80:80"
       - "443:443"
