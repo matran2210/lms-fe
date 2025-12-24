@@ -2,8 +2,8 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useCallback, useState } from 'react'
 import { useQuery } from 'react-query'
-import { SAPPCalendar } from 'sapp-common-package'
-import { IEvent } from 'sapp-common-package/dist/types'
+import { SAPPCalendar } from '@sapp-fe/sapp-common-package'
+import { IEvent } from '@sapp-fe/sapp-common-package/dist/types'
 import {
   EVENT_REPEAT_LABEL,
   EVENT_REPEAT_TYPES,
@@ -80,7 +80,7 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
             description: item.description,
             classroomAddress: item.classroom_address,
             classroomName: item.classroom_name,
-            meetingLink: item.meeting_link,
+            meetingLink: item.link_meeting,
             repeat: item.is_schedule_recurring
               ? formatRecurringSchedule(
                   item.recurring_pattern,

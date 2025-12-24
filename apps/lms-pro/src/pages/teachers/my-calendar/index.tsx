@@ -7,7 +7,7 @@ import { LayoutTeacher } from '@lms/ui'
 import dayjs from 'dayjs'
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
-import { IEvent } from 'sapp-common-package/dist/types'
+import { IEvent } from '@sapp-fe/sapp-common-package/dist/types'
 import withAuthorization from 'src/HOC/withAuthorization'
 
 const breadcrumbs = [

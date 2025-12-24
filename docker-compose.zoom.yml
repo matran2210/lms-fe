@@ -1,22 +1,21 @@
-version: '3'
+version: "3.9"
 
 services:
-  next-app:
-    image: gitlab.sapp.edu.vn:5050/lms-pro/lms-fe/lms-fe-next
-    container_name: lms-fe-app
-    build:
-      context: ./
-      dockerfile: prod.Dockerfile
-    restart: always
+  lms-zoom:
+    image: ${LMS_ZOOM_IMAGE}
+    container_name: lms-zoom
     ports:
-      - '3000:3000'
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+    restart: always
     networks:
       - local
 
   nginx:
     image: nginx:latest
     depends_on:
-      next-app:
+      lms-zoom:
         condition: service_started
     container_name: nginx
     restart: always
@@ -32,3 +31,4 @@ services:
 
 networks:
   local:
+ 

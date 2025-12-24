@@ -10,8 +10,8 @@ import {
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
 import { FullScreenLayout, SappLoadingGlobal, Tooltip } from '@lms/ui'
+import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 import { TestServiceAPI } from '@pages/api/test-api'
-import { ExplanationPackageV2 } from 'explanation-package'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routes'

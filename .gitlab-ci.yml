@@ -32,6 +32,16 @@ deploy_staging_finhub:
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_FINHUB
     - vercel deploy --prod --token=$VERCEL_TOKEN
 
+# Job deploy staging cho Lms-zoom
+deploy_staging_zoom:
+  extends: .deploy_staging_template
+  only: 
+    - staging
+  script:
+    - npm install -g vercel
+    - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_ZOOM
+    - vercel deploy --prod --token=$VERCEL_TOKEN
+
 # =================== PRODUCTION ZONE =========================
 # Prod environment
 stages:
@@ -68,71 +78,51 @@ variables:
   environment: production
   resource_group: lms-fe
 
-# # Build LMS-PRO
-build_lms_pro:
+build_apps:
   extends: .build_template
-  variables:
-    APP_NAME: lms-pro
-    IMAGE_TAG: lms-pro-$CI_PIPELINE_IID
-  only:
-    # variables:
-    #   - $CI_COMMIT_MESSAGE =~ /build/
-    refs:
-      - master-test-build
-  # rules:
-  #   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-  #     changes:
-  #       - apps/lms-pro/**/*
-  #       - libs/**/*
-  #       - features/**/*
-  #       - tools/**/*
-  #       - scripts/**/*
-  #       - package.json
-  #       - pnpm-lock.yaml
-  #       - pnpm-workspace.yaml
-  #       - turbo.json
-  #       - tsconfig.json
-  #       - .babelrc
-  #       - .npmrc
-  #       - .dockerignore
-  #       - Dockerfile
+  parallel:
+    matrix:
+      - APP_NAME: lms-pro
+        IMAGE_TAG: lms-pro-$CI_PIPELINE_IID
+        APP_PATH: apps/lms-pro/**/*
+      - APP_NAME: lms-finhub
+        IMAGE_TAG: lms-finhub-$CI_PIPELINE_IID
+        APP_PATH: apps/lms-finhub/**/*
+      - APP_NAME: lms-zoom
+        IMAGE_TAG: lms-zoom-$CI_PIPELINE_IID
+        APP_PATH: apps/lms-zoom/**/*
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+      changes:
+        - apps/lms-pro/**/*
+        - libs/**/*
+        - features/**/*
+        - tools/**/*
+        - scripts/**/*
+        - package.json
+        - pnpm-lock.yaml
+        - pnpm-workspace.yaml
+        - turbo.json
+        - tsconfig.json
+        - .babelrc
+        - .npmrc
+        - .dockerignore
+        - Dockerfile
 
-# Deploy LMS-PRO
-
-# Build lms-finhub
-build_lms_finhub:
-  extends: .build_template
-  variables:
-    APP_NAME: lms-finhub
-    IMAGE_TAG: lms-finhub-$CI_PIPELINE_IID
-  only:
-    # variables:
-    #   - $CI_COMMIT_MESSAGE =~ /build/
-    refs:
-      - master-test-build
-# rules:
-#   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-#     changes:
-#       - apps/lms-finhub/**/*
-#       - libs/**/*
-#       - features/**/*
-#       - tools/**/*
-#       - scripts/**/*
-#       - package.json
-#       - pnpm-lock.yaml
-#       - pnpm-workspace.yaml
-#       - turbo.json
-#       - tsconfig.json
-#       - .babelrc
-#       - .npmrc
-#       - .dockerignore
-#       - Dockerfile
-
-# Deploy LMS-PRO
-deploy_lms_pro:
+# Deploy
+deploy_prod:
   stage: deploy
-  # needs:
-  #   - build_lms_pro
+  parallel:
+    matrix:
+      - APP_NAME: lms-pro
+        PROFILE: lms-pro
+        IMAGE_ENV: LMS_PRO_IMAGE
+      - APP_NAME: lms-finhub
+        PROFILE: lms-finhub
+        IMAGE_ENV: LMS_FINHUB_IMAGE
+      - APP_NAME: lms-zoom
+        PROFILE: lms-zoom
+        IMAGE_ENV: LMS_ZOOM_IMAGE
   rules:
     - if: '$CI_COMMIT_BRANCH == "master-test-build"'
   script:
@@ -140,9 +130,8 @@ deploy_lms_pro:
     - cp "$TEST_SSH_KEY_PROD" key.pem
     - cp $TEST_ENV_PRODUCT_FILE .env
     - source .env
-
-    - export IMAGE_TAG="lms-pro-${CI_PIPELINE_IID}"
-    - export LMS_PRO_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
+    - export IMAGE_TAG="${APP_NAME}-${CI_PIPELINE_IID}"
+    - export IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
 
     - |
       ssh -o StrictHostKeyChecking=no -i key.pem root@$TEST_PROD_IP "
@@ -150,42 +139,42 @@ deploy_lms_pro:
         cd /var/www/lms-fe &&
         git fetch origin --prune &&
         git reset --hard origin/master-test-build &&
-        export LMS_PRO_IMAGE='${LMS_PRO_IMAGE}' &&
-        docker compose -f docker-compose.lms.yml pull && 
-        docker compose -f docker-compose.lms.yml up -d lms-pro nginx
+        export ${IMAGE_ENV}='${IMAGE}' &&
+        docker compose pull &&
+        docker compose --profile ${PROFILE} up -d
       "
   environment: production
   tags:
-  - shell
+    - shell
   resource_group: lms-fe
 
-# Deploy lms-finhub
-deploy_lms_finhub:
-  stage: deploy
-  # needs:
-  #   - build_lms_finhub
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-  script:
-    - chmod 600 "$TEST_SSH_KEY_PROD"
-    - cp "$TEST_SSH_KEY_PROD" key.pem
-    - cp $TEST_ENV_PRODUCT_FILE .env
-    - source .env
 
-    - export IMAGE_TAG="lms-finhub-${CI_PIPELINE_IID}"
-    - export LMS_FINHUB_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
+# deploy_lms_pro:
+#   stage: deploy
+#   # needs:
+#   #   - build_lms_pro
+#   rules:
+#     - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+#   script:
+#     - chmod 600 "$TEST_SSH_KEY_PROD"
+#     - cp "$TEST_SSH_KEY_PROD" key.pem
+#     - cp $TEST_ENV_PRODUCT_FILE .env
+#     - source .env
 
-    - |
-      ssh -o StrictHostKeyChecking=no -i key.pem root@$TEST_PROD_FINHUB_IP "
-        docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
-        cd /var/www/lms-fe &&
-        git fetch origin --prune &&
-        git reset --hard origin/master-test-build &&
-        export LMS_FINHUB_IMAGE='${LMS_FINHUB_IMAGE}' &&
-        docker compose -f docker-compose.finhub.yml pull && 
-        docker compose -f docker-compose.finhub.yml up -d lms-finhub nginx
-      "
-  environment: production
-  tags:
-  - shell
-  resource_group: lms-fe
+#     - export IMAGE_TAG="lms-pro-${CI_PIPELINE_IID}"
+#     - export LMS_PRO_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
+
+#     - |
+#       ssh -o StrictHostKeyChecking=no -i key.pem root@$TEST_PROD_IP "
+#         docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
+#         cd /var/www/lms-fe &&
+#         git fetch origin --prune &&
+#         git reset --hard origin/master-test-build &&
+#         export LMS_PRO_IMAGE='${LMS_PRO_IMAGE}' &&
+#         docker compose -f docker-compose.lms.yml pull && 
+#         docker compose -f docker-compose.lms.yml up -d lms-pro nginx
+#       "
+#   environment: production
+#   tags:
+#   - shell
+#   resource_group: lms-fe
