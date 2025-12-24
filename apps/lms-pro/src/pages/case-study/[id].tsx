@@ -40,7 +40,7 @@ import {
 } from '@lms/feature-courses'
 import QuitTestModal from '@lms/feature-test/src/components/test/modal/quit-test-modal'
 import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
-import { useTailwindBreakpoint } from '@lms/hooks'
+import { useSmartModalSize, useTailwindBreakpoint } from '@lms/hooks'
 import {
   ButtonTextV2,
   EditorReader,
@@ -311,6 +311,8 @@ const CaseStudyDetail = () => {
   const [isCalculatorOpen, setIsCalculatorOpen] = useState(false)
   const [showWarning, setShowWarning] = useState(true)
   const MatchQuizRef = useRef(null) as any
+  const { width: widthFileViewer, height: heightFileViewer } =
+    useSmartModalSize()
   const [openResetToTemplateModal, setOpenResetToTemplateModal] = useState<{
     status: boolean
     question: any
@@ -1431,8 +1433,8 @@ const CaseStudyDetail = () => {
                 return (
                   <ModalResizeable
                     title={e?.fileName}
-                    width={isDesktopView ? 650 : 400}
-                    height={isDesktopView ? 750 : 400}
+                    width={widthFileViewer}
+                    height={heightFileViewer}
                     key={e.id}
                     handleCloseScratchPad={() => handleCloseScratchPad(e)}
                     position="center"
