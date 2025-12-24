@@ -71,7 +71,8 @@ variables:
     - source .env
 
     - docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD
-    - docker build \
+    - |
+      docker build \
         --build-arg APP_NAME=$APP_NAME \
         -f $DOCKERFILE \
         -t $IMAGE_NAME:$IMAGE_TAG .
