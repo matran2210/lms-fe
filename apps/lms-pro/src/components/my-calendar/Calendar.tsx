@@ -80,7 +80,7 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
             description: item.description,
             classroomAddress: item.classroom_address,
             classroomName: item.classroom_name,
-            meetingLink: item.meeting_link,
+            meetingLink: item.link_meeting,
             repeat: item.is_schedule_recurring
               ? formatRecurringSchedule(
                   item.recurring_pattern,

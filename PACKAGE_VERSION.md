@@ -70,7 +70,7 @@ Lệnh này sẽ **tự động**:
 
 ---
 
-### Bước 4: Push release branch + tag
+### Bước 4: Push origin + tag
 
 ```bash
 git push origin staging --follow-tags
