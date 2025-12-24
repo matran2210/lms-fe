@@ -636,6 +636,7 @@ const QuizDocument = ({
       }
     } finally {
       setLoading(false);
+      setOpenUnsubmitWarning(false);
     }
   };
 
