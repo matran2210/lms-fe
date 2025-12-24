@@ -196,7 +196,7 @@ build_lms_zoom:
         git reset --hard origin/master-test-build &&
         export ${IMAGE_ENV}='${IMAGE}' &&
         docker compose pull &&
-        docker compose --profile ${PROFILE} nginx up -d
+        docker compose --profile ${PROFILE} up -d
       "
   environment: production
   tags:
