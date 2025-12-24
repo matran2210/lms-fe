@@ -52,7 +52,7 @@ import { isNull, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { CoursesAPI } from 'src/pages/api/courses'
+import { CoursesAPI } from 'src/api/courses'
 
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])

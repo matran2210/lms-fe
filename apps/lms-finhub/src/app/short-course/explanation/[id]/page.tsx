@@ -7,13 +7,12 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { GRADING_METHOD, TEST_ATTEMPT_TYPE } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UploadAPI } from 'src/pages/api/upload'
 import { UserType } from 'src/redux/types/User/urser'
 import { IQuestion, QUESTION_TYPES } from '@lms/core'
 import { IAtempt, IRequirement } from 'src/type/courses-3-level/test'
-import { CoursesAPI } from '../../../api/courses'
 import { PageLink } from 'src/constants/routes'
-import { TestServiceAPI } from '@pages/api/test-api'
+import { CoursesAPI } from 'src/api/courses'
+import { TestServiceAPI } from 'src/api/test-api'
 
 const Explanation = () => {
   const router = useRouter()

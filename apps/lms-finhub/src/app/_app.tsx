@@ -67,7 +67,7 @@ import { NotificationAPI } from './api/notification'
 import MyProfileAPI, { AuthAPI } from './api/profile'
 import { QuestionAPI } from './api/question'
 import { UploadAPI } from './api/upload'
-import ErrorRedirectPage from './error-redirect'
+import ErrorRedirectPage from './error-redirect/page'
 import { fetcher } from '@services/requestV2'
 import { TestServiceAPI } from './api/test-api'
 
