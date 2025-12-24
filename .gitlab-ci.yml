@@ -69,8 +69,13 @@ variables:
     - cp $TEST_ENV_PRODUCT_FILE apps/$APP_NAME/.env
     - cp $TEST_ENV_PRODUCT_FILE .env
     - source .env
+
     - docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD
-    - docker build --build-arg APP_NAME=$APP_NAME -t $IMAGE_NAME:$IMAGE_TAG -f prod.Dockerfile .
+    - docker build \
+        --build-arg APP_NAME=$APP_NAME \
+        -f $DOCKERFILE \
+        -t $IMAGE_NAME:$IMAGE_TAG .
+
     - docker push $IMAGE_NAME:$IMAGE_TAG
     - echo "$IMAGE_NAME:$IMAGE_TAG build success"
   tags:
@@ -78,19 +83,13 @@ variables:
   environment: production
   resource_group: lms-fe
 
-build_apps:
+# Build lms-pro
+build_lms_pro:
   extends: .build_template
-  parallel:
-    matrix:
-      - APP_NAME: lms-pro
-        IMAGE_TAG: lms-pro-$CI_PIPELINE_IID
-        APP_PATH: apps/lms-pro/**/*
-      - APP_NAME: lms-finhub
-        IMAGE_TAG: lms-finhub-$CI_PIPELINE_IID
-        APP_PATH: apps/lms-finhub/**/*
-      - APP_NAME: lms-zoom
-        IMAGE_TAG: lms-zoom-$CI_PIPELINE_IID
-        APP_PATH: apps/lms-zoom/**/*
+  variables:
+    APP_NAME: lms-pro
+    IMAGE_TAG: lms-pro-$CI_PIPELINE_IID
+    DOCKERFILE: prod.Dockerfile
   rules:
     - if: '$CI_COMMIT_BRANCH == "master-test-build"'
       changes:
@@ -107,22 +106,61 @@ build_apps:
         - .babelrc
         - .npmrc
         - .dockerignore
-        - Dockerfile
+        - prod.Dockerfile
+
+# Build lms-finhub
+build_lms_finhub:
+  extends: .build_template
+  variables:
+    APP_NAME: lms-finhub
+    IMAGE_TAG: lms-finhub-$CI_PIPELINE_IID
+    DOCKERFILE: prod.Dockerfile
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+      changes:
+        - apps/lms-finhub/**/*
+        - libs/**/*
+        - features/**/*
+        - tools/**/*
+        - scripts/**/*
+        - package.json
+        - pnpm-lock.yaml
+        - pnpm-workspace.yaml
+        - turbo.json
+        - tsconfig.json
+        - .babelrc
+        - .npmrc
+        - .dockerignore
+        - prod.Dockerfile
+
+# Build lms-zoom
+build_lms_zoom:
+  extends: .build_template
+  variables:
+    APP_NAME: lms-zoom
+    IMAGE_TAG: lms-zoom-$CI_PIPELINE_IID
+    DOCKERFILE: prod.zoom.Dockerfile
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+      changes:
+        - apps/lms-zoom/**/*
+        - libs/**/*
+        - features/**/*
+        - tools/**/*
+        - scripts/**/*
+        - package.json
+        - pnpm-lock.yaml
+        - pnpm-workspace.yaml
+        - turbo.json
+        - tsconfig.json
+        - .babelrc
+        - .npmrc
+        - .dockerignore
+        - prod.zoom.Dockerfile
 
 # Deploy
-deploy_prod:
+deploy_template:
   stage: deploy
-  parallel:
-    matrix:
-      - APP_NAME: lms-pro
-        PROFILE: lms-pro
-        IMAGE_ENV: LMS_PRO_IMAGE
-      - APP_NAME: lms-finhub
-        PROFILE: lms-finhub
-        IMAGE_ENV: LMS_FINHUB_IMAGE
-      - APP_NAME: lms-zoom
-        PROFILE: lms-zoom
-        IMAGE_ENV: LMS_ZOOM_IMAGE
   rules:
     - if: '$CI_COMMIT_BRANCH == "master-test-build"'
   script:
@@ -130,6 +168,7 @@ deploy_prod:
     - cp "$TEST_SSH_KEY_PROD" key.pem
     - cp $TEST_ENV_PRODUCT_FILE .env
     - source .env
+
     - export IMAGE_TAG="${APP_NAME}-${CI_PIPELINE_IID}"
     - export IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
 
@@ -141,13 +180,39 @@ deploy_prod:
         git reset --hard origin/master-test-build &&
         export ${IMAGE_ENV}='${IMAGE}' &&
         docker compose pull &&
-        docker compose --profile ${PROFILE} up -d
+        docker compose --profile ${PROFILE} nginx up -d
       "
   environment: production
   tags:
     - shell
   resource_group: lms-fe
 
+# Deploy lms-pro
+deploy_lms_pro:
+  extends: .deploy_template
+  needs: ["build_lms_pro"]
+  variables:
+    APP_NAME: lms-pro
+    PROFILE: lms-pro
+    IMAGE_ENV: LMS_PRO_IMAGE
+
+# Deploy lms-finhub
+deploy_lms_finhub:
+  extends: .deploy_template
+  needs: ["build_lms_finhub"]
+  variables:
+    APP_NAME: lms-finhub
+    PROFILE: lms-finhub
+    IMAGE_ENV: LMS_FINHUB_IMAGE
+
+# Deploy lms-zoom
+deploy_lms_zoom:
+  extends: .deploy_template
+  needs: ["build_lms_zoom"]
+  variables:
+    APP_NAME: lms-zoom
+    PROFILE: lms-zoom
+    IMAGE_ENV: LMS_ZOOM_IMAGE
 
 # deploy_lms_pro:
 #   stage: deploy
