@@ -232,7 +232,7 @@ deploy_lms_zoom:
     APP_NAME: lms-zoom
     PROFILE: lms-zoom
     IMAGE_ENV: LMS_ZOOM_IMAGE
-    TARGET_IP_VAR: TEST_PROD_ZOOM_IP
+    TARGET_IP_VAR: TEST_PROD_FINHUB_IP
 
 # deploy_lms_zoom:
 #   stage: deploy
