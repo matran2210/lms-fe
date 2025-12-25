@@ -96,9 +96,9 @@ build_lms_pro:
     # variables:
     #   - $CI_COMMIT_MESSAGE =~ /build/
     refs:
-      - master-test-build
+      - master
   # rules:
-  #   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+  #   - if: '$CI_COMMIT_BRANCH == "master"'
   #     changes:
   #       - apps/lms-pro/**/*
   #       - libs/**/*
@@ -127,9 +127,9 @@ build_lms_finhub:
     # variables:
     #   - $CI_COMMIT_MESSAGE =~ /build/
     refs:
-      - master-test-build
+      - master
   # rules:
-  #   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+  #   - if: '$CI_COMMIT_BRANCH == "master"'
   #     changes:
   #       - apps/lms-finhub/**/*
   #       - libs/**/*
@@ -158,9 +158,9 @@ build_lms_zoom:
     # variables:
     #   - $CI_COMMIT_MESSAGE =~ /build/
     refs:
-      - master-test-build
+      - master
   # rules:
-  #   - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+  #   - if: '$CI_COMMIT_BRANCH == "master"'
   #     changes:
   #       - apps/lms-zoom/**/*
   #       - libs/**/*
@@ -181,7 +181,7 @@ build_lms_zoom:
 .deploy_template:
   stage: deploy
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+    - if: '$CI_COMMIT_BRANCH == "master"'
   script:
     - chmod 600 "$SSH_KEY_PROD"
     - cp "$SSH_KEY_PROD" key.pem
@@ -197,7 +197,7 @@ build_lms_zoom:
         docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
         cd /var/www/lms-fe &&
         git fetch origin --prune &&
-        git reset --hard origin/master-test-build &&
+        git reset --hard origin/master &&
         export ${IMAGE_ENV}='${IMAGE}' &&
         docker compose pull &&
         docker compose --profile ${PROFILE} up -d
@@ -248,7 +248,7 @@ deploy_lms_zoom:
 #   # needs:
 #   #   - build_lms_finhub
 #   rules:
-#     - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+#     - if: '$CI_COMMIT_BRANCH == "master"'
 #   script:
 #     - chmod 600 "$TEST_SSH_KEY_PROD"
 #     - cp "$TEST_SSH_KEY_PROD" key.pem
@@ -263,7 +263,7 @@ deploy_lms_zoom:
 #         docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
 #         cd /var/www/lms-fe &&
 #         git fetch origin --prune &&
-#         git reset --hard origin/master-test-build &&
+#         git reset --hard origin/master &&
 #         export LMS_ZOOM_IMAGE='${LMS_ZOOM_IMAGE}' &&
 #         docker compose -f docker-compose.zoom.yml pull && 
 #         docker compose -f docker-compose.zoom.yml up -d lms-zoom nginx
