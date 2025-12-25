@@ -183,8 +183,8 @@ build_lms_zoom:
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
   script:
-    - chmod 600 "$SSH_KEY_PROD"
-    - cp "$SSH_KEY_PROD" key.pem
+    - chmod 600 "$SSH_KEY_FILE"
+    - cp "$SSH_KEY_FILE" key.pem
     - cp $RUNTIME_ENV_FILE .env
     - source .env
 
