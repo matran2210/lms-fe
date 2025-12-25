@@ -6,7 +6,6 @@ import clsx from "clsx";
 import React, { forwardRef } from "react";
 import Badge from "./CardCourseBadge";
 
-
 const mappingBadgeFromStatus: Partial<
   Record<EAttemptStatus, { badge: string; className: string }>
 > = {
@@ -47,8 +46,8 @@ const mappingBadgeFromStatus: Partial<
     className: "bg-success-50 text-success",
   },
   [EAttemptStatus.EXPIRED]: {
-    badge: 'Expired',
-    className: 'bg-error-50 text-error',
+    badge: "Expired",
+    className: "bg-error-50 text-error",
   },
 };
 
@@ -90,6 +89,7 @@ const CardCourse = forwardRef<
     return (
       <div data-aos={ANIMATION.DATA_AOS}>
         <div
+          data-guide-id="courses-card"
           className={clsx(
             "border-transparent relative flex flex-col rounded-xl border border-white bg-white p-4 shadow-card transition-colors duration-300 ease-in-out hover:border-primary hover:shadow-md md:p-6 lg:rounded-2xl lg:p-8",
             classNameCard,

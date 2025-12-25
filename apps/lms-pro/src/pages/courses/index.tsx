@@ -7,16 +7,15 @@ import {
   useCourseContext,
   UserType,
 } from '@lms/contexts'
-import {
-  ANIMATION,
-  AppType,
-  defaultStatusCourse,
-  ICoursesAPI,
-  UserGuide,
-} from '@lms/core'
+import { ANIMATION, AppType, defaultStatusCourse, ICoursesAPI } from '@lms/core'
 import { CoursesList, FilterCourse, Heading } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { Layout, PopupStep, PopupWelcome, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
+import {
+  Layout,
+  PopupWelcome,
+  SappLoadingGlobal,
+  SearchWithMenuToggle,
+} from '@lms/ui'
 import Aos from 'aos'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
@@ -26,7 +25,6 @@ import { useInfiniteQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from '../api/courses'
-import { TourGuideCoursesAnimation, TourGuideCourseTabAnimation, TourGuideFilterAnimation } from '@lms/assets'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -244,6 +242,7 @@ const MyCourse = () => {
           data-aos={!guideStatus ? ANIMATION.DATA_AOS : ''}
         >
           <div
+            data-guide-id="welcome-to"
             className={`relative flex items-center rounded-md bg-white p-3 md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 4 ? 'z-50' : ''}`}
           >
             <Heading
@@ -261,7 +260,6 @@ const MyCourse = () => {
                 </span>
               }
             />
-            
           </div>
         </div>
         <div

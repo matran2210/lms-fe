@@ -556,5 +556,5 @@ export * from "./upload";
 export * from "./form";
 export * from "./test";
 export * from "./sidebar";
-export * from "./queryKey"
-export * from './exception-errors/index'
+export * from "./queryKey";
+export * from "./exception-errors/index";

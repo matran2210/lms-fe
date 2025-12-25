@@ -164,23 +164,48 @@ export interface IPopupFormState {
   thankYouLater: boolean;
 }
 export type MenuItem = {
-  name: string
-  icon: string
-  url: string
-  type?: string
-  id: string
-  depth: number
-  subItems?: MenuItem[]
-}
+  name: string;
+  icon: string;
+  url: string;
+  type?: string;
+  id: string;
+  depth: number;
+  subItems?: MenuItem[];
+};
 
 export type MenuOption = {
-  name: string
-  icon: string
-  url: string
-  type: string
-  subItems?: MenuOption[]
-}
+  name: string;
+  icon: string;
+  url: string;
+  type: string;
+  subItems?: MenuOption[];
+};
 
+export type GuideOffset = {
+  x?: number;
+  y?: number;
+};
+
+export type GuidePlacement =
+  // TOP
+  | "top-left"
+  | "top-center"
+  | "top-right"
+
+  // BOTTOM
+  | "bottom-left"
+  | "bottom-center"
+  | "bottom-right"
+
+  // LEFT
+  | "left-top"
+  | "left-center"
+  | "left-bottom"
+
+  // RIGHT
+  | "right-top"
+  | "right-center"
+  | "right-bottom";
 
 export * from "./common";
 export * from "./Icon";
@@ -207,6 +232,6 @@ export * from "./v2";
 export * from "./exam-infomation";
 export * from "./services";
 export * from "./file/index";
-export * from "./courses-3-level"
-export * from "./my-calendar"
-export * from "./my-request"
+export * from "./courses-3-level";
+export * from "./my-calendar";
+export * from "./my-request";
