@@ -24,8 +24,8 @@ importers:
         specifier: ^3.10.0
         version: 3.10.0(react-hook-form@7.48.2(react@18.2.0))
       '@sapp-fe/explanation-package':
-        specifier: ^1.4.13
-        version: 1.4.13(@babel/core@7.28.5)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.4)(typescript@5.1.6))(webpack@5.104.1)
+        specifier: ^1.4.14
+        version: 1.4.14(@babel/core@7.28.5)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.4)(typescript@5.1.6))(webpack@5.104.1)
       '@sapp-fe/sapp-common-package':
         specifier: ^1.6.14
         version: 1.6.14(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.4)(typescript@5.1.6))(webpack@5.104.1)
@@ -208,8 +208,8 @@ importers:
         specifier: ^1.4.1
         version: 1.4.1(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@sapp-fe/explanation-package':
-        specifier: ^1.4.13
-        version: 1.4.13(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.104.1)
+        specifier: ^1.4.14
+        version: 1.4.14(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.104.1)
       '@sapp-fe/preview-activity':
         specifier: ^1.1.43
         version: 1.1.43(@babel/core@7.28.5)(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.104.1)
@@ -530,8 +530,8 @@ importers:
         specifier: ^1.4.1
         version: 1.4.1(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@sapp-fe/explanation-package':
-        specifier: ^1.4.13
-        version: 1.4.13(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.104.1)
+        specifier: ^1.4.14
+        version: 1.4.14(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.104.1)
       '@sapp-fe/preview-activity':
         specifier: ^1.1.43
         version: 1.1.43(@babel/core@7.28.5)(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.104.1)
@@ -1033,8 +1033,8 @@ importers:
         specifier: workspace:*
         version: link:../../libs/utils
       '@sapp-fe/explanation-package':
-        specifier: ^1.4.13
-        version: 1.4.13(@babel/core@7.28.5)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.4)(typescript@5.1.6))(webpack@5.104.1)
+        specifier: ^1.4.14
+        version: 1.4.14(@babel/core@7.28.5)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.4)(typescript@5.1.6))(webpack@5.104.1)
       '@sapp-fe/quiz-result-package':
         specifier: ^1.5.0
         version: 1.5.1(@babel/core@7.28.5)(antd@5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
@@ -4112,8 +4112,8 @@ packages:
     peerDependencies:
       react: ^16.0.0
 
-  '@sapp-fe/explanation-package@1.4.13':
-    resolution: {integrity: sha1-dC1XadGjlCtnSCbrmUExITMLmyc=, tarball: https://gitlab.sapp.edu.vn/api/v4/projects/2/packages/npm/@sapp-fe/explanation-package/-/@sapp-fe/explanation-package-1.4.13.tgz}
+  '@sapp-fe/explanation-package@1.4.14':
+    resolution: {integrity: sha1-iIHFh0ae4xSYRpXq6cXp7o7hgH4=, tarball: https://gitlab.sapp.edu.vn/api/v4/projects/2/packages/npm/@sapp-fe/explanation-package/-/@sapp-fe/explanation-package-1.4.14.tgz}
     engines: {node: '>=10'}
     peerDependencies:
       react: ^16.13.1
@@ -15295,7 +15295,7 @@ snapshots:
       - moment
       - react-dom
 
-  '@sapp-fe/explanation-package@1.4.13(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.104.1)':
+  '@sapp-fe/explanation-package@1.4.14(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.104.1)':
     dependencies:
       '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
       '@cloudflare/stream-react': 1.9.3(react@18.2.0)
@@ -15340,7 +15340,7 @@ snapshots:
       - webpack
       - worker-loader
 
-  '@sapp-fe/explanation-package@1.4.13(@babel/core@7.28.5)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.4)(typescript@5.1.6))(webpack@5.104.1)':
+  '@sapp-fe/explanation-package@1.4.14(@babel/core@7.28.5)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.4)(typescript@5.1.6))(webpack@5.104.1)':
     dependencies:
       '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
       '@cloudflare/stream-react': 1.9.3(react@18.2.0)
