@@ -29,7 +29,7 @@ services:
     image: ${LMS_ZOOM_IMAGE}
     container_name: lms-zoom
     ports:
-      - "3001:3000"
+      - "3000:3000"
     profiles: ["lms-zoom"]
 
   nginx:

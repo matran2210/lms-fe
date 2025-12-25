@@ -212,7 +212,7 @@ deploy_lms_pro:
     APP_NAME: lms-pro
     PROFILE: lms-pro
     IMAGE_ENV: LMS_PRO_IMAGE
-    TARGET_IP_VAR: TEST_PROD_IP
+    TARGET_IP_VAR: PROD_LMS_IP
 
 # Deploy lms-finhub
 deploy_lms_finhub:
@@ -222,7 +222,7 @@ deploy_lms_finhub:
     APP_NAME: lms-finhub
     PROFILE: lms-finhub
     IMAGE_ENV: LMS_FINHUB_IMAGE
-    TARGET_IP_VAR: TEST_PROD_FINHUB_IP
+    TARGET_IP_VAR: PROD_FINHUB_IP
 
 # Deploy lms-zoom
 deploy_lms_zoom:
@@ -232,7 +232,7 @@ deploy_lms_zoom:
     APP_NAME: lms-zoom
     PROFILE: lms-zoom
     IMAGE_ENV: LMS_ZOOM_IMAGE
-    TARGET_IP_VAR: TEST_PROD_FINHUB_IP
+    TARGET_IP_VAR: PROD_ZOOM_IP
 
 # deploy_lms_zoom:
 #   stage: deploy
