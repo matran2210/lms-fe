@@ -75,7 +75,7 @@ const Editor = ({
 
     const run = async () => {
       if (!valueText) {
-        setEditorContent(valueText);
+        setEditorContent(valueText || "");
         return;
       }
 
@@ -93,7 +93,7 @@ const Editor = ({
     };
   }, [valueText]);
 
-  if (!editorContent) return null;
+  if (editorContent === undefined) return null;
   // const { handleImageUpload } = useSappEditorImageUpload()
   return (
     <div key={key}>
