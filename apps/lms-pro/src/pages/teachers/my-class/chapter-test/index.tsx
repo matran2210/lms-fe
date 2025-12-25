@@ -6,15 +6,13 @@ import { UserType } from '@lms/contexts'
 import { IStudentClassDetail, ITabs, ProfilePages, StatusActionCell } from '@lms/core'
 import { useSappPaging } from '@lms/hooks'
 import { LayoutFilter, LayoutTeacher, SappTable } from '@lms/ui'
-import { CoursesAPI } from '@pages/api/courses'
-import { StudentKey } from '@pages/api/queryKey'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
+import { StudentKey } from 'src/app/api/queryKey'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { TeacherAPI } from 'src/app/api/teacher/route'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { TeacherAPI } from 'src/pages/api/teacher/index'
 
 interface FilterParams {
   status?: string

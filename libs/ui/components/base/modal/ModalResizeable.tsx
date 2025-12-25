@@ -1,3 +1,4 @@
+"use client"
 import { CloseIcon } from '@lms/assets'
 import clsx from 'clsx'
 import React, { ReactNode, useEffect, useState } from 'react'

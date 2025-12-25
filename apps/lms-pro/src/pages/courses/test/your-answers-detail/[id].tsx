@@ -2,7 +2,7 @@ import { GRADE_STATUS, ITabs, TEST_TYPE_LABELS } from '@lms/core'
 import { FullScreenLayout, SappBreadCrumbs, SappLoading } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import { useRouter } from 'next/router'
-import { CoursesAPI } from 'src/pages/api/courses'
+import { CoursesAPI } from 'src/app/api/courses/route'
 import TableQuestions from 'src/pages/courses/quiz/your-answers-detail/TableQuestions'
 
 const TestResultDetail = () => {

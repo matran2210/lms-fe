@@ -14,7 +14,7 @@ import {
   IQuizResultList,
   IScoreDetails,
 } from "./quiz";
-import { AxiosPromise } from "axios";
+import { AxiosPromise, AxiosResponse } from "axios";
 
 export interface IAuthManager {
   getToken(): string;
@@ -296,4 +296,13 @@ export interface ITestServiceAPI {
       name: string;
     }>
   >
+}
+
+export interface ICertificateAPI {
+  uploadImageToLinkedIn: (
+    token: string,
+    personURN: string,
+    shareUrl: string,
+    text: string,
+  ) => Promise<AxiosResponse<any, any, {}>>;
 }

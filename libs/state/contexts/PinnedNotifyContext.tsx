@@ -1,3 +1,4 @@
+"use client";
 import { CERTIFICATE_DETAIL } from "@lms/core";
 import { getLocalStorageItem, setLocalStorageItem, convertUTCToLocalTime } from "@lms/utils";
 import {

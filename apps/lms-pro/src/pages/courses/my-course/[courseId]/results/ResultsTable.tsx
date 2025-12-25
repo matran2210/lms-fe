@@ -29,8 +29,8 @@ import {
 } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useInfiniteQuery } from 'react-query'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { CourseKey } from 'src/pages/api/queryKey'
+import { CoursesAPI } from 'src/app/api/courses/route'
+import { CourseKey } from 'src/app/api/queryKey'
 
 const ResultsTable = ({
   openFilter,

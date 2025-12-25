@@ -3,7 +3,7 @@ import { FullScreenLayout, SappBreadCrumbs, SappLoading } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import { useRouter } from 'next/router'
 import { PageLink } from 'src/constants/routers'
-import { CoursesAPI } from 'src/pages/api/courses'
+import { CoursesAPI } from 'src/app/api/courses/route'
 import TableQuestions from 'src/pages/courses/quiz/your-answers-detail/TableQuestions'
 
 const TestResultDetail = () => {

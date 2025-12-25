@@ -82,7 +82,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
+import { CoursesAPI, getActivityById } from 'src/app/api/courses/route'
 import { v4 as uuidv4 } from 'uuid'
 import { createPortal } from 'react-dom'
 

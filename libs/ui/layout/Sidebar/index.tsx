@@ -1,3 +1,4 @@
+"use client";
 import { ExpandIcon, TourGuideNotiAnimation, TourGuideSidebarAnimation } from "@lms/assets";
 import { useAppSelector, useFeature } from "@lms/contexts";
 import { UserGuide } from "@lms/core";

@@ -1,3 +1,4 @@
+"use client"
 import { RefObject } from 'react'
 import { HandShake } from '@lms/assets'
 import { UserGuide } from '@lms/core'

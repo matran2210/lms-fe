@@ -1,3 +1,4 @@
+"use client"
 import { CloseIcon } from '@lms/assets'
 import { ANIMATION, LAYOUT, QUESTION_TYPES } from '@lms/core'
 import {

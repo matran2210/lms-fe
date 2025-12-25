@@ -1,3 +1,4 @@
+"use client"
 import { CloseIcon } from '@lms/assets'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { FullScreenLayout } from '@lms/ui'

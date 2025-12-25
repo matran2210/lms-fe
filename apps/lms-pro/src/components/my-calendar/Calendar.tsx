@@ -11,7 +11,7 @@ import {
   EVENT_TYPES_ARRAY,
   EVENT_TYPES_RESPONSE,
 } from '@lms/core'
-import { SchedulesAPI } from 'src/pages/api/schedules'
+import { SchedulesAPI } from 'src/app/api/schedules/route'
 import CalendarHead from './CalendarHead'
 import { pick } from 'lodash'
 import { formatRecurringSchedule } from '@utils/request'

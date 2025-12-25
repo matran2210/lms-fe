@@ -1,5 +1,5 @@
 import { SappModal } from '@lms/ui'
-import Image from 'next/future/image'
+import Image from 'next/image'
 import React from 'react'
 
 type Props = {

@@ -11,7 +11,7 @@ import {
 } from 'react'
 import { UseFormGetValues, UseFormReset } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { AuthAPI } from 'src/pages/api/profile'
+import { AuthAPI } from 'src/app/api/profile/route'
 import { IChangePassword } from './ChangePassword'
 import { useCountdownTest } from '@lms/hooks'
 

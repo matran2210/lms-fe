@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";

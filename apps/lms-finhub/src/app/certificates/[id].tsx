@@ -1,3 +1,4 @@
+"use client"
 import { LAYOUT } from '@lms/core'
 import { SappLoadingGlobal } from '@lms/ui'
 import { useRouter } from 'next/router'

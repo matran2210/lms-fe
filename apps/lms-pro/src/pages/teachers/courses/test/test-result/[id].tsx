@@ -5,7 +5,7 @@ import { useGetDataQuery } from '@lms/utils'
 import { useRouter } from 'next/router'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { CoursesAPI } from 'src/pages/api/courses'
+import { CoursesAPI } from 'src/app/api/courses/route'
 import TestResultPage from 'src/pages/courses/test/test-result/testResultPage'
 
 const TestResultDetailTeacher = () => {

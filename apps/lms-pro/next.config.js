@@ -6,23 +6,9 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
-const removeImports = require('next-remove-imports')({
-  test: /node_modules([\s\S]*?)\.(tsx|ts|js|mjs|jsx)$/,
-  matchImports: '\\.(less|css|scss|sass|styl)$',
-})
-
-const securityHeaders = [
-  { key: 'X-DNS-Prefetch-Control', value: 'on' },
-  { key: 'X-XSS-Protection', value: '1; mode=block' },
-  { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
-  { key: 'X-Content-Type-Options', value: 'nosniff' },
-]
-
+/** @type {import('next').NextConfig} */
 let nextConfig = {
   reactStrictMode: false,
-  productionBrowserSourceMaps: true,
-  optimizeFonts: false,
-  swcMinify: false, // BƯỚC 1: transpilePackages vẫn phải giữ để hỗ trợ
   transpilePackages: [
     '@lms/ui',
     '@lms/core',
@@ -39,70 +25,26 @@ let nextConfig = {
     '@lms/feature-test',
     '@lms/feature-calendar',
   ],
-  webpack: (config, { isServer, defaultLoaders }) => {
-    config.resolve.alias.canvas = false // RULE MỚI: Dùng Next.js's default Babel loader cho libs/ và features/
-    config.resolve.alias['styled-components'] =
-      require.resolve('styled-components')
-    config.module.rules.push({
-      test: /\.(ts|tsx)$/,
-      include: [
-        // Trỏ đến thư mục libs/ và features/ từ gốc monorepo
-        path.resolve(__dirname, '../../libs'),
-        path.resolve(__dirname, '../../features'),
-      ],
-      use: [
-        // Sử dụng bộ loader mặc định của Next.js (thường là SWC hoặc Babel)
-        defaultLoaders.babel,
-      ],
-    })
 
-    return config
-  },
-
-  sassOptions: {
-    includePaths: [path.join(__dirname, 'styles')],
-  },
-
-  output: 'standalone',
-
-  publicRuntimeConfig: {
-    apiURL: process.env.NEXT_PUBLIC_BASE_API_URL,
-  },
-
-  images: {
-    minimumCacheTTL: 43200,
-    remotePatterns: [{ protocol: 'https', hostname: '**' }],
-    unoptimized: true,
-  },
+  // output: 'standalone',
 
   compiler: {
     styledComponents: true,
   },
 
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: securityHeaders,
-      },
-    ]
-  },
-
-  poweredByHeader: false,
-
-  logging: {
-    fetches: { fullUrl: true },
-  }, // Tối ưu hóa lại Experimental
   experimental: {
-    optimizeCss: true,
-    forceSwcTransforms: true,
+    externalDir: true,
     instrumentationHook: true,
+    esmExternals: 'loose',
+    // ❌ deprecated / unstable trong Next 14
+    // optimizeCss: true,
+    // forceSwcTransforms: true,
   },
 }
 
 // --- Inject Sentry wrapper ---
 const { withSentryConfig } = require('@sentry/nextjs')
-const isSentryDisabled = true // Disable Sentry for lms-pro app
+const isSentryDisabled = true
 
 if (!isSentryDisabled) {
   nextConfig = withSentryConfig(nextConfig, {
@@ -118,4 +60,4 @@ if (!isSentryDisabled) {
 }
 
 // --- wrap removeImports + bundle analyzer ---
-module.exports = removeImports(withBundleAnalyzer(nextConfig))
+module.exports = withBundleAnalyzer(nextConfig)

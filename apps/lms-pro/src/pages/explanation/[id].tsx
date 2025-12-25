@@ -8,14 +8,13 @@ import {
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
 import { FullScreenLayout, SappLoadingGlobal, Tooltip } from '@lms/ui'
-import { TestServiceAPI } from '@pages/api/test-api'
+import { TestServiceAPI } from 'src/app/api/test-api/route'
 import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UploadAPI } from 'src/pages/api/upload'
-import { CoursesAPI } from '../api/courses'
+import { CoursesAPI } from 'src/app/api/courses/route'
 
 const Explanation = () => {
   const router = useRouter()

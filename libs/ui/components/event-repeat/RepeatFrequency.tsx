@@ -1,3 +1,4 @@
+"use client";
 import {
   FREQUENCY_OPTIONS,
   FREQUENCY_OPTIONS_PLURAL,

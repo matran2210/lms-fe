@@ -1,3 +1,4 @@
+"use client";
 import { CloseIcon, UploadIcon } from "@lms/assets";
 import { disableUnsavedChange, loginSlice, useAppDispatch, useFeature } from "@lms/contexts";
 import { DEFAULT_EDITOR_VALUE, DISPLAY_TYPE, generateSheetId, MY_COURSES, RESPONSE_OPTION, SheetData } from "@lms/core";

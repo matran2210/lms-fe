@@ -45,14 +45,14 @@ import {
   SlotValue,
 } from '@lms/ui'
 import { runHighlight } from '@lms/utils'
-import { TestServiceAPI } from '@pages/api/test-api'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { CoursesAPI } from 'src/pages/api/courses'
+import { CoursesAPI } from 'src/app/api/courses/route'
+import { TestServiceAPI } from 'src/app/api/test-api/route'
 
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])

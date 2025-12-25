@@ -12,7 +12,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useInfiniteQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { CoursesAPI } from 'src/pages/api/courses'
+import { CoursesAPI } from 'src/app/api/courses/route'
 
 const DEFAULT_PAGESIZE = 9
 const breadcrumbs: ITabs[] = [
