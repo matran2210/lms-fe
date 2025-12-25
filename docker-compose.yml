@@ -1,0 +1,50 @@
+version: "3.9"
+
+x-app-base: &app-base
+  restart: always
+  environment:
+    NODE_ENV: production
+  networks:
+    - local
+
+services:
+  lms-pro:
+    <<: *app-base
+    image: ${LMS_PRO_IMAGE}
+    container_name: lms-pro
+    ports:
+      - "3000:3000"
+    profiles: ["lms-pro"]
+
+  lms-finhub:
+    <<: *app-base
+    image: ${LMS_FINHUB_IMAGE}
+    container_name: lms-finhub
+    ports:
+      - "3000:3000"
+    profiles: ["lms-finhub"]
+
+  lms-zoom:
+    <<: *app-base
+    image: ${LMS_ZOOM_IMAGE}
+    container_name: lms-zoom
+    ports:
+      - "3000:3000"
+    profiles: ["lms-zoom"]
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/www/vhost:/etc/nginx/conf.d
+      - /var/www/cert/uat-ops-be.sapp.edu.vn.crt:/etc/nginx/uat-ops-be.sapp.edu.vn.crt
+      - /var/www/cert/uat-ops-be.sapp.edu.vn.key:/etc/nginx/uat-ops-be.sapp.edu.vn.key
+    networks:
+      - local
+    restart: always
+
+networks:
+  local:
