@@ -236,9 +236,7 @@ const MyCourse = () => {
         />
 
         <div
-          className={
-            'mt-2 flex justify-center rounded-md bg-white shadow-medium md:mt-4 md:justify-between lg:rounded-xl'
-          }
+          className="mt-2 flex justify-center rounded-md bg-white shadow-medium md:mt-4 md:justify-between lg:rounded-xl"
           data-aos={!guideStatus ? ANIMATION.DATA_AOS : ''}
         >
           <div

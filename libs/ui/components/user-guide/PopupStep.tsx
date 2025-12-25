@@ -206,7 +206,7 @@ const PopupStep = ({
       ref={confirmDialogRef}
       layout
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="fixed z-50 w-[315px] rounded-xl bg-white p-4 text-gray-800 shadow-lg"
+      className="fixed z-50 sm:w-[315px] w-[315px] rounded-xl bg-white p-4 text-gray-800 shadow-lg"
       style={style}
     >
       <div>
