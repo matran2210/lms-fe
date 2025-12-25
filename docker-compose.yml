@@ -40,7 +40,8 @@ services:
       - "443:443"
     volumes:
       - /var/www/vhost:/etc/nginx/conf.d
-      - /var/www/cert:/etc/nginx/certs
+      - /var/www/cert/uat-ops-be.sapp.edu.vn.crt:/etc/nginx/uat-ops-be.sapp.edu.vn.crt
+      - /var/www/cert/uat-ops-be.sapp.edu.vn.key:/etc/nginx/uat-ops-be.sapp.edu.vn.key
     networks:
       - local
     restart: always
