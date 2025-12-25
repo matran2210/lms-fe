@@ -370,9 +370,7 @@ const TestDetail = () => {
                 b: { answer_position: number },
               ) => a?.answer_position - b?.answer_position,
             )
-            console.log('drag_drop_answers', drag_drop_answers)
-            console.log('answersTemp', answersTemp)
-            // console.log('drag_drop_answers', drag_drop_answers)
+  
             return {
               corrects: {
                 corrects: handleMultipleCorrectAnswer(
