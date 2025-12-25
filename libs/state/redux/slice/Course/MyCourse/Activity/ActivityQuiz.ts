@@ -2,6 +2,7 @@ import { Slice, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { FieldValues } from "react-hook-form";
 import {
   ICoursesAPI,
+  IDragDropAnswer,
   IQuestionAPI,
   ITestServiceAPI,
   QUESTION_TYPES,
@@ -26,7 +27,7 @@ export interface IActivityStateQuestion extends IQuestion {
   defaultValue?: any;
   isDrafAnswer?: boolean;
   answer_template?: string;
-  drag_drop_answers?: any[];
+  drag_drop_answers: IDragDropAnswer[];
 }
 
 /**

@@ -61,6 +61,10 @@ export interface IAnswerResult {
   question: IQuestionResult
 }
 
+export interface IDragDropAnswer {
+  answer_position: number
+  answer_id: string[]
+}
 export interface IQuestionResult {
   id: string
   question_content: string
@@ -97,8 +101,7 @@ export interface IQuestionResult {
     average_time: string
   }
   question_topic: ITopic
-  drag_drop_answers: any
-
+  drag_drop_answers: IDragDropAnswer[];
 }
 
 export interface ITopic {
