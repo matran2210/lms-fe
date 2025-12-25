@@ -84,6 +84,7 @@ const SAPPVideo = ({
   const [canPlay, setCanPlay] = useState<boolean>(false);
   const [loadingPercentage, setLoadingPercentage] = useState<number>(0);
   const [cloudflarePlayer, setCloudflarePlayer] = useState<boolean>(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const playbackAnimationRef = useRef<HTMLDivElement>(null);
   const videoControlsRef = useRef<HTMLDivElement>(null);
@@ -827,6 +828,24 @@ const SAPPVideo = ({
 
   const { src, width, height } = getThumbnail();
   const isSmallVideo = videoAttribs && Number(videoAttribs.width) < 346;
+  const isMediumVideo =
+    videoAttribs &&
+    Number(videoAttribs.width) >= 346 &&
+    Number(videoAttribs.width) < 480;
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
+  
   return (
     <>
       <div
@@ -946,7 +965,7 @@ const SAPPVideo = ({
                   className={clsx(
                     "flex-center flex w-full items-center gap-6",
                     {
-                      "justify-between": isSmallVideo,
+                      "justify-between": isSmallVideo && !isFullscreen,
                       "justify-center": !isSmallVideo,
                     },
                   )}
@@ -977,7 +996,7 @@ const SAPPVideo = ({
                       className={clsx(
                         "time flex-center hidden gap-1 text-xsm font-normal leading-normal text-[#E3E3E3] sm:mr-4 sm:flex",
                         {
-                          "!hidden": isSmallVideo,
+                          "!hidden": isSmallVideo && !isFullscreen,
                         },
                       )}
                     >
@@ -988,7 +1007,7 @@ const SAPPVideo = ({
                   </div>
                   <div
                     className={clsx("relative h-[6px] w-full text-justify", {
-                      hidden: isSmallVideo,
+                      hidden: isSmallVideo && !isFullscreen,
                     })}
                   >
                     <progress
@@ -996,7 +1015,9 @@ const SAPPVideo = ({
                       ref={progressBarRef}
                     />
                     <input
-                      className="seek absolute top-0 z-10 m-0 w-full cursor-pointer"
+                      className={clsx("seek absolute top-0 z-10 m-0 w-full cursor-pointer", {
+                        hidden: isMediumVideo && !isFullscreen,
+                      })}
                       min="0"
                       type="range"
                       step="0.01"
@@ -1028,7 +1049,7 @@ const SAPPVideo = ({
                       className={clsx(
                         "volume-controls relative flex h-8 items-center",
                         {
-                          hidden: isSmallVideo,
+                          hidden: isSmallVideo && !isFullscreen,
                         },
                       )}
                     >
@@ -1161,7 +1182,7 @@ const SAPPVideo = ({
                     <div
                       className={clsx(
                         "volume-controls relative hidden h-8 items-center sm:flex",
-                        { "!hidden": isSmallVideo },
+                        { "!hidden": isSmallVideo && !isFullscreen},
                       )}
                     >
                       <button
@@ -1178,7 +1199,7 @@ const SAPPVideo = ({
                           activeSettings ? "active" : ""
                         }`,
                         {
-                          hidden: isSmallVideo,
+                          hidden: isSmallVideo && !isFullscreen,
                         },
                       )}
                       ref={listSettingsRef}
