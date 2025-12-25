@@ -6,15 +6,15 @@ import { useCourseContext } from '@lms/contexts'
 import { ANIMATION, CLASS_USER_STATUS, ICourse, ROUTES } from '@lms/core'
 import { useCourseStatus } from '@lms/hooks'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { CoursesAPI } from 'src/pages/api/courses'
+import { CoursesAPI } from 'src/app/api/courses/route'
 import CourseAction from './course/CourseAction'
 import CourseClass from './course/CourseClass'
 import CourseDescription from './course/CourseDescription'
 import CourseProgress from './course/CourseProgress'
 import CourseTitle from './course/CourseTitle'
+import { useRouter } from 'next/navigation'
 
 export default function CourseCard({
   course,

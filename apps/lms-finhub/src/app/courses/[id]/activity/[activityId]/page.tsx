@@ -1,5 +1,5 @@
+'use client'
 import { CloseIcon, DownloadIcon, LinkIcon } from '@lms/assets'
-
 import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
 import Layout from '@components/layout'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
@@ -39,7 +39,7 @@ import {
 } from '@lms/ui'
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { useParams, useRouter } from 'next/navigation'
 import React, {
   useEffect,
   useLayoutEffect,
@@ -49,8 +49,9 @@ import React, {
 } from 'react'
 import { useQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
-import { UploadAPI } from 'src/pages/api/upload'
+import { CoursesAPI, getActivityById } from 'src/app/api/courses/route'
+import { UploadAPI } from 'src/app/api/upload/route'
+
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string
@@ -67,6 +68,7 @@ interface VideoStateClicked {
 const ActivityPage = () => {
   const router = useRouter()
   const { setOpenPopupCTA } = useCourseContext()
+  const params = useParams()
 
   const useGetActivityById = (
     id: string | string[] | undefined,
@@ -86,10 +88,10 @@ const ActivityPage = () => {
     data: activity,
     isLoading,
     refetch,
-  } = useGetActivityById(router.query?.activityId, router.query?.id)
+  } = useGetActivityById(params?.activityId, params?.id)
 
-  const courseId = router.query?.id
-  const sectionId = router.query?.activityId as string
+  const courseId = params?.id
+  const sectionId = params?.activityId as string
 
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityReducer)
@@ -185,7 +187,7 @@ const ActivityPage = () => {
         dispatch(
           getDiscussion({
             api: CoursesAPI,
-            id: router.query?.id as string,
+            id: params?.id as string,
             sectionId: sectionId,
           }),
         )
@@ -196,23 +198,25 @@ const ActivityPage = () => {
       dispatch(courseActivityAction.resetActivity())
       dispatch(resetQuizActivity({}))
     }
-  }, [activity, dispatch, router.query.id, sectionId])
+  }, [activity, dispatch, params.id, sectionId])
 
   useEffect(() => {
     if (activity) {
       settingDoneProcessActivity(activity)
     }
   }, [activity])
-  useEffect(() => {
-    router.events.on('routeChangeComplete', () => {
-      isFinishRef.current = false
-    })
-    return () => {
-      router.events.off('routeChangeComplete', () => {
-        isFinishRef.current = true
-      })
-    }
-  }, [router.events])
+  
+  //TODO: check lại phần này với router của nextjs
+  // useEffect(() => {
+  //   router.events.on('routeChangeComplete', () => {
+  //     isFinishRef.current = false
+  //   })
+  //   return () => {
+  //     router.events.off('routeChangeComplete', () => {
+  //       isFinishRef.current = true
+  //     })
+  //   }
+  // }, [router.events])
 
   useEffect(() => {}, [
     endActivityRef.current,
@@ -222,10 +226,11 @@ const ActivityPage = () => {
   ])
 
   // Clear notes & calculator
+  // TODO: check lại phần này với router.asPath của nextjs của dependency
   useEffect(() => {
     dispatch(clearNote())
     dispatch(closeCalculator())
-  }, [dispatch, router.asPath])
+  }, [dispatch])
 
   const onVideoStart = (file_id: string, course_tab_document_id: string) => {
     if (isHasQuizGrading) {
@@ -438,8 +443,8 @@ const ActivityPage = () => {
    * @description lấy data breadcrumb using react-query
    */
   const { data: breadcrumbsMenu } = useGetBreadcrumb(
-    router.query.id,
-    router.query.activityId,
+    params.id,
+    params.activityId,
   )
 
   /**
@@ -461,7 +466,7 @@ const ActivityPage = () => {
       {breadcrumbsMenu?.data &&
         breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
           let url = ''
-          const urlCourseDetail = `/courses/${router.query?.id}/section/${partId}`
+          const urlCourseDetail = `/courses/${params?.id}/section/${partId}`
           switch (e.course_section_type) {
             case 'PART':
               url = urlCourseDetail
@@ -476,7 +481,7 @@ const ActivityPage = () => {
               url = '#'
               break
             default:
-              url = `/courses/my-course/${router.query?.id}`
+              url = `/courses/my-course/${params?.id}`
               break
           }
 
@@ -529,7 +534,7 @@ const ActivityPage = () => {
 
   // Tìm vị trí của hoạt động tiếp theo trong mảng activityIds
   // const nextActivityIndex = activityIds?.indexOf(
-  //   nextActivityId || router.query?.activityId,
+  //   nextActivityId || params?.activityId,
   // )
 
   // Lấy id của hoạt động trước đó
@@ -537,7 +542,7 @@ const ActivityPage = () => {
 
   // Tìm vị trí của hoạt động trước đó trong mảng activityIds
   // const previousActivityIndex = activityIds?.indexOf(
-  //   previousActivityId || router.query?.activityId,
+  //   previousActivityId || params?.activityId,
   // )
 
   // const findActivityByIndex = (previousIndex: number) => {
@@ -578,9 +583,7 @@ const ActivityPage = () => {
       })
     } else {
       // Nếu hoạt động không bị khóa, điều hướng đến hoạt động và ghi nhận sự kiện
-      router.push({
-        pathname: `/courses/${router.query?.id}/activity/${activityId}`,
-      })
+      router.push(`/courses/${params?.id}/activity/${activityId}`)
       trackGAEvent(eventLabel) // Ghi nhận sự kiện Google Analytics
     }
   }
@@ -1019,7 +1022,7 @@ const ActivityPage = () => {
           </div>
           <div></div>
           <div className="mt-6 shadow-activity" data-aos={ANIMATION.DATA_AOS}>
-            <Discussion class_id={(router.query?.id as string) || ''} />
+            <Discussion class_id={(params?.id as string) || ''} />
           </div>
 
           {/* Sratchpad */}

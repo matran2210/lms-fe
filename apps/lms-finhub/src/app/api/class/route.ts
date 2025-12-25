@@ -1,4 +1,3 @@
-import { apiURL } from '@components/mycourses/LearningResource'
 import { fetcher, fetchFormData } from '@services/requestV2'
 import { AxiosPromise } from 'axios'
 import { ExaminationsResponse } from 'src/redux/types/Course/MyCourse/ExamInformation'
@@ -10,7 +9,7 @@ export class ClassAPI {
     quiz_id: string,
     params?: { page_index: number; page_size: number },
   ): Promise<IResponse<IQuizResultList>> {
-    return fetcher(`${apiURL}/classes/${id}/result/${quiz_id}`, {
+    return fetcher(`paramsclasses/${id}/result/${quiz_id}`, {
       params: params,
     })
   }
@@ -19,7 +18,7 @@ export class ClassAPI {
     id: string,
     params: { page_index: number; page_size: number },
   ): Promise<ExaminationsResponse> {
-    return fetcher(`${apiURL}/classes/${id}/examination`, {
+    return fetcher(`paramsclasses/${id}/examination`, {
       method: 'GET',
       params: params,
     })
@@ -30,14 +29,14 @@ export class ClassAPI {
     data: FormData,
   ): AxiosPromise<IResponse<any>> {
     return fetchFormData({
-      url: `${apiURL}/classes/${id}/examination`,
+      url: `paramsclasses/${id}/examination`,
       method: 'PUT',
       formData: data,
     })
   }
 
   static getExamInfo(id: string): Promise<ExamInformation> {
-    return fetcher(`${apiURL}/classes/${id}/exam-info`, { method: 'GET' })
+    return fetcher(`paramsclasses/${id}/exam-info`, { method: 'GET' })
   }
 
   static sendMailRequestRegrading(

@@ -1,3 +1,4 @@
+'use client'
 import { ConfirmIcon } from '@lms/assets'
 import { FINISHED_TEST_TITLE } from '@lms/core'
 import { SappModalV3 } from '@lms/ui'

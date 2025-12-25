@@ -1,4 +1,5 @@
 import { ExpandIcon } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
 import {
   ANIMATION,
   IAuthManager,
@@ -9,7 +10,6 @@ import {
 } from "@lms/core";
 import { trackGAEvent } from "@lms/utils";
 import clsx from "clsx";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 interface IProps {
@@ -75,8 +75,7 @@ type Child =
   | ChildWithCFA;
 
 const ProfileSideBar = ({ page, children, authManager}: IProps) => {
-  const router = useRouter();
-
+const {router} = useFeature()
   const getLabelFromChild = (child: Child): string => {
     if ("label" in child) {
       return child.label;

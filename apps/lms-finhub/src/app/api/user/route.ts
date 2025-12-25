@@ -1,6 +1,5 @@
 import { UserExamInformation } from '@lms/core'
 import { fetcher } from '@services/requestV2'
-import { apiURL } from 'src/redux/services/httpService'
 
 export class UserApi {
   static getExamination(
@@ -8,7 +7,7 @@ export class UserApi {
     page_size: number,
   ): Promise<UserExamInformation> {
     return fetcher(
-      `${apiURL}/users/examination?page_index=${page_index}&page_size=${page_size}`,
+      `paramsusers/examination?page_index=${page_index}&page_size=${page_size}`,
     )
   }
 

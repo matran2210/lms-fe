@@ -6,15 +6,14 @@ import {
   IActivityStateQuestion,
   useAppDispatch,
 } from '@lms/contexts'
+import { IQuestion, IVideo } from '@lms/core'
+import { SappButton, SappModal, SAPPVideo } from '@lms/ui'
 import { debounce } from '@utils/helpers'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import { IQuestion, IVideo } from '@lms/core'
-import { QuestionAPI } from '@pages/api/question'
-import { CoursesAPI } from '@pages/api/courses'
-import { SappButton, SappModal, SAPPVideo } from '@lms/ui'
-import { TestServiceAPI } from '@pages/api/test-api'
+import { TestServiceAPI } from 'src/app/api/test-api/route'
+import { CoursesAPI } from 'src/app/api/courses/route'
 
 type Props = {
   videos?: IVideo[]

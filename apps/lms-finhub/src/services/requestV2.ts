@@ -6,7 +6,7 @@ import axios, {
 } from 'axios'
 import { toast } from 'react-hot-toast'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
-import Router from 'next/router'
+import Router from 'next/navigation'
 import {
   CERTIFICATE_DETAIL,
   COOKIE_INFO,
@@ -14,7 +14,6 @@ import {
   ENTRANCE_TEST_TABLE_RESULT,
   ExceptionErrorCode,
 } from '@lms/core'
-import { apiURL } from 'src/redux/services/httpService'
 import { deleteCookie, getCookie, setCookie } from '@lms/utils'
 
 export const getBaseUrl = () => {
@@ -42,13 +41,14 @@ export const fetcher = (url: string, config: AxiosRequestConfig = {}) =>
 request.interceptors.request.use(async (config: any) => {
   const authenticationManager = new AuthenticationManager()
 
-  const checkRouteCertificate = [
-    ENTRANCE_TEST_RESULT,
-    CERTIFICATE_DETAIL,
-    ENTRANCE_TEST_TABLE_RESULT,
-  ].includes((Router?.router as any)?.state?.pathname)
+  // const checkRouteCertificate = [
+  //   ENTRANCE_TEST_RESULT,
+  //   CERTIFICATE_DETAIL,
+  //   ENTRANCE_TEST_TABLE_RESULT,
+  // ].includes((Router?.router as any)?.state?.pathname)
 
-  if (authenticationManager.getToken() || checkRouteCertificate) {
+  // if (authenticationManager.getToken() || checkRouteCertificate) {
+  if (authenticationManager.getToken()) {
     config.headers = {
       Authorization: 'Bearer ' + authenticationManager.getToken(),
       ...config.headers,
@@ -59,7 +59,8 @@ request.interceptors.request.use(async (config: any) => {
   await new Promise((resolve) => {
     let interval = null as any
     interval = setInterval(() => {
-      if (authenticationManager.getToken() || checkRouteCertificate) {
+      // if (authenticationManager.getToken() || checkRouteCertificate) {
+      if (authenticationManager.getToken()) {
         config.headers = {
           Authorization: 'Bearer ' + authenticationManager.getToken(),
           ...config.headers,
@@ -87,7 +88,7 @@ request.interceptors.response.use(
       if (!isRefreshing) {
         isRefreshing = true
 
-        axios(`${apiURL}/auth/refresh-token`, {
+        axios(`${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/refresh-token`, {
           method: 'POST',
           headers: {
             Authorization: 'Bearer ' + getCookie(COOKIE_INFO.KEYCLOAK_TOKEN),
@@ -187,7 +188,8 @@ request.interceptors.response.use(
     if (
       errorCode?.startsWith('403') // Forbidden các loại
     ) {
-      Router.replace('/')
+      // TODo: nhoứ check lại
+      // Router.replace('/')
     }
 
     return Promise.reject(error)

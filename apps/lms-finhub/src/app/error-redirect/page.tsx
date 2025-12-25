@@ -1,3 +1,4 @@
+'use client'
 import { LAYOUT } from '@lms/core'
 import Image from 'next/image'
 import { SappButton } from '@lms/ui'

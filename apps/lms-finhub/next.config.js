@@ -19,7 +19,8 @@ const securityHeaders = [
 ]
 
 let nextConfig = {
-  reactStrictMode: false,
+  reactStrictMode: true,
+   srcDir: 'src',
   productionBrowserSourceMaps: true,
   optimizeFonts: false,
   swcMinify: false, // BƯỚC 1: transpilePackages vẫn phải giữ để hỗ trợ

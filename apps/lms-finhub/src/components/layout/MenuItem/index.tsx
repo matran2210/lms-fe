@@ -11,13 +11,11 @@ import {
 import { MenuItem as MenuItemType, TitleSidebar } from '@lms/core'
 import { useNotification } from '@lms/hooks'
 import { trackGAEvent } from '@lms/utils'
-import { NotificationAPI } from '@pages/api/notification'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import SappNotificationComponent from '@sapp-fe/sapp-notification'
 import { PageLink } from 'src/constants/routes'
@@ -25,6 +23,8 @@ import { v4 as uuidv4 } from 'uuid'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
 import { BlankAvatarImage } from '@lms/assets'
+import { NotificationAPI } from 'src/app/api/notification/route'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -72,8 +72,10 @@ export default function MenuItem({
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer)
   const router = useRouter()
+  const pathName = usePathname()
+  const params = useParams()
   const isNested = subItems && subItems?.length > 0
-  const selected = router.pathname === url
+  const selected = pathName === url
   const isFetching = useRef(false)
   const pagination = useAppSelector((state) => state.notificationReducer.meta)
 
@@ -106,20 +108,14 @@ export default function MenuItem({
   }
 
   const handleOpenCourseContentPage = () => {
-    router.push({
-      pathname: `/short-course/detail/${router.query.courseId || router.query.id}`,
-    })
+    router.push(`/short-course/detail/${params.courseId || params.id}`)
   }
   const handleOpenResultsPage = () => {
-    router.push({
-      pathname: `/courses/my-course/${router.query.courseId || router.query.id}/results`,
-    })
+    router.push(`/courses/my-course/${params.courseId || params.id}/results`)
   }
 
   const handleViewNotification = (link: string) => {
-    router.push({
-      pathname: link,
-    })
+    router.push(link)
   }
 
   const handleOpenExaminationInfoPage = () => {
@@ -127,7 +123,7 @@ export default function MenuItem({
   }
 
   const onClickMenuItem = () => {
-    const hasCourseContext = router?.query?.courseId || router?.query?.id
+    const hasCourseContext = params?.courseId || params?.id
 
     // Nếu là Notification
     if (isEmpty(url)) {
@@ -165,20 +161,20 @@ export default function MenuItem({
           if (url !== '#' && !isEmpty(url)) {
             const targetUrl =
               url === PageLink.RESULTS
-                ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/results`
+                ? `/courses/my-course/${params?.courseId || params?.id}/results`
                 : url === PageLink.DASHBOARD
-                  ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/dashboard`
+                  ? `/courses/my-course/${params?.courseId || params?.id}/dashboard`
                   : name === TitleSidebar.COURSE_CONTENT
-                    ? `/short-course/detail/${router?.query?.courseId || router?.query?.id}`
+                    ? `/short-course/detail/${params?.courseId || params?.id}`
                     : url
 
-            router.push({ pathname: targetUrl })
+            router.push(targetUrl)
           }
           break
       }
     } else {
       // Nếu không ở trong course
-      if (url && url !== '#') router.push({ pathname: url })
+      if (url && url !== '#') router.push(url)
     }
 
     closeSideBar()
@@ -192,8 +188,8 @@ export default function MenuItem({
     return lastTwo.join(' ')
   }
 
-  const isActivity = router?.query?.activityId || router?.query?.id
-  const isInCourse = router?.query?.courseId
+  const isActivity = params?.activityId || params?.id
+  const isInCourse = params?.courseId
   const isInMyProfile = router.asPath === PageLink.MYPROFILE
   const countNotificationsUnRead = async () => {
     try {
@@ -444,11 +440,11 @@ export default function MenuItem({
             <Link
               href={
                 url === PageLink.RESULTS
-                  ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/results`
+                  ? `/courses/my-course/${params?.courseId || params?.id}/results`
                   : url === PageLink.DASHBOARD
-                    ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/dashboard`
+                    ? `/courses/my-course/${params?.courseId || params?.id}/dashboard`
                     : name === TitleSidebar.COURSE_CONTENT
-                      ? `/short-course/detail/${router?.query?.courseId || router?.query?.id}`
+                      ? `/short-course/detail/${params?.courseId || params?.id}`
                       : url
               }
               // passHref

@@ -1,3 +1,4 @@
+'use client'
 import {
   CalculatorIcon,
   CloseIcon,
@@ -49,10 +50,10 @@ import {
 import { runHighlight } from '@lms/utils'
 import clsx from 'clsx'
 import { isNull, uniqueId } from 'lodash'
-import { useRouter } from 'next/router'
+import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { CoursesAPI } from 'src/api/courses'
+import { CoursesAPI } from 'src/app/api/courses/route'
 
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])
@@ -64,6 +65,7 @@ const CaseStudyResult = () => {
   const [allowUnHighLight, setAllowUnHighLight] = useState(false)
   const [activeQuestionIndex, setActiveQuestionIndex] = useState<number>(0)
   const questionsScrollRef = useRef<HTMLDivElement | null>(null)
+  const params = useParams()
 
   // handle show exhibit list
   const [showListExhibits, setShowListExhibits] = useState(false)
@@ -300,11 +302,11 @@ const CaseStudyResult = () => {
     }
     if (result?.next_topic?.attempt) {
       router.replace(
-        `/case-study/result/${result?.next_topic?.attempt.id}?class_user_id=${router.query.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}`,
+        `/case-study/result/${result?.next_topic?.attempt.id}?class_user_id=${params.class_user_id}&class_id=${params?.class_id}&course_section_id=${params?.course_section_id}`,
       )
     } else {
       router.push(
-        `/case-study/${result?.next_topic?.question_topic_id}?quiz_id=${result?.quiz_id}&class_user_id=${router?.query?.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}&caseStudyId=${result?.next_topic?.id}`,
+        `/case-study/${result?.next_topic?.question_topic_id}?quiz_id=${result?.quiz_id}&class_user_id=${params?.class_user_id}&class_id=${params?.class_id}&course_section_id=${params?.course_section_id}&caseStudyId=${result?.next_topic?.id}`,
       )
     }
   }
@@ -316,11 +318,11 @@ const CaseStudyResult = () => {
     resetEssayBeforeAction()
     if (result?.previous_topic?.attempt) {
       router.replace(
-        `/case-study/result/${result?.previous_topic?.attempt.id}?class_user_id=${router.query.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}`,
+        `/case-study/result/${result?.previous_topic?.attempt.id}?class_user_id=${params.class_user_id}&class_id=${params?.class_id}&course_section_id=${params?.course_section_id}`,
       )
     } else {
       router.push(
-        `/case-study/${result?.previous_topic?.question_topic_id}?quiz_id=${result?.quiz_id}&class_user_id=${router?.query?.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}&caseStudyId=${result?.previous_topic?.id}`,
+        `/case-study/${result?.previous_topic?.question_topic_id}?quiz_id=${result?.quiz_id}&class_user_id=${params?.class_user_id}&class_id=${params?.class_id}&course_section_id=${params?.course_section_id}&caseStudyId=${result?.previous_topic?.id}`,
       )
     }
   }
@@ -459,16 +461,16 @@ const CaseStudyResult = () => {
 
   const backToPart = () => {
     resetEssayBeforeAction()
-    if (router?.query?.class_id) {
-      if (router?.query?.is_from_activity) {
+    if (params?.class_id) {
+      if (params?.is_from_activity) {
         router.push(
           ROUTES.ACTIVITY(
-            router?.query?.class_id as string,
-            router?.query?.course_section_id as string,
+            params?.class_id as string,
+            params?.course_section_id as string,
           ),
         )
       } else {
-        router.push(ROUTES.COURSE_DETAIL(router?.query?.class_id as string))
+        router.push(ROUTES.COURSE_DETAIL(params?.class_id as string))
       }
     } else {
       router.push(ROUTES.SHORT_COURSE)
@@ -579,8 +581,8 @@ const CaseStudyResult = () => {
   }, [startResize])
 
   useEffect(() => {
-    !!router.query.id && fetchResult(router.query.id as string)
-  }, [router.query.id])
+    !!params.id && fetchResult(params.id as string)
+  }, [params.id])
 
   const questionRender = useMemo(() => {
     editorRefs.current = new Array(result?.answers?.length || 0).fill(null)

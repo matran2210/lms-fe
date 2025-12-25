@@ -1,3 +1,4 @@
+'use client'
 import SappLoading from '@components/common/SappLoading'
 import {
   FileTextIcon,
@@ -34,9 +35,7 @@ import {
   TEST_TYPE,
 } from '@lms/core'
 import { runHighlight, trackGAEvent } from '@lms/utils'
-import { CoursesAPI } from '@pages/api/courses'
 import { cloneDeep, isEmpty, isUndefined, uniqueId } from 'lodash'
-import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import ConFirmSubmit from './conFirmSubmit'
@@ -74,8 +73,6 @@ import {
   SlotValue,
   TestWrapper,
 } from '@lms/ui'
-import { QuestionAPI } from '@pages/api/question'
-import { TestAPI } from '@pages/api/test'
 import { download } from '@utils/index'
 import { Tooltip } from 'antd'
 import clsx from 'clsx'
@@ -86,7 +83,8 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import { TestServiceAPI } from '@pages/api/test-api'
+import { TestServiceAPI } from 'src/app/api/test-api/route'
+import { useParams, useRouter } from 'next/navigation'
 
 declare global {
   interface Window {
@@ -106,9 +104,10 @@ const TestDetail = () => {
   const { courseType, setSubmitEventTest } = useCourseContext()
   const scrollRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
-  const { quizDetail } = useGetQuizDetail(router.query.id as string)
-  const { questions } = useGetQuestionTabs(router.query.id as string)
-  const type = router.query.type
+  const params = useParams()
+  const { quizDetail } = useGetQuizDetail(params.id as string)
+  const { questions } = useGetQuestionTabs(params.id as string)
+  const type = params.type
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
   const { control, watch, getValues, setValue } = useForm()
   const {
@@ -1611,12 +1610,12 @@ const TestDetail = () => {
 
       fetchAnswersSubmitted()
     } else {
-      if (router.query.id) {
+      if (params.id) {
         const createQuizAttempt = async () => {
           try {
             const res = await TestServiceAPI.createQuizAttempt(
-              router.query.id as string,
-              router.query.class_user_id as string,
+              params.id as string,
+              params.class_user_id as string,
             )
             localStorage.setItem('quizAttempt', JSON.stringify(res.data))
             setIsQuizAttemptCreated(true) // Mark the attempt as created
@@ -1649,7 +1648,7 @@ const TestDetail = () => {
         createQuizAttempt()
       }
     }
-  }, [router.query.id])
+  }, [params.id])
 
   useEffect(() => {
     if (!isQuizAttemptCreated) return
@@ -2152,7 +2151,7 @@ const TestDetail = () => {
                               currentTabContent?.topicDescription
                                 ?.description || ''
                             }
-                            storageKey={`${router.query.id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
+                            storageKey={`${params.id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
                             className="sapp-questions mb-6"
                           />
                         )}
@@ -2246,7 +2245,7 @@ const TestDetail = () => {
                             currentTabContent?.topicDescription?.description ||
                             ''
                           }
-                          storageKey={`${router.query.id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
+                          storageKey={`${params.id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
                           className="mb-4"
                         />
                       )}
@@ -2356,7 +2355,7 @@ const TestDetail = () => {
                     router.replace(`/entrance-test`)
                     break
                   default:
-                    const class_id = router.query.class_id
+                    const class_id = params.class_id
                     if (class_id) {
                       router.push(`/short-course/detail/${class_id}`)
                     } else {

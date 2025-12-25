@@ -3,12 +3,12 @@ import { COOKIE_INFO, IDeviceItem, MY_COURSES } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import { SappDrawerV2 } from "@lms/ui";
 import { calculateTimeAgo, getCookie, getSessionIdFromToken } from "@lms/utils";
-import { AuthAPI } from "@pages/api/profile";
 import clsx from "clsx";
 import { useEffect, useMemo, useState } from "react";
-import UserApi from "src/redux/services/User/user";
 import ProfileCard from "../ProfileCard";
 import DeviceItem from "./DeviceItem";
+import UserApi from 'src/redux/services/User/user'
+import { AuthAPI } from 'src/app/api/profile/route'
 
 const DeviceList = () => {
   const sessionId =

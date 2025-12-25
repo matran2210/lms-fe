@@ -1,17 +1,17 @@
-import { CoursesAPI } from '@pages/api/courses'
 import { ISection } from '@lms/core'
-import { useRouter } from 'next/router'
+import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { CoursesAPI } from 'src/app/api/courses/route'
 
 export const useSectionData = (sectionId: string | null, type: string) => {
   const [sections, setSections] = useState<ISection[]>([])
-  const router = useRouter()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const params = useParams()
 
   const fetchSections = async (page_size: number) => {
     try {
       if (sectionId) {
-        const class_id = router.query.courseId || router.query.id
+        const class_id = params.courseId || params.id
         setIsLoading(true)
         const res = await CoursesAPI.getCourseSubsectionList(
           page_size,

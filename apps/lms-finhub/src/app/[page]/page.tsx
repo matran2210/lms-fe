@@ -1,3 +1,4 @@
+'use client'
 import Layout from '@components/layout'
 import { Icon } from '@lms/assets'
 import {
@@ -51,7 +52,7 @@ import {
   TabHeaderItem,
 } from '@lms/ui'
 import clsx from 'clsx'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { PageLink } from 'src/constants/routes'
 import UserApi from 'src/redux/services/User/user'
 

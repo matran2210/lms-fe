@@ -1,21 +1,23 @@
+'use client'
 import { CloseIcon } from '@lms/assets'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { FullScreenLayout } from '@lms/ui'
 import { LAYOUT } from '@lms/core'
 import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { GRADING_METHOD, TEST_ATTEMPT_TYPE } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { IQuestion, QUESTION_TYPES } from '@lms/core'
 import { IAtempt, IRequirement } from 'src/type/courses-3-level/test'
 import { PageLink } from 'src/constants/routes'
-import { CoursesAPI } from 'src/api/courses'
-import { TestServiceAPI } from 'src/api/test-api'
+import { CoursesAPI } from 'src/app/api/courses/route'
+import { TestServiceAPI } from 'src/app/api/test-api/route'
+import { useParams, useRouter } from 'next/navigation'
 
 const Explanation = () => {
   const router = useRouter()
+  const params = useParams()
   const [activeQuestion, setActiveQuestion] = useState<IQuestion | undefined>()
   const [attempt, setAttempt] = useState<IAtempt>()
   const [loading, setLoading] = useState<boolean>(false)
@@ -106,10 +108,10 @@ const Explanation = () => {
   }
 
   useEffect(() => {
-    if (router.query.id) {
-      getActiveQuestion(router.query.id as string)
+    if (params.id) {
+      getActiveQuestion(params.id as string)
     }
-  }, [router.query.id])
+  }, [params.id])
 
   const handleDownload = async (data: {
     files: { name: string; file_key: string }[]
@@ -119,8 +121,8 @@ const Explanation = () => {
     } catch (error) {}
   }
 
-  const isUserViewAnswers = router?.query?.title === 'Your Answers Detail'
-  const viewAnswersType = router?.query?.type
+  const isUserViewAnswers = params?.title === 'Your Answers Detail'
+  const viewAnswersType = params?.type
   const isUserViewAnswersDetailAndEssay =
     isUserViewAnswers && activeQuestion?.qType === QUESTION_TYPES.ESSAY
   return (

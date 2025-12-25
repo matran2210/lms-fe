@@ -2,12 +2,9 @@ import SappIcon from '@components/common/SappIcon'
 import { BlankAvatarImage, BlankAvatarNotificationImage } from '@lms/assets'
 import { courseActivityReducer, createDiscussion, getDiscussion, ICreateDiscussionResReact, IDiscussion, reactDiscussion, uploadImagesDiscussion, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
 import { HookFormTextArea, SappButton, SappButtonIcon, SappModalImage } from '@lms/ui'
-import { ActivityAPI } from '@pages/api/activity'
-import { CoursesAPI } from '@pages/api/courses'
 import { Skeleton } from 'antd'
 import clsx from 'clsx'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -16,6 +13,9 @@ import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import ActionDiscussion from './ActionDiscussion'
 import DiscussionElement from './DiscussionElement'
 import SendComment from './SendComment'
+import { useParams, useRouter } from 'next/navigation'
+import { ActivityAPI } from 'src/app/api/activity/route'
+import { CoursesAPI } from 'src/app/api/courses/route'
 
 type Props = {
   class_id: string
@@ -27,6 +27,7 @@ type Props = {
  */
 const Discussion = ({ class_id }: Props) => {
   const router = useRouter()
+  const params = useParams()
 
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityReducer)
@@ -65,7 +66,7 @@ const Discussion = ({ class_id }: Props) => {
     { comment, commentRoot }: { comment: string; commentRoot: string },
     isRoot?: boolean,
   ) => {
-    if (router.query.activityId) {
+    if (params.activityId) {
       let parent_id = idReply
       let content = comment
       let fieldToReset
@@ -126,7 +127,7 @@ const Discussion = ({ class_id }: Props) => {
           createDiscussion({
             api: ActivityAPI,
             data: {
-              course_section_id: router.query.activityId as string,
+              course_section_id: params.activityId as string,
             class_id: class_id,
             content: content?.trim(),
             parent_id,
@@ -144,7 +145,7 @@ const Discussion = ({ class_id }: Props) => {
                 getDiscussion({
                   api: CoursesAPI,
                   id: class_id,
-                  sectionId: router.query.activityId as string,
+                  sectionId: params.activityId as string,
                 }),
               )
               return
@@ -167,7 +168,7 @@ const Discussion = ({ class_id }: Props) => {
                   getDiscussion({
                     api: CoursesAPI,
                     id: class_id,
-                    sectionId: router.query.activityId as string,
+                    sectionId: params.activityId as string,
                   }),
                 )
                 if (isRoot) {
@@ -212,7 +213,7 @@ const Discussion = ({ class_id }: Props) => {
         await dispatch(getDiscussion({
           api: CoursesAPI,
           id: class_id,
-          sectionId: router.query.activityId as string,
+          sectionId: params.activityId as string,
         }),)
       }
     }, 1000)

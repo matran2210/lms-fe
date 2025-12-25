@@ -1,3 +1,4 @@
+'use client'
 import { HookFormTextArea } from '@lms/ui'
 import clsx from 'clsx'
 import { Control } from 'react-hook-form'

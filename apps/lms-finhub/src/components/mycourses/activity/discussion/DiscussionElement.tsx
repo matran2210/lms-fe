@@ -16,7 +16,6 @@ import {
 } from '@lms/contexts'
 import { HookFormTextArea, SappButton, SappButtonIcon } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
-import { CoursesAPI } from '@pages/api/courses'
 import { calculateTimeAgo } from '@utils/helpers'
 import { Popover } from 'antd'
 import clsx from 'clsx'
@@ -25,11 +24,12 @@ import Image from 'next/image'
 import { SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { ActivityAPI } from 'src/pages/api/activity'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import ActionDiscussion from './ActionDiscussion'
 import ModalDeleteComment from './ModalDeleteComment'
 import SendComment from './SendComment'
+import { ActivityAPI } from 'src/app/api/activity/route'
+import { CoursesAPI } from 'src/app/api/courses/route'
 
 type Props = {
   rank?: number

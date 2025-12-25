@@ -1,3 +1,4 @@
+'use client'
 import { QuizResults } from '@lms/feature-courses'
 import { FullScreenLayout } from '@lms/ui'
 import withAuthorization from 'src/HOC/withAuthorization'

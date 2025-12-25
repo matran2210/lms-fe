@@ -5,7 +5,6 @@ import { useSappPaging } from "@lms/hooks";
 import { isQuizExpired } from "@lms/utils";
 import { Collapse } from "antd";
 import clsx from "clsx";
-import router from "next/router";
 import { useEffect, useState } from "react";
 import TableListQuizInActivity from "./TableListQuizInActivity";
 import ModalActionTest from "./ModalActionTest";
@@ -15,7 +14,7 @@ interface CollapseActivityProps {
 }
 
 const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
-  const { courseApi } = useFeature();
+  const { courseApi, router } = useFeature();
   const [activeKey, setActiveKey] = useState<string | string[]>([]);
   const [hasDataLoaded, setHasDataLoaded] = useState(false);
   const [open, setOpen] = useState<{ status: boolean; data: QuizActivity | null }>({

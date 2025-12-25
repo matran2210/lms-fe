@@ -1,3 +1,4 @@
+'use client'
 import { AlertTriagle } from '@lms/assets'
 import { SappModalV3 } from '@lms/ui'
 

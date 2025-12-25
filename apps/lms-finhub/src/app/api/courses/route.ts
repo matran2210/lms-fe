@@ -1,6 +1,5 @@
 import { fetcher } from '@services/requestV2'
 import url from 'src/redux/services/Course/MyCourse/Test/url'
-import { apiURL } from 'src/redux/services/httpService'
 import {
   CourseDetail,
   IAnswerQuizLastestAttempt,
@@ -145,7 +144,7 @@ export class CoursesAPI {
   static getQuizAttemptsEntranceTestChartData(
     id: string | string[] | undefined,
   ): Promise<any> {
-    return fetcher(`${apiURL}/entrance-test/chart-data/${id}`)
+    return fetcher(`paramsentrance-test/chart-data/${id}`)
   }
 
   static getPartDetail(
@@ -184,7 +183,7 @@ export class CoursesAPI {
     success: boolean
     data: IScoreDetails
   }> {
-    return fetcher(`${apiURL}/entrance-test/quiz-attempts/${id}/answers`, {
+    return fetcher(`paramsentrance-test/quiz-attempts/${id}/answers`, {
       params: {
         page_index: page_index || 1,
         page_size: page_size || 10,
