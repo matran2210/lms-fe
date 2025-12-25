@@ -1,0 +1,30 @@
+/* Tùy chỉnh toàn bộ tooltip */
+.tooltip-action .ant-tooltip-inner {
+  @apply bg-white text-black;
+}
+/* Tùy chỉnh màu mũi tên */
+.tooltip-action .ant-tooltip-arrow::before {
+  @apply bg-white;
+}
+
+// Tooltip sidebar teacher
+.teacher-sidebar-tooltip {
+  --tooltip-content-margin-left: 10px;
+  .ant-tooltip-arrow {
+    left: var(--tooltip-content-margin-left) !important;
+  }
+  .ant-tooltip-content {
+    margin-left: var(--tooltip-content-margin-left);
+  }
+}
+
+//Tooltip show all btn
+.tooltip-show-all {
+  .ant-tooltip-arrow {
+    bottom: 1px !important;
+  }
+}
+
+.sapp-tooltip .ant-tooltip-inner {
+  @apply py-1 px-2;
+}

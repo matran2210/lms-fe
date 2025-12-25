@@ -1,0 +1,86 @@
+[
+  {
+    "code": "404|000000",
+    "message": "Not Found"
+  },
+  {
+    "code": "304|000000",
+    "message": "Not Modified"
+  },
+  {
+    "code": "401|000000",
+    "message": "Unauthorized"
+  },
+  {
+    "code": "403|000000",
+    "message": "Forbidden"
+  },
+  {
+    "code": "400|000000",
+    "message": "Bad Request"
+  },
+  {
+    "code": "403|000005",
+    "message": "Forbidden Inactive"
+  },
+  {
+    "code": "403|000008",
+    "message": "Forbidden Blocked"
+  },
+  {
+    "code": "403|000010",
+    "message": "The Number Of Logins Has Been Exceeded"
+  },
+  {
+    "code": "422|000405",
+    "message": "Unprocess Entity"
+  },
+  {
+    "code": "400|010004",
+    "message": "Student Not Found"
+  },
+  {
+    "code": "400|010008",
+    "message": "Your Account Has Been Blocked"
+  },
+  {
+    "code": "400|010009",
+    "message": "User Has Not Permission For Resource"
+  },
+  {
+    "code": "400|010401",
+    "message": "Username Already Exists"
+  },
+  {
+    "code": "400|010433",
+    "message": "User Account Incorrect"
+  },
+  {
+    "code": "400|010501",
+    "message": "Email Already Exists"
+  },
+  {
+    "code": "400|010601",
+    "message": "Phone Already Exists"
+  },
+  {
+    "code": "400|010704",
+    "message": "Level Of Student Not Found"
+  },
+  {
+    "code": "400|010833",
+    "message": "User Password Incorrect"
+  },
+  {
+    "code": "400|020004",
+    "message": "Staff Not Found"
+  },
+  {
+    "code": "400|020501",
+    "message": "Email Already Exists"
+  },
+  {
+    "code": "400|550001",
+    "message": "Link hết hạn. Vui lòng kiểm tra lịch học để lấy link mới."
+  }
+]

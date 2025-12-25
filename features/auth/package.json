@@ -1,0 +1,23 @@
+{
+  "name": "@lms/feature-auth",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . --ext .ts,.tsx",
+    "type-check": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "lottie-react": "^2.4.1"
+  },
+  "dependencies": {
+    "@lms/assets": "workspace:*",
+    "@lms/contexts": "workspace:*",
+    "@lms/core": "workspace:*",
+    "@lms/hooks": "workspace:*",
+    "@lms/ui": "workspace:*",
+    "@lms/utils": "workspace:*"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "root": false,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": ["./tsconfig.json"]
+  },
+  "plugins": ["@typescript-eslint"],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "rules": {
+    "no-empty": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@next/next/no-document-import-in-page": "off",
+    "no-console": "error",
+    "no-extra-boolean-cast": "off",
+    "no-case-declarations": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "no-unsafe-optional-chaining": "off",
+    "@typescript-eslint/no-explicit-any": "off"
+  }
+}

@@ -1,0 +1,15 @@
+package.json
+package-lock.json
+tsconfig.json
+src/services/en.exceptions.json
+src/styles/*
+next-env.d.ts
+public/*
+src/assets/*
+src/pages/*.tsx
+next-seo.config.js
+src/i18n/locales/*
+.eslintrc.js
+tailwind.config.js
+postcss.config.js
+next.config.js

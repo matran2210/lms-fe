@@ -1,0 +1,19 @@
+{
+  "name": "@lms/hooks",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "scripts": {
+    "lint": "eslint . --ext .ts,.tsx",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@lms/contexts": "workspace:*",
+    "@lms/core": "workspace:*",
+    "@lms/utils": "workspace:*",
+    "antd": "^5.25.0",
+    "lodash": "^4.17.21",
+    "react-hook-form": "7.48.2"
+  }
+}

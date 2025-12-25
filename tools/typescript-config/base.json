@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["es2022", "DOM", "DOM.Iterable"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noUncheckedIndexedAccess": true,
+    "incremental": false,
+    "moduleDetection": "force",
+
+    "baseUrl": ".",
+    "jsx": "preserve",
+    "noEmit": true,
+
+    "paths": {
+      "@lms/feature-dashboard": ["features/dashboard/index.ts"],
+      "@lms/feature-test": ["features/test/index.ts"],
+      "@lms/feature-calendar": ["features/calendar/index.ts"],
+      "@lms/contexts": ["libs/contexts/index.ts"],
+      "@lms/assets": ["libs/assets/index.ts"],
+      "@lms/ui": ["libs/ui/index.ts"],
+      "@lms/utils": ["libs/utils/index.ts"],
+      "@lms/core": ["libs/core/index.ts"],
+      "@lms/hooks": ["libs/hooks/index.ts"],
+      "@lms/feature-user": ["features/user/index.ts"],
+      "@lms/feature-auth": ["features/auth/index.ts"],
+      "@lms/feature-class": ["features/class/index.ts"],
+      "@lms/feature-courses": ["features/courses/index.ts"],
+      "@lms/feature-notifications": ["features/notifications/index.ts"],
+      "@lms/config-tailwind": ["tools/config-tailwind/tailwind.config.js"],
+      "@lms/typescript-config": ["tools/typescript-config/base.json"]
+    }
+  },
+  "exclude": ["node_modules", "dist", ".next"]
+}
