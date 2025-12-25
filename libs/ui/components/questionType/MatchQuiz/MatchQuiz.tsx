@@ -15,7 +15,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { MY_COURSES } from "@lms/core";
+import { AnswerItem, IAnswerMultipleChoice, MY_COURSES } from "@lms/core";
 import { IExhibitData } from "@lms/core";
 import CustomEdge from "./CustomEdge";
 import { CustomNode } from "./CustomNode";
@@ -382,7 +382,7 @@ const MatchQuiz = forwardRef(
       const nodeColors = new Map<string, string>();
       edges.forEach((edge) => {
         const answerCurrent = corrects.find(
-          (item: any) => item?.id === edge?.source,
+          (item: { id: string }) => item?.id === edge?.source,
         );
         const isMultiAnswer = answerCurrent?.answer_ids?.includes(edge?.target);
         const isCorrect =
@@ -493,11 +493,11 @@ const MatchQuiz = forwardRef(
 
       const allAnswersCorrect =
         defaultAnswer?.length > 0
-          ? defaultAnswer?.every((pair: any) =>
-              corrects.some(
-                (c: any) =>
-                  String(c.id) === String(pair.question_id) &&
-                  String(c?.answer?.id) === String(pair.answer_id),
+          ? defaultAnswer?.every((pair: AnswerItem) =>
+              corrects?.some(
+                (c: IAnswerMultipleChoice) =>
+                  String(c?.id) === String(pair?.question_id) &&
+                  String(c?.answer?.id) === String(pair?.answer_id),
               ),
             )
           : false;
