@@ -67,7 +67,7 @@ const Editor = ({
   key,
   editorRef,
 }: IProps) => {
-  const [editorContent, setEditorContent] = useState<string | undefined>("");
+  const [editorContent, setEditorContent] = useState<string>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -79,7 +79,7 @@ const Editor = ({
         return;
       }
 
-      const converted = await convertMathHtmlToImage(valueText || "");
+      const converted = await convertMathHtmlToImage(valueText);
 
       if (mounted) {
         setEditorContent(converted);
