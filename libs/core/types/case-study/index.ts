@@ -97,6 +97,8 @@ export interface IQuestionResult {
     average_time: string
   }
   question_topic: ITopic
+  drag_drop_answers: any
+
 }
 
 export interface ITopic {
