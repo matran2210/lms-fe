@@ -381,14 +381,14 @@ const MatchQuiz = forwardRef(
       const connectedIds = new Set<string>();
       const nodeColors = new Map<string, string>();
       edges.forEach((edge) => {
-        const answerCurrent = corrects.find(
+        const answerCurrent = corrects?.find(
           (item: { id: string }) => item?.id === edge?.source,
         );
         const isMultiAnswer = answerCurrent?.answer_ids?.includes(edge?.target);
         const isCorrect =
-          correctMap.get(edge.source) === edge.target || isMultiAnswer;
-        connectedIds.add(edge.source);
-        connectedIds.add(edge.target);
+          correctMap.get(edge?.source) === edge?.target || isMultiAnswer;
+        connectedIds.add(edge?.source);
+        connectedIds.add(edge?.target);
 
         nodeColors.set(edge.source, isCorrect ? Color.Success : Color.Error);
         nodeColors.set(edge.target, isCorrect ? Color.Success : Color.Error);

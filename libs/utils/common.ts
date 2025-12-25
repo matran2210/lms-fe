@@ -699,7 +699,6 @@ export const handleMultipleCorrectAnswer = (
   dragDropAnswers: IDragDropAnswer[],
   answers: Correct[],
 ) => {
-  console.log("answers", answers);
   answers?.forEach((item: Correct) => {
     dragDropAnswers?.forEach((correctItem: IDragDropAnswer) => {
       if (correctItem?.answer_ids?.includes(item?.id)) {
