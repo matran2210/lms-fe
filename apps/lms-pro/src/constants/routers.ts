@@ -41,4 +41,5 @@ export const PageLink = {
   COURSE_CONTENT: '/courses/my-course/[courseId]',
   CALENDAR: '/calendar',
   EXAM_LIST: '/exam_list',
+  CLASS_RESOURCE: '/courses/my-course/[courseId]/class-resource',
 }

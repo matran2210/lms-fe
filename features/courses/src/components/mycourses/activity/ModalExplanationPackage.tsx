@@ -1,8 +1,8 @@
-import { ExplanationPackageV2 } from "explanation-package";
+import { ExplanationPackageV2 } from "@sapp-fe/explanation-package";
 import { useEffect, useState } from "react";
-// import 'explanation-package/dist/index.css'
+// import '@sapp-fe/explanation-package/dist/index.css'
 import { AltArrowLeft, CloseIconV2 } from "@lms/assets";
-import { useFeature } from '@lms/contexts';
+import { useFeature } from "@lms/contexts";
 import { SappLoading } from "@lms/ui";
 import { Modal } from "antd";
 
@@ -33,18 +33,20 @@ const ModalExplanationPackage = ({
   setOpen: () => void;
   document_id?: string;
 }) => {
-  const { activityApi, courseApi, uploadApi } = useFeature()
+  const { activityApi, testServiceApi, uploadApi } = useFeature();
   const [activeQuestion, setActiveQuestion] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const getActiveQuestion = async (id: string) => {
     setLoading(true);
     try {
-      const resultResponse = await activityApi.getQuizAttemptsAnswer(id) as any
-      const topicDescription = await courseApi.getTopicDescription(
+      const resultResponse = (await activityApi.getQuizAttemptsAnswer(
+        id,
+      )) as any;
+      const topicDescription = (await testServiceApi.getTopicDescription(
         resultResponse?.data?.answer?.question?.question_topic_id,
         resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
-      ) as any
+      )) as any;
       setActiveQuestion({
         ...resultResponse?.data?.answer?.question,
         answer_file: resultResponse.data.answer.answer_file,
@@ -113,7 +115,7 @@ const ModalExplanationPackage = ({
     files: { name: string; file_key: string }[];
   }) => {
     try {
-      await uploadApi.downloadFile(data);
+      await testServiceApi.downloadFile(data);
     } catch {}
   };
 

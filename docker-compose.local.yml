@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  lms-pro:
+    build:
+      context: .
+      dockerfile: ./prod.Dockerfile
+      args:
+        APP_NAME: "lms-pro"
+    container_name: lms-pro
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+    restart: always
+    networks:
+      - local
+
+  lms-finhub:
+    build:
+      context: .
+      dockerfile: ./prod.Dockerfile
+      args:
+        APP_NAME: "lms-finhub"
+    container_name: lms-finhub
+    ports:
+      - "3001:3000"
+    environment:
+      NODE_ENV: production
+    restart: always
+    networks:
+      - local
+
+  lms-zoom:
+    build:
+      context: .
+      dockerfile: ./prod.zoom.Dockerfile
+      args:
+        APP_NAME: "lms-zoom"
+    container_name: lms-zoom
+    ports:
+      - "3002:3000"
+    environment:
+      NODE_ENV: production
+    restart: always
+    networks:
+      - local
+networks:
+  local:
+ 

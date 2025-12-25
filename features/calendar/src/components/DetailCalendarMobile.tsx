@@ -1,11 +1,23 @@
-import { CollapseArrowIcon, SpinIcon, StatusDotIcon, ZoomIcon } from "@lms/assets";
-import { CALENDAR_FILTER_TYPE, CourseSectionType, ICalendarDetail, LEARNING_USER_STATUS, LearningMode, TEST_TYPE_ENUM } from "@lms/core";
+import {
+  CollapseArrowIcon,
+  SpinIcon,
+  StatusDotIcon,
+  ZoomIcon,
+} from "@lms/assets";
+import {
+  CALENDAR_FILTER_TYPE,
+  CourseSectionType,
+  ICalendarDetail,
+  LEARNING_USER_STATUS,
+  LearningMode,
+  TEST_TYPE_ENUM,
+} from "@lms/core";
 import { ButtonPrimary, SappDrawerV3, SappIcon } from "@lms/ui";
 import { Divider } from "antd";
 import clsx from "clsx";
 import dayjs, { Dayjs } from "dayjs";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
-import { IEvent } from "sapp-common-package/dist/types";
+import { IEvent } from "@sapp-fe/sapp-common-package/dist/types";
 import CourseTree from "./CourseTree";
 import { buildQueryString } from "@lms/utils";
 import { useFeature } from "../../../../libs/state";
@@ -16,7 +28,7 @@ interface IProps {
 }
 
 const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
-  const {router, calendarApi} = useFeature();
+  const { router, calendarApi } = useFeature();
   const [data, setData] = useState<ICalendarDetail>();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -127,7 +139,10 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
     setLoading(true);
     try {
       if (!open?.data?.id) return;
-      const res = await calendarApi?.getDetailEvent(open?.data?.id, open?.data?.type === "HOLIDAY");
+      const res = await calendarApi?.getDetailEvent(
+        open?.data?.id,
+        open?.data?.type === "HOLIDAY",
+      );
       setData(res.data);
     } finally {
       setLoading(false);

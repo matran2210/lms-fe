@@ -1,4 +1,22 @@
-import { AddNoteAnimation, BlankAvatarImage, CalculatorAnimation, CalendarAnimation, CourseContentAnimation, DashboardAnimation, EntranceTestAnimation, EventTestAnimation, ExamInfoAnimation, ExamListAnimation, ExpandIcon, MyCourseAnimation, NoteListAnimation, NotificationAnimation, ResourceAnimation, TestQuizListAnimation } from "@lms/assets";
+import {
+  AddNoteAnimation,
+  BlankAvatarImage,
+  CalculatorAnimation,
+  CalendarAnimation,
+  CourseContentAnimation,
+  DashboardAnimation,
+  EntranceTestAnimation,
+  EventTestAnimation,
+  ExamInfoAnimation,
+  ExamListAnimation,
+  ExpandIcon,
+  MyCourseAnimation,
+  NoteListAnimation,
+  NotificationAnimation,
+  ResourceAnimation,
+  TestQuizListAnimation,
+  OpenBookAnimation,
+} from "@lms/assets";
 import {
   activeNotesList,
   clearNotifications,
@@ -9,11 +27,7 @@ import {
   useFeature,
   userReducer,
 } from "@lms/contexts";
-import {
-  LANG_SIGNIN,
-  MenuItem as MenuItemType,
-  TitleSidebar,
-} from "@lms/core";
+import { LANG_SIGNIN, MenuItem as MenuItemType, TitleSidebar } from "@lms/core";
 import { useNotification } from "@lms/hooks";
 import { trackGAEvent } from "@lms/utils";
 import { Divider } from "antd";
@@ -24,7 +38,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import SappNotificationComponent from "sapp-notification";
+import SappNotificationComponent from "@sapp-fe/sapp-notification";
 import { v4 as uuidv4 } from "uuid";
 import MenuItemsList from "../MenuItemsList";
 
@@ -41,8 +55,7 @@ export default function MenuItem({
   closeSideBar,
   setOpenExaminationInfo,
 }: MenuItemProps) {
-  const { notificationApi,
-    pageLink } = useFeature();
+  const { notificationApi, pageLink } = useFeature();
   const {
     isViewDetail,
     openNotification,
@@ -193,7 +206,9 @@ export default function MenuItem({
                   ? `/courses/my-course/${router.query.courseId || router.query.id}/dashboard`
                   : name === TitleSidebar.COURSE_CONTENT
                     ? `/courses/my-course/${router.query.courseId || router.query.id}`
-                    : url;
+                    : name === TitleSidebar.CLASS_RESOURCE
+                      ? `/courses/my-course/${router.query.courseId || router.query.id}/class-resource`
+                      : url;
 
             router.push({ pathname: targetUrl });
           }
@@ -370,6 +385,15 @@ export default function MenuItem({
             )}
           </div>
         );
+      case "class-resource":
+        return (
+          <Lottie
+            animationData={OpenBookAnimation}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        );
 
       default:
         return (
@@ -412,7 +436,7 @@ export default function MenuItem({
               />
             ) : (
               <Image
-                  src={BlankAvatarImage}
+                src={BlankAvatarImage}
                 alt="avatar"
                 className="rounded-full"
                 width={40}
@@ -573,6 +597,7 @@ export default function MenuItem({
             name === TitleSidebar.RESULTS ||
             name === TitleSidebar.EXAM ||
             name === TitleSidebar.DASHBOARD ||
+            name === TitleSidebar.CLASS_RESOURCE ||
             Icon === "stats-chart-sharp" ||
             Icon === "profile-detail")
             ? "hidden"
@@ -616,9 +641,11 @@ export default function MenuItem({
                   ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/results`
                   : url === pageLink.DASHBOARD
                     ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/dashboard`
-                    : name === TitleSidebar.COURSE_CONTENT
-                      ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}`
-                      : url
+                    : name === TitleSidebar.CLASS_RESOURCE
+                      ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/class-resource`
+                      : name === TitleSidebar.COURSE_CONTENT
+                        ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}`
+                        : url
               }
               // passHref
             >

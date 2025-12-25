@@ -48,10 +48,13 @@ import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { CoursesAPI } from '../api/courses'
 import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
 
+import {
+  removeHighlights,
+  serializeHighlights,
+} from '@funktechno/texthighlighter/lib'
 import {
   CheckCircleOutlineYellow,
   FlagIconV2,
@@ -89,14 +92,15 @@ import {
   ButtonText,
   ButtonTextV2,
   HighlightableHTML,
+  MatchQuizComponent,
   ModalUploadFile,
+  NewDragNDropQuestion,
+  SlotValue,
+  TestWrapper,
 } from '@lms/ui'
-import { MatchQuizComponent } from '@lms/ui'
-import { SlotValue, NewDragNDropQuestion } from '@lms/ui'
-import { TestWrapper } from '@lms/ui'
 import { checkSheetAnswered, runHighlight, trackGAEvent } from '@lms/utils'
 import { EventTestAPI } from '@pages/api/event-test'
-import { TestAPI } from '@pages/api/test'
+import { TestServiceAPI } from '@pages/api/test-api'
 import { UploadAPI } from '@pages/api/upload'
 import { TabsProps, Tooltip } from 'antd'
 import clsx from 'clsx'
@@ -108,15 +112,10 @@ import {
   isValuesEqual,
   isWorkbookEmpty,
 } from '../../utils/helpers/quiz-test/helper'
-import { QuestionAPI } from '../api/question'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import {
-  removeHighlights,
-  serializeHighlights,
-} from '@funktechno/texthighlighter/lib'
 declare global {
   interface Window {
     userAgreed: any
@@ -1434,7 +1433,7 @@ const TestDetail = () => {
     return value
   }
   const getResult = async (currentTabContent: any) => {
-    const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
+    const res = await TestServiceAPI.getQuestionAnswer(currentTabContent.id)
     let corrects = {} as any
     if (
       currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
@@ -1560,13 +1559,13 @@ const TestDetail = () => {
     let question
     try {
       if (!isUndefined(quizDetail) && !isUndefined(questions)) {
-        topicDescription = await CoursesAPI.getTopicDescription(
+        topicDescription = await TestServiceAPI.getTopicDescription(
           questions[questions.findIndex((e: any) => e.id === currentPage)]
             ?.question_topic_id,
           quizDetail?.id,
           router?.query?.class_user_id as string,
         )
-        question = await QuestionAPI.getQuestionDetail(currentPage)
+        question = await TestServiceAPI.getQuestionDetail(currentPage)
       }
       return { topicDescription, question: question?.data }
     } catch (err) {
@@ -1918,7 +1917,7 @@ const TestDetail = () => {
     dispatch(disableUnsavedChange())
 
     try {
-      const res = await CoursesAPI.submitAnswer(
+      const res = await TestServiceAPI.submitAnswer(
         quizAttempt?.id as string,
         payload,
       )
@@ -1944,7 +1943,10 @@ const TestDetail = () => {
         question_id,
         flag: !currentTabContent?.flag,
       }
-      await CoursesAPI.updateFlagInQuestion(quizAttempt?.id as string, payload)
+      await TestServiceAPI.updateFlagInQuestion(
+        quizAttempt?.id as string,
+        payload,
+      )
       setTabs((prevTabs: Tab[]) =>
         prevTabs.map((tab) =>
           tab.id === question_id ? { ...tab, flag: !tab.flag } : tab,
@@ -2114,7 +2116,7 @@ const TestDetail = () => {
       }
       dispatch(disableUnsavedChange())
 
-      const res = await CoursesAPI.submitAllQuestion(
+      const res = await TestServiceAPI.submitAllQuestion(
         quizAttempt?.id as string,
         {
           quiz_position_mapping: quiz_position_mapping,
@@ -2499,7 +2501,9 @@ const TestDetail = () => {
       const fetchAnswersSubmitted = async () => {
         try {
           setLoading(true)
-          const response = await CoursesAPI.getAnswersSubmitted(quizAttempt.id)
+          const response = await TestServiceAPI.getAnswersSubmitted(
+            quizAttempt.id,
+          )
           setExhibitText(EXHIBIT_TEXT_REPLACE.EXHIBIT)
           setIsQuizAttemptCreated(true) // Mark the attempt as created
           setAnswersSubmitted(response.data)
@@ -2514,7 +2518,7 @@ const TestDetail = () => {
       if (router.query.id) {
         const createQuizAttempt = async () => {
           try {
-            const res = await CoursesAPI.createQuizAttempt(
+            const res = await TestServiceAPI.createQuizAttempt(
               router.query.id as string,
               router.query.class_user_id as string,
             )
@@ -2683,7 +2687,7 @@ const TestDetail = () => {
   }, [questions, router, quizDetail?.id, answersSubmitted])
 
   const handleSubmitAnswerError = async (answerSubmitErr: any) => {
-    const res = await CoursesAPI.submitAnswer(
+    const res = await TestServiceAPI.submitAnswer(
       quizAttempt?.id as string,
       answerSubmitErr,
     )
@@ -3645,7 +3649,7 @@ const TestDetail = () => {
                       <div
                         className="cursor-pointer text-white"
                         onClick={() => {
-                          UploadAPI.downloadFile({
+                          TestServiceAPI.downloadFile({
                             files: [
                               {
                                 name: e?.resource?.name,

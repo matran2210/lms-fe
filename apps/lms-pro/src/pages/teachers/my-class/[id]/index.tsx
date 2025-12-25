@@ -1,4 +1,5 @@
 import Progress from '@components/my-class/progress-table/Progress'
+import ClassResourceTeacher from '@components/teacher/myClass/class-detail/ClassResourceTeacher'
 import Overview from '@components/teacher/myClass/class-detail/OverView'
 import Students from '@components/teacher/myClass/class-detail/Students'
 import StudentsTestResult from '@components/teacher/myClass/class-detail/StudentsTestResult'
@@ -62,6 +63,11 @@ const tabs = [
     id: 4,
     title: 'Students Test Result',
     urlTitle: ProfilePages.STUDENTS_TEST_RESULT,
+  },
+  {
+    id: 5,
+    title: 'Class Resource',
+    urlTitle: ProfilePages.CLASS_RESOURCE,
   },
 ]
 
@@ -152,6 +158,8 @@ const ClassDetail = () => {
         return <Progress classDetail={data} />
       case ProfilePages.STUDENTS_TEST_RESULT:
         return <StudentsTestResult />
+      case ProfilePages.CLASS_RESOURCE:
+        return <ClassResourceTeacher />
       default:
         return <Overview certificateData={certificateData} />
     }

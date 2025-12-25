@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["./types/assets.d.ts"],
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Node",
@@ -10,5 +11,6 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true // Cho phép import file .json
-  }
+  },
+  "include": ["./types/**/*", "./icons/**/*"]
 }

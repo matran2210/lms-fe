@@ -51,7 +51,7 @@ const TestModal = ({
   is_passed_course,
   selectedResultCourse
 }: IProps) => {
-  const {router, courseApi, classApi } = useFeature();
+  const { router, testServiceApi, classApi } = useFeature();
   const isSubmitted =
     data?.quiz?.attempt && data?.quiz?.attempt?.status === "SUBMITTED";
   const isUnsubmitted =
@@ -241,7 +241,7 @@ const TestModal = ({
   }, [remainingTimeLastAttempt?.current])
 
   const handleSubmitNow = async (isRedirect = true) => {
-    const res =await courseApi.submitAllQuestion(data?.quiz?.attempt?.id as string);    
+    const res = await testServiceApi.submitAllQuestion(data?.quiz?.attempt?.id as string);    
     if (!isRedirect && res?.success && data?.quiz?.attempt) {
       data.quiz.attempt.status = "SUBMITTED";
       if (selectedResultCourse) {

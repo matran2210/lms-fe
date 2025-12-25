@@ -104,50 +104,7 @@ export class CoursesAPI {
     )
   }
 
-  static getQuestionTabsById(id: string | string[] | undefined): Promise<any> {
-    return fetcher(`${url.getQuestionTabs}/${id}/shuffle`)
-  }
-
-  static getDetailQuizById(id: string | string[] | undefined): Promise<any> {
-    return fetcher(`${url.getQuestionTabs}/${id}`)
-  }
-
-  static createQuizAttempt(
-    id: string | string[] | undefined,
-    class_user_id: string | undefined,
-  ): Promise<any> {
-    return fetcher(`${url.createQuizAttemp}`, {
-      method: 'POST',
-      data: {
-        quiz_id: id,
-        class_user_id: class_user_id || undefined,
-      },
-    })
-  }
-
   static CACHE_GET_TOPIC_DESCRIPTION = {} as { [key: string]: any }
-
-  static async getTopicDescription(
-    id: string | string[] | undefined,
-    quiz_id?: string,
-    class_user_id?: string,
-    cache = false,
-  ): Promise<any> {
-    let uri =
-      url.getTopicDescription +
-      `/${id}?quiz_id=${quiz_id}&include_questions=false`
-
-    if (class_user_id) {
-      uri += `&class_user_id=${class_user_id}`
-    }
-    if (!cache) return fetcher(uri)
-
-    if (!this.CACHE_GET_TOPIC_DESCRIPTION[uri]) {
-      this.CACHE_GET_TOPIC_DESCRIPTION[uri] = await fetcher(uri)
-    }
-
-    return this.CACHE_GET_TOPIC_DESCRIPTION[uri]
-  }
 
   static startCourseSectionProgress(
     courseId: string | string[] | undefined,
@@ -173,18 +130,6 @@ export class CoursesAPI {
     const uri = `course-sections/course/${course_id}/section/${section_id}/progress`
     return fetcher(`${uri}`, {
       params: params,
-    })
-  }
-
-  /**
-   * @deprecated use QuestionAPI.getQuestionDetail (cached api)
-   */
-  static getQuestionsDetail(id: string): Promise<any> {
-    const uri = url.getQuestionDetail
-    return fetcher(`${uri}`, {
-      params: {
-        question_ids: id,
-      },
     })
   }
 
@@ -258,36 +203,6 @@ export class CoursesAPI {
 
   static getQuizAttempts(id: string | string[] | undefined): Promise<any> {
     return fetcher(`${url.getQuizAttempts}/${id}`)
-  }
-
-  //get answer a question
-  static getAnswersSubmitted(id: string): Promise<any> {
-    return fetcher(`${url.getQuizAttempts}/user-answers/${id}`)
-  }
-
-  static submitAllQuestion(id: string, data?: any): Promise<any> {
-    //is submit test
-    const uri = url.submitQuestion + `/${id}` + '/submit'
-    return fetcher(`${uri}`, {
-      data: data,
-      method: 'POST',
-    })
-  }
-
-  static submitAnswer(id: string, data: any): Promise<any> {
-    const uri = url.submitQuestion + `/${id}` + '/submit-answer'
-    return fetcher(`${uri}`, {
-      data: data,
-      method: 'POST',
-    })
-  }
-
-  static submitCaseStudy(id: string, data: any): Promise<any> {
-    const uri = url.submitCaseStudy + `/${id}` + '/submit'
-    return fetcher(`${uri}`, {
-      data: data,
-      method: 'POST',
-    })
   }
 
   static getCaseStudyAttemptsTable(
@@ -509,23 +424,6 @@ export class CoursesAPI {
       method: 'PUT',
     })
   }
-
-  static updateFlagInQuestion(
-    quiz_attempt_id: string,
-    payload: {
-      question_id: string
-      flag: boolean
-      answer?: {
-        question_id: string
-        requirement_id: string
-      }[]
-    },
-  ) {
-    return fetcher(`quiz/${quiz_attempt_id}/flag`, {
-      data: payload,
-      method: 'PUT',
-    })
-  }
 }
 
 /**
@@ -553,32 +451,6 @@ export const getQuestionsById = async (
   }
 }
 
-//Hiện đang dùng để submit cho bài test trong activity
-export const submitQuizTest = async (
-  id: string,
-  data: any,
-  class_user_id?: string,
-): Promise<any> => {
-  const quizAttemptResponse = await CoursesAPI.createQuizAttempt(
-    id,
-    class_user_id,
-  )
-
-  const quizAttemptId = quizAttemptResponse.data?.id
-  if (quizAttemptId) {
-    const uri = '/quiz' + `/${quizAttemptId}` + '/submit-with-all-answer'
-    const response = await fetcher(`${uri}`, {
-      data: data,
-      method: 'POST',
-    })
-    return {
-      ...response,
-      quizAttemptId,
-      progress: quizAttemptResponse?.data?.progress,
-    }
-  }
-}
-
 /**
  * @description Lấy thông tin hoạt động bằng ID.
  * @async
@@ -598,15 +470,15 @@ export const getActivityById = async (
     return responseActivity.data
   }
   responseActivity.data.tabs = []
-const promises = responseTabs.data.map(async (tab: any) => {
-  const responseTab = await fetcher(
-    `course-sections/${course_id}/tab/${tab.id}`,
-  )
-  if (responseTab?.data) {
-    return responseTab.data
-  }
-  throw new Error("Tab Not Found")
-})
+  const promises = responseTabs.data.map(async (tab: any) => {
+    const responseTab = await fetcher(
+      `course-sections/${course_id}/tab/${tab.id}`,
+    )
+    if (responseTab?.data) {
+      return responseTab.data
+    }
+    throw new Error('Tab Not Found')
+  })
   responseActivity.data.tabs = await Promise.all(promises)
   return responseActivity.data
 }

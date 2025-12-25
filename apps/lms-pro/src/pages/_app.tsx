@@ -44,18 +44,18 @@ import 'aos/dist/aos.css'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import weekday from 'dayjs/plugin/weekday'
-import 'entrance-test-result-package/dist/index.css'
+import '@sapp-fe/entrance-test-result-package/dist/index.css'
 import type { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
-import 'preview-part/dist/index.css'
-import 'quiz-result-package/dist/index.css'
+import '@sapp-fe/preview-part/dist/index.css'
+import '@sapp-fe/quiz-result-package/dist/index.css'
 import { useEffect, useState } from 'react'
 import TagManager, { TagManagerArgs } from 'react-gtm-module'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import 'sapp-common-package/dist/index.css'
-import 'sapp-common-package/dist/sapp-editor.css'
-import 'sapp-notification/dist/index.css'
+import '@sapp-fe/sapp-common-package/dist/index.css'
+import '@sapp-fe/sapp-common-package/dist/sapp-editor.css'
+import '@sapp-fe/sapp-notification/dist/index.css'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import { io } from 'socket.io-client'
@@ -72,9 +72,8 @@ import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { ActivityAPI } from './api/activity'
-import { CaseStudyAPI } from './api/case-study'
 import { ClassAPI } from './api/class'
-import { CoursesAPI, submitQuizTest } from './api/courses'
+import { CoursesAPI } from './api/courses'
 import { EntranceTestAPI } from './api/entrance-test'
 import { EventTestAPI } from './api/event-test'
 import { NotificationAPI } from './api/notification'
@@ -83,6 +82,7 @@ import { QuestionAPI } from './api/question'
 import { UploadAPI } from './api/upload'
 import ErrorRedirectPage from './error-redirect'
 import CalendarApi from './api/calendar'
+import { TestServiceAPI } from './api/test-api'
 dayjs.extend(utc)
 dayjs.extend(weekday)
 
@@ -355,12 +355,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 classApi: ClassAPI,
                 activityApi: ActivityAPI,
                 courseActivityApi: CourseActivityApi,
-                caseStudyApi: CaseStudyAPI,
                 entranceTestApi: EntranceTestAPI,
                 eventTestApi: EventTestAPI,
                 calendarApi: CalendarApi,
                 myProfileApi: MyProfileAPI,
-                submitQuizTest: submitQuizTest,
+                submitQuizTest: TestServiceAPI.submitQuizTest,
                 authManager: new AuthenticationManager(),
                 pageLink: PageLink,
                 menuItems: MENU_ITEMS,
@@ -369,6 +368,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 router: router,
                 fetcher: fetcher,
                 videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
+                testServiceApi: TestServiceAPI,
               }}
             >
               <CourseProvider

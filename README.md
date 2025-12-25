@@ -10,7 +10,7 @@ Tài liệu này hướng dẫn quy trình làm việc chuẩn trong dự án **
 
 | Thư mục    | Mô tả                                                       | Ví dụ                                    |
 | ---------- | ----------------------------------------------------------- | ---------------------------------------- |
-| `apps`     | Chứa các ứng dụng con (deploy được). Mỗi app là một subtree | `apps/lms-pro`, `apps/finhub`            |
+| `apps`     | Chứa các ứng dụng con (deploy được). Mỗi app là một subtree | `apps/lms-pro`, `apps/lms-finhub`            |
 | `libs`     | Chứa các thư viện dùng chung (Core, UI, Utils...)           | `@lms/ui`, `@lms/utils`                  |
 | `features` | Chứa các module nghiệp vụ dùng chung                        | `@lms/feature-auth`, `@lms/feature-test` |
 
@@ -32,7 +32,7 @@ git subtree add --prefix=<đường_dẫn_trong_monorepo> <url_repo_con> <tên_n
 
 ```bash
 # Đứng tại thư mục gốc (lms-fe)
-git subtree add --prefix=apps/finhub https://github.com/user/finhub-repo.git main
+git subtree add --prefix=apps/lms-finhub https://github.com/user/lms-finhub-repo.git main
 ```
 
 ---
@@ -387,7 +387,7 @@ Dựa đúng vào block script m gửi, không thêm thắt lung tung.
 
 ## **1. Chạy toàn bộ dự án**
 
-Dùng khi muốn chạy tất cả apps trong monorepo (lms-pro + finhub), Turborepo sẽ lo caching:
+Dùng khi muốn chạy tất cả apps trong monorepo (lms-pro + lms-finhub), Turborepo sẽ lo caching:
 
 ### **Chạy toàn bộ apps**
 
@@ -411,13 +411,13 @@ pnpm dev:lms-pro
 Chạy đúng app `/apps/lms-pro`
 Dùng khi dev tính năng chỉ nằm trong LMS Pro.
 
-### **Chạy Finhub**
+### **Chạy lms-finhub**
 
 ```
-pnpm dev:finhub
+pnpm dev:lms-finhub
 ```
 
-Tương tự, chạy đúng app `/apps/finhub`.
+Tương tự, chạy đúng app `/apps/lms-finhub`.
 
 ---
 
@@ -447,7 +447,7 @@ Dùng khi muốn test build một app cụ thể mà không cần build cả mon
 pnpm build:lms-pro
 ```
 
-### **Build Finhub**
+### **Build lms-finhub**
 
 ```
 pnpm build:finhub
@@ -457,7 +457,7 @@ pnpm build:finhub
 
 ```json
 "build:lms-pro": "pnpm --filter ./apps/lms-pro build",
-"build:finhub": "pnpm --filter ./apps/finhub build",
+"build:lms-finhub": "pnpm --filter ./apps/lms-finhub build",
 ```
 
 ---

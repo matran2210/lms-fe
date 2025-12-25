@@ -28,7 +28,6 @@ import { CalculatorModal } from '@lms/feature-courses'
 import { useMousePosition, useTailwindBreakpoint } from '@lms/hooks'
 import {
   AddWordPreview,
-  Calculator,
   CaseStudyWrapper,
   EditorReader,
   EssayQuestionPreview,
@@ -46,7 +45,7 @@ import {
   SlotValue,
 } from '@lms/ui'
 import { runHighlight } from '@lms/utils'
-import { UploadAPI } from '@pages/api/upload'
+import { TestServiceAPI } from '@pages/api/test-api'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
@@ -975,7 +974,7 @@ const CaseStudyResult = () => {
                             <div
                               className="cursor-pointer text-white"
                               onClick={() => {
-                                UploadAPI.downloadFile({
+                                TestServiceAPI.downloadFile({
                                   files: [
                                     {
                                       name: e?.resource?.name,

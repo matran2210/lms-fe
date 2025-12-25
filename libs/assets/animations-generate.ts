@@ -21,3 +21,4 @@ export { default as TourGuideNotiAnimation } from "./animations/TourGuideNoti.js
 export { default as TourGuideSidebarAnimation } from "./animations/TourGuideSidebar.json";
 export { default as TourGuideStartAnimation } from "./animations/TourGuideStart.json";
 export { default as WavingHandAnimation } from "./animations/WavingHand.json";
+export { default as OpenBookAnimation } from "./animations/OpenBook.json";

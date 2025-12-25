@@ -1,6 +1,6 @@
 import { Slice, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { FieldValues } from "react-hook-form";
-import { ICoursesAPI, IQuestionAPI, QUESTION_TYPES } from "@lms/core";
+import { ICoursesAPI, IQuestionAPI, ITestServiceAPI, QUESTION_TYPES } from "@lms/core";
 import { RootState } from "../../../../store";
 import { IRequirement } from "@lms/core";
 import { IQuestion } from "@lms/core";
@@ -64,7 +64,7 @@ const fetchQuestionById = createAsyncThunk(
       questionId,
       attemptId,
     }: {
-      api: IQuestionAPI;
+      api: ITestServiceAPI;
       courseApi: ICoursesAPI;
       activityId: string;
       tabId: string;
@@ -195,7 +195,7 @@ const confirmQuestion = createAsyncThunk(
       myAnswers,
       time_spent,
     }: {
-      api: IQuestionAPI;
+      api: ITestServiceAPI;
       courseApi: ICoursesAPI;
       activityId: string;
       tabId: string;

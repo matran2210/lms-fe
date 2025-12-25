@@ -98,6 +98,7 @@ import {
   removeHighlights,
   serializeHighlights,
 } from '@funktechno/texthighlighter/lib'
+import { TestServiceAPI } from '@pages/api/test-api'
 declare global {
   interface Window {
     userAgreed: any
@@ -1209,7 +1210,7 @@ const TestDetail = () => {
   }
 
   const getResult = async (currentTabContent: any) => {
-    const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
+    const res = await TestServiceAPI.getQuestionAnswer(currentTabContent.id)
     let corrects = {} as any
     if (
       currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
@@ -1342,12 +1343,12 @@ const TestDetail = () => {
     let question
     try {
       if (!isUndefined(quizDetail) && !isUndefined(questions)) {
-        topicDescription = await CoursesAPI.getTopicDescription(
+        topicDescription = await TestServiceAPI.getTopicDescription(
           questions[questions.findIndex((e: any) => e.id === currentPage)]
             ?.question_topic_id,
           quizDetail?.id,
         )
-        question = await QuestionAPI.getQuestionDetail(currentPage)
+        question = await TestServiceAPI.getQuestionDetail(currentPage)
       }
       return { topicDescription, question: question?.data }
     } catch (err) {
@@ -1702,7 +1703,7 @@ const TestDetail = () => {
     dispatch(disableUnsavedChange())
 
     try {
-      const res = await CoursesAPI.submitAnswer(
+      const res = await TestServiceAPI.submitAnswer(
         quizAttempt?.id as string,
         payload,
       )
@@ -1736,7 +1737,10 @@ const TestDetail = () => {
           })),
         }),
       }
-      await CoursesAPI.updateFlagInQuestion(quizAttempt?.id as string, payload)
+      await TestServiceAPI.updateFlagInQuestion(
+        quizAttempt?.id as string,
+        payload,
+      )
       setTabs((prevTabs: Tab[]) =>
         prevTabs.map((tab) =>
           tab.id === question_id ? { ...tab, flag: !tab.flag } : tab,
@@ -1908,7 +1912,7 @@ const TestDetail = () => {
       }
       dispatch(disableUnsavedChange())
 
-      const res = await CoursesAPI.submitAllQuestion(
+      const res = await TestServiceAPI.submitAllQuestion(
         quizAttempt?.id as string,
         {
           quiz_position_mapping: quiz_position_mapping,
@@ -2268,7 +2272,9 @@ const TestDetail = () => {
       const fetchAnswersSubmitted = async () => {
         try {
           setLoading(true)
-          const response = await CoursesAPI.getAnswersSubmitted(quizAttempt.id)
+          const response = await TestServiceAPI.getAnswersSubmitted(
+            quizAttempt.id,
+          )
           setIsQuizAttemptCreated(true) // Mark the attempt as created
           setAnswersSubmitted(response.data)
         } catch (err) {
@@ -2282,7 +2288,7 @@ const TestDetail = () => {
       if (router.query.id) {
         const createQuizAttempt = async () => {
           try {
-            const res = await CoursesAPI.createQuizAttempt(
+            const res = await TestServiceAPI.createQuizAttempt(
               router.query.id as string,
               router.query.class_user_id as string,
             )
@@ -2447,7 +2453,7 @@ const TestDetail = () => {
   }, [questions, router, quizDetail?.id, answersSubmitted])
 
   const handleSubmitAnswerError = async (answerSubmitErr: any) => {
-    const res = await CoursesAPI.submitAnswer(
+    const res = await TestServiceAPI.submitAnswer(
       quizAttempt?.id as string,
       answerSubmitErr,
     )

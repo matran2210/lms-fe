@@ -1,12 +1,12 @@
 import { Icon } from "@lms/assets";
 import { ANIMATION, ITopicProgress, IWeeklyReport } from "@lms/core";
 import { isUndefined } from "lodash";
-import { useRouter } from "next/router";
 import { memo, useState } from "react";
 import { TopicProgress } from "./dashboard-exam";
 import { WeeklyReport } from "./dashboard-normal";
 import LearningResult from "./dashboard-normal/LearningResult";
 import OverallProgress from "./dashboard-normal/OverallProgress";
+import { useFeature } from "@lms/contexts";
 export interface IActivityProgress {
   completed: number;
   total: number;
@@ -28,7 +28,7 @@ const CourseDashboard = ({
   overallProgressData: any;
   weeklyReportData: IWeeklyReport | null;
 }) => {
-  const router = useRouter();
+  const { router } = useFeature();
   const [activities, setActivities] = useState<IActivities | undefined>(
     undefined,
   );
@@ -133,7 +133,7 @@ const CourseDashboard = ({
         className={`flex w-full flex-col gap-4 bg-[#F9F9F9] md:gap-6 xl:gap-8`}
         data-aos={ANIMATION.DATA_AOS}
       >
-        <div className="grid xl:grid-cols-2 xl:gap-8">
+        <div className="grid xl:grid-cols-2 xl:gap-8 grid-cols-1 gap-4 md:gap-6">
           <div>
             <OverallProgress
               setActivities={setActivities}

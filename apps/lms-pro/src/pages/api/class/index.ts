@@ -1,7 +1,14 @@
-import { ExaminationsResponse } from '@lms/contexts';
-import { apiURL, ExamInformation, IQuizResultList, IResponse } from '@lms/core';
-import { fetcher, fetchFormData } from '@services/requestV2';
-import { AxiosPromise } from 'axios';
+import { ExaminationsResponse } from '@lms/contexts'
+import {
+  apiURL,
+  ExamInformation,
+  IClassResourceList,
+  IListClassResourceParams,
+  IQuizResultList,
+  IResponse,
+} from '@lms/core'
+import { fetcher, fetchFormData } from '@services/requestV2'
+import { AxiosPromise } from 'axios'
 
 export class ClassAPI {
   static getAllResultOfQuiz(
@@ -39,6 +46,17 @@ export class ClassAPI {
     return fetcher(`${apiURL}/classes/${id}/exam-info`)
   }
 
+  static getClassSchedule(
+    id: string,
+    page_index: number,
+    page_size: number,
+    search_key?: string,
+  ): Promise<any> {
+    return fetcher(`${apiURL}/class-resource/class-schedule`, {
+      params: { class_id: id, page_index, page_size, search_key },
+    })
+  }
+
   static sendMailRequestRegrading(
     classId: string,
     quizAttemptId: string,
@@ -51,5 +69,12 @@ export class ClassAPI {
         method: 'POST',
       },
     )
+  }
+
+  static getClassResource(
+    class_id: string,
+    params: IListClassResourceParams,
+  ): Promise<IResponse<IClassResourceList>> {
+    return fetcher(`class-resource`, { params: { class_id, ...params } })
   }
 }
