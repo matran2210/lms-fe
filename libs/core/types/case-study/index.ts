@@ -63,8 +63,9 @@ export interface IAnswerResult {
 
 export interface IDragDropAnswer {
   answer_position: number
-  answer_id: string[]
+  answer_ids: string[]
 }
+
 export interface IQuestionResult {
   id: string
   question_content: string

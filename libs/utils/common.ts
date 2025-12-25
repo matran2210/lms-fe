@@ -2,7 +2,12 @@ import DOMPurify from "dompurify";
 import { isEmpty, isNull, isUndefined } from "lodash";
 import { useQuery } from "react-query";
 import dayjs, { Dayjs } from "dayjs";
-import { DATE_FORMAT, DAYS_IN_WEEK, GRADE_STATUS } from "@lms/core";
+import {
+  DATE_FORMAT,
+  DAYS_IN_WEEK,
+  GRADE_STATUS,
+  IDragDropAnswer,
+} from "@lms/core";
 import weekday from "dayjs/plugin/weekday";
 import utc from "dayjs/plugin/utc";
 import {
@@ -12,6 +17,7 @@ import {
   removeHighlights,
   serializeHighlights,
 } from "@funktechno/texthighlighter/lib";
+import { Correct } from './answer';
 
 dayjs.extend(utc);
 dayjs.extend(weekday);
@@ -690,11 +696,12 @@ export const getGradingStatusLabel = (status: string) => {
 };
 
 export const handleMultipleCorrectAnswer = (
-  dragDropAnswers: any,
-  answers: any[],
+  dragDropAnswers: IDragDropAnswer[],
+  answers: Correct[],
 ) => {
-  answers?.forEach((item: any) => {
-    dragDropAnswers?.forEach((correctItem: any) => {
+  console.log("answers", answers);
+  answers?.forEach((item: Correct) => {
+    dragDropAnswers?.forEach((correctItem: IDragDropAnswer) => {
       if (correctItem?.answer_ids?.includes(item?.id)) {
         item.answer_position = correctItem?.answer_position;
         item.is_correct = true;
