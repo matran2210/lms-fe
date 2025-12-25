@@ -1,3 +1,4 @@
+"use client";
 import SappDivider from "../../base/divider/Divider";
 import { DndContext, DragEndEvent, useDroppable } from "@dnd-kit/core";
 import parse, { Element } from "html-react-parser";

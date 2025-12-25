@@ -15,7 +15,7 @@ import {
   convertSnakeCaseToHumanReadable,
   formatDateFromUTC,
 } from '@lms/utils'
-import { TeacherAPI } from '../../../../pages/api/teacher'
+import { TeacherAPI } from '../../../../app/api/teacher'
 import {
   FilterRequestScheduleParams,
   IScheduleRequestItem,

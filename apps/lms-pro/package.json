@@ -73,7 +73,7 @@
     "keycloak-js": "^25.0.1",
     "lodash": "^4.17.21",
     "lottie-react": "^2.4.1",
-    "next": "^12.3.7",
+    "next": "^14.2.35",
     "next-compose-plugins": "^2.2.1",
     "next-i18next": "^13.2.2",
     "next-redux-wrapper": "^8.1.0",
@@ -115,8 +115,8 @@
     "@types/aos": "^3.0.7",
     "@types/dompurify": "^3.0.5",
     "@types/lodash": "^4.14.202",
-    "@types/node": "^18.0.0",
-    "@types/react": "^18.0.14",
+    "@types/node": "^18.19.130",
+    "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.17",
     "@types/react-gtm-module": "^2.0.3",
     "@types/react-slick": "^0.23.13",
@@ -124,7 +124,7 @@
     "autoprefixer": "^10.4.16",
     "critters": "^0.0.19",
     "eslint": "7.32.0",
-    "eslint-config-next": "^12.2.0",
+    "eslint-config-next": "^12.3.7",
     "eslint-config-prettier": "^8.5.0",
     "husky": "^8.0.1",
     "lint-staged": "13.0.3",
@@ -133,7 +133,7 @@
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.6",
     "tailwindcss": "3.4.17",
-    "typescript": "^5.5.4"
+    "typescript": "^5.9.3"
   },
   "resolutions": {
     "string-width": "4.1.0",

@@ -1,3 +1,4 @@
+"use client";
 import { ArrowActionSearchIcon, HamburgerMenuLargeIcon, CloseIconV2, TourGuideStartAnimation } from "@lms/assets";
 import { useAppSelector, useFeature } from "@lms/contexts";
 import { AppType, MY_COURSES, UserGuide } from "@lms/core";

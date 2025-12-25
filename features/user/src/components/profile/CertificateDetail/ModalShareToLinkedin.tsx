@@ -1,9 +1,9 @@
+import { useFeature } from '@lms/contexts'
+import { ICertificate } from '@lms/core'
 import { ButtonPrimary } from '@lms/ui'
 import { HookFormCheckBox } from '@lms/ui'
 import { SappModalV3 } from '@lms/ui'
 import { HookFormTextAreaV2 } from '@lms/ui'
-import { uploadImageToLinkedIn } from '@pages/api/certificate'
-import { ICertificate } from '@pages/certificates/[id]'
 import { openLinkedInPopup } from '@lms/utils'
 import { Image } from 'antd'
 import dayjs from 'dayjs'
@@ -22,7 +22,8 @@ interface IForm {
   text?: string
 }
 const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
-  const [loading, setLoading] = useState(false)
+  const {certificateApi} = useFeature();
+   const [loading, setLoading] = useState(false)
   const certId = certificate?.id || ''
   const certURL = certificate?.certificate_url || ''
   const shareUrl = encodeURIComponent(certURL)
@@ -82,7 +83,7 @@ const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
           }
           setLoading(true)
           // Gọi luôn hàm upload sau khi login
-          const res = await uploadImageToLinkedIn(
+          const res = await certificateApi.uploadImageToLinkedIn(
             event.data.token,
             personURN,
             shareUrl,
@@ -107,7 +108,7 @@ const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
         return
       }
       setLoading(true)
-      const res = await uploadImageToLinkedIn(
+      const res = await certificateApi.uploadImageToLinkedIn(
         token,
         personURN,
         shareUrl,
@@ -164,7 +165,6 @@ const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
             {isShareToFeed && (
               <div className="flex items-center gap-5 rounded-lg border border-gray-300 p-4">
                 {certificate?.certificate_url && (
-                  // eslint-disable-next-line @next/next/no-img-element
                   <Image
                     src={certURL}
                     alt={certificate?.course.name}

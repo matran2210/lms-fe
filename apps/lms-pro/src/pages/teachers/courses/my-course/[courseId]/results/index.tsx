@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { CoursesAPI } from 'src/pages/api/courses'
+import { CoursesAPI } from 'src/app/api/courses/route'
 
 const DEFAULT_PAGESIZE = 10
 

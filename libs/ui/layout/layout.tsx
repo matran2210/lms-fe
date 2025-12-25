@@ -1,3 +1,4 @@
+"use client";
 import { useAppSelector, useCourseContext, useFeature, usePinnedNotifyContext } from "@lms/contexts";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import clsx from "clsx";

@@ -49,7 +49,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { CoursesAPI } from 'src/pages/api/courses'
+import { CoursesAPI } from 'src/app/api/courses/route'
 
 const CaseStudyResultTeacher = () => {
   const router = useRouter()

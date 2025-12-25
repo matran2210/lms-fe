@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useRef, useState } from "react";
 import { Spin } from "antd";
 import { VALID_UPLOAD_EDITOR } from "@lms/core";

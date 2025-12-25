@@ -1,10 +1,10 @@
+"use client";
 import { Stream } from "@cloudflare/stream-react";
 import { LoadingIcon, PiPIcon } from "@lms/assets";
 import { Icon } from "@lms/assets/icons";
 import { Thumbnail } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import useClickOutside from "../clickoutside/HookClick";
 import { ArrowIcon } from "../pagination";
@@ -68,7 +68,7 @@ const SAPPVideo = ({
   videoAttribs,
   isFetchCaptions = true,
 }: IProp) => {
-  const { fetcher, videoUrl } = useFeature();
+  const { fetcher, videoUrl, router } = useFeature();
   const [playerFunction, setPlayerFunction] = useState<any>();
   const [valueVolume, setValueVolume] = useState<number>(1);
   const [playbackRate, setPlaybackRate] = useState<number>(1);
@@ -773,7 +773,6 @@ const SAPPVideo = ({
       // ignore
     }
   };
-  const router = useRouter();
 
   useEffect(() => {
     const handleRouteChange = async () => {

@@ -3,16 +3,14 @@ import MyClassFilter from '@components/teacher/components/MyClassFilter'
 import { UserType } from '@lms/contexts'
 import { IMyClass, ITabs } from '@lms/core'
 import { LayoutFilter, LayoutTeacher, PaginationSAPP } from '@lms/ui'
-import { CoursesAPI } from '@pages/api/courses'
-import { TeacherKey } from '@pages/api/queryKey'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
+import { TeacherKey } from 'src/app/api/queryKey'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useQuery } from 'react-query'
+import { TeacherAPI } from 'src/app/api/teacher/route'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { TeacherAPI } from 'src/pages/api/teacher/index'
 
 const breadcrumbs: ITabs[] = [
   { link: PageLink.TEACHERS, title: 'LMS' },

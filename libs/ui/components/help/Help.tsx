@@ -1,3 +1,4 @@
+"use client";
 import { IconClose } from "@lms/assets";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import { Popover } from "antd";

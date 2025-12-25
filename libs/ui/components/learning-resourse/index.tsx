@@ -1,3 +1,4 @@
+"use client";
 import { DownloadIcon } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
 import {

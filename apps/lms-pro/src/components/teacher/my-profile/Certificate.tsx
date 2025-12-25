@@ -1,5 +1,4 @@
 import { useLayoutEffect, useState } from 'react'
-import { AuthAPI } from 'src/pages/api/profile'
 import PopUpCertificate from './popupCertificate'
 import { Divider, Table, TableProps } from 'antd'
 import { CertificateImg, Icon } from '@lms/assets'
@@ -8,6 +7,7 @@ import Image from 'next/image'
 import { sappFormatDate } from '@lms/utils'
 import clsx from 'clsx'
 import { HaveNoItemIcon } from '@lms/assets'
+import { AuthAPI } from 'src/app/api/profile/route'
 
 interface ICertificate {
   certificate: {

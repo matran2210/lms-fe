@@ -1,6 +1,5 @@
 import { ExaminationsResponse } from '@lms/contexts'
 import {
-  apiURL,
   ExamInformation,
   IClassResourceList,
   IListClassResourceParams,
@@ -9,6 +8,7 @@ import {
 } from '@lms/core'
 import { fetcher, fetchFormData } from '@services/requestV2'
 import { AxiosPromise } from 'axios'
+import { apiURL } from 'src/constants';
 
 export class ClassAPI {
   static getAllResultOfQuiz(

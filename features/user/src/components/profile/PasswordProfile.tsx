@@ -1,14 +1,13 @@
 import { Icon } from "@lms/assets";
-import { useAppSelector, userReducer } from "@lms/contexts";
+import { useAppSelector, useFeature, userReducer } from "@lms/contexts";
 import { ButtonPrimary, ButtonText, SappModalV2 } from "@lms/ui";
 import type { GetProps } from "antd";
 import { Input } from "antd";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { UseFormGetValues, UseFormReset } from "react-hook-form";
 import toast from "react-hot-toast";
-import { AuthAPI } from "src/pages/api/profile";
 import { IChangePassword } from "./ChangePassword";
-import { useCountdownTest } from "node_modules/@lms/hooks";
+import { useCountdownTest } from "@lms/hooks";
 
 type OTPProps = GetProps<typeof Input.OTP>;
 interface IProps {
@@ -20,6 +19,7 @@ interface IProps {
 
 const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
   const { user } = useAppSelector(userReducer);
+  const {authApi} = useFeature()
 
   const [code, setCode] = useState(Array(6).join(".").split("."));
   const [canResend, setCanResend] = useState(false);
@@ -64,7 +64,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
   const verifyCode = async () => {
     setLoading(true);
     try {
-      await AuthAPI.verifyOTPPassword(
+      await authApi.verifyOTPPassword(
         getValues("password"),
         getValues("newPassword"),
         code?.join(""),
@@ -85,7 +85,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
    */
   const onResendCode = async () => {
     try {
-      await AuthAPI.changeUserPassword(getValues("password"));
+      await authApi.changeUserPassword(getValues("password"));
       setErrorMessage("");
       setCanResend(false);
       settimeCountDownResent(() => {

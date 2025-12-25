@@ -1,18 +1,11 @@
 import MKTInApp from '@components/MKTInApp'
-import Metadata from '@components/common/Metadata'
 import '@fortune-sheet/react/dist/index.css'
 import {
-  CourseNoteProvider,
-  CourseProvider,
-  FeatureProvider,
   getCountUnRead,
-  PinnedNotifyProvider,
-  PreviousSectionRouteProvider,
   showNotification,
-  SocketContext,
   store,
   useAppDispatch,
-  wrapper,
+  wrapper
 } from '@lms/contexts'
 import {
   ANIMATION,
@@ -23,20 +16,22 @@ import {
   LOCAL_STORAGE_KEYS,
   SOCKET_EVENTS,
 } from '@lms/core'
-import { RouteGuard } from '@lms/feature-auth'
 import { LearningNotesList, PopupCompletedCourse } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import '@lms/styles'
 import {
-  AntConfigProvider,
   BackToTop,
   Help,
-  PinnedNotifications,
-  SappConfirmDialogContainer,
+  PinnedNotifications
 } from '@lms/ui'
 import { initializeGA, onMessageListener, pageview } from '@lms/utils'
+import '@sapp-fe/entrance-test-result-package/dist/index.css'
+import '@sapp-fe/preview-part/dist/index.css'
+import '@sapp-fe/quiz-result-package/dist/index.css'
+import '@sapp-fe/sapp-common-package/dist/index.css'
+import '@sapp-fe/sapp-common-package/dist/sapp-editor.css'
+import '@sapp-fe/sapp-notification/dist/index.css'
 import { ErrorBoundary } from '@sentry/nextjs'
-import { fetcher } from '@services/requestV2'
 import '@styles/index.scss'
 import '@xyflow/react/dist/style.css'
 import Aos from 'aos'
@@ -44,45 +39,21 @@ import 'aos/dist/aos.css'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import weekday from 'dayjs/plugin/weekday'
-import '@sapp-fe/entrance-test-result-package/dist/index.css'
 import type { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
-import '@sapp-fe/preview-part/dist/index.css'
-import '@sapp-fe/quiz-result-package/dist/index.css'
 import { useEffect, useState } from 'react'
 import TagManager, { TagManagerArgs } from 'react-gtm-module'
-import { Toaster } from 'react-hot-toast'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import '@sapp-fe/sapp-common-package/dist/index.css'
-import '@sapp-fe/sapp-common-package/dist/sapp-editor.css'
-import '@sapp-fe/sapp-notification/dist/index.css'
+import { QueryClient } from 'react-query'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import { io } from 'socket.io-client'
-import {
-  MENU_BOTTOM,
-  MENU_ITEMS,
-  MENU_ITEMS_EVENT,
-} from 'src/constants/menu-items'
-import { PageLink } from 'src/constants/routers'
-import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
-import UserApi from 'src/redux/services/User/user'
+import { NotificationAPI } from 'src/app/api/notification/route'
 import { injectStore } from 'src/redux/services/httpService'
 import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
-import { ActivityAPI } from './api/activity'
-import { ClassAPI } from './api/class'
-import { CoursesAPI } from './api/courses'
-import { EntranceTestAPI } from './api/entrance-test'
-import { EventTestAPI } from './api/event-test'
-import { NotificationAPI } from './api/notification'
-import MyProfileAPI, { AuthAPI } from './api/profile'
-import { QuestionAPI } from './api/question'
-import { UploadAPI } from './api/upload'
 import ErrorRedirectPage from './error-redirect'
-import CalendarApi from './api/calendar'
-import { TestServiceAPI } from './api/test-api'
+
 dayjs.extend(utc)
 dayjs.extend(weekday)
 
@@ -336,60 +307,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   return (
     <ErrorBoundary fallback={<ErrorRedirectPage />}>
       <main>
-        <Metadata />
-        <AntConfigProvider>
-          <PinnedNotifyProvider
-            router={router}
-            api={{
-              getPinnedNotifications: UserApi.getPinnedNotifications,
-            }}
-          >
-            <FeatureProvider
-              value={{
-                courseApi: CoursesAPI,
-                questionApi: QuestionAPI,
-                uploadApi: UploadAPI,
-                userApi: UserApi,
-                notificationApi: NotificationAPI,
-                authApi: AuthAPI,
-                classApi: ClassAPI,
-                activityApi: ActivityAPI,
-                courseActivityApi: CourseActivityApi,
-                entranceTestApi: EntranceTestAPI,
-                eventTestApi: EventTestAPI,
-                calendarApi: CalendarApi,
-                myProfileApi: MyProfileAPI,
-                submitQuizTest: TestServiceAPI.submitQuizTest,
-                authManager: new AuthenticationManager(),
-                pageLink: PageLink,
-                menuItems: MENU_ITEMS,
-                menuItemsEvent: MENU_ITEMS_EVENT,
-                menuBottom: MENU_BOTTOM,
-                router: router,
-                fetcher: fetcher,
-                videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
-                testServiceApi: TestServiceAPI,
-              }}
-            >
-              <CourseProvider
-                router={router}
-                api={{
-                  get: EventTestAPI.get,
-                }}
-              >
-                <CourseNoteProvider router={router} api={CoursesAPI}>
-                  <QueryClientProvider client={queryClient}>
-                    <SocketContext.Provider value={socket}>
-                      <PreviousSectionRouteProvider router={router}>
-                        <Toaster
-                          toastOptions={{
-                            style: {
-                              maxWidth: '400px', // Tăng chiều rộng của toast
-                            },
-                          }}
-                        />
-                        <SappConfirmDialogContainer />
-                        <RouteGuard>
                           <>
                             <div className="relative">
                               <PinnedNotifications />
@@ -402,15 +319,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                             <LearningNotesList appType={AppType.LMS_PRO} />
                             <PopupCompletedCourse />
                           </>
-                        </RouteGuard>
-                      </PreviousSectionRouteProvider>
-                    </SocketContext.Provider>
-                  </QueryClientProvider>
-                </CourseNoteProvider>
-              </CourseProvider>
-            </FeatureProvider>
-          </PinnedNotifyProvider>
-        </AntConfigProvider>
+            
       </main>
     </ErrorBoundary>
   )

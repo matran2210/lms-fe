@@ -1,3 +1,4 @@
+"use client";
 import { PointerIcon, ShowCommentIcon } from "@lms/assets";
 import { useCourseNoteContext, useFeature } from "@lms/contexts";
 import { doHighlight, optionsImpl } from "@funktechno/texthighlighter/lib";

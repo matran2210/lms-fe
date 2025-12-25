@@ -1,13 +1,13 @@
-import { UserApi } from '@pages/api/user'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { fetcher } from '@services/requestV2'
 import { CERTIFICATE } from '@lms/core'
 import { getMessagingToken } from '@lms/utils'
 import Keycloak from 'keycloak-js'
 import { COOKIE_INFO } from '@lms/core'
-import { EntranceTestAPI } from 'src/pages/api/entrance-test'
 import { deleteCookie, getCookie, getSessionIdFromToken, setCookie } from '@lms/utils'
 import { PageLink } from 'src/constants/routers'
+import { EntranceTestAPI } from 'src/app/api/entrance-test/route'
+import { UserApi } from 'src/app/api/user/route'
 
 const handleFirebaseToken = async () => {
   const accessDeviceToken = await AsyncStorage.getItem('firebaseDeviceToken')

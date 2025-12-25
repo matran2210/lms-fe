@@ -1,8 +1,9 @@
+"use client"
 // ConfirmDialog.tsx
-import router from 'next/router'
 import { FC, useEffect } from 'react'
 import SappModal from '../modal/SappModal'
 import { AlertCircleSharp } from '@lms/assets'
+import { useFeature } from '@lms/contexts'
 
 // define the props for the confirm dialog component
 export type SappConfirmDialogProps = {
@@ -26,6 +27,7 @@ const SappConfirmDialog: FC<SappConfirmDialogProps> = ({
   onConfirm,
   closeConfirmation,
 }) => {
+  const {router} = useFeature()
   const handleCancel = async () => {
     onCancel && (await onCancel())
   }
