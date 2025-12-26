@@ -2,10 +2,8 @@
 import { useFeature } from "@lms/contexts";
 import clsx from "clsx";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 const LogoDefault = ({ className }: { className?: string }) => {
-  const router = useRouter();
   const { pageLink } = useFeature();
 
   return (

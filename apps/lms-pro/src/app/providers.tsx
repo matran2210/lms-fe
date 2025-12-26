@@ -3,18 +3,16 @@
 
 import '@fortune-sheet/react/dist/index.css'
 import {
-    CourseNoteProvider,
-    CourseProvider,
-    FeatureProvider,
-    PinnedNotifyProvider,
-    PreviousSectionRouteProvider,
-    SocketContext
+  CourseNoteProvider,
+  CourseProvider,
+  FeatureProvider,
+  PinnedNotifyProvider,
+  PreviousSectionRouteProvider,
+  SocketContext,
 } from '@lms/contexts'
 import { RouteGuard } from '@lms/feature-auth'
 import '@lms/styles'
-import {
-    SappConfirmDialogContainer
-} from '@lms/ui'
+import { SappConfirmDialogContainer } from '@lms/ui'
 import '@sapp-fe/entrance-test-result-package/dist/index.css'
 import '@sapp-fe/preview-part/dist/index.css'
 import '@sapp-fe/quiz-result-package/dist/index.css'
@@ -35,9 +33,9 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import {
-    MENU_BOTTOM,
-    MENU_ITEMS,
-    MENU_ITEMS_EVENT,
+  MENU_BOTTOM,
+  MENU_ITEMS,
+  MENU_ITEMS_EVENT,
 } from 'src/constants/menu-items'
 import { PageLink } from 'src/constants/routers'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
@@ -59,120 +57,136 @@ import { useRouter } from 'next/navigation'
 import { LOCAL_STORAGE_KEYS, SOCKET_EVENTS } from '@lms/core'
 import { io } from 'socket.io-client'
 import { uploadImageToLinkedIn } from './api/certificate/route'
+import { ErrorBoundary } from '@sentry/nextjs'
+import ErrorRedirectPage from '@pages/error-redirect'
+import { Provider } from 'react-redux'
+import { store } from '@lms/contexts'
+import { usePathname, useParams, useSearchParams } from 'next/navigation'
+
 dayjs.extend(utc)
 dayjs.extend(weekday)
+
 export function Providers({ children }: { children: ReactNode }) {
-    const router = useRouter()
-      const queryClient = new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: 3000000,
-            refetchOnWindowFocus: false,
-            // Đặt thời gian stale tại đây, ví dụ: 30 giây (30000 miligiây)
-          },
+  const router = useRouter()
+  const pathname = usePathname()
+  const params = useParams()
+  const query = useSearchParams()
+
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 3000000,
+        refetchOnWindowFocus: false,
+        // Đặt thời gian stale tại đây, ví dụ: 30 giây (30000 miligiây)
+      },
+    },
+  })
+  const [socket, setSocket] = useState<any>(null)
+  const authenticationManager = new AuthenticationManager()
+  useEffect(() => {
+    const token = authenticationManager.getToken()
+    if (token !== '') {
+      const newSocket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
+        extraHeaders: {
+          authorization: token,
         },
       })
-    const [socket, setSocket] = useState<any>(null)
-    const authenticationManager = new AuthenticationManager()
-    useEffect(() => {
-        const token = authenticationManager.getToken()
-        if (token !== '') {
-            const newSocket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
-                extraHeaders: {
-                    authorization: token,
-                },
-            })
-            setSocket(newSocket)
-            return () => {
-                newSocket.disconnect()
-            }
-        }
-    }, [authenticationManager]) // reconnect khi authToken thay đổi
+      setSocket(newSocket)
+      return () => {
+        newSocket.disconnect()
+      }
+    }
+  }, [authenticationManager]) // reconnect khi authToken thay đổi
 
-    useEffect(() => {
-        if (socket) {
-            socket.on('connect', () => { })
-            socket.on('disconnect', () => { })
-            socket?.on(SOCKET_EVENTS.NOTIFICATION_UNREAD, (data: any) => {
-                localStorage.setItem(
-                    LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
-                    data.payload.data.unread,
-                )
-                window.dispatchEvent(new Event('storage'))
-            })
-            return () => {
-                socket?.off(SOCKET_EVENTS.NOTIFICATION_UNREAD)
-            }
-        }
-    }, [socket])
-    return (
-        <PinnedNotifyProvider
+  useEffect(() => {
+    if (socket) {
+      socket.on('connect', () => {})
+      socket.on('disconnect', () => {})
+      socket?.on(SOCKET_EVENTS.NOTIFICATION_UNREAD, (data: any) => {
+        localStorage.setItem(
+          LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
+          data.payload.data.unread,
+        )
+        window.dispatchEvent(new Event('storage'))
+      })
+      return () => {
+        socket?.off(SOCKET_EVENTS.NOTIFICATION_UNREAD)
+      }
+    }
+  }, [socket])
+  return (
+    // <ErrorBoundary fallback={<ErrorRedirectPage />}>
+    <Provider store={store}>
+      <PinnedNotifyProvider
+        router={router}
+        api={{
+          getPinnedNotifications: UserApi.getPinnedNotifications,
+        }}
+      >
+        <FeatureProvider
+          value={{
+            courseApi: CoursesAPI,
+            questionApi: QuestionAPI,
+            uploadApi: UploadAPI,
+            userApi: UserApi,
+            notificationApi: NotificationAPI,
+            authApi: AuthAPI,
+            classApi: ClassAPI,
+            activityApi: ActivityAPI,
+            courseActivityApi: CourseActivityApi,
+            entranceTestApi: EntranceTestAPI,
+            eventTestApi: EventTestAPI,
+            calendarApi: CalendarApi,
+            myProfileApi: MyProfileAPI,
+            submitQuizTest: TestServiceAPI.submitQuizTest,
+            authManager: new AuthenticationManager(),
+            pageLink: PageLink,
+            menuItems: MENU_ITEMS,
+            menuItemsEvent: MENU_ITEMS_EVENT,
+            menuBottom: MENU_BOTTOM,
+            router: router,
+            pathname,
+            params,
+            query,
+            fetcher: fetcher,
+            videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
+            testServiceApi: TestServiceAPI,
+            certificateApi: {
+              uploadImageToLinkedIn,
+            },
+          }}
+        >
+          <CourseProvider
             router={router}
             api={{
-                getPinnedNotifications: UserApi.getPinnedNotifications,
+              get: EventTestAPI.get,
             }}
-        >
-            <FeatureProvider
-                value={{
-                    courseApi: CoursesAPI,
-                    questionApi: QuestionAPI,
-                    uploadApi: UploadAPI,
-                    userApi: UserApi,
-                    notificationApi: NotificationAPI,
-                    authApi: AuthAPI,
-                    classApi: ClassAPI,
-                    activityApi: ActivityAPI,
-                    courseActivityApi: CourseActivityApi,
-                    entranceTestApi: EntranceTestAPI,
-                    eventTestApi: EventTestAPI,
-                    calendarApi: CalendarApi,
-                    myProfileApi: MyProfileAPI,
-                    submitQuizTest: TestServiceAPI.submitQuizTest,
-                    authManager: new AuthenticationManager(),
-                    pageLink: PageLink,
-                    menuItems: MENU_ITEMS,
-                    menuItemsEvent: MENU_ITEMS_EVENT,
-                    menuBottom: MENU_BOTTOM,
-                    router: router,
-                    fetcher: fetcher,
-                    videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
-                    testServiceApi: TestServiceAPI,
-                    certificateApi: {
-                        uploadImageToLinkedIn
-                    }
-                }}
-            >
-                <CourseProvider
-                    router={router}
-                    api={{
-                        get: EventTestAPI.get,
-                    }}
-                >
-                    <CourseNoteProvider router={router} api={CoursesAPI}>
-                        <QueryClientProvider client={queryClient}>
-                            <SocketContext.Provider value={socket}>
-                                <PreviousSectionRouteProvider router={router}>
-                                    <Toaster
-                                        toastOptions={{
-                                            style: {
-                                                maxWidth: '400px', // Tăng chiều rộng của toast
-                                            },
-                                        }}
-                                    />
-                                    {/* <SappConfirmDialogContainer /> */}
-                                    <RouteGuard>
-                                        <ConfigProvider>
-                                            <AntdApp>
-                                                {children}
-                                            </AntdApp>
-                                        </ConfigProvider>
-                                    </RouteGuard>
-                                </PreviousSectionRouteProvider>
-                            </SocketContext.Provider>
-                        </QueryClientProvider>
-                    </CourseNoteProvider>
-                </CourseProvider>
-            </FeatureProvider>
-        </PinnedNotifyProvider>
-    )
+          >
+            <CourseNoteProvider router={router} api={CoursesAPI}>
+              <QueryClientProvider client={queryClient}>
+                <SocketContext.Provider value={socket}>
+                  <PreviousSectionRouteProvider pathname={pathname}>
+                    <Toaster
+                      toastOptions={{
+                        style: {
+                          maxWidth: '400px', // Tăng chiều rộng của toast
+                        },
+                      }}
+                    />
+                    <SappConfirmDialogContainer />
+                    <RouteGuard>
+                      <ConfigProvider>
+                        <AntdApp>{children}</AntdApp>
+                      </ConfigProvider>
+                    </RouteGuard>
+                  </PreviousSectionRouteProvider>
+                </SocketContext.Provider>
+              </QueryClientProvider>
+            </CourseNoteProvider>
+          </CourseProvider>
+        </FeatureProvider>
+      </PinnedNotifyProvider>
+    </Provider>
+    // </ErrorBoundary>
+  )
 }

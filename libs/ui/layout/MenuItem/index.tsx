@@ -37,7 +37,6 @@ import { isEmpty } from "lodash";
 import Lottie from "lottie-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import SappNotificationComponent from "@sapp-fe/sapp-notification";
 import { v4 as uuidv4 } from "uuid";
@@ -56,7 +55,7 @@ export default function MenuItem({
   closeSideBar,
   setOpenExaminationInfo,
 }: MenuItemProps) {
-  const { notificationApi, pageLink } = useFeature();
+  const { notificationApi, pageLink, router, pathname } = useFeature();
   const {
     isViewDetail,
     openNotification,
@@ -99,9 +98,8 @@ export default function MenuItem({
   const [isExpanded, toggleExpanded] = useState(false);
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(userReducer);
-  const router = useRouter();
   const isNested = subItems && subItems?.length > 0;
-  const selected = router.pathname === url;
+  const selected = pathname === url;
   const [badgeClass, setBadgeClass] = useState("w-4 h-4 -top-[5px] -right-1.5"); // Default width
 
   useEffect(() => {

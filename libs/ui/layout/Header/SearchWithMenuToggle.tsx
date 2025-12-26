@@ -4,8 +4,7 @@ import { useAppSelector, useFeature } from "@lms/contexts";
 import { AppType, MY_COURSES, UserGuide } from "@lms/core";
 import { buildQueryString } from "@lms/utils";
 import clsx from "clsx";
-import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
+ import React, { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { PopupStep } from "../../components";
 import SearchForm from "./SearchForm";
@@ -36,13 +35,11 @@ const SearchWithMenuToggle = ({
   redirectLink, 
   appType
 }: IProps) => {
-  const { pageLink } = useFeature();  
-  const {isMobileView} = useTailwindBreakpoint()
+  const { pageLink, router, query } = useFeature();  
   const {
     status: guideStatus,
     step: guideStep,
   } = useAppSelector((state) => state.userGuideReducer);
-  const { query, push } = useRouter();
   const methods = useForm<{ name: string }>({
     defaultValues: {
       name: "",
@@ -60,7 +57,7 @@ const SearchWithMenuToggle = ({
   const appCourseLink = appType === AppType.LMS_PRO ? pageLink.COURSES : pageLink.SHORT_COURSE 
   const handleSubmit = () => {
     // Redirect to the search results page with the query as a query parameter
-    push(
+    router.push(
       `${appCourseLink}${
         methods.watch("name")?.trim()?.length
           ? `?name=${methods.watch("name")}`

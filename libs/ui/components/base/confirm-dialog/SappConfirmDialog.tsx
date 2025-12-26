@@ -28,13 +28,14 @@ const SappConfirmDialog: FC<SappConfirmDialogProps> = ({
   onConfirm,
   closeConfirmation,
 }) => {
-  const pathname = usePathname()
+  const { pathname } = useFeature()
   const handleCancel = async () => {
     onCancel && (await onCancel())
   }
   const handleConfirm = async () => {
     await onConfirm()
   }
+  // ✅ Close dialog when route changes
   useEffect(() => {
     if (open) {
       closeConfirmation()
