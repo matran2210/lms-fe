@@ -37,12 +37,21 @@ const PopupStep = ({
   isEnd,
   imgType = "animation",
 }: Props) => {
+  const isCenterPosition = placement === "center";
   const getPopupPosition = (
     targetId: string,
     placement: GuidePlacement,
     baseOffset: number,
     customOffset?: GuideOffset,
   ) => {
+    if (isCenterPosition) {
+      return {
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+      };
+    }
+
     const el = document.querySelector(
       `[data-guide-id="${targetId}"]`,
     ) as HTMLElement | null;
@@ -56,13 +65,6 @@ const PopupStep = ({
     let pos: { top: number; left: number; transform: string } | null = null;
 
     switch (placement) {
-      case "center":
-        pos = {
-          top: window.innerHeight / 2,
-          left: window.innerWidth / 2,
-          transform: "translate(-50%, -50%)",
-        };
-        break;
       // ===== TOP =====
       case "top-left":
         pos = {
@@ -211,7 +213,7 @@ const PopupStep = ({
   return (
     <motion.div
       ref={confirmDialogRef}
-      layout
+      layout={isCenterPosition ? undefined : true}
       transition={{ duration: 0.3, ease: "easeOut" }}
       className="fixed z-50 sm:w-[315px] w-[315px] rounded-xl bg-white p-4 text-gray-800 shadow-lg"
       style={style}

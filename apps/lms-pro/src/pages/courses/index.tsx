@@ -46,7 +46,7 @@ const MyCourse = () => {
   } = useAppSelector((state) => state.userGuideReducer)
   const dispatch = useAppDispatch()
   const [openModalMarketingInApp, setOpenModalMarketingInApp] = useState(false)
-  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
   const router = useRouter()
@@ -241,7 +241,7 @@ const MyCourse = () => {
         >
           <div
             data-guide-id="welcome-to"
-            className={`relative flex items-center rounded-md bg-white p-3 md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 4 ? 'z-50' : ''}`}
+            className={`relative flex items-center rounded-md bg-white p-3 md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 4 && !isMobileView ? 'z-50' : ''}`}
           >
             <Heading
               greeting="Welcome to"
@@ -281,7 +281,7 @@ const MyCourse = () => {
             isEmpty(courses)
               ? 'flex min-h-[calc(100vh-21rem)] items-center justify-center'
               : ''
-          } ${guideStatus && guideStep === 5 && 'tour-guide-course-active z-50'}`}
+          } ${guideStatus && guideStep === 5 && !isMobileView && 'tour-guide-course-active z-50'}`}
         >
           <CoursesList
             courses={courses}
