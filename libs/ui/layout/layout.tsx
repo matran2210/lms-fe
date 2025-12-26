@@ -45,7 +45,8 @@ export default function Layout(props: LayoutProps): ReactElement {
     closeUserGuide,
   } = props;
   const { pageLink, router } = useFeature();
-  const { isShowMenuContent, isMobileView } = useTailwindBreakpoint();
+  const { isShowMenuContent, isMobileView, isTabletView } =
+    useTailwindBreakpoint();
 
   const { isOpenSidebar, setOpenSidebar } = useCourseContext();
   const toggleDrawer = () => {
@@ -139,7 +140,13 @@ export default function Layout(props: LayoutProps): ReactElement {
     }
   };
   const stepConfig = getGuideStepConfig(guideStep);
-
+  const customOffset =
+    isTabletView &&
+    (stepConfig?.targetId === "sidebar" ||
+      stepConfig?.targetId === "notification-profile")
+      ? { x: 115, y: 0 }
+      : undefined;
+      
   return (
     <>
       <Head>
@@ -205,6 +212,7 @@ export default function Layout(props: LayoutProps): ReactElement {
           isEnd={stepConfig.isEnd}
           handleCancel={stepConfig.handleCancel}
           titleButtonNext={stepConfig.titleButtonNext}
+          customOffset={customOffset}
         />
       )}
     </>

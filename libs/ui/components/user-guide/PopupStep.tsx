@@ -14,7 +14,7 @@ type Props = {
   targetId: string;
   placement?: GuidePlacement;
   offset?: number;
-
+  customOffset?: GuideOffset;
   titleButtonNext?: string;
   title?: string;
   handleCancel?: () => void;
@@ -36,6 +36,7 @@ const PopupStep = ({
   imgSrc,
   isEnd,
   imgType = "animation",
+  customOffset = { x: 0, y: 0 },
 }: Props) => {
   const isCenterPosition = placement === "center";
   const getPopupPosition = (
@@ -193,7 +194,7 @@ const PopupStep = ({
   };
 
   const updatePosition = () => {
-    const pos = getPopupPosition(targetId, placement, offset);
+    const pos = getPopupPosition(targetId, placement, offset, customOffset);
     if (pos) setStyle(pos);
   };
 

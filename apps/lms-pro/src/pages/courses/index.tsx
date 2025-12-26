@@ -46,7 +46,8 @@ const MyCourse = () => {
   } = useAppSelector((state) => state.userGuideReducer)
   const dispatch = useAppDispatch()
   const [openModalMarketingInApp, setOpenModalMarketingInApp] = useState(false)
-  const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
+  const { isAlwaysShowSidebar, isMobileView, isTabletView } =
+    useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
   const router = useRouter()
@@ -220,7 +221,13 @@ const MyCourse = () => {
     <SappLoadingGlobal loading={isLoading}>
       <Layout
         title="My Course"
-        showSidebar={showSidebar || isAlwaysShowSidebar}
+        showSidebar={
+          showSidebar ||
+          isAlwaysShowSidebar ||
+          (guideIsActive &&
+            isTabletView &&
+            (guideStep === 2 || guideStep === 3))
+        }
         handleToggleSidebar={handleCloseSidebar}
         className="relative"
         isEndGuide={isEndGuide}

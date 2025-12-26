@@ -86,7 +86,7 @@ export default function Sidebar({
                   "lg:group-hover:left-0 lg:group-hover:translate-x-0",
                   // Active when guideStep is 2 or 3
                   (guideStep === 2 || guideStep === 3) &&
-                    "lg:left-0 lg:translate-x-0",
+                    "lg:!left-0 lg:!translate-x-0",
                 )}
               />
               <ExpandIcon type="logo-full" />
