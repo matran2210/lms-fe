@@ -27,7 +27,11 @@ let nextConfig = {
   ],
 
   // output: 'standalone',
-
+  images: {
+    minimumCacheTTL: 43200,
+    remotePatterns: [{ protocol: 'https', hostname: '**' }],
+    unoptimized: true,
+  },
   compiler: {
     styledComponents: true,
   },

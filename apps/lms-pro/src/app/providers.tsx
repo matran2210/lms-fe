@@ -61,7 +61,7 @@ import { ErrorBoundary } from '@sentry/nextjs'
 import ErrorRedirectPage from '@pages/error-redirect'
 import { Provider } from 'react-redux'
 import { store } from '@lms/contexts'
-import { usePathname, useParams } from 'next/navigation'
+import { usePathname, useParams, useSearchParams } from 'next/navigation'
 
 dayjs.extend(utc)
 dayjs.extend(weekday)
@@ -70,6 +70,7 @@ export function Providers({ children }: { children: ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
   const params = useParams()
+  const query = useSearchParams()
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -114,77 +115,78 @@ export function Providers({ children }: { children: ReactNode }) {
     }
   }, [socket])
   return (
-    <ErrorBoundary fallback={<ErrorRedirectPage />}>
-      <Provider store={store}>
-        <PinnedNotifyProvider
-          router={router}
-          api={{
-            getPinnedNotifications: UserApi.getPinnedNotifications,
+    // <ErrorBoundary fallback={<ErrorRedirectPage />}>
+    <Provider store={store}>
+      <PinnedNotifyProvider
+        router={router}
+        api={{
+          getPinnedNotifications: UserApi.getPinnedNotifications,
+        }}
+      >
+        <FeatureProvider
+          value={{
+            courseApi: CoursesAPI,
+            questionApi: QuestionAPI,
+            uploadApi: UploadAPI,
+            userApi: UserApi,
+            notificationApi: NotificationAPI,
+            authApi: AuthAPI,
+            classApi: ClassAPI,
+            activityApi: ActivityAPI,
+            courseActivityApi: CourseActivityApi,
+            entranceTestApi: EntranceTestAPI,
+            eventTestApi: EventTestAPI,
+            calendarApi: CalendarApi,
+            myProfileApi: MyProfileAPI,
+            submitQuizTest: TestServiceAPI.submitQuizTest,
+            authManager: new AuthenticationManager(),
+            pageLink: PageLink,
+            menuItems: MENU_ITEMS,
+            menuItemsEvent: MENU_ITEMS_EVENT,
+            menuBottom: MENU_BOTTOM,
+            router: router,
+            pathname,
+            params,
+            query,
+            fetcher: fetcher,
+            videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
+            testServiceApi: TestServiceAPI,
+            certificateApi: {
+              uploadImageToLinkedIn,
+            },
           }}
         >
-          <FeatureProvider
-            value={{
-              courseApi: CoursesAPI,
-              questionApi: QuestionAPI,
-              uploadApi: UploadAPI,
-              userApi: UserApi,
-              notificationApi: NotificationAPI,
-              authApi: AuthAPI,
-              classApi: ClassAPI,
-              activityApi: ActivityAPI,
-              courseActivityApi: CourseActivityApi,
-              entranceTestApi: EntranceTestAPI,
-              eventTestApi: EventTestAPI,
-              calendarApi: CalendarApi,
-              myProfileApi: MyProfileAPI,
-              submitQuizTest: TestServiceAPI.submitQuizTest,
-              authManager: new AuthenticationManager(),
-              pageLink: PageLink,
-              menuItems: MENU_ITEMS,
-              menuItemsEvent: MENU_ITEMS_EVENT,
-              menuBottom: MENU_BOTTOM,
-              router: router,
-              pathname,
-              params,
-              fetcher: fetcher,
-              videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
-              testServiceApi: TestServiceAPI,
-              certificateApi: {
-                uploadImageToLinkedIn,
-              },
+          <CourseProvider
+            router={router}
+            api={{
+              get: EventTestAPI.get,
             }}
           >
-            <CourseProvider
-              router={router}
-              api={{
-                get: EventTestAPI.get,
-              }}
-            >
-              <CourseNoteProvider router={router} api={CoursesAPI}>
-                <QueryClientProvider client={queryClient}>
-                  <SocketContext.Provider value={socket}>
-                    <PreviousSectionRouteProvider pathname={pathname}>
-                      <Toaster
-                        toastOptions={{
-                          style: {
-                            maxWidth: '400px', // Tăng chiều rộng của toast
-                          },
-                        }}
-                      />
-                      {/* <SappConfirmDialogContainer /> */}
-                      <RouteGuard>
-                        <ConfigProvider>
-                          <AntdApp>{children}</AntdApp>
-                        </ConfigProvider>
-                      </RouteGuard>
-                    </PreviousSectionRouteProvider>
-                  </SocketContext.Provider>
-                </QueryClientProvider>
-              </CourseNoteProvider>
-            </CourseProvider>
-          </FeatureProvider>
-        </PinnedNotifyProvider>
-      </Provider>
-    </ErrorBoundary>
+            <CourseNoteProvider router={router} api={CoursesAPI}>
+              <QueryClientProvider client={queryClient}>
+                <SocketContext.Provider value={socket}>
+                  <PreviousSectionRouteProvider pathname={pathname}>
+                    <Toaster
+                      toastOptions={{
+                        style: {
+                          maxWidth: '400px', // Tăng chiều rộng của toast
+                        },
+                      }}
+                    />
+                    <SappConfirmDialogContainer />
+                    <RouteGuard>
+                      <ConfigProvider>
+                        <AntdApp>{children}</AntdApp>
+                      </ConfigProvider>
+                    </RouteGuard>
+                  </PreviousSectionRouteProvider>
+                </SocketContext.Provider>
+              </QueryClientProvider>
+            </CourseNoteProvider>
+          </CourseProvider>
+        </FeatureProvider>
+      </PinnedNotifyProvider>
+    </Provider>
+    // </ErrorBoundary>
   )
 }
