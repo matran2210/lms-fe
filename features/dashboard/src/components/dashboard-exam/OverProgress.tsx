@@ -1,22 +1,21 @@
 import { EChart } from "@lms/ui";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { DashboardAPI } from "@pages/api/dashboard";
 import { DATE_FORMAT } from "@lms/core";
 import { IOverProgress, IExamPrediction } from "@lms/core";
 import dayjs from "dayjs";
 import { IconEssentional } from "@lms/assets";
-import useReponsive from "src/hooks/useReponsive";
 import { EChartsOption } from "echarts";
+import { useReponsive } from "@lms/hooks";
+import { useFeature } from "@lms/contexts";
 
 interface ChartData {
   exam_prediction: number;
 }
 
 const OverProgress = () => {
-  const router = useRouter();
   const [option, setOption] = useState<EChartsOption | null>();
   const { isMobile } = useReponsive();
+  const {router} = useFeature()
 
   const handlePieChartOption = (
     data: IOverProgress | IExamPrediction | ChartData,

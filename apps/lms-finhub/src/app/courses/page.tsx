@@ -1,10 +1,10 @@
 "use client"
 import React from 'react'
-import { useRouter } from 'next/router'
+import { useParams, useRouter } from 'next/navigation'
 
 const Index = () => {
+  const params = useParams()
   const router = useRouter()
-  const params = router.query
   router.push(`/short-course/?${params}`)
   return <div></div>
 }

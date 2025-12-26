@@ -6,10 +6,10 @@ import {
   getSessionIdFromToken,
   setCookie,
 } from '@lms/utils'
-import { UserApi } from '@pages/api/user'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { fetcher } from '@services/requestV2'
 import Keycloak from 'keycloak-js'
+import { UserApi } from 'src/app/api/user/route'
 
 const handleFirebaseToken = async () => {
   const accessDeviceToken = await AsyncStorage.getItem('firebaseDeviceToken')

@@ -9,16 +9,15 @@ import {
 } from "recharts";
 import { DashboardAPI } from "@pages/api/dashboard";
 import dayjs from "dayjs";
-import { useRouter } from "next/router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ILearningResult, IMockTestResult } from "@lms/core";
 import { COURSE_TYPE, DATE_FORMAT } from "@lms/core";
 import { IconEssentional } from "@lms/assets";
 import { Tooltip } from "@lms/ui";
-import useReponsive from "src/hooks/useReponsive";
+import { useReponsive } from "@lms/hooks";
+import { useFeature } from "@lms/contexts";
 
 const LearningResultTest = () => {
-  const router = useRouter();
   const [option, setOption] = useState<any>();
   const [hasLearning, setHasLearning] = useState<boolean>(false);
   const [mockTestId, setMockTestId] = useState<string>("");
@@ -27,6 +26,7 @@ const LearningResultTest = () => {
   );
   const containerRef = useRef<HTMLDivElement>(null);
   const tickTooltipRef = useRef<HTMLDivElement>(null);
+  const {router} = useFeature()
 
   const avgPercent = useMemo(() => {
     if (!chartData.length) return 0;

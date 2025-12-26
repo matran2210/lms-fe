@@ -1,4 +1,5 @@
 import { IconEssentional, MatchFailIcon, SuccessMatchIcon } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
 import {
   ANIMATION,
   COURSE_TYPE,
@@ -12,7 +13,6 @@ import { DashboardAPI } from "@pages/api/dashboard";
 import dayjs from "dayjs";
 import { EChartsOption } from "echarts";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 
 interface CourseInfo {
@@ -34,10 +34,10 @@ interface TooltipParams {
 }
 
 const LearningResults = () => {
-  const router = useRouter();
   const [results, setResults] = useState<ILearningResult[] | IMockTestResult[]>(
     [],
   );
+  const {router} = useFeature()
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [hasLearning, setHasLearning] = useState<boolean>(false);

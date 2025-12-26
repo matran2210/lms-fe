@@ -1,31 +1,29 @@
 import { fetcher } from '@services/requestV2'
 import getConfig from 'next/config'
 
-const { publicRuntimeConfig } = getConfig()
-export const { apiURL } = publicRuntimeConfig
 export class NotificationAPI {
   static getCountUnRead(): Promise<any> {
-    return fetcher(`${apiURL}/notifications/count-unread`)
+    return fetcher(`/notifications/count-unread`)
   }
 
   static getNotification(params: Object): Promise<any> {
-    return fetcher(`${apiURL}/notifications`, {
+    return fetcher(`/notifications`, {
       params: params,
     })
   }
 
   static getDetail(id: string): Promise<any> {
-    return fetcher(`${apiURL}/notifications/${id}`)
+    return fetcher(`/notifications/${id}`)
   }
 
   static markAll(): Promise<any> {
-    return fetcher(`${apiURL}/notifications/mark-all-read`, {
+    return fetcher(`/notifications/mark-all-read`, {
       method: 'POST',
     })
   }
 
   static markById(ids: string[], markRead: boolean): Promise<any> {
-    return fetcher(`${apiURL}/notifications/mark-read`, {
+    return fetcher(`/notifications/mark-read`, {
       method: 'POST',
       data: {
         notification_ids: ids,

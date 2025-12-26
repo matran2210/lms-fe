@@ -1,8 +1,8 @@
-import { CoursesAPI } from '@pages/api/courses'
 import React, { Dispatch, SetStateAction } from 'react'
-import { useRouter } from 'next/router'
 import { LockSectionIcon, ThankYouIcon, UnlockIcon } from '@lms/assets'
 import ShortCourseModal from '@components/modal/ShortCourseModal'
+import { useParams, useRouter } from 'next/navigation'
+import { CoursesAPI } from 'src/app/api/courses/route'
 
 export interface IPopupFormState {
   lockSection: boolean
@@ -48,6 +48,7 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
   setShowForm,
 }) => {
   const router = useRouter()
+  const params = useParams()
 
   /**
    * Xử lý đóng modal bằng cách reset tất cả các trạng thái về false
@@ -81,7 +82,7 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
    */
   const handleUpgrade = async () => {
     const res = await CoursesAPI.upgradeNowTrial(
-      router.query.courseId || router.query.id,
+      params.courseId || params.id,
     )
     if (res.success) {
       setShowForm({

@@ -12,16 +12,17 @@ import {
 } from '@lms/core'
 import { FullScreenLayout, SappLoadingGlobal, Tooltip } from '@lms/ui'
 import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
-import { TestServiceAPI } from '@pages/api/test-api'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routes'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
-import { CoursesAPI } from '../api/courses'
+import { CoursesAPI } from '../api/courses/route'
+import { TestServiceAPI } from '../api/test-api/route'
+import { useParams, useRouter } from 'next/navigation'
 
 const Explanation = () => {
   const router = useRouter()
+  const params = useParams()
   const [activeQuestion, setActiveQuestion] = useState<any>()
   const [attempt, setAttempt] = useState<IAtempt>()
   const [loading, setLoading] = useState<boolean>(false)
@@ -106,10 +107,10 @@ const Explanation = () => {
   }
 
   useEffect(() => {
-    if (router.query.id) {
-      getActiveQuestion(router.query.id as string)
+    if (params.id) {
+      getActiveQuestion(params.id as string)
     }
-  }, [router.query.id])
+  }, [params.id])
 
   const handleDownload = async (data: {
     files: { name: string; file_key: string }[]
@@ -119,8 +120,8 @@ const Explanation = () => {
     } catch (error) {}
   }
 
-  const isUserViewAnswers = router?.query?.title === 'Your Answers Detail'
-  const viewAnswersType = router?.query?.type
+  const isUserViewAnswers = params?.title === 'Your Answers Detail'
+  const viewAnswersType = params?.type
   const isUserViewAnswersDetailAndEssay =
     isUserViewAnswers && activeQuestion?.qType === QUESTION_TYPES.ESSAY
 

@@ -1,5 +1,4 @@
 import { fetcher } from '@services/requestV2'
-import { apiURL } from 'src/redux/services/httpService'
 import {
   ChangePasswordReq,
   ResetPassword,
@@ -52,7 +51,7 @@ export default MyProfileAPI
 
 export class AuthAPI {
   static getProfile() {
-    return fetcher(`${apiURL}/users/profile`)
+    return fetcher(`paramsusers/profile`)
   }
 
   static me() {

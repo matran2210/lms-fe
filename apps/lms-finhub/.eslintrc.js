@@ -22,6 +22,8 @@ module.exports = {
     'no-empty-pattern': 'off',
     'no-useless-escape': 'off',
     'no-var': 'off',
+    'react/no-unescaped-entities': 'off',
+      '@next/next/no-page-custom-font': 'off',
   },
   env: {
     browser: true,

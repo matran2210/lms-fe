@@ -1,3 +1,4 @@
+'use client'
 import Tooltip from '@components/common/Tooltip'
 import Layout from '@components/layout'
 import TestResultPage from '@components/v2/test-result/testResultPage'
@@ -6,17 +7,18 @@ import { GRADE_STATUS } from '@lms/core'
 import { ButtonSecondary } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import clsx from 'clsx'
-import { useRouter } from 'next/router'
-import { ResultAPI } from 'src/pages/api/short-course/test-result'
+import { useParams, useRouter } from 'next/navigation'
+import { ResultAPI } from 'src/app/api/short-course/test-result/route'
 
 const TestResultDetail = () => {
   const router = useRouter()
+  const param = useParams()
   const useGetQuizAttempts = (queryKey: string, params: Object) => {
     return useGetDataQuery(
       queryKey,
       params,
-      () => ResultAPI.getQuizAttempts(router.query.id),
-      router.query.id !== undefined,
+      () => ResultAPI.getQuizAttempts(param.id),
+      param.id !== undefined,
       () => router.replace('/'),
     )
   }
@@ -25,8 +27,8 @@ const TestResultDetail = () => {
     return useGetDataQuery(
       queryKey,
       params,
-      () => ResultAPI.getQuizAttemptsChartData(router.query.id),
-      router.query.id !== undefined,
+      () => ResultAPI.getQuizAttemptsChartData(param.id),
+      param.id !== undefined,
     )
   }
 
@@ -46,7 +48,7 @@ const TestResultDetail = () => {
     quiz?.limit_count === questions?.quizAttempt?.number_of_attempts
   ) {
     // Nếu bài test đã quá số lần làm bài thì chỉ cho link đến trang kết quả, không cho làm lại
-    linkTest = `/short-course/test-result/${router.query.id}`
+    linkTest = `/short-course/test-result/${param.id}`
   }
 
   const handleRetake = () => {

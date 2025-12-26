@@ -49,17 +49,17 @@ import {
 } from '@lms/ui'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight } from '@lms/utils'
-import { TestServiceAPI } from '@pages/api/test-api'
 import { download } from '@utils/index'
 import { Popover } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
-import { useRouter } from 'next/router'
+import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import ConFirmSubmit from '../short-course/test/conFirmSubmit'
 import LimitQuizModal from '../short-course/test/limitQuizModal'
+import { TestServiceAPI } from '../api/test-api/route'
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
 
@@ -230,7 +230,7 @@ const CaseStudyDetail = () => {
               dispatch(
                 clearFileEssayCaseStudy({
                   question_id: data.id,
-                  topic_id: router.query.id as string,
+                  topic_id: params.id as string,
                   requirement_id: data?.requirements?.[0]?.id,
                 }),
               )
@@ -282,6 +282,7 @@ const CaseStudyDetail = () => {
   const [isClickExhibitOpen, setIsClickExhibitOpen] = useState(false)
   const [showWarning, setShowWarning] = useState(true)
   const MatchQuizRef = useRef(null) as any
+  const params = useParams()
 
   const handleResetEssay = async (
     index: number,
@@ -395,16 +396,16 @@ const CaseStudyDetail = () => {
     }
   }, [x, startResize])
   useEffect(() => {
-    if (router.query.id) {
+    if (params.id) {
       dispatch(
         getTopicsCaseStudy({
           api: TestServiceAPI,
-          id: router.query.id,
-          quiz_id: router.query.quiz_id,
+          id: params.id,
+          quiz_id: params.quiz_id,
         }),
       )
     }
-  }, [router.query.id])
+  }, [params.id])
   async function createAttempts(
     quiz_id: string,
     id: string,
@@ -415,7 +416,7 @@ const CaseStudyDetail = () => {
         quiz_id,
         id,
         class_user_id,
-        router.query.caseStudyId,
+        params.caseStudyId,
       )
       setExhibitText(
         res.data.program === PROGRAM.CMA
@@ -435,14 +436,14 @@ const CaseStudyDetail = () => {
     } catch (err) {}
   }
   useEffect(() => {
-    if (router.query.quiz_id && router.query.id && router.query.class_user_id) {
+    if (params.quiz_id && params.id && params.class_user_id) {
       createAttempts(
-        router.query.quiz_id as string,
-        router.query.id as string,
-        router.query.class_user_id as string,
+        params.quiz_id as string,
+        params.id as string,
+        params.class_user_id as string,
       )
     }
-  }, [router.query.id])
+  }, [params.id])
 
   /**
    * Declare form to handle exhibit
@@ -516,16 +517,16 @@ const CaseStudyDetail = () => {
 
   const backToPart = () => {
     resetEssayBeforeAction()
-    if (router?.query?.class_id) {
-      if (router?.query?.is_from_activity) {
+    if (params?.class_id) {
+      if (params?.is_from_activity) {
         router.push(
           ROUTES.ACTIVITY(
-            router?.query?.class_id as string,
-            router?.query?.course_section_id as string,
+            params?.class_id as string,
+            params?.course_section_id as string,
           ),
         )
       } else {
-        router.push(ROUTES.COURSE_DETAIL(router?.query?.class_id as string))
+        router.push(ROUTES.COURSE_DETAIL(params?.class_id as string))
       }
     } else {
       router.push(ROUTES.SHORT_COURSE)
@@ -806,7 +807,7 @@ const CaseStudyDetail = () => {
         }
 
         router.replace(
-          `/case-study/result/${quizAttempId}?class_user_id=${router.query.class_user_id}&class_id=${router.query.class_id}&course_section_id=${router.query.course_section_id}`,
+          `/case-study/result/${quizAttempId}?class_user_id=${params.class_user_id}&class_id=${params.class_id}&course_section_id=${params.course_section_id}`,
         )
       } catch (err) {
         toast.error('Submission failed. Please try again.')
@@ -891,14 +892,17 @@ const CaseStudyDetail = () => {
     const handleBrowseAway = () => {
       if (!unsavedChanges) return
       if (window.confirm(warningText)) return
-      router.events.emit('routeChangeError')
+      // TODO: nhớ check lại phần này với router của nextjs
+      // router.events.emit('routeChangeError')
       throw 'routeChange aborted.'
     }
     window.addEventListener('beforeunload', handleWindowClose)
-    router.events.on('routeChangeStart', handleBrowseAway)
+    // TODO: nhớ check lại phần này với router của nextjs
+    // router.events.on('routeChangeStart', handleBrowseAway)
     return () => {
       window.removeEventListener('beforeunload', handleWindowClose)
-      router.events.off('routeChangeStart', handleBrowseAway)
+      // TODO: nhớ check lại phần này với router của nextjs
+      // router.events.off('routeChangeStart', handleBrowseAway)
     }
   }, [unsavedChanges])
   useEffect(() => {
@@ -1418,7 +1422,7 @@ const CaseStudyDetail = () => {
               handleSaveFileEssay(
                 e?.[0],
                 openUpload?.question_id,
-                router.query.id as string,
+                params.id as string,
                 openUpload.requirementId,
               )
             }

@@ -8,9 +8,9 @@ import {
   SappBaseTable,
 } from '@lms/ui'
 import { roundNumber } from '@utils/helpers'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { CoursesAPI } from '../../api/courses/index'
+import { CoursesAPI } from '../../api/courses/route'
+import { useParams, useRouter } from 'next/navigation'
 
 const headers = [
   {
@@ -47,11 +47,12 @@ const TableCaseStudyResult = () => {
   })
   const [topicAttemptDetail, setTopicAttemptDetail] = useState<any>()
   const router = useRouter()
+  const params = useParams()
 
   const fetchScoreDetail = async (page_index: number, page_size: number) => {
     try {
       const res = await CoursesAPI.getCaseStudyAttemptsTable(
-        router.query.id as string,
+        params.id as string,
         page_index,
         page_size,
       )
@@ -95,7 +96,7 @@ const TableCaseStudyResult = () => {
   }
   const getScoreDetail = async () => {
     const res = await fetchScoreDetail(1, 20)
-    const topic = await fetchTopicAttemptDetail(router.query.id as string)
+    const topic = await fetchTopicAttemptDetail(params.id as string)
     setScoreDetail(res?.data)
     setTopicAttemptDetail(topic?.data)
   }
@@ -106,15 +107,9 @@ const TableCaseStudyResult = () => {
     class_id?: string,
     course_section_id?: string,
   ) => {
-    router.replace({
-      pathname: `/case-study/${topicId}`,
-      query: {
-        quiz_id: quizId,
-        class_user_id: class_user_id,
-        class_id: class_id,
-        course_section_id: course_section_id,
-      },
-    })
+    router.replace(
+      `/case-study/${topicId}?quiz_id=${quizId}&class_user_id=${class_user_id}&class_id=${class_id}&course_section_id=${course_section_id}`,
+    )
   }
   // Hàm ánh xạ giá trị enum với tên tương ứng
   const getTypeName = (type: QUESTION_TYPES): string => {
@@ -141,10 +136,10 @@ const TableCaseStudyResult = () => {
   }
 
   useEffect(() => {
-    if (router.query.id) {
+    if (params.id) {
       getScoreDetail()
     }
-  }, [router.query.id])
+  }, [params.id])
 
   return (
     <FullScreenLayout title="Case Study Result">

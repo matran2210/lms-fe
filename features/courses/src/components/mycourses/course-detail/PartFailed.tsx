@@ -4,7 +4,6 @@ import { EAttemptStatus, GRADE_STATUS, GRADING_METHOD, IMyCourseDetail, TEST_TYP
 import { ButtonSecondary, ButtonText, SappModalV3 } from "@lms/ui";
 import { formatTimer, getUserPrefix, trackGAEvent } from "@lms/utils";
 import clsx from "clsx";
-import router from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { CardCourse } from "../../course";
 import { TestModal, TestModalTeacher } from "../test";
@@ -27,7 +26,7 @@ const PartFailed = ({
   isTeacher: boolean;
   hasCertificate?: boolean;
 }) => {
-  const { pageLink } = useFeature();
+  const { pageLink, router } = useFeature();
 
   const noOfAttempts = `${coursePart?.quiz?.attempt?.number_of_attempts || 0}/${coursePart?.quiz?.is_limited ? coursePart?.quiz?.limit_count : "Unlimited"
     }`;

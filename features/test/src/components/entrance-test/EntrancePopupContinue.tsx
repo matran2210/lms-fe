@@ -2,9 +2,9 @@ import { IEntranceTest, IEntranceTestAttempt } from "@lms/core";
 import { ButtonPrimary, ButtonSecondary, ButtonText } from "@lms/ui";
 import { getNoOfAttemptEntranceTest, trackGAEvent } from "@lms/utils";
 import dayjs from "dayjs";
-import router from "next/router";
 import { TestPopup } from "@lms/feature-courses";
 import { Dispatch, SetStateAction } from "react";
+import { useFeature } from "@lms/contexts";
 
 interface EntrancePopupContinueProps {
   currentAttempt: IEntranceTestAttempt;
@@ -30,6 +30,7 @@ const EntrancePopupContinue = ({
   //         handleSubmitNow()
   //     }
   // }, [remainingTimeLastAttempt])
+  const {router} = useFeature()
 
   const handleRedirectResult = () => {
     const searchParams = getNoOfAttemptEntranceTest({ data, currentAttempt });

@@ -1,29 +1,9 @@
-import { DownloadIcon } from '@lms/assets'
-import getConfig from 'next/config'
-import { useRouter } from 'next/router'
-import React, {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
-import { CoursesAPI } from 'src/pages/api/courses'
-
-const { publicRuntimeConfig } = getConfig()
-export const { apiURL } = publicRuntimeConfig
-import { isEmpty } from 'lodash'
-import NoDataV2 from 'src/components/common/NodataV2'
-import { UploadAPI } from 'src/pages/api/upload'
-import FilterCourseSection from '@components/mycourses/FilterCourseSection'
-import { FormProvider, useForm } from 'react-hook-form'
-import SortBy from '@components/common/SortBy'
+'use client'
 import ListFilterMobile from '@components/common/ListFilterMobile'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
-import Tooltip from 'src/components/common/Tooltip'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { cleanParamsAPI, formatBytes } from '@lms/utils'
-import { SappDrawerV3 } from '@lms/ui'
+import SortBy from '@components/common/SortBy'
+import FilterCourseSection from '@components/mycourses/FilterCourseSection'
+import { DownloadIcon } from '@lms/assets'
 import {
   backTypeMap,
   getTypeName,
@@ -33,6 +13,23 @@ import {
   SectionDropdownFormValues,
   SectionField,
 } from '@lms/core'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { SappDrawerV3 } from '@lms/ui'
+import { cleanParamsAPI, formatBytes } from '@lms/utils'
+import { isEmpty } from 'lodash'
+import { useParams } from 'next/navigation'
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import { CoursesAPI } from 'src/app/api/courses/route'
+import { UploadAPI } from 'src/app/api/upload/route'
+import NoDataV2 from 'src/components/common/NodataV2'
+import Tooltip from 'src/components/common/Tooltip'
 interface IProps {
   open: boolean
   setOpenResource: Dispatch<SetStateAction<boolean>>
@@ -45,7 +42,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const { isMobileView, isTabletView } = useTailwindBreakpoint()
   const scrollRef = useRef<HTMLDivElement>(null)
   const [resources, setResources] = useState<IResourceDetail>()
-  const router = useRouter()
+  const param = useParams()
   const [loading, setLoading] = useState<boolean>(false)
   const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false)
   const [openChooseItem, setOpenChooseItem] = useState<IOpenChooseItem>({
@@ -96,11 +93,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   useEffect(() => {
     const initFetchData = async () => {
-      if (open && (router.query.courseId || router.query.id)) {
+      if (open && (param.courseId || param.id)) {
         setLoading(true)
         try {
           const resources = await CoursesAPI.getCourseResource(
-            router.query.courseId || router.query.id,
+            param.courseId || param.id,
             params,
           )
           setPageIndex(DEFAULT_PAGE_INDEX)
@@ -124,7 +121,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       requestOngoingRef.current = true
       params.page_index = nextPageIndex
       const res = await CoursesAPI.getCourseResource(
-        router.query.courseId || router.query.id,
+        param.courseId || param.id,
         params,
       )
 
@@ -150,7 +147,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       if (!scrollEl) return
       const { scrollTop, scrollHeight, clientHeight } = scrollEl
       if (scrollTop + clientHeight + 200 >= scrollHeight) {
-        if ((router.query.courseId || router.query.id) && open) {
+        if ((param.courseId || param.id) && open) {
           const nextPageIndex = pageIndex + 1
           if (Number(resources?.meta?.total_pages) >= nextPageIndex) {
             fetchData(nextPageIndex)

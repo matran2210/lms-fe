@@ -1,3 +1,4 @@
+'use client'
 import { useCountdownTest } from '@lms/hooks'
 import { formatTimer } from '@lms/utils'
 import {

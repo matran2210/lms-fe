@@ -1,14 +1,13 @@
 "use client"
 import { LAYOUT } from '@lms/core'
+import { CertificateVertical, HorizontalCertificate } from '@lms/feature-user'
+import { useDownloadImage } from '@lms/hooks'
 import { SappLoadingGlobal } from '@lms/ui'
-import { useRouter } from 'next/router'
+import { useParams } from "next/navigation"
 import { useQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
-import { useDownloadImage } from '@lms/hooks'
-import SinglePageLayout from '@components/layout/SinglePage'
-import { CoursesAPI } from '@pages/api/courses'
-import { CertificateVertical, HorizontalCertificate } from '@lms/feature-user'
+import { CoursesAPI } from '../api/courses/route'
 
 export interface ICertificate {
   certificate_url: string
@@ -19,20 +18,19 @@ export interface ICertificate {
 }
 
 const Certificate = () => {
-  const router = useRouter()
   const { downloadImage } = useDownloadImage()
-
+  const param = useParams()
   /**
    * @description sử dụng react query để call API get certificate
    */
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
-      const { data } = await CoursesAPI.getCertificate(router.query.id)
+      const { data } = await CoursesAPI.getCertificate(param.id)
       return data
     }
 
     return useQuery([queryKey, params], fetchData, {
-      enabled: router.query.id !== undefined,
+      enabled: param.id !== undefined,
       retry: false,
     })
   }

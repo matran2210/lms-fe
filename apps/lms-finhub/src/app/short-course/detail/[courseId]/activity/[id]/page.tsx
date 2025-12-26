@@ -7,7 +7,6 @@ import {
   SectionContent,
   SectionContentModal,
 } from '@components/courses'
-import Calculator from '@components/courses/activity/calculator'
 import CreateNote from '@components/courses/activity/create-note/CreateNote'
 import ButtonIcon from '@components/courses/buttons/ButtonIcon'
 import NextPrevActivityButton from '@components/courses/buttons/ButtonNextPrevActivity'
@@ -22,7 +21,7 @@ import {
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
-import { CloseIcon, CloseModalIcon } from '@lms/assets'
+import { CloseIcon } from '@lms/assets'
 import {
   clearNote3Level,
   closeCalculator3Level,
@@ -43,15 +42,13 @@ import {
 } from '@lms/core'
 import { CalculatorModal } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { MovableWindow } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
-import { CoursesAPI } from '@pages/api/courses'
-import { getActivityById } from '@pages/api/short-course/activity'
-import { UploadAPI } from '@pages/api/upload'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
+import { CoursesAPI, getActivityById } from 'src/app/api/courses/route'
+import { UploadAPI } from 'src/app/api/upload/route'
 import { PageLink } from 'src/constants/routes'
 
 interface VideoStateClicked {
@@ -64,9 +61,10 @@ interface VideoStateClicked {
 
 export default function ActivityDetail() {
   const router = useRouter()
+  const params = useParams()
   const listSectionRef = useRef<ISubSection[] | undefined>([])
-  const ACTIVITYID = (router.query.id as string) || ''
-  const COURSEID = router.query.courseId
+  const ACTIVITYID = (params?.id as string) || ''
+  const COURSEID = params?.courseId
   const [activeTab, setActiveTab] = useState<string>('')
   const [activeVideo, setActiveVideo] = useState<string>('')
   const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
@@ -393,9 +391,7 @@ export default function ActivityDetail() {
       })
     } else if (activityId) {
       // Nếu hoạt động không bị khóa, điều hướng đến hoạt động và ghi nhận sự kiện
-      router.push({
-        pathname: `/short-course/detail/${COURSEID}/activity/${activityId}`,
-      })
+      router.push(`/short-course/detail/${COURSEID}/activity/${activityId}`)
       trackGAEvent(eventLabel) // Ghi nhận sự kiện Google Analytics
     }
   }

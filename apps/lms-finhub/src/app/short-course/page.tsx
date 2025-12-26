@@ -1,23 +1,25 @@
+'use client'
 import CoursesList from '@components/courses/card/CoursesList'
 import Filter3Level from '@components/courses/filter/Filter'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
-import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import { ANIMATION, AppType } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { CoursesAPI } from '../api/courses'
+import { CoursesAPI } from '../api/courses/route'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { useCourseContext, UserType } from '@lms/contexts'
 import { SearchWithMenuToggle } from '@lms/ui'
 import { PageLink } from 'src/constants/routes'
 import Layout from '@components/layout'
+import { useParams, useRouter } from 'next/navigation'
 
 const DEFAULT_PAGESIZE = 9
 
 const MyCourse3Level = () => {
   const router = useRouter()
+  const param = useParams()
   const observer = useRef<IntersectionObserver>()
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()
@@ -39,9 +41,9 @@ const MyCourse3Level = () => {
   }
 
   const params = {
-    name: router.query.name || undefined,
-    status: router.query.status || undefined,
-    type: router.query.type || undefined,
+    name: param.name || undefined,
+    status: param.status || undefined,
+    type: param.type || undefined,
     template: '3',
   }
 

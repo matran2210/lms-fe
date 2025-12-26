@@ -1,6 +1,5 @@
 import clsx from 'clsx'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import { ReactElement, ReactNode, useState } from 'react'
 import { PageLink } from 'src/constants/routes'
 import Sidebar from './Sidebar'
@@ -10,6 +9,7 @@ import {
   useCourseContext,
   usePinnedNotifyContext,
 } from '@lms/contexts'
+import { usePathname, useRouter } from 'next/navigation'
 interface LayoutProps {
   readonly children: ReactNode
   readonly title: string
@@ -32,6 +32,7 @@ export default function Layout(props: LayoutProps): ReactElement {
   } = props
   const router = useRouter()
   const { isShowMenuContent } = useTailwindBreakpoint()
+  const pathName = usePathname()
 
   const { isOpenSidebar, setOpenSidebar } = useCourseContext()
   const toggleDrawer = () => {
@@ -56,7 +57,7 @@ export default function Layout(props: LayoutProps): ReactElement {
     PageLink.COURSE_DETAIL,
     PageLink.COURSE_PART_DETAIL,
     PageLink.COURSE_ACTIVITY,
-  ].includes(router.pathname)
+  ].includes(pathName)
 
   let paddingTop = ''
 

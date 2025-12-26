@@ -12,12 +12,10 @@ import TestModal from '@components/courses/popup/TestModal'
 import Layout from '@components/layout'
 import BottomMenu from '@components/v2/course-detail/BottomMenu'
 import CardMenuItem from '@components/v2/course-detail/CardMenuItem'
-import { CoursesAPI } from '@pages/api/courses'
 import { buildQueryString, formatDate } from '@lms/utils'
 import { Alert, Divider, Skeleton } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import PreviewPartDetail from '@sapp-fe/preview-part'
@@ -37,6 +35,8 @@ import { PopupLockContent } from '@lms/feature-courses'
 import { LearningResource } from '@lms/ui'
 // import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import PromotionalBanner from '@lms/ui/components/banner/PromotionalBanner'
+import { CoursesAPI } from 'src/app/api/courses/route'
+import { useParams, useRouter } from 'next/navigation'
 
 const CourseDetail = () => {
   const dispatch = useAppDispatch()
@@ -50,6 +50,7 @@ const CourseDetail = () => {
     [],
   )
   const router = useRouter()
+  const params = useParams()
   const [readMore, setReadMore] = useState<boolean>(false)
   const [open, setOpen] = useState<boolean>(false)
   const [chapterData, setChapterData] = useState<any>({})
@@ -72,9 +73,9 @@ const CourseDetail = () => {
   }
 
   const { data: previewPart, isLoading } = useQuery({
-    queryKey: ['courseDetail', router.query?.courseId],
-    queryFn: () => fetchCourseDetail(router.query?.courseId),
-    enabled: !!router.query?.courseId,
+    queryKey: ['courseDetail', params?.courseId],
+    queryFn: () => fetchCourseDetail(params?.courseId),
+    enabled: !!params?.courseId,
     retry: false,
   })
 
@@ -100,11 +101,11 @@ const CourseDetail = () => {
     }
   }
 
-  const focusSubSectionIds = router?.query?.focusSubSectionIds as
+  const focusSubSectionIds = params?.focusSubSectionIds as
     | string
     | undefined
-  const focusUnitIds = router?.query?.focusUnitIds as string | undefined
-  const deadline = router?.query?.deadline as string | undefined
+  const focusUnitIds = params?.focusUnitIds as string | undefined
+  const deadline = params?.deadline as string | undefined
   const isOverdue = dayjs(deadline).isBefore(new Date())
   const listFocusSubSectionIds = focusSubSectionIds?.split(',') || []
   const listFocusUnitIds = focusUnitIds?.split(',') || []
@@ -135,7 +136,7 @@ const CourseDetail = () => {
     } else {
       setLoadingChapter(true)
       try {
-        if (course_section_id !== router.query?.partId) {
+        if (course_section_id !== params?.partId) {
           const searchParams = buildQueryString({
             focusSubSectionIds,
             focusUnitIds,
@@ -166,7 +167,7 @@ const CourseDetail = () => {
     document.body.style.overflow = 'hidden'
   }
   const handleDefaultActiveItem = () => {
-    localStorage.setItem('course_chapter_id', router.query?.partId as string)
+    localStorage.setItem('course_chapter_id', params?.partId as string)
   }
   useEffect(() => {
     if (openLearningOutcome && chapterId && chapterDetail) {
@@ -187,7 +188,7 @@ const CourseDetail = () => {
       })
     } else {
       handleDefaultActiveItem()
-      router.push(ROUTES.ACTIVITY(router.query?.courseId as string, id))
+      router.push(ROUTES.ACTIVITY(params?.courseId as string, id))
     }
   }
 
@@ -214,26 +215,14 @@ const CourseDetail = () => {
 
     if (isCompleted && attemptId) {
       handleDefaultActiveItem()
-      router.push({
-        pathname: `/case-study/result/${attemptId}`,
-        query: {
-          class_user_id: previewPart?.class_user_id,
-          class_id: router?.query?.courseId,
-        },
-      })
+      router.push(
+        `/case-study/result/${attemptId}?class_user_id=${previewPart?.class_user_id}&class_id=${params?.courseId}`,
+      )
     } else {
       handleDefaultActiveItem()
-      router.push({
-        pathname: `/case-study/${topicId}`,
-        query: {
-          quiz_id: quizId,
-          class_user_id: previewPart?.class_user_id,
-          caseStudyId,
-          class_id: router?.query?.courseId,
-          course_section_id: router?.query?.course_section_id,
-          sectionId,
-        },
-      })
+      router.push(
+        `/case-study/${topicId}?quiz_id=${quizId}&class_user_id=${previewPart?.class_user_id}&caseStudyId=${caseStudyId}&class_id=${params?.courseId}&course_section_id=${params?.course_section_id}&sectionId=${sectionId}`,
+      )
     }
   }
 
@@ -281,7 +270,7 @@ const CourseDetail = () => {
   ) => {
     const res = await CoursesAPI.learningOutcomeProgress(id, course_section_id)
     if (res?.success) {
-      fetchChapterDetail(router.query?.courseId, course_section_id)
+      fetchChapterDetail(params?.courseId, course_section_id)
     }
   }
   const handleChangeChapterId = (id: string) => {
@@ -429,16 +418,16 @@ const CourseDetail = () => {
             loadingChapter={loadingChapter}
             setLoadingChapter={setLoadingChapter}
             setOpenLearningOutcome={setOpenLearningOutcome}
-            course_id={router.query.courseId as any}
-            course_section_id={router.query.course_section_id as any}
+            course_id={params.courseId as any}
+            course_section_id={params.course_section_id as any}
             handleRouterActivity={handleRouterActivity}
             handleRouterCaseStudy={handleRouterCaseStudy}
             handleLearningOutCome={handleLearningOutCome}
             handleRouterChapter={handleRouterChapter}
             readMore={readMore}
             setReadMore={setReadMore}
-            defaultActive={router.query.chapter ?? defaultActive}
-            focus_id={router?.query?.focus_id as string}
+            defaultActive={params.chapter ?? defaultActive}
+            focus_id={params?.focus_id as string}
             handleGetItem={handleActive}
             handleGoBack={handleGoBack}
             listFocusSubSectionIds={listFocusSubSectionIds}
