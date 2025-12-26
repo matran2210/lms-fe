@@ -51,7 +51,7 @@ type Props = {
 };
 const LearningNotesList = ({ appType }: Props) => {
   const [direction, setDirection] = useState<1 | -1>(1);
-  const { courseApi, pageLink, router } = useFeature();
+  const { courseApi, pageLink, router, pathname, params: paramCourse } = useFeature();
   const { isMobileView, isAlwaysShowSidebar } = useTailwindBreakpoint();
   const notesListStatus = useAppSelector(
     (state) => appType === AppType.LMS_PRO ? state.notesListReducer?.status : state.shortNotesListReducer?.status,
@@ -68,10 +68,10 @@ const LearningNotesList = ({ appType }: Props) => {
   });
 
   const isNotBottomDrawer =
-    router.pathname === "/courses/[id]/section/[course_section_id]" ||  
-    router.pathname === "/short-course/detail/[courseId]" ||
-    router.pathname === "/short-course/detail/[courseId]/activity/[id]" ||
-    (router.pathname === "/courses/[id]/activity/[activityId]" &&
+    pathname === "/courses/[id]/section/[course_section_id]" ||  
+    pathname === "/short-course/detail/[courseId]" ||
+    pathname === "/short-course/detail/[courseId]/activity/[id]" ||
+    (pathname === "/courses/[id]/activity/[activityId]" &&
       !isMobileView);
 
   const userType = useAppSelector(userReducer).user.type;
@@ -111,15 +111,15 @@ const LearningNotesList = ({ appType }: Props) => {
 
 
   //Tạo các biến để lấy id trên thanh url
-  const isCourseDetail = pageLink.COURSE_DETAIL === router.pathname;
-  const isCoursePartDetail = router.pathname.includes("/section");
-  const isActivityDetail = router.pathname.includes("/activity");
-  const courseId = router.query?.courseId;
-  const queryId = router.query?.id;
-  const activityId = router.query?.activityId;
-  const chapterId = router.query?.chapter;
-  const unitId = router.query?.unit;
-  const courseSectionId = router.query.course_section_id;
+  const isCourseDetail = pageLink.COURSE_DETAIL === pathname;
+  const isCoursePartDetail = pathname?.includes("/section");
+  const isActivityDetail = pathname?.includes("/activity");
+  const courseId = paramCourse?.courseId;
+  const queryId = paramCourse?.id;
+  const activityId = paramCourse?.activityId;
+  const chapterId = paramCourse?.chapter;
+  const unitId = paramCourse?.unit;
+  const courseSectionId = paramCourse?.course_section_id;
 
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_NUMBER);
   const [isFirstCallApi, setIsFirstCallApi] = useState(false);

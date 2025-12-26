@@ -182,8 +182,8 @@ const TableCaseStudyResult = () => {
                         topicAttemptDetail?.question_topic?.id,
                         topicAttemptDetail?.quiz?.id,
                         topicAttemptDetail?.class_user_id as string,
-                        router?.query?.class_id as string,
-                        router?.query?.course_section_id as string,
+                        params?.class_id as string,
+                        params?.course_section_id as string,
                       )
                     }
                   />
@@ -215,8 +215,8 @@ const TableCaseStudyResult = () => {
                     topicAttemptDetail?.question_topic?.id,
                     topicAttemptDetail?.quiz?.id,
                     topicAttemptDetail?.class_user_id as string,
-                    router?.query?.class_id as string,
-                    router?.query?.course_section_id as string,
+                    params?.class_id as string,
+                    params?.course_section_id as string,
                   )
                 }
                 className={'shrink-0 !font-medium'}

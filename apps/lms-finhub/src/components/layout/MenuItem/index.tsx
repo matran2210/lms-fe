@@ -157,6 +157,9 @@ export default function MenuItem({
         case TitleSidebar.EXAM_LIST:
           handleOpenExaminationInfoPage()
           break
+        case TitleSidebar.ACTIVITY:
+          handleOpenCourseContentPage()
+          break
         default:
           if (url !== '#' && !isEmpty(url)) {
             const targetUrl =

@@ -8,7 +8,7 @@ import {
     PinnedNotifyProvider,
     SocketContext
 } from '@lms/contexts'
-import { AppType, LOCAL_STORAGE_KEYS, SOCKET_EVENTS } from '@lms/core'
+import { ANIMATION, AppType, LOCAL_STORAGE_KEYS, SOCKET_EVENTS } from '@lms/core'
 import { RouteGuard } from '@lms/feature-auth'
 import { LearningNotesList, PopupCompletedCourse } from '@lms/feature-courses'
 import '@lms/styles'
@@ -30,7 +30,7 @@ import 'aos/dist/aos.css'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import weekday from 'dayjs/plugin/weekday'
-import { usePathname, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { ReactNode, useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
@@ -59,6 +59,7 @@ import { uploadImageToLinkedIn } from './api/certificate'
 import { ConfigProvider } from 'antd'
 import { Provider } from 'react-redux'
 import { store } from "@lms/contexts";
+import Aos from 'aos'
 
 dayjs.extend(utc)
 dayjs.extend(weekday)
@@ -115,6 +116,13 @@ export function Providers({ children }: { children: ReactNode }) {
     ]
     const pathName = usePathname()
     const showHelp = showSupportWidget.includes(pathName) // Add condition to hide help on teacher pages
+    const params = useParams()
+    const query = useSearchParams()
+
+    useEffect(() => {
+        Aos.init({ duration: ANIMATION.DURATION, once: true })
+    })
+
     return (
         <Provider store={store}>
             <PinnedNotifyProvider
@@ -147,8 +155,10 @@ export function Providers({ children }: { children: ReactNode }) {
                         testServiceApi: TestServiceAPI,
                         certificateApi: {
                             uploadImageToLinkedIn
-                        }
-                        pathname: pathName
+                        },
+                        pathname: pathName,
+                        params,
+                        query
                     }}
                 >
                     <CourseProvider router={router}>
