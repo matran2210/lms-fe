@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { CollapseArrowIcon, Icon } from '@lms/assets'
 import {
   UserType,
@@ -48,7 +48,7 @@ import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { Collapse, CollapseProps, Divider, Tabs } from 'antd'
 import clsx from 'clsx'
 import { StaticImageData } from 'next/image'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
