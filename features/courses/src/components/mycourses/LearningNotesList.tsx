@@ -51,7 +51,7 @@ type Props = {
 };
 const LearningNotesList = ({ appType }: Props) => {
   const [direction, setDirection] = useState<1 | -1>(1);
-  const { courseApi, pageLink, router, pathname, params: paramCourse } = useFeature();
+  const { courseApi, pageLink, router, pathname, query } = useFeature();
   const { isMobileView, isAlwaysShowSidebar } = useTailwindBreakpoint();
   const notesListStatus = useAppSelector(
     (state) => appType === AppType.LMS_PRO ? state.notesListReducer?.status : state.shortNotesListReducer?.status,
@@ -68,6 +68,10 @@ const LearningNotesList = ({ appType }: Props) => {
   });
 
   const isNotBottomDrawer =
+    pathname === "/courses/[id]/section/[course_section_id]" ||  
+    pathname === "/short-course/detail/[courseId]" ||
+    pathname === "/short-course/detail/[courseId]/activity/[id]" ||
+    (pathname === "/courses/[id]/activity/[activityId]" &&
     pathname === "/courses/[id]/section/[course_section_id]" ||  
     pathname === "/short-course/detail/[courseId]" ||
     pathname === "/short-course/detail/[courseId]/activity/[id]" ||
@@ -114,12 +118,12 @@ const LearningNotesList = ({ appType }: Props) => {
   const isCourseDetail = pageLink.COURSE_DETAIL === pathname;
   const isCoursePartDetail = pathname?.includes("/section");
   const isActivityDetail = pathname?.includes("/activity");
-  const courseId = paramCourse?.courseId;
-  const queryId = paramCourse?.id;
-  const activityId = paramCourse?.activityId;
-  const chapterId = paramCourse?.chapter;
-  const unitId = paramCourse?.unit;
-  const courseSectionId = paramCourse?.course_section_id;
+  const courseId = query?.courseId;
+  const queryId = query?.id;
+  const activityId = query?.activityId;
+  const chapterId = query?.chapter;
+  const unitId = query?.unit;
+  const courseSectionId = query.course_section_id;
 
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_NUMBER);
   const [isFirstCallApi, setIsFirstCallApi] = useState(false);

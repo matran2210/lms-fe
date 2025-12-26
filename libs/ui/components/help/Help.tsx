@@ -21,7 +21,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
     "/teachers",
     "/test",
     "/case-study",
-  ].map((p) => asPath.includes(p));
+  ].map((p) => pathname?.includes(p));
   const hiddenChatbot =
     (pathname && excludedPathsHelp.some((path) => pathname.includes(path))) ||
     isTeacherPage;

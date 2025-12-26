@@ -39,7 +39,6 @@ let nextConfig = {
   experimental: {
     externalDir: true,
     instrumentationHook: true,
-    esmExternals: 'loose',
     // ❌ deprecated / unstable trong Next 14
     // optimizeCss: true,
     // forceSwcTransforms: true,
