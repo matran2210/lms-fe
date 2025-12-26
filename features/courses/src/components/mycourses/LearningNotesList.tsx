@@ -71,12 +71,7 @@ const LearningNotesList = ({ appType }: Props) => {
     pathname === "/courses/[id]/section/[course_section_id]" ||  
     pathname === "/short-course/detail/[courseId]" ||
     pathname === "/short-course/detail/[courseId]/activity/[id]" ||
-    (pathname === "/courses/[id]/activity/[activityId]" &&
-    pathname === "/courses/[id]/section/[course_section_id]" ||  
-    pathname === "/short-course/detail/[courseId]" ||
-    pathname === "/short-course/detail/[courseId]/activity/[id]" ||
-    (pathname === "/courses/[id]/activity/[activityId]" &&
-      !isMobileView);
+    (pathname === "/courses/[id]/activity/[activityId]" && !isMobileView);
 
   const userType = useAppSelector(userReducer).user.type;
 
