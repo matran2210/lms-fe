@@ -1,12 +1,11 @@
-import { useAppSelector, userReducer, UserType } from '@lms/contexts'
-import { useRouter } from 'next/router'
+import { useAppSelector, useFeature, userReducer, UserType } from '@lms/contexts'
 import { useEffect, useState } from 'react'
 
 const withAuthorization =
   <P extends object>(allowedRoles: string[]) =>
   (WrappedComponent: React.ComponentType<P>) => {
     const Wrapper = (props: P) => {
-      const router = useRouter()
+      const {router} = useFeature()
       const userType = useAppSelector(userReducer).user.type
       const [isLoading, setIsLoading] = useState(true)
 

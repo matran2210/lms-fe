@@ -56,8 +56,8 @@ import React, {
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
-import { UploadAPI } from 'src/pages/api/upload'
+import { CoursesAPI, getActivityById } from 'src/app/api/courses/route'
+import { UploadAPI } from 'src/app/api/upload/route'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'

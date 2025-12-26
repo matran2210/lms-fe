@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, Dispatch, SetStateAction } from "react";
 import router, { useRouter } from "next/router";
 import { CourseSearchIcon } from "@lms/assets";

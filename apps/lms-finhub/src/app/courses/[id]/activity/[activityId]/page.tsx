@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import { CloseIcon, DownloadIcon, LinkIcon } from '@lms/assets'
 import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
 import Layout from '@components/layout'

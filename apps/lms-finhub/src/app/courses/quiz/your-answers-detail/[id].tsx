@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import TableQuestions from '@components/your-answers-detail/TableQuestions'
 import { EYourAnswerType, ITabs, TEST_TYPE_LABELS } from '@lms/core'
 import { FullScreenLayout, SappBreadCrumbs, SappLoading } from '@lms/ui'

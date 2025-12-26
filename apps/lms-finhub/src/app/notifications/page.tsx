@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import Layout from '@components/layout'
 import { trackGAEvent } from '@lms/utils'
 import Aos from 'aos'

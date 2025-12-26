@@ -1,3 +1,4 @@
+"use client";
 import { CollapseArrowIcon } from "@lms/assets";
 import clsx from "clsx";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";

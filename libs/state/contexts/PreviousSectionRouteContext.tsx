@@ -1,3 +1,4 @@
+"use client"
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
 const sectionPath = '/courses/[id]/section/[course_section_id]'

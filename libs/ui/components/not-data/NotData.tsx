@@ -1,4 +1,3 @@
-import React from 'react'
 
 const NotData = ({ className }: { className?: string | undefined }) => {
   return (

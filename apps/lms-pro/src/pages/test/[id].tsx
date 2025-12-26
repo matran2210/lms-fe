@@ -99,9 +99,8 @@ import {
   TestWrapper,
 } from '@lms/ui'
 import { checkSheetAnswered, runHighlight, trackGAEvent } from '@lms/utils'
-import { EventTestAPI } from '@pages/api/event-test'
-import { TestServiceAPI } from '@pages/api/test-api'
-import { UploadAPI } from '@pages/api/upload'
+import { EventTestAPI } from 'src/app/api/event-test/route'
+import { TestServiceAPI } from 'src/app/api/test-api/route'
 import { TabsProps, Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'

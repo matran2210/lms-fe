@@ -5,7 +5,6 @@ import { VALIDATE_REQUIRED } from "@lms/utils";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-// import { EntranceTestAPI } from 'src/pages/api/entrance-test'
 import { entranceTestReducer } from "@lms/contexts";
 
 interface IProps {
@@ -17,9 +16,7 @@ interface IProps {
 const EntranceTestFillForm = ({
   open,
   setOpen,
-  entrancePopupContent,
   setOpenTestInfo,
-
 }: IProps) => {
   const { entranceTestApi, userApi } = useFeature();
   const [listUnivers, setListUnivers] = useState<any>();

@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { ITabsTeacher } from '@lms/core'
-import { useRouter } from 'next/router'
+import { useFeature } from '@lms/contexts'
 
 interface SappTabsProps {
   tabs: ITabsTeacher[]
@@ -15,7 +15,7 @@ const SappTabs: React.FC<SappTabsProps> = ({
   selected,
   bordered = false,
 }) => {
-  const router = useRouter()
+  const { router } = useFeature()
   const tabUrlTitleQuery = router.query.tabId as string
   // Nếu không có tabId trên url thì lấy tab đầu tiên hoặc selected
   const activeTabUrlTitle =

@@ -6,7 +6,6 @@ import axios, {
 } from 'axios'
 import { toast } from 'react-hot-toast'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
-import Router from 'next/router'
 import {
   CERTIFICATE_DETAIL,
   COOKIE_INFO,
@@ -14,8 +13,8 @@ import {
   ENTRANCE_TEST_TABLE_RESULT,
   ExceptionErrorCode,
 } from '@lms/core'
-import { apiURL } from 'src/redux/services/httpService'
 import { deleteCookie, getCookie, setCookie } from '@lms/utils'
+import { apiURL } from 'src/constants'
 
 export const getBaseUrl = () => {
   if (typeof window !== 'undefined') {
@@ -41,12 +40,12 @@ export const fetcher = (url: string, config: AxiosRequestConfig = {}) =>
 // Request Interceptor
 request.interceptors.request.use(async (config: any) => {
   const authenticationManager = new AuthenticationManager()
-
+const pathname = typeof window !== 'undefined' ? window.location.pathname : ''
   const checkRouteCertificate = [
     ENTRANCE_TEST_RESULT,
     CERTIFICATE_DETAIL,
     ENTRANCE_TEST_TABLE_RESULT,
-  ].includes((Router?.router as any)?.state?.pathname)
+  ].includes(pathname)
 
   if (authenticationManager.getToken() || checkRouteCertificate) {
     config.headers = {
@@ -129,7 +128,9 @@ request.interceptors.response.use(
             deleteCookie(COOKIE_INFO.KEYCLOAK_REFRESH_TOKEN)
             deleteCookie(COOKIE_INFO.KEYCLOAK_USER_ID)
             deleteCookie(COOKIE_INFO.SESSION_ID)
-            window.location.reload()
+            if (typeof window !== 'undefined') {
+              window.location.reload()
+            }
           })
       }
 
@@ -186,7 +187,9 @@ request.interceptors.response.use(
     if (
       errorCode?.startsWith('403') // Forbidden các loại
     ) {
-      Router.replace('/')
+      if (typeof window !== 'undefined') {
+        window.location.href = '/'
+      }
     }
 
     return Promise.reject(error)

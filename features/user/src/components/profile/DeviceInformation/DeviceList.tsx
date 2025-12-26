@@ -7,10 +7,10 @@ import clsx from "clsx";
 import { useEffect, useMemo, useState } from "react";
 import ProfileCard from "../ProfileCard";
 import DeviceItem from "./DeviceItem";
-import UserApi from 'src/redux/services/User/user'
-import { AuthAPI } from 'src/app/api/profile/route'
+import { useFeature } from "@lms/contexts";
 
 const DeviceList = () => {
+  const {authApi, userApi} = useFeature()
   const sessionId =
     getSessionIdFromToken(getCookie(COOKIE_INFO.KEYCLOAK_TOKEN) ?? "") ??
     getCookie(COOKIE_INFO.SESSION_ID);
@@ -32,14 +32,14 @@ const DeviceList = () => {
   }, [selectedDrawer?.data?.created_at]);
 
   const getListDevices = async () => {
-    const res = await UserApi.getListDevices();
+    const res = await userApi.getListDevices();
     setListDevices(res);
   };
 
   const onRemoveDevice = async (session_id: string) => {
     setLoading(true);
     try {
-      const res = await AuthAPI.removeDevice(session_id);
+      const res = await authApi.removeDevice(session_id);
       if (res) {
         setLoading(false);
         closeDeviceDrawer();

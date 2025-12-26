@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react'
 import { Icon } from '@lms/assets'
 import { ReactNode } from 'react'

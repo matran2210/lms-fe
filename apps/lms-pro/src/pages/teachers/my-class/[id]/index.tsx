@@ -25,7 +25,7 @@ import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { TeacherAPI } from 'src/pages/api/teacher/index'
+import { TeacherAPI } from 'src/app/api/teacher/route'
 import { ClassStandardScheduleItem } from 'src/type/teachers/request-schedule.interface'
 
 const breadcrumbs: ITabs[] = [

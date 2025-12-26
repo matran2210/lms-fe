@@ -1,3 +1,4 @@
+"use client"
 import {
   PropsWithChildren,
   createContext,
@@ -48,7 +49,7 @@ export function CourseNoteProvider(props: PropsWithChildren<{
   }
 }>) {
   const { api, router } = props
-  const activityId = router.query.activityId
+  const activityId = router?.query?.activityId
   const [openNote, setOpenNote] = useState(false)
   const [noteData, setNoteData] = useState<ICourseSectionNoteItem | undefined>(
     undefined,

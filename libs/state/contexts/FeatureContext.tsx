@@ -1,14 +1,10 @@
-import { createContext, useContext } from "react";
-import {
-  AxiosRequestConfig,
-} from 'axios'
-import { QueryClient } from "react-query";
+"use client";
 import {
   IActivityAPI,
   IAuthAPI,
   IAuthManager,
   ICalendarAPI,
-  ICaseStudyAPI,
+  ICertificateAPI,
   IClassAPI,
   ICourseActivityAPI,
   ICoursesAPI,
@@ -18,8 +14,12 @@ import {
   IQuestionAPI,
   ITestServiceAPI,
   IUploadAPI,
-  MenuItem,
+  MenuItem
 } from "@lms/core";
+import {
+  AxiosRequestConfig,
+} from 'axios';
+import { createContext, useContext } from "react";
 import { IUserAPI } from "../redux/types/User/urser";
 interface FeatureContextProps {
   courseApi: ICoursesAPI;
@@ -63,6 +63,7 @@ interface FeatureContextProps {
   fetcher: (url: string, config?: AxiosRequestConfig<any>) => Promise<any>
   videoUrl: string;
   testServiceApi: ITestServiceAPI;
+  certificateApi: ICertificateAPI
 }
 
 const FeatureContext = createContext<FeatureContextProps>(

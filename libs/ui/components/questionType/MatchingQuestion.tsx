@@ -1,3 +1,4 @@
+"use client";
 import { IExhibitData, MY_COURSES } from "@lms/core";
 import { runHighlight } from "@lms/utils";
 import { uniqueId } from "lodash";

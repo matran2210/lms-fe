@@ -1,3 +1,4 @@
+"use client"
 import Lottie from 'lottie-react'
 import Image, { StaticImageData } from 'next/image'
 import { useRef } from 'react'

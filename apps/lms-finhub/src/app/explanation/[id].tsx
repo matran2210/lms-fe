@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import { AltArrowLeft } from '@components/courses/icons/AltArrowLeft'
 import { CloseIconV2, MenuDotsIcon } from '@lms/assets'
 import {

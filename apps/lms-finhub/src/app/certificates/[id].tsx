@@ -1,5 +1,4 @@
-'use client'
-import SinglePageLayout from '@components/layout/SinglePage'
+"use client"
 import { LAYOUT } from '@lms/core'
 import { CertificateVertical, HorizontalCertificate } from '@lms/feature-user'
 import { useDownloadImage } from '@lms/hooks'

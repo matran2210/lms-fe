@@ -48,7 +48,7 @@ import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight } from '@lms/utils'
-import { TestServiceAPI } from '@pages/api/test-api'
+import { TestServiceAPI } from 'src/app/api/test-api/route'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'

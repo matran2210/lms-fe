@@ -1,3 +1,4 @@
+"use client";
 import { MY_COURSES } from "@lms/core";
 import { getUppercaseByNumber, runHighlight } from "@lms/utils";
 import { useRouter } from "next/router";

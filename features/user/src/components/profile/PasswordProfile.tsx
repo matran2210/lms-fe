@@ -19,7 +19,8 @@ interface IProps {
 
 const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
   const { user } = useAppSelector(userReducer);
-const {authApi} = useFeature()
+  const {authApi} = useFeature()
+
   const [code, setCode] = useState(Array(6).join(".").split("."));
   const [canResend, setCanResend] = useState(false);
   const [resetCountdown, setResetCountdown] = useState(false);

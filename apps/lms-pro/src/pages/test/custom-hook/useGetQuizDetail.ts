@@ -1,4 +1,4 @@
-import { TestServiceAPI } from '@pages/api/test-api'
+import { TestServiceAPI } from 'src/app/api/test-api/route'
 import { useEffect, useState } from 'react'
 
 const useGetQuizDetail = (id: string) => {

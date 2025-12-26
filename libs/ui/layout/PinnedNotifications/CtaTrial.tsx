@@ -1,3 +1,4 @@
+"use client";
 import { CloseIconNote } from "@lms/assets";
 import {
   useCourseContext,

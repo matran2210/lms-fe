@@ -1,3 +1,4 @@
+"use client";
 import { MY_COURSES } from "@lms/core";
 import { runHighlight } from "@lms/utils";
 import { Element, HTMLReactParserOptions } from "html-react-parser";

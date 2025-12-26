@@ -1,6 +1,6 @@
+import Image from 'next/image'
 import React from 'react'
 import SappModalV2 from './SappModalV2'
-import Image from 'next/image'
 
 type Props = {
   src?: string

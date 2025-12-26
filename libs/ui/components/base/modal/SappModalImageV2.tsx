@@ -1,3 +1,5 @@
+"use client";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import SappModalV2 from "./SappModalV2";
 import Image from "next/image";

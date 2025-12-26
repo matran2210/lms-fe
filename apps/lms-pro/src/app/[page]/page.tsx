@@ -1,3 +1,4 @@
+"use client"
 import { CollapseArrowIcon, Icon } from '@lms/assets'
 import {
   UserType,

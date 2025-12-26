@@ -1,3 +1,4 @@
+"use client"
 import { Progress } from "antd";
 import { RcFile, UploadChangeParam, UploadFile } from "antd/es/upload";
 import dynamic from "next/dynamic";
