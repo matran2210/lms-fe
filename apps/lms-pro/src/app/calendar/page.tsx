@@ -1,3 +1,4 @@
+"use client"
 import {
   ANIMATION,
   CALENDAR_COLOR_TYPES,
@@ -14,10 +15,10 @@ import {
 } from '@lms/feature-calendar'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { HeaderMobile, Layout } from '@lms/ui'
-import CalendarApi from '@pages/api/calendar'
+import CalendarApi from 'src/app/api/calendar/route'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { SAPPCalendarV2 } from '@sapp-fe/sapp-common-package'
 import { IEvent, IFilter } from '@sapp-fe/sapp-common-package/dist/types'

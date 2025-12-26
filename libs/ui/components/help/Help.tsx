@@ -2,28 +2,26 @@
 import { IconClose } from "@lms/assets";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import { Popover } from "antd";
-import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { Tooltip } from "../common";
 import PopupSupportCenter from "./PopupSupportCenter";
-import { usePinnedNotifyContext } from "@lms/contexts";
+import { useFeature, usePinnedNotifyContext } from "@lms/contexts";
 import { excludedPathsHelp } from "@lms/core";
 const Help = ({ showHelp }: { showHelp: boolean }) => {
   // All hooks need to be at the top level, before any conditional returns
   const [visible, setVisible] = useState(false);
-  const router = useRouter();
+  const { pathname } = useFeature();
   const scriptRef = useRef<HTMLScriptElement | null>(null);
   const { openPinned } = usePinnedNotifyContext();
   const { isMobileView } = useTailwindBreakpoint();
   const isChangePosition = openPinned && isMobileView;
-  const { asPath } = router;
   const [isTeacherPage, isTestPage, isCaseStudyPage, isActivityPage] = [
     "/teachers",
     "/test",
     "/case-study",
-  ].map((p) => asPath.includes(p));
+  ].map((p) => pathname?.includes(p));
   const hiddenChatbot =
-    excludedPathsHelp.some((path) => router.pathname.includes(path)) ||
+    excludedPathsHelp.some((path) => pathname?.includes(path)) ||
     isTeacherPage;
 
   // Handle visibility changes
