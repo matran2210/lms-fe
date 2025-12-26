@@ -61,7 +61,7 @@ import { ErrorBoundary } from '@sentry/nextjs'
 import ErrorRedirectPage from '@pages/error-redirect'
 import { Provider } from 'react-redux'
 import { store } from '@lms/contexts'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { usePathname, useParams } from 'next/navigation'
 
 dayjs.extend(utc)
 dayjs.extend(weekday)
@@ -69,6 +69,7 @@ dayjs.extend(weekday)
 export function Providers({ children }: { children: ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
+  const params = useParams()
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -144,6 +145,7 @@ export function Providers({ children }: { children: ReactNode }) {
               menuBottom: MENU_BOTTOM,
               router: router,
               pathname,
+              params,
               fetcher: fetcher,
               videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
               testServiceApi: TestServiceAPI,
