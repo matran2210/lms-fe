@@ -46,7 +46,7 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
   showForm,
   setShowForm,
 }) => {
-  const {courseApi, router}= useFeature()
+  const {courseApi, router, params}= useFeature()
 
   /**
    * Xử lý đóng modal bằng cách reset tất cả các trạng thái về false
@@ -82,7 +82,7 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
 
   const handleUpgrade = async () => {
     const res = await courseApi.upgradeNowTrial(
-      router.query.courseId || router.query.id,
+      params?.courseId || params?.id,
     ) as { data?: { upgrade_now_available: boolean } }
 
     const isAvailable = !!res?.data?.upgrade_now_available

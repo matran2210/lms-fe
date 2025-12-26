@@ -15,8 +15,8 @@ const SappBreadcrumbNotLink = ({
   paths: IProps[];
   isTeacher?: boolean;
 }) => {
-  const { router, pageLink } = useFeature();
-  const getCourseId = router?.query?.courseId ?? router.query.id;
+  const { router, pageLink, params } = useFeature();
+  const getCourseId = router?.query?.courseId ?? params?.id;
   const displayPaths = paths.filter((p) => p.type !== "ACTIVITY");
 
   return (

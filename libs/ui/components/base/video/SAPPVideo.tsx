@@ -774,23 +774,34 @@ const SAPPVideo = ({
     }
   };
 
+  //TODO: chuyển từ next12 lên next14
+  // useEffect(() => {
+  //   const handleRouteChange = async () => {
+  //     if (document.pictureInPictureElement) {
+  //       try {
+  //         await document.exitPictureInPicture();
+  //       } catch (err) {
+  //         // console.error('Error exiting PiP on route change:', err);
+  //       }
+  //     }
+  //   };
+
+  //   router.events.on("routeChangeStart", handleRouteChange);
+
+  //   return () => {
+  //     router.events.off("routeChangeStart", handleRouteChange);
+  //   };
+  // }, [router.events]);
+
+  const {pathname} = useFeature()
   useEffect(() => {
-    const handleRouteChange = async () => {
-      if (document.pictureInPictureElement) {
-        try {
-          await document.exitPictureInPicture();
-        } catch (err) {
-          // console.error('Error exiting PiP on route change:', err);
-        }
-      }
-    };
-
-    router.events.on("routeChangeStart", handleRouteChange);
-
-    return () => {
-      router.events.off("routeChangeStart", handleRouteChange);
-    };
-  }, [router.events]);
+  // cleanup của route trước (tương đương routeChangeStart)
+  return () => {
+    if (document.pictureInPictureElement) {
+      document.exitPictureInPicture().catch(() => {})
+    }
+  }
+}, [pathname])
 
   const { isDesktopView, isXLMiddleView, isMobileView } =
     useTailwindBreakpoint();

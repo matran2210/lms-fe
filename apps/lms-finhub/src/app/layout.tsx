@@ -1,15 +1,26 @@
-import React from 'react'
+// app/layout.tsx
+'use client'
+import type { ReactNode } from 'react'
+import Metadata from '@components/common/Metadata'
+import { ErrorBoundary } from '@sentry/nextjs'
+import ErrorRedirectPage from './error-redirect/page'
+import { Providers } from './provider'
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+// export const metadata = {
+//     title: 'LMS Pro',
+//     description: 'LMS Pro App',
+// }
+
+export default function RootLayout({ children }: { children: ReactNode }) {
     return (
-        <html lang="en">
+        <ErrorBoundary fallback={<ErrorRedirectPage />}>
+        <html lang="vi">
+            <Metadata />
             <body>
-                <div id="zoom-app">
+                <Providers>
                     {children}
-                </div>
+                </Providers>
             </body>
-        </html>
+        </html></ErrorBoundary>
     )
 }
-
-export default Layout
