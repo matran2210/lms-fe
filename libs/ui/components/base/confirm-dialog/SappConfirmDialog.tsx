@@ -4,6 +4,7 @@ import { FC, useEffect } from 'react'
 import SappModal from '../modal/SappModal'
 import { AlertCircleSharp } from '@lms/assets'
 import { useFeature } from '@lms/contexts'
+import { usePathname } from 'next/navigation'
 
 // define the props for the confirm dialog component
 export type SappConfirmDialogProps = {
@@ -27,7 +28,7 @@ const SappConfirmDialog: FC<SappConfirmDialogProps> = ({
   onConfirm,
   closeConfirmation,
 }) => {
-  const {router} = useFeature()
+  const pathname = usePathname()
   const handleCancel = async () => {
     onCancel && (await onCancel())
   }
@@ -35,17 +36,10 @@ const SappConfirmDialog: FC<SappConfirmDialogProps> = ({
     await onConfirm()
   }
   useEffect(() => {
-    // on route change start - hide dialog
     if (open) {
-      router.events.on('routeChangeComplete', closeConfirmation)
-    } else {
-      router.events.off('routeChangeComplete', closeConfirmation)
+      closeConfirmation()
     }
-    // unsubscribe from events in useEffect return function
-    return () => {
-      router.events.off('routeChangeComplete', closeConfirmation)
-    }
-  }, [open])
+  }, [pathname])
 
   return (
     <>
