@@ -31,6 +31,7 @@ import {
   useAppDispatch,
   useAppSelector,
   useCourseContext,
+  useFeature,
 } from '@lms/contexts'
 import {
   ACTIVE_TABS,
@@ -185,7 +186,7 @@ export default function ActivityDetail() {
       CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION = {}
       try {
         dispatch(courseActivityAction3Level.setActivityState3Level(activity))
-      } catch (error) {}
+      } catch (error) { }
     }
 
     return () => {
@@ -296,16 +297,16 @@ export default function ActivityDetail() {
     }
   }, [activity])
 
+  const { pathname } = useFeature()
+  
   useEffect(() => {
-    router.events.on('routeChangeComplete', () => {
-      isFinishRef.current = false
-    })
+    // tương đương routeChangeComplete
+    isFinishRef.current = false
+
     return () => {
-      router.events.off('routeChangeComplete', () => {
-        isFinishRef.current = true
-      })
+      isFinishRef.current = true
     }
-  }, [router.events])
+  }, [pathname])
 
   /**
    * Giá trị được memoized cho course_tab_documents.

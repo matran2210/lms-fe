@@ -10,18 +10,20 @@ import { excludedPathsHelp } from "@lms/core";
 const Help = ({ showHelp }: { showHelp: boolean }) => {
   // All hooks need to be at the top level, before any conditional returns
   const [visible, setVisible] = useState(false);
-  const { pathname } = useFeature();
+  const {router, pathname, query} = useFeature()
   const scriptRef = useRef<HTMLScriptElement | null>(null);
   const { openPinned } = usePinnedNotifyContext();
   const { isMobileView } = useTailwindBreakpoint();
   const isChangePosition = openPinned && isMobileView;
+  const asPath =
+  pathname + (query.toString() ? `?${query}` : '')
   const [isTeacherPage, isTestPage, isCaseStudyPage, isActivityPage] = [
     "/teachers",
     "/test",
     "/case-study",
   ].map((p) => pathname?.includes(p));
   const hiddenChatbot =
-    excludedPathsHelp.some((path) => pathname?.includes(path)) ||
+    (pathname && excludedPathsHelp.some((path) => pathname.includes(path))) ||
     isTeacherPage;
 
   // Handle visibility changes

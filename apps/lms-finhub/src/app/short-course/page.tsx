@@ -173,4 +173,4 @@ const MyCourse3Level = () => {
   )
 }
 
-export default withAuthorization([UserType.STUDENT])(MyCourse3Level)
+export default MyCourse3Level

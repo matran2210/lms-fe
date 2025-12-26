@@ -18,7 +18,7 @@ const MENU_OPTIONS: MenuOption[] = [
   {
     name: TitleSidebar.ACTIVITY,
     icon: 'activity',
-    url: PageLink.COURSE_ACTIVITY,
+    url: 'PageLink.COURSE_ACTIVITY',
     type: 'level-1',
   },
   {
