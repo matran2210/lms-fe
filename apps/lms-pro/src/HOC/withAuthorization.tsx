@@ -1,11 +1,16 @@
-import { useAppSelector, useFeature, userReducer, UserType } from '@lms/contexts'
+import {
+  useAppSelector,
+  useFeature,
+  userReducer,
+  UserType,
+} from '@lms/contexts'
 import { useEffect, useState } from 'react'
 
 const withAuthorization =
   <P extends object>(allowedRoles: string[]) =>
   (WrappedComponent: React.ComponentType<P>) => {
     const Wrapper = (props: P) => {
-      const {router} = useFeature()
+      const { pathname, router } = useFeature()
       const userType = useAppSelector(userReducer).user.type
       const [isLoading, setIsLoading] = useState(true)
 
@@ -21,13 +26,13 @@ const withAuthorization =
 
         if (!userType) return // Chưa có userType, không làm gì
 
-        if (router.pathname === '/') {
+        if (pathname === '/') {
           if (userType === UserType.TEACHER) router.push('/teachers')
           else if (userType === UserType.STUDENT) router.push('/courses')
         } else if (!allowedRoles.includes(userType)) {
           router.replace('/courses')
         }
-      }, [router.pathname, userType, isLoading])
+      }, [pathname, userType, isLoading])
 
       // Chỉ loading khi đang loading
       if (isLoading) return null
