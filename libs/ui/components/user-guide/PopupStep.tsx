@@ -56,6 +56,13 @@ const PopupStep = ({
     let pos: { top: number; left: number; transform: string } | null = null;
 
     switch (placement) {
+      case "center":
+        pos = {
+          top: window.innerHeight / 2,
+          left: window.innerWidth / 2,
+          transform: "translate(-50%, -50%)",
+        };
+        break;
       // ===== TOP =====
       case "top-left":
         pos = {

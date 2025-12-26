@@ -187,6 +187,8 @@ export type GuideOffset = {
 };
 
 export type GuidePlacement =
+  // CENTER
+  | "center"
   // TOP
   | "top-left"
   | "top-center"

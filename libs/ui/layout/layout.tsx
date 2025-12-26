@@ -45,7 +45,7 @@ export default function Layout(props: LayoutProps): ReactElement {
     closeUserGuide,
   } = props;
   const { pageLink, router } = useFeature();
-  const { isShowMenuContent } = useTailwindBreakpoint();
+  const { isShowMenuContent, isMobileView } = useTailwindBreakpoint();
 
   const { isOpenSidebar, setOpenSidebar } = useCourseContext();
   const toggleDrawer = () => {
@@ -198,7 +198,9 @@ export default function Layout(props: LayoutProps): ReactElement {
           title={stepConfig.title}
           content={stepConfig.content}
           targetId={stepConfig.targetId as string}
-          placement={stepConfig.placement as GuidePlacement}
+          placement={
+            isMobileView ? "center" : (stepConfig.placement as GuidePlacement)
+          }
           imgSrc={stepConfig.imgSrc}
           isEnd={stepConfig.isEnd}
           handleCancel={stepConfig.handleCancel}
