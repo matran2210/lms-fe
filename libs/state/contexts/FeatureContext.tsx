@@ -62,6 +62,7 @@ interface FeatureContextProps {
   router: any;
   pathname: string | null
   params: Record<string, string | string[]> | null
+  query: any
   fetcher: (url: string, config?: AxiosRequestConfig<any>) => Promise<any>
   videoUrl: string;
   testServiceApi: ITestServiceAPI;

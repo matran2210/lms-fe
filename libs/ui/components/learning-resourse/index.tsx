@@ -30,22 +30,22 @@ const DEFAULT_PAGE_INDEX = 1;
 const DEFAULT_PAGESIZE = 20;
 
 const LearningResource = ({ open, setOpenResource }: IProps) => {
-  const { pageLink, router, courseApi, uploadApi } = useFeature();
+  const { pageLink, router, courseApi, uploadApi, pathname, query } = useFeature();
   const [direction, setDirection] = useState<1 | -1>(1);
   const { isMobileView, isTabletView, isAlwaysShowSidebar } =
     useTailwindBreakpoint();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [resources, setResources] = useState<IResourceDetail>();
   //Tạo các biến để lấy id trên thanh url
-  const isCourseDetail = pageLink.COURSE_DETAIL === router.pathname;
-  const isCoursePartDetail = router.pathname.includes("/section");
-  const isActivityDetail = router.pathname.includes("/activity");
-  const courseId = router.query?.courseId;
-  const queryId = router.query?.id;
-  const activityId = router.query?.activityId;
-  const chapterId = router.query?.chapter;
-  const unitId = router.query?.unit;
-  const courseSectionId = router.query.course_section_id;
+  const isCourseDetail = pageLink.COURSE_DETAIL === pathname;
+  const isCoursePartDetail = pathname?.includes("/section");
+  const isActivityDetail = pathname?.includes("/activity");
+  const courseId = query?.courseId;
+  const queryId = query?.id;
+  const activityId = query?.activityId;
+  const chapterId = query?.chapter;
+  const unitId = query?.unit;
+  const courseSectionId = query.course_section_id;
 
   const [loading, setLoading] = useState<boolean>(false);
   const [isFirstCallApi, setIsFirstCallApi] = useState(false);
