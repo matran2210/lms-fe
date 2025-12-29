@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAppSelector, useFeature } from '@lms/contexts'

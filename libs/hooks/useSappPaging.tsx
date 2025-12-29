@@ -1,3 +1,4 @@
+"use client"
 import { useQuery, UseQueryResult } from 'react-query'
 import { TablePaginationConfig } from 'antd'
 import { Dispatch, SetStateAction, useState, useEffect } from 'react'

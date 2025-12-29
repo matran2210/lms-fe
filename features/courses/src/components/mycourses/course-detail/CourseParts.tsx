@@ -2,13 +2,13 @@ import { CourseSectionType } from '@lms/core'
 import { Badge, Divider, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { isEmpty } from 'lodash'
-import { useRouter } from 'next/router'
 import { useEffect, useRef } from 'react'
 import { TEST_TYPE } from '@lms/core'
 import { IMyCourseDetail } from '@lms/core'
 import Part from './Part'
 import PartMiddleTest from './PartFailed'
 import {NoCoursesAvailable} from '@lms/ui'
+import { useFeature } from '@lms/contexts'
 
 const CourseParts = ({
   courses,
@@ -27,7 +27,7 @@ const CourseParts = ({
   isTeacher?: boolean
   hasCertificate?: boolean
 }) => {
-  const router = useRouter()
+  const {router} = useFeature()
   const cardRefs = useRef<any>([]) // Để lưu ref của các thẻ card
   const handleLock = (coursePart: IMyCourseDetail) => {
     return !!(

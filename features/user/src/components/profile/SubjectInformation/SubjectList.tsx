@@ -1,3 +1,4 @@
+"use client"
 import { CollapseArrowIcon } from "@lms/assets";
 import { PROGRAM } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";

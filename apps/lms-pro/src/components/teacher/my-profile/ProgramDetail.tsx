@@ -6,8 +6,8 @@ import { Divider } from 'antd'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import AttempItem from './SubjectInformation/AttempItem'
-import { UserApi } from 'src/app/api/user/route'
-import MyProfileAPI from 'src/app/api/profile/route'
+import { UserApi } from 'src/api/user'
+import MyProfileAPI from 'src/api/profile'
 
 interface IProps {
   typeProgram: PROGRAM

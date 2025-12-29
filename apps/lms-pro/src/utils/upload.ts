@@ -1,4 +1,4 @@
-import { TestAPI } from 'src/app/api/test/route'
+import { TestAPI } from 'src/api/test'
 
 export const mergeImageToEditor = async (data: string) => {
   const div = document.createElement('div')

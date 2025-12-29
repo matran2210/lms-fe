@@ -55,7 +55,7 @@ export default function MenuItem({
   closeSideBar,
   setOpenExaminationInfo,
 }: MenuItemProps) {
-  const { notificationApi, pageLink, router, pathname } = useFeature();
+  const { notificationApi, pageLink, router, pathname, query } = useFeature();
   const {
     isViewDetail,
     openNotification,
@@ -138,20 +138,14 @@ export default function MenuItem({
   };
 
   const handleOpenCourseContentPage = () => {
-    router.push({
-      pathname: `/courses/my-course/${router.query.courseId || router.query.id}`,
-    });
+    router.push(`/courses/my-course/${query.courseId || query.id}`);
   };
   const handleOpenResultsPage = () => {
-    router.push({
-      pathname: `/courses/my-course/${router.query.courseId || router.query.id}/results`,
-    });
+    router.push(`/courses/my-course/${query.courseId || query.id}/results`);
   };
 
   const handleViewNotification = (link: string) => {
-    router.push({
-      pathname: link,
-    });
+    router.push(link);
   };
 
   const handleOpenExaminationInfoPage = () => {
@@ -159,7 +153,7 @@ export default function MenuItem({
   };
 
   const onClickMenuItem = () => {
-    const hasCourseContext = router?.query?.courseId || router?.query?.id;
+    const hasCourseContext = query?.courseId || query?.id;
 
     // Nếu url trống => là menu Notification
     if (isEmpty(url)) {
@@ -200,22 +194,22 @@ export default function MenuItem({
           if (url && url !== "#") {
             const targetUrl =
               url === pageLink.RESULTS
-                ? `/courses/my-course/${router.query.courseId || router.query.id}/results`
+                ? `/courses/my-course/${query.courseId || query.id}/results`
                 : url === pageLink.DASHBOARD
-                  ? `/courses/my-course/${router.query.courseId || router.query.id}/dashboard`
+                  ? `/courses/my-course/${query.courseId || query.id}/dashboard`
                   : name === TitleSidebar.COURSE_CONTENT
-                    ? `/courses/my-course/${router.query.courseId || router.query.id}`
+                    ? `/courses/my-course/${query.courseId || query.id}`
                     : name === TitleSidebar.CLASS_RESOURCE
-                      ? `/courses/my-course/${router.query.courseId || router.query.id}/class-resource`
+                      ? `/courses/my-course/${query.courseId || query.id}/class-resource`
                       : url;
 
-            router.push({ pathname: targetUrl });
+            router.push(targetUrl);
           }
           break;
       }
     } else {
       // Nếu không ở trong course thì chỉ điều hướng URL bình thường
-      if (url && url !== "#") router.push({ pathname: url });
+      if (url && url !== "#") router.push(url);
     }
     closeSideBar();
   };
@@ -228,12 +222,12 @@ export default function MenuItem({
     return lastTwo.join(" ");
   }
 
-  const isActivity = router?.query?.activityId;
+  const isActivity = query?.activityId;
   const isInCourse =
-    router?.query?.courseId ||
-    (router?.query?.activityId && name !== TitleSidebar.EXAM) ||
-    (router?.query?.course_section_id && name !== TitleSidebar.EXAM);
-  const isInMyProfile = router.asPath === pageLink.MYPROFILE;
+    query?.courseId ||
+    (query?.activityId && name !== TitleSidebar.EXAM) ||
+    (query?.course_section_id && name !== TitleSidebar.EXAM);
+  const isInMyProfile = pathname === pageLink.MYPROFILE;
   const checkIsHiddenDashboard = (info: any) => {
     return name == TitleSidebar.DASHBOARD && !info;
   };
@@ -637,13 +631,13 @@ export default function MenuItem({
             <Link
               href={
                 url === pageLink.RESULTS
-                  ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/results`
+                  ? `/courses/my-course/${query?.courseId || query?.id}/results`
                   : url === pageLink.DASHBOARD
-                    ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/dashboard`
+                    ? `/courses/my-course/${query?.courseId || query?.id}/dashboard`
                     : name === TitleSidebar.CLASS_RESOURCE
-                      ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/class-resource`
+                      ? `/courses/my-course/${query?.courseId || query?.id}/class-resource`
                       : name === TitleSidebar.COURSE_CONTENT
-                        ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}`
+                        ? `/courses/my-course/${query?.courseId || query?.id}`
                         : url
               }
               // passHref

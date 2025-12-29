@@ -1,3 +1,4 @@
+"use client"
 import {
   BUTTON_STATUS,
   CLASS_STATUS,

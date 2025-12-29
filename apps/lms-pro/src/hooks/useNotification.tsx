@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
-import { NotificationAPI } from 'src/app/api/notification/route'
+import { useRouter } from 'next/navigation'
+import { NotificationAPI } from 'src/api/notification'
 import { isEmpty } from 'lodash'
 import { LOCAL_STORAGE_KEYS } from '@lms/core'
 import { useAppDispatch, useAppSelector ,getCountUnRead,

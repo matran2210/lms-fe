@@ -1,3 +1,4 @@
+"use client"
 import { ExpandIcon } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
 import {

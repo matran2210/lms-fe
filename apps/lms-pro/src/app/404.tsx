@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useAppSelector } from '@lms/contexts'
 import { userReducer } from '@lms/contexts'
 import { PageLink } from 'src/constants/routers'
+import Image from 'next/image'
 
 const ErrorPage = () => {
   const userSlice = useAppSelector(userReducer)
@@ -20,7 +21,7 @@ const ErrorPage = () => {
 
   return (
     <div className="flex h-screen flex-col flex-nowrap items-center justify-center overflow-y-auto p-4 text-center">
-      <img
+      <Image
         className="h-max"
         src="/assets/images/image_404.jpg"
         loading="lazy"

@@ -1,6 +1,6 @@
 import { SAPPSelectV2 } from '@lms/ui'
 import { useForm, useWatch } from 'react-hook-form'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { DefaultOptionType } from 'antd/es/select'
 import { useTailwindBreakpoint } from '@lms/hooks'
