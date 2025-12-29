@@ -1,3 +1,4 @@
+'use client'
 import { SappButton } from '@lms/ui'
 import { LAYOUT } from '@lms/core'
 import Link from 'next/link'
@@ -33,7 +34,7 @@ const ErrorPage = () => {
         PAGE NOT FOUND
       </h1>
       <span className="mt-3 max-w-[646px] px-4 text-base text-[#A1A1A1]">
-        We are very sorry for the inconvenience. It looks like you're trying to
+        We are very sorry for the inconvenience. It looks like you&apos;re trying to
         access a page that has been deleted or never even existed.
       </span>
       <Link href={getRedirectPath()}>

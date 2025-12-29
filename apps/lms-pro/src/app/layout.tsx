@@ -22,7 +22,7 @@ export const metadata = {
   title: 'LMS Pro',
   description: 'LMS Pro App',
 }
-
+export const revalidate = 0
 export default function RootLayout({ children }: { children: ReactNode }) {
 
   return (
