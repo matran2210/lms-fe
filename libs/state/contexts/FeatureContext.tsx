@@ -8,6 +8,7 @@ import {
   IClassAPI,
   ICourseActivityAPI,
   ICoursesAPI,
+  IDashboardAPI,
   IEntranceTestAPI,
   IEventTestAPI,
   INotificationAPI,
@@ -34,6 +35,7 @@ interface FeatureContextProps {
   entranceTestApi?: IEntranceTestAPI;
   eventTestApi?: IEventTestAPI;
   calendarApi?: ICalendarAPI;
+  dashboardApi?: IDashboardAPI;
   myProfileApi?: {
       getProfile: () => Promise<any>;
     getSubjectOfhubspot: (courseCategoryName: string) => Promise<any>;

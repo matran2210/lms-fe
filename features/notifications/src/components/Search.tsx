@@ -1,7 +1,7 @@
 // components/SearchForm.tsx
 
 import React, { useState } from 'react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { Icon } from '@lms/assets'
 
 interface IProps {

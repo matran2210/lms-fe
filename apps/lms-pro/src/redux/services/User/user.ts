@@ -1,6 +1,6 @@
 import { IDeviceItem, IResponse, PinnedNotifications } from '@lms/core'
 import { fetchFormData } from '@services/requestV2'
-import { AuthAPI } from 'src/app/api/profile/route'
+import { AuthAPI } from 'src/api/profile'
 import { IUser } from '@lms/contexts'
 import url from './url'
 import { apiURL } from 'src/constants'

@@ -1,7 +1,6 @@
 import { IconCongrats } from '@lms/assets'
 import { SappModalV2 } from '@lms/ui'
-import { useCourseContext } from '@lms/contexts'
-import { useRouter } from 'next/router'
+import { useCourseContext, useFeature } from '@lms/contexts'
 import React, { useEffect } from 'react'
 
 interface IProps {
@@ -19,10 +18,10 @@ const ModalCongrats = ({ name, course_type, quiz }: IProps) => {
   /**
    * @description lấy giá trị của router
    */
-  const router = useRouter()
+  const {router} = useFeature()
 
   /**
-   * @description lấy state trong context
+   * @description lấy state trong context  
    */
   const {
     setCourseType,

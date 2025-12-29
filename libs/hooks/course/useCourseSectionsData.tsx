@@ -1,3 +1,4 @@
+"use client"
 import { Dispatch, SetStateAction, useEffect } from 'react'
 import { isEmpty } from 'lodash'
 import { DEFAULT_PAGE_SIZE, ICoursesAPI } from '@lms/core'

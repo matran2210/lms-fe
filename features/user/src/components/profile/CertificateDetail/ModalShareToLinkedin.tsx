@@ -1,3 +1,4 @@
+"use client"
 import { useFeature } from '@lms/contexts'
 import { ICertificate } from '@lms/core'
 import { ButtonPrimary } from '@lms/ui'

@@ -10,7 +10,7 @@ import {
 import { isEmpty } from 'lodash'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { AuthAPI } from 'src/app/api/profile/route'
+import { AuthAPI } from 'src/api/profile'
 import { z } from 'zod'
 import PasswordProfile from './PasswordProfile'
 import { ButtonSecondary } from '@lms/ui'

@@ -1,5 +1,5 @@
 import { ClassKey } from '@lms/core'
-import { ClassAPI } from '@pages/api/class'
+import { ClassAPI } from 'src/api/class'
 import { useInfiniteQuery } from 'react-query' // Import useInfiniteQuery
 
 const useSelectClassSchedule = (

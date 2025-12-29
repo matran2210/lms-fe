@@ -15,6 +15,7 @@ let nextConfig = {
     '@lms/hooks',
     '@lms/assets',
     '@lms/utils',
+    '@lms/styles',
     '@lms/contexts',
     '@lms/feature-user',
     '@lms/feature-class',

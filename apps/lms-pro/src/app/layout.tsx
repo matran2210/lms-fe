@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { Providers } from './providers'
 import Metadata from '@components/common/Metadata'
 // TODO: Next14
-// import '@lms/styles'
+import '@lms/styles'
 import '@fortune-sheet/react/dist/index.css'
 import '@sapp-fe/entrance-test-result-package/dist/index.css'
 import '@sapp-fe/preview-part/dist/index.css'

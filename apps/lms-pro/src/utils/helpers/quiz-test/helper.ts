@@ -1,5 +1,5 @@
 import { QUESTION_TYPES, Sheet, TEST_TYPE } from '@lms/core'
-import { TestServiceAPI } from 'src/app/api/test-api/route'
+import { TestServiceAPI } from 'src/api/test-api'
 import dayjs from 'dayjs'
 import { FieldValues, UseFormGetValues } from 'react-hook-form'
 
