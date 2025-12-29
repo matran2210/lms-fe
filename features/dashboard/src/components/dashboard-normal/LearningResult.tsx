@@ -213,7 +213,7 @@ const LearningResultTest = () => {
 
   const getLearningResults = async (id: string) => {
     try {
-      const res = await dashboardApi.getLearningResults(id);
+      const res = await dashboardApi?.getLearningResults(id);
 
       if (res && res.success) handleLearningResults(res.data);
     } catch (error) {

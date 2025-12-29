@@ -8,7 +8,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 /** @type {import('next').NextConfig} */
 let nextConfig = {
-  reactStrictMode: false,
+  reactStrictMode: true,
   transpilePackages: [
     '@lms/ui',
     '@lms/core',

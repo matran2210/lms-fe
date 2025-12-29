@@ -15,7 +15,7 @@ interface ChartData {
 const OverProgress = () => {
   const [option, setOption] = useState<EChartsOption | null>();
   const { isMobile } = useReponsive();
-  const {router} = useFeature()
+  const {router, dashboardApi} = useFeature()
 
   const handlePieChartOption = (
     data: IOverProgress | IExamPrediction | ChartData,
@@ -113,7 +113,7 @@ const OverProgress = () => {
 
   const getOverProgress = async (id: string) => {
     try {
-      const res = await DashboardAPI.getExamPrediction(id);
+      const res = await dashboardApi?.getExamPrediction(id);
 
       if (res && res.success) handlePieChartOption(res.data);
     } catch (error) {

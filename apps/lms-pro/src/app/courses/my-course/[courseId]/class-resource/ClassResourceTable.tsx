@@ -127,8 +127,8 @@ const ClassResourceTable = ({
       className: clsx(className, 'text-center'),
       align: 'center',
       render: (_, record) =>
-        record?.class_resource_permissions?.schedules.map((item) => (
-          <div className="text-base text-gray-400">{item?.name}</div>
+        record?.class_resource_permissions?.schedules.map((item, index) => (
+          <div key={index} className="text-base text-gray-400">{item?.name}</div>
         )),
       width: 400,
     },

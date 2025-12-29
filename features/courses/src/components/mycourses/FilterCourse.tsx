@@ -1,6 +1,5 @@
 import { SAPPSelectV2 } from '@lms/ui'
 import { useForm, useWatch } from 'react-hook-form'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { DefaultOptionType } from 'antd/es/select'
 import { useTailwindBreakpoint } from '@lms/hooks'
@@ -9,6 +8,7 @@ import { SappDrawerV3 } from '@lms/ui'
 import { Button, Divider } from 'antd'
 import clsx from 'clsx'
 import { ButtonPrimary } from '@lms/ui'
+import { useFeature } from '@lms/contexts'
 
 interface IFilters {
   [name: string]: React.Key | null | undefined
@@ -25,7 +25,7 @@ const FilterCourse = ({
   }[]
 }) => {
   const { control, setValue, getValues, reset } = useForm()
-  const router = useRouter()
+  const {router} = useFeature()
   const { isMobileView } = useTailwindBreakpoint()
   const [openMobileFilter, setOpenMobileFilter] = useState(false)
   const [filters, setFilters] = useState<IFilters>()
