@@ -11,7 +11,7 @@ import DeviceItem from "./DeviceItem";
 import { useFeature } from "@lms/contexts";
 
 const DeviceList = () => {
-  const {authApi, userApi} = useFeature()
+  const { authApi, userApi } = useFeature()
   const sessionId =
     getSessionIdFromToken(getCookie(COOKIE_INFO.KEYCLOAK_TOKEN) ?? "") ??
     getCookie(COOKIE_INFO.SESSION_ID);
@@ -40,13 +40,13 @@ const DeviceList = () => {
   const onRemoveDevice = async (session_id: string) => {
     setLoading(true);
     try {
-      const res = await authApi.removeDevice(session_id);
+      const res = await userApi.removeDevice(session_id);
       if (res) {
         setLoading(false);
         closeDeviceDrawer();
         getListDevices();
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   useEffect(() => {

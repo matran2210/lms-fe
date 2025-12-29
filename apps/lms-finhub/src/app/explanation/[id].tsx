@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { AltArrowLeft } from '@components/courses/icons/AltArrowLeft'
 import { CloseIconV2, MenuDotsIcon } from '@lms/assets'
 import {
@@ -16,9 +16,9 @@ import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routes'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
-import { CoursesAPI } from '../api/courses/route'
-import { TestServiceAPI } from '../api/test-api/route'
 import { useParams, useRouter } from 'next/navigation'
+import { CoursesAPI } from 'src/api/courses'
+import { TestServiceAPI } from 'src/api/test-api'
 
 const Explanation = () => {
   const router = useRouter()

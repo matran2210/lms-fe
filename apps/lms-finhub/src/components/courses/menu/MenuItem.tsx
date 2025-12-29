@@ -6,6 +6,7 @@ import {
   pushNotes3Level,
   useAppDispatch,
   useAppSelector,
+  useFeature,
   userReducer,
 } from '@lms/contexts'
 import {
@@ -28,8 +29,8 @@ import { v4 as uuidv4 } from 'uuid'
 import MenuItemsList from './MenuItemsList'
 import { PageLink } from 'src/constants/routes'
 import ExpandIcon from '@components/layout/ExpandIcon'
-import { NotificationAPI } from 'src/app/api/notification/route'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { NotificationAPI } from 'src/api/notification'
 export default function MenuItem({
   menuItem: { name, icon: Icon, url, type, subItems },
   closeSideBar,
@@ -66,6 +67,8 @@ export default function MenuItem({
       title: `Unread ${notificationUnread ? `(${notificationUnread})` : ''}`,
     },
   ]
+
+  const pathname  = usePathname()
 
   useEffect(() => {
     if (selectedTab) {
@@ -123,10 +126,15 @@ export default function MenuItem({
     }
   }
 
-  const isActivity = params?.courseId && params?.id
-  const isInMyProfile = router.asPath === PageLink.SHORT_COURSE_PROFILE
+const searchParams = useSearchParams()
 
-  const selected = router.pathname === url
+const asPath =
+  pathname + (searchParams.toString() ? `?${searchParams}` : '')
+
+  const isActivity = params?.courseId && params?.id
+  const isInMyProfile = asPath === PageLink.SHORT_COURSE_PROFILE
+
+  const selected = pathname === url
   // ? true
   // : isActivity
   //   ? name === TitleSidebar.COURSE_CONTENT
@@ -146,7 +154,7 @@ export default function MenuItem({
             })}
           >
             {user?.detail?.avatar &&
-            (user.detail.avatar['40x40'] || user.detail.avatar['ORIGIN']) ? (
+              (user.detail.avatar['40x40'] || user.detail.avatar['ORIGIN']) ? (
               <Image
                 src={
                   user?.detail?.avatar['40x40'] ||
@@ -189,8 +197,7 @@ export default function MenuItem({
               <ExpandIcon
                 type={Icon}
                 className={clsx(
-                  `before-icon min-h-6 min-w-6 shrink-0 ${
-                    selected ? 'bg-primary text-white' : 'text-gray-800'
+                  `before-icon min-h-6 min-w-6 shrink-0 ${selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
                     'group-hover:text-gray-800': !selected,
@@ -203,8 +210,7 @@ export default function MenuItem({
         {Icon === 'avatar' ? (
           <div
             className={clsx(
-              `label avatar invisible pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
-                selected ? 'bg-primary text-white' : 'text-gray-800'
+              `label avatar invisible pl-4 text-base font-normal opacity-0 transition-all duration-150 ${selected ? 'bg-primary text-white' : 'text-gray-800'
               }`,
               {
                 'group-hover:text-gray-800': !selected,
@@ -240,8 +246,7 @@ export default function MenuItem({
             {Icon === 'profile-detail' ? (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
-                    selected ? 'bg-primary text-white' : 'text-gray-800'
+                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
                     'group-hover:text-gray-800': !selected,
@@ -254,8 +259,7 @@ export default function MenuItem({
             ) : (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
-                    selected ? 'bg-primary text-white' : 'text-gray-800'
+                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
                     'group-hover:text-gray-800': !selected,
@@ -273,7 +277,7 @@ export default function MenuItem({
     )
   }
 
-  const profileUrl = router.pathname?.startsWith(PageLink.SHORT_COURSE)
+  const profileUrl = pathname?.startsWith(PageLink.SHORT_COURSE)
     ? `${PageLink.SHORT_COURSE_PROFILE}`
     : `${PageLink.MYPROFILE}`
   return (
@@ -285,45 +289,41 @@ export default function MenuItem({
       )}
       <div
         className={clsx(
-          `group cursor-pointer rounded ${
-            selected &&
+          `group cursor-pointer rounded ${selected &&
             ((type === 'level-1' &&
               Icon !== 'avatar' &&
               Icon !== 'profile-detail') ||
               (type === 'level-2' && Icon === 'result'))
-              ? 'bg-primary text-white'
-              : ''
-          } sidebar-list-items relative px-4 py-2 last:mb-0 ${
-            !isActivity &&
+            ? 'bg-primary text-white'
+            : ''
+          } sidebar-list-items relative px-4 py-2 last:mb-0 ${!isActivity &&
             (name === TitleSidebar.ADD_NOTE || name === TitleSidebar.CALCULATOR)
-              ? 'hidden'
-              : name === TitleSidebar.CALCULATOR
-                ? 'mt-4'
-                : ''
+            ? 'hidden'
+            : name === TitleSidebar.CALCULATOR
+              ? 'mt-4'
+              : ''
           }
-        ${
-          !isActivity &&
-          (name === TitleSidebar.COURSE_CONTENT ||
-            name === TitleSidebar.NOTES_LIST ||
-            name === TitleSidebar.COURSE_RESOURCES ||
-            name === TitleSidebar.ACTIVITY ||
-            Icon === 'stats-chart-sharp' ||
-            Icon === 'profile-detail')
+        ${!isActivity &&
+            (name === TitleSidebar.COURSE_CONTENT ||
+              name === TitleSidebar.NOTES_LIST ||
+              name === TitleSidebar.COURSE_RESOURCES ||
+              name === TitleSidebar.ACTIVITY ||
+              Icon === 'stats-chart-sharp' ||
+              Icon === 'profile-detail')
             ? 'hidden'
             : ''
-        }
-        ${
-          isActivity &&
-          (name === TitleSidebar.COURSES ||
-            name === TitleSidebar.DASHBOARD ||
-            name === LANG_SIGNIN.eventTest ||
-            checkIsHiddenDashboard(
-              JSON.parse(localStorage.getItem('courseInfo') as string),
-            ) ||
-            Icon === 'avatar')
+          }
+        ${isActivity &&
+            (name === TitleSidebar.COURSES ||
+              name === TitleSidebar.DASHBOARD ||
+              name === LANG_SIGNIN.eventTest ||
+              checkIsHiddenDashboard(
+                JSON.parse(localStorage.getItem('courseInfo') as string),
+              ) ||
+              Icon === 'avatar')
             ? 'hidden'
             : ''
-        }
+          }
        `,
           {
             'hover:bg-gray-100': !selected,
@@ -335,9 +335,8 @@ export default function MenuItem({
         }}
       >
         <div
-          className={`sidebar-item flex items-center ${
-            Icon === 'avatar' || Icon === 'profile-detail' ? '-ml-2' : ''
-          }`}
+          className={`sidebar-item flex items-center ${Icon === 'avatar' || Icon === 'profile-detail' ? '-ml-2' : ''
+            }`}
         >
           {url !== '#' && url !== PageLink.NOTIFICATION ? (
             <Link
@@ -370,9 +369,8 @@ export default function MenuItem({
         </div>
         {isNested ? (
           <div
-            className={`sidebar-child ${type} ${
-              isExpanded && type === 'level-2' ? 'active' : ''
-            }`}
+            className={`sidebar-child ${type} ${isExpanded && type === 'level-2' ? 'active' : ''
+              }`}
           >
             <MenuItemsList
               options={subItems}

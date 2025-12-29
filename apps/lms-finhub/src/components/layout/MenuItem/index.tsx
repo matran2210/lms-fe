@@ -23,8 +23,8 @@ import { v4 as uuidv4 } from 'uuid'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
 import { BlankAvatarImage } from '@lms/assets'
-import { NotificationAPI } from 'src/app/api/notification/route'
-import { useParams, usePathname, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { NotificationAPI } from 'src/api/notification'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -191,13 +191,18 @@ export default function MenuItem({
     return lastTwo.join(' ')
   }
 
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  const asPath =
+    pathname + (searchParams.toString() ? `?${searchParams}` : '')
   const isActivity = params?.activityId || params?.id
   const isInCourse = params?.courseId
-  const isInMyProfile = router.asPath === PageLink.MYPROFILE
+  const isInMyProfile = asPath === PageLink.MYPROFILE
   const countNotificationsUnRead = async () => {
     try {
       await dispatch(getCountUnRead(NotificationAPI))
-    } catch (error) {}
+    } catch (error) { }
   }
 
   useEffect(() => {
@@ -254,7 +259,7 @@ export default function MenuItem({
             })}
           >
             {user?.detail?.avatar?.['40x40'] ||
-            user.detail.avatar?.['ORIGIN'] ? (
+              user.detail.avatar?.['ORIGIN'] ? (
               <Image
                 src={
                   user.detail.avatar?.['40x40'] ||
@@ -297,8 +302,7 @@ export default function MenuItem({
               <ExpandIcon
                 type={Icon}
                 className={clsx(
-                  `before-icon min-h-6 min-w-6 shrink-0 ${
-                    selected ? 'bg-primary text-white' : 'text-gray-800'
+                  `before-icon min-h-6 min-w-6 shrink-0 ${selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
                     'group-hover:text-gray-800': !selected,
@@ -311,8 +315,7 @@ export default function MenuItem({
         {Icon === 'avatar' ? (
           <div
             className={clsx(
-              `label avatar invisible pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
-                selected ? 'bg-primary text-white' : 'text-gray-800'
+              `label avatar invisible pl-4 text-base font-normal opacity-0 transition-all duration-150 ${selected ? 'bg-primary text-white' : 'text-gray-800'
               }`,
               {
                 'group-hover:text-gray-800': !selected,
@@ -347,8 +350,7 @@ export default function MenuItem({
             {Icon === 'profile-detail' ? (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${
-                    selected ? 'bg-primary text-white' : 'text-gray-800'
+                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
                     'group-hover:text-gray-800': !selected,
@@ -360,8 +362,7 @@ export default function MenuItem({
             ) : (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${
-                    selected ? 'bg-primary text-white' : 'text-gray-800'
+                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
                     'group-hover:text-gray-800': !selected,
@@ -387,45 +388,40 @@ export default function MenuItem({
       )}
       <div
         className={clsx(
-          `group cursor-pointer rounded transition-all duration-200 ease-in-out ${
-            selected &&
+          `group cursor-pointer rounded transition-all duration-200 ease-in-out ${selected &&
             ((type === 'level-1' &&
               Icon !== 'avatar' &&
               Icon !== 'profile-detail') ||
               (type === 'level-2' &&
                 (Icon === 'result' || Icon === 'bookmark')))
-              ? 'bg-primary text-white'
-              : ''
-          } sidebar-list-items relative px-4 py-2 last:mb-0 ${
-            !isActivity &&
+            ? 'bg-primary text-white'
+            : ''
+          } sidebar-list-items relative px-4 py-2 last:mb-0 ${!isActivity &&
             (name === TitleSidebar.NEW_NOTE || name === TitleSidebar.CALCULATOR)
-              ? 'hidden'
-              : ''
-          }
-              ${
-                isActivity && name === TitleSidebar.COURSE_CONTENT
-                  ? 'hidden'
-                  : ''
-              }
-            ${
-              isInCourse &&
-              (name === TitleSidebar.COURSES ||
-                Icon === 'avatar' ||
-                (name === TitleSidebar.ACTIVITY && !isActivity))
-                ? 'hidden'
-                : ''
-            }
-          
-        ${
-          !isInCourse &&
-          (name === TitleSidebar.NOTES_LIST ||
-            name === TitleSidebar.RESOURCES ||
-            name === TitleSidebar.COURSE_CONTENT ||
-            name === TitleSidebar.ACTIVITY ||
-            Icon === 'profile-detail')
             ? 'hidden'
             : ''
-        }
+          }
+              ${isActivity && name === TitleSidebar.COURSE_CONTENT
+            ? 'hidden'
+            : ''
+          }
+            ${isInCourse &&
+            (name === TitleSidebar.COURSES ||
+              Icon === 'avatar' ||
+              (name === TitleSidebar.ACTIVITY && !isActivity))
+            ? 'hidden'
+            : ''
+          }
+          
+        ${!isInCourse &&
+            (name === TitleSidebar.NOTES_LIST ||
+              name === TitleSidebar.RESOURCES ||
+              name === TitleSidebar.COURSE_CONTENT ||
+              name === TitleSidebar.ACTIVITY ||
+              Icon === 'profile-detail')
+            ? 'hidden'
+            : ''
+          }
         
         `,
           {
@@ -435,9 +431,8 @@ export default function MenuItem({
         onClick={() => onClickMenuItem()}
       >
         <div
-          className={`sidebar-item flex items-center ${
-            Icon === 'avatar' || Icon === 'profile-detail' ? '-ml-2' : ''
-          }`}
+          className={`sidebar-item flex items-center ${Icon === 'avatar' || Icon === 'profile-detail' ? '-ml-2' : ''
+            }`}
         >
           {url !== '#' && !isEmpty(url) ? (
             <Link
@@ -450,7 +445,7 @@ export default function MenuItem({
                       ? `/short-course/detail/${params?.courseId || params?.id}`
                       : url
               }
-              // passHref
+            // passHref
             >
               {renderMenuContent()}
             </Link>
@@ -473,9 +468,8 @@ export default function MenuItem({
         </div>
         {isNested ? (
           <div
-            className={`sidebar-child ${type} ${
-              isExpanded && type === 'level-2' ? 'active' : ''
-            }`}
+            className={`sidebar-child ${type} ${isExpanded && type === 'level-2' ? 'active' : ''
+              }`}
           >
             <MenuItemsList
               options={subItems || []}

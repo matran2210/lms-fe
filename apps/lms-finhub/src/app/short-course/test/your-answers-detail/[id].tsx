@@ -1,12 +1,12 @@
 import { FullScreenLayout } from '@lms/ui'
 import { TEST_TYPE_LABELS } from '@lms/core'
 import { useGetDataQuery } from '@lms/utils'
-import { CoursesAPI } from 'src/app/api/courses/route'
 import { EYourAnswerType, ITabs } from '@lms/core'
 import TableQuestions from '@components/your-answers-detail/TableQuestions'
 import SappLoading from '@components/common/SappLoading'
 import { SappBreadCrumbs } from '@lms/ui'
 import { useParams, useRouter } from 'next/navigation'
+import { CoursesAPI } from 'src/api/courses'
 
 const TestResultDetail = () => {
   const router = useRouter()

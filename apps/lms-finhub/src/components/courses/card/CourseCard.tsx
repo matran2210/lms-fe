@@ -8,13 +8,13 @@ import { useCourseStatus } from '@lms/hooks'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { CoursesAPI } from 'src/app/api/courses/route'
 import CourseAction from './course/CourseAction'
 import CourseClass from './course/CourseClass'
 import CourseDescription from './course/CourseDescription'
 import CourseProgress from './course/CourseProgress'
 import CourseTitle from './course/CourseTitle'
 import { useRouter } from 'next/navigation'
+import { CoursesAPI } from 'src/api/courses'
 
 export default function CourseCard({
   course,

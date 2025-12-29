@@ -165,29 +165,9 @@ export default function SectionContentAccoridior({
                                         ?.id as string | undefined
 
                                       if (isCompleted && attemptId) {
-                                        router.push({
-                                          pathname: `/case-study/result/${attemptId}`,
-                                          query: {
-                                            class_user_id: class_user_id,
-                                            class_id: router?.query?.courseId,
-                                            course_section_id:
-                                              router?.query?.id,
-                                            is_from_activity: true,
-                                          },
-                                        })
+                                        router.push(`/case-study/result/${attemptId}?class_user_id=${class_user_id}&class_id=${params?.courseId}&course_section_id=${params?.id}&is_from_activity=true`)
                                       } else {
-                                        router.push({
-                                          pathname: `/case-study/${topicId}`,
-                                          query: {
-                                            quiz_id: quizId,
-                                            class_user_id: class_user_id,
-                                            caseStudyId,
-                                            class_id: router?.query?.courseId,
-                                            course_section_id:
-                                              router?.query?.id,
-                                            is_from_activity: true,
-                                          },
-                                        })
+                                        router.push(`/case-study/${topicId}?quiz_id=${quizId}&class_user_id=${class_user_id}&caseStudyId=${caseStudyId}&class_id=${params?.courseId}&course_section_id=${params?.id}&is_from_activity=true`)
                                       }
                                     }}
                                   >

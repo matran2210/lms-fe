@@ -9,8 +9,8 @@ import { useAppDispatch } from 'src/redux/hook'
 import QuizModal from './QuizModal'
 import VideoSelector from './VideoSelector'
 import VideoTimeline from './VideoTimeLine'
-import { TestServiceAPI } from 'src/app/api/test-api/route'
-import { CoursesAPI } from 'src/app/api/courses/route'
+import { TestServiceAPI } from 'src/api/test-api'
+import { CoursesAPI } from 'src/api/courses'
 
 type Props = {
   videos?: IVideo[]

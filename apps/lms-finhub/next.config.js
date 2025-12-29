@@ -6,7 +6,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 module.exports = withBundleAnalyzer({
   reactStrictMode: true,
   swcMinify: true,
-
   productionBrowserSourceMaps: true,
 
   transpilePackages: [
@@ -16,6 +15,7 @@ module.exports = withBundleAnalyzer({
     '@lms/assets',
     '@lms/utils',
     '@lms/contexts',
+    '@lms/styles',
     '@lms/feature-user',
     '@lms/feature-class',
     '@lms/feature-auth',
@@ -35,20 +35,6 @@ module.exports = withBundleAnalyzer({
 
   compiler: {
     styledComponents: true,
-  },
-
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          { key: 'X-DNS-Prefetch-Control', value: 'on' },
-          { key: 'X-XSS-Protection', value: '1; mode=block' },
-          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-        ],
-      },
-    ]
   },
 
   poweredByHeader: false,

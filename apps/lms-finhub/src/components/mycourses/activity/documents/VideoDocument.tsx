@@ -12,8 +12,8 @@ import { debounce } from '@utils/helpers'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import { TestServiceAPI } from 'src/app/api/test-api/route'
-import { CoursesAPI } from 'src/app/api/courses/route'
+import { TestServiceAPI } from 'src/api/test-api'
+import { CoursesAPI } from 'src/api/courses'
 
 type Props = {
   videos?: IVideo[]

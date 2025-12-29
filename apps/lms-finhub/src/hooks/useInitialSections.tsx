@@ -2,8 +2,8 @@ import { ISection } from '@lms/core'
 import { useRef, useState } from 'react'
 import { DEFAULT_PAGE_SIZE } from '@lms/core'
 import { isEmpty } from 'lodash'
-import { CoursesAPI } from 'src/app/api/courses/route'
 import { useParams, useRouter } from 'next/navigation'
+import { CoursesAPI } from 'src/api/courses'
 
 export const useInitialSections = () => {
   const [sections, setSections] = useState<ISection[]>([])

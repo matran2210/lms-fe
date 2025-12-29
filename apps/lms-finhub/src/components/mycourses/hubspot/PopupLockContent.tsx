@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction } from 'react'
 import { LockSectionIcon, ThankYouIcon, UnlockIcon } from '@lms/assets'
 import ShortCourseModal from '@components/modal/ShortCourseModal'
 import { useParams, useRouter } from 'next/navigation'
-import { CoursesAPI } from 'src/app/api/courses/route'
+import { CoursesAPI } from 'src/api/courses'
 
 export interface IPopupFormState {
   lockSection: boolean

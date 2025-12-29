@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { CloseIcon } from '@lms/assets'
 import { ANIMATION, LAYOUT, QUESTION_TYPES } from '@lms/core'
 import {
@@ -9,8 +9,8 @@ import {
 } from '@lms/ui'
 import { roundNumber } from '@utils/helpers'
 import { useEffect, useState } from 'react'
-import { CoursesAPI } from '../../api/courses/route'
 import { useParams, useRouter } from 'next/navigation'
+import { CoursesAPI } from 'src/api/courses'
 
 const headers = [
   {

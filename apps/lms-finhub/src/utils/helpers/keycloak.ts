@@ -9,7 +9,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { fetcher } from '@services/requestV2'
 import Keycloak from 'keycloak-js'
-import { UserApi } from 'src/app/api/user/route'
+import { UserApi } from 'src/api/user'
 
 const handleFirebaseToken = async () => {
   const accessDeviceToken = await AsyncStorage.getItem('firebaseDeviceToken')

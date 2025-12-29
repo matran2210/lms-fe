@@ -5,8 +5,8 @@ import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 // import '@sapp-fe/explanation-package/dist/index.css'
 import SappLoading from '@components/common/SappLoading'
 import { CloseIcon } from '@lms/assets'
-import { ActivityAPI } from 'src/app/api/activity/route'
-import { TestServiceAPI } from 'src/app/api/test-api/route'
+import { ActivityAPI } from 'src/api/activity'
+import { TestServiceAPI } from 'src/api/test-api'
 
 export enum QUESTION_LEVELS {
   FUNDAMENTAL = 'FUNDAMENTAL',

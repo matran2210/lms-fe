@@ -2,14 +2,14 @@ import { fetcher, fetchFormData } from '@services/requestV2'
 import { AxiosPromise } from 'axios'
 import { ExaminationsResponse } from 'src/redux/types/Course/MyCourse/ExamInformation'
 import { IQuizResultList, ExamInformation, IResponse} from '@lms/core'
-
+ 
 export class ClassAPI {
   static getAllResultOfQuiz(
     id: string,
     quiz_id: string,
     params?: { page_index: number; page_size: number },
   ): Promise<IResponse<IQuizResultList>> {
-    return fetcher(`paramsclasses/${id}/result/${quiz_id}`, {
+    return fetcher(`classes/${id}/result/${quiz_id}`, {
       params: params,
     })
   }
@@ -18,7 +18,7 @@ export class ClassAPI {
     id: string,
     params: { page_index: number; page_size: number },
   ): Promise<ExaminationsResponse> {
-    return fetcher(`paramsclasses/${id}/examination`, {
+    return fetcher(`classes/${id}/examination`, {
       method: 'GET',
       params: params,
     })

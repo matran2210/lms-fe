@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import {
   CalculatorIcon,
   CloseIcon,
@@ -53,7 +53,7 @@ import { isNull, uniqueId } from 'lodash'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { CoursesAPI } from 'src/app/api/courses/route'
+import { CoursesAPI } from 'src/api/courses'
 
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])

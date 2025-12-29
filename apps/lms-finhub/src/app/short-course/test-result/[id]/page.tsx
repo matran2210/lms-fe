@@ -8,7 +8,7 @@ import { ButtonSecondary } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import clsx from 'clsx'
 import { useParams, useRouter } from 'next/navigation'
-import { ResultAPI } from 'src/app/api/short-course/test-result/route'
+import { ResultAPI } from 'src/api/short-course/test-result'
 
 const TestResultDetail = () => {
   const router = useRouter()

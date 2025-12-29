@@ -1,9 +1,9 @@
 import { HandShake } from '@lms/assets'
 import { RefObject } from 'react'
-import { CoursesAPI } from 'src/app/api/courses/route'
 import { clearGuideState, increment, useAppDispatch } from '@lms/contexts'
 import { ButtonPrimary, ButtonText, SappModal } from '@lms/ui'
 import { UserGuide } from '@lms/core'
+import { CoursesAPI } from 'src/api/courses'
 type Props = {
   confirmDialogOverLayRef: RefObject<HTMLDivElement>
 }

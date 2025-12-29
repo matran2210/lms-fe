@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import {
   CloseIcon,
   CloseModalIcon,
@@ -59,7 +59,7 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import ConFirmSubmit from '../short-course/test/conFirmSubmit'
 import LimitQuizModal from '../short-course/test/limitQuizModal'
-import { TestServiceAPI } from '../api/test-api/route'
+import { TestServiceAPI } from 'src/api/test-api'
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
 

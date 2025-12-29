@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { CloseIcon, DownloadIcon, LinkIcon } from '@lms/assets'
 import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
 import Layout from '@components/layout'
@@ -49,8 +49,8 @@ import React, {
 } from 'react'
 import { useQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { CoursesAPI, getActivityById } from 'src/app/api/courses/route'
-import { UploadAPI } from 'src/app/api/upload/route'
+import { CoursesAPI, getActivityById } from 'src/api/courses'
+import { UploadAPI } from 'src/api/upload'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
