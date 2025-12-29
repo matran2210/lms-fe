@@ -2,7 +2,6 @@
 import { MY_COURSES } from "@lms/core";
 import { runHighlight } from "@lms/utils";
 import { Element, HTMLReactParserOptions } from "html-react-parser";
-import { useRouter } from "next/navigation";
 import {
   ForwardedRef,
   forwardRef,
@@ -63,7 +62,7 @@ const NewFilltext = forwardRef(
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
-    const router = useRouter();
+    
     const refEditor = useRef(null) as any;
     const [questionContent, setQuestionContent] = useState<any>();
     const [answerContent, setAnswerContent] = useState<any>();

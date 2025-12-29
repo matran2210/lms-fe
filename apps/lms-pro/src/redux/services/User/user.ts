@@ -73,6 +73,14 @@ const UserApi = {
     // Sử dụng httpService để gửi yêu cầu GET
     return AuthAPI.getPinnedNotifications()
   },
+
+  /**
+   * @description Xóa device.
+   * @async
+   */
+  removeDevice: (session_id: string): Promise<any> => {
+    return AuthAPI.removeDevice(session_id)
+  },
 }
 
 export default UserApi

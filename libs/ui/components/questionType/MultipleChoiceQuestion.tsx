@@ -1,13 +1,13 @@
 "use client";
 import { MY_COURSES } from "@lms/core";
 import { getUppercaseByNumber, runHighlight } from "@lms/utils";
-import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { EditorReader, HookFormCheckBoxGroup, SappDivider } from "../base";
 import { SappTitleSolution } from "../common";
 import { HighlightableHTML } from "../highlights";
 import { IPreviewProp } from "./OneChoiceQuestion";
 import WarningSection from "./WarningSection";
+import { useFeature } from "@lms/contexts";
 
 interface IDataAnswer {
   data: {
@@ -37,7 +37,7 @@ const MultiChoiceQuestion = ({
   explainClassname,
   storageKey,
 }: IPreviewProp) => {
-  const router = useRouter();
+  const { router } = useFeature()
   const convertAnswer = useMemo(() => {
     const answers = [];
     let number = 0;

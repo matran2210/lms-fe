@@ -1,10 +1,9 @@
 "use client"
 // ConfirmDialog.tsx
-import { FC, useEffect } from 'react'
-import SappModal from '../modal/SappModal'
 import { AlertCircleSharp } from '@lms/assets'
 import { useFeature } from '@lms/contexts'
-import { usePathname } from 'next/navigation'
+import { FC, useEffect } from 'react'
+import SappModal from '../modal/SappModal'
 
 // define the props for the confirm dialog component
 export type SappConfirmDialogProps = {

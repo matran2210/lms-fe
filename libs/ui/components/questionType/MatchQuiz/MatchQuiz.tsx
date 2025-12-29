@@ -25,10 +25,10 @@ import { runHighlight } from "@lms/utils";
 import clsx from "clsx";
 import { Grid } from "antd";
 import SappDivider from "../../base/divider/Divider";
-import { useRouter } from "next/navigation";
 import { HighlightableHTML } from "../../highlights";
 import { SappTitleSolution } from "../../common";
 import { EditorReader } from "../../base";
+import { useFeature } from "@lms/contexts";
 
 interface IProps {
   data: any;
@@ -109,8 +109,7 @@ const MatchQuiz = forwardRef(
     ref: ForwardedRef<any>,
   ) => {
 
-    console.log("corrects", corrects)
-    const router = useRouter();
+    const { router } = useFeature()
     const [edges, setEdges] = useState<Edge[]>([]);
     const flowRef = useRef<HTMLDivElement>(null);
     const [nodes, setNodes] = useState<MatchNode[]>([]);
