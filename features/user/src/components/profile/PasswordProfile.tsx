@@ -1,3 +1,4 @@
+"use client"
 import { Icon } from "@lms/assets";
 import { useAppSelector, useFeature, userReducer } from "@lms/contexts";
 import { ButtonPrimary, ButtonText, SappModalV2 } from "@lms/ui";

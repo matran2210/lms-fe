@@ -18,7 +18,7 @@ import { Table, TablePaginationConfig } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { usePathname } from 'next/navigation'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 import RequestActionCell from '../RequestActionCell'
 
@@ -183,7 +183,7 @@ const PersonalScheduleTable = ({
   ]
 
   const { current, pageSize } = pagination
-  const router = useRouter()
+  const pathname = usePathname()
   const { setIsOpenViewModal } = useRequestContext()
   const tableColumns = columnsTitles.map((item, index) => {
     return {
@@ -198,7 +198,7 @@ const PersonalScheduleTable = ({
       index: ((current || 1) - 1) * (pageSize || 10) + index + 1,
       creator: item.staff_request || item.user_request,
       customName: (
-        <Link href={`${router.pathname}?id=${item.id}`}>
+        <Link href={`${pathname}?id=${item.id}`}>
           <div
             onClick={() => setIsOpenViewModal(true)}
             className="cursor-pointer"

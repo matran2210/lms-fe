@@ -53,18 +53,18 @@ import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import UserApi from 'src/redux/services/User/user'
 import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
-import { ActivityAPI } from './api/activity/route'
-import CalendarApi from './api/calendar/route'
-import { uploadImageToLinkedIn } from './api/certificate/route'
-import { CoursesAPI } from './api/courses/route'
-import { EntranceTestAPI } from './api/entrance-test/route'
-import { EventTestAPI } from './api/event-test/route'
-import { NotificationAPI } from './api/notification/route'
-import MyProfileAPI, { AuthAPI } from './api/profile/route'
-import { QuestionAPI } from './api/question/route'
-import { TestServiceAPI } from './api/test-api/route'
-import { UploadAPI } from './api/upload/route'
-import { ClassAPI } from './api/class/route'
+import { ActivityAPI } from 'src/api/activity'
+import CalendarApi from 'src/api/calendar'
+import { uploadImageToLinkedIn } from 'src/api/certificate'
+import { ClassAPI } from 'src/api/class'
+import { CoursesAPI } from 'src/api/courses'
+import { EntranceTestAPI } from 'src/api/entrance-test'
+import { EventTestAPI } from 'src/api/event-test'
+import { NotificationAPI } from 'src/api/notification'
+import MyProfileAPI, { AuthAPI } from 'src/api/profile'
+import { QuestionAPI } from 'src/api/question'
+import { TestServiceAPI } from 'src/api/test-api'
+import { UploadAPI } from 'src/api/upload'
 
 dayjs.extend(utc)
 dayjs.extend(weekday)
@@ -352,7 +352,7 @@ export function Providers({ children }: { children: ReactNode }) {
                         router: router,
                         pathname,
                         params,
-                        query,
+                        query: Object.fromEntries(query.entries()),
                         fetcher: fetcher,
                         videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
                         testServiceApi: TestServiceAPI,

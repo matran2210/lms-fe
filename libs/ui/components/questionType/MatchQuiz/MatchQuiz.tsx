@@ -25,7 +25,7 @@ import { runHighlight } from "@lms/utils";
 import clsx from "clsx";
 import { Grid } from "antd";
 import SappDivider from "../../base/divider/Divider";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { HighlightableHTML } from "../../highlights";
 import { SappTitleSolution } from "../../common";
 import { EditorReader } from "../../base";

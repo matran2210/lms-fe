@@ -9,7 +9,7 @@ import {
 import { Button, Divider, Input, Modal, Popover } from "antd";
 import dayjs from "dayjs";
 import parseHTML, { Element } from "html-react-parser";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import {

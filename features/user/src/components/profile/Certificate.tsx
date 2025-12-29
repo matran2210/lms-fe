@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import { useLayoutEffect, useState } from 'react'
 import { Divider, Table, TableProps } from 'antd'

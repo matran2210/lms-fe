@@ -2,7 +2,7 @@
 import { getCountUnRead, showNotification, useAppDispatch } from '@lms/contexts'
 import { CERTIFICATE_DETAIL, ENTRANCE_TEST_RESULT, ENTRANCE_TEST_TABLE_RESULT } from '@lms/core'
 import { usePathname } from 'next/navigation'
-import { NotificationAPI } from './api/notification/route'
+import { NotificationAPI } from 'src/api/notification'
 import { onMessageListener } from '@lms/utils'
 import { useEffect } from 'react'
 export default function ClientLayout() {

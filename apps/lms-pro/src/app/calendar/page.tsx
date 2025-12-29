@@ -15,7 +15,6 @@ import {
 } from '@lms/feature-calendar'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { HeaderMobile, Layout } from '@lms/ui'
-import CalendarApi from 'src/app/api/calendar/route'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/navigation'
@@ -23,8 +22,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { SAPPCalendarV2 } from '@sapp-fe/sapp-common-package'
 import { IEvent, IFilter } from '@sapp-fe/sapp-common-package/dist/types'
 import { PageLink } from 'src/constants/routers'
+import CalendarApi from 'src/api/calendar'
 
-const Page = () => {
+const CalendarPage = () => {
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =
     useTailwindBreakpoint()
   const [loading, setLoading] = useState<boolean>(false)
@@ -230,4 +230,4 @@ const Page = () => {
   )
 }
 
-export default Page
+export default CalendarPage

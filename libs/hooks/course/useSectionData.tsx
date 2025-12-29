@@ -1,3 +1,4 @@
+"use client"
 import { ICoursesAPI, ISection } from '@lms/core'
 import { useFeature } from '@lms/contexts'
 import { useState } from 'react'

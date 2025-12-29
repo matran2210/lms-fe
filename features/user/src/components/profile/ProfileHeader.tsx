@@ -1,3 +1,4 @@
+"use client"
 import { BlankAvatarImage, CheckCircleOutlineYellow, CloseIconV2, PencilFillV2Icon, PencilV2Icon } from '@lms/assets'
 import {
   getLogoutUser,

@@ -5,10 +5,9 @@ import {
   LockClosedIcon,
 } from '@lms/assets'
 import { ButtonText } from '@lms/ui'
-import { useCourseContext } from '@lms/contexts'
+import { useCourseContext, useFeature } from '@lms/contexts'
 import { trackGAEvent, truncateString} from '@lms/utils'
 import clsx from 'clsx'
-import { useRouter } from 'next/router'
 import React, { useRef } from 'react'
 import {SappIcon} from '@lms/ui'
 import { Tooltip } from "@lms/ui";
@@ -19,7 +18,7 @@ interface IProps {
   focusOnly: boolean
 }
 const ActivityPagination = ({ activity, focusOnly }: IProps) => {
-  const router = useRouter()
+  const {router} = useFeature()
   const endActivityRef = useRef<HTMLDivElement>(null)
 
   const { setOpenPopupCTA, openPopupCTA } = useCourseContext()

@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { sappFormatDate } from '@lms/utils'
 import clsx from 'clsx'
 import { HaveNoItemIcon } from '@lms/assets'
-import { AuthAPI } from 'src/app/api/profile/route'
+import { AuthAPI } from 'src/api/profile'
 
 interface ICertificate {
   certificate: {

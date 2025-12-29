@@ -6,8 +6,8 @@ import Keycloak from 'keycloak-js'
 import { COOKIE_INFO } from '@lms/core'
 import { deleteCookie, getCookie, getSessionIdFromToken, setCookie } from '@lms/utils'
 import { PageLink } from 'src/constants/routers'
-import { EntranceTestAPI } from 'src/app/api/entrance-test/route'
-import { UserApi } from 'src/app/api/user/route'
+import { EntranceTestAPI } from 'src/api/entrance-test'
+import { UserApi } from 'src/api/user'
 
 const handleFirebaseToken = async () => {
   const accessDeviceToken = await AsyncStorage.getItem('firebaseDeviceToken')

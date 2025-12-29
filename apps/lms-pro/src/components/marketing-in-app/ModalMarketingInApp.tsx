@@ -6,8 +6,8 @@ import { ButtonPrimary } from '@lms/ui'
 import { ButtonText } from '@lms/ui'
 import { Dispatch, SetStateAction } from 'react'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { linkCdnMktInApp } from '@pages/lms-pro-new-version'
 import { motion, AnimatePresence } from 'framer-motion'
+import { linkCdnMktInApp } from 'src/constants'
 
 const SlickSlider = ReactSlick as unknown as ComponentType<Settings>
 const ModalMarketingInApp = ({

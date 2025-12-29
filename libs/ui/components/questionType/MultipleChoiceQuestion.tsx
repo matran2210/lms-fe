@@ -1,7 +1,7 @@
 "use client";
 import { MY_COURSES } from "@lms/core";
 import { getUppercaseByNumber, runHighlight } from "@lms/utils";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { EditorReader, HookFormCheckBoxGroup, SappDivider } from "../base";
 import { SappTitleSolution } from "../common";

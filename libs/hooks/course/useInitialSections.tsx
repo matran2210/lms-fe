@@ -1,3 +1,4 @@
+"use client"
 import { useFeature } from '@lms/contexts'
 import { DEFAULT_PAGE_SIZE, ICoursesAPI, ISection } from '@lms/core'
 import { isEmpty } from 'lodash'

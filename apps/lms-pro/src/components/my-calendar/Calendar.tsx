@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { useRouter } from 'next/router'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import { useQuery } from 'react-query'
 import { SAPPCalendar } from '@sapp-fe/sapp-common-package'
@@ -11,7 +11,7 @@ import {
   EVENT_TYPES_ARRAY,
   EVENT_TYPES_RESPONSE,
 } from '@lms/core'
-import { SchedulesAPI } from 'src/app/api/schedules/route'
+import { SchedulesAPI } from 'src/api/schedules'
 import CalendarHead from './CalendarHead'
 import { pick } from 'lodash'
 import { formatRecurringSchedule } from '@utils/request'
@@ -36,15 +36,17 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
   >('')
 
   const router = useRouter()
+  const searchParams = useSearchParams()
 
+  const query = Object.fromEntries(searchParams.entries())
   /**
    * @description config params khi filter
    */
   const params = {
-    start_date: router.query.startDate || undefined,
-    end_date: router.query.endDate || undefined,
-    event_name: router.query.eventName || undefined,
-    event_type: router.query.eventType || undefined,
+    start_date: query.startDate || undefined,
+    end_date: query.endDate || undefined,
+    event_name: query.eventName || undefined,
+    event_type: query.eventType || undefined,
   }
 
   /**
@@ -107,6 +109,9 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
     }
   }
 
+  const enabled =
+    Boolean(startTime) &&
+    Boolean(endTime)
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['schedules', startTime, endTime, eventName, eventType],
     queryFn: () => {
@@ -131,7 +136,7 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
 
       return fetchData({ params: finalParams })
     },
-    enabled: router.isReady,
+    enabled,
     refetchOnWindowFocus: true,
     retry: false,
   })

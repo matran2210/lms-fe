@@ -1,3 +1,4 @@
+"use client"
 import { Icon } from "@lms/assets";
 import { COOKIE_INFO, IDeviceItem, MY_COURSES } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
