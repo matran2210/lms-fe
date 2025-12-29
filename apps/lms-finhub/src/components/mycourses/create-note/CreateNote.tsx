@@ -4,12 +4,12 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
-import { CoursesAPI } from 'src/app/api/courses/route'
 import toast from 'react-hot-toast'
 import { closeNote, pushNotes, useAppDispatch } from '@lms/contexts'
 import { v4 as uuidv4 } from 'uuid'
 import { HookFormTextArea, MovableWindow } from '@lms/ui'
 import { useParams, useRouter } from 'next/navigation'
+import { CoursesAPI } from 'src/api/courses'
 
 interface IProps {
   id: string | undefined

@@ -14,8 +14,8 @@ import ActionDiscussion from './ActionDiscussion'
 import DiscussionElement from './DiscussionElement'
 import SendComment from './SendComment'
 import { useParams, useRouter } from 'next/navigation'
-import { ActivityAPI } from 'src/app/api/activity/route'
-import { CoursesAPI } from 'src/app/api/courses/route'
+import { ActivityAPI } from 'src/api/activity'
+import { CoursesAPI } from 'src/api/courses'
 
 type Props = {
   class_id: string

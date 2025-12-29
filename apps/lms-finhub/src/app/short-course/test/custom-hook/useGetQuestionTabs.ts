@@ -1,6 +1,5 @@
-import { CoursesAPI } from '@pages/api/courses'
-import { TestServiceAPI } from '@pages/api/test-api'
 import { useEffect, useState } from 'react'
+import { TestServiceAPI } from 'src/api/test-api'
 
 const useGetQuestionTabs = (id: string) => {
   const [questions, setQuestionTabs] = useState<any>(undefined)

@@ -3,7 +3,7 @@ import url from './url'
 import { IResponse, PinnedNotifications } from '@lms/core'
 import { fetchFormData } from '@services/requestV2'
 import { IDeviceItem } from '@lms/core'
-import { AuthAPI } from 'src/app/api/profile/route'
+import { AuthAPI } from 'src/api/profile'
 
 const UserApi = {
   /**
@@ -73,6 +73,9 @@ const UserApi = {
     // Sử dụng httpService để gửi yêu cầu GET
     return AuthAPI.getPinnedNotifications()
   },
+  removeDevice: (session_id: string): Promise<any> => {
+    return AuthAPI.removeDevice(session_id)
+  }
 }
 
 export default UserApi

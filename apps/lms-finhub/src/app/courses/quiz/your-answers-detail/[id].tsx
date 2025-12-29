@@ -1,10 +1,10 @@
-"use client"
+'use client'
 import TableQuestions from '@components/your-answers-detail/TableQuestions'
 import { EYourAnswerType, ITabs, TEST_TYPE_LABELS } from '@lms/core'
 import { FullScreenLayout, SappBreadCrumbs, SappLoading } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import { useParams, useRouter } from 'next/navigation'
-import { CoursesAPI } from 'src/app/api/courses/route'
+import { CoursesAPI } from 'src/api/courses'
 
 const TestResultDetail = () => {
   const router = useRouter()

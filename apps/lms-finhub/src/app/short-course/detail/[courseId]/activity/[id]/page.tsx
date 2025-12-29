@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import {
   ActivityBar,
   ActivityResource,
@@ -30,8 +30,7 @@ import {
   showPopupCompletedCourse,
   useAppDispatch,
   useAppSelector,
-  useCourseContext,
-  useFeature,
+  useCourseContext
 } from '@lms/contexts'
 import {
   ACTIVE_TABS,
@@ -45,11 +44,11 @@ import { CalculatorModal } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { trackGAEvent } from '@lms/utils'
 import Link from 'next/link'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
-import { CoursesAPI, getActivityById } from 'src/app/api/courses/route'
-import { UploadAPI } from 'src/app/api/upload/route'
+import { CoursesAPI, getActivityById } from 'src/api/courses'
+import { UploadAPI } from 'src/api/upload'
 import { PageLink } from 'src/constants/routes'
 
 interface VideoStateClicked {
@@ -213,11 +212,17 @@ export default function ActivityDetail() {
     }
   }
 
+const searchParams = useSearchParams()
+  const  pathname  = usePathname()
+
+const asPath =
+  pathname + (searchParams.toString() ? `?${searchParams}` : '')
+  
   // Clear notes & calculator
   useEffect(() => {
     dispatch(clearNote3Level())
     dispatch(closeCalculator3Level())
-  }, [dispatch, router.asPath])
+  }, [dispatch, asPath])
 
   const onVideoStart = (file_id: string, course_tab_document_id: string) => {
     setActiveVideo(file_id)
@@ -296,8 +301,6 @@ export default function ActivityDetail() {
       settingDoneProcessActivity(activity)
     }
   }, [activity])
-
-  const { pathname } = useFeature()
   
   useEffect(() => {
     // tương đương routeChangeComplete
@@ -510,7 +513,7 @@ export default function ActivityDetail() {
               >
                 <div className="mx-auto my-0 w-full px-4 pt-4 lg:px-6">
                   <div className="tab-content overflow-x-auto overflow-y-hidden">
-                    {course_tab_documents?.map((e, i) => {
+                    {course_tab_documents?.map((e: any, i: number) => {
                       const marginBottom =
                         i < course_tab_documents?.length - 1 ? 'mb-6' : ''
                       if (e.type === 'VIDEO') {

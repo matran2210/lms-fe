@@ -34,9 +34,9 @@ import { PageLink } from 'src/constants/routes'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import { useRouter } from 'next/navigation'
-import { TestServiceAPI } from 'src/app/api/test-api/route'
-import { CoursesAPI } from 'src/app/api/courses/route'
 import ConFirmSubmit from 'src/app/short-course/test/conFirmSubmit'
+import { TestServiceAPI } from 'src/api/test-api'
+import { CoursesAPI } from 'src/api/courses'
 
 type Props = {
   questions: IQuestion[]

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { trackGAEvent } from '@lms/utils'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 interface Tab {
   label: string
@@ -36,6 +36,12 @@ const NotifyTab: React.FC<TabsProps> = ({
     trackGAEvent('Click Button Tab Notification')
   }
 
+  const pathname = usePathname()
+const searchParams = useSearchParams()
+
+const asPath =
+  pathname + (searchParams.toString() ? `?${searchParams}` : '')
+
   return (
     <ul className={classUl}>
       {tabs.map((tab, index) => (
@@ -44,7 +50,7 @@ const NotifyTab: React.FC<TabsProps> = ({
             <a
               onClick={() => handleTabClick(index)}
               className={`${tabClass} ${
-                router.asPath.includes(tab.path) ||
+                asPath.includes(tab.path) ||
                 (activeTab == 0 && tab?.label == 'All')
                   ? `${tabCurrentClass}`
                   : `${tabNotCurrentClass}`
@@ -54,7 +60,7 @@ const NotifyTab: React.FC<TabsProps> = ({
               {tab?.total !== undefined && (
                 <span className="ml-1">{`(${tab?.total})`}</span>
               )}
-              {router.asPath.includes(tab.path) ||
+              {asPath.includes(tab.path) ||
               (activeTab == 0 && tab?.label == 'All') ? (
                 <span className={currentClass}></span>
               ) : (

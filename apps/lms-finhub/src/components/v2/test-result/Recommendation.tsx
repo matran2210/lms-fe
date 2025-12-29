@@ -4,7 +4,7 @@ import { ButtonPrimary, HookFormTextArea } from '@lms/ui'
 import { Dispatch, SetStateAction, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { ClassAPI } from 'src/app/api/class/route'
+import { ClassAPI } from 'src/api/class'
 import { z } from 'zod'
 interface IProps {
   classId: string

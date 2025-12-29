@@ -23,7 +23,7 @@ import { useParams, useRouter } from 'next/navigation'
 import React from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
-import { ResultAPI } from 'src/app/api/short-course/test-result/route'
+import { ResultAPI } from 'src/api/short-course/test-result'
 import { PageLink } from 'src/constants/routes'
 
 const commonHeaderClass = 'font-medium leading-6 text-gray py-2 pb-4 md:pb-6'

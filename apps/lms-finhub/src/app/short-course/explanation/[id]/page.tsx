@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { CloseIcon } from '@lms/assets'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { FullScreenLayout } from '@lms/ui'
@@ -11,9 +11,9 @@ import { UserType } from 'src/redux/types/User/urser'
 import { IQuestion, QUESTION_TYPES } from '@lms/core'
 import { IAtempt, IRequirement } from 'src/type/courses-3-level/test'
 import { PageLink } from 'src/constants/routes'
-import { CoursesAPI } from 'src/app/api/courses/route'
-import { TestServiceAPI } from 'src/app/api/test-api/route'
 import { useParams, useRouter } from 'next/navigation'
+import { CoursesAPI } from 'src/api/courses'
+import { TestServiceAPI } from 'src/api/test-api'
 
 const Explanation = () => {
   const router = useRouter()

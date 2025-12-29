@@ -11,7 +11,6 @@ import {
 import { ANIMATION, AppType, LOCAL_STORAGE_KEYS, SOCKET_EVENTS } from '@lms/core'
 import { RouteGuard } from '@lms/feature-auth'
 import { LearningNotesList, PopupCompletedCourse } from '@lms/feature-courses'
-import '@lms/styles'
 import {
     BackToTop,
     Help,
@@ -47,19 +46,19 @@ import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import UserApi from 'src/redux/services/User/user'
 import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
-import { ActivityAPI } from './api/activity/route'
-import { ClassAPI } from './api/class/route'
-import { CoursesAPI } from './api/courses/route'
-import { NotificationAPI } from './api/notification/route'
-import MyProfileAPI, { AuthAPI } from './api/profile/route'
-import { QuestionAPI } from './api/question/route'
-import { TestServiceAPI } from './api/test-api/route'
-import { UploadAPI } from './api/upload/route'
-import { uploadImageToLinkedIn } from './api/certificate'
+import { uploadImageToLinkedIn } from '../api/certificate'
 import { ConfigProvider } from 'antd'
 import { Provider } from 'react-redux'
 import { store } from "@lms/contexts";
 import Aos from 'aos'
+import { ActivityAPI } from 'src/api/activity'
+import { CoursesAPI } from 'src/api/courses'
+import { QuestionAPI } from 'src/api/question'
+import { UploadAPI } from 'src/api/upload'
+import { NotificationAPI } from 'src/api/notification'
+import MyProfileAPI, { AuthAPI } from 'src/api/profile'
+import { ClassAPI } from 'src/api/class'
+import { TestServiceAPI } from 'src/api/test-api'
 
 dayjs.extend(utc)
 dayjs.extend(weekday)
@@ -158,7 +157,7 @@ export function Providers({ children }: { children: ReactNode }) {
                         },
                         pathname: pathName,
                         params,
-                        query
+                        query:  Object.fromEntries(query.entries())
                     }}
                 >
                     <CourseProvider router={router}>

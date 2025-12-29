@@ -56,7 +56,6 @@ import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { ActivityAPI } from './api/activity/route'
 import CalendarApi from './api/calendar/route'
 import { uploadImageToLinkedIn } from './api/certificate/route'
-import { ClassAPI } from './api/class/route'
 import { CoursesAPI } from './api/courses/route'
 import { EntranceTestAPI } from './api/entrance-test/route'
 import { EventTestAPI } from './api/event-test/route'
@@ -65,6 +64,7 @@ import MyProfileAPI, { AuthAPI } from './api/profile/route'
 import { QuestionAPI } from './api/question/route'
 import { TestServiceAPI } from './api/test-api/route'
 import { UploadAPI } from './api/upload/route'
+import { ClassAPI } from './api/class/route'
 
 dayjs.extend(utc)
 dayjs.extend(weekday)

@@ -28,8 +28,8 @@ import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import ActionDiscussion from './ActionDiscussion'
 import ModalDeleteComment from './ModalDeleteComment'
 import SendComment from './SendComment'
-import { ActivityAPI } from 'src/app/api/activity/route'
-import { CoursesAPI } from 'src/app/api/courses/route'
+import { ActivityAPI } from 'src/api/activity'
+import { CoursesAPI } from 'src/api/courses'
 
 type Props = {
   rank?: number

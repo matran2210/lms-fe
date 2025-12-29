@@ -47,8 +47,8 @@ import {
   UseFormWatch,
 } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { CoursesAPI } from 'src/app/api/courses/route'
-import { TestServiceAPI } from 'src/app/api/test-api/route'
+import { CoursesAPI } from 'src/api/courses'
+import { TestServiceAPI } from 'src/api/test-api'
 
 import { v4 as uuidv4 } from 'uuid'
 

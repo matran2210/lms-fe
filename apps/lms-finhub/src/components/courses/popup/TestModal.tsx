@@ -19,8 +19,9 @@ import dayjs from 'dayjs'
 import { isNull } from 'lodash'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ClassAPI } from 'src/app/api/class/route'
-import { TestServiceAPI } from 'src/app/api/test-api/route'
+import { ClassAPI } from 'src/api/class'
+import { TestServiceAPI } from 'src/api/test-api'
+
 enum StatusQuizAttempt {
   Passed = 'PASSED',
   Failed = 'FAILED',
@@ -75,6 +76,7 @@ const TestModal = ({
   activeCourse,
   is_passed_course,
 }: IProps) => {
+  console.log('class_user_id',class_user_id)
   const router = useRouter()
   const isSubmitted =
     data?.quiz?.attempt && data?.quiz?.attempt?.status === 'SUBMITTED'
@@ -310,9 +312,10 @@ const TestModal = ({
   }, [selectedResult?.value, data?.quiz?.attempt])
 
   const handleStartANewAttempt = async () => {
+    if(!class_user_id) return
     try {
       activeCourse && (await activeCourse())
-      router.push(`?class_user_id=${class_user_id}`)
+      router.push(`/short-course/test/${data?.quiz?.id}?class_user_id=${class_user_id}`)
       status
         ? () => trackGAEvent('Click Button Retake Modal Test')
         : () => trackGAEvent('Click Button Start Modal Test')
@@ -649,11 +652,11 @@ const TestModal = ({
   const handleRedirectResult = () => {
     if (isManualGradingAndNotFinishedGrading) {
       router.push(
-        `?attempt=${selectedResult?.label}`
+        `/short-course/test/your-answers-detail?attempt=${selectedResult?.label}`
       )
     } else {
       router.push(
-        `?attempt=${selectedResult?.label}`
+        `/short-course/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`
       )
     }
   }
@@ -775,11 +778,11 @@ const TestModal = ({
                         onClick={() => {
                           if (isManualGradingAndNotFinishedGrading) {
                             router.push(
-                              `?attempt=${selectedResult?.label}`
+                              `/short-course/test/your-answers-detail?attempt=${selectedResult?.label}`
                             )
                           } else {
                             router.push(
-                              `?attempt=${selectedResult?.label}`
+                              `/short-course/test-result?attempt=${selectedResult?.label}?attempt=${selectedResult?.label}`
                             )
                           }
 

@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import Layout from '@components/layout'
 import { trackGAEvent } from '@lms/utils'
 import Aos from 'aos'
@@ -12,8 +12,8 @@ import NotifyTab from '@components/notification/NotifyTab'
 import NotifyList from '@components/notification/NotifyList'
 import NotifyDetail from '@components/notification/NotifyDetail'
 import SearchForm from '@components/courses/shared/SearchForm'
-import { NotificationAPI } from '../api/notification/route'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { NotificationAPI } from 'src/api/notification'
 
 const Notifications = () => {
   const [openModel, setOpenModel] = useState<boolean>(false)
@@ -43,7 +43,7 @@ const Notifications = () => {
   const coutNotificationsUnRead = async () => {
     try {
       await dispatch(getCountUnRead(NotificationAPI))
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const getApiNotificationDetail = async (
@@ -52,7 +52,7 @@ const Notifications = () => {
     content: string,
   ) => {
     try {
-      const res = await dispatch(getNotificationDetail({  api: NotificationAPI, id }))
+      const res = await dispatch(getNotificationDetail({ api: NotificationAPI, id }))
       if (res) {
         await coutNotificationsUnRead()
         dispatch(updateStatus({ id: id }))
@@ -61,7 +61,7 @@ const Notifications = () => {
           router.replace(`${content?.replace('class_id', 'classId')}`)
         }
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const markAllRead = async () => {
@@ -70,7 +70,7 @@ const Notifications = () => {
       dispatch(updateStatusAll())
       await coutNotificationsUnRead()
       Aos.refresh()
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const handleMarkAll = () => {
@@ -81,6 +81,10 @@ const Notifications = () => {
 
   const DEFAULT_PAGESIZE = 10
   const [page, setPage] = useState(DEFAULT_PAGESIZE)
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  const asPath = pathname + (searchParams.toString() ? `?${searchParams}` : '')
 
   useEffect(() => {
     let isFetching = false
@@ -96,12 +100,14 @@ const Notifications = () => {
       }
     }
 
+
+
     const handleScroll = () => {
       if (
         !isFetching &&
         isEndPage &&
         window.innerHeight + document.documentElement.scrollTop >=
-          document.documentElement.offsetHeight - 10
+        document.documentElement.offsetHeight - 10
       ) {
         isFetching = true
         const pageIndex = pagination?.page_index
@@ -109,7 +115,7 @@ const Notifications = () => {
         loadMore({
           page_index: pageIndex + 1,
           page_size: pageSize,
-          ...(router.asPath.includes('unread') && {
+          ...(asPath.includes('unread') && {
             is_read: false,
           }),
         })
@@ -123,14 +129,14 @@ const Notifications = () => {
     const getNotifications = async (params: Object) => {
       try {
         await dispatch(getCountUnRead(NotificationAPI))
-        await dispatch(getNotification({  api: NotificationAPI, params }))
-      } catch (error) {}
+        await dispatch(getNotification({ api: NotificationAPI, params }))
+      } catch (error) { }
     }
 
     getNotifications({
       page_index: 1,
       page_size: 10,
-      ...(router.asPath.includes('unread') && {
+      ...(asPath.includes('unread') && {
         is_read: false,
       }),
     })

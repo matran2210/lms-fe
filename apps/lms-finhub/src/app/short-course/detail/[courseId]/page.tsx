@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import {
   AlertInfoIcon,
   ChapterIcon,
@@ -35,8 +35,8 @@ import { PopupLockContent } from '@lms/feature-courses'
 import { LearningResource } from '@lms/ui'
 // import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import PromotionalBanner from '@lms/ui/components/banner/PromotionalBanner'
-import { CoursesAPI } from 'src/app/api/courses/route'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { CoursesAPI } from 'src/api/courses'
 
 const CourseDetail = () => {
   const dispatch = useAppDispatch()
@@ -277,6 +277,11 @@ const CourseDetail = () => {
     if (id) setChapterId(id)
   }
 
+  const pathname = usePathname()
+const searchParams = useSearchParams()
+const asPath =
+  pathname + (searchParams.toString() ? `?${searchParams}` : '')
+
   useEffect(() => {
     if (
       partDetail?.class_user_id &&
@@ -310,7 +315,7 @@ const CourseDetail = () => {
         !courseChapterId && setDefaultActive(filteredChildren[0].id) // Set default to the first child
       }
     }
-  }, [router?.asPath, partDetail?.class_user_id])
+  }, [asPath, partDetail?.class_user_id])
 
   const handleGoBack = () => {
     router.push(PageLink.SHORT_COURSE)
@@ -339,7 +344,7 @@ const CourseDetail = () => {
 
     return []
   }, [partDetail, chapterDetail])
-
+console.log('previewPart', previewPart)
   return (
     <Layout
       showSidebar={showSidebar || isAlwaysShowSidebar}

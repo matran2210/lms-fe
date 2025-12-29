@@ -1,9 +1,9 @@
 import { formatTime } from '@components/common/timer'
 import { SelectArrow } from '@components/courses/icons'
 import { formatNumber } from '@lms/utils'
-import { ClassAPI } from '@pages/api/class'
 import { Select } from 'antd'
 import { useEffect, useState } from 'react'
+import { ClassAPI } from 'src/api/class'
 import { IAttempt, ICourseAttemptProps } from 'src/type/courses-3-level'
 
 export default function SectionAttempts({

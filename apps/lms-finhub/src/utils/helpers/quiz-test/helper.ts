@@ -1,10 +1,7 @@
-import { TestAPI } from '@pages/api/test'
+import { QUESTION_TYPES, Sheet, TEST_TYPE } from '@lms/core'
 import dayjs from 'dayjs'
 import { FieldValues, UseFormGetValues } from 'react-hook-form'
-import { QUESTION_TYPES, TEST_TYPE } from '@lms/core'
-import { Sheet } from '@lms/core'
-import crypto from 'crypto'
-import { TestServiceAPI } from '@pages/api/test-api'
+import { TestServiceAPI } from 'src/api/test-api'
 
 export const getResult = async (currentTabContent: any) => {
   const res = await TestServiceAPI.getQuestionAnswer(currentTabContent.id)

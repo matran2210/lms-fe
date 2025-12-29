@@ -5,13 +5,13 @@ import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { CoursesAPI } from 'src/app/api/courses/route'
 import { useAppDispatch } from 'src/redux/hook'
 import { IProps, NoteFormData } from 'src/type/courses-3-level'
 import { z } from 'zod'
 import CreateNoteDesktop from './CreateNoteDesktop'
 import CreateNoteMobile from './CreateNoteMobile'
 import { useParams, useRouter } from 'next/navigation'
+import { CoursesAPI } from 'src/api/courses'
 
 const CreateNote = ({
   id,

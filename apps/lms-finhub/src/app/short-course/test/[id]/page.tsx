@@ -17,6 +17,7 @@ import {
   useAppDispatch,
   useAppSelector,
   useCourseContext,
+  useFeature,
 } from '@lms/contexts'
 import {
   Answer,
@@ -38,8 +39,8 @@ import { runHighlight, trackGAEvent } from '@lms/utils'
 import { cloneDeep, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import ConFirmSubmit from './conFirmSubmit'
-import LimitQuizModal from './limitQuizModal'
+import ConFirmSubmit from '../conFirmSubmit'
+import LimitQuizModal from '../limitQuizModal'
 import styles from './test.module.scss'
 
 import { CalculatorIcon, DownloadIcon, ScratchPadIcon } from '@assets/icons'
@@ -79,12 +80,12 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { PageLink } from 'src/constants/routes'
 import { checkTypeAndRenderTitle } from 'src/utils/helpers/quiz-test/helper'
-import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
-import TestScratchPads from './TestScratchPads'
-import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
-import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import { TestServiceAPI } from 'src/app/api/test-api/route'
+import SuccessSubmittedConstructorModal from '../SuccessSubmittedConstructorModal'
+import TestScratchPads from '../TestScratchPads'
+import useGetQuestionTabs from '../custom-hook/useGetQuestionTabs'
+import useGetQuizDetail from '../custom-hook/useGetQuizDetail'
 import { useParams, useRouter } from 'next/navigation'
+import { TestServiceAPI } from 'src/api/test-api'
 
 declare global {
   interface Window {
@@ -1017,7 +1018,7 @@ const TestDetail = () => {
           questions[questions.findIndex((e: any) => e.id === currentPage)]
             ?.question_topic_id,
           quizDetail?.id,
-          router?.query?.class_user_id as string,
+          params?.class_user_id as string,
         )
         question = await TestServiceAPI.getQuestionDetail(currentPage)
       }
@@ -1590,7 +1591,7 @@ const TestDetail = () => {
       })
     }
   }, [watchExhibits('exhibits')])
-
+console.log('params', params)
   useEffect(() => {
     if (quizAttempt?.id) {
       const fetchAnswersSubmitted = async () => {
@@ -1650,31 +1651,32 @@ const TestDetail = () => {
     }
   }, [params.id])
 
-  useEffect(() => {
-    if (!isQuizAttemptCreated) return
+  //todo: next14
+  // useEffect(() => {
+  //   if (!isQuizAttemptCreated) return
 
-    const handleWindowClose = (e: any) => {
-      if (!unsavedChange) return
-      e.preventDefault()
-      return (e.returnValue = warningText)
-    }
+  //   const handleWindowClose = (e: any) => {
+  //     if (!unsavedChange) return
+  //     e.preventDefault()
+  //     return (e.returnValue = warningText)
+  //   }
 
-    const handleBrowseAway = () => {
-      if (unsavedChange === true && routeBack === false) {
-        if (!unsavedChange) return
-        if (window.confirm(warningText)) return
-        router.events.emit('routeChangeError')
-        throw 'routeChange aborted.'
-      }
-    }
+  //   const handleBrowseAway = () => {
+  //     if (unsavedChange === true && routeBack === false) {
+  //       if (!unsavedChange) return
+  //       if (window.confirm(warningText)) return
+  //       router.events.emit('routeChangeError')
+  //       throw 'routeChange aborted.'
+  //     }
+  //   }
 
-    window.addEventListener('beforeunload', handleWindowClose)
-    router.events.on('routeChangeStart', handleBrowseAway)
-    return () => {
-      window.removeEventListener('beforeunload', handleWindowClose)
-      router.events.off('routeChangeStart', handleBrowseAway)
-    }
-  }, [unsavedChange, isQuizAttemptCreated])
+  //   window.addEventListener('beforeunload', handleWindowClose)
+  //   router.events.on('routeChangeStart', handleBrowseAway)
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleWindowClose)
+  //     router.events.off('routeChangeStart', handleBrowseAway)
+  //   }
+  // }, [unsavedChange, isQuizAttemptCreated])
 
   useEffect(() => {
     if (startResize) {

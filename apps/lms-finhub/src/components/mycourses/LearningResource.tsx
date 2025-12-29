@@ -26,8 +26,8 @@ import {
   useState,
 } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { CoursesAPI } from 'src/app/api/courses/route'
-import { UploadAPI } from 'src/app/api/upload/route'
+import { CoursesAPI } from 'src/api/courses'
+import { UploadAPI } from 'src/api/upload'
 import NoDataV2 from 'src/components/common/NodataV2'
 import Tooltip from 'src/components/common/Tooltip'
 interface IProps {

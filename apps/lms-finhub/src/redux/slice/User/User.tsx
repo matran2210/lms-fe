@@ -9,7 +9,7 @@ import {
   UserState,
   ITemplateConfig,
 } from 'src/redux/types/User/urser'
-import { AuthAPI } from '../../../pages/api/profile/index'
+import { AuthAPI } from 'src/api/profile'
 
 const initialState: UserState = {
   loading: false,

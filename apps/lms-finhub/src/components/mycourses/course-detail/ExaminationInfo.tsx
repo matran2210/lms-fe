@@ -21,8 +21,8 @@ import { useTailwindBreakpoint } from '@lms/hooks'
 import { getDuration } from '@lms/utils'
 import { SappDrawerV3 } from '@lms/ui'
 import { useParams, useRouter } from 'next/navigation'
-import { ClassKey } from 'src/app/api/queryKey'
-import { ClassAPI } from 'src/app/api/class/route'
+import { ClassKey } from 'src/api/queryKey'
+import { ClassAPI } from 'src/api/class'
 
 type Props = {
   open: boolean

@@ -29,7 +29,7 @@ import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
 import { PageLink } from 'src/constants/routes'
 import { useParams, useRouter } from 'next/navigation'
-import { CoursesAPI } from 'src/app/api/courses/route'
+import { CoursesAPI } from 'src/api/courses'
 
 const commonHeaderClass = 'text-left p-0 text-base font-medium text-gray'
 
@@ -235,7 +235,7 @@ const TableQuestions = ({
           </span>
         </div>
         {params?.attempt && (
-          <div className="mb-6 text-base text-[#A1A1A1]">{`attempt: ${router?.query?.attempt}`}</div>
+          <div className="mb-6 text-base text-[#A1A1A1]">{`attempt: ${params?.attempt}`}</div>
         )}
       </div>
       <div

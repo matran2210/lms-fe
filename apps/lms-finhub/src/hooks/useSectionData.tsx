@@ -1,7 +1,7 @@
 import { ISection } from '@lms/core'
 import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { CoursesAPI } from 'src/app/api/courses/route'
+import { CoursesAPI } from 'src/api/courses'
 
 export const useSectionData = (sectionId: string | null, type: string) => {
   const [sections, setSections] = useState<ISection[]>([])
