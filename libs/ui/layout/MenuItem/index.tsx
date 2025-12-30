@@ -494,7 +494,7 @@ export default function MenuItem({
           <div
             className={clsx(
               `label avatar invisible pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
-                selected ? "bg-primary text-white" : "text-gray-800"
+                selected ? "text-white" : "text-gray-800"
               }`,
               {
                 "group-hover:text-gray-800": !selected,
