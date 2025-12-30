@@ -108,10 +108,10 @@ const Explanation = () => {
   }
 
   useEffect(() => {
-    if (params.id) {
+    if (params?.id) {
       getActiveQuestion(params.id as string)
     }
-  }, [params.id])
+  }, [params?.id])
 
   const handleDownload = async (data: {
     files: { name: string; file_key: string }[]

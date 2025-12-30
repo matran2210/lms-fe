@@ -16,17 +16,17 @@ import '@sapp-fe/sapp-notification/dist/index.css'
 //     title: 'LMS Pro',
 //     description: 'LMS Pro App',
 // }
+export const revalidate = 0
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-    return (
-        <ErrorBoundary fallback={<ErrorRedirectPage />}>
-        <html lang="vi">
-            <Metadata />
-            <body>
-                <Providers>
-                    {children}
-                </Providers>
-            </body>
-        </html></ErrorBoundary>
-    )
+  return (
+    <ErrorBoundary fallback={<ErrorRedirectPage />}>
+      <html lang="vi">
+        <Metadata />
+        <body>
+          <Providers>{children}</Providers>
+        </body>
+      </html>
+    </ErrorBoundary>
+  )
 }
