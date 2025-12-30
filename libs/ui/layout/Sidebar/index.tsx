@@ -1,13 +1,12 @@
 "use client";
-import { ExpandIcon, TourGuideNotiAnimation, TourGuideSidebarAnimation } from "@lms/assets";
+import { ExpandIcon } from "@lms/assets";
 import { useAppSelector, useFeature } from "@lms/contexts";
-import { UserGuide } from "@lms/core";
 import { trackGAEvent } from "@lms/utils";
 import { Divider } from "antd";
 import clsx from "clsx";
 import { Dispatch, SetStateAction } from "react";
+import { ExaminationInfo, LearningResource } from "../../components";
 import MenuItemsList from "../MenuItemsList";
-import { ExaminationInfo, LearningResource, PopupStep } from "../../components";
 type SidebarProps = {
   isOpened: boolean;
   className: string;
@@ -27,13 +26,8 @@ export default function Sidebar({
   openExaminationInfo,
   setOpenExaminationInfo,
 }: SidebarProps) {
-  const {
-    pageLink,
-    menuItems,
-    menuItemsEvent,
-    menuBottom,
-    router,
-  } = useFeature();
+  const { pageLink, menuItems, menuItemsEvent, menuBottom, router } =
+    useFeature();
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status);
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step);
   /**
@@ -53,7 +47,15 @@ export default function Sidebar({
     router.pathname === pageLink.EXAM_LIST;
   const isGuideActive = guideStatus && (guideStep === 2 || guideStep === 3);
   return (
-    <div className="group">
+    <div className="group relative">
+      {/* Thẻ div để hiển thị đúng vị trí modal guide */}
+      {guideStatus && guideStep === 2 && (
+        <div
+          data-guide-id="sidebar"
+          className="pointer-events-none absolute left-0 top-4 h-fit w-[126px]"
+        />
+      )}
+
       <div
         className={clsx(
           className,
@@ -63,8 +65,8 @@ export default function Sidebar({
         )}
       >
         <div
-          className={`max-h-[calc(100vh-145px) relative rounded-xl pb-6 pt-[25PX] ${
-            guideStatus && guideStep == 2
+          className={`max-h-[calc(100vh-145px)] relative rounded-xl pb-6 pt-[25px] ${
+            guideStatus && guideStep === 2
               ? "z-50 bg-white"
               : "overflow-y-auto overflow-x-hidden"
           }`}
@@ -85,10 +87,10 @@ export default function Sidebar({
                   "lg:group-hover:left-0 lg:group-hover:translate-x-0",
                   // Active when guideStep is 2 or 3
                   (guideStep === 2 || guideStep === 3) &&
-                    "lg:left-0 lg:translate-x-0",
+                    "lg:!left-0 lg:!translate-x-0",
                 )}
               />
-              <ExpandIcon type={"logo-full"} />
+              <ExpandIcon type="logo-full" />
             </div>
           </div>
           {/* Divider */}
@@ -105,20 +107,10 @@ export default function Sidebar({
             closeSideBar={closeSideBar}
             setOpenExaminationInfo={setOpenExaminationInfo}
           />
-          {guideStatus && guideStep == 2 && (
-            <PopupStep
-              title="Sidebar"
-              content={UserGuide.CONTENT_STEP_2}
-              className="left-full top-[41%] sm:top-1/2 ml-5"
-              index={2}
-              total={6}
-              imgSrc={TourGuideSidebarAnimation}
-            />
-          )}
         </div>
         <div
           className={`absolute bottom-0 w-full rounded-xl bg-white pb-6
-          ${guideStatus && guideStep == 3 ? "z-50" : ""}`}
+        ${guideStatus && guideStep === 3 ? "z-50" : ""}`}
         >
           {isLevel1 && (
             <div className="mx-auto w-[calc(100%-48px)] bg-[#DCDDDD] text-center">
@@ -131,21 +123,9 @@ export default function Sidebar({
             closeSideBar={closeSideBar}
             setOpenExaminationInfo={setOpenExaminationInfo}
           />
-          {guideStatus && guideStep == 3 && (
-            <PopupStep
-              content={UserGuide.CONTENT_STEP_3}
-              className="sm:bottom-0 bottom-[122%] left-full ml-5"
-              title="Notification & Profile"
-              imgSrc={TourGuideNotiAnimation}
-              index={3}
-              total={6}
-            />
-          )}
         </div>
         {guideStatus && (guideStep === 2 || guideStep === 3) && (
-          <div
-            className={`absolute inset-0 z-40 animate-fade-in-overlay rounded-xl bg-black opacity-[.55] transition-opacity`}
-          />
+          <div className="absolute inset-0 z-40 animate-fade-in-overlay rounded-xl bg-black opacity-[.55]" />
         )}
       </div>
       <div
@@ -155,13 +135,20 @@ export default function Sidebar({
             isOpened
               ? "pointer-events-auto opacity-100 peer-hover:pointer-events-auto peer-hover:opacity-100 lg:pointer-events-none lg:opacity-0"
               : "pointer-events-none opacity-0 peer-hover:pointer-events-auto peer-hover:opacity-100"
-          } fixed bottom-0 left-0 right-0 top-0 z-20 h-full w-full cursor-pointer bg-[#00000080] transition-opacity duration-300 ease-in-out`,
+          } fixed inset-0 z-20 cursor-pointer bg-[#00000080] transition-opacity`,
           {
             "!pointer-events-none !opacity-0":
               guideStatus && (guideStep === 2 || guideStep === 3),
           },
         )}
       />
+      {/* Thẻ div để hiển thị đúng vị trí modal guide */}
+      {guideStatus && guideStep === 3 && (
+        <div
+          data-guide-id="notification-profile"
+          className="pointer-events-none absolute left-0 bottom-4 h-[438px] w-[126px]"
+        />
+      )}
       <LearningResource open={openResource} setOpenResource={setOpenResource} />
       <ExaminationInfo
         open={openExaminationInfo}

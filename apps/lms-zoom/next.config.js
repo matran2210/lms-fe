@@ -1,12 +1,11 @@
-import withBundleAnalyzer from '@next/bundle-analyzer'
-import removeImports from 'next-remove-imports'
-import path from 'path'
+/** @type {import('next').NextConfig} */
+const path = require('path')
 
-const bundleAnalyzer = withBundleAnalyzer({
+const bundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
-const removeImportsPlugin = removeImports({
+const removeImportsPlugin = require('next-remove-imports')({
   test: /node_modules([\s\S]*?)\.(tsx|ts|js|mjs|jsx)$/,
   matchImports: '\\.(less|css|scss|sass|styl)$',
 })
@@ -56,3 +55,5 @@ nextConfig = removeImportsPlugin(nextConfig)
 //   automaticVercelMonitors: true,
 //   telemetry: false,
 // })
+
+module.exports = nextConfig
