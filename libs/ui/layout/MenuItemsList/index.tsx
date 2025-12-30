@@ -18,7 +18,7 @@ export default function MenuItemsList({
 }: MenuItemsListProps) {
 
   return (
-    <div className="menu-items-list flex flex-col gap-4 px-3">
+    <div className="menu-items-list flex flex-col short:gap-1 gap-4 px-3">
       {options?.map((option, index) => (
         <MenuItem
           menuItem={option}
