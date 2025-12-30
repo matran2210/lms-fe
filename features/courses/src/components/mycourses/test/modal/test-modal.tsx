@@ -313,12 +313,7 @@ const TestModal = ({
     //to do: start test
     try {
       activeCourse && (await activeCourse());
-      router.push({
-        pathname: `/test/${data.quiz.id}`,
-        query: {
-          class_user_id: class_user_id,
-        },
-      });
+      router.push(`/test/${data.quiz.id}?class_user_id=${class_user_id}`);
       status
         ? () => trackGAEvent("Click Button Retake Modal Test")
         : () => trackGAEvent("Click Button Start Modal Test");
@@ -657,10 +652,7 @@ const TestModal = ({
         `/courses/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
       );
     } else {
-      router.push({
-        pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
-        query: { attempt: selectedResult?.label },
-      });
+      router.push(`/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}?attempt=${selectedResult?.label}`);
     }
   };
 
@@ -797,10 +789,7 @@ const TestModal = ({
                                 `/courses/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
                               );
                             } else {
-                              router.push({
-                                pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
-                                query: { attempt: selectedResult?.label },
-                              });
+                              router.push(`/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}?attempt=${selectedResult?.label}`);
                             }
 
                             trackGAEvent("Click Button View Modal Result");
