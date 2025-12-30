@@ -13,7 +13,7 @@ interface ISelectExamPopup {
 }
 
 const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
-  const {router, classApi} = useFeature()
+  const {router, classApi, params} = useFeature()
   const { control, watch } = useForm({ defaultValues: { exam_date: null } })
   const selectedExam = watch('exam_date')
   const [examModal, setExamModal] = useState(false)
@@ -25,14 +25,14 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
     api: {
       getExams: classApi.getExams,
     },
-    courseId: router.query.courseId as string
+    courseId: params?.courseId as string
   }
     
   )
 
   const { mutate: updateExamDate, isLoading } = useMutation({
     mutationFn: (formData: FormData) =>
-      classApi.changeExamDate(router.query.courseId as string, formData),
+      classApi.changeExamDate(params?.courseId as string, formData),
     onSuccess: (res: any) => {
       if (res.data.success) {
         setExamModal(false)

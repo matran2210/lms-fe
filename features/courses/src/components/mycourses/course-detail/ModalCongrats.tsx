@@ -18,7 +18,7 @@ const ModalCongrats = ({ name, course_type, quiz }: IProps) => {
   /**
    * @description lấy giá trị của router
    */
-  const {router} = useFeature()
+  const {router, params} = useFeature()
 
   /**
    * @description lấy state trong context  
@@ -73,7 +73,7 @@ const ModalCongrats = ({ name, course_type, quiz }: IProps) => {
           `${
             passFoundation
               ? `/courses/test/test-result/${quiz?.attempt?.id}`
-              : `/courses/my-course/${router.query.courseId}`
+              : `/courses/my-course/${params?.courseId}`
           }`,
         )
         handleClosePopup()

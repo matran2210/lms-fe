@@ -23,7 +23,7 @@ const Part = ({
   lastElementRef: (node: HTMLDivElement) => void;
   isTeacher?: boolean;
 }) => {
-  const {pageLink, router} = useFeature()
+  const {pageLink, router, params} = useFeature()
   const total = course?.learning_progress?.total_course_sections ?? 0;
   const completed =
     course?.learning_progress?.total_course_sections_completed ?? 0;
@@ -37,7 +37,7 @@ const Part = ({
       deadline,
     });
     router.push(
-      `${getUserPrefix(isTeacher, pageLink)}/courses/${router.query.courseId}/section/${id}?${searchParams}`,
+      `${getUserPrefix(isTeacher, pageLink)}/courses/${params?.courseId}/section/${id}?${searchParams}`,
     );
   };
 

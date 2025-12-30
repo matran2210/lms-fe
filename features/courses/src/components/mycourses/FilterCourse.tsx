@@ -9,6 +9,7 @@ import { Button, Divider } from 'antd'
 import clsx from 'clsx'
 import { ButtonPrimary } from '@lms/ui'
 import { useFeature } from '@lms/contexts'
+import { buildQueryString } from '@lms/utils'
 
 interface IFilters {
   [name: string]: React.Key | null | undefined
@@ -25,7 +26,7 @@ const FilterCourse = ({
   }[]
 }) => {
   const { control, setValue, getValues, reset } = useForm()
-  const {router} = useFeature()
+  const {router, pathname} = useFeature()
   const { isMobileView } = useTailwindBreakpoint()
   const [openMobileFilter, setOpenMobileFilter] = useState(false)
   const [filters, setFilters] = useState<IFilters>()
@@ -67,14 +68,7 @@ const FilterCourse = ({
       }
     })
 
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: currentQuery,
-      },
-      undefined,
-      { shallow: true },
-    )
+    router.replace(`${pathname}?${buildQueryString(currentQuery)}`)
   }, [filterValues])
 
   return (

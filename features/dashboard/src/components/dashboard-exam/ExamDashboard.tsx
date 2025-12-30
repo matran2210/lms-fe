@@ -5,7 +5,6 @@ import TopicProgress from "./TopicProgress";
 
 const ExamDashboard = ({
   topicProgressData,
-  mockTestResultsData,
 }: {
   topicProgressData: ITopicProgress[] | null;
   mockTestResultsData: IMockTestResult | null;

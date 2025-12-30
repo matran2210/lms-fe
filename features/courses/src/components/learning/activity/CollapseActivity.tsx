@@ -14,7 +14,7 @@ interface CollapseActivityProps {
 }
 
 const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
-  const { courseApi, router } = useFeature();
+  const { courseApi, router, params } = useFeature();
   const [activeKey, setActiveKey] = useState<string | string[]>([]);
   const [hasDataLoaded, setHasDataLoaded] = useState(false);
   const [open, setOpen] = useState<{ status: boolean; data: QuizActivity | null }>({
@@ -80,7 +80,7 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
   const handleViewActivity = (record: QuizActivity) => {
     if (!record?.id) return;
 
-    const courseId = router.query.courseId as string;
+    const courseId = params?.courseId as string;
     const quiz = record;
     const attempt = quiz?.attempts?.[0];
     // Logic điều hướng theo yêu cầu:
@@ -179,16 +179,16 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
   } = useSappPaging({
     uniqueKey: `course-results-${resultData?.id}`, // Unique key cho mỗi section
     queryFn: () => {
-      return courseApi?.getCourseResults!(router.query.courseId as string, {
-        class_id: router.query.classId as string,
+      return courseApi?.getCourseResults!(params?.courseId as string, {
+        class_id: params?.classId as string,
         section_id: resultData?.id,
         page_index: pagination.current,
         page_size: pagination.pageSize,
       });
     },
     params: {
-      courseId: router.query.courseId,
-      classId: router.query.classId,
+      courseId: params?.courseId,
+      classId: params?.classId,
       sectionId: resultData?.id,
     },
     enabled: hasDataLoaded, // Chỉ gọi API khi collapse được mở

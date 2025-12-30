@@ -30,7 +30,7 @@ export default function TeacherMenu({
   isCourseDetail: boolean;
   isActivity: boolean;
 }) {
-  const { authManager, pageLink, router } = useFeature();
+  const { authManager, pageLink, router, params, query } = useFeature();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(userReducer);
 
@@ -72,6 +72,8 @@ export default function TeacherMenu({
 
   const getMenuItems = useCallback(() => {
     if (isCourseDetail || isActivity) {
+      const courseId = params?.id || params?.courseId;
+      const id = query.id || query.courseId;
       const baseItems = [
         {
           key: TitleSidebar.COURSE_CONTENT,
@@ -81,7 +83,7 @@ export default function TeacherMenu({
               selected={selectedKey === TitleSidebar.COURSE_CONTENT}
             />
           ),
-          link: `${pageLink.TEACHER_MY_COURSE}/my-course/${router.query.id || router.query.courseId}`,
+          link: `${pageLink.TEACHER_MY_COURSE}/my-course/${id || courseId}`,
           active:
             isCurrent(`${pageLink.TEACHERS}${pageLink.COURSE_DETAIL}`) &&
             selectedKey !== TitleSidebar.NOTES_LIST,
@@ -112,9 +114,9 @@ export default function TeacherMenu({
               selected={selectedKey === TitleSidebar.RESULTS}
             />
           ),
-          link: `${pageLink.TEACHER_MY_COURSE}/my-course/${router.query.id || router.query.courseId}/results`,
+          link: `${pageLink.TEACHER_MY_COURSE}/my-course/${id || courseId}/results`,
           active: isCurrent(
-            `${pageLink.TEACHER_MY_COURSE}/my-course/${router.query?.id ? "[id]" : "[courseId]"}/results`,
+            `${pageLink.TEACHER_MY_COURSE}/my-course/${id ? "[id]" : "[courseId]"}/results`,
           ),
         },
       ];

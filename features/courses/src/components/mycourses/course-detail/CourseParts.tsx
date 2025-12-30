@@ -27,7 +27,7 @@ const CourseParts = ({
   isTeacher?: boolean
   hasCertificate?: boolean
 }) => {
-  const {router} = useFeature()
+  const {query} = useFeature()
   const cardRefs = useRef<any>([]) // Để lưu ref của các thẻ card
   const handleLock = (coursePart: IMyCourseDetail) => {
     return !!(
@@ -38,20 +38,20 @@ const CourseParts = ({
 
   // Scroll đến phần tử có id khớp với router.query.type
   useEffect(() => {
-    const courseId = router.query.focus_id as string // Chuyển đổi giá trị query thành số (giả sử id là số)
+    const courseId = query.focus_id as string // Chuyển đổi giá trị query thành số (giả sử id là số)
     const selectedCard = cardRefs.current[courseId]
     if (selectedCard) {
       selectedCard.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
-  }, [router?.query?.focus_id])
+  }, [query?.focus_id])
 
   const renderContent = () => {
-    const focusSectionIds = router?.query?.focusSectionIds as string | undefined
-    const focusSubSectionIds = router?.query?.focusSubSectionIds as
+    const focusSectionIds = query?.focusSectionIds as string | undefined
+    const focusSubSectionIds = query?.focusSubSectionIds as
       | string
       | undefined
-    const focusUnitIds = router?.query?.focusUnitIds as string | undefined
-    const deadline = router?.query?.deadline as string | undefined
+    const focusUnitIds = query?.focusUnitIds as string | undefined
+    const deadline = query?.deadline as string | undefined
     const listFocusSectionIds = focusSectionIds?.split(',') || []
     const isOverdue = dayjs(deadline).isBefore(new Date())
     if (isEmpty(courses)) {
@@ -73,7 +73,7 @@ const CourseParts = ({
                 key={coursePart?.id}
                 ref={(el) => (cardRefs.current[coursePart.id] = el)}
               >
-                {router?.query?.focus_id === coursePart.id ? (
+                {query?.focus_id === coursePart.id ? (
                   <>
                     {' '}
                     {[
