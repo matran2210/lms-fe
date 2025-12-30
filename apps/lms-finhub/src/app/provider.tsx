@@ -17,12 +17,6 @@ import {
     PinnedNotifications,
     SappConfirmDialogContainer
 } from '@lms/ui'
-import '@sapp-fe/entrance-test-result-package/dist/index.css'
-import '@sapp-fe/preview-part/dist/index.css'
-import '@sapp-fe/quiz-result-package/dist/index.css'
-import '@sapp-fe/sapp-common-package/dist/index.css'
-import '@sapp-fe/sapp-common-package/dist/sapp-editor.css'
-import '@sapp-fe/sapp-notification/dist/index.css'
 import { fetcher } from '@services/requestV2'
 import '@xyflow/react/dist/style.css'
 import 'aos/dist/aos.css'
