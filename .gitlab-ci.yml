@@ -66,11 +66,17 @@ variables:
   extends: .prepare
   image: docker:latest
   script:
-    - cp $TEST_ENV_PRODUCT_FILE apps/$APP_NAME/.env
-    - cp $TEST_ENV_PRODUCT_FILE .env
+    - cp $ENV_FILE apps/$APP_NAME/.env
+    - cp $ENV_FILE .env
     - source .env
+
     - docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD
-    - docker build --build-arg APP_NAME=$APP_NAME -t $IMAGE_NAME:$IMAGE_TAG -f prod.Dockerfile .
+    - |
+      docker build \
+        --build-arg APP_NAME=$APP_NAME \
+        -f $DOCKERFILE \
+        -t $IMAGE_NAME:$IMAGE_TAG .
+
     - docker push $IMAGE_NAME:$IMAGE_TAG
     - echo "$IMAGE_NAME:$IMAGE_TAG build success"
   tags:
@@ -78,36 +84,36 @@ variables:
   environment: production
   resource_group: lms-fe
 
-# Build LMS-PRO
+# Build lms-pro
 build_lms_pro:
   extends: .build_template
   variables:
     APP_NAME: lms-pro
     IMAGE_TAG: lms-pro-$CI_PIPELINE_IID
-  # only:
-  #   # variables:
-  #   #   - $CI_COMMIT_MESSAGE =~ /build/
-  #   refs:
-  #     - master-test-build
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-      changes:
-        - apps/lms-pro/**/*
-        - libs/**/*
-        - features/**/*
-        - tools/**/*
-        - scripts/**/*
-        - package.json
-        - pnpm-lock.yaml
-        - pnpm-workspace.yaml
-        - turbo.json
-        - tsconfig.json
-        - .babelrc
-        - .npmrc
-        - .dockerignore
-        - Dockerfile
-
-# Deploy LMS-PRO
+    DOCKERFILE: prod.Dockerfile
+    ENV_FILE: $ENV_PROD_LMS_FILE
+  only:
+    # variables:
+    #   - $CI_COMMIT_MESSAGE =~ /build/
+    refs:
+      - master
+  # rules:
+  #   - if: '$CI_COMMIT_BRANCH == "master"'
+  #     changes:
+  #       - apps/lms-pro/**/*
+  #       - libs/**/*
+  #       - features/**/*
+  #       - tools/**/*
+  #       - scripts/**/*
+  #       - package.json
+  #       - pnpm-lock.yaml
+  #       - pnpm-workspace.yaml
+  #       - turbo.json
+  #       - tsconfig.json
+  #       - .babelrc
+  #       - .npmrc
+  #       - .dockerignore
+  #       - prod.Dockerfile
 
 # Build lms-finhub
 build_lms_finhub:
@@ -115,147 +121,154 @@ build_lms_finhub:
   variables:
     APP_NAME: lms-finhub
     IMAGE_TAG: lms-finhub-$CI_PIPELINE_IID
-  # only:
-  #   # variables:
-  #   #   - $CI_COMMIT_MESSAGE =~ /build/
-  #   refs:
-  #     - master-test-build
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-      changes:
-        - apps/lms-finhub/**/*
-        - libs/**/*
-        - features/**/*
-        - tools/**/*
-        - scripts/**/*
-        - package.json
-        - pnpm-lock.yaml
-        - pnpm-workspace.yaml
-        - turbo.json
-        - tsconfig.json
-        - .babelrc
-        - .npmrc
-        - .dockerignore
-        - Dockerfile
+    DOCKERFILE: prod.Dockerfile
+    ENV_FILE: $ENV_PROD_FINHUB_FILE
+  only:
+    # variables:
+    #   - $CI_COMMIT_MESSAGE =~ /build/
+    refs:
+      - master
+  # rules:
+  #   - if: '$CI_COMMIT_BRANCH == "master"'
+  #     changes:
+  #       - apps/lms-finhub/**/*
+  #       - libs/**/*
+  #       - features/**/*
+  #       - tools/**/*
+  #       - scripts/**/*
+  #       - package.json
+  #       - pnpm-lock.yaml
+  #       - pnpm-workspace.yaml
+  #       - turbo.json
+  #       - tsconfig.json
+  #       - .babelrc
+  #       - .npmrc
+  #       - .dockerignore
+  #       - prod.Dockerfile
 
-# Build LMS-ZOOM
+# Build lms-zoom
 build_lms_zoom:
   extends: .build_template
   variables:
     APP_NAME: lms-zoom
     IMAGE_TAG: lms-zoom-$CI_PIPELINE_IID
-  # only:
-  #   # variables:
-  #   #   - $CI_COMMIT_MESSAGE =~ /build/
-  #   refs:
-  #     - master-test-build
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-      changes:
-        - apps/lms-zoom/**/*
-        - libs/**/*
-        - features/**/*
-        - tools/**/*
-        - scripts/**/*
-        - package.json
-        - pnpm-lock.yaml
-        - pnpm-workspace.yaml
-        - turbo.json
-        - tsconfig.json
-        - .babelrc
-        - .npmrc
-        - .dockerignore
-        - Dockerfile
+    DOCKERFILE: prod.zoom.Dockerfile
+    ENV_FILE: $ENV_PROD_ZOOM_FILE
+  only:
+    # variables:
+    #   - $CI_COMMIT_MESSAGE =~ /build/
+    refs:
+      - master
+  # rules:
+  #   - if: '$CI_COMMIT_BRANCH == "master"'
+  #     changes:
+  #       - apps/lms-zoom/**/*
+  #       - libs/**/*
+  #       - features/**/*
+  #       - tools/**/*
+  #       - scripts/**/*
+  #       - package.json
+  #       - pnpm-lock.yaml
+  #       - pnpm-workspace.yaml
+  #       - turbo.json
+  #       - tsconfig.json
+  #       - .babelrc
+  #       - .npmrc
+  #       - .dockerignore
+  #       - prod.zoom.Dockerfile
 
-# Deploy LMS-PRO
-deploy_lms_pro:
+# Deploy
+.deploy_template:
   stage: deploy
-  # needs:
-  #   - build_lms_pro
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
+    - if: '$CI_COMMIT_BRANCH == "master"'
   script:
-    - chmod 600 "$TEST_SSH_KEY_PROD"
-    - cp "$TEST_SSH_KEY_PROD" key.pem
-    - cp $TEST_ENV_PRODUCT_FILE .env
+    - chmod 600 "$SSH_KEY_FILE"
+    - cp "$SSH_KEY_FILE" key.pem
+    - cp $RUNTIME_ENV_FILE .env
     - source .env
 
-    - export IMAGE_TAG="lms-pro-${CI_PIPELINE_IID}"
-    - export LMS_PRO_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
+    - export TARGET_IP=$(eval echo "\$$TARGET_IP_VAR")
+    - export IMAGE_TAG="${APP_NAME}-${CI_PIPELINE_IID}"
+    - export IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
 
     - |
-      ssh -o StrictHostKeyChecking=no -i key.pem root@$TEST_PROD_IP "
+      ssh -o StrictHostKeyChecking=no -i key.pem root@$TARGET_IP "
         docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
         cd /var/www/lms-fe &&
         git fetch origin --prune &&
-        git reset --hard origin/master-test-build &&
-        export LMS_PRO_IMAGE='${LMS_PRO_IMAGE}' &&
-        docker compose -f docker-compose.lms.yml pull && 
-        docker compose -f docker-compose.lms.yml up -d lms-pro nginx
+        git reset --hard origin/master &&
+        export ${IMAGE_ENV}='${IMAGE}' &&
+        docker compose pull &&
+        docker compose --profile ${PROFILE} up -d
       "
   environment: production
   tags:
   - shell
   resource_group: lms-fe
+
+# Deploy lms-pro
+deploy_lms_pro:
+  extends: .deploy_template
+  needs: ["build_lms_pro"]
+  variables:
+    APP_NAME: lms-pro
+    PROFILE: lms-pro
+    IMAGE_ENV: LMS_PRO_IMAGE
+    TARGET_IP_VAR: PROD_LMS_IP
+    SSH_KEY_FILE: $SSH_KEY_PROD_LMS
+    RUNTIME_ENV_FILE: $ENV_PROD_LMS_FILE
 
 # Deploy lms-finhub
 deploy_lms_finhub:
-  stage: deploy
-  # needs:
-  #   - build_lms_finhub
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-  script:
-    - chmod 600 "$TEST_SSH_KEY_PROD"
-    - cp "$TEST_SSH_KEY_PROD" key.pem
-    - cp $TEST_ENV_PRODUCT_FILE .env
-    - source .env
-
-    - export IMAGE_TAG="lms-finhub-${CI_PIPELINE_IID}"
-    - export LMS_FINHUB_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
-
-    - |
-      ssh -o StrictHostKeyChecking=no -i key.pem root@$TEST_PROD_FINHUB_IP "
-        docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
-        cd /var/www/lms-fe &&
-        git fetch origin --prune &&
-        git reset --hard origin/master-test-build &&
-        export LMS_FINHUB_IMAGE='${LMS_FINHUB_IMAGE}' &&
-        docker compose -f docker-compose.finhub.yml pull && 
-        docker compose -f docker-compose.finhub.yml up -d lms-finhub nginx
-      "
-  environment: production
-  tags:
-  - shell
-  resource_group: lms-fe
+  extends: .deploy_template
+  needs: ["build_lms_finhub"]
+  variables:
+    APP_NAME: lms-finhub
+    PROFILE: lms-finhub
+    IMAGE_ENV: LMS_FINHUB_IMAGE
+    TARGET_IP_VAR: PROD_FINHUB_IP
+    SSH_KEY_FILE: $SSH_KEY_PROD_FINHUB
+    RUNTIME_ENV_FILE: $ENV_PROD_FINHUB_FILE
 
 # Deploy lms-zoom
 deploy_lms_zoom:
-  stage: deploy
-  # needs:
-  #   - build_lms_finhub
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master-test-build"'
-  script:
-    - chmod 600 "$TEST_SSH_KEY_PROD"
-    - cp "$TEST_SSH_KEY_PROD" key.pem
-    - cp $TEST_ENV_PRODUCT_FILE .env
-    - source .env
+  extends: .deploy_template
+  needs: ["build_lms_zoom"]
+  variables:
+    APP_NAME: lms-zoom
+    PROFILE: lms-zoom
+    IMAGE_ENV: LMS_ZOOM_IMAGE
+    TARGET_IP_VAR: PROD_ZOOM_IP
+    SSH_KEY_FILE: $SSH_KEY_PROD_ZOOM
+    RUNTIME_ENV_FILE: $ENV_PROD_ZOOM_FILE
 
-    - export IMAGE_TAG="lms-zoom-${CI_PIPELINE_IID}"
-    - export LMS_ZOOM_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
+# deploy_lms_zoom:
+#   stage: deploy
+#   # needs:
+#   #   - build_lms_finhub
+#   rules:
+#     - if: '$CI_COMMIT_BRANCH == "master"'
+#   script:
+#     - chmod 600 "$TEST_SSH_KEY_PROD"
+#     - cp "$TEST_SSH_KEY_PROD" key.pem
+#     - cp $TEST_ENV_PRODUCT_FILE .env
+#     - source .env
 
-    - |
-      ssh -o StrictHostKeyChecking=no -i key.pem root@$TEST_PROD_FINHUB_IP "
-        docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
-        cd /var/www/lms-fe &&
-        git fetch origin --prune &&
-        git reset --hard origin/master-test-build &&
-        export LMS_ZOOM_IMAGE='${LMS_ZOOM_IMAGE}' &&
-        docker compose -f docker-compose.zoom.yml pull && 
-        docker compose -f docker-compose.zoom.yml up -d lms-zoom nginx
-      "
-  environment: production
-  tags:
-  - shell
-  resource_group: lms-fe
+#     - export IMAGE_TAG="lms-zoom-${CI_PIPELINE_IID}"
+#     - export LMS_ZOOM_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
+
+#     - |
+#       ssh -o StrictHostKeyChecking=no -i key.pem root@$TEST_PROD_FINHUB_IP "
+#         docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
+#         cd /var/www/lms-fe &&
+#         git fetch origin --prune &&
+#         git reset --hard origin/master &&
+#         export LMS_ZOOM_IMAGE='${LMS_ZOOM_IMAGE}' &&
+#         docker compose -f docker-compose.zoom.yml pull && 
+#         docker compose -f docker-compose.zoom.yml up -d lms-zoom nginx
+#       "
+#   environment: production
+#   tags:
+#   - shell
+#   resource_group: lms-fe
