@@ -1,5 +1,4 @@
 // app/layout.tsx
-'use client'
 import type { ReactNode } from 'react'
 import Metadata from '@components/common/Metadata'
 import { ErrorBoundary } from '@sentry/nextjs'
