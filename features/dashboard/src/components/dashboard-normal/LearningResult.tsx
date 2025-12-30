@@ -24,7 +24,7 @@ const LearningResultTest = () => {
   );
   const containerRef = useRef<HTMLDivElement>(null);
   const tickTooltipRef = useRef<HTMLDivElement>(null);
-  const {router} = useFeature()
+  const { params } = useFeature()
 
   const avgPercent = useMemo(() => {
     if (!chartData.length) return 0;
@@ -222,9 +222,9 @@ const LearningResultTest = () => {
   };
 
   useEffect(() => {
-    if (router?.query?.courseId)
-      getLearningResults(router.query.courseId as string);
-  }, [router?.query?.courseId]);
+    if (params?.courseId)
+      getLearningResults(params?.courseId as string);
+  }, [params?.courseId]);
 
   const resultFormula =
     courseInfo?.category === "ACCA"

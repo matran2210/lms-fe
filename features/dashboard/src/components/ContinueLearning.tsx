@@ -5,12 +5,12 @@ import { useFeature } from "@lms/contexts";
 import { InstructionText } from "./InstructionText";
 
 const ContinueLearning = () => {
-  const {router, pageLink} = useFeature()
+  const {router, pageLink, params} = useFeature()
   const goToCourseContent = () => {
     router.push(
       pageLink.COURSE_DETAIL.replace(
         "[courseId]",
-        router.query.courseId as string,
+        params?.courseId as string,
       ),
     );
   };

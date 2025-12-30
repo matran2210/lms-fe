@@ -1,15 +1,15 @@
-import { SAPPSelectV2 } from "@lms/ui";
-import { useForm, useWatch } from "react-hook-form";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { DefaultOptionType } from "antd/es/select";
-import { useTailwindBreakpoint } from "@lms/hooks";
-import { CheckIconV2, FilterCourseIcon } from "@lms/assets";
-import { SappDrawerV3 } from "@lms/ui";
-import { Button, Divider } from "antd";
-import clsx from "clsx";
-import { ButtonPrimary } from "@lms/ui";
-import { useFeature } from "@lms/contexts";
+import { SAPPSelectV2 } from '@lms/ui'
+import { useForm, useWatch } from 'react-hook-form'
+import { useEffect, useState } from 'react'
+import { DefaultOptionType } from 'antd/es/select'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { CheckIconV2, FilterCourseIcon } from '@lms/assets'
+import { SappDrawerV3 } from '@lms/ui'
+import { Button, Divider } from 'antd'
+import clsx from 'clsx'
+import { ButtonPrimary } from '@lms/ui'
+import { useFeature } from '@lms/contexts'
+import { buildQueryString } from '@lms/utils'
 
 interface IFilters {
   [name: string]: React.Key | null | undefined;
@@ -25,8 +25,8 @@ const FilterCourse = ({
     options: DefaultOptionType[];
   }[];
 }) => {
-  const { control, setValue, reset } = useForm()
-  const {router} = useFeature()
+  const { control, setValue, getValues, reset } = useForm()
+  const {router, pathname} = useFeature()
   const { isMobileView } = useTailwindBreakpoint()
   const [openMobileFilter, setOpenMobileFilter] = useState(false)
   const [filters, setFilters] = useState<IFilters>()
@@ -68,15 +68,8 @@ const FilterCourse = ({
       }
     });
 
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: currentQuery,
-      },
-      undefined,
-      { shallow: true },
-    );
-  }, [filterValues]);
+    router.replace(`${pathname}?${buildQueryString(currentQuery)}`)
+  }, [filterValues])
 
   return (
     <>
