@@ -1,0 +1,17 @@
+/* ========== BORDER / RING ========== */
+.hover-ring-primary {
+  @apply ring-2 ring-primary/0
+         hover:ring-primary
+         transition-[box-shadow]
+         duration-300
+         ease-out;
+}
+
+/* ========== ELEVATION ========== */
+.hover-shadow-card {
+  @apply shadow-medium
+         hover:shadow-large
+         transition-[box-shadow]
+         duration-200
+         ease-out;
+}
