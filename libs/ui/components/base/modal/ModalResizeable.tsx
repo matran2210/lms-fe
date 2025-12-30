@@ -1,41 +1,41 @@
-import { CloseIcon } from '@lms/assets'
-import clsx from 'clsx'
-import React, { ReactNode, useEffect, useState } from 'react'
-import { createPortal } from 'react-dom'
-import { Rnd } from 'react-rnd'
+import { CloseIcon } from "@lms/assets";
+import clsx from "clsx";
+import React, { ReactNode, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { Rnd } from "react-rnd";
 
 interface ModalResizeableProps {
-  title?: string | ReactNode
-  children: ReactNode
-  width?: number
-  height?: number
-  minWidth?: number
-  minHeight?: number
-  dragHandleClassName?: string
-  header?: ReactNode
-  handleCloseScratchPad?: (pad: any) => void
+  title?: string | ReactNode;
+  children: ReactNode;
+  width?: number;
+  height?: number;
+  minWidth?: number;
+  minHeight?: number;
+  dragHandleClassName?: string;
+  header?: ReactNode;
+  handleCloseScratchPad?: (pad: any) => void;
   position?:
-  | 'top left'
-  | 'top middle'
-  | 'top right'
-  | 'bottom left'
-  | 'bottom middle'
-  | 'bottom right'
-  | 'center left'
-  | 'center right'
-  | 'center'
-  className?: string
-  draggableFull?: boolean
-  modalIndex?: number
-  rootClassName?: string
-  bodyClassName?: string
-  contentClassName?: string
-  isInBody?: boolean
-  onClick?: () => void
+    | "top left"
+    | "top middle"
+    | "top right"
+    | "bottom left"
+    | "bottom middle"
+    | "bottom right"
+    | "center left"
+    | "center right"
+    | "center";
+  className?: string;
+  draggableFull?: boolean;
+  modalIndex?: number;
+  rootClassName?: string;
+  bodyClassName?: string;
+  contentClassName?: string;
+  isInBody?: boolean;
+  onClick?: () => void;
 }
 
 const ModalResizeable: React.FC<ModalResizeableProps> = ({
-  title = 'Title',
+  title = "Title",
   children,
   width = 600,
   height = 400,
@@ -44,7 +44,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   header,
   dragHandleClassName, //Determine the drag handle class name
   handleCloseScratchPad,
-  position = 'center',
+  position = "center",
   className,
   draggableFull = false,
   modalIndex = 0,
@@ -52,10 +52,10 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   bodyClassName,
   contentClassName,
   isInBody = false,
-  onClick = () => { },
+  onClick = () => {},
 }) => {
-  const [size, setSize] = useState({ width, height })
-
+  const [size, setSize] = useState({ width, height });
+  const clamp = (value: number, min = 0) => Math.max(value, min);
   //Hàm tính vị trí của Modal
   const calculatePosition = (
     pos: string,
@@ -63,84 +63,61 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
     modalHeight: number,
     offset = 0,
   ) => {
-    const windowWidth = window.innerWidth
-    const windowHeight = window.innerHeight
-    const scrollX = window.scrollX
-    const scrollY = window.scrollY
-    const shift = offset * 20 // mỗi modal lệch 20px
-    // const positions = {
-    //   'top left': { x: 0, y: 0 },
-    //   'top middle': { x: (windowWidth - modalWidth) / 2, y: 0 },
-    //   'bottom left': { x: 0, y: windowHeight - modalHeight },
-    //   'bottom middle': {
-    //     x: (windowWidth - modalWidth) / 2,
-    //     y: windowHeight - modalHeight,
-    //   },
-    //   'bottom right': {
-    //     x: windowWidth - modalWidth,
-    //     y: windowHeight - modalHeight,
-    //   },
-    //   'top right': { x: windowWidth - modalWidth, y: 0 },
-    //   'center left': { x: 0, y: (windowHeight - modalHeight) / 2 },
-    //   'center right': {
-    //     x: windowWidth - modalWidth,
-    //     y: (windowHeight - modalHeight) / 2,
-    //   },
-    //   center: {
-    //     x: (windowWidth - modalWidth) / 2,
-    //     y: (windowHeight - modalHeight) / 2,
-    //   },
-    // }
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const shift = offset * 20; // mỗi modal lệch 20px
     const positions = {
-      'top left': { x: shift, y: shift },
-      'top middle': {
-        x: (windowWidth - modalWidth) / 2 + shift,
-        y: shift,
+      "top left": { x: clamp(shift), y: clamp(shift) },
+      "top middle": {
+        x: clamp((windowWidth - modalWidth) / 2 + shift),
+        y: clamp(shift),
       },
-      'top right': {
-        x: windowWidth - modalWidth - shift,
-        y: shift,
+      "top right": {
+        x: clamp(windowWidth - modalWidth - shift),
+        y: clamp(shift),
       },
 
-      'center left': {
-        x: shift,
-        y: (windowHeight - modalHeight) / 2 + shift,
+      "center left": {
+        x: clamp(shift),
+        y: clamp((windowHeight - modalHeight) / 2 + shift),
       },
       center: {
-        x: (windowWidth - modalWidth) / 2 + shift,
-        y: (windowHeight - modalHeight) / 2 + shift,
+        x: clamp((windowWidth - modalWidth) / 2 + shift),
+        y: clamp((windowHeight - modalHeight) / 2 + shift),
       },
-      'center right': {
-        x: windowWidth - modalWidth - shift,
-        y: (windowHeight - modalHeight) / 2 + shift,
+      "center right": {
+        x: clamp(windowWidth - modalWidth - shift),
+        y: clamp((windowHeight - modalHeight) / 2 + shift),
       },
 
-      'bottom left': {
-        x: shift,
-        y: windowHeight - modalHeight - shift,
+      "bottom left": {
+        x: clamp(shift),
+        y: clamp(windowHeight - modalHeight - shift),
       },
-      'bottom middle': {
-        x: (windowWidth - modalWidth) / 2 + shift,
-        y: windowHeight - modalHeight - shift,
+      "bottom middle": {
+        x: clamp((windowWidth - modalWidth) / 2 + shift),
+        y: clamp(windowHeight - modalHeight - shift),
       },
-      'bottom right': {
-        x: windowWidth - modalWidth - shift,
-        y: windowHeight - modalHeight - shift,
+      "bottom right": {
+        x: clamp(windowWidth - modalWidth - shift),
+        y: clamp(windowHeight - modalHeight - shift),
       },
-    }
+    };
 
-    return positions[pos as keyof typeof positions] || positions.center
-  }
+    return positions[pos as keyof typeof positions] || positions.center;
+  };
 
   const [modalPosition, setModalPosition] = useState(() =>
     calculatePosition(position, width, height, modalIndex),
-  )
+  );
 
   useEffect(() => {
     setModalPosition(
       calculatePosition(position, size.width, size.height, modalIndex),
-    )
-  }, [])
+    );
+  }, []);
 
   const renderContent = () => {
     return (
@@ -149,45 +126,45 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
           size={{ width: size.width, height: size.height }}
           position={modalPosition}
           onDragStop={(e, d) => {
-            const maxX = window.innerWidth - size.width
-            const maxY = window.innerHeight - size.height
+            const maxX = clamp(window.innerWidth - size.width);
+            const maxY = clamp(window.innerHeight - size.height);
             setModalPosition({
               x: Math.min(Math.max(0, d.x), maxX),
               y: Math.min(Math.max(0, d.y), maxY),
-            })
+            });
           }}
           onResizeStop={(e, direction, ref, delta, newPos) => {
-            const newWidth = parseInt(ref.style.width)
-            const newHeight = parseInt(ref.style.height)
-            const maxX = window.innerWidth - newWidth
-            const maxY = window.innerHeight - newHeight
+            const newWidth = parseInt(ref.style.width);
+            const newHeight = parseInt(ref.style.height);
+            const maxX = window.innerWidth - newWidth;
+            const maxY = window.innerHeight - newHeight;
 
-            setSize({ width: newWidth, height: newHeight })
+            setSize({ width: clamp(newWidth), height: clamp(newHeight) });
             setModalPosition({
               x: Math.min(Math.max(0, newPos.x), maxX),
               y: Math.min(Math.max(0, newPos.y), maxY),
-            })
+            });
           }}
           minWidth={minWidth}
           minHeight={minHeight}
           bounds="window"
           style={{
-            background: 'white',
-            boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-            border: '1px solid #DCDDDD',
-            position: 'fixed',
-            pointerEvents: 'auto',
+            background: "white",
+            boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+            border: "1px solid #DCDDDD",
+            position: "fixed",
+            pointerEvents: "auto",
           }}
           dragHandleClassName={
             draggableFull
               ? undefined
               : dragHandleClassName
                 ? dragHandleClassName
-                : 'modal-dragger'
+                : "modal-dragger"
           }
           className={clsx(
-            'modalResizeable',
-            'overflow-hidden rounded-xl',
+            "modalResizeable",
+            "overflow-hidden rounded-xl",
             className,
             rootClassName,
           )}
@@ -196,14 +173,14 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
         >
           <div
             className={clsx(
-              'absolute left-0 top-0 h-full w-full',
+              "absolute left-0 top-0 h-full w-full",
               bodyClassName,
             )}
           >
             {header ? (
               header
             ) : (
-              <div className={'modalHeader'}>
+              <div className={"modalHeader"}>
                 <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between px-5">
                   <div className="truncate">{title}</div>
                 </div>
@@ -215,17 +192,17 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
                 </button>
               </div>
             )}
-            <div className={clsx('modalContent', contentClassName)}>
+            <div className={clsx("modalContent", contentClassName)}>
               {children}
             </div>
           </div>
         </Rnd>
       </div>
-    )
-  }
+    );
+  };
   return isInBody
     ? createPortal(renderContent(), document.body)
-    : renderContent()
-}
+    : renderContent();
+};
 
-export default ModalResizeable
+export default ModalResizeable;
