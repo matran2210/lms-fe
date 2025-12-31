@@ -78,3 +78,37 @@
     opacity: 1;
   }
 }
+
+/* Container */
+.tab-content-container {
+  position: relative;
+  min-height: 400px;
+  overflow: hidden;
+}
+
+/* Base */
+.tab-content {
+  width: 100%;
+}
+
+/* Tab mới lướt vào */
+.tab-content-enter {
+  animation: tabSlideCover 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Keyframe: lướt đè */
+@keyframes tabSlideCover {
+  from {
+    transform: translateX(64px);
+    opacity: 0.6;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Ẩn content mặc định của AntD */
+.sapp-tabs-profile .ant-tabs-content-holder {
+  display: none;
+}
