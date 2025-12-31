@@ -36,8 +36,8 @@ const LearningResults = () => {
   const [results, setResults] = useState<ILearningResult[] | IMockTestResult[]>(
     [],
   );
-  const {router, dashboardApi} = useFeature()
-
+  const {query, params, dashboardApi} = useFeature()
+  const {courseId } = params || query
   const [isLoading, setIsLoading] = useState<boolean>(true);
   // const [hasLearning, setHasLearning] = useState<boolean>(false);
   const [mockTestId, setMockTestId] = useState<string>("");
@@ -74,9 +74,9 @@ const LearningResults = () => {
         setIsLoading(false);
       }
     };
-    if (router?.query?.courseId)
-      getLearningResults(router.query.courseId as string);
-  }, [router?.query?.courseId, isNormal]);
+    if (courseId)
+      getLearningResults(courseId as string);
+  }, [courseId, isNormal]);
 
   const option = useMemo(() => {
     if (!results || results.length === 0) return null;

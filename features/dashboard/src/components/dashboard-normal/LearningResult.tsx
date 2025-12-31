@@ -17,15 +17,14 @@ import { useReponsive } from "@lms/hooks";
 import { useFeature } from "@lms/contexts";
 
 const LearningResultTest = () => {
-  const {dashboardApi} = useFeature();
+  const { dashboardApi, params, query } = useFeature()
+  const { courseId } = params || query
   const [option, setOption] = useState<any>();
   const [chartData, setChartData] = useState<{ name: string; score: number }[]>(
     [],
   );
   const containerRef = useRef<HTMLDivElement>(null);
   const tickTooltipRef = useRef<HTMLDivElement>(null);
-  const {router} = useFeature()
-
   const avgPercent = useMemo(() => {
     if (!chartData.length) return 0;
     const sum = chartData.reduce((acc, d) => acc + (Number(d.score) || 0), 0);
@@ -222,9 +221,9 @@ const LearningResultTest = () => {
   };
 
   useEffect(() => {
-    if (router?.query?.courseId)
-      getLearningResults(router.query.courseId as string);
-  }, [router?.query?.courseId]);
+    if (courseId)
+      getLearningResults(courseId as string);
+  }, [courseId]);
 
   const resultFormula =
     courseInfo?.category === "ACCA"

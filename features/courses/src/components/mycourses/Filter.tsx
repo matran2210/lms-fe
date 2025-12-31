@@ -18,7 +18,7 @@ interface IProps {
 }
 
 const Filter = ({ courses, setPage, tourGuideActive, isTeacher }: IProps) => {
-  const { router, pageLink } = useFeature();
+  const { router, pageLink, query } = useFeature();
 
   const { control, watch, setValue } = useForm();
   const [activeStatus, setActiveStatus] = useState<boolean>(false);
@@ -47,7 +47,7 @@ const Filter = ({ courses, setPage, tourGuideActive, isTeacher }: IProps) => {
       (userSectionLearningType !== undefined ||
         userSectionLearningStatus !== undefined)
     ) {
-      router.push(`${apiUrl}?name=${router.query.name || ""}${queryString}`);
+      router.push(`${apiUrl}?name=${query.name || ""}${queryString}`);
       setPage && setPage(9);
     }
   }, [apiUrl, queryString, watch]);

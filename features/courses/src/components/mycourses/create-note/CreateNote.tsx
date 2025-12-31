@@ -17,9 +17,9 @@ interface IProps {
 }
 
 const CreateNote = ({ id, content, uuid, count }: IProps) => {
-  const { courseApi, router } = useFeature();
+  const { courseApi, router, params } = useFeature();
 
-  const activityId = router.query.activityId
+  const activityId = params?.activityId
   const [activeSectionId, setActiveSectionId] = useState<string>()
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)

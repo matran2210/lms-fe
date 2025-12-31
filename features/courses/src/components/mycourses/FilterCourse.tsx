@@ -25,8 +25,8 @@ const FilterCourse = ({
     options: DefaultOptionType[];
   }[];
 }) => {
-  const { control, setValue, reset } = useForm()
-  const {router} = useFeature()
+  const { control, setValue, reset} = useForm()
+  const {router, query} = useFeature()
   const { isMobileView } = useTailwindBreakpoint()
   const [openMobileFilter, setOpenMobileFilter] = useState(false)
   const [filters, setFilters] = useState<IFilters>()
@@ -57,7 +57,7 @@ const FilterCourse = ({
     onCloseMobileFilter();
   };
   useEffect(() => {
-    const currentQuery = { ...router.query };
+    const currentQuery = { ...query };
 
     listFilter?.forEach((filter) => {
       const val = filterValues?.[filter.name];
