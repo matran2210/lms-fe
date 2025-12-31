@@ -10,7 +10,10 @@ interface IProps {
   isMobileCalc?: boolean;
   isShortScreen?: boolean;
 }
-const Calculator = ({ isMobileCalc = false, isShortScreen = false }: IProps) => {
+const Calculator = ({
+  isMobileCalc = false,
+  isShortScreen = false,
+}: IProps) => {
   const [lastExpression, setLastExpression] = useState("");
   const [calc, setCalc] = useState({
     total: null,
@@ -74,6 +77,8 @@ const Calculator = ({ isMobileCalc = false, isShortScreen = false }: IProps) => 
       })}
       style={{
         boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+        overflowX: "hidden",
+        overflowY: "auto",
       }}
     >
       <Display
@@ -88,7 +93,7 @@ const Calculator = ({ isMobileCalc = false, isShortScreen = false }: IProps) => 
         isMobileCalc={isMobileCalc}
         isShortScreen={isShortScreen}
       />
-      <Warning warning={badDivision} />
+      {/* <Warning warning={badDivision} /> */}
     </div>
   );
 };
