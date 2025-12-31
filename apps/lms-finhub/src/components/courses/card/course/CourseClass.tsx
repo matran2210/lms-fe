@@ -1,3 +1,4 @@
+"use client"
 import { Bachelor, CourseTimeIcon } from '@components/courses/icons'
 import TooltipCourses from '@components/courses/shared/Tooltip'
 import { useTailwindBreakpoint } from '@lms/hooks'

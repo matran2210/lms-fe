@@ -1,3 +1,4 @@
+"use client"
 import clsx from 'clsx'
 import Head from 'next/head'
 import { ReactElement, ReactNode, useState } from 'react'

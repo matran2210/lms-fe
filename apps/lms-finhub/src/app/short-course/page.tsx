@@ -2,13 +2,12 @@
 import CoursesList from '@components/courses/card/CoursesList'
 import Filter3Level from '@components/courses/filter/Filter'
 import Layout from '@components/layout'
-import { useCourseContext } from '@lms/contexts'
+import { useCourseContext, useFeature } from '@lms/contexts'
 import { ANIMATION, AppType } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { SearchWithMenuToggle } from '@lms/ui'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
-import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
@@ -17,9 +16,7 @@ import { PageLink } from 'src/constants/routes'
 const DEFAULT_PAGESIZE = 9
 
 const MyCourse3Level = () => {
-  const router = useRouter()
-  console.log(window)
-  const param = useParams()
+  const {query: param} = useFeature()
   const observer = useRef<IntersectionObserver>()
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()

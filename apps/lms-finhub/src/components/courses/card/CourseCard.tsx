@@ -1,3 +1,4 @@
+"use client"
 import PopupActive from '@components/mycourses/PopupActive'
 import PopupExtend from '@components/mycourses/PopupExtend'
 import PopupLesson from '@components/mycourses/PopupLesson'

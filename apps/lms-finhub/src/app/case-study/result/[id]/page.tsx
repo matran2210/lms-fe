@@ -10,7 +10,7 @@ import {
   UnHighLightIcon,
 } from '@lms/assets'
 
-import { loadMoreQuestion, useAppDispatch } from '@lms/contexts'
+import { loadMoreQuestion, useAppDispatch, useFeature } from '@lms/contexts'
 import {
   EXHIBIT_TEXT_REPLACE,
   IAnswerResult,
@@ -58,6 +58,8 @@ import { CoursesAPI } from 'src/api/courses'
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])
   const router = useRouter()
+  const params = useParams()
+  const {query} = useFeature()
   const containerRef = useRef(null)
   const { control, setValue, getValues } = useForm()
   const { control: controlScratch } = useForm()
@@ -65,7 +67,6 @@ const CaseStudyResult = () => {
   const [allowUnHighLight, setAllowUnHighLight] = useState(false)
   const [activeQuestionIndex, setActiveQuestionIndex] = useState<number>(0)
   const questionsScrollRef = useRef<HTMLDivElement | null>(null)
-  const params = useParams()
 
   // handle show exhibit list
   const [showListExhibits, setShowListExhibits] = useState(false)
@@ -302,11 +303,11 @@ const CaseStudyResult = () => {
     }
     if (result?.next_topic?.attempt) {
       router.replace(
-        `/case-study/result/${result?.next_topic?.attempt.id}?class_user_id=${params.class_user_id}&class_id=${params?.class_id}&course_section_id=${params?.course_section_id}`,
+        `/case-study/result/${result?.next_topic?.attempt.id}?class_user_id=${query.class_user_id}&class_id=${query?.class_id}&course_section_id=${query?.course_section_id}`,
       )
     } else {
       router.push(
-        `/case-study/${result?.next_topic?.question_topic_id}?quiz_id=${result?.quiz_id}&class_user_id=${params?.class_user_id}&class_id=${params?.class_id}&course_section_id=${params?.course_section_id}&caseStudyId=${result?.next_topic?.id}`,
+        `/case-study/${result?.next_topic?.question_topic_id}?quiz_id=${result?.quiz_id}&class_user_id=${query?.class_user_id}&class_id=${query?.class_id}&course_section_id=${query?.course_section_id}&caseStudyId=${result?.next_topic?.id}`,
       )
     }
   }
@@ -318,11 +319,11 @@ const CaseStudyResult = () => {
     resetEssayBeforeAction()
     if (result?.previous_topic?.attempt) {
       router.replace(
-        `/case-study/result/${result?.previous_topic?.attempt.id}?class_user_id=${params.class_user_id}&class_id=${params?.class_id}&course_section_id=${params?.course_section_id}`,
+        `/case-study/result/${result?.previous_topic?.attempt.id}?class_user_id=${query.class_user_id}&class_id=${query?.class_id}&course_section_id=${query?.course_section_id}`,
       )
     } else {
       router.push(
-        `/case-study/${result?.previous_topic?.question_topic_id}?quiz_id=${result?.quiz_id}&class_user_id=${params?.class_user_id}&class_id=${params?.class_id}&course_section_id=${params?.course_section_id}&caseStudyId=${result?.previous_topic?.id}`,
+        `/case-study/${result?.previous_topic?.question_topic_id}?quiz_id=${result?.quiz_id}&class_user_id=${query?.class_user_id}&class_id=${query?.class_id}&course_section_id=${query?.course_section_id}&caseStudyId=${result?.previous_topic?.id}`,
       )
     }
   }
@@ -461,16 +462,16 @@ const CaseStudyResult = () => {
 
   const backToPart = () => {
     resetEssayBeforeAction()
-    if (params?.class_id) {
-      if (params?.is_from_activity) {
+    if (query?.class_id) {
+      if (query?.is_from_activity) {
         router.push(
           ROUTES.ACTIVITY(
-            params?.class_id as string,
-            params?.course_section_id as string,
+           query?.class_id as string,
+            query?.course_section_id as string,
           ),
         )
       } else {
-        router.push(ROUTES.COURSE_DETAIL(params?.class_id as string))
+        router.push(ROUTES.COURSE_DETAIL(query?.class_id as string))
       }
     } else {
       router.push(ROUTES.SHORT_COURSE)
