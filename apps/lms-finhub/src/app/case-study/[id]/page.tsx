@@ -418,7 +418,7 @@ const CaseStudyDetail = () => {
         quiz_id,
         id,
         class_user_id,
-        params?.caseStudyId,
+        query?.caseStudyId,
       )
       setExhibitText(
         res.data.program === PROGRAM.CMA
