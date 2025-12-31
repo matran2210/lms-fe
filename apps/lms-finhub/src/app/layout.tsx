@@ -12,10 +12,6 @@ import '@sapp-fe/sapp-common-package/dist/index.css'
 import '@sapp-fe/sapp-common-package/dist/sapp-editor.css'
 import '@sapp-fe/sapp-notification/dist/index.css'
 
-// export const metadata = {
-//     title: 'LMS Pro',
-//     description: 'LMS Pro App',
-// }
 export const revalidate = 0
 
 export default function RootLayout({ children }: { children: ReactNode }) {

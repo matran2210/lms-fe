@@ -16,6 +16,7 @@ import {
   showPopupCompletedCourse,
   useAppDispatch,
   useAppSelector,
+  useFeature,
 } from '@lms/contexts'
 import {
   ESSAY_TYPE,
@@ -283,6 +284,7 @@ const CaseStudyDetail = () => {
   const [showWarning, setShowWarning] = useState(true)
   const MatchQuizRef = useRef(null) as any
   const params = useParams()
+  const { query } = useFeature()
 
   const handleResetEssay = async (
     index: number,
@@ -401,7 +403,7 @@ const CaseStudyDetail = () => {
         getTopicsCaseStudy({
           api: TestServiceAPI,
           id: params.id,
-          quiz_id: params.quiz_id,
+          quiz_id: query.quiz_id,
         }),
       )
     }
@@ -436,11 +438,11 @@ const CaseStudyDetail = () => {
     } catch (err) {}
   }
   useEffect(() => {
-    if (params?.quiz_id && params.id && params.class_user_id) {
+    if (query?.quiz_id && params.id && query.class_user_id) {
       createAttempts(
-        params.quiz_id as string,
+        query.quiz_id as string,
         params.id as string,
-        params.class_user_id as string,
+        query.class_user_id as string,
       )
     }
   }, [params?.id])
