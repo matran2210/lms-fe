@@ -321,7 +321,7 @@ const Course = ({
     classInstance?.class_user_instances?.[0]?.started_at,
   );
   const isNotOpened = !classInstance?.class_user_instances?.[0]?.is_opened;
-  const isCanceled = course.status === CLASS_USER_STATUS.CANCELED;
+  const isCanceled = classInstance?.status === CLASS_USER_STATUS.CANCELED;
 
   const courseAction = () => {
     // Handle pending lesson cases
