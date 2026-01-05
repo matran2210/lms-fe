@@ -39,7 +39,7 @@ const TestPopup = ({
       open={open}
       isClosable={isClosable}
       onOk={() => {}}
-      handleCancel={() => setOpen(false)}
+      handleClose={() => setOpen(false)}
       icon={isTimeOut ? <TimeOutIcon /> : undefined}
       header={title}
       showFooter={false}

@@ -53,6 +53,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
   return (
     <>
       <SappModalV3
+        handleClose={() => setOpen && setOpen(false)}
         open={open}
         cancelButtonCaption="Back"
         okButtonCaption="Start"

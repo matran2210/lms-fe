@@ -139,7 +139,7 @@ const QuizDocument = ({
   }>()
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       if (questions?.[0]?.id) {
         setStartWorkTime(Date.now())
         // Load the first question when the component mounts
@@ -867,6 +867,7 @@ const QuizDocument = ({
         setOpen={() => setShowQuestionResultDetail(undefined)}
       />
       <SappModalV3
+        handleClose={() => setOpenGradedReport(false)}
         open={openGradedReport}
         okButtonCaption={
           is_graded && grading_method === GRADING_METHOD.MANUAL

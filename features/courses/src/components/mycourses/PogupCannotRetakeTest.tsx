@@ -1,20 +1,20 @@
-import { AlertIcon } from '@lms/assets'
-import { SappModalV2 } from '@lms/ui'
-import { Dispatch, SetStateAction } from 'react'
+import { AlertIcon } from "@lms/assets";
+import { SappModalV2 } from "@lms/ui";
+import { Dispatch, SetStateAction } from "react";
 
 interface IProps {
-  open: boolean
-  onCancel: () => void
-  setOpen: Dispatch<SetStateAction<boolean>>
+  open: boolean;
+  onCancel: () => void;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 const PopupCanNotRetakeTest = ({ open, onCancel, setOpen }: IProps) => {
   const onOk = () => {
-    onCancel()
-    setOpen(false)
-  }
+    onCancel();
+    setOpen(false);
+  };
   return (
     <SappModalV2
-      open={open}
+      open={true}
       okButtonCaption="Back"
       onOk={onOk}
       handleCancel={() => setOpen(false)}
@@ -40,7 +40,7 @@ const PopupCanNotRetakeTest = ({ open, onCancel, setOpen }: IProps) => {
         Congratulations!
       </div>
     </SappModalV2>
-  )
-}
+  );
+};
 
-export default PopupCanNotRetakeTest
+export default PopupCanNotRetakeTest;

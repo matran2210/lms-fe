@@ -1,54 +1,62 @@
-import { Modal } from 'antd'
-import { ReactNode } from 'react'
-import { IButtonColors } from '@lms/core'
-import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
-import clsx from 'clsx'
+import { Modal } from "antd";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
+import { IButtonColors } from "@lms/core";
+import ButtonCancelSubmit from "../button/ButtonCancelSubmit";
+import clsx from "clsx";
 
 interface IProps {
-  showFooter?: boolean
-  cancelButtonCaption?: any
-  okButtonCaption?: any
-  okButtonClass?: string
-  cancelButtonClass?: string
-  buttonSize?: 'small' | 'medium' | 'large' | 'extra'
-  footerButtonClassName?: string
-  fullWidthBtn?: boolean
-  showOkButton?: boolean
-  showCancelButton?: boolean
-  scrollbale?: boolean
-  footerClassName?: string
-  externalLoading?: boolean
-  revertFunction?: boolean
-  loading?: boolean
-  disabled?: boolean
-  onOk: () => void
-  handleCancel: () => void
-  handleClose?: () => void
-  icon?: ReactNode
-  header?: ReactNode
-  content?: string | undefined | ReactNode
-  children?: ReactNode
-  headerClassName?: string
-  isClosable?: boolean
-  isUnderLine?: boolean
-  customFooter?: ReactNode
-  className?: string
-  gapContent?: string
-  loadingBtnSubmit?: boolean
+  open: boolean;
+  showFooter?: boolean;
+  cancelButtonCaption?: any;
+  okButtonCaption?: any;
+  okButtonClass?: string;
+  cancelButtonClass?: string;
+  buttonSize?: "small" | "medium" | "large" | "extra";
+  footerButtonClassName?: string;
+  fullWidthBtn?: boolean;
+  showOkButton?: boolean;
+  showCancelButton?: boolean;
+  scrollbale?: boolean;
+  footerClassName?: string;
+  externalLoading?: boolean;
+  revertFunction?: boolean;
+  loading?: boolean;
+  disabled?: boolean;
+  onOk: () => void;
+  handleCancel?: () => void;
+  handleClose?: () => void;
+  icon?: ReactNode;
+  header?: ReactNode;
+  content?: string | undefined | ReactNode;
+  children?: ReactNode;
+  headerClassName?: string;
+  isClosable?: boolean;
+  isUnderLine?: boolean;
+  customFooter?: ReactNode;
+  className?: string;
+  gapContent?: string;
+  loadingBtnSubmit?: boolean;
   // Các props còn lại sẽ được gom vào otherProps
-  [key: string]: any
+  [key: string]: any;
 }
 
 const SappModalV3 = ({
+  open,
   showFooter = true,
-  footerButtonClassName = 'flex flex-col gap-3 items-center justify-between',
+  footerButtonClassName = "flex flex-col gap-3 items-center justify-between",
   color,
   colorCancel,
   showOkButton,
   showCancelButton,
   revertFunction,
   okButtonCaption,
-  buttonSize = 'small',
+  buttonSize = "small",
   externalLoading,
   loading,
   disabled,
@@ -68,22 +76,54 @@ const SappModalV3 = ({
   isUnderLine = false,
   className,
   customFooter,
-  gapContent = 'gap-4 md:gap-8',
+  gapContent = "gap-4 md:gap-8",
   loadingBtnSubmit,
   ...otherProps
 }: IProps) => {
-  const onCancel = isClosable && handleClose ? handleClose : handleCancel
+  const [visible, setVisible] = useState(open);
+  const [closing, setClosing] = useState(false);
+  const EXIT_DURATION = 400;
+
+  useEffect(() => {
+    if (open) {
+      setVisible(true);
+
+      requestAnimationFrame(() => {
+        setClosing(false);
+      });
+    }
+  }, [open]);
+
+  const requestClose = (callback?: () => void) => {
+    if (closing) return;
+
+    setClosing(true);
+
+    setTimeout(() => {
+      callback?.();
+      setVisible(false);
+      handleClose?.();
+    }, EXIT_DURATION);
+  };
+
+  const handleModalClose = () => {
+    requestClose(() => {});
+  };
   return (
     <Modal
-      className={clsx('sapp-modal', className)}
+      open={visible}
+      destroyOnClose
+      className={clsx(
+        "sapp-modal",
+        closing ? "modal-slide-down" : "modal-slide-up",
+        className,
+      )}
       footer={false}
       centered
       closeIcon={false}
-      onCancel={(e) => {
-        e.stopPropagation()
-        onCancel()
-      }}
-      maskClosable={true}
+      maskTransitionName="mask-fade"
+      transitionName=""
+      onCancel={handleModalClose}
       closable={isClosable}
       {...otherProps}
     >
@@ -94,14 +134,14 @@ const SappModalV3 = ({
       )}
       <div
         className={clsx(`flex flex-col ${gapContent}`, {
-          'pb-6 md:pb-10': showFooter,
+          "pb-6 md:pb-10": showFooter,
         })}
       >
         {header && (
           <div
             className={clsx(
-              'flex justify-center text-2xl font-semibold text-gray-800 md:text-3xl',
-              { 'mb-4': !content && !children },
+              "flex justify-center text-2xl font-semibold text-gray-800 md:text-3xl",
+              { "mb-4": !content && !children },
               headerClassName,
             )}
           >
@@ -126,14 +166,14 @@ const SappModalV3 = ({
               size: buttonSize,
               loading: loadingBtnSubmit ?? externalLoading ?? loading,
               disabled,
-              onClick: onOk,
+              onClick: () => requestClose(onOk),
               full: fullWidthBtn,
               className: okButtonClass,
             }}
             cancel={{
               title: cancelButtonCaption,
               size: buttonSize,
-              onClick: handleCancel,
+              onClick: () => requestClose(handleCancel),
               loading: externalLoading ?? loading,
               full: fullWidthBtn,
               className: cancelButtonClass,
@@ -143,10 +183,10 @@ const SappModalV3 = ({
         </div>
       )}
       {!showFooter && customFooter && (
-        <div className={'relative flex justify-center'}>{customFooter}</div>
+        <div className={"relative flex justify-center"}>{customFooter}</div>
       )}
     </Modal>
-  )
-}
+  );
+};
 
-export default SappModalV3
+export default SappModalV3;
