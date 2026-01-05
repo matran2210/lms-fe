@@ -10,6 +10,7 @@ import {
 } from "react";
 import { ENTRANCE_TEST_RESULT, ENTRANCE_TEST_TABLE_RESULT } from "@lms/core";
 import { PinnedNotifications } from "@lms/core";
+import { useFeature } from "./FeatureContext";
 
 // type for context
 type Context = {
@@ -52,7 +53,8 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{
     getPinnedNotifications: () => Promise<PinnedNotifications>
   }
 }>) {
-  const { api, router } = props
+  const { api } = props
+  const {pathname}  = useFeature()
 
   const [openPinned, setOpenPinned] = useState(true);
   const [pinnedNotifications, setPinnedNotifications] =
@@ -114,11 +116,11 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{
         ENTRANCE_TEST_TABLE_RESULT,
         ENTRANCE_TEST_RESULT,
         CERTIFICATE_DETAIL,
-      ].includes(router.pathname)
+      ].includes(pathname as string)
     ) {
       getPinnedData();
     }
-  }, [router.pathname]);
+  }, [pathname]);
 
   return (
     <PinnedNotifyContext.Provider

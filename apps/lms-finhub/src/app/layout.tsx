@@ -15,10 +15,11 @@ import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import 'aos/dist/aos.css'
 import { Providers } from './provider'
+import { ErrorBoundary } from '@sentry/nextjs'
+import ErrorRedirectPage from './error-redirect/page'
 
 export const revalidate = 0
 
-export const revalidate = 0
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <ErrorBoundary fallback={<ErrorRedirectPage />}>

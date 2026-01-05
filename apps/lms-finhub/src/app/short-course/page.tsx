@@ -8,7 +8,7 @@ import { useTailwindBreakpoint } from '@lms/hooks'
 import { SearchWithMenuToggle } from '@lms/ui'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routes'
@@ -16,12 +16,11 @@ import { PageLink } from 'src/constants/routes'
 const DEFAULT_PAGESIZE = 9
 
 const MyCourse3Level = () => {
-  const {query: param} = useFeature()
+  const { query: param } = useFeature()
   const observer = useRef<IntersectionObserver>()
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
-
   const fetchMyCourse = async ({
     pageParam,
     params,
@@ -53,10 +52,17 @@ const MyCourse3Level = () => {
     refetch,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ['myCourse'],
+    queryKey: ['myCourse', params],
     queryFn: ({ pageParam }) => fetchMyCourse({ pageParam, params }),
-    getNextPageParam: (lastPage, allPages) => {
-      return lastPage?.data.length ? allPages.length + 1 : undefined
+    getNextPageParam: (lastPage) => {
+      const meta = lastPage?.category?.metadata
+      if (!meta) return undefined
+
+      const { page_index, page_size, total_records } = meta
+
+      const hasNext = page_index * page_size < total_records
+
+      return hasNext ? page_index + 1 : undefined
     },
     retry: false,
   })
@@ -170,4 +176,4 @@ const MyCourse3Level = () => {
   )
 }
 
-export default MyCourse3Level
+export default memo(MyCourse3Level)
