@@ -1,7 +1,7 @@
 .modalResizeable {
   * {
     &::-webkit-scrollbar {
-      @apply w-0;
+      @apply w-1.5 border bg-white;
     }
 
     &::-webkit-scrollbar-track {

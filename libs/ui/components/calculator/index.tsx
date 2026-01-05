@@ -77,8 +77,6 @@ const Calculator = ({
       })}
       style={{
         boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-        overflowX: "hidden",
-        overflowY: "auto",
       }}
     >
       <Display
@@ -93,7 +91,7 @@ const Calculator = ({
         isMobileCalc={isMobileCalc}
         isShortScreen={isShortScreen}
       />
-      {/* <Warning warning={badDivision} /> */}
+      <Warning warning={badDivision} />
     </div>
   );
 };

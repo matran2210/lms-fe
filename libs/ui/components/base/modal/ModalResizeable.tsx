@@ -55,7 +55,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   onClick = () => {},
 }) => {
   const [size, setSize] = useState({ width, height });
-  const clamp = (value: number, min = 0) => Math.max(value, min);
+  const clamp = (value: number) => Math.abs(value);
   //Hàm tính vị trí của Modal
   const calculatePosition = (
     pos: string,
