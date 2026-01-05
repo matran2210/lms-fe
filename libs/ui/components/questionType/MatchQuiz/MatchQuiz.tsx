@@ -109,7 +109,7 @@ const MatchQuiz = forwardRef(
     ref: ForwardedRef<any>,
   ) => {
 
-    const { router } = useFeature()
+    const { params, query } = useFeature()
     const [edges, setEdges] = useState<Edge[]>([]);
     const flowRef = useRef<HTMLDivElement>(null);
     const [nodes, setNodes] = useState<MatchNode[]>([]);
@@ -619,7 +619,7 @@ const MatchQuiz = forwardRef(
             initialHTML={data?.question_content || ""}
             storageKey={
               storageKey ||
-              `${router.query.id}-${data?.qType}-question-${data?.id}`
+              `${params?.id || query.id}-${data?.qType}-question-${data?.id}`
             }
             className="sapp-questions sapp-editor-reader !mb-8"
           />

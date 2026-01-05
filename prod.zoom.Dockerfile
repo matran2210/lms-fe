@@ -58,11 +58,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 WORKDIR /app
 
 COPY --from=builder /app/apps/${APP_NAME}/.next/standalone ./
-COPY --from=builder /app/apps/${APP_NAME}/.next/static ./.next/static
-COPY --from=builder /app/apps/${APP_NAME}/public ./public
-COPY --from=builder /app/node_modules ./node_modules
-
+COPY --from=builder /app/apps/${APP_NAME}/.next/static ./apps/${APP_NAME}/.next/static
+COPY --from=builder /app/apps/${APP_NAME}/public ./apps/${APP_NAME}/public
 
 EXPOSE 3000
 
-CMD ["node", "server.js"]
+CMD ["node", "apps/lms-zoom/server.js"]

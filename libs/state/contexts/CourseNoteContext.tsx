@@ -7,6 +7,7 @@ import {
   useState,
 } from 'react'
 import { ICourseSectionNoteItem } from '@lms/core'
+import { useFeature } from './FeatureContext'
 
 // type for context
 type Context = {
@@ -49,7 +50,8 @@ export function CourseNoteProvider(props: PropsWithChildren<{
   }
 }>) {
   const { api, router } = props
-  const activityId = router?.query?.activityId
+  const { params } = useFeature()
+  const activityId = params?.activityId
   const [openNote, setOpenNote] = useState(false)
   const [noteData, setNoteData] = useState<ICourseSectionNoteItem | undefined>(
     undefined,

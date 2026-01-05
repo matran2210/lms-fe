@@ -15,8 +15,8 @@ interface ChartData {
 const OverProgress = () => {
   const [option, setOption] = useState<EChartsOption | null>();
   const { isMobile } = useReponsive();
-  const {router, dashboardApi} = useFeature()
-
+  const {dashboardApi, params, query} = useFeature()
+  const {courseId } = params || query
   const handlePieChartOption = (
     data: IOverProgress | IExamPrediction | ChartData,
   ) => {
@@ -122,9 +122,9 @@ const OverProgress = () => {
   };
 
   useEffect(() => {
-    if (router?.query?.courseId)
-      getOverProgress(router.query.courseId as string);
-  }, [router?.query?.courseId]);
+    if (courseId)
+      getOverProgress(courseId as string);
+  }, [courseId]);
 
   return (
     <div className="mb-5 mt-6 flex w-full flex-col rounded-2xl bg-white p-4 text-gray-700 shadow-small md:mb-0 md:p-6 lg:h-auto xl:mt-0 xl:h-auto xl:w-[566px] xl:p-8">

@@ -13,7 +13,12 @@ import {
   TestPopup,
 } from '@lms/feature-courses'
 import { ButtonPrimary, ButtonSecondary, ButtonText } from '@lms/ui'
-import { capitalizeFirstLetter, formatTimer, isQuizExpired, trackGAEvent } from '@lms/utils'
+import {
+  capitalizeFirstLetter,
+  formatTimer,
+  isQuizExpired,
+  trackGAEvent,
+} from '@lms/utils'
 import { Select } from 'antd'
 import dayjs from 'dayjs'
 import { isNull } from 'lodash'
@@ -76,7 +81,7 @@ const TestModal = ({
   activeCourse,
   is_passed_course,
 }: IProps) => {
-  console.log('class_user_id',class_user_id)
+  console.log('class_user_id', class_user_id)
   const router = useRouter()
   const isSubmitted =
     data?.quiz?.attempt && data?.quiz?.attempt?.status === 'SUBMITTED'
@@ -312,10 +317,12 @@ const TestModal = ({
   }, [selectedResult?.value, data?.quiz?.attempt])
 
   const handleStartANewAttempt = async () => {
-    if(!class_user_id) return
+    if (!class_user_id) return
     try {
       activeCourse && (await activeCourse())
-      router.push(`/short-course/test/${data?.quiz?.id}?class_user_id=${class_user_id}`)
+      router.push(
+        `/short-course/test/${data?.quiz?.id}?class_user_id=${class_user_id}`,
+      )
       status
         ? () => trackGAEvent('Click Button Retake Modal Test')
         : () => trackGAEvent('Click Button Start Modal Test')
@@ -652,11 +659,11 @@ const TestModal = ({
   const handleRedirectResult = () => {
     if (isManualGradingAndNotFinishedGrading) {
       router.push(
-        `/short-course/test/your-answers-detail?attempt=${selectedResult?.label}`
+        `/short-course/test/your-answers-detail?attempt=${selectedResult?.label}`,
       )
     } else {
       router.push(
-        `/short-course/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`
+        `/short-course/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
       )
     }
   }
@@ -778,11 +785,11 @@ const TestModal = ({
                         onClick={() => {
                           if (isManualGradingAndNotFinishedGrading) {
                             router.push(
-                              `/short-course/test/your-answers-detail?attempt=${selectedResult?.label}`
+                              `/short-course/test/your-answers-detail/${data?.quiz?.attempt?.id}?attempt=${selectedResult?.label}`,
                             )
                           } else {
                             router.push(
-                              `/short-course/test-result?attempt=${selectedResult?.label}?attempt=${selectedResult?.label}`
+                              `/short-course/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}?attempt=${selectedResult?.label}?attempt=${selectedResult?.label}`,
                             )
                           }
 

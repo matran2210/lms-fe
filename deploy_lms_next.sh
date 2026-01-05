@@ -21,7 +21,7 @@ fi
 echo "📝 Creating project.json..."
 cat > "$PROJECT_FILE" <<EOL
 {
-  "projectId":"prj_zS5V1DDmRXtNXgnux25k4XieVweM",
+  "projectId":"prj_2uEp5ABUipd5XQAOfxIEnsYsZyhB",
   "orgId":"team_JU0yCXAg41hvPS2acUIm6gEr"
 }
 EOL

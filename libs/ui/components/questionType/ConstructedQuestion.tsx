@@ -96,6 +96,7 @@ const EssayQuestionPreview = ({
   const dispatch = useAppDispatch();
   const refSheet = useRef(null) as any;
   const [key, setKey] = useState("1");
+  const {query} = useFeature()
 
   const editorRef = useRef<SAPPEditorHandle>(null);
   // Cờ chặn tạm thời onChange trong lúc đang thực hiện các thao tác cấu trúc
@@ -470,7 +471,7 @@ const EssayQuestionPreview = ({
             initialHTML={question_content || ""}
             storageKey={
               storageKey ||
-              `${router.query.id}-${fullData?.data?.qType}-question-${fullData?.id}`
+              `${query.id}-${fullData?.data?.qType}-question-${fullData?.id}`
             }
             className="sapp-questions sapp-editor-reader"
           />
@@ -521,7 +522,7 @@ const EssayQuestionPreview = ({
               <>
                 <HighlightableHTML
                   initialHTML={data?.description || ""}
-                  storageKey={`${router.query.id}-${fullData?.data?.qType}-requirement-description-${question_data?.requirements?.[index || 0]?.id}`}
+                  storageKey={`${query.id}-${fullData?.data?.qType}-requirement-description-${question_data?.requirements?.[index || 0]?.id}`}
                   className="sapp-questions mb-6"
                 />
                 {/* <EditorReader

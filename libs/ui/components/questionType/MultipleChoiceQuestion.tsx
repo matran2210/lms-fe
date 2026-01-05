@@ -37,7 +37,7 @@ const MultiChoiceQuestion = ({
   explainClassname,
   storageKey,
 }: IPreviewProp) => {
-  const { router } = useFeature()
+  const { query, params } = useFeature()
   const convertAnswer = useMemo(() => {
     const answers = [];
     let number = 0;
@@ -106,7 +106,7 @@ const MultiChoiceQuestion = ({
           initialHTML={data?.question_content || ""}
           storageKey={
             storageKey ||
-            `${router.query.id}-${data?.qType}-question-${data?.id}`
+            `${params?.id || query?.id}-${data?.qType}-question-${data?.id}`
           }
           className="sapp-questions sapp-editor-reader mb-6"
         />

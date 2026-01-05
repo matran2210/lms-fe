@@ -16,22 +16,18 @@ import 'slick-carousel/slick/slick.css'
 import 'aos/dist/aos.css'
 import { Providers } from './provider'
 
-export const metadata = {
-  title: 'LMS Pro',
-  description: 'LMS Pro App',
-}
+export const revalidate = 0
 
 export const revalidate = 0
 export default function RootLayout({ children }: { children: ReactNode }) {
-
   return (
-    <html lang="vi">
-      <Metadata />
-      <body>
-        <Providers>
-          {children}
-          </Providers>
-      </body>
-    </html>
+    <ErrorBoundary fallback={<ErrorRedirectPage />}>
+      <html lang="vi">
+        <Metadata />
+        <body>
+          <Providers>{children}</Providers>
+        </body>
+      </html>
+    </ErrorBoundary>
   )
 }

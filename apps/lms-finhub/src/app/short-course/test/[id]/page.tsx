@@ -106,9 +106,10 @@ const TestDetail = () => {
   const scrollRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const params = useParams()
+  const {query} = useFeature()
   const { quizDetail } = useGetQuizDetail(params.id as string)
   const { questions } = useGetQuestionTabs(params.id as string)
-  const type = params.type
+  const type = query.type
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
   const { control, watch, getValues, setValue } = useForm()
   const {
@@ -1591,7 +1592,6 @@ const TestDetail = () => {
       })
     }
   }, [watchExhibits('exhibits')])
-console.log('params', params)
   useEffect(() => {
     if (quizAttempt?.id) {
       const fetchAnswersSubmitted = async () => {
@@ -1616,7 +1616,7 @@ console.log('params', params)
           try {
             const res = await TestServiceAPI.createQuizAttempt(
               params.id as string,
-              params.class_user_id as string,
+              query.class_user_id as string,
             )
             localStorage.setItem('quizAttempt', JSON.stringify(res.data))
             setIsQuizAttemptCreated(true) // Mark the attempt as created
@@ -2357,7 +2357,7 @@ console.log('params', params)
                     router.replace(`/entrance-test`)
                     break
                   default:
-                    const class_id = params.class_id
+                    const class_id = query.class_id
                     if (class_id) {
                       router.push(`/short-course/detail/${class_id}`)
                     } else {

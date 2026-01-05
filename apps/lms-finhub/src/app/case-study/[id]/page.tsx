@@ -16,6 +16,7 @@ import {
   showPopupCompletedCourse,
   useAppDispatch,
   useAppSelector,
+  useFeature,
 } from '@lms/contexts'
 import {
   ESSAY_TYPE,
@@ -57,8 +58,8 @@ import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import ConFirmSubmit from '../short-course/test/conFirmSubmit'
-import LimitQuizModal from '../short-course/test/limitQuizModal'
+import ConFirmSubmit from '../../short-course/test/conFirmSubmit'
+import LimitQuizModal from '../../short-course/test/limitQuizModal'
 import { TestServiceAPI } from 'src/api/test-api'
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
@@ -230,7 +231,7 @@ const CaseStudyDetail = () => {
               dispatch(
                 clearFileEssayCaseStudy({
                   question_id: data.id,
-                  topic_id: params.id as string,
+                  topic_id: params?.id as string,
                   requirement_id: data?.requirements?.[0]?.id,
                 }),
               )
@@ -283,6 +284,7 @@ const CaseStudyDetail = () => {
   const [showWarning, setShowWarning] = useState(true)
   const MatchQuizRef = useRef(null) as any
   const params = useParams()
+  const { query } = useFeature()
 
   const handleResetEssay = async (
     index: number,
@@ -396,16 +398,16 @@ const CaseStudyDetail = () => {
     }
   }, [x, startResize])
   useEffect(() => {
-    if (params.id) {
+    if (params?.id) {
       dispatch(
         getTopicsCaseStudy({
           api: TestServiceAPI,
           id: params.id,
-          quiz_id: params.quiz_id,
+          quiz_id: query.quiz_id,
         }),
       )
     }
-  }, [params.id])
+  }, [params?.id])
   async function createAttempts(
     quiz_id: string,
     id: string,
@@ -416,7 +418,7 @@ const CaseStudyDetail = () => {
         quiz_id,
         id,
         class_user_id,
-        params.caseStudyId,
+        query?.caseStudyId,
       )
       setExhibitText(
         res.data.program === PROGRAM.CMA
@@ -436,14 +438,14 @@ const CaseStudyDetail = () => {
     } catch (err) {}
   }
   useEffect(() => {
-    if (params.quiz_id && params.id && params.class_user_id) {
+    if (query?.quiz_id && params.id && query.class_user_id) {
       createAttempts(
-        params.quiz_id as string,
+        query.quiz_id as string,
         params.id as string,
-        params.class_user_id as string,
+        query.class_user_id as string,
       )
     }
-  }, [params.id])
+  }, [params?.id])
 
   /**
    * Declare form to handle exhibit
@@ -807,7 +809,7 @@ const CaseStudyDetail = () => {
         }
 
         router.replace(
-          `/case-study/result/${quizAttempId}?class_user_id=${params.class_user_id}&class_id=${params.class_id}&course_section_id=${params.course_section_id}`,
+          `/case-study/result/${quizAttempId}?class_user_id=${params?.class_user_id}&class_id=${params?.class_id}&course_section_id=${params?.course_section_id}`,
         )
       } catch (err) {
         toast.error('Submission failed. Please try again.')
@@ -1422,7 +1424,7 @@ const CaseStudyDetail = () => {
               handleSaveFileEssay(
                 e?.[0],
                 openUpload?.question_id,
-                params.id as string,
+                params?.id as string,
                 openUpload.requirementId,
               )
             }

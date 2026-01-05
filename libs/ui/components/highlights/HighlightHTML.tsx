@@ -44,8 +44,8 @@ export const HighlightableHTML: React.FC<Props> = ({
   isShowNote = false,
   className,
 }) => {
-  const { router, courseApi, videoUrl } = useFeature();
-  const activityId = router.query.activityId;
+  const { courseApi, videoUrl, query } = useFeature();
+  const activityId = query.activityId;
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRefs = useRef<Record<string, React.RefObject<HTMLVideoElement>>>(
     {},

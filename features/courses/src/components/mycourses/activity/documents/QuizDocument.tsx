@@ -60,7 +60,14 @@ import ConFirmSubmit from "../../test/conFirmSubmit";
 import ShowAnswerTemplate from "../../test/ShowAnswerTemplate";
 import ResetToAnswerTemplateModal from "../../test/ResetToAnswerTemplateModal";
 import { useTailwindBreakpoint } from "@lms/hooks";
-import { myAnswer, myAnswerDragDrop, myAnswerFillWord, myAnswerMatching, myAnswerMultipleChoice, myAnswerSelectWord } from "@lms/core/types/answer";
+import {
+  myAnswer,
+  myAnswerDragDrop,
+  myAnswerFillWord,
+  myAnswerMatching,
+  myAnswerMultipleChoice,
+  myAnswerSelectWord,
+} from "@lms/core/types/answer";
 
 type Props = {
   questions: IQuestion[];
@@ -399,12 +406,12 @@ const QuizDocument = ({
         return [
           {
             question_id: question.id,
-            answer: (rawAnswer as { question_id: string; answer_id: string }[]).map(
-              (e) => ({
-                question_id: e.question_id,
-                answer_id: e.answer_id,
-              }),
-            ),
+            answer: (
+              rawAnswer as { question_id: string; answer_id: string }[]
+            ).map((e) => ({
+              question_id: e.question_id,
+              answer_id: e.answer_id,
+            })),
             time_spent: time_spent,
           },
         ] as myAnswerMatching[];
@@ -435,42 +442,34 @@ const QuizDocument = ({
   };
 
   const handleQuizFinish = async () => {
-    const isLastQuestionAfterAllQuestion = isAFTERAllQUESTION && isLastQuestion && !isQuestionConfirmed;
-      // Lấy đáp án từ form ( câu cuối người dùng vừa chọn (nếu có) để dùng cho case câu cuối của after all question)
-      const answerFromForm = questionRef?.current?.onSaveAnswer(activeQuestion);
-      const quizQuestion = selectQuestions(
-        selector,
-        activityId,
-        tabId,
-        quizId || "",
-      );
-    const quizQuestionMapped = isLastQuestionAfterAllQuestion ? quizQuestion?.map(
-        (item, index: number) => {
+    const isLastQuestionAfterAllQuestion =
+      isAFTERAllQUESTION && isLastQuestion && !isQuestionConfirmed;
+    // Lấy đáp án từ form ( câu cuối người dùng vừa chọn (nếu có) để dùng cho case câu cuối của after all question)
+    const answerFromForm = questionRef?.current?.onSaveAnswer(activeQuestion);
+    const quizQuestion = selectQuestions(
+      selector,
+      activityId,
+      tabId,
+      quizId || "",
+    );
+    const quizQuestionMapped = isLastQuestionAfterAllQuestion
+      ? quizQuestion?.map((item, index: number) => {
           if (index === activeQuestionIndex) {
-            // Check neeus store chưa có mà form có thì gán myAnswers từ form vào
-            const hasValidAnswerInStore =
-              item?.myAnswers &&
-              isValidatedAnswer(item.myAnswers, activeQuestion?.qType);
-            if (!hasValidAnswerInStore && answerFromForm) {
+            if (answerFromForm) {
               const formattedAnswer = formatMyAnswerFromForm(
                 answerFromForm,
                 activeQuestion,
                 calculateWorkTime(),
               );
-              if (
-                formattedAnswer.length > 0 &&
-                isValidatedAnswer(formattedAnswer, activeQuestion?.qType)
-              ) {
-                return {
-                  ...item,
-                  myAnswers: formattedAnswer,
-                };
-              }
+              return {
+                ...item,
+                myAnswers: formattedAnswer,
+              };
             }
           }
           return item;
-        },
-      ) : quizQuestion;
+        })
+      : quizQuestion;
 
     // Lọc hoặc giữ nguyên câu hỏi (ở đây hàm bạn gọi `isValidatedAnswer` đang return cùng item)
     const availableQuestions = quizQuestionMapped?.map((item: any) => {
@@ -479,7 +478,6 @@ const QuizDocument = ({
         isValidAnswer: isValidatedAnswer(item.myAnswers, item.qType),
       };
     });
-
     // Hàm helper: lấy giá trị trả lời hợp lệ từ câu trả lời
     // Comment để sử dụng isValidAnswer để check hợp lệ thay vì extractAnswerValue
     // const extractAnswerValue = (ans: any) => {
@@ -496,10 +494,7 @@ const QuizDocument = ({
     // };
 
     // Map qua toàn bộ câu hỏi để check hợp lệ
-    const validityList = availableQuestions?.map((item) =>
-      item?.isValidAnswer,
-    );
-    
+    const validityList = availableQuestions?.map((item) => item?.isValidAnswer);
 
     const allValid = every(validityList);
     if (allValid) {
@@ -765,6 +760,7 @@ const QuizDocument = ({
       }
     } finally {
       setLoading(false);
+      setOpenUnsubmitWarning(false);
     }
   };
 
