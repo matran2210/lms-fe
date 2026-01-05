@@ -2,37 +2,19 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@adapters/*": [
-        "src/adapters/*"
-      ],
-      "@components/*": [
-        "src/components/*"
-      ],
-      "@contexts/*": [
-        "src/contexts/*"
-      ],
-      "@services/*": [
-        "src/services/*"
-      ],
-      "@styles/*": [
-        "src/styles/*"
-      ],
-      "@utils/*": [
-        "src/utils/*"
-      ],
-      "@assets/*": [
-        "src/assets/*"
-      ],
-      "@i18n/*": [
-        "src/i18n/*"
-      ],
-      "@pages/*": [
-        "src/pages/*"
-      ]
+      "@adapters/*": ["src/adapters/*"],
+      "@components/*": ["src/components/*"],
+      "@contexts/*": ["src/contexts/*"],
+      "@services/*": ["src/services/*"],
+      "@styles/*": ["src/styles/*"],
+      "@utils/*": ["src/utils/*"],
+      "@assets/*": ["src/assets/*"],
+      "@i18n/*": ["src/i18n/*"],
+      "@pages/*": ["src/pages/*"]
     },
     "target": "ES2022",
     "module": "ESNext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "strict": true,
     "jsx": "preserve",
     "esModuleInterop": true,
@@ -40,11 +22,7 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "noEmit": true,
     "incremental": true,
@@ -62,7 +40,5 @@
     "**/*.tsx",
     ".next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
