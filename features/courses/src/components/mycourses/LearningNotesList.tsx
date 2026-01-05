@@ -51,7 +51,7 @@ type Props = {
 };
 const LearningNotesList = ({ appType }: Props) => {
   const [direction, setDirection] = useState<1 | -1>(1);
-  const { courseApi, pageLink, router, pathname, query } = useFeature();
+  const { courseApi, pageLink, router, pathname, query, params: param } = useFeature();
   const { isMobileView, isAlwaysShowSidebar } = useTailwindBreakpoint();
   const notesListStatus = useAppSelector(
     (state) => appType === AppType.LMS_PRO ? state.notesListReducer?.status : state.shortNotesListReducer?.status,
@@ -113,12 +113,12 @@ const LearningNotesList = ({ appType }: Props) => {
   const isCourseDetail = pageLink.COURSE_DETAIL === pathname;
   const isCoursePartDetail = pathname?.includes("/section");
   const isActivityDetail = pathname?.includes("/activity");
-  const courseId = query?.courseId;
-  const queryId = query?.id;
-  const activityId = query?.activityId;
+  const courseId = param?.courseId ||  query?.courseId;
+  const queryId = param?.id || query?.id;
+  const activityId = param?.activityId || query?.activityId;
   const chapterId = query?.chapter;
   const unitId = query?.unit;
-  const courseSectionId = query.course_section_id;
+  const courseSectionId = param?.course_section_id || query.course_section_id;
 
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_NUMBER);
   const [isFirstCallApi, setIsFirstCallApi] = useState(false);

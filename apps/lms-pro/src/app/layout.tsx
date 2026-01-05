@@ -17,23 +17,28 @@ import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import 'aos/dist/aos.css'
 import ClientLayout from './client-layout'
-
+import Script from 'next/script'
 export const metadata = {
   title: 'LMS Pro',
   description: 'LMS Pro App',
 }
 export const revalidate = 0
 export default function RootLayout({ children }: { children: ReactNode }) {
-
   return (
     <html lang="vi">
       <Metadata />
+      <head>
+        <Script
+          src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"
+          strategy="beforeInteractive"
+        />
+      </head>
       <body>
         <Providers>
           <ClientLayout />
           {children}
           {/* </ClientLayout> */}
-          </Providers>
+        </Providers>
       </body>
     </html>
   )

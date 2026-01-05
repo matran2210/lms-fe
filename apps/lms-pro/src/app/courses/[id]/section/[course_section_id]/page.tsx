@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import {
   AlertInfoIcon,
   ChapterIcon,
@@ -29,7 +29,12 @@ import { buildQueryString, formatDate } from '@lms/utils'
 import { Alert, Divider, Skeleton } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation'
 import PreviewPartDetail from '@sapp-fe/preview-part'
 import { use, useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -94,32 +99,29 @@ const CoursePartDetail = () => {
   const [openResource, setOpenResource] = useState<boolean>(false)
   const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
 
-  const useGetData = (queryKey: string, params: Object) => {
+  const useGetData = (queryKey: string) => {
     const fetchData = async () => {
       const { data } = await CoursesAPI.getPartDetail(
-        query.id,
-        query.course_section_id,
+        params.id,
+        params.course_section_id,
       )
       return data
     }
 
     return useQuery([queryKey, params], fetchData, {
       enabled:
-        query.id !== undefined &&
-        query.course_section_id !== undefined,
+        params.id !== undefined && params.course_section_id !== undefined,
       retry: false,
     })
   }
 
-  const focusSubSectionIds = query?.focusSubSectionIds as
-    | string
-    | undefined
+  const focusSubSectionIds = query?.focusSubSectionIds as string | undefined
   const focusUnitIds = query?.focusUnitIds as string | undefined
   const deadline = query?.deadline as string | undefined
   const isOverdue = dayjs(deadline).isBefore(new Date())
   const listFocusSubSectionIds = focusSubSectionIds?.split(',') || []
   const listFocusUnitIds = focusUnitIds?.split(',') || []
-  const { data: previewPart, isLoading } = useGetData('course-part-detail', {})
+  const { data: previewPart, isLoading } = useGetData('course-part-detail')
 
   const tree = TreeHelper.convertFromArray(previewPart?.course_section_tree)
   const partDetail = tree[0] as any
@@ -233,7 +235,9 @@ const CoursePartDetail = () => {
         thankYouLater: false,
       })
     } else {
-      router.push(`/courses/${query.id}/activity/${id}?chapter=${query.chapter}&unit=${chapter?.parent_id}&course_section_id=${query.course_section_id}`)
+      router.push(
+        `/courses/${params.id}/activity/${id}?chapter=${query.chapter}&unit=${chapter?.parent_id}&course_section_id=${params.course_section_id}`,
+      )
     }
   }
 
@@ -268,11 +272,10 @@ const CoursePartDetail = () => {
           thankYouLater: false,
         })
       } else {
-        localStorage.setItem(
-          'course_chapter_id',
-          query?.chapter as string,
+        localStorage.setItem('course_chapter_id', query?.chapter as string)
+        router.push(
+          `/case-study/result/${getCaseStudy?.attempt?.id}?class_user_id=${previewPart.class_user_id}&class_id=${params?.id}&course_section_id=${params?.course_section_id}`,
         )
-        router.push(`/case-study/result/${getCaseStudy?.attempt?.id}?class_user_id=${previewPart.class_user_id}&class_id=${params?.id}&course_section_id=${params?.course_section_id}`)
       }
     } else {
       if (sectionId && caseStudyId) {
@@ -286,11 +289,10 @@ const CoursePartDetail = () => {
           thankYouLater: false,
         })
       } else {
-        localStorage.setItem(
-          'course_chapter_id',
-          query?.chapter as string,
+        localStorage.setItem('course_chapter_id', query?.chapter as string)
+        router.push(
+          `/case-study/${topicId}?quiz_id=${quizId}&class_user_id=${previewPart.class_user_id}&caseStudyId=${caseStudyId}&class_id=${params?.id}&course_section_id=${params?.course_section_id}`,
         )
-        router.push(`/case-study/${topicId}?quiz_id=${quizId}&class_user_id=${previewPart.class_user_id}&caseStudyId=${caseStudyId}&class_id=${params?.id}&course_section_id=${params?.course_section_id}`)
       }
     }
   }
@@ -402,7 +404,7 @@ const CoursePartDetail = () => {
     course_section_id: string | string[] | undefined,
   ) => {
     const res = await CoursesAPI.learningOutcomeProgress(
-      query.id,
+      params.id,
       chapterDetail?.id,
     )
     if (res?.success) {
@@ -414,7 +416,7 @@ const CoursePartDetail = () => {
     courseId: string,
     caseStudyId: string,
   ) => {
-    await CoursesAPI.caseStudyProgress(query.id, courseId, caseStudyId)
+    await CoursesAPI.caseStudyProgress(params.id, courseId, caseStudyId)
   }
 
   useEffect(() => {
@@ -449,10 +451,9 @@ const CoursePartDetail = () => {
   }, [pathname, searchParams, partDetail?.id])
 
   const handleGoBack = () => {
-    router.push(PageLink.COURSE_DETAIL.replace(
-        '[courseId]',
-        query.id as string,
-      ))
+    router.push(
+      PageLink.COURSE_DETAIL.replace('[courseId]', params.id as string),
+    )
   }
 
   useEffect(() => {
@@ -543,7 +544,7 @@ const CoursePartDetail = () => {
                 title: previewPart?.name,
                 link: PageLink.COURSE_DETAIL.replace(
                   '[courseId]',
-                  query.id as string,
+                  params.id as string,
                 ),
               },
               {
@@ -562,8 +563,8 @@ const CoursePartDetail = () => {
             loadingChapter={loadingScreen}
             setLoadingChapter={setLoadingChapter}
             setOpenLearningOutcome={setOpenLearningOutcome}
-            course_id={query.id as any}
-            course_section_id={query.course_section_id as any}
+            course_id={params.id as string}
+            course_section_id={params.course_section_id as string}
             handleRouterActivity={handleRouterActivity}
             handleRouterCaseStudy={handleRouterCaseStudy}
             handleLearningOutCome={handleLearningOutCome}

@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import {
   CalculatorIconV2,
   CloseIcon,
@@ -9,7 +9,7 @@ import {
   HourglassIcon,
   ResourceIcon,
   ScratchPadIconV2,
-  TimeLineIcon
+  TimeLineIcon,
 } from '@lms/assets'
 import {
   CalculatorModal,
@@ -23,7 +23,7 @@ import {
   FileViewer,
   Layout,
   LearningResource,
-  ModalResizeable
+  ModalResizeable,
 } from '@lms/ui'
 import { convertMinutesToHourFormat } from '@lms/utils'
 
@@ -76,7 +76,12 @@ import {
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation'
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useQuery } from 'react-query'
@@ -250,9 +255,7 @@ const ActivityPage = () => {
         dispatch(courseActivityAction.setActivityState(activity))
         dispatch(
           courseActivityAction.setCurrentTabId(
-            !!query?.tabId
-              ? (query?.tabId as string)
-              : activity?.tabs?.[0]?.id,
+            !!query?.tabId ? (query?.tabId as string) : activity?.tabs?.[0]?.id,
           ),
         )
         dispatch(
@@ -279,11 +282,11 @@ const ActivityPage = () => {
   // TODO: next14
   useEffect(() => {
     // router.events.on('routeChangeComplete', () => {
-      isFinishRef.current = false
+    isFinishRef.current = false
     // })
     return () => {
       // router.events.off('routeChangeComplete', () => {
-        isFinishRef.current = true
+      isFinishRef.current = true
       // })
     }
   }, [pathname, searchParams])
@@ -420,7 +423,7 @@ const ActivityPage = () => {
 
   const breadcrumbsData: ITabs[] = breadcrumbsMenu?.data
     ? breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
-      const urlCourseDetail = `/courses/${params?.id}/section/${partId}`
+        const urlCourseDetail = `/courses/${params?.id}/section/${partId}`
         switch (e.course_section_type) {
           case 'PART':
           case 'CHAPTER':
@@ -529,7 +532,6 @@ const ActivityPage = () => {
       }
     }
   }, [])
-
   return (
     <>
       <Layout
@@ -680,7 +682,7 @@ const ActivityPage = () => {
                   })}
                   data-aos={isMobileView ? undefined : ANIMATION.DATA_AOS}
                 >
-                    <Discussion class_id={(params?.id as string) || ''} />
+                  <Discussion class_id={(params?.id as string) || ''} />
                 </div>
               </div>
               <AssistiveTouch

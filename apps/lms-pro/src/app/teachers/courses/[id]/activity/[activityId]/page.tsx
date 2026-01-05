@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { CloseIcon, DownloadIcon, LinkIcon } from '@lms/assets'
 import {
   clearNote,
@@ -46,7 +46,12 @@ import {
 } from '@lms/ui'
 import { trackGAEvent, truncateBySpace, truncateString } from '@lms/utils'
 import { uniqueId } from 'lodash'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation'
 import React, {
   useEffect,
   useLayoutEffect,
@@ -77,7 +82,7 @@ const ActivityTeacherPage = () => {
   const router = useRouter()
   const searchParam = useSearchParams()
   const pathname = usePathname()
-  const params = useParams();
+  const params = useParams()
   const { id, activityId } = params
   const query = Object.fromEntries(searchParam.entries())
   const { setOpenPopupCTA } = useCourseContext()
@@ -446,10 +451,7 @@ const ActivityTeacherPage = () => {
   /**
    * @description lấy data breadcrumb using react-query
    */
-  const { data: breadcrumbsMenu } = useGetBreadcrumb(
-    id,
-    activityId,
-  )
+  const { data: breadcrumbsMenu } = useGetBreadcrumb(id, activityId)
 
   /**
    * @description tìm kiếm id của Part
