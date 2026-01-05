@@ -14,9 +14,9 @@ import {
   MyCourseAnimation,
   NoteListAnimation,
   NotificationAnimation,
+  OpenBookAnimation,
   ResourceAnimation,
   TestQuizListAnimation,
-  OpenBookAnimation,
 } from "@lms/assets";
 import {
   activeNotesList,
@@ -28,9 +28,10 @@ import {
   useFeature,
   userReducer,
 } from "@lms/contexts";
-import { LANG_SIGNIN, MenuItem as MenuItemType, TitleSidebar } from "@lms/core";
+import { LANG_SIGNIN, MenuItem as MenuItemType, RouteContext, TitleSidebar } from "@lms/core";
 import { useNotification } from "@lms/hooks";
-import { trackGAEvent } from "@lms/utils";
+import { getCourseContentSubContext, getLearningSubContext, getRouteContext, trackGAEvent } from "@lms/utils";
+import SappNotificationComponent from "@sapp-fe/sapp-notification";
 import { Divider } from "antd";
 import clsx from "clsx";
 import { isEmpty } from "lodash";
@@ -38,7 +39,6 @@ import Lottie from "lottie-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import SappNotificationComponent from "@sapp-fe/sapp-notification";
 import { v4 as uuidv4 } from "uuid";
 import MenuItemsList from "../MenuItemsList";
 
@@ -55,7 +55,11 @@ export default function MenuItem({
   closeSideBar,
   setOpenExaminationInfo,
 }: MenuItemProps) {
-  const { notificationApi, pageLink, router, pathname, query } = useFeature();
+  const { notificationApi, pageLink, router, pathname, query, params } = useFeature();
+  const id = params?.id || query.id
+  const courseId = params?.courseId || query.courseId
+  const activityId = params?.activityId || query.activityId
+  const course_section_id = params?.course_section_id || query.course_section_id
   const {
     isViewDetail,
     openNotification,
@@ -99,7 +103,40 @@ export default function MenuItem({
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(userReducer);
   const isNested = subItems && subItems?.length > 0;
-  const selected = pathname === url;
+  const courseContext = getCourseContentSubContext(pathname as string);
+  const learningContext = getLearningSubContext(pathname as string);
+  const selected = (() => {
+    const context: RouteContext = getRouteContext(pathname as string);
+    if (context === "GLOBAL") return pathname === url;
+
+    else if (context === "COURSE_MANAGEMENT") {
+      switch (name) {
+        case TitleSidebar.COURSE_CONTENT:
+          return courseContext === "CONTENT";
+
+        case TitleSidebar.DASHBOARD:
+          return courseContext === "DASHBOARD";
+
+        case TitleSidebar.RESULTS:
+          return courseContext === "RESULTS";
+
+        case TitleSidebar.CLASS_RESOURCE:
+          return courseContext === "CLASS_RESOURCE";
+
+        default:
+          return false;
+      }
+    } else if (context === "COURSE_LEARNING") {
+      switch (name) {
+        case TitleSidebar.COURSE_CONTENT:
+          return learningContext === "CONTENT";
+
+        default:
+          return false;
+      }
+    }
+
+  })();
   const [badgeClass, setBadgeClass] = useState("w-4 h-4 -top-[5px] -right-1.5"); // Default width
 
   useEffect(() => {
@@ -138,10 +175,10 @@ export default function MenuItem({
   };
 
   const handleOpenCourseContentPage = () => {
-    router.push(`/courses/my-course/${query.courseId || query.id}`);
+    router.push(`/courses/my-course/${courseId || id}`);
   };
   const handleOpenResultsPage = () => {
-    router.push(`/courses/my-course/${query.courseId || query.id}/results`);
+    router.push(`/courses/my-course/${courseId || id}/results`);
   };
 
   const handleViewNotification = (link: string) => {
@@ -153,7 +190,7 @@ export default function MenuItem({
   };
 
   const onClickMenuItem = () => {
-    const hasCourseContext = query?.courseId || query?.id;
+    const hasCourseContext = courseId || id;
 
     // Nếu url trống => là menu Notification
     if (isEmpty(url)) {
@@ -194,13 +231,13 @@ export default function MenuItem({
           if (url && url !== "#") {
             const targetUrl =
               url === pageLink.RESULTS
-                ? `/courses/my-course/${query.courseId || query.id}/results`
+                ? `/courses/my-course/${courseId || id}/results`
                 : url === pageLink.DASHBOARD
-                  ? `/courses/my-course/${query.courseId || query.id}/dashboard`
+                  ? `/courses/my-course/${courseId || id}/dashboard`
                   : name === TitleSidebar.COURSE_CONTENT
-                    ? `/courses/my-course/${query.courseId || query.id}`
+                    ? `/courses/my-course/${courseId || id}`
                     : name === TitleSidebar.CLASS_RESOURCE
-                      ? `/courses/my-course/${query.courseId || query.id}/class-resource`
+                      ? `/courses/my-course/${courseId || id}/class-resource`
                       : url;
 
             router.push(targetUrl);
@@ -222,12 +259,13 @@ export default function MenuItem({
     return lastTwo.join(" ");
   }
 
-  const isActivity = query?.activityId;
+  const isActivity = activityId;
   const isInCourse =
-    query?.courseId ||
-    (query?.activityId && name !== TitleSidebar.EXAM) ||
-    (query?.course_section_id && name !== TitleSidebar.EXAM);
+    courseId ||
+    (activityId && name !== TitleSidebar.EXAM) ||
+    (course_section_id && name !== TitleSidebar.EXAM);
   const isInMyProfile = pathname === pageLink.MYPROFILE;
+
   const checkIsHiddenDashboard = (info: any) => {
     return name == TitleSidebar.DASHBOARD && !info;
   };
@@ -416,7 +454,7 @@ export default function MenuItem({
             })}
           >
             {user?.detail?.avatar?.["40x40"] ||
-            user.detail.avatar?.["ORIGIN"] ? (
+              user.detail.avatar?.["ORIGIN"] ? (
               <Image
                 src={
                   user.detail.avatar?.["40x40"] ||
@@ -461,8 +499,7 @@ export default function MenuItem({
                 <ExpandIcon
                   type={Icon}
                   className={clsx(
-                    `before-icon min-h-6 min-w-6 shrink-0 ${
-                      selected ? "bg-primary text-white" : "text-gray-800"
+                    `before-icon min-h-6 min-w-6 shrink-0 ${selected ? "bg-primary text-white" : "text-gray-800"
                     }`,
                     {
                       "group-hover:text-gray-800": !selected,
@@ -493,8 +530,7 @@ export default function MenuItem({
         {Icon === "avatar" ? (
           <div
             className={clsx(
-              `label avatar invisible pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
-                selected ? "text-white" : "text-gray-800"
+              `label avatar invisible pl-4 text-base font-normal opacity-0 transition-all duration-150 ${selected ? "text-white" : "text-gray-800"
               }`,
               {
                 "group-hover:text-gray-800": !selected,
@@ -527,8 +563,7 @@ export default function MenuItem({
             {Icon === "profile-detail" ? (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-3 text-base font-normal opacity-0 transition-all duration-200 ease-in-out md:pl-4 ${
-                    selected ? "bg-primary text-white" : "text-gray-800"
+                  `label invisible line-clamp-1 pl-3 text-base font-normal opacity-0 transition-all duration-200 ease-in-out md:pl-4 ${selected ? "bg-primary text-white" : "text-gray-800"
                   }`,
                   {
                     "group-hover:text-gray-800": !selected,
@@ -540,8 +575,7 @@ export default function MenuItem({
             ) : (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-3 text-base font-normal opacity-0 transition-all duration-200 ease-in-out md:pl-4 ${
-                    selected ? "bg-primary text-white" : "text-gray-800"
+                  `label invisible line-clamp-1 pl-3 text-base font-normal opacity-0 transition-all duration-200 ease-in-out md:pl-4 ${selected ? "bg-primary text-white" : "text-gray-800"
                   }`,
                   {
                     "group-hover:text-gray-800": !selected,
@@ -558,6 +592,7 @@ export default function MenuItem({
     );
   };
 
+
   return (
     <>
       {isActivity && name === TitleSidebar.NEW_NOTE && (
@@ -567,54 +602,50 @@ export default function MenuItem({
       )}
       <div
         className={clsx(
-          `group/menuItem transform cursor-pointer rounded transition-all duration-200 ease-in-out ${
-            selected &&
+          `group/menuItem transform cursor-pointer rounded transition-all duration-200 ease-in-out ${selected &&
             ((type === "level-1" &&
               Icon !== "avatar" &&
               Icon !== "profile-detail") ||
               (type === "level-2" &&
                 (Icon === "result" || Icon === "bookmark")))
-              ? "bg-primary text-white"
-              : ""
-          } sidebar-list-items relative px-4 py-2 last:mb-0 ${
-            !isActivity &&
+            ? "bg-primary text-white"
+            : ""
+          } sidebar-list-items relative px-4 py-2 last:mb-0 ${!isActivity &&
             (name === TitleSidebar.NEW_NOTE || name === TitleSidebar.CALCULATOR)
-              ? "hidden"
-              : ""
+            ? "hidden"
+            : ""
           }
-        ${
-          !isInCourse &&
-          (name === TitleSidebar.COURSE_CONTENT ||
-            name === TitleSidebar.NOTES_LIST ||
-            name === TitleSidebar.RESOURCES ||
-            name === TitleSidebar.RESULTS ||
-            name === TitleSidebar.EXAM ||
-            name === TitleSidebar.DASHBOARD ||
-            name === TitleSidebar.CLASS_RESOURCE ||
-            Icon === "stats-chart-sharp" ||
-            Icon === "profile-detail")
+        ${!isInCourse &&
+            (name === TitleSidebar.COURSE_CONTENT ||
+              name === TitleSidebar.NOTES_LIST ||
+              name === TitleSidebar.RESOURCES ||
+              name === TitleSidebar.RESULTS ||
+              name === TitleSidebar.EXAM ||
+              name === TitleSidebar.DASHBOARD ||
+              name === TitleSidebar.CLASS_RESOURCE ||
+              Icon === "stats-chart-sharp" ||
+              Icon === "profile-detail")
             ? "hidden"
             : ""
-        }
-        ${
-          isInCourse &&
-          (name === TitleSidebar.COURSES ||
-            name === TitleSidebar.EXAM_LIST ||
-            name === TitleSidebar.ENTRANCE_TEST ||
-            // hidden when in course
-            name === TitleSidebar.CALENDAR ||
-            // hidden when in course
-            name === LANG_SIGNIN.eventTest ||
-            name === TitleSidebar.NOTIFICATION ||
-            Icon === "avatar" ||
-            Icon === "profile-detail" ||
-            checkIsHiddenDashboard(
-              JSON.parse(localStorage.getItem("courseInfo") as any),
-            ) ||
-            Icon === "avatar")
+          }
+        ${isInCourse &&
+            (name === TitleSidebar.COURSES ||
+              name === TitleSidebar.EXAM_LIST ||
+              name === TitleSidebar.ENTRANCE_TEST ||
+              // hidden when in course
+              name === TitleSidebar.CALENDAR ||
+              // hidden when in course
+              name === LANG_SIGNIN.eventTest ||
+              name === TitleSidebar.NOTIFICATION ||
+              Icon === "avatar" ||
+              Icon === "profile-detail" ||
+              checkIsHiddenDashboard(
+                JSON.parse(localStorage.getItem("courseInfo") as any),
+              ) ||
+              Icon === "avatar")
             ? "hidden"
             : ""
-        }
+          }
         `,
           {
             "hover:bg-gray-100": !selected,
@@ -623,9 +654,8 @@ export default function MenuItem({
         onClick={() => onClickMenuItem()}
       >
         <div
-          className={`sidebar-item flex items-center ${
-            Icon === "avatar" || Icon === "profile-detail" ? "-ml-2" : ""
-          }`}
+          className={`sidebar-item flex items-center ${Icon === "avatar" || Icon === "profile-detail" ? "-ml-2" : ""
+            }`}
         >
           {url !== "#" && !isEmpty(url) ? (
             <Link
@@ -640,7 +670,7 @@ export default function MenuItem({
                         ? `/courses/my-course/${query?.courseId || query?.id}`
                         : url
               }
-              // passHref
+            // passHref
             >
               {renderMenuContent()}
             </Link>
@@ -663,9 +693,8 @@ export default function MenuItem({
         </div>
         {isNested ? (
           <div
-            className={`sidebar-child ${type} ${
-              isExpanded && type === "level-2" ? "active" : ""
-            }`}
+            className={`sidebar-child ${type} ${isExpanded && type === "level-2" ? "active" : ""
+              }`}
           >
             <MenuItemsList
               options={subItems || []}
