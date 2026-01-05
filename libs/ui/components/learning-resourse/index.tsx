@@ -30,7 +30,7 @@ const DEFAULT_PAGE_INDEX = 1;
 const DEFAULT_PAGESIZE = 20;
 
 const LearningResource = ({ open, setOpenResource }: IProps) => {
-  const { pageLink, router, courseApi, uploadApi, pathname, query } = useFeature();
+  const { pageLink, router, courseApi, uploadApi, pathname, query, params: param } = useFeature();
   const [direction, setDirection] = useState<1 | -1>(1);
   const { isMobileView, isTabletView, isAlwaysShowSidebar } =
     useTailwindBreakpoint();
@@ -40,12 +40,12 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const isCourseDetail = pageLink.COURSE_DETAIL === pathname;
   const isCoursePartDetail = pathname?.includes("/section");
   const isActivityDetail = pathname?.includes("/activity");
-  const courseId = query?.courseId;
-  const queryId = query?.id;
-  const activityId = query?.activityId;
+  const courseId = param?.courseId || query?.courseId;
+  const queryId = param?.id || query?.id;
+  const activityId = param?.id || query?.activityId;
   const chapterId = query?.chapter;
   const unitId = query?.unit;
-  const courseSectionId = query.course_section_id;
+  const courseSectionId = param?.course_section_id || query.course_section_id;
 
   const [loading, setLoading] = useState<boolean>(false);
   const [isFirstCallApi, setIsFirstCallApi] = useState(false);
