@@ -80,7 +80,7 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
   const handleViewActivity = (record: QuizActivity) => {
     if (!record?.id) return;
 
-    const courseId = params?.id || query.courseId as string;
+    const courseId = params?.courseId || query.courseId as string;
     const quiz = record;
     const attempt = quiz?.attempts?.[0];
     // Logic điều hướng theo yêu cầu:
@@ -97,7 +97,7 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
         }
         );
       } else {
-        if (record?.attempts) {
+        if (record?.attempts && record?.attempts?.length > 0) {
         if (
           record?.attempts?.[0]?.status === EAttemptStatus.IN_PROGRESS
         ) {
@@ -140,7 +140,7 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
         openInNewTab({ url: `/courses/${courseId}/activity/${record.activity_id}?tabId=${record?.tab_id}`, });
       } else {
         // handleOpenTest(record)
-        if (record?.attempts) {
+        if (record?.attempts && record?.attempts?.length > 0) {
           if (
             record?.attempts?.[0]?.status === EAttemptStatus.SUBMITTED
           ) {
