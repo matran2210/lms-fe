@@ -92,9 +92,9 @@ const TestModal = ({
   const [isCallSubmit, setIsCallSubmit] = useState(false);
 
   const quiz = data?.quiz;
-  const isLimited = !!quiz.is_limited;
-  const attempt = quiz.attempt;
-  const limitCount = quiz.limit_count;
+  const isLimited = !!quiz?.is_limited;
+  const attempt = quiz?.attempt;
+  const limitCount = quiz?.limit_count;
   const currentAttemptNum = attempt?.number_of_attempts;
   const isNoAttempt = !data?.quiz?.attempt;
 
@@ -405,19 +405,19 @@ const TestModal = ({
     }
   };
 
-  const renderBackButton = () => (
+  const renderBackButton = (requestClose: () => void) => (
     <ButtonText
       title="Cancel"
       // icon={<BackIcon />}
       size="medium"
       onClick={() => {
-        setOpen(false);
+        requestClose();
         trackGAEvent("Click Button Back to My Course");
       }}
     />
   );
 
-  const renderCustomFooter = () => {
+  const renderCustomFooter = (requestClose: () => void) => {
     if (!quiz) return null;
 
     // Trường hợp: có thể hiển thị nút Start hoặc Retake
@@ -451,7 +451,7 @@ const TestModal = ({
                   onClick={handleStartANewAttempt}
                 />
               )}
-              {renderBackButton()}
+              {renderBackButton(requestClose)}
             </>
           );
         }
@@ -472,7 +472,7 @@ const TestModal = ({
                 full
                 onClick={handleStartANewAttempt}
               />
-              {renderBackButton()}
+              {renderBackButton(requestClose)}
             </>
           );
         }
@@ -488,7 +488,7 @@ const TestModal = ({
                 onClick={handleRetakeNewAttempt}
               />
             )}
-            {renderBackButton()}
+            {renderBackButton(requestClose)}
           </>
         );
       } else {
@@ -517,7 +517,7 @@ const TestModal = ({
                   onClick={handleStartANewAttempt}
                 />
               )}
-              {renderBackButton()}
+              {renderBackButton(requestClose)}
             </>
           );
         }
@@ -841,11 +841,11 @@ const TestModal = ({
             </>
           )
         }
-        customFooter={
+        customFooter={({ requestClose }) => (
           <div className="flex w-full flex-col items-center justify-center gap-3">
-            {renderCustomFooter()}
+            {renderCustomFooter(requestClose)}
           </div>
-        }
+        )}
         isClosable={
           isNoAttemptOrLimitReached &&
           (!isLimited ||

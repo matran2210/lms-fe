@@ -31,16 +31,16 @@ const CreateNoteDesktop = ({
       position="center left"
       width={412}
       height={350}
-      header={
+      header={({ requestClose }) => (
         <div className="modal-dragger modal-header cursor-move overflow-hidden">
           <div className="flex justify-between rounded-sm bg-gray-100 px-4 py-3">
             <h4 className="text-sm font-semibold">New Note</h4>
-            <div className="cursor-pointer" onClick={() => onRemove()}>
+            <div className="cursor-pointer" onClick={() => requestClose()}>
               <CloseNone />
             </div>
           </div>
         </div>
-      }
+      )}
       rootClassName="rounded-xl overflow-hidden border-gray-12"
     >
       <div className="relative h-[calc(100%-8px)] w-full">

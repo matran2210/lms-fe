@@ -31,7 +31,9 @@ interface IProps {
   headerClassName?: string;
   isClosable?: boolean;
   isUnderLine?: boolean;
-  customFooter?: ReactNode;
+  customFooter?:
+    | ReactNode
+    | ((helpers: { requestClose: () => void }) => ReactNode);
   className?: string;
   gapContent?: string;
   loadingBtnSubmit?: boolean;
@@ -169,7 +171,11 @@ const SappModalV3 = ({
         </div>
       )}
       {!showFooter && customFooter && (
-        <div className={"relative flex justify-center"}>{customFooter}</div>
+        <div className={"relative flex justify-center"}>
+          {typeof customFooter === "function"
+            ? customFooter({ requestClose })
+            : customFooter}
+        </div>
       )}
     </Modal>
   );

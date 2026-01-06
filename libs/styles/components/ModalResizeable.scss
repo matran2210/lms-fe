@@ -31,6 +31,10 @@
   transform-origin: center;
 }
 
+.modal-zoom-out {
+  animation: modalZoomOut 300ms ease-in forwards;
+}
+
 @keyframes overlayFade {
   from {
     opacity: 0;
@@ -48,5 +52,16 @@
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes modalZoomOut {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.95);
+    opacity: 0;
   }
 }

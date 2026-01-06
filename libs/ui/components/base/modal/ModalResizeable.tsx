@@ -6,13 +6,13 @@ import { Rnd } from "react-rnd";
 
 interface ModalResizeableProps {
   title?: string | ReactNode;
-  children: ReactNode;
+  children: ReactNode | ((helpers: { requestClose: () => void }) => ReactNode); // requestClose dùng để close modal mà vẫn giữ được animation khi đóng modal
   width?: number;
   height?: number;
   minWidth?: number;
   minHeight?: number;
   dragHandleClassName?: string;
-  header?: ReactNode;
+  header?: ReactNode | ((actions: { requestClose: () => void }) => ReactNode); // requestClose dùng để close modal mà vẫn giữ được animation khi đóng modal
   handleCloseScratchPad?: (pad: any) => void;
   position?:
     | "top left"
@@ -55,7 +55,18 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   onClick = () => {},
 }) => {
   const [size, setSize] = useState({ width, height });
+  const [closing, setClosing] = useState(false);
+  const EXIT_DURATION = 300;
 
+  const requestClose = () => {
+    if (closing) return;
+
+    setClosing(true);
+
+    setTimeout(() => {
+      handleCloseScratchPad?.(null);
+    }, EXIT_DURATION);
+  };
   //Hàm tính vị trí của Modal
   const calculatePosition = (
     pos: string,
@@ -142,9 +153,18 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
     );
   }, []);
 
+  useEffect(() => {
+    setClosing(false);
+  }, [width, height]);
+
   const renderContent = () => {
     return (
-      <div className="pointer-events-none fixed inset-0 z-[1000] overflow-hidden modal-zoom-in modal-overlay">
+      <div
+        className={clsx(
+          "pointer-events-none fixed inset-0 z-[1000] overflow-hidden modal-overlay",
+          closing ? "modal-zoom-out" : "modal-zoom-in",
+        )}
+      >
         <Rnd
           size={{ width: size.width, height: size.height }}
           position={modalPosition}
@@ -201,7 +221,11 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
             )}
           >
             {header ? (
-              header
+              typeof header === "function" ? (
+                header({ requestClose })
+              ) : (
+                header
+              )
             ) : (
               <div className={"modalHeader"}>
                 <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between px-5">
@@ -209,14 +233,16 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
                 </div>
                 <button
                   className="absolute right-3 top-2"
-                  onClick={handleCloseScratchPad}
+                  onClick={requestClose}
                 >
                   <CloseIcon />
                 </button>
               </div>
             )}
             <div className={clsx("modalContent", contentClassName)}>
-              {children}
+              {typeof children === "function"
+                ? children({ requestClose })
+                : children}
             </div>
           </div>
         </Rnd>

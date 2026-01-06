@@ -14,7 +14,7 @@ const PopupCanNotRetakeTest = ({ open, onCancel, setOpen }: IProps) => {
   };
   return (
     <SappModalV2
-      open={true}
+      open={open}
       okButtonCaption="Back"
       onOk={onOk}
       handleCancel={() => setOpen(false)}
