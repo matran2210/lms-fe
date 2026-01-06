@@ -25,7 +25,11 @@ import {
   RESPONSE_OPTION,
   ROUTES,
 } from '@lms/core'
-import { useMousePosition, useTailwindBreakpoint } from '@lms/hooks'
+import {
+  useMousePosition,
+  useSmartModalSize,
+  useTailwindBreakpoint,
+} from '@lms/hooks'
 import {
   AddWordPreview,
   ButtonPrimary,
@@ -64,6 +68,8 @@ const CaseStudyResult = () => {
   const [allowUnHighLight, setAllowUnHighLight] = useState(false)
   const [activeQuestionIndex, setActiveQuestionIndex] = useState<number>(0)
   const questionsScrollRef = useRef<HTMLDivElement | null>(null)
+  const { width: widthFileViewer, height: heightFileViewer } =
+    useSmartModalSize()
 
   // handle show exhibit list
   const [showListExhibits, setShowListExhibits] = useState(false)
@@ -970,8 +976,8 @@ const CaseStudyResult = () => {
                 return (
                   <ModalResizeable
                     title={e?.fileName}
-                    width={isDesktopView ? 650 : 400}
-                    height={isDesktopView ? 650 : 400}
+                    width={widthFileViewer}
+                    height={heightFileViewer}
                     minWidth={200}
                     minHeight={200}
                     key={e.id}
