@@ -21,7 +21,7 @@
     "@lms/hooks": "workspace:*",
     "@lms/ui": "workspace:*",
     "@lms/utils": "workspace:*",
-    "@sapp-fe/explanation-package": "^1.4.13",
+    "@sapp-fe/explanation-package": "^1.5.1",
     "@sapp-fe/quiz-result-package": "^1.5.0",
     "antd": "^5.25.0",
     "clsx": "^2.1.1",

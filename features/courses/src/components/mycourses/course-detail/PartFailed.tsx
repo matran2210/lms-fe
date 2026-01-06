@@ -2,7 +2,7 @@ import { ConfirmIcon } from "@lms/assets";
 import { useCourseContext, useFeature } from "@lms/contexts";
 import { EAttemptStatus, GRADE_STATUS, GRADING_METHOD, IMyCourseDetail, TEST_TYPE } from "@lms/core";
 import { ButtonSecondary, ButtonText, SappModalV3 } from "@lms/ui";
-import { formatTimer, getUserPrefix, trackGAEvent } from "@lms/utils";
+import { buildQueryString, formatTimer, getUserPrefix, trackGAEvent } from "@lms/utils";
 import clsx from "clsx";
 import { useEffect, useMemo, useState } from "react";
 import { CardCourse } from "../../course";
@@ -178,13 +178,10 @@ const PartFailed = ({
         );
       }
     } else {
-      router.push({
-        pathname: `${userPrefix}/courses/test/test-result/${selectedResult?.value}`,
-        query: {
+      router.push(`${userPrefix}/courses/test/test-result/${selectedResult?.value}?${buildQueryString({
           attempt: selectedResult?.label,
           ...(hasCertificate && { hasCertificate }),
-        },
-      });
+        })}`);
     }
     trackGAEvent(`Click Button Result ${showTitleFinalTest}`);
   };

@@ -10,7 +10,12 @@ import {
   QUESTION_TYPES,
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
-import { FullScreenLayout, SappLoadingGlobal, Tooltip } from '@lms/ui'
+import {
+  FullScreenLayout,
+  PDFViewer,
+  SappLoadingGlobal,
+  Tooltip,
+} from '@lms/ui'
 import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routes'
@@ -230,6 +235,15 @@ const Explanation = () => {
             }}
             document_id={''}
             handleDownload={handleDownload}
+            renderPdf={({
+              url,
+              fileName,
+            }: {
+              url: string
+              fileName?: string | undefined
+            }) => {
+              return <PDFViewer file={url} />
+            }}
           />
         )}
       </FullScreenLayout>

@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { CloseIcon } from '@lms/assets'
 import { UserType } from '@lms/contexts'
 import {
@@ -9,7 +9,7 @@ import {
   QUESTION_TYPES,
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
-import { FullScreenLayout, SappLoadingGlobal } from '@lms/ui'
+import { FullScreenLayout, PDFViewer, SappLoadingGlobal } from '@lms/ui'
 import { ExplanationPackage } from '@sapp-fe/explanation-package'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -21,7 +21,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 const Explanation = () => {
   const router = useRouter()
   const searchParam = useSearchParams()
-  const params = useParams();
+  const params = useParams()
   const { id } = params
   const query = Object.fromEntries(searchParam.entries())
   const [activeQuestion, setActiveQuestion] = useState<any>()
@@ -187,6 +187,15 @@ const Explanation = () => {
           }}
           document_id={''}
           handleDownload={handleDownload}
+          renderPdf={({
+            url,
+            fileName,
+          }: {
+            url: string
+            fileName?: string | undefined
+          }) => {
+            return <PDFViewer file={url} />
+          }}
         />
       </FullScreenLayout>
     </SappLoadingGlobal>

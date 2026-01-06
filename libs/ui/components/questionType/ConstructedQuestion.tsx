@@ -2,7 +2,7 @@
 import { CloseIcon, UploadIcon } from "@lms/assets";
 import { disableUnsavedChange, loginSlice, useAppDispatch, useFeature } from "@lms/contexts";
 import { DEFAULT_EDITOR_VALUE, DISPLAY_TYPE, generateSheetId, MY_COURSES, RESPONSE_OPTION, SheetData } from "@lms/core";
-import { runHighlight } from "@lms/utils";
+import { convertMathHtmlToImage, runHighlight } from "@lms/utils";
 import clsx from "clsx";
 import { cloneDeep, isNull, isUndefined, uniqueId } from "lodash";
 import React, {
@@ -222,13 +222,12 @@ const EssayQuestionPreview = ({
   };
   if (externalRef) {
     externalRef.current = {
-      reset: (templateValue?: string) => {
+      reset: async (templateValue?: string) => {
         // editorRef.current?.moveSelectionOutOfTable()
-        editorRef.current?.resetContentSafe(
-          templateValue !== undefined
-            ? templateValue
-            : defaultValue || DEFAULT_EDITOR_VALUE,
-        );
+        const converted = await convertMathHtmlToImage(templateValue !== undefined
+          ? templateValue
+          : defaultValue || DEFAULT_EDITOR_VALUE);
+        editorRef.current?.resetContentSafe(converted);
       },
       resetSheet: () => {
         setKey((prev) => {

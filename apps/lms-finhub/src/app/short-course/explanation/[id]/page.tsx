@@ -1,7 +1,7 @@
 'use client'
 import { CloseIcon } from '@lms/assets'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
-import { FullScreenLayout } from '@lms/ui'
+import { FullScreenLayout, PDFViewer } from '@lms/ui'
 import { LAYOUT } from '@lms/core'
 import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 import { use, useEffect, useState } from 'react'
@@ -208,6 +208,15 @@ const Explanation = () => {
           }}
           document_id={''}
           handleDownload={handleDownload}
+          renderPdf={({
+            url,
+            fileName,
+          }: {
+            url: string
+            fileName?: string | undefined
+          }) => {
+            return <PDFViewer file={url} />
+          }}
         />
       </FullScreenLayout>
     </SappLoadingGlobal>

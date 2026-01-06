@@ -42,10 +42,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const isActivityDetail = pathname?.includes("/activity");
   const courseId = param?.courseId || query?.courseId;
   const queryId = param?.id || query?.id;
-  const activityId = param?.id || query?.activityId;
+  const activityId = param?.activityId || query?.activityId;
   const chapterId = query?.chapter;
   const unitId = query?.unit;
-  const courseSectionId = param?.course_section_id || query.course_section_id;
+  const courseSectionId = param?.course_section_id
 
   const [loading, setLoading] = useState<boolean>(false);
   const [isFirstCallApi, setIsFirstCallApi] = useState(false);
@@ -221,7 +221,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const title = !openChooseItem.isOpen
     ? isOpenFilter
       ? "Filter"
-      : "Course Resource"
+      : "Course Resource1"
     : openChooseItem.name;
   const classNameHeader = openChooseItem.isOpen
     ? "pb-4 border-b border-gray-200"

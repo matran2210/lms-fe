@@ -44,24 +44,14 @@ const EntrancePopupContinue = ({
     localStorage.removeItem("quizAttempt");
 
     try {
-      router.push({
-        pathname: `/test/${data?.id}`,
-        query: {
-          type: "entrance",
-        },
-      });
+      router.push(`/test/${data?.id}?type=entrance`);
       trackGAEvent("Click Button Start Modal Test");
     } catch (err) {}
   };
 
   const handleContinueLastAttempt = async () => {
     try {
-      router.push({
-        pathname: `/test/${data?.id}`,
-        query: {
-          type: "entrance",
-        },
-      });
+      router.push(`/test/${data?.id}?type=entrance`);
       trackGAEvent("Click Button Continue Modal Test");
     } catch (err) {}
   };

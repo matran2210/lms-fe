@@ -1,17 +1,23 @@
-"use client"
+'use client'
 import { SappBaseTable } from '@lms/ui'
-import { convertSecondsToMinutesSeconds, roundNumber, truncateString } from '@lms/utils'
+import {
+  convertSecondsToMinutesSeconds,
+  roundNumber,
+  truncateString,
+} from '@lms/utils'
 
 import { CollapseArrowIcon } from '@lms/assets'
 import {
   ANIMATION,
   COMMON_TEXT_ENUM,
   GRADE_STATUS,
-  IAnswer, IQuizAttempt, IQuizAttemptChartType,
-  QUESTION_TYPES
+  IAnswer,
+  IQuizAttempt,
+  IQuizAttemptChartType,
+  QUESTION_TYPES,
 } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { Tooltip } from "@lms/ui"
+import { Tooltip } from '@lms/ui'
 import { htmlToRaw } from '@lms/utils'
 import { Collapse } from 'antd'
 import 'aos/dist/aos.css'
@@ -19,7 +25,7 @@ import clsx from 'clsx'
 import DOMPurify from 'dompurify'
 import { groupBy } from 'lodash'
 import Image from 'next/image'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
@@ -47,6 +53,7 @@ const ScoreDetail = ({
   numberSelectedResponse,
 }: ScoreDetailProps) => {
   const router = useRouter()
+  const params = useParams()
   const searchParams = useSearchParams()
 
   const query = Object.fromEntries(searchParams.entries())
@@ -89,15 +96,12 @@ const ScoreDetail = ({
     isLoading,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ['scoreDetails', query.id],
+    queryKey: ['scoreDetails', params.id],
     queryFn: async ({ pageParam }) => {
-      const res = await CoursesAPI.getQuizAttemptsTable(
-        query.id as string,
-        {
-          page_index: pageParam,
-          page_size: DEFAULT_PAGESIZE,
-        },
-      )
+      const res = await CoursesAPI.getQuizAttemptsTable(params.id as string, {
+        page_index: pageParam,
+        page_size: DEFAULT_PAGESIZE,
+      })
       if (res.success) {
         return res.data
       }
@@ -109,7 +113,7 @@ const ScoreDetail = ({
           : undefined
       }
     },
-    enabled: query.id !== undefined,
+    enabled: params.id !== undefined,
     retry: false,
   })
 

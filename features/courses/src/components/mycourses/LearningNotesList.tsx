@@ -451,12 +451,7 @@ const LearningNotesList = ({ appType }: Props) => {
                           }
                         };
                         const handleView = async () => {
-                          await router.push({
-                            pathname: `/courses/${queryId || courseId}/activity/${note?.course_section_id}`,
-                            query: {
-                              note_id: note?.id,
-                            },
-                          });
+                          await router.push(`/courses/${queryId || courseId}/activity/${note?.course_section_id}?note_id=${note?.id}`);
                           handleOpenNote(note, true);
                           handleEditNote(note?.id, note?.description);
                           onClose();

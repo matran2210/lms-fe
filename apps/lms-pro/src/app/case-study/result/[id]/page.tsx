@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-"use client"
+'use client'
 import {
   CalculatorIconV2,
   CloseModalIcon,
@@ -49,7 +49,7 @@ import { runHighlight } from '@lms/utils'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { CoursesAPI } from 'src/api/courses'
@@ -58,9 +58,10 @@ import { TestServiceAPI } from 'src/api/test-api'
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])
   const router = useRouter()
+  const params = useParams()
   const searchParams = useSearchParams()
-  
-    const query = Object.fromEntries(searchParams.entries())
+
+  const query = Object.fromEntries(searchParams.entries())
   const containerRef = useRef(null)
   const { control, setValue, getValues } = useForm()
   const { control: controlScratch } = useForm()
@@ -554,8 +555,8 @@ const CaseStudyResult = () => {
   }, [startResize])
 
   useEffect(() => {
-    !!query.id && fetchResult(query.id as string)
-  }, [query.id])
+    !!params.id && fetchResult(params.id as string)
+  }, [params.id])
 
   const questionRender = useMemo(() => {
     editorRefs.current = new Array(result?.answers?.length || 0).fill(null)

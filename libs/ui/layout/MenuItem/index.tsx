@@ -461,7 +461,7 @@ export default function MenuItem({
                   user.detail.avatar?.["ORIGIN"]
                 }
                 alt="avatar"
-                className="h-10 w-10 rounded-full object-cover"
+                className="h-9 w-9 rounded-full object-cover"
                 width={40}
                 height={40}
               />
@@ -487,7 +487,7 @@ export default function MenuItem({
                     BlankAvatarImage
                   }
                   alt="avatar"
-                  className="h-10 w-10 rounded-full object-cover"
+                  className="h-9 w-9 rounded-full object-cover"
                   width={40}
                   height={40}
                   priority={true}

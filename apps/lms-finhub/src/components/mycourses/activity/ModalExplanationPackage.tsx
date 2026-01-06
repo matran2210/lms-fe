@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { SappModal } from '@lms/ui'
+import { PDFViewer, SappModal } from '@lms/ui'
 import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 // import '@sapp-fe/explanation-package/dist/index.css'
 import SappLoading from '@components/common/SappLoading'
@@ -165,6 +165,15 @@ const ModalExplanationPackage = ({
                   activeQuestion={activeQuestion}
                   document_id={document_id}
                   handleDownload={handleDownload}
+                  renderPdf={({
+                    url,
+                    fileName,
+                  }: {
+                    url: string
+                    fileName?: string | undefined
+                  }) => {
+                    return <PDFViewer file={url} />
+                  }}
                 />
               ) : (
                 <SappLoading />

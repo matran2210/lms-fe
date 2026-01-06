@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { AltArrowLeft, CloseIconV2, MenuDotsIcon } from '@lms/assets'
 import { UserType } from '@lms/contexts'
 import {
@@ -8,7 +8,12 @@ import {
   QUESTION_TYPES,
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
-import { FullScreenLayout, SappLoadingGlobal, Tooltip } from '@lms/ui'
+import {
+  FullScreenLayout,
+  PDFViewer,
+  SappLoadingGlobal,
+  Tooltip,
+} from '@lms/ui'
 import { TestServiceAPI } from 'src/api/test-api'
 import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
@@ -20,7 +25,7 @@ import { CoursesAPI } from 'src/api/courses'
 const Explanation = () => {
   const router = useRouter()
   const searchParam = useSearchParams()
-  const params = useParams();
+  const params = useParams()
   const { id } = params
   const query = Object.fromEntries(searchParam.entries())
   const { attempt: noOfAttempt } = query
@@ -208,6 +213,15 @@ const Explanation = () => {
             }}
             document_id={''}
             handleDownload={handleDownload}
+            renderPdf={({
+              url,
+              fileName,
+            }: {
+              url: string
+              fileName?: string | undefined
+            }) => {
+              return <PDFViewer file={url} />
+            }}
           />
         )}
       </FullScreenLayout>
