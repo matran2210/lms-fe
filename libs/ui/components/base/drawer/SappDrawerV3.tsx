@@ -67,6 +67,7 @@ const SappDrawerV3: React.FC<IProps> = ({
       width={width}
       title={undefined}
       closeIcon={false}
+      motionName="drawer-slide-bounce-left"
       {...props}
     >
       <div
