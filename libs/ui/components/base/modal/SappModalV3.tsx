@@ -1,14 +1,7 @@
 import { Modal } from "antd";
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
-import { IButtonColors } from "@lms/core";
-import ButtonCancelSubmit from "../button/ButtonCancelSubmit";
 import clsx from "clsx";
+import { ReactNode, useEffect, useState } from "react";
+import ButtonCancelSubmit from "../button/ButtonCancelSubmit";
 
 interface IProps {
   open: boolean;
@@ -80,14 +73,11 @@ const SappModalV3 = ({
   loadingBtnSubmit,
   ...otherProps
 }: IProps) => {
-  const [visible, setVisible] = useState(open);
   const [closing, setClosing] = useState(false);
   const EXIT_DURATION = 400;
 
   useEffect(() => {
     if (open) {
-      setVisible(true);
-
       requestAnimationFrame(() => {
         setClosing(false);
       });
@@ -101,18 +91,14 @@ const SappModalV3 = ({
 
     setTimeout(() => {
       callback?.();
-      setVisible(false);
       handleClose?.();
     }, EXIT_DURATION);
   };
 
-  const handleModalClose = () => {
-    requestClose(() => {});
-  };
   return (
     <Modal
-      open={visible}
-      destroyOnClose
+      maskClosable
+      open={open}
       className={clsx(
         "sapp-modal",
         closing ? "modal-slide-down" : "modal-slide-up",
@@ -123,7 +109,7 @@ const SappModalV3 = ({
       closeIcon={false}
       maskTransitionName="mask-fade"
       transitionName=""
-      onCancel={handleModalClose}
+      onCancel={() => requestClose()}
       closable={isClosable}
       {...otherProps}
     >
