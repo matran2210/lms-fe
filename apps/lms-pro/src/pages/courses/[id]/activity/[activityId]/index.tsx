@@ -66,7 +66,7 @@ import {
   VideoTimelineMobile,
 } from '@lms/feature-courses'
 import ActivityResource from '@lms/feature-courses/src/components/learning/activity/ActivityResource'
-import { useTailwindBreakpoint } from '@lms/hooks'
+import { useSmartModalSize, useTailwindBreakpoint } from '@lms/hooks'
 import {
   AssistiveTouch,
   BackToTop,
@@ -118,6 +118,8 @@ const ActivityPage = () => {
 
   const courseId = router.query?.id
   const sectionId = router.query?.activityId as string
+  const { width: widthFileViewer, height: heightFileViewer } =
+    useSmartModalSize()
 
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityReducer)
@@ -758,14 +760,14 @@ const ActivityPage = () => {
                   return (
                     <ModalResizeable
                       modalIndex={index}
-                      bodyClassName="h-[100%]"
+                      // bodyClassName="h-[100%]"
                       title={e.fileName}
-                      width={650}
-                      height={850}
+                      width={widthFileViewer}
+                      height={heightFileViewer}
                       key={e.id}
-                      className="!z-40 h-full !rounded-lg"
+                      className="!z-40 !rounded-lg"
                       handleCloseScratchPad={() => handleCloseScratchPad(e)}
-                      position="center left"
+                      position="center"
                       header={
                         <div className="">
                           <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between px-5">
@@ -779,10 +781,11 @@ const ActivityPage = () => {
                           </button>
                         </div>
                       }
+                      isInBody
                     >
                       <div
                         // className="overflow-auto p-4 bg-white"
-                        className="h-full cursor-pointer select-none text-right text-base font-semibold text-gray-800 hover:text-primary"
+                        className="h-full cursor-pointer select-none bg-white p-4 text-right text-base font-semibold text-gray-800 hover:text-primary"
                       >
                         {/* <div className='flex flex-'> */}
                         <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
