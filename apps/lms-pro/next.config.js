@@ -9,23 +9,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 /** @type {import('next').NextConfig} */
 let nextConfig = {
   reactStrictMode: true,
-  transpilePackages: [
-    '@lms/ui',
-    '@lms/core',
-    '@lms/hooks',
-    '@lms/assets',
-    '@lms/utils',
-    '@lms/styles',
-    '@lms/contexts',
-    '@lms/feature-user',
-    '@lms/feature-class',
-    '@lms/feature-auth',
-    '@lms/feature-dashboard',
-    '@lms/feature-courses',
-    '@lms/feature-notifications',
-    '@lms/feature-test',
-    '@lms/feature-calendar',
-  ],
 
   // output: 'standalone',
   images: {
@@ -38,11 +21,25 @@ let nextConfig = {
   },
 
   experimental: {
+    appDir: true,
     externalDir: true,
-    instrumentationHook: true,
-    // ❌ deprecated / unstable trong Next 14
-    // optimizeCss: true,
-    // forceSwcTransforms: true,
+    transpilePackages: [
+      '@lms/ui',
+      '@lms/core',
+      '@lms/hooks',
+      '@lms/assets',
+      '@lms/utils',
+      '@lms/styles',
+      '@lms/contexts',
+      '@lms/feature-user',
+      '@lms/feature-class',
+      '@lms/feature-auth',
+      '@lms/feature-dashboard',
+      '@lms/feature-courses',
+      '@lms/feature-notifications',
+      '@lms/feature-test',
+      '@lms/feature-calendar',
+    ],
   },
 }
 
