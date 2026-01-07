@@ -47,7 +47,7 @@
     "@react-native-async-storage/async-storage": "^1.19.5",
     "@reduxjs/toolkit": "^1.9.7",
     "@sapp-fe/entrance-test-result-package": "^1.4.1",
-    "@sapp-fe/explanation-package": "^1.5.2",
+    "@sapp-fe/explanation-package": "^1.5.3",
     "@sapp-fe/preview-activity": "^1.1.43",
     "@sapp-fe/preview-part": "^1.7.2",
     "@sapp-fe/quiz-result-package": "^1.5.1",
