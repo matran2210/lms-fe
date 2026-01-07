@@ -8,7 +8,7 @@ import {
 import { useTailwindBreakpoint } from "@lms/hooks";
 import clsx from "clsx";
 import Head from "next/head";
-import { ReactElement, ReactNode, useState } from "react";
+import { ReactElement, ReactNode, useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import { PopupStep } from "../components";
 import { GuidePlacement, UserGuide } from "@lms/core";
@@ -143,11 +143,13 @@ export default function Layout(props: LayoutProps): ReactElement {
   const stepConfig = getGuideStepConfig(guideStep);
   const customOffset =
     isTabletView &&
-    (stepConfig?.targetId === "sidebar" ||
-      stepConfig?.targetId === "notification-profile")
+      (stepConfig?.targetId === "sidebar" ||
+        stepConfig?.targetId === "notification-profile")
       ? { x: 115, y: 0 }
       : undefined;
-      
+  useEffect(() => {
+    document.title = title
+  }, [title])
   return (
     <>
       <Head>
