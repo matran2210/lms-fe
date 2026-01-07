@@ -784,8 +784,9 @@ const ActivityPage = () => {
                       isInBody
                     >
                       <div
-                        // className="overflow-auto p-4 bg-white"
-                        className="h-full cursor-pointer select-none bg-white p-4 text-right text-base font-semibold text-gray-800 hover:text-primary"
+                        className="overflow-auto bg-white p-4"
+                        style={{ height: 'calc(100% - 40px' }}
+                        // className="h-full cursor-pointer p-4"
                       >
                         {/* <div className='flex flex-'> */}
                         <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
