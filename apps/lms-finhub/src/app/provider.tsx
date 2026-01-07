@@ -18,6 +18,7 @@ import {
 import { RouteGuard } from '@lms/feature-auth'
 import { LearningNotesList, PopupCompletedCourse } from '@lms/feature-courses'
 import {
+  AntConfigProvider,
   BackToTop,
   Help,
   PinnedNotifications,
@@ -127,79 +128,75 @@ export function Providers({ children }: { children: ReactNode }) {
   })
 
   return (
-    <Provider store={store}>
-      <PinnedNotifyProvider
-        router={router}
-        api={{
-          getPinnedNotifications: UserApi.getPinnedNotifications,
-        }}
-      >
-        <FeatureProvider
-          value={{
-            courseApi: CoursesAPI,
-            questionApi: QuestionAPI,
-            uploadApi: UploadAPI,
-            userApi: UserApi,
-            notificationApi: NotificationAPI,
-            authApi: AuthAPI,
-            classApi: ClassAPI,
-            activityApi: ActivityAPI,
-            courseActivityApi: CourseActivityApi,
-            myProfileApi: MyProfileAPI,
-            submitQuizTest: TestServiceAPI.submitQuizTest,
-            authManager: new AuthenticationManager(),
-            pageLink: PageLink,
-            menuItems: MENU_ITEMS,
-            menuItemsEvent: MENU_ITEMS_EVENT,
-            menuBottom: MENU_BOTTOM,
-            router: router,
-            fetcher: fetcher,
-            videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
-            testServiceApi: TestServiceAPI,
-            certificateApi: {
-              uploadImageToLinkedIn,
-            },
-            pathname: pathName,
-            params,
-            query: Object.fromEntries(query.entries()),
+    <AntConfigProvider>
+      <Provider store={store}>
+        <PinnedNotifyProvider
+          router={router}
+          api={{
+            getPinnedNotifications: UserApi.getPinnedNotifications,
           }}
         >
-          <CourseProvider router={router}>
-            <QueryClientProvider client={queryClient}>
-              <SocketContext.Provider value={socket}>
-                <Toaster
-                  toastOptions={{
-                    style: {
-                      maxWidth: '400px', // Tăng chiều rộng của toast
-                    },
-                  }}
-                />
-                <SappConfirmDialogContainer />
-                <RouteGuard>
-                  <ConfigProvider
-                    theme={{
-                      token: {
-                        colorPrimary: '#FFC83A',
+          <FeatureProvider
+            value={{
+              courseApi: CoursesAPI,
+              questionApi: QuestionAPI,
+              uploadApi: UploadAPI,
+              userApi: UserApi,
+              notificationApi: NotificationAPI,
+              authApi: AuthAPI,
+              classApi: ClassAPI,
+              activityApi: ActivityAPI,
+              courseActivityApi: CourseActivityApi,
+              myProfileApi: MyProfileAPI,
+              submitQuizTest: TestServiceAPI.submitQuizTest,
+              authManager: new AuthenticationManager(),
+              pageLink: PageLink,
+              menuItems: MENU_ITEMS,
+              menuItemsEvent: MENU_ITEMS_EVENT,
+              menuBottom: MENU_BOTTOM,
+              router: router,
+              fetcher: fetcher,
+              videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
+              testServiceApi: TestServiceAPI,
+              certificateApi: {
+                uploadImageToLinkedIn,
+              },
+              pathname: pathName,
+              params,
+              query: Object.fromEntries(query.entries()),
+            }}
+          >
+            <CourseProvider router={router}>
+              <QueryClientProvider client={queryClient}>
+                <SocketContext.Provider value={socket}>
+                  <Toaster
+                    toastOptions={{
+                      style: {
+                        maxWidth: '400px', // Tăng chiều rộng của toast
                       },
                     }}
-                  >
-                    {/* <AntdApp> */}
-                    <div className="relative">
-                      <PinnedNotifications />
-                      {children}
-                    </div>
-                    <BackToTop />
-                    <Help showHelp={showHelp} />
-                    <LearningNotesList appType={AppType.LMS_FINHUB} />
-                    <PopupCompletedCourse />
-                    {/* </AntdApp> */}
-                  </ConfigProvider>
-                </RouteGuard>
-              </SocketContext.Provider>
-            </QueryClientProvider>
-          </CourseProvider>
-        </FeatureProvider>
-      </PinnedNotifyProvider>
-    </Provider>
+                  />
+                  <SappConfirmDialogContainer />
+                  <RouteGuard>
+                    <>
+                      {/* <AntdApp> */}
+                      <div className="relative">
+                        <PinnedNotifications />
+                        {children}
+                      </div>
+                      <BackToTop />
+                      <Help showHelp={showHelp} />
+                      <LearningNotesList appType={AppType.LMS_FINHUB} />
+                      <PopupCompletedCourse />
+                      {/* </AntdApp> */}
+                    </>
+                  </RouteGuard>
+                </SocketContext.Provider>
+              </QueryClientProvider>
+            </CourseProvider>
+          </FeatureProvider>
+        </PinnedNotifyProvider>
+      </Provider>
+    </AntConfigProvider>
   )
 }

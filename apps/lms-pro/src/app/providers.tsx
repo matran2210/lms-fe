@@ -23,6 +23,7 @@ import { LearningNotesList, PopupCompletedCourse } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import '@lms/styles'
 import {
+  AntConfigProvider,
   BackToTop,
   Help,
   PinnedNotifications,
@@ -81,6 +82,8 @@ import { QuestionAPI } from 'src/api/question'
 import { TestServiceAPI } from 'src/api/test-api'
 import { UploadAPI } from 'src/api/upload'
 import { DashboardAPI } from 'src/api/dashboard'
+import { ErrorBoundary } from '@sentry/nextjs'
+import ErrorRedirectPage from './error-redirect/page'
 
 dayjs.extend(utc)
 dayjs.extend(weekday)
@@ -330,91 +333,93 @@ export function Providers({ children }: { children: ReactNode }) {
     prevPathRef.current = pathname
   }, [pathname])
   return (
-    // <ErrorBoundary fallback={<ErrorRedirectPage />}>
-    <Provider store={store}>
-      <PinnedNotifyProvider
-        router={router}
-        api={{
-          getPinnedNotifications: UserApi.getPinnedNotifications,
-        }}
-      >
-        <FeatureProvider
-          value={{
-            courseApi: CoursesAPI,
-            questionApi: QuestionAPI,
-            uploadApi: UploadAPI,
-            userApi: UserApi,
-            notificationApi: NotificationAPI,
-            authApi: AuthAPI,
-            classApi: ClassAPI,
-            activityApi: ActivityAPI,
-            courseActivityApi: CourseActivityApi,
-            entranceTestApi: EntranceTestAPI,
-            eventTestApi: EventTestAPI,
-            calendarApi: CalendarApi,
-            myProfileApi: MyProfileAPI,
-            submitQuizTest: TestServiceAPI.submitQuizTest,
-            dashboardApi: DashboardAPI,
-            authManager: new AuthenticationManager(),
-            pageLink: PageLink,
-            menuItems: MENU_ITEMS,
-            menuItemsEvent: MENU_ITEMS_EVENT,
-            menuBottom: MENU_BOTTOM,
-            router: router,
-            pathname,
-            params,
-            query: Object.fromEntries(query.entries()),
-            fetcher: fetcher,
-            videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
-            testServiceApi: TestServiceAPI,
-            certificateApi: {
-              uploadImageToLinkedIn,
-            },
-          }}
-        >
-          <CourseProvider
+    <ErrorBoundary fallback={<ErrorRedirectPage />}>
+      <AntConfigProvider>
+        <Provider store={store}>
+          <PinnedNotifyProvider
             router={router}
             api={{
-              get: EventTestAPI.get,
+              getPinnedNotifications: UserApi.getPinnedNotifications,
             }}
           >
-            <CourseNoteProvider router={router} api={CoursesAPI}>
-              <QueryClientProvider client={queryClient}>
-                <SocketContext.Provider value={socket}>
-                  <PreviousSectionRouteProvider pathname={pathname}>
-                    <Toaster
-                      toastOptions={{
-                        style: {
-                          maxWidth: '400px', // Tăng chiều rộng của toast
-                        },
-                      }}
-                    />
-                    <SappConfirmDialogContainer />
-                    <RouteGuard>
-                      <ConfigProvider>
-                        <AntdApp>{children}</AntdApp>
-                        <>
-                          <div className="relative">
-                            <PinnedNotifications />
-                            {/* <Component {...pageProps} /> */}
-                          </div>
-                          {showBackToTop && <BackToTop />}
-                          <MKTInApp showMKTInApp={showMKTInApp} />
-                          {showHelp && <div id="floating-btn-divider" />}
-                          <Help showHelp={showHelp} />
-                          <LearningNotesList appType={AppType.LMS_PRO} />
-                          <PopupCompletedCourse />
-                        </>
-                      </ConfigProvider>
-                    </RouteGuard>
-                  </PreviousSectionRouteProvider>
-                </SocketContext.Provider>
-              </QueryClientProvider>
-            </CourseNoteProvider>
-          </CourseProvider>
-        </FeatureProvider>
-      </PinnedNotifyProvider>
-    </Provider>
-    // </ErrorBoundary>
+            <FeatureProvider
+              value={{
+                courseApi: CoursesAPI,
+                questionApi: QuestionAPI,
+                uploadApi: UploadAPI,
+                userApi: UserApi,
+                notificationApi: NotificationAPI,
+                authApi: AuthAPI,
+                classApi: ClassAPI,
+                activityApi: ActivityAPI,
+                courseActivityApi: CourseActivityApi,
+                entranceTestApi: EntranceTestAPI,
+                eventTestApi: EventTestAPI,
+                calendarApi: CalendarApi,
+                myProfileApi: MyProfileAPI,
+                submitQuizTest: TestServiceAPI.submitQuizTest,
+                dashboardApi: DashboardAPI,
+                authManager: new AuthenticationManager(),
+                pageLink: PageLink,
+                menuItems: MENU_ITEMS,
+                menuItemsEvent: MENU_ITEMS_EVENT,
+                menuBottom: MENU_BOTTOM,
+                router: router,
+                pathname,
+                params,
+                query: Object.fromEntries(query.entries()),
+                fetcher: fetcher,
+                videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
+                testServiceApi: TestServiceAPI,
+                certificateApi: {
+                  uploadImageToLinkedIn,
+                },
+              }}
+            >
+              <CourseProvider
+                router={router}
+                api={{
+                  get: EventTestAPI.get,
+                }}
+              >
+                <CourseNoteProvider router={router} api={CoursesAPI}>
+                  <QueryClientProvider client={queryClient}>
+                    <SocketContext.Provider value={socket}>
+                      <PreviousSectionRouteProvider pathname={pathname}>
+                        <Toaster
+                          toastOptions={{
+                            style: {
+                              maxWidth: '400px', // Tăng chiều rộng của toast
+                            },
+                          }}
+                        />
+                        <SappConfirmDialogContainer />
+                        <RouteGuard>
+                          <ConfigProvider>
+                            <AntdApp>{children}</AntdApp>
+                            <>
+                              <div className="relative">
+                                <PinnedNotifications />
+                                {/* <Component {...pageProps} /> */}
+                              </div>
+                              {showBackToTop && <BackToTop />}
+                              <MKTInApp showMKTInApp={showMKTInApp} />
+                              {showHelp && <div id="floating-btn-divider" />}
+                              <Help showHelp={showHelp} />
+                              <LearningNotesList appType={AppType.LMS_PRO} />
+                              <PopupCompletedCourse />
+                            </>
+                          </ConfigProvider>
+                        </RouteGuard>
+                      </PreviousSectionRouteProvider>
+                    </SocketContext.Provider>
+                  </QueryClientProvider>
+                </CourseNoteProvider>
+              </CourseProvider>
+            </FeatureProvider>
+          </PinnedNotifyProvider>
+        </Provider>
+      </AntConfigProvider>
+    </ErrorBoundary>
   )
 }
