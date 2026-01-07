@@ -8,15 +8,16 @@
     "build:lms-finhub": "pnpm --filter ./apps/lms-finhub build",
     "build:lms-zoom": "pnpm --filter ./apps/lms-zoom build",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types",
     "dev:lms-pro": "pnpm --filter ./apps/lms-pro dev",
     "dev:lms-finhub": "pnpm --filter ./apps/lms-finhub dev",
     "dev:lms-zoom": "pnpm --filter ./apps/lms-zoom dev",
     "start:lms-pro": "pnpm --filter ./apps/lms-pro start",
     "start:lms-finhub": "pnpm --filter ./apps/lms-finhub start",
     "start:lms-zoom": "pnpm --filter ./apps/lms-zoom start",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,scss,css}\"",
+    "clean": "node scripts/clean.cjs",
+    "clean:all": "node scripts/clean.cjs --all",
     "prepare": "husky install",
     "lint-staged": "lint-staged",
     "gen:assets": "node scripts/generate-assets-index.js"
@@ -41,11 +42,13 @@
     "postcss-nesting": "^12.1.5",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
+    "rimraf": "^5.0.5",
     "turbo": "^2.5.1",
     "typescript": "5.1.6"
   },
   "engines": {
-    "node": "22.x"
+    "node": ">=20.0.0 <21.0.0",
+    "pnpm": ">=10.0.0"
   },
   "packageManager": "pnpm@10.22.0",
   "lint-staged": {
@@ -58,15 +61,12 @@
   "dependencies": {
     "@ant-design/cssinjs": "^1.24.0",
     "@babel/runtime": "^7.26.0",
-    "@eslint/js": "^8.0.0",
     "@funktechno/texthighlighter": "^2.1.2",
     "@hookform/resolvers": "^3.10.0",
     "@sapp-fe/explanation-package": "^1.4.13",
     "@sapp-fe/sapp-common-package": "^1.6.14",
     "antd": "^5.25.0",
     "critters": "^0.0.19",
-    "eslint-plugin-react": "^7.37.5",
-    "globals": "^16.0.0",
     "lodash": "^4.17.21",
     "next": "12.3.7",
     "react": "18.2.0",

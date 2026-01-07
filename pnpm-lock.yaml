@@ -14,9 +14,6 @@ importers:
       '@babel/runtime':
         specifier: ^7.26.0
         version: 7.28.4
-      '@eslint/js':
-        specifier: ^8.0.0
-        version: 8.57.1
       '@funktechno/texthighlighter':
         specifier: ^2.1.2
         version: 2.1.2
@@ -35,12 +32,6 @@ importers:
       critters:
         specifier: ^0.0.19
         version: 0.0.19
-      eslint-plugin-react:
-        specifier: ^7.37.5
-        version: 7.37.5(eslint@8.57.1)
-      globals:
-        specifier: ^16.0.0
-        version: 16.5.0
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -63,6 +54,9 @@ importers:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
     devDependencies:
+      '@eslint/js':
+        specifier: ^8.0.0
+        version: 8.57.1
       '@tailwindcss/aspect-ratio':
         specifier: ^0.4.2
         version: 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.4)(typescript@5.1.6)))
@@ -96,6 +90,12 @@ importers:
       eslint-plugin-only-warn:
         specifier: ^1.1.0
         version: 1.1.0
+      eslint-plugin-react:
+        specifier: ^7.37.5
+        version: 7.37.5(eslint@8.57.1)
+      globals:
+        specifier: ^16.0.0
+        version: 16.5.0
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -111,6 +111,9 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: ^0.6.11
         version: 0.6.14(prettier@3.7.4)
+      rimraf:
+        specifier: ^5.0.5
+        version: 5.0.10
       turbo:
         specifier: ^2.5.1
         version: 2.7.2
@@ -10732,6 +10735,10 @@ packages:
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
     deprecated: Rimraf versions prior to v4 are no longer supported
+    hasBin: true
+
+  rimraf@5.0.10:
+    resolution: {integrity: sha512-l0OE8wL34P4nJH/H2ffoaniAokM2qSmrtXHmlpvYr5AVVX8msAyW0l8NVJFDxlSK4u3Uh/f41cQheDVdnYijwQ==}
     hasBin: true
 
   rollup@3.29.5:
@@ -23554,6 +23561,10 @@ snapshots:
   rimraf@3.0.2:
     dependencies:
       glob: 7.2.3
+
+  rimraf@5.0.10:
+    dependencies:
+      glob: 10.5.0
 
   rollup@3.29.5:
     optionalDependencies:
