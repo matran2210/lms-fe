@@ -7,6 +7,7 @@ module.exports = withBundleAnalyzer({
   reactStrictMode: true,
   swcMinify: true,
   productionBrowserSourceMaps: true,
+  poweredByHeader: false, // loại bỏ X-Powered-By
 
   transpilePackages: [
     '@lms/ui',
@@ -37,10 +38,8 @@ module.exports = withBundleAnalyzer({
     styledComponents: true,
   },
 
-  poweredByHeader: false,
-
   experimental: {
     optimizeCss: true,
-    instrumentationHook: true,
+    instrumentationHook: false,
   },
 })

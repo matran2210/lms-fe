@@ -1,7 +1,7 @@
 # =========================
 # 1. Base image
 # =========================
-FROM node:20-slim AS base
+FROM node:22-slim AS base
 WORKDIR /app
 
 # =========================
@@ -49,7 +49,7 @@ RUN turbo run build --filter=${APP_NAME}
 # =========================
 # 5. Runtime
 # =========================
-FROM node:20-slim AS runner
+FROM node:22-slim AS runner
 ARG APP_NAME
 ENV APP_NAME=$APP_NAME
 ENV NODE_ENV=production
@@ -60,9 +60,12 @@ WORKDIR /app
 COPY --from=builder /app/apps/${APP_NAME}/.next/standalone ./
 COPY --from=builder /app/apps/${APP_NAME}/.next/static ./.next/static
 COPY --from=builder /app/apps/${APP_NAME}/public ./public
-COPY --from=builder /app/node_modules ./node_modules
 
 
 EXPOSE 3000
 
+# Thay đổi WORKDIR đến app cụ thể
+WORKDIR /app/apps/${APP_NAME}
+
+# CMD JSON array không cần expand biến
 CMD ["node", "server.js"]
