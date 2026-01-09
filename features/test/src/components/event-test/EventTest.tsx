@@ -234,7 +234,7 @@ const EventTest = ({
       case 'ACCA':
         return '11/11/2025'
       case 'CFA':
-        return '19-22/12/2025'
+        return '26/01/2026'
       case 'CMA':
         return '14/10/2025'
       default:

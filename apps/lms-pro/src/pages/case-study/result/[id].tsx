@@ -25,7 +25,11 @@ import {
   RESPONSE_OPTION,
 } from '@lms/core'
 import { CalculatorModal } from '@lms/feature-courses'
-import { useMousePosition, useTailwindBreakpoint } from '@lms/hooks'
+import {
+  useMousePosition,
+  useSmartModalSize,
+  useTailwindBreakpoint,
+} from '@lms/hooks'
 import {
   AddWordPreview,
   CaseStudyWrapper,
@@ -64,7 +68,8 @@ const CaseStudyResult = () => {
   const allowUnHighLight = false
   const [activeQuestionIndex, setActiveQuestionIndex] = useState<number>(0)
   const questionsScrollRef = useRef<HTMLDivElement | null>(null)
-
+  const { width: widthFileViewer, height: heightFileViewer } =
+    useSmartModalSize()
   // handle show exhibit list
   const [exhibitData, setExhibitData] = useState<IExhibit[]>([])
   const [openScratchPad, setOpenScratchPad] = useState<Array<ICratchPad>>([])
@@ -861,8 +866,8 @@ const CaseStudyResult = () => {
               return (
                 <ModalResizeable
                   title={e?.fileName}
-                  width={isDesktopView ? 650 : 400}
-                  height={isDesktopView ? 750 : 400}
+                  width={widthFileViewer}
+                  height={heightFileViewer}
                   key={e.id}
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
                   position="center"
