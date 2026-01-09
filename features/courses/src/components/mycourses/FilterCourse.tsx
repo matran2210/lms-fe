@@ -1,71 +1,71 @@
-import { SAPPSelectV2 } from '@lms/ui'
-import { useForm, useWatch } from 'react-hook-form'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { DefaultOptionType } from 'antd/es/select'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { CheckIconV2, FilterCourseIcon } from '@lms/assets'
-import { SappDrawerV3 } from '@lms/ui'
-import { Button, Divider } from 'antd'
-import clsx from 'clsx'
-import { ButtonPrimary } from '@lms/ui'
+import { SAPPSelectV2 } from "@lms/ui";
+import { useForm, useWatch } from "react-hook-form";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { DefaultOptionType } from "antd/es/select";
+import { useTailwindBreakpoint } from "@lms/hooks";
+import { CheckIconV2, FilterCourseIcon } from "@lms/assets";
+import { SappDrawerV3 } from "@lms/ui";
+import { Button, Divider } from "antd";
+import clsx from "clsx";
+import { ButtonPrimary } from "@lms/ui";
 
 interface IFilters {
-  [name: string]: React.Key | null | undefined
+  [name: string]: React.Key | null | undefined;
 }
 const FilterCourse = ({
   totalResult,
   listFilter,
 }: {
-  totalResult: number
+  totalResult: number;
   listFilter: {
-    name: string
-    placeholder: string
-    options: DefaultOptionType[]
-  }[]
+    name: string;
+    placeholder: string;
+    options: DefaultOptionType[];
+  }[];
 }) => {
-  const { control, setValue, getValues, reset } = useForm()
-  const router = useRouter()
-  const { isMobileView } = useTailwindBreakpoint()
-  const [openMobileFilter, setOpenMobileFilter] = useState(false)
-  const [filters, setFilters] = useState<IFilters>()
-  const filterValues = useWatch({ control })
+  const { control, setValue, getValues, reset } = useForm();
+  const router = useRouter();
+  const { isMobileView } = useTailwindBreakpoint();
+  const [openMobileFilter, setOpenMobileFilter] = useState(false);
+  const [filters, setFilters] = useState<IFilters>();
+  const filterValues = useWatch({ control });
 
   const onOpenMobileFilter = () => {
-    setOpenMobileFilter(true)
-  }
+    setOpenMobileFilter(true);
+  };
   const onCloseMobileFilter = () => {
-    setOpenMobileFilter(false)
-  }
+    setOpenMobileFilter(false);
+  };
 
   const handleSelect = (option: DefaultOptionType, name: string) => {
     // Neu value ton tai thi xoa
     if (filters?.[name] === option.value) {
-      delete filters?.[name]
+      delete filters?.[name];
       // setFilters({ ...filters })
     } else {
       // Neu value khong ton tai thi them vao
       setFilters({
         ...filters,
         [name]: option.value,
-      })
+      });
     }
-  }
+  };
   const onConfirm = () => {
-    reset(filters)
-    onCloseMobileFilter()
-  }
+    reset(filters);
+    onCloseMobileFilter();
+  };
   useEffect(() => {
-    const currentQuery = { ...router.query }
+    const currentQuery = { ...router.query };
 
     listFilter?.forEach((filter) => {
-      const val = filterValues?.[filter.name]
+      const val = filterValues?.[filter.name];
       if (val) {
-        currentQuery[filter.name] = val.value ?? val
+        currentQuery[filter.name] = val.value ?? val;
       } else {
-        delete currentQuery[filter.name]
+        delete currentQuery[filter.name];
       }
-    })
+    });
 
     router.replace(
       {
@@ -74,8 +74,8 @@ const FilterCourse = ({
       },
       undefined,
       { shallow: true },
-    )
-  }, [filterValues])
+    );
+  }, [filterValues]);
 
   return (
     <>
@@ -92,7 +92,10 @@ const FilterCourse = ({
           </div>
         </>
       ) : (
-        <div className="flex shrink-0 items-center gap-4">
+        <div
+          className="flex shrink-0 items-center gap-4"
+          data-guide-id="filter-courses"
+        >
           <div className="shrink-0 text-sm font-normal text-gray-800">
             {totalResult} Results
           </div>
@@ -119,7 +122,7 @@ const FilterCourse = ({
           open={openMobileFilter}
           handleCancel={onCloseMobileFilter}
           title="Filter"
-          rootClassName={'responsive-drawer-base drawer-bottom-0'}
+          rootClassName={"responsive-drawer-base drawer-bottom-0"}
           isShowBtnClose
           closable
           classNameHeader="mb-4"
@@ -138,8 +141,9 @@ const FilterCourse = ({
                   </div>
                   <div>
                     {(item.options ?? []).map((el) => {
-                      const isSelected = filters?.[item.name] === el.value
-                      const defaultSelected = !filters?.[item.name] && !el.value
+                      const isSelected = filters?.[item.name] === el.value;
+                      const defaultSelected =
+                        !filters?.[item.name] && !el.value;
                       return (
                         <div
                           key={el.id}
@@ -148,8 +152,8 @@ const FilterCourse = ({
                         >
                           <div
                             className={clsx(
-                              'text-sm text-gray-800',
-                              (isSelected || defaultSelected) && 'text-primary',
+                              "text-sm text-gray-800",
+                              (isSelected || defaultSelected) && "text-primary",
                             )}
                           >
                             {el.label}
@@ -158,7 +162,7 @@ const FilterCourse = ({
                             {(isSelected || defaultSelected) && <CheckIconV2 />}
                           </div>
                         </div>
-                      )
+                      );
                     })}
                   </div>
                 </div>
@@ -171,7 +175,7 @@ const FilterCourse = ({
         </SappDrawerV3>
       )}
     </>
-  )
-}
+  );
+};
 
-export default FilterCourse
+export default FilterCourse;

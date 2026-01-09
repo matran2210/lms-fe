@@ -16,6 +16,7 @@ import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UploadAPI } from 'src/pages/api/upload'
 import { CoursesAPI } from '../api/courses'
+import { handleMultipleCorrectAnswer } from '@lms/utils'
 
 const Explanation = () => {
   const router = useRouter()
@@ -71,7 +72,10 @@ const Explanation = () => {
         corrects: getCorrect(
           resultResponse?.data?.answer?.question?.qType !==
             QUESTION_TYPES.MATCHING
-            ? resultResponse?.data?.answer?.question?.answers
+            ? handleMultipleCorrectAnswer(
+                resultResponse?.data?.answer?.question?.drag_drop_answers,
+                resultResponse?.data?.answer?.question?.answers,
+              )
             : resultResponse?.data?.answer?.answer_matching_mapping,
           resultResponse?.data?.answer?.question?.qType,
         ),

@@ -98,10 +98,14 @@ import {
   SlotValue,
   TestWrapper,
 } from '@lms/ui'
-import { checkSheetAnswered, runHighlight, trackGAEvent } from '@lms/utils'
+import {
+  checkSheetAnswered,
+  handleMultipleCorrectAnswer,
+  runHighlight,
+  trackGAEvent,
+} from '@lms/utils'
 import { EventTestAPI } from '@pages/api/event-test'
 import { TestServiceAPI } from '@pages/api/test-api'
-import { UploadAPI } from '@pages/api/upload'
 import { TabsProps, Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
@@ -311,6 +315,7 @@ const TestDetail = () => {
             solution,
             is_self_reflection,
             requirements,
+            drag_drop_answers,
           } = answerSubmitted?.[0]
 
           // Handle different question types
@@ -359,10 +364,18 @@ const TestDetail = () => {
           }
 
           if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
+            const answersTemp = (answers || []).sort(
+              (
+                a: { answer_position: number },
+                b: { answer_position: number },
+              ) => a?.answer_position - b?.answer_position,
+            )
+
             return {
               corrects: {
-                corrects: (answers || []).sort(
-                  (a: any, b: any) => a?.answer_position - b?.answer_position,
+                corrects: handleMultipleCorrectAnswer(
+                  drag_drop_answers,
+                  answersTemp,
                 ),
               },
               solution,
@@ -669,6 +682,17 @@ const TestDetail = () => {
           return updatedObjTab
         }
       } else {
+        if (objTab?.data?.qType === QUESTION_TYPES.DRAG_DROP) {
+          return {
+            ...objTab,
+            corrects: {
+              corrects: handleMultipleCorrectAnswer(
+                objTab?.data?.drag_drop_answers,
+                objTab?.corrects?.corrects,
+              ),
+            },
+          }
+        }
         return objTab
       }
     } else return undefined

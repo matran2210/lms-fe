@@ -7,18 +7,11 @@ import {
   useCourseContext,
   UserType,
 } from '@lms/contexts'
-import {
-  ANIMATION,
-  AppType,
-  defaultStatusCourse,
-  ICoursesAPI,
-  UserGuide,
-} from '@lms/core'
+import { ANIMATION, AppType, defaultStatusCourse, ICoursesAPI } from '@lms/core'
 import { CoursesList, FilterCourse, Heading } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   Layout,
-  PopupStep,
   PopupWelcome,
   SappLoadingGlobal,
   SearchWithMenuToggle,
@@ -32,11 +25,6 @@ import { useInfiniteQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from '../api/courses'
-import {
-  TourGuideCoursesAnimation,
-  TourGuideCourseTabAnimation,
-  TourGuideFilterAnimation,
-} from '@lms/assets'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -58,7 +46,8 @@ const MyCourse = () => {
   } = useAppSelector((state) => state.userGuideReducer)
   const dispatch = useAppDispatch()
   const [openModalMarketingInApp, setOpenModalMarketingInApp] = useState(false)
-  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const { isAlwaysShowSidebar, isMobileView, isTabletView } =
+    useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
   const router = useRouter()
@@ -71,7 +60,6 @@ const MyCourse = () => {
 
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
   const observer = useRef<IntersectionObserver>()
-  const { isMobileView } = useTailwindBreakpoint()
 
   /**
    * @description handle open and close sidebar
@@ -233,9 +221,17 @@ const MyCourse = () => {
     <SappLoadingGlobal loading={isLoading}>
       <Layout
         title="My Course"
-        showSidebar={showSidebar || isAlwaysShowSidebar}
+        showSidebar={
+          showSidebar ||
+          isAlwaysShowSidebar ||
+          (guideIsActive &&
+            isTabletView &&
+            (guideStep === 2 || guideStep === 3))
+        }
         handleToggleSidebar={handleCloseSidebar}
         className="relative"
+        isEndGuide={isEndGuide}
+        closeUserGuide={closeUserGuide}
       >
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}
@@ -245,77 +241,32 @@ const MyCourse = () => {
           redirectLink={PageLink.COURSES}
           appType={AppType.LMS_PRO}
         />
-        {isMobileView ? (
-          <>
-            {guideStatus && guideStep === 4 && (
-              <PopupStep
-                content={UserGuide.CONTENT_STEP_4}
-                index={4}
-                total={6}
-                isEnd={isEndGuide}
-                title="Welcome"
-                handleCancel={closeUserGuide}
-                className="top-[55%]"
-              />
-            )}
-          </>
-        ) : (
+
+        <div
+          className="mt-2 flex justify-center rounded-md bg-white shadow-medium md:mt-4 md:justify-between lg:rounded-xl"
+          data-aos={!guideStatus ? ANIMATION.DATA_AOS : ''}
+        >
           <div
-            className="mt-2 flex justify-center rounded-md bg-white shadow-medium md:mt-4 md:justify-between lg:rounded-xl"
-            data-aos={!guideStatus ? ANIMATION.DATA_AOS : ''}
+            data-guide-id="welcome-to"
+            className={`relative flex items-center rounded-md bg-white p-3 md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 4 && !isMobileView ? 'z-50' : ''}`}
           >
-            <div
-              className={`relative flex items-center rounded-md bg-white p-3 md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 4 ? 'z-50' : ''}`}
-            >
-              <Heading
-                greeting="Welcome to"
-                title={'My Course'}
-                showShadow={false}
-                showWavingHand
-                des={
-                  <span>
-                    Here you can find all your courses, each packed with{' '}
-                    <strong>
-                      expert lessons, study materials, and interactive exercises
-                    </strong>
-                    . Select a course to start learning!
-                  </span>
-                }
-              />
-
-              {guideStatus && guideStep === 4 && (
-                <PopupStep
-                  content={UserGuide.CONTENT_STEP_4}
-                  className="left-[10%] top-full mt-14 sm:left-0 sm:mt-5"
-                  index={4}
-                  total={6}
-                  isEnd={isEndGuide}
-                  title="Welcome"
-                  handleCancel={closeUserGuide}
-                />
-              )}
-            </div>
-
-            {/* <div
-            className={`hidden items-center rounded-md bg-white p-3 md:flex md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 5 ? ' z-50 h-auto' : ''}`}
-            data-aos={ANIMATION.DATA_AOS}
-          >
-            {guideStatus && guideStep === 5 && (
-              <PopupStep
-                content={UserGuide.CONTENT_STEP_5}
-                className="left-[-400px] top-full mt-5"
-                index={5}
-                total={7}
-                isEnd={isEndGuide}
-                imgSrc={TourGuideCourseTabAnimation}
-                title="Course Tab"
-                handleCancel={closeUserGuide}
-              />
-            )}
-          </div> */}
+            <Heading
+              greeting="Welcome to"
+              title={'My Course'}
+              showShadow={false}
+              showWavingHand
+              des={
+                <span>
+                  Here you can find all your courses, each packed with{' '}
+                  <strong>
+                    expert lessons, study materials, and interactive exercises
+                  </strong>
+                  . Select a course to start learning!
+                </span>
+              }
+            />
           </div>
-        )}
-
+        </div>
         <div
           className={clsx(
             'mx-auto mb-6 mt-8 flex items-center justify-between lg:mt-11',
@@ -330,18 +281,6 @@ const MyCourse = () => {
           </h1>
           <div className="relative">
             <FilterCourse totalResult={totalRecords} listFilter={listFilter} />
-            {guideStatus && guideStep === 6 && (
-              <PopupStep
-                content={UserGuide.CONTENT_STEP_6}
-                className="right-0 top-full mt-[65px]"
-                index={6}
-                total={6}
-                titleButtonNext="Finish"
-                title="Filter"
-                handleCancel={closeUserGuide}
-                imgSrc={TourGuideFilterAnimation}
-              />
-            )}
           </div>
         </div>
         <div
@@ -349,7 +288,7 @@ const MyCourse = () => {
             isEmpty(courses)
               ? 'flex min-h-[calc(100vh-21rem)] items-center justify-center'
               : ''
-          } ${guideStatus && guideStep === 5 && 'tour-guide-course-active z-50'}`}
+          } ${guideStatus && guideStep === 5 && !isMobileView && 'tour-guide-course-active z-50'}`}
         >
           <CoursesList
             courses={courses}
@@ -359,16 +298,6 @@ const MyCourse = () => {
             isFetchingNextPage={isFetchingNextPage}
             guideIsActive={guideStatus === true && !isEndGuide}
           />
-          {guideStatus && guideStep === 5 && (
-            <PopupStep
-              content={UserGuide.CONTENT_STEP_5}
-              className="left-0 top-[20px] mt-6 xl:left-[33.5%]"
-              index={5}
-              total={6}
-              title="Courses"
-              imgSrc={TourGuideCoursesAnimation}
-            />
-          )}
         </div>
 
         {guideStatus && guideStep === 0 && (

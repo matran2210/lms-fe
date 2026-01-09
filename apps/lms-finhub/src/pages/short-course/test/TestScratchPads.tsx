@@ -11,6 +11,7 @@ import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
 import ScratchPatch from './scratchPatch'
 import { CalculatorModal } from '@lms/feature-courses'
+import { useSmartModalSize } from '@lms/hooks'
 interface IProps {
   openScratchPad: any[]
   onFocusingPad: string
@@ -63,6 +64,8 @@ const TestScratchPads = ({
       ])
     }
   }
+  const { width: widthFileViewer, height: heightFileViewer } =
+    useSmartModalSize()
   const { control: controlScratch } = useForm()
 
   return openScratchPad.map((e, index: number) => {
@@ -166,8 +169,8 @@ const TestScratchPads = ({
       return (
         <ModalResizeable
           title={e.fileName}
-          width={650}
-          height={850}
+          width={widthFileViewer}
+          height={heightFileViewer}
           key={e.id}
           handleCloseScratchPad={() => handleCloseScratchPad(e)}
           position="center"
