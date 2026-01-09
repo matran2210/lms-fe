@@ -341,7 +341,6 @@ export const convertFractionToPercentage = (fraction: string) => {
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
 export const pageview = (url: URL) => {
-  // @ts-ignore: Unreachable code error
   window.gtag(
     "config",
     `${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}` as string,

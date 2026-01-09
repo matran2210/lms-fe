@@ -370,7 +370,7 @@ const TestDetail = () => {
                 b: { answer_position: number },
               ) => a?.answer_position - b?.answer_position,
             )
-  
+
             return {
               corrects: {
                 corrects: handleMultipleCorrectAnswer(
