@@ -1389,19 +1389,22 @@ const CaseStudyDetail = () => {
                     key={e.id}
                     handleCloseScratchPad={() => handleCloseScratchPad(e)}
                     position="center left"
-                    header={
+                    header={({ requestClose }) => (
                       <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
                         <div className="text-sm font-semibold text-gray-800">
                           {`${exhibitText} ${(i ?? 0) + 1}: ${exhibitsDes?.name}`}
                         </div>
                         <button
                           className="text-icon"
-                          onClick={() => handleCloseScratchPad(e)}
+                          onClick={() => {
+                            requestClose()
+                            setTimeout(() => handleCloseScratchPad(e), 300)
+                          }}
                         >
                           <CloseModalIcon />
                         </button>
                       </div>
-                    }
+                    )}
                     modalIndex={i}
                     draggableFull
                   >

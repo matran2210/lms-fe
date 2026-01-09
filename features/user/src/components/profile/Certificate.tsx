@@ -1,76 +1,131 @@
-import React from 'react';
-import { useLayoutEffect, useState } from 'react'
-import { Divider, Table, TableProps } from 'antd'
-import { CertificateImg, Icon, NoCertificationIcon } from '@lms/assets'
-import {useDownloadImage} from '@lms/hooks'
+import React from "react";
+import { useLayoutEffect, useState } from "react";
+import { Divider, Table, TableProps } from "antd";
+import { CertificateImg, Icon, NoCertificationIcon } from "@lms/assets";
+import { useDownloadImage } from "@lms/hooks";
 
-import Image from 'next/image'
-import { sappFormatDate } from '@lms/utils'
-import clsx from 'clsx'
-import { useFeature } from '@lms/contexts';
-import PopUpCertificate from './popupCertificate/PopupCertificare';
+import Image from "next/image";
+import { sappFormatDate } from "@lms/utils";
+import clsx from "clsx";
+import { useFeature } from "@lms/contexts";
+import PopUpCertificate from "./popupCertificate/PopupCertificare";
 
 interface ICertificate {
   certificate: {
-    id: string
-    name: string
-  }
-  certificate_id: string
-  certificate_url: string
-  class_id: string
+    id: string;
+    name: string;
+  };
+  certificate_id: string;
+  certificate_url: string;
+  class_id: string;
   course: {
-    id: string
-    name: string
-  }
-  course_id: string
-  id: string
-  user_id: string
-  pass_point: number
-  received_times: string
+    id: string;
+    name: string;
+  };
+  course_id: string;
+  id: string;
+  user_id: string;
+  pass_point: number;
+  received_times: string;
 }
 
+const Skeleton = ({ className }: { className?: string }) => (
+  <div className={clsx("animate-pulse rounded bg-gray-200", className)} />
+);
+const CertificateRowSkeleton = () => {
+  return (
+    <div className="grid grid-cols-[1.6fr_0.6fr_1fr_0.5fr] items-center gap-4 py-5">
+      {/* Certificate column */}
+      <div className="flex items-center gap-4">
+        {/* Thumbnail */}
+        <Skeleton className="h-12 w-20 rounded-md" />
+
+        {/* Course name */}
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-4 w-44" />
+          <Skeleton className="h-3 w-28" />
+        </div>
+      </div>
+
+      {/* Grade */}
+      <Skeleton className="mx-auto h-4 w-12" />
+
+      {/* Certificate received */}
+      <Skeleton className="mx-auto h-4 w-32" />
+
+      {/* Actions */}
+      <div className="flex justify-center gap-3">
+        <Skeleton className="h-5 w-5 rounded-full" />
+        <Skeleton className="h-5 w-5 rounded-full" />
+      </div>
+    </div>
+  );
+};
+const CertificateHeaderSkeleton = () => (
+  <div className="grid grid-cols-[1.6fr_0.6fr_1fr_0.5fr] gap-4 border-b pb-4">
+    <Skeleton className="h-4 w-28" />
+    <Skeleton className="mx-auto h-4 w-20" />
+    <Skeleton className="mx-auto h-4 w-28" />
+    <Skeleton className="mx-auto h-4 w-16" />
+  </div>
+);
+
+const CertificateTableSkeleton = ({ rows = 6 }: { rows?: number }) => {
+  return (
+    <div className="rounded-2xl bg-[#fefefe] px-6 py-4 mb-6 mt-0 md:mb-0 md:mt-8 lg:mt-10">
+      <CertificateHeaderSkeleton />
+
+      {Array.from({ length: rows }).map((_, i) => (
+        <div key={i} className={clsx("border-b last:border-b-0 bg-[#fefefe]")}>
+          <CertificateRowSkeleton />
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const Certificate = () => {
-  const {authApi} = useFeature()
-  const { downloadImage } = useDownloadImage()
+  const { authApi } = useFeature();
+  const { downloadImage } = useDownloadImage();
   const [certificateData, setCertificateData] = useState<
     ICertificate[] | undefined
-  >(undefined)
-  const [modalOpen, setOpenModal] = useState(false)
-  const [userDetail, setUserDetail] = useState('')
+  >(undefined);
+  const [modalOpen, setOpenModal] = useState(false);
+  const [userDetail, setUserDetail] = useState("");
 
   const fetchChapterDetail = async () => {
     try {
-      const res = await authApi.getCertificate(1, 30)
-      const certificate = res.data.certificates
-      const userDetail = res.username
-      setCertificateData(certificate)
-      setUserDetail(userDetail)
+      const res = await authApi.getCertificate(1, 30);
+      const certificate = res.data.certificates;
+      const userDetail = res.username;
+      setCertificateData(certificate);
+      setUserDetail(userDetail);
     } catch (error) {}
-  }
+  };
 
   useLayoutEffect(() => {
-    fetchChapterDetail()
-  }, [])
-  const [certificateDataPopup, setCertificateDataPopup] = useState<unknown>()
+    fetchChapterDetail();
+  }, []);
+  const [certificateDataPopup, setCertificateDataPopup] = useState<unknown>();
 
-  const columns: TableProps<ICertificate>['columns'] = [
+  const columns: TableProps<ICertificate>["columns"] = [
     {
-      title: 'Certificate',
-      className: 'max-w-sm',
-    render: (record) => (
+      title: "Certificate",
+      className: "max-w-sm",
+      render: (record) => (
         <div
           className="group flex cursor-pointer items-center gap-2"
           onClick={() =>
             window.open(
               `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${record?.id}`,
-              '_blank',
+              "_blank",
             )
           }
         >
           {record?.certificate_url ? (
             <Image
-              src={record?.certificate_url || ''}
-              alt={record?.course?.name || ''}
+              src={record?.certificate_url || ""}
+              alt={record?.course?.name || ""}
               className="ratio-16/9 max-h-50 max-w-80 object-contain"
               width={50}
               height={50}
@@ -86,24 +141,26 @@ const Certificate = () => {
       ),
     },
     {
-      title: 'Grade Achieved',
-      align: 'center',
-      render: (record) => (
-        <div className="text-base text-secondary">{record?.pass_point ? `${record?.pass_point}%` : "-"}</div>
-      ),
-    },
-    {
-      title: 'Certificate Received',
-      align: 'center',
+      title: "Grade Achieved",
+      align: "center",
       render: (record) => (
         <div className="text-base text-secondary">
-          {sappFormatDate(record?.received_times, 'DD/MM/YYYY HH:mm')}
+          {record?.pass_point ? `${record?.pass_point}%` : "-"}
         </div>
       ),
     },
     {
-      title: 'Action',
-      align: 'center',
+      title: "Certificate Received",
+      align: "center",
+      render: (record) => (
+        <div className="text-base text-secondary">
+          {sappFormatDate(record?.received_times, "DD/MM/YYYY HH:mm")}
+        </div>
+      ),
+    },
+    {
+      title: "Action",
+      align: "center",
       render: (record) => (
         <div className="flex items-center justify-center gap-1">
           <div
@@ -122,7 +179,7 @@ const Certificate = () => {
             onClick={() =>
               window.open(
                 `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${record?.id}`,
-                '_blank',
+                "_blank",
               )
             }
           >
@@ -134,8 +191,11 @@ const Certificate = () => {
         </div>
       ),
     },
-  ]
+  ];
 
+  if (!certificateData) {
+    return <CertificateTableSkeleton />;
+  }
   return (
     <div className="mb-6 mt-0 md:mb-0 md:mt-8 lg:mt-10">
       {certificateData && !certificateData?.length ? (
@@ -177,33 +237,33 @@ const Certificate = () => {
           openPreview={modalOpen}
           setOpenModal={setOpenModal}
           data={certificateDataPopup}
-          message={''}
+          message={""}
           onClose={() => {
-            setCertificateDataPopup(null)
-            setOpenModal(false)
+            setCertificateDataPopup(null);
+            setOpenModal(false);
           }}
           userDetail={userDetail}
         />
       )}
     </div>
-  )
-}
+  );
+};
 
 const CertificateItem = ({
   record,
   isLastItem,
 }: {
-  record: ICertificate
-  isLastItem: boolean
+  record: ICertificate;
+  isLastItem: boolean;
 }) => {
-  const { downloadImage } = useDownloadImage()
+  const { downloadImage } = useDownloadImage();
 
   return (
     <div
       className={clsx(
-        'flex flex-col gap-3 rounded-xl bg-white p-4 shadow-small md:gap-6 md:rounded-none md:bg-transparent md:p-0 md:shadow-none',
+        "flex flex-col gap-3 rounded-xl bg-white p-4 shadow-small md:gap-6 md:rounded-none md:bg-transparent md:p-0 md:shadow-none",
         {
-          'md:border-b md:border-b-gray-300 md:pb-6': !isLastItem,
+          "md:border-b md:border-b-gray-300 md:pb-6": !isLastItem,
         },
       )}
     >
@@ -212,14 +272,14 @@ const CertificateItem = ({
         onClick={() =>
           window.open(
             `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${record?.id}`,
-            '_blank',
+            "_blank",
           )
         }
       >
         {record?.certificate_url ? (
           <Image
-            src={record?.certificate_url || ''}
-            alt={record?.course?.name || ''}
+            src={record?.certificate_url || ""}
+            alt={record?.course?.name || ""}
             className="ratio-16/9 max-h-50 max-w-80 object-contain"
             width={80}
             height={80}
@@ -239,7 +299,7 @@ const CertificateItem = ({
 
       <InfoWrapper
         title="Certificate Received:"
-        value={sappFormatDate(record?.received_times, 'DD/MM/YYYY HH:mm')}
+        value={sappFormatDate(record?.received_times, "DD/MM/YYYY HH:mm")}
       />
       <InfoWrapper
         value={
@@ -260,7 +320,7 @@ const CertificateItem = ({
               onClick={() =>
                 window.open(
                   `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${record?.id}`,
-                  '_blank',
+                  "_blank",
                 )
               }
             >
@@ -273,20 +333,20 @@ const CertificateItem = ({
         }
       />
     </div>
-  )
-}
+  );
+};
 const InfoWrapper = ({
   title,
   value,
 }: {
-  title?: string
-  value: React.ReactNode
+  title?: string;
+  value: React.ReactNode;
 }) => {
   return (
     <div className="flex items-center justify-between text-sm md:text-base">
       <div className="font-normal">{title}</div>
       <div className="font-semibold text-gray-800">{value}</div>
     </div>
-  )
-}
-export default Certificate
+  );
+};
+export default Certificate;

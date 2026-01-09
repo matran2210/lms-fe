@@ -70,6 +70,7 @@ import { UploadAPI } from './api/upload'
 import ErrorRedirectPage from './error-redirect'
 import { fetcher } from '@services/requestV2'
 import { TestServiceAPI } from './api/test-api'
+import { uploadImageToLinkedIn } from './api/certificate'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -350,6 +351,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 fetcher: fetcher,
                 videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
                 testServiceApi: TestServiceAPI,
+                uploadImageToLinkedIn: uploadImageToLinkedIn,
               }}
             >
               <CourseProvider router={router}>

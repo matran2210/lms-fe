@@ -54,7 +54,7 @@ const EventTest = ({
     try {
       const res = await testServiceApi.submitAllQuestion(
         data?.quiz_attempt_id as string,
-      )
+      );
       if (res.success) {
         await onRefetch();
         setSubmitEventTest(true);
@@ -146,7 +146,7 @@ const EventTest = ({
             className="ml-auto"
             onClick={handleSubmitQuestion}
           />
-        )
+        );
       }
       return (
         <ButtonSecondary
@@ -217,30 +217,29 @@ const EventTest = ({
     }
   };
 
-
   const getEventTestStatus = (
     textDoneAttempt: string | number | any,
     textNotAttempt: string | number,
   ) => {
-    if (data?.attempt_status === EAttemptStatus['SUBMITTED']) {
-      return textDoneAttempt
+    if (data?.attempt_status === EAttemptStatus["SUBMITTED"]) {
+      return textDoneAttempt;
     } else {
-      return textNotAttempt
+      return textNotAttempt;
     }
-  }
-  
+  };
+
   const resultDate = (category: string) => {
     switch (category) {
-      case 'ACCA':
-        return '11/11/2025'
-      case 'CFA':
-        return '26/01/2026'
-      case 'CMA':
-        return '14/10/2025'
+      case "ACCA":
+        return "11/11/2025";
+      case "CFA":
+        return "26/01/2026";
+      case "CMA":
+        return "14/10/2025";
       default:
-        break
+        break;
     }
-  }
+  };
 
   return (
     <>
@@ -279,7 +278,7 @@ const EventTest = ({
               className={`flex justify-between pt-4 text-base capitalize text-gray`}
             >
               <p>
-                {getEventTestStatus('Result Release Date:', 'No of Questions:')}
+                {getEventTestStatus("Result Release Date:", "No of Questions:")}
               </p>
               <p className={`font-medium text-gray-800`}>
                 {getEventTestStatus(
@@ -343,6 +342,7 @@ const EventTest = ({
       )} */}
 
       <SappModalV3
+        handleClose={() => setOpen(false)}
         open={open}
         okButtonCaption="Back"
         handleCancel={() => setOpen(false)}

@@ -4,6 +4,7 @@ import { formatDateToLongString } from "@lms/utils";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
+import clsx from "clsx";
 
 interface PinnedCompletedCourseData {
   isOpen: boolean;
@@ -78,7 +79,13 @@ const PinnedCompletedCourse: React.FC<IProps> = React.memo(
       <PinnedNotificationsV2
         bgColor="bg-primary-200"
         borderColor="border-primary"
-        classPinned="lg:flex-row lg:justify-between lg:items-center flex-col gap-2 md:gap-4"
+        classPinned={clsx(
+          "fixed left-1/2 bottom-6 z-[1000]",
+          "-translate-x-1/2",
+          "w-[calc(100%-2rem)] max-w-[720px]",
+          "lg:flex-row lg:justify-between lg:items-center flex-col gap-2 md:gap-4",
+          "pinned-toast-enter",
+        )}
       >
         <div className="flex items-center gap-4">
           <CertificateImage url={userCertificateUrl} />
@@ -89,6 +96,7 @@ const PinnedCompletedCourse: React.FC<IProps> = React.memo(
     );
   },
 );
+
 PinnedCompletedCourse.displayName = "PinnedCompletedCourse";
 
 export default PinnedCompletedCourse;

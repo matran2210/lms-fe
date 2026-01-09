@@ -768,19 +768,22 @@ const ActivityPage = () => {
                       className="!z-40 !rounded-lg"
                       handleCloseScratchPad={() => handleCloseScratchPad(e)}
                       position="center"
-                      header={
+                      header={({ requestClose }) => (
                         <div className="">
                           <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between px-5">
                             <div className="truncate">{e.fileName}</div>
                           </div>
                           <button
                             className="absolute right-3 top-2"
-                            onClick={() => handleCloseScratchPad(e)}
+                            onClick={() => {
+                              requestClose()
+                              setTimeout(() => handleCloseScratchPad(e), 300)
+                            }}
                           >
                             <CloseIcon />
                           </button>
                         </div>
-                      }
+                      )}
                       isInBody
                     >
                       <div
@@ -800,19 +803,22 @@ const ActivityPage = () => {
                       className="!z-40"
                       handleCloseScratchPad={() => handleCloseScratchPad(e)}
                       position="center left"
-                      header={
+                      header={({ requestClose }) => (
                         <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
                           <div className="text-sm font-semibold text-gray-800">
                             {`${exhibitText} ${(e?.index ?? 0) + 1}: ${e?.name}`}
                           </div>
                           <button
                             className="text-icon"
-                            onClick={() => handleCloseScratchPad(e)}
+                            onClick={() => {
+                              requestClose()
+                              setTimeout(() => handleCloseScratchPad(e), 300)
+                            }}
                           >
                             <CloseIconNote />
                           </button>
                         </div>
-                      }
+                      )}
                       draggableFull
                       modalIndex={e.index}
                     >

@@ -29,6 +29,7 @@ const ConFirmSubmit = ({
 
   return (
     <SappModalV3
+      handleClose={() => setOpen(false)}
       open={open}
       cancelButtonCaption="Back to My Course"
       okButtonCaption="Submit"

@@ -8,7 +8,12 @@ import {
   TEST_TYPE_LABELS,
 } from "@lms/core";
 import { ButtonPrimary, ButtonSecondary, ButtonText } from "@lms/ui";
-import { capitalizeFirstLetter, formatTimer, isQuizExpired, trackGAEvent } from "@lms/utils";
+import {
+  capitalizeFirstLetter,
+  formatTimer,
+  isQuizExpired,
+  trackGAEvent,
+} from "@lms/utils";
 import { Select } from "antd";
 import dayjs from "dayjs";
 import { isNull } from "lodash";
@@ -32,14 +37,16 @@ interface IProps {
   class_user_id?: string;
   activeCourse?: any;
   is_passed_course: boolean;
-  selectedResultCourse?: {
-    label: string;
-    value: string;
-    ratio_score?: string | undefined;
-    status: string;
-    score: number;
-    total_attempt_time: number;
-  } | undefined
+  selectedResultCourse?:
+    | {
+        label: string;
+        value: string;
+        ratio_score?: string | undefined;
+        status: string;
+        score: number;
+        total_attempt_time: number;
+      }
+    | undefined;
 }
 
 const TestModal = ({
@@ -49,7 +56,7 @@ const TestModal = ({
   class_user_id,
   activeCourse,
   is_passed_course,
-  selectedResultCourse
+  selectedResultCourse,
 }: IProps) => {
   const { router, testServiceApi, classApi } = useFeature();
   const isSubmitted =
@@ -82,12 +89,12 @@ const TestModal = ({
   const [openResource, setOpenPopup] = useState(false);
   const [remainingTime, setRemainingTime] = useState<number>();
   const remainingTimeLastAttempt = useRef<number | null>(null);
-  const [isCallSubmit, setIsCallSubmit] = useState(false)
+  const [isCallSubmit, setIsCallSubmit] = useState(false);
 
   const quiz = data?.quiz;
-  const isLimited = !!quiz.is_limited;
-  const attempt = quiz.attempt;
-  const limitCount = quiz.limit_count;
+  const isLimited = !!quiz?.is_limited;
+  const attempt = quiz?.attempt;
+  const limitCount = quiz?.limit_count;
   const currentAttemptNum = attempt?.number_of_attempts;
   const isNoAttempt = !data?.quiz?.attempt;
 
@@ -230,26 +237,28 @@ const TestModal = ({
   const isTimeOut =
     remainingTimeLastAttempt?.current != null &&
     remainingTimeLastAttempt.current <= 0;
-  
-    useEffect(() => {
+
+  useEffect(() => {
     if (
       remainingTimeLastAttempt?.current != null &&
       remainingTimeLastAttempt.current <= 0
     ) {
-      setIsCallSubmit(true)
+      setIsCallSubmit(true);
     }
-  }, [remainingTimeLastAttempt?.current])
+  }, [remainingTimeLastAttempt?.current]);
 
   const handleSubmitNow = async (isRedirect = true) => {
-    const res = await testServiceApi.submitAllQuestion(data?.quiz?.attempt?.id as string);    
+    const res = await testServiceApi.submitAllQuestion(
+      data?.quiz?.attempt?.id as string,
+    );
     if (!isRedirect && res?.success && data?.quiz?.attempt) {
       data.quiz.attempt.status = "SUBMITTED";
       if (selectedResultCourse) {
-        selectedResultCourse.ratio_score = res?.data?.ratio_score,
-        selectedResultCourse.status = res?.data?.status,
-        selectedResultCourse.score = res?.data?.score,
-        selectedResultCourse.total_attempt_time = res?.data?.total_attempt_time
-      
+        ((selectedResultCourse.ratio_score = res?.data?.ratio_score),
+          (selectedResultCourse.status = res?.data?.status),
+          (selectedResultCourse.score = res?.data?.score),
+          (selectedResultCourse.total_attempt_time =
+            res?.data?.total_attempt_time));
       }
     }
     isRedirect && handleRedirectResult();
@@ -396,19 +405,19 @@ const TestModal = ({
     }
   };
 
-  const renderBackButton = () => (
+  const renderBackButton = (requestClose: () => void) => (
     <ButtonText
       title="Cancel"
       // icon={<BackIcon />}
       size="medium"
       onClick={() => {
-        setOpen(false);
+        requestClose();
         trackGAEvent("Click Button Back to My Course");
       }}
     />
   );
 
-  const renderCustomFooter = () => {
+  const renderCustomFooter = (requestClose: () => void) => {
     if (!quiz) return null;
 
     // Trường hợp: có thể hiển thị nút Start hoặc Retake
@@ -442,7 +451,7 @@ const TestModal = ({
                   onClick={handleStartANewAttempt}
                 />
               )}
-              {renderBackButton()}
+              {renderBackButton(requestClose)}
             </>
           );
         }
@@ -463,7 +472,7 @@ const TestModal = ({
                 full
                 onClick={handleStartANewAttempt}
               />
-              {renderBackButton()}
+              {renderBackButton(requestClose)}
             </>
           );
         }
@@ -479,7 +488,7 @@ const TestModal = ({
                 onClick={handleRetakeNewAttempt}
               />
             )}
-            {renderBackButton()}
+            {renderBackButton(requestClose)}
           </>
         );
       } else {
@@ -508,7 +517,7 @@ const TestModal = ({
                   onClick={handleStartANewAttempt}
                 />
               )}
-              {renderBackButton()}
+              {renderBackButton(requestClose)}
             </>
           );
         }
@@ -687,7 +696,11 @@ const TestModal = ({
         setOpen={setOpen}
         title={
           <div className="flex items-center justify-center">
-            {TEST_TYPE_LABELS[data?.course_section_type as keyof typeof TEST_TYPE_LABELS]}
+            {
+              TEST_TYPE_LABELS[
+                data?.course_section_type as keyof typeof TEST_TYPE_LABELS
+              ]
+            }
           </div>
         }
         time={displayTime}
@@ -828,11 +841,11 @@ const TestModal = ({
             </>
           )
         }
-        customFooter={
+        customFooter={({ requestClose }) => (
           <div className="flex w-full flex-col items-center justify-center gap-3">
-            {renderCustomFooter()}
+            {renderCustomFooter(requestClose)}
           </div>
-        }
+        )}
         isClosable={
           isNoAttemptOrLimitReached &&
           (!isLimited ||

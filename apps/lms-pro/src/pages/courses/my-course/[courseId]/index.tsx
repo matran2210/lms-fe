@@ -16,6 +16,7 @@ import {
 } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
+  ButtonPrimary,
   CourseDetailSkeleton,
   CtaTrial,
   HeaderMobile,
@@ -321,11 +322,9 @@ const CourseDetail = () => {
       <div className="z-2 sticky inset-x-0 bottom-4">
         <div className="flex w-full flex-col gap-4">
           <CtaTrial />
-          {pinnedCompletedCourse.isOpen && (
-            <PinnedCompletedCourse
-              pinnedCompletedCourse={pinnedCompletedCourse}
-            />
-          )}
+          <PinnedCompletedCourse
+            pinnedCompletedCourse={pinnedCompletedCourse}
+          />
         </div>
       </div>
       <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />
