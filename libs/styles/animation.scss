@@ -177,58 +177,59 @@
 
 /* ===== ANTD DRAWER ANIMATION ===== */
 
-.ant-drawer-content-wrapper {
-  transition: none !important;
-}
+/* =========================
+   ANTD DRAWER ANIMATION (PC ONLY)
+   ========================= */
+@media (min-width: 1024px) {
+  .ant-drawer-content-wrapper {
+    transition: none !important;
+  }
 
-/* ===== OPEN ===== */
-.ant-drawer-open .ant-drawer-content-wrapper {
-  animation: drawerSlideInBounce 400ms cubic-bezier(0.22, 1.2, 0.36, 1);
-}
+  /* ===== OPEN ===== */
+  .ant-drawer-open .ant-drawer-content-wrapper {
+    animation: drawerSlideInBounce 400ms cubic-bezier(0.22, 1.2, 0.36, 1);
+  }
 
-/* ===== CLOSE ===== */
-.ant-drawer-content-wrapper {
-  animation: drawerSlideOut 300ms ease-in;
-}
+  /* ===== CLOSE ===== */
+  .ant-drawer-content-wrapper {
+    animation: drawerSlideOut 300ms ease-in;
+  }
 
-/* ===== KEYFRAMES ===== */
+  /* ===== KEYFRAMES ===== */
 
-/* Trượt vào → quá đích → về vị trí */
-@keyframes drawerSlideInBounce {
-  0% {
-    transform: translateX(100%);
+  @keyframes drawerSlideInBounce {
+    0% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+
+    70% {
+      transform: translateX(-24px);
+      opacity: 1;
+    }
+
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes drawerSlideOut {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  /* ===== MASK ===== */
+  .ant-drawer-mask {
+    transition: opacity 300ms ease;
     opacity: 0;
   }
 
-  70% {
-    transform: translateX(-24px);
+  .ant-drawer-open .ant-drawer-mask {
     opacity: 1;
   }
-
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-/* Trượt ra */
-@keyframes drawerSlideOut {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(100%);
-  }
-}
-
-.ant-drawer-mask {
-  transition: opacity 300ms ease;
-}
-
-.ant-drawer-open .ant-drawer-mask {
-  opacity: 1;
-}
-
-.ant-drawer-mask {
-  opacity: 0;
 }
