@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import parse, { Element } from 'html-react-parser'
-import { Correct } from './NewDragNDrop'
+import { Correct } from '@lms/utils'
 
 interface CorrectAnswerProps {
   questionContent: string
