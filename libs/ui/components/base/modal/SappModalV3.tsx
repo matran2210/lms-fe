@@ -4,7 +4,7 @@ import { ReactNode, useEffect, useState } from "react";
 import ButtonCancelSubmit from "../button/ButtonCancelSubmit";
 
 interface IProps {
-  open: boolean;
+  open?: boolean;
   showFooter?: boolean;
   cancelButtonCaption?: any;
   okButtonCaption?: any;
