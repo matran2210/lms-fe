@@ -229,9 +229,11 @@ const LearningResultTest = () => {
   }, [router?.query?.courseId]);
 
   const resultFormula =
-    courseInfo?.category === "ACCA" || courseInfo?.category === PROGRAM.LD
-      ? "%Results = Graded activities (70%) + Final test (30%)"
-      : "%Results = Module test (40%) + Topic test (60%)";
+    courseInfo?.category === PROGRAM.LD
+      ? "% Results = Topic test (30%) + Final test (70%)"
+      : courseInfo?.category === "ACCA"
+        ? "%Results = Graded activities (70%) + Final test (30%)"
+        : "%Results = Module test (40%) + Topic test (60%)";
 
   return (
     <div className="flex h-auto w-full rounded-2xl bg-white p-4 md:p-6">
