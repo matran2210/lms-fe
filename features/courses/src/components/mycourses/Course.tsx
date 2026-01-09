@@ -1,7 +1,14 @@
-import { CourseTimeIcon, GraduationCapIcon, Icon } from '@lms/assets';
+import { CourseTimeIcon, GraduationCapIcon, Icon } from "@lms/assets";
 import { useCourseContext, useFeature } from "@lms/contexts";
 import { ButtonSecondary, Tooltip } from "@lms/ui";
-import { clearStylesHtml, convertHourToDayLeft, convertLocalTimeToUTC, getUserPrefix, trackGAEvent, truncateString } from "@lms/utils";
+import {
+  clearStylesHtml,
+  convertHourToDayLeft,
+  convertLocalTimeToUTC,
+  getUserPrefix,
+  trackGAEvent,
+  truncateString,
+} from "@lms/utils";
 import { differenceInDays, parseISO, startOfDay } from "date-fns";
 import { isNull, round } from "lodash";
 import { useRouter } from "next/router";
@@ -42,7 +49,7 @@ const Course = ({
   refetch: () => void;
   isTeacher?: boolean;
 }) => {
-  const {courseApi, pageLink} = useFeature();
+  const { courseApi, pageLink } = useFeature();
   const [openExtend, setOpenExtend] = useState<boolean>(false);
   const [openActive, setOpenActive] = useState<boolean>(false);
   const [timeActive, setTimeActive] = useState<number>();
@@ -212,7 +219,9 @@ const Course = ({
       const params = {
         classId: foundation_class_id ? foundation_class_id : classInstance?.id,
       };
-      const res = await courseApi.activeCourse(params) as { success: boolean };
+      const res = (await courseApi.activeCourse(params)) as {
+        success: boolean;
+      };
       if (res?.success) {
         router.push(
           `${userPrefix}/courses/my-course/${foundation_class_id || classInstance?.id}`,
@@ -227,7 +236,9 @@ const Course = ({
   }
   async function extendCourse() {
     try {
-      const res = await courseApi.extendCourse({ classId: classInstance?.id }) as { success: boolean };
+      const res = (await courseApi.extendCourse({
+        classId: classInstance?.id,
+      })) as { success: boolean };
       if (res?.success) {
         refetch();
         toast.success("Gia hạn hành công!");
@@ -252,7 +263,8 @@ const Course = ({
         course?.course_type == COURSE_TYPE.PRACTICE_COURSE) &&
       (category == PROGRAM.ACCA ||
         category == PROGRAM.CFA ||
-        category == PROGRAM.CMA);
+        category == PROGRAM.CMA ||
+        category == PROGRAM.LD);
 
     // Redirect to dashboard if the course type is practice, normal
     const basePath = `${userPrefix}/courses/my-course/${classInstance?.id}`;

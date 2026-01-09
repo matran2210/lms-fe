@@ -38,6 +38,7 @@ export enum PROGRAM {
   "CMA" = "CMA",
   "CFA" = "CFA",
   "CD" = "Cert/Dip",
+  "LD" = "L&D Courses",
 }
 export enum CONSTRUCTION {
   "OFFLINE" = "OFFLINE",
