@@ -174,7 +174,7 @@ const TableQuestions = ({
           <div
             className={clsx(
               `rounded-[4px] px-2 py-0.5 text-xs font-normal leading-5.5 md:text-sm`,
-              answer?.is_correct && 'bg-green-7 text-green-6',
+              answer?.is_correct && 'bg-success-50 text-success',
               !answer?.is_correct && 'bg-error-50 text-error',
             )}
           >
@@ -226,7 +226,7 @@ const TableQuestions = ({
             className={clsx(
               'ml-5 rounded-sm px-1 py-1.5 text-sm md:text-base',
               gradingStatus === GRADE_STATUS.FINISHED_GRADING
-                ? 'bg-[#176CDD0D] text-blue-7'
+                ? 'text-acent-info bg-[#176CDD0D]'
                 : 'bg-[#FFB8001A] text-[#FFB800]',
             )}
           >

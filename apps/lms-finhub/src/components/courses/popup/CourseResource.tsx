@@ -238,7 +238,7 @@
 //       width={673}
 //       customTitle={
 //         <div className="flex items-center justify-between p-8">
-//           <div className="text-2xl font-semibold text-bw-1">
+//           <div className="text-2xl font-semibold text-gray-800">
 //             Course Resource
 //           </div>
 //           <div className="cursor-pointer" onClick={onClose}>

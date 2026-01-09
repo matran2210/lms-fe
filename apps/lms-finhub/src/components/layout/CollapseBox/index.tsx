@@ -9,11 +9,11 @@ type IProps = {
 function CollapseBox({ title, children }: IProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   return (
-    <div className="w-full rounded-lg border border-gray-5 px-7 py-4">
+    <div className="border-[#7E8299]px-7 w-full rounded-lg border py-4">
       <div
-        className={`flex items-center justify-between ${isOpen && 'mb-4 border-b border-gray-5 pb-3'}`}
+        className={`flex items-center justify-between ${isOpen && 'border-[#7E8299]pb-3 mb-4 border-b'}`}
       >
-        <div className="text-base font-semibold text-heading">{title}</div>
+        <div className="text-heading text-base font-semibold">{title}</div>
         <div className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
           <CollapseArrowIcon selected={isOpen} />
         </div>

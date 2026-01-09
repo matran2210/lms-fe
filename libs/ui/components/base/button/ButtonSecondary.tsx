@@ -1,14 +1,14 @@
-import React from 'react'
-import BaseButton from './BaseButton'
-import { IButtonBaseProps } from '@lms/core'
-import clsx from 'clsx'
+import React from "react";
+import BaseButton from "./BaseButton";
+import { IButtonBaseProps } from "@lms/core";
+import clsx from "clsx";
 
 const ButtonSecondary = ({
   title,
   onClick,
-  className = '',
+  className = "",
   link,
-  size = 'small',
+  size = "small",
   disabled = false,
   startIcon,
   endIcon,
@@ -17,19 +17,19 @@ const ButtonSecondary = ({
   ...props
 }: IButtonBaseProps) => {
   const textSizeClass =
-    size === 'small'
-      ? 'text-sm'
-      : size === 'medium'
-        ? 'text-sm md:text-base'
-        : 'text-sm md:text-lg'
+    size === "small"
+      ? "text-sm"
+      : size === "medium"
+        ? "text-sm md:text-base"
+        : "text-sm md:text-lg";
   const padding =
-    size === 'small'
-      ? 'py-[7px] px-[15px]'
-      : size === 'medium'
-        ? 'py-[7px] px-[15px] md:py-[11px] md:px-[23px]'
-        : 'py-[7px] px-[15px] md:py-[15px] md:px-[31px]'
+    size === "small"
+      ? "py-[7px] px-[15px]"
+      : size === "medium"
+        ? "py-[7px] px-[15px] md:py-[11px] md:px-[23px]"
+        : "py-[7px] px-[15px] md:py-[15px] md:px-[31px]";
 
-  const fullWidthClass = full ? 'block w-full' : 'inline-block'
+  const fullWidthClass = full ? "block w-full" : "inline-block";
 
   const componentClass = clsx(
     `
@@ -45,12 +45,12 @@ const ButtonSecondary = ({
      `,
     className,
     {
-      ' text-secondary hover:!text-secondary hover:!border-secondary hover:!bg-gray-100 cursor-pointer':
+      " text-secondary hover:!text-secondary hover:!border-secondary hover:!bg-gray-100 cursor-pointer":
         !disabled,
-      'cursor-not-allowed !bg-gray-100 !text-gray-400 !border !border-gray-17 hover:!bg-gray-100 hover:!text-gray-400 hover:!border-gray-17':
+      "cursor-not-allowed !bg-gray-100 !text-gray-400 !border !border-gray-200 hover:!bg-gray-100 hover:!text-gray-400 hover:!border-gray-200":
         disabled,
     },
-  )
+  );
 
   return (
     <BaseButton
@@ -66,7 +66,7 @@ const ButtonSecondary = ({
         {endIcon && <div className="w-full">{endIcon}</div>}
       </div>
     </BaseButton>
-  )
-}
+  );
+};
 
-export default ButtonSecondary
+export default ButtonSecondary;

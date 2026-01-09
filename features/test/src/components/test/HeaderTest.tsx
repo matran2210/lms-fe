@@ -96,7 +96,7 @@ const HeaderTest = ({
             size: "small",
             loading: false,
             disabled: submited,
-            className: "border border-bw-1",
+            className: "border border-gray-800",
             onClick: async () => {
               await resetWordBeforeAction?.();
               onSubmitAnswer("finish");
@@ -111,7 +111,7 @@ const HeaderTest = ({
           cancel={{
             title: "Quit",
             size: "small",
-            className: "border border-bw-1 !w-[109px]",
+            className: "border border-gray-800 !w-[109px]",
             onClick: async () => {
               await resetWordBeforeAction?.();
               setOpenQuit(true);

@@ -2755,7 +2755,7 @@ const TestDetail = () => {
                 : 'You should select an answer before click'
             }
             classNames={{
-              root: 'max-w-72 rounded-md',
+              root: 'max-w-[288px] rounded-md',
               body: 'text-sm !py-1 !px-2 flex items-center',
             }}
             getPopupContainer={(triggerNode) => triggerNode.parentElement!}

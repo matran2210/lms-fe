@@ -36,7 +36,7 @@ const SAPPDrawerV3 = ({
         {customTitle ? (
           customTitle
         ) : (
-          <div className="relative bg-bw-1 px-8 py-6">
+          <div className="relative bg-gray-800 px-8 py-6">
             <div className="pr-10 text-2xl font-medium text-white">{title}</div>
             <div
               className="absolute right-8 top-1/2 -translate-y-2/4 cursor-pointer"

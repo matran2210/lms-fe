@@ -77,7 +77,7 @@ const TableEntranceResult = () => {
     attempt && attempt !== 'undefined' ? `attempt=${attempt}` : ''
 
   return (
-    <FullScreenLayout title="Entrance test result" className="!bg-gray-4">
+    <FullScreenLayout title="Entrance test result" className="!bg-gray-100">
       <div>
         <div
           className="fixed right-8 top-5 z-20 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-gray-200 transition-colors hover:bg-gray-300"

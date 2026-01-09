@@ -998,7 +998,7 @@ const CaseStudyResult = () => {
                 )
               }
             })}
-            <div className=" relative flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
+            <div className=" bg-gray-100shadow-question-footer relative flex h-[48px] items-center justify-between">
               <div className="flex h-full items-center">
                 <button
                   className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
@@ -1071,7 +1071,7 @@ const CaseStudyResult = () => {
                       </div>
                     </div>
                     {showListExhibits && (
-                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
+                      <div className="sapp-separateLine bg-gray-100shadow-questions-exhibits absolute bottom-full h-fit justify-center 3xl:w-full">
                         {exhibits?.map(
                           (
                             e: { label: string; value: string },
@@ -1082,7 +1082,7 @@ const CaseStudyResult = () => {
                                 key={e?.value}
                                 className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px] ' : 'min-w-[100px] '} ${
                                   !watch('exhibits')?.includes(e?.value) &&
-                                  'text-gray-1 '
+                                  'text-gray '
                                 }`}
                                 onClick={() => handleOpenExhibit(e?.value)}
                               >{`${exhibitText} ${index + 1}`}</button>

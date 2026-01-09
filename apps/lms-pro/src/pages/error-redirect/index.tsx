@@ -13,10 +13,10 @@ const ErrorRedirectPage = () => {
         height={142}
         priority
       />
-      <h1 className="text-center font-inter text-3xl font-semibold text-bw-11">
+      <h1 className="text-center font-inter text-3xl font-semibold text-[#252F4A]">
         Oops!
       </h1>
-      <p className="text-center font-inter text-lg font-normal text-gray-9">
+      <p className="text-center font-inter text-lg font-normal text-gray-700">
         Something went wrong. Please try again.
       </p>
       <SappButton

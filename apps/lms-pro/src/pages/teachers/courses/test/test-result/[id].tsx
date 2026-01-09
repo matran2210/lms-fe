@@ -62,8 +62,8 @@ const TestResultDetailTeacher = () => {
   ]
 
   return (
-    <FullScreenLayout title="Test Result" className="!bg-gray-3">
-      <div className="mx-auto max-w-1570">
+    <FullScreenLayout title="Test Result" className="!bg-gray-200">
+      <div className="mx-auto max-w-[1570px]">
         <div className="py-5 xl:container md:px-10">
           <SappBreadCrumbs breadcrumbs={breadcrumbs} />
         </div>

@@ -79,7 +79,7 @@ export default function SidebarMobile() {
 
             {/* <TabButton
               items={itemButtonTab}
-              className="!rounded !px-1 !py-2 text-ssm"
+              className="!rounded !px-1 !py-2 text-xs"
             /> */}
           </div>
         </div>

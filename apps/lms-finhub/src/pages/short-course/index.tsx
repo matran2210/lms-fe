@@ -121,13 +121,13 @@ const MyCourse3Level = () => {
         />
       </div>
       <div
-        className="heading relative my-0 mt-4 hidden max-w-1524 rounded-lg bg-white shadow-search md:block"
+        className="heading relative my-0 mt-4 hidden max-w-[1524px] rounded-lg bg-white shadow-search md:block"
         data-aos={ANIMATION.DATA_AOS}
       >
         <div className="flex w-full items-center justify-between gap-8 rounded-lg px-8 py-6">
           <div>
             <div>
-              <h1 className="line-clamp-1 text-3xl font-medium leading-[46px] text-bw-15">
+              <h1 className="line-clamp-1 text-3xl font-medium leading-[46px] text-gray-800">
                 Welcome to
                 <span className="ml-1.5 font-medium text-primary">
                   Master Finance
@@ -135,7 +135,7 @@ const MyCourse3Level = () => {
               </h1>
             </div>
             <div className="mt-1 flex w-full">
-              <div className="w-full text-medium-sm leading-[22px] text-bw-15">
+              <div className="w-full text-sm leading-[22px] text-gray-800">
                 From here, you can access every topic, reading, and video
                 lesson, as well as assignment questions.
               </div>
@@ -145,15 +145,15 @@ const MyCourse3Level = () => {
         </div>
       </div>
 
-      <div className="mt-4 flex max-w-1524 items-center justify-between gap-8 md:mt-10">
-        <h3 className="text-lg font-semibold leading-8 text-bw-15 md:text-2xl">
+      <div className="mt-4 flex max-w-[1524px] items-center justify-between gap-8 md:mt-10">
+        <h3 className="text-lg font-semibold leading-8 text-gray-800 md:text-2xl">
           Course List
         </h3>
         <Filter3Level courses={data?.pages?.[0]?.category} />
       </div>
 
       <div
-        className={`relative my-0 max-w-1524 pt-6 ${
+        className={`relative my-0 max-w-[1524px] pt-6 ${
           isEmpty(courses)
             ? 'flex min-h-[calc(100vh-22rem)] items-center justify-center'
             : ''

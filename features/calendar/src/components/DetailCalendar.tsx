@@ -194,7 +194,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
   return (
     <div
       className={clsx(
-        "sticky top-4 h-[calc(100vh-32px)] w-full flex-col overflow-y-auto rounded-2xl bg-white p-8 !text-bw-13 shadow-table lg:flex",
+        "sticky top-4 h-[calc(100vh-32px)] w-full flex-col overflow-y-auto rounded-2xl bg-white p-8 !text-gray-800 shadow-table lg:flex",
         "transition-all duration-300 ease-in-out",
         open.isOpen
           ? "translate-x-0 opacity-100"

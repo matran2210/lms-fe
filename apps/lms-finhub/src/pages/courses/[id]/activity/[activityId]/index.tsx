@@ -497,7 +497,7 @@ const ActivityPage = () => {
                   <Tooltip title={e?.name} showTooltip={e?.name?.length > 45}>
                     <li
                       className={
-                        ' cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-gray-1 hover:text-primary'
+                        ' cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-gray hover:text-primary'
                       }
                       title={e?.name}
                     >
@@ -588,12 +588,12 @@ const ActivityPage = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Activity">
-        <div className={`mx-auto my-0 max-w-xxl text-bw-1`}>
+        <div className={`max-w-xxl mx-auto my-0 text-bw-1`}>
           {/* Breadcrumbs */}
-          <ul className="line-clamp-1 flex overflow-x-auto py-6 text-medium-sm font-medium">
+          <ul className="line-clamp-1 flex overflow-x-auto py-6 text-sm font-medium">
             <BreadCrumbs />
             <Tooltip title={nameActivity?.name}>
-              <li className="responsive-truncate-container text-bw-1">
+              <li className="responsive-truncate-container text-gray-800">
                 <Link
                   href={'#'}
                   className="breadcrumbs__link"
@@ -629,7 +629,7 @@ const ActivityPage = () => {
           {/* Main Activity */}
           <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
             {/* Header */}
-            <div className="bg-gray-3 px-6 ">
+            <div className="bg-gray-100px-6 ">
               <div
                 className={`flex w-full select-none items-center justify-between gap-4 py-6 ${
                   activity?.course_outcomes?.length > 0
@@ -644,7 +644,7 @@ const ActivityPage = () => {
                     {activity?.name}
                   </Tooltip>
                 </div>
-                <div className="whitespace-nowrap text-sm text-gray-1">
+                <div className="whitespace-nowrap text-sm text-gray">
                   {activity?.duration || 0}{' '}
                   {activity?.duration > 1 ? 'mins' : 'min'} estimated
                 </div>
@@ -673,14 +673,14 @@ const ActivityPage = () => {
             </div>
 
             {/* Tabs */}
-            <div className="bg-gray-3">
+            <div className="bg-gray-200">
               <div className="flex flex-wrap gap-2 px-6">
                 {selector?.tabs?.map((e) => {
                   return (
                     <SappButton
                       key={e?.id}
                       size="small"
-                      className="!px-3 py-2.5 text-medium-sm !font-normal"
+                      className="!px-3 py-2.5 text-sm !font-normal"
                       color={tabButtonColor(e?.id)}
                       title={truncateBySpace(e?.name, 5)}
                       showTooltip={e?.name?.length > 20}
@@ -822,7 +822,7 @@ const ActivityPage = () => {
                                     placement="right"
                                   >
                                     <p
-                                      className="cursor-pointer text-gray-1 hover:text-primary"
+                                      className="cursor-pointer text-gray hover:text-primary"
                                       onClick={() => {
                                         isPreviewFile
                                           ? handleOpenScratchPad(
@@ -879,7 +879,7 @@ const ActivityPage = () => {
                               )
                               trackGAEvent('Click Button Previous Tab Activity')
                             }}
-                            className="group relative z-10 mb-2 flex cursor-pointer select-none items-center gap-2 text-base font-semibold text-bw-1 hover:text-primary"
+                            className="group relative z-10 mb-2 flex cursor-pointer select-none items-center gap-2 text-base font-semibold text-gray-800 hover:text-primary"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -888,7 +888,7 @@ const ActivityPage = () => {
                               fill="none"
                             >
                               <path
-                                className="fill-bw-1 group-hover:fill-primary"
+                                className="fill-gray-800 group-hover:fill-primary"
                                 fillRule="evenodd"
                                 d="M7.707 14.707a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l2.293 2.293a1 1 0 0 1 0 1.414Z"
                                 clipRule="evenodd"
@@ -896,7 +896,7 @@ const ActivityPage = () => {
                             </svg>
                             Previous Tab
                           </div>
-                          <div className="absolute bottom-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
+                          <div className="absolute bottom-0 left-0 h-2.5 w-[129px] bg-gray-200"></div>
                         </div>
                       </div>
                     )}
@@ -911,7 +911,7 @@ const ActivityPage = () => {
                               )
                               trackGAEvent('Click Button Next Tab Activity')
                             }}
-                            className="group relative z-10 mb-2 flex cursor-pointer select-none items-center gap-2 text-right text-base font-semibold text-bw-1 hover:text-primary"
+                            className="group relative z-10 mb-2 flex cursor-pointer select-none items-center gap-2 text-right text-base font-semibold text-gray-800 hover:text-primary"
                           >
                             Next Tab
                             <svg
@@ -921,14 +921,14 @@ const ActivityPage = () => {
                               fill="none"
                             >
                               <path
-                                className="fill-bw-1 group-hover:fill-primary"
+                                className="fill-gray-800 group-hover:fill-primary"
                                 fillRule="evenodd"
                                 d="M12.293 5.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 0 1 0-2h11.586l-2.293-2.293a1 1 0 0 1 0-1.414Z"
                                 clipRule="evenodd"
                               />
                             </svg>
                           </div>
-                          <div className="absolute bottom-0 left-0 h-2.5 w-[98px] -translate-x-1 bg-gray-3"></div>
+                          <div className="absolute bottom-0 left-0 h-2.5 w-[98px] -translate-x-1 bg-gray-200"></div>
                         </div>
                       </div>
                     )}
@@ -940,7 +940,7 @@ const ActivityPage = () => {
 
           {/* Next/Prev Activities */}
           <div data-aos={ANIMATION.DATA_AOS} className="bg-red">
-            <div className="border-b-primary-2 relative mb-6 border-b-2 bg-white px-6 py-3 shadow-activity">
+            <div className="relative mb-6 border-b-2 border-b-primary-400 bg-white px-6 py-3 shadow-activity">
               <div
                 ref={endActivityRef}
                 className={`flex flex-nowrap gap-5 justify-${activity?.previous_activity ? 'between' : 'end'}`}
@@ -955,11 +955,11 @@ const ActivityPage = () => {
                           'Click Button Previous Activity',
                         )
                       }
-                      className="mb-2 cursor-pointer select-none whitespace-nowrap text-base font-semibold text-bw-1 hover:text-primary"
+                      className="mb-2 cursor-pointer select-none whitespace-nowrap text-base font-semibold text-gray-800 hover:text-primary"
                     >
                       Previous Activity
                     </div>
-                    <div className="flex text-medium-sm text-gray-1">
+                    <div className="flex text-sm text-gray">
                       {getCourseIcon(
                         activity?.previous_activity?.display_icon,
                         activity?.previous_activity?.is_preview_locked,
@@ -991,11 +991,11 @@ const ActivityPage = () => {
                           'Click Button Next Activity',
                         )
                       }
-                      className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
+                      className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-gray-800 hover:text-primary"
                     >
                       Next Activity
                     </div>
-                    <div className="flex justify-end text-medium-sm text-gray-1">
+                    <div className="flex justify-end text-sm text-gray">
                       <Tooltip
                         title={activity?.next_activity?.name}
                         showTooltip={activity?.next_activity?.name?.length > 80}
@@ -1038,7 +1038,7 @@ const ActivityPage = () => {
                   <div
                     // className="overflow-auto p-4 bg-white"
                     style={{ height: 'calc(100% - 40px' }}
-                    className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
+                    className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-gray-800 hover:text-primary"
                   >
                     {/* <div className='flex flex-'> */}
                     <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
@@ -1056,7 +1056,7 @@ const ActivityPage = () => {
                     <div className="relative">
                       <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                         <div className="truncate">
-                          <span className="text-base font-semibold text-bw-1">{`${exhibitText} ${
+                          <span className="text-base font-semibold text-gray-800">{`${exhibitText} ${
                             e?.index + 1
                           }: `}</span>
                           {e?.name}

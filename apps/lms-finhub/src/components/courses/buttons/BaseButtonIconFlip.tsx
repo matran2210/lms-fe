@@ -23,8 +23,8 @@ export default function BaseButtonIconFlip({
     small: 'text-sm leading-5.5 py-2 px-7',
     medium:
       'text-sm leading-5.5 lg:text-base lg:leading-6 py-1.5 lg:py-3 px-4 lg:px-[31px] min-w-[92px] lg:min-w-[120px]',
-    large: 'text-lg leading-6.5 py-2.8 px-9',
-    extra: 'text-xl leading-6.5 py-2.8 px-9',
+    large: 'text-lg leading-6.5 py-3 px-9',
+    extra: 'text-xl leading-6.5 py-3 px-9',
   }
 
   const isDisabled = disabled || loading
@@ -41,8 +41,8 @@ export default function BaseButtonIconFlip({
 
   const variantClass =
     variant === 'primary'
-      ? 'text-white bg-primary hover:bg-primary-2'
-      : 'text-bw-1 bg-gray-3'
+      ? 'text-white bg-primary hover:bg-primary-400'
+      : 'text-gray-800 bg-gray-200'
 
   const componentClass = `${baseClass} ${variantClass}`.trim()
 

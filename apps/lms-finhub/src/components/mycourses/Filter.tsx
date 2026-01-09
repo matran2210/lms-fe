@@ -75,7 +75,7 @@ const Filter = ({ courses, setPage, isTeacher = false }: IProps) => {
     <div className="flex items-center filter">
       <TotalResullt total={totalResults} className="mr-6" />
       <div
-        className={`border-r border-gray-1 pr-6 ${
+        className={`border-r border-gray pr-6 ${
           !activeStatus ? 'inactive-filter' : ''
         }`}
       >

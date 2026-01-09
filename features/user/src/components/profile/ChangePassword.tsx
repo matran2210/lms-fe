@@ -4,10 +4,18 @@ import { isEmpty } from "lodash";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { ButtonCancelSubmit, ButtonSecondary, HookFormTextField } from "@lms/ui";
+import {
+  ButtonCancelSubmit,
+  ButtonSecondary,
+  HookFormTextField,
+} from "@lms/ui";
 import { ButtonPrimary } from "@lms/ui";
 import { useFeature } from "@lms/contexts";
-import { VALIDATE_MIN_LENGTH_PASSWORD, VALIDATE_PASSWORD_REGEX_MSG, VALIDATE_REQUIRED } from "@lms/utils";
+import {
+  VALIDATE_MIN_LENGTH_PASSWORD,
+  VALIDATE_PASSWORD_REGEX_MSG,
+  VALIDATE_REQUIRED,
+} from "@lms/utils";
 import PasswordProfile from "./PasswordProfile";
 
 export interface IChangePassword {
@@ -22,7 +30,7 @@ interface IProp {
 
 const ChangePassword = ({ handleCancel }: IProp) => {
   const [loading, setLoading] = useState(false);
-  const { authApi } = useFeature()
+  const { authApi } = useFeature();
 
   /**
    * @description validate password
@@ -81,16 +89,16 @@ const ChangePassword = ({ handleCancel }: IProp) => {
     try {
       await authApi.changeUserPassword(data.password);
       setOpenPopup(true);
-    }catch (error: any) {
-      const errorCode = error?.response?.data?.error?.code
+    } catch (error: any) {
+      const errorCode = error?.response?.data?.error?.code;
       const errorMessage = ExceptionErrorCode.find(
         (exception) => exception.code === errorCode,
-      )
+      );
 
-      setError('password', {
-        message: errorMessage?.message || '',
-      })
-    }  finally {
+      setError("password", {
+        message: errorMessage?.message || "",
+      });
+    } finally {
       setLoading(false);
     }
   };
@@ -103,7 +111,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
             <div className="relative">
               <HookFormTextField
                 label="Current Password"
-                labelClass="textfield-label as-label z-10 text-ssm font-normal"
+                labelClass="textfield-label as-label z-10 text-xs font-normal"
                 inputClassName="rounded-lg"
                 control={control}
                 name="password"
@@ -115,7 +123,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
             <div className="relative">
               <HookFormTextField
                 label="New Password"
-                labelClass="textfield-label as-label z-10 text-ssm font-normal"
+                labelClass="textfield-label as-label z-10 text-xs font-normal"
                 inputClassName="rounded-lg"
                 required
                 control={control}
@@ -127,7 +135,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
             <div className="relative">
               <HookFormTextField
                 label="Confirm New Password"
-                labelClass="textfield-label as-label z-10 text-ssm font-normal"
+                labelClass="textfield-label as-label z-10 text-xs font-normal"
                 inputClassName="rounded-lg"
                 required
                 control={control}

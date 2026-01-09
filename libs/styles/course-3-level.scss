@@ -1,7 +1,7 @@
 .filter {
   .select-3lv {
     .select__placeholder {
-      @apply font-normal text-bw-2;
+      @apply font-normal text-[#141414];
     }
 
     &.select-single.status-course .select__value-container {
@@ -9,10 +9,10 @@
     }
 
     &.select-single .select__indicator {
-      @apply text-bw-2;
+      @apply text-[#141414];
     }
     &.select-single .select__single-value {
-      @apply font-normal text-bw-2;
+      @apply font-normal text-[#141414];
     }
   }
 
@@ -50,7 +50,7 @@
 
     &.ant-collapse-item-active {
       & > .ant-collapse-header {
-        @apply border-b border-gray-6 pb-4 lg:border-b-0 lg:pb-0;
+        @apply border-b border-[#D8D8E5] pb-4 lg:border-b-0 lg:pb-0;
       }
 
       .collapse-button {
@@ -59,11 +59,11 @@
     }
 
     > .ant-collapse-header {
-      @apply flex-row-reverse border-solid border-gray-6 px-0 py-0 md:flex-row md:!items-center md:px-4 md:py-3;
+      @apply flex-row-reverse border-solid border-[#D8D8E5] px-0 py-0 md:flex-row md:!items-center md:px-4 md:py-3;
     }
 
     > .ant-collapse-content > .ant-collapse-content-box {
-      @apply mt-4 flex flex-col gap-4 border-gray-17 p-0 pt-4 md:border-0 md:px-4 md:pt-0;
+      @apply mt-4 flex flex-col gap-4 border-gray-200 p-0 pt-4 md:border-0 md:px-4 md:pt-0;
     }
 
     &.course-test.ant-collapse-item-active {
@@ -84,10 +84,10 @@
       }
 
       .ant-select-selector {
-        @apply border-0 p-0 text-sm leading-5.5 text-bw-15 md:text-base md:leading-6;
+        @apply border-0 p-0 text-sm leading-5.5 text-gray-800 md:text-base md:leading-6;
 
         .ant-select-open .ant-select-selection-item {
-          @apply text-bw-15;
+          @apply text-gray-800;
         }
 
         .ant-select-selection-item {
@@ -114,7 +114,7 @@
     }
 
     &.topic_test {
-      @apply rounded-lg hover:bg-gray-4;
+      @apply rounded-lg hover:bg-gray-100;
       &.ant-collapse-item-active {
         @apply border-0;
       }
@@ -139,7 +139,7 @@
     @apply mb-2 border-0 last:mb-0;
 
     > .ant-collapse-header {
-      @apply px-3 py-2 text-sm font-medium leading-5.5 text-bw-15 md:px-4 md:py-3 md:text-base md:leading-6;
+      @apply px-3 py-2 text-sm font-medium leading-5.5 text-gray-800 md:px-4 md:py-3 md:text-base md:leading-6;
     }
 
     &.ant-collapse-item-active > .ant-collapse-header {
@@ -150,7 +150,7 @@
     }
 
     > .ant-collapse-content > .ant-collapse-content-box {
-      @apply ml-0 mt-2 border-l border-gray-2 px-1 py-0 md:ml-4 md:mt-4 md:pl-2;
+      @apply ml-0 mt-2 border-l border-secondary-100 px-1 py-0 md:ml-4 md:mt-4 md:pl-2;
     }
   }
 }
@@ -179,11 +179,11 @@
       @apply flex-row-reverse;
 
       .ant-drawer-title {
-        @apply text-xl font-semibold leading-7 text-bw-15;
+        @apply text-xl font-semibold leading-7 text-gray-800;
       }
 
       .ant-drawer-close {
-        @apply mr-0 rounded-full text-bw-15;
+        @apply mr-0 rounded-full text-gray-800;
       }
     }
   }
@@ -199,7 +199,7 @@
 
     .ant-modal-body {
       &::-webkit-scrollbar {
-        @apply h-4 w-1.5 border bg-bw-3;
+        @apply h-4 w-1.5 border bg-white;
       }
 
       &::-webkit-scrollbar-track {
@@ -217,11 +217,11 @@
   }
 
   .ant-modal-close {
-    @apply text-bw-15;
+    @apply text-gray-800;
   }
 
   .ant-modal-title {
-    @apply text-lg font-semibold leading-7 text-bw-15;
+    @apply text-lg font-semibold leading-7 text-gray-800;
   }
 
   .ant-modal-footer {
@@ -241,7 +241,7 @@
 
     .ant-modal-body {
       &::-webkit-scrollbar {
-        @apply h-4 w-1.5 border bg-bw-3;
+        @apply h-4 w-1.5 border bg-white;
       }
 
       &::-webkit-scrollbar-track {
@@ -259,11 +259,11 @@
   }
 
   .ant-modal-close {
-    @apply text-bw-15;
+    @apply text-gray-800;
   }
 
   .ant-modal-title {
-    @apply text-lg font-semibold leading-7 text-bw-15;
+    @apply text-lg font-semibold leading-7 text-gray-800;
   }
 
   .ant-modal-footer {
@@ -280,7 +280,7 @@
     @apply px-2 py-3;
     .ant-modal-body {
       &::-webkit-scrollbar {
-        @apply h-4 w-1.5 border bg-bw-3;
+        @apply h-4 w-1.5 border bg-white;
       }
 
       &::-webkit-scrollbar-track {
@@ -314,7 +314,7 @@
 
 .course-test-modal {
   .ant-modal-title {
-    @apply text-center text-2xl leading-8 text-bw-13 lg:text-3xl;
+    @apply text-center text-2xl leading-8 text-gray-800 lg:text-3xl;
   }
   .ant-modal-content {
     @apply min-w-[343px] !rounded-2xl p-6 lg:min-w-[520px] lg:max-w-[560px] lg:p-10;

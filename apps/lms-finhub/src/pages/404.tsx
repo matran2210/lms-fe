@@ -27,10 +27,10 @@ const ErrorPage = () => {
         width="320"
         height="260"
       />
-      <h1 className="mt-10 text-2xl font-bold text-bw-1 md:text-4xl">
+      <h1 className="mt-10 text-2xl font-bold text-gray-800 md:text-4xl">
         PAGE NOT FOUND
       </h1>
-      <span className="mt-3 max-w-dl px-4 text-base text-gray-1">
+      <span className="max-w-dl mt-3 px-4 text-base text-gray">
         We are very sorry for the inconvenience. It looks like you&apos;re
         trying to access a page that has been deleted or never even existed.
       </span>

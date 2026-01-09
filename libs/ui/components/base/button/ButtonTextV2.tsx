@@ -1,13 +1,13 @@
-import React from 'react'
-import { IButtonBaseProps } from '@lms/core'
-import BaseButton from './BaseButton'
+import React from "react";
+import { IButtonBaseProps } from "@lms/core";
+import BaseButton from "./BaseButton";
 
 const ButtonTextV2 = ({
   title,
   onClick,
-  className = '',
+  className = "",
   link,
-  size = 'small',
+  size = "small",
   disabled = false,
   startIcon,
   endIcon,
@@ -17,18 +17,18 @@ const ButtonTextV2 = ({
   ...props
 }: IButtonBaseProps) => {
   const textSizeClass =
-    size === 'small'
-      ? 'text-v2-sm'
-      : size === 'medium'
-        ? 'text-v2-sm md:text-v2-base'
-        : 'text-v2-sm md:text-v2-lg'
+    size === "small"
+      ? "text-sm"
+      : size === "medium"
+        ? "text-sm md:text-base"
+        : "text-sm md:text-lg";
 
-  const fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
+  const fullWidthClass = full ? "block w-full" : "inline-block w-fit";
   const disabledClass = disabled
-    ? 'cursor-not-allowed !bg-transparent !text-secondary-v2-100 hover:!text-secondary-v2-100'
-    : 'cursor-pointer'
+    ? "cursor-not-allowed !bg-transparent !text-secondary-100 hover:!text-secondary-100"
+    : "cursor-pointer";
 
-  const isUnderline = isUnderLine ? 'underline' : ''
+  const isUnderline = isUnderLine ? "underline" : "";
 
   const componentClass = `
     p-0
@@ -42,7 +42,7 @@ const ButtonTextV2 = ({
     ${disabledClass} 
     ${textSizeClass} 
     ${className} 
-  `
+  `;
 
   return (
     <BaseButton
@@ -58,7 +58,7 @@ const ButtonTextV2 = ({
         {endIcon && <div className="w-full">{endIcon}</div>}
       </div>
     </BaseButton>
-  )
-}
+  );
+};
 
-export default ButtonTextV2
+export default ButtonTextV2;

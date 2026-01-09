@@ -165,11 +165,11 @@ export default function CourseCard({
         <div data-aos={ANIMATION.DATA_AOS}>
           <div
             key={index}
-            className="border-transparent relative flex flex-col rounded-xl border border-white bg-white p-4 shadow-card transition-colors duration-300 ease-in-out hover:border-primary hover:shadow-md md:p-6 lg:rounded-2xl lg:p-8"
+            className="relative flex flex-col rounded-xl border border-transparent border-white bg-white p-4 shadow-card transition-colors duration-300 ease-in-out hover:border-primary hover:shadow-md md:p-6 lg:rounded-2xl lg:p-8"
             // data-aos={ANIMATION.DATA_AOS}
             ref={lastElementRef}
           >
-            <div className="flex min-h-352 flex-col">
+            <div className="flex min-h-[352px] flex-col">
               {/* <div className="mb-3">{renderBadge(course)}</div> */}
               <CourseTitle
                 course={course}

@@ -845,7 +845,7 @@ const SAPPVideo = ({
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
     };
   }, []);
-  
+
   return (
     <>
       <div
@@ -994,7 +994,7 @@ const SAPPVideo = ({
 
                     <div
                       className={clsx(
-                        "time flex-center hidden gap-1 text-xsm font-normal leading-normal text-[#E3E3E3] sm:mr-4 sm:flex",
+                        "time flex-center hidden gap-1 text-sm font-normal leading-normal text-[#E3E3E3] sm:mr-4 sm:flex",
                         {
                           "!hidden": isSmallVideo && !isFullscreen,
                         },
@@ -1015,9 +1015,12 @@ const SAPPVideo = ({
                       ref={progressBarRef}
                     />
                     <input
-                      className={clsx("seek absolute top-0 z-10 m-0 w-full cursor-pointer", {
-                        hidden: isMediumVideo && !isFullscreen,
-                      })}
+                      className={clsx(
+                        "seek absolute top-0 z-10 m-0 w-full cursor-pointer",
+                        {
+                          hidden: isMediumVideo && !isFullscreen,
+                        },
+                      )}
                       min="0"
                       type="range"
                       step="0.01"
@@ -1025,7 +1028,7 @@ const SAPPVideo = ({
                       defaultValue="0"
                     />
                     <div
-                      className="seek-tooltip absolute top-[-50px] -ml-5 hidden bg-[#00000080] p-1 text-xsm font-semibold text-white"
+                      className="seek-tooltip absolute top-[-50px] -ml-5 hidden bg-[#00000080] p-1 text-sm font-semibold text-white"
                       ref={seekTooltipRef}
                     >
                       00:00
@@ -1182,7 +1185,7 @@ const SAPPVideo = ({
                     <div
                       className={clsx(
                         "volume-controls relative hidden h-8 items-center sm:flex",
-                        { "!hidden": isSmallVideo && !isFullscreen},
+                        { "!hidden": isSmallVideo && !isFullscreen },
                       )}
                     >
                       <button
@@ -1230,7 +1233,7 @@ const SAPPVideo = ({
                                 <span className="block w-16 text-left text-sm font-semibold">
                                   Quality:
                                 </span>
-                                <span className="flex items-center justify-between gap-1 text-xsm font-medium">
+                                <span className="flex items-center justify-between gap-1 text-sm font-medium">
                                   {playbackQuality === "Auto"
                                     ? "Auto"
                                     : getResolution(Number(playbackQuality))}
@@ -1248,7 +1251,7 @@ const SAPPVideo = ({
                                 <span className="block w-16 text-left text-sm font-semibold">
                                   Speed:
                                 </span>
-                                <span className="flex items-center justify-between gap-1 text-xsm font-medium">
+                                <span className="flex items-center justify-between gap-1 text-sm font-medium">
                                   {playbackRate === 1 ? "Normal" : playbackRate}
                                   <ArrowIcon
                                     className={"h-4 w-3"}
@@ -1265,7 +1268,7 @@ const SAPPVideo = ({
                                   <span className="block w-16 text-left text-sm font-semibold">
                                     CC:
                                   </span>
-                                  <span className="flex items-center justify-between gap-1 text-xsm font-medium">
+                                  <span className="flex items-center justify-between gap-1 text-sm font-medium">
                                     {playbackCC === -1
                                       ? "Off"
                                       : listCaptions[playbackCC].lang}
@@ -1298,7 +1301,7 @@ const SAPPVideo = ({
                                 <li
                                   key={"auto-switch"}
                                   onClick={() => changeQuality("auto", "Auto")}
-                                  className={`text-xsm hover:bg-white hover:text-black ${
+                                  className={`text-sm hover:bg-white hover:text-black ${
                                     "Auto" === playbackQuality
                                       ? "bg-white text-black"
                                       : ""
@@ -1316,7 +1319,7 @@ const SAPPVideo = ({
                                           quality?.bitrate,
                                         )
                                       }
-                                      className={`text-xsm hover:bg-white hover:text-black ${
+                                      className={`text-sm hover:bg-white hover:text-black ${
                                         quality?.bitrate === playbackQuality
                                           ? "bg-white text-black"
                                           : ""
@@ -1350,7 +1353,7 @@ const SAPPVideo = ({
                                     key={speed.value}
                                     onClick={handlePlaybackRateChange}
                                     data-speed={speed.value}
-                                    className={`text-xsm hover:bg-white hover:text-black ${
+                                    className={`text-sm hover:bg-white hover:text-black ${
                                       parseFloat(speed.value) === playbackRate
                                         ? "bg-white text-black"
                                         : ""
@@ -1382,7 +1385,7 @@ const SAPPVideo = ({
                                   key={-1}
                                   onClick={handleLanguageChange}
                                   data-cc={-1}
-                                  className={`text-xsm hover:bg-white hover:text-black ${
+                                  className={`text-sm hover:bg-white hover:text-black ${
                                     -1 === playbackCC
                                       ? "bg-white text-black"
                                       : ""
@@ -1395,7 +1398,7 @@ const SAPPVideo = ({
                                     key={cc.index}
                                     onClick={handleLanguageChange}
                                     data-cc={cc.index}
-                                    className={`text-xsm hover:bg-white hover:text-black ${
+                                    className={`text-sm hover:bg-white hover:text-black ${
                                       cc.index === playbackCC
                                         ? "bg-white text-black"
                                         : ""
@@ -1423,7 +1426,7 @@ const SAPPVideo = ({
                       <Icon
                         type={"fullscreen-exit"}
                         className={
-                          "fullscreen-exit hidden h-5.5 w-5 text-white"
+                          "fullscreen-exit hidden h-[22px] w-5 text-white"
                         }
                       />
                     </button>

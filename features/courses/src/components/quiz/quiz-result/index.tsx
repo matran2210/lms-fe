@@ -69,7 +69,7 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
   }, [id]);
 
   return (
-    <FullScreenLayout title="Quiz result" className="!bg-gray-4">
+    <FullScreenLayout title="Quiz result" className="!bg-gray-100">
       <div>
         <div
           className="fixed right-8 top-5 z-20 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-gray-200 transition-colors hover:bg-gray-300"
@@ -94,7 +94,7 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
           fullWidth
           title="Quiz Result"
           showSidebar={false}
-          className="bg-gray-4"
+          className="bg-gray-100"
         >
           <div className="m-auto">
             {modalResult?.questions?.data?.length > 0 && (

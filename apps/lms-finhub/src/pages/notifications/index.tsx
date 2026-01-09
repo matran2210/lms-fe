@@ -6,7 +6,19 @@ import Router, { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { ANIMATION, LOCAL_STORAGE_KEYS, MY_COURSES } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { getCountUnRead, getNotification, getNotificationDetail, loadMoreNotification, markAllNotifications, notificationSlice, updateStatus, updateStatusAll, useAppDispatch, useAppSelector, UserType } from '@lms/contexts'
+import {
+  getCountUnRead,
+  getNotification,
+  getNotificationDetail,
+  loadMoreNotification,
+  markAllNotifications,
+  notificationSlice,
+  updateStatus,
+  updateStatusAll,
+  useAppDispatch,
+  useAppSelector,
+  UserType,
+} from '@lms/contexts'
 import { ActionCell, SappDrawerV2 } from '@lms/ui'
 import { NotificationAPI } from '@pages/api/notification'
 import NotifyActions from '@components/notification/NotifyActions'
@@ -52,7 +64,9 @@ const Notifications = () => {
     content: string,
   ) => {
     try {
-      const res = await dispatch(getNotificationDetail({  api: NotificationAPI, id }))
+      const res = await dispatch(
+        getNotificationDetail({ api: NotificationAPI, id }),
+      )
       if (res) {
         await coutNotificationsUnRead()
         dispatch(updateStatus({ id: id }))
@@ -123,7 +137,7 @@ const Notifications = () => {
     const getNotifications = async (params: Object) => {
       try {
         await dispatch(getCountUnRead(NotificationAPI))
-        await dispatch(getNotification({  api: NotificationAPI, params }))
+        await dispatch(getNotification({ api: NotificationAPI, params }))
       } catch (error) {}
     }
 
@@ -152,9 +166,8 @@ const Notifications = () => {
 
   return (
     <Layout title="Notifications">
-
       <div className="border-default border-b bg-white px-4 lg:px-20">
-        <div className="mx-auto my-0 flex max-w-xxl py-4.5">
+        <div className="max-w-xxl mx-auto my-0 flex py-4.5">
           <SearchForm
             placeholder={MY_COURSES.placeholderSearch}
             formStyle="w-full flex items-center"
@@ -163,16 +176,16 @@ const Notifications = () => {
       </div>
       <div className="h-full px-5 lg:px-20" data-aos={ANIMATION.DATA_AOS}>
         <div
-          className="main mx-auto my-0 max-w-xxl pt-6 lg:px-0"
+          className="main max-w-xxl mx-auto my-0 pt-6 lg:px-0"
           data-aos={ANIMATION.DATA_AOS}
         >
-          <h2 className="pb-4 text-medium-sm font-medium text-bw-1">
+          <h2 className="pb-4 text-sm font-medium text-gray-800">
             Notifications
           </h2>
         </div>
 
         <div
-          className="heading mx-auto my-0 flex max-w-xxl justify-between border-b border-gray-2 bg-white px-6"
+          className="heading max-w-xxl mx-auto my-0 flex justify-between border-b border-secondary-100 bg-white px-6"
           data-aos={ANIMATION.DATA_AOS}
         >
           <NotifyTab tabs={tabs} />
@@ -187,7 +200,7 @@ const Notifications = () => {
           </div>
         </div>
 
-        <div className="mx-auto my-0 max-w-xxl" data-aos={ANIMATION.DATA_AOS}>
+        <div className="max-w-xxl mx-auto my-0" data-aos={ANIMATION.DATA_AOS}>
           <NotifyList
             notifyLists={notifyLists}
             open={openModel}

@@ -27,20 +27,21 @@ const COLORS = {
     "bg-white border-[#050505] hover:border-[#A1A1A1] hover:text-[#A1A1A1] text-[#050505]",
   text: "bg-none text-[#050505] hover:text-[#A1A1A1] disabled:text-[#DCDDDD] underline-offset-2 font-medium",
   textUnderline:
-    "bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2 underline-offset-2 underline font-medium",
-  quizActivity: "bg-gray-1 hover:bg-gray-2 disabled:bg-gray-2 text-white",
+    "bg-none text-gray-800 hover:text-gray disabled:text-secondary-100 underline-offset-2 underline font-medium",
+  quizActivity:
+    "bg-gray hover:bg-secondary-100 disabled:bg-secondary-100 text-white",
   okPopup: "bg-accent-error text-white",
-  cancelPopup: "bg-gray-4 text-accent-default",
+  cancelPopup: "bg-gray-100 text-accent-default",
   "light-dark":
     "bg-secondary-600 hover:bg-secondary disabled:bg-gray-100 text-white",
-  gray: "bg-white hover:bg-primary-2 disabled:bg-white text-bw-15 hover:text-white",
+  gray: "bg-white hover:bg-primary-400 disabled:bg-white text-gray-800 hover:text-white",
 };
 
 const PADDINGS = {
   small: "px-4 py-2",
   medium: "px-6 py-3",
-  large: "px-9 py-2.8",
-  extra: "px-17.5 py-2.8",
+  large: "px-9 py-3",
+  extra: "px-[70px] py-3",
   none: "",
 };
 

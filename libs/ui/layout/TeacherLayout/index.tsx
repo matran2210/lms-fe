@@ -36,7 +36,7 @@ const LayoutTeacher: React.FC<LayoutTeacherProps> = ({
         <TeacherMenu isCourseDetail={isCourseDetail} isActivity={isActivity} />
         <div
           className={clsx(
-            "min-h-screen w-full bg-gray-10",
+            "min-h-screen w-full bg-[#F2F4F7]",
             showPinnedTrial && "mt-[54px]",
           )}
         >

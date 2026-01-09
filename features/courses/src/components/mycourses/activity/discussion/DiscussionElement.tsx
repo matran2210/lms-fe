@@ -6,7 +6,7 @@ import {
   DeleteMessageIcon,
   EditMessageIcon,
   ReplyMessageIcon,
-  VerifiedIcon
+  VerifiedIcon,
 } from "@lms/assets";
 import {
   getDiscussion,
@@ -29,7 +29,7 @@ import { Popover } from "antd";
 import clsx from "clsx";
 import { isEmpty } from "lodash";
 import Image from "next/image";
-import React, { SetStateAction, useEffect, useRef, useState } from 'react';
+import React, { SetStateAction, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import ActionDiscussion from "./ActionDiscussion";
@@ -70,11 +70,8 @@ function DiscussionElement({
   setLoading,
   isSappSupporterUserCurrent = false,
   handleEditDiscussionElement,
-
 }: Props) {
-  const { courseApi,
-    activityApi,
-    courseActivityApi } = useFeature();
+  const { courseApi, activityApi, courseActivityApi } = useFeature();
 
   const { isMobileView } = useTailwindBreakpoint();
   const [isLike, setIsLike] = useState<boolean>(discussion.is_like);
@@ -118,10 +115,10 @@ function DiscussionElement({
             .map((item) => item.id),
         });
       }
-      const res = await activityApi.updateDiscussionComment(
+      const res = (await activityApi.updateDiscussionComment(
         discussion?.id,
         params,
-      ) as { success?: boolean; data?: { content: string } };
+      )) as { success?: boolean; data?: { content: string } };
       handleRefresh();
       if (res?.success) {
         setDiscussionContent(res?.data?.content ?? "");
@@ -129,7 +126,7 @@ function DiscussionElement({
         handleEditDiscussionElement(false);
         setSelectFile([]);
       }
-    }finally {
+    } finally {
       setIsLoading(false);
     }
   };
@@ -153,7 +150,7 @@ function DiscussionElement({
         setIsDelete(false);
         setLoading(false);
       }
-    } catch { }
+    } catch {}
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -265,20 +262,21 @@ function DiscussionElement({
   );
   const fetchDiscussionStudentInfo = async () => {
     try {
-      const res = await courseApi.getDiscussionStudentInfo(
+      const res = (await courseApi.getDiscussionStudentInfo(
         discussion?.course_section_id,
         classId as string,
         discussion?.user_id,
-      ) as { data?: any };
+      )) as { data?: any };
       const { data } = res;
       if (isEmpty(data)) return;
       setUserInfo({
         name: data?.student_info?.detail?.full_name,
         email: data?.student_info?.user_contacts?.[0]?.email,
         phone: data?.student_info?.user_contacts?.[0]?.phone,
-        avatar: data?.student_info?.detail.avatar?.["50x50"] || BlankAvatarImage,
+        avatar:
+          data?.student_info?.detail.avatar?.["50x50"] || BlankAvatarImage,
       });
-    } catch { }
+    } catch {}
   };
 
   const handleMouseEnter = () => {
@@ -331,11 +329,11 @@ function DiscussionElement({
                   src={
                     discussion.is_sapp_supporter
                       ? discussion?.avatar?.["50x50"] ||
-                      discussion?.avatar?.["ORIGIN"] ||
-                      BlankAvatarNotificationImage
+                        discussion?.avatar?.["ORIGIN"] ||
+                        BlankAvatarNotificationImage
                       : discussion?.avatar?.["50x50"] ||
-                      discussion?.avatar?.["ORIGIN"] ||
-                      BlankAvatarImage
+                        discussion?.avatar?.["ORIGIN"] ||
+                        BlankAvatarImage
                   }
                   loading="eager"
                   blurDataURL={BlankAvatarImage.src}
@@ -489,8 +487,9 @@ function DiscussionElement({
               {!isEdit && rank < 1 && (
                 <div
                   role="button"
-                  className={`${discussion?.id === idReply ? "text-primary" : ""
-                    } flex select-none items-center gap-2 font-medium hover:underline`}
+                  className={`${
+                    discussion?.id === idReply ? "text-primary" : ""
+                  } flex select-none items-center gap-2 font-medium hover:underline`}
                   onClick={() => {
                     handleChangeIdReply && handleChangeIdReply(discussion?.id);
                     trackGAEvent("Click Reply Comment Activity");
@@ -506,7 +505,7 @@ function DiscussionElement({
                     {!isEdit ? (
                       <>
                         <div
-                          className="flex cursor-pointer items-center gap-2 pr-8 font-medium text-bw-1 hover:underline"
+                          className="flex cursor-pointer items-center gap-2 pr-8 font-medium text-gray-800 hover:underline"
                           onClick={handleEdit}
                         >
                           <EditMessageIcon /> Edit

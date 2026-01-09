@@ -545,14 +545,14 @@ const CoursePartDetailTeacher = () => {
           >
             <div
               style={{ borderBottom: '1px solid #DCDDDD' }}
-              className="learningOutcome-description pb-6 text-bw-1"
+              className="learningOutcome-description pb-6 text-gray-800"
               dangerouslySetInnerHTML={{
                 __html: learningOutcome?.description ?? '',
               }}
             />
           </TextSkeleton>
           {loadingLearningOutcome && (
-            <div className="mb-2 mt-4 h-px w-full bg-gray-2"></div>
+            <div className="mb-2 mt-4 h-px w-full bg-secondary-100"></div>
           )}
           <TextSkeleton
             loading={loadingLearningOutcome}
@@ -562,11 +562,11 @@ const CoursePartDetailTeacher = () => {
           >
             {learningOutcome?.course_outcomes?.map((outcome, index) => (
               <div className="mr-3 mt-6 flex" key={outcome.id}>
-                <div className="me-1 text-base font-medium leading-5 text-bw-1">
+                <div className="me-1 text-base font-medium leading-5 text-gray-800">
                   LO{index + 1}:
                 </div>
                 <div
-                  className="learningOutcome-description text-bw-1"
+                  className="learningOutcome-description text-gray-800"
                   dangerouslySetInnerHTML={{ __html: outcome?.description }}
                 />
               </div>

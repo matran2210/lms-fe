@@ -11,14 +11,14 @@ export default function CourseClass({
   daysDifference = 0,
 }: ICourseClassDay) {
   const { isDesktopView } = useTailwindBreakpoint()
-  const textColorClass = enableCourse ? 'text-bw-15' : 'text-gray-2'
+  const textColorClass = enableCourse ? 'text-gray-800' : 'text-secondary-100'
   const maxLengthTitle = isDesktopView ? 25 : 15
   const sizeIcon = 'h-5 w-5 md:h-[1.25rem] md:w-[1.25rem]'
   return (
     <>
       <div className="flex items-center justify-between">
         <div
-          className={`flex items-center justify-center text-medium-sm ${textColorClass}`}
+          className={`flex items-center justify-center text-sm ${textColorClass}`}
         >
           <Bachelor />
           <span className={`ml-2 mt-1 font-medium ${textColorClass}`}>
