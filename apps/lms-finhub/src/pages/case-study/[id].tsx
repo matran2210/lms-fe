@@ -27,7 +27,11 @@ import {
   ROUTES,
 } from '@lms/core'
 import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
-import { useMousePosition, useTailwindBreakpoint } from '@lms/hooks'
+import {
+  useMousePosition,
+  useSmartModalSize,
+  useTailwindBreakpoint,
+} from '@lms/hooks'
 import {
   AddWordPreview,
   Calculator,
@@ -61,7 +65,8 @@ import ConFirmSubmit from '../short-course/test/conFirmSubmit'
 import LimitQuizModal from '../short-course/test/limitQuizModal'
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
-
+  const { width: widthFileViewer, height: heightFileViewer } =
+    useSmartModalSize()
   const checkType = (
     e: any,
     index: number,
@@ -1287,8 +1292,8 @@ const CaseStudyDetail = () => {
               return (
                 <ModalResizeable
                   title={e?.fileName}
-                  width={isDesktopView ? 650 : 450}
-                  height={isDesktopView ? 850 : 450}
+                  width={widthFileViewer}
+                  height={heightFileViewer}
                   key={e.id}
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
                   position="center"

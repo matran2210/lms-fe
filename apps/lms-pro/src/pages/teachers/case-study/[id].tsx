@@ -28,7 +28,7 @@ import {
 import { CalculatorModal, ConFirmSubmit } from '@lms/feature-courses'
 import { QuitTestModal } from '@lms/feature-test'
 import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
-import { useMousePosition } from '@lms/hooks'
+import { useMousePosition, useSmartModalSize } from '@lms/hooks'
 import {
   EditorReader,
   FileViewer,
@@ -277,6 +277,8 @@ const CaseStudyDetailTeacher = () => {
   const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<number[]>([])
   const [exhibitText, setExhibitText] = useState<string>('')
 
+  const { width: widthFileViewer, height: heightFileViewer } =
+    useSmartModalSize()
   /**
    * LIST DANH SÁCH CÁC CÂU CHƯA LÀM
    */
@@ -1207,8 +1209,8 @@ const CaseStudyDetailTeacher = () => {
                 return (
                   <ModalResizeable
                     title={e?.fileName}
-                    width={650}
-                    height={850}
+                    width={widthFileViewer}
+                    height={heightFileViewer}
                     key={e.id}
                     handleCloseScratchPad={() => handleCloseScratchPad(e)}
                     position="center"

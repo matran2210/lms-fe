@@ -6,15 +6,14 @@ import {
   IActivityStateQuestion,
   useAppDispatch,
 } from '@lms/contexts'
+import { IQuestion, IVideo } from '@lms/core'
+import { SappButton, SappModal, SAPPVideo } from '@lms/ui'
+import { CoursesAPI } from '@pages/api/courses'
+import { TestServiceAPI } from '@pages/api/test-api'
 import { debounce } from '@utils/helpers'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import { IQuestion, IVideo } from '@lms/core'
-import { QuestionAPI } from '@pages/api/question'
-import { CoursesAPI } from '@pages/api/courses'
-import { SappButton, SappModal, SAPPVideo } from '@lms/ui'
-import { TestServiceAPI } from '@pages/api/test-api'
 
 type Props = {
   videos?: IVideo[]
@@ -359,7 +358,7 @@ const VideoDocument = ({
                 {videos?.map((v, i) => {
                   return (
                     <label
-                      className=" flex cursor-pointer select-none items-center gap-2"
+                      className="flex cursor-pointer select-none items-center gap-2"
                       key={v?.file?.id ?? i}
                     >
                       {/* Radio button for video selection */}

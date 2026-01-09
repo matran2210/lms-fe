@@ -95,6 +95,7 @@ const CardCourse = forwardRef<
     return (
       <div data-aos={ANIMATION.DATA_AOS}>
         <div
+          data-guide-id="courses-card"
           className={clsx(
             "relative flex flex-col rounded-xl bg-white p-4 md:p-6 lg:rounded-2xl lg:p-8",
             "hover-ring-primary hover-shadow-card",

@@ -1,16 +1,11 @@
-import { CloseIconNote, CloseModalIcon, Triangle } from '@lms/assets'
+import { CloseIconNote, Triangle } from '@lms/assets'
 import { IExhibit, ScratchPadValue } from '@lms/core'
-import {
-  EditorReader,
-  FileViewer,
-  ModalResizeable,
-  MovableWindow,
-} from '@lms/ui'
-import Calculator from '@lms/ui/components/calculator/index'
+import { CalculatorModal } from '@lms/feature-courses'
+import { useSmartModalSize } from '@lms/hooks'
+import { EditorReader, FileViewer, ModalResizeable } from '@lms/ui'
 import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
 import ScratchPatch from './scratchPatch'
-import { CalculatorModal } from '@lms/feature-courses'
 interface IProps {
   openScratchPad: any[]
   onFocusingPad: string
@@ -61,7 +56,8 @@ const TestScratchPads = ({
     }
   }
   const { control: controlScratch } = useForm()
-
+  const { width: widthFileViewer, height: heightFileViewer } =
+    useSmartModalSize()
   return openScratchPad.map((e, index: number) => {
     if (e.type === 'calculator') {
       return (
@@ -175,15 +171,15 @@ const TestScratchPads = ({
       return (
         <ModalResizeable
           title={e.fileName}
-          width={650}
-          height={850}
+          width={widthFileViewer}
+          height={heightFileViewer}
           key={e.id}
           handleCloseScratchPad={() => handleCloseScratchPad(e)}
           position="center"
         >
           <div
             className="overflow-auto bg-white p-4"
-            style={{ height: 'calc(100% - 40px' }}
+            style={{ height: 'calc(100% - 40px)' }}
           >
             {/* <div className='flex flex-'> */}
             <FileViewer fileName={e?.fileName} fileUrl={e?.file} />

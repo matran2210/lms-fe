@@ -42,7 +42,7 @@ const EventTestList = ({
         return (
           <ContentTestCongratution
             text1="Your results will"
-            text2="be emailed to you on December 19 - 22, 2025"
+            text2="be emailed to you on January 26, 2026"
             text3="Please remember to check your inbox to ensure you don’t miss the update."
           />
         );
