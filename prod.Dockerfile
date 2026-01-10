@@ -58,7 +58,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 WORKDIR /app
 
 COPY --from=builder /app/apps/${APP_NAME}/.next/standalone ./
-COPY --from=builder /app/apps/${APP_NAME}/.next/static ./.next/static
+# COPY --from=builder /app/apps/${APP_NAME}/.next/static ./.next/static
 COPY --from=builder /app/apps/${APP_NAME}/public ./public
 
 
