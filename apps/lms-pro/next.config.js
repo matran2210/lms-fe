@@ -6,7 +6,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 module.exports = withBundleAnalyzer({
   reactStrictMode: true,
   swcMinify: true,
-  productionBrowserSourceMaps: true,
+  productionBrowserSourceMaps: false,
   poweredByHeader: false, // loại bỏ X-Powered-By
 
   transpilePackages: [
@@ -41,5 +41,6 @@ module.exports = withBundleAnalyzer({
   experimental: {
     optimizeCss: true,
     instrumentationHook: false,
+    removeConsole: true,
   },
 })
