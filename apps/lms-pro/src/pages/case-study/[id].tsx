@@ -36,6 +36,7 @@ import {
   ResetToAnswerTemplateModal,
   ShowAnswerTemplate,
 } from '@lms/feature-courses'
+import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
 import { useSmartModalSize, useTailwindBreakpoint } from '@lms/hooks'
 import {
   AddWordPreview,
@@ -48,7 +49,6 @@ import {
   MatchQuizComponent,
   ModalResizeable,
   ModalUploadFile,
-  MovableWindow,
   MultiChoiceQuestion,
   NewDragNDropQuestion,
   OneChoiceQuestion,
@@ -66,9 +66,8 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import LimitQuizModal from '../test/limitQuizModal'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
+import LimitQuizModal from '../test/limitQuizModal'
 
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
@@ -1338,40 +1337,39 @@ const CaseStudyDetail = () => {
                 )
               } else if (e.type === 'scratch_pad') {
                 return (
-                  <MovableWindow
-                    position={{
-                      width: '412px',
-                      height: '312px',
-                      top: 'calc(50% - 150px)',
-                      left: 'calc(50% - 200px)',
-                    }}
-                    key={e?.id}
-                    onClick={() => setOnFocusingPad(e?.id)}
-                    zIndex={
-                      onFocusingPad === e?.id
-                        ? openScratchPad?.length + 500
-                        : index + 500
-                    }
+                  <ModalResizeable
+                    key={e.id}
+                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                    position="center"
+                    width={412}
+                    height={350}
                   >
-                    <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl">
-                      <div className="flex w-full items-center justify-between bg-gray-v2-100 px-4 py-3">
-                        <div className="text-sm font-bold">Scratch Pad</div>
-                        {/* <CloseIcon */}
-                        <button onClick={() => handleCloseScratchPad(e)}>
-                          <CloseModalIcon />
-                        </button>
+                    {({ requestClose }) => (
+                      <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl">
+                        <div className="flex w-full items-center justify-between bg-gray-v2-100 px-4 py-3">
+                          <div className="text-sm font-bold">Scratch Pad</div>
+                          {/* <CloseIcon */}
+                          <button
+                            onClick={() => {
+                              requestClose()
+                              setTimeout(() => handleCloseScratchPad(e), 300)
+                            }}
+                          >
+                            <CloseModalIcon />
+                          </button>
+                        </div>
+                        <HookFormTextArea
+                          defaultValue={scratchPadValues?.value}
+                          placeholder="Take a note..."
+                          control={controlScratch}
+                          name={e?.id}
+                          onChange={(event) => handleChangeScratchPad(event)}
+                          className="sapp-text-area not-resizer h-full w-full rounded-b-xl rounded-t-none px-5 py-3 placeholder:text-sm placeholder:font-normal"
+                        />
+                        {/* </div> */}
                       </div>
-                      <HookFormTextArea
-                        defaultValue={scratchPadValues?.value}
-                        placeholder="Take a note..."
-                        control={controlScratch}
-                        name={e?.id}
-                        onChange={(event) => handleChangeScratchPad(event)}
-                        className="sapp-text-area not-resizer h-full w-full rounded-b-xl rounded-t-none px-5 py-3 placeholder:text-sm placeholder:font-normal"
-                      />
-                      {/* </div> */}
-                    </div>
-                  </MovableWindow>
+                    )}
+                  </ModalResizeable>
                 )
               } else if (e.type === 'exhibits') {
                 const i = exhibitData?.findIndex(
@@ -1383,8 +1381,10 @@ const CaseStudyDetail = () => {
                 return (
                   <ModalResizeable
                     key={e.id}
+                    width={412}
+                    height={350}
                     handleCloseScratchPad={() => handleCloseScratchPad(e)}
-                    position="center left"
+                    position="center"
                     header={({ requestClose }) => (
                       <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
                         <div className="text-sm font-semibold text-gray-800">

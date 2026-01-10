@@ -798,7 +798,7 @@ const ActivityPage = () => {
                       key={e.id}
                       className="!z-40"
                       handleCloseScratchPad={() => handleCloseScratchPad(e)}
-                      position="center left"
+                      position="center"
                       header={({ requestClose }) => (
                         <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
                           <div className="text-sm font-semibold text-gray-800">
