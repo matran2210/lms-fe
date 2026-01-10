@@ -139,7 +139,7 @@ const QuizDocument = ({
   }>()
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       if (questions?.[0]?.id) {
         setStartWorkTime(Date.now())
         // Load the first question when the component mounts
