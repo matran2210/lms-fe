@@ -22,6 +22,7 @@ type Props = {
   options?: any;
   highlighArea?: string;
   pinned?: boolean;
+  isAddBorder?: boolean;
 };
 
 const EditorReader = ({
@@ -34,8 +35,9 @@ const EditorReader = ({
   options,
   highlighArea = "hightlight_area",
   pinned,
+  isAddBorder = true,
 }: Props) => {
-  const {videoUrl} = useFeature();
+  const { videoUrl } = useFeature();
   const [src, setSrc] = useState<string>();
   const [type, setType] = useState<"VIDEO" | "IMG">("VIDEO");
   const [content, setContent] = useState<any>();
@@ -150,6 +152,7 @@ const EditorReader = ({
    * @description add class border theo editor khi border style khác none và hidden ở lần đầu component render
    */
   useEffect(() => {
+    if (!isAddBorder) return;
     // Lấy tất cả các bảng trong tài liệu
     const tableElements = document?.querySelectorAll("table");
 

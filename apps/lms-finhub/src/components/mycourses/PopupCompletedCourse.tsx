@@ -15,13 +15,14 @@ const PopupCert = () => {
       <EditorReader
         text_editor_content={selector?.content}
         className="content-course text-center text-sm text-gray-800 md:text-base"
+        isAddBorder={false}
       />
     )
   }
 
   return (
     <ShortCourseModal
-      open={selector.is_open}
+      open={false}
       okButtonCaption="Back"
       showCancelButton={false}
       handleCancel={onClickBackCourse}
