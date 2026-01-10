@@ -1,6 +1,6 @@
-import { IResponse } from '@lms/core';
-import request, { fetcher, getBaseUrl } from '@services/requestV2';
-import axios, { AxiosResponse, CancelTokenSource } from 'axios';
+import { IResponse } from '@lms/core'
+import request, { fetcher, getBaseUrl } from '@services/requestV2'
+import axios, { AxiosResponse, CancelTokenSource } from 'axios'
 
 type PartUploadDto = { part_number: number; upload_url: string }
 
@@ -31,23 +31,23 @@ export class UploadAPI {
     getProgress: (percent: number) => void
     location: string
   }) {
-      const responsePreUpload = await preUpload({
-        content_type,
-        name: name || '',
-        location: location || '',
-        size,
-      })
-      await uploadFile(
-        {
-          upload_url: responsePreUpload.data.upload_url,
-          file_key: responsePreUpload.data.file_key,
-          type: responsePreUpload.data.type as 'SINGLE_PART' | 'MULTIPLE_PART',
-          contentType: content_type,
-          blob,
-        },
-        getProgress,
-      )
-      return responsePreUpload
+    const responsePreUpload = await preUpload({
+      content_type,
+      name: name || '',
+      location: location || '',
+      size,
+    })
+    await uploadFile(
+      {
+        upload_url: responsePreUpload.data.upload_url,
+        file_key: responsePreUpload.data.file_key,
+        type: responsePreUpload.data.type as 'SINGLE_PART' | 'MULTIPLE_PART',
+        contentType: content_type,
+        blob,
+      },
+      getProgress,
+    )
+    return responsePreUpload
   }
   static downloadFile = async (data: {
     files: { name: string; file_key: string }[]
@@ -86,6 +86,25 @@ export class UploadAPI {
         file_key,
       },
     })
+  }
+  static downloadFileClassResource = async (
+    class_id: string,
+    resource_id: string,
+  ) => {
+    try {
+      const response = await request.get(
+        `/class-resource/${class_id}/download/${resource_id}`,
+      )
+      if (response.status === 200) {
+        const link = document.createElement('a')
+        link.href = `${getBaseUrl()}/resource/download?token=${response.data}`
+        link.download = ''
+        link.style.display = 'none'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      }
+    } catch (error) {}
   }
 }
 
@@ -130,46 +149,46 @@ const uploadFile = async (
   getProgress?: (percent: number) => void,
 ) => {
   const fileBlob = file.blob
-    if (file.type === 'SINGLE_PART') {
-      const onUploadProgress = (progressEvent: any) => {
-        const percent = Math.round(
-          (progressEvent.loaded * 100) / progressEvent.total,
-        )
-        if (getProgress) {
-          getProgress(percent)
-        }
+  if (file.type === 'SINGLE_PART') {
+    const onUploadProgress = (progressEvent: any) => {
+      const percent = Math.round(
+        (progressEvent.loaded * 100) / progressEvent.total,
+      )
+      if (getProgress) {
+        getProgress(percent)
       }
-        await axios.put(file.upload_url, fileBlob, {
-          headers: { 'Content-Type': fileBlob.type },
-          onUploadProgress,
-        })
-      return
     }
-
-    const startResp = await request.post(`/resources/upload/start`, {
-      file_key: file.file_key,
-      content_type: fileBlob.type,
-      size: fileBlob.size,
+    await axios.put(file.upload_url, fileBlob, {
+      headers: { 'Content-Type': fileBlob.type },
+      onUploadProgress,
     })
-    const startMultipartResponse: StartMultipartResponse = startResp.data.data
-    const { uploadId, metadata, parts } = startMultipartResponse
+    return
+  }
 
-    const batchSize = 2
-    percent = 0
-    const uploadPartsArray: PartUploadedDto[] = await uploadMultipart({
-      batchSize,
-      chunkSize: metadata.partSize,
-      fileBlob,
-      numberOfChunks: metadata.numberOfParts,
-      parts,
-      ...(getProgress ? { getProgress } : { getProgress: () => {} }),
-    })
+  const startResp = await request.post(`/resources/upload/start`, {
+    file_key: file.file_key,
+    content_type: fileBlob.type,
+    size: fileBlob.size,
+  })
+  const startMultipartResponse: StartMultipartResponse = startResp.data.data
+  const { uploadId, metadata, parts } = startMultipartResponse
 
-    await request.post(`/resources/upload/complete`, {
-      file_key: file.file_key,
-      parts: uploadPartsArray,
-      uploadId: uploadId,
-    })
+  const batchSize = 2
+  percent = 0
+  const uploadPartsArray: PartUploadedDto[] = await uploadMultipart({
+    batchSize,
+    chunkSize: metadata.partSize,
+    fileBlob,
+    numberOfChunks: metadata.numberOfParts,
+    parts,
+    ...(getProgress ? { getProgress } : { getProgress: () => {} }),
+  })
+
+  await request.post(`/resources/upload/complete`, {
+    file_key: file.file_key,
+    parts: uploadPartsArray,
+    uploadId: uploadId,
+  })
 }
 
 type UploadMultipartParams = {
@@ -209,19 +228,19 @@ async function uploadMultipart(
         : fileBlob.slice(start)
 
     const uploadUrl = parts[partNumbers.indexOf(index)]?.upload_url
-      const uploadPromise = getUploadPromise(
-        {
-          blob,
-          contentType: fileBlob.type,
-          index,
-          uploadUrl,
-          fileSize: fileBlob.size,
-          chunkSize: blob.size,
-          getProgress,
-        },
-        source,
-      )
-      batchUploadPromises.push(uploadPromise)
+    const uploadPromise = getUploadPromise(
+      {
+        blob,
+        contentType: fileBlob.type,
+        index,
+        uploadUrl,
+        fileSize: fileBlob.size,
+        chunkSize: blob.size,
+        getProgress,
+      },
+      source,
+    )
+    batchUploadPromises.push(uploadPromise)
   }
 
   const batchUploadResults = await Promise.allSettled(batchUploadPromises)
