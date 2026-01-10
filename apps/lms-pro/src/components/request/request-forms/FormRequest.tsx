@@ -20,11 +20,11 @@ import {
 } from '@lms/core'
 import {
   HookFormDateRangeV2,
+  HookFormEventRepeat,
   SAPPButtonV2,
   SappIcon,
   SAPPSelectV2,
 } from '@lms/ui'
-import HookFormEventRepeat from '@lms/ui/components/event-repeat/HookFormEventRepeatField'
 import {
   capitalizeFirstLetter,
   formatDateTimeWithTimeZone,

@@ -1,8 +1,6 @@
 import { useFeature } from "@lms/contexts";
 import { DEFAULT_PAGE_SIZE, SectionField } from "@lms/core";
-import { useDynamicLoading } from "@lms/hooks";
-import { useInitialSections } from "@lms/hooks/course/useInitialSections";
-import { useSectionData } from "@lms/hooks/course/useSectionData";
+import { useDynamicLoading, useInitialSections, useSectionData } from "@lms/hooks";
 import clsx from "clsx";
 import { isEmpty } from "lodash";
 import { Dispatch, SetStateAction, useCallback, useEffect } from "react";

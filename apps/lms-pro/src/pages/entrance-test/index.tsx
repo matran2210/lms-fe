@@ -2,8 +2,6 @@ import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInAp
 import { UserType, getEntranceCount, useCourseContext } from '@lms/contexts'
 import { ANIMATION, AppType } from '@lms/core'
 import { Heading } from '@lms/feature-courses'
-import EntranceTestFilter from '@lms/feature-test/src/components/entrance-test/EntranceTestFilter'
-import EntranceTestList from '@lms/feature-test/src/components/entrance-test/EntranceTestList'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   CourseSkeleton,
@@ -19,6 +17,7 @@ import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch } from 'src/redux/hook'
 import { EntranceTestAPI } from '../api/entrance-test'
+import { EntranceTestFilter, EntranceTestList } from '@lms/feature-test'
 
 const EntranceTest = () => {
   const router = useRouter()

@@ -11,6 +11,7 @@ import {
   TimeLineIcon,
 } from '@lms/assets'
 import {
+  ActivityResource,
   CalculatorModal,
   CreateNote,
   Discussion,
@@ -60,7 +61,6 @@ import {
   LearningOutcome,
   VideoTimelineMobile,
 } from '@lms/feature-courses'
-import ActivityResource from '@lms/feature-courses/src/components/learning/activity/ActivityResource'
 import { useSmartModalSize, useTailwindBreakpoint } from '@lms/hooks'
 import {
   AssistiveTouch,

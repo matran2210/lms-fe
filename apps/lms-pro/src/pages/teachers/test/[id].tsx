@@ -27,21 +27,20 @@ import {
   RESPONSE_OPTION,
   TEST_TYPE,
 } from '@lms/core'
-import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
 import {
+  DragNDropPreivew,
   EditorReader,
+  EssayQuestionPreview,
   FullScreenLayout,
   HookFormCheckBoxGroup,
+  MatchingQuestion,
+  ModalUploadFile,
+  MultiChoiceQuestion,
+  NewFillText,
+  OneChoiceQuestion,
+  SelectWord,
   useClickOutside,
 } from '@lms/ui'
-import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
-import DragNDropPreivew from '@lms/ui/components/questionType/DragNDrop'
-import MatchingQuestion from '@lms/ui/components/questionType/MatchingQuestion'
-import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
-import NewFiltext from '@lms/ui/components/questionType/NewFillText'
-import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
-import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { checkSheetAnswered, runHighlight } from '@lms/utils'
 import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
@@ -78,6 +77,7 @@ import {
   QuitTestModal,
   TabSlide,
   TestTimeOutModal,
+  UnSubmitAnswerModal,
 } from '@lms/feature-test'
 import { ButtonPrimaryV2, ButtonTextV2, SappLoading } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
@@ -86,7 +86,6 @@ import { TestServiceAPI } from '@pages/api/test-api'
 import dayjs from 'dayjs'
 import { PageLink } from 'src/constants/routers'
 import SuccessSubmittedConstructorModal from 'src/pages/test/SuccessSubmittedConstructorModal'
-import TestScratchPads from 'src/pages/test/TestScratchPads'
 import useGetQuestionTabs from 'src/pages/test/custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from 'src/pages/test/custom-hook/useGetQuizDetail'
 import {
@@ -95,6 +94,7 @@ import {
   isWorkbookEmpty,
 } from 'src/utils/helpers/quiz-test/helper'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import TestScratchPads from '@pages/test/TestScratchPads'
 declare global {
   interface Window {
     userAgreed: any
@@ -187,7 +187,7 @@ const TestDetail = () => {
         )
       case QUESTION_TYPES.FILL_WORD:
         return (
-          <NewFiltext
+          <NewFillText
             control={control}
             name={`${currentTabID}_fillword`}
             data={data}

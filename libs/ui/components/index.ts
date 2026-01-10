@@ -21,4 +21,4 @@ export * from "./filters"
 export * from "./examination-info"
 export * from './uploadFile/ModalUploadFile'
 export * from './tag/StatusTag'
-export * from './banner/PromotionalBanner'
+export { default as PromotionalBanner } from './banner/PromotionalBanner'

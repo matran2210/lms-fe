@@ -16,8 +16,12 @@ import {
   EVENT_TYPES,
   REPEAT_TYPE,
 } from '@lms/core'
-import { HookFormDateRangeV2, SAPPButtonV2, SappIcon } from '@lms/ui'
-import HookFormEventRepeat from '@lms/ui/components/event-repeat/HookFormEventRepeatField'
+import {
+  HookFormDateRangeV2,
+  SAPPButtonV2,
+  SappIcon,
+  HookFormEventRepeat,
+} from '@lms/ui'
 import { handleDisableDate, handleDisableTime } from '@lms/utils'
 import { SchedulesAPI } from '@pages/api/schedules'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'

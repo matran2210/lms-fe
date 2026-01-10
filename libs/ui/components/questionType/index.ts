@@ -8,3 +8,4 @@ export { default as SelectWord } from "./SelectQuestion";
 export { default as MatchingQuestion } from "./MatchingQuestion";
 export { default as NewFillText } from "./NewFillText";
 export { default as WarningSection } from "./WarningSection";
+export { default as DragNDropPreivew } from "./DragNDrop";

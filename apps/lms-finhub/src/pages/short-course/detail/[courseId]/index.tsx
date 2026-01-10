@@ -19,7 +19,7 @@ import {
 import { ANIMATION, DEFAULT_PAGESIZE, ROUTES, TEST_TYPE } from '@lms/core'
 import { PopupLockContent } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { LearningResource } from '@lms/ui'
+import { LearningResource, PromotionalBanner } from '@lms/ui'
 import { buildQueryString, formatDate } from '@lms/utils'
 import { CoursesAPI } from '@pages/api/courses'
 import PreviewPartDetail from '@sapp-fe/preview-part'
@@ -34,7 +34,6 @@ import { PageLink } from 'src/constants/routes'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { ISubSection } from 'src/type/courses-3-level'
 // import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
-import PromotionalBanner from '@lms/ui/components/banner/PromotionalBanner'
 import { useAppDispatch } from 'src/redux/hook'
 
 const CourseDetail = () => {

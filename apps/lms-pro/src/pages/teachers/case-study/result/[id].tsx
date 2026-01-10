@@ -23,22 +23,22 @@ import {
 import { CalculatorModal } from '@lms/feature-courses'
 import { useMousePosition, useSmartModalSize } from '@lms/hooks'
 import {
+  AddWordPreview,
+  DragNDropPreivew,
   EditorReader,
+  EssayQuestionPreview,
   FileViewer,
   FullScreenLayout,
   HookFormTextArea,
+  MatchingQuestion,
   ModalResizeable,
   MovableWindow,
+  MultiChoiceQuestion,
+  OneChoiceQuestion,
   SappButton,
   SappLoadingGlobal,
+  SelectWord,
 } from '@lms/ui'
-import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
-import DragNDropPreivew from '@lms/ui/components/questionType/DragNDrop'
-import AddWordPreview from '@lms/ui/components/questionType/FillText'
-import MatchingQuestion from '@lms/ui/components/questionType/MatchingQuestion'
-import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
-import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
-import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
 import { runHighlight } from '@lms/utils'
 import { IFile } from '@sapp-fe/preview-activity/dist/shared/interfaces'
 import clsx from 'clsx'

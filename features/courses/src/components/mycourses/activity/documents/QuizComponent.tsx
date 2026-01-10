@@ -30,14 +30,15 @@ import {
   FileViewer,
   HighlightableHTML,
   MatchQuizComponent,
+  ModalUploadFile,
   MultiChoiceQuestion,
   NewDragNDropQuestion,
   OneChoiceQuestion,
   Popover,
   SelectWord,
+  SlotValue,
   useClickOutside,
 } from "@lms/ui";
-import ModalUploadFile from "@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile";
 import { checkSheetAnswered, isEmptyParagraph } from "@lms/utils";
 import { Collapse, CollapseProps, Divider, Modal, Tabs } from "antd";
 import clsx from "clsx";
@@ -62,7 +63,6 @@ import {
 import toast from "react-hot-toast";
 
 import { IEssayAnswer, IExhibit, IExhibitData, IFile } from "@lms/core";
-import { SlotValue } from "@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop";
 import { v4 as uuidv4 } from "uuid";
 
 interface IRequirement {

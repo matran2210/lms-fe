@@ -21,6 +21,7 @@ import {
   EditorReader,
   EssayQuestionPreview,
   MatchQuizComponent,
+  ModalUploadFile,
   MultiChoiceQuestion,
   NewDragNDropQuestion,
   OneChoiceQuestion,
@@ -28,7 +29,6 @@ import {
   SlotValue,
   useClickOutside,
 } from '@lms/ui'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CoursesAPI } from '@pages/api/courses'
 import { TestServiceAPI } from '@pages/api/test-api'
 import { isEmpty, isUndefined } from 'lodash'

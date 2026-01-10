@@ -40,6 +40,7 @@ import {
   HookFormTextArea,
   MatchQuizComponent,
   ModalResizeable,
+  ModalUploadFile,
   MovableWindow,
   MultiChoiceQuestion,
   NewDragNDropQuestion,
@@ -48,7 +49,6 @@ import {
   SelectWord,
   SlotValue,
 } from '@lms/ui'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight } from '@lms/utils'
 import { TestServiceAPI } from '@pages/api/test-api'
 import { download } from '@utils/index'

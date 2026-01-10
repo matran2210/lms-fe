@@ -36,6 +36,12 @@ import {
   IQuizSetting,
   IRequirment,
   ITestServiceAPI,
+  myAnswer,
+  myAnswerDragDrop,
+  myAnswerFillWord,
+  myAnswerMatching,
+  myAnswerMultipleChoice,
+  myAnswerSelectWord,
   QUESTION_TYPES,
   RESPONSE_OPTION,
   SOCIAL_LINK,
@@ -59,14 +65,7 @@ import ConFirmSubmit from "../../test/conFirmSubmit";
 import ShowAnswerTemplate from "../../test/ShowAnswerTemplate";
 import ResetToAnswerTemplateModal from "../../test/ResetToAnswerTemplateModal";
 import { useTailwindBreakpoint } from "@lms/hooks";
-import {
-  myAnswer,
-  myAnswerDragDrop,
-  myAnswerFillWord,
-  myAnswerMatching,
-  myAnswerMultipleChoice,
-  myAnswerSelectWord,
-} from "@lms/core/types/answer";
+
 
 type Props = {
   questions: IQuestion[];
