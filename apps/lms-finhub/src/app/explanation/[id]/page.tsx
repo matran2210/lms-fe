@@ -31,6 +31,7 @@ const Explanation = () => {
   const [activeQuestion, setActiveQuestion] = useState<any>()
   const [attempt, setAttempt] = useState<IAtempt>()
   const [loading, setLoading] = useState<boolean>(false)
+
   function getCorrect(answers: any, questionType: any) {
     switch (questionType as QUESTION_TYPES) {
       case QUESTION_TYPES.ONE_CHOICE:
@@ -58,6 +59,7 @@ const Explanation = () => {
         return {}
     }
   }
+
   const getActiveQuestion = async (id: string) => {
     setLoading(true)
     try {
@@ -173,10 +175,10 @@ const Explanation = () => {
             }
           }}
         >
-          <div className="hidden rounded-md bg-gray-200 p-2 transition-all duration-300 ease-in-out hover:bg-gray-300 md:block">
+          <div className="hidden rounded-md bg-gray-200 p-2 transition-all duration-300 ease-in-out hover:bg-gray-300 md:!block">
             <AltArrowLeft />
           </div>
-          <div className="rounded-md bg-gray-200 p-2 transition-all duration-300 ease-in-out hover:bg-gray-300 md:hidden">
+          <div className="rounded-md bg-gray-200 p-2 transition-all duration-300 ease-in-out hover:bg-gray-300 md:!hidden">
             <CloseIconV2 className="h-[18px] w-[18px]" />
           </div>
         </div>
@@ -188,7 +190,7 @@ const Explanation = () => {
                 Show comment
               </span>
             }
-            className="block md:hidden"
+            className="block md:!hidden"
           >
             <button className="text-icon">
               <MenuDotsIcon />
