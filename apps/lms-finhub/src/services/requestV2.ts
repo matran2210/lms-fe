@@ -6,7 +6,6 @@ import axios, {
 } from 'axios'
 import { toast } from 'react-hot-toast'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
-import Router from 'next/navigation'
 import {
   CERTIFICATE_DETAIL,
   COOKIE_INFO,
@@ -40,15 +39,14 @@ export const fetcher = (url: string, config: AxiosRequestConfig = {}) =>
 // Request Interceptor
 request.interceptors.request.use(async (config: any) => {
   const authenticationManager = new AuthenticationManager()
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : ''
+  const checkRouteCertificate = [
+    ENTRANCE_TEST_RESULT,
+    CERTIFICATE_DETAIL,
+    ENTRANCE_TEST_TABLE_RESULT,
+  ].includes(pathname)
 
-  // const checkRouteCertificate = [
-  //   ENTRANCE_TEST_RESULT,
-  //   CERTIFICATE_DETAIL,
-  //   ENTRANCE_TEST_TABLE_RESULT,
-  // ].includes((Router?.router as any)?.state?.pathname)
-
-  // if (authenticationManager.getToken() || checkRouteCertificate) {
-  if (authenticationManager.getToken()) {
+  if (authenticationManager.getToken() || checkRouteCertificate) {
     config.headers = {
       Authorization: 'Bearer ' + authenticationManager.getToken(),
       ...config.headers,
@@ -59,8 +57,7 @@ request.interceptors.request.use(async (config: any) => {
   await new Promise((resolve) => {
     let interval = null as any
     interval = setInterval(() => {
-      // if (authenticationManager.getToken() || checkRouteCertificate) {
-      if (authenticationManager.getToken()) {
+      if (authenticationManager.getToken() || checkRouteCertificate) {
         config.headers = {
           Authorization: 'Bearer ' + authenticationManager.getToken(),
           ...config.headers,
@@ -131,7 +128,9 @@ request.interceptors.response.use(
             deleteCookie(COOKIE_INFO.KEYCLOAK_REFRESH_TOKEN)
             deleteCookie(COOKIE_INFO.KEYCLOAK_USER_ID)
             deleteCookie(COOKIE_INFO.SESSION_ID)
-            window.location.reload()
+            if (typeof window !== 'undefined') {
+              window.location.reload()
+            }
           })
       }
 
@@ -163,13 +162,11 @@ const toastExceptions = [
 ]
 
 // Map exceptions
-const formattedExceptions: { [key: string]: string } = ExceptionErrorCode.reduce(
-  (acc: any, { code, message }) => {
+const formattedExceptions: { [key: string]: string } =
+  ExceptionErrorCode.reduce((acc: any, { code, message }) => {
     acc[code] = message
     return acc
-  },
-  {},
-)
+  }, {})
 
 // Global error handler
 request.interceptors.response.use(
@@ -188,8 +185,9 @@ request.interceptors.response.use(
     if (
       errorCode?.startsWith('403') // Forbidden các loại
     ) {
-      // TODo: nhoứ check lại
-      // Router.replace('/')
+      if (typeof window !== 'undefined') {
+        window.location.href = '/'
+      }
     }
 
     return Promise.reject(error)
