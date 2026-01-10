@@ -107,6 +107,8 @@ import {
 import { TabsProps, Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
+import { EventTestAPI } from 'src/api/event-test'
+import { TestServiceAPI } from 'src/api/test-api'
 import { PageLink } from 'src/constants/routers'
 import {
   checkTypeAndRenderTitle,
@@ -119,8 +121,6 @@ import useGetQuizDetail from '../custom-hook/useGetQuizDetail'
 import LimitQuizModal from '../limitQuizModal'
 import SuccessSubmittedConstructorModal from '../SuccessSubmittedConstructorModal'
 import TestScratchPads from '../TestScratchPads'
-import { TestServiceAPI } from 'src/api/test-api'
-import { EventTestAPI } from 'src/api/event-test'
 
 declare global {
   interface Window {
