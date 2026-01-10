@@ -22,7 +22,7 @@ const PopupCert = () => {
 
   return (
     <ShortCourseModal
-      open={false}
+      open={selector.is_open}
       okButtonCaption="Back"
       showCancelButton={false}
       handleCancel={onClickBackCourse}
