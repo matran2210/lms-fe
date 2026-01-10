@@ -2,8 +2,6 @@ import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInAp
 import {
   active,
   clearGuideState,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
   UserType,
 } from '@lms/contexts'
@@ -25,6 +23,7 @@ import { useInfiniteQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from '../api/courses'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [

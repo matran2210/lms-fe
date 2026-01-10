@@ -14,7 +14,6 @@ import {
   IDiscussion,
   IDiscussionFile,
   IUser,
-  useAppDispatch,
   useFeature,
 } from "@lms/contexts";
 import { useTailwindBreakpoint } from "@lms/hooks";
@@ -74,7 +73,7 @@ function DiscussionElement({
 }: Props) {
   const { courseApi,
     activityApi,
-    courseActivityApi } = useFeature();
+    courseActivityApi, dispatch} = useFeature();
 
   const { isMobileView } = useTailwindBreakpoint();
   const [isLike, setIsLike] = useState<boolean>(discussion.is_like);
@@ -85,7 +84,6 @@ function DiscussionElement({
   const [discussionContent, setDiscussionContent] = useState(
     discussion?.content ?? "",
   );
-  const dispatch = useAppDispatch();
   const [selectFile, setSelectFile] = useState<File[]>([]);
   const [discussionFile, setDiscussionFile] = useState<IDiscussionFile[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -135,7 +133,7 @@ function DiscussionElement({
   };
 
   const handleRefresh = () => {
-    dispatch(
+    dispatch?.(
       getDiscussion({
         api: courseApi,
         id: classId as string,

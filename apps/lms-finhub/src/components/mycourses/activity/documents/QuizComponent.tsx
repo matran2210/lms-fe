@@ -4,7 +4,6 @@ import {
   confirmQuestion,
   IActivityStateQuestion,
   saveFileEssay,
-  useAppDispatch,
 } from '@lms/contexts'
 
 import {
@@ -31,7 +30,6 @@ import {
 } from '@lms/ui'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CoursesAPI } from '@pages/api/courses'
-import { QuestionAPI } from '@pages/api/question'
 import { TestServiceAPI } from '@pages/api/test-api'
 import { isEmpty, isUndefined } from 'lodash'
 import React, {
@@ -50,6 +48,7 @@ import {
   UseFormWatch,
 } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { useAppDispatch } from 'src/redux/hook'
 
 import { v4 as uuidv4 } from 'uuid'
 

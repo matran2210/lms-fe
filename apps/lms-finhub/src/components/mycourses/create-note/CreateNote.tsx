@@ -7,9 +7,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { CoursesAPI } from 'src/pages/api/courses'
 import toast from 'react-hot-toast'
-import { closeNote, pushNotes, useAppDispatch } from '@lms/contexts'
+import { closeNote, pushNotes } from '@lms/contexts'
 import { v4 as uuidv4 } from 'uuid'
 import { HookFormTextArea, MovableWindow } from '@lms/ui'
+import { useAppDispatch } from 'src/redux/hook'
 
 interface IProps {
   id: string | undefined

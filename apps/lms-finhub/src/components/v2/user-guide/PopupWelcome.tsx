@@ -1,9 +1,10 @@
 import { HandShake } from '@lms/assets'
 import { RefObject } from 'react'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { clearGuideState, increment, useAppDispatch } from '@lms/contexts'
+import { clearGuideState, increment } from '@lms/contexts'
 import { ButtonPrimary, ButtonText, SappModal } from '@lms/ui'
 import { UserGuide } from '@lms/core'
+import { useAppDispatch } from 'src/redux/hook'
 type Props = {
   confirmDialogOverLayRef: RefObject<HTMLDivElement>
 }

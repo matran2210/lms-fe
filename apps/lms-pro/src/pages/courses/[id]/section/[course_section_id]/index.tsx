@@ -9,7 +9,6 @@ import {
 import {
   activeNotesList,
   resetNotesList,
-  useAppDispatch,
   useCourseContext,
   UserType,
 } from '@lms/contexts'
@@ -25,17 +24,18 @@ import {
   SappDrawerV3,
 } from '@lms/ui'
 import { buildQueryString, formatDate } from '@lms/utils'
+import PreviewPartDetail from '@sapp-fe/preview-part'
 import { Alert, Divider, Skeleton } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
-import PreviewPartDetail from '@sapp-fe/preview-part'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import { TreeHelper } from 'src/helper/tree'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from '../../../../api/courses/index'
+import { useAppDispatch } from 'src/redux/hook'
 
 interface IProps {
   course_section_type: string

@@ -1,10 +1,26 @@
+import TeacherProfileCard from '@components/common/TeacherProfileCard'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icon } from '@lms/assets'
+import {
+  getLogoutUser,
+  getMe,
+  updateUser,
+  updateUserAvatar,
+  userReducer,
+} from '@lms/contexts'
 import { USER_TYPE } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { ButtonCancelSubmit, ButtonPrimary, ButtonSecondary, HookFormTextField, HookFormTextFieldV2, TextSkeleton } from '@lms/ui'
+import {
+  ButtonCancelSubmit,
+  ButtonPrimary,
+  ButtonSecondary,
+  HookFormTextField,
+  HookFormTextFieldV2,
+  TextSkeleton,
+} from '@lms/ui'
 import { convertHumanReadableToSnakeCase } from '@lms/utils'
 import { formatDate } from '@utils/helpers'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 import {
   VALIDATE_MAX,
   VALIDATE_MIN,
@@ -15,15 +31,10 @@ import clsx from 'clsx'
 import { StaticImageData } from 'next/image'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { Control, useForm } from 'react-hook-form'
-import {   getMe,
-  updateUser,
-  updateUserAvatar,
-  userReducer,useAppDispatch, useAppSelector, getLogoutUser } from '@lms/contexts'
+import UserApi from 'src/redux/services/User/user'
 import { z } from 'zod'
 import FullScreenMobile from './Modal/FullScreenMobile'
-import TeacherProfileCard from '@components/common/TeacherProfileCard'
-import UserApi from 'src/redux/services/User/user'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 interface IProps {
   isEdit: boolean
@@ -109,7 +120,9 @@ const MyProfile = ({
       // Nếu không có avatar và người dùng có avatar hiện tại
       if (!avatar && user?.detail?.avatar) {
         // Gọi hành động thunk updateUser để cập nhật tên và avatar của người dùng
-        await dispatch(updateUser({ full_name, avatar: null, api: UserApi })).unwrap()
+        await dispatch(
+          updateUser({ full_name, avatar: null, api: UserApi }),
+        ).unwrap()
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
         dispatch(getMe(UserApi))
         // Đặt trạng thái isEdit thành false
@@ -122,7 +135,7 @@ const MyProfile = ({
       // Nếu có avatar
       if (avatar) {
         // Gọi hành động thunk updateUserAvatar để cập nhật avatar của người dùng
-        await dispatch(updateUserAvatar({api: UserApi, avatar})).unwrap()
+        await dispatch(updateUserAvatar({ api: UserApi, avatar })).unwrap()
         // Đặt lại giá trị của avatar
         handleSetAvatar(undefined)
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
@@ -136,7 +149,9 @@ const MyProfile = ({
       setOpenEditProfile(false)
       setReViewImageSrc(undefined)
       if (error?.response?.data?.error?.code === '403|1002') {
-        await dispatch(getLogoutUser({authManager: new AuthenticationManager()}))
+        await dispatch(
+          getLogoutUser({ authManager: new AuthenticationManager() }),
+        )
       }
     }
   }

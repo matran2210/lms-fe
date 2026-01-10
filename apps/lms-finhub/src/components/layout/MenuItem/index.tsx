@@ -4,8 +4,6 @@ import {
   loadMoreNotification,
   openCalculator3Level,
   pushNotes3Level,
-  useAppDispatch,
-  useAppSelector,
   userReducer,
 } from '@lms/contexts'
 import { MenuItem as MenuItemType, TitleSidebar } from '@lms/core'
@@ -25,6 +23,7 @@ import { v4 as uuidv4 } from 'uuid'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
 import { BlankAvatarImage } from '@lms/assets'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 type MenuItemProps = {
   menuItem: MenuItemType

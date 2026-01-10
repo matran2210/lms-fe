@@ -13,8 +13,6 @@ import {
   loadMoreQuestion,
   saveFileEssay,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
   UserType,
 } from '@lms/contexts'
 import {
@@ -58,6 +56,7 @@ import toast from 'react-hot-toast'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import LimitQuizModal from 'src/pages/test/limitQuizModal'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 const CaseStudyDetailTeacher = () => {
   const checkType = (

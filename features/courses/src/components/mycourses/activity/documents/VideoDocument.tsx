@@ -1,6 +1,6 @@
 import {
   IActivityStateQuestion,
-  fetchQuestionById, useAppDispatch,
+  fetchQuestionById,
   useFeature
 } from '@lms/contexts'
 import { ANIMATION, IQuestion, IVideo } from '@lms/core'
@@ -53,7 +53,7 @@ const VideoDocument = ({
   // newQuizModal,
 
 }: Props) => {
-  const { questionApi, testServiceApi,
+  const { dispatch, testServiceApi,
     courseApi, videoUrl } = useFeature();
 
   const {
@@ -79,7 +79,6 @@ const VideoDocument = ({
   const { handleSubmit, reset } = useForm()
   const internalRef = useRef<any>()
   const streamRef = streamRefProp?.current ? streamRefProp : internalRef
-  const dispatch = useAppDispatch()
   const { isMobileView } = useTailwindBreakpoint()
 
   useEffect(() => {
@@ -96,7 +95,7 @@ const VideoDocument = ({
 
   useEffect(() => {
     if (activeQuestion?.id) {
-      dispatch(
+      dispatch?.(
         fetchQuestionById({
           api: testServiceApi,
           courseApi: courseApi,
@@ -170,7 +169,7 @@ const VideoDocument = ({
   }) => {
     try {
       if (open) {
-        await dispatch(
+        await dispatch?.(
           fetchQuestionById({
             api: testServiceApi,
             courseApi: courseApi,

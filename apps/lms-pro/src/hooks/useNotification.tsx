@@ -1,18 +1,21 @@
-import { useRef, useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
-import { NotificationAPI } from 'src/pages/api/notification'
-import { isEmpty } from 'lodash'
-import { LOCAL_STORAGE_KEYS } from '@lms/core'
-import { useAppDispatch, useAppSelector ,getCountUnRead,
+import {
+  deleteAllNotifications,
+  deleteNotificationById,
+  getCountUnRead,
   getNotification,
   getNotificationDetail,
   loadMoreNotification,
   markAllNotifications,
-  updateStatusAll,
   toggleStatusById,
-  deleteNotificationById,
-  deleteAllNotifications,} from '@lms/contexts'
+  updateStatusAll,
+} from '@lms/contexts'
+import { LOCAL_STORAGE_KEYS } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
+import { isEmpty } from 'lodash'
+import { useRouter } from 'next/router'
+import { useEffect, useRef, useState } from 'react'
+import { NotificationAPI } from 'src/pages/api/notification'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 export const useNotification = () => {
   const router = useRouter()
@@ -49,11 +52,11 @@ export const useNotification = () => {
           api: NotificationAPI,
           params: {
             page_index: 1,
-          page_size: 10,
-          ...(selectedTab === 2 && {
-            is_read: false,
-          }),
-          }
+            page_size: 10,
+            ...(selectedTab === 2 && {
+              is_read: false,
+            }),
+          },
         }),
       )
 
@@ -68,12 +71,12 @@ export const useNotification = () => {
           loadMoreNotification({
             api: NotificationAPI,
             params: {
-            page_index: page,
-            page_size: 10,
-            ...(selectedTab === 2 && {
-              is_read: false,
-            }),
-          }
+              page_index: page,
+              page_size: 10,
+              ...(selectedTab === 2 && {
+                is_read: false,
+              }),
+            },
           }),
         )
       }
@@ -141,7 +144,9 @@ export const useNotification = () => {
   ) => {
     try {
       if (id !== notifyDetail?.id) {
-        const res = await dispatch(getNotificationDetail({ api: NotificationAPI, id }))
+        const res = await dispatch(
+          getNotificationDetail({ api: NotificationAPI, id }),
+        )
         if (res) {
           await countNotificationsUnRead()
         }
@@ -201,12 +206,12 @@ export const useNotification = () => {
               loadMoreNotification({
                 api: NotificationAPI,
                 params: {
-                page_index: page_index + 1,
-                page_size,
-                ...(selectedTab === 2 && {
-                  is_read: false,
-                }),
-              }
+                  page_index: page_index + 1,
+                  page_size,
+                  ...(selectedTab === 2 && {
+                    is_read: false,
+                  }),
+                },
               }),
             )
             await countNotificationsUnRead()

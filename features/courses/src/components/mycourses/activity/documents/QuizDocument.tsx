@@ -7,10 +7,9 @@ import {
   saveAnswer,
   selectQuestions,
   submitQuiz,
-  useAppDispatch,
-  useAppSelector,
   useFeature,
   IActivityStateQuestion,
+  ActivityQuizRootState,
 } from "@lms/contexts";
 import { useEffect, useRef, useState } from "react";
 
@@ -122,18 +121,17 @@ const QuizDocument = ({
   number_of_attempts,
   isQuizFinished = false,
 }: Props): JSX.Element => {
-  const dispatch = useAppDispatch();
-  const { courseApi, pageLink, testServiceApi, router } = useFeature();
+  const { courseApi, pageLink, testServiceApi, router, dispatch, useAppSelector } = useFeature();
   const { isAlwaysShowSidebar } = useTailwindBreakpoint();
   const [isOpenActivityIncluded, setIsOpenActivityIncluded] =
     useState<boolean>(false);
-  const selector = useAppSelector(courseActivityQuizReducer);
+  const selector = useAppSelector?.(courseActivityQuizReducer);
   const isAFTERAllQUESTION = grading_preference !== "AFTER_EACH_QUESTION";
   const isAFTEREACHQUESTION = grading_preference === "AFTER_EACH_QUESTION";
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   const questionRef = useRef<QuizComponentRef>(null);
   const questionsList =
-    selector[activityId]?.[tabId]?.[quizId]?.questions || [];
+    selector?.[activityId]?.[tabId]?.[quizId]?.questions || [];
 
   const activeQuestion = questionsList[activeQuestionIndex];
   const isLastQuestion = activeQuestionIndex === questions.length - 1;
@@ -194,7 +192,7 @@ const QuizDocument = ({
 
         // Load the first question when the component mounts
         try {
-          await dispatch(
+          await dispatch?.(
             fetchQuestionById({
               api: testServiceApi as ITestServiceAPI,
               courseApi: courseApi,
@@ -231,7 +229,7 @@ const QuizDocument = ({
       // Only call API if we haven't got corrects yet for this question
       const hasCorrects = !!activeQuestion.corrects;
       if (!hasCorrects) {
-        dispatch(
+        dispatch?.(
           confirmQuestion({
             api: testServiceApi,
             courseApi: courseApi,
@@ -286,7 +284,7 @@ const QuizDocument = ({
       const nextQuestionId = questions[activeQuestionIndex + 1]?.id;
       if (nextQuestionId) {
         try {
-          const nextQuestion = await dispatch(
+          const nextQuestion = await dispatch?.(
             fetchQuestionById({
               api: testServiceApi as ITestServiceAPI,
               courseApi: courseApi,
@@ -447,7 +445,7 @@ const QuizDocument = ({
     // Lấy đáp án từ form ( câu cuối người dùng vừa chọn (nếu có) để dùng cho case câu cuối của after all question)
     const answerFromForm = questionRef?.current?.onSaveAnswer(activeQuestion);
     const quizQuestion = selectQuestions(
-      selector,
+      selector as ActivityQuizRootState,
       activityId,
       tabId,
       quizId || "",
@@ -517,7 +515,7 @@ const QuizDocument = ({
     } else {
       await questionRef.current?.onResetWord(
         name,
-        activeQuestion?.response_option,
+        activeQuestion?.response_option as RESPONSE_OPTION,
         defaultValue,
       );
     }
@@ -530,7 +528,7 @@ const QuizDocument = ({
     const nextQuestionId = questions[activeQuestionIndex + 1]?.id;
     if (nextQuestionId) {
       try {
-        await dispatch(
+        await dispatch?.(
           fetchQuestionById({
             api: testServiceApi as ITestServiceAPI,
             courseApi: courseApi,
@@ -576,7 +574,7 @@ const QuizDocument = ({
       const prevQuestionId = questions?.[activeQuestionIndex - 1]?.id;
       if (prevQuestionId) {
         try {
-          const prevQuestion = await dispatch(
+          const prevQuestion = await dispatch?.(
             fetchQuestionById({
               api: testServiceApi as ITestServiceAPI,
               courseApi: courseApi,
@@ -646,7 +644,7 @@ const QuizDocument = ({
       activeQuestion,
     ) as unknown;
     if (!activeQuestion?.confirmed) {
-      dispatch(
+      dispatch?.(
         saveAnswer({
           activityId,
           tabId,
@@ -664,7 +662,7 @@ const QuizDocument = ({
     setOpenUnsubmitWarning(false);
     setLoading(true);
     const questions = selectQuestions(
-      selector,
+      selector as ActivityQuizRootState,
       activityId,
       tabId,
       quizId || "",
@@ -704,7 +702,7 @@ const QuizDocument = ({
       );
 
     try {
-      await dispatch(
+      await dispatch?.(
         submitQuiz({
           submitQuizTest: testServiceApi.submitQuizTest,
           id: quizId,
@@ -717,7 +715,7 @@ const QuizDocument = ({
           const isCompletedCourse = e?.data?.progress;
           if (isCompletedCourse?.is_completed) {
             setTimeout(() => {
-              dispatch(
+              dispatch?.(
                 showPopupCompletedCourse(isCompletedCourse?.content || ""),
               );
             }, 2000);
@@ -1121,7 +1119,7 @@ const QuizDocument = ({
 
   const handleRetakeQuestion = () => {
     // Reset toàn bộ trạng thái quiz trong redux (xóa myAnswers, corrects, confirmed, time_spent, ...)
-    dispatch(
+    dispatch?.(
       removeQuizFinished({
         activityId,
         tabId,
@@ -1445,7 +1443,7 @@ const QuizDocument = ({
                     QUESTION_TYPES.TRUE_FALSE,
                     QUESTION_TYPES.ONE_CHOICE,
                     QUESTION_TYPES.MULTIPLE_CHOICE,
-                  ].includes(activeQuestion?.qType) ||
+                  ].includes(activeQuestion?.qType as QUESTION_TYPES) ||
                   ((activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
                     activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE) &&
                     watch(`${activeQuestion?.id}_${document_id}_answer`)) ||

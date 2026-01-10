@@ -1,7 +1,8 @@
 import ShortCourseModal from '@components/modal/ShortCourseModal'
 import { IRibbon } from '@lms/assets'
-import { hidePopup, useAppDispatch, useAppSelector } from '@lms/contexts'
+import { hidePopup } from '@lms/contexts'
 import { EditorReader } from '@lms/ui'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 const PopupCert = () => {
   const dispatch = useAppDispatch()

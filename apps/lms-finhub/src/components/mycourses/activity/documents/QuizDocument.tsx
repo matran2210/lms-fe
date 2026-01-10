@@ -5,8 +5,6 @@ import {
   saveAnswer,
   selectQuestions,
   submitQuiz,
-  useAppDispatch,
-  useAppSelector,
 } from '@lms/contexts'
 import { useEffect, useRef, useState } from 'react'
 
@@ -37,6 +35,7 @@ import { PageLink } from 'src/constants/routes'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 type Props = {
   questions: IQuestion[]
@@ -253,7 +252,7 @@ const QuizDocument = ({
     } else {
       await questionRef.current?.onResetWord(
         name,
-        activeQuestion?.response_option,
+        activeQuestion?.response_option as RESPONSE_OPTION,
         defaultValue,
       )
     }

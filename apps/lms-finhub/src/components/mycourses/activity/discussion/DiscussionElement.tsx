@@ -12,7 +12,6 @@ import {
   IDiscussion,
   IDiscussionFile,
   IUser,
-  useAppDispatch,
 } from '@lms/contexts'
 import { HookFormTextArea, SappButton, SappButtonIcon } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
@@ -26,6 +25,7 @@ import { SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { ActivityAPI } from 'src/pages/api/activity'
+import { useAppDispatch } from 'src/redux/hook'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import ActionDiscussion from './ActionDiscussion'
 import ModalDeleteComment from './ModalDeleteComment'

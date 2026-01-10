@@ -5,11 +5,8 @@ import { ReactElement, ReactNode, useState } from 'react'
 import { PageLink } from 'src/constants/routes'
 import Sidebar from './Sidebar'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import {
-  useAppSelector,
-  useCourseContext,
-  usePinnedNotifyContext,
-} from '@lms/contexts'
+import { useCourseContext, usePinnedNotifyContext } from '@lms/contexts'
+import { useAppSelector } from 'src/redux/hook'
 interface LayoutProps {
   readonly children: ReactNode
   readonly title: string

@@ -1,8 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getMe, useAppDispatch, useAppSelector, useFeature, userReducer } from "@lms/contexts";
+import { getMe, useFeature, userReducer } from "@lms/contexts";
 import { SappHookFormSelect, SappModalV2 } from "@lms/ui";
 import { VALIDATE_REQUIRED } from "@lms/utils";
-import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -18,16 +17,14 @@ interface IProps {
 const EntranceTestFillForm = ({
   open,
   setOpen,
-  entrancePopupContent,
   setOpenTestInfo,
-
 }: IProps) => {
-  const { entranceTestApi, userApi } = useFeature();
+  const { entranceTestApi, userApi, dispatch, useAppSelector } = useFeature();
   const [listUnivers, setListUnivers] = useState<any>();
   const [listUniverPrograms, setListUniverPrograms] = useState<any>();
   const [listMajors, setListMajors] = useState<any>();
   const [listEngLevel, setListEngLevel] = useState<any>();
-  const { user } = useAppSelector(userReducer);
+  const { user } = useAppSelector?.(userReducer) || {};
   const schema = z.object({
     univers_id: z
       .object({
@@ -60,8 +57,8 @@ const EntranceTestFillForm = ({
   });
   const getListUniversities = async () => {
     const res = await entranceTestApi?.getListUnivers() as any
-    let optionUnivers = [];
-    for (let e of res?.data) {
+    const optionUnivers = [];
+    for (const e of res?.data) {
       optionUnivers?.push({ value: e?.id, label: e?.name });
     }
     setListUnivers(optionUnivers);
@@ -69,8 +66,8 @@ const EntranceTestFillForm = ({
   };
   const getListUniverPrograms = async () => {
     const res = await entranceTestApi?.getListUniversProgram() as any
-    let optionUniverProgram = [];
-    for (let e of res?.data) {
+    const optionUniverProgram = [];
+    for (const e of res?.data) {
       optionUniverProgram?.push({ value: e?.id, label: e?.name });
     }
     setListUniverPrograms(optionUniverProgram);
@@ -78,8 +75,8 @@ const EntranceTestFillForm = ({
   };
   const getListMajors = async () => {
     const res = await entranceTestApi?.getListMajors() as any
-    let optionMajors = [];
-    for (let e of res?.data) {
+    const optionMajors = [];
+    for (const e of res?.data) {
       optionMajors?.push({ value: e?.id, label: e?.name });
     }
     setListMajors(optionMajors);
@@ -87,8 +84,8 @@ const EntranceTestFillForm = ({
   };
   const getListEngLevel = async () => {
     const res = await entranceTestApi?.getListEngLevel() as any
-    let optionEngLevel = [];
-    for (let e of res?.data) {
+    const optionEngLevel = [];
+    for (const e of res?.data) {
       optionEngLevel?.push({ value: e?.id, label: e?.name });
     }
     setListEngLevel(optionEngLevel);
@@ -140,9 +137,7 @@ const EntranceTestFillForm = ({
     setOpen && setOpen(false);
   };
 
-  const { count } = useAppSelector(entranceTestReducer);
-  const dispatch = useAppDispatch();
-
+  const { count } = useAppSelector?.(entranceTestReducer) || {};
   const onSubmit = async (dataValue: any) => {
     const res = await entranceTestApi?.putLevel({
       university_program_id: dataValue?.univers_program_id?.value,
@@ -152,7 +147,7 @@ const EntranceTestFillForm = ({
     }) as any
 
     if (res?.success) {
-      await dispatch(getMe(userApi)).unwrap();
+      await dispatch?.(getMe(userApi)).unwrap();
     }
 
     if (count > 1) {

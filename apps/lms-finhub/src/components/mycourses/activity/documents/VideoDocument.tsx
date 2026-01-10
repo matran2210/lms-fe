@@ -1,11 +1,7 @@
 import { formatTime, htmlToRaw } from '@components/common/timer'
 import { Soundwave } from '@components/courses/icons'
 import TimeLineModal from '@components/courses/timeline/TimeLineModal'
-import {
-  fetchQuestionById,
-  IActivityStateQuestion,
-  useAppDispatch,
-} from '@lms/contexts'
+import { fetchQuestionById, IActivityStateQuestion } from '@lms/contexts'
 import { IQuestion, IVideo } from '@lms/core'
 import { SappButton, SappModal, SAPPVideo } from '@lms/ui'
 import { CoursesAPI } from '@pages/api/courses'
@@ -14,6 +10,7 @@ import { debounce } from '@utils/helpers'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
+import { useAppDispatch } from 'src/redux/hook'
 
 type Props = {
   videos?: IVideo[]

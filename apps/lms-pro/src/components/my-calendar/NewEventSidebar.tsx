@@ -4,7 +4,6 @@ import {
   confirmDialog,
   ICreateScheduleForm,
   ICreateSchedulePayload,
-  useAppDispatch,
 } from '@lms/contexts'
 import {
   ANT_THEME_CONFIG,
@@ -28,6 +27,7 @@ import { isInteger } from 'lodash'
 import { memo, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { useAppDispatch } from 'src/redux/hook'
 import { z } from 'zod'
 
 interface IProps {

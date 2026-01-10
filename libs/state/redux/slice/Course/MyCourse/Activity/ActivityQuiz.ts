@@ -1,17 +1,15 @@
-import { Slice, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { FieldValues } from "react-hook-form";
 import {
   ICoursesAPI,
   IDragDropAnswer,
-  IQuestionAPI,
+  IEssayAnswer,
+  IQuestion,
+  IRequirement,
   ITestServiceAPI,
-  QUESTION_TYPES,
+  QUESTION_TYPES
 } from "@lms/core";
-import { RootState } from "../../../../store";
-import { IRequirement } from "@lms/core";
-import { IQuestion } from "@lms/core";
-import { IEssayAnswer } from "@lms/core";
 import { handleMultipleCorrectAnswer } from "@lms/utils";
+import { Slice, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { FieldValues } from "react-hook-form";
 
 /**
  * Interface mô tả thông tin về câu hỏi trong trạng thái Redux.
@@ -905,10 +903,16 @@ export default quizSlice.reducer;
 /**
  * Selector để lấy trạng thái `courseActivityQuizReducer` từ Redux store.
  * @function
- * @param {RootState} state - Trạng thái toàn bộ Redux store.
+ * @param {T} state - Trạng thái toàn bộ Redux store.
  * @returns {ActivityQuizRootState} - Trạng thái của `courseActivityQuizReducer`.
  */
-export const courseActivityQuizReducer = (state: RootState) =>
+export const courseActivityQuizReducer = <
+  T extends {
+    courseActivityQuizReducer: ActivityQuizRootState;
+  },
+>(
+  state: T,
+) =>
   state.courseActivityQuizReducer;
 const {
   removeQuizFinished,
@@ -926,5 +930,6 @@ export {
   resetQuizActivity,
   saveAnswer,
   saveFileEssay,
-  submitQuiz,
+  submitQuiz
 };
+

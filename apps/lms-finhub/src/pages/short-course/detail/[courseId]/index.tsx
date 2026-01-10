@@ -1,3 +1,9 @@
+import { Breadcrumb3Level } from '@components/courses'
+import LearningOutComeModal from '@components/courses/popup/LearningOutComeModal'
+import TestModal from '@components/courses/popup/TestModal'
+import Layout from '@components/layout'
+import BottomMenu from '@components/v2/course-detail/BottomMenu'
+import CardMenuItem from '@components/v2/course-detail/CardMenuItem'
 import {
   AlertInfoIcon,
   ChapterIcon,
@@ -5,37 +11,31 @@ import {
   DocumentTextIcon,
   ResourceIcon,
 } from '@lms/assets'
-import { Breadcrumb3Level } from '@components/courses'
-import LearningOutComeModal from '@components/courses/popup/LearningOutComeModal'
-import TestModal from '@components/courses/popup/TestModal'
-import Layout from '@components/layout'
-import BottomMenu from '@components/v2/course-detail/BottomMenu'
-import CardMenuItem from '@components/v2/course-detail/CardMenuItem'
-import { CoursesAPI } from '@pages/api/courses'
-import { buildQueryString, formatDate } from '@lms/utils'
-import { Alert, Divider, Skeleton } from 'antd'
-import clsx from 'clsx'
-import dayjs from 'dayjs'
-import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
-import { useQuery } from 'react-query'
-import PreviewPartDetail from '@sapp-fe/preview-part'
-import { ANIMATION, DEFAULT_PAGESIZE, ROUTES, TEST_TYPE } from '@lms/core'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   activeNotesList3Level,
-  useAppDispatch,
   useCourseContext,
   UserType,
 } from '@lms/contexts'
-import { ISubSection } from 'src/type/courses-3-level'
-import { isEmpty } from 'lodash'
-import { PageLink } from 'src/constants/routes'
+import { ANIMATION, DEFAULT_PAGESIZE, ROUTES, TEST_TYPE } from '@lms/core'
 import { PopupLockContent } from '@lms/feature-courses'
+import { useTailwindBreakpoint } from '@lms/hooks'
 import { LearningResource } from '@lms/ui'
+import { buildQueryString, formatDate } from '@lms/utils'
+import { CoursesAPI } from '@pages/api/courses'
+import PreviewPartDetail from '@sapp-fe/preview-part'
+import { Alert, Divider, Skeleton } from 'antd'
+import clsx from 'clsx'
+import dayjs from 'dayjs'
+import { isEmpty } from 'lodash'
+import { useRouter } from 'next/router'
+import { useEffect, useMemo, useState } from 'react'
+import { useQuery } from 'react-query'
+import { PageLink } from 'src/constants/routes'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { ISubSection } from 'src/type/courses-3-level'
 // import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import PromotionalBanner from '@lms/ui/components/banner/PromotionalBanner'
+import { useAppDispatch } from 'src/redux/hook'
 
 const CourseDetail = () => {
   const dispatch = useAppDispatch()

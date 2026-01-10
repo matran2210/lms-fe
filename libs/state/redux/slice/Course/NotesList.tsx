@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { RootState } from '../../store'
 
 // Tạo một đối tượng Notification với giá trị mặc định
 export interface NotesListState {
@@ -53,5 +52,11 @@ export const {
   closeNote,
   clearNote,
 } = notesListSlice.actions
-export const notesListReducer = (state: RootState) => state.notesListReducer
+export const notesListReducer = <
+  T extends {
+    notesListReducer: NotesListState;
+  },
+>(
+  state: T,
+) => state.notesListReducer
 export default notesListSlice.reducer

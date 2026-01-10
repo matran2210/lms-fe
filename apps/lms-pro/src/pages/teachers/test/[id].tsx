@@ -15,8 +15,6 @@ import {
   CourseProvider,
   disableUnsavedChange,
   loginSlice,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
 } from '@lms/contexts'
 import {
@@ -49,9 +47,12 @@ import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { CoursesAPI } from 'src/pages/api/courses'
 import LimitQuizModal from 'src/pages/test/limitQuizModal'
 
+import {
+  removeHighlights,
+  serializeHighlights,
+} from '@funktechno/texthighlighter/lib'
 import { showPopupCompletedCourse } from '@lms/contexts'
 import {
   Answer,
@@ -81,10 +82,9 @@ import {
 import { ButtonPrimaryV2, ButtonTextV2, SappLoading } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
 import { EventTestAPI } from '@pages/api/event-test'
-import { TestAPI } from '@pages/api/test'
+import { TestServiceAPI } from '@pages/api/test-api'
 import dayjs from 'dayjs'
 import { PageLink } from 'src/constants/routers'
-import { QuestionAPI } from 'src/pages/api/question'
 import SuccessSubmittedConstructorModal from 'src/pages/test/SuccessSubmittedConstructorModal'
 import TestScratchPads from 'src/pages/test/TestScratchPads'
 import useGetQuestionTabs from 'src/pages/test/custom-hook/useGetQuestionTabs'
@@ -94,11 +94,7 @@ import {
   isValuesEqual,
   isWorkbookEmpty,
 } from 'src/utils/helpers/quiz-test/helper'
-import {
-  removeHighlights,
-  serializeHighlights,
-} from '@funktechno/texthighlighter/lib'
-import { TestServiceAPI } from '@pages/api/test-api'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 declare global {
   interface Window {
     userAgreed: any

@@ -12,8 +12,6 @@ import {
   CourseProvider,
   disableUnsavedChange,
   loginSlice,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
 } from '@lms/contexts'
 import {
@@ -120,6 +118,7 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 declare global {
   interface Window {
     userAgreed: any

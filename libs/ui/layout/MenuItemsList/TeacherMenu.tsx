@@ -10,7 +10,7 @@ import {
   MyCalendarMenuIcon,
   MyCourseTeacherIcon,
 } from "@lms/assets";
-import { activeNotesList, IUser, openCalculator, pushNotes, useAppDispatch, useAppSelector, useCourseContext, useFeature, userReducer } from "@lms/contexts";
+import { activeNotesList, IUser, openCalculator, pushNotes, useCourseContext, useFeature, userReducer } from "@lms/contexts";
 import { TitleSidebar, TitleTeacherSidebar } from "@lms/core";
 import { Layout, Menu, Tooltip } from "antd";
 import clsx from "clsx";
@@ -29,9 +29,8 @@ export default function TeacherMenu({
   isCourseDetail: boolean;
   isActivity: boolean;
 }) {
-  const { authManager, pageLink, router } = useFeature();
-  const dispatch = useAppDispatch();
-  const { user } = useAppSelector(userReducer);
+  const { authManager, pageLink, router, dispatch, useAppSelector } = useFeature();
+  const { user } = useAppSelector?.(userReducer) || {};
 
   const [selectedKey, setSelectedKey] = useState("Home");
   const [openResource, setOpenResource] = useState(false);
@@ -54,7 +53,7 @@ export default function TeacherMenu({
 
   const actionHandlers: Record<string, () => void> = {
     [TitleSidebar.NOTES_LIST]: () => {
-      dispatch(activeNotesList());
+      dispatch?.(activeNotesList());
       document.body.style.overflow = "hidden";
     },
     [TitleSidebar.RESOURCES]: () => {
@@ -62,11 +61,11 @@ export default function TeacherMenu({
       document.body.style.overflow = "hidden";
     },
     [TitleSidebar.NEW_NOTE]: () => {
-      dispatch(
+      dispatch?.(
         pushNotes({ uuid: uuidv4(), id: "", name: "Note", description: "" }),
       );
     },
-    [TitleSidebar.CALCULATOR]: () => dispatch(openCalculator()),
+    [TitleSidebar.CALCULATOR]: () => dispatch?.(openCalculator()),
   };
 
   const getMenuItems = useCallback(() => {
@@ -232,7 +231,7 @@ export default function TeacherMenu({
             selectedKey={selectedKey}
             onClick={handleMenuClick}
           />
-          <BottomActionMenu user={user} onLogout={handleLogout} pageLink={pageLink} />
+          <BottomActionMenu user={user as IUser} onLogout={handleLogout} pageLink={pageLink} />
         </div>
       </Sider>
       <LearningResource

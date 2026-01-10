@@ -19,8 +19,6 @@ import {
   loadMoreQuestion,
   saveFileEssay,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
 } from '@lms/contexts'
 import {
   defaultSheetData,
@@ -64,7 +62,6 @@ import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/Modal
 import CaseStudyWrapper from '@lms/ui/layout/CaseStudyLayout/CaseStudyWrapper'
 import { runHighlight } from '@lms/utils'
 import { TestServiceAPI } from '@pages/api/test-api'
-import { UploadAPI } from '@pages/api/upload'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
@@ -73,6 +70,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import LimitQuizModal from '../test/limitQuizModal'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])

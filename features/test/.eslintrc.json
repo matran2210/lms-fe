@@ -11,6 +11,7 @@
     "@typescript-eslint/no-empty-function": "off",
     "@next/next/no-document-import-in-page": "off",
     "no-console": "error",
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-unsafe-optional-chaining": "off"
   }
 }

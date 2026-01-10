@@ -1,19 +1,30 @@
 import Layout from '@components/layout'
 
+import SearchForm from '@components/courses/shared/SearchForm'
+import NotifyActions from '@components/notification/NotifyActions'
+import NotifyDetail from '@components/notification/NotifyDetail'
+import NotifyList from '@components/notification/NotifyList'
+import NotifyTab from '@components/notification/NotifyTab'
+import {
+  getCountUnRead,
+  getNotification,
+  getNotificationDetail,
+  loadMoreNotification,
+  markAllNotifications,
+  notificationSlice,
+  updateStatus,
+  updateStatusAll,
+  UserType,
+} from '@lms/contexts'
+import { ANIMATION, LOCAL_STORAGE_KEYS, MY_COURSES } from '@lms/core'
+import { ActionCell, SappDrawerV2 } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
+import { NotificationAPI } from '@pages/api/notification'
 import Aos from 'aos'
 import Router, { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { ANIMATION, LOCAL_STORAGE_KEYS, MY_COURSES } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { getCountUnRead, getNotification, getNotificationDetail, loadMoreNotification, markAllNotifications, notificationSlice, updateStatus, updateStatusAll, useAppDispatch, useAppSelector, UserType } from '@lms/contexts'
-import { ActionCell, SappDrawerV2 } from '@lms/ui'
-import { NotificationAPI } from '@pages/api/notification'
-import NotifyActions from '@components/notification/NotifyActions'
-import NotifyTab from '@components/notification/NotifyTab'
-import NotifyList from '@components/notification/NotifyList'
-import NotifyDetail from '@components/notification/NotifyDetail'
-import SearchForm from '@components/courses/shared/SearchForm'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 const Notifications = () => {
   const [openModel, setOpenModel] = useState<boolean>(false)
@@ -52,7 +63,9 @@ const Notifications = () => {
     content: string,
   ) => {
     try {
-      const res = await dispatch(getNotificationDetail({  api: NotificationAPI, id }))
+      const res = await dispatch(
+        getNotificationDetail({ api: NotificationAPI, id }),
+      )
       if (res) {
         await coutNotificationsUnRead()
         dispatch(updateStatus({ id: id }))
@@ -123,7 +136,7 @@ const Notifications = () => {
     const getNotifications = async (params: Object) => {
       try {
         await dispatch(getCountUnRead(NotificationAPI))
-        await dispatch(getNotification({  api: NotificationAPI, params }))
+        await dispatch(getNotification({ api: NotificationAPI, params }))
       } catch (error) {}
     }
 
@@ -152,7 +165,6 @@ const Notifications = () => {
 
   return (
     <Layout title="Notifications">
-
       <div className="border-default border-b bg-white px-4 lg:px-20">
         <div className="mx-auto my-0 flex max-w-xxl py-4.5">
           <SearchForm

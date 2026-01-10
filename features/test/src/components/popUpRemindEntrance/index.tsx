@@ -2,8 +2,7 @@ import { AccessIcon } from "@lms/assets";
 import {
   closeShowRemindEntrance,
   entranceTestReducer,
-  useAppDispatch,
-  useAppSelector,
+  useFeature,
 } from "@lms/contexts";
 import { SappModalV3 } from "@lms/ui";
 import { Dispatch, SetStateAction, useMemo } from "react";
@@ -14,17 +13,17 @@ const PopUpRemindEntrance = ({
   setOpenFillForm: Dispatch<SetStateAction<boolean>>;
   setOpenTest: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const { shouldShowRemind, count } = useAppSelector(entranceTestReducer);
-  const dispatch = useAppDispatch();
+  const { dispatch, useAppSelector} = useFeature()
+  const { shouldShowRemind, count } = useAppSelector?.(entranceTestReducer) || {};
   const getEntranceTest = localStorage.getItem("enstranceTest");
   const openModal =  useMemo(() => shouldShowRemind && getEntranceTest === "true", [shouldShowRemind]);
   const onCancel = () => {
-    dispatch(closeShowRemindEntrance());
+    dispatch?.(closeShowRemindEntrance());
     localStorage.setItem("enstranceTest", "false");
   };
 
   const onOk = () => {
-    count === 1 ? setOpenTest(true) : dispatch(closeShowRemindEntrance());
+    count === 1 ? setOpenTest(true) : dispatch?.(closeShowRemindEntrance());
     localStorage.setItem("enstranceTest", "false");
   };
 

@@ -1,5 +1,5 @@
 import { Icon } from '@lms/assets'
-import { ISubjectItem, IUser, useAppSelector, userReducer } from '@lms/contexts'
+import { ISubjectItem, IUser, useFeature, userReducer } from '@lms/contexts'
 import { PROGRAM } from '@lms/core'
 import { SappCollapse } from '@lms/ui'
 import { UserApi } from '@pages/api/user'
@@ -27,8 +27,9 @@ interface ISubject {
 }
 
 const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
+  const { useAppSelector } = useFeature()
+  const { user } = useAppSelector?.(userReducer) || {}
   const [subjects, setSubjects] = useState<ISubject>()
-  const { user } = useAppSelector(userReducer)
   const [typeOfProgram, setTypeOfProgram] = useState<string>('')
   const [userProgram, setUserProgram] = useState<IUser>()
 

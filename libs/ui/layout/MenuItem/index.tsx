@@ -22,8 +22,6 @@ import {
   clearNotifications,
   openCalculator,
   pushNotes,
-  useAppDispatch,
-  useAppSelector,
   useFeature,
   userReducer,
 } from "@lms/contexts";
@@ -55,7 +53,7 @@ export default function MenuItem({
   closeSideBar,
   setOpenExaminationInfo,
 }: MenuItemProps) {
-  const { notificationApi, pageLink } = useFeature();
+  const { notificationApi, pageLink, dispatch, useAppSelector } = useFeature();
   const {
     isViewDetail,
     openNotification,
@@ -75,7 +73,7 @@ export default function MenuItem({
     notificationUnread,
   } = useNotification(notificationApi);
 
-  const isLoading = useAppSelector(
+  const isLoading = useAppSelector?.(
     (state) => state.notificationReducer.loading,
   );
   const tabs = [
@@ -91,13 +89,12 @@ export default function MenuItem({
 
   useEffect(() => {
     if (selectedTab) {
-      dispatch(clearNotifications());
+      dispatch?.(clearNotifications());
     }
   }, [selectedTab]);
 
   const [isExpanded, toggleExpanded] = useState(false);
-  const dispatch = useAppDispatch();
-  const { user } = useAppSelector(userReducer);
+  const { user } = useAppSelector?.(userReducer) || {};
   const router = useRouter();
   const isNested = subItems && subItems?.length > 0;
   const selected = router.pathname === url;
@@ -120,7 +117,7 @@ export default function MenuItem({
   };
 
   const handleOpenNotesList = () => {
-    dispatch(activeNotesList());
+    dispatch?.(activeNotesList());
     document.body.style.overflow = "hidden";
   };
 
@@ -131,11 +128,11 @@ export default function MenuItem({
       name: "Note",
       description: "",
     };
-    dispatch(pushNotes(note));
+    dispatch?.(pushNotes(note));
   };
 
   const handleOpenCalculator = () => {
-    dispatch(openCalculator());
+    dispatch?.(openCalculator());
   };
 
   const handleOpenCourseContentPage = () => {
@@ -423,11 +420,11 @@ export default function MenuItem({
             })}
           >
             {user?.detail?.avatar?.["40x40"] ||
-            user.detail.avatar?.["ORIGIN"] ? (
+            user?.detail.avatar?.["ORIGIN"] ? (
               <Image
                 src={
-                  user.detail.avatar?.["40x40"] ||
-                  user.detail.avatar?.["ORIGIN"]
+                  user?.detail.avatar?.["40x40"] ||
+                  user?.detail.avatar?.["ORIGIN"]
                 }
                 alt="avatar"
                 className="h-10 w-10 rounded-full object-cover"
@@ -451,8 +448,8 @@ export default function MenuItem({
               <div className="h-10 w-10 shrink-0">
                 <Image
                   src={
-                    user.detail.avatar?.["40x40"] ||
-                    user.detail.avatar?.["ORIGIN"] ||
+                    user?.detail.avatar?.["40x40"] ||
+                    user?.detail.avatar?.["ORIGIN"] ||
                     BlankAvatarImage
                   }
                   alt="avatar"

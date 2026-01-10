@@ -1,7 +1,21 @@
 import SappIcon from '@components/common/SappIcon'
 import { BlankAvatarImage, BlankAvatarNotificationImage } from '@lms/assets'
-import { courseActivityReducer, createDiscussion, getDiscussion, ICreateDiscussionResReact, IDiscussion, reactDiscussion, uploadImagesDiscussion, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
-import { HookFormTextArea, SappButton, SappButtonIcon, SappModalImage } from '@lms/ui'
+import {
+  courseActivityReducer,
+  createDiscussion,
+  getDiscussion,
+  ICreateDiscussionResReact,
+  IDiscussion,
+  reactDiscussion,
+  uploadImagesDiscussion,
+  userReducer,
+} from '@lms/contexts'
+import {
+  HookFormTextArea,
+  SappButton,
+  SappButtonIcon,
+  SappModalImage,
+} from '@lms/ui'
 import { ActivityAPI } from '@pages/api/activity'
 import { CoursesAPI } from '@pages/api/courses'
 import { Skeleton } from 'antd'
@@ -13,6 +27,7 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import ActionDiscussion from './ActionDiscussion'
 import DiscussionElement from './DiscussionElement'
 import SendComment from './SendComment'
@@ -127,10 +142,10 @@ const Discussion = ({ class_id }: Props) => {
             api: ActivityAPI,
             data: {
               course_section_id: router.query.activityId as string,
-            class_id: class_id,
-            content: content?.trim(),
-            parent_id,
-            }
+              class_id: class_id,
+              content: content?.trim(),
+              parent_id,
+            },
           }),
         )
           .unwrap()
@@ -154,11 +169,11 @@ const Discussion = ({ class_id }: Props) => {
               uploadImagesDiscussion({
                 api: CourseActivityApi,
                 data: {
-                    discussion_id: e?.id,
-                new_discussion_file: isRoot
-                  ? getRootSelectedFiles
-                  : getSelectedFiles,
-                }
+                  discussion_id: e?.id,
+                  new_discussion_file: isRoot
+                    ? getRootSelectedFiles
+                    : getSelectedFiles,
+                },
               }),
             )
               .unwrap()
@@ -209,11 +224,13 @@ const Discussion = ({ class_id }: Props) => {
         await dispatch(reactDiscussion({ api: ActivityAPI, data }))
       } catch (error) {
       } finally {
-        await dispatch(getDiscussion({
-          api: CoursesAPI,
-          id: class_id,
-          sectionId: router.query.activityId as string,
-        }),)
+        await dispatch(
+          getDiscussion({
+            api: CoursesAPI,
+            id: class_id,
+            sectionId: router.query.activityId as string,
+          }),
+        )
       }
     }, 1000)
   }
@@ -518,7 +535,7 @@ const Discussion = ({ class_id }: Props) => {
                   BlankAvatarNotificationImage
                 : user?.detail?.avatar['50x50'] ||
                   user?.detail?.avatar['ORIGIN'] ||
-                BlankAvatarImage
+                  BlankAvatarImage
             }
             loading="eager"
             priority={true}

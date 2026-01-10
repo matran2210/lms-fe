@@ -9,7 +9,7 @@ import {
   UnHighLightIcon,
 } from '@lms/assets'
 
-import { loadMoreQuestion, useAppDispatch } from '@lms/contexts'
+import { loadMoreQuestion } from '@lms/contexts'
 import {
   EXHIBIT_TEXT_REPLACE,
   IAnswerResult,
@@ -57,6 +57,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { CoursesAPI } from 'src/pages/api/courses'
+import { useAppDispatch } from 'src/redux/hook'
 
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])

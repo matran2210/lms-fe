@@ -1,5 +1,5 @@
 import { CloseIcon, UploadIcon } from "@lms/assets";
-import { disableUnsavedChange, loginSlice, useAppDispatch, useFeature } from "@lms/contexts";
+import { disableUnsavedChange, loginSlice, useFeature } from "@lms/contexts";
 import { DEFAULT_EDITOR_VALUE, DISPLAY_TYPE, generateSheetId, MY_COURSES, RESPONSE_OPTION, SheetData } from "@lms/core";
 import { runHighlight } from "@lms/utils";
 import clsx from "clsx";
@@ -90,9 +90,8 @@ const EssayQuestionPreview = ({
   storageKey,
   
 }: IPreviewProp) => {
-  const { testServiceApi, router } = useFeature();
+  const { testServiceApi, router, dispatch} = useFeature();
 
-  const dispatch = useAppDispatch();
   const refSheet = useRef(null) as any;
   const [key, setKey] = useState("1");
 
@@ -354,13 +353,13 @@ const EssayQuestionPreview = ({
   }) => {
     try {
       setUnsavedChanges && setUnsavedChanges(false);
-      dispatch(disableUnsavedChange());
+      dispatch?.(disableUnsavedChange());
       await testServiceApi.downloadFile(data);
     } catch (error) {
       // do nothing
     } finally {
       setUnsavedChanges && setUnsavedChanges(true);
-      dispatch(loginSlice.actions.enableUnsavedChange());
+      dispatch?.(loginSlice.actions.enableUnsavedChange());
     }
   };
 

@@ -3,8 +3,6 @@ import {
   UserType,
   getLoginHistory,
   getLogoutUser,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
   userReducer,
 } from '@lms/contexts'
@@ -51,6 +49,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import UserApi from 'src/redux/services/User/user'
 
 interface IFullScreenMobile {

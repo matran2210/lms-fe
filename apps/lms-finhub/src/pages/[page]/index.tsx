@@ -15,15 +15,13 @@ import {
 } from '@lms/utils'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { Collapse, CollapseProps, Divider, Tabs } from 'antd'
-import Image, { StaticImageData } from 'next/image'
+import { StaticImageData } from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import withAuthorization from 'src/HOC/withAuthorization'
 
 import {
   getLoginHistory,
   getLogoutUser,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
   userReducer,
   UserType,
@@ -54,6 +52,7 @@ import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { PageLink } from 'src/constants/routes'
 import UserApi from 'src/redux/services/User/user'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 interface IFullScreenMobile {
   open: boolean

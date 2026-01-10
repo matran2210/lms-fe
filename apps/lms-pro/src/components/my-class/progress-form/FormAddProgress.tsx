@@ -1,8 +1,20 @@
-import { SAPPInput } from '@lms/ui'
-import { SAPPButtonV2 } from '@lms/ui'
-import { HookformTimePicker } from '@lms/ui'
-import { SAPPSelect } from '@lms/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { confirmDialog } from '@lms/contexts'
+import {
+  CONFIRM_CANCEL,
+  IContentCompleted,
+  IDefaultFormAddProgress,
+  ILesson,
+  IRequestCreateProgress,
+} from '@lms/core'
+import {
+  HookformTimePicker,
+  SAPPButtonV2,
+  SappIcon,
+  SAPPInput,
+  SAPPSelect,
+} from '@lms/ui'
+import { sortSectionsByPosition } from '@lms/utils'
 import { ProgressAPI } from '@pages/api/progress'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { Drawer } from 'antd'
@@ -10,18 +22,9 @@ import { useRouter } from 'next/router'
 import React, { useLayoutEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import {SappIcon} from '@lms/ui'
-import { CONFIRM_CANCEL } from '@lms/core'
-import { confirmDialog, useAppDispatch } from '@lms/contexts'
-import {
-  IContentCompleted,
-  IDefaultFormAddProgress,
-  ILesson,
-  IRequestCreateProgress,
-} from '@lms/core'
+import { useAppDispatch } from 'src/redux/hook'
 import { z } from 'zod'
 import TreeProgress from './TreeProgress'
-import { sortSectionsByPosition } from '@lms/utils'
 
 const defaultValues = {
   lesson: undefined,

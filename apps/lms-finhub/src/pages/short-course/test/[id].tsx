@@ -13,8 +13,6 @@ import {
   disableUnsavedChange,
   loginSlice,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
 } from '@lms/contexts'
 import {
@@ -34,7 +32,6 @@ import {
   TEST_TYPE,
 } from '@lms/core'
 import { runHighlight, trackGAEvent } from '@lms/utils'
-import { CoursesAPI } from '@pages/api/courses'
 import { cloneDeep, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -74,8 +71,7 @@ import {
   SlotValue,
   TestWrapper,
 } from '@lms/ui'
-import { QuestionAPI } from '@pages/api/question'
-import { TestAPI } from '@pages/api/test'
+import { TestServiceAPI } from '@pages/api/test-api'
 import { download } from '@utils/index'
 import { Tooltip } from 'antd'
 import clsx from 'clsx'
@@ -86,7 +82,7 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import { TestServiceAPI } from '@pages/api/test-api'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 declare global {
   interface Window {

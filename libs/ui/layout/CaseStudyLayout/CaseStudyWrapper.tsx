@@ -1,5 +1,5 @@
 import { CloseIconV2, NextIcon, PreviousIcon } from "@lms/assets";
-import { disableUnsavedChange, useAppDispatch } from "@lms/contexts";
+import { disableUnsavedChange, useFeature } from "@lms/contexts";
 import { Layout } from "antd";
 import clsx from "clsx";
 import React, { Dispatch, PropsWithChildren, SetStateAction } from "react";
@@ -44,7 +44,7 @@ const CaseStudyWrapper = ({
   totalQuestions,
   onQuit,
 }: PropsWithChildren<IProps>) => {
-  const dispatch = useAppDispatch();
+  const {dispatch} = useFeature();
 
   return (
     <Layout className="flex h-screen flex-col">
@@ -111,7 +111,7 @@ const CaseStudyWrapper = ({
                       onNextQuestion();
                     } else {
                       setOpenSubmit && setOpenSubmit(true);
-                      dispatch(disableUnsavedChange());
+                      dispatch?.(disableUnsavedChange());
                     }
                   }}
                 >

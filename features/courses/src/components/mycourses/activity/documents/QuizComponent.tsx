@@ -13,7 +13,6 @@ import {
   confirmQuestion,
   pushNotes,
   saveFileEssay,
-  useAppDispatch,
   useFeature,
 } from "@lms/contexts";
 import {
@@ -171,7 +170,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }: Props,
     ref,
   ) => {
-    const { uploadApi,
+    const { dispatch,
       testServiceApi,
       courseApi,
     } = useFeature();
@@ -183,7 +182,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       QUESTION_TYPES.ONE_CHOICE,
       QUESTION_TYPES.SELECT_WORD,
     ].includes(activeQuestion?.qType as QUESTION_TYPES);
-    const dispatch = useAppDispatch();
     const { isMobileView } = useTailwindBreakpoint();
 
     // const DragDropRef = useRef(null) as any;
@@ -540,7 +538,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
         // DragDropRef?.current?.handleReset()
         try {
-          dispatch(
+          dispatch?.(
             confirmQuestion({
               api: testServiceApi,
               courseApi: courseApi,
@@ -576,7 +574,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       requirement_id: string,
     ) => {
       try {
-        dispatch(
+        dispatch?.(
           saveFileEssay({
             activityId,
             tabId,
@@ -850,7 +848,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                         })
                       }
                       handleClearFile={() => {
-                        dispatch(
+                        dispatch?.(
                           clearFileEssay({
                             activityId,
                             tabId,
@@ -1031,7 +1029,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                         })
                       }
                       handleClearFile={() => {
-                        dispatch(
+                        dispatch?.(
                           clearFileEssay({
                             activityId,
                             tabId,
@@ -1151,7 +1149,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         name: "Note",
         description: "",
       };
-      dispatch(pushNotes(note));
+      dispatch?.(pushNotes(note));
     };
 
     const getTemplateValueForWord = () => {

@@ -1,17 +1,24 @@
 import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
-import { UserType, getEntranceCount, useAppDispatch, useCourseContext } from '@lms/contexts'
+import { UserType, getEntranceCount, useCourseContext } from '@lms/contexts'
 import { ANIMATION, AppType } from '@lms/core'
 import { Heading } from '@lms/feature-courses'
 import EntranceTestFilter from '@lms/feature-test/src/components/entrance-test/EntranceTestFilter'
 import EntranceTestList from '@lms/feature-test/src/components/entrance-test/EntranceTestList'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { CourseSkeleton, Footer, Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
+import {
+  CourseSkeleton,
+  Footer,
+  Layout,
+  SappLoadingGlobal,
+  SearchWithMenuToggle,
+} from '@lms/ui'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { EntranceTestAPI } from '../api/entrance-test'
 import { PageLink } from 'src/constants/routers'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { useAppDispatch } from 'src/redux/hook'
+import { EntranceTestAPI } from '../api/entrance-test'
 
 const EntranceTest = () => {
   const router = useRouter()
@@ -35,7 +42,8 @@ const EntranceTest = () => {
     { retry: false },
   )
 
-  const getEntranceTestCount = async () => await dispatch(getEntranceCount(EntranceTestAPI))
+  const getEntranceTestCount = async () =>
+    await dispatch(getEntranceCount(EntranceTestAPI))
   /**
    * @description handle open and close sidebar
    */

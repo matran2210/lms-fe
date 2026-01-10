@@ -23,8 +23,6 @@ import {
   getDiscussion,
   resetQuizActivity,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
   UserType,
 } from '@lms/contexts'
@@ -51,6 +49,7 @@ import { useQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { UploadAPI } from 'src/pages/api/upload'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string

@@ -1,21 +1,22 @@
-
-import {
-  UserType,
-  getEventCount,
-  useAppDispatch,
-  useCourseContext
-} from '@lms/contexts'
+import { UserType, getEventCount, useCourseContext } from '@lms/contexts'
 import { ANIMATION, AppType, LANG_SIGNIN } from '@lms/core'
 import { Heading } from '@lms/feature-courses'
 import { EventTestFilter, EventTestList } from '@lms/feature-test'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { CourseSkeleton, Footer, Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
+import {
+  CourseSkeleton,
+  Footer,
+  Layout,
+  SappLoadingGlobal,
+  SearchWithMenuToggle,
+} from '@lms/ui'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { EventTestAPI } from '../api/event-test'
 import { PageLink } from 'src/constants/routers'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { useAppDispatch } from 'src/redux/hook'
+import { EventTestAPI } from '../api/event-test'
 
 const EventTest = () => {
   const router = useRouter()
@@ -39,7 +40,8 @@ const EventTest = () => {
     { retry: false },
   )
 
-  const getEventTestCount = async () => await dispatch(getEventCount(EventTestAPI))
+  const getEventTestCount = async () =>
+    await dispatch(getEventCount(EventTestAPI))
   /**
    * @description handle open and close sidebar
    */
