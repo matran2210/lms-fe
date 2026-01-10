@@ -9,29 +9,10 @@ module.exports = withBundleAnalyzer({
   productionBrowserSourceMaps: false,
   poweredByHeader: false, // loại bỏ X-Powered-By
 
-  transpilePackages: [
-    '@lms/ui',
-    '@lms/core',
-    '@lms/hooks',
-    '@lms/assets',
-    '@lms/utils',
-    '@lms/contexts',
-    '@lms/styles',
-    '@lms/feature-user',
-    '@lms/feature-class',
-    '@lms/feature-auth',
-    '@lms/feature-dashboard',
-    '@lms/feature-courses',
-    '@lms/feature-notifications',
-    '@lms/feature-test',
-    '@lms/feature-calendar',
-  ],
-
   output: 'standalone',
 
   images: {
     remotePatterns: [{ protocol: 'https', hostname: '**' }],
-    unoptimized: true,
   },
 
   compiler: {
