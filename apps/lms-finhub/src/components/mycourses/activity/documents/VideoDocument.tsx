@@ -358,7 +358,7 @@ const VideoDocument = ({
                 {videos?.map((v, i) => {
                   return (
                     <label
-                      className=" flex cursor-pointer select-none items-center gap-2"
+                      className="flex cursor-pointer select-none items-center gap-2"
                       key={v?.file?.id ?? i}
                     >
                       {/* Radio button for video selection */}

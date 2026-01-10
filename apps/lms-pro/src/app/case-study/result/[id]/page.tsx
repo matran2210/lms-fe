@@ -26,7 +26,11 @@ import {
   RESPONSE_OPTION,
 } from '@lms/core'
 import { CalculatorModal } from '@lms/feature-courses'
-import { useMousePosition, useTailwindBreakpoint } from '@lms/hooks'
+import {
+  useMousePosition,
+  useSmartModalSize,
+  useTailwindBreakpoint,
+} from '@lms/hooks'
 import {
   AddWordPreview,
   CaseStudyWrapper,
@@ -45,7 +49,7 @@ import {
   SelectWord,
   SlotValue,
 } from '@lms/ui'
-import { runHighlight } from '@lms/utils'
+import { handleMultipleCorrectAnswer, runHighlight } from '@lms/utils'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
@@ -69,7 +73,8 @@ const CaseStudyResult = () => {
   const allowUnHighLight = false
   const [activeQuestionIndex, setActiveQuestionIndex] = useState<number>(0)
   const questionsScrollRef = useRef<HTMLDivElement | null>(null)
-
+  const { width: widthFileViewer, height: heightFileViewer } =
+    useSmartModalSize()
   // handle show exhibit list
   const [exhibitData, setExhibitData] = useState<IExhibit[]>([])
   const [openScratchPad, setOpenScratchPad] = useState<Array<ICratchPad>>([])
@@ -366,6 +371,10 @@ const CaseStudyResult = () => {
       )
     }
     if (data.question.qType === QUESTION_TYPES.DRAG_DROP) {
+      handleMultipleCorrectAnswer(
+        data?.question?.drag_drop_answers,
+        data?.question?.answers,
+      )
       return data.answer?.map(
         (item: { answer_position: number; answer_id: string }) => {
           return {
@@ -862,8 +871,8 @@ const CaseStudyResult = () => {
               return (
                 <ModalResizeable
                   title={e?.fileName}
-                  width={isDesktopView ? 650 : 400}
-                  height={isDesktopView ? 750 : 400}
+                  width={widthFileViewer}
+                  height={heightFileViewer}
                   key={e.id}
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
                   position="center"

@@ -13,6 +13,7 @@
 @import "video.scss";
 @import "activity.scss";
 @import "test.scss";
+@import "animation.scss";
 @import "./course-3-level.scss";
 @import "./components/_calculator.scss";
 @import "./components/_event-repeat.scss";
@@ -1607,4 +1608,24 @@ mark {
       @apply mx-10 py-10;
     }
   }
+}
+
+.sapp-action-popover {
+  .ant-popover-inner {
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .ant-popover-arrow {
+    display: none !important;
+  }
+}
+
+.flag {
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity 200ms ease-out,
+    transform 200ms ease-out;
 }

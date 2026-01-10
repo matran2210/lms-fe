@@ -272,21 +272,21 @@ const ClassResourceTable = ({
               setOpenPreview(false)
               setPreviewResource(null)
             }}
-            header={
+            header={({ requestClose }) => (
               <div className="modal-header modal-dragger flex h-10 w-full items-center justify-between">
                 <div className="truncate font-semibold">
                   {previewResource.name}
                 </div>
                 <button
                   onClick={() => {
-                    setOpenPreview(false)
-                    setPreviewResource(null)
+                    requestClose()
+                    setTimeout(() => setOpenPreview(false), 300)
                   }}
                 >
                   <CloseIcon />
                 </button>
               </div>
-            }
+            )}
           >
             <div className="h-full bg-white">
               {renderPreviewContent(previewResource)}

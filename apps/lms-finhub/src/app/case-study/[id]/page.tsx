@@ -29,7 +29,11 @@ import {
   ROUTES,
 } from '@lms/core'
 import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
-import { useMousePosition, useTailwindBreakpoint } from '@lms/hooks'
+import {
+  useMousePosition,
+  useSmartModalSize,
+  useTailwindBreakpoint,
+} from '@lms/hooks'
 import {
   AddWordPreview,
   Calculator,
@@ -63,7 +67,8 @@ import LimitQuizModal from '../../short-course/test/limitQuizModal'
 import { TestServiceAPI } from 'src/api/test-api'
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
-
+  const { width: widthFileViewer, height: heightFileViewer } =
+    useSmartModalSize()
   const checkType = (
     e: any,
     index: number,
@@ -1248,7 +1253,7 @@ const CaseStudyDetail = () => {
                   key={e.id}
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
                   position="center left"
-                  header={
+                  header={({ requestClose }) => (
                     <div className="relative">
                       <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                         <div className="truncate">
@@ -1260,12 +1265,15 @@ const CaseStudyDetail = () => {
                       </div>
                       <button
                         className="absolute right-3 top-2"
-                        onClick={() => handleCloseScratchPad(e)}
+                        onClick={() => {
+                          requestClose()
+                          setTimeout(() => handleCloseScratchPad(e), 300)
+                        }}
                       >
                         <CloseIcon />
                       </button>
                     </div>
-                  }
+                  )}
                 >
                   <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                     <EditorReader
@@ -1291,8 +1299,8 @@ const CaseStudyDetail = () => {
               return (
                 <ModalResizeable
                   title={e?.fileName}
-                  width={isDesktopView ? 650 : 450}
-                  height={isDesktopView ? 850 : 450}
+                  width={widthFileViewer}
+                  height={heightFileViewer}
                   key={e.id}
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
                   position="center"

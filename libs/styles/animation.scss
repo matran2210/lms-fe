@@ -1,0 +1,235 @@
+/* ===== ANTD CARD ANIMATION ===== */
+
+.hover-ring-primary {
+  @apply ring-2 ring-primary/0
+         hover:ring-primary
+         transition-[box-shadow]
+         duration-300
+         ease-out;
+}
+
+.hover-shadow-card {
+  @apply shadow-medium
+         hover:shadow-large
+         transition-[box-shadow]
+         duration-200
+         ease-out;
+}
+
+/* ===== ANTD FLAG ANIMATION ===== */
+
+.flag-enter {
+  animation: flagIn 300ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.flag-exit {
+  animation: flagOut 220ms cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+@keyframes flagIn {
+  from {
+    transform: rotate(90deg) translateY(-4px);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(0deg) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes flagOut {
+  from {
+    transform: rotate(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: rotate(90deg) translateY(-4px);
+    opacity: 0;
+  }
+}
+
+.flag-static-on {
+  transform: rotate(0deg) translateY(0);
+  opacity: 1;
+}
+
+.flag-static-off {
+  transform: rotate(90deg) translateY(-4px);
+  opacity: 0;
+}
+
+/* ===== ANTD PINNED TOAST ANIMATION ===== */
+
+.pinned-toast-enter {
+  animation: slideUpBounce 600ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.pinned-toast-exit {
+  animation: slideDown 600ms ease-in forwards;
+}
+
+@keyframes slideUpBounce {
+  0% {
+    transform: translate(-50%, 100%);
+    opacity: 0;
+  }
+
+  70% {
+    transform: translate(-50%, -8%);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+
+/* ===== ANTD TAB ANIMATION ===== */
+.tab-content-container {
+  position: relative;
+  min-height: 400px;
+  overflow: hidden;
+}
+
+/* Base */
+.tab-content {
+  width: 100%;
+}
+
+/* Tab mới lướt vào */
+.tab-content-enter {
+  animation: tabSlideCover 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Keyframe: lướt đè */
+@keyframes tabSlideCover {
+  from {
+    transform: translateX(64px);
+    opacity: 0.6;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.sapp-tabs-profile .ant-tabs-content-holder {
+  display: none;
+}
+
+/* ===== ANTD MODAL ANIMATION ===== */
+
+.modal-slide-up {
+  animation: slideUpFadeIn 400ms ease-out forwards;
+}
+
+.modal-slide-down {
+  animation: slideDownFadeOut 400ms ease-in forwards;
+}
+
+/* ===== Slide up sâu + fade in ===== */
+@keyframes slideUpFadeIn {
+  from {
+    transform: translateY(160px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ===== Slide down + fade out ===== */
+@keyframes slideDownFadeOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateY(160px);
+    opacity: 0;
+  }
+}
+
+/* ===== MASK MOTION (RC-MOTION) ===== */
+.mask-fade-enter,
+.mask-fade-appear {
+  opacity: 0;
+}
+
+.mask-fade-enter-active,
+.mask-fade-appear-active {
+  opacity: 1;
+  transition: opacity 400ms ease-out;
+}
+
+.mask-fade-leave {
+  opacity: 1;
+}
+
+.mask-fade-leave-active {
+  opacity: 0;
+  transition: opacity 400ms ease-in;
+}
+
+/* ===== ANTD DRAWER ANIMATION ===== */
+
+/* =========================
+   ANTD DRAWER ANIMATION (PC ONLY)
+   ========================= */
+@media (min-width: 1024px) {
+  .ant-drawer-content-wrapper {
+    transition: none !important;
+  }
+
+  /* ===== OPEN ===== */
+  .ant-drawer-open .ant-drawer-content-wrapper {
+    animation: drawerSlideInBounce 400ms cubic-bezier(0.22, 1.2, 0.36, 1);
+  }
+
+  /* ===== CLOSE ===== */
+  .ant-drawer-content-wrapper {
+    animation: drawerSlideOut 300ms ease-in;
+  }
+
+  /* ===== KEYFRAMES ===== */
+
+  @keyframes drawerSlideInBounce {
+    0% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+
+    70% {
+      transform: translateX(-24px);
+      opacity: 1;
+    }
+
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes drawerSlideOut {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  /* ===== MASK ===== */
+  .ant-drawer-mask {
+    transition: opacity 300ms ease;
+    opacity: 0;
+  }
+
+  .ant-drawer-open .ant-drawer-mask {
+    opacity: 1;
+  }
+}

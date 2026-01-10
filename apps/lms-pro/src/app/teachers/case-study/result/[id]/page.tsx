@@ -22,7 +22,7 @@ import {
   QUESTION_TYPES,
 } from '@lms/core'
 import { CalculatorModal } from '@lms/feature-courses'
-import { useMousePosition } from '@lms/hooks'
+import { useMousePosition, useSmartModalSize } from '@lms/hooks'
 import {
   Calculator,
   EditorReader,
@@ -83,7 +83,8 @@ const CaseStudyResultTeacher = () => {
     value: '',
   })
   const [exhibitText, setExhibitText] = useState<string>('')
-
+  const { width: widthFileViewer, height: heightFileViewer } =
+    useSmartModalSize()
   /**
    * Declare form to handle exhibit
    */
@@ -786,7 +787,7 @@ const CaseStudyResultTeacher = () => {
                     key={e.id}
                     handleCloseScratchPad={() => handleCloseScratchPad(e)}
                     position="center left"
-                    header={
+                    header={({ requestClose }) => (
                       <div className="relative">
                         <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                           <div className="truncate">
@@ -798,12 +799,17 @@ const CaseStudyResultTeacher = () => {
                         </div>
                         <button
                           className="absolute right-3 top-2"
-                          onClick={() => handleCloseScratchPad(e)}
+                          onClick={() => {
+                            requestClose()
+                            setTimeout(() => {
+                              handleCloseScratchPad(e)
+                            }, 300)
+                          }}
                         >
                           <CloseIcon />
                         </button>
                       </div>
-                    }
+                    )}
                   >
                     <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                       <EditorReader
@@ -829,8 +835,8 @@ const CaseStudyResultTeacher = () => {
                 return (
                   <ModalResizeable
                     title={e?.fileName}
-                    width={650}
-                    height={850}
+                    width={widthFileViewer}
+                    height={heightFileViewer}
                     minWidth={200}
                     minHeight={200}
                     key={e.id}

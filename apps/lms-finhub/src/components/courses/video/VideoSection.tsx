@@ -1,6 +1,6 @@
 import { QuizComponentRef } from '@components/mycourses/activity/documents/QuizComponent'
 import { fetchQuestionById, IActivityStateQuestion } from '@lms/contexts'
-import { IQuestion, IVideo } from '@lms/core'
+import { IQuestion, ITestServiceAPI, IVideo } from '@lms/core'
 import { SAPPVideo } from '@lms/ui'
 import { debounce } from '@utils/helpers'
 import { memo, useEffect, useRef, useState } from 'react'

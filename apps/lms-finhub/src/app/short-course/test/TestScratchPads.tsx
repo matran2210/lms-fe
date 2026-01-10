@@ -10,6 +10,7 @@ import {
 import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
 import ScratchPatch from './scratchPatch'
+import { useSmartModalSize } from '@lms/hooks'
 interface IProps {
   openScratchPad: any[]
   onFocusingPad: string
@@ -63,7 +64,8 @@ const TestScratchPads = ({
     }
   }
   const { control: controlScratch } = useForm()
-
+  const { width: widthFileViewer, height: heightFileViewer } =
+    useSmartModalSize()
   return openScratchPad.map((e, index: number) => {
     if (e.type === 'calculator') {
       return (
@@ -78,19 +80,26 @@ const TestScratchPads = ({
         <ModalResizeable
           position="center left"
           key={currentPage}
-          header={
+          header={({ requestClose }) => (
             <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
               <div className="text-sm font-semibold text-gray-800">
                 Scratch Pad
               </div>
               <button
                 className="text-icon"
-                onClick={() => handleCloseScratchPad(e)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  requestClose()
+                }}
+                onTouchEnd={(e) => {
+                  e.stopPropagation()
+                  requestClose()
+                }}
               >
                 <CloseIconNote />
               </button>
             </div>
-          }
+          )}
           handleCloseScratchPad={() => {
             handleCloseScratchPad(e)
           }}
@@ -122,24 +131,24 @@ const TestScratchPads = ({
           key={e.id}
           handleCloseScratchPad={() => handleCloseScratchPad(e)}
           position="center left"
-          header={
-            <div className="relative">
-              <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
-                <div className="truncate">
-                  <span className="text-base font-semibold">{`${exhibitText} ${
-                    (i ?? 0) + 1
-                  }: `}</span>
-                  {exhibitsDes?.name}
-                </div>
+          header={({ requestClose }) => (
+            <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
+              <div className="text-sm font-semibold text-gray-800">
+                {`${exhibitText} ${(i ?? 0) + 1}: ${exhibitsDes?.name}`}
               </div>
               <button
-                className="absolute right-3 top-2"
-                onClick={() => handleCloseScratchPad(e)}
+                className="text-icon"
+                onClick={() => {
+                  e.stopPropagation()
+                  requestClose()
+                }}
               >
                 <CloseIcon />
               </button>
             </div>
-          }
+          )}
+          draggableFull
+          modalIndex={i}
         >
           <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
             <EditorReader
@@ -165,15 +174,15 @@ const TestScratchPads = ({
       return (
         <ModalResizeable
           title={e.fileName}
-          width={650}
-          height={850}
+          width={widthFileViewer}
+          height={heightFileViewer}
           key={e.id}
           handleCloseScratchPad={() => handleCloseScratchPad(e)}
           position="center"
         >
           <div
             className="overflow-auto bg-white p-4"
-            style={{ height: 'calc(100% - 40px' }}
+            style={{ height: 'calc(100% - 40px)' }}
           >
             {/* <div className='flex flex-'> */}
             <FileViewer fileName={e?.fileName} fileUrl={e?.file} />

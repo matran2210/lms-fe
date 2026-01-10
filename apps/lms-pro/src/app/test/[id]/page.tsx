@@ -98,12 +98,10 @@ import {
   SlotValue,
   TestWrapper,
 } from '@lms/ui'
-import { checkSheetAnswered, runHighlight, trackGAEvent } from '@lms/utils'
+import { checkSheetAnswered, handleMultipleCorrectAnswer, runHighlight, trackGAEvent } from '@lms/utils'
 import { TabsProps, Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { EventTestAPI } from 'src/api/event-test'
-import { TestServiceAPI } from 'src/api/test-api'
 import { PageLink } from 'src/constants/routers'
 import {
   checkTypeAndRenderTitle,
@@ -116,6 +114,8 @@ import useGetQuizDetail from '../custom-hook/useGetQuizDetail'
 import LimitQuizModal from '../limitQuizModal'
 import SuccessSubmittedConstructorModal from '../SuccessSubmittedConstructorModal'
 import TestScratchPads from '../TestScratchPads'
+import { TestServiceAPI } from 'src/api/test-api'
+import { EventTestAPI } from 'src/api/event-test'
 
 declare global {
   interface Window {
@@ -316,6 +316,7 @@ const TestDetail = () => {
             solution,
             is_self_reflection,
             requirements,
+            drag_drop_answers,
           } = answerSubmitted?.[0]
 
           // Handle different question types
@@ -364,10 +365,18 @@ const TestDetail = () => {
           }
 
           if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
+            const answersTemp = (answers || []).sort(
+              (
+                a: { answer_position: number },
+                b: { answer_position: number },
+              ) => a?.answer_position - b?.answer_position,
+            )
+
             return {
               corrects: {
-                corrects: (answers || []).sort(
-                  (a: any, b: any) => a?.answer_position - b?.answer_position,
+                corrects: handleMultipleCorrectAnswer(
+                  drag_drop_answers,
+                  answersTemp,
                 ),
               },
               solution,
@@ -674,6 +683,17 @@ const TestDetail = () => {
           return updatedObjTab
         }
       } else {
+        if (objTab?.data?.qType === QUESTION_TYPES.DRAG_DROP) {
+          return {
+            ...objTab,
+            corrects: {
+              corrects: handleMultipleCorrectAnswer(
+                objTab?.data?.drag_drop_answers,
+                objTab?.corrects?.corrects,
+              ),
+            },
+          }
+        }
         return objTab
       }
     } else return undefined

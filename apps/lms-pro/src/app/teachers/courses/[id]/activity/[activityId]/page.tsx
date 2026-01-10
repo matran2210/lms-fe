@@ -979,7 +979,7 @@ const ActivityTeacherPage = () => {
                   dragHandleClassName="modal-header"
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
                   position="center left"
-                  header={
+                  header={({ requestClose }) => (
                     <div className="relative">
                       <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                         <div className="truncate">
@@ -991,12 +991,15 @@ const ActivityTeacherPage = () => {
                       </div>
                       <button
                         className="absolute right-3 top-2"
-                        onClick={() => handleCloseScratchPad(e)}
+                        onClick={() => {
+                          requestClose()
+                          setTimeout(() => handleCloseScratchPad(e), 300)
+                        }}
                       >
                         <CloseIcon />
                       </button>
                     </div>
-                  }
+                  )}
                 >
                   <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                     <EditorReader

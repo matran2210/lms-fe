@@ -53,7 +53,7 @@ const ModalUploadFile = ({
   maxCount,
   location,
 }: IModalUploadProps) => {
-  const {testServiceApi} = useFeature()
+  const { testServiceApi } = useFeature();
   const sourceRef = useRef<CancelTokenSource>();
   const isCancel = useRef<boolean>();
   const [uploadFile, setUploadFile] = useState<UploadFile[] | undefined>();
@@ -176,6 +176,7 @@ const ModalUploadFile = ({
   return (
     <div>
       <SappModalV3
+        handleClose={() => handleClose()}
         open={open}
         title={""}
         headerClassName="text-lg !font-normal"

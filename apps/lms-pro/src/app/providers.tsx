@@ -36,6 +36,7 @@ import '@sapp-fe/quiz-result-package/dist/index.css'
 import '@sapp-fe/sapp-common-package/dist/index.css'
 import '@sapp-fe/sapp-common-package/dist/sapp-editor.css'
 import '@sapp-fe/sapp-notification/dist/index.css'
+import { ErrorBoundary } from '@sentry/nextjs'
 import { fetcher } from '@services/requestV2'
 import '@styles/index.scss'
 import '@xyflow/react/dist/style.css'
@@ -59,6 +60,19 @@ import { Provider } from 'react-redux'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import { io } from 'socket.io-client'
+import { ActivityAPI } from 'src/api/activity'
+import CalendarApi from 'src/api/calendar'
+import { uploadImageToLinkedIn } from 'src/api/certificate'
+import { ClassAPI } from 'src/api/class'
+import { CoursesAPI } from 'src/api/courses'
+import { DashboardAPI } from 'src/api/dashboard'
+import { EntranceTestAPI } from 'src/api/entrance-test'
+import { EventTestAPI } from 'src/api/event-test'
+import { NotificationAPI } from 'src/api/notification'
+import MyProfileAPI, { AuthAPI } from 'src/api/profile'
+import { QuestionAPI } from 'src/api/question'
+import { TestServiceAPI } from 'src/api/test-api'
+import { UploadAPI } from 'src/api/upload'
 import {
   MENU_BOTTOM,
   MENU_ITEMS,
@@ -69,20 +83,6 @@ import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import UserApi from 'src/redux/services/User/user'
 import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
-import { ActivityAPI } from 'src/api/activity'
-import CalendarApi from 'src/api/calendar'
-import { uploadImageToLinkedIn } from 'src/api/certificate'
-import { ClassAPI } from 'src/api/class'
-import { CoursesAPI } from 'src/api/courses'
-import { EntranceTestAPI } from 'src/api/entrance-test'
-import { EventTestAPI } from 'src/api/event-test'
-import { NotificationAPI } from 'src/api/notification'
-import MyProfileAPI, { AuthAPI } from 'src/api/profile'
-import { QuestionAPI } from 'src/api/question'
-import { TestServiceAPI } from 'src/api/test-api'
-import { UploadAPI } from 'src/api/upload'
-import { DashboardAPI } from 'src/api/dashboard'
-import { ErrorBoundary } from '@sentry/nextjs'
 import ErrorRedirectPage from './error-redirect/page'
 
 dayjs.extend(utc)
@@ -374,6 +374,7 @@ export function Providers({ children }: { children: ReactNode }) {
                 certificateApi: {
                   uploadImageToLinkedIn,
                 },
+                uploadImageToLinkedIn: uploadImageToLinkedIn,
               }}
             >
               <CourseProvider

@@ -1,15 +1,15 @@
-import { AlertTriagle } from '@lms/assets'
-import { SappModalV2 } from '@lms/ui'
-import { trackGAEvent } from '@lms/utils'
-import { Dispatch, SetStateAction } from 'react'
+import { AlertTriagle } from "@lms/assets";
+import { SappModalV3 } from "@lms/ui";
+import { trackGAEvent } from "@lms/utils";
+import { Dispatch, SetStateAction } from "react";
 
 interface IProps {
-  open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>
-  data: number[] | []
-  handleSubmit: () => void
-  handleCancel: () => void
-  title?: string
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  data: number[] | [];
+  handleSubmit: () => void;
+  handleCancel: () => void;
+  title?: string;
 }
 const UnSubmitAnswerModal = ({
   title,
@@ -17,27 +17,27 @@ const UnSubmitAnswerModal = ({
   setOpen,
   data,
   handleSubmit,
-  handleCancel,
 }: IProps) => {
   const onSubmit = () => {
-    handleSubmit()
-    trackGAEvent('Click Button Submit Anyway Test')
-  }
+    handleSubmit();
+    trackGAEvent("Click Button Submit Anyway Test");
+  };
 
   const onCancel = () => {
-    setOpen(false)
-    trackGAEvent('Click Button Keep Doing Test')
-  }
+    setOpen(false);
+    trackGAEvent("Click Button Keep Doing Test");
+  };
 
   return (
-    <SappModalV2
+    <SappModalV3
       open={open}
+      handleClose={() => setOpen(false)}
       okButtonCaption="Submit Anyway"
       onOk={onSubmit}
       handleCancel={onCancel}
       showHeader={false}
       refClass="p-6 md:p-8 3xl:py-[70px] 3xl:px-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
-      size="max-w-[646px]"
+      width="560px"
       footerButtonClassName="flex flex-col gap-3"
       parentChildClass=""
       position="center"
@@ -46,7 +46,7 @@ const UnSubmitAnswerModal = ({
       buttonSize="medium"
       scrollbale={false}
       confirmOnclose={false}
-      title={title ?? ''}
+      title={title ?? ""}
       cancelButtonCaption="Keep Doing"
       cancelButtonClass="!p-0 underline hover:text-primary"
     >
@@ -61,15 +61,15 @@ const UnSubmitAnswerModal = ({
           Oops look like you&apos;ve got a few unfinished questions:&nbsp;
         </span>
         <span className="text-center font-semibold text-primary">
-          {data?.length > 10 ? data?.slice(0, 10)?.join(', ') : data.join(', ')}{' '}
-          {data?.length > 10 ? '...' : ''}
+          {data?.length > 10 ? data?.slice(0, 10)?.join(", ") : data.join(", ")}{" "}
+          {data?.length > 10 ? "..." : ""}
         </span>
         <span className="text-center font-normal text-gray-800">
           After you submit, you can&apos;t edit this assignment.
         </span>
       </div>
-    </SappModalV2>
-  )
-}
+    </SappModalV3>
+  );
+};
 
-export default UnSubmitAnswerModal
+export default UnSubmitAnswerModal;

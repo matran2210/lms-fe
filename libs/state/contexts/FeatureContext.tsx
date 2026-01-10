@@ -19,6 +19,7 @@ import {
 } from "@lms/core";
 import {
   AxiosRequestConfig,
+  AxiosResponse,
 } from 'axios';
 import { createContext, useContext } from "react";
 import { IUserAPI } from "../redux/types/User/urser";
@@ -37,18 +38,24 @@ interface FeatureContextProps {
   calendarApi?: ICalendarAPI;
   dashboardApi?: IDashboardAPI;
   myProfileApi?: {
-      getProfile: () => Promise<any>;
+    getProfile: () => Promise<any>;
     getSubjectOfhubspot: (courseCategoryName: string) => Promise<any>;
-    getExamBySubjectId: ({ pageIndex, pageSize, params, }: {
-        pageIndex: number;
-        pageSize: number;
-        params?: Object | undefined;
+    getExamBySubjectId: ({
+      pageIndex,
+      pageSize,
+      params,
+    }: {
+      pageIndex: number;
+      pageSize: number;
+      params?: Object | undefined;
     }) => Promise<any>;
     updateProgram: (data: {
-        course_category_id?: string | undefined;
-        user_hubspot_examination_subjects?: {
+      course_category_id?: string | undefined;
+      user_hubspot_examination_subjects?:
+        | {
             examination_subject_id?: string | undefined;
-        }[] | undefined;
+          }[]
+        | undefined;
     }) => Promise<any>;
   };
   submitQuizTest: (
@@ -65,10 +72,16 @@ interface FeatureContextProps {
   pathname: string | null
   params: Record<string, string | string[]> | null
   query: any
-  fetcher: (url: string, config?: AxiosRequestConfig<any>) => Promise<any>
+  certificateApi: ICertificateAPI
+  fetcher: (url: string, config?: AxiosRequestConfig<any>) => Promise<any>;
   videoUrl: string;
   testServiceApi: ITestServiceAPI;
-  certificateApi: ICertificateAPI
+  uploadImageToLinkedIn: (
+    token: string,
+    personURN: string,
+    shareUrl: string,
+    text: string,
+  ) => Promise<AxiosResponse<any, any, {}>>;
 }
 
 const FeatureContext = createContext<FeatureContextProps>(

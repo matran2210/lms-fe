@@ -64,7 +64,7 @@ import {
   VideoTimelineMobile,
 } from '@lms/feature-courses'
 import ActivityResource from '@lms/feature-courses/src/components/learning/activity/ActivityResource'
-import { useTailwindBreakpoint } from '@lms/hooks'
+import { useSmartModalSize, useTailwindBreakpoint } from '@lms/hooks'
 import {
   AssistiveTouch,
   BackToTop,
@@ -125,6 +125,8 @@ const ActivityPage = () => {
 
   const courseId = params?.id
   const sectionId = params?.activityId as string
+  const { width: widthFileViewer, height: heightFileViewer } =
+    useSmartModalSize()
 
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityReducer)
@@ -763,31 +765,36 @@ const ActivityPage = () => {
                   return (
                     <ModalResizeable
                       modalIndex={index}
-                      bodyClassName="h-[100%]"
+                      // bodyClassName="h-[100%]"
                       title={e.fileName}
-                      width={650}
-                      height={850}
+                      width={widthFileViewer}
+                      height={heightFileViewer}
                       key={e.id}
-                      className="!z-40 h-full !rounded-lg"
+                      className="!z-40 !rounded-lg"
                       handleCloseScratchPad={() => handleCloseScratchPad(e)}
-                      position="center left"
-                      header={
+                      position="center"
+                      header={({ requestClose }) => (
                         <div className="">
                           <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between px-5">
                             <div className="truncate">{e.fileName}</div>
                           </div>
                           <button
                             className="absolute right-3 top-2"
-                            onClick={() => handleCloseScratchPad(e)}
+                            onClick={() => {
+                              requestClose()
+                              setTimeout(() => handleCloseScratchPad(e), 300)
+                            }}
                           >
                             <CloseIcon />
                           </button>
                         </div>
-                      }
+                      )}
+                      isInBody
                     >
                       <div
-                        // className="overflow-auto p-4 bg-white"
-                        className="h-full cursor-pointer select-none text-right text-base font-semibold text-gray-800 hover:text-primary"
+                        className="overflow-auto bg-white p-4"
+                        style={{ height: 'calc(100% - 40px' }}
+                        // className="h-full cursor-pointer p-4"
                       >
                         {/* <div className='flex flex-'> */}
                         <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
@@ -801,19 +808,22 @@ const ActivityPage = () => {
                       className="!z-40"
                       handleCloseScratchPad={() => handleCloseScratchPad(e)}
                       position="center left"
-                      header={
+                      header={({ requestClose }) => (
                         <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
                           <div className="text-sm font-semibold text-gray-800">
                             {`${exhibitText} ${(e?.index ?? 0) + 1}: ${e?.name}`}
                           </div>
                           <button
                             className="text-icon"
-                            onClick={() => handleCloseScratchPad(e)}
+                            onClick={() => {
+                              requestClose()
+                              setTimeout(() => handleCloseScratchPad(e), 300)
+                            }}
                           >
                             <CloseIconNote />
                           </button>
                         </div>
-                      }
+                      )}
                       draggableFull
                       modalIndex={e.index}
                     >

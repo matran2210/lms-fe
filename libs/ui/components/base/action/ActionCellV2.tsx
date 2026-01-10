@@ -1,61 +1,89 @@
 "use client"
-import React, { useState } from 'react'
 import { Icon } from '@lms/assets'
-import { ReactNode } from 'react'
-import { Tooltip } from 'antd'
+import { Popover } from "antd"
 import clsx from 'clsx'
+import { AnimatePresence, motion } from "framer-motion"
+import { ReactNode, useState } from 'react'
 
-interface actionCellProps {
-  icon?: ReactNode
-  className?: string
-  listAction?: {
-    icon: ReactNode
-    nameAction: string
-    action: () => void
-  }[]
+import { Placement, arrowClassMap, arrowRotationMap } from "./placement"
+import { tooltipMotionByPlacement } from "./tooltip.motion"
+
+interface ActionItem {
+  icon: ReactNode;
+  nameAction: string;
+  action: () => void;
+}
+
+interface ActionCellV2Props {
+  icon?: ReactNode;
+  className?: string;
+  listAction?: ActionItem[];
+  placement?: Placement;
 }
 
 const ActionCellV2 = ({
   icon = <Icon type="pencil" />,
   className,
-  listAction,
-}: actionCellProps) => {
-  const [open, setOpen] = useState(false)
-  const classNames = clsx('flex cursor-pointer items-center gap-2 p-1', {
-    className,
-  })
+  listAction = [],
+  placement = "left",
+}: ActionCellV2Props) => {
+  const [open, setOpen] = useState(false);
 
   return (
-    <Tooltip
+    <Popover
       trigger="click"
-      placement="leftTop"
-      onOpenChange={(visible) => setOpen(visible)}
-      title={
-        <div className="flex flex-col gap-2">
-          {listAction?.map((item) => (
-            <div
-              className={classNames}
-              key={item.nameAction}
-              onClick={(e) => {
-                e.stopPropagation()
-                item.action()
-                setOpen(false)
-              }}
-            >
-              {item.icon}
-              <span className="text-sm font-normal leading-snug text-white">
-                {item.nameAction}
-              </span>
-            </div>
-          ))}
-        </div>
-      }
-      color="#404041"
+      placement={placement}
       open={open}
+      onOpenChange={setOpen}
+      destroyTooltipOnHide
+      overlayClassName="sapp-action-popover"
+      content={
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              key="action-menu"
+              {...tooltipMotionByPlacement(placement)}
+              className={clsx(
+                "relative rounded-md bg-[#404041] px-3 py-2 text-white shadow-large",
+                className,
+              )}
+            >
+              <span
+                className={clsx(
+                  "absolute h-2 w-4 bg-[#404041]",
+                  arrowClassMap[placement],
+                  arrowRotationMap[placement],
+                  "[clip-path:polygon(50%_100%,0_0,100%_0)]",
+                )}
+              />
+
+              {/* ACTION LIST */}
+              <div className="flex flex-col gap-2">
+                {listAction.map((item) => (
+                  <div
+                    key={item.nameAction}
+                    className="flex cursor-pointer items-center gap-2 rounded px-1 py-1 "
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      item.action();
+                      setOpen(false);
+                    }}
+                  >
+                    {item.icon}
+                    <span className="text-sm leading-snug">
+                      {item.nameAction}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      }
     >
       <div className="cursor-pointer">{icon}</div>
-    </Tooltip>
-  )
-}
+    </Popover>
+  );
+};
 
-export default ActionCellV2
+export default ActionCellV2;

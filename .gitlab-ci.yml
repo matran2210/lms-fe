@@ -9,7 +9,7 @@
 
   environment: staging
   tags:
-    - shell-docker
+    - ec2-runner-docker
   resource_group: lms-fe
 
 # Job deploy staging cho LMS
@@ -80,7 +80,7 @@ variables:
     - docker push $IMAGE_NAME:$IMAGE_TAG
     - echo "$IMAGE_NAME:$IMAGE_TAG build success"
   tags:
-  - shell-docker
+  - ec2-runner-docker
   environment: production
   resource_group: lms-fe
 
@@ -204,7 +204,7 @@ build_lms_zoom:
       "
   environment: production
   tags:
-  - shell
+  - ec2-runner-shell
   resource_group: lms-fe
 
 # Deploy lms-pro
@@ -270,5 +270,5 @@ deploy_lms_zoom:
 #       "
 #   environment: production
 #   tags:
-#   - shell
+#   - ec2-runner-shell
 #   resource_group: lms-fe

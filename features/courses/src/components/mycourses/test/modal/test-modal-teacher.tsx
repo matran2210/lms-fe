@@ -440,6 +440,7 @@ const TestModalTeacher = ({
         !data?.quiz?.attempt ||
         data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count ? (
         <SappModalV3
+          handleClose={() => setOpen(false)}
           title={
             <div className="flex items-center justify-between gap-2">
               <div>

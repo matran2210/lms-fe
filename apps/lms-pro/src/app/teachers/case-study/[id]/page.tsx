@@ -29,7 +29,7 @@ import {
 import { CalculatorModal, ConFirmSubmit } from '@lms/feature-courses'
 import { QuitTestModal } from '@lms/feature-test'
 import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
-import { useMousePosition } from '@lms/hooks'
+import { useMousePosition, useSmartModalSize } from '@lms/hooks'
 import {
   EditorReader,
   FileViewer,
@@ -282,6 +282,8 @@ const CaseStudyDetailTeacher = () => {
   const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<number[]>([])
   const [exhibitText, setExhibitText] = useState<string>('')
 
+  const { width: widthFileViewer, height: heightFileViewer } =
+    useSmartModalSize()
   /**
    * LIST DANH SÁCH CÁC CÂU CHƯA LÀM
    */
@@ -1167,7 +1169,7 @@ const CaseStudyDetailTeacher = () => {
                     key={e.id}
                     handleCloseScratchPad={() => handleCloseScratchPad(e)}
                     position="center left"
-                    header={
+                    header={({ requestClose }) => (
                       <div className="relative">
                         <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                           <div className="truncate">
@@ -1179,12 +1181,15 @@ const CaseStudyDetailTeacher = () => {
                         </div>
                         <button
                           className="absolute right-3 top-2"
-                          onClick={() => handleCloseScratchPad(e)}
+                          onClick={() => {
+                            requestClose()
+                            setTimeout(() => handleCloseScratchPad(e), 300)
+                          }}
                         >
                           <CloseIcon />
                         </button>
                       </div>
-                    }
+                    )}
                   >
                     <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                       <EditorReader
@@ -1210,8 +1215,8 @@ const CaseStudyDetailTeacher = () => {
                 return (
                   <ModalResizeable
                     title={e?.fileName}
-                    width={650}
-                    height={850}
+                    width={widthFileViewer}
+                    height={heightFileViewer}
                     key={e.id}
                     handleCloseScratchPad={() => handleCloseScratchPad(e)}
                     position="center"
