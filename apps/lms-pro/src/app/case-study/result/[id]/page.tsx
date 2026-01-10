@@ -826,7 +826,7 @@ const CaseStudyResult = () => {
                 <ModalResizeable
                   key={e.id}
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
-                  position="center left"
+                  position="center"
                   header={
                     <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
                       <div className="text-sm font-semibold text-gray-800">

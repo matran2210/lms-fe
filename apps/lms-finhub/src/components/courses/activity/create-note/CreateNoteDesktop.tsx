@@ -28,7 +28,7 @@ const CreateNoteDesktop = ({
 }: IProps) => {
   return (
     <ModalResizeable
-      position="center left"
+      position="center"
       width={412}
       height={350}
       header={({ requestClose }) => (

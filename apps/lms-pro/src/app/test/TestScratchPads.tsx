@@ -72,7 +72,7 @@ const TestScratchPads = ({
     } else if (e.type === 'scratch_pad') {
       return (
         <ModalResizeable
-          position="center left"
+          position="center"
           key={currentPage}
           header={({ requestClose }) => (
             <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
@@ -121,7 +121,7 @@ const TestScratchPads = ({
         <ModalResizeable
           key={e.id}
           handleCloseScratchPad={() => handleCloseScratchPad(e)}
-          position="center left"
+          position="center"
           header={({ requestClose }) => (
             <div className="relative">
               <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">

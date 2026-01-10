@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import PopupActive from '@components/mycourses/PopupActive'
 import PopupExtend from '@components/mycourses/PopupExtend'
 import PopupLesson from '@components/mycourses/PopupLesson'
@@ -166,7 +166,7 @@ export default function CourseCard({
         <div data-aos={ANIMATION.DATA_AOS}>
           <div
             key={index}
-            className="border-transparent relative flex flex-col rounded-xl border border-white bg-white p-4 shadow-card transition-colors duration-300 ease-in-out hover:border-primary hover:shadow-md md:p-6 lg:rounded-2xl lg:p-8"
+            className="hover-shadow-card hover-ring-primary relative flex flex-col rounded-xl border-white bg-white p-4 md:p-6 lg:rounded-2xl lg:p-8"
             // data-aos={ANIMATION.DATA_AOS}
             ref={lastElementRef}
           >
