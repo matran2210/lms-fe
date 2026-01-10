@@ -25,19 +25,18 @@ import {
 } from '@lms/core'
 import { SappButton, SappIcon, SappModal, SappModalV3 } from '@lms/ui'
 import { isValidatedAnswer, trackGAEvent } from '@lms/utils'
-import { QuestionAPI } from '@pages/api/question'
+import { TestServiceAPI } from '@pages/api/test-api'
 import ConFirmSubmit from '@pages/short-course/test/conFirmSubmit'
+import { QuizResultComponent } from '@sapp-fe/quiz-result-package'
+import { IQuestionResult } from '@sapp-fe/quiz-result-package/dist/type'
 import dayjs from 'dayjs'
 import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
-import { QuizResultComponent } from '@sapp-fe/quiz-result-package'
 import toast from 'react-hot-toast'
 import { PageLink } from 'src/constants/routes'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import { IQuestionResult } from '@sapp-fe/quiz-result-package/dist/type'
-import { TestServiceAPI } from '@pages/api/test-api'
 
 type Props = {
   questions: IQuestion[]
@@ -139,7 +138,7 @@ const QuizDocument = ({
   }>()
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       if (questions?.[0]?.id) {
         setStartWorkTime(Date.now())
         // Load the first question when the component mounts

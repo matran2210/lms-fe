@@ -1,10 +1,10 @@
 import React from 'react'
 import { useAppDispatch } from 'src/redux/hook'
-import { disableUnsavedChange } from 'src/redux/slice/Login/Login'
 import Countdown from './Countdown'
 import { IHeaderTestProps } from 'src/type/courses-3-level'
 import { Close } from '../icons'
 import { ButtonSecondary } from '@lms/ui'
+import { disableUnsavedChange } from '@lms/contexts'
 
 export default function HeaderTest({
   checkUnSubmitAnswer,

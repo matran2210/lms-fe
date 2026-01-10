@@ -4,6 +4,6 @@ export * from "./EntranceTest/EntranceTest";
 export * from "./EventTest/EventTest";
 export * from "./Popup/Result-test";
 export * from "./Login/Login";
-export * from "./Notification/Notification";
+export * from "./Notification/Notification"
 export * from "./Popup/Result-test";
 export * from "./User/User";

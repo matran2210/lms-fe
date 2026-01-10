@@ -10,9 +10,6 @@ import {
   PreviousSectionRouteProvider,
   showNotification,
   SocketContext,
-  store,
-  useAppDispatch,
-  wrapper,
 } from '@lms/contexts'
 import {
   ANIMATION,
@@ -84,6 +81,8 @@ import ErrorRedirectPage from './error-redirect'
 import CalendarApi from './api/calendar'
 import { TestServiceAPI } from './api/test-api'
 import { uploadImageToLinkedIn } from './api/certificate'
+import { store, wrapper } from 'src/redux/store'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 dayjs.extend(utc)
 dayjs.extend(weekday)
 
@@ -371,6 +370,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
                 testServiceApi: TestServiceAPI,
                 uploadImageToLinkedIn: uploadImageToLinkedIn,
+                dispatch: dispatch,
+                useAppSelector: useAppSelector,
               }}
             >
               <CourseProvider
