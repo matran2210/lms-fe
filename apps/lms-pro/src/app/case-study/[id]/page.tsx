@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-"use client"
+'use client'
 import {
   CalculatorIconV2,
   DownloadIcon,
@@ -76,15 +76,15 @@ import LimitQuizModal from 'src/app/test/limitQuizModal'
 
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
-    const searchParams = useSearchParams()
-    const params = useParams()
-    const id = params.id
-    const quizId = searchParams.get('quiz_id')
-    const classUserId = searchParams.get('class_user_id') as string
-    const caseStudyId = searchParams.get('caseStudyId') as string
-    const classId = searchParams.get('class_id') as string
-    const courseSectionId = searchParams.get('course_section_id') as string
-    const checkType = (
+  const searchParams = useSearchParams()
+  const params = useParams()
+  const id = params.id
+  const quizId = searchParams.get('quiz_id')
+  const classUserId = searchParams.get('class_user_id') as string
+  const caseStudyId = searchParams.get('caseStudyId') as string
+  const classId = searchParams.get('class_id') as string
+  const courseSectionId = searchParams.get('course_section_id') as string
+  const checkType = (
     e: any,
     index: number,
     data: any,
@@ -283,7 +283,7 @@ const CaseStudyDetail = () => {
   const dragStateRef = useRef({ startX: 0, startLeftWidth: 0 })
   const currentWidthRef = useRef(0)
   const router = useRouter()
-  
+
   const valueRef = useRef<(HTMLDivElement | null)[]>([])
   const containerRef = useRef<any>(null)
   const questionsScrollRef = useRef<HTMLDivElement | null>(null)
@@ -493,16 +493,8 @@ const CaseStudyDetail = () => {
     } catch (err) {}
   }
   useEffect(() => {
-    if (
-      quizId &&
-      id &&
-      classUserId
-    ) {
-      createAttempts(
-        quizId as string,
-        id as string,
-        classUserId as string,
-      )
+    if (quizId && id && classUserId) {
+      createAttempts(quizId as string, id as string, classUserId as string)
     }
   }, [router])
 
@@ -575,9 +567,7 @@ const CaseStudyDetail = () => {
   }
 
   const backToPart = () => {
-    router.replace(
-      `/courses/${classId}/section/${courseSectionId}`,
-    )
+    router.replace(`/courses/${classId}/section/${courseSectionId}`)
   }
 
   const getValueFillText = (index: number) => {
@@ -929,7 +919,7 @@ const CaseStudyDetail = () => {
     // router.events.on('routeChangeStart', handleBrowseAway)
     return () => {
       window.removeEventListener('beforeunload', handleWindowClose)
-    //   router.events.off('routeChangeStart', handleBrowseAway)
+      //   router.events.off('routeChangeStart', handleBrowseAway)
     }
   }, [unsavedChanges])
   useEffect(() => {

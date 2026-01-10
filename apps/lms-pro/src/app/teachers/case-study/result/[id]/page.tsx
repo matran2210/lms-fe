@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-"use client"
+'use client'
 import {
   CalculatorIcon,
   CloseIcon,
@@ -55,7 +55,7 @@ import { CoursesAPI } from 'src/api/courses'
 const CaseStudyResultTeacher = () => {
   const router = useRouter()
   const searchParam = useSearchParams()
-  const params = useParams();
+  const params = useParams()
   const { id } = params
   const query = Object.fromEntries(searchParam.entries())
   const containerRef = useRef(null)

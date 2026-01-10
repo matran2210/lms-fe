@@ -164,6 +164,7 @@ export function Providers({ children }: { children: ReactNode }) {
               pathname: pathName,
               params,
               query: Object.fromEntries(query.entries()),
+              uploadImageToLinkedIn: uploadImageToLinkedIn,
             }}
           >
             <CourseProvider router={router}>

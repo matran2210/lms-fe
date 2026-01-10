@@ -63,7 +63,7 @@ const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])
   const router = useRouter()
   const params = useParams()
-  const {query} = useFeature()
+  const { query } = useFeature()
   const containerRef = useRef(null)
   const { control, setValue, getValues } = useForm()
   const { control: controlScratch } = useForm()
@@ -472,7 +472,7 @@ const CaseStudyResult = () => {
       if (query?.is_from_activity) {
         router.push(
           ROUTES.ACTIVITY(
-           query?.class_id as string,
+            query?.class_id as string,
             query?.course_section_id as string,
           ),
         )

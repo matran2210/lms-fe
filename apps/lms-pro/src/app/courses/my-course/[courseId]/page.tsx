@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import PopupModalTest from '@components/survey/PopupModalTest'
 import { useCourseContext, UserType } from '@lms/contexts'
 import {
@@ -37,9 +37,9 @@ import withAuthorization from 'src/HOC/withAuthorization'
 const DEFAULT_PAGESIZE = 18
 
 const CourseDetail = () => {
-    const searchParams = useSearchParams()
+  const searchParams = useSearchParams()
   const param = useParams()
-    const query = Object.fromEntries(searchParams.entries())
+  const query = Object.fromEntries(searchParams.entries())
   const observer = useRef<IntersectionObserver>()
   const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
   const { setOpenSidebar, setOpenPopupCTA, openPopupCTA } = useCourseContext()

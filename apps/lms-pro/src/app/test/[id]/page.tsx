@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import {
   CalculatorIconV2,
   DownloadIcon,
@@ -98,7 +98,12 @@ import {
   SlotValue,
   TestWrapper,
 } from '@lms/ui'
-import { checkSheetAnswered, handleMultipleCorrectAnswer, runHighlight, trackGAEvent } from '@lms/utils'
+import {
+  checkSheetAnswered,
+  handleMultipleCorrectAnswer,
+  runHighlight,
+  trackGAEvent,
+} from '@lms/utils'
 import { TabsProps, Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
@@ -138,7 +143,7 @@ const TestDetail = () => {
   const scrollRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const searchParam = useSearchParams()
-  const params = useParams();
+  const params = useParams()
   const { id } = params
   const query = Object.fromEntries(searchParam.entries())
   const { quizDetail } = useGetQuizDetail(id as string)

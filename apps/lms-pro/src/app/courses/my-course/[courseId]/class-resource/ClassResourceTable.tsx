@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { CloseIcon, DownloadIcon } from '@lms/assets'
 import {
@@ -38,9 +38,9 @@ const ClassResourceTable = ({
 }) => {
   const router = useRouter()
   const pathname = usePathname()
-    const searchParams = useSearchParams()
-  
-    const query = Object.fromEntries(searchParams.entries())
+  const searchParams = useSearchParams()
+
+  const query = Object.fromEntries(searchParams.entries())
   const textStyle = 'text-base font-medium text-gray-800'
   const className = 'custom-column-table'
   const textTruncateStyle = `${textStyle} overflow-hidden text-ellipsis whitespace-nowrap max-w-[300px]`
@@ -128,7 +128,9 @@ const ClassResourceTable = ({
       align: 'center',
       render: (_, record) =>
         record?.class_resource_permissions?.schedules.map((item, index) => (
-          <div key={index} className="text-base text-gray-400">{item?.name}</div>
+          <div key={index} className="text-base text-gray-400">
+            {item?.name}
+          </div>
         )),
       width: 400,
     },
@@ -241,18 +243,22 @@ const ClassResourceTable = ({
         pageSize={pagination?.pageSize || 10}
         totalItems={pagination?.total || 0}
         setCurrentPage={(page) => {
-          router.push(`${pathname}?${buildQueryString({
+          router.push(
+            `${pathname}?${buildQueryString({
               ...query,
               page_index: page as number,
-            })}` )
+            })}`,
+          )
           setPagination((prev) => ({ ...prev, current: page as number }))
         }}
         setPageSize={(page) => {
-          router.push(`${pathname}?${buildQueryString({
+          router.push(
+            `${pathname}?${buildQueryString({
               ...query,
               page_size: page as number,
               page_index: DEFAULT_PAGE_NUMBER,
-            })}`)
+            })}`,
+          )
           setPagination((prev) => ({ ...prev, pageSize: page as number }))
         }}
       />
