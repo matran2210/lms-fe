@@ -13,7 +13,7 @@
   }
 
   .select__placeholder {
-    @apply text-[#050505];
+    @apply text-gray-800;
   }
 
   .select__menu {
@@ -21,7 +21,7 @@
   }
 
   .select__option {
-    @apply line-clamp-2 max-h-11 cursor-pointer bg-transparent text-sm font-medium leading-[17px] text-[#050505];
+    @apply line-clamp-2 max-h-11 cursor-pointer bg-transparent text-sm font-medium leading-[17px] text-gray-800;
 
     &.select__option--is-focused {
       @apply bg-transparent;
@@ -64,7 +64,7 @@
 }
 
 .select-single .select__single-value {
-  @apply text-base text-[#99A1B7];
+  @apply text-base text-accent;
 }
 
 // style css for result popup
@@ -87,7 +87,7 @@
   }
 
   .select__placeholder {
-    @apply p-0 text-base text-[#a1a1aa] focus:text-primary;
+    @apply p-0 text-base text-zinc-400 focus:text-primary;
   }
 
   .select__menu {
@@ -95,7 +95,7 @@
   }
 
   .select__option {
-    @apply line-clamp-2 max-h-11 cursor-pointer bg-transparent text-sm font-normal leading-[17px] text-[#050505];
+    @apply line-clamp-2 max-h-11 cursor-pointer bg-transparent text-sm font-normal leading-[17px] text-gray-800;
 
     &.select__option--is-focused {
       @apply bg-transparent;
@@ -156,7 +156,7 @@
     @apply h-10 rounded-md;
   }
   .select__placeholder {
-    @apply text-sm font-medium text-[#99A1B7];
+    @apply text-sm font-medium text-accent;
   }
 }
 

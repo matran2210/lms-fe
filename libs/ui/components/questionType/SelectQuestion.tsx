@@ -532,9 +532,9 @@ const SelectWord = forwardRef(
                     `.option[data-component-id="${componentId.current}"]`,
                   )
                   .forEach((opt) =>
-                    opt.classList.remove("bg-[#e5e7eb]", "selected"),
+                    opt.classList.remove("bg-gray-200", "selected"),
                   );
-                option.classList.add("bg-[#e5e7eb]", "selected");
+                option.classList.add("bg-gray-200", "selected");
 
                 // Tooltip logic
                 const el = e.target as HTMLElement;

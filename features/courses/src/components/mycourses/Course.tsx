@@ -584,7 +584,7 @@ const Course = ({
                       <Icon
                         type={enableCourse ? iconType : "expired"}
                         className={`relative ${
-                          enableCourse ? "text-[#050505]" : "text-gray-300"
+                          enableCourse ? "text-gray-800" : "text-gray-300"
                         }`}
                       />
                       <p
@@ -598,7 +598,7 @@ const Course = ({
                     <div className="number">
                       <p
                         className={`text-sm font-normal ${
-                          enableCourse ? "text-[#050505]" : "text-gray-300"
+                          enableCourse ? "text-gray-800" : "text-gray-300"
                         }`}
                       >
                         {progressPart}%

@@ -528,7 +528,7 @@ const CoursePartDetail = () => {
             className="w-full max-w-3xl rounded-none px-[14px]"
             closable
             closeIcon={
-              <span className="text-[#99A1B7]">
+              <span className="text-accent">
                 <CloseIconPreview />
               </span>
             }

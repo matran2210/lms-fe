@@ -252,7 +252,7 @@ function DiscussionElement({
       </div>
       <div className="w-4" />
       <div className="w-[180px]">
-        <div className="mb-1 text-base font-semibold text-[#050505]">
+        <div className="mb-1 text-base font-semibold text-gray-800">
           {userInfo?.name}
         </div>
         <div className="text-xs text-[#A1A1A1]">{userInfo?.email}</div>

@@ -158,7 +158,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
                 className={`min-w-fit text-right text-sm font-semibold ${
                   timeCountDown === "00 : 00"
                     ? "text-error-400"
-                    : "text-[#050505]"
+                    : "text-gray-800"
                 }`}
               >
                 {timeCountDown}

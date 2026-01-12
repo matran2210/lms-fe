@@ -403,7 +403,7 @@ const VideoDocument = ({
                 return (
                   <div
                     key={i}
-                    className="mx-3 grid grid-cols-[1.3fr,6fr] rounded-[4px] gap-3 p-3 text-sm text-[#050505] hover:bg-[#F9F9F9] hover:text-primary-400"
+                    className="mx-3 grid grid-cols-[1.3fr,6fr] rounded-[4px] gap-3 p-3 text-sm text-gray-800 hover:bg-[#F9F9F9] hover:text-primary-400"
                     onClick={() => {
                       handleGoTimeline(e?.time);
                     }}
@@ -411,7 +411,7 @@ const VideoDocument = ({
                     <div className="mim-w-[62px] text-[#3964EA]">
                       {formatTimer(e?.time)}
                     </div>
-                    <div className="text-inherit line-clamp-2 text-[#050505]">
+                    <div className="text-inherit line-clamp-2 text-gray-800">
                       {htmlToRaw(e?.text)}
                     </div>
                   </div>

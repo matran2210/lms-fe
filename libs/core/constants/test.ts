@@ -46,7 +46,7 @@ export const STATUS_QUIZ_TEST = {
   },
   DRAFT: {
     label: "Draft",
-    color: "text-[#99A1B7]",
+    color: "text-accent",
     bg: "bg-[#f3f4f6]",
   },
 };

@@ -28,7 +28,7 @@ const ErrorPage = () => {
         width="320"
         height="260"
       />
-      <h1 className="mt-10 text-2xl font-bold text-[#050505] md:text-4xl">
+      <h1 className="mt-10 text-2xl font-bold text-gray-800 md:text-4xl">
         PAGE NOT FOUND
       </h1>
       <span className="mt-3 max-w-[646px] px-4 text-base text-[#A1A1A1]">

@@ -12,20 +12,20 @@ const SIZES = {
 
 const COLORS = {
   primary:
-    "bg-black text-white rounded-lg hover:bg-[#404041] disabled:text-gray-300 disabled:bg-[#99A1B7]",
+    "bg-black text-white rounded-lg hover:bg-[#404041] disabled:text-gray-300 disabled:bg-accent",
   info: "bg-info hover:bg-info-2 disabled:bg-info-2 text-white",
   success: "bg-success hover:bg-success-2 disabled:bg-success-2 text-white",
   secondary:
-    "bg-[#F1F1F1] hover:bg-secondary-4 disabled:bg-secondary-4 text-[#050505]",
-  danger: "bg-[#D35563] hover:bg-[#dd4339] disabled:bg-[#dd4339] text-white",
+    "bg-gray-200 hover:bg-secondary-4 disabled:bg-secondary-4 text-gray-800",
+  danger: "bg-error-300 hover:bg-[#dd4339] disabled:bg-[#dd4339] text-white",
   warning: "bg-warning hover:bg-warning-2 disabled:bg-warning-2 text-white",
   light: "bg-light hover:bg-light-2 disabled:bg-light-2 text-white",
   dark: "bg-dark hover:bg-dark-2 disabled:bg-dark-2 text-white",
   white:
-    "bg-white hover:bg-[#FFC83A] disabled:bg-white text-[#A1A1A1] hover:text-white",
+    "bg-white hover:bg-[#FFC83A] disabled:bg-white text-gray-400 hover:text-white",
   outline:
-    "bg-white border-[#050505] hover:border-[#A1A1A1] hover:text-[#A1A1A1] text-[#050505]",
-  text: "bg-none text-[#050505] hover:text-[#A1A1A1] disabled:text-[#DCDDDD] underline-offset-2 font-medium",
+    "bg-white border-gray-800 hover:border-gray-400 hover:text-gray-400 text-gray-800",
+  text: "bg-none text-gray-800 hover:text-gray-400 disabled:text-divider underline-offset-2 font-medium",
   textUnderline:
     "bg-none text-gray-800 hover:text-gray disabled:text-secondary-100 underline-offset-2 underline font-medium",
   quizActivity:
@@ -49,13 +49,13 @@ const COLOR_LOADING = {
   primary: "bg-white",
   info: "bg-white",
   success: "bg-white",
-  secondary: "bg-[#050505]",
+  secondary: "bg-gray-800",
   danger: "bg-white",
   warning: "bg-white",
   light: "bg-white",
   dark: "bg-white",
-  white: "bg-[#A1A1A1]",
-  outline: "bg-[#A1A1A1]",
+  white: "bg-gray-400",
+  outline: "bg-gray-400",
   text: "bg-none",
   textUnderline: "bg-none",
   quizActivity: "bg-white",

@@ -58,7 +58,7 @@ export default function SidebarMobile() {
             </div>
             {/* Divider */}
             <div className="mx-auto w-[calc(100%-48px)] text-center">
-              <Divider className="my-6 bg-[#DCDDDD]" />
+              <Divider className="my-6 bg-divider" />
             </div>
             {/* Menu Items */}
             <MenuItemsList
@@ -68,8 +68,8 @@ export default function SidebarMobile() {
             />
           </div>
           <div>
-            <div className="mx-auto w-[calc(100%-48px)] bg-[#DCDDDD] text-center">
-              <Divider className="mb-8 mt-0 bg-[#DCDDDD]" />
+            <div className="mx-auto w-[calc(100%-48px)] bg-divider text-center">
+              <Divider className="mb-8 mt-0 bg-divider" />
             </div>
             <MenuItemsList
               options={MENU_BOTTOM}

@@ -404,7 +404,7 @@ const VideoDocument = ({
             onClose={() => handleCloseTab?.('')}
             onGoTimeline={handleGoTimeline}
           />
-          <div className="absolute bottom-0 right-0 hidden w-[407px] translate-y-full animate-fade-in-overlay overflow-hidden rounded-lg border border-[#E5E7EB] bg-white py-3 shadow-single-dialog group-hover:block">
+          <div className="absolute bottom-0 right-0 hidden w-[407px] translate-y-full animate-fade-in-overlay overflow-hidden rounded-lg border border-gray-200 bg-white py-3 shadow-single-dialog group-hover:block">
             <div className="h-full max-h-[412px] flex-1 snap-y overflow-y-auto bg-white">
               {timeLine?.map((e, i) => {
                 return (

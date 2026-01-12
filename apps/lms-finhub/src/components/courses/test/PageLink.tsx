@@ -40,7 +40,7 @@ const PageLink = ({
       <li
         className={`${
           type === 'table'
-            ? 'min-h-8 min-w-8 text-[#7E8299]'
+            ? 'min-h-8 min-w-8 text-gray'
             : 'min-h-10 cursor-pointer'
         } flex cursor-pointer items-center justify-center`}
         {...otherProps}
@@ -55,7 +55,7 @@ const PageLink = ({
       <li
         className={`flex items-center justify-center ${
           type === 'table'
-            ? 'min-h-8 min-w-8 text-[#7E8299]'
+            ? 'min-h-8 min-w-8 text-gray'
             : 'min-h-10 text-3xl font-thin leading-[33px] text-[#A1A1A1]'
         }`}
       >
@@ -74,9 +74,9 @@ const PageLink = ({
       ${isViewedProp && type !== 'row' ? 'bg-gray-400 text-white' : ''} 
       ${
         active
-          ? 'border-[#FFB800] bg-primary text-white'
+          ? 'border-primary bg-primary text-white'
           : !isViewedProp
-            ? 'bg-gray-100 text-gray-800 hover:border-[#FFB800] hover:bg-primary hover:text-white'
+            ? 'bg-gray-100 text-gray-800 hover:border-primary hover:bg-primary hover:text-white'
             : 'text-gray-100 hover:bg-primary hover:text-white'
       }`}
       aria-current={active ? 'page' : undefined}

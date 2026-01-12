@@ -286,7 +286,7 @@ const SappModalCerti: React.FC<IProps> = ({
                     <div className="relative bg-white pb-5 md:pb-5">
                       <div className="flex">
                         {customTitle || (
-                          <div className="text-xl font-bold text-[#050505]">
+                          <div className="text-xl font-bold text-gray-800">
                             {title}
                           </div>
                         )}
@@ -294,11 +294,11 @@ const SappModalCerti: React.FC<IProps> = ({
                           className="ml-auto cursor-pointer"
                           onClick={onCancel}
                         >
-                          <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+                          <CloseIcon className="transform stroke-gray-800 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
                         </div>
                       </div>
                       {isBordered && (
-                        <div className="absolute inset-0 bottom-0 -z-10 -mx-6 h-[1px] border-b border-[#DCDDDD]"></div>
+                        <div className="absolute inset-0 bottom-0 -z-10 -mx-6 h-[1px] border-b border"></div>
                       )}
                     </div>
                   ))}
@@ -315,7 +315,7 @@ const SappModalCerti: React.FC<IProps> = ({
                 {showFooter && (
                   <div className={`relative pt-5 md:pt-5 ${footerClassName}`}>
                     {isBordered && (
-                      <div className="absolute left-0 right-0 top-0 -mx-6 border-b border-[#DCDDDD]"></div>
+                      <div className="absolute left-0 right-0 top-0 -mx-6 border-b border"></div>
                     )}
                     {customFooter || (
                       <ButtonCancelSubmit

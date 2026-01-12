@@ -35,7 +35,7 @@ const CalculatorModal = ({
           <div className="flex h-full flex-col p-4">
             <div className="absolute inset-0">
               <div
-                className="modal-header modal-dragger cursor-move flex h-10 w-full items-center justify-between rounded-t-md bg-[#DCDDDD] px-5"
+                className="modal-header modal-dragger cursor-move flex h-10 w-full items-center justify-between rounded-t-md bg-divider px-5"
                 style={{
                   boxShadow: "0 0 10px rgba(0,0,0,0.1)",
                 }}

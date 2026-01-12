@@ -972,7 +972,7 @@ const SAPPVideo = ({
                 >
                   <div className="left-controls flex items-center gap-4 text-white">
                     <button
-                      className="btn-video flex size-6 items-center justify-center rounded bg-[#E5E7EB] before:-right-4 sm:mr-4 sm:size-8"
+                      className="btn-video flex size-6 items-center justify-center rounded bg-gray-200 before:-right-4 sm:mr-4 sm:size-8"
                       data-title="Play"
                       ref={playButtonRef}
                       onClick={() => {

@@ -45,7 +45,7 @@ const SubjectItem = ({
             <div>
               <span className="font-bold text-secondary">{`${data.title} (${data.course_category_name})`}</span>
             </div>
-            <div className="mt-4 text-[#050505]">
+            <div className="mt-4 text-gray-800">
               <div className="w-fit">
                 <div className="flex items-center gap-2">
                   <Icon type="contact" />

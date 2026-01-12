@@ -61,8 +61,8 @@ const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {
         return (
           <tr
             className={clsx({
-              'row h-auto border-b border-dashed border-[#DCDDDD]': true,
-              'text-[#DCDDDD]': !row?.attempts || row?.attempts.length === 0,
+              'row h-auto border-b border-dashed border': true,
+              'text-divider': !row?.attempts || row?.attempts.length === 0,
             })}
             key={row?.id}
           >
@@ -75,7 +75,7 @@ const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {
             <td
               className={clsx(
                 commonDataCellStyle,
-                'font-medium text-[#050505]',
+                'font-medium text-gray-800',
               )}
             >
               {TEST_TYPE_LABELS[row?.quiz_type as keyof typeof TEST_TYPE_LABELS]}
@@ -85,14 +85,14 @@ const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {
             <td
               className={clsx(
                 commonDataCellStyle,
-                'text-center  text-[#050505]',
+                'text-center  text-gray-800',
               )}
             >
               {row?.is_graded ? 'Yes' : 'No'}
             </td>
 
             {/* Status */}
-            <td className={clsx(commonDataCellStyle, ' text-[#050505]')}>
+            <td className={clsx(commonDataCellStyle, ' text-gray-800')}>
               {row?.attempts.length > 0 ? row?.attempts?.[0]?.status : '-'}
             </td>
 
@@ -100,7 +100,7 @@ const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {
             <td
               className={clsx(
                 commonDataCellStyle,
-                'text-center  text-[#050505]',
+                'text-center  text-gray-800',
               )}
             >
               {row?.attempts[0]?.score ?? '-'}
@@ -110,7 +110,7 @@ const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {
             <td
               className={clsx(
                 commonDataCellStyle,
-                'text-center text-[#050505]',
+                'text-center text-gray-800',
               )}
             >
               {getTimeFromInput(row?.attempts[0]?.total_attempt_time)}
@@ -118,7 +118,7 @@ const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {
 
             {/* Last Submission */}
             <td
-              className={clsx('!pr-0', commonDataCellStyle, ' text-[#050505]')}
+              className={clsx('!pr-0', commonDataCellStyle, ' text-gray-800')}
             >
               {row?.attempts.length > 0
                 ? dayjs(row?.attempts[0]?.finished_at).format(

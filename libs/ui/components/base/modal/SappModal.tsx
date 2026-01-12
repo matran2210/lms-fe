@@ -318,7 +318,7 @@ const SappModal: React.FC<IProps> = ({
                       )}
                       <div className="flex">
                         {customTitle || (
-                          <div className="text-xl font-bold text-[#050505]">
+                          <div className="text-xl font-bold text-gray-800">
                             {title}
                           </div>
                         )}
@@ -327,7 +327,7 @@ const SappModal: React.FC<IProps> = ({
                             className="ml-auto cursor-pointer"
                             onClick={onCancel}
                           >
-                            <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+                            <CloseIcon className="transform stroke-gray-800 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
                           </div>
                         )}
                       </div>
