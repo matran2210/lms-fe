@@ -1,5 +1,6 @@
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { CloseIcon, DownloadIcon } from '@lms/assets'
+import { useFeature } from '@lms/contexts'
 import {
   CLASS_SUFFIX_TYPE,
   DEFAULT_PAGE_NUMBER,
@@ -16,6 +17,7 @@ import {
   SAPPVideo,
   TextPreview,
   Tooltip,
+  SAPPAudio,
 } from '@lms/ui'
 import { UploadAPI } from '@pages/api/upload'
 import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
@@ -34,6 +36,7 @@ const ClassResourceTable = ({
   isLoading: boolean
   setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
 }) => {
+  const { videoUrl } = useFeature()
   const router = useRouter()
   const textStyle = 'text-base font-medium text-gray-800'
   const className = 'custom-column-table'
@@ -127,21 +130,6 @@ const ClassResourceTable = ({
       width: 400,
     },
     {
-      title: 'Location',
-      dataIndex: 'location',
-      key: 'location',
-      className: clsx(className),
-      align: 'center',
-      render: (location) => (
-        <NameNoActionCell
-          isCenter
-          dataColumn={location}
-          className="text-base text-gray-400"
-        />
-      ),
-      width: 300,
-    },
-    {
       title: '',
       key: 'actions',
       className: className,
@@ -181,14 +169,35 @@ const ClassResourceTable = ({
   }
 
   const renderPreviewContent = (resource: IClassResource) => {
+    const videoUrl = process.env.NEXT_PUBLIC_VIDEO_URL as string
     switch (resource.suffix_type) {
       case 'VIDEO':
+      case 'AUDIO':
         return (
           <SAPPVideo
             isFetchCaptions={false}
             streamRef={internalRef}
-            options={{ src: resource.sub_url }}
+            options={{
+              src: resource.url
+                ? resource.url
+                    .replace(videoUrl || '', '')
+                    .replace('/manifest/video.m3u8', '')
+                : resource.sub_url,
+            }}
           ></SAPPVideo>
+        )
+      case 'AUDIO':
+        return (
+          <SAPPAudio
+            streamRef={internalRef}
+            options={{
+              src: resource.url
+                ? resource.url
+                    .replace(videoUrl || '', '')
+                    .replace('/manifest/video.m3u8', '')
+                : resource.sub_url,
+            }}
+          ></SAPPAudio>
         )
       case 'SHEET':
       case 'WORD_DOCUMENT':
@@ -265,8 +274,21 @@ const ClassResourceTable = ({
             modalIndex={1}
             title={previewResource.name}
             width={900}
-            height={548}
-            className={clsx('!z-40 !rounded-lg')}
+            height={previewResource.suffix_type === 'AUDIO' ? 100 : 548}
+            minHeight={
+              previewResource.suffix_type === 'AUDIO' ? 100 : undefined
+            }
+            maxHeight={
+              previewResource.suffix_type === 'AUDIO' ? 100 : undefined
+            }
+            minWidth={
+              ['AUDIO', 'VIDEO'].includes(previewResource.suffix_type)
+                ? 430
+                : undefined
+            }
+            className={clsx('!z-40 !rounded-lg', {
+              '!overflow-visible': previewResource.suffix_type === 'AUDIO',
+            })}
             position="center"
             handleCloseScratchPad={() => {
               setOpenPreview(false)
@@ -279,6 +301,10 @@ const ClassResourceTable = ({
                 </div>
                 <button
                   onClick={() => {
+                    setOpenPreview(false)
+                    setPreviewResource(null)
+                  }}
+                  onTouchEnd={() => {
                     setOpenPreview(false)
                     setPreviewResource(null)
                   }}

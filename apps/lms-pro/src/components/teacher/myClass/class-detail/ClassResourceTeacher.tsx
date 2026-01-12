@@ -1,6 +1,7 @@
 import ClassResourceTeacherFilter from '@components/teacher/components/ClassResourceTeacherFilter'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { CloseIcon, DownloadIcon } from '@lms/assets'
+import { useFeature } from '@lms/contexts'
 import {
   CLASS_SUFFIX_TYPE,
   ClassKey,
@@ -30,6 +31,7 @@ import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 export default function ClassResourceTeacher() {
+  const { videoUrl } = useFeature()
   const router = useRouter()
   const internalRef = useRef<HTMLVideoElement>(null)
   const { control, reset, getValues } = useForm()
@@ -157,16 +159,6 @@ export default function ClassResourceTeacher() {
         )),
     },
     {
-      title: 'Location',
-      render: (record: IClassResource) => (
-        <Tooltip placement="bottomLeft" title={record?.location}>
-          <div className={clsx(textTruncateStyle, 'font-normal')}>
-            {record?.location}
-          </div>
-        </Tooltip>
-      ),
-    },
-    {
       title: '',
       render: (record: IClassResource) => {
         const allowDownload = canDownload(record, isTeacher)
@@ -206,11 +198,18 @@ export default function ClassResourceTeacher() {
   const renderPreviewContent = (resource: IClassResource) => {
     switch (resource.suffix_type) {
       case 'VIDEO':
+      case 'AUDIO':
         return (
           <SAPPVideo
             isFetchCaptions={false}
             streamRef={internalRef}
-            options={{ src: resource.sub_url }}
+            options={{
+              src: resource.url
+                ? resource.url
+                    .replace(videoUrl || '', '')
+                    .replace('/manifest/video.m3u8', '')
+                : resource.sub_url,
+            }}
           ></SAPPVideo>
         )
       case 'SHEET':
@@ -272,8 +271,21 @@ export default function ClassResourceTeacher() {
             modalIndex={1}
             title={previewResource.name}
             width={900}
-            height={548}
-            className={clsx('!z-40 !rounded-lg')}
+            height={previewResource.suffix_type === 'AUDIO' ? 100 : 548}
+            minHeight={
+              previewResource.suffix_type === 'AUDIO' ? 100 : undefined
+            }
+            maxHeight={
+              previewResource.suffix_type === 'AUDIO' ? 100 : undefined
+            }
+            minWidth={
+              ['AUDIO', 'VIDEO'].includes(previewResource.suffix_type)
+                ? 430
+                : undefined
+            }
+            className={clsx('!z-40 !rounded-lg', {
+              '!overflow-visible': previewResource.suffix_type === 'AUDIO',
+            })}
             position="center"
             handleCloseScratchPad={() => {
               setOpenPreview(false)
