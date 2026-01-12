@@ -444,6 +444,7 @@ const TestModalTeacher = ({
       !data?.quiz?.attempt ||
       data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count ? (
         <SappModalV3
+          handleClose={() => setOpen(false)}
           title={
             <div className="flex items-center justify-between gap-2">
               <div>
@@ -492,7 +493,7 @@ const TestModalTeacher = ({
             renderShowOkButton() &&
             renderOkButtonCaption() === "Continue" &&
             data?.quiz?.attempt?.number_of_attempts ===
-              data?.quiz?.limit_count && (
+                data?.quiz?.limit_count && (
               <div className="mt-8 text-center text-base !font-normal text-gray">
                 <div>Your last attempt was unexpectedly ended.</div>
                 <div>{"Please click 'Continue' to proceed with the test."}</div>

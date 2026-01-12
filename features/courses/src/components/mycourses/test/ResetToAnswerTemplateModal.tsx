@@ -1,10 +1,10 @@
-import { AlertTriagle } from '@lms/assets'
-import { SappModalV3 } from '@lms/ui'
+import { AlertTriagle } from "@lms/assets";
+import { SappModalV3 } from "@lms/ui";
 
 interface IProps {
-  open: boolean
-  handleReset: () => void
-  handleClose: () => void
+  open: boolean;
+  handleReset: () => void;
+  handleClose: () => void;
 }
 
 const ResetToAnswerTemplateModal = ({
@@ -13,12 +13,13 @@ const ResetToAnswerTemplateModal = ({
   handleClose,
 }: IProps) => {
   const onSubmit = () => {
-    handleReset()
-    handleClose()
-  }
+    handleReset();
+    handleClose();
+  };
 
   return (
     <SappModalV3
+      handleClose={() => handleClose()}
       open={open}
       cancelButtonCaption="Keep Doing"
       okButtonCaption="Confirm"
@@ -29,10 +30,10 @@ const ResetToAnswerTemplateModal = ({
       icon={<AlertTriagle />}
       header="Are you sure?"
       content={
-        'Are you sure you want to reset the template? If you do, all of your previous work will be deleted and you will have to start over.'
+        "Are you sure you want to reset the template? If you do, all of your previous work will be deleted and you will have to start over."
       }
     />
-  )
-}
+  );
+};
 
-export default ResetToAnswerTemplateModal
+export default ResetToAnswerTemplateModal;

@@ -29,6 +29,61 @@ interface ICertificate {
   received_times: string;
 }
 
+const Skeleton = ({ className }: { className?: string }) => (
+  <div className={clsx("animate-pulse rounded bg-gray-200", className)} />
+);
+const CertificateRowSkeleton = () => {
+  return (
+    <div className="grid grid-cols-[1.6fr_0.6fr_1fr_0.5fr] items-center gap-4 py-5">
+      {/* Certificate column */}
+      <div className="flex items-center gap-4">
+        {/* Thumbnail */}
+        <Skeleton className="h-12 w-20 rounded-md" />
+
+        {/* Course name */}
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-4 w-44" />
+          <Skeleton className="h-3 w-28" />
+        </div>
+      </div>
+
+      {/* Grade */}
+      <Skeleton className="mx-auto h-4 w-12" />
+
+      {/* Certificate received */}
+      <Skeleton className="mx-auto h-4 w-32" />
+
+      {/* Actions */}
+      <div className="flex justify-center gap-3">
+        <Skeleton className="h-5 w-5 rounded-full" />
+        <Skeleton className="h-5 w-5 rounded-full" />
+      </div>
+    </div>
+  );
+};
+const CertificateHeaderSkeleton = () => (
+  <div className="grid grid-cols-[1.6fr_0.6fr_1fr_0.5fr] gap-4 border-b pb-4">
+    <Skeleton className="h-4 w-28" />
+    <Skeleton className="mx-auto h-4 w-20" />
+    <Skeleton className="mx-auto h-4 w-28" />
+    <Skeleton className="mx-auto h-4 w-16" />
+  </div>
+);
+
+const CertificateTableSkeleton = ({ rows = 6 }: { rows?: number }) => {
+  return (
+    <div className="rounded-2xl bg-[#fefefe] px-6 py-4 mb-6 mt-0 md:mb-0 md:mt-8 lg:mt-10">
+      <CertificateHeaderSkeleton />
+
+      {Array.from({ length: rows }).map((_, i) => (
+        <div key={i} className={clsx("border-b last:border-b-0 bg-[#fefefe]")}>
+          <CertificateRowSkeleton />
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const Certificate = () => {
   const { authApi } = useFeature();
   const { downloadImage } = useDownloadImage();
@@ -138,6 +193,9 @@ const Certificate = () => {
     },
   ];
 
+  if (!certificateData) {
+    return <CertificateTableSkeleton />;
+  }
   return (
     <div className="mb-6 mt-0 md:mb-0 md:mt-8 lg:mt-10">
       {certificateData && !certificateData?.length ? (

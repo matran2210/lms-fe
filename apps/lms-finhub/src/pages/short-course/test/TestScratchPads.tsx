@@ -80,21 +80,24 @@ const TestScratchPads = ({
     } else if (e.type === 'scratch_pad') {
       return (
         <ModalResizeable
-          position="center left"
+          position="center"
           key={currentPage}
-          header={
+          header={({ requestClose }) => (
             <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
               <div className="text-sm font-semibold text-gray-800">
                 Scratch Pad
               </div>
               <button
                 className="text-icon"
-                onClick={() => handleCloseScratchPad(e)}
+                onClick={() => {
+                  requestClose()
+                  setTimeout(() => handleCloseScratchPad(e), 300)
+                }}
               >
                 <CloseIconNote />
               </button>
             </div>
-          }
+          )}
           handleCloseScratchPad={() => {
             handleCloseScratchPad(e)
           }}
@@ -125,8 +128,8 @@ const TestScratchPads = ({
         <ModalResizeable
           key={e.id}
           handleCloseScratchPad={() => handleCloseScratchPad(e)}
-          position="center left"
-          header={
+          position="center"
+          header={({ requestClose }) => (
             <div className="relative">
               <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                 <div className="truncate">
@@ -138,12 +141,15 @@ const TestScratchPads = ({
               </div>
               <button
                 className="absolute right-3 top-2"
-                onClick={() => handleCloseScratchPad(e)}
+                onClick={() => {
+                  requestClose()
+                  setTimeout(() => handleCloseScratchPad(e), 300)
+                }}
               >
                 <CloseIcon />
               </button>
             </div>
-          }
+          )}
         >
           <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
             <EditorReader

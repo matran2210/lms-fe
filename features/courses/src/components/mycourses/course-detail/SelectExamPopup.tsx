@@ -124,6 +124,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
 
   return (
     <SappModalV3
+      handleClose={() => setExamModal(false)}
       open={examModal}
       handleCancel={() => setExamModal(false)}
       onOk={

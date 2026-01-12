@@ -6,10 +6,9 @@ import {
   useAppSelector,
 } from "@lms/contexts";
 import { SappModalV3 } from "@lms/ui";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useMemo } from "react";
 
 const PopUpRemindEntrance = ({
-  setOpenFillForm,
   setOpenTest,
 }: {
   setOpenFillForm: Dispatch<SetStateAction<boolean>>;
@@ -17,7 +16,8 @@ const PopUpRemindEntrance = ({
 }) => {
   const { shouldShowRemind, count } = useAppSelector(entranceTestReducer);
   const dispatch = useAppDispatch();
-  const getEnstranceTest = localStorage.getItem("enstranceTest");
+  const getEntranceTest = localStorage.getItem("enstranceTest");
+  const openModal =  useMemo(() => shouldShowRemind && getEntranceTest === "true", [shouldShowRemind]);
   const onCancel = () => {
     dispatch(closeShowRemindEntrance());
     localStorage.setItem("enstranceTest", "false");
@@ -30,7 +30,7 @@ const PopUpRemindEntrance = ({
 
   return (
     <SappModalV3
-      open={shouldShowRemind && getEnstranceTest === "true"}
+      open={openModal}
       cancelButtonCaption="Close"
       okButtonCaption="Take Your Test"
       handleCancel={onCancel}

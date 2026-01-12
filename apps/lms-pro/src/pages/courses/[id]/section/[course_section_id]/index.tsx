@@ -684,16 +684,14 @@ const CoursePartDetail = () => {
             </div>
           </div>
         </SappDrawerV3>
-        {open && (
-          <TestModal
-            open={open}
-            setOpen={setOpen}
-            data={chapterData}
-            class_user_id={previewPart?.class_user_id}
-            activeCourse={() => {}}
-            is_passed_course={isPassedCourse}
-          />
-        )}
+        <TestModal
+          open={open}
+          setOpen={setOpen}
+          data={chapterData}
+          class_user_id={previewPart?.class_user_id}
+          activeCourse={() => {}}
+          is_passed_course={isPassedCourse}
+        />
         <LearningResource
           open={openResource}
           setOpenResource={setOpenResource}

@@ -1158,6 +1158,7 @@ const QuizDocument = ({
       })}
     >
       <SappModalV3
+        handleClose={() => setOpenUnsubmitWarning(false)}
         open={openUnsubmitWarning}
         setOpen={setOpenUnsubmitWarning}
         onOk={handleFinishQuiz}
@@ -1174,7 +1175,7 @@ const QuizDocument = ({
           <AlertTriagle />
         </div>
         <div className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-8 md:text-[32px]">
-          Are you sure?
+          Are you sure ?
         </div>
         <div className="text-center text-sm md:text-base">
           <span className="text-center font-normal text-gray-800">

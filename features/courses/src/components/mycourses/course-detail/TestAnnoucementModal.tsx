@@ -1,13 +1,13 @@
-import { AlertTriagle } from '@lms/assets'
-import { SappModalV3 } from '@lms/ui'
-import dayjs from 'dayjs'
-import { SOCIAL_LINK } from '@lms/core'
+import { AlertTriagle } from "@lms/assets";
+import { SappModalV3 } from "@lms/ui";
+import dayjs from "dayjs";
+import { SOCIAL_LINK } from "@lms/core";
 
 interface IProps {
-  open: boolean
-  handleCancel: () => void
-  type?: 'NOT_OPEN_YET' | 'EXPIRED'
-  start_time?: string
+  open: boolean;
+  handleCancel: () => void;
+  type?: "NOT_OPEN_YET" | "EXPIRED";
+  start_time?: string;
 }
 
 const TestAnnouncementModal = ({
@@ -17,15 +17,16 @@ const TestAnnouncementModal = ({
   start_time,
 }: IProps) => {
   // TEST EXPIRED
-  if (type === 'EXPIRED') {
+  if (type === "EXPIRED") {
     return (
       <SappModalV3
         open={open}
+        handleClose={() => handleCancel()}
         showCancelButton={false}
         cancelButtonCaption="Quit"
-        header={'Test Expired'}
+        header={"Test Expired"}
         buttonSize="extra"
-        okButtonCaption={'Quit'}
+        okButtonCaption={"Quit"}
         fullWidthBtn
         icon={<AlertTriagle />}
         handleCancel={handleCancel}
@@ -33,7 +34,7 @@ const TestAnnouncementModal = ({
       >
         <p className="mt-6">
           The time for this test has ended, you can no longer submit answers.
-          For further support, please contact SAPP Academy via{' '}
+          For further support, please contact SAPP Academy via{" "}
           <a
             href={SOCIAL_LINK.FACEBOOK}
             className="text-primary"
@@ -45,11 +46,11 @@ const TestAnnouncementModal = ({
           , or hotline <span className="text-primary">19002225</span>.
         </p>
       </SappModalV3>
-    )
+    );
   }
 
   // TEST UNOPENED
-  if (type === 'NOT_OPEN_YET') {
+  if (type === "NOT_OPEN_YET") {
     return (
       <SappModalV3
         open={open}
@@ -57,20 +58,20 @@ const TestAnnouncementModal = ({
         handleCancel={handleCancel}
         onOk={handleCancel}
         buttonSize="extra"
-        okButtonCaption={'Quit'}
+        okButtonCaption={"Quit"}
         fullWidthBtn
         icon={<AlertTriagle />}
-        header={'Unopened Test'}
+        header={"Unopened Test"}
       >
         <p className="mt-5 text-center text-[#A1A1A1]">
-          This test will be opened at{' '}
+          This test will be opened at{" "}
           <span className="font-bold text-primary">
-            {dayjs(start_time).format('DD/MM/YYYY HH:mm:ss')}
+            {dayjs(start_time).format("DD/MM/YYYY HH:mm:ss")}
           </span>
         </p>
       </SappModalV3>
-    )
+    );
   }
-}
+};
 
-export default TestAnnouncementModal
+export default TestAnnouncementModal;

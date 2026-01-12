@@ -43,6 +43,7 @@ const PopupSelectRetakeOrContinueAttempt = ({
   }
   return (
     <SappModalV3
+      handleClose={() => setOpen(false)}
       open={open}
       okButtonCaption="Continue"
       cancelButtonCaption={'Cancel'}

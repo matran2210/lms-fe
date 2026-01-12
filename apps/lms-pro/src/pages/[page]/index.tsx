@@ -80,6 +80,11 @@ const ProfilePage = () => {
     })
   const { setOpenSidebar } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
+
+  // Animation states
+  const [activeTab, setActiveTab] = useState('my-profile')
+  const [tabAnimating, setTabAnimating] = useState(false)
+
   const onOpenFullScreenMobile = (title: string, children: React.ReactNode) => {
     setOpenFullScreenMobile({
       open: true,
@@ -129,6 +134,17 @@ const ProfilePage = () => {
     setListDevices(res)
   }
 
+  const handleTabChange = (newTab: string) => {
+    if (newTab === activeTab) return
+
+    setTabAnimating(true)
+    setActiveTab(newTab)
+
+    setTimeout(() => {
+      setTabAnimating(false)
+    }, 500)
+  }
+
   useEffect(() => {
     dispatch(
       getLoginHistory({
@@ -141,25 +157,51 @@ const ProfilePage = () => {
     getListDevices()
   }, [])
 
+  const getTabContent = (key: string) => {
+    switch (key) {
+      case 'my-profile':
+        return (
+          <>
+            <MyProfile
+              isEdit={isEdit}
+              setIsEdit={setIsEdit}
+              avatar={avatar}
+              handleSetAvatar={handleSetAvatar}
+              setReViewImageSrc={setReViewImageSrc}
+              appType={AppType.LMS_PRO}
+            />
+            <SubjectList isEdit={isEdit} />
+            <ProfileList isEdit={isEdit} />
+          </>
+        )
+      case 'certificates':
+        return <Certificate />
+      case 'setting':
+        return <Settings />
+      case 'sercurity':
+        return (
+          <>
+            {isChangePassword ? (
+              <ChangePassword handleCancel={() => setIsChangePassword(false)} />
+            ) : (
+              <div className="flex flex-col">
+                <MyPasword setIsChangePassword={setIsChangePassword} />
+                <DeviceList />
+                <LoginHistoryList />
+              </div>
+            )}
+          </>
+        )
+      default:
+        return null
+    }
+  }
+
   const items = [
     {
       key: 'my-profile',
       label: (
         <TabHeaderItem icon={<Icon type="my-profile" />} title="My profile" />
-      ),
-      children: (
-        <>
-          <MyProfile
-            isEdit={isEdit}
-            setIsEdit={setIsEdit}
-            avatar={avatar}
-            handleSetAvatar={handleSetAvatar}
-            setReViewImageSrc={setReViewImageSrc}
-            appType={AppType.LMS_PRO}
-          />
-          <SubjectList isEdit={isEdit} />
-          <ProfileList isEdit={isEdit} />
-        </>
       ),
     },
     {
@@ -170,30 +212,15 @@ const ProfilePage = () => {
           title="Certificates"
         />
       ),
-      children: <Certificate />,
     },
     {
       key: 'setting',
       label: <TabHeaderItem icon={<Icon type="setting" />} title="Setting" />,
-      children: <Settings />,
     },
     {
       key: 'sercurity',
       label: (
         <TabHeaderItem icon={<Icon type="sercurity" />} title="Security" />
-      ),
-      children: (
-        <>
-          {isChangePassword ? (
-            <ChangePassword handleCancel={() => setIsChangePassword(false)} />
-          ) : (
-            <div className="flex flex-col">
-              <MyPasword setIsChangePassword={setIsChangePassword} />
-              <DeviceList />
-              <LoginHistoryList />
-            </div>
-          )}
-        </>
       ),
     },
   ]
@@ -373,9 +400,27 @@ const ProfilePage = () => {
                     </div>
                   }
                   className="sapp-tabs-profile hidden md:block"
-                  defaultActiveKey="my-profile"
+                  activeKey={activeTab}
+                  onChange={handleTabChange}
                   items={items}
+                  renderTabBar={(props, DefaultTabBar) => (
+                    <DefaultTabBar {...props} />
+                  )}
                 />
+
+                {/* Tab content with animation */}
+                <div className="tab-content-container relative hidden md:block">
+                  {/* Current tab - sliding in */}
+                  <div
+                    key={activeTab}
+                    className={clsx(
+                      'tab-content',
+                      tabAnimating && 'tab-content-enter',
+                    )}
+                  >
+                    {getTabContent(activeTab)}
+                  </div>
+                </div>
 
                 <div className="flex flex-col gap-3 md:hidden">
                   {mobileOverviewItems.map((item, index) => (
