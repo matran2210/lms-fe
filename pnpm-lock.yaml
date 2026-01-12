@@ -25,10 +25,10 @@ importers:
         version: 3.10.0(react-hook-form@7.48.2(react@18.2.0))
       '@sapp-fe/explanation-package':
         specifier: ^1.5.5
-        version: 1.5.5(@babel/core@7.28.5)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))(webpack@5.104.1)
+        version: 1.5.5(@babel/core@7.28.5)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1)
       '@sapp-fe/sapp-common-package':
         specifier: ^1.6.16
-        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))(webpack@5.104.1)
+        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1)
       antd:
         specifier: ^5.25.0
         version: 5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -61,20 +61,20 @@ importers:
         version: 3.39.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       styled-components:
         specifier: ^6.1.19
-        version: 6.2.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 6.3.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
     devDependencies:
       '@tailwindcss/aspect-ratio':
         specifier: ^0.4.2
-        version: 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6)))
+        version: 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))
       '@tailwindcss/forms':
         specifier: ^0.5.10
-        version: 0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6)))
+        version: 0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))
       '@types/lodash':
         specifier: ^4.17.20
-        version: 4.17.22
+        version: 4.17.23
       '@types/node':
         specifier: ^24.10.1
-        version: 24.10.6
+        version: 24.10.7
       '@types/react':
         specifier: 18.2.21
         version: 18.2.21
@@ -113,7 +113,7 @@ importers:
         version: 0.6.14(prettier@3.7.4)
       turbo:
         specifier: ^2.5.1
-        version: 2.7.3
+        version: 2.7.4
       typescript:
         specifier: 5.1.6
         version: 5.1.6
@@ -390,7 +390,7 @@ importers:
         version: 3.2.0
       '@types/lodash':
         specifier: ^4.14.202
-        version: 4.17.22
+        version: 4.17.23
       '@types/node':
         specifier: ^18.0.0
         version: 18.19.130
@@ -736,7 +736,7 @@ importers:
         version: 3.2.0
       '@types/lodash':
         specifier: ^4.14.202
-        version: 4.17.22
+        version: 4.17.23
       '@types/node':
         specifier: ^18.19.130
         version: 18.19.130
@@ -799,7 +799,7 @@ importers:
     dependencies:
       '@hookform/resolvers':
         specifier: ^3.9.0
-        version: 3.10.0(react-hook-form@7.70.0(react@18.2.0))
+        version: 3.10.0(react-hook-form@7.71.0(react@18.2.0))
       '@lottiefiles/react-lottie-player':
         specifier: ^3.6.0
         version: 3.6.0(react@18.2.0)
@@ -808,10 +808,10 @@ importers:
         version: 2.2.0(react-native@0.83.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))
       '@tailwindcss/aspect-ratio':
         specifier: ^0.4.2
-        version: 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.9.3)))
+        version: 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3)))
       '@tailwindcss/forms':
         specifier: ^0.5.10
-        version: 0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.9.3)))
+        version: 0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3)))
       '@zoom/meetingsdk':
         specifier: ^3.13.2
         version: 3.13.2(lodash@4.17.21)(react-dom@18.2.0(react@18.2.0))(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.5)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0)(redux-thunk@2.4.2(redux@4.2.1))(redux@4.2.1)
@@ -847,13 +847,13 @@ importers:
         version: 18.2.0(react@18.2.0)
       react-hook-form:
         specifier: ^7.53.0
-        version: 7.70.0(react@18.2.0)
+        version: 7.71.0(react@18.2.0)
       react-hot-toast:
         specifier: ^2.4.1
         version: 2.6.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       tailwindcss:
         specifier: ^3.4.10
-        version: 3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.9.3))
+        version: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3))
       zod:
         specifier: ^3.23.8
         version: 3.25.76
@@ -863,7 +863,7 @@ importers:
         version: 5.4.1(@next/eslint-plugin-next@14.2.35)(@vue/compiler-sfc@3.5.26)(eslint-plugin-jsx-a11y@6.10.2(eslint@8.57.1))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.1))(eslint@8.57.1)(typescript@5.9.3)
       '@commitlint/cli':
         specifier: ^19.8.1
-        version: 19.8.1(@types/node@24.10.6)(typescript@5.9.3)
+        version: 19.8.1(@types/node@24.10.7)(typescript@5.9.3)
       '@commitlint/config-conventional':
         specifier: ^19.8.1
         version: 19.8.1
@@ -902,7 +902,7 @@ importers:
         version: 6.10.2(eslint@8.57.1)
       eslint-plugin-playwright:
         specifier: ^2.2.1
-        version: 2.4.1(eslint@8.57.1)
+        version: 2.5.0(eslint@8.57.1)
       eslint-plugin-prettier:
         specifier: ^5.1.3
         version: 5.5.4(@types/eslint@9.6.1)(eslint-config-prettier@9.1.2(eslint@8.57.1))(eslint@8.57.1)(prettier@3.7.4)
@@ -914,7 +914,7 @@ importers:
         version: 12.1.1(eslint@8.57.1)
       eslint-plugin-tailwindcss:
         specifier: ^3.17.4
-        version: 3.18.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.9.3)))
+        version: 3.18.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3)))
       eslint-plugin-testing-library:
         specifier: ^7.6.3
         version: 7.15.4(eslint@8.57.1)(typescript@5.9.3)
@@ -980,7 +980,7 @@ importers:
         version: link:../../libs/utils
       '@sapp-fe/sapp-common-package':
         specifier: ^1.6.16
-        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))(webpack@5.104.1)
+        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1)
       antd:
         specifier: ^5.25.0
         version: 5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -1037,7 +1037,7 @@ importers:
         version: link:../../libs/utils
       '@sapp-fe/explanation-package':
         specifier: ^1.5.5
-        version: 1.5.5(@babel/core@7.28.5)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))(webpack@5.104.1)
+        version: 1.5.5(@babel/core@7.28.5)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1)
       '@sapp-fe/quiz-result-package':
         specifier: ^1.5.0
         version: 1.6.0(@babel/core@7.28.5)(antd@5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
@@ -1267,7 +1267,7 @@ importers:
     dependencies:
       '@sapp-fe/sapp-common-package':
         specifier: ^1.6.16
-        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))(webpack@5.104.1)
+        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1)
       antd:
         specifier: ^5.25.0
         version: 5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -1389,10 +1389,10 @@ importers:
         version: 2.0.2(react@18.2.0)
       '@sapp-fe/sapp-common-package':
         specifier: ^1.6.16
-        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))(webpack@5.104.1)
+        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1)
       '@sapp-fe/sapp-notification':
         specifier: ^1.2.2
-        version: 1.2.3(antd@5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6)))
+        version: 1.2.3(antd@5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))
       '@xyflow/react':
         specifier: ^12.8.6
         version: 12.10.0(@types/react@18.2.21)(immer@10.2.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -1498,13 +1498,13 @@ importers:
     dependencies:
       '@tailwindcss/aspect-ratio':
         specifier: ^0.4.2
-        version: 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6)))
+        version: 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))
       '@tailwindcss/forms':
         specifier: ^0.5.6
-        version: 0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6)))
+        version: 0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))
       tailwindcss:
         specifier: 3.4.17
-        version: 3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))
+        version: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))
     devDependencies:
       '@lms/typescript-config':
         specifier: workspace:*
@@ -2706,14 +2706,8 @@ packages:
   '@emotion/hash@0.9.2':
     resolution: {integrity: sha512-MyqliTZGuOm3+5ZRSaaBGP3USLw6+EGykkwZns2EPC5g8jJ4z9OrdZY9apkl3+UP9+sdz76YYkwCKP5gh8iY3g==}
 
-  '@emotion/is-prop-valid@1.2.2':
-    resolution: {integrity: sha512-uNsoYd37AFmaCdXlg6EYD1KaPOaRWRByMCYzbKUX4+hhMfrxdVSelShywL4JVaAeM/eHUOSprYBQls+/neX3pw==}
-
   '@emotion/is-prop-valid@1.4.0':
     resolution: {integrity: sha512-QgD4fyscGcbbKwJmqNvUMSE02OsHUa+lAWKdEUIJKgqe5IwRSKd7+KhibEWdaKwgjLj0DRSHA9biAIqGBk05lw==}
-
-  '@emotion/memoize@0.8.1':
-    resolution: {integrity: sha512-W2P2c/VRW1/1tLox0mVUalvnWXxavmv/Oum2aPsRcoDJuob75FC3Y8FbpfLwUegRcxINtGUMPq0tFCvYNTBXNA==}
 
   '@emotion/memoize@0.9.0':
     resolution: {integrity: sha512-30FAj7/EoJ5mwVPOWhAyCX+FPfMDrVecJAM+Iw9NRoSl4BBAQeqj4cApHHUXOVvIPgLVDsCFoz/hGD+5QQD1GQ==}
@@ -2741,9 +2735,6 @@ packages:
 
   '@emotion/unitless@0.7.5':
     resolution: {integrity: sha512-OWORNpfjMsSSUBVrRBVGECkhWcULOAJz9ZW8uK9qgxD+87M7jHRcvh/A96XXNhXTLmKcoYSQtBEX7lHMO7YRwg==}
-
-  '@emotion/unitless@0.8.1':
-    resolution: {integrity: sha512-KOEGMu6dmJZtpadb476IsZBclKvILjopjUii3V+7MnXIQCYh8W3NgNcgwo21n9LXZX6EDIKvqfjYxXebDwxKmQ==}
 
   '@emotion/use-insertion-effect-with-fallbacks@1.2.0':
     resolution: {integrity: sha512-yJMtVdH59sxi/aVJBpk9FQq+OR8ll5GT8oWd57UpeaKEVGab41JWaCFA7FRLoMLloOZF/c/wsPoe+bfGmRKgDg==}
@@ -3776,86 +3767,86 @@ packages:
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
 
-  '@parcel/watcher-android-arm64@2.5.1':
-    resolution: {integrity: sha512-KF8+j9nNbUN8vzOFDpRMsaKBHZ/mcjEjMToVMJOhTozkDonQFFrRcfdLWn6yWKCmJKmdVxSgHiYvTCef4/qcBA==}
+  '@parcel/watcher-android-arm64@2.5.4':
+    resolution: {integrity: sha512-hoh0vx4v+b3BNI7Cjoy2/B0ARqcwVNrzN/n7DLq9ZB4I3lrsvhrkCViJyfTj/Qi5xM9YFiH4AmHGK6pgH1ss7g==}
     engines: {node: '>= 10.0.0'}
     cpu: [arm64]
     os: [android]
 
-  '@parcel/watcher-darwin-arm64@2.5.1':
-    resolution: {integrity: sha512-eAzPv5osDmZyBhou8PoF4i6RQXAfeKL9tjb3QzYuccXFMQU0ruIc/POh30ePnaOyD1UXdlKguHBmsTs53tVoPw==}
+  '@parcel/watcher-darwin-arm64@2.5.4':
+    resolution: {integrity: sha512-kphKy377pZiWpAOyTgQYPE5/XEKVMaj6VUjKT5VkNyUJlr2qZAn8gIc7CPzx+kbhvqHDT9d7EqdOqRXT6vk0zw==}
     engines: {node: '>= 10.0.0'}
     cpu: [arm64]
     os: [darwin]
 
-  '@parcel/watcher-darwin-x64@2.5.1':
-    resolution: {integrity: sha512-1ZXDthrnNmwv10A0/3AJNZ9JGlzrF82i3gNQcWOzd7nJ8aj+ILyW1MTxVk35Db0u91oD5Nlk9MBiujMlwmeXZg==}
+  '@parcel/watcher-darwin-x64@2.5.4':
+    resolution: {integrity: sha512-UKaQFhCtNJW1A9YyVz3Ju7ydf6QgrpNQfRZ35wNKUhTQ3dxJ/3MULXN5JN/0Z80V/KUBDGa3RZaKq1EQT2a2gg==}
     engines: {node: '>= 10.0.0'}
     cpu: [x64]
     os: [darwin]
 
-  '@parcel/watcher-freebsd-x64@2.5.1':
-    resolution: {integrity: sha512-SI4eljM7Flp9yPuKi8W0ird8TI/JK6CSxju3NojVI6BjHsTyK7zxA9urjVjEKJ5MBYC+bLmMcbAWlZ+rFkLpJQ==}
+  '@parcel/watcher-freebsd-x64@2.5.4':
+    resolution: {integrity: sha512-Dib0Wv3Ow/m2/ttvLdeI2DBXloO7t3Z0oCp4bAb2aqyqOjKPPGrg10pMJJAQ7tt8P4V2rwYwywkDhUia/FgS+Q==}
     engines: {node: '>= 10.0.0'}
     cpu: [x64]
     os: [freebsd]
 
-  '@parcel/watcher-linux-arm-glibc@2.5.1':
-    resolution: {integrity: sha512-RCdZlEyTs8geyBkkcnPWvtXLY44BCeZKmGYRtSgtwwnHR4dxfHRG3gR99XdMEdQ7KeiDdasJwwvNSF5jKtDwdA==}
+  '@parcel/watcher-linux-arm-glibc@2.5.4':
+    resolution: {integrity: sha512-I5Vb769pdf7Q7Sf4KNy8Pogl/URRCKu9ImMmnVKYayhynuyGYMzuI4UOWnegQNa2sGpsPSbzDsqbHNMyeyPCgw==}
     engines: {node: '>= 10.0.0'}
     cpu: [arm]
     os: [linux]
 
-  '@parcel/watcher-linux-arm-musl@2.5.1':
-    resolution: {integrity: sha512-6E+m/Mm1t1yhB8X412stiKFG3XykmgdIOqhjWj+VL8oHkKABfu/gjFj8DvLrYVHSBNC+/u5PeNrujiSQ1zwd1Q==}
+  '@parcel/watcher-linux-arm-musl@2.5.4':
+    resolution: {integrity: sha512-kGO8RPvVrcAotV4QcWh8kZuHr9bXi9a3bSZw7kFarYR0+fGliU7hd/zevhjw8fnvIKG3J9EO5G6sXNGCSNMYPQ==}
     engines: {node: '>= 10.0.0'}
     cpu: [arm]
     os: [linux]
 
-  '@parcel/watcher-linux-arm64-glibc@2.5.1':
-    resolution: {integrity: sha512-LrGp+f02yU3BN9A+DGuY3v3bmnFUggAITBGriZHUREfNEzZh/GO06FF5u2kx8x+GBEUYfyTGamol4j3m9ANe8w==}
+  '@parcel/watcher-linux-arm64-glibc@2.5.4':
+    resolution: {integrity: sha512-KU75aooXhqGFY2W5/p8DYYHt4hrjHZod8AhcGAmhzPn/etTa+lYCDB2b1sJy3sWJ8ahFVTdy+EbqSBvMx3iFlw==}
     engines: {node: '>= 10.0.0'}
     cpu: [arm64]
     os: [linux]
 
-  '@parcel/watcher-linux-arm64-musl@2.5.1':
-    resolution: {integrity: sha512-cFOjABi92pMYRXS7AcQv9/M1YuKRw8SZniCDw0ssQb/noPkRzA+HBDkwmyOJYp5wXcsTrhxO0zq1U11cK9jsFg==}
+  '@parcel/watcher-linux-arm64-musl@2.5.4':
+    resolution: {integrity: sha512-Qx8uNiIekVutnzbVdrgSanM+cbpDD3boB1f8vMtnuG5Zau4/bdDbXyKwIn0ToqFhIuob73bcxV9NwRm04/hzHQ==}
     engines: {node: '>= 10.0.0'}
     cpu: [arm64]
     os: [linux]
 
-  '@parcel/watcher-linux-x64-glibc@2.5.1':
-    resolution: {integrity: sha512-GcESn8NZySmfwlTsIur+49yDqSny2IhPeZfXunQi48DMugKeZ7uy1FX83pO0X22sHntJ4Ub+9k34XQCX+oHt2A==}
+  '@parcel/watcher-linux-x64-glibc@2.5.4':
+    resolution: {integrity: sha512-UYBQvhYmgAv61LNUn24qGQdjtycFBKSK3EXr72DbJqX9aaLbtCOO8+1SkKhD/GNiJ97ExgcHBrukcYhVjrnogA==}
     engines: {node: '>= 10.0.0'}
     cpu: [x64]
     os: [linux]
 
-  '@parcel/watcher-linux-x64-musl@2.5.1':
-    resolution: {integrity: sha512-n0E2EQbatQ3bXhcH2D1XIAANAcTZkQICBPVaxMeaCVBtOpBZpWJuf7LwyWPSBDITb7In8mqQgJ7gH8CILCURXg==}
+  '@parcel/watcher-linux-x64-musl@2.5.4':
+    resolution: {integrity: sha512-YoRWCVgxv8akZrMhdyVi6/TyoeeMkQ0PGGOf2E4omODrvd1wxniXP+DBynKoHryStks7l+fDAMUBRzqNHrVOpg==}
     engines: {node: '>= 10.0.0'}
     cpu: [x64]
     os: [linux]
 
-  '@parcel/watcher-win32-arm64@2.5.1':
-    resolution: {integrity: sha512-RFzklRvmc3PkjKjry3hLF9wD7ppR4AKcWNzH7kXR7GUe0Igb3Nz8fyPwtZCSquGrhU5HhUNDr/mKBqj7tqA2Vw==}
+  '@parcel/watcher-win32-arm64@2.5.4':
+    resolution: {integrity: sha512-iby+D/YNXWkiQNYcIhg8P5hSjzXEHaQrk2SLrWOUD7VeC4Ohu0WQvmV+HDJokZVJ2UjJ4AGXW3bx7Lls9Ln4TQ==}
     engines: {node: '>= 10.0.0'}
     cpu: [arm64]
     os: [win32]
 
-  '@parcel/watcher-win32-ia32@2.5.1':
-    resolution: {integrity: sha512-c2KkcVN+NJmuA7CGlaGD1qJh1cLfDnQsHjE89E60vUEMlqduHGCdCLJCID5geFVM0dOtA3ZiIO8BoEQmzQVfpQ==}
+  '@parcel/watcher-win32-ia32@2.5.4':
+    resolution: {integrity: sha512-vQN+KIReG0a2ZDpVv8cgddlf67J8hk1WfZMMP7sMeZmJRSmEax5xNDNWKdgqSe2brOKTQQAs3aCCUal2qBHAyg==}
     engines: {node: '>= 10.0.0'}
     cpu: [ia32]
     os: [win32]
 
-  '@parcel/watcher-win32-x64@2.5.1':
-    resolution: {integrity: sha512-9lHBdJITeNR++EvSQVUcaZoWupyHfXe1jZvGZ06O/5MflPcuPLtEphScIBL+AiCWBO46tDSHzWyD0uDmmZqsgA==}
+  '@parcel/watcher-win32-x64@2.5.4':
+    resolution: {integrity: sha512-3A6efb6BOKwyw7yk9ro2vus2YTt2nvcd56AuzxdMiVOxL9umDyN5PKkKfZ/gZ9row41SjVmTVQNWQhaRRGpOKw==}
     engines: {node: '>= 10.0.0'}
     cpu: [x64]
     os: [win32]
 
-  '@parcel/watcher@2.5.1':
-    resolution: {integrity: sha512-dfUnCxiN9H4ap84DvD2ubjw+3vUNpstxa0TneY/Paat8a3R4uQZDLSvWjmznAY/DoahqTHl9V46HF/Zs3F29pg==}
+  '@parcel/watcher@2.5.4':
+    resolution: {integrity: sha512-WYa2tUVV5HiArWPB3ydlOc4R2ivq0IDrlqhMi3l7mVsFEXNcTfxYFPIHXHXIh/ca/y/V5N4E1zecyxdIBjYnkQ==}
     engines: {node: '>= 10.0.0'}
 
   '@pkgjs/parseargs@0.11.0':
@@ -4746,8 +4737,8 @@ packages:
   '@types/linkify-it@5.0.0':
     resolution: {integrity: sha512-sVDA58zAw4eWAffKOaQH5/5j3XeayukzDk+ewSsnv3p4yJEZHCCzMDiZM8e0OUrRvmpGZ85jf4yDHkHsgBNr9Q==}
 
-  '@types/lodash@4.17.22':
-    resolution: {integrity: sha512-46Wh9Pr5XQloXkIDyfIJ3garzam+jG4m2Vb2bG84chuLsPbX1BG9W25JEkplrz5hN7I3F5NU/keGlL+MrkTkDA==}
+  '@types/lodash@4.17.23':
+    resolution: {integrity: sha512-RDvF6wTulMPjrNdCoYRC8gNR880JNGT8uB+REUpC2Ns4pRqQJhGz90wh7rgdXDPpCczF3VGktDuFGVnz8zP7HA==}
 
   '@types/markdown-it@14.1.2':
     resolution: {integrity: sha512-promo4eFwuiW+TfGxhi+0x3czqTYJkG8qB17ZUJiVF10Xm7NLVRSLUsfRTU/6h1e24VvRnXCx+hG7li58lkzog==}
@@ -4782,8 +4773,8 @@ packages:
   '@types/node@20.5.1':
     resolution: {integrity: sha512-4tT2UrL5LBqDwoed9wZ6N3umC4Yhz3W3FloMmiiG4JwmUJWpie0c7lcnUNd4gtMKuDEO4wRVS8B6Xa0uMRsMKg==}
 
-  '@types/node@24.10.6':
-    resolution: {integrity: sha512-B8h60xgJMR/xmgyX9fncRzEW9gCxoJjdenUhke2v1JGOd/V66KopmWrLPXi5oUI4VuiGK+d+HlXJjDRZMj21EQ==}
+  '@types/node@24.10.7':
+    resolution: {integrity: sha512-+054pVMzVTmRQV8BhpGv3UyfZ2Llgl8rdpDTon+cUH9+na0ncBVXj3wTUKh14+Kiz18ziM3b4ikpP5/Pc0rQEQ==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -5710,11 +5701,11 @@ packages:
   caniuse-api@3.0.0:
     resolution: {integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==}
 
-  caniuse-lite@1.0.30001763:
-    resolution: {integrity: sha512-mh/dGtq56uN98LlNX9qdbKnzINhX0QzhiWBFEkFfsFO4QyCvL8YegrJAazCwXIeqkIob8BlZPGM3xdnY+sgmvQ==}
+  caniuse-lite@1.0.30001764:
+    resolution: {integrity: sha512-9JGuzl2M+vPL+pz70gtMF9sHdMFbY9FJaQBi186cHKH3pSzDvzoUJUPV6fqiKIMyXbud9ZLg4F3Yza1vJ1+93g==}
 
-  canvas@3.2.0:
-    resolution: {integrity: sha512-jk0GxrLtUEmW/TmFsk2WghvgHe8B0pxGilqCL21y8lHkPUGa6FTsnCNtHPOzT8O3y+N+m3espawV80bbBlgfTA==}
+  canvas@3.2.1:
+    resolution: {integrity: sha512-ej1sPFR5+0YWtaVp6S1N1FVz69TQCqmrkGeRvQxZeAB1nAIcjNTHVwrZtYtWFFBmQsF40/uDLehsW5KuYC99mg==}
     engines: {node: ^18.12.0 || >= 20.9.0}
 
   ccount@2.0.1:
@@ -6371,11 +6362,6 @@ packages:
     resolution: {integrity: sha512-DtCOLG98P007x7wiiOmfI0fi3eIKyWiLTGJ2MDnVi/E04lWGbf+JzrRHMm0rgIIZJGtHpKpbVgLWHrv8xXpc3Q==}
     engines: {node: '>=0.10.0'}
 
-  detect-libc@1.0.3:
-    resolution: {integrity: sha512-pGjwhsmsp4kL2RTz08wcOlGN83otlqHeD/Z5T8GXZB+/YcpQ/dgo+lbU8ZsGxV0HIvqqxo9l7mqYwyYMD9bKDg==}
-    engines: {node: '>=0.10'}
-    hasBin: true
-
   detect-libc@2.1.2:
     resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
     engines: {node: '>=8'}
@@ -6909,8 +6895,8 @@ packages:
     peerDependencies:
       eslint: '>=8.45.0'
 
-  eslint-plugin-playwright@2.4.1:
-    resolution: {integrity: sha512-rKx00OLmwrtGmA8UhOFeDu4lK1Y0i5n5VliK7DCdzc1Dh+StvCEwWajtSYqfhbHa935DoHWyS1DN95NBDGXGWg==}
+  eslint-plugin-playwright@2.5.0:
+    resolution: {integrity: sha512-1ckFw7Abdz+l23wtw5Tg4GTK3Y+MgEQQNjEr7FTJP3wwmIOj8DkbJ6G655aPc09c0Kfn/NoGA4xpMZzeSO4NWw==}
     engines: {node: '>=16.9.0'}
     peerDependencies:
       eslint: '>=8.40.0'
@@ -10375,8 +10361,8 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18
 
-  react-hook-form@7.70.0:
-    resolution: {integrity: sha512-COOMajS4FI3Wuwrs3GPpi/Jeef/5W1DRR84Yl5/ShlT3dKVFUfoGiEZ/QE6Uw8P4T2/CLJdcTVYKvWBMQTEpvw==}
+  react-hook-form@7.71.0:
+    resolution: {integrity: sha512-oFDt/iIFMV9ZfV52waONXzg4xuSlbwKUPvXVH2jumL1me5qFhBMc4knZxuXiZ2+j6h546sYe3ZKJcg/900/iHw==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
@@ -11185,8 +11171,8 @@ packages:
       react-dom: '>= 16.8.0'
       react-is: '>= 16.8.0'
 
-  styled-components@6.2.0:
-    resolution: {integrity: sha512-ryFCkETE++8jlrBmC+BoGPUN96ld1/Yp0s7t5bcXDobrs4XoXroY1tN+JbFi09hV6a5h3MzbcVi8/BGDP0eCgQ==}
+  styled-components@6.3.5:
+    resolution: {integrity: sha512-f8jAunVw/r41o17+JlWVlMTsyBKyghCdQ84YCKPxgKSMOZJbK3CKPxeIhotz6hlXvHb0w62zG4yyOdGY0kaB3g==}
     engines: {node: '>= 16'}
     peerDependencies:
       react: '>= 16.8.0'
@@ -11516,38 +11502,38 @@ packages:
   tunnel-agent@0.6.0:
     resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}
 
-  turbo-darwin-64@2.7.3:
-    resolution: {integrity: sha512-aZHhvRiRHXbJw1EcEAq4aws1hsVVUZ9DPuSFaq9VVFAKCup7niIEwc22glxb7240yYEr1vLafdQ2U294Vcwz+w==}
+  turbo-darwin-64@2.7.4:
+    resolution: {integrity: sha512-xDR30ltfkSsRfGzABBckvl1nz1cZ3ssTujvdj+TPwOweeDRvZ0e06t5DS0rmRBvyKpgGs42K/EK6Mn2qLlFY9A==}
     cpu: [x64]
     os: [darwin]
 
-  turbo-darwin-arm64@2.7.3:
-    resolution: {integrity: sha512-CkVrHSq+Bnhl9sX2LQgqQYVfLTWC2gvI74C4758OmU0djfrssDKU9d4YQF0AYXXhIIRZipSXfxClQziIMD+EAg==}
+  turbo-darwin-arm64@2.7.4:
+    resolution: {integrity: sha512-P7sjqXtOL/+nYWPvcDGWhi8wf8M8mZHHB8XEzw2VX7VJrS8IGHyJHGD1AYfDvhAEcr7pnk3gGifz3/xyhI655w==}
     cpu: [arm64]
     os: [darwin]
 
-  turbo-linux-64@2.7.3:
-    resolution: {integrity: sha512-GqDsCNnzzr89kMaLGpRALyigUklzgxIrSy2pHZVXyifgczvYPnLglex78Aj3T2gu+T3trPPH2iJ+pWucVOCC2Q==}
+  turbo-linux-64@2.7.4:
+    resolution: {integrity: sha512-GofFOxRO/IhG8BcPyMSSB3Y2+oKQotsaYbHxL9yD6JPb20/o35eo+zUSyazOtilAwDHnak5dorAJFoFU8MIg2A==}
     cpu: [x64]
     os: [linux]
 
-  turbo-linux-arm64@2.7.3:
-    resolution: {integrity: sha512-NdCDTfIcIo3dWjsiaAHlxu5gW61Ed/8maah1IAF/9E3EtX0aAHNiBMbuYLZaR4vRJ7BeVkYB6xKWRtdFLZ0y3g==}
+  turbo-linux-arm64@2.7.4:
+    resolution: {integrity: sha512-+RQKgNjksVPxYAyAgmDV7w/1qj++qca+nSNTAOKGOfJiDtSvRKoci89oftJ6anGs00uamLKVEQ712TI/tfNAIw==}
     cpu: [arm64]
     os: [linux]
 
-  turbo-windows-64@2.7.3:
-    resolution: {integrity: sha512-7bVvO987daXGSJVYBoG8R4Q+csT1pKIgLJYZevXRQ0Hqw0Vv4mKme/TOjYXs9Qb1xMKh51Tb3bXKDbd8/4G08g==}
+  turbo-windows-64@2.7.4:
+    resolution: {integrity: sha512-rfak1+g+ON3czs1mDYsCS4X74ZmK6gOgRQTXjDICtzvR4o61paqtgAYtNPofcVsMWeF4wvCajSeoAkkeAnQ1kg==}
     cpu: [x64]
     os: [win32]
 
-  turbo-windows-arm64@2.7.3:
-    resolution: {integrity: sha512-nTodweTbPmkvwMu/a55XvjMsPtuyUSC+sV7f/SR57K36rB2I0YG21qNETN+00LOTUW9B3omd8XkiXJkt4kx/cw==}
+  turbo-windows-arm64@2.7.4:
+    resolution: {integrity: sha512-1ZgBNjNRbDu/fPeqXuX9i26x3CJ/Y1gcwUpQ+Vp7kN9Un6RZ9kzs164f/knrjcu5E+szCRexVjRSJay1k5jApA==}
     cpu: [arm64]
     os: [win32]
 
-  turbo@2.7.3:
-    resolution: {integrity: sha512-+HjKlP4OfYk+qzvWNETA3cUO5UuK6b5MSc2UJOKyvBceKucQoQGb2g7HlC2H1GHdkfKrk4YF1VPvROkhVZDDLQ==}
+  turbo@2.7.4:
+    resolution: {integrity: sha512-bkO4AddmDishzJB2ze7aYYPaejMoJVfS0XnaR6RCdXFOY8JGJfQE+l9fKiV7uDPa5Ut44gmOWJL3894CIMeH9g==}
     hasBin: true
 
   type-check@0.4.0:
@@ -12971,11 +12957,11 @@ snapshots:
       - '@swc/core'
       - '@swc/wasm'
 
-  '@commitlint/cli@19.8.1(@types/node@24.10.6)(typescript@5.9.3)':
+  '@commitlint/cli@19.8.1(@types/node@24.10.7)(typescript@5.9.3)':
     dependencies:
       '@commitlint/format': 19.8.1
       '@commitlint/lint': 19.8.1
-      '@commitlint/load': 19.8.1(@types/node@24.10.6)(typescript@5.9.3)
+      '@commitlint/load': 19.8.1(@types/node@24.10.7)(typescript@5.9.3)
       '@commitlint/read': 19.8.1
       '@commitlint/types': 19.8.1
       tinyexec: 1.0.2
@@ -13079,7 +13065,7 @@ snapshots:
       - '@swc/core'
       - '@swc/wasm'
 
-  '@commitlint/load@19.8.1(@types/node@24.10.6)(typescript@5.9.3)':
+  '@commitlint/load@19.8.1(@types/node@24.10.7)(typescript@5.9.3)':
     dependencies:
       '@commitlint/config-validator': 19.8.1
       '@commitlint/execute-rule': 19.8.1
@@ -13087,7 +13073,7 @@ snapshots:
       '@commitlint/types': 19.8.1
       chalk: 5.6.2
       cosmiconfig: 9.0.0(typescript@5.9.3)
-      cosmiconfig-typescript-loader: 6.2.0(@types/node@24.10.6)(cosmiconfig@9.0.0(typescript@5.9.3))(typescript@5.9.3)
+      cosmiconfig-typescript-loader: 6.2.0(@types/node@24.10.7)(cosmiconfig@9.0.0(typescript@5.9.3))(typescript@5.9.3)
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
@@ -13451,7 +13437,7 @@ snapshots:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-pdf: 9.2.1(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      styled-components: 6.2.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      styled-components: 6.3.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
     transitivePeerDependencies:
       - '@types/react'
 
@@ -13529,15 +13515,9 @@ snapshots:
 
   '@emotion/hash@0.9.2': {}
 
-  '@emotion/is-prop-valid@1.2.2':
-    dependencies:
-      '@emotion/memoize': 0.8.1
-
   '@emotion/is-prop-valid@1.4.0':
     dependencies:
       '@emotion/memoize': 0.9.0
-
-  '@emotion/memoize@0.8.1': {}
 
   '@emotion/memoize@0.9.0': {}
 
@@ -13572,8 +13552,6 @@ snapshots:
   '@emotion/unitless@0.10.0': {}
 
   '@emotion/unitless@0.7.5': {}
-
-  '@emotion/unitless@0.8.1': {}
 
   '@emotion/use-insertion-effect-with-fallbacks@1.2.0(react@18.2.0)':
     dependencies:
@@ -14398,9 +14376,9 @@ snapshots:
     dependencies:
       react-hook-form: 7.48.2(react@18.2.0)
 
-  '@hookform/resolvers@3.10.0(react-hook-form@7.70.0(react@18.2.0))':
+  '@hookform/resolvers@3.10.0(react-hook-form@7.71.0(react@18.2.0))':
     dependencies:
-      react-hook-form: 7.70.0(react@18.2.0)
+      react-hook-form: 7.71.0(react@18.2.0)
 
   '@humanwhocodes/config-array@0.13.0':
     dependencies:
@@ -14541,7 +14519,7 @@ snapshots:
       consola: 3.4.2
       detect-libc: 2.1.2
       https-proxy-agent: 7.0.6
-      node-fetch: 2.6.9(encoding@0.1.13)
+      node-fetch: 2.7.0(encoding@0.1.13)
       nopt: 8.1.0
       semver: 7.7.3
       tar: 7.5.2
@@ -14955,65 +14933,65 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 1.30.1(@opentelemetry/api@1.9.0)
 
-  '@parcel/watcher-android-arm64@2.5.1':
+  '@parcel/watcher-android-arm64@2.5.4':
     optional: true
 
-  '@parcel/watcher-darwin-arm64@2.5.1':
+  '@parcel/watcher-darwin-arm64@2.5.4':
     optional: true
 
-  '@parcel/watcher-darwin-x64@2.5.1':
+  '@parcel/watcher-darwin-x64@2.5.4':
     optional: true
 
-  '@parcel/watcher-freebsd-x64@2.5.1':
+  '@parcel/watcher-freebsd-x64@2.5.4':
     optional: true
 
-  '@parcel/watcher-linux-arm-glibc@2.5.1':
+  '@parcel/watcher-linux-arm-glibc@2.5.4':
     optional: true
 
-  '@parcel/watcher-linux-arm-musl@2.5.1':
+  '@parcel/watcher-linux-arm-musl@2.5.4':
     optional: true
 
-  '@parcel/watcher-linux-arm64-glibc@2.5.1':
+  '@parcel/watcher-linux-arm64-glibc@2.5.4':
     optional: true
 
-  '@parcel/watcher-linux-arm64-musl@2.5.1':
+  '@parcel/watcher-linux-arm64-musl@2.5.4':
     optional: true
 
-  '@parcel/watcher-linux-x64-glibc@2.5.1':
+  '@parcel/watcher-linux-x64-glibc@2.5.4':
     optional: true
 
-  '@parcel/watcher-linux-x64-musl@2.5.1':
+  '@parcel/watcher-linux-x64-musl@2.5.4':
     optional: true
 
-  '@parcel/watcher-win32-arm64@2.5.1':
+  '@parcel/watcher-win32-arm64@2.5.4':
     optional: true
 
-  '@parcel/watcher-win32-ia32@2.5.1':
+  '@parcel/watcher-win32-ia32@2.5.4':
     optional: true
 
-  '@parcel/watcher-win32-x64@2.5.1':
+  '@parcel/watcher-win32-x64@2.5.4':
     optional: true
 
-  '@parcel/watcher@2.5.1':
+  '@parcel/watcher@2.5.4':
     dependencies:
-      detect-libc: 1.0.3
+      detect-libc: 2.1.2
       is-glob: 4.0.3
-      micromatch: 4.0.8
       node-addon-api: 7.1.1
+      picomatch: 4.0.3
     optionalDependencies:
-      '@parcel/watcher-android-arm64': 2.5.1
-      '@parcel/watcher-darwin-arm64': 2.5.1
-      '@parcel/watcher-darwin-x64': 2.5.1
-      '@parcel/watcher-freebsd-x64': 2.5.1
-      '@parcel/watcher-linux-arm-glibc': 2.5.1
-      '@parcel/watcher-linux-arm-musl': 2.5.1
-      '@parcel/watcher-linux-arm64-glibc': 2.5.1
-      '@parcel/watcher-linux-arm64-musl': 2.5.1
-      '@parcel/watcher-linux-x64-glibc': 2.5.1
-      '@parcel/watcher-linux-x64-musl': 2.5.1
-      '@parcel/watcher-win32-arm64': 2.5.1
-      '@parcel/watcher-win32-ia32': 2.5.1
-      '@parcel/watcher-win32-x64': 2.5.1
+      '@parcel/watcher-android-arm64': 2.5.4
+      '@parcel/watcher-darwin-arm64': 2.5.4
+      '@parcel/watcher-darwin-x64': 2.5.4
+      '@parcel/watcher-freebsd-x64': 2.5.4
+      '@parcel/watcher-linux-arm-glibc': 2.5.4
+      '@parcel/watcher-linux-arm-musl': 2.5.4
+      '@parcel/watcher-linux-arm64-glibc': 2.5.4
+      '@parcel/watcher-linux-arm64-musl': 2.5.4
+      '@parcel/watcher-linux-x64-glibc': 2.5.4
+      '@parcel/watcher-linux-x64-musl': 2.5.4
+      '@parcel/watcher-win32-arm64': 2.5.4
+      '@parcel/watcher-win32-ia32': 2.5.4
+      '@parcel/watcher-win32-x64': 2.5.4
     optional: true
 
   '@pkgjs/parseargs@0.11.0':
@@ -15293,7 +15271,7 @@ snapshots:
       '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
       '@types/dompurify': 3.2.0
       antd: 5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      caniuse-lite: 1.0.30001763
+      caniuse-lite: 1.0.30001764
       dompurify: 3.3.1
       react: 18.2.0
       sass: 1.97.2
@@ -15349,15 +15327,15 @@ snapshots:
       - webpack
       - worker-loader
 
-  '@sapp-fe/explanation-package@1.5.5(@babel/core@7.28.5)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))(webpack@5.104.1)':
+  '@sapp-fe/explanation-package@1.5.5(@babel/core@7.28.5)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1)':
     dependencies:
       '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
       '@cloudflare/stream-react': 1.9.3(react@18.2.0)
       '@cyntler/react-doc-viewer': 1.10.4(@babel/core@7.28.5)(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.104.1)
       '@fortune-sheet/react': 0.19.18(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@funktechno/texthighlighter': 2.1.2
-      '@tailwindcss/aspect-ratio': 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6)))
-      '@tailwindcss/forms': 0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6)))
+      '@tailwindcss/aspect-ratio': 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))
+      '@tailwindcss/forms': 0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))
       '@types/styled-components': 5.1.34
       '@xyflow/react': 12.10.0(@types/react@18.2.21)(immer@10.2.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       antd: 5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -15371,10 +15349,10 @@ snapshots:
       react-dom: 18.2.0(react@18.2.0)
       react-hook-form: 7.46.0(react@18.2.0)
       react-shadow: 20.6.0(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      sapp-common-package: 1.6.5(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))(webpack@5.104.1)
+      sapp-common-package: 1.6.5(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1)
       sass: 1.97.2
       styled-components: 5.3.11(@babel/core@7.28.5)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))
     transitivePeerDependencies:
       - '@babel/core'
       - '@rspack/core'
@@ -15398,7 +15376,7 @@ snapshots:
     dependencies:
       '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
       '@cloudflare/stream-react': 1.9.3(react@18.2.0)
-      '@types/lodash': 4.17.22
+      '@types/lodash': 4.17.23
       '@types/video.js': 7.3.58
       lodash: 4.17.21
       preview-question-bank: 1.1.67(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.104.1)
@@ -15421,7 +15399,7 @@ snapshots:
       '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
       '@react-hook/resize-observer': 2.0.2(react@18.2.0)
       '@types/aos': 3.0.7
-      '@types/lodash': 4.17.22
+      '@types/lodash': 4.17.23
       '@types/react-lines-ellipsis': 0.15.6
       antd: 5.25.0(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       aos: 2.3.4
@@ -15492,7 +15470,7 @@ snapshots:
       - ts-node
       - webpack
 
-  '@sapp-fe/sapp-common-package@1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))(webpack@5.104.1)':
+  '@sapp-fe/sapp-common-package@1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1)':
     dependencies:
       '@_ueberdosis/prosemirror-tables': 1.1.3
       '@floating-ui/react': 0.27.16(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -15529,7 +15507,7 @@ snapshots:
       react-dom: 18.2.0(react@18.2.0)
       sass: 1.97.2
       sass-loader: 13.3.3(sass@1.97.2)(webpack@5.104.1)
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))
     transitivePeerDependencies:
       - date-fns
       - fibers
@@ -15551,14 +15529,14 @@ snapshots:
     transitivePeerDependencies:
       - tailwindcss
 
-  '@sapp-fe/sapp-notification@1.2.3(antd@5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6)))':
+  '@sapp-fe/sapp-notification@1.2.3(antd@5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))':
     dependencies:
-      '@tailwindcss/line-clamp': 0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6)))
+      '@tailwindcss/line-clamp': 0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))
       antd: 5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       clsx: 2.1.1
       dayjs: 1.11.19
       react: 18.2.0
-      tailwind-scrollbar: 4.0.2(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6)))
+      tailwind-scrollbar: 4.0.2(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))
     transitivePeerDependencies:
       - tailwindcss
 
@@ -15925,36 +15903,36 @@ snapshots:
     dependencies:
       tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))
 
-  '@tailwindcss/aspect-ratio@0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6)))':
+  '@tailwindcss/aspect-ratio@0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))':
     dependencies:
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))
 
-  '@tailwindcss/aspect-ratio@0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.9.3)))':
+  '@tailwindcss/aspect-ratio@0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3)))':
     dependencies:
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.9.3))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3))
 
   '@tailwindcss/forms@0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))':
     dependencies:
       mini-svg-data-uri: 1.4.4
       tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))
 
-  '@tailwindcss/forms@0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6)))':
+  '@tailwindcss/forms@0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))':
     dependencies:
       mini-svg-data-uri: 1.4.4
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))
 
-  '@tailwindcss/forms@0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.9.3)))':
+  '@tailwindcss/forms@0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3)))':
     dependencies:
       mini-svg-data-uri: 1.4.4
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.9.3))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3))
 
   '@tailwindcss/line-clamp@0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))':
     dependencies:
       tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))
 
-  '@tailwindcss/line-clamp@0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6)))':
+  '@tailwindcss/line-clamp@0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))':
     dependencies:
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))
 
   '@tinymce/tinymce-react@4.3.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
@@ -16332,7 +16310,7 @@ snapshots:
 
   '@types/linkify-it@5.0.0': {}
 
-  '@types/lodash@4.17.22': {}
+  '@types/lodash@4.17.23': {}
 
   '@types/markdown-it@14.1.2':
     dependencies:
@@ -16365,7 +16343,7 @@ snapshots:
 
   '@types/node@20.5.1': {}
 
-  '@types/node@24.10.6':
+  '@types/node@24.10.7':
     dependencies:
       undici-types: 7.16.0
 
@@ -16403,7 +16381,7 @@ snapshots:
 
   '@types/react-lines-ellipsis@0.15.6':
     dependencies:
-      '@types/lodash': 4.17.22
+      '@types/lodash': 4.17.23
       '@types/react': 18.2.21
 
   '@types/react-slick@0.23.13':
@@ -17396,7 +17374,7 @@ snapshots:
   autoprefixer@10.4.23(postcss@8.5.6):
     dependencies:
       browserslist: 4.28.1
-      caniuse-lite: 1.0.30001763
+      caniuse-lite: 1.0.30001764
       fraction.js: 5.3.4
       picocolors: 1.1.1
       postcss: 8.5.6
@@ -17609,7 +17587,7 @@ snapshots:
   browserslist@4.28.1:
     dependencies:
       baseline-browser-mapping: 2.9.14
-      caniuse-lite: 1.0.30001763
+      caniuse-lite: 1.0.30001764
       electron-to-chromium: 1.5.267
       node-releases: 2.0.27
       update-browserslist-db: 1.2.3(browserslist@4.28.1)
@@ -17675,13 +17653,13 @@ snapshots:
   caniuse-api@3.0.0:
     dependencies:
       browserslist: 4.28.1
-      caniuse-lite: 1.0.30001763
+      caniuse-lite: 1.0.30001764
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
 
-  caniuse-lite@1.0.30001763: {}
+  caniuse-lite@1.0.30001764: {}
 
-  canvas@3.2.0:
+  canvas@3.2.1:
     dependencies:
       node-addon-api: 7.1.1
       prebuild-install: 7.1.3
@@ -17985,9 +17963,9 @@ snapshots:
       ts-node: 10.9.2(@types/node@20.5.1)(typescript@5.9.3)
       typescript: 5.9.3
 
-  cosmiconfig-typescript-loader@6.2.0(@types/node@24.10.6)(cosmiconfig@9.0.0(typescript@5.9.3))(typescript@5.9.3):
+  cosmiconfig-typescript-loader@6.2.0(@types/node@24.10.7)(cosmiconfig@9.0.0(typescript@5.9.3))(typescript@5.9.3):
     dependencies:
-      '@types/node': 24.10.6
+      '@types/node': 24.10.7
       cosmiconfig: 9.0.0(typescript@5.9.3)
       jiti: 2.6.1
       typescript: 5.9.3
@@ -18362,9 +18340,6 @@ snapshots:
   destroy@1.2.0: {}
 
   detect-file@1.0.0: {}
-
-  detect-libc@1.0.3:
-    optional: true
 
   detect-libc@2.1.2: {}
 
@@ -18978,7 +18953,7 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-playwright@2.4.1(eslint@8.57.1):
+  eslint-plugin-playwright@2.5.0(eslint@8.57.1):
     dependencies:
       eslint: 8.57.1
       globals: 16.5.0
@@ -19071,11 +19046,11 @@ snapshots:
     dependencies:
       eslint: 8.57.1
 
-  eslint-plugin-tailwindcss@3.18.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.9.3))):
+  eslint-plugin-tailwindcss@3.18.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3))):
     dependencies:
       fast-glob: 3.3.3
       postcss: 8.5.6
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.9.3))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3))
 
   eslint-plugin-testing-library@7.15.4(eslint@8.57.1)(typescript@5.9.3):
     dependencies:
@@ -21479,7 +21454,7 @@ snapshots:
     dependencies:
       '@next/env': 12.3.7
       '@swc/helpers': 0.4.11
-      caniuse-lite: 1.0.30001763
+      caniuse-lite: 1.0.30001764
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -21509,7 +21484,7 @@ snapshots:
       '@next/env': 14.2.35
       '@swc/helpers': 0.5.5
       busboy: 1.6.0
-      caniuse-lite: 1.0.30001763
+      caniuse-lite: 1.0.30001764
       graceful-fs: 4.2.11
       postcss: 8.4.31
       react: 18.2.0
@@ -21841,7 +21816,7 @@ snapshots:
 
   pdfjs-dist@4.8.69:
     optionalDependencies:
-      canvas: 3.2.0
+      canvas: 3.2.1
       path2d: 0.2.2
 
   pend@1.2.0: {}
@@ -22074,21 +22049,21 @@ snapshots:
       postcss: 8.5.6
       ts-node: 10.9.2(@types/node@20.5.1)(typescript@5.9.3)
 
-  postcss-load-config@4.0.2(postcss@8.5.6)(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6)):
+  postcss-load-config@4.0.2(postcss@8.5.6)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)):
     dependencies:
       lilconfig: 3.1.3
       yaml: 2.8.2
     optionalDependencies:
       postcss: 8.5.6
-      ts-node: 10.9.2(@types/node@24.10.6)(typescript@5.1.6)
+      ts-node: 10.9.2(@types/node@24.10.7)(typescript@5.1.6)
 
-  postcss-load-config@4.0.2(postcss@8.5.6)(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.9.3)):
+  postcss-load-config@4.0.2(postcss@8.5.6)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3)):
     dependencies:
       lilconfig: 3.1.3
       yaml: 2.8.2
     optionalDependencies:
       postcss: 8.5.6
-      ts-node: 10.9.2(@types/node@24.10.6)(typescript@5.9.3)
+      ts-node: 10.9.2(@types/node@24.10.7)(typescript@5.9.3)
 
   postcss-logical@7.0.1(postcss@8.5.6):
     dependencies:
@@ -23100,7 +23075,7 @@ snapshots:
     dependencies:
       react: 18.2.0
 
-  react-hook-form@7.70.0(react@18.2.0):
+  react-hook-form@7.71.0(react@18.2.0):
     dependencies:
       react: 18.2.0
 
@@ -23612,7 +23587,7 @@ snapshots:
       - ts-node
       - webpack
 
-  sapp-common-package@1.6.5(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))(webpack@5.104.1):
+  sapp-common-package@1.6.5(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1):
     dependencies:
       '@_ueberdosis/prosemirror-tables': 1.1.3
       '@floating-ui/react': 0.27.16(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -23645,7 +23620,7 @@ snapshots:
       react-dom: 18.2.0(react@18.2.0)
       sass: 1.97.2
       sass-loader: 13.3.3(sass@1.97.2)(webpack@5.104.1)
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))
     transitivePeerDependencies:
       - '@tiptap/core'
       - date-fns
@@ -23676,7 +23651,7 @@ snapshots:
       immutable: 5.1.4
       source-map-js: 1.2.1
     optionalDependencies:
-      '@parcel/watcher': 2.5.1
+      '@parcel/watcher': 2.5.4
 
   sax@1.2.1: {}
 
@@ -24132,10 +24107,10 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
 
-  styled-components@6.2.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+  styled-components@6.3.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
-      '@emotion/is-prop-valid': 1.2.2
-      '@emotion/unitless': 0.8.1
+      '@emotion/is-prop-valid': 1.4.0
+      '@emotion/unitless': 0.10.0
       '@types/stylis': 4.2.7
       css-to-react-native: 3.2.0
       csstype: 3.2.3
@@ -24144,7 +24119,7 @@ snapshots:
       react-dom: 18.2.0(react@18.2.0)
       shallowequal: 1.1.0
       stylis: 4.3.6
-      tslib: 2.6.2
+      tslib: 2.8.1
 
   styled-jsx@5.0.7(@babel/core@7.28.5)(react@18.2.0):
     dependencies:
@@ -24228,10 +24203,10 @@ snapshots:
     transitivePeerDependencies:
       - react
 
-  tailwind-scrollbar@4.0.2(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))):
+  tailwind-scrollbar@4.0.2(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))):
     dependencies:
       prism-react-renderer: 2.4.1(react@18.2.0)
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))
     transitivePeerDependencies:
       - react
 
@@ -24262,7 +24237,7 @@ snapshots:
     transitivePeerDependencies:
       - ts-node
 
-  tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6)):
+  tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -24281,7 +24256,7 @@ snapshots:
       postcss: 8.5.6
       postcss-import: 15.1.0(postcss@8.5.6)
       postcss-js: 4.1.0(postcss@8.5.6)
-      postcss-load-config: 4.0.2(postcss@8.5.6)(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6))
+      postcss-load-config: 4.0.2(postcss@8.5.6)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))
       postcss-nested: 6.2.0(postcss@8.5.6)
       postcss-selector-parser: 6.1.2
       resolve: 1.22.11
@@ -24289,7 +24264,7 @@ snapshots:
     transitivePeerDependencies:
       - ts-node
 
-  tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.9.3)):
+  tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -24308,7 +24283,7 @@ snapshots:
       postcss: 8.5.6
       postcss-import: 15.1.0(postcss@8.5.6)
       postcss-js: 4.1.0(postcss@8.5.6)
-      postcss-load-config: 4.0.2(postcss@8.5.6)(ts-node@10.9.2(@types/node@24.10.6)(typescript@5.9.3))
+      postcss-load-config: 4.0.2(postcss@8.5.6)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3))
       postcss-nested: 6.2.0(postcss@8.5.6)
       postcss-selector-parser: 6.1.2
       resolve: 1.22.11
@@ -24509,14 +24484,14 @@ snapshots:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
 
-  ts-node@10.9.2(@types/node@24.10.6)(typescript@5.1.6):
+  ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.12
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 24.10.6
+      '@types/node': 24.10.7
       acorn: 8.15.0
       acorn-walk: 8.3.4
       arg: 4.1.3
@@ -24528,14 +24503,14 @@ snapshots:
       yn: 3.1.1
     optional: true
 
-  ts-node@10.9.2(@types/node@24.10.6)(typescript@5.9.3):
+  ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.12
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 24.10.6
+      '@types/node': 24.10.7
       acorn: 8.15.0
       acorn-walk: 8.3.4
       arg: 4.1.3
@@ -24573,32 +24548,32 @@ snapshots:
     dependencies:
       safe-buffer: 5.2.1
 
-  turbo-darwin-64@2.7.3:
+  turbo-darwin-64@2.7.4:
     optional: true
 
-  turbo-darwin-arm64@2.7.3:
+  turbo-darwin-arm64@2.7.4:
     optional: true
 
-  turbo-linux-64@2.7.3:
+  turbo-linux-64@2.7.4:
     optional: true
 
-  turbo-linux-arm64@2.7.3:
+  turbo-linux-arm64@2.7.4:
     optional: true
 
-  turbo-windows-64@2.7.3:
+  turbo-windows-64@2.7.4:
     optional: true
 
-  turbo-windows-arm64@2.7.3:
+  turbo-windows-arm64@2.7.4:
     optional: true
 
-  turbo@2.7.3:
+  turbo@2.7.4:
     optionalDependencies:
-      turbo-darwin-64: 2.7.3
-      turbo-darwin-arm64: 2.7.3
-      turbo-linux-64: 2.7.3
-      turbo-linux-arm64: 2.7.3
-      turbo-windows-64: 2.7.3
-      turbo-windows-arm64: 2.7.3
+      turbo-darwin-64: 2.7.4
+      turbo-darwin-arm64: 2.7.4
+      turbo-linux-64: 2.7.4
+      turbo-linux-arm64: 2.7.4
+      turbo-windows-64: 2.7.4
+      turbo-windows-arm64: 2.7.4
 
   type-check@0.4.0:
     dependencies:
