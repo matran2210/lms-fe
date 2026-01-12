@@ -20,9 +20,8 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import SappNotificationComponent from '@sapp-fe/sapp-notification'
 import { PageLink } from 'src/constants/routes'
 import { v4 as uuidv4 } from 'uuid'
-import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
-import { BlankAvatarImage } from '@lms/assets'
+import { BlankAvatarImage, ExpandIcon } from '@lms/assets'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 type MenuItemProps = {

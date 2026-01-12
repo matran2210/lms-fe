@@ -1,5 +1,3 @@
-import SappDisplayText from '@components/common/SappDisplayText'
-import SappIcon from '@components/common/SappIcon'
 import {
   BlankAvatarImage,
   BlankAvatarNotificationImage,
@@ -13,7 +11,13 @@ import {
   IDiscussionFile,
   IUser,
 } from '@lms/contexts'
-import { HookFormTextArea, SappButton, SappButtonIcon } from '@lms/ui'
+import {
+  HookFormTextArea,
+  SappButton,
+  SappButtonIcon,
+  SappDisplayText,
+  SappIcon,
+} from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
 import { CoursesAPI } from '@pages/api/courses'
 import { calculateTimeAgo } from '@utils/helpers'

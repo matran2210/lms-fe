@@ -1,8 +1,9 @@
-import { Bachelor, CourseTimeIcon } from '@components/courses/icons'
+import { Bachelor } from '@components/courses/icons'
 import TooltipCourses from '@components/courses/shared/Tooltip'
+import { CourseTimeIcon } from '@lms/assets'
+import { ICourseClassDay } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { truncateString } from '@lms/utils'
-import { ICourseClassDay } from 'src/type/courses-3-level/course'
 
 export default function CourseClass({
   course,

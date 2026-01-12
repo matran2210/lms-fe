@@ -7,7 +7,7 @@ import {
   QUESTION_TYPES,
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
-import { FullScreenLayout, SappLoadingGlobal, Tooltip } from '@lms/ui'
+import { FullScreenLayout, Tooltip } from '@lms/ui'
 import { TestServiceAPI } from '@pages/api/test-api'
 import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 import { useRouter } from 'next/router'
@@ -17,6 +17,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UploadAPI } from 'src/pages/api/upload'
 import { CoursesAPI } from '../api/courses'
 import { handleMultipleCorrectAnswer } from '@lms/utils'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 
 const Explanation = () => {
   const router = useRouter()

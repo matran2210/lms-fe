@@ -45,7 +45,6 @@ import {
   MultiChoiceQuestion,
   NewDragNDropQuestion,
   OneChoiceQuestion,
-  SappLoadingGlobal,
   SelectWord,
   SlotValue,
 } from '@lms/ui'
@@ -62,6 +61,7 @@ import toast from 'react-hot-toast'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import ConFirmSubmit from '../short-course/test/conFirmSubmit'
 import LimitQuizModal from '../short-course/test/limitQuizModal'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
   const { width: widthFileViewer, height: heightFileViewer } =

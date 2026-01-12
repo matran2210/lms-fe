@@ -1,4 +1,5 @@
 /* eslint-disable prefer-const */
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import {
   CalculatorIconV2,
   CloseModalIcon,
@@ -44,7 +45,6 @@ import {
   NewDragNDropQuestion,
   OneChoiceQuestion,
   Popover,
-  SappLoadingGlobal,
   SelectWord,
   SlotValue,
 } from '@lms/ui'

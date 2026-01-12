@@ -1,5 +1,4 @@
-import { IconSendHover } from '@assets/icons'
-import { IconSend } from '@lms/assets'
+import { IconSend, IconSendHover } from '@lms/assets'
 import { useRef } from 'react'
 import { useHover } from 'usehooks-ts'
 

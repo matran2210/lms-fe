@@ -1,5 +1,4 @@
 import { LAYOUT } from '@lms/core'
-import { SappLoadingGlobal } from '@lms/ui'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
@@ -8,6 +7,7 @@ import { useDownloadImage } from '@lms/hooks'
 import SinglePageLayout from '@components/layout/SinglePage'
 import { CoursesAPI } from '@pages/api/courses'
 import { CertificateVertical, HorizontalCertificate } from '@lms/feature-user'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 
 export interface ICertificate {
   certificate_url: string

@@ -1,4 +1,4 @@
-import { BlankAvatarImage } from '@lms/assets'
+import { BlankAvatarImage, ExpandIcon } from '@lms/assets'
 import {
   activeNotesList3Level,
   clearNotifications,
@@ -27,7 +27,6 @@ import { v4 as uuidv4 } from 'uuid'
 import MenuItemsList from './MenuItemsList'
 import { NotificationAPI } from '@pages/api/notification'
 import { PageLink } from 'src/constants/routes'
-import ExpandIcon from '@components/layout/ExpandIcon'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 export default function MenuItem({
   menuItem: { name, icon: Icon, url, type, subItems },

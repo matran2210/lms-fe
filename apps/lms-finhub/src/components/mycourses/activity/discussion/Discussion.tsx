@@ -1,4 +1,3 @@
-import SappIcon from '@components/common/SappIcon'
 import { BlankAvatarImage, BlankAvatarNotificationImage } from '@lms/assets'
 import {
   courseActivityReducer,
@@ -14,6 +13,7 @@ import {
   HookFormTextArea,
   SappButton,
   SappButtonIcon,
+  SappIcon,
   SappModalImage,
 } from '@lms/ui'
 import { ActivityAPI } from '@pages/api/activity'

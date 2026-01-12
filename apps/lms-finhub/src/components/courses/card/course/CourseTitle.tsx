@@ -1,6 +1,6 @@
 import TooltipCourses from '@components/courses/shared/Tooltip'
+import { ICourseTitle } from '@lms/core'
 import { trackGAEvent, truncateString } from '@lms/utils'
-import { ICourseTitle } from 'src/type/courses-3-level/course'
 
 export default function CourseTitle({
   course,

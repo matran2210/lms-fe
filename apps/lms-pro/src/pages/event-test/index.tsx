@@ -3,13 +3,7 @@ import { ANIMATION, AppType, LANG_SIGNIN } from '@lms/core'
 import { Heading } from '@lms/feature-courses'
 import { EventTestFilter, EventTestList } from '@lms/feature-test'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import {
-  CourseSkeleton,
-  Footer,
-  Layout,
-  SappLoadingGlobal,
-  SearchWithMenuToggle,
-} from '@lms/ui'
+import { CourseSkeleton, Footer, Layout, SearchWithMenuToggle } from '@lms/ui'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -17,6 +11,7 @@ import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch } from 'src/redux/hook'
 import { EventTestAPI } from '../api/event-test'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 
 const EventTest = () => {
   const router = useRouter()

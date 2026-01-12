@@ -1,4 +1,3 @@
-import SappIcon from '@components/common/SappIcon'
 import {
   clearFileEssay,
   confirmQuestion,
@@ -25,6 +24,7 @@ import {
   MultiChoiceQuestion,
   NewDragNDropQuestion,
   OneChoiceQuestion,
+  SappIcon,
   SelectWord,
   SlotValue,
   useClickOutside,

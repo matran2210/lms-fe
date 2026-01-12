@@ -1,3 +1,4 @@
+import { CountDownProps } from "@lms/core";
 import { useCountdownTest } from "@lms/hooks";
 import { formatTimer } from "@lms/utils";
 import {
@@ -9,7 +10,7 @@ import {
 } from "react";
 
 const CountDown = forwardRef(
-  ({ remainTime, onTimeOut }: any, ref: ForwardedRef<any>) => {
+  ({ remainTime, onTimeOut }: CountDownProps, ref: ForwardedRef<any>) => {
     const time = useCountdownTest(0, remainTime);
     useImperativeHandle(ref, () => ({
       handleGetTime() {

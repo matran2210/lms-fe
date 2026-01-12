@@ -1,3 +1,4 @@
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { CloseIcon, DownloadIcon, LinkIcon } from '@lms/assets'
 import {
   clearNote,
@@ -36,7 +37,6 @@ import {
   SAPPBorder,
   SappButton,
   SappIcon,
-  SappLoadingGlobal,
   Tooltip,
 } from '@lms/ui'
 import { trackGAEvent, truncateBySpace, truncateString } from '@lms/utils'

@@ -1,5 +1,3 @@
-import { htmlToRaw } from '@components/common/timer'
-import Tooltip from '@components/common/Tooltip'
 import { CollapseArrowIcon } from '@lms/assets'
 import {
   ANIMATION,
@@ -10,8 +8,8 @@ import {
   QUESTION_TYPES,
 } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { SappBaseTable } from '@lms/ui'
-import { roundNumber, truncateString } from '@lms/utils'
+import { SappBaseTable, Tooltip } from '@lms/ui'
+import { htmlToRaw, roundNumber, truncateString } from '@lms/utils'
 import { ResultAPI } from '@pages/api/short-course/test-result'
 import { convertSecondsToMinutesSeconds } from '@utils/helpers'
 import { Collapse } from 'antd'

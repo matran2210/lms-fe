@@ -1,23 +1,22 @@
+import { DrawerProps } from "antd";
 import { TooltipPlacement } from "antd/es/tooltip";
 import { Dispatch, ForwardedRef, ReactNode, SetStateAction } from "react";
 import { FieldValues, UseFormSetValue } from "react-hook-form";
+import { IBreadcrumb, IButtonProps, IExhibit } from "..";
+import { IMetaData } from "../api-response";
+import { CourseProgram, IQuestion, IVideo } from "../course";
 import {
   CourseSectionLinkParent,
-  IActivity,
   ITab,
-  RemindChoosingExam,
+  RemindChoosingExam
 } from "../course/my-course";
-import { CourseProgram, IQuestion, IVideo } from "../course";
-import { DrawerProps } from "antd";
 import {
   ICourseAll,
   ICourseSection,
   ILearningOutcome,
   IQuizSetting,
 } from "../courses";
-import { IMetaData } from "../api-response";
 import { ExaminationSubject } from "../exam-infomation";
-import { IBreadcrumb, IButtonProps, IExhibit } from "..";
 
 export interface ICourseOutcomes {
   id: string;
@@ -530,6 +529,13 @@ export interface IHeaderTestProps {
     quiz_type: string;
     is_limited: boolean;
   };
+  quizAttempt: {
+    id: string;
+    number_of_attempts: number;
+    is_limited: boolean;
+    created_at?: string;
+    quiz_timed?: number;
+  };
   openLimit: boolean;
   handleSubmitQuestion: (type_submit: "timeout" | "submit") => Promise<void>;
   timeRef: ForwardedRef<unknown>;
@@ -697,3 +703,5 @@ export interface IActivity3Level {
     name: string;
   };
 }
+
+export * from "./course"

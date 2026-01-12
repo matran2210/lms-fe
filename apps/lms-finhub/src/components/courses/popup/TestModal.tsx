@@ -12,10 +12,8 @@ import {
   TestAnnouncementModal,
   TestPopup,
 } from '@lms/feature-courses'
-import { useTailwindBreakpoint } from '@lms/hooks'
 import { ButtonPrimary, ButtonSecondary, ButtonText } from '@lms/ui'
 import { capitalizeFirstLetter, formatTimer, trackGAEvent } from '@lms/utils'
-import { CoursesAPI } from '@pages/api/courses'
 import { TestServiceAPI } from '@pages/api/test-api'
 import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
 import { Select } from 'antd'

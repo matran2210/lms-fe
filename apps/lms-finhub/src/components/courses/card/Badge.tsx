@@ -1,4 +1,4 @@
-import { IBadge } from 'src/type/courses-3-level'
+import { IBadge } from '@lms/core'
 
 const badgeTypeClasses: Record<string, string> = {
   open: 'text-badge-open',

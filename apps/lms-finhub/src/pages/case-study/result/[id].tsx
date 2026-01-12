@@ -1,3 +1,4 @@
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import {
   CalculatorIcon,
   CloseIcon,
@@ -46,7 +47,6 @@ import {
   MultiChoiceQuestion,
   NewDragNDropQuestion,
   OneChoiceQuestion,
-  SappLoadingGlobal,
   SelectWord,
   SlotValue,
 } from '@lms/ui'

@@ -4,10 +4,8 @@ import { useRouter } from 'next/router'
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from 'react'
 import { useQuery, useQueryClient, useMutation } from 'react-query'
 import { PencilV2Icon } from '@lms/assets'
-import Tooltip from 'src/components/common/Tooltip'
 import { CheckCircleTwoTone } from '@ant-design/icons'
 import { Avatar, GetProp, List, Skeleton, UploadProps, UploadFile } from 'antd'
-import NoDataV2 from 'src/components/common/NodataV2'
 import ChangExamDate from '@components/mycourses/course-detail/ChangeExamDate'
 import { z } from 'zod'
 import { ExaminationForm } from 'src/redux/types/Course/MyCourse/ExamInformation'
@@ -21,7 +19,7 @@ import clsx from 'clsx'
 import { COURSE_TYPE, Data, TitleSidebar, zodMsg } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { getDuration } from '@lms/utils'
-import { SappDrawerV3 } from '@lms/ui'
+import { NoData, SappDrawerV3, Tooltip } from '@lms/ui'
 
 type Props = {
   open: boolean
@@ -199,7 +197,7 @@ const ExaminationInfo = ({
     if (isError) {
       return (
         <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center">
-          <NoDataV2 />
+          <NoData />
         </div>
       )
     }

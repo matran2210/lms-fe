@@ -1,8 +1,7 @@
 import React from 'react'
 import { Control, Controller } from 'react-hook-form'
-import ErrorMessage from '@components/common/ErrorMessage'
 import SappTextFieldV2 from './SappTextFieldV2'
-import GuidelineFieldV2 from '@components/common/GuidelineFieldV2'
+import { ErrorMessage, GuidelineFieldV2 } from '@lms/ui'
 
 interface IProps {
   name: string

@@ -1,6 +1,7 @@
+import SappLoading from '@components/common/SappLoading'
 import TableQuestions from '@components/your-answers-detail/TableQuestions'
 import { EYourAnswerType, ITabs, TEST_TYPE_LABELS } from '@lms/core'
-import { FullScreenLayout, SappBreadCrumbs, SappLoading } from '@lms/ui'
+import { FullScreenLayout, SappBreadCrumbs } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import { useRouter } from 'next/router'
 import { CoursesAPI } from 'src/pages/api/courses'

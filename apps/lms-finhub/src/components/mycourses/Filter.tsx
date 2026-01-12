@@ -1,8 +1,7 @@
 // components/SearchForm.tsx
 
-import TotalResullt from '@components/common/TotalResullt'
 import { defaultStatusCourse, ICourseAll } from '@lms/core'
-import { SappHookFormSelect } from '@lms/ui'
+import { SappHookFormSelect, TotalResullt } from '@lms/ui'
 import { buildQueryString } from '@lms/utils'
 import { getUserPrefix } from '@utils/helpers'
 import { isEmpty } from 'lodash'

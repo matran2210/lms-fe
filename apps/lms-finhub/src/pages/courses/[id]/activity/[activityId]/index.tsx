@@ -1,6 +1,5 @@
 import { CloseIcon, DownloadIcon, LinkIcon } from '@lms/assets'
 
-import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
 import Layout from '@components/layout'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
@@ -10,10 +9,7 @@ import CreateNote from '@components/mycourses/create-note/CreateNote'
 import { CourseSectionType, IActivity, SUFFIX_TYPE } from '@lms/core'
 import { trackGAEvent, truncateBySpace, truncateString } from '@lms/utils'
 
-import SAPPBorder from '@components/common/SAPPBorder'
-import SappIcon from '@components/common/SappIcon'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
-import Tooltip from '@components/common/Tooltip'
 import {
   clearNote,
   closeCalculator,
@@ -33,7 +29,11 @@ import {
   EditorReader,
   FileViewer,
   ModalResizeable,
+  ResponsiveTextTruncate,
+  SAPPBorder,
   SappButton,
+  SappIcon,
+  Tooltip,
 } from '@lms/ui'
 import { uniqueId } from 'lodash'
 import Link from 'next/link'

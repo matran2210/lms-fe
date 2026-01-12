@@ -79,7 +79,7 @@ import {
   TestTimeOutModal,
   UnSubmitAnswerModal,
 } from '@lms/feature-test'
-import { ButtonPrimaryV2, ButtonTextV2, SappLoading } from '@lms/ui'
+import { ButtonPrimaryV2, ButtonTextV2 } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
 import { EventTestAPI } from '@pages/api/event-test'
 import { TestServiceAPI } from '@pages/api/test-api'
@@ -95,6 +95,7 @@ import {
 } from 'src/utils/helpers/quiz-test/helper'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import TestScratchPads from '@pages/test/TestScratchPads'
+import SappLoading from '@components/common/SappLoading'
 declare global {
   interface Window {
     userAgreed: any

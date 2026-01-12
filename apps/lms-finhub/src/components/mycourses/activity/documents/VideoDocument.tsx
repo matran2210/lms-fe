@@ -1,5 +1,3 @@
-import { formatTime, htmlToRaw } from '@components/common/timer'
-import { Soundwave } from '@components/courses/icons'
 import TimeLineModal from '@components/courses/timeline/TimeLineModal'
 import { fetchQuestionById, IActivityStateQuestion } from '@lms/contexts'
 import { IQuestion, IVideo } from '@lms/core'
@@ -11,6 +9,8 @@ import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import { useAppDispatch } from 'src/redux/hook'
+import { formatTimer, htmlToRaw } from '@lms/utils'
+import { Soundwave } from '@lms/assets'
 
 type Props = {
   videos?: IVideo[]
@@ -413,7 +413,7 @@ const VideoDocument = ({
                     }}
                   >
                     <div className="mim-w-[62px] text-state-info">
-                      {formatTime(e?.time)}
+                      {formatTimer(e?.time)}
                     </div>
                     <div className="text-inherit line-clamp-2 text-bw-1">
                       {htmlToRaw(e?.text)}

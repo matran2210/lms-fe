@@ -6,7 +6,7 @@ import {
   getPaddingHorizontalClass,
   getPaddingVerticalClass,
   getTextSizeClass,
-} from '@utils/helpers/button'
+} from '@lms/utils'
 
 const LoadingSpinner = () => (
   <div className="w-100 h-100 absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center space-x-2 bg-none dark:invert">

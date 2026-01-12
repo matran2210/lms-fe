@@ -3,13 +3,7 @@ import { UserType, getEntranceCount, useCourseContext } from '@lms/contexts'
 import { ANIMATION, AppType } from '@lms/core'
 import { Heading } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import {
-  CourseSkeleton,
-  Footer,
-  Layout,
-  SappLoadingGlobal,
-  SearchWithMenuToggle,
-} from '@lms/ui'
+import { CourseSkeleton, Footer, Layout, SearchWithMenuToggle } from '@lms/ui'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -18,6 +12,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch } from 'src/redux/hook'
 import { EntranceTestAPI } from '../api/entrance-test'
 import { EntranceTestFilter, EntranceTestList } from '@lms/feature-test'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 
 const EntranceTest = () => {
   const router = useRouter()

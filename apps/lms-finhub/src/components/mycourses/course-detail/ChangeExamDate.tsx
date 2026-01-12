@@ -1,10 +1,9 @@
 import { Controller, useFormContext } from 'react-hook-form'
 import useSelectExams from 'src/hooks/useSelectExams'
 import { useEffect } from 'react'
-import ErrorMessage from '@components/common/ErrorMessage'
 import { RcFile } from 'antd/es/upload'
 import { message, Upload, UploadProps } from 'antd'
-import { SAPPSelectV2, UploadSingleFileV2 } from '@lms/ui'
+import { ErrorMessage, SAPPSelectV2, UploadSingleFileV2 } from '@lms/ui'
 interface IProps {
   classId: string
   remainingChanges?: number

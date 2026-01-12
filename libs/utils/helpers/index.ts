@@ -111,3 +111,4 @@ export * from "./quiz-test";
 export * from "./ValidateMessage";
 export * from "./tiptap";
 export * from "./upload";
+export * from "./button";

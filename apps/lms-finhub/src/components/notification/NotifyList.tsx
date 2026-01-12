@@ -3,7 +3,6 @@ import Image from 'next/image'
 import { calculateTimeAgo } from '@utils/helpers'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
-import NoData from '@components/common/NoData'
 import { ANIMATION } from '@lms/core'
 import {
   containsKeyword,
@@ -11,6 +10,7 @@ import {
   trackGAEvent,
 } from '@lms/utils'
 import { BlankAvatarImage, Icon } from '@lms/assets'
+import { NoData } from '@lms/ui'
 
 interface IProps {
   notifyLists: any[]

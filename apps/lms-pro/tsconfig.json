@@ -28,6 +28,11 @@
     "incremental": true,
     "isolatedModules": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "../../libs/utils/helpers/button.ts"
+  ],
   "exclude": ["node_modules"]
 }

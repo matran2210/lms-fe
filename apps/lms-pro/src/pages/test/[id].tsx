@@ -38,7 +38,6 @@ import {
   NewFillText,
   OneChoiceQuestion,
   Popover,
-  SappLoading,
   SelectWord,
   useClickOutside,
 } from '@lms/ui'
@@ -119,6 +118,7 @@ import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import SappLoading from '@components/common/SappLoading'
 declare global {
   interface Window {
     userAgreed: any

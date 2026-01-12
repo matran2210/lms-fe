@@ -1,8 +1,7 @@
 // components/SearchForm.tsx
 
-import TotalResullt from '@components/common/TotalResullt'
 import { defaultStatusDetail } from '@lms/core'
-import { SappHookFormSelect } from '@lms/ui'
+import { SappHookFormSelect, TotalResullt } from '@lms/ui'
 import { getUserPrefix } from '@utils/helpers'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'

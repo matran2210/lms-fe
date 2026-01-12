@@ -1,6 +1,6 @@
 import React from 'react'
-import Tooltip from '@components/common/Tooltip'
 import { truncateString } from '@lms/utils'
+import { Tooltip } from '@lms/ui'
 
 interface IProps {
   greeting: string

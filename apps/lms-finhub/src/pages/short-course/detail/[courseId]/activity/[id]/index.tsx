@@ -10,7 +10,6 @@ import CreateNote from '@components/courses/activity/create-note/CreateNote'
 import ButtonIcon from '@components/courses/buttons/ButtonIcon'
 import NextPrevActivityButton from '@components/courses/buttons/ButtonNextPrevActivity'
 import { Arrows } from '@components/courses/icons'
-import { AltArrowLeft } from '@components/courses/icons/AltArrowLeft'
 import PdfModal from '@components/courses/popup/PdfModal'
 import Layout from '@components/layout'
 import {
@@ -20,7 +19,7 @@ import {
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
-import { CloseIcon } from '@lms/assets'
+import { AltArrowLeft, CloseIcon } from '@lms/assets'
 import {
   clearNote3Level,
   closeCalculator3Level,

@@ -53,7 +53,6 @@ import {
   NewDragNDropQuestion,
   OneChoiceQuestion,
   Popover,
-  SappLoadingGlobal,
   SelectWord,
   SlotValue,
 } from '@lms/ui'
@@ -68,6 +67,7 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import LimitQuizModal from '../test/limitQuizModal'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])

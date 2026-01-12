@@ -1,8 +1,8 @@
-import { apiURL } from '@components/mycourses/LearningResource'
 import { fetcher, fetchFormData } from '@services/requestV2'
 import { AxiosPromise } from 'axios'
 import { ExaminationsResponse } from 'src/redux/types/Course/MyCourse/ExamInformation'
-import { IQuizResultList, ExamInformation, IResponse} from '@lms/core'
+import { IQuizResultList, ExamInformation, IResponse } from '@lms/core'
+import { apiURL } from 'src/redux/services/httpService'
 
 export class ClassAPI {
   static getAllResultOfQuiz(
