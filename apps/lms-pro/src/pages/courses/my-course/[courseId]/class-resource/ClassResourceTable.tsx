@@ -1,5 +1,6 @@
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { CloseIcon, DownloadIcon } from '@lms/assets'
+import { useFeature } from '@lms/contexts'
 import {
   CLASS_SUFFIX_TYPE,
   DEFAULT_PAGE_NUMBER,
@@ -34,6 +35,7 @@ const ClassResourceTable = ({
   isLoading: boolean
   setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
 }) => {
+  const { videoUrl } = useFeature()
   const router = useRouter()
   const textStyle = 'text-base font-medium text-gray-800'
   const className = 'custom-column-table'
@@ -187,7 +189,12 @@ const ClassResourceTable = ({
           <SAPPVideo
             isFetchCaptions={false}
             streamRef={internalRef}
-            options={{ src: resource.sub_url }}
+            options={{
+              src:
+                resource.url
+                  ?.replace(videoUrl || '', '')
+                  .replace('/manifest/video.m3u8', '') || '',
+            }}
           ></SAPPVideo>
         )
       case 'SHEET':
