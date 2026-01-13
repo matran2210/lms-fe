@@ -15,9 +15,9 @@ import {
 } from '@lms/core'
 import { CollapseBox, CollapseItem } from '@lms/ui'
 import { capitalizeFirstLetter, formatDateTimeWithTimeZone } from '@lms/utils'
-import { MyRequestAPI } from '@pages/api/my-request'
+import { MyRequestAPI } from 'src/api/my-request'
 import dayjs from 'dayjs'
-import { useRouter } from 'next/router'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import toast from 'react-hot-toast'
 
 import { confirmDialog } from '@lms/contexts'
@@ -35,7 +35,10 @@ export interface IProps {
 
 function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
   const router = useRouter()
-  const params = router.query?.id
+  const searchParam = useSearchParams()
+  const pathname = usePathname()
+  const query = Object.fromEntries(searchParam.entries())
+  const params = query?.id
   const [loading, setLoading] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const [requestDetail, setRequestDetail] =
@@ -136,7 +139,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
         setLoading(false)
         setOpen(false)
         reloadPage()
-        router.replace(router.pathname, undefined, { shallow: true })
+        router.replace(pathname)
       }
     } catch (error: any) {
       // Handled by axios interceptor

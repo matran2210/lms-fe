@@ -4,14 +4,14 @@ import {
   GRADE_STATUS,
   GRADING_METHOD,
   IQuizResultList,
-  TEST_TYPE_LABELS,
+  TEST_TYPE_LABELS
 } from "@lms/core";
 import { HookFormSelect, SappModalV3 } from "@lms/ui";
 import {
   capitalizeFirstLetter,
   formatTimeMinToHhMm,
   isQuizExpired,
-  trackGAEvent,
+  trackGAEvent
 } from "@lms/utils";
 import clsx from "clsx";
 import dayjs from "dayjs";
@@ -45,7 +45,8 @@ const TestModalTeacher = ({
   activeCourse,
   is_passed_course,
 }: IProps) => {
-  const { router, classApi, pageLink } = useFeature();
+  const { router, classApi,
+    pageLink, } = useFeature();
 
   const isSubmitted =
     data?.quiz?.attempt && data?.quiz?.attempt?.status === "SUBMITTED";
@@ -75,9 +76,9 @@ const TestModalTeacher = ({
   const [isFocus, setIsFocus] = useState<boolean>(false);
   const [openResource, setOpenPopup] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [openLastAttempt, setOpenLastAttempt] = useState<boolean>(false);
+  const [openLastAttempt,setOpenLastAttempt] = useState<boolean>(false);
   const [remainingTime, setRemainingTime] = useState<number>();
-  let remainingTimeLastAttempt = useRef<number>(0);
+  const remainingTimeLastAttempt = useRef<number>(0);
   const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false);
 
   const onCancel = () => {
@@ -241,16 +242,11 @@ const TestModalTeacher = ({
     //to do: start test
     try {
       activeCourse && (await activeCourse());
-      router.push({
-        pathname: `${pageLink.TEACHER_TEST}/${data.quiz.id}`,
-        query: {
-          class_user_id: class_user_id,
-        },
-      });
+      router.push(`${pageLink.TEACHER_TEST}/${data.quiz.id}?class_user_id=${class_user_id}`);
       status
         ? () => trackGAEvent("Click Button Retake Modal Test")
         : () => trackGAEvent("Click Button Start Modal Test");
-    } catch {}
+    } catch { }
   };
 
   const handleFinishTest = async () => {
@@ -354,7 +350,7 @@ const TestModalTeacher = ({
       selectedResult &&
       selectedResult?.number_of_attempt &&
       selectedResult?.number_of_attempt !==
-        data?.quiz?.attempt?.number_of_attempts
+      data?.quiz?.attempt?.number_of_attempts
     ) {
       return false;
     }
@@ -440,19 +436,15 @@ const TestModalTeacher = ({
   return (
     <>
       {isSubmitted ||
-      isUnsubmitted ||
-      !data?.quiz?.attempt ||
-      data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count ? (
+        isUnsubmitted ||
+        !data?.quiz?.attempt ||
+        data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count ? (
         <SappModalV3
           handleClose={() => setOpen(false)}
           title={
             <div className="flex items-center justify-between gap-2">
               <div>
-                {
-                  TEST_TYPE_LABELS[
-                    data?.course_section_type as keyof typeof TEST_TYPE_LABELS
-                  ]
-                }
+                {TEST_TYPE_LABELS[data?.course_section_type as keyof typeof TEST_TYPE_LABELS]}
               </div>
               {!!data?.quiz?.quiz_timed &&
                 !!remainingTimeLastAttempt.current &&
@@ -493,7 +485,7 @@ const TestModalTeacher = ({
             renderShowOkButton() &&
             renderOkButtonCaption() === "Continue" &&
             data?.quiz?.attempt?.number_of_attempts ===
-              data?.quiz?.limit_count && (
+            data?.quiz?.limit_count && (
               <div className="mt-8 text-center text-base !font-normal text-gray-1">
                 <div>Your last attempt was unexpectedly ended.</div>
                 <div>{"Please click 'Continue' to proceed with the test."}</div>
@@ -508,148 +500,145 @@ const TestModalTeacher = ({
             renderOkButtonCaption() === "Continue" &&
             data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count
           ) && (
-            <>
-              <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
-                <div className="text-gray-1">Name:</div>
-                <div className="line-clamp-2 pr-0.5 font-medium text-bw-1">
-                  {data?.name}
-                </div>
-              </div>
-              <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
-                <div className="text-gray-1">Pass Point:</div>
-                <div className="pr-0.5 font-medium text-bw-1">
-                  {data?.quiz?.is_graded ? (
-                    <>{data?.quiz?.required_percent_score ?? "- -"}</>
-                  ) : (
-                    <>--</>
-                  )}
-                </div>
-              </div>
-              <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
-                <div className="text-gray-1">Time Allowed:</div>
-                <div className="pr-0.5 font-medium text-bw-1">
-                  {data?.quiz?.quiz_timed
-                    ? formatTimeMinToHhMm(data?.quiz?.quiz_timed * 60)
-                    : "Unlimited"}
-                </div>
-              </div>
-              <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
-                <div className="text-gray-1">Grading Method:</div>
-                <div className="pr-0.5 font-medium text-bw-1">
-                  {capitalizeFirstLetter(selectedResult?.grading_method) ??
-                    capitalizeFirstLetter(data?.quiz?.grading_method)}
-                </div>
-              </div>
-              <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
-                <div className="text-gray-1">No of Attempts:</div>
-                <div className="pr-0.5 font-medium text-bw-1">
-                  {data?.quiz?.attempt?.number_of_attempts || 0}/
-                  {data?.quiz?.is_limited
-                    ? data?.quiz?.limit_count
-                    : "Unlimited"}
-                </div>
-              </div>
-              {data?.quiz && (
+              <>
                 <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
-                  <div className="flex items-center gap-2 hover:text-primary">
-                    <div
-                      className={`forcus-group:text-primary text-gray-1 ${isFocus ? "text-primary" : ""}`}
-                    >
-                      Result:
-                    </div>
-                    {resultList.data.length > 1 && (
-                      <div className="flex gap-2">
-                        <HookFormSelect
-                          classParent="w-full md:max-w-full border-none h-[50px] forcus:text-primary"
-                          placeholder=""
-                          value={selectedResult}
-                          onChange={(selectedOption) => {
-                            setSelectedResult({
-                              ...selectedOption,
-                              number_of_attempt: Number(
-                                (selectedOption?.name ?? "").split("/")[0] ?? 0,
-                              ),
-                            });
-                            setIsFocus(false);
-                          }}
-                          options={resultList.data.map((item, index) => ({
-                            name: item.name,
-                            value: item.id,
-                            label: item.name,
-                            status: item.status,
-                            ratio_score: item.ratio_score,
-                            number_of_attempt: 3 - index,
-                          }))}
-                          onMenuScrollToBottom={(
-                            e: React.UIEvent<HTMLDivElement>,
-                          ) => {
-                            const { target } = e;
-                            if (
-                              (target as HTMLDivElement).scrollTop +
-                                (target as HTMLDivElement).offsetHeight ===
-                              (target as HTMLDivElement).scrollHeight
-                            ) {
-                              handleNextPage();
-                            }
-                          }}
-                          isResultSelect
-                          maxMenuHeight={130}
-                          onFocus={(e) => {
-                            setIsFocus(true);
-                          }}
-                          onBlur={(e) => {
-                            setIsFocus(false);
-                          }}
-                          isSearchable={false}
-                        />
-                      </div>
-                    )}
+                  <div className="text-gray-1">Name:</div>
+                  <div className="line-clamp-2 pr-0.5 font-medium text-bw-1">
+                    {data?.name}
                   </div>
-                  <div className="flex flex-row items-center">
-                    <div className={`pr-0.5 font-medium`}>
-                      {getResultOfTest()}
-                    </div>
-                    {isShowDetail() && (
-                      <div
-                        className="ml-2 cursor-pointer text-state-info underline"
-                        onClick={() => {
-                          if (isManualGradingAndNotFinishedGrading) {
-                            router.push(
-                              `${pageLink.TEACHER_MY_COURSE}/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
-                            );
-                          } else {
-                            router.push({
-                              pathname: `${pageLink.TEACHER_MY_COURSE}/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
-                              query: { attempt: selectedResult?.label },
-                            });
-                          }
-
-                          trackGAEvent("Click Button View Modal Result");
-                        }}
-                      >
-                        {isManualGradingAndNotFinishedGrading
-                          ? "Your Answers"
-                          : "Detail"}
-                      </div>
+                </div>
+                <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
+                  <div className="text-gray-1">Pass Point:</div>
+                  <div className="pr-0.5 font-medium text-bw-1">
+                    {data?.quiz?.is_graded ? (
+                      <>{data?.quiz?.required_percent_score ?? "- -"}</>
+                    ) : (
+                      <>--</>
                     )}
                   </div>
                 </div>
-              )}
-              <div className="flex justify-between gap-8 py-6 text-base">
-                <div className="text-gray-1">Status:</div>
-                {data?.quiz?.is_graded &&
-                data?.quiz?.grading_method === GRADING_METHOD.MANUAL ? (
-                  getGradedStatus(data?.quiz?.attempt?.grading_status)
-                ) : (
-                  <div
-                    className={`${status === StatusQuizAttempt.Passed ? "text-state-success" : status === StatusQuizAttempt.Failed ? "text-state-error" : "text-bw-1"} pr-0.5 font-medium`}
-                  >
-                    {status}
+                <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
+                  <div className="text-gray-1">Time Allowed:</div>
+                  <div className="pr-0.5 font-medium text-bw-1">
+                    {data?.quiz?.quiz_timed
+                      ? formatTimeMinToHhMm(data?.quiz?.quiz_timed * 60)
+                      : "Unlimited"}
+                  </div>
+                </div>
+                <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
+                  <div className="text-gray-1">Grading Method:</div>
+                  <div className="pr-0.5 font-medium text-bw-1">
+                    {capitalizeFirstLetter(selectedResult?.grading_method) ??
+                      capitalizeFirstLetter(data?.quiz?.grading_method)}
+                  </div>
+                </div>
+                <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
+                  <div className="text-gray-1">No of Attempts:</div>
+                  <div className="pr-0.5 font-medium text-bw-1">
+                    {data?.quiz?.attempt?.number_of_attempts || 0}/
+                    {data?.quiz?.is_limited
+                      ? data?.quiz?.limit_count
+                      : "Unlimited"}
+                  </div>
+                </div>
+                {data?.quiz && (
+                  <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
+                    <div className="flex items-center gap-2 hover:text-primary">
+                      <div
+                        className={`forcus-group:text-primary text-gray-1 ${isFocus ? "text-primary" : ""}`}
+                      >
+                        Result:
+                      </div>
+                      {resultList.data.length > 1 && (
+                        <div className="flex gap-2">
+                          <HookFormSelect
+                            classParent="w-full md:max-w-full border-none h-[50px] forcus:text-primary"
+                            placeholder=""
+                            value={selectedResult}
+                            onChange={(selectedOption) => {
+                              setSelectedResult({
+                                ...selectedOption,
+                                number_of_attempt: Number(
+                                  (selectedOption?.name ?? "").split("/")[0] ?? 0,
+                                ),
+                              });
+                              setIsFocus(false);
+                            }}
+                            options={resultList.data.map((item, index) => ({
+                              name: item.name,
+                              value: item.id,
+                              label: item.name,
+                              status: item.status,
+                              ratio_score: item.ratio_score,
+                              number_of_attempt: 3 - index,
+                            }))}
+                            onMenuScrollToBottom={(
+                              e: React.UIEvent<HTMLDivElement>,
+                            ) => {
+                              const { target } = e;
+                              if (
+                                (target as HTMLDivElement).scrollTop +
+                                (target as HTMLDivElement).offsetHeight ===
+                                (target as HTMLDivElement).scrollHeight
+                              ) {
+                                handleNextPage();
+                              }
+                            }}
+                            isResultSelect
+                            maxMenuHeight={130}
+                            onFocus={(e) => {
+                              setIsFocus(true);
+                            }}
+                            onBlur={(e) => {
+                              setIsFocus(false);
+                            }}
+                            isSearchable={false}
+                          />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex flex-row items-center">
+                      <div className={`pr-0.5 font-medium`}>
+                        {getResultOfTest()}
+                      </div>
+                      {isShowDetail() && (
+                        <div
+                          className="ml-2 cursor-pointer text-state-info underline"
+                          onClick={() => {
+                            if (isManualGradingAndNotFinishedGrading) {
+                              router.push(
+                                `${pageLink.TEACHER_MY_COURSE}/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
+                              );
+                            } else {
+                              router.push(`${pageLink.TEACHER_MY_COURSE}/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}?attempt=${selectedResult?.label}`);
+                            }
+
+                            trackGAEvent("Click Button View Modal Result");
+                          }}
+                        >
+                          {isManualGradingAndNotFinishedGrading
+                            ? "Your Answers"
+                            : "Detail"}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
-              </div>
-            </>
-          )}
+                <div className="flex justify-between gap-8 py-6 text-base">
+                  <div className="text-gray-1">Status:</div>
+                  {data?.quiz?.is_graded &&
+                    data?.quiz?.grading_method === GRADING_METHOD.MANUAL ? (
+                    getGradedStatus(data?.quiz?.attempt?.grading_status)
+                  ) : (
+                    <div
+                      className={`${status === StatusQuizAttempt.Passed ? "text-state-success" : status === StatusQuizAttempt.Failed ? "text-state-error" : "text-bw-1"} pr-0.5 font-medium`}
+                    >
+                      {status}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
 
           <PopupCanNotRetakeTest
             open={openResource}
@@ -669,11 +658,7 @@ const TestModalTeacher = ({
           title={
             <div className="flex items-center justify-between gap-2">
               <div>
-                {
-                  TEST_TYPE_LABELS[
-                    data?.course_section_type as keyof typeof TEST_TYPE_LABELS
-                  ]
-                }
+                {TEST_TYPE_LABELS[data?.course_section_type as keyof typeof TEST_TYPE_LABELS]}
               </div>
               {!!data?.quiz?.quiz_timed &&
                 (remainingTime !== undefined && remainingTime >= 0 ? (

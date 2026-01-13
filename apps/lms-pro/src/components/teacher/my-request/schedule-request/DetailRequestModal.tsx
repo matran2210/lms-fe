@@ -10,11 +10,11 @@ import PrimaryInformation from 'src/components/teacher/my-request/schedule-reque
 import { IScheduleRequestItem } from 'src/type/teachers/request-schedule.interface'
 import { StatusRequestSchedule } from '@lms/core'
 import { useQuery } from 'react-query'
-import { TeacherAPI } from '@pages/api/teacher'
+import { TeacherAPI } from 'src/api/teacher'
 import clsx from 'clsx'
 import InfoItem from './InfoItem'
 import StatusItem from './StatusItem'
-import { useRouter } from 'next/router'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { SappDrawer } from '@lms/ui'
 import { sappFormatDate } from '@lms/utils'
 
@@ -38,7 +38,8 @@ const DetailRequestModal = ({
   setOpenReasonModal,
   handleUpdateStatus,
 }: IProps) => {
-  const router = useRouter()
+  const searchParam = useSearchParams()
+  const query = Object.fromEntries(searchParam.entries())
   const requestId = selectedRequest?.id
   const isPending = selectedRequest?.status === StatusRequestSchedule.PENDING
   const isApproved = selectedRequest?.status === StatusRequestSchedule.APPROVED
@@ -66,7 +67,7 @@ const DetailRequestModal = ({
          *
          * @returns {object} - Dữ liệu lịch trình yêu cầu của giáo viên.
          */
-        const id = requestId || (router.query.request_id as string)
+        const id = requestId || (query.request_id as string)
         if (!id) throw new Error('Request ID is required')
         return await TeacherAPI.getRequestScheduleById(id)
       } catch (error) {

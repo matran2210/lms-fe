@@ -1,3 +1,4 @@
+"use client"
 import { useFeature } from '@lms/contexts'
 import { DEFAULT_PAGE_SIZE, ICoursesAPI, ISection } from '@lms/core'
 import { isEmpty } from 'lodash'
@@ -6,18 +7,18 @@ import { useRef, useState } from 'react'
 export const useInitialSections = (api: ICoursesAPI) => {
   const [sections, setSections] = useState<ISection[]>([])
   const isFetchingRef = useRef(false)
-  const {router} = useFeature()
+  const { params } = useFeature()
 
   const fetchInitialSections = async (page_size: number) => {
     try {
       if (
         isEmpty(sections) &&
-        (router.query.courseId || router.query.id) &&
+        (params?.courseId || params?.id) &&
         !isFetchingRef.current
       ) {
         isFetchingRef.current = true
         const { data } = await api.getCourseSectionList(
-          router.query.courseId || router.query.id,
+          params?.courseId || params?.id,
           page_size || DEFAULT_PAGE_SIZE,
         )
         if (!isEmpty(data?.sections)) {

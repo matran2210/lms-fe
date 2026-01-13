@@ -1,3 +1,4 @@
+"use client"
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { IIcon } from '@lms/core'

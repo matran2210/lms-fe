@@ -55,14 +55,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         cancelButtonCaption="Back"
         okButtonCaption="Start"
         handleCancel={handleOnClick}
-        onOk={() => {
-          router.push({
-            pathname: `/test/${data?.id}`,
-            query: {
-              type: "entrance",
-            },
-          });
-        }}
+        onOk={() => router.push(`/test/${data?.id}?type=entrance`)}
         showOkButton={!checkLimit || count >= 1}
         showHeader={false}
         buttonSize="medium"

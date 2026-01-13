@@ -15,7 +15,7 @@ import {
 } from '@lms/core'
 import { useQueryAction } from '@lms/hooks'
 import { ActivitySkeleton, HighlightableHTML } from '@lms/ui'
-import { trackGAEvent, truncateBySpace } from '@lms/utils'
+import { buildQueryString, trackGAEvent, truncateBySpace } from '@lms/utils'
 import { Tabs, Tooltip } from 'antd'
 import clsx from 'clsx'
 import React, { useMemo, useRef } from 'react'
@@ -56,14 +56,14 @@ const CourseTabDocument = ({
   focusOnlyDiscussion,
   scrollRef,
 }: IProps) => {
-  const { courseApi, router, dispatch, useAppSelector } = useFeature();
+  const { courseApi, router, dispatch, useAppSelector, query, params, pathname } = useFeature();
   const selector = useAppSelector?.(courseActivityReducer)
 
   const quizDocumentRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<any>(null)
   const queryAction = useQueryAction()
-  const courseId = router.query?.id
-  const activityId = router.query.activityId
+  const courseId = params?.id || query?.id
+  const activityId = params?.activityId || query.activityId
   /**
    * Giá trị được memoized cho course_tab_documents.
    */
@@ -89,14 +89,7 @@ const CourseTabDocument = ({
   const handleChangeTab = (courseId: string, id: string) => {
     try {
       dispatch?.(getCourseActivityTapById({ courseId, id, api: courseApi }))
-      router.replace(
-        {
-          pathname: router.pathname,
-          query: { ...router.query, tabId: id },
-        },
-        undefined,
-        { shallow: true },
-      )
+      router.replace(`${pathname}?${buildQueryString({ ...query, tabId: id })}`)
       scrollToTop()
       //   setActiveButtonId(id)
     } catch (error) {}
@@ -348,7 +341,7 @@ const CourseTabDocument = ({
           hidden: !focusOnlyDiscussion,
         })}
       >
-        <Discussion class_id={(router.query.id as string) || ''} />
+        <Discussion class_id={(params?.id as string || query.id as string) || ''} />
       </div>
       {selector?.tabs && selector?.tabs?.length > 1 && (
         <div

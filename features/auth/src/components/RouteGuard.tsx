@@ -5,7 +5,6 @@ import {
   ENTRANCE_TEST_TABLE_RESULT
 } from "@lms/core";
 import { setCookie } from "@lms/utils";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 interface IProps {
@@ -13,15 +12,14 @@ interface IProps {
 }
 
 export const RouteGuard = ({ children }: IProps) => {
-  const { userApi, dispatch, useAppSelector } = useFeature();
+  const { userApi, dispatch, useAppSelector, pathname} = useFeature();
 
-  const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
   const userSlice = useAppSelector?.(userReducer);
   // First useEffect for getMe
   useEffect(() => {
     callGetMe();
-  }, [router.pathname, userSlice?.user.keycloak_user_id]);
+  }, [pathname, userSlice?.user.keycloak_user_id]);
 
   const callGetMe = async () => {
     if (
@@ -31,7 +29,7 @@ export const RouteGuard = ({ children }: IProps) => {
         CERTIFICATE_DETAIL,
         ENTRANCE_TEST_RESULT,
         ENTRANCE_TEST_TABLE_RESULT,
-      ].includes(router.pathname)
+      ].includes(pathname as string)
     ) {
       setAuthorized(true);
       setCookie(

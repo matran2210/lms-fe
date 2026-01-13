@@ -1,3 +1,4 @@
+'use client'
 import { isEmpty } from 'lodash'
 import EmptyCourses from '../shared/EmptyCourses'
 import CourseCard from './CourseCard'

@@ -1,3 +1,4 @@
+"use client";
 import { AssistiveIcon } from "@lms/assets";
 import clsx from "clsx";
 import React, { useEffect, useRef, useState } from "react";

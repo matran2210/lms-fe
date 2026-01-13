@@ -1,15 +1,18 @@
+'use client'
 import DesktopFilter3Level from '@components/courses/filter/FilterDesktop'
 import MobileFilter3Level from '@components/courses/filter/FilterMobile'
 import { defaultStatusCourse, IFilterProps } from '@lms/core'
 import { formatPathWithQueryParams } from '@lms/utils'
-import { useRouter } from 'next/router'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants/routes'
 
 export default function Filter3Level({ courses, setPage }: IFilterProps) {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { setValue } = useForm()
+  const params = Object.fromEntries(searchParams.entries())
 
   const [filterType, setFilterType] = useState<{
     label: string
@@ -34,8 +37,8 @@ export default function Filter3Level({ courses, setPage }: IFilterProps) {
   const totalResults = courses?.metadata?.total_records || 0
 
   useEffect(() => {
-    const queryStatus = router.query.status || ''
-    const queryType = router.query.type || ''
+    const queryStatus = params.status || ''
+    const queryType = params.type || ''
 
     const foundStatus = defaultStatusCourse.find(
       (item) => item.value === queryStatus,
@@ -56,7 +59,7 @@ export default function Filter3Level({ courses, setPage }: IFilterProps) {
   useEffect(() => {
     if (!isFirstRender) {
       const filterUrl = formatPathWithQueryParams(PageLink.SHORT_COURSE, {
-        name: router.query.name as string,
+        name: params.name as string,
         status: filterStatus.value,
         type: filterType.value,
       })

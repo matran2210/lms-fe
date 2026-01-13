@@ -7,7 +7,7 @@ import {
 } from '@lms/ui'
 import { getSelectOptions } from '@utils/helpers'
 import { debounce } from 'lodash'
-import { useRouter } from 'next/router'
+import { useParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Control } from 'react-hook-form'
 import useSelectClassSchedule from 'src/hooks/useSelectClassSchedule'
@@ -16,11 +16,12 @@ interface IProps {
 }
 
 const ClassResourceTeacherFilter: React.FC<IProps> = ({ control }) => {
-  const router = useRouter()
+  const params = useParams()
+  const { id } = params
   const [search, setSearch] = useState('')
   const [isOpen, setIsOpen] = useState(false)
   const { classSchedule, hasNextPage, fetchNextPage, isLoading, refetch } =
-    useSelectClassSchedule(router.query.id as string, search, isOpen)
+    useSelectClassSchedule(id as string, search, isOpen)
 
   const debouncedSearch = useRef(
     debounce((value: string) => {

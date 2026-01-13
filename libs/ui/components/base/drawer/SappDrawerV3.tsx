@@ -1,3 +1,4 @@
+"use client";
 import { Drawer, DrawerProps } from "antd";
 import React, { ReactNode, useEffect } from "react";
 import clsx from "clsx";

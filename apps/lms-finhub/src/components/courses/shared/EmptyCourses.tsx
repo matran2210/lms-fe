@@ -1,3 +1,4 @@
+'use client'
 import { EmptyCourseProps } from '@lms/core'
 import { EmptyCoursesIcon } from '../icons'
 

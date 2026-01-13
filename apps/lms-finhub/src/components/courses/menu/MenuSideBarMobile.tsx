@@ -2,14 +2,15 @@ import { Divider, Drawer } from 'antd'
 import { useState } from 'react'
 import MenuItemsList from '@components/courses/menu/MenuItemsList'
 import { LogoMobile } from '@components/courses/icons'
-import { useRouter } from 'next/router'
 import clsx from 'clsx'
 import { HamburgerMenuLargeIcon } from '@lms/assets'
 import { MENU_BOTTOM, MENU_ITEMS } from 'src/constants/menu-items'
+import { useRouter, usePathname } from 'next/navigation'
 
 export default function SidebarMobile() {
   const [open, setOpen] = useState<boolean>(false)
   const router = useRouter()
+  const pathname = usePathname()
 
   const toggleDrawer = () => {
     setOpen(!open)
@@ -19,7 +20,7 @@ export default function SidebarMobile() {
     '/short-course/detail/[courseId]/activity/[id]',
   ]
 
-  const isInMyProfile = router.pathname === '/overview'
+  const isInMyProfile = pathname === '/overview'
   return (
     <>
       {/* Top bar with hamburger and title */}
@@ -27,11 +28,8 @@ export default function SidebarMobile() {
         className={clsx(
           'h-12 w-12 items-center justify-center rounded-lg bg-white p-2 shadow-small md:h-14 md:w-14 lg:hidden',
           {
-            hidden:
-              listPathHiddenSidebar.includes(router.pathname) && !isInMyProfile,
-            flex:
-              !listPathHiddenSidebar.includes(router.pathname) &&
-              !isInMyProfile,
+            hidden: listPathHiddenSidebar.includes(pathname) && !isInMyProfile,
+            flex: !listPathHiddenSidebar.includes(pathname) && !isInMyProfile,
             'hidden md:flex': isInMyProfile,
           },
         )}

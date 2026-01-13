@@ -1,3 +1,4 @@
+'use client'
 import TooltipCourses from '@components/courses/shared/Tooltip'
 import { ICourseTitle } from '@lms/core'
 import { trackGAEvent, truncateString } from '@lms/utils'

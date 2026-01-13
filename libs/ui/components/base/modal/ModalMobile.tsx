@@ -1,3 +1,4 @@
+"use client"
 import { SadIcon } from '@lms/assets'
 import { Modal } from 'antd'
 import { useEffect, useState } from 'react'

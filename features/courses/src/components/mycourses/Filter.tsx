@@ -17,7 +17,7 @@ interface IProps {
 }
 
 const Filter = ({ courses, setPage, tourGuideActive, isTeacher }: IProps) => {
-  const { router, pageLink } = useFeature();
+  const { router, pageLink, query } = useFeature();
 
   const { control, watch, setValue } = useForm();
   const [activeStatus, setActiveStatus] = useState<boolean>(false);
@@ -46,7 +46,7 @@ const Filter = ({ courses, setPage, tourGuideActive, isTeacher }: IProps) => {
       (userSectionLearningType !== undefined ||
         userSectionLearningStatus !== undefined)
     ) {
-      router.push(`${apiUrl}?name=${router.query.name || ""}${queryString}`);
+      router.push(`${apiUrl}?name=${query.name || ""}${queryString}`);
       setPage && setPage(9);
     }
   }, [apiUrl, queryString, watch]);
@@ -59,19 +59,19 @@ const Filter = ({ courses, setPage, tourGuideActive, isTeacher }: IProps) => {
    * @description set lại value của status khi router query rỗng
    */
   useEffect(() => {
-    if (isEmpty(router?.query?.status)) {
+    if (isEmpty(query?.status)) {
       setValue("status", "");
     }
-  }, [router?.query?.status]);
+  }, [query?.status]);
 
   /**
    * @description set lại value của type khi router query rỗng
    */
   useEffect(() => {
-    if (isEmpty(router?.query?.type)) {
+    if (isEmpty(query?.type)) {
       setValue("type", "");
     }
-  }, [router?.query?.type]);
+  }, [query?.type]);
 
   return (
     <div className="flex items-center font-normal filter">

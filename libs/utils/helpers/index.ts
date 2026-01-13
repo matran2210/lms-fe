@@ -1,4 +1,4 @@
-import { MenuItem, MenuOption } from "@lms/core";
+import { MenuItem, MenuOption, RouteContext } from "@lms/core";
 
 export const convertLocalTimeToUTC = (currentTime: Date) => {
   const offsetMinutes = currentTime.getTimezoneOffset();
@@ -132,6 +132,51 @@ export function makeMenuLevel(options: MenuOption[], depth = 0): MenuItem[] {
         ? makeMenuLevel(option.subItems, depth + 1)
         : undefined,
   }))
+}
+export function getRouteContext(pathname: string): RouteContext {
+  // Learning flow
+  if (/^\/courses\/[^/]+\/(section|activity)/.test(pathname)) {
+    return "COURSE_LEARNING";
+  }
+
+  // Course management
+  if (/^\/courses\/my-course\/[^/]+/.test(pathname)) {
+    return "COURSE_MANAGEMENT";
+  }
+
+  return "GLOBAL";
+}
+
+export function getLearningSubContext(pathname: string) {
+  const parts = pathname.split("/").filter(Boolean);
+  if (parts.length === 4) return "CONTENT";
+  if (parts[2] === "section") return "CONTENT";
+  if (parts[2] === "activity") return "CONTENT";
+  return null;
+}
+
+export function getCourseContentSubContext(pathname: string) {
+  const parts = pathname.split("/").filter(Boolean);
+
+  // /courses/my-course/:id
+  if (parts.length === 3) return "CONTENT";
+
+  // /courses/my-course/:id/dashboard
+  if (parts[3] === "dashboard") return "DASHBOARD";
+
+  // /courses/my-course/:id/results
+  if (parts[3] === "results") return "RESULTS";
+
+  // /courses/my-course/:id/class-resource
+  if (parts[3] === "class-resource") return "CLASS_RESOURCE";
+
+  // /courses/my-course/:id/section/:sectionId
+  if (parts[3] === "section") return "CONTENT";
+
+  // /courses/my-course/:id/activity/:activityId
+  if (parts[3] === "activity") return "CONTENT";
+
+  return null;
 }
 export * from "./timer";
 export * from "./date";

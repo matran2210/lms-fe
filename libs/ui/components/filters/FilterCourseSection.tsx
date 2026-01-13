@@ -1,3 +1,4 @@
+"use client";
 import { useFeature } from "@lms/contexts";
 import { DEFAULT_PAGE_SIZE, SectionField } from "@lms/core";
 import { useDynamicLoading, useInitialSections, useSectionData } from "@lms/hooks";

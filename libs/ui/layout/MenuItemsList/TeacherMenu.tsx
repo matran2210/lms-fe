@@ -1,3 +1,4 @@
+"use client";
 import {
   BellIcon,
   BlankAvatarImage,
@@ -29,8 +30,10 @@ export default function TeacherMenu({
   isCourseDetail: boolean;
   isActivity: boolean;
 }) {
-  const { authManager, pageLink, router, dispatch, useAppSelector } = useFeature();
+  const { authManager, pageLink, router, dispatch, useAppSelector, params, query } = useFeature();
   const { user } = useAppSelector?.(userReducer) || {};
+  const courseId = params?.courseId as string || query.courseId as string;
+  const id = params?.id as string || query.id as string;
 
   const [selectedKey, setSelectedKey] = useState("Home");
   const [openResource, setOpenResource] = useState(false);
@@ -79,7 +82,7 @@ export default function TeacherMenu({
               selected={selectedKey === TitleSidebar.COURSE_CONTENT}
             />
           ),
-          link: `${pageLink.TEACHER_MY_COURSE}/my-course/${router.query.id || router.query.courseId}`,
+          link: `${pageLink.TEACHER_MY_COURSE}/my-course/${id || courseId}`,
           active:
             isCurrent(`${pageLink.TEACHERS}${pageLink.COURSE_DETAIL}`) &&
             selectedKey !== TitleSidebar.NOTES_LIST,
@@ -110,9 +113,9 @@ export default function TeacherMenu({
               selected={selectedKey === TitleSidebar.RESULTS}
             />
           ),
-          link: `${pageLink.TEACHER_MY_COURSE}/my-course/${router.query.id || router.query.courseId}/results`,
+          link: `${pageLink.TEACHER_MY_COURSE}/my-course/${id || courseId}/results`,
           active: isCurrent(
-            `${pageLink.TEACHER_MY_COURSE}/my-course/${router.query?.id ? "[id]" : "[courseId]"}/results`,
+            `${pageLink.TEACHER_MY_COURSE}/my-course/${id ? "[id]" : "[courseId]"}/results`,
           ),
         },
       ];
@@ -192,7 +195,7 @@ export default function TeacherMenu({
         active: isCurrent(pageLink.TEACHERS),
       },
     ];
-  }, [isCourseDetail, isActivity, selectedKey, router.query, isCurrent]);
+  }, [isCourseDetail, isActivity, selectedKey, query, isCurrent]);
 
   const menuItems = useMemo(() => getMenuItems(), [getMenuItems]);
 

@@ -1,3 +1,4 @@
+"use client"
 import { UploadFile } from "antd/es/upload";
 import axios, { CancelTokenSource } from "axios";
 import { capitalize } from "lodash";

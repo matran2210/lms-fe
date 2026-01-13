@@ -18,19 +18,20 @@ import {
   SappModalImage,
   SappTable,
   SAPPVideo,
-  Tooltip,
   TextPreview,
+  Tooltip,
 } from '@lms/ui'
 import { formatDate } from '@lms/utils'
-import { ClassAPI } from '@pages/api/class'
-import { UploadAPI } from '@pages/api/upload'
 import clsx from 'clsx'
-import { useRouter } from 'next/router'
+import { useParams } from 'next/navigation'
 import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { ClassAPI } from 'src/api/class'
+import { UploadAPI } from 'src/api/upload'
 
 export default function ClassResourceTeacher() {
-  const router = useRouter()
+  const param = useParams()
+  const { id } = param
   const internalRef = useRef<HTMLVideoElement>(null)
   const { control, reset, getValues } = useForm()
   const [params, setParams] = useState<IListClassResourceParams>({
@@ -53,7 +54,7 @@ export default function ClassResourceTeacher() {
     useSappPaging({
       uniqueKey: ClassKey.ClassResource,
       queryFn: () =>
-        ClassAPI.getClassResource(router.query.id as string, {
+        ClassAPI.getClassResource(id as string, {
           ...params,
           page_index: pagination.current as number,
           page_size: pagination.pageSize as number,
@@ -152,8 +153,8 @@ export default function ClassResourceTeacher() {
     {
       title: 'Lesson',
       render: (record: IClassResource) =>
-        record?.class_resource_permissions?.schedules.map((item) => (
-          <div>{item?.name}</div>
+        record?.class_resource_permissions?.schedules.map((item, index) => (
+          <div key={index}>{item?.name}</div>
         )),
     },
     {

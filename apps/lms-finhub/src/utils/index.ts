@@ -1,4 +1,4 @@
-import { TestServiceAPI } from '@pages/api/test-api'
+import { TestServiceAPI } from 'src/api/test-api'
 
 export const download = async (name: string, file_key: string) => {
   await TestServiceAPI.downloadFile({
