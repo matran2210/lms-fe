@@ -1,7 +1,12 @@
 import { UserType } from '@lms/contexts'
 import { DEFAULT_PAGE_SIZE, TEST_AND_QUIZ_TITLE } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { HeaderMobile, Layout, SappBreadCrumbs } from '@lms/ui'
+import {
+  HeaderMobile,
+  Layout,
+  SappBreadCrumbs,
+  TestQuizResultSkeleton,
+} from '@lms/ui'
 import { CoursesAPI } from '@pages/api/courses'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
@@ -62,51 +67,50 @@ const Results = () => {
   const courseNameDetail = courseData?.courseDetail?.data?.name
 
   return (
-    <Layout
-      title={TEST_AND_QUIZ_TITLE}
-      showSidebar={isAlwaysShowSidebar}
-    >
-      {isAlwaysShowSidebar && (
-        <div className="mb-2 mt-4 flex w-full">
-          <SappBreadCrumbs
-            isTeacher={false}
-            breadcrumbs={[
-              {
-                title: 'My Course',
-                link: PageLink.COURSES,
-              },
-              {
-                title: courseNameDetail || '',
-                link: PageLink.COURSE_DETAIL.replace(
-                  '[courseId]',
-                  router.query.courseId as string,
-                ),
-              },
-              {
-                title: TEST_AND_QUIZ_TITLE,
-                link: '',
-              },
-            ]}
-          />
-        </div>
-      )}
-      <HeaderMobile
-        title={TEST_AND_QUIZ_TITLE}
-        showIcon={isTabletView || isMobileView}
-        onBack={handleBack}
-        className={clsx({ 'mt-4': isMobileView, 'mt-8': isTabletView })}
-        extraActions={
-          isMobileView && (
-            <div onClick={() => setOpenFilter((prev) => !prev)}>
-              <FilterCourseIcon />
+    <Layout title={TEST_AND_QUIZ_TITLE} showSidebar={isAlwaysShowSidebar}>
+      {!courseData ? (
+        <TestQuizResultSkeleton />
+      ) : (
+        <>
+          {isAlwaysShowSidebar && (
+            <div className="mb-2 mt-4 flex w-full">
+              <SappBreadCrumbs
+                isTeacher={false}
+                breadcrumbs={[
+                  { title: 'My Course', link: PageLink.COURSES },
+                  {
+                    title: courseNameDetail || '',
+                    link: PageLink.COURSE_DETAIL.replace(
+                      '[courseId]',
+                      router.query.courseId as string,
+                    ),
+                  },
+                  { title: TEST_AND_QUIZ_TITLE, link: '' },
+                ]}
+              />
             </div>
-          )
-        }
-      />
-      <ResultsTable
-        openFilter={openFilter}
-        setOpenFilter={setOpenFilter}
-      />
+          )}
+
+          <HeaderMobile
+            title={TEST_AND_QUIZ_TITLE}
+            showIcon={isTabletView || isMobileView}
+            onBack={handleBack}
+            className={clsx({
+              'mt-4': isMobileView,
+              'mt-8': isTabletView,
+            })}
+            extraActions={
+              isMobileView && (
+                <div onClick={() => setOpenFilter((prev) => !prev)}>
+                  <FilterCourseIcon />
+                </div>
+              )
+            }
+          />
+
+          <ResultsTable openFilter={openFilter} setOpenFilter={setOpenFilter} />
+        </>
+      )}
     </Layout>
   )
 }

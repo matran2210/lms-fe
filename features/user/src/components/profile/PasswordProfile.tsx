@@ -1,14 +1,14 @@
 import { Icon } from "@lms/assets";
 import { useAppSelector, userReducer } from "@lms/contexts";
-import { ButtonPrimary, ButtonText, SappModalV2 } from "@lms/ui";
+import { ButtonPrimary, ButtonText, SappModalV3 } from "@lms/ui";
 import type { GetProps } from "antd";
 import { Input } from "antd";
+import { useCountdownTest } from "node_modules/@lms/hooks";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { UseFormGetValues, UseFormReset } from "react-hook-form";
 import toast from "react-hot-toast";
 import { AuthAPI } from "src/pages/api/profile";
 import { IChangePassword } from "./ChangePassword";
-import { useCountdownTest } from "node_modules/@lms/hooks";
 
 type OTPProps = GetProps<typeof Input.OTP>;
 interface IProps {
@@ -115,7 +115,9 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
     onInput,
   };
   return (
-    <SappModalV2
+    <SappModalV3
+      width={560}
+      handleClose={() => setOpen(false)}
       title={undefined}
       open={open}
       handleCancel={() => setOpen(false)}
@@ -186,7 +188,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
           />
         </div>
       </div>
-    </SappModalV2>
+    </SappModalV3>
   );
 };
 

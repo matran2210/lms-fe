@@ -83,6 +83,7 @@ import { UploadAPI } from './api/upload'
 import ErrorRedirectPage from './error-redirect'
 import CalendarApi from './api/calendar'
 import { TestServiceAPI } from './api/test-api'
+import { uploadImageToLinkedIn } from './api/certificate'
 dayjs.extend(utc)
 dayjs.extend(weekday)
 
@@ -369,6 +370,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 fetcher: fetcher,
                 videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
                 testServiceApi: TestServiceAPI,
+                uploadImageToLinkedIn: uploadImageToLinkedIn,
               }}
             >
               <CourseProvider

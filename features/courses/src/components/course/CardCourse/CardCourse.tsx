@@ -97,7 +97,8 @@ const CardCourse = forwardRef<
         <div
           data-guide-id="courses-card"
           className={clsx(
-            "relative flex flex-col rounded-xl bg-white p-4 shadow-card transition-colors duration-300 ease-in-out hover:border hover:border-primary hover:shadow-md md:p-6 lg:rounded-2xl lg:p-8",
+            "relative flex flex-col rounded-xl bg-white p-4 md:p-6 lg:rounded-2xl lg:p-8",
+            "hover-ring-primary hover-shadow-card",
             {
               "border-white bg-white":
                 !isMobileView && guideStatus && guideStep === 5,

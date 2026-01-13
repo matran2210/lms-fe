@@ -48,7 +48,7 @@ import {
   SelectWord,
   SlotValue,
 } from '@lms/ui'
-import { runHighlight } from '@lms/utils'
+import { handleMultipleCorrectAnswer, runHighlight } from '@lms/utils'
 import { TestServiceAPI } from '@pages/api/test-api'
 import { Divider } from 'antd'
 import clsx from 'clsx'
@@ -366,6 +366,10 @@ const CaseStudyResult = () => {
       )
     }
     if (data.question.qType === QUESTION_TYPES.DRAG_DROP) {
+      handleMultipleCorrectAnswer(
+        data?.question?.drag_drop_answers,
+        data?.question?.answers,
+      )
       return data.answer?.map(
         (item: { answer_position: number; answer_id: string }) => {
           return {
@@ -817,7 +821,7 @@ const CaseStudyResult = () => {
                 <ModalResizeable
                   key={e.id}
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
-                  position="center left"
+                  position="center"
                   header={
                     <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
                       <div className="text-sm font-semibold text-gray-800">

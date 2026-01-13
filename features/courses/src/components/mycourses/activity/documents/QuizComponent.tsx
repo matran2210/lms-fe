@@ -873,6 +873,13 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       }}
                       isShowContent={showQuestionContent}
                       externalRef={refEditor}
+                      setOpenPdf={(type: string, file?: string | undefined, fileName?: string | undefined) => { 
+                        handleOpenFile({resource: {
+                            name: fileName as string,
+                            url: file as string,
+                          }
+                        } as IFile)
+                      }}
                     />
                   </div>
                 ),

@@ -5,6 +5,6 @@ packages:
   - "tools/*"
 
 hoistPattern:
-  - "react*"
-  - "antd"
-  - "@ant-design/*"
+  - react*
+  - antd
+  - '@ant-design/*'

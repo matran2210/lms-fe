@@ -1,35 +1,36 @@
-import { UnstartedIcon } from '@lms/assets'
-import { SappModalV3 } from '@lms/ui'
-import { Dispatch, SetStateAction } from 'react'
-import { MY_COURSES } from '@lms/core'
-import { formatDateToSlash } from '@lms/utils'
+import { UnstartedIcon } from "@lms/assets";
+import { SappModalV3 } from "@lms/ui";
+import { Dispatch, SetStateAction } from "react";
+import { MY_COURSES } from "@lms/core";
+import { formatDateToSlash } from "@lms/utils";
 
 interface IProps {
-  open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>
-  started_at: Date
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  started_at: Date;
 }
 const PopupLesson = ({ open, setOpen, started_at }: IProps) => {
   const onOk = () => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
   const ContentUnstartedCourse = () => {
     return (
       <div className="justify-center self-stretch text-center">
         <span className="text-base font-normal leading-normal text-gray-800">
-          This Course will start on{' '}
-          {formatDateToSlash(new Date(started_at).toString(), true)}. Please come back
-          later or contact{' '}
+          This Course will start on{" "}
+          {formatDateToSlash(new Date(started_at).toString(), true)}. Please
+          come back later or contact{" "}
           <span className="font-semibold">
             our Support at {MY_COURSES.hotline}
           </span>
         </span>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <SappModalV3
+      handleClose={() => setOpen(false)}
       open={open}
       handleCancel={onOk}
       onOk={onOk}
@@ -43,7 +44,7 @@ const PopupLesson = ({ open, setOpen, started_at }: IProps) => {
       showCancelButton={false}
       isUnderLine
     />
-  )
-}
+  );
+};
 
-export default PopupLesson
+export default PopupLesson;

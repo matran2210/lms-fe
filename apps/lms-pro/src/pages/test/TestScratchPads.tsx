@@ -70,22 +70,28 @@ const TestScratchPads = ({
     } else if (e.type === 'scratch_pad') {
       return (
         <ModalResizeable
-          position="center left"
+          position="center"
           key={currentPage}
-          header={
+          header={({ requestClose }) => (
             <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
               <div className="text-sm font-semibold text-gray-800">
                 Scratch Pad
               </div>
               <button
                 className="text-icon"
-                onClick={() => handleCloseScratchPad(e)}
-                onTouchEnd={() => handleCloseScratchPad(e)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  requestClose()
+                }}
+                onTouchEnd={(e) => {
+                  e.stopPropagation()
+                  requestClose()
+                }}
               >
                 <CloseIconNote />
               </button>
             </div>
-          }
+          )}
           handleCloseScratchPad={() => {
             handleCloseScratchPad(e)
           }}
@@ -117,20 +123,23 @@ const TestScratchPads = ({
         <ModalResizeable
           key={e.id}
           handleCloseScratchPad={() => handleCloseScratchPad(e)}
-          position="center left"
-          header={
+          position="center"
+          header={({ requestClose }) => (
             <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
               <div className="text-sm font-semibold text-gray-800">
                 {`${exhibitText} ${(i ?? 0) + 1}: ${exhibitsDes?.name}`}
               </div>
               <button
                 className="text-icon"
-                onClick={() => handleCloseScratchPad(e)}
+                onClick={() => {
+                  e.stopPropagation()
+                  requestClose()
+                }}
               >
                 <CloseIconNote />
               </button>
             </div>
-          }
+          )}
           draggableFull
           modalIndex={i}
         >
