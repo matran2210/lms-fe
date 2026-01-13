@@ -193,8 +193,8 @@ const ClassResourceTable = ({
             options={{
               src: resource.url
                 ? resource.url
-                    ?.replace(videoUrl || '', '')
-                    .replace('/manifest/video.m3u8', '') || ''
+                    .replace(videoUrl || '', '')
+                    .replace('/manifest/video.m3u8', '')
                 : resource.sub_url,
             }}
           ></SAPPVideo>
