@@ -106,7 +106,7 @@ const TestDetail = () => {
   const scrollRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const params = useParams()
-  const { query } = useFeature()
+  const { query, pathname } = useFeature()
   const { quizDetail } = useGetQuizDetail(params.id as string)
   const { questions } = useGetQuestionTabs(params.id as string)
   const type = query.type
@@ -1654,28 +1654,31 @@ const TestDetail = () => {
   useEffect(() => {
     if (!isQuizAttemptCreated) return
 
-    const handleWindowClose = (e: any) => {
+    // cảnh báo khi đóng tab / reload
+    const handleWindowClose = (e: BeforeUnloadEvent) => {
       if (!unsavedChange) return
       e.preventDefault()
-      return (e.returnValue = warningText)
+      e.returnValue = warningText
     }
 
-    const handleBrowseAway = () => {
-      if (unsavedChange === true && routeBack === false) {
-        if (!unsavedChange) return
-        if (window.confirm(warningText)) return
-        router.events.emit('routeChangeError')
-        throw 'routeChange aborted.'
+    // cảnh báo khi route change
+    const handleBrowseAway = (e: Event) => {
+      if (!unsavedChange) return
+      const confirmed = window.confirm(warningText)
+      if (!confirmed) {
+        e.preventDefault()
+        throw 'Route change aborted due to unsaved changes'
       }
     }
 
     window.addEventListener('beforeunload', handleWindowClose)
-    router.events.on('routeChangeStart', handleBrowseAway)
+    window.addEventListener('popstate', handleBrowseAway) // tương đương back/forward
+
     return () => {
       window.removeEventListener('beforeunload', handleWindowClose)
-      router.events.off('routeChangeStart', handleBrowseAway)
+      window.removeEventListener('popstate', handleBrowseAway)
     }
-  }, [unsavedChange, isQuizAttemptCreated])
+  }, [unsavedChange, isQuizAttemptCreated, pathname])
 
   useEffect(() => {
     if (startResize) {
