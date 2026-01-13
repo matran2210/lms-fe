@@ -899,17 +899,14 @@ const CaseStudyDetail = () => {
     const handleBrowseAway = () => {
       if (!unsavedChanges) return
       if (window.confirm(warningText)) return
-      // TODO: nhớ check lại phần này với router của nextjs
-      // router.events.emit('routeChangeError')
+      router.events.emit('routeChangeError')
       throw 'routeChange aborted.'
     }
     window.addEventListener('beforeunload', handleWindowClose)
-    // TODO: nhớ check lại phần này với router của nextjs
-    // router.events.on('routeChangeStart', handleBrowseAway)
+    router.events.on('routeChangeStart', handleBrowseAway)
     return () => {
       window.removeEventListener('beforeunload', handleWindowClose)
-      // TODO: nhớ check lại phần này với router của nextjs
-      // router.events.off('routeChangeStart', handleBrowseAway)
+      router.events.off('routeChangeStart', handleBrowseAway)
     }
   }, [unsavedChanges])
   useEffect(() => {

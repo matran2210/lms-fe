@@ -106,7 +106,7 @@ const TestDetail = () => {
   const scrollRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const params = useParams()
-  const {query} = useFeature()
+  const { query } = useFeature()
   const { quizDetail } = useGetQuizDetail(params.id as string)
   const { questions } = useGetQuestionTabs(params.id as string)
   const type = query.type
@@ -885,7 +885,7 @@ const TestDetail = () => {
       return false
     }
   }
-  // TODO: Implement this
+
   const getValueFillText = () => {}
   const getValueSelectText = () => {
     const value = getValues(`${currentPage}_answer`) || []
@@ -1651,32 +1651,31 @@ const TestDetail = () => {
     }
   }, [params.id])
 
-  //todo: next14
-  // useEffect(() => {
-  //   if (!isQuizAttemptCreated) return
+  useEffect(() => {
+    if (!isQuizAttemptCreated) return
 
-  //   const handleWindowClose = (e: any) => {
-  //     if (!unsavedChange) return
-  //     e.preventDefault()
-  //     return (e.returnValue = warningText)
-  //   }
+    const handleWindowClose = (e: any) => {
+      if (!unsavedChange) return
+      e.preventDefault()
+      return (e.returnValue = warningText)
+    }
 
-  //   const handleBrowseAway = () => {
-  //     if (unsavedChange === true && routeBack === false) {
-  //       if (!unsavedChange) return
-  //       if (window.confirm(warningText)) return
-  //       router.events.emit('routeChangeError')
-  //       throw 'routeChange aborted.'
-  //     }
-  //   }
+    const handleBrowseAway = () => {
+      if (unsavedChange === true && routeBack === false) {
+        if (!unsavedChange) return
+        if (window.confirm(warningText)) return
+        router.events.emit('routeChangeError')
+        throw 'routeChange aborted.'
+      }
+    }
 
-  //   window.addEventListener('beforeunload', handleWindowClose)
-  //   router.events.on('routeChangeStart', handleBrowseAway)
-  //   return () => {
-  //     window.removeEventListener('beforeunload', handleWindowClose)
-  //     router.events.off('routeChangeStart', handleBrowseAway)
-  //   }
-  // }, [unsavedChange, isQuizAttemptCreated])
+    window.addEventListener('beforeunload', handleWindowClose)
+    router.events.on('routeChangeStart', handleBrowseAway)
+    return () => {
+      window.removeEventListener('beforeunload', handleWindowClose)
+      router.events.off('routeChangeStart', handleBrowseAway)
+    }
+  }, [unsavedChange, isQuizAttemptCreated])
 
   useEffect(() => {
     if (startResize) {

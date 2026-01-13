@@ -156,21 +156,6 @@ export function Providers({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  /**
-   * @description Sử dụng useEffect để thực hiện các tác vụ liên quan đến việc theo dõi thay đổi trong route của ứng dụng để check GA
-   */
-  // TODO: Next14
-  // useEffect(() => {
-  //     const handleRouteChange = (url: URL) => {
-  //         pageview(url as any)
-  //     }
-
-  //     router.events.on('routeChangeComplete', handleRouteChange)
-
-  //     return () => {
-  //         router.events.off('routeChangeComplete', handleRouteChange)
-  //     }
-  // }, [router.events])
   useEffect(() => {
     if (!pathname) return
     pageview(pathname as any)
@@ -274,37 +259,8 @@ export function Providers({ children }: { children: ReactNode }) {
     //     setTimeout(hideHubspotWidget, 300) // Short delay to ensure DOM is updated
     // }
 
-    // TODO: Next14
-    // router.events.on('routeChangeComplete', handleRouteChange)
-
-    // return () => {
-    //     observer.disconnect()
-    //     router.events.off('routeChangeComplete', handleRouteChange)
-    // }
     return () => observer.disconnect()
   }, [router, showHelp, hiddenChatbot])
-
-  // TODO: Next14
-  // useEffect(() => {
-  //     const handleRouteChange = () => {
-  //         // Lưu URL hiện tại vào localStorage trước khi đổi sang URL mới
-  //         localStorage.setItem('previousUrl', router.asPath)
-  //         if (
-  //             router.asPath.includes('courses') &&
-  //             !router.asPath.includes('your-answers-detail')
-  //         ) {
-  //             localStorage.setItem('previousCourseUrl', router.asPath)
-  //         }
-  //     }
-
-  //     // Lắng nghe sự kiện chuyển route
-  //     router.events.on('routeChangeStart', handleRouteChange)
-
-  //     // Cleanup listener
-  //     return () => {
-  //         router.events.off('routeChangeStart', handleRouteChange)
-  //     }
-  // }, [router])
 
   useEffect(() => {
     if (prevPathRef.current) {
@@ -320,6 +276,7 @@ export function Providers({ children }: { children: ReactNode }) {
 
     prevPathRef.current = pathname
   }, [pathname])
+
   return (
     <ErrorBoundary fallback={<ErrorRedirectPage />}>
       <AntConfigProvider>
