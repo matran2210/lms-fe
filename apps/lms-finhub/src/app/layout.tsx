@@ -1,7 +1,6 @@
 // app/layout.tsx
 import type { ReactNode } from 'react'
 import Metadata from '@components/common/Metadata'
-// TODO: Next14
 import '@lms/styles'
 import '@fortune-sheet/react/dist/index.css'
 import '@sapp-fe/entrance-test-result-package/dist/index.css'
@@ -17,6 +16,7 @@ import 'aos/dist/aos.css'
 import { Providers } from './provider'
 import { ErrorBoundary } from '@sentry/nextjs'
 import ErrorRedirectPage from './error-redirect/page'
+import Script from 'next/script'
 
 export const revalidate = 0
 
@@ -25,6 +25,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <ErrorBoundary fallback={<ErrorRedirectPage />}>
       <html lang="vi">
         <Metadata />
+        <head>
+          <Script
+            src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"
+            strategy="beforeInteractive"
+          />
+        </head>
         <body>
           <Providers>{children}</Providers>
         </body>

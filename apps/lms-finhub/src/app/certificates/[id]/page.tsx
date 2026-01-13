@@ -3,7 +3,7 @@ import { LAYOUT } from '@lms/core'
 import { CertificateVertical, HorizontalCertificate } from '@lms/feature-user'
 import { useDownloadImage } from '@lms/hooks'
 import { SappLoadingGlobal, SinglePageLayout } from '@lms/ui'
-import { useParams } from "next/navigation"
+import { useParams } from 'next/navigation'
 import { useQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
 import withAuthorization from 'src/HOC/withAuthorization'
