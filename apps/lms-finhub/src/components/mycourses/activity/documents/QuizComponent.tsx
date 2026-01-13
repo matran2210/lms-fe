@@ -122,10 +122,6 @@ type Props = {
   modalOpen?: boolean
 }
 
-// type RefEditor = {
-//   reset: () => void
-// }
-
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
   (
     {

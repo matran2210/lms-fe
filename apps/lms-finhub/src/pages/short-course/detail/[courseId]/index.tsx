@@ -2,8 +2,6 @@ import { Breadcrumb3Level } from '@components/courses'
 import LearningOutComeModal from '@components/courses/popup/LearningOutComeModal'
 import TestModal from '@components/courses/popup/TestModal'
 import Layout from '@components/layout'
-import BottomMenu from '@components/v2/course-detail/BottomMenu'
-import CardMenuItem from '@components/v2/course-detail/CardMenuItem'
 import {
   AlertInfoIcon,
   ChapterIcon,
@@ -17,9 +15,9 @@ import {
   UserType,
 } from '@lms/contexts'
 import { ANIMATION, DEFAULT_PAGESIZE, ROUTES, TEST_TYPE } from '@lms/core'
-import { PopupLockContent } from '@lms/feature-courses'
+import { CardMenuItem, PopupLockContent } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { LearningResource, PromotionalBanner } from '@lms/ui'
+import { BottomMenu, LearningResource, PromotionalBanner } from '@lms/ui'
 import { buildQueryString, formatDate } from '@lms/utils'
 import { CoursesAPI } from '@pages/api/courses'
 import PreviewPartDetail from '@sapp-fe/preview-part'

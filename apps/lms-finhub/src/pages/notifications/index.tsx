@@ -1,10 +1,6 @@
 import Layout from '@components/layout'
 
 import SearchForm from '@components/courses/shared/SearchForm'
-import NotifyActions from '@components/notification/NotifyActions'
-import NotifyDetail from '@components/notification/NotifyDetail'
-import NotifyList from '@components/notification/NotifyList'
-import NotifyTab from '@components/notification/NotifyTab'
 import {
   getCountUnRead,
   getNotification,
@@ -25,7 +21,12 @@ import Router, { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-
+import {
+  NotifyActions,
+  NotifyDetail,
+  NotifyList,
+  NotifyTab,
+} from '@lms/feature-notifications'
 const Notifications = () => {
   const [openModel, setOpenModel] = useState<boolean>(false)
   const [openToolTip, setOpenToolTip] = useState<boolean>(false)

@@ -32,10 +32,10 @@ import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 import { PageLink } from 'src/constants/routes'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 type Props = {
   questions: IQuestion[]
@@ -57,29 +57,6 @@ type Props = {
   attemptId?: string
   isTeacher?: boolean
 }
-
-interface IAnswer {
-  active: string
-  id: string
-  is_correct: false
-  quiz_attempt_id: string
-  time_spent: number
-  topic_attempt_id: string
-  question: {
-    id: string
-    qType: string
-    question_content: string
-    question_filter_id: {
-      part: {
-        name: string
-      }
-    }
-  }
-}
-
-// interface IAnswers {
-//   answers: IAnswer[]
-// }
 
 const QuizDocument = ({
   questions,

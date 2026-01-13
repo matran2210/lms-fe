@@ -1,6 +1,5 @@
 import Metadata from '@components/common/Metadata'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
-import PopupCompletedCourse from '@components/mycourses/PopupCompletedCourse'
 import '@fortune-sheet/react/dist/index.css'
 import {
   CourseProvider,
@@ -21,7 +20,7 @@ import {
   SOCKET_EVENTS,
 } from '@lms/core'
 import { RouteGuard } from '@lms/feature-auth'
-import { LearningNotesList } from '@lms/feature-courses'
+import { LearningNotesList, PopupCompletedCourse } from '@lms/feature-courses'
 import {
   AntConfigProvider,
   BackToTop,

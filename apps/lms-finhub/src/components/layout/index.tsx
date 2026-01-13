@@ -45,8 +45,6 @@ export default function Layout(props: LayoutProps): ReactElement {
   )
 
   const [openResource, setOpenResource] = useState(false)
-  const [openExaminationInfo, setOpenExaminationInfo] = useState(false)
-
   const isEnablePinnedPages = [
     PageLink.COURSES,
     PageLink.USERPAGE,
@@ -95,8 +93,6 @@ export default function Layout(props: LayoutProps): ReactElement {
           )}
           setOpenResource={setOpenResource}
           openResource={openResource}
-          openExaminationInfo={openExaminationInfo}
-          setOpenExaminationInfo={setOpenExaminationInfo}
         />
 
         <div

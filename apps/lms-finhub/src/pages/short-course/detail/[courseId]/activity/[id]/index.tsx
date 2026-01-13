@@ -18,7 +18,6 @@ import {
 } from '@components/mycourses/activity/documents/LoadingActivity'
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
-import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
 import { AltArrowLeft, CloseIcon } from '@lms/assets'
 import {
   clearNote3Level,
@@ -36,7 +35,7 @@ import {
   IActivityResource,
   ISubSection,
 } from '@lms/core'
-import { CalculatorModal } from '@lms/feature-courses'
+import { CalculatorModal, PopupLockContent } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { trackGAEvent } from '@lms/utils'
 import { CoursesAPI } from '@pages/api/courses'

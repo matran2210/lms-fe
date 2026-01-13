@@ -28,14 +28,12 @@ type MenuItemProps = {
   menuItem: MenuItemType
   setOpenResource?: Dispatch<SetStateAction<boolean>>
   closeSideBar: () => void
-  setOpenExaminationInfo?: Dispatch<SetStateAction<boolean>>
 }
 
 export default function MenuItem({
   menuItem: { name, icon: Icon, url, type, subItems },
   setOpenResource,
   closeSideBar,
-  setOpenExaminationInfo,
 }: MenuItemProps) {
   const {
     isViewDetail,
@@ -120,10 +118,6 @@ export default function MenuItem({
     })
   }
 
-  const handleOpenExaminationInfoPage = () => {
-    setOpenExaminationInfo && setOpenExaminationInfo(true)
-  }
-
   const onClickMenuItem = () => {
     const hasCourseContext = router?.query?.courseId || router?.query?.id
 
@@ -155,9 +149,6 @@ export default function MenuItem({
           break
         case TitleSidebar.RESULTS:
           handleOpenResultsPage()
-          break
-        case TitleSidebar.EXAM_LIST:
-          handleOpenExaminationInfoPage()
           break
         default:
           if (url !== '#' && !isEmpty(url)) {
@@ -480,7 +471,6 @@ export default function MenuItem({
               options={subItems || []}
               setOpenResource={setOpenResource}
               closeSideBar={closeSideBar}
-              setOpenExaminationInfo={setOpenExaminationInfo}
             />
           </div>
         ) : null}

@@ -1,11 +1,9 @@
 import { CloseIcon, DownloadIcon, LinkIcon } from '@lms/assets'
 
 import Layout from '@components/layout'
-import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
-import CreateNote from '@components/mycourses/create-note/CreateNote'
 import { CourseSectionType, IActivity, SUFFIX_TYPE } from '@lms/core'
 import { trackGAEvent, truncateBySpace, truncateString } from '@lms/utils'
 
@@ -23,7 +21,7 @@ import {
   UserType,
 } from '@lms/contexts'
 import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from '@lms/core'
-import { CalculatorModal } from '@lms/feature-courses'
+import { CalculatorModal, CreateNote, Discussion } from '@lms/feature-courses'
 import {
   ActivitySkeleton,
   EditorReader,
