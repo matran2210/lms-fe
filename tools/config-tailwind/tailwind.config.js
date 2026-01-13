@@ -372,7 +372,8 @@ module.exports = {
         pagination: "0px 2px 7px 0px #00000021",
         pinned: "0 1px 3px rgba(0, 0, 0, .1)",
         small: "0px 4px 20px 0px rgba(41, 41, 41, 0.05)",
-        medium: "0px 4px 12px 0px rgba(44, 48, 0, 0.04)",
+        medium: "0px 4px 16px 0px rgba(44, 48, 0, 0.08)",
+        large: "0px 4px 24px 0px rgba(0, 0, 0, 0.12)",
         card: "0px 4px 16px 0px #00000014",
         table: "0px 4px 16px 0px rgba(0,0,0,0.08)",
         sidebar_menu: "0px 0px 16px 0px #00000014",
@@ -381,7 +382,6 @@ module.exports = {
           "0px 0px 6px 0px rgba(18, 80, 163, 0.40), 0px 2px 4px 0px rgba(18, 80, 163, 0.20), 0px 4px 6px 0px rgba(18, 80, 163, 0.25)",
         "focus-overdue":
           "0px 0px 6px 0px rgba(255, 62, 62, 0.40), 0px 2px 4px 0px rgba(255, 62, 62, 0.20), 0px 4px 6px 0px rgba(255, 62, 62, 0.25)",
-        card: "0px 4px 16px 0px #00000014",
         header: "0px 4px 16px 0px rgba(44, 48, 0, 0.05)",
         navigator: "0px 4px 16px 0px rgba(124,124,124,0.18)",
         strong:

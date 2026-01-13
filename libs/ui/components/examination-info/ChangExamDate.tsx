@@ -1,3 +1,4 @@
+"use client";
 import { ArrowDownIcon } from "@lms/assets";
 import React from "react";
 import { useSelectExams, useTailwindBreakpoint } from "@lms/hooks";

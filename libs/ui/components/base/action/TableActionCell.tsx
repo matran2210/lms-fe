@@ -1,3 +1,4 @@
+"use client"
 import { ActionIcon } from '@lms/assets'
 import { Dropdown, Tooltip } from 'antd'
 import { ReactNode, useState } from 'react'

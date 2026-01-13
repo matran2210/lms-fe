@@ -1,9 +1,7 @@
 import { QuizComponentRef } from '@components/mycourses/activity/documents/QuizComponent'
 import { fetchQuestionById, IActivityStateQuestion } from '@lms/contexts'
-import { IQuestion, IVideo } from '@lms/core'
+import { IQuestion, ITestServiceAPI, IVideo } from '@lms/core'
 import { SAPPVideo } from '@lms/ui'
-import { CoursesAPI } from '@pages/api/courses'
-import { TestServiceAPI } from '@pages/api/test-api'
 import { debounce } from '@utils/helpers'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -11,6 +9,8 @@ import { useAppDispatch } from 'src/redux/hook'
 import QuizModal from './QuizModal'
 import VideoSelector from './VideoSelector'
 import VideoTimeline from './VideoTimeLine'
+import { TestServiceAPI } from 'src/api/test-api'
+import { CoursesAPI } from 'src/api/courses'
 
 type Props = {
   videos?: IVideo[]

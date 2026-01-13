@@ -1,3 +1,4 @@
+"use client";
 import SappDivider from "../../base/divider/Divider";
 import { DndContext, DragEndEvent, useDroppable } from "@dnd-kit/core";
 import parse, { Element } from "html-react-parser";
@@ -9,6 +10,7 @@ import DraggableItem from "./DraggableItem";
 import DroppableSlot from "./DroppableSlot";
 import { SappTitleSolution } from "../../common";
 import { EditorReader, SappModalImage } from "../../base";
+import { Correct } from "@lms/utils";
 declare var com: any;
 
 interface Answer {
@@ -23,14 +25,6 @@ export interface SlotValue {
   position: number;
   idAnswer?: string;
 }
-
-export interface Correct {
-  id: string;
-  is_correct: boolean;
-  answer: string;
-  answer_position: number;
-}
-
 interface DragDropQuestionProps {
   data: {
     question_content: string;

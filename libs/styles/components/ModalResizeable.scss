@@ -12,7 +12,6 @@
       @apply border bg-primary;
     }
   }
-  @apply fixed left-0 top-0 z-[1000] mb-4;
 }
 
 .modalHeader {
@@ -21,4 +20,48 @@
 
 .modalContent {
   @apply h-[calc(100%-40px)] overflow-auto;
+}
+
+.modal-overlay {
+  animation: overlayFade 300ms ease-out;
+}
+
+.modal-zoom-in {
+  animation: modalZoomIn 300ms ease-out;
+  transform-origin: center;
+}
+
+.modal-zoom-out {
+  animation: modalZoomOut 300ms ease-in forwards;
+}
+
+@keyframes overlayFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalZoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes modalZoomOut {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.95);
+    opacity: 0;
+  }
 }

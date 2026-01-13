@@ -1,6 +1,5 @@
 import { CircleInfoIcon } from '@lms/assets'
 import clsx from 'clsx'
-import React from 'react'
 interface IProps {
   isShowWarning: boolean
   className?: string

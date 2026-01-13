@@ -1,9 +1,9 @@
 import { IDeviceItem, IResponse, PinnedNotifications } from '@lms/core'
 import { fetchFormData } from '@services/requestV2'
-import { AuthAPI } from 'src/pages/api/profile'
+import { AuthAPI } from 'src/api/profile'
 import { IUser } from '@lms/contexts'
-import { apiURL } from '../httpService'
 import url from './url'
+import { apiURL } from 'src/constants'
 
 const UserApi = {
   /**
@@ -72,6 +72,14 @@ const UserApi = {
     // Đường dẫn api Pinned Notification
     // Sử dụng httpService để gửi yêu cầu GET
     return AuthAPI.getPinnedNotifications()
+  },
+
+  /**
+   * @description Xóa device.
+   * @async
+   */
+  removeDevice: (session_id: string): Promise<any> => {
+    return AuthAPI.removeDevice(session_id)
   },
 }
 

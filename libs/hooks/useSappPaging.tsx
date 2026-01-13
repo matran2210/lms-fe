@@ -1,3 +1,4 @@
+"use client"
 import { useQuery, UseQueryResult } from 'react-query'
 import { TablePaginationConfig } from 'antd'
 import { Dispatch, SetStateAction, useState, useEffect } from 'react'
@@ -25,10 +26,10 @@ const useSappPaging = ({
   params,
   enabled = true,
 }: UsePagingProps): UsePagingResultSapp => {
-  const { router } = useFeature()
+  const { query } = useFeature()
   const [pagination, setPagination] = useState<TablePaginationConfig>({
-    current: Number(router.query.page_index) || 1,
-    pageSize: Number(router.query.page_size) || 10,
+    current: Number(query.page_index) || 1,
+    pageSize: Number(query.page_size) || 10,
     total: 10,
     showSizeChanger: true, // Hiển thị lựa chọn số lượng trang
     showQuickJumper: true, // Hiển thị tùy chọn chuyển nhanh trang

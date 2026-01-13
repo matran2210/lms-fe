@@ -12,7 +12,9 @@ interface IProps {
   title: ReactNode;
   time: string | Dayjs | Date;
   numberOfAttempt?: number;
-  customFooter?: ReactNode;
+  customFooter?:
+    | ReactNode
+    | ((helpers: { requestClose: () => void }) => ReactNode);
   otherContent?: ReactNode;
   gapContent?: string;
   isClosable?: boolean;
@@ -39,7 +41,7 @@ const TestPopup = ({
       open={open}
       isClosable={isClosable}
       onOk={() => {}}
-      handleCancel={() => setOpen(false)}
+      handleClose={() => setOpen(false)}
       icon={isTimeOut ? <TimeOutIcon /> : undefined}
       header={title}
       showFooter={false}

@@ -32,17 +32,27 @@ Dự án bao gồm 2 Next.js applications:
 lms-fe/
 ├── .husky/
 ├── apps/
-│   ├── lms/                          # LMS Application (full features)
+│   ├── lms/                          # LMS Application (full features - App Router)
 │   │   ├── src/
-│   │   │   ├── pages/                # Next.js pages
+│   │   │   ├── app/                  # Next.js App Router
 │   │   │   │   ├── courses/
+│   │   │   │   │   └── page.tsx      # Route /courses
 │   │   │   │   ├── test/
+│   │   │   │   │   └── [id]/
+│   │   │   │   │       └── page.tsx  # Dynamic route /test/:id
 │   │   │   │   ├── entrance-test/
+│   │   │   │   │   └── page.tsx
 │   │   │   │   ├── event-test/
+│   │   │   │   │   └── page.tsx
 │   │   │   │   ├── calendar/
+│   │   │   │   │   └── page.tsx
 │   │   │   │   ├── teachers/
+│   │   │   │   │   └── page.tsx
 │   │   │   │   ├── profile/
-│   │   │   │   └── ...
+│   │   │   │   │   └── page.tsx
+│   │   │   │   └── layout.tsx
+|   |   |   |   └── providers.tsx
+|   |   |   |   └── not-found.tsx
 │   │   │   └── middleware.ts
 │   │   ├── public/
 │   │   ├── next.config.js
@@ -50,18 +60,21 @@ lms-fe/
 │   │   ├── tsconfig.json
 │   │   └── ...
 │   │
-│   └── lms-finhub/                       # Lms-Finhub Application (Shour Course)
+│   └── lms-finhub/                   # Lms-Finhub Application (short course - Pages Router)
 │       ├── src/
-│       │   ├── pages/                # Next.js pages
+│       │   ├── pages/                # Next.js Pages Router
 │       │   │   ├── courses/
+│       │   │   │   └── index.tsx     # Route /courses
 │       │   │   ├── profile/
+│       │   │   │   └── index.tsx     # Route /profile
 │       │   │   └── certificate/
+│       │   │       └── index.tsx     # Route /certificate
 │       │   └── middleware.ts
 │       ├── public/
 │       ├── next.config.js
 │       ├── package.json
 │       └── tsconfig.json
-│
+
 ├── libs/                             # LIBRARY LAYER
 │   ├── ui/                           # Atomic shared components (Button, Text, Collapse, Drawer, Modal) (non-business)
 │   │   ├── components/
@@ -342,8 +355,8 @@ apps/short-course (Courses Only)
 
 ```yaml
 packages:
-  - 'apps/*'
-  - 'packages/*'
+  - "apps/*"
+  - "packages/*"
 ```
 
 ### turbo.json

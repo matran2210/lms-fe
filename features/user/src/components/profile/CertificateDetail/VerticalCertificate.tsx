@@ -1,3 +1,4 @@
+"use client"
 import { CertificateImg, CopyIcon, Icon, SappLogoImage } from "@lms/assets";
 import { ButtonPrimary, ClickToCopyButton } from "@lms/ui";
 import Image from "next/image";

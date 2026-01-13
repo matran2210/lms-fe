@@ -1,33 +1,31 @@
+"use client";
 import {
   RadarChart,
   PolarGrid,
-  PolarAngleAxis,
+  PolarAngleAxis,  
   PolarRadiusAxis,
   Radar,
   ResponsiveContainer,
   Tooltip as RTooltip,
 } from "recharts";
-import { DashboardAPI } from "@pages/api/dashboard";
 import dayjs from "dayjs";
-import { useRouter } from "next/router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ILearningResult, IMockTestResult } from "@lms/core";
 import { COURSE_TYPE, DATE_FORMAT } from "@lms/core";
 import { IconEssentional } from "@lms/assets";
 import { Tooltip } from "@lms/ui";
-import useReponsive from "src/hooks/useReponsive";
+import { useReponsive } from "@lms/hooks";
+import { useFeature } from "@lms/contexts";
 
 const LearningResultTest = () => {
-  const router = useRouter();
+  const { dashboardApi, params, query } = useFeature()
+  const { courseId } = params || query
   const [option, setOption] = useState<any>();
-  const [hasLearning, setHasLearning] = useState<boolean>(false);
-  const [mockTestId, setMockTestId] = useState<string>("");
   const [chartData, setChartData] = useState<{ name: string; score: number }[]>(
     [],
   );
   const containerRef = useRef<HTMLDivElement>(null);
   const tickTooltipRef = useRef<HTMLDivElement>(null);
-
   const avgPercent = useMemo(() => {
     if (!chartData.length) return 0;
     const sum = chartData.reduce((acc, d) => acc + (Number(d.score) || 0), 0);
@@ -58,11 +56,11 @@ const LearningResultTest = () => {
   const handleLearningResults = (
     data: ILearningResult[] | IMockTestResult | any,
   ) => {
-    if (data.mock_tests?.length == 1) setMockTestId(data.mock_tests[0].id);
+    // if (data.mock_tests?.length == 1) setMockTestId(data.mock_tests[0].id);
 
     if (data.length) {
       let total = 0;
-      const hasLearning = data.some((e: ILearningResult) => e.score);
+      // const hasLearning = data.some((e: ILearningResult) => e.score);
       // Tính max cho từng section
       const maxValues = data.map((result: any) => {
         const learning = result?.score || 0;
@@ -199,7 +197,7 @@ const LearningResultTest = () => {
         ],
       };
 
-      setHasLearning(hasLearning);
+      // setHasLearning(hasLearning);
       setOption(option);
       setChartData(
         data.map((e: ILearningResult) => ({
@@ -215,7 +213,7 @@ const LearningResultTest = () => {
 
   const getLearningResults = async (id: string) => {
     try {
-      const res = await DashboardAPI.getLearningResults(id);
+      const res = await dashboardApi?.getLearningResults(id);
 
       if (res && res.success) handleLearningResults(res.data);
     } catch (error) {
@@ -224,9 +222,9 @@ const LearningResultTest = () => {
   };
 
   useEffect(() => {
-    if (router?.query?.courseId)
-      getLearningResults(router.query.courseId as string);
-  }, [router?.query?.courseId]);
+    if (courseId)
+      getLearningResults(courseId as string);
+  }, [courseId]);
 
   const resultFormula =
     courseInfo?.category === "ACCA"

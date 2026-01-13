@@ -1,3 +1,4 @@
+"use client";
 import { CloseIconNote } from "@lms/assets";
 import {
   useCourseContext,
@@ -8,7 +9,7 @@ import { useLayoutEffect } from "react";
 import PinnedNotificationsV2 from "./PinnedNotificationsV2";
 
 export default function CtaTrial() {
-  const { pageLink, router } = useFeature();
+  const { pageLink, router, pathname } = useFeature();
   const ENABLED_PINNED_PAGES = [
     pageLink.COURSE_DETAIL,
     pageLink.COURSE_PART_DETAIL,
@@ -28,9 +29,9 @@ export default function CtaTrial() {
     useCourseContext();
   const { openPinned } = usePinnedNotifyContext();
 
-  const isEnablePinnedPages = ENABLED_PINNED_PAGES.includes(router.pathname);
+  const isEnablePinnedPages = ENABLED_PINNED_PAGES.includes(pathname as string);
   const isEnablePinnedNotiPages = ENABLED_PINNED_NOTI_PAGES.includes(
-    router.pathname,
+    pathname as string,
   );
 
   useLayoutEffect(() => {

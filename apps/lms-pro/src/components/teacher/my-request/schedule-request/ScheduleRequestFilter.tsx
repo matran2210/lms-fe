@@ -1,6 +1,6 @@
 import { SappHookFormSelect } from '@lms/ui'
 import { HookFormTextField } from '@lms/ui'
-import { TeacherAPI } from '@pages/api/teacher'
+import { TeacherAPI } from 'src/api/teacher'
 import { useState } from 'react'
 import { isEmpty } from 'lodash'
 import { HookFormDateRangePicker } from '@lms/ui'

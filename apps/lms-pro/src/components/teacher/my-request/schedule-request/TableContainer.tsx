@@ -6,16 +6,17 @@ import {
 } from '@lms/core'
 import { SappActionCell, SappTable, TooltipParagraph } from '@lms/ui'
 import { ColumnsType } from 'antd/es/table'
-import { useRouter } from 'next/router'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 import { useSappPaging } from '@lms/hooks'
 import {
+  buildQueryString,
   convertSlugToTitle,
   convertSnakeCaseToHumanReadable,
   formatDateFromUTC,
 } from '@lms/utils'
-import { TeacherAPI } from '../../../../pages/api/teacher'
+import { TeacherAPI } from 'src/api/teacher'
 import {
   FilterRequestScheduleParams,
   IScheduleRequestItem,
@@ -61,6 +62,9 @@ interface IProps {
 }
 export default function TableContainer({ params }: IProps) {
   const router = useRouter()
+  const searchParam = useSearchParams()
+  const pathname = usePathname()
+  const query = Object.fromEntries(searchParam.entries())
   const [openDetail, setOpenDetail] = useState(false)
   const [openReasonModal, setOpenReasonModal] = useState<IOpenReasonModal>(
     defaultOpenReasonModal,
@@ -89,19 +93,12 @@ export default function TableContainer({ params }: IProps) {
   })
 
   useEffect(() => {
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: {
-          ...router.query,
+    router.replace(`${pathname}?${buildQueryString({
+          ...query,
           page_index: pagination.current,
           page_size: pagination.pageSize,
           ...params,
-        },
-      },
-      undefined,
-      { shallow: true },
-    )
+        })}`)
   }, [pagination, params])
 
   const Action = (data: IScheduleRequestItem) => {
@@ -272,7 +269,7 @@ export default function TableContainer({ params }: IProps) {
   }
 
   useEffect(() => {
-    if (router.query.showRequestDetail === 'true') {
+    if (query.showRequestDetail === 'true') {
       setOpenDetail(true)
     }
   }, [])
@@ -289,7 +286,7 @@ export default function TableContainer({ params }: IProps) {
         emptyText="No matching records found"
       />
 
-      {(selectedRequest || router.query.request_id) && (
+      {(selectedRequest || query.request_id) && (
         <DetailRequestModal
           open={openDetail}
           setOpen={setOpenDetail}
