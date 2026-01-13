@@ -15,8 +15,6 @@ import {
   CourseProvider,
   disableUnsavedChange,
   loginSlice,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
 } from '@lms/contexts'
 import {
@@ -29,29 +27,31 @@ import {
   RESPONSE_OPTION,
   TEST_TYPE,
 } from '@lms/core'
-import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
 import {
+  DragNDropPreivew,
   EditorReader,
+  EssayQuestionPreview,
   FullScreenLayout,
   HookFormCheckBoxGroup,
+  MatchingQuestion,
+  ModalUploadFile,
+  MultiChoiceQuestion,
+  NewFillText,
+  OneChoiceQuestion,
+  SelectWord,
   useClickOutside,
 } from '@lms/ui'
-import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
-import DragNDropPreivew from '@lms/ui/components/questionType/DragNDrop'
-import MatchingQuestion from '@lms/ui/components/questionType/MatchingQuestion'
-import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
-import NewFiltext from '@lms/ui/components/questionType/NewFillText'
-import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
-import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { checkSheetAnswered, runHighlight } from '@lms/utils'
 import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { CoursesAPI } from 'src/pages/api/courses'
 import LimitQuizModal from 'src/pages/test/limitQuizModal'
 
+import {
+  removeHighlights,
+  serializeHighlights,
+} from '@funktechno/texthighlighter/lib'
 import { showPopupCompletedCourse } from '@lms/contexts'
 import {
   Answer,
@@ -77,16 +77,15 @@ import {
   QuitTestModal,
   TabSlide,
   TestTimeOutModal,
+  UnSubmitAnswerModal,
 } from '@lms/feature-test'
-import { ButtonPrimaryV2, ButtonTextV2, SappLoading } from '@lms/ui'
+import { ButtonPrimaryV2, ButtonTextV2 } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
 import { EventTestAPI } from '@pages/api/event-test'
-import { TestAPI } from '@pages/api/test'
+import { TestServiceAPI } from '@pages/api/test-api'
 import dayjs from 'dayjs'
 import { PageLink } from 'src/constants/routers'
-import { QuestionAPI } from 'src/pages/api/question'
 import SuccessSubmittedConstructorModal from 'src/pages/test/SuccessSubmittedConstructorModal'
-import TestScratchPads from 'src/pages/test/TestScratchPads'
 import useGetQuestionTabs from 'src/pages/test/custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from 'src/pages/test/custom-hook/useGetQuizDetail'
 import {
@@ -94,11 +93,9 @@ import {
   isValuesEqual,
   isWorkbookEmpty,
 } from 'src/utils/helpers/quiz-test/helper'
-import {
-  removeHighlights,
-  serializeHighlights,
-} from '@funktechno/texthighlighter/lib'
-import { TestServiceAPI } from '@pages/api/test-api'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import TestScratchPads from '@pages/test/TestScratchPads'
+import SappLoading from '@components/common/SappLoading'
 declare global {
   interface Window {
     userAgreed: any
@@ -191,7 +188,7 @@ const TestDetail = () => {
         )
       case QUESTION_TYPES.FILL_WORD:
         return (
-          <NewFiltext
+          <NewFillText
             control={control}
             name={`${currentTabID}_fillword`}
             data={data}

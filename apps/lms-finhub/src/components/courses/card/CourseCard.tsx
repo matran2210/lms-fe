@@ -1,11 +1,6 @@
-import PopupActive from '@components/mycourses/PopupActive'
-import PopupExtend from '@components/mycourses/PopupExtend'
-import PopupLesson from '@components/mycourses/PopupLesson'
-import PopupOpenClass from '@components/mycourses/PopupOpenClass'
 import { useCourseContext } from '@lms/contexts'
 import { ANIMATION, CLASS_USER_STATUS, ICourse, ROUTES } from '@lms/core'
 import { useCourseStatus } from '@lms/hooks'
-import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -15,6 +10,13 @@ import CourseClass from './course/CourseClass'
 import CourseDescription from './course/CourseDescription'
 import CourseProgress from './course/CourseProgress'
 import CourseTitle from './course/CourseTitle'
+import { convertHourToDayLeft, convertLocalTimeToUTC } from '@lms/utils'
+import {
+  PopupActive,
+  PopupExtend,
+  PopupLesson,
+  PopupOpenClass,
+} from '@lms/feature-courses'
 
 export default function CourseCard({
   course,
@@ -213,6 +215,14 @@ export default function CourseCard({
         open={openActive}
         setOpen={setOpenActive}
         activeCourse={activeCourse}
+        activeContent={
+          <div className="justify-center self-stretch text-center">
+            <span className="text-base font-normal leading-normal text-gray-800">
+              Please select &apos;Confirm&apos; to start studying this course
+              right away.
+            </span>
+          </div>
+        }
       />
       <PopupLesson open={openLesson} setOpen={setOpenLesson} />
       <PopupOpenClass

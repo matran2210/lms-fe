@@ -5,8 +5,6 @@ import {
   saveAnswer,
   selectQuestions,
   submitQuiz,
-  useAppDispatch,
-  useAppSelector,
 } from '@lms/contexts'
 import { useEffect, useRef, useState } from 'react'
 
@@ -25,19 +23,19 @@ import {
 } from '@lms/core'
 import { SappButton, SappIcon, SappModal, SappModalV3 } from '@lms/ui'
 import { isValidatedAnswer, trackGAEvent } from '@lms/utils'
-import { QuestionAPI } from '@pages/api/question'
+import { TestServiceAPI } from '@pages/api/test-api'
 import ConFirmSubmit from '@pages/short-course/test/conFirmSubmit'
+import { QuizResultComponent } from '@sapp-fe/quiz-result-package'
+import { IQuestionResult } from '@sapp-fe/quiz-result-package/dist/type'
 import dayjs from 'dayjs'
 import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
-import { QuizResultComponent } from '@sapp-fe/quiz-result-package'
 import toast from 'react-hot-toast'
 import { PageLink } from 'src/constants/routes'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import { IQuestionResult } from '@sapp-fe/quiz-result-package/dist/type'
-import { TestServiceAPI } from '@pages/api/test-api'
 
 type Props = {
   questions: IQuestion[]
@@ -59,29 +57,6 @@ type Props = {
   attemptId?: string
   isTeacher?: boolean
 }
-
-interface IAnswer {
-  active: string
-  id: string
-  is_correct: false
-  quiz_attempt_id: string
-  time_spent: number
-  topic_attempt_id: string
-  question: {
-    id: string
-    qType: string
-    question_content: string
-    question_filter_id: {
-      part: {
-        name: string
-      }
-    }
-  }
-}
-
-// interface IAnswers {
-//   answers: IAnswer[]
-// }
 
 const QuizDocument = ({
   questions,
@@ -254,7 +229,7 @@ const QuizDocument = ({
     } else {
       await questionRef.current?.onResetWord(
         name,
-        activeQuestion?.response_option,
+        activeQuestion?.response_option as RESPONSE_OPTION,
         defaultValue,
       )
     }

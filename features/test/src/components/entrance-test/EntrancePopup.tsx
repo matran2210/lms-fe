@@ -1,9 +1,7 @@
 import { SappModalV3 } from "@lms/ui";
 import dayjs from "dayjs";
-import { useRouter } from "next/router";
 import { Dispatch, FC, SetStateAction, useMemo } from "react";
-import { useAppSelector } from "@lms/contexts";
-import { entranceTestReducer } from "@lms/contexts";
+import { entranceTestReducer, useFeature } from "@lms/contexts";
 import EntrancePopupContent from "./EntrancePopupContent";
 
 const calculateEndTime = (createdAt: Date, quizTimed: number): Date => {
@@ -37,9 +35,8 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
   const handleOnClick = () => {
     setOpen && setOpen(false);
   };
-
-  const { count } = useAppSelector(entranceTestReducer);
-  const router = useRouter();
+  const { router, useAppSelector } = useFeature();
+  const { count } = useAppSelector?.(entranceTestReducer) || {};
 
   const checkLimit = useMemo(() => {
     if (data?.is_limited) {

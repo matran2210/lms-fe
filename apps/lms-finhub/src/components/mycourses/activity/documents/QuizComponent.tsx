@@ -1,10 +1,8 @@
-import SappIcon from '@components/common/SappIcon'
 import {
   clearFileEssay,
   confirmQuestion,
   IActivityStateQuestion,
   saveFileEssay,
-  useAppDispatch,
 } from '@lms/contexts'
 
 import {
@@ -22,16 +20,16 @@ import {
   EditorReader,
   EssayQuestionPreview,
   MatchQuizComponent,
+  ModalUploadFile,
   MultiChoiceQuestion,
   NewDragNDropQuestion,
   OneChoiceQuestion,
+  SappIcon,
   SelectWord,
   SlotValue,
   useClickOutside,
 } from '@lms/ui'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CoursesAPI } from '@pages/api/courses'
-import { QuestionAPI } from '@pages/api/question'
 import { TestServiceAPI } from '@pages/api/test-api'
 import { isEmpty, isUndefined } from 'lodash'
 import React, {
@@ -50,6 +48,7 @@ import {
   UseFormWatch,
 } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { useAppDispatch } from 'src/redux/hook'
 
 import { v4 as uuidv4 } from 'uuid'
 
@@ -122,10 +121,6 @@ type Props = {
   exhibitText?: string
   modalOpen?: boolean
 }
-
-// type RefEditor = {
-//   reset: () => void
-// }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
   (

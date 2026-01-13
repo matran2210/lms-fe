@@ -6,12 +6,10 @@ import {
   SectionContent,
   SectionContentModal,
 } from '@components/courses'
-import Calculator from '@components/courses/activity/calculator'
 import CreateNote from '@components/courses/activity/create-note/CreateNote'
 import ButtonIcon from '@components/courses/buttons/ButtonIcon'
 import NextPrevActivityButton from '@components/courses/buttons/ButtonNextPrevActivity'
 import { Arrows } from '@components/courses/icons'
-import { AltArrowLeft } from '@components/courses/icons/AltArrowLeft'
 import PdfModal from '@components/courses/popup/PdfModal'
 import Layout from '@components/layout'
 import {
@@ -20,16 +18,13 @@ import {
 } from '@components/mycourses/activity/documents/LoadingActivity'
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
-import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
-import { CloseIcon, CloseModalIcon } from '@lms/assets'
+import { AltArrowLeft, CloseIcon } from '@lms/assets'
 import {
   clearNote3Level,
   closeCalculator3Level,
   courseActivityAction3Level,
   shortCourseActivityReducer,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
 } from '@lms/contexts'
 import {
@@ -40,9 +35,8 @@ import {
   IActivityResource,
   ISubSection,
 } from '@lms/core'
-import { CalculatorModal } from '@lms/feature-courses'
+import { CalculatorModal, PopupLockContent } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { MovableWindow } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
 import { CoursesAPI } from '@pages/api/courses'
 import { getActivityById } from '@pages/api/short-course/activity'
@@ -52,6 +46,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routes'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 interface VideoStateClicked {
   course_tab_document_id: string

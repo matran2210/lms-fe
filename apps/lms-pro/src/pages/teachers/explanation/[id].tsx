@@ -1,3 +1,4 @@
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { CloseIcon } from '@lms/assets'
 import { UserType } from '@lms/contexts'
 import {
@@ -8,7 +9,7 @@ import {
   QUESTION_TYPES,
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
-import { FullScreenLayout, SappLoadingGlobal } from '@lms/ui'
+import { FullScreenLayout } from '@lms/ui'
 import { TestServiceAPI } from '@pages/api/test-api'
 import { ExplanationPackage } from '@sapp-fe/explanation-package'
 import { useRouter } from 'next/router'

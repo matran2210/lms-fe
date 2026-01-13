@@ -1,6 +1,6 @@
 import BaseModal from '@components/courses/popup/BaseModal'
-import { IActivityResourceProps } from 'src/type/courses-3-level'
-import { Docs, IconDownload } from '../icons'
+import { Docs, IconDownload } from '@lms/assets'
+import { IActivityResourceProps } from '@lms/core'
 
 export default function ActivityResourcesMobile({
   title,

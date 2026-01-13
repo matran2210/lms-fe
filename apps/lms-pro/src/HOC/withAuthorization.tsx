@@ -1,6 +1,7 @@
-import { useAppSelector, userReducer, UserType } from '@lms/contexts'
+import { userReducer, UserType } from '@lms/contexts'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { useAppSelector } from 'src/redux/hook'
 
 const withAuthorization =
   <P extends object>(allowedRoles: string[]) =>

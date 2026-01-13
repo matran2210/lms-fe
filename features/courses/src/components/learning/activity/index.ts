@@ -7,3 +7,4 @@ export { default as CollapseActivity } from "./CollapseActivity";
 export { default as CourseTabDocument } from "./CourseTabDocument";
 export { default as LearningOutcome } from "./LearningOutcome";
 export { default as TableListQuizInActivity } from "./TableListQuizInActivity";
+export { default as ActivityResource } from "./ActivityResource"

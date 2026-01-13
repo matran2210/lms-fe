@@ -2,20 +2,13 @@ import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInAp
 import {
   active,
   clearGuideState,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
   UserType,
 } from '@lms/contexts'
 import { ANIMATION, AppType, defaultStatusCourse, ICoursesAPI } from '@lms/core'
 import { CoursesList, FilterCourse, Heading } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import {
-  Layout,
-  PopupWelcome,
-  SappLoadingGlobal,
-  SearchWithMenuToggle,
-} from '@lms/ui'
+import { Layout, PopupWelcome, SearchWithMenuToggle } from '@lms/ui'
 import Aos from 'aos'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
@@ -25,6 +18,8 @@ import { useInfiniteQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from '../api/courses'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [

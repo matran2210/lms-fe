@@ -1,17 +1,13 @@
 import { Progress } from "antd";
 import { RcFile, UploadChangeParam, UploadFile } from "antd/es/upload";
 import dynamic from "next/dynamic";
-// import Dragger from 'antd/es/upload/Dragger'
 import React, { ReactElement } from "react";
 import toast from "react-hot-toast";
-// import ButtonIconOnly from '../../button/ButtonIconOnly'
-// import ButtonPrimary from '../../button/ButtonPrimary'
-import { UPLOAD_TYPE } from "@lms/core/types/file/UploadFileInterface";
 import { ButtonSecondary } from "../../base";
 import { validateFile } from "@lms/utils";
 import { isArray } from "lodash";
 import { DocumentIconImage, ImageIconImage, VideoIconImage } from "@lms/assets";
-// import { ResourceAPI } from 'src/apis/resource-bank'
+import { UPLOAD_TYPE } from "@lms/core";
 
 type Props = {
   beforeUpload?: (file: RcFile, FileList: RcFile[]) => boolean;

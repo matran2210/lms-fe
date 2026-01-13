@@ -3,7 +3,7 @@ import {
   HamburgerMenuLargeIcon,
   CloseIconV2,
 } from "@lms/assets";
-import { useAppSelector, useFeature } from "@lms/contexts";
+import { useFeature } from "@lms/contexts";
 import { AppType, MY_COURSES } from "@lms/core";
 import { buildQueryString } from "@lms/utils";
 import clsx from "clsx";
@@ -37,10 +37,10 @@ const SearchWithMenuToggle = ({
   redirectLink,
   appType,
 }: IProps) => {
-  const { pageLink } = useFeature();
-  const { status: guideStatus, step: guideStep } = useAppSelector(
+  const { pageLink, useAppSelector } = useFeature();
+  const { status: guideStatus, step: guideStep } = useAppSelector?.(
     (state) => state.userGuideReducer,
-  );
+  ) || {};
   const { query, push } = useRouter();
   const methods = useForm<{ name: string }>({
     defaultValues: {

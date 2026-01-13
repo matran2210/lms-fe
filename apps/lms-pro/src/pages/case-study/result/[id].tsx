@@ -1,4 +1,5 @@
 /* eslint-disable prefer-const */
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import {
   CalculatorIconV2,
   CloseModalIcon,
@@ -10,7 +11,7 @@ import {
   ScratchPadIconV2,
   Triangle,
 } from '@lms/assets'
-import { loadMoreQuestion, useAppDispatch } from '@lms/contexts'
+import { loadMoreQuestion } from '@lms/contexts'
 import {
   EXHIBIT_TEXT_REPLACE,
   IAnswerResult,
@@ -44,7 +45,6 @@ import {
   NewDragNDropQuestion,
   OneChoiceQuestion,
   Popover,
-  SappLoadingGlobal,
   SelectWord,
   SlotValue,
 } from '@lms/ui'
@@ -57,6 +57,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { CoursesAPI } from 'src/pages/api/courses'
+import { useAppDispatch } from 'src/redux/hook'
 
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])

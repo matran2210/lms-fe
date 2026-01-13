@@ -1,7 +1,6 @@
 import {
   getLoginHistory,
   loadMoreLoginHistory,
-  useAppDispatch, useAppSelector,
   useFeature,
   userReducer
 } from '@lms/contexts'
@@ -10,14 +9,13 @@ import ProfileCard from '../ProfileCard'
 import HistoryItem from './HistoryItem'
 
 const LoginHistoryList = () => {
-  const dispatch = useAppDispatch()
-  const { userApi } = useFeature();
+  const { userApi, dispatch, useAppSelector } = useFeature();
 
-  const { loginHistory, loadHistory } = useAppSelector(userReducer)
+  const { loginHistory, loadHistory } = useAppSelector?.(userReducer) || {};
   const [pageIndex, setPageIndex] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   useEffect(() => {
-    dispatch(
+    dispatch?.(
       getLoginHistory({
         api: userApi,
         page_index: pageIndex,
@@ -31,7 +29,7 @@ const LoginHistoryList = () => {
     if (!loadHistory) {
       if (pageIndex < loginHistory.meta.total_pages) {
         setPageIndex((prev) => {
-          dispatch(
+          dispatch?.(
             loadMoreLoginHistory({
               api: userApi,
               page_index: prev + 1,

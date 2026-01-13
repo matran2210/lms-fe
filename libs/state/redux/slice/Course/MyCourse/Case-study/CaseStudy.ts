@@ -1,6 +1,5 @@
 import { ITestServiceAPI } from '@lms/core'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { RootState } from '../../../../store'
 
 export interface ICaseStudyTest {
   loading: boolean
@@ -178,8 +177,13 @@ export const caseStudyTestSlice = createSlice({
     })
   },
 })
-export const caseStudyTestReducer = (state: RootState) =>
-  state.caseStudyTestReducer
+export const caseStudyTestReducer = <
+  T extends {
+    caseStudyTestReducer: ICaseStudyTest;
+  },
+>(
+  state: T,
+) => state.caseStudyTestReducer;
 export const caseStudyTestAction = caseStudyTestSlice.actions
 export const { loadMoreQuestion, saveFileEssayCaseStudy, clearFileEssayCaseStudy } =
   caseStudyTestSlice.actions;

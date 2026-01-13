@@ -1,8 +1,7 @@
-import { defaultStatusCourse } from '@lms/core'
+import { defaultStatusCourse, DesktopFilter3LevelProps } from '@lms/core'
 import { SAPPSelect } from '@lms/ui'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { DesktopFilter3LevelProps } from 'src/type/courses-3-level'
 
 export default function DesktopFilter3Level({
   courses,

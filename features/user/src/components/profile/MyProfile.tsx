@@ -6,9 +6,9 @@ import {
   IUserContact,
   updateUser,
   updateUserAvatar,
-  useAppDispatch, useAppSelector,
   useFeature,
-  userReducer
+  userReducer,
+  UserType
 } from "@lms/contexts";
 import { AppType, USER_TYPE } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
@@ -52,11 +52,10 @@ const MyProfile = ({
   appType
 }: IProps) => {
   const { isMobileView } = useTailwindBreakpoint();
-  const { userApi, authManager } = useFeature();
+  const { userApi, authManager, dispatch, useAppSelector } = useFeature();
   const isLMSPRO = appType === AppType.LMS_PRO
   const [openEditProfile, setOpenEditProfile] = useState(false);
-  const dispatch = useAppDispatch();
-  const { user, loading, loadingEditName } = useAppSelector(userReducer);
+  const { user, loading, loadingEditName } = useAppSelector?.(userReducer) || {};
   // Sử dụng hook useForm để quản lý form và xác thực dữ liệu
   const { control, setValue, handleSubmit, reset } = useForm<{
     full_name: string;
@@ -69,7 +68,7 @@ const MyProfile = ({
    */
   const handleChangeToEditForm = () => {
     // Đặt giá trị cho trường full_name bằng tên hiện tại của người dùng
-    setValue("full_name", user?.detail?.full_name);
+    setValue("full_name", user?.detail?.full_name || "");
     // Đặt trạng thái isEdit thành true
     setIsEdit(true);
     setOpenEditProfile(true);
@@ -86,7 +85,7 @@ const MyProfile = ({
     setReViewImageSrc(undefined);
     reset(
       {
-        full_name: user.detail.full_name,
+        full_name: user?.detail.full_name,
       },
       {
         keepDirty: false,
@@ -112,25 +111,25 @@ const MyProfile = ({
       // Nếu không có avatar và người dùng có avatar hiện tại
       if (!avatar && user?.detail?.avatar) {
         // Gọi hành động thunk updateUser để cập nhật tên và avatar của người dùng
-        await dispatch(updateUser({ full_name, avatar: null, api: userApi })).unwrap();
+        await dispatch?.(updateUser({ full_name, avatar: null, api: userApi })).unwrap();
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
-        dispatch(getMe(userApi));
+        dispatch?.(getMe(userApi));
         // Đặt trạng thái isEdit thành false
         setIsEdit(false);
         setOpenEditProfile(false);
         return;
       }
       // Gọi hành động thunk updateUser để cập nhật tên của người dùng
-      await dispatch(updateUser({ api: userApi, full_name })).unwrap();
+      await dispatch?.(updateUser({ api: userApi, full_name })).unwrap();
       // Nếu có avatar
       if (avatar) {
         // Gọi hành động thunk updateUserAvatar để cập nhật avatar của người dùng
-        await dispatch(updateUserAvatar({api: userApi, avatar})).unwrap();
+        await dispatch?.(updateUserAvatar({api: userApi, avatar})).unwrap();
         // Đặt lại giá trị của avatar
         handleSetAvatar(undefined);
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
       }
-      dispatch(getMe(userApi));
+      dispatch?.(getMe(userApi));
       // Đặt trạng thái isEdit thành false
       setIsEdit(false);
       setOpenEditProfile(false);
@@ -139,7 +138,7 @@ const MyProfile = ({
       setOpenEditProfile(false);
       setReViewImageSrc(undefined);
       if (error?.response?.data?.error?.code === "403|1002") {
-        await dispatch(getLogoutUser({ authManager }));
+        await dispatch?.(getLogoutUser({ authManager }));
       }
     }
   };
@@ -170,7 +169,7 @@ const MyProfile = ({
               <TextWrapper
                 title="Code"
                 value={user?.code?.toString() ?? user?.key?.toString()}
-                loading={loading}
+                loading={!!loading}
                 control={control}
                 hiddenOnEdit={isEdit}
               />
@@ -178,7 +177,7 @@ const MyProfile = ({
                 title="Full Name"
                 showEditIcon
                 isEdit={isEdit}
-                loading={loading}
+                loading={!!loading}
                 handleClickEdit={handleChangeToEditForm}
                 control={control}
                 isInForm
@@ -217,7 +216,7 @@ const MyProfile = ({
                 ) : (
                   <div className="flex flex-auto justify-end break-all text-end font-medium text-gray-800 lg:max-w-[300px] lg:justify-start">
                     <ProfileSkeleton loading={loading && !isEdit}>
-                      {user.detail.full_name}
+                      {user?.detail.full_name}
                     </ProfileSkeleton>
                   </div>
                 )}
@@ -225,14 +224,14 @@ const MyProfile = ({
               <TextWrapper
                 title="Username"
                 value={user?.username}
-                loading={loading}
+                loading={!!loading}
                 control={control}
                 isEdit={isEdit}
               />
               <TextWrapper
                 title="Role"
-                value={USER_TYPE[user?.type]?.label}
-                loading={loading}
+                value={USER_TYPE[user?.type as UserType]?.label}
+                loading={!!loading}
                 control={control}
                 isEdit={isEdit}
                 className="hidden xl:block"
@@ -242,7 +241,7 @@ const MyProfile = ({
                 value={
                   user?.detail?.dob ? formatDateToSlash(user?.detail?.dob, true) : ""
                 }
-                loading={loading}
+                loading={!!loading}
                 control={control}
                 isEdit={isEdit}
                 type="date"
@@ -254,14 +253,14 @@ const MyProfile = ({
                   user?.user_contacts?.find((e: IUserContact) => e.is_default)
                     ?.email ?? ""
                 }
-                loading={loading}
+                loading={!!loading}
                 control={control}
                 isEdit={isEdit}
               />
               <TextWrapper
                 title="Phone"
                 value={user?.user_contacts?.[0]?.phone}
-                loading={loading}
+                loading={!!loading}
                 control={control}
                 isEdit={isEdit}
               />
@@ -269,42 +268,42 @@ const MyProfile = ({
                 <TextWrapper
                   title="University"
                   value={user?.detail?.university?.name ?? ""}
-                  loading={loading}
+                  loading={!!loading}
                   control={control}
                   isEdit={isEdit}
                 />
                 <TextWrapper
                   title="Major"
                   value={user?.detail?.major?.name}
-                  loading={loading}
+                  loading={!!loading}
                   control={control}
                   isEdit={isEdit}
                 />
                 <TextWrapper
                   title="Field of work"
                   value={user?.detail?.company_type ?? ""}
-                  loading={loading}
+                  loading={!!loading}
                   control={control}
                   isEdit={isEdit}
                 />
                 <TextWrapper
                   title="Position"
                   value={user?.detail?.company_position ?? ""}
-                  loading={loading}
+                  loading={!!loading}
                   control={control}
                   isEdit={isEdit}
                 />
                 <TextWrapper
                   title="Main Class"
                   value={user?.main_class?.join(",") ?? ""}
-                  loading={loading}
+                  loading={!!loading}
                   control={control}
                   hiddenOnEdit={isEdit}
                 />
                 <TextWrapper
                   title="Deferred/Retake class"
                   value={user?.reserve_retook_class?.join(", ") ?? ""}
-                  loading={loading}
+                  loading={!!loading}
                   control={control}
                   hiddenOnEdit={isEdit}
                 /></>} 
@@ -313,9 +312,9 @@ const MyProfile = ({
               {!isEdit && (
                 <TextWrapper
                   title="Updated At"
-                  value={formatDate(user?.updated_at) ?? ""}
+                  value={formatDate(user?.updated_at ?? '') ?? ""}
                   isEdit={isEdit}
-                  loading={loading}
+                  loading={!!loading}
                   control={control}
                 />
               )}
@@ -367,14 +366,14 @@ const MyProfile = ({
                   <TextWrapper
                     title="Full Name"
                     value={user?.detail?.full_name}
-                    loading={loading}
+                    loading={!!loading}
                     control={control}
                     isEdit
                   />
                   <TextWrapper
                     title="Username"
                     value={user?.username}
-                    loading={loading}
+                    loading={!!loading}
                     control={control}
                     isEdit
                   />
@@ -392,7 +391,7 @@ const MyProfile = ({
                         ? formatDateToSlash(user?.detail?.dob, true)
                         : ""
                     }
-                    loading={loading}
+                    loading={!!loading}
                     control={control}
                     isEdit
                     type="date"
@@ -401,14 +400,14 @@ const MyProfile = ({
                   <TextWrapper
                     title="Email"
                     value={user?.user_contacts?.[0]?.email}
-                    loading={loading}
+                    loading={!!loading}
                     control={control}
                     isEdit
                   />
                   <TextWrapper
                     title="Phone"
                     value={user?.user_contacts?.[0]?.phone}
-                    loading={loading}
+                    loading={!!loading}
                     control={control}
                     isEdit
                   />
@@ -417,28 +416,28 @@ const MyProfile = ({
                      <TextWrapper
                     title="University"
                     value={user?.detail?.university?.name ?? ""}
-                    loading={loading}
+                    loading={!!loading}
                     control={control}
                     isEdit
                   />
                   <TextWrapper
                     title="Major"
                     value={user?.detail?.major?.name}
-                    loading={loading}
+                    loading={!!loading}
                     control={control}
                     isEdit
                   />
                   <TextWrapper
                     title="Field of work"
                     value={user?.detail?.company_type ?? ""}
-                    loading={loading}
+                    loading={!!loading}
                     control={control}
                     isEdit
                   />
                   <TextWrapper
                     title="Position"
                     value={user?.detail?.company_position ?? ""}
-                    loading={loading}
+                    loading={!!loading}
                     control={control}
                     isEdit
                   />

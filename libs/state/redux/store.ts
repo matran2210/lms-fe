@@ -36,9 +36,22 @@ export const store = configureStore({
       serializableCheck: false,
     }),
 });
-
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export const globalReducer = {
+  loginReducer,
+  userReducer,
+  confirmDialogReducer,
+  courseActivityReducer,
+  notificationReducer,
+  popupReducer,
+  courseActivityQuizReducer,
+  userGuideReducer,
+  caseStudyTestReducer,
+  entranceTestReducer,
+  eventTestReducer,
+  notesListReducer,
+  shortCourseActivityReducer,
+  shortNotesListReducer,
+};
 
 const makeStore = () => store
 export const wrapper = createWrapper(makeStore)

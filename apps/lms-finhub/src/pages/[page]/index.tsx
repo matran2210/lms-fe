@@ -3,8 +3,6 @@ import {
   UserType,
   getLoginHistory,
   getLogoutUser,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
   userReducer,
 } from '@lms/contexts'
@@ -33,7 +31,6 @@ import {
   Footer,
   FullScreenMobile,
   HeaderMobile,
-  Layout,
   SearchWithMenuToggle,
   TabHeaderItem,
 } from '@lms/ui'
@@ -52,6 +49,8 @@ import { PageLink } from 'src/constants/routes'
 
 import withAuthorization from 'src/HOC/withAuthorization'
 import UserApi from 'src/redux/services/User/user'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import Layout from '@components/layout'
 
 interface IFullScreenMobile {
   open: boolean

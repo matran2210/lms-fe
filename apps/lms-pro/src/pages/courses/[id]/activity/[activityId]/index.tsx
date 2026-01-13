@@ -2,7 +2,6 @@ import {
   CalculatorIconV2,
   CloseIcon,
   CloseIconNote,
-  CloseModalIcon,
   DiscussionIcon,
   DocumentTextIcon,
   ExpandIcon,
@@ -12,6 +11,7 @@ import {
   TimeLineIcon,
 } from '@lms/assets'
 import {
+  ActivityResource,
   CalculatorModal,
   CreateNote,
   Discussion,
@@ -19,13 +19,11 @@ import {
 } from '@lms/feature-courses'
 import {
   ActivitySkeleton,
-  Calculator,
   EditorReader,
   FileViewer,
   Layout,
   LearningResource,
   ModalResizeable,
-  MovableWindow,
 } from '@lms/ui'
 import { convertMinutesToHourFormat } from '@lms/utils'
 
@@ -40,8 +38,6 @@ import {
   pushNotes,
   resetQuizActivity,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
   usePreviousSectionRoute,
   UserType,
@@ -65,7 +61,6 @@ import {
   LearningOutcome,
   VideoTimelineMobile,
 } from '@lms/feature-courses'
-import ActivityResource from '@lms/feature-courses/src/components/learning/activity/ActivityResource'
 import { useSmartModalSize, useTailwindBreakpoint } from '@lms/hooks'
 import {
   AssistiveTouch,
@@ -80,11 +75,12 @@ import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { v4 as uuidv4 } from 'uuid'
-import { createPortal } from 'react-dom'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'

@@ -1,19 +1,13 @@
 import { CloseIcon, DownloadIcon, LinkIcon } from '@lms/assets'
 
-import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
 import Layout from '@components/layout'
-import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
-import CreateNote from '@components/mycourses/create-note/CreateNote'
 import { CourseSectionType, IActivity, SUFFIX_TYPE } from '@lms/core'
 import { trackGAEvent, truncateBySpace, truncateString } from '@lms/utils'
 
-import SAPPBorder from '@components/common/SAPPBorder'
-import SappIcon from '@components/common/SappIcon'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
-import Tooltip from '@components/common/Tooltip'
 import {
   clearNote,
   closeCalculator,
@@ -23,19 +17,21 @@ import {
   getDiscussion,
   resetQuizActivity,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
   UserType,
 } from '@lms/contexts'
 import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from '@lms/core'
-import { CalculatorModal } from '@lms/feature-courses'
+import { CalculatorModal, CreateNote, Discussion } from '@lms/feature-courses'
 import {
   ActivitySkeleton,
   EditorReader,
   FileViewer,
   ModalResizeable,
+  ResponsiveTextTruncate,
+  SAPPBorder,
   SappButton,
+  SappIcon,
+  Tooltip,
 } from '@lms/ui'
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
@@ -51,6 +47,7 @@ import { useQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { UploadAPI } from 'src/pages/api/upload'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string

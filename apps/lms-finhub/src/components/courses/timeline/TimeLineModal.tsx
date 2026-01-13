@@ -1,7 +1,7 @@
 import React from 'react'
 import { TimeLineProp } from 'src/type/courses-3-level'
-import { formatTime } from '@components/common/timer'
 import BaseModal from '@components/courses/popup/BaseModal'
+import { formatTimer } from '@lms/utils'
 
 export default function TimeLineModal({
   items,
@@ -36,9 +36,9 @@ export default function TimeLineModal({
               onClick={() => handleGoTimeline(e?.time)}
             >
               <div className="min-w-[62px] font-medium text-state-info">
-                {formatTime(e?.time)}
+                {formatTimer(e?.time)}
               </div>
-              <div className="line-clamp-2 text-bw-1 text-inherit">
+              <div className="text-inherit line-clamp-2 text-bw-1">
                 {e?.text}
               </div>
             </div>

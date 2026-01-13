@@ -13,8 +13,6 @@ import {
   loadMoreQuestion,
   saveFileEssayCaseStudy,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
 } from '@lms/contexts'
 import {
   ESSAY_TYPE,
@@ -42,15 +40,14 @@ import {
   HookFormTextArea,
   MatchQuizComponent,
   ModalResizeable,
+  ModalUploadFile,
   MovableWindow,
   MultiChoiceQuestion,
   NewDragNDropQuestion,
   OneChoiceQuestion,
-  SappLoadingGlobal,
   SelectWord,
   SlotValue,
 } from '@lms/ui'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight } from '@lms/utils'
 import { TestServiceAPI } from '@pages/api/test-api'
 import { download } from '@utils/index'
@@ -61,8 +58,10 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import ConFirmSubmit from '../short-course/test/conFirmSubmit'
 import LimitQuizModal from '../short-course/test/limitQuizModal'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
   const { width: widthFileViewer, height: heightFileViewer } =

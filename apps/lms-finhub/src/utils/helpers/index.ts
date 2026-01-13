@@ -209,26 +209,6 @@ export const convertSecondsToMinutesSeconds = (seconds: number) => {
   return `${formattedMinutes}:${formattedSeconds}`
 }
 
-export const convertLocalTimeToUTC = (currentTime: Date) => {
-  const offsetMinutes = currentTime.getTimezoneOffset()
-  const utcTime = new Date(currentTime.getTime() + offsetMinutes * 60 * 1000)
-
-  return utcTime
-}
-
-export const convertUTCToLocalTime = (utc_time: Date | string) => {
-  return new Date(utc_time)
-}
-
-export const convertHourToDayLeft = (hours: number) => {
-  if (hours <= 0) {
-    return 0
-  }
-
-  const days = Math.ceil(hours / 24)
-  return days
-}
-
 // formatTime takes a time length in seconds and returns the time in
 // minutes and seconds
 export const formatTimeToHourMinuteSecond = (timeInSeconds: number) => {

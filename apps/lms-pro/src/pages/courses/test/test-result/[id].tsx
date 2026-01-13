@@ -2,12 +2,13 @@ import { CloseModalIcon, MenuDotsIcon } from '@lms/assets'
 import { ButtonSecondary } from '@lms/ui'
 
 import { GRADE_STATUS } from '@lms/core'
-import { SappLoading, Tooltip } from '@lms/ui'
+import { Tooltip } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { CoursesAPI } from '../../../api/courses'
 import TestResultPage from './testResultPage'
+import SappLoading from '@components/common/SappLoading'
 
 const TestResultDetail = () => {
   const router = useRouter()

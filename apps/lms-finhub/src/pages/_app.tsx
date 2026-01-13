@@ -1,6 +1,5 @@
 import Metadata from '@components/common/Metadata'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
-import PopupCompletedCourse from '@components/mycourses/PopupCompletedCourse'
 import '@fortune-sheet/react/dist/index.css'
 import {
   CourseProvider,
@@ -9,9 +8,6 @@ import {
   PinnedNotifyProvider,
   showNotification,
   SocketContext,
-  store,
-  useAppDispatch,
-  wrapper,
 } from '@lms/contexts'
 import {
   ANIMATION,
@@ -24,7 +20,7 @@ import {
   SOCKET_EVENTS,
 } from '@lms/core'
 import { RouteGuard } from '@lms/feature-auth'
-import { LearningNotesList } from '@lms/feature-courses'
+import { LearningNotesList, PopupCompletedCourse } from '@lms/feature-courses'
 import {
   AntConfigProvider,
   BackToTop,
@@ -71,6 +67,8 @@ import ErrorRedirectPage from './error-redirect'
 import { fetcher } from '@services/requestV2'
 import { TestServiceAPI } from './api/test-api'
 import { uploadImageToLinkedIn } from './api/certificate'
+import { store, wrapper } from 'src/redux/store'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -352,6 +350,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
                 testServiceApi: TestServiceAPI,
                 uploadImageToLinkedIn: uploadImageToLinkedIn,
+                dispatch: dispatch,
+                useAppSelector: useAppSelector,
               }}
             >
               <CourseProvider router={router}>

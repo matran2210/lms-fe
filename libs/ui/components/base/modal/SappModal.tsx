@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { useAppDispatch, confirmDialog } from '@lms/contexts'
+import { confirmDialog, useFeature } from '@lms/contexts'
 import { IButtonColors } from '@lms/core'
 import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
 import { CloseIcon } from '@lms/assets'
@@ -134,7 +134,7 @@ const SappModal: React.FC<IProps> = ({
   disableClickOutSide = false,
   className = '',
 }) => {
-  const dispatch = useAppDispatch()
+  const {dispatch} = useFeature()
   const [loading, setLoading] = useState<boolean>(false)
 
   const confirmDialogRef = useRef<HTMLDivElement>(null)
@@ -228,7 +228,7 @@ const SappModal: React.FC<IProps> = ({
     // Nếu confirmOnclose là true, thì mở một hộp thoại xác nhận
 
     if (confirmOnclose) {
-      dispatch(
+      dispatch?.(
         confirmDialog.open({
           // Nội dung của hộp thoại xác nhận
           message: 'Bạn có chắc chắn muốn hủy không?',

@@ -1,6 +1,19 @@
-import { BlankAvatarImage, CheckCircleOutlineYellow, PencilFillV2Icon } from '@lms/assets'
+import {
+  BlankAvatarImage,
+  CheckCircleOutlineYellow,
+  CloseIconV2,
+  PencilFillV2Icon,
+} from '@lms/assets'
+import {
+  getLogoutUser,
+  getMe,
+  getUserInformation,
+  updateUser,
+  updateUserAvatar,
+  userReducer,
+} from '@lms/contexts'
 import { TextSkeleton } from '@lms/ui'
-import { CloseIconV2 } from '@lms/assets'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { Divider, Tag } from 'antd'
 import clsx from 'clsx'
 import Image, { StaticImageData } from 'next/image'
@@ -12,9 +25,8 @@ import {
   useState,
 } from 'react'
 import toast from 'react-hot-toast'
-import { getLogoutUser, getMe, getUserInformation, updateUser, updateUserAvatar, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import UserApi from 'src/redux/services/User/user'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
 interface IProps {
   isEdit: boolean
   avatar: File | undefined
@@ -128,7 +140,9 @@ const ProfileHeader = ({
       // Nếu không có avatar và người dùng có avatar hiện tại
       if (!avatar && user?.detail?.avatar) {
         // Gọi hành động thunk updateUser để cập nhật tên và avatar của người dùng
-        await dispatch(updateUser({ full_name, avatar: null, api: UserApi })).unwrap()
+        await dispatch(
+          updateUser({ full_name, avatar: null, api: UserApi }),
+        ).unwrap()
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
         dispatch(getMe(UserApi))
         // Đặt trạng thái isEdit thành false
@@ -154,9 +168,11 @@ const ProfileHeader = ({
       setIsEditAvatar(false)
       setReViewImageSrc(undefined)
       if (error?.response?.data?.error?.code === '403|1002') {
-        await dispatch(getLogoutUser({
-          authManager: new AuthenticationManager(),
-        }))
+        await dispatch(
+          getLogoutUser({
+            authManager: new AuthenticationManager(),
+          }),
+        )
       }
     }
   }

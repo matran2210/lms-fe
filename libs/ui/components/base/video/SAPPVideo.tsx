@@ -1,6 +1,5 @@
 import { Stream } from "@cloudflare/stream-react";
-import { LoadingIcon, PiPIcon } from "@lms/assets";
-import { Icon } from "@lms/assets/icons";
+import { LoadingIcon, PiPIcon, Icon} from "@lms/assets";
 import { Thumbnail } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import Image from "next/image";

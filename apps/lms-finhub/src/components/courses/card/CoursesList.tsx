@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash'
-import { Courses3LevelProps } from 'src/type/courses-3-level/course'
 import EmptyCourses from '../shared/EmptyCourses'
 import CourseCard from './CourseCard'
+import { Courses3LevelProps } from '@lms/core'
 
 export default function CoursesList({
   courses,

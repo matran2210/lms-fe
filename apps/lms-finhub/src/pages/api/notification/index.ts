@@ -1,8 +1,5 @@
 import { fetcher } from '@services/requestV2'
-import getConfig from 'next/config'
-
-const { publicRuntimeConfig } = getConfig()
-export const { apiURL } = publicRuntimeConfig
+import { apiURL } from 'src/redux/services/httpService'
 export class NotificationAPI {
   static getCountUnRead(): Promise<any> {
     return fetcher(`${apiURL}/notifications/count-unread`)

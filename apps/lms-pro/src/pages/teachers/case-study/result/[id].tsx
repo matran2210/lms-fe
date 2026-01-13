@@ -1,4 +1,5 @@
 /* eslint-disable prefer-const */
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import {
   CalculatorIcon,
   CloseIcon,
@@ -7,7 +8,7 @@ import {
   ScratchPadIcon,
   UnHighLightIcon,
 } from '@lms/assets'
-import { UserType, loadMoreQuestion, useAppDispatch } from '@lms/contexts'
+import { UserType, loadMoreQuestion } from '@lms/contexts'
 import {
   EXHIBIT_TEXT_REPLACE,
   IAnswerResult,
@@ -23,33 +24,32 @@ import {
 import { CalculatorModal } from '@lms/feature-courses'
 import { useMousePosition, useSmartModalSize } from '@lms/hooks'
 import {
-  Calculator,
+  AddWordPreview,
+  DragNDropPreivew,
   EditorReader,
+  EssayQuestionPreview,
   FileViewer,
   FullScreenLayout,
   HookFormTextArea,
+  MatchingQuestion,
   ModalResizeable,
   MovableWindow,
+  MultiChoiceQuestion,
+  OneChoiceQuestion,
   SappButton,
-  SappLoadingGlobal,
+  SelectWord,
 } from '@lms/ui'
-import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
-import DragNDropPreivew from '@lms/ui/components/questionType/DragNDrop'
-import AddWordPreview from '@lms/ui/components/questionType/FillText'
-import MatchingQuestion from '@lms/ui/components/questionType/MatchingQuestion'
-import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
-import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
-import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
 import { runHighlight } from '@lms/utils'
+import { IFile } from '@sapp-fe/preview-activity/dist/shared/interfaces'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
-import { IFile } from '@sapp-fe/preview-activity/dist/shared/interfaces'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from 'src/pages/api/courses'
+import { useAppDispatch } from 'src/redux/hook'
 
 const CaseStudyResultTeacher = () => {
   const router = useRouter()

@@ -5,7 +5,6 @@ import {
   getUserInformation,
   updateUser,
   updateUserAvatar,
-  useAppDispatch, useAppSelector,
   useFeature,
   userReducer
 } from '@lms/contexts'
@@ -44,12 +43,11 @@ const ProfileHeader = ({
   setIsEdit,
   appType
 }: IProps) => {
-  const dispatch = useAppDispatch()
-  const { userApi, authManager } = useFeature();
+  const { userApi, authManager, dispatch, useAppSelector } = useFeature();
 
   // Sử dụng hook useAppSelector để lấy dữ liệu từ state redux
   const { user, loading, loadingEditName, loadingEditAvatar } =
-    useAppSelector(userReducer)
+    useAppSelector?.(userReducer) || {};
 
   const [isEditAvatar, setIsEditAvatar] = useState(false)
 
@@ -141,9 +139,9 @@ const ProfileHeader = ({
       // Nếu không có avatar và người dùng có avatar hiện tại
       if (!avatar && user?.detail?.avatar) {
         // Gọi hành động thunk updateUser để cập nhật tên và avatar của người dùng
-        await dispatch(updateUser({ full_name, avatar: null, api: userApi })).unwrap()
+        await dispatch?.(updateUser({ full_name, avatar: null, api: userApi })).unwrap()
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
-        dispatch(getMe(userApi))
+        dispatch?.(getMe(userApi))
         // Đặt trạng thái isEdit thành false
         setIsEdit(false)
         setIsEditAvatar(false)
@@ -153,12 +151,12 @@ const ProfileHeader = ({
       // Nếu có avatar
       if (avatar) {
         // Gọi hành động thunk updateUserAvatar để cập nhật avatar của người dùng
-        await dispatch(updateUserAvatar({api: userApi, avatar})).unwrap()
+        await dispatch?.(updateUserAvatar({api: userApi, avatar})).unwrap()
         // Đặt lại giá trị của avatar
         setAvatar(undefined)
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
       }
-      dispatch(getMe(userApi))
+      dispatch?.(getMe(userApi))
       // Đặt trạng thái isEdit thành false
       setIsEdit(false)
       setIsEditAvatar(false)
@@ -167,12 +165,12 @@ const ProfileHeader = ({
       setIsEditAvatar(false)
       setReViewImageSrc(undefined)
       if (error?.response?.data?.error?.code === '403|1002') {
-        await dispatch(getLogoutUser({ authManager }))
+        await dispatch?.(getLogoutUser({ authManager }))
       }
     }
   }
   useEffect(() => {
-    dispatch(getUserInformation(userApi))
+    dispatch?.(getUserInformation(userApi))
   }, [])
 
   return (
@@ -236,8 +234,8 @@ const ProfileHeader = ({
               <Image
                 src={
                   reViewImageSrc ||
-                  user.detail.avatar['150x150'] ||
-                  user.detail.avatar?.['ORIGIN'] ||
+                  user?.detail.avatar['150x150'] ||
+                  user?.detail.avatar?.['ORIGIN'] ||
                   BlankAvatarImage
                 }
                 alt="avatar"
@@ -261,7 +259,7 @@ const ProfileHeader = ({
               )}
               onClick={() =>
                 avatar
-                  ? onSubmit({ full_name: user.detail.full_name })
+                  ? onSubmit({ full_name: user?.detail.full_name || "" })
                   : onCancelUploadAvatar()
               }
             >
@@ -296,7 +294,7 @@ const ProfileHeader = ({
             )}
             onClick={() =>
               avatar
-                ? onSubmit({ full_name: user.detail.full_name })
+                ? onSubmit({ full_name: user?.detail.full_name || "" })
                 : handlerCancelUploadAvatar()
             }
           >
@@ -340,7 +338,7 @@ const ProfileHeader = ({
         >
           <div className="flex w-full items-center justify-center gap-3 md:justify-start">
             <ProfileSkeleton loading={loading || loadingEditName}>
-              {user.detail.full_name}
+              {user?.detail.full_name}
             </ProfileSkeleton>
             <div>
               <Tag
@@ -368,7 +366,7 @@ const ProfileHeader = ({
                 fill="currentColor"
               />
             </svg>
-            {(appType === AppType.LMS_PRO ? user.courses?.template_full : user?.courses?.template_short_course) ?? 0} Enrolled Courses
+            {(appType === AppType.LMS_PRO ? user?.courses?.template_full : user?.courses?.template_short_course) ?? 0} Enrolled Courses
           </div>
           <Divider type="vertical" className="m-0 bg-gray-300" />
           <div className="flex items-center justify-start gap-1">
@@ -386,7 +384,7 @@ const ProfileHeader = ({
                 fill="currentColor"
               />
             </svg>
-            {(appType === AppType.LMS_PRO ? user.certificates?.template_full : user?.certificates?.template_short_course) ?? 0} Certificates
+            {(appType === AppType.LMS_PRO ? user?.certificates?.template_full : user?.certificates?.template_short_course) ?? 0} Certificates
           </div>
         </div>
       </div>

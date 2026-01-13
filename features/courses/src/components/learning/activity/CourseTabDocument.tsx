@@ -2,7 +2,6 @@ import { ArrowLeft, ArrowRight, PaginationDotIcon } from '@lms/assets'
 import {
   courseActivityReducer,
   getCourseActivityTapById,
-  useAppDispatch, useAppSelector,
   useFeature
 } from '@lms/contexts'
 import {
@@ -57,15 +56,14 @@ const CourseTabDocument = ({
   focusOnlyDiscussion,
   scrollRef,
 }: IProps) => {
-  const selector = useAppSelector(courseActivityReducer)
-  const { courseApi,  router } = useFeature();
+  const { courseApi, router, dispatch, useAppSelector } = useFeature();
+  const selector = useAppSelector?.(courseActivityReducer)
 
   const quizDocumentRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<any>(null)
   const queryAction = useQueryAction()
   const courseId = router.query?.id
   const activityId = router.query.activityId
-  const dispatch = useAppDispatch()
   /**
    * Giá trị được memoized cho course_tab_documents.
    */
@@ -90,7 +88,7 @@ const CourseTabDocument = ({
    */
   const handleChangeTab = (courseId: string, id: string) => {
     try {
-      dispatch(getCourseActivityTapById({ courseId, id, api: courseApi }))
+      dispatch?.(getCourseActivityTapById({ courseId, id, api: courseApi }))
       router.replace(
         {
           pathname: router.pathname,
@@ -107,7 +105,7 @@ const CourseTabDocument = ({
     try {
       selector?.currentTabId &&
         delete courseApi.CACHE_GET_TOPIC_DESCRIPTION[selector?.currentTabId]
-      dispatch(
+      dispatch?.(
         getCourseActivityTapById({
           courseId: courseId as string,
           id: selector?.currentTabId ?? '',

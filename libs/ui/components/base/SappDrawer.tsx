@@ -1,4 +1,4 @@
-import { useAppDispatch, confirmDialog } from '@lms/contexts'
+import { confirmDialog, useFeature } from '@lms/contexts'
 import ButtonPrimary from './button/ButtonPrimary'
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
@@ -56,11 +56,11 @@ const SappDrawer = ({
   submitButtonClassName,
   handleClickCancelButton = () => undefined,
 }: IProps) => {
-  const dispatch = useAppDispatch()
+  const {dispatch} = useFeature()
 
   const handleOnClose = () => {
     if (confirmOnClose) {
-      dispatch(confirmDialog.open({ message: message, onConfirm: onClose }))
+      dispatch?.(confirmDialog.open({ message: message, onConfirm: onClose }))
     } else {
       onClose()
     }

@@ -1,5 +1,4 @@
-import { AltArrowLeft } from '@components/courses/icons/AltArrowLeft'
-import { CloseIconV2, MenuDotsIcon } from '@lms/assets'
+import { AltArrowLeft, CloseIconV2, MenuDotsIcon } from '@lms/assets'
 import {
   EYourAnswerType,
   GRADING_METHOD,
@@ -9,7 +8,7 @@ import {
   QUESTION_TYPES,
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
-import { FullScreenLayout, SappLoadingGlobal, Tooltip } from '@lms/ui'
+import { FullScreenLayout, Tooltip } from '@lms/ui'
 import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 import { TestServiceAPI } from '@pages/api/test-api'
 import { useRouter } from 'next/router'
@@ -18,6 +17,7 @@ import { PageLink } from 'src/constants/routes'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { CoursesAPI } from '../api/courses'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 
 const Explanation = () => {
   const router = useRouter()

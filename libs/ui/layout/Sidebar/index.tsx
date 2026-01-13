@@ -1,5 +1,5 @@
 import { ExpandIcon } from "@lms/assets";
-import { useAppSelector, useFeature } from "@lms/contexts";
+import { useFeature } from "@lms/contexts";
 import { trackGAEvent } from "@lms/utils";
 import { Divider } from "antd";
 import clsx from "clsx";
@@ -25,10 +25,10 @@ export default function Sidebar({
   openExaminationInfo,
   setOpenExaminationInfo,
 }: SidebarProps) {
-  const { pageLink, menuItems, menuItemsEvent, menuBottom, router } =
+  const { pageLink, menuItems, menuItemsEvent, menuBottom, router, useAppSelector } =
     useFeature();
-  const guideStatus = useAppSelector((state) => state.userGuideReducer?.status);
-  const guideStep = useAppSelector((state) => state.userGuideReducer?.step);
+  const guideStatus = useAppSelector?.((state) => state.userGuideReducer?.status);
+  const guideStep = useAppSelector?.((state) => state.userGuideReducer?.step);
   /**
    * @description lấy state trong context
    */

@@ -1,10 +1,13 @@
 import SappLoading from '@components/common/SappLoading'
 import {
+  CalculatorIconV2,
+  DownloadIcon,
   FileTextIcon,
   FlagIcon,
   Icon,
   NotesOutline,
   ResizeIcon,
+  ScratchPadIconV2,
   ShowLessIcon,
   ShowMoreIcon,
 } from '@lms/assets'
@@ -13,8 +16,6 @@ import {
   disableUnsavedChange,
   loginSlice,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
 } from '@lms/contexts'
 import {
@@ -34,7 +35,6 @@ import {
   TEST_TYPE,
 } from '@lms/core'
 import { runHighlight, trackGAEvent } from '@lms/utils'
-import { CoursesAPI } from '@pages/api/courses'
 import { cloneDeep, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -43,7 +43,6 @@ import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
 
-import { CalculatorIcon, DownloadIcon, ScratchPadIcon } from '@assets/icons'
 import Layout from '@components/layout'
 import {
   removeHighlights,
@@ -74,8 +73,7 @@ import {
   SlotValue,
   TestWrapper,
 } from '@lms/ui'
-import { QuestionAPI } from '@pages/api/question'
-import { TestAPI } from '@pages/api/test'
+import { TestServiceAPI } from '@pages/api/test-api'
 import { download } from '@utils/index'
 import { Tooltip } from 'antd'
 import clsx from 'clsx'
@@ -86,7 +84,7 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import { TestServiceAPI } from '@pages/api/test-api'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 declare global {
   interface Window {
@@ -1982,7 +1980,7 @@ const TestDetail = () => {
                     }}
                   >
                     <ButtonContent
-                      icon={<ScratchPadIcon isActive={isScatchPadEnabled} />}
+                      icon={<ScratchPadIconV2 isActive={isScatchPadEnabled} />}
                       content=""
                     />
                   </button>
@@ -2007,7 +2005,7 @@ const TestDetail = () => {
                     disabled={checkCalExist > -1}
                   >
                     <ButtonContent
-                      icon={<CalculatorIcon isActive={checkCalExist > -1} />}
+                      icon={<CalculatorIconV2 isActive={checkCalExist > -1} />}
                       content=""
                     />
                   </button>
@@ -2555,7 +2553,7 @@ const TestDetail = () => {
           { '!bg-primary': isScatchPadEnabled },
         )}
       >
-        <ScratchPadIcon isActive={isScatchPadEnabled} />
+        <ScratchPadIconV2 isActive={isScatchPadEnabled} />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <div
@@ -2568,7 +2566,7 @@ const TestDetail = () => {
           { '!bg-primary': checkCalExist > -1 },
         )}
       >
-        <CalculatorIcon isActive={checkCalExist > -1} />
+        <CalculatorIconV2 isActive={checkCalExist > -1} />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <div

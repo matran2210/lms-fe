@@ -1,6 +1,4 @@
-import { CompletedIcon } from '@assets/icons'
-import Tooltip from '@components/common/Tooltip'
-import { LockClosedIcon } from '@lms/assets'
+import { ArrowDownIcon, CompletedIcon, LockClosedIcon } from '@lms/assets'
 import { useCourseContext } from '@lms/contexts'
 import { ROUTES, TEST_TYPE_ENUM } from '@lms/core'
 import { Collapse } from 'antd'
@@ -13,9 +11,9 @@ import {
   formatDurationMenuActivity,
   renderBadge,
   renderIconActivity,
-} from '../card/accordion/utils'
-import { ArrowDownIcon } from '../icons'
+} from './Accoridior'
 import TestModal from '../popup/TestModal'
+import { Tooltip } from '@lms/ui'
 
 const { Panel } = Collapse
 

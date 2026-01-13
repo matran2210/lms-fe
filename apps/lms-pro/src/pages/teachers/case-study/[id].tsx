@@ -1,4 +1,5 @@
 /* eslint-disable prefer-const */
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import {
   CalculatorIcon,
   CloseIcon,
@@ -13,8 +14,6 @@ import {
   loadMoreQuestion,
   saveFileEssay,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
   UserType,
 } from '@lms/contexts'
 import {
@@ -26,27 +25,25 @@ import {
   QUESTION_TYPES,
 } from '@lms/core'
 import { CalculatorModal, ConFirmSubmit } from '@lms/feature-courses'
-import { QuitTestModal } from '@lms/feature-test'
-import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
+import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
 import { useMousePosition, useSmartModalSize } from '@lms/hooks'
 import {
+  AddWordPreview,
+  DragNDropPreivew,
   EditorReader,
+  EssayQuestionPreview,
   FileViewer,
   FullScreenLayout,
   HookFormTextArea,
+  MatchingQuestion,
   ModalResizeable,
+  ModalUploadFile,
   MovableWindow,
+  MultiChoiceQuestion,
+  OneChoiceQuestion,
   SappButton,
-  SappLoadingGlobal,
+  SelectWord,
 } from '@lms/ui'
-import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
-import DragNDropPreivew from '@lms/ui/components/questionType/DragNDrop'
-import AddWordPreview from '@lms/ui/components/questionType/FillText'
-import MatchingQuestion from '@lms/ui/components/questionType/MatchingQuestion'
-import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
-import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
-import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight } from '@lms/utils'
 import { TestServiceAPI } from '@pages/api/test-api'
 import clsx from 'clsx'
@@ -58,6 +55,7 @@ import toast from 'react-hot-toast'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import LimitQuizModal from 'src/pages/test/limitQuizModal'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 const CaseStudyDetailTeacher = () => {
   const checkType = (

@@ -19,8 +19,6 @@ import {
   loadMoreQuestion,
   saveFileEssay,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
 } from '@lms/contexts'
 import {
   defaultSheetData,
@@ -38,29 +36,26 @@ import {
   ResetToAnswerTemplateModal,
   ShowAnswerTemplate,
 } from '@lms/feature-courses'
-import QuitTestModal from '@lms/feature-test/src/components/test/modal/quit-test-modal'
-import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
+import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
 import { useSmartModalSize, useTailwindBreakpoint } from '@lms/hooks'
 import {
+  AddWordPreview,
   ButtonTextV2,
+  CaseStudyWrapper,
   EditorReader,
+  EssayQuestionPreview,
   FileViewer,
   HookFormTextArea,
+  MatchQuizComponent,
   ModalResizeable,
+  ModalUploadFile,
+  MultiChoiceQuestion,
+  NewDragNDropQuestion,
+  OneChoiceQuestion,
   Popover,
-  SappLoadingGlobal,
-} from '@lms/ui'
-import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
-import AddWordPreview from '@lms/ui/components/questionType/FillText'
-import MatchQuizComponent from '@lms/ui/components/questionType/MatchQuiz/MatchQuiz'
-import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
-import DragDropQuestion, {
+  SelectWord,
   SlotValue,
-} from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
-import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
-import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
-import CaseStudyWrapper from '@lms/ui/layout/CaseStudyLayout/CaseStudyWrapper'
+} from '@lms/ui'
 import { runHighlight } from '@lms/utils'
 import { TestServiceAPI } from '@pages/api/test-api'
 import { Divider } from 'antd'
@@ -70,7 +65,9 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import LimitQuizModal from '../test/limitQuizModal'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
@@ -189,7 +186,7 @@ const CaseStudyDetail = () => {
           //   defaultAnswer={defaultValue}
           //   extenalRef={(el: any) => (valueRef.current[index || 0] = el)}
           // />
-          <DragDropQuestion
+          <NewDragNDropQuestion
             data={data}
             defaultValue={defaultValue}
             onChange={(data: SlotValue[]) => {

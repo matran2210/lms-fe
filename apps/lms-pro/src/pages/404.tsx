@@ -1,9 +1,9 @@
 import { SappButton } from '@lms/ui'
 import { LAYOUT } from '@lms/core'
 import Link from 'next/link'
-import { useAppSelector } from '@lms/contexts'
 import { userReducer } from '@lms/contexts'
 import { PageLink } from 'src/constants/routers'
+import { useAppSelector } from 'src/redux/hook'
 
 const ErrorPage = () => {
   const userSlice = useAppSelector(userReducer)

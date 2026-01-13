@@ -5,11 +5,8 @@ import { ReactElement, ReactNode, useState } from 'react'
 import { PageLink } from 'src/constants/routes'
 import Sidebar from './Sidebar'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import {
-  useAppSelector,
-  useCourseContext,
-  usePinnedNotifyContext,
-} from '@lms/contexts'
+import { useCourseContext, usePinnedNotifyContext } from '@lms/contexts'
+import { useAppSelector } from 'src/redux/hook'
 interface LayoutProps {
   readonly children: ReactNode
   readonly title: string
@@ -48,8 +45,6 @@ export default function Layout(props: LayoutProps): ReactElement {
   )
 
   const [openResource, setOpenResource] = useState(false)
-  const [openExaminationInfo, setOpenExaminationInfo] = useState(false)
-
   const isEnablePinnedPages = [
     PageLink.COURSES,
     PageLink.USERPAGE,
@@ -98,8 +93,6 @@ export default function Layout(props: LayoutProps): ReactElement {
           )}
           setOpenResource={setOpenResource}
           openResource={openResource}
-          openExaminationInfo={openExaminationInfo}
-          setOpenExaminationInfo={setOpenExaminationInfo}
         />
 
         <div

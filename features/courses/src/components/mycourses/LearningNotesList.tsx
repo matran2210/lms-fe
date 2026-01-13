@@ -27,8 +27,6 @@ import {
   pushNotes,
   resetNotesList,
   resetNotesList3Level,
-  useAppDispatch,
-  useAppSelector,
   useCourseNoteContext,
   useFeature,
   userReducer,
@@ -39,14 +37,10 @@ import { cleanParamsAPI } from "@lms/utils";
 import clsx from "clsx";
 import { format } from "date-fns";
 import { isEmpty } from "lodash";
-import getConfig from "next/config";
 import { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
-
-const { publicRuntimeConfig } = getConfig();
-export const { apiURL } = publicRuntimeConfig;
 
 const DEFAULT_PAGESIZE = 20;
 
@@ -55,12 +49,12 @@ type Props = {
 };
 const LearningNotesList = ({ appType }: Props) => {
   const [direction, setDirection] = useState<1 | -1>(1);
-  const { courseApi, pageLink, router } = useFeature();
+  const { courseApi, pageLink, router, dispatch, useAppSelector } = useFeature();
   const { isMobileView, isAlwaysShowSidebar } = useTailwindBreakpoint();
-  const notesListStatus = useAppSelector(
+  const notesListStatus = useAppSelector?.(
     (state) => appType === AppType.LMS_PRO ? state.notesListReducer?.status : state.shortNotesListReducer?.status,
   );
-  const getNotesData = useAppSelector(
+  const getNotesData = useAppSelector?.(
     (state) => appType === AppType.LMS_PRO ? state.notesListReducer?.note_data: state.shortNotesListReducer?.note_data,
   );
   const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false);
@@ -78,7 +72,7 @@ const LearningNotesList = ({ appType }: Props) => {
     (router.pathname === "/courses/[id]/activity/[activityId]" &&
       !isMobileView);
 
-  const userType = useAppSelector(userReducer).user.type;
+  const userType = useAppSelector?.(userReducer).user.type;
 
   const [listSection, setListSection] = useState<ISection[]>([]);
   const [listSubsection, setListSubsection] = useState<ISection[]>([]);
@@ -94,7 +88,6 @@ const LearningNotesList = ({ appType }: Props) => {
     setIsViewOnly,
     notesListData: notesListDataFromContext,
   } = useCourseNoteContext();
-  const dispatch = useAppDispatch();
   const [notesListData, setNotesListData] = useState<
     INotesListResponse | undefined
   >();
@@ -292,7 +285,7 @@ const LearningNotesList = ({ appType }: Props) => {
 
   const onClose = () => {
     document.body.style.overflow = "auto";
-    dispatch(appType === AppType.LMS_PRO ? resetNotesList() : resetNotesList3Level());
+    dispatch?.(appType === AppType.LMS_PRO ? resetNotesList() : resetNotesList3Level());
     resetFormFields(["section", "subsection", "unit", "activity"]);
     setIsPageStateVariables(true);
   };
@@ -329,9 +322,9 @@ const LearningNotesList = ({ appType }: Props) => {
       name: "Note",
       description: description,
     };
-    const isExist = getNotesData.find((item) => item.id === note.id);
+    const isExist = getNotesData.find((item: ICourseSectionNoteItem) => item.id === note.id);
     if (!isExist) {
-      dispatch(pushNotes(note));
+      dispatch?.(pushNotes(note));
     }
   };
 
@@ -446,7 +439,7 @@ const LearningNotesList = ({ appType }: Props) => {
                         const isEdit = activityId === note?.course_section_id;
                         const handleEdit = () => {
                           if (
-                            !getNotesData.some((item) =>
+                            !getNotesData.some((item: ICourseSectionNoteItem) =>
                               item.id.includes(note?.id),
                             )
                           ) {

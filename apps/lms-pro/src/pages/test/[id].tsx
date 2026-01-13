@@ -12,8 +12,6 @@ import {
   CourseProvider,
   disableUnsavedChange,
   loginSlice,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
 } from '@lms/contexts'
 import {
@@ -40,7 +38,6 @@ import {
   NewFillText,
   OneChoiceQuestion,
   Popover,
-  SappLoading,
   SelectWord,
   useClickOutside,
 } from '@lms/ui'
@@ -120,6 +117,8 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import SappLoading from '@components/common/SappLoading'
 declare global {
   interface Window {
     userAgreed: any

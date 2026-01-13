@@ -1,8 +1,7 @@
 import clsx from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { QUESTION_TYPES } from "@lms/core";
-import { ArrowIconV2 } from "@lms/ui/components/base/pagination/ArrowIconV2";
-import { PageLinkPagination } from "@lms/ui";
+import { ArrowIconV2, PageLinkPagination } from "@lms/ui";
 import { useTailwindBreakpoint } from "@lms/hooks";
 
 interface IProps {

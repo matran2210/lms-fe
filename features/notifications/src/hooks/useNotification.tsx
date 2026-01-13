@@ -9,7 +9,8 @@ import {   getCountUnRead,
   updateStatusAll,
   toggleStatusById,
   deleteNotificationById,
-  deleteAllNotifications,useAppDispatch, useAppSelector } from '@lms/contexts'
+  deleteAllNotifications,
+  useFeature} from '@lms/contexts'
 import { useTailwindBreakpoint } from '../../../../libs/hooks'
 
 export const useNotification = ({
@@ -21,12 +22,12 @@ markById: (ids: string[], markRead: boolean) => Promise<any>;
 router: any
     notificationApi: INotificationAPI
 }) => {
-  const dispatch = useAppDispatch()
-  const notifyDetail = useAppSelector((state) => state.notificationReducer)
-  const notifyLists = useAppSelector(
+  const { dispatch, useAppSelector } = useFeature()
+  const notifyDetail = useAppSelector?.((state) => state.notificationReducer)
+  const notifyLists = useAppSelector?.(
     (state) => state.notificationReducer.list_notifications,
   )
-  const pagination = useAppSelector((state) => state.notificationReducer.meta)
+  const pagination = useAppSelector?.((state) => state.notificationReducer.meta)
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [isDesktopView, setIsDesktopView] = useState(false)
   const [isViewDetail, setIsViewDetail] = useState(false)
@@ -47,9 +48,9 @@ router: any
     const loadMultiplePages = async () => {
       const screenHeight = window.innerHeight
 
-      isRefresh && (await dispatch(getCountUnRead(notificationApi)))
+      isRefresh && (await dispatch?.(getCountUnRead(notificationApi)))
 
-      const firstPageAction = await dispatch(
+      const firstPageAction = await dispatch?.(
         getNotification({
           api: notificationApi,
           params: {
@@ -62,14 +63,14 @@ router: any
         }),
       )
 
-      const totalPages = firstPageAction.payload?.meta?.total_pages || 1
+      const totalPages = firstPageAction?.payload?.meta?.total_pages || 1
       const baseHeight = 911
       const heightRatio = screenHeight / baseHeight
       const calculatedPages = Math.ceil(heightRatio)
       const pagesToLoad = Math.min(calculatedPages, totalPages)
 
       for (let page = 2; page <= pagesToLoad; page++) {
-        await dispatch(
+        await dispatch?.(
           loadMoreNotification({
             api: notificationApi,
             params: {
@@ -89,17 +90,17 @@ router: any
 
   const countNotificationsUnRead = async () => {
     try {
-      await dispatch(getCountUnRead(notificationApi))
+      await dispatch?.(getCountUnRead(notificationApi))
     } catch (error) {}
   }
 
   const markAllRead = async (selectedTab: number) => {
     try {
-      await dispatch(markAllNotifications(notificationApi))
+      await dispatch?.(markAllNotifications(notificationApi))
       if (selectedTab === 2) {
-        dispatch(deleteAllNotifications())
+        dispatch?.(deleteAllNotifications())
       } else {
-        dispatch(updateStatusAll())
+        dispatch?.(updateStatusAll())
       }
       await countNotificationsUnRead()
     } catch (error) {}
@@ -115,12 +116,12 @@ router: any
       if (!res?.data) {
         return
       }
-      dispatch(getCountUnRead(notificationApi))
+      dispatch?.(getCountUnRead(notificationApi))
       ids.forEach((id) => {
         if (selectedTab === 2) {
-          dispatch(deleteNotificationById(id))
+          dispatch?.(deleteNotificationById(id))
         } else {
-          dispatch(toggleStatusById(id))
+          dispatch?.(toggleStatusById(id))
         }
       })
     } catch (error) {}
@@ -133,9 +134,9 @@ router: any
         return
       }
       ids.forEach((id) => {
-        dispatch(toggleStatusById(id))
+        dispatch?.(toggleStatusById(id))
       })
-      dispatch(getCountUnRead(notificationApi))
+      dispatch?.(getCountUnRead(notificationApi))
     } catch (error) {}
   }
 
@@ -146,7 +147,7 @@ router: any
   ) => {
     try {
       if (id !== notifyDetail?.id) {
-        const res = await dispatch(getNotificationDetail({ api: notificationApi, id }))
+        const res = await dispatch?.(getNotificationDetail({ api: notificationApi, id }))
         if (res) {
           await countNotificationsUnRead()
         }
@@ -202,7 +203,7 @@ router: any
           if (page_index >= total_pages || isFetching.current) return
           try {
             isFetching.current = true
-            await dispatch(
+            await dispatch?.(
               loadMoreNotification({
                 api: notificationApi,
                 params: {
