@@ -19,6 +19,7 @@ export function isMobile() {
   })
 }
 
+//TODO: tạm comment window.opera https://prnt.sc/KLgFxqq3GJ2X
 export function isMobileExtensive() {
   let check = false
   ;(function (a) {
@@ -31,7 +32,7 @@ export function isMobileExtensive() {
       )
     )
       check = true
-  })(navigator.userAgent || window.opera)
+  })(navigator.userAgent)
   return check
 }
 

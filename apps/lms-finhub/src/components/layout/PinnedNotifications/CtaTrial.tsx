@@ -1,9 +1,9 @@
 import { CloseIconNote } from '@lms/assets'
-import { useRouter } from 'next/router'
 import React, { useLayoutEffect } from 'react'
 import PinnedNotificationsV2 from './PinnedNotificationsV2'
 import { PageLink } from 'src/constants/routes'
 import { useCourseContext, usePinnedNotifyContext } from '@lms/contexts'
+import { usePathname, useRouter } from 'next/navigation'
 
 const ENABLED_PINNED_PAGES = [
   `${PageLink.SHORT_COURSE_DETAIL}/[courseId]`,
@@ -18,13 +18,14 @@ const ENABLED_PINNED_NOTI_PAGES = [
 
 function CtaTrial() {
   const router = useRouter()
+  const pathName = usePathname()
   const { setShowPinnedTrial, showPinnedTrial, setOpenPopupCTA } =
     useCourseContext()
   const { openPinned } = usePinnedNotifyContext()
 
-  const isEnablePinnedPages = ENABLED_PINNED_PAGES.includes(router.pathname)
+  const isEnablePinnedPages = ENABLED_PINNED_PAGES.includes(pathName)
   const isEnablePinnedNotiPages = ENABLED_PINNED_NOTI_PAGES.includes(
-    router.pathname,
+    pathName,
   )
 
   useLayoutEffect(() => {

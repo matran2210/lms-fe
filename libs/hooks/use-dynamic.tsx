@@ -1,3 +1,4 @@
+"use client"
 import { useFeature } from '@lms/contexts'
 import { useEffect, useState } from 'react'
 
@@ -5,7 +6,7 @@ const useDynamicLoading = (
   getData: (page: number) => void,
   pageSize: number,
 ) => {
-  const { router } = useFeature()
+  const { router, params } = useFeature()
   const [isLoading, setIsLoading] = useState(false)
   const [page, setPage] = useState<number>(pageSize)
 
@@ -31,7 +32,7 @@ const useDynamicLoading = (
 
   useEffect(() => {
     // Load initial options when the component mounts
-    if (router.query.courseId || router.query.id) {
+    if (params?.courseId || params?.id) {
       loadMoreOptions()
     }
   }, [])

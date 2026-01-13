@@ -1,4 +1,4 @@
-import { MyRequestAPI } from '@pages/api/my-request'
+import { MyRequestAPI } from 'src/api/my-request'
 import { useInfiniteQuery } from 'react-query' // Import useInfiniteQuery
 
 const useSelectClassCode = (teacher_id?: string) => {

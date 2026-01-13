@@ -8,9 +8,8 @@ import {
   TEST_TYPE,
 } from "@lms/core";
 import { ButtonSecondary, ButtonText, SappModalV3 } from "@lms/ui";
-import { formatTimer, getUserPrefix, trackGAEvent } from "@lms/utils";
+import { buildQueryString, formatTimer, getUserPrefix, trackGAEvent } from "@lms/utils";
 import clsx from "clsx";
-import router from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { CardCourse } from "../../course";
 import { TestModal, TestModalTeacher } from "../test";
@@ -33,7 +32,7 @@ const PartFailed = ({
   isTeacher: boolean;
   hasCertificate?: boolean;
 }) => {
-  const { pageLink } = useFeature();
+  const { pageLink, router } = useFeature();
 
   const noOfAttempts = `${coursePart?.quiz?.attempt?.number_of_attempts || 0}/${
     coursePart?.quiz?.is_limited ? coursePart?.quiz?.limit_count : "Unlimited"
@@ -189,13 +188,10 @@ const PartFailed = ({
         );
       }
     } else {
-      router.push({
-        pathname: `${userPrefix}/courses/test/test-result/${selectedResult?.value}`,
-        query: {
+      router.push(`${userPrefix}/courses/test/test-result/${selectedResult?.value}?${buildQueryString({
           attempt: selectedResult?.label,
           ...(hasCertificate && { hasCertificate }),
-        },
-      });
+        })}`);
     }
     trackGAEvent(`Click Button Result ${showTitleFinalTest}`);
   };

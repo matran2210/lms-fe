@@ -45,7 +45,7 @@
     "typescript": "5.1.6"
   },
   "engines": {
-    "node": "22.x"
+    "node": "20.x"
   },
   "packageManager": "pnpm@10.22.0",
   "lint-staged": {
@@ -61,7 +61,7 @@
     "@eslint/js": "^8.0.0",
     "@funktechno/texthighlighter": "^2.1.2",
     "@hookform/resolvers": "^3.10.0",
-    "@sapp-fe/explanation-package": "^1.4.14",
+    "@sapp-fe/explanation-package": "^1.5.5",
     "@sapp-fe/sapp-common-package": "^1.6.16",
     "antd": "^5.25.0",
     "critters": "^0.0.19",

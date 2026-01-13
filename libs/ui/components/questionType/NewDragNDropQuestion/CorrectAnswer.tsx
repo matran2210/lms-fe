@@ -1,3 +1,4 @@
+"use client"
 import React, { useMemo } from 'react'
 import parse, { Element } from 'html-react-parser'
 import { Correct } from '@lms/utils'

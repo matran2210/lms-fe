@@ -1,8 +1,8 @@
 import React, { useEffect, Dispatch, SetStateAction } from 'react'
-import router, { useRouter } from 'next/router'
 import { CourseSearchIcon } from '@lms/assets'
 import { Controller, useFormContext } from 'react-hook-form'
 import { PageLink } from 'src/constants/routes'
+import { useParams, useRouter } from 'next/navigation'
 
 interface IProps {
   placeholder: string
@@ -27,7 +27,8 @@ const SearchForm = ({
   isCoursePage,
   isTeacher = false,
 }: IProps) => {
-  const { query, push } = useRouter()
+  const { push } = useRouter()
+  const params = useParams()
   const { control, watch, setValue } = useFormContext()
 
   useEffect(() => {
@@ -42,8 +43,8 @@ const SearchForm = ({
   }, [isFocused, watch('name'), isCoursePage])
 
   useEffect(() => {
-    setValue('name', query?.name ?? '')
-  }, [query?.name])
+    setValue('name', params?.name ?? '')
+  }, [params?.name])
 
   return (
     <form
@@ -59,7 +60,7 @@ const SearchForm = ({
       <Controller
         control={control}
         name="name"
-        defaultValue={router.query.name ?? ''}
+        defaultValue={params?.name ?? ''}
         render={({ field }) => (
           <input
             {...field}

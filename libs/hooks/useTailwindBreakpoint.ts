@@ -1,3 +1,4 @@
+"use client"
 import { useCallback, useLayoutEffect, useState } from 'react'
 
 const TAILWIND_BREAKPOINTS = {

@@ -1,3 +1,4 @@
+"use client";
 import {
   ReactFlowProvider,
   addEdge,
@@ -24,10 +25,10 @@ import { runHighlight } from "@lms/utils";
 import clsx from "clsx";
 import { Grid } from "antd";
 import SappDivider from "../../base/divider/Divider";
-import { useRouter } from "next/router";
 import { HighlightableHTML } from "../../highlights";
 import { SappTitleSolution } from "../../common";
 import { EditorReader } from "../../base";
+import { useFeature } from "@lms/contexts";
 
 interface IProps {
   data: any;
@@ -107,7 +108,8 @@ const MatchQuiz = forwardRef(
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
-    const router = useRouter();
+
+    const { params, query } = useFeature()
     const [edges, setEdges] = useState<Edge[]>([]);
     const flowRef = useRef<HTMLDivElement>(null);
     const [nodes, setNodes] = useState<MatchNode[]>([]);
@@ -623,7 +625,7 @@ const MatchQuiz = forwardRef(
             initialHTML={data?.question_content || ""}
             storageKey={
               storageKey ||
-              `${router.query.id}-${data?.qType}-question-${data?.id}`
+              `${params?.id || query.id}-${data?.qType}-question-${data?.id}`
             }
             className="sapp-questions sapp-editor-reader !mb-8"
           />

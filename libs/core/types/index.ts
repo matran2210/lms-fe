@@ -208,7 +208,10 @@ export type GuidePlacement =
   | "right-top"
   | "right-center"
   | "right-bottom";
-
+export type RouteContext =
+  | "COURSE_MANAGEMENT" // dashboard, results, class-resource
+  | "COURSE_LEARNING" // section, activity
+  | "GLOBAL";
 export * from "./common";
 export * from "./Icon";
 export * from "./api-response";

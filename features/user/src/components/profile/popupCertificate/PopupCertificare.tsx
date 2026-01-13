@@ -1,5 +1,4 @@
 import { CloseIconPreview } from "@lms/assets";
-import { useRouter } from "next/router";
 import { Dispatch, SetStateAction } from "react";
 import SappModalCerti from "./SappModalCerti";
 
@@ -22,7 +21,6 @@ const PopUpCertificate = ({
   confirmOnClose = true,
   userDetail,
 }: PopupProp) => {
-  const router = useRouter();
   const handleOnClose = () => {
     onClose();
   };

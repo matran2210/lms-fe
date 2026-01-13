@@ -2,8 +2,8 @@ import { ArrowRightV2Icon } from "@lms/assets";
 import PinnedNotificationsV2 from "./PinnedNotificationsV2";
 import { formatDateToLongString } from "@lms/utils";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import React from "react";
+import { useFeature } from "@lms/contexts";
 import clsx from "clsx";
 
 interface PinnedCompletedCourseData {
@@ -60,7 +60,7 @@ SeeCertificateButton.displayName = "SeeCertificateButton";
 
 const PinnedCompletedCourse: React.FC<IProps> = React.memo(
   ({ pinnedCompletedCourse }) => {
-    const router = useRouter();
+    const {router} = useFeature();
     const {
       isOpen,
       passedAt,

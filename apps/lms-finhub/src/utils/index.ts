@@ -1,7 +1,7 @@
-import { TestServiceAPI } from '@pages/api/test-api'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import weekday from 'dayjs/plugin/weekday'
+import { TestServiceAPI } from 'src/api/test-api'
 
 dayjs.extend(utc)
 
