@@ -1,6 +1,6 @@
 // app/layout.tsx
 import type { ReactNode } from 'react'
-import { Providers } from './providers'
+import { ProvidersWrapper } from './providers'
 import Metadata from '@components/common/Metadata'
 // TODO: Next14
 import '@lms/styles'
@@ -34,11 +34,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
       <body>
-        <Providers>
+        <ProvidersWrapper>
           <ClientLayout />
           {children}
           {/* </ClientLayout> */}
-        </Providers>
+        </ProvidersWrapper>
       </body>
     </html>
   )

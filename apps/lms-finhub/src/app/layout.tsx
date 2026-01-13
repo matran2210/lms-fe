@@ -13,7 +13,7 @@ import '@xyflow/react/dist/style.css'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import 'aos/dist/aos.css'
-import { Providers } from './provider'
+import { ProvidersWrapper } from './provider'
 import { ErrorBoundary } from '@sentry/nextjs'
 import ErrorRedirectPage from './error-redirect/page'
 import Script from 'next/script'
@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           />
         </head>
         <body>
-          <Providers>{children}</Providers>
+          <ProvidersWrapper>{children}</ProvidersWrapper>
         </body>
       </html>
     </ErrorBoundary>
