@@ -1,5 +1,4 @@
 import { fetcher } from '@services/requestV2'
-import { apiURL } from 'src/redux/services/httpService'
 
 export class NotificationAPI {
   static getCountUnRead(): Promise<any> {

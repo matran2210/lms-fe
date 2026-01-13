@@ -116,9 +116,7 @@ export default function MenuItem({
   }
 
   const handleViewNotification = (link: string) => {
-    router.push({
-      pathname: link,
-    })
+    router.push(link)
   }
 
   const onClickMenuItem = () => {

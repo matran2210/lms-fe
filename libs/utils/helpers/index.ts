@@ -72,7 +72,7 @@ export const isMobileExtensive = () => {
       )
     )
       check = true;
-  })(navigator.userAgent || window.opera);
+  })(navigator.userAgent);
   return check;
 }
 export const isMobileOrTablet = () => {

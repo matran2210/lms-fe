@@ -1,5 +1,5 @@
 'use client'
-import { getCountUnRead, showNotification, useAppDispatch } from '@lms/contexts'
+import { getCountUnRead, showNotification } from '@lms/contexts'
 import {
   CERTIFICATE_DETAIL,
   ENTRANCE_TEST_RESULT,
@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation'
 import { NotificationAPI } from 'src/api/notification'
 import { onMessageListener } from '@lms/utils'
 import { useEffect } from 'react'
+import { useAppDispatch } from 'src/redux/hook'
 export default function ClientLayout() {
   const dispatch = useAppDispatch()
   const pathname = usePathname()
