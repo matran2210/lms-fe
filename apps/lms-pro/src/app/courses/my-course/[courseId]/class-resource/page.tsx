@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { UserType } from '@lms/contexts'
 import {
   AppType,
@@ -8,10 +8,8 @@ import {
   IListClassResourceParams,
 } from '@lms/core'
 import { useSappPaging, useTailwindBreakpoint } from '@lms/hooks'
-import { Layout, SappBreadCrumbs } from '@lms/ui'
-import { ClassAPI } from 'src/api/class'
-import { CoursesAPI } from 'src/api/courses'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { ClassResourceSkeleton, Layout, SappBreadCrumbs } from '@lms/ui'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
@@ -20,13 +18,15 @@ import ClassResourceTable from './ClassResourceTable'
 import FilterClassResource from './FilterClassResource'
 import SearchClassResource from './SearchClassResource'
 import { normalizeToArray } from '@lms/utils'
+import { useParams, usePathname, useSearchParams } from 'next/navigation'
+import { CoursesAPI } from 'src/api/courses'
+import { ClassAPI } from 'src/api/class'
 
 const ClassResource = () => {
   const router = useRouter()
-   const pathname = usePathname()
-      const searchParams = useSearchParams()
+  const searchParams = useSearchParams()
   const param = useParams()
-      const query = Object.fromEntries(searchParams.entries())
+  const query = Object.fromEntries(searchParams.entries())
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [params, setParams] = useState<IListClassResourceParams>({
     page_size: DEFAULT_PAGE_SIZE,
@@ -54,13 +54,11 @@ const ClassResource = () => {
     }
   }
 
-  const { data, pagination, isLoading, handleChangeParams, setPagination } =
-    useSappPaging({
-      uniqueKey: ClassKey.ClassResource,
-      queryFn: () =>
-        ClassAPI.getClassResource(param.courseId as string, params),
-      params,
-    })
+  const { data, pagination, isLoading, setPagination } = useSappPaging({
+    uniqueKey: ClassKey.ClassResource,
+    queryFn: () => ClassAPI.getClassResource(param.courseId as string, params),
+    params,
+  })
 
   const paramsCourseDetail = {
     user_section_learning_status:
@@ -91,9 +89,7 @@ const ClassResource = () => {
       schedule_ids: normalizeToArray(query.schedule_ids),
 
       search_key:
-        typeof query.search_key === 'string'
-          ? query.search_key
-          : undefined,
+        typeof query.search_key === 'string' ? query.search_key : undefined,
     }))
   }, [
     query.page_index,
@@ -103,51 +99,54 @@ const ClassResource = () => {
   ])
 
   return (
-    <Layout title={'Class Resource'} showSidebar={isAlwaysShowSidebar}>
-      {isAlwaysShowSidebar && (
-        <div className="mb-2 mt-4 flex w-full">
-          <SappBreadCrumbs
-            isTeacher={false}
-            breadcrumbs={[
-              {
-                title: 'My Course',
-                link: PageLink.COURSES,
-              },
-              {
-                title: courseNameDetail || '',
-                link: PageLink.COURSE_DETAIL.replace(
-                  '[courseId]',
-                  param.courseId as string,
-                ),
-              },
-              {
-                title: 'Class Resource',
-                link: '',
-              },
-            ]}
+    <Layout title="Class Resource" showSidebar={isAlwaysShowSidebar}>
+      {isLoading ? (
+        <ClassResourceSkeleton />
+      ) : (
+        <>
+          {isAlwaysShowSidebar && (
+            <div className="mb-2 mt-4 flex w-full">
+              <SappBreadCrumbs
+                isTeacher={false}
+                breadcrumbs={[
+                  { title: 'My Course', link: PageLink.COURSES },
+                  {
+                    title: courseNameDetail || '',
+                    link: PageLink.COURSE_DETAIL.replace(
+                      '[courseId]',
+                      router.query.courseId as string,
+                    ),
+                  },
+                  { title: 'Class Resource', link: '' },
+                ]}
+              />
+            </div>
+          )}
+
+          <div className="mb-8">
+            <SearchClassResource
+              handleOpenSidebar={() => {}}
+              isShowToggle
+              redirectLink={PageLink.COURSES}
+              appType={AppType.LMS_PRO}
+            />
+          </div>
+
+          <div className="mb-6 flex w-full justify-between">
+            <div className="text-2xl font-semibold text-gray-800">
+              Class Resource
+            </div>
+            <FilterClassResource totalResult={pagination?.total || 0} />
+          </div>
+
+          <ClassResourceTable
+            data={data}
+            pagination={pagination}
+            setPagination={setPagination}
+            isLoading={false}
           />
-        </div>
+        </>
       )}
-      <div className="mb-8">
-        <SearchClassResource
-          handleOpenSidebar={() => {}}
-          isShowToggle
-          redirectLink={PageLink.COURSES}
-          appType={AppType.LMS_PRO}
-        />
-      </div>
-      <div className="mb-6 flex w-full justify-between">
-        <div className="text-2xl font-semibold text-gray-800">
-          Class Resource
-        </div>
-        <FilterClassResource totalResult={pagination?.total || 0} />
-      </div>
-      <ClassResourceTable
-        data={data}
-        pagination={pagination}
-        setPagination={setPagination}
-        isLoading={isLoading}
-      />
     </Layout>
   )
 }

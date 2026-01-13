@@ -1,9 +1,13 @@
-"use client"
+'use client'
 import { UserType } from '@lms/contexts'
 import { DEFAULT_PAGE_SIZE, TEST_AND_QUIZ_TITLE } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { HeaderMobile, Layout, SappBreadCrumbs } from '@lms/ui'
-import { CoursesAPI } from 'src/api/courses'
+import {
+  HeaderMobile,
+  Layout,
+  SappBreadCrumbs,
+  TestQuizResultSkeleton,
+} from '@lms/ui'
 import clsx from 'clsx'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
@@ -12,18 +16,18 @@ import { FilterCourseIcon } from '@lms/assets'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import ResultsTable from './ResultsTable'
+import { CoursesAPI } from 'src/api/courses'
 
 const Results = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
-      const param = useParams()
-        const query = Object.fromEntries(searchParams.entries())
+  const param = useParams()
+  const query = Object.fromEntries(searchParams.entries())
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =
     useTailwindBreakpoint()
   const [openFilter, setOpenFilter] = useState(false)
   const handleBack = () => {
-    if (param.courseId)
-      router.push(`/courses/my-course/${param.courseId}`)
+    if (param.courseId) router.push(`/courses/my-course/${param.courseId}`)
   }
 
   /**
@@ -66,51 +70,50 @@ const Results = () => {
   const courseNameDetail = courseData?.courseDetail?.data?.name
 
   return (
-    <Layout
-      title={TEST_AND_QUIZ_TITLE}
-      showSidebar={isAlwaysShowSidebar}
-    >
-      {isAlwaysShowSidebar && (
-        <div className="mb-2 mt-4 flex w-full">
-          <SappBreadCrumbs
-            isTeacher={false}
-            breadcrumbs={[
-              {
-                title: 'My Course',
-                link: PageLink.COURSES,
-              },
-              {
-                title: courseNameDetail || '',
-                link: PageLink.COURSE_DETAIL.replace(
-                  '[courseId]',
-                  param.courseId as string,
-                ),
-              },
-              {
-                title: TEST_AND_QUIZ_TITLE,
-                link: '',
-              },
-            ]}
-          />
-        </div>
-      )}
-      <HeaderMobile
-        title={TEST_AND_QUIZ_TITLE}
-        showIcon={isTabletView || isMobileView}
-        onBack={handleBack}
-        className={clsx({ 'mt-4': isMobileView, 'mt-8': isTabletView })}
-        extraActions={
-          isMobileView && (
-            <div onClick={() => setOpenFilter((prev) => !prev)}>
-              <FilterCourseIcon />
+    <Layout title={TEST_AND_QUIZ_TITLE} showSidebar={isAlwaysShowSidebar}>
+      {!courseData ? (
+        <TestQuizResultSkeleton />
+      ) : (
+        <>
+          {isAlwaysShowSidebar && (
+            <div className="mb-2 mt-4 flex w-full">
+              <SappBreadCrumbs
+                isTeacher={false}
+                breadcrumbs={[
+                  { title: 'My Course', link: PageLink.COURSES },
+                  {
+                    title: courseNameDetail || '',
+                    link: PageLink.COURSE_DETAIL.replace(
+                      '[courseId]',
+                      query.courseId as string,
+                    ),
+                  },
+                  { title: TEST_AND_QUIZ_TITLE, link: '' },
+                ]}
+              />
             </div>
-          )
-        }
-      />
-      <ResultsTable
-        openFilter={openFilter}
-        setOpenFilter={setOpenFilter}
-      />
+          )}
+
+          <HeaderMobile
+            title={TEST_AND_QUIZ_TITLE}
+            showIcon={isTabletView || isMobileView}
+            onBack={handleBack}
+            className={clsx({
+              'mt-4': isMobileView,
+              'mt-8': isTabletView,
+            })}
+            extraActions={
+              isMobileView && (
+                <div onClick={() => setOpenFilter((prev) => !prev)}>
+                  <FilterCourseIcon />
+                </div>
+              )
+            }
+          />
+
+          <ResultsTable openFilter={openFilter} setOpenFilter={setOpenFilter} />
+        </>
+      )}
     </Layout>
   )
 }
