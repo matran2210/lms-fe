@@ -1,5 +1,9 @@
 export const CLASS_SUFFIX_TYPE = [
   {
+    label: "Audio",
+    value: "AUDIO",
+  },
+  {
     label: "Video",
     value: "VIDEO",
   },

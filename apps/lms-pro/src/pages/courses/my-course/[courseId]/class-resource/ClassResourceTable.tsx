@@ -185,15 +185,17 @@ const ClassResourceTable = ({
   const renderPreviewContent = (resource: IClassResource) => {
     switch (resource.suffix_type) {
       case 'VIDEO':
+      case 'AUDIO':
         return (
           <SAPPVideo
             isFetchCaptions={false}
             streamRef={internalRef}
             options={{
-              src:
-                resource.url
-                  ?.replace(videoUrl || '', '')
-                  .replace('/manifest/video.m3u8', '') || '',
+              src: resource.url
+                ? resource.url
+                    ?.replace(videoUrl || '', '')
+                    .replace('/manifest/video.m3u8', '') || ''
+                : resource.sub_url,
             }}
           ></SAPPVideo>
         )
