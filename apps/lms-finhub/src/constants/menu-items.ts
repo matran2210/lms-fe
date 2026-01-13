@@ -16,12 +16,6 @@ const MENU_OPTIONS: MenuOption[] = [
     type: 'level-1',
   },
   {
-    name: TitleSidebar.ACTIVITY,
-    icon: 'activity',
-    url: 'PageLink.COURSE_ACTIVITY',
-    type: 'level-1',
-  },
-  {
     name: TitleSidebar.NOTES_LIST,
     icon: 'notes-list',
     url: '#',

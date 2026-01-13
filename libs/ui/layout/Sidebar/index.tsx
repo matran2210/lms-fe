@@ -26,7 +26,7 @@ export default function Sidebar({
   openExaminationInfo,
   setOpenExaminationInfo,
 }: SidebarProps) {
-  const { pageLink, menuItems, menuItemsEvent, menuBottom, router } =
+  const { pageLink, menuItems, menuItemsEvent, menuBottom, router, pathname } =
     useFeature();
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status);
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step);
@@ -41,10 +41,10 @@ export default function Sidebar({
     }, 1000);
   };
   const isLevel1 =
-    router.pathname === pageLink.COURSES ||
-    router.pathname === pageLink.CALENDAR ||
-    router.pathname === pageLink.ENTRANCE_TEST ||
-    router.pathname === pageLink.EXAM_LIST;
+    pathname === pageLink.COURSES ||
+    pathname === pageLink.CALENDAR ||
+    pathname === pageLink.ENTRANCE_TEST ||
+    pathname === pageLink.EXAM_LIST;
   const isGuideActive = guideStatus && (guideStep === 2 || guideStep === 3);
   return (
     <div className="group relative">
