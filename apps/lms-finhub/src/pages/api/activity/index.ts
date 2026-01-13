@@ -1,9 +1,9 @@
-import { fetcher } from '@services/requestV2'
 import {
   ICreateDiscussionRequest,
   ICreateDiscussionResReact,
   ICreateDiscussionUploadRequest,
-} from 'src/redux/types/Course/MyCourse/Activity/activity'
+} from '@lms/contexts'
+import { fetcher } from '@services/requestV2'
 
 export class ActivityAPI {
   /**

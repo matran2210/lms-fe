@@ -1,4 +1,3 @@
-import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
 import { CloseIcon } from '@lms/assets'
 import {
   ANIMATION,
@@ -11,10 +10,12 @@ import {
 import { ListScoreCollapse } from '@lms/feature-courses'
 import { SappBaseTable, Tooltip } from '@lms/ui'
 import {
+  convertSecondsToMinutesSeconds,
   convertSlugToTitle,
   getGradingStatusLabel,
   handleReplaceText,
   removeHtmlTags,
+  roundNumber,
   truncateString,
 } from '@lms/utils'
 import 'aos/dist/aos.css'

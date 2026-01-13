@@ -1,11 +1,10 @@
 import { ArrowDownIcon, CompletedIcon, LockClosedIcon } from '@lms/assets'
 import { useCourseContext } from '@lms/contexts'
-import { ROUTES, TEST_TYPE_ENUM } from '@lms/core'
+import { ROUTES, SectionContentProps, TEST_TYPE_ENUM } from '@lms/core'
 import { Collapse } from 'antd'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { SectionContentProps } from 'src/type/courses-3-level'
 import {
   formatDuration,
   formatDurationMenuActivity,

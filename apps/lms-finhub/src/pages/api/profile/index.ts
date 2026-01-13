@@ -5,7 +5,7 @@ import {
   ResetPassword,
   SendEmailReq,
   VerifyOtpReq,
-} from 'src/redux/types/Login/login'
+} from '@lms/contexts'
 
 const MyProfileAPI = {
   getProfile: async (): Promise<any> => {

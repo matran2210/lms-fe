@@ -1,6 +1,5 @@
-import { IActivity3Level } from '@lms/core'
+import { IActivity3Level, ICourseTabDocument, IFile } from '@lms/core'
 import { fetcher } from '@services/requestV2'
-import { ICourseTabDocument, IFile } from 'src/type/courses-3-level'
 
 /**
  * @description fetch activity information by ID.

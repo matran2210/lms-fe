@@ -1,4 +1,4 @@
-import { IButton3Level } from 'src/type/courses-3-level/button'
+import { IButton3Level } from '@lms/core'
 
 export default function ButtonIcon({
   title,

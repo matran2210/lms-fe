@@ -15,9 +15,9 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routes'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
 import { CoursesAPI } from '../api/courses'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
+import { UserType } from '@lms/contexts'
 
 const Explanation = () => {
   const router = useRouter()

@@ -2,12 +2,12 @@ import { LAYOUT } from '@lms/core'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
 import { useDownloadImage } from '@lms/hooks'
 import SinglePageLayout from '@components/layout/SinglePage'
 import { CoursesAPI } from '@pages/api/courses'
 import { CertificateVertical, HorizontalCertificate } from '@lms/feature-user'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
+import { UserType } from '@lms/contexts'
 
 export interface ICertificate {
   certificate_url: string

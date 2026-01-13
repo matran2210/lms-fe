@@ -1,10 +1,10 @@
-import { IUser } from 'src/redux/types/User/urser'
 import { apiURL } from '../httpService'
 import url from './url'
 import { AuthAPI } from 'src/pages/api/profile'
 import { IResponse, PinnedNotifications } from '@lms/core'
 import { fetchFormData } from '@services/requestV2'
 import { IDeviceItem } from '@lms/core'
+import { IUser } from '@lms/contexts'
 
 const UserApi = {
   /**

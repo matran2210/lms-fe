@@ -1,17 +1,17 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { closeNote3Level } from '@lms/contexts'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { useAppDispatch } from 'src/redux/hook'
-import { IProps, NoteFormData } from 'src/type/courses-3-level'
 import { z } from 'zod'
 import CreateNoteDesktop from './CreateNoteDesktop'
 import CreateNoteMobile from './CreateNoteMobile'
+import { IProps, NoteFormData } from '@lms/core'
+import { VALIDATE_REQUIRED } from '@lms/utils'
 
 const CreateNote = ({
   id,

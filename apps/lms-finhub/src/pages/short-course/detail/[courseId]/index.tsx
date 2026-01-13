@@ -14,7 +14,13 @@ import {
   useCourseContext,
   UserType,
 } from '@lms/contexts'
-import { ANIMATION, DEFAULT_PAGESIZE, ROUTES, TEST_TYPE } from '@lms/core'
+import {
+  ANIMATION,
+  DEFAULT_PAGESIZE,
+  ISubSection,
+  ROUTES,
+  TEST_TYPE,
+} from '@lms/core'
 import { CardMenuItem, PopupLockContent } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { BottomMenu, LearningResource, PromotionalBanner } from '@lms/ui'
@@ -30,8 +36,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routes'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { ISubSection } from 'src/type/courses-3-level'
-// import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import { useAppDispatch } from 'src/redux/hook'
 
 const CourseDetail = () => {

@@ -1,6 +1,6 @@
 import { AppleLogo, PhoneLogo, WinDowLogo } from '@lms/assets'
+import { calculateTimeAgo } from '@lms/utils'
 import { useMemo } from 'react'
-import { calculateTimeAgo } from '@utils/helpers'
 
 const DeviceItem = ({ data }: any) => {
   const chooseLogo = useMemo(() => {

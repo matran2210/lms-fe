@@ -6,10 +6,10 @@ import {
   FullScreenLayout,
   SappBaseTable,
 } from '@lms/ui'
-import { roundNumber } from '@utils/helpers'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { CoursesAPI } from '../../api/courses/index'
+import { roundNumber } from '@lms/utils'
 
 const headers = [
   {
@@ -281,7 +281,7 @@ const TableCaseStudyResult = () => {
                               : 'Unfinished'}
                           </>
                         )}
-                        </td>
+                      </td>
                       <td className="m-6 pr-4 text-start text-gray-1">
                         {e?.question?.qType !== 'ESSAY' && (
                           <div className="ml-1 flex items-center">

@@ -34,7 +34,7 @@ import {
   ScratchPadValue,
   TEST_TYPE,
 } from '@lms/core'
-import { runHighlight, trackGAEvent } from '@lms/utils'
+import { checkTypeAndRenderTitle, runHighlight, trackGAEvent } from '@lms/utils'
 import { cloneDeep, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -79,7 +79,6 @@ import { Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { PageLink } from 'src/constants/routes'
-import { checkTypeAndRenderTitle } from 'src/utils/helpers/quiz-test/helper'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'

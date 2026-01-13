@@ -9,9 +9,13 @@ import {
 } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { SappBaseTable, Tooltip } from '@lms/ui'
-import { htmlToRaw, roundNumber, truncateString } from '@lms/utils'
+import {
+  convertSecondsToMinutesSeconds,
+  htmlToRaw,
+  roundNumber,
+  truncateString,
+} from '@lms/utils'
 import { ResultAPI } from '@pages/api/short-course/test-result'
-import { convertSecondsToMinutesSeconds } from '@utils/helpers'
 import { Collapse } from 'antd'
 import 'aos/dist/aos.css'
 import clsx from 'clsx'

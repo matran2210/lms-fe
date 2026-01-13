@@ -1,6 +1,6 @@
 import { LANG_SIGNIN, MenuItem, MenuOption, TitleSidebar } from '@lms/core'
 import { PageLink } from './routes'
-import { makeMenuLevel } from '@utils/helpers'
+import { makeMenuLevel } from '@lms/utils'
 
 const MENU_OPTIONS: MenuOption[] = [
   {

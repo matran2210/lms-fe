@@ -1,4 +1,4 @@
-import { ICreateDiscussionUploadRequest } from 'src/redux/types/Course/MyCourse/Activity/activity'
+import { ICreateDiscussionUploadRequest } from '@lms/contexts'
 import { fetchFormData } from '@services/requestV2'
 
 /**

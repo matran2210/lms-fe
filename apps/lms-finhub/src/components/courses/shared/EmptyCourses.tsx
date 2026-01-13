@@ -1,4 +1,4 @@
-import { EmptyCourseProps } from 'src/type/courses-3-level'
+import { EmptyCourseProps } from '@lms/core'
 import { EmptyCoursesIcon } from '../icons'
 
 export default function EmptyCourses({

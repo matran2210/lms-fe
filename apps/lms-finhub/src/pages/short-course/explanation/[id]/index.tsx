@@ -1,19 +1,23 @@
-import { CloseIcon } from '@lms/assets'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
+import { CloseIcon } from '@lms/assets'
+import {
+  GRADING_METHOD,
+  IAtempt,
+  IQuestion,
+  IRequirement,
+  LAYOUT,
+  QUESTION_TYPES,
+  TEST_ATTEMPT_TYPE,
+} from '@lms/core'
 import { FullScreenLayout } from '@lms/ui'
-import { LAYOUT } from '@lms/core'
+import { TestServiceAPI } from '@pages/api/test-api'
 import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { GRADING_METHOD, TEST_ATTEMPT_TYPE } from '@lms/core'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { UploadAPI } from 'src/pages/api/upload'
-import { UserType } from 'src/redux/types/User/urser'
-import { IQuestion, QUESTION_TYPES } from '@lms/core'
-import { IAtempt, IRequirement } from 'src/type/courses-3-level/test'
-import { CoursesAPI } from '../../../api/courses'
 import { PageLink } from 'src/constants/routes'
-import { TestServiceAPI } from '@pages/api/test-api'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { CoursesAPI } from '../../../api/courses'
+import { UserType } from '@lms/contexts'
 
 const Explanation = () => {
   const router = useRouter()

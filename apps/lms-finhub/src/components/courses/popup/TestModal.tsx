@@ -13,9 +13,13 @@ import {
   TestPopup,
 } from '@lms/feature-courses'
 import { ButtonPrimary, ButtonSecondary, ButtonText } from '@lms/ui'
-import { capitalizeFirstLetter, formatTimer, trackGAEvent } from '@lms/utils'
+import {
+  capitalizeFirstLetter,
+  formatTimer,
+  isQuizExpired,
+  trackGAEvent,
+} from '@lms/utils'
 import { TestServiceAPI } from '@pages/api/test-api'
-import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
 import { Select } from 'antd'
 import dayjs from 'dayjs'
 import { isNull } from 'lodash'
