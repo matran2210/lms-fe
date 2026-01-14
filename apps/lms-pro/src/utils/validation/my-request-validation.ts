@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { REQUEST_TYPE } from '@lms/core'
+import { VALIDATE_REQUIRED } from '@lms/utils'
 
 // Shared fields for all schemas
 

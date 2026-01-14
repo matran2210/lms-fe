@@ -1,10 +1,11 @@
 'use client'
-import { calculatePercentage, roundNumber } from '@utils/helpers'
+import { calculatePercentage } from '@utils/helpers'
 import { MutableRefObject, useRef } from 'react'
 import { useDraggable } from 'react-use-draggable-scroll'
 
 import { Tooltip } from '@lms/ui'
 import { ChartDatum } from '@lms/core'
+import { roundNumber } from '@lms/utils'
 
 interface IProps {
   data: ChartDatum[]

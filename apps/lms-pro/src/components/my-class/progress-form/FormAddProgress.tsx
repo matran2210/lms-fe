@@ -14,8 +14,11 @@ import {
   SAPPInput,
   SAPPSelect,
 } from '@lms/ui'
-import { buildQueryString, sortSectionsByPosition } from '@lms/utils'
-import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
+import {
+  buildQueryString,
+  sortSectionsByPosition,
+  VALIDATE_REQUIRED,
+} from '@lms/utils'
 import { Drawer } from 'antd'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useLayoutEffect, useState } from 'react'

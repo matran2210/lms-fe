@@ -20,9 +20,9 @@ import {
   buildQueryString,
   formatDate,
   sortSectionsByPosition,
+  VALIDATE_REQUIRED,
 } from '@lms/utils'
 import { ProgressAPI } from 'src/api/progress'
-import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { Drawer } from 'antd'
 import { round } from 'lodash'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'

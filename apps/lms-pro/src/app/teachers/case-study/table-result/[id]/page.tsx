@@ -8,13 +8,12 @@ import {
   FullScreenLayout,
   SappBaseTable,
 } from '@lms/ui'
-import { roundNumber } from '@utils/helpers'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from 'src/api/courses'
-import { buildQueryString } from '@lms/utils'
+import { buildQueryString, roundNumber } from '@lms/utils'
 
 const headers = [
   {

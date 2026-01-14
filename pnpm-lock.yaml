@@ -25,10 +25,10 @@ importers:
         version: 3.10.0(react-hook-form@7.48.2(react@18.2.0))
       '@sapp-fe/explanation-package':
         specifier: ^1.5.5
-        version: 1.5.5(@babel/core@7.28.6)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1)
+        version: 1.5.5(@babel/core@7.28.6)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)
       '@sapp-fe/sapp-common-package':
         specifier: ^1.6.16
-        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1)
+        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)
       antd:
         specifier: ^5.25.0
         version: 5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -61,20 +61,20 @@ importers:
         version: 3.39.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       styled-components:
         specifier: ^6.1.19
-        version: 6.3.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 6.3.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
     devDependencies:
       '@tailwindcss/aspect-ratio':
         specifier: ^0.4.2
-        version: 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))
+        version: 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6)))
       '@tailwindcss/forms':
         specifier: ^0.5.10
-        version: 0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))
+        version: 0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6)))
       '@types/lodash':
         specifier: ^4.17.20
         version: 4.17.23
       '@types/node':
         specifier: ^24.10.1
-        version: 24.10.7
+        version: 24.10.8
       '@types/react':
         specifier: 18.2.21
         version: 18.2.21
@@ -603,7 +603,7 @@ importers:
         version: 10.14.1(@react-native-async-storage/async-storage@1.24.0(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0)))
       framer-motion:
         specifier: ^12.23.12
-        version: 12.26.1(@emotion/is-prop-valid@1.4.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 12.26.2(@emotion/is-prop-valid@1.4.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       html-react-parser:
         specifier: ^5.2.5
         version: 5.2.11(@types/react@18.2.21)(react@18.2.0)
@@ -799,7 +799,7 @@ importers:
     dependencies:
       '@hookform/resolvers':
         specifier: ^3.9.0
-        version: 3.10.0(react-hook-form@7.71.0(react@18.2.0))
+        version: 3.10.0(react-hook-form@7.71.1(react@18.2.0))
       '@lottiefiles/react-lottie-player':
         specifier: ^3.6.0
         version: 3.6.0(react@18.2.0)
@@ -808,10 +808,10 @@ importers:
         version: 2.2.0(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))
       '@tailwindcss/aspect-ratio':
         specifier: ^0.4.2
-        version: 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3)))
+        version: 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.9.3)))
       '@tailwindcss/forms':
         specifier: ^0.5.10
-        version: 0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3)))
+        version: 0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.9.3)))
       '@zoom/meetingsdk':
         specifier: ^3.13.2
         version: 3.13.2(lodash@4.17.21)(react-dom@18.2.0(react@18.2.0))(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0)(redux-thunk@2.4.2(redux@4.2.1))(redux@4.2.1)
@@ -847,13 +847,13 @@ importers:
         version: 18.2.0(react@18.2.0)
       react-hook-form:
         specifier: ^7.53.0
-        version: 7.71.0(react@18.2.0)
+        version: 7.71.1(react@18.2.0)
       react-hot-toast:
         specifier: ^2.4.1
         version: 2.6.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       tailwindcss:
         specifier: ^3.4.10
-        version: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3))
+        version: 3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.9.3))
       zod:
         specifier: ^3.23.8
         version: 3.25.76
@@ -863,7 +863,7 @@ importers:
         version: 5.4.1(@next/eslint-plugin-next@14.2.35)(@vue/compiler-sfc@3.5.26)(eslint-plugin-jsx-a11y@6.10.2(eslint@8.57.1))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.1))(eslint@8.57.1)(typescript@5.9.3)
       '@commitlint/cli':
         specifier: ^19.8.1
-        version: 19.8.1(@types/node@24.10.7)(typescript@5.9.3)
+        version: 19.8.1(@types/node@24.10.8)(typescript@5.9.3)
       '@commitlint/config-conventional':
         specifier: ^19.8.1
         version: 19.8.1
@@ -914,7 +914,7 @@ importers:
         version: 12.1.1(eslint@8.57.1)
       eslint-plugin-tailwindcss:
         specifier: ^3.17.4
-        version: 3.18.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3)))
+        version: 3.18.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.9.3)))
       eslint-plugin-testing-library:
         specifier: ^7.6.3
         version: 7.15.4(eslint@8.57.1)(typescript@5.9.3)
@@ -980,7 +980,7 @@ importers:
         version: link:../../libs/utils
       '@sapp-fe/sapp-common-package':
         specifier: ^1.6.16
-        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1)
+        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)
       antd:
         specifier: ^5.25.0
         version: 5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -1037,7 +1037,7 @@ importers:
         version: link:../../libs/utils
       '@sapp-fe/explanation-package':
         specifier: ^1.5.5
-        version: 1.5.5(@babel/core@7.28.6)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1)
+        version: 1.5.5(@babel/core@7.28.6)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)
       '@sapp-fe/quiz-result-package':
         specifier: ^1.5.0
         version: 1.6.0(@babel/core@7.28.6)(antd@5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
@@ -1055,7 +1055,7 @@ importers:
         version: 1.11.19
       framer-motion:
         specifier: ^12.23.12
-        version: 12.26.1(@emotion/is-prop-valid@1.4.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 12.26.2(@emotion/is-prop-valid@1.4.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -1267,7 +1267,7 @@ importers:
     dependencies:
       '@sapp-fe/sapp-common-package':
         specifier: ^1.6.16
-        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1)
+        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)
       antd:
         specifier: ^5.25.0
         version: 5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -1386,10 +1386,10 @@ importers:
         version: 2.0.2(react@18.2.0)
       '@sapp-fe/sapp-common-package':
         specifier: ^1.6.16
-        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1)
+        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)
       '@sapp-fe/sapp-notification':
         specifier: ^1.2.2
-        version: 1.2.3(antd@5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))
+        version: 1.2.3(antd@5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6)))
       '@xyflow/react':
         specifier: ^12.8.6
         version: 12.10.0(@types/react@18.2.21)(immer@10.2.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -1416,7 +1416,7 @@ importers:
         version: 5.6.0
       framer-motion:
         specifier: ^12.23.12
-        version: 12.26.1(@emotion/is-prop-valid@1.4.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 12.26.2(@emotion/is-prop-valid@1.4.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       html-react-parser:
         specifier: ^5.2.5
         version: 5.2.11(@types/react@18.2.21)(react@18.2.0)
@@ -1495,13 +1495,13 @@ importers:
     dependencies:
       '@tailwindcss/aspect-ratio':
         specifier: ^0.4.2
-        version: 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))
+        version: 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6)))
       '@tailwindcss/forms':
         specifier: ^0.5.6
-        version: 0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))
+        version: 0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6)))
       tailwindcss:
         specifier: 3.4.17
-        version: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))
+        version: 3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))
     devDependencies:
       '@lms/typescript-config':
         specifier: workspace:*
@@ -2752,8 +2752,8 @@ packages:
     resolution: {integrity: sha512-rQkU5u8hNAq2NVRzHnIUUvR6arbO0b6AOlvpTNS48CkiKSn/xtNfOzBK23JE4SiW89DgvU7GtxLVgV4Vn2HBAw==}
     engines: {node: '>=20.11.0'}
 
-  '@eslint-community/eslint-plugin-eslint-comments@4.5.0':
-    resolution: {integrity: sha512-MAhuTKlr4y/CE3WYX26raZjy+I/kS2PLKSzvfmDCGrBLTFHOYwqROZdr4XwPgXwX3K9rjzMr4pSmUWGnzsUyMg==}
+  '@eslint-community/eslint-plugin-eslint-comments@4.6.0':
+    resolution: {integrity: sha512-2EX2bBQq1ez++xz2o9tEeEQkyvfieWgUFMH4rtJJri2q0Azvhja3hZGXsjPXs31R4fQkZDtWzNDDK2zQn5UE5g==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
@@ -4770,8 +4770,8 @@ packages:
   '@types/node@20.5.1':
     resolution: {integrity: sha512-4tT2UrL5LBqDwoed9wZ6N3umC4Yhz3W3FloMmiiG4JwmUJWpie0c7lcnUNd4gtMKuDEO4wRVS8B6Xa0uMRsMKg==}
 
-  '@types/node@24.10.7':
-    resolution: {integrity: sha512-+054pVMzVTmRQV8BhpGv3UyfZ2Llgl8rdpDTon+cUH9+na0ncBVXj3wTUKh14+Kiz18ziM3b4ikpP5/Pc0rQEQ==}
+  '@types/node@24.10.8':
+    resolution: {integrity: sha512-r0bBaXu5Swb05doFYO2kTWHMovJnNVbCsII0fhesM8bNRlLhXIuckley4a2DaD+vOdmm5G+zGkQZAPZsF80+YQ==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -6872,8 +6872,8 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9
 
-  eslint-plugin-n@17.23.1:
-    resolution: {integrity: sha512-68PealUpYoHOBh332JLLD9Sj7OQUDkFpmcfqt8R9sySfFSeuGJjMTJQvCRRB96zO3A/PELRLkPrzsHmzEFQQ5A==}
+  eslint-plugin-n@17.23.2:
+    resolution: {integrity: sha512-RhWBeb7YVPmNa2eggvJooiuehdL76/bbfj/OJewyoGT80qn5PXdz8zMOTO6YHOsI7byPt7+Ighh/i/4a5/v7hw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: '>=8.23.0'
@@ -7293,8 +7293,8 @@ packages:
   fraction.js@5.3.4:
     resolution: {integrity: sha512-1X1NTtiJphryn/uLQz3whtY6jK3fTqoE3ohKs0tT+Ujr1W59oopxmoEh7Lu5p6vBaPbgoM0bzveAW4Qi5RyWDQ==}
 
-  framer-motion@12.26.1:
-    resolution: {integrity: sha512-Uzc8wGldU4FpmGotthjjcj0SZhigcODjqvKT7lzVZHsmYkzQMFfMIv0vHQoXCeoe/Ahxqp4by4A6QbzFA/lblw==}
+  framer-motion@12.26.2:
+    resolution: {integrity: sha512-lflOQEdjquUi9sCg5Y1LrsZDlsjrHw7m0T9Yedvnk7Bnhqfkc89/Uha10J3CFhkL+TCZVCRw9eUGyM/lyYhXQA==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: ^18.0.0 || ^19.0.0
@@ -8743,8 +8743,8 @@ packages:
   module-details-from-path@1.0.4:
     resolution: {integrity: sha512-EGWKgxALGMgzvxYF1UyGTy0HXX/2vHLkw6+NvDKW2jypWbHpjQuj4UMcqQWXHERJhVGKikolT06G3bcKe4fi7w==}
 
-  motion-dom@12.24.11:
-    resolution: {integrity: sha512-DlWOmsXMJrV8lzZyd+LKjG2CXULUs++bkq8GZ2Sr0R0RRhs30K2wtY+LKiTjhmJU3W61HK+rB0GLz6XmPvTA1A==}
+  motion-dom@12.26.2:
+    resolution: {integrity: sha512-KLMT1BroY8oKNeliA3JMNJ+nbCIsTKg6hJpDb4jtRAJ7nCKnnpg/LTq/NGqG90Limitz3kdAnAVXecdFVGlWTw==}
 
   motion-utils@12.24.10:
     resolution: {integrity: sha512-x5TFgkCIP4pPsRLpKoI86jv/q8t8FQOiM/0E8QKBzfMozWHfkKap2gA1hOki+B5g3IsBNpxbUnfOum1+dgvYww==}
@@ -10358,8 +10358,8 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18
 
-  react-hook-form@7.71.0:
-    resolution: {integrity: sha512-oFDt/iIFMV9ZfV52waONXzg4xuSlbwKUPvXVH2jumL1me5qFhBMc4knZxuXiZ2+j6h546sYe3ZKJcg/900/iHw==}
+  react-hook-form@7.71.1:
+    resolution: {integrity: sha512-9SUJKCGKo8HUSsCO+y0CtqkqI5nNuaDqTxyqPsZPqIwudpj4rCrAz/jZV+jn57bx5gtZKOh3neQu94DXMc+w5w==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
@@ -11168,8 +11168,8 @@ packages:
       react-dom: '>= 16.8.0'
       react-is: '>= 16.8.0'
 
-  styled-components@6.3.5:
-    resolution: {integrity: sha512-f8jAunVw/r41o17+JlWVlMTsyBKyghCdQ84YCKPxgKSMOZJbK3CKPxeIhotz6hlXvHb0w62zG4yyOdGY0kaB3g==}
+  styled-components@6.3.6:
+    resolution: {integrity: sha512-eRtK6PXWk3juH+8X9cyfItRk6a0JM+0Cw2gSr9jM3T3WeErb+UPObTRkVCHAv9maYfvPof77h1wq3325I0iI7w==}
     engines: {node: '>= 16'}
     peerDependencies:
       react: '>= 16.8.0'
@@ -12112,7 +12112,7 @@ snapshots:
     dependencies:
       '@antfu/install-pkg': 1.1.0
       '@clack/prompts': 0.11.0
-      '@eslint-community/eslint-plugin-eslint-comments': 4.5.0(eslint@8.57.1)
+      '@eslint-community/eslint-plugin-eslint-comments': 4.6.0(eslint@8.57.1)
       '@eslint/markdown': 7.5.1
       '@stylistic/eslint-plugin': 5.7.0(eslint@8.57.1)
       '@typescript-eslint/eslint-plugin': 8.53.0(@typescript-eslint/parser@8.53.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
@@ -12129,7 +12129,7 @@ snapshots:
       eslint-plugin-import-lite: 0.3.1(eslint@8.57.1)(typescript@5.9.3)
       eslint-plugin-jsdoc: 59.1.0(eslint@8.57.1)
       eslint-plugin-jsonc: 2.21.0(eslint@8.57.1)
-      eslint-plugin-n: 17.23.1(eslint@8.57.1)(typescript@5.9.3)
+      eslint-plugin-n: 17.23.2(eslint@8.57.1)(typescript@5.9.3)
       eslint-plugin-no-only-tests: 3.3.0
       eslint-plugin-perfectionist: 4.15.1(eslint@8.57.1)(typescript@5.9.3)
       eslint-plugin-pnpm: 1.4.3(eslint@8.57.1)
@@ -12954,11 +12954,11 @@ snapshots:
       - '@swc/core'
       - '@swc/wasm'
 
-  '@commitlint/cli@19.8.1(@types/node@24.10.7)(typescript@5.9.3)':
+  '@commitlint/cli@19.8.1(@types/node@24.10.8)(typescript@5.9.3)':
     dependencies:
       '@commitlint/format': 19.8.1
       '@commitlint/lint': 19.8.1
-      '@commitlint/load': 19.8.1(@types/node@24.10.7)(typescript@5.9.3)
+      '@commitlint/load': 19.8.1(@types/node@24.10.8)(typescript@5.9.3)
       '@commitlint/read': 19.8.1
       '@commitlint/types': 19.8.1
       tinyexec: 1.0.2
@@ -13062,7 +13062,7 @@ snapshots:
       - '@swc/core'
       - '@swc/wasm'
 
-  '@commitlint/load@19.8.1(@types/node@24.10.7)(typescript@5.9.3)':
+  '@commitlint/load@19.8.1(@types/node@24.10.8)(typescript@5.9.3)':
     dependencies:
       '@commitlint/config-validator': 19.8.1
       '@commitlint/execute-rule': 19.8.1
@@ -13070,7 +13070,7 @@ snapshots:
       '@commitlint/types': 19.8.1
       chalk: 5.6.2
       cosmiconfig: 9.0.0(typescript@5.9.3)
-      cosmiconfig-typescript-loader: 6.2.0(@types/node@24.10.7)(cosmiconfig@9.0.0(typescript@5.9.3))(typescript@5.9.3)
+      cosmiconfig-typescript-loader: 6.2.0(@types/node@24.10.8)(cosmiconfig@9.0.0(typescript@5.9.3))(typescript@5.9.3)
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
@@ -13434,7 +13434,7 @@ snapshots:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-pdf: 9.2.1(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      styled-components: 6.3.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      styled-components: 6.3.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
     transitivePeerDependencies:
       - '@types/react'
 
@@ -13574,11 +13574,11 @@ snapshots:
       esquery: 1.7.0
       jsdoc-type-pratt-parser: 7.0.0
 
-  '@eslint-community/eslint-plugin-eslint-comments@4.5.0(eslint@8.57.1)':
+  '@eslint-community/eslint-plugin-eslint-comments@4.6.0(eslint@8.57.1)':
     dependencies:
       escape-string-regexp: 4.0.0
       eslint: 8.57.1
-      ignore: 5.3.2
+      ignore: 7.0.5
 
   '@eslint-community/eslint-utils@4.9.1(eslint@8.57.1)':
     dependencies:
@@ -14373,9 +14373,9 @@ snapshots:
     dependencies:
       react-hook-form: 7.48.2(react@18.2.0)
 
-  '@hookform/resolvers@3.10.0(react-hook-form@7.71.0(react@18.2.0))':
+  '@hookform/resolvers@3.10.0(react-hook-form@7.71.1(react@18.2.0))':
     dependencies:
-      react-hook-form: 7.71.0(react@18.2.0)
+      react-hook-form: 7.71.1(react@18.2.0)
 
   '@humanwhocodes/config-array@0.13.0':
     dependencies:
@@ -14516,7 +14516,7 @@ snapshots:
       consola: 3.4.2
       detect-libc: 2.1.2
       https-proxy-agent: 7.0.6
-      node-fetch: 2.7.0(encoding@0.1.13)
+      node-fetch: 2.6.9(encoding@0.1.13)
       nopt: 8.1.0
       semver: 7.7.3
       tar: 7.5.2
@@ -15324,15 +15324,15 @@ snapshots:
       - webpack
       - worker-loader
 
-  '@sapp-fe/explanation-package@1.5.5(@babel/core@7.28.6)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1)':
+  '@sapp-fe/explanation-package@1.5.5(@babel/core@7.28.6)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)':
     dependencies:
       '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.6)
       '@cloudflare/stream-react': 1.9.3(react@18.2.0)
       '@cyntler/react-doc-viewer': 1.10.4(@babel/core@7.28.6)(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.104.1)
       '@fortune-sheet/react': 0.19.18(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@funktechno/texthighlighter': 2.1.2
-      '@tailwindcss/aspect-ratio': 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))
-      '@tailwindcss/forms': 0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))
+      '@tailwindcss/aspect-ratio': 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6)))
+      '@tailwindcss/forms': 0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6)))
       '@types/styled-components': 5.1.34
       '@xyflow/react': 12.10.0(@types/react@18.2.21)(immer@10.2.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       antd: 5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -15346,10 +15346,10 @@ snapshots:
       react-dom: 18.2.0(react@18.2.0)
       react-hook-form: 7.46.0(react@18.2.0)
       react-shadow: 20.6.0(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      sapp-common-package: 1.6.5(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1)
+      sapp-common-package: 1.6.5(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)
       sass: 1.97.2
       styled-components: 5.3.11(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))
     transitivePeerDependencies:
       - '@babel/core'
       - '@rspack/core'
@@ -15467,7 +15467,7 @@ snapshots:
       - ts-node
       - webpack
 
-  '@sapp-fe/sapp-common-package@1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1)':
+  '@sapp-fe/sapp-common-package@1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)':
     dependencies:
       '@_ueberdosis/prosemirror-tables': 1.1.3
       '@floating-ui/react': 0.27.16(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -15504,7 +15504,7 @@ snapshots:
       react-dom: 18.2.0(react@18.2.0)
       sass: 1.97.2
       sass-loader: 13.3.3(sass@1.97.2)(webpack@5.104.1)
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))
     transitivePeerDependencies:
       - date-fns
       - fibers
@@ -15526,14 +15526,14 @@ snapshots:
     transitivePeerDependencies:
       - tailwindcss
 
-  '@sapp-fe/sapp-notification@1.2.3(antd@5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))':
+  '@sapp-fe/sapp-notification@1.2.3(antd@5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6)))':
     dependencies:
-      '@tailwindcss/line-clamp': 0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))
+      '@tailwindcss/line-clamp': 0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6)))
       antd: 5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       clsx: 2.1.1
       dayjs: 1.11.19
       react: 18.2.0
-      tailwind-scrollbar: 4.0.2(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))
+      tailwind-scrollbar: 4.0.2(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6)))
     transitivePeerDependencies:
       - tailwindcss
 
@@ -15900,36 +15900,36 @@ snapshots:
     dependencies:
       tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))
 
-  '@tailwindcss/aspect-ratio@0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))':
+  '@tailwindcss/aspect-ratio@0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6)))':
     dependencies:
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))
 
-  '@tailwindcss/aspect-ratio@0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3)))':
+  '@tailwindcss/aspect-ratio@0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.9.3)))':
     dependencies:
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.9.3))
 
   '@tailwindcss/forms@0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))':
     dependencies:
       mini-svg-data-uri: 1.4.4
       tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))
 
-  '@tailwindcss/forms@0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))':
+  '@tailwindcss/forms@0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6)))':
     dependencies:
       mini-svg-data-uri: 1.4.4
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))
 
-  '@tailwindcss/forms@0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3)))':
+  '@tailwindcss/forms@0.5.11(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.9.3)))':
     dependencies:
       mini-svg-data-uri: 1.4.4
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.9.3))
 
   '@tailwindcss/line-clamp@0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))':
     dependencies:
       tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))
 
-  '@tailwindcss/line-clamp@0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)))':
+  '@tailwindcss/line-clamp@0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6)))':
     dependencies:
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))
 
   '@tinymce/tinymce-react@4.3.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
@@ -16340,7 +16340,7 @@ snapshots:
 
   '@types/node@20.5.1': {}
 
-  '@types/node@24.10.7':
+  '@types/node@24.10.8':
     dependencies:
       undici-types: 7.16.0
 
@@ -17960,9 +17960,9 @@ snapshots:
       ts-node: 10.9.2(@types/node@20.5.1)(typescript@5.9.3)
       typescript: 5.9.3
 
-  cosmiconfig-typescript-loader@6.2.0(@types/node@24.10.7)(cosmiconfig@9.0.0(typescript@5.9.3))(typescript@5.9.3):
+  cosmiconfig-typescript-loader@6.2.0(@types/node@24.10.8)(cosmiconfig@9.0.0(typescript@5.9.3))(typescript@5.9.3):
     dependencies:
-      '@types/node': 24.10.7
+      '@types/node': 24.10.8
       cosmiconfig: 9.0.0(typescript@5.9.3)
       jiti: 2.6.1
       typescript: 5.9.3
@@ -18921,7 +18921,7 @@ snapshots:
       safe-regex-test: 1.1.0
       string.prototype.includes: 2.0.1
 
-  eslint-plugin-n@17.23.1(eslint@8.57.1)(typescript@5.9.3):
+  eslint-plugin-n@17.23.2(eslint@8.57.1)(typescript@5.9.3):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@8.57.1)
       enhanced-resolve: 5.18.4
@@ -19043,11 +19043,11 @@ snapshots:
     dependencies:
       eslint: 8.57.1
 
-  eslint-plugin-tailwindcss@3.18.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3))):
+  eslint-plugin-tailwindcss@3.18.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.9.3))):
     dependencies:
       fast-glob: 3.3.3
       postcss: 8.5.6
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.9.3))
 
   eslint-plugin-testing-library@7.15.4(eslint@8.57.1)(typescript@5.9.3):
     dependencies:
@@ -19554,9 +19554,9 @@ snapshots:
 
   fraction.js@5.3.4: {}
 
-  framer-motion@12.26.1(@emotion/is-prop-valid@1.4.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+  framer-motion@12.26.2(@emotion/is-prop-valid@1.4.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
-      motion-dom: 12.24.11
+      motion-dom: 12.26.2
       motion-utils: 12.24.10
       tslib: 2.8.1
     optionalDependencies:
@@ -21325,7 +21325,7 @@ snapshots:
 
   module-details-from-path@1.0.4: {}
 
-  motion-dom@12.24.11:
+  motion-dom@12.26.2:
     dependencies:
       motion-utils: 12.24.10
 
@@ -22040,21 +22040,21 @@ snapshots:
       postcss: 8.5.6
       ts-node: 10.9.2(@types/node@20.5.1)(typescript@5.9.3)
 
-  postcss-load-config@4.0.2(postcss@8.5.6)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)):
+  postcss-load-config@4.0.2(postcss@8.5.6)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6)):
     dependencies:
       lilconfig: 3.1.3
       yaml: 2.8.2
     optionalDependencies:
       postcss: 8.5.6
-      ts-node: 10.9.2(@types/node@24.10.7)(typescript@5.1.6)
+      ts-node: 10.9.2(@types/node@24.10.8)(typescript@5.1.6)
 
-  postcss-load-config@4.0.2(postcss@8.5.6)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3)):
+  postcss-load-config@4.0.2(postcss@8.5.6)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.9.3)):
     dependencies:
       lilconfig: 3.1.3
       yaml: 2.8.2
     optionalDependencies:
       postcss: 8.5.6
-      ts-node: 10.9.2(@types/node@24.10.7)(typescript@5.9.3)
+      ts-node: 10.9.2(@types/node@24.10.8)(typescript@5.9.3)
 
   postcss-logical@7.0.1(postcss@8.5.6):
     dependencies:
@@ -23066,7 +23066,7 @@ snapshots:
     dependencies:
       react: 18.2.0
 
-  react-hook-form@7.71.0(react@18.2.0):
+  react-hook-form@7.71.1(react@18.2.0):
     dependencies:
       react: 18.2.0
 
@@ -23578,7 +23578,7 @@ snapshots:
       - ts-node
       - webpack
 
-  sapp-common-package@1.6.5(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))(webpack@5.104.1):
+  sapp-common-package@1.6.5(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1):
     dependencies:
       '@_ueberdosis/prosemirror-tables': 1.1.3
       '@floating-ui/react': 0.27.16(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -23611,7 +23611,7 @@ snapshots:
       react-dom: 18.2.0(react@18.2.0)
       sass: 1.97.2
       sass-loader: 13.3.3(sass@1.97.2)(webpack@5.104.1)
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))
     transitivePeerDependencies:
       - '@tiptap/core'
       - date-fns
@@ -24098,7 +24098,7 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
 
-  styled-components@6.3.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+  styled-components@6.3.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       '@emotion/is-prop-valid': 1.4.0
       '@emotion/unitless': 0.10.0
@@ -24194,10 +24194,10 @@ snapshots:
     transitivePeerDependencies:
       - react
 
-  tailwind-scrollbar@4.0.2(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))):
+  tailwind-scrollbar@4.0.2(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))):
     dependencies:
       prism-react-renderer: 2.4.1(react@18.2.0)
-      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))
+      tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))
     transitivePeerDependencies:
       - react
 
@@ -24228,7 +24228,7 @@ snapshots:
     transitivePeerDependencies:
       - ts-node
 
-  tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6)):
+  tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -24247,7 +24247,7 @@ snapshots:
       postcss: 8.5.6
       postcss-import: 15.1.0(postcss@8.5.6)
       postcss-js: 4.1.0(postcss@8.5.6)
-      postcss-load-config: 4.0.2(postcss@8.5.6)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6))
+      postcss-load-config: 4.0.2(postcss@8.5.6)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))
       postcss-nested: 6.2.0(postcss@8.5.6)
       postcss-selector-parser: 6.1.2
       resolve: 1.22.11
@@ -24255,7 +24255,7 @@ snapshots:
     transitivePeerDependencies:
       - ts-node
 
-  tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3)):
+  tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.9.3)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -24274,7 +24274,7 @@ snapshots:
       postcss: 8.5.6
       postcss-import: 15.1.0(postcss@8.5.6)
       postcss-js: 4.1.0(postcss@8.5.6)
-      postcss-load-config: 4.0.2(postcss@8.5.6)(ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3))
+      postcss-load-config: 4.0.2(postcss@8.5.6)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.9.3))
       postcss-nested: 6.2.0(postcss@8.5.6)
       postcss-selector-parser: 6.1.2
       resolve: 1.22.11
@@ -24475,14 +24475,14 @@ snapshots:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
 
-  ts-node@10.9.2(@types/node@24.10.7)(typescript@5.1.6):
+  ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.12
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 24.10.7
+      '@types/node': 24.10.8
       acorn: 8.15.0
       acorn-walk: 8.3.4
       arg: 4.1.3
@@ -24494,14 +24494,14 @@ snapshots:
       yn: 3.1.1
     optional: true
 
-  ts-node@10.9.2(@types/node@24.10.7)(typescript@5.9.3):
+  ts-node@10.9.2(@types/node@24.10.8)(typescript@5.9.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.12
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 24.10.7
+      '@types/node': 24.10.8
       acorn: 8.15.0
       acorn-walk: 8.3.4
       arg: 4.1.3
