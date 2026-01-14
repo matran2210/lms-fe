@@ -14,27 +14,23 @@ import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import 'aos/dist/aos.css'
 import { Providers } from './provider'
-import { ErrorBoundary } from '@sentry/nextjs'
-import ErrorRedirectPage from './error-redirect/page'
 import Script from 'next/script'
 
 export const revalidate = 0
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <ErrorBoundary fallback={<ErrorRedirectPage />}>
-      <html lang="vi">
-        <Metadata />
-        <head>
-          <Script
-            src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"
-            strategy="beforeInteractive"
-          />
-        </head>
-        <body>
-          <Providers>{children}</Providers>
-        </body>
-      </html>
-    </ErrorBoundary>
+    <html lang="vi">
+      <Metadata />
+      <head>
+        <Script
+          src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"
+          strategy="beforeInteractive"
+        />
+      </head>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
   )
 }
