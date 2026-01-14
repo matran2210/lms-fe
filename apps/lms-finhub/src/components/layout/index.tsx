@@ -68,12 +68,8 @@ export default function Layout(props: LayoutProps): ReactElement {
 
   return (
     <div
-      className={clsx('container min-h-screen', {
-        'max-w-[calc(1179px+4rem)]': size === 'sm',
-        'max-w-[calc(1280px+4rem)]': size === 'md',
-        'max-w-[calc(1318px+4rem)]': size === 'xl',
-        'max-w-[calc(1580px+4rem)]': size === '2xl',
-        '!max-w-full p-0': fullWidth,
+      className={clsx('flex flex-nowrap rounded-xl', {
+        'lg:ml-[calc(5rem+32px)]': showSidebar,
       })}
     >
       <Sidebar
