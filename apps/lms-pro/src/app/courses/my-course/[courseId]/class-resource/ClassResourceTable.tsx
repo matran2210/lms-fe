@@ -1,6 +1,7 @@
 'use client'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { CloseIcon, DownloadIcon } from '@lms/assets'
+import { useFeature } from '@lms/contexts'
 import {
   CLASS_SUFFIX_TYPE,
   DEFAULT_PAGE_NUMBER,
@@ -36,6 +37,7 @@ const ClassResourceTable = ({
   isLoading: boolean
   setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
 }) => {
+  const { videoUrl } = useFeature()
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -135,21 +137,6 @@ const ClassResourceTable = ({
       width: 400,
     },
     {
-      title: 'Location',
-      dataIndex: 'location',
-      key: 'location',
-      className: clsx(className),
-      align: 'center',
-      render: (location) => (
-        <NameNoActionCell
-          isCenter
-          dataColumn={location}
-          className="text-base text-gray-400"
-        />
-      ),
-      width: 300,
-    },
-    {
       title: '',
       key: 'actions',
       className: className,
@@ -191,11 +178,18 @@ const ClassResourceTable = ({
   const renderPreviewContent = (resource: IClassResource) => {
     switch (resource.suffix_type) {
       case 'VIDEO':
+      case 'AUDIO':
         return (
           <SAPPVideo
             isFetchCaptions={false}
             streamRef={internalRef}
-            options={{ src: resource.sub_url }}
+            options={{
+              src: resource.url
+                ? resource.url
+                    .replace(videoUrl || '', '')
+                    .replace('/manifest/video.m3u8', '')
+                : resource.sub_url,
+            }}
           ></SAPPVideo>
         )
       case 'SHEET':
