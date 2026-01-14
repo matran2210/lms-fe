@@ -1,3 +1,4 @@
+'use client'
 import { FullScreenLayout } from '@lms/ui'
 import { TEST_TYPE_LABELS } from '@lms/core'
 import { useGetDataQuery } from '@lms/utils'
