@@ -24,14 +24,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <ErrorBoundary fallback={<ErrorRedirectPage />}>
       <html lang="vi">
-        <Metadata />
-        <head>
+        <body>
           <Script
             src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"
-            strategy="beforeInteractive"
+            strategy="afterInteractive"
           />
-        </head>
-        <body>
           <ProvidersWrapper>{children}</ProvidersWrapper>
         </body>
       </html>
