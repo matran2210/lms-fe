@@ -51,22 +51,19 @@ const useSappPaging = ({
   }
 
   useEffect(() => {
-    if (
-      data?.meta?.total_records ||
-      data?.metadata?.total_records ||
-      data?.data?.metadata?.total_records ||
-      data?.data?.meta?.total_records
-    ) {
-      setPagination((prev) => ({
-        ...prev,
-        total:
-          data?.meta?.total_records ||
-          data?.metadata?.total_records ||
-          data?.data?.metadata?.total_records ||
-          data?.data?.meta?.total_records,
-      }))
-    }
-  }, [data])
+  const total =
+    data?.meta?.total_records ??
+    data?.metadata?.total_records ??
+    data?.data?.metadata?.total_records ??
+    data?.data?.meta?.total_records
+
+  if (total !== undefined && total !== null) {
+    setPagination((prev) => ({
+      ...prev,
+      total,
+    }))
+  }
+}, [data])
 
   return {
     data, // Dữ liệu trả về từ queryFn, thường là danh sách hoặc object chứa dữ liệu phân trang
