@@ -1,10 +1,15 @@
 packages:
-  - "apps/*"
-  - "features/*"
-  - "libs/*"
-  - "tools/*"
+  - apps/*
+  - features/*
+  - libs/*
+  - tools/*
 
 hoistPattern:
   - react*
   - antd
   - '@ant-design/*'
+
+overrides:
+  '@sapp-fe/explanation-package': link:../../Users/Admin/AppData/Local/pnpm/global/5/node_modules/@sapp-fe/explanation-package
+  '@sapp-fe/preview-part': link:../../Users/Admin/AppData/Local/pnpm/global/5/node_modules/@sapp-fe/preview-part
+  '@sapp-fe/sapp-common-package': link:../../Users/Admin/AppData/Local/pnpm/global/5/node_modules/@sapp-fe/sapp-common-package
