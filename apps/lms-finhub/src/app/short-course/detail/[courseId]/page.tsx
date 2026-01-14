@@ -31,18 +31,18 @@ import { Alert, Divider, Skeleton } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { isEmpty } from 'lodash'
-import { useEffect, useMemo, useState } from 'react'
-import { useQuery } from 'react-query'
-import { PageLink } from 'src/constants/routes'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { useAppDispatch } from 'src/redux/hook'
 import {
   useParams,
   usePathname,
   useRouter,
   useSearchParams,
 } from 'next/navigation'
+import { useEffect, useMemo, useState } from 'react'
+import { useQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
+import { PageLink } from 'src/constants/routes'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { useAppDispatch } from 'src/redux/hook'
 
 const CourseDetail = () => {
   const dispatch = useAppDispatch()
@@ -70,7 +70,6 @@ const CourseDetail = () => {
   const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
   const { setOpenSidebar } = useCourseContext()
-
   // const handleOpenSidebar = () => {
   //   setShowSidebar(true)
   //   setOpenSidebar(true)
@@ -109,9 +108,9 @@ const CourseDetail = () => {
     }
   }
 
-  const focusSubSectionIds = params?.focusSubSectionIds as string | undefined
-  const focusUnitIds = params?.focusUnitIds as string | undefined
-  const deadline = params?.deadline as string | undefined
+  const focusSubSectionIds = query?.focusSubSectionIds as string | undefined
+  const focusUnitIds = query?.focusUnitIds as string | undefined
+  const deadline = query?.deadline as string | undefined
   const isOverdue = dayjs(deadline).isBefore(new Date())
   const listFocusSubSectionIds = focusSubSectionIds?.split(',') || []
   const listFocusUnitIds = focusUnitIds?.split(',') || []
@@ -173,7 +172,7 @@ const CourseDetail = () => {
     document.body.style.overflow = 'hidden'
   }
   const handleDefaultActiveItem = () => {
-    localStorage.setItem('course_chapter_id', params?.partId as string)
+    localStorage.setItem('course_chapter_id', query?.partId as string)
   }
   useEffect(() => {
     if (openLearningOutcome && chapterId && chapterDetail) {
@@ -348,7 +347,6 @@ const CourseDetail = () => {
 
     return []
   }, [partDetail, chapterDetail])
-  console.log('previewPart', previewPart)
   return (
     <Layout
       showSidebar={showSidebar || isAlwaysShowSidebar}

@@ -10,11 +10,9 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
-  DRAWER_REQUEST_TYPE,
   E_REQUEST_TYPE,
   OPTIONS_REQUEST_STATUS,
   OPTIONS_TIME_OFF_REQUEST_TYPE,
-  REQUEST_TYPE,
 } from '@lms/core'
 import { IRequest, IRequestFilterForm } from '@lms/core'
 import FormRequest from '../request-forms/FormRequest'
@@ -70,7 +68,7 @@ const TimeOffTab = () => {
   ) => {
     otherParams['type'] = otherParams['type']
       ? [otherParams['type']]
-      : [E_REQUEST_TYPE.TEACHER_SCHEDULE_TIME_OFF, REQUEST_TYPE.TEACHING_MODE]
+      : [E_REQUEST_TYPE.TEACHER_SCHEDULE_TIME_OFF, E_REQUEST_TYPE.TEACHING_MODE]
 
     setIsLoading(true)
     try {

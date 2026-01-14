@@ -80,9 +80,7 @@ const SappModalV3 = ({
 
   useEffect(() => {
     if (open) {
-      requestAnimationFrame(() => {
-        setClosing(false);
-      });
+      setClosing(false);
     }
   }, [open]);
 
@@ -99,6 +97,7 @@ const SappModalV3 = ({
 
   return (
     <Modal
+      forceRender={false}
       maskClosable
       open={open}
       className={clsx(

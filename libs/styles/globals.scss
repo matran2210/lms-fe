@@ -822,6 +822,7 @@ textarea.is-invalid:focus {
   }
 }
 .sapp-modal.ant-modal {
+  will-change: transform, opacity;
   @apply max-w-[calc(100vw-2rem)] md:max-w-[calc(100vw-1rem)];
   .ant-modal-content {
     @apply rounded-2xl p-6 md:p-10;
