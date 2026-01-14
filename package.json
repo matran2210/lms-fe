@@ -53,14 +53,81 @@
   },
   "packageManager": "pnpm@10.22.0",
   "lint-staged": {
-    "apps/lms-zoom/**/*.{ts,tsx}": [
-      "pnpm --filter lms-zoom lint"
+    "apps/lms-finhub/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter lms-finhub tsc --noEmit"
     ],
     "apps/lms-pro/**/*.{ts,tsx}": [
-      "pnpm --filter lms-pro lint"
+      "eslint --fix",
+      "pnpm --filter lms-pro tsc --noEmit"
     ],
-    "packages/**/*.{ts,tsx}": [
-      "pnpm --filter ./packages/... lint"
+    "apps/lms-zoom/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter lms-zoom tsc --noEmit"
+    ],
+    "libs/ui/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/ui tsc --noEmit"
+    ],
+    "libs/styles/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/styles tsc --noEmit"
+    ],
+    "libs/state/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/state tsc --noEmit"
+    ],
+    "libs/core/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/core tsc --noEmit"
+    ],
+    "libs/hooks/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/hooks tsc --noEmit"
+    ],
+    "libs/utils/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/utils tsc --noEmit"
+    ],
+    "libs/assets/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/assets tsc --noEmit"
+    ],
+    "libs/contexts/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/contexts tsc --noEmit"
+    ],
+    "features/auth/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/feature-auth tsc --noEmit"
+    ],
+    "features/calendar/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/feature-calendar tsc --noEmit"
+    ],
+    "features/class/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/feature-class tsc --noEmit"
+    ],
+    "features/courses/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/feature-courses tsc --noEmit"
+    ],
+    "features/dashboard/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/feature-dashboard tsc --noEmit"
+    ],
+    "features/notifications/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/feature-notifications tsc --noEmit"
+    ],
+    "features/test/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/feature-test tsc --noEmit"
+    ],
+    "features/user/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/feature-user tsc --noEmit"
     ]
   },
   "dependencies": {

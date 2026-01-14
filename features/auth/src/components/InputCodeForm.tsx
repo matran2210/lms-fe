@@ -175,7 +175,7 @@ const InputCodeForm = ({ error = '', email, token, api }: IInputCodeFormProps) =
         className="pb-3.25 pt-3 no-underline"
         size="medium"
         loading={loading}
-      />
+      />             
     </>
   )
 }
