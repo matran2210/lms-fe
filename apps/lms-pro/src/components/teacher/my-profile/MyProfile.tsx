@@ -18,14 +18,14 @@ import {
   HookFormTextFieldV2,
   TextSkeleton,
 } from '@lms/ui'
-import { convertHumanReadableToSnakeCase } from '@lms/utils'
-import { formatDate } from '@utils/helpers'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
 import {
   VALIDATE_MAX,
   VALIDATE_MIN,
   VALIDATE_REQUIRED,
-} from '@utils/helpers/ValidateMessage'
+  convertHumanReadableToSnakeCase,
+  formatDateToSlash,
+} from '@lms/utils'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { Tag } from 'antd'
 import clsx from 'clsx'
 import { StaticImageData } from 'next/image'
@@ -352,7 +352,7 @@ const MyProfile = ({
                     title="D.O.B"
                     value={
                       user?.detail?.dob
-                        ? formatDate(user?.detail?.dob, true)
+                        ? formatDateToSlash(user?.detail?.dob, true)
                         : ''
                     }
                     loading={loading}

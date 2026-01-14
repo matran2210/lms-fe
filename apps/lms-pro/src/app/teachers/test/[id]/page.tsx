@@ -42,7 +42,11 @@ import {
   SelectWord,
   useClickOutside,
 } from '@lms/ui'
-import { checkSheetAnswered, runHighlight } from '@lms/utils'
+import {
+  checkSheetAnswered,
+  checkTypeAndRenderTitle,
+  runHighlight,
+} from '@lms/utils'
 import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -90,13 +94,9 @@ import SuccessSubmittedConstructorModal from 'src/app/test/SuccessSubmittedConst
 import TestScratchPads from 'src/app/test/TestScratchPads'
 import useGetQuestionTabs from 'src/app/test/custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from 'src/app/test/custom-hook/useGetQuizDetail'
-import {
-  checkTypeAndRenderTitle,
-  isValuesEqual,
-  isWorkbookEmpty,
-} from 'src/utils/helpers/quiz-test/helper'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import SappLoading from '@components/common/SappLoading'
+import { isValuesEqual, isWorkbookEmpty } from '@utils/helpers'
 declare global {
   interface Window {
     userAgreed: any

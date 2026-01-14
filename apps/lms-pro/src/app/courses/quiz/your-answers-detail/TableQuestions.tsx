@@ -1,6 +1,5 @@
 'use client'
 import { SappBaseTable } from '@lms/ui'
-import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
 import { CloseIcon } from '@lms/assets'
 import {
   ANIMATION,
@@ -23,10 +22,12 @@ import { useInfiniteQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses/index'
 import { PageLink } from 'src/constants/routers'
 import {
+  convertSecondsToMinutesSeconds,
   convertSlugToTitle,
   getGradingStatusLabel,
   handleReplaceText,
   removeHtmlTags,
+  roundNumber,
   truncateString,
 } from '@lms/utils'
 import { ListScoreCollapse } from '@lms/feature-courses'

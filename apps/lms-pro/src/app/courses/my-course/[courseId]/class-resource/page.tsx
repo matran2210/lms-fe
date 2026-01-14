@@ -9,7 +9,7 @@ import {
 } from '@lms/core'
 import { useSappPaging, useTailwindBreakpoint } from '@lms/hooks'
 import { ClassResourceSkeleton, Layout, SappBreadCrumbs } from '@lms/ui'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
@@ -112,10 +112,7 @@ const ClassResource = () => {
                   { title: 'My Course', link: PageLink.COURSES },
                   {
                     title: courseNameDetail || '',
-                    link: PageLink.COURSE_DETAIL.replace(
-                      '[courseId]',
-                      router.query.courseId as string,
-                    ),
+                    link: `/courses/my-course/${param?.courseId}`,
                   },
                   { title: 'Class Resource', link: '' },
                 ]}

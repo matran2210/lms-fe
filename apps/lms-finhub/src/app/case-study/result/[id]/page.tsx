@@ -54,7 +54,7 @@ import {
 import { runHighlight } from '@lms/utils'
 import clsx from 'clsx'
 import { isNull, uniqueId } from 'lodash'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { CoursesAPI } from 'src/api/courses'
@@ -64,7 +64,8 @@ const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])
   const router = useRouter()
   const params = useParams()
-  const { query } = useFeature()
+  const searchParams = useSearchParams()
+  const query = Object.fromEntries(searchParams.entries())
   const containerRef = useRef(null)
   const { control, setValue, getValues } = useForm()
   const { control: controlScratch } = useForm()

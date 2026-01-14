@@ -2,11 +2,6 @@ import { ButtonCancelSubmit } from '@lms/ui'
 import { HookFormTextField } from '@lms/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ExceptionErrorCode, VALIDATE_PASSWORD } from '@lms/core'
-import {
-  VALIDATE_MIN_LENGTH_PASSWORD,
-  VALIDATE_PASSWORD_REGEX_MSG,
-  VALIDATE_REQUIRED,
-} from '@utils/helpers/ValidateMessage'
 import { isEmpty } from 'lodash'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -15,6 +10,11 @@ import { z } from 'zod'
 import PasswordProfile from './PasswordProfile'
 import { ButtonSecondary } from '@lms/ui'
 import { ButtonPrimary } from '@lms/ui'
+import {
+  VALIDATE_MIN_LENGTH_PASSWORD,
+  VALIDATE_PASSWORD_REGEX_MSG,
+  VALIDATE_REQUIRED,
+} from '@lms/utils'
 export interface IChangePassword {
   password: string
   newPassword: string

@@ -3,9 +3,9 @@ import { HookFormTextField } from '@lms/ui'
 import { TeacherAPI } from 'src/api/teacher'
 import { useState } from 'react'
 import { Control } from 'react-hook-form'
-import { debounce } from '@utils/helpers'
 import { isEmpty } from 'lodash'
 import { listStatusMyClass } from 'src/constants'
+import { debounce } from '@lms/utils'
 
 interface MyClassFilterProps {
   control: Control<any>

@@ -7,7 +7,6 @@ import {
   QuizAttemptChart,
   QuizAttemptChartType,
 } from '@lms/core'
-import { roundNumber } from '@utils/helpers'
 import { useMemo, useRef } from 'react'
 import ChartACCAScore from './acca/chartACCAScore'
 import ChartCFAScore from './cfa/chartCFAScore'
@@ -15,6 +14,7 @@ import ChartCMAScore from './cma/chartCMAScore'
 import MultipleChoiceScore from './MultipleChoiceScore'
 import ScoreDetail from './ScoreDetail'
 import { Recommendation } from '@lms/feature-test'
+import { roundNumber } from '@lms/utils'
 
 interface IProps {
   questions: {

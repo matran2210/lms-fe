@@ -7,7 +7,7 @@ import {
   FullScreenLayout,
   SappBaseTable,
 } from '@lms/ui'
-import { roundNumber } from '@utils/helpers'
+import { roundNumber } from '@lms/utils'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { CoursesAPI } from 'src/api/courses'
