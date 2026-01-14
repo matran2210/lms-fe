@@ -1,3 +1,4 @@
+"use client"
 import { useRef, useState, useEffect } from 'react'
 import { isEmpty } from 'lodash'
 import { INotificationAPI, LOCAL_STORAGE_KEYS } from '@lms/core'

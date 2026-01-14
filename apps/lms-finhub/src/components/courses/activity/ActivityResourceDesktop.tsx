@@ -1,5 +1,5 @@
-import { IActivityResource } from 'src/type/courses-3-level'
 import { Docs, IconDownload } from '@lms/assets'
+import { IActivityResource } from '@lms/core'
 
 export default function ActivityResourceDesktop({
   title,

@@ -1,4 +1,6 @@
+"use client"
 import { ExpandIcon } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
 import {
   ANIMATION,
   IAuthManager,
@@ -9,7 +11,6 @@ import {
 } from "@lms/core";
 import { trackGAEvent } from "@lms/utils";
 import clsx from "clsx";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 interface IProps {
@@ -75,8 +76,7 @@ type Child =
   | ChildWithCFA;
 
 const ProfileSideBar = ({ page, children, authManager}: IProps) => {
-  const router = useRouter();
-
+const {router, params} = useFeature()
   const getLabelFromChild = (child: Child): string => {
     if ("label" in child) {
       return child.label;
@@ -179,17 +179,17 @@ const ProfileSideBar = ({ page, children, authManager}: IProps) => {
          * Nếu không, chuyển đến trang con đầu tiên của trang hiện tại.
          */
         if (
-          MYPROFILE_TREE.includes(router.query.page as string) &&
+          MYPROFILE_TREE.includes(params?.page as string) &&
           urlPage === "myprofile"
         ) {
-          handleSetStatusActiveChild(router.query.page as string);
+          handleSetStatusActiveChild(params?.page as string);
           break;
         }
         if (
-          SECURITY_TREE.includes(router.query.page as string) &&
+          SECURITY_TREE.includes(params?.page as string) &&
           urlPage === "security"
         ) {
-          handleSetStatusActiveChild(router.query.page as string);
+          handleSetStatusActiveChild(params?.page as string);
           break;
         }
 
@@ -287,13 +287,13 @@ const ProfileSideBar = ({ page, children, authManager}: IProps) => {
   };
 
   useEffect(() => {
-    const rootMenu = SECURITY_TREE.includes(router.query.page as string)
+    const rootMenu = SECURITY_TREE.includes(params?.page as string)
       ? "security"
-      : MYPROFILE_TREE.includes(router.query.page as string)
+      : MYPROFILE_TREE.includes(params?.page as string)
         ? "myprofile"
         : null;
     rootMenu && onClickExpand(rootMenu);
-    handleChildClick(router.query.page as string);
+    handleChildClick(params?.page as string);
   }, []);
 
   useEffect(() => {

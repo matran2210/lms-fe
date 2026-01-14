@@ -9,6 +9,8 @@ import { SappDrawerV3 } from "@lms/ui";
 import { Button, Divider } from "antd";
 import clsx from "clsx";
 import { ButtonPrimary } from "@lms/ui";
+import { useFeature } from "@lms/contexts";
+import { buildQueryString } from "@lms/utils";
 
 interface IFilters {
   [name: string]: React.Key | null | undefined;
@@ -24,12 +26,12 @@ const FilterCourse = ({
     options: DefaultOptionType[];
   }[];
 }) => {
-  const { control, setValue, getValues, reset } = useForm();
-  const router = useRouter();
-  const { isMobileView } = useTailwindBreakpoint();
-  const [openMobileFilter, setOpenMobileFilter] = useState(false);
-  const [filters, setFilters] = useState<IFilters>();
-  const filterValues = useWatch({ control });
+  const { control, setValue, reset} = useForm()
+  const {router, query, pathname} = useFeature()
+  const { isMobileView } = useTailwindBreakpoint()
+  const [openMobileFilter, setOpenMobileFilter] = useState(false)
+  const [filters, setFilters] = useState<IFilters>()
+  const filterValues = useWatch({ control })
 
   const onOpenMobileFilter = () => {
     setOpenMobileFilter(true);
@@ -56,7 +58,7 @@ const FilterCourse = ({
     onCloseMobileFilter();
   };
   useEffect(() => {
-    const currentQuery = { ...router.query };
+    const currentQuery = { ...query };
 
     listFilter?.forEach((filter) => {
       const val = filterValues?.[filter.name];
@@ -67,14 +69,7 @@ const FilterCourse = ({
       }
     });
 
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: currentQuery,
-      },
-      undefined,
-      { shallow: true },
-    );
+    router.replace(`${pathname}?${buildQueryString(currentQuery)}`);
   }, [filterValues]);
 
   return (

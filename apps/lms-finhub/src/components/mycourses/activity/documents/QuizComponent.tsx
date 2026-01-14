@@ -29,8 +29,6 @@ import {
   SlotValue,
   useClickOutside,
 } from '@lms/ui'
-import { CoursesAPI } from '@pages/api/courses'
-import { TestServiceAPI } from '@pages/api/test-api'
 import { isEmpty, isUndefined } from 'lodash'
 import React, {
   forwardRef,
@@ -48,6 +46,8 @@ import {
   UseFormWatch,
 } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { CoursesAPI } from 'src/api/courses'
+import { TestServiceAPI } from 'src/api/test-api'
 import { useAppDispatch } from 'src/redux/hook'
 
 import { v4 as uuidv4 } from 'uuid'

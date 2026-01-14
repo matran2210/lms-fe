@@ -1,7 +1,7 @@
 import { CloseNone, SaveIcon } from '@lms/assets'
+import { NoteFormData } from '@lms/core'
 import { ButtonPrimary, HookFormTextArea, ModalResizeable } from '@lms/ui'
 import { Control, UseFormHandleSubmit } from 'react-hook-form'
-import { NoteFormData } from 'src/type/courses-3-level'
 
 interface IProps {
   id?: string | number

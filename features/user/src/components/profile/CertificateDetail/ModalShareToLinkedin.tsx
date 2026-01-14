@@ -22,7 +22,7 @@ interface IForm {
   text?: string;
 }
 const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
-  const { uploadImageToLinkedIn } = useFeature();
+  const { uploadImageToLinkedIn, certificateApi } = useFeature();
   const [loading, setLoading] = useState(false);
   const certId = certificate?.id || "";
   const certURL = certificate?.certificate_url || "";
@@ -83,7 +83,7 @@ const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
           }
           setLoading(true);
           // Gọi luôn hàm upload sau khi login
-          const res = await uploadImageToLinkedIn(
+          const res = await certificateApi.uploadImageToLinkedIn(
             event.data.token,
             personURN,
             shareUrl,
@@ -107,8 +107,8 @@ const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
         toast.error("Không lấy được URN");
         return;
       }
-      setLoading(true);
-      const res = await uploadImageToLinkedIn(
+      setLoading(true)
+      const res = await certificateApi.uploadImageToLinkedIn(
         token,
         personURN,
         shareUrl,

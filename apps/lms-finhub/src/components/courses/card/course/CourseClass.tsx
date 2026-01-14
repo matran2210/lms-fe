@@ -1,3 +1,4 @@
+'use client'
 import { Bachelor } from '@components/courses/icons'
 import TooltipCourses from '@components/courses/shared/Tooltip'
 import { CourseTimeIcon } from '@lms/assets'

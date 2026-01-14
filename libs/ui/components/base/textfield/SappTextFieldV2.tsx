@@ -1,3 +1,4 @@
+"use client"
 import React, { HTMLInputTypeAttribute, ReactNode, useState } from 'react'
 import { Control, ControllerRenderProps, FieldError } from 'react-hook-form'
 import { Input, InputProps } from 'antd'

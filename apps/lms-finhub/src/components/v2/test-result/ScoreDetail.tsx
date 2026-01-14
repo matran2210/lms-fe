@@ -9,19 +9,23 @@ import {
 } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { SappBaseTable, Tooltip } from '@lms/ui'
-import { htmlToRaw, roundNumber, truncateString } from '@lms/utils'
-import { ResultAPI } from '@pages/api/short-course/test-result'
-import { convertSecondsToMinutesSeconds } from '@utils/helpers'
+import {
+  convertSecondsToMinutesSeconds,
+  htmlToRaw,
+  roundNumber,
+  truncateString,
+} from '@lms/utils'
 import { Collapse } from 'antd'
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
 import DOMPurify from 'dompurify'
 import { groupBy } from 'lodash'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
+import { useParams, useRouter } from 'next/navigation'
 import React from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
+import { ResultAPI } from 'src/api/short-course/test-result'
 import { PageLink } from 'src/constants/routes'
 
 const commonHeaderClass = 'font-medium leading-6 text-gray py-2 pb-4 md:pb-6'
@@ -45,6 +49,7 @@ const ScoreDetail = ({
   isTeacher,
 }: ScoreDetailProps) => {
   const router = useRouter()
+  const params = useParams()
 
   const { isMobileView } = useTailwindBreakpoint()
 
@@ -85,15 +90,12 @@ const ScoreDetail = ({
     isLoading,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ['scoreDetails', router.query.id],
+    queryKey: ['scoreDetails', params.id],
     queryFn: async ({ pageParam }) => {
-      const res = await ResultAPI.getQuizAttemptsTable(
-        router.query.id as string,
-        {
-          page_index: pageParam,
-          page_size: DEFAULT_PAGESIZE,
-        },
-      )
+      const res = await ResultAPI.getQuizAttemptsTable(params.id as string, {
+        page_index: pageParam,
+        page_size: DEFAULT_PAGESIZE,
+      })
       if (res.success) {
         return res.data
       }
@@ -105,7 +107,7 @@ const ScoreDetail = ({
           : undefined
       }
     },
-    enabled: router.query.id !== undefined,
+    enabled: params.id !== undefined,
     retry: false,
   })
 
@@ -174,7 +176,7 @@ const ScoreDetail = ({
       <div className="mb-4 flex items-center gap-x-3">
         <div className="text-lg font-semibold md:text-xl ">
           Score Detail{' '}
-          {!router?.query?.attempt && quizAttempt?.number_of_attempts && (
+          {!params?.attempt && quizAttempt?.number_of_attempts && (
             <span className="text-sm text-gray-400 md:text-base">
               attempt:{' '}
               {Number(quizAttempt?.total_attempt_time || 0) > 0
@@ -183,8 +185,8 @@ const ScoreDetail = ({
             </span>
           )}
         </div>
-        {router?.query?.attempt && (
-          <div className="text-sm leading-7 text-gray-400 md:text-base">{`attempt: ${router?.query?.attempt}`}</div>
+        {params?.attempt && (
+          <div className="text-sm leading-7 text-gray-400 md:text-base">{`attempt: ${params?.attempt}`}</div>
         )}
       </div>
       <div className="flex flex-col gap-4">

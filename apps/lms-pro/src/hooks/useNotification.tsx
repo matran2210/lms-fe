@@ -1,3 +1,6 @@
+import { useRef, useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { NotificationAPI } from 'src/api/notification'
 import {
   deleteAllNotifications,
   deleteNotificationById,
@@ -12,9 +15,6 @@ import {
 import { LOCAL_STORAGE_KEYS } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { isEmpty } from 'lodash'
-import { useRouter } from 'next/router'
-import { useEffect, useRef, useState } from 'react'
-import { NotificationAPI } from 'src/pages/api/notification'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 export const useNotification = () => {

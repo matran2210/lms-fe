@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { useFeature } from '@lms/contexts'
 
 interface Tab {
   label: string
@@ -28,7 +28,7 @@ const Tabs: React.FC<TabsProps> = ({
   tabCurrentClass,
   tabNotCurrentClass,
 }) => {
-  const router = useRouter()
+  const {router} = useFeature()
   const [activeTab, setActiveTab] = useState<number>(
     tabs.findIndex((tab) => tab.path === router.pathname),
   )

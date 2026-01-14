@@ -2,15 +2,14 @@ import TimeLineModal from '@components/courses/timeline/TimeLineModal'
 import { fetchQuestionById, IActivityStateQuestion } from '@lms/contexts'
 import { IQuestion, IVideo } from '@lms/core'
 import { SappButton, SappModal, SAPPVideo } from '@lms/ui'
-import { CoursesAPI } from '@pages/api/courses'
-import { TestServiceAPI } from '@pages/api/test-api'
-import { debounce } from '@utils/helpers'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import { useAppDispatch } from 'src/redux/hook'
-import { formatTimer, htmlToRaw } from '@lms/utils'
+import { debounce, formatTimer, htmlToRaw } from '@lms/utils'
 import { Soundwave } from '@lms/assets'
+import { TestServiceAPI } from 'src/api/test-api'
+import { CoursesAPI } from 'src/api/courses'
 
 type Props = {
   videos?: IVideo[]

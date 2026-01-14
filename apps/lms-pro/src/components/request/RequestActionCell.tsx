@@ -7,12 +7,12 @@ import {
   IRequest,
 } from '@lms/core'
 import { SAPPDropdown } from '@lms/ui'
-import { MyRequestAPI } from '@pages/api/my-request'
-import { RequestAPI } from '@pages/api/request'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import toast from 'react-hot-toast'
 import { useAppDispatch } from 'src/redux/hook'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import toast from 'react-hot-toast'
+import { MyRequestAPI } from 'src/api/my-request'
+import { RequestAPI } from 'src/api/request'
 
 interface Iprops {
   item: IRequest
@@ -20,7 +20,7 @@ interface Iprops {
 }
 
 const RequestActionCell = ({ item, reloadPage }: Iprops) => {
-  const router = useRouter()
+  const pathname = usePathname()
   const { setIsOpenViewModal, setOpenAddModal, setIsReFetch } =
     useRequestContext()
   const dispatch = useAppDispatch()
@@ -90,11 +90,11 @@ const RequestActionCell = ({ item, reloadPage }: Iprops) => {
 
   return (
     <SAPPDropdown>
-      <Link href={`${router.pathname}?id=${item.id}`}>
+      <Link href={`${pathname}?id=${item.id}`}>
         <div onClick={() => setIsOpenViewModal(true)}>View</div>
       </Link>
       {item.status === E_REQUEST_STATUS.PENDING && (
-        <Link href={`${router.pathname}?id=${item.id}`}>
+        <Link href={`${pathname}?id=${item.id}`}>
           <div onClick={() => setOpenAddModal(true)}>Edit</div>
         </Link>
       )}

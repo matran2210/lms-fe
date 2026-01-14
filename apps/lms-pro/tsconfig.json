@@ -14,7 +14,7 @@
     },
     "target": "ES2022",
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "strict": true,
     "jsx": "preserve",
     "esModuleInterop": true,
@@ -26,13 +26,19 @@
     "allowJs": true,
     "noEmit": true,
     "incremental": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
+    "src",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "../../libs/utils/helpers/button.ts"
+    ".next/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

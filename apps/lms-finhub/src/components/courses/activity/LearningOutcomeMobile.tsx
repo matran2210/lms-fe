@@ -1,6 +1,6 @@
-import BaseModal from '@components/courses/popup/BaseModal';
-import { EditorReader } from '@lms/ui';
-import { ILearningOutcomeProps } from 'src/type/courses-3-level';
+import BaseModal from '@components/courses/popup/BaseModal'
+import { ILearningOutcomeProps } from '@lms/core'
+import { EditorReader } from '@lms/ui'
 
 export default function LearningOutcomeMobile({
   title,

@@ -2,12 +2,11 @@ import { DrawerProps } from "antd";
 import { TooltipPlacement } from "antd/es/tooltip";
 import { Dispatch, ForwardedRef, ReactNode, SetStateAction } from "react";
 import { FieldValues, UseFormSetValue } from "react-hook-form";
-import { IBreadcrumb, IButtonProps, IExhibit } from "..";
+import { IBreadcrumb, IButtonProps, IExhibit, ITabs } from "..";
 import { IMetaData } from "../api-response";
 import { CourseProgram, IQuestion, IVideo } from "../course";
 import {
   CourseSectionLinkParent,
-  ITab,
   RemindChoosingExam
 } from "../course/my-course";
 import {
@@ -17,6 +16,7 @@ import {
   IQuizSetting,
 } from "../courses";
 import { ExaminationSubject } from "../exam-infomation";
+import { QueryObserverResult, RefetchOptions, RefetchQueryFilters } from "react-query";
 
 export interface ICourseOutcomes {
   id: string;
@@ -180,7 +180,7 @@ export interface IActivityResourceProps {
 }
 
 export interface BreadcrumbProps {
-  tabs?: ITab[];
+  tabs?: ITabs[];
   currentPage: string;
   className?: string;
 }
@@ -244,14 +244,14 @@ export interface CourseInfo {
   category: string;
 }
 
-// export type SectionContentProps = {
-//   title?: string
-//   sections: ISubSection[]
-//   class_user_id: string
-//   refetch?: <TPageData>(
-//     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
-//   ) => Promise<QueryObserverResult<IActivity, unknown>>
-// }
+export type SectionContentProps = {
+  title?: string;
+  sections: ISubSection[];
+  class_user_id: string;
+  refetch?: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
+  ) => Promise<QueryObserverResult<IActivity3Level, unknown>>;
+};
 
 export type SectionContentModalProp = {
   sections: ISubSection[];
@@ -705,3 +705,4 @@ export interface IActivity3Level {
 }
 
 export * from "./course"
+export * from "./button"

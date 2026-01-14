@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
-import { BreadcrumbProps } from 'src/type/courses-3-level'
 import clsx from 'clsx'
+import { BreadcrumbProps } from '@lms/core'
 
 export default function Breadcrumb3Level({
   tabs,
@@ -11,7 +11,7 @@ export default function Breadcrumb3Level({
   return (
     <nav className="breadcrumb" aria-label="breadcrumbs">
       <ul className={`breadcrumb flex flex-row pt-4 text-sm ${className}`}>
-        {tabs.map((tab, index) => (
+        {tabs?.map((tab, index) => (
           <li
             className="flex items-center gap-2 text-ssm md:text-base"
             key={index}

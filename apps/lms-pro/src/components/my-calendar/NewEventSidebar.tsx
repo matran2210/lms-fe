@@ -23,7 +23,7 @@ import {
   HookFormEventRepeat,
 } from '@lms/ui'
 import { handleDisableDate, handleDisableTime } from '@lms/utils'
-import { SchedulesAPI } from '@pages/api/schedules'
+import { SchedulesAPI } from 'src/api/schedules'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { ConfigProvider, Drawer } from 'antd'
 import { Dayjs } from 'dayjs'

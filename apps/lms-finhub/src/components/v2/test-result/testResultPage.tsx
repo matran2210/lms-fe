@@ -1,4 +1,3 @@
-import { roundNumber } from '@utils/helpers'
 import { useMemo, useRef } from 'react'
 import SappLoading from '@components/common/SappLoading'
 import MultipleChoiceScore from '@components/v2/test-result/MultipleChoiceScore'
@@ -8,6 +7,7 @@ import {
   IQuizAttemptChartType,
   QuizAttemptChart,
 } from '@lms/core'
+import { roundNumber } from '@lms/utils'
 
 interface IProps {
   questions: {

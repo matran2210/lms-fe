@@ -1,13 +1,14 @@
+"use client"
 import { Icon } from "@lms/assets";
 import { useFeature, userReducer } from "@lms/contexts";
 import { ButtonPrimary, ButtonText, SappModalV3 } from "@lms/ui";
 import type { GetProps } from "antd";
 import { Input } from "antd";
-import { useCountdownTest } from "@lms/hooks";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { UseFormGetValues, UseFormReset } from "react-hook-form";
 import toast from "react-hot-toast";
 import { IChangePassword } from "./ChangePassword";
+import { useCountdownTest } from "@lms/hooks";
 
 type OTPProps = GetProps<typeof Input.OTP>;
 interface IProps {

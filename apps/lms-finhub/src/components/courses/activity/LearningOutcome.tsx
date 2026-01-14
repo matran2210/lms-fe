@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { ILearningOutcomeProps } from 'src/type/courses-3-level'
 import LearningOutcomeDesktop from '@components/courses/activity/LearningOutcomeDesktop'
 import LearningOutcomeMobile from '@components/courses/activity//LearningOutcomeMobile'
+import { ILearningOutcomeProps } from '@lms/core'
 
 export default function LearningOutcome({
   title,

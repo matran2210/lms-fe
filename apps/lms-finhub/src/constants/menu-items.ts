@@ -1,6 +1,6 @@
 import { LANG_SIGNIN, MenuItem, MenuOption, TitleSidebar } from '@lms/core'
 import { PageLink } from './routes'
-import { makeMenuLevel } from '@utils/helpers'
+import { makeMenuLevel } from '@lms/utils'
 
 const MENU_OPTIONS: MenuOption[] = [
   {
@@ -13,12 +13,6 @@ const MENU_OPTIONS: MenuOption[] = [
     name: TitleSidebar.COURSE_CONTENT,
     icon: 'course-content',
     url: PageLink.SHORT_COURSE_DETAIL,
-    type: 'level-1',
-  },
-  {
-    name: TitleSidebar.ACTIVITY,
-    icon: 'activity',
-    url: PageLink.COURSE_ACTIVITY,
     type: 'level-1',
   },
   {

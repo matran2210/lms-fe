@@ -1,3 +1,4 @@
+"use client";
 import useResizeObserver from "@react-hook/resize-observer";
 import { TooltipPlacement } from "antd/es/tooltip";
 import React, { useEffect, useRef, useState } from "react";

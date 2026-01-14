@@ -16,12 +16,16 @@ import {
   SAPPInput,
   SAPPSelect,
 } from '@lms/ui'
-import { formatDate, sortSectionsByPosition } from '@lms/utils'
-import { ProgressAPI } from '@pages/api/progress'
+import {
+  buildQueryString,
+  formatDate,
+  sortSectionsByPosition,
+} from '@lms/utils'
+import { ProgressAPI } from 'src/api/progress'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { Drawer } from 'antd'
 import { round } from 'lodash'
-import { useRouter } from 'next/router'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -56,7 +60,11 @@ function FormViewProgress({
   classId,
 }: IProps) {
   const router = useRouter()
-  const currentQuery = { ...router.query }
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const query = Object.fromEntries(searchParams.entries())
+
+  const currentQuery = { ...query }
 
   const [loading, setLoading] = useState<boolean>(false)
   const [detailProgress, setDetailProgress] = useState<IProgress>()
@@ -246,14 +254,7 @@ function FormViewProgress({
           ...currentQuery,
           classProgress: data?.data?.progress || 0,
         }
-        router.push(
-          {
-            pathname: router.pathname,
-            query: updatedQuery,
-          },
-          undefined,
-          { shallow: true },
-        )
+        router.push(`${pathname}?${buildQueryString(updatedQuery)}`)
         toast.success('Update successful')
         refresh?.()
         setOpen(false)

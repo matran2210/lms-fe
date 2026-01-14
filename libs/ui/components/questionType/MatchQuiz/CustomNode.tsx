@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef, useState, useEffect } from "react";
 import { Handle, Position, NodeProps } from "@xyflow/react";
 import { Color } from "./MatchQuiz";

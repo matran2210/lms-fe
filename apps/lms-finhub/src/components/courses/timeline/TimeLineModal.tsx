@@ -1,7 +1,7 @@
 import React from 'react'
-import { TimeLineProp } from 'src/type/courses-3-level'
 import BaseModal from '@components/courses/popup/BaseModal'
 import { formatTimer } from '@lms/utils'
+import { TimeLineProp } from '@lms/core'
 
 export default function TimeLineModal({
   items,

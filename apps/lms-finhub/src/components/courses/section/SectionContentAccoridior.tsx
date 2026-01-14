@@ -1,11 +1,9 @@
 import { ArrowDownIcon, CompletedIcon, LockClosedIcon } from '@lms/assets'
 import { useCourseContext } from '@lms/contexts'
-import { ROUTES, TEST_TYPE_ENUM } from '@lms/core'
+import { ROUTES, SectionContentProps, TEST_TYPE_ENUM } from '@lms/core'
 import { Collapse } from 'antd'
 import clsx from 'clsx'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { SectionContentProps } from 'src/type/courses-3-level'
 import {
   formatDuration,
   formatDurationMenuActivity,
@@ -14,6 +12,7 @@ import {
 } from './Accoridior'
 import TestModal from '../popup/TestModal'
 import { Tooltip } from '@lms/ui'
+import { useParams, useRouter } from 'next/navigation'
 
 const { Panel } = Collapse
 
@@ -23,7 +22,8 @@ export default function SectionContentAccoridior({
   // refetch,
 }: SectionContentProps) {
   const router = useRouter()
-  const courseId = router.query.courseId
+  const params = useParams()
+  const courseId = params.courseId
   const [open, setOpen] = useState(false)
   const [dataTest, setDataTest] = useState<any>(null)
   const [activePanelKey, setActivePanelKey] = useState<string[]>([])
@@ -34,7 +34,7 @@ export default function SectionContentAccoridior({
 
   const activeKey = sections.findIndex((section) => {
     if (section.children.length > 0) {
-      return section.children.some((child) => child.id === router.query.id)
+      return section.children.some((child) => child.id === params.id)
     }
     return false
   })
@@ -162,29 +162,13 @@ export default function SectionContentAccoridior({
                                         ?.id as string | undefined
 
                                       if (isCompleted && attemptId) {
-                                        router.push({
-                                          pathname: `/case-study/result/${attemptId}`,
-                                          query: {
-                                            class_user_id: class_user_id,
-                                            class_id: router?.query?.courseId,
-                                            course_section_id:
-                                              router?.query?.id,
-                                            is_from_activity: true,
-                                          },
-                                        })
+                                        router.push(
+                                          `/case-study/result/${attemptId}?class_user_id=${class_user_id}&class_id=${params?.courseId}&course_section_id=${params?.id}&is_from_activity=true`,
+                                        )
                                       } else {
-                                        router.push({
-                                          pathname: `/case-study/${topicId}`,
-                                          query: {
-                                            quiz_id: quizId,
-                                            class_user_id: class_user_id,
-                                            caseStudyId,
-                                            class_id: router?.query?.courseId,
-                                            course_section_id:
-                                              router?.query?.id,
-                                            is_from_activity: true,
-                                          },
-                                        })
+                                        router.push(
+                                          `/case-study/${topicId}?quiz_id=${quizId}&class_user_id=${class_user_id}&caseStudyId=${caseStudyId}&class_id=${params?.courseId}&course_section_id=${params?.id}&is_from_activity=true`,
+                                        )
                                       }
                                     }}
                                   >
@@ -256,7 +240,7 @@ export default function SectionContentAccoridior({
                       activity?.learning_progress
                         ?.total_course_sections_completed > 0
 
-                    const selectedActivity = activity?.id === router.query.id
+                    const selectedActivity = activity?.id === params.id
                     const isLock =
                       activity?.course_section_link_parents?.[0]
                         ?.is_preview_locked

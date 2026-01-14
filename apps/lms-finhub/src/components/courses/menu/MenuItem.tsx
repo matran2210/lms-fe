@@ -20,14 +20,19 @@ import clsx from 'clsx'
 import { isEmpty } from 'lodash'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import SappNotificationComponent from '@sapp-fe/sapp-notification'
 import { v4 as uuidv4 } from 'uuid'
 import MenuItemsList from './MenuItemsList'
-import { NotificationAPI } from '@pages/api/notification'
 import { PageLink } from 'src/constants/routes'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation'
+import { NotificationAPI } from 'src/api/notification'
 export default function MenuItem({
   menuItem: { name, icon: Icon, url, type, subItems },
   closeSideBar,
@@ -65,6 +70,8 @@ export default function MenuItem({
     },
   ]
 
+  const pathname = usePathname()
+
   useEffect(() => {
     if (selectedTab) {
       dispatch(clearNotifications())
@@ -75,6 +82,7 @@ export default function MenuItem({
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer)
   const router = useRouter()
+  const params = useParams()
 
   const isNested = subItems && subItems?.length > 0
 
@@ -102,9 +110,7 @@ export default function MenuItem({
   }
 
   const handleViewNotification = (link: string) => {
-    router.push({
-      pathname: link,
-    })
+    router.push(link)
   }
 
   const handleActive = () => {
@@ -114,7 +120,7 @@ export default function MenuItem({
         refreshNotification(false)
       }
     }
-    if (router?.query?.courseId || router.query.id) {
+    if (params?.courseId || params.id) {
       name === TitleSidebar.NOTES_LIST && handleOpenNotesList()
       name === TitleSidebar.ADD_NOTE && handleAddNote()
       name === TitleSidebar.CALCULATOR && handleOpenCalculator()
@@ -122,10 +128,14 @@ export default function MenuItem({
     }
   }
 
-  const isActivity = router?.query?.courseId && router?.query?.id
-  const isInMyProfile = router.asPath === PageLink.SHORT_COURSE_PROFILE
+  const searchParams = useSearchParams()
 
-  const selected = router.pathname === url
+  const asPath = pathname + (searchParams.toString() ? `?${searchParams}` : '')
+
+  const isActivity = params?.courseId && params?.id
+  const isInMyProfile = asPath === PageLink.SHORT_COURSE_PROFILE
+
+  const selected = pathname === url
   // ? true
   // : isActivity
   //   ? name === TitleSidebar.COURSE_CONTENT
@@ -272,7 +282,7 @@ export default function MenuItem({
     )
   }
 
-  const profileUrl = router.pathname?.startsWith(PageLink.SHORT_COURSE)
+  const profileUrl = pathname?.startsWith(PageLink.SHORT_COURSE)
     ? `${PageLink.SHORT_COURSE_PROFILE}`
     : `${PageLink.MYPROFILE}`
   return (
@@ -342,9 +352,9 @@ export default function MenuItem({
             <Link
               href={
                 url === PageLink.DASHBOARD
-                  ? `${ROUTES.MY_COURSES}${router?.query?.courseId || router?.query?.id}/dashboard`
+                  ? `${ROUTES.MY_COURSES}${params?.courseId || params?.id}/dashboard`
                   : name === TitleSidebar.COURSE_CONTENT
-                    ? `${url}/${router?.query?.courseId || router?.query?.id}`
+                    ? `${url}/${params?.courseId || params?.id}`
                     : url === PageLink.MYPROFILE
                       ? profileUrl
                       : url

@@ -1,8 +1,9 @@
-import Lottie from "lottie-react";
-import Image, { StaticImageData } from "next/image";
+"use client"
+import Lottie from 'lottie-react'
+import Image, { StaticImageData } from 'next/image'
+import { ButtonPrimary, ButtonText } from '../base';
 import { useEffect, useRef, useState } from "react";
 import { decrement, increment, useFeature } from "@lms/contexts";
-import { ButtonPrimary, ButtonText } from "../base";
 import { motion } from "framer-motion";
 import { GuideOffset, GuidePlacement } from "@lms/core";
 

@@ -1,4 +1,4 @@
-
+"use client"
 import { runHighlight } from '@lms/utils'
 import { uniqueId } from 'lodash'
 import {

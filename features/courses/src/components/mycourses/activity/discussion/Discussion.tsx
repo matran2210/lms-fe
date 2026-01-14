@@ -32,7 +32,7 @@ type Props = {
  * @param {Props} props - Props của component.
  */
 const Discussion = ({ class_id,  }: Props) => {
-  const { activityApi, courseApi, courseActivityApi, router, dispatch, useAppSelector } = useFeature();
+  const { activityApi, courseApi, courseActivityApi, router, dispatch, useAppSelector, params } = useFeature();
   const selector = useAppSelector?.(courseActivityReducer)
   const [idReply, setIdReply] = useState<string>()
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null)
@@ -73,7 +73,7 @@ const Discussion = ({ class_id,  }: Props) => {
     { comment, commentRoot }: { comment: string; commentRoot: string },
     isRoot?: boolean,
   ) => {
-    if (router.query.activityId) {
+    if (params?.activityId) {
       setLoading(true)
       let parent_id = idReply
       let content = comment
@@ -135,7 +135,7 @@ const Discussion = ({ class_id,  }: Props) => {
           createDiscussion({
             api: activityApi,
             data: {
-              course_section_id: router.query.activityId as string,
+              course_section_id: params?.activityId as string,
             class_id: class_id,
             content: content?.trim(),
             parent_id,
@@ -153,7 +153,7 @@ const Discussion = ({ class_id,  }: Props) => {
                 getDiscussion({
                   api: courseApi,
                   id: class_id,
-                  sectionId: router.query.activityId as string,
+                  sectionId: params?.activityId as string,
                 }),
               )
               return
@@ -177,7 +177,7 @@ const Discussion = ({ class_id,  }: Props) => {
                   getDiscussion({
                     api: courseApi,
                     id: class_id,
-                    sectionId: router.query.activityId as string,
+                    sectionId: params?.activityId as string,
                   }),
                 )
                 if (isRoot) {
@@ -220,7 +220,7 @@ const Discussion = ({ class_id,  }: Props) => {
       try {
         await dispatch?.(reactDiscussion({ api: activityApi, data  }))
       } finally {
-        await dispatch?.(getDiscussion({api: courseApi, id: class_id, sectionId: router.query.activityId as string}))
+        await dispatch?.(getDiscussion({api: courseApi, id: class_id, sectionId: params?.activityId as string}))
       }
     }, 1000)
   }

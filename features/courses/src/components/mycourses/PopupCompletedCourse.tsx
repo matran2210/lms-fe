@@ -13,7 +13,7 @@ const PopupCert = () => {
   return (
     <SappModalV3
       title={undefined}
-      open={selector.is_open}
+      open={!!selector?.is_open}
       handleCancel={onClickBackCourse}
       onOk={onClickBackCourse}
       fullWidthBtn={true}

@@ -1,3 +1,4 @@
+"use client"
 import { CollapseArrowIcon, Icon } from '@lms/assets'
 import { getMe, IUserContact, makeContactDefault, useFeature, userReducer } from '@lms/contexts'
 import { useTailwindBreakpoint } from '@lms/hooks'
