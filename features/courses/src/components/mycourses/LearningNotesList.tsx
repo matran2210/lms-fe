@@ -216,7 +216,7 @@ const LearningNotesList = ({ appType }: Props) => {
 
   useEffect(() => {
     if (
-      !(params.course_section_id || params.class_id) ||
+      !(courseSectionId || params.class_id) ||
       !notesListStatus ||
       isFetchingRef.current
     )

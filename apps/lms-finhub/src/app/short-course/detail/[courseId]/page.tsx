@@ -57,6 +57,8 @@ const CourseDetail = () => {
   )
   const router = useRouter()
   const params = useParams()
+  const searchParams = useSearchParams()
+  const query = Object.fromEntries(searchParams.entries())
   const [readMore, setReadMore] = useState<boolean>(false)
   const [open, setOpen] = useState<boolean>(false)
   const [chapterData, setChapterData] = useState<any>({})
@@ -140,7 +142,7 @@ const CourseDetail = () => {
     } else {
       setLoadingChapter(true)
       try {
-        if (course_section_id !== params?.partId) {
+        if (course_section_id !== query?.partId) {
           const searchParams = buildQueryString({
             focusSubSectionIds,
             focusUnitIds,
@@ -225,7 +227,7 @@ const CourseDetail = () => {
     } else {
       handleDefaultActiveItem()
       router.push(
-        `/case-study/${topicId}?quiz_id=${quizId}&class_user_id=${previewPart?.class_user_id}&caseStudyId=${caseStudyId}&class_id=${params?.courseId}&course_section_id=${params?.course_section_id}&sectionId=${sectionId}`,
+        `/case-study/${topicId}?quiz_id=${quizId}&class_user_id=${previewPart?.class_user_id}&caseStudyId=${caseStudyId}&class_id=${params?.courseId}&course_section_id=${query?.course_section_id}&sectionId=${sectionId}`,
       )
     }
   }
@@ -282,7 +284,6 @@ const CourseDetail = () => {
   }
 
   const pathname = usePathname()
-  const searchParams = useSearchParams()
   const asPath = pathname + (searchParams.toString() ? `?${searchParams}` : '')
 
   useEffect(() => {
@@ -427,15 +428,15 @@ const CourseDetail = () => {
             setLoadingChapter={setLoadingChapter}
             setOpenLearningOutcome={setOpenLearningOutcome}
             course_id={params.courseId as any}
-            course_section_id={params.course_section_id as any}
+            course_section_id={query.course_section_id as any}
             handleRouterActivity={handleRouterActivity}
             handleRouterCaseStudy={handleRouterCaseStudy}
             handleLearningOutCome={handleLearningOutCome}
             handleRouterChapter={handleRouterChapter}
             readMore={readMore}
             setReadMore={setReadMore}
-            defaultActive={params.chapter ?? defaultActive}
-            focus_id={params?.focus_id as string}
+            defaultActive={query.chapter ?? defaultActive}
+            focus_id={query?.focus_id as string}
             handleGetItem={handleActive}
             handleGoBack={handleGoBack}
             listFocusSubSectionIds={listFocusSubSectionIds}

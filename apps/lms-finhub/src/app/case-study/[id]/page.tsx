@@ -55,7 +55,7 @@ import { download } from '@utils/index'
 import { Popover } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -288,7 +288,8 @@ const CaseStudyDetail = () => {
   const [showWarning, setShowWarning] = useState(true)
   const MatchQuizRef = useRef(null) as any
   const params = useParams()
-  const { query } = useFeature()
+  const searchParams = useSearchParams()
+  const query = Object.fromEntries(searchParams.entries())
 
   const handleResetEssay = async (
     index: number,
@@ -523,16 +524,16 @@ const CaseStudyDetail = () => {
 
   const backToPart = () => {
     resetEssayBeforeAction()
-    if (params?.class_id) {
-      if (params?.is_from_activity) {
+    if (query?.class_id) {
+      if (query?.is_from_activity) {
         router.push(
           ROUTES.ACTIVITY(
-            params?.class_id as string,
-            params?.course_section_id as string,
+            query?.class_id as string,
+            query?.course_section_id as string,
           ),
         )
       } else {
-        router.push(ROUTES.COURSE_DETAIL(params?.class_id as string))
+        router.push(ROUTES.COURSE_DETAIL(query?.class_id as string))
       }
     } else {
       router.push(ROUTES.SHORT_COURSE)
@@ -813,7 +814,7 @@ const CaseStudyDetail = () => {
         }
 
         router.replace(
-          `/case-study/result/${quizAttempId}?class_user_id=${params?.class_user_id}&class_id=${params?.class_id}&course_section_id=${params?.course_section_id}`,
+          `/case-study/result/${quizAttempId}?class_user_id=${query?.class_user_id}&class_id=${query?.class_id}&course_section_id=${query?.course_section_id}`,
         )
       } catch (err) {
         toast.error('Submission failed. Please try again.')
