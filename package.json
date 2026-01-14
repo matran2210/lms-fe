@@ -53,15 +53,16 @@
   },
   "packageManager": "pnpm@10.22.0",
   "lint-staged": {
-    "**/*.ts": "eslint --fix",
-    "**/*.tsx": "eslint --fix",
-    "**/*.js": "eslint --fix",
-    "**/*.json": "prettier --write",
-    "**/*.md": "prettier --write"
+    "apps/**/*.{ts,tsx,js,jsx}": [
+      "pnpm -r --filter ./apps/... lint"
+    ],
+    "packages/**/*.{ts,tsx,js,jsx}": [
+      "pnpm -r --filter ./packages/... lint"
+    ],
+    "**/*.{md,json}": "prettier --write"
   },
   "dependencies": {
     "@ant-design/cssinjs": "^1.24.0",
-    "@babel/runtime": "^7.26.0",
     "@funktechno/texthighlighter": "^2.1.2",
     "@hookform/resolvers": "^3.10.0",
     "@sapp-fe/explanation-package": "^1.5.5",
