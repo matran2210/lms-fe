@@ -129,21 +129,6 @@ const ClassResourceTable = ({
       width: 400,
     },
     {
-      title: 'Location',
-      dataIndex: 'location',
-      key: 'location',
-      className: clsx(className),
-      align: 'center',
-      render: (location) => (
-        <NameNoActionCell
-          isCenter
-          dataColumn={location}
-          className="text-base text-gray-400"
-        />
-      ),
-      width: 300,
-    },
-    {
       title: '',
       key: 'actions',
       className: className,
