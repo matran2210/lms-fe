@@ -53,13 +53,15 @@
   },
   "packageManager": "pnpm@10.22.0",
   "lint-staged": {
-    "apps/**/*.{ts,tsx,js,jsx}": [
-      "pnpm -r --filter ./apps/... lint"
+    "apps/lms-zoom/**/*.{ts,tsx}": [
+      "pnpm --filter lms-zoom lint"
     ],
-    "packages/**/*.{ts,tsx,js,jsx}": [
-      "pnpm -r --filter ./packages/... lint"
+    "apps/lms-pro/**/*.{ts,tsx}": [
+      "pnpm --filter lms-pro lint"
     ],
-    "**/*.{md,json}": "prettier --write"
+    "packages/**/*.{ts,tsx}": [
+      "pnpm --filter ./packages/... lint"
+    ]
   },
   "dependencies": {
     "@ant-design/cssinjs": "^1.24.0",

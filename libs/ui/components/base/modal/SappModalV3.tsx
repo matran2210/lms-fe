@@ -93,8 +93,8 @@ const SappModalV3 = ({
 
     setTimeout(() => {
       callback?.();
-      handleClose?.();
-    }, EXIT_DURATION_Test);
+      handleClose?.(;
+    }, EXIT_DURATION);
   };
 
   return (
