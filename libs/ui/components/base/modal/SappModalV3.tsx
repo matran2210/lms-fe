@@ -89,12 +89,12 @@ const SappModalV3 = ({
   const requestClose = (callback?: () => void) => {
     if (closing) return;
 
-    setClosing();
+    setClosing(true);
 
     setTimeout(() => {
       callback?.();
       handleClose?.();
-    }, EXIT_DURATION);
+    }, EXIT_DURATION_Test);
   };
 
   return (
