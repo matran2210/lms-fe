@@ -26,6 +26,7 @@ import {
   activeNotesList3Level,
   useAppDispatch,
   useCourseContext,
+  useFeature,
   UserType,
 } from '@lms/contexts'
 import { ISubSection } from 'src/type/courses-3-level'
@@ -35,7 +36,12 @@ import { PopupLockContent } from '@lms/feature-courses'
 import { LearningResource } from '@lms/ui'
 // import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import PromotionalBanner from '@lms/ui/components/banner/PromotionalBanner'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation'
 import { CoursesAPI } from 'src/api/courses'
 
 const CourseDetail = () => {
@@ -62,6 +68,7 @@ const CourseDetail = () => {
   const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
   const { setOpenSidebar } = useCourseContext()
+  const { query } = useFeature()
 
   // const handleOpenSidebar = () => {
   //   setShowSidebar(true)
@@ -101,11 +108,9 @@ const CourseDetail = () => {
     }
   }
 
-  const focusSubSectionIds = params?.focusSubSectionIds as
-    | string
-    | undefined
-  const focusUnitIds = params?.focusUnitIds as string | undefined
-  const deadline = params?.deadline as string | undefined
+  const focusSubSectionIds = query?.focusSubSectionIds as string | undefined
+  const focusUnitIds = query?.focusUnitIds as string | undefined
+  const deadline = query?.deadline as string | undefined
   const isOverdue = dayjs(deadline).isBefore(new Date())
   const listFocusSubSectionIds = focusSubSectionIds?.split(',') || []
   const listFocusUnitIds = focusUnitIds?.split(',') || []
@@ -136,7 +141,7 @@ const CourseDetail = () => {
     } else {
       setLoadingChapter(true)
       try {
-        if (course_section_id !== params?.partId) {
+        if (course_section_id !== query?.partId) {
           const searchParams = buildQueryString({
             focusSubSectionIds,
             focusUnitIds,
@@ -167,7 +172,7 @@ const CourseDetail = () => {
     document.body.style.overflow = 'hidden'
   }
   const handleDefaultActiveItem = () => {
-    localStorage.setItem('course_chapter_id', params?.partId as string)
+    localStorage.setItem('course_chapter_id', query?.partId as string)
   }
   useEffect(() => {
     if (openLearningOutcome && chapterId && chapterDetail) {
@@ -221,7 +226,7 @@ const CourseDetail = () => {
     } else {
       handleDefaultActiveItem()
       router.push(
-        `/case-study/${topicId}?quiz_id=${quizId}&class_user_id=${previewPart?.class_user_id}&caseStudyId=${caseStudyId}&class_id=${params?.courseId}&course_section_id=${params?.course_section_id}&sectionId=${sectionId}`,
+        `/case-study/${topicId}?quiz_id=${quizId}&class_user_id=${previewPart?.class_user_id}&caseStudyId=${caseStudyId}&class_id=${params?.courseId}&course_section_id=${query?.course_section_id}&sectionId=${sectionId}`,
       )
     }
   }
@@ -278,9 +283,8 @@ const CourseDetail = () => {
   }
 
   const pathname = usePathname()
-const searchParams = useSearchParams()
-const asPath =
-  pathname + (searchParams.toString() ? `?${searchParams}` : '')
+  const searchParams = useSearchParams()
+  const asPath = pathname + (searchParams.toString() ? `?${searchParams}` : '')
 
   useEffect(() => {
     if (
@@ -344,7 +348,6 @@ const asPath =
 
     return []
   }, [partDetail, chapterDetail])
-console.log('previewPart', previewPart)
   return (
     <Layout
       showSidebar={showSidebar || isAlwaysShowSidebar}
@@ -424,15 +427,15 @@ console.log('previewPart', previewPart)
             setLoadingChapter={setLoadingChapter}
             setOpenLearningOutcome={setOpenLearningOutcome}
             course_id={params.courseId as any}
-            course_section_id={params.course_section_id as any}
+            course_section_id={query.course_section_id as any}
             handleRouterActivity={handleRouterActivity}
             handleRouterCaseStudy={handleRouterCaseStudy}
             handleLearningOutCome={handleLearningOutCome}
             handleRouterChapter={handleRouterChapter}
             readMore={readMore}
             setReadMore={setReadMore}
-            defaultActive={params.chapter ?? defaultActive}
-            focus_id={params?.focus_id as string}
+            defaultActive={query.chapter ?? defaultActive}
+            focus_id={query?.focus_id as string}
             handleGetItem={handleActive}
             handleGoBack={handleGoBack}
             listFocusSubSectionIds={listFocusSubSectionIds}

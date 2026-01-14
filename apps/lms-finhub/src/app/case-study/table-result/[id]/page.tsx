@@ -11,6 +11,7 @@ import { roundNumber } from '@utils/helpers'
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { CoursesAPI } from 'src/api/courses'
+import { useFeature } from '@lms/contexts'
 
 const headers = [
   {
@@ -48,6 +49,7 @@ const TableCaseStudyResult = () => {
   const [topicAttemptDetail, setTopicAttemptDetail] = useState<any>()
   const router = useRouter()
   const params = useParams()
+  const { query } = useFeature()
 
   const fetchScoreDetail = async (page_index: number, page_size: number) => {
     try {
@@ -182,8 +184,8 @@ const TableCaseStudyResult = () => {
                         topicAttemptDetail?.question_topic?.id,
                         topicAttemptDetail?.quiz?.id,
                         topicAttemptDetail?.class_user_id as string,
-                        params?.class_id as string,
-                        params?.course_section_id as string,
+                        query?.class_id as string,
+                        query?.course_section_id as string,
                       )
                     }
                   />
@@ -215,8 +217,8 @@ const TableCaseStudyResult = () => {
                     topicAttemptDetail?.question_topic?.id,
                     topicAttemptDetail?.quiz?.id,
                     topicAttemptDetail?.class_user_id as string,
-                    params?.class_id as string,
-                    params?.course_section_id as string,
+                    query?.class_id as string,
+                    query?.course_section_id as string,
                   )
                 }
                 className={'shrink-0 !font-medium'}
