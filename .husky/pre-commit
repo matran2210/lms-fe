@@ -1,2 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname "$0")/h"
+
+echo ">>> PRE-COMMIT IS RUNNING <<<"
+pnpm lint-staged

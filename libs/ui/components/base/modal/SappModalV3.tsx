@@ -89,7 +89,7 @@ const SappModalV3 = ({
   const requestClose = (callback?: () => void) => {
     if (closing) return;
 
-    setClosing(
+    setClosing();
 
     setTimeout(() => {
       callback?.();
