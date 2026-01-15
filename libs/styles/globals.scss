@@ -1611,6 +1611,15 @@ mark {
   }
 }
 
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 .sapp-action-popover {
   .ant-popover-inner {
     background: transparent !important;
