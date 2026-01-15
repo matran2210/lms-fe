@@ -1,15 +1,15 @@
 import { IBadge } from '@lms/core'
 
 const badgeTypeClasses: Record<string, string> = {
-  open: 'text-badge-open',
-  pending: 'text-badge-pending',
-  finished: 'text-badge-finished bg-badge-finished_bg',
-  reject: 'text-badge-reject bg-badge-reject_bg',
-  denied: 'text-badge-denied',
-  canceled: 'text-badge-canceled',
-  accepted: 'text-badge-accepted',
-  active: 'text-badge-active bg-badge-active_bg',
-  learning: 'text-badge-learning bg-badge-learning_bg',
+  open: 'text-accent-warning',
+  pending: 'text-accent-warning',
+  finished: 'text-[#087051] bg-[#E9FFEE]',
+  reject: 'text-error bg-error_bg',
+  denied: 'text-accent-error',
+  canceled: 'text-accent',
+  accepted: 'text-accent-success',
+  active: 'text-accent-success bg-accent-success_bg',
+  learning: 'text-[#FE9800] bg-[#FFF6E1]',
 }
 
 export default function Badge({ label, badgeType, isBold = false }: IBadge) {

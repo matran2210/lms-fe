@@ -23,7 +23,7 @@ export default function LearningOutcomeMobile({
         >
           {items.map((item, index) => (
             <div className="item mb-4 last:mb-0" key={index}>
-              <p className="flex items-start gap-1 text-sm font-normal leading-5.5 text-bw-15">
+              <p className="flex items-start gap-1 text-sm font-normal leading-5.5 text-gray-800">
                 <span className="font-bold">LO{index + 1}:</span>
                 <EditorReader text_editor_content={item.title} />
               </p>

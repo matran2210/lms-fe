@@ -41,7 +41,7 @@ const SappBreadCrumbs = ({
 
   return (
     <nav aria-label="breadcrumb" className={clsx("hidden lg:block", className)}>
-      <ul className="flex items-center overflow-hidden text-sm font-normal text-[#a1a1aa]">
+      <ul className="flex items-center overflow-hidden text-sm font-normal text-zinc-400">
         <AnimatePresence initial={false}>
           {breadcrumbs.map((breadcrumb, index) => {
             const isLast = index === lastIndex;

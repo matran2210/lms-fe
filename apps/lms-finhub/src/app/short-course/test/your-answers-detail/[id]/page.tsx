@@ -1,3 +1,4 @@
+'use client'
 import SappLoading from '@components/common/SappLoading'
 import TableQuestions from '@components/your-answers-detail/TableQuestions'
 import { EYourAnswerType, ITabs, TEST_TYPE_LABELS } from '@lms/core'
@@ -53,7 +54,7 @@ const TestResultDetail = () => {
   ]
 
   return (
-    <FullScreenLayout title="Your Answer Details" className="!bg-gray-4">
+    <FullScreenLayout title="Your Answer Details" className="!bg-gray-100">
       <div className="mx-auto max-w-[1570px]">
         <div className="px-5 pt-5 xl:container md:px-10">
           <SappBreadCrumbs breadcrumbs={breadcrumbs} />

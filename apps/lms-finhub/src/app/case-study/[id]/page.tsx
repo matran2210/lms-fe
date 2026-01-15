@@ -980,7 +980,7 @@ const CaseStudyDetail = () => {
           }}
         >
           <div className="h-full" ref={containerRef}>
-            <div className="flex h-full bg-[#F1F1F1]" id={'preview-question'}>
+            <div className="flex h-full bg-gray-200" id={'preview-question'}>
               <div
                 className={`h-full overflow-auto bg-white p-6`}
                 style={{ width: `calc(50% - ${leftWidth}px)` }}
@@ -1053,7 +1053,7 @@ const CaseStudyDetail = () => {
                 </div>
               </div>
               <div
-                className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-[#99A1B7]"
+                className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-accent"
                 onMouseDown={() => {
                   setStartResize(true)
                   setCurrentMousePos(x || 0)

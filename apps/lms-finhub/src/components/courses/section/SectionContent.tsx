@@ -9,7 +9,7 @@ function SectionContent({
 }: SectionContentProps) {
   return (
     <div className="hidden rounded-xl bg-white p-6 shadow-search lg:block">
-      <h2 className="mb-4 select-none text-xl font-semibold text-bw-15">
+      <h2 className="mb-4 select-none text-xl font-semibold text-gray-800">
         {title}
       </h2>
       <SectionContentAccoridior

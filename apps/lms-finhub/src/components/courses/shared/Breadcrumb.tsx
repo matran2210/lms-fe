@@ -13,7 +13,7 @@ export default function Breadcrumb3Level({
       <ul className={`breadcrumb flex flex-row pt-4 text-sm ${className}`}>
         {tabs?.map((tab, index) => (
           <li
-            className="flex items-center gap-2 text-ssm md:text-base"
+            className="flex items-center gap-2 text-xs md:text-base"
             key={index}
           >
             {index !== tabs.length - 1 ? (
@@ -53,7 +53,7 @@ export default function Breadcrumb3Level({
                     )}
                   </span>
                 )}
-                <span className={`pr-2 text-bw-15`}>{' / '}</span>
+                <span className={`pr-2 text-gray-800`}>{' / '}</span>
               </>
             ) : (
               <span

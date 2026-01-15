@@ -417,14 +417,14 @@ export default function ActivityDetail() {
       showSidebar={showSidebar || isAlwaysShowSidebar}
       handleToggleSidebar={handleCloseSidebar}
     >
-      <div className="relative mx-auto h-full max-w-1729">
+      <div className="relative mx-auto h-full max-w-[1729px]">
         {isLoadingActivity ? (
           <div className="mb-6 mt-4 h-[72px] gap-6 md:gap-10 lg:flex lg:flex-row lg:items-start">
-            <div className="rounded-lg bg-white p-4 shadow lg:w-6.5">
+            <div className="rounded-lg bg-white p-4 shadow lg:w-[65%]">
               <div className="mb-3 h-4 w-11/12 rounded bg-skeleton" />
               <div className="h-6 w-10/12 rounded bg-skeleton" />
             </div>
-            <div className="lg:w-3.5" />
+            <div className="lg:w-[35%]" />
           </div>
         ) : (
           <>
@@ -452,7 +452,7 @@ export default function ActivityDetail() {
                   </div>
                 </Link>
               )}
-              <h1 className="line-clamp-1 text-[18px] font-bold text-bw-15 lg:text-2xl">
+              <h1 className="line-clamp-1 text-[18px] font-bold text-gray-800 lg:text-2xl">
                 {activity?.name}
               </h1>
             </div>
@@ -499,7 +499,7 @@ export default function ActivityDetail() {
           {isLoadingActivity ? (
             <ActivityLeftSkeleton />
           ) : (
-            <div className="flex flex-col gap-6 lg:w-6.5">
+            <div className="flex flex-col gap-6 lg:w-[65%]">
               {(activity?.course_outcomes?.length ?? 0) > 0 && (
                 <LearningOutcome
                   title="Learning Outcome"
@@ -596,7 +596,7 @@ export default function ActivityDetail() {
             <ActivityRightSkeleton />
           ) : (
             <section
-              className="sticky top-[40px] mb-4 w-3.5 space-y-6"
+              className="sticky top-[40px] mb-4 w-[35%] space-y-6"
               data-aos={ANIMATION.DATA_AOS}
             >
               <SectionContentModal

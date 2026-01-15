@@ -132,13 +132,13 @@ const CoursesList: React.FC<CoursesProps> = ({
                   <div className="progress mb-6">
                     <div className="info mb-1.5 flex items-center justify-between">
                       <div className="text flex items-center">
-                        <Icon type="like" className="relative text-[#050505]" />
+                        <Icon type="like" className="relative text-gray-800" />
                         <p className="ml-px pl-2 text-sm font-normal text-gray-800">
                           Ready to learn
                         </p>
                       </div>
                       <div className="number">
-                        <p className="text-sm font-normal text-[#050505]">0%</p>
+                        <p className="text-sm font-normal text-gray-800">0%</p>
                       </div>
                     </div>
                     <div

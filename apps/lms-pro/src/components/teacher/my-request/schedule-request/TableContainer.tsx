@@ -118,14 +118,14 @@ export default function TableContainer({ params }: IProps) {
             ((pagination?.current || 1) - DEFAULT_PAGE_NUMBER) *
               (pagination?.pageSize || DEFAULT_PAGE_SIZE)
           }
-          className="!text-[#a1a1aa]"
+          className="!text-zinc-400"
         />
       ),
     },
     {
       title: 'Class code',
       render: (_, record: IScheduleRequestItem) => (
-        <TableCell data={record?.class?.code} className="!text-[#a1a1aa]" />
+        <TableCell data={record?.class?.code} className="!text-zinc-400" />
       ),
     },
     {
@@ -174,7 +174,7 @@ export default function TableContainer({ params }: IProps) {
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={formatDateFromUTC(record?.created_at)}
-          className="!text-[#a1a1aa]"
+          className="!text-zinc-400"
         />
       ),
     },
@@ -183,7 +183,7 @@ export default function TableContainer({ params }: IProps) {
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={record?.staff_detail?.full_name}
-          className="!text-[#a1a1aa]"
+          className="!text-zinc-400"
         />
       ),
     },
@@ -192,7 +192,7 @@ export default function TableContainer({ params }: IProps) {
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={formatDateFromUTC(record?.updated_at)}
-          className="!text-[#a1a1aa]"
+          className="!text-zinc-400"
         />
       ),
     },

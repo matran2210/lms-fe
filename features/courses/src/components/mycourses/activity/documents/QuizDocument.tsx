@@ -1265,7 +1265,7 @@ const QuizDocument = ({
                       </span>
                     </button>
                   )}
-                  <div className="text-sm text-bw-13 md:text-base">
+                  <div className="text-sm text-gray-800 md:text-base">
                     Question: {activeQuestionIndex + 1} of{" "}
                     {questions?.length || 0}
                   </div>
@@ -1453,7 +1453,7 @@ const QuizDocument = ({
                     ? null
                     : "You should select an answer before click"
                 }
-                classNames={{ root: "max-w-72" }}
+                classNames={{ root: "max-w-[288px]" }}
                 trigger={"hover"}
               >
                 <>

@@ -471,7 +471,7 @@ export const statusMap = {
   },
   NOT_STARTED: {
     label: "Not Started",
-    color: "text-primary-4",
+    color: "text-[#f57c00]",
     bg: "bg-primary-5",
   },
   ended: { label: "Ended", color: "text-gray-600", bg: "bg-gray-100" },

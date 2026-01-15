@@ -1,34 +1,35 @@
 import {
   IActivityStateQuestion,
   fetchQuestionById,
-  useFeature
-} from '@lms/contexts'
-import { ANIMATION, IQuestion, IVideo } from '@lms/core'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { SAPPRadio, SAPPVideo, SappIcon, SappModal } from '@lms/ui'
-import { debounce, formatTimer, htmlToRaw } from '@lms/utils'
-import clsx from 'clsx'
-import { memo, useEffect, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import QuizComponent, { QuizComponentRef } from './QuizComponent'
+ 
+  useFeature,
+} from "@lms/contexts";
+import { ANIMATION, IQuestion, IVideo } from "@lms/core";
+import { useTailwindBreakpoint } from "@lms/hooks";
+import { SAPPRadio, SAPPVideo, SappIcon, SappModal } from "@lms/ui";
+import { debounce, formatTimer, htmlToRaw } from "@lms/utils";
+import clsx from "clsx";
+import { memo, useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import QuizComponent, { QuizComponentRef } from "./QuizComponent";
 
 type Props = {
-  videos?: IVideo[]
-  activityId: string
-  tabId: string
-  streamRefProp?: any
-  handleProcess?: (file_id: string, course_tab_document_id: string) => void
-  document_id: string
-  quizId: string
-  grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
-  class_user_id?: string
-  handleSetCurrentVideoCallback?: (video: IVideo) => void
-  activeTab?: string
-  activeVideo?: string
-  handleCloseTab?: (activeTab: string) => void
-  onUpdateActiveVideo?: (activeVideo: string) => void
-  newQuizModal?: boolean
-}
+  videos?: IVideo[];
+  activityId: string;
+  tabId: string;
+  streamRefProp?: any;
+  handleProcess?: (file_id: string, course_tab_document_id: string) => void;
+  document_id: string;
+  quizId: string;
+  grading_preference: "AFTER_EACH_QUESTION" | "AFTER_ALL_QUESTIONS";
+  class_user_id?: string;
+  handleSetCurrentVideoCallback?: (video: IVideo) => void;
+  activeTab?: string;
+  activeVideo?: string;
+  handleCloseTab?: (activeTab: string) => void;
+  onUpdateActiveVideo?: (activeVideo: string) => void;
+  newQuizModal?: boolean;
+};
 
 /**
  * VideoDocument component for displaying and interacting with videos and quiz questions.
@@ -51,10 +52,8 @@ const VideoDocument = ({
   // handleCloseTab,
   onUpdateActiveVideo,
   // newQuizModal,
-
 }: Props) => {
-  const { dispatch, testServiceApi,
-    courseApi, videoUrl } = useFeature();
+  const { dispatch, testServiceApi, courseApi, videoUrl } = useFeature();
 
   const {
     control: controlAnswer,
@@ -62,15 +61,15 @@ const VideoDocument = ({
     // reset: resetAnswer,
     // getValues,
     // watch,
-  } = useForm({})
+  } = useForm({});
   const [currentVideo, setCurrentVideo] = useState<IVideo>(
     videos && videos.length > 0 ? videos[0] : ({} as IVideo),
-  )
-  const quizTimed = useRef<{ [key: string]: IQuestion[] }>()
-  const currentTimeRef = useRef(-1)
+  );
+  const quizTimed = useRef<{ [key: string]: IQuestion[] }>();
+  const currentTimeRef = useRef(-1);
   const [currentListQuestion, setCurrentListQuestion] = useState<IQuestion[]>(
     [],
-  )
+  );
   // const selector = useAppSelector(courseActivityQuizReducer)
   const questionRef = useRef<QuizComponentRef>(null)
   const [modalOpen, setModalOpen] = useState(false)
@@ -83,15 +82,15 @@ const VideoDocument = ({
 
   useEffect(() => {
     if (videos?.[0]) {
-      debouncedHandleSetCurrentVideo?.current(videos?.[0])
+      debouncedHandleSetCurrentVideo?.current(videos?.[0]);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (handleProcess && streamRef?.current?.paused === false) {
-      handleProcess(currentVideo?.file?.id, document_id)
+      handleProcess(currentVideo?.file?.id, document_id);
     }
-  }, [streamRef?.current?.paused])
+  }, [streamRef?.current?.paused]);
 
   useEffect(() => {
     if (activeQuestion?.id) {
@@ -101,18 +100,18 @@ const VideoDocument = ({
           courseApi: courseApi,
           activityId: activityId,
           tabId: tabId,
-          quizId: currentVideo?.quiz?.id || '',
+          quizId: currentVideo?.quiz?.id || "",
           questionId: activeQuestion?.id,
         }),
       )
         .unwrap()
         .then((e: any) => {
           if (e?.question) {
-            setActiveQuestion(e?.question)
+            setActiveQuestion(e?.question);
           }
-        })
+        });
     }
-  }, [isConfirmQuestion])
+  }, [isConfirmQuestion]);
 
   /**
    * Handles setting the current video and fetching quiz questions.
@@ -121,35 +120,35 @@ const VideoDocument = ({
    */
   const handleSetCurrentVideo = async (v: IVideo): Promise<void> => {
     handleOpenModalQuestions({
-      id: '',
+      id: "",
       open: false,
       listQuestion: [],
-    })
-    setModalOpen(false)
+    });
+    setModalOpen(false);
 
     const listQuestion = [
       ...(v?.quiz?.constructed_questions || []),
       ...(v?.quiz?.multiple_choice_questions || []),
-    ]
-    setCurrentVideo(v)
-    handleSetCurrentVideoCallback?.(v)
-    onUpdateActiveVideo?.(v.file.id)
+    ];
+    setCurrentVideo(v);
+    handleSetCurrentVideoCallback?.(v);
+    onUpdateActiveVideo?.(v.file.id);
     quizTimed.current = listQuestion.reduce(
       (obj, e) => {
         if (e?.time !== undefined && e?.id !== undefined) {
           if (!obj?.[e?.time]) {
-            obj[e.time] = []
+            obj[e.time] = [];
           }
-          obj?.[e?.time]?.push(e)
+          obj?.[e?.time]?.push(e);
         }
-        return obj
+        return obj;
       },
       {} as { [key: string]: IQuestion[] },
-    )
-  }
+    );
+  };
   const debouncedHandleSetCurrentVideo = useRef(
     debounce(handleSetCurrentVideo, 500),
-  )
+  );
 
   /**
    * Opens the modal with quiz questions based on the provided parameters.
@@ -163,9 +162,9 @@ const VideoDocument = ({
     open,
     listQuestion,
   }: {
-    id: string
-    open: boolean
-    listQuestion: IQuestion[]
+    id: string;
+    open: boolean;
+    listQuestion: IQuestion[];
   }) => {
     try {
       if (open) {
@@ -175,26 +174,26 @@ const VideoDocument = ({
             courseApi: courseApi,
             activityId: activityId,
             tabId: tabId,
-            quizId: currentVideo?.quiz?.id || '',
+            quizId: currentVideo?.quiz?.id || "",
             questionId: id,
           }),
         )
           .unwrap()
           .then((e: any) => {
             if (e.question) {
-              setCurrentListQuestion(listQuestion)
-              setActiveQuestion(e?.question)
-              setModalOpen(true)
-              setHideVideo(true)
+              setCurrentListQuestion(listQuestion);
+              setActiveQuestion(e?.question);
+              setModalOpen(true);
+              setHideVideo(true);
             }
-          })
+          });
       } else {
-        setCurrentListQuestion([])
-        setModalOpen(false)
-        setHideVideo(false)
+        setCurrentListQuestion([]);
+        setModalOpen(false);
+        setHideVideo(false);
       }
-    } catch { }
-  }
+    } catch {}
+  };
 
   /**
    * Tracks the time of the video and opens the modal for quiz questions if necessary.
@@ -202,46 +201,46 @@ const VideoDocument = ({
    * @param {string} questionId - The ID of the quiz question to find.
    * @returns {boolean} - Returns true if a quiz question is opened; otherwise, false.
    */
-  const [hideVideo, setHideVideo] = useState(false)
+  const [hideVideo, setHideVideo] = useState(false);
 
   const handleTrackTime = (time: number, questionId?: string) => {
-    const quizAtTime = quizTimed?.current?.[time]
+    const quizAtTime = quizTimed?.current?.[time];
     if (quizAtTime && quizAtTime?.length > 0) {
-      let foundQuestion = null
+      let foundQuestion = null;
 
       if (questionId) {
         foundQuestion = quizAtTime?.find(
           (question) => question?.id === questionId,
-        )
+        );
       } else {
-        foundQuestion = quizAtTime?.[0]
+        foundQuestion = quizAtTime?.[0];
       }
       if (foundQuestion) {
         handleOpenModalQuestions({
-          id: foundQuestion?.id || '',
+          id: foundQuestion?.id || "",
           open: true,
           listQuestion: questionId ? [foundQuestion] : quizAtTime,
-        })
-        streamRef.current?.pause()
-        setCurrentListQuestion(quizAtTime)
-        return true
+        });
+        streamRef.current?.pause();
+        setCurrentListQuestion(quizAtTime);
+        return true;
       }
     }
 
-    setCurrentListQuestion([])
-    return false
-  }
+    setCurrentListQuestion([]);
+    return false;
+  };
 
   /**
    * Handles the time update event of the video.
    */
   const handleOnTimeUpdate = () => {
-    const currentTime = Math.floor(streamRef?.current?.currentTime || 0)
+    const currentTime = Math.floor(streamRef?.current?.currentTime || 0);
     if (currentTimeRef.current !== currentTime) {
-      currentTimeRef.current = currentTime
-      handleTrackTime(currentTime)
+      currentTimeRef.current = currentTime;
+      handleTrackTime(currentTime);
     }
-  }
+  };
 
   /**
    * Closes the modal and performs necessary actions based on the parameters.
@@ -253,20 +252,20 @@ const VideoDocument = ({
     questionId,
     listQuestion,
   }: {
-    questionId?: string
-    listQuestion: IQuestion[]
+    questionId?: string;
+    listQuestion: IQuestion[];
   }) => {
     if (questionId) {
-      const currentIndex = listQuestion?.map((q) => q?.id)?.indexOf(questionId)
-      const nextQuestionId = listQuestion?.[currentIndex + 1]?.id
+      const currentIndex = listQuestion?.map((q) => q?.id)?.indexOf(questionId);
+      const nextQuestionId = listQuestion?.[currentIndex + 1]?.id;
 
       // Close the modal
       handleOpenModalQuestions({
-        id: '',
+        id: "",
         open: false,
         listQuestion: [],
-      })
-      setModalOpen(false)
+      });
+      setModalOpen(false);
 
       if (nextQuestionId) {
         // Open the modal for the next question at the same time
@@ -275,20 +274,20 @@ const VideoDocument = ({
             id: nextQuestionId,
             open: true,
             listQuestion,
-          })
-          setModalOpen(true)
-        }, 500)
-        return
+          });
+          setModalOpen(true);
+        }, 500);
+        return;
       }
     }
 
     // Close the modal and reset
     // setActiveQuestionIndex(-1)
-    streamRef.current?.play()
-    setCurrentListQuestion([])
-    setIsConfirmQuestion(false)
-    reset()
-  }
+    streamRef.current?.play();
+    setCurrentListQuestion([]);
+    setIsConfirmQuestion(false);
+    reset();
+  };
 
   /**
    * Handles form submission.
@@ -300,31 +299,31 @@ const VideoDocument = ({
         handleClose({
           questionId: activeQuestion?.id,
           listQuestion: currentListQuestion,
-        })
+        });
       } else {
         questionRef?.current?.onSubmit({
           activityId: activityId,
           tabId: tabId,
-          quizId: currentVideo?.quiz?.id || '',
+          quizId: currentVideo?.quiz?.id || "",
           then: () => {
-            setIsConfirmQuestion(true)
+            setIsConfirmQuestion(true);
           },
-        })
+        });
       }
-    } catch { }
-  }
+    } catch {}
+  };
 
   const handleGoTimeline = (time: number) => {
     if (streamRef.current) {
-      streamRef.current.currentTime = time
+      streamRef.current.currentTime = time;
     }
-  }
+  };
 
   const timeLine = [...(currentVideo?.file?.resource?.time_line || [])]?.sort(
     (a, b) => (Number(a?.time) || 0) - (Number(b.time) || 0),
-  )
+  );
 
-  const timeQuiz = Object.values(quizTimed?.current || [])
+  const timeQuiz = Object.values(quizTimed?.current || []);
 
   /**
    * @description check điều kiện xem có phải câu hỏi cuối cùng không
@@ -332,21 +331,21 @@ const VideoDocument = ({
   const atLastQuestion =
     timeQuiz?.[timeQuiz?.length - 1]?.find(
       (quiz) => quiz?.id === activeQuestion?.id,
-    )?.id === activeQuestion?.id
+    )?.id === activeQuestion?.id;
 
-  const [finishAll, setFinishAll] = useState<boolean>(false)
+  const [finishAll, setFinishAll] = useState<boolean>(false);
 
   useEffect(() => {
     if (atLastQuestion && isConfirmQuestion) {
-      setFinishAll(true)
+      setFinishAll(true);
     }
-  }, [atLastQuestion, isConfirmQuestion])
+  }, [atLastQuestion, isConfirmQuestion]);
 
   return (
     <div data-aos={ANIMATION.DATA_AOS}>
       <div
         className={clsx(
-          'mb-6 flex items-center justify-between gap-x-10 gap-y-2',
+          "mb-6 flex items-center justify-between gap-x-10 gap-y-2",
         )}
       >
         <div className="flex items-center gap-8">
@@ -362,21 +361,22 @@ const VideoDocument = ({
                     onChange={() => debouncedHandleSetCurrentVideo.current(v)}
                     {...(v?.file?.id === currentVideo?.file?.id
                       ? {
-                        checked: true,
-                      }
+                          checked: true,
+                        }
                       : { checked: false })}
-                    size={'small'}
+                    size={"small"}
                   ></SAPPRadio>
                   <span
-                    className={`radio-item-label  ${v?.file?.id === currentVideo?.file?.id
-                        ? 'text-bw-1'
-                        : 'text-gray-1'
-                      }`}
+                    className={`radio-item-label  ${
+                      v?.file?.id === currentVideo?.file?.id
+                        ? "text-gray-800"
+                        : "text-gray"
+                    }`}
                   >
                     Video {i + 1}
                   </span>
                 </label>
-              )
+              );
             })}
         </div>
         <div className="group relative z-[1051] hidden cursor-pointer select-none items-center md:flex">
@@ -384,10 +384,10 @@ const VideoDocument = ({
             <>
               {/* Icon for course video timeline */}
               <SappIcon
-                className="fill-bw-1 group-hover:text-primary"
+                className="fill-gray-800 group-hover:text-primary"
                 icon="course_video_timeline"
               ></SappIcon>
-              <span className="ml-2 text-bw-1 group-hover:text-primary">
+              <span className="ml-2 text-gray-800 group-hover:text-primary">
                 Timeline
               </span>
             </>
@@ -396,24 +396,24 @@ const VideoDocument = ({
           )}
 
           <div className="z-50 max-w-[6.25rem]: absolute right-0 bottom-0 hidden w-[25.75rem] py-1 !bg-transparent translate-y-full animate-fade-in-overlay group-hover:block">
-            <div className="h-full max-h-[25.75rem] relative rounded-lg py-4 flex-1 snap-y overflow-y-auto bg-white border border-gray-17 shadow-single-dialog overflow-hidden ">
+            <div className="h-full max-h-[25.75rem] relative rounded-lg py-4 flex-1 snap-y overflow-y-auto bg-white border border-gray-200 shadow-single-dialog overflow-hidden ">
               {timeLine?.map((e, i) => {
                 return (
                   <div
                     key={i}
-                    className="mx-3 grid grid-cols-[1.3fr,6fr] rounded-[4px] gap-3 p-3 text-sm text-[#050505] hover:bg-[#F9F9F9] hover:text-primary-2"
+                    className="mx-3 grid grid-cols-[1.3fr,6fr] rounded-[4px] gap-3 p-3 text-sm text-gray-800 hover:bg-[#F9F9F9] hover:text-primary-400"
                     onClick={() => {
-                      handleGoTimeline(e?.time)
+                      handleGoTimeline(e?.time);
                     }}
                   >
                     <div className="mim-w-[62px] text-[#3964EA]">
                       {formatTimer(e?.time)}
                     </div>
-                    <div className="text-inherit line-clamp-2 text-[#050505]">
+                    <div className="text-inherit line-clamp-2 text-gray-800">
                       {htmlToRaw(e?.text)}
                     </div>
                   </div>
-                )
+                );
               })}
             </div>
           </div>
@@ -426,8 +426,8 @@ const VideoDocument = ({
             onTimeUpdate: handleOnTimeUpdate,
             src:
               currentVideo?.file?.resource?.url
-                ?.replace(videoUrl || '', '')
-                .replace('/manifest/video.m3u8', '') || '',
+                ?.replace(videoUrl || "", "")
+                .replace("/manifest/video.m3u8", "") || "",
           }}
           pauseOnSeek={true}
           hideVideo={hideVideo}
@@ -440,17 +440,17 @@ const VideoDocument = ({
           <SappModal
             open={modalOpen}
             customTitle={
-              <div className="!text-xl font-bold text-bw-1">Question</div>
+              <div className="!text-xl font-bold text-gray-800">Question</div>
             }
             parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
-            okButtonCaption={`${finishAll ? 'Finish' : !isConfirmQuestion ? 'Submit' : 'Finish'}`}
+            okButtonCaption={`${finishAll ? "Finish" : !isConfirmQuestion ? "Submit" : "Finish"}`}
             buttonSize="small"
             size="max-w-full"
             position="center"
             isInner={isMobileView ? false : true}
             isBordered={true}
-            okButtonClass="!w-20 h-8.5 !px-0"
-            cancelButtonClass="!w-20 h-8.5 !px-0 !w-fit"
+            okButtonClass="!w-20 h-[34px] !px-0"
+            cancelButtonClass="!w-20 h-[34px] !px-0 !w-fit"
             footerButtonClassName="!justify-between items-center flex"
             handleSubmit={handleSubmit(() =>
               onSubmit(activeQuestion?.corrects ? true : false),
@@ -459,11 +459,11 @@ const VideoDocument = ({
               handleClose({
                 questionId: activeQuestion?.id,
                 listQuestion: currentListQuestion,
-              })
+              });
             }}
             closeAfterSubmit={false}
             colorCancel="textUnderline"
-            cancelButtonCaption={`${finishAll ? '' : !isConfirmQuestion ? 'Skip' : ''}`}
+            cancelButtonCaption={`${finishAll ? "" : !isConfirmQuestion ? "Skip" : ""}`}
           >
             <div className="py-5">
               <QuizComponent
@@ -482,7 +482,7 @@ const VideoDocument = ({
         </SAPPVideo>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default memo(VideoDocument)
+export default memo(VideoDocument);

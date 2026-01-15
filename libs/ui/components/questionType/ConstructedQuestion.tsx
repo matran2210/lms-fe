@@ -1,7 +1,19 @@
 "use client";
 import { CloseIcon, UploadIcon } from "@lms/assets";
-import { disableUnsavedChange, loginSlice, useFeature } from "@lms/contexts";
-import { DEFAULT_EDITOR_VALUE, DISPLAY_TYPE, generateSheetId, MY_COURSES, RESPONSE_OPTION, SheetData } from "@lms/core";
+import {
+  disableUnsavedChange,
+  loginSlice,
+ 
+  useFeature,
+} from "@lms/contexts";
+import {
+  DEFAULT_EDITOR_VALUE,
+  DISPLAY_TYPE,
+  generateSheetId,
+  MY_COURSES,
+  RESPONSE_OPTION,
+  SheetData,
+} from "@lms/core";
 import { convertMathHtmlToImage, runHighlight } from "@lms/utils";
 import clsx from "clsx";
 import { cloneDeep, isNull, isUndefined, uniqueId } from "lodash";
@@ -89,7 +101,6 @@ const EssayQuestionPreview = ({
   uniqueKey,
   isInTest = false,
   storageKey,
-  
 }: IPreviewProp) => {
   const { testServiceApi, router, dispatch} = useFeature();
 
@@ -567,7 +578,7 @@ const EssayQuestionPreview = ({
           !isNull(fileData.key) && !isUndefined(fileData.key) ? (
             <React.Fragment>
               <div className="sapp-upload-file-preview">
-                <div className="text-lg font-semibold text-bw-13">
+                <div className="text-lg font-semibold text-gray-800">
                   {fullData.done
                     ? "Your Answer File:"
                     : "Upload file to submit"}

@@ -7,7 +7,7 @@ type Props = {
 const StudentCell: FC<Props> = ({ dataColumn }) => (
   <div className="flex items-center">
     <div className="flex flex-col">
-      <span className="text-[#27272a]">{dataColumn ?? '-'}</span>
+      <span className="text-zinc-800">{dataColumn ?? '-'}</span>
     </div>
   </div>
 )

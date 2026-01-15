@@ -7,7 +7,7 @@ export default function CourseProgress({
   showStatus,
   progressPart,
 }: ICourseProgress) {
-  const textColorClass = enableCourse ? 'text-bw-15' : 'text-gray-2'
+  const textColorClass = enableCourse ? 'text-gray-700' : 'text-secondary-100'
 
   return (
     <div className="progress mb-6 h-8">
@@ -17,22 +17,20 @@ export default function CourseProgress({
             type={enableCourse ? iconType : 'expired'}
             className={`relative ${textColorClass}`}
           />
-          <p
-            className={`text-medium-sm font-normal ${textColorClass} ml-px pl-2`}
-          >
+          <p className={`text-sm font-normal ${textColorClass} ml-px pl-2`}>
             {enableCourse ? showStatus : 'Expired'}
           </p>
         </div>
         <div className="number">
-          <p className={`text-medium-sm font-normal ${textColorClass}`}>
+          <p className={`text-sm font-normal ${textColorClass}`}>
             {progressPart}%
           </p>
         </div>
       </div>
-      <div className="progressbar h-1.5 bg-gray-3">
+      <div className="progressbar h-1.5 rounded-[100px] bg-gray-200">
         <div
           className={`progress-percentage ${
-            enableCourse ? 'bg-primary ' : 'bg-gray-2'
+            enableCourse ? 'bg-primary ' : 'bg-secondary-100'
           } h-1.5 rounded-100`}
           style={{ width: `${progressPart}%` }}
         ></div>

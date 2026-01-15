@@ -29,7 +29,7 @@ export default function PdfModal({
       handleCloseScratchPad={onClose}
       position={position}
     >
-      <div className="h-full cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary">
+      <div className="h-full cursor-pointer select-none text-right text-base font-semibold text-gray-800 hover:text-primary">
         <FileViewer fileName={title} fileUrl={fileUrl} />
       </div>
     </ModalResizeable>

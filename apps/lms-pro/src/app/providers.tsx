@@ -28,7 +28,6 @@ import {
   SappConfirmDialogContainer,
 } from '@lms/ui'
 import { initializeGA, pageview } from '@lms/utils'
-import { ErrorBoundary } from '@sentry/nextjs'
 import { fetcher } from '@services/requestV2'
 import { App as AntdApp, ConfigProvider } from 'antd'
 import Aos from 'aos'
@@ -72,7 +71,6 @@ import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { store } from 'src/redux/store'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import ErrorRedirectPage from './error-redirect/page'
 dayjs.extend(utc)
 dayjs.extend(weekday)
 const showSupportWidget = [
@@ -278,7 +276,6 @@ function Providers({ children }: { children: ReactNode }) {
   }, [pathname])
 
   return (
-    <ErrorBoundary fallback={<ErrorRedirectPage />}>
       <AntConfigProvider>
         {/* <Provider store={store}> */}
         <PinnedNotifyProvider
@@ -368,7 +365,6 @@ function Providers({ children }: { children: ReactNode }) {
         </PinnedNotifyProvider>
         {/* </Provider> */}
       </AntConfigProvider>
-    </ErrorBoundary>
   )
 }
 

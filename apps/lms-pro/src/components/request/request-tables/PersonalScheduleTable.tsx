@@ -146,21 +146,21 @@ const PersonalScheduleTable = ({
       title: 'Approver',
       dataIndex: 'staff_assignee',
       render: (value: Partial<IUser>) => (
-        <div className="text-txt-secondary">{value?.detail?.full_name}</div>
+        <div className="text-gray-400">{value?.detail?.full_name}</div>
       ),
     },
     {
       title: 'Creator',
       dataIndex: 'creator',
       render: (value: Partial<IUser>) => (
-        <div className="text-txt-secondary">{value?.detail?.full_name}</div>
+        <div className="text-gray-400">{value?.detail?.full_name}</div>
       ),
     },
     {
       title: 'Create date',
       dataIndex: 'created_at',
       render: (value: string) => (
-        <div className="text-txt-secondary">
+        <div className="text-gray-400">
           {formatDate(value, DATE_TIME_FORMAT)}
         </div>
       ),
@@ -169,7 +169,7 @@ const PersonalScheduleTable = ({
       title: 'Note',
       dataIndex: 'note',
       render: (value: string) => (
-        <div className="text-txt-secondary">{value || '_ _ _ _ _ _'}</div>
+        <div className="text-gray-400">{value || '_ _ _ _ _ _'}</div>
       ),
     },
     {

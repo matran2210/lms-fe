@@ -65,7 +65,7 @@ const Recommendation = ({
             >
               {/* Header */}
               <div className="flex-shrink-0 border-b px-6 py-4">
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-gray-70000 text-lg font-semibold">
                   {COMMENTS?.STUDENT_COMMENT}
                 </h3>
               </div>

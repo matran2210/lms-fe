@@ -536,7 +536,7 @@ export default function MenuItem({
           >
             <div
               className={clsx(
-                "line-clamp-1 text-base font-semibold text-[#050505]",
+                "line-clamp-1 text-base font-semibold text-gray-800",
                 {
                   "group-hover:text-gray-800": !selected,
                   "!text-primary": isInMyProfile,
@@ -594,7 +594,7 @@ export default function MenuItem({
     <>
       {isActivity && name === TitleSidebar.NEW_NOTE && (
         <div className="mx-auto w-[calc(100%-48px)] min-w-[50px] text-center">
-          <Divider className="my-2 bg-[#DCDDDD]" />
+          <Divider className="my-2 bg-divider" />
         </div>
       )}
       <div

@@ -176,7 +176,7 @@ const TableQuestions = ({
           <div
             className={clsx(
               `rounded-[4px] px-2 py-0.5 text-xs font-normal leading-5.5 md:text-sm`,
-              answer?.is_correct && 'bg-green-7 text-green-6',
+              answer?.is_correct && 'bg-success-50 text-success',
               !answer?.is_correct && 'bg-error-50 text-error',
             )}
           >
@@ -222,14 +222,14 @@ const TableQuestions = ({
       ref={yourScoreDetailRef}
     >
       <div className="flex items-center gap-x-3">
-        <div className="mb-6 text-base font-semibold text-[#050505] md:text-lg xl:text-xl xl:font-medium">
+        <div className="mb-6 text-base font-semibold text-gray-800 md:text-lg xl:text-xl xl:font-medium">
           Your Answer Details{' '}
           <span
             className={clsx(
               'ml-5 rounded-sm px-1 py-1.5 text-sm md:text-base',
               gradingStatus === GRADE_STATUS.FINISHED_GRADING
-                ? 'bg-[#176CDD0D] text-blue-7'
-                : 'bg-[#FFB8001A] text-[#FFB800]',
+                ? 'text-acent-info bg-[#176CDD0D]'
+                : 'bg-[#FFB8001A] text-primary',
             )}
           >
             {getGradingStatusLabel(gradingStatus || '')}
@@ -250,7 +250,7 @@ const TableQuestions = ({
           )
         }}
       >
-        <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+        <CloseIcon className="transform stroke-gray-800 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
       </div>
       <div className="hidden rounded-xl bg-white p-8 md:block md:shadow-medium">
         <SappBaseTable

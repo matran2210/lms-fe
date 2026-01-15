@@ -48,7 +48,7 @@ const ChartACCAScore = ({ data, loading }: IProps) => {
                     </div>
                   </Tooltip>
                   <div className="w-full">
-                    <div className="relative h-2 w-full rounded-full bg-progress-active">
+                    <div className="relative h-2 w-full rounded-full bg-gray-200">
                       <div
                         className="absolute left-0 top-0 h-2 rounded-full bg-primary text-sm md:text-base"
                         style={{

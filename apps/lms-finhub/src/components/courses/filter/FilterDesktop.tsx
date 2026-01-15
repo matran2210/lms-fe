@@ -66,7 +66,7 @@ export default function DesktopFilter3Level({
   )
   return (
     <div className="hidden items-center filter md:flex">
-      <div className="pr-4 text-sm font-normal text-bw-15">
+      <div className="pr-4 text-sm font-normal text-gray-800">
         {`${totalResults} ${totalResults > 1 ? 'Results' : 'Result'}`}
       </div>
       <div className="flex items-center gap-2">

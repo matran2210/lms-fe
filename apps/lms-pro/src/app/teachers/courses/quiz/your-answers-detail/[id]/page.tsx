@@ -65,7 +65,7 @@ const TestResultDetail = () => {
 
   return (
     <FullScreenLayout title="Your Answer Details">
-      <div className="mx-auto max-w-1570">
+      <div className="mx-auto max-w-[1570px]">
         <div className="mt-5 px-5 xl:container md:px-10">
           <SappBreadCrumbs breadcrumbs={breadcrumbs} />
         </div>

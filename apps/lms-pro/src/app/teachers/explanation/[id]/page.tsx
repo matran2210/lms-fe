@@ -165,7 +165,7 @@ const Explanation = () => {
             }
           }}
         >
-          <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+          <CloseIcon className="transform stroke-gray-800 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
         </div>
         <ExplanationPackage
           getActiveQuestion={getActiveQuestion}

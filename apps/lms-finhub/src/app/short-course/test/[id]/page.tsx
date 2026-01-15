@@ -1810,7 +1810,7 @@ const TestDetail = () => {
                 : 'You should select an answer before click'
             }
             classNames={{
-              root: 'max-w-72 rounded-md',
+              root: 'max-w-[288px] rounded-md',
               body: 'text-sm !py-1 !px-2 flex items-center',
             }}
             getPopupContainer={(triggerNode) => triggerNode.parentElement!}
@@ -2161,7 +2161,7 @@ const TestDetail = () => {
                       </div>
                     </div>
                     <div
-                      className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-[#99A1B7]"
+                      className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-accent"
                       onMouseDown={() => setStartResize(true)}
                       onTouchStart={(e) => {
                         e.preventDefault()

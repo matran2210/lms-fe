@@ -117,7 +117,7 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
               <span>Account ID Number:</span>
               <span className="font-bold">
                 {' '}
-                <div className="col-span-1 max-w-[300px] flex-auto font-medium text-[#050505]">
+                <div className="col-span-1 max-w-[300px] flex-auto font-medium text-gray-800">
                   {programData?.hubspot_account_info}
                 </div>
               </span>
@@ -152,7 +152,7 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
                   {
                     key: '1',
                     label: (
-                      <div className="flex flex-none items-center text-base font-semibold text-[#374151] md:text-base lg:text-xl ">
+                      <div className="flex flex-none items-center text-base font-semibold text-gray-700 md:text-base lg:text-xl ">
                         {subject?.name}
                       </div>
                     ),

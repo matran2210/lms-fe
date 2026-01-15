@@ -26,7 +26,7 @@ export default function LearningOutcomeDesktop({
           className="flex cursor-pointer select-none justify-between"
           onClick={onClose}
         >
-          <h2 className="text-lg font-semibold leading-7 text-bw-15">
+          <h2 className="text-lg font-semibold leading-7 text-gray-800">
             {title}
           </h2>
           {visible ? <ArrowUpIcon /> : <ArrowDownIcon />}
@@ -45,7 +45,7 @@ export default function LearningOutcomeDesktop({
                 <div className="mt-[0.05em]">
                   <StarIcon />
                 </div>
-                <div className="flex select-none items-start gap-1 text-base font-normal text-bw-15">
+                <div className="flex select-none items-start gap-1 text-base font-normal text-gray-800">
                   <span>LO{index + 1}:</span>
                   <EditorReader text_editor_content={item.title} />
                 </div>

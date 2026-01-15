@@ -12,7 +12,7 @@ export default function CourseTitle({
   return (
     <div
       className={`name-course mb-4 text-base font-semibold lg:text-2xl xl:h-[64px] ${
-        !enableCourse ? 'text-gray-2' : 'text-bw-15'
+        !enableCourse ? 'text-secondary-100' : 'text-gray-800'
       }`}
     >
       <div

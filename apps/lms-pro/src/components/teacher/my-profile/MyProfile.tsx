@@ -123,6 +123,9 @@ const MyProfile = ({
         await dispatch(
           updateUser({ full_name, avatar: null, api: UserApi }),
         ).unwrap()
+        await dispatch(
+          updateUser({ full_name, avatar: null, api: UserApi }),
+        ).unwrap()
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
         dispatch(getMe(UserApi))
         // Đặt trạng thái isEdit thành false
@@ -135,6 +138,7 @@ const MyProfile = ({
       // Nếu có avatar
       if (avatar) {
         // Gọi hành động thunk updateUserAvatar để cập nhật avatar của người dùng
+        await dispatch(updateUserAvatar({ api: UserApi, avatar })).unwrap()
         await dispatch(updateUserAvatar({ api: UserApi, avatar })).unwrap()
         // Đặt lại giá trị của avatar
         handleSetAvatar(undefined)
@@ -149,6 +153,9 @@ const MyProfile = ({
       setOpenEditProfile(false)
       setReViewImageSrc(undefined)
       if (error?.response?.data?.error?.code === '403|1002') {
+        await dispatch(
+          getLogoutUser({ authManager: new AuthenticationManager() }),
+        )
         await dispatch(
           getLogoutUser({ authManager: new AuthenticationManager() }),
         )
@@ -315,7 +322,7 @@ const MyProfile = ({
       </form>
       {isMobileView && openEditProfile && (
         <FullScreenMobile
-          className="bg-gray-canvas px-4 pb-4"
+          className="bg-gray-100 px-4 pb-4"
           title={'My Profile'}
           open={openEditProfile}
           onClose={handleChangeToPreview}
@@ -491,7 +498,7 @@ const TextWrapper = ({
 
       <div
         className={clsx(
-          'max-w-[200px] flex-none text-txt-secondary md:w-[278.88px] lg:max-w-[50%]',
+          'max-w-[200px] flex-none text-gray-400 md:w-[278.88px] lg:max-w-[50%]',
           { 'hidden lg:mb-2 lg:block': isEdit },
         )}
       >

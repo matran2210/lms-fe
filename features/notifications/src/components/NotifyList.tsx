@@ -80,7 +80,7 @@ const NotifyList = ({
                       notifyItem?.avatar['50x50'] || notifyItem?.avatar?.ORIGIN
                     }
                     alt="avatar"
-                    className="h-14 w-14 rounded-full bg-[#F1F1F1] object-cover"
+                    className="h-14 w-14 rounded-full bg-gray-200 object-cover"
                     width={56}
                     height={56}
                   />
@@ -99,7 +99,7 @@ const NotifyList = ({
               </div>
               <div className="block">
                 <h4
-                  className="mb-1 line-clamp-2 text-base text-[#050505]"
+                  className="mb-1 line-clamp-2 text-base text-gray-800"
                   dangerouslySetInnerHTML={{
                     __html: notifyItem?.created_by
                       ? notifyItem?.title

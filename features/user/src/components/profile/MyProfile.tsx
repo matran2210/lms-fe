@@ -13,11 +13,22 @@ import {
 } from "@lms/contexts";
 import { AppType, USER_TYPE } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
-import { ButtonCancelSubmit, ButtonPrimary, ButtonSecondary, FullScreenMobile, HookFormTextField, HookFormTextFieldV2, ProfileSkeleton } from "@lms/ui";
 import {
-  convertHumanReadableToSnakeCase, formatDate, formatDateToSlash, VALIDATE_MAX,
+  ButtonCancelSubmit,
+  ButtonPrimary,
+  ButtonSecondary,
+  FullScreenMobile,
+  HookFormTextField,
+  HookFormTextFieldV2,
+  ProfileSkeleton,
+} from "@lms/ui";
+import {
+  convertHumanReadableToSnakeCase,
+  formatDate,
+  formatDateToSlash,
+  VALIDATE_MAX,
   VALIDATE_MIN,
-  VALIDATE_REQUIRED
+  VALIDATE_REQUIRED,
 } from "@lms/utils";
 import clsx from "clsx";
 import { StaticImageData } from "next/image";
@@ -34,7 +45,7 @@ interface IProps {
   setReViewImageSrc: Dispatch<
     SetStateAction<string | StaticImageData | undefined>
   >;
-  appType: AppType
+  appType: AppType;
 }
 
 const schema = z.object({
@@ -50,11 +61,11 @@ const MyProfile = ({
   avatar,
   handleSetAvatar,
   setReViewImageSrc,
-  appType
+  appType,
 }: IProps) => {
   const { isMobileView } = useTailwindBreakpoint();
   const { userApi, authManager, dispatch, useAppSelector } = useFeature();
-  const isLMSPRO = appType === AppType.LMS_PRO
+  const isLMSPRO = appType === AppType.LMS_PRO;
   const [openEditProfile, setOpenEditProfile] = useState(false);
   const { user, loading, loadingEditName } = useAppSelector?.(userReducer) || {};
   // Sử dụng hook useForm để quản lý form và xác thực dữ liệu
@@ -112,7 +123,9 @@ const MyProfile = ({
       // Nếu không có avatar và người dùng có avatar hiện tại
       if (!avatar && user?.detail?.avatar) {
         // Gọi hành động thunk updateUser để cập nhật tên và avatar của người dùng
-        await dispatch?.(updateUser({ full_name, avatar: null, api: userApi })).unwrap();
+        await dispatch?.(
+          updateUser({ full_name, avatar: null, api: userApi }),
+        ).unwrap();
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
         dispatch?.(getMe(userApi));
         // Đặt trạng thái isEdit thành false
@@ -125,7 +138,7 @@ const MyProfile = ({
       // Nếu có avatar
       if (avatar) {
         // Gọi hành động thunk updateUserAvatar để cập nhật avatar của người dùng
-        await dispatch?.(updateUserAvatar({api: userApi, avatar})).unwrap();
+        await dispatch?.(updateUserAvatar({ api: userApi, avatar })).unwrap();
         // Đặt lại giá trị của avatar
         handleSetAvatar(undefined);
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
@@ -240,7 +253,9 @@ const MyProfile = ({
               <TextWrapper
                 title="D.O.B"
                 value={
-                  user?.detail?.dob ? formatDateToSlash(user?.detail?.dob, true) : ""
+                  user?.detail?.dob
+                    ? formatDateToSlash(user?.detail?.dob, true)
+                    : ""
                 }
                 loading={!!loading}
                 control={control}
@@ -265,50 +280,52 @@ const MyProfile = ({
                 control={control}
                 isEdit={isEdit}
               />
-              {isLMSPRO && <>
-                <TextWrapper
-                  title="University"
-                  value={user?.detail?.university?.name ?? ""}
-                  loading={!!loading}
-                  control={control}
-                  isEdit={isEdit}
-                />
-                <TextWrapper
-                  title="Major"
-                  value={user?.detail?.major?.name}
-                  loading={!!loading}
-                  control={control}
-                  isEdit={isEdit}
-                />
-                <TextWrapper
-                  title="Field of work"
-                  value={user?.detail?.company_type ?? ""}
-                  loading={!!loading}
-                  control={control}
-                  isEdit={isEdit}
-                />
-                <TextWrapper
-                  title="Position"
-                  value={user?.detail?.company_position ?? ""}
-                  loading={!!loading}
-                  control={control}
-                  isEdit={isEdit}
-                />
-                <TextWrapper
-                  title="Main Class"
-                  value={user?.main_class?.join(",") ?? ""}
-                  loading={!!loading}
-                  control={control}
-                  hiddenOnEdit={isEdit}
-                />
-                <TextWrapper
-                  title="Deferred/Retake class"
-                  value={user?.reserve_retook_class?.join(", ") ?? ""}
-                  loading={!!loading}
-                  control={control}
-                  hiddenOnEdit={isEdit}
-                /></>} 
-              
+              {isLMSPRO && (
+                <>
+                  <TextWrapper
+                    title="University"
+                    value={user?.detail?.university?.name ?? ""}
+                    loading={!!loading}
+                    control={control}
+                    isEdit={isEdit}
+                  />
+                  <TextWrapper
+                    title="Major"
+                    value={user?.detail?.major?.name}
+                    loading={!!loading}
+                    control={control}
+                    isEdit={isEdit}
+                  />
+                  <TextWrapper
+                    title="Field of work"
+                    value={user?.detail?.company_type ?? ""}
+                    loading={!!loading}
+                    control={control}
+                    isEdit={isEdit}
+                  />
+                  <TextWrapper
+                    title="Position"
+                    value={user?.detail?.company_position ?? ""}
+                    loading={!!loading}
+                    control={control}
+                    isEdit={isEdit}
+                  />
+                  <TextWrapper
+                    title="Main Class"
+                    value={user?.main_class?.join(",") ?? ""}
+                    loading={!!loading}
+                    control={control}
+                    hiddenOnEdit={isEdit}
+                  />
+                  <TextWrapper
+                    title="Deferred/Retake class"
+                    value={user?.reserve_retook_class?.join(", ") ?? ""}
+                    loading={!!loading}
+                    control={control}
+                    hiddenOnEdit={isEdit}
+                  />
+                </>
+              )}
 
               {!isEdit && (
                 <TextWrapper
@@ -352,7 +369,7 @@ const MyProfile = ({
       </form>
       {isMobileView && openEditProfile && (
         <FullScreenMobile
-          className="bg-gray-canvas px-4 pb-4"
+          className="bg-gray-100 px-4 pb-4"
           title={"My Profile"}
           open={openEditProfile}
           onClose={handleChangeToPreview}
@@ -412,39 +429,38 @@ const MyProfile = ({
                     control={control}
                     isEdit
                   />
-                  {
-                    isLMSPRO && <>
-                     <TextWrapper
-                    title="University"
-                    value={user?.detail?.university?.name ?? ""}
-                    loading={!!loading}
-                    control={control}
-                    isEdit
-                  />
-                  <TextWrapper
-                    title="Major"
-                    value={user?.detail?.major?.name}
-                    loading={!!loading}
-                    control={control}
-                    isEdit
-                  />
-                  <TextWrapper
-                    title="Field of work"
-                    value={user?.detail?.company_type ?? ""}
-                    loading={!!loading}
-                    control={control}
-                    isEdit
-                  />
-                  <TextWrapper
-                    title="Position"
-                    value={user?.detail?.company_position ?? ""}
-                    loading={!!loading}
-                    control={control}
-                    isEdit
-                  />
+                  {isLMSPRO && (
+                    <>
+                      <TextWrapper
+                        title="University"
+                        value={user?.detail?.university?.name ?? ""}
+                        loading={!!loading}
+                        control={control}
+                        isEdit
+                      />
+                      <TextWrapper
+                        title="Major"
+                        value={user?.detail?.major?.name}
+                        loading={!!loading}
+                        control={control}
+                        isEdit
+                      />
+                      <TextWrapper
+                        title="Field of work"
+                        value={user?.detail?.company_type ?? ""}
+                        loading={!!loading}
+                        control={control}
+                        isEdit
+                      />
+                      <TextWrapper
+                        title="Position"
+                        value={user?.detail?.company_position ?? ""}
+                        loading={!!loading}
+                        control={control}
+                        isEdit
+                      />
                     </>
-                  }
-                 
+                  )}
                 </ul>
 
                 <div className="flex items-center justify-between gap-2">

@@ -5,18 +5,18 @@ import { SubjectOptionItem } from './SubjectList'
 import { useFeature, userReducer } from '@lms/contexts'
 
 interface IProps {
-  data: SubjectOptionItem
-  className?: string
-  isEdit: boolean
+  data: SubjectOptionItem;
+  className?: string;
+  isEdit: boolean;
   setMakeDefaultDrawer: React.Dispatch<
     React.SetStateAction<
       | {
-          status: boolean
-          course_category_name: 'CMA' | 'CFA' | 'ACCA'
+          status: boolean;
+          course_category_name: "CMA" | "CFA" | "ACCA";
         }
       | undefined
     >
-  >
+  >;
 }
 
 const SubjectItem = ({
@@ -26,12 +26,12 @@ const SubjectItem = ({
   setMakeDefaultDrawer,
 }: IProps) => {
   const { useAppSelector } = useFeature()
-  const { user } = useAppSelector?.(userReducer) || {}
+  const { user } = useAppSelector?.(userReducer) || {};
   return (
     <div className={className}>
       <div
         className={clsx(
-          'group rounded-md bg-gray-canvas p-3 text-sm hover:bg-primary-50 md:px-6 md:py-4 md:text-base',
+          "group rounded-md bg-gray-100 p-3 text-sm hover:bg-primary-50 md:px-6 md:py-4 md:text-base",
         )}
         onClick={() =>
           setMakeDefaultDrawer({
@@ -45,7 +45,7 @@ const SubjectItem = ({
             <div>
               <span className="font-bold text-secondary">{`${data.title} (${data.course_category_name})`}</span>
             </div>
-            <div className="mt-4 text-[#050505]">
+            <div className="mt-4 text-gray-800">
               <div className="w-fit">
                 <div className="flex items-center gap-2">
                   <Icon type="contact" />
@@ -73,7 +73,7 @@ const SubjectItem = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SubjectItem
+export default SubjectItem;

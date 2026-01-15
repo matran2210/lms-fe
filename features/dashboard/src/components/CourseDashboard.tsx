@@ -130,7 +130,7 @@ const CourseDashboard = ({
   return (
     <>
       <div
-        className={`flex w-full flex-col gap-4 bg-[#F9F9F9] md:gap-6 xl:gap-8`}
+        className={`flex w-full flex-col gap-4 bg-gray-100 md:gap-6 xl:gap-8`}
         data-aos={ANIMATION.DATA_AOS}
       >
         <div className="grid xl:grid-cols-2 xl:gap-8 grid-cols-1 gap-4 md:gap-6">

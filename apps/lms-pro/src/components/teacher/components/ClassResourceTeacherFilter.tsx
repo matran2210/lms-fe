@@ -52,7 +52,7 @@ const ClassResourceTeacherFilter: React.FC<IProps> = ({ control }) => {
         name="search_key"
         placeholder={'Search class resource'}
         placeholderIcon={<SearchIcon />}
-        inputClassName="placeholder:text-sm placeholder:text-[#99A1B7] placeholder:font-medium"
+        inputClassName="placeholder:text-sm placeholder:text-accent placeholder:font-medium"
         style={{
           borderRadius: '6px',
           height: 40,

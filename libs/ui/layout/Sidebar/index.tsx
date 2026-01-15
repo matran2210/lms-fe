@@ -94,7 +94,7 @@ export default function Sidebar({
           </div>
           {/* Divider */}
           <div className="mx-auto w-[calc(100%-70px)] min-w-[50px] text-center">
-            <Divider className="my-6 bg-[#DCDDDD]" />
+            <Divider className="my-6 bg-divider" />
           </div>
           <MenuItemsList
             options={
@@ -112,8 +112,8 @@ export default function Sidebar({
         ${guideStatus && guideStep === 3 ? "z-50" : ""}`}
         >
           {isLevel1 && (
-            <div className="mx-auto w-[calc(100%-48px)] bg-[#DCDDDD] text-center">
-              <Divider className="mb-8 mt-0 bg-[#DCDDDD]" />
+            <div className="mx-auto w-[calc(100%-48px)] bg-divider text-center">
+              <Divider className="mb-8 mt-0 bg-divider" />
             </div>
           )}
           <MenuItemsList

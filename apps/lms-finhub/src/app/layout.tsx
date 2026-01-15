@@ -14,15 +14,12 @@ import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import 'aos/dist/aos.css'
 import { ProvidersWrapper } from './provider'
-import { ErrorBoundary } from '@sentry/nextjs'
-import ErrorRedirectPage from './error-redirect/page'
 import Script from 'next/script'
 
 export const revalidate = 0
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <ErrorBoundary fallback={<ErrorRedirectPage />}>
       <html lang="vi">
         <body>
           <Script
@@ -32,6 +29,5 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <ProvidersWrapper>{children}</ProvidersWrapper>
         </body>
       </html>
-    </ErrorBoundary>
   )
 }
