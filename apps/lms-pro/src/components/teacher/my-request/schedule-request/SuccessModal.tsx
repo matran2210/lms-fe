@@ -9,6 +9,7 @@ interface IProps {
 const SuccessModal = ({ open, setOpen }: IProps) => {
   return (
     <SappModalV3
+      handleClose={() => setOpen(false)}
       open={open}
       icon={<CheckIcon />}
       header={'Your comment has been submitted successfully.'}
