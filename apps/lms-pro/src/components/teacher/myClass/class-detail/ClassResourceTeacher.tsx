@@ -158,16 +158,6 @@ export default function ClassResourceTeacher() {
         )),
     },
     {
-      title: 'Location',
-      render: (record: IClassResource) => (
-        <Tooltip placement="bottomLeft" title={record?.location}>
-          <div className={clsx(textTruncateStyle, 'font-normal')}>
-            {record?.location}
-          </div>
-        </Tooltip>
-      ),
-    },
-    {
       title: '',
       render: (record: IClassResource) => {
         const allowDownload = canDownload(record, isTeacher)
