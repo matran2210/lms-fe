@@ -1,18 +1,16 @@
-import {LayoutFilter} from '@lms/ui'
-import {SappTable} from '@lms/ui'
-import React, { useState } from 'react'
-import { useRouter } from 'next/router'
-import { formatDateFromUTC } from '@lms/utils'
-import StudentCell from '@components/teacher/components/StudentCell'
-import { TeacherAPI } from '@pages/api/teacher'
-import StudentFilter from '@components/teacher/components/StudentFilter'
-import { useForm } from 'react-hook-form'
-import { IStudentClassDetail } from '@lms/core'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
-import _, { round } from 'lodash'
-import { FOUNDATION } from '@lms/core'
-import { StudentKey } from '@pages/api/queryKey'
+import StudentCell from '@components/teacher/components/StudentCell'
+import StudentFilter from '@components/teacher/components/StudentFilter'
+import { FOUNDATION, IStudentClassDetail } from '@lms/core'
 import { useSappPaging } from '@lms/hooks'
+import { LayoutFilter, SappTable } from '@lms/ui'
+import { formatDateFromUTC } from '@lms/utils'
+import _, { round } from 'lodash'
+import { useParams } from 'next/navigation'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { StudentKey } from 'src/api/queryKey'
+import { TeacherAPI } from 'src/api/teacher'
 
 interface FilterParams {
   text?: string
@@ -24,8 +22,9 @@ const initialValues: FilterParams = {
 
 export default function Students() {
   const { control, reset, getValues } = useForm()
-  const router = useRouter()
-  const studentId = router?.query?.id as string
+  const param = useParams();
+  const { id } = param
+  const studentId = id as string
   const [params, setParams] = useState<FilterParams>(initialValues)
 
   const { data, pagination, isLoading, handleChangeParams, setPagination } =

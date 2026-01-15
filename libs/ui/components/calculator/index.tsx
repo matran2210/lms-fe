@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { calculate, isNumber } from "./logic/calculate";
 
@@ -8,8 +9,12 @@ import clsx from "clsx";
 
 interface IProps {
   isMobileCalc?: boolean;
+  isShortScreen?: boolean;
 }
-const Calculator = ({ isMobileCalc = false }: IProps) => {
+const Calculator = ({
+  isMobileCalc = false,
+  isShortScreen = false,
+}: IProps) => {
   const [lastExpression, setLastExpression] = useState("");
   const [calc, setCalc] = useState({
     total: null,
@@ -69,7 +74,7 @@ const Calculator = ({ isMobileCalc = false }: IProps) => {
   return (
     <div
       className={clsx("calc", {
-        "!w-64": isMobileCalc,
+        "!w-64": isMobileCalc || isShortScreen,
       })}
       style={{
         boxShadow: "0 0 10px rgba(0,0,0,0.1)",
@@ -85,6 +90,7 @@ const Calculator = ({ isMobileCalc = false }: IProps) => {
         click={(e) => handleClick(calc, e)}
         keyDown={handleKeyDown}
         isMobileCalc={isMobileCalc}
+        isShortScreen={isShortScreen}
       />
       <Warning warning={badDivision} />
     </div>

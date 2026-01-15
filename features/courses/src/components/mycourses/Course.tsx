@@ -1,10 +1,16 @@
-import { CourseTimeIcon, GraduationCapIcon, Icon } from '@lms/assets';
+import { CourseTimeIcon, GraduationCapIcon, Icon } from "@lms/assets";
 import { useCourseContext, useFeature } from "@lms/contexts";
 import { ButtonSecondary, Tooltip } from "@lms/ui";
-import { clearStylesHtml, convertHourToDayLeft, convertLocalTimeToUTC, getUserPrefix, trackGAEvent, truncateString } from "@lms/utils";
+import {
+  clearStylesHtml,
+  convertHourToDayLeft,
+  convertLocalTimeToUTC,
+  getUserPrefix,
+  trackGAEvent,
+  truncateString,
+} from "@lms/utils";
 import { differenceInDays, parseISO, startOfDay } from "date-fns";
 import { isNull, round } from "lodash";
-import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 // import {Tooltip} from '@lms/ui' lỗi monorepo
@@ -42,13 +48,12 @@ const Course = ({
   refetch: () => void;
   isTeacher?: boolean;
 }) => {
-  const {courseApi, pageLink} = useFeature();
+  const {courseApi, pageLink, router} = useFeature();
   const [openExtend, setOpenExtend] = useState<boolean>(false);
   const [openActive, setOpenActive] = useState<boolean>(false);
   const [timeActive, setTimeActive] = useState<number>();
   const [openLesson, setOpenLesson] = useState<boolean>(false);
   const [openClass, setOpenClass] = useState<boolean>(false);
-  const router = useRouter();
   const student = course?.classes?.[0]?.class_user_instances?.[0];
   const classInstance = course?.classes[0];
   const [daysDifference, setDaysDifference] = useState(0);
@@ -212,7 +217,9 @@ const Course = ({
       const params = {
         classId: foundation_class_id ? foundation_class_id : classInstance?.id,
       };
-      const res = await courseApi.activeCourse(params) as { success: boolean };
+      const res = (await courseApi.activeCourse(params)) as {
+        success: boolean;
+      };
       if (res?.success) {
         router.push(
           `${userPrefix}/courses/my-course/${foundation_class_id || classInstance?.id}`,
@@ -227,7 +234,9 @@ const Course = ({
   }
   async function extendCourse() {
     try {
-      const res = await courseApi.extendCourse({ classId: classInstance?.id }) as { success: boolean };
+      const res = (await courseApi.extendCourse({
+        classId: classInstance?.id,
+      })) as { success: boolean };
       if (res?.success) {
         refetch();
         toast.success("Gia hạn hành công!");
@@ -252,7 +261,8 @@ const Course = ({
         course?.course_type == COURSE_TYPE.PRACTICE_COURSE) &&
       (category == PROGRAM.ACCA ||
         category == PROGRAM.CFA ||
-        category == PROGRAM.CMA);
+        category == PROGRAM.CMA ||
+        category == PROGRAM.LD);
 
     // Redirect to dashboard if the course type is practice, normal
     const basePath = `${userPrefix}/courses/my-course/${classInstance?.id}`;
@@ -321,7 +331,7 @@ const Course = ({
     classInstance?.class_user_instances?.[0]?.started_at,
   );
   const isNotOpened = !classInstance?.class_user_instances?.[0]?.is_opened;
-  const isCanceled = course.status === CLASS_USER_STATUS.CANCELED;
+  const isCanceled = classInstance?.status === CLASS_USER_STATUS.CANCELED;
 
   const courseAction = () => {
     // Handle pending lesson cases
@@ -469,7 +479,7 @@ const Course = ({
           hideBadge={true}
           badgeCode={{
             badge: category,
-            className: "bg-badge-200 text-badge-500 font-medium",
+            className: "bg-[#B3CEE0] text-[#08719D] font-medium",
           }}
           classNameCard="lg:h-[434px] md:h-[390px] h-[312px]"
           onClick={() => {
@@ -573,7 +583,7 @@ const Course = ({
                       <Icon
                         type={enableCourse ? iconType : "expired"}
                         className={`relative ${
-                          enableCourse ? "text-[#050505]" : "text-gray-300"
+                          enableCourse ? "text-gray-800" : "text-gray-300"
                         }`}
                       />
                       <p
@@ -587,7 +597,7 @@ const Course = ({
                     <div className="number">
                       <p
                         className={`text-sm font-normal ${
-                          enableCourse ? "text-[#050505]" : "text-gray-300"
+                          enableCourse ? "text-gray-800" : "text-gray-300"
                         }`}
                       >
                         {progressPart}%

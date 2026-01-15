@@ -5,7 +5,6 @@ import { useCourseContext } from '@lms/contexts'
 import { ROUTES, TEST_TYPE_ENUM } from '@lms/core'
 import { Collapse } from 'antd'
 import clsx from 'clsx'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { SectionContentProps } from 'src/type/courses-3-level'
 import {
@@ -16,6 +15,7 @@ import {
 } from '../card/accordion/utils'
 import { ArrowDownIcon } from '../icons'
 import TestModal from '../popup/TestModal'
+import { useParams, useRouter } from 'next/navigation'
 
 const { Panel } = Collapse
 
@@ -25,7 +25,8 @@ export default function SectionContentAccoridior({
   // refetch,
 }: SectionContentProps) {
   const router = useRouter()
-  const courseId = router.query.courseId
+  const params = useParams()
+  const courseId = params.courseId
   const [open, setOpen] = useState(false)
   const [dataTest, setDataTest] = useState<any>(null)
   const [activePanelKey, setActivePanelKey] = useState<string[]>([])
@@ -36,7 +37,7 @@ export default function SectionContentAccoridior({
 
   const activeKey = sections.findIndex((section) => {
     if (section.children.length > 0) {
-      return section.children.some((child) => child.id === router.query.id)
+      return section.children.some((child) => child.id === params.id)
     }
     return false
   })
@@ -116,8 +117,8 @@ export default function SectionContentAccoridior({
                 {isStorySection && storyInstances?.length ? (
                   <>
                     {storyInstances?.length > 0 && (
-                      <div className="mb-2 select-none text-ssm md:mb-2 md:text-sm md:leading-5.5">
-                        <div className="select-none text-gray-1 md:font-medium md:text-bw-15">
+                      <div className="mb-2 select-none text-xs md:mb-2 md:text-sm md:leading-5.5">
+                        <div className="select-none text-gray md:font-medium md:text-gray-800">
                           {pluralize(
                             storyInstances?.length,
                             'Case study',
@@ -139,7 +140,7 @@ export default function SectionContentAccoridior({
                         return (
                           <div
                             key={idx}
-                            className="group flex items-center justify-between gap-4 overflow-hidden rounded-md hover:bg-gray-4 md:px-2 md:py-2"
+                            className="group flex items-center justify-between gap-4 overflow-hidden rounded-md hover:bg-gray-100 md:px-2 md:py-2"
                           >
                             <div className="flex gap-2">
                               <div className="flex-shrink-0">
@@ -164,29 +165,9 @@ export default function SectionContentAccoridior({
                                         ?.id as string | undefined
 
                                       if (isCompleted && attemptId) {
-                                        router.push({
-                                          pathname: `/case-study/result/${attemptId}`,
-                                          query: {
-                                            class_user_id: class_user_id,
-                                            class_id: router?.query?.courseId,
-                                            course_section_id:
-                                              router?.query?.id,
-                                            is_from_activity: true,
-                                          },
-                                        })
+                                        router.push(`/case-study/result/${attemptId}?class_user_id=${class_user_id}&class_id=${params?.courseId}&course_section_id=${params?.id}&is_from_activity=true`)
                                       } else {
-                                        router.push({
-                                          pathname: `/case-study/${topicId}`,
-                                          query: {
-                                            quiz_id: quizId,
-                                            class_user_id: class_user_id,
-                                            caseStudyId,
-                                            class_id: router?.query?.courseId,
-                                            course_section_id:
-                                              router?.query?.id,
-                                            is_from_activity: true,
-                                          },
-                                        })
+                                        router.push(`/case-study/${topicId}?quiz_id=${quizId}&class_user_id=${class_user_id}&caseStudyId=${caseStudyId}&class_id=${params?.courseId}&course_section_id=${params?.id}&is_from_activity=true`)
                                       }
                                     }}
                                   >
@@ -232,19 +213,19 @@ export default function SectionContentAccoridior({
               className="border-none"
             >
               <div className="flex flex-col">
-                <div className="mb-2 flex items-center gap-2 text-ssm md:mb-4 md:text-sm md:leading-5.5">
-                  <span className="select-none text-gray-1 md:font-medium md:text-bw-15">
+                <div className="mb-2 flex items-center gap-2 text-xs md:mb-4 md:text-sm md:leading-5.5">
+                  <span className="select-none text-gray md:font-medium md:text-gray-800">
                     {pluralize(
                       section.activity_count,
                       'Activity',
                       'Activities',
                     )}
                   </span>
-                  <span className="select-none text-gray-1 md:hidden">|</span>
-                  <span className="select-none text-gray-1 md:hidden">
+                  <span className="select-none text-gray md:hidden">|</span>
+                  <span className="select-none text-gray md:hidden">
                     {totalDuration}
                   </span>
-                  <span className="hidden select-none text-gray-1 md:inline-block">
+                  <span className="hidden select-none text-gray md:inline-block">
                     ({totalDuration})
                   </span>
                 </div>
@@ -258,7 +239,7 @@ export default function SectionContentAccoridior({
                       activity?.learning_progress
                         ?.total_course_sections_completed > 0
 
-                    const selectedActivity = activity?.id === router.query.id
+                    const selectedActivity = activity?.id === params.id
                     const isLock =
                       activity?.course_section_link_parents?.[0]
                         ?.is_preview_locked
@@ -271,7 +252,7 @@ export default function SectionContentAccoridior({
                       <>
                         <div
                           key={activityIndex}
-                          className={`group mb-3 flex cursor-pointer flex-col justify-between gap-1 rounded-md p-0 hover:bg-gray-4 md:mb-2 md:flex-row md:items-center md:gap-4 md:p-2 md:hover:text-primary${selectedActivity ? 'bg-gray-4 text-primary' : ''}`}
+                          className={`group mb-3 flex cursor-pointer flex-col justify-between gap-1 rounded-md p-0 hover:bg-gray-100 md:mb-2 md:flex-row md:items-center md:gap-4 md:p-2 md:hover:text-primary${selectedActivity ? 'bg-gray-100 text-primary' : ''}`}
                           onClick={(e) => {
                             e.stopPropagation()
                             if (isLock) {
@@ -321,7 +302,7 @@ export default function SectionContentAccoridior({
                                 </span>
                               </Tooltip>
 
-                              <div className="flex gap-3 text-ssm text-gray-1 md:hidden">
+                              <div className="flex gap-3 text-xs text-gray md:hidden">
                                 {activity?.course_section_type ===
                                   'ACTIVITY' && (
                                   <span className="md:group-hover:text-primary">
@@ -344,7 +325,7 @@ export default function SectionContentAccoridior({
                             <CompletedIcon className="shrink-0" />
                           ) : activity?.course_section_type ==
                             TEST_TYPE_ENUM.ACTIVITY ? (
-                            <span className="hidden shrink-0 select-none text-right text-sm text-gray-1 group-hover:text-primary md:block">
+                            <span className="hidden shrink-0 select-none text-right text-sm text-gray group-hover:text-primary md:block">
                               {formatDurationMenuActivity(activity?.duration)}
                             </span>
                           ) : null}

@@ -1,13 +1,13 @@
 // components/LinkedInAddCertificateButton.tsx
-import React from 'react'
+import React from "react";
 
 interface LinkedInAddCertificateButtonProps {
-  certName: string
-  orgName: string
-  issueYear: number
-  issueMonth: number
-  certUrl: string
-  certId: string
+  certName: string;
+  orgName: string;
+  issueYear: number;
+  issueMonth: number;
+  certUrl: string;
+  certId: string;
 }
 
 const LinkedInAddCertificateButton: React.FC<
@@ -20,18 +20,18 @@ const LinkedInAddCertificateButton: React.FC<
     `&issueYear=${issueYear}` +
     `&issueMonth=${issueMonth}` +
     `&certUrl=${encodeURIComponent(certUrl)}` +
-    `&certId=${encodeURIComponent(certId)}`
+    `&certId=${encodeURIComponent(certId)}`;
 
   return (
     <a
       href={linkedInUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="bg-blue-600 hover:bg-blue-700 rounded-lg px-4 py-2 font-medium text-white shadow-md"
+      className="bg-blue-600 hover:bg-acent-info00 rounded-lg px-4 py-2 font-medium text-white shadow-md"
     >
       Add to LinkedIn
     </a>
-  )
-}
+  );
+};
 
-export default LinkedInAddCertificateButton
+export default LinkedInAddCertificateButton;

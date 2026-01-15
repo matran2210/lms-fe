@@ -1,11 +1,11 @@
 import { SappHookFormSelect } from '@lms/ui'
 import { HookFormTextField } from '@lms/ui'
-import { listStatusMyClass } from 'src/pages/teachers/my-class/index'
-import { TeacherAPI } from '@pages/api/teacher'
+import { TeacherAPI } from 'src/api/teacher'
 import { useState } from 'react'
 import { Control } from 'react-hook-form'
 import { debounce } from '@utils/helpers'
 import { isEmpty } from 'lodash'
+import { listStatusMyClass } from 'src/constants'
 
 interface MyClassFilterProps {
   control: Control<any>

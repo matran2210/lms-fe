@@ -16,7 +16,7 @@ const ActionDiscussion = ({
       <div className="flex flex-row items-center">
         <div
           onClick={onClick}
-          className="cursor-pointer text-sm text-[#050505] underline"
+          className="cursor-pointer text-sm text-gray-800 underline"
         >
           {titleSecondary}
         </div>

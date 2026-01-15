@@ -1,41 +1,42 @@
-import { ActiveIcon } from '@lms/assets'
-import { SappModalV3 } from '@lms/ui'
-import { Dispatch, SetStateAction } from 'react'
+import { ActiveIcon } from "@lms/assets";
+import { SappModalV3 } from "@lms/ui";
+import { Dispatch, SetStateAction } from "react";
 
 interface IProps {
-  open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>
-  activeCourse: () => void
-  time?: number
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  activeCourse: () => void;
+  time?: number;
 }
 const PopupActive = ({ open, setOpen, activeCourse, time = 60 }: IProps) => {
   const handleCancel = () => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
   const onOk = () => {
-    setOpen(false)
-    activeCourse()
-  }
+    setOpen(false);
+    activeCourse();
+  };
 
   const ContentActiveCourse = () => {
     return (
       <div className="justify-center self-stretch text-center">
         <span className="text-base font-normal leading-normal text-gray-800">
-          You will have{' '}
+          You will have{" "}
         </span>
         <span className="text-base font-bold leading-normal text-primary">
-          {time} {time > 1 ? 'days' : 'day'}
+          {time} {time > 1 ? "days" : "day"}
         </span>
         <span className="text-base font-normal leading-normal text-gray-800">
-          {' '}
+          {" "}
           from the activation date to study this course
         </span>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <SappModalV3
+      handleClose={handleCancel}
       open={open}
       handleCancel={handleCancel}
       onOk={onOk}
@@ -49,7 +50,7 @@ const PopupActive = ({ open, setOpen, activeCourse, time = 60 }: IProps) => {
       cancelButtonCaption="I will begin later"
       isUnderLine
     />
-  )
-}
+  );
+};
 
-export default PopupActive
+export default PopupActive;

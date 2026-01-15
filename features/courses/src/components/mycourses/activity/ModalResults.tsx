@@ -48,7 +48,7 @@ const ModalResults = ({
           className="absolute right-6 top-5  ml-auto cursor-pointer"
           onClick={handleCancel}
         >
-          <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+          <CloseIcon className="transform stroke-gray-800 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
         </div>
         <QuizResultComponent
           questionResponse={modalResult?.questions || []}

@@ -5,7 +5,6 @@ import {
   ENTRANCE_TEST_TABLE_RESULT
 } from "@lms/core";
 import { setCookie } from "@lms/utils";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 interface IProps {
@@ -13,9 +12,8 @@ interface IProps {
 }
 
 export const RouteGuard = ({ children }: IProps) => {
-  const { userApi } = useFeature();
+  const { userApi, router } = useFeature();
 
-  const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
   const dispatch = useAppDispatch();
   const userSlice = useAppSelector(userReducer);

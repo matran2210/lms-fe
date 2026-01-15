@@ -208,7 +208,7 @@ const ProfileHeader = ({
                       <div role="status">
                         <svg
                           aria-hidden="true"
-                          className="fill-blue-600 text-[#DCDDDD]00 h-8 w-8 animate-spin dark:text-[#4b5563]"
+                          className="fill-blue-600 text-divider h-8 w-8 animate-spin dark:text-[#4b5563]"
                           viewBox="0 0 100 101"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"

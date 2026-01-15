@@ -26,16 +26,16 @@ const ResultRow = ({
 
   return (
     <>
-      <td className="w-[72px] min-w-[165px] border-b border-dashed border-[#DCDDDD] py-5 pl-11 text-base text-[#050505]">
+      <td className="w-[72px] min-w-[165px] border-b border-dashed border py-5 pl-11 text-base text-gray-800">
         {type}
       </td>
-      <td className="w-[36%] min-w-[400px] border-b border-dashed border-[#DCDDDD] py-5 text-base text-[#050505]">
+      <td className="w-[36%] min-w-[400px] border-b border-dashed border py-5 text-base text-gray-800">
         {partName}
       </td>
-      <td className="w-[17%] min-w-[190px] border-b border-dashed border-[#DCDDDD] py-5 text-base text-[#050505]">
+      <td className="w-[17%] min-w-[190px] border-b border-dashed border py-5 text-base text-gray-800">
         {chapter}
       </td>
-      <td className="flex min-w-[132px] justify-between border-b border-dashed border-[#DCDDDD] py-5 pr-14 text-base text-[#050505]">
+      <td className="flex min-w-[132px] justify-between border-b border-dashed border py-5 pr-14 text-base text-gray-800">
         <div className="flex w-full justify-between gap-x-5">
           <span>
             {correctStatus ? (
@@ -52,7 +52,7 @@ const ResultRow = ({
           )}
         </div>
       </td>
-      <td className="w-[7%] min-w-[78px] border-b border-dashed border-[#DCDDDD] py-5 text-center text-base text-[#050505]">
+      <td className="w-[7%] min-w-[78px] border-b border-dashed border py-5 text-center text-base text-gray-800">
         {formattedTime}
       </td>
     </>

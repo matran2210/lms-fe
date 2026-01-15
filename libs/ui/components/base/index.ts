@@ -15,7 +15,6 @@ export { default as useClickOutside } from "./clickoutside/HookClick";
 export * from "./confirm-dialog/index";
 export * from "./date/index";
 export { default as HookFormDateRangePicker } from "./date-range/HookFormDateRangePicker";
-export { default as DeviceItem } from "./deviceItem/DeviceItem";
 export * from "./drawer/index";
 export * from "./editor/index";
 export { default as FileViewer } from "./fileViewer/FileViewer";

@@ -24,6 +24,7 @@ const ChangeAnywayModal = ({
 }: IProps) => {
   return (
     <SappModalV3
+      handleClose={() => setOpenConfirmModal(false)}
       open={openConfirmModal}
       cancelButtonCaption="No"
       okButtonCaption="Change Anyway"
@@ -40,7 +41,7 @@ const ChangeAnywayModal = ({
       loading={isChangingLoad}
     >
       Your learning progress in the Revision class for the{' '}
-      <span className="text-sm font-medium text-[#050505]">
+      <span className="text-sm font-medium text-gray-800">
         {exams?.current_exam_name}
       </span>{' '}
       exam cannot be saved. Do you want to continue making changes?

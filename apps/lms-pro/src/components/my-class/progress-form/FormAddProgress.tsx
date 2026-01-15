@@ -1,27 +1,22 @@
-import { SAPPInput } from '@lms/ui'
-import { SAPPButtonV2 } from '@lms/ui'
-import { HookformTimePicker } from '@lms/ui'
-import { SAPPSelect } from '@lms/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ProgressAPI } from '@pages/api/progress'
+import { confirmDialog, useAppDispatch } from '@lms/contexts'
+import {
+  CONFIRM_CANCEL, IContentCompleted,
+  IDefaultFormAddProgress,
+  ILesson,
+  IRequestCreateProgress
+} from '@lms/core'
+import { HookformTimePicker, SAPPButtonV2, SappIcon, SAPPInput, SAPPSelect } from '@lms/ui'
+import { buildQueryString, sortSectionsByPosition } from '@lms/utils'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { Drawer } from 'antd'
-import { useRouter } from 'next/router'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useLayoutEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import {SappIcon} from '@lms/ui'
-import { CONFIRM_CANCEL } from '@lms/core'
-import { confirmDialog, useAppDispatch } from '@lms/contexts'
-import {
-  IContentCompleted,
-  IDefaultFormAddProgress,
-  ILesson,
-  IRequestCreateProgress,
-} from '@lms/core'
+import { ProgressAPI } from 'src/api/progress'
 import { z } from 'zod'
 import TreeProgress from './TreeProgress'
-import { sortSectionsByPosition } from '@lms/utils'
 
 const defaultValues = {
   lesson: undefined,
@@ -40,10 +35,14 @@ export interface IProps {
 
 function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
   const router = useRouter()
-  const currentQuery = { ...router.query }
-  const params = router.query?.id
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const query = Object.fromEntries(searchParams.entries())
+
+  const currentQuery = { ...query }
+  const params = query?.id
   const dispatch = useAppDispatch()
-  const { id } = router.query
+  const { id } = query
   const [lesson, setLesson] = useState<ILesson[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [treeDataNotConvert, setTreeDataNotConvert] = useState<
@@ -180,14 +179,7 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
           ...currentQuery,
           classProgress: data?.data?.progress || 0,
         }
-        router.push(
-          {
-            pathname: router.pathname,
-            query: updatedQuery,
-          },
-          undefined,
-          { shallow: true },
-        )
+        router.push(`${pathname}?${buildQueryString(updatedQuery)}`)
         toast.success('Update successful')
         setOpen(false)
         refresh?.()

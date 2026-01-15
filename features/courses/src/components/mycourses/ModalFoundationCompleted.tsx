@@ -1,12 +1,12 @@
-import { ActiveIcon } from '@lms/assets'
-import { SappModalV3 } from '@lms/ui'
-import React from 'react'
+import { ActiveIcon } from "@lms/assets";
+import { SappModalV3 } from "@lms/ui";
+import React from "react";
 
 interface IModalFoundationCompletedProps {
-  openContinue: boolean
-  handleSkipCourse: () => void
-  handleContinueFoundation: () => void
-  handleClose: () => void
+  openContinue: boolean;
+  handleSkipCourse: () => void;
+  handleContinueFoundation: () => void;
+  handleClose: () => void;
 }
 
 const ModalFoundationCompleted = ({
@@ -38,7 +38,7 @@ const ModalFoundationCompleted = ({
         away?
       </div>
     </SappModalV3>
-  )
-}
+  );
+};
 
-export default ModalFoundationCompleted
+export default ModalFoundationCompleted;

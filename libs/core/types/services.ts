@@ -9,12 +9,13 @@ import {
   VerifyOtpReq,
 } from "../../state";
 import { ExamInformation, IQuestion } from "./course";
+import { IExamPrediction, ILearningResult, IMockTestResult, IOverProgress, ITopicProgress, IWeeklyReport } from "./dashboard";
 import {
   IAnswerQuizLastestAttempt,
   IQuizResultList,
   IScoreDetails,
 } from "./quiz";
-import { AxiosPromise } from "axios";
+import { AxiosPromise, AxiosResponse } from "axios";
 
 export interface IAuthManager {
   getToken(): string;
@@ -296,4 +297,26 @@ export interface ITestServiceAPI {
       name: string;
     }>
   >
+}
+
+export interface ICertificateAPI {
+  uploadImageToLinkedIn: (
+    token: string,
+    personURN: string,
+    shareUrl: string,
+    text: string,
+  ) => Promise<AxiosResponse<any, any, {}>>;
+}
+export interface IDashboardAPI {
+  getOverProgress: (id: string) => Promise<IResponse<IOverProgress>>
+
+  getTopicProgress:(id: string)=> Promise<IResponse<ITopicProgress[]>>
+
+  getWeeklyReport:(id: string)=>Promise<IResponse<IWeeklyReport>>
+
+  getLearningResults:(id: string)=> Promise<IResponse<ILearningResult[]>> 
+
+  getMockTestResults:(id: string)=> Promise<IResponse<IMockTestResult>>
+
+  getExamPrediction:(id: string)=> Promise<IResponse<IExamPrediction>> 
 }

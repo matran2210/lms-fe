@@ -1,8 +1,6 @@
 import { InfoIcon } from '@lms/assets'
 import getConfig from 'next/config'
 import React, { Dispatch, SetStateAction } from 'react'
-const { publicRuntimeConfig } = getConfig()
-export const { apiURL } = publicRuntimeConfig
 import {
   IOpenReasonModal,
   statusColor,
@@ -13,11 +11,11 @@ import PrimaryInformation from 'src/components/teacher/my-request/schedule-reque
 import { IScheduleRequestItem } from 'src/type/teachers/request-schedule.interface'
 import { StatusRequestSchedule } from '@lms/core'
 import { useQuery } from 'react-query'
-import { TeacherAPI } from '@pages/api/teacher'
+import { TeacherAPI } from 'src/api/teacher'
 import clsx from 'clsx'
 import InfoItem from './InfoItem'
 import StatusItem from './StatusItem'
-import { useRouter } from 'next/router'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { SappDrawer } from '@lms/ui'
 import { sappFormatDate } from '@lms/utils'
 
@@ -41,7 +39,8 @@ const DetailRequestModal = ({
   setOpenReasonModal,
   handleUpdateStatus,
 }: IProps) => {
-  const router = useRouter()
+    const searchParam = useSearchParams()
+    const query = Object.fromEntries(searchParam.entries())
   const requestId = selectedRequest?.id
   const isPending = selectedRequest?.status === StatusRequestSchedule.PENDING
   const isApproved = selectedRequest?.status === StatusRequestSchedule.APPROVED
@@ -69,7 +68,7 @@ const DetailRequestModal = ({
          *
          * @returns {object} - Dữ liệu lịch trình yêu cầu của giáo viên.
          */
-        const id = requestId || (router.query.request_id as string)
+        const id = requestId || (query.request_id as string)
         if (!id) throw new Error('Request ID is required')
         return await TeacherAPI.getRequestScheduleById(id)
       } catch (error) {
@@ -155,10 +154,10 @@ const DetailRequestModal = ({
       footerClassName={clsx('flex !justify-end gap-4', {
         'px-0': isApproved,
       })}
-      headerClassName="!bg-white !text-black border border-b-solid border-[#7E8299] px-8 py-5 text-xl"
+      headerClassName="!bg-white !text-black border border-b-solid border-gray px-8 py-5 text-xl"
       sizeTextBtn="medium"
       cancelButtonClassName={clsx('font-medium rounded-md no-underline', {
-        '!bg-[#F9F9F9] hover:!bg-[#D8D8E5] !text-[#78829D] !me-0': isPending,
+        '!bg-gray-100 hover:!bg-gray-200 !text-[#78829D] !me-0': isPending,
         '!bg-[#D20306] !text-white hover:bg-[#D20306]': isApproved,
       })}
       submitButtonClassName="rounded-md"
@@ -170,7 +169,7 @@ const DetailRequestModal = ({
             {selectedRequest?.class?.code || data?.data?.class?.code}
           </div>
           <div className="flex items-center gap-2">
-            <div className="text-sm text-[#99A1B7]">Processing deadline:</div>
+            <div className="text-sm text-accent">Processing deadline:</div>
             <div
               className={clsx('flex items-center gap-2 text-sm', {
                 'text-[#D20306]': isOverdue,

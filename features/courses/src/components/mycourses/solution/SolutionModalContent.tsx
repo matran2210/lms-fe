@@ -47,7 +47,7 @@ const SolutionModalContent = ({
       className={`pt-6 ${classModalParent} h-[calc(100vh-60px)] overflow-y-auto`}
     >
       <div
-        className={`topic ${classModalContent} text-base text-[#050505] [&>.content]:max-h-full [&>.content]:overflow-y-auto [&>img]:mx-auto [&>img]:my-6 [&>img]:max-w-[225px] [&>p]:mb-6`}
+        className={`topic ${classModalContent} text-base text-gray-800 [&>.content]:max-h-full [&>.content]:overflow-y-auto [&>img]:mx-auto [&>img]:my-6 [&>img]:max-w-[225px] [&>p]:mb-6`}
         dangerouslySetInnerHTML={{ __html: topic }}
       ></div>
       <div className={`content ${classModalContent}`}>
@@ -58,12 +58,12 @@ const SolutionModalContent = ({
               solutionListAnswers={solutionListAnswers}
             />
           </div>
-          <div className="solution-part bg-[#F9F9F9] p-6 pb-5">
-            <h3 className="mb-4 text-base font-semibold text-[#050505]">
+          <div className="solution-part bg-gray-100 p-6 pb-5">
+            <h3 className="mb-4 text-base font-semibold text-gray-800">
               {MY_COURSES.explanations}
             </h3>
             <div
-              className="solution text-base text-[#050505] [&>p]:mb-6"
+              className="solution text-base text-gray-800 [&>p]:mb-6"
               dangerouslySetInnerHTML={{ __html: solution }}
             ></div>
           </div>

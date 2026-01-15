@@ -1,11 +1,11 @@
-import { AlertIcon } from '@lms/assets'
-import { SappModalV2 } from '@lms/ui'
-import { trackGAEvent, onLinkSocial} from '@lms/utils'
-import { Dispatch, SetStateAction } from 'react'
+import { AlertIcon } from "@lms/assets";
+import { SappModalV2 } from "@lms/ui";
+import { trackGAEvent, onLinkSocial } from "@lms/utils";
+import { Dispatch, SetStateAction } from "react";
 
 interface IProps {
-  open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 const PopupExtend = ({ open, setOpen }: IProps) => {
@@ -14,8 +14,8 @@ const PopupExtend = ({ open, setOpen }: IProps) => {
       open={open}
       okButtonCaption="Back"
       onOk={() => {
-        setOpen(false)
-        trackGAEvent('Click Button Back Modal Expired Test')
+        setOpen(false);
+        trackGAEvent("Click Button Back Modal Expired Test");
       }}
       handleCancel={() => setOpen(false)}
       showCancelButton={false}
@@ -35,26 +35,26 @@ const PopupExtend = ({ open, setOpen }: IProps) => {
       <div className="mx-auto mb-6 flex w-max items-center justify-center rounded-full bg-secondary p-8">
         <AlertIcon />
       </div>
-      <div className="text-center text-2xl font-semibold text-bw-1 md:text-4xl">
+      <div className="text-center text-2xl font-semibold text-gray-800 md:text-4xl">
         Test Expired
       </div>
-      <div className="mb-1 mt-4 px-1 text-center text-medium-sm xl:mb-7">
-        <span className="text-gray-1">
+      <div className="mb-1 mt-4 px-1 text-center text-sm xl:mb-7">
+        <span className="text-gray">
           You can only take the entrance test twice. For further support, please
           contact SAPP Academy via
-        </span>{' '}
+        </span>{" "}
         <span
           className="cursor-pointer text-primary underline"
           onClick={() => {
-            onLinkSocial('https://www.facebook.com/sapp.edu.vn')
-            trackGAEvent('Click Text Link Facebook')
+            onLinkSocial("https://www.facebook.com/sapp.edu.vn");
+            trackGAEvent("Click Text Link Facebook");
           }}
         >
           Facebook.
         </span>
       </div>
     </SappModalV2>
-  )
-}
+  );
+};
 
-export default PopupExtend
+export default PopupExtend;

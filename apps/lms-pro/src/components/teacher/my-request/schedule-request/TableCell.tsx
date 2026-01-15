@@ -10,7 +10,7 @@ type Props = {
 const TableCell: FC<Props> = ({ data, className, onClick = () => {} }) => (
   <div className="flex items-center">
     <div className="flex flex-col">
-      <span className={clsx('text-[#27272a]', className)} onClick={onClick}>
+      <span className={clsx('text-zinc-800', className)} onClick={onClick}>
         {data ?? '-'}
       </span>
     </div>

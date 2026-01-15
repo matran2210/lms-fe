@@ -24,11 +24,11 @@ importers:
         specifier: ^3.10.0
         version: 3.10.0(react-hook-form@7.48.2(react@18.2.0))
       '@sapp-fe/explanation-package':
-        specifier: ^1.4.13
+        specifier: ^1.5.5
         version: 1.5.5(@babel/core@7.28.6)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)
       '@sapp-fe/sapp-common-package':
-        specifier: ^1.6.14
-        version: 1.6.14(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)
+        specifier: ^1.6.16
+        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)
       antd:
         specifier: ^5.25.0
         version: 5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -194,7 +194,7 @@ importers:
         version: 3.6.0(react@18.2.0)
       '@next/third-parties':
         specifier: ^14.2.5
-        version: 14.2.35(next@12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react@18.2.0)
+        version: 14.2.35(next@14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react@18.2.0)
       '@react-hook/resize-observer':
         specifier: ^2.0.2
         version: 2.0.2(react@18.2.0)
@@ -205,29 +205,29 @@ importers:
         specifier: ^1.9.7
         version: 1.9.7(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0)
       '@sapp-fe/entrance-test-result-package':
-        specifier: ^1.4.1
+        specifier: ^1.5.0
         version: 1.5.0(@babel/core@7.28.6)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@sapp-fe/explanation-package':
-        specifier: ^1.4.13
+        specifier: ^1.5.5
         version: 1.5.5(@babel/core@7.28.6)(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.104.1)
       '@sapp-fe/preview-activity':
         specifier: ^1.1.43
         version: 1.1.43(@babel/core@7.28.6)(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.104.1)
       '@sapp-fe/preview-part':
-        specifier: ^1.7.2
+        specifier: ^1.7.4
         version: 1.7.4(@babel/core@7.28.6)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@sapp-fe/quiz-result-package':
         specifier: ^1.5.1
         version: 1.6.0(@babel/core@7.28.6)(antd@5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
       '@sapp-fe/sapp-common-package':
         specifier: ^1.6.14
-        version: 1.6.14(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.104.1)
+        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.104.1)
       '@sapp-fe/sapp-notification':
         specifier: ^1.2.2
         version: 1.2.3(antd@5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))
       '@sentry/nextjs':
         specifier: '8'
-        version: 8.55.0(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.57.2(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0))(encoding@0.1.13)(next@12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react@18.2.0)(webpack@5.104.1)
+        version: 8.55.0(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.57.2(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0))(encoding@0.1.13)(next@14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react@18.2.0)(webpack@5.104.1)
       '@tiptap/core':
         specifier: ^2.12.0
         version: 2.27.2(@tiptap/pm@2.27.2)
@@ -289,23 +289,23 @@ importers:
         specifier: ^2.4.1
         version: 2.4.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       next:
-        specifier: ^12.3.7
-        version: 12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2)
+        specifier: ^14.2.35
+        version: 14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2)
       next-compose-plugins:
         specifier: ^2.2.1
         version: 2.2.1
       next-i18next:
         specifier: ^13.2.2
-        version: 13.3.0(@types/react@18.2.21)(i18next@22.5.1)(next@12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react-i18next@12.3.1(i18next@22.5.1)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0))(react@18.2.0)
+        version: 13.3.0(@types/react@18.2.21)(i18next@22.5.1)(next@14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react-i18next@12.3.1(i18next@22.5.1)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0))(react@18.2.0)
       next-redux-wrapper:
         specifier: ^8.1.0
-        version: 8.1.0(next@12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0)
+        version: 8.1.0(next@14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0)
       next-remove-imports:
         specifier: ^1.0.12
         version: 1.0.12(webpack@5.104.1)
       next-with-less:
         specifier: ^3.0.1
-        version: 3.0.1(less-loader@12.3.0(less@4.5.1)(webpack@5.104.1))(less@4.5.1)(next@12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))
+        version: 3.0.1(less-loader@12.3.0(less@4.5.1)(webpack@5.104.1))(less@4.5.1)(next@14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))
       postcss-flexbugs-fixes:
         specifier: ^5.0.2
         version: 5.0.2(postcss@8.5.6)
@@ -351,6 +351,9 @@ importers:
       sharp:
         specifier: ^0.30.7
         version: 0.30.7
+      slick-carousel:
+        specifier: ^1.8.1
+        version: 1.8.1(jquery@3.7.1)
       socket.io-client:
         specifier: ^4.7.5
         version: 4.8.3
@@ -519,7 +522,7 @@ importers:
         version: 3.6.0(react@18.2.0)
       '@next/third-parties':
         specifier: ^14.2.5
-        version: 14.2.35(next@12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react@18.2.0)
+        version: 14.2.35(next@14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react@18.2.0)
       '@react-native-async-storage/async-storage':
         specifier: ^1.19.5
         version: 1.24.0(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))
@@ -527,29 +530,29 @@ importers:
         specifier: ^1.9.7
         version: 1.9.7(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0)
       '@sapp-fe/entrance-test-result-package':
-        specifier: ^1.4.1
+        specifier: ^1.5.0
         version: 1.5.0(@babel/core@7.28.6)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@sapp-fe/explanation-package':
-        specifier: ^1.4.13
+        specifier: ^1.5.5
         version: 1.5.5(@babel/core@7.28.6)(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.104.1)
       '@sapp-fe/preview-activity':
         specifier: ^1.1.43
         version: 1.1.43(@babel/core@7.28.6)(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.104.1)
       '@sapp-fe/preview-part':
-        specifier: ^1.7.2
+        specifier: ^1.7.4
         version: 1.7.4(@babel/core@7.28.6)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@sapp-fe/quiz-result-package':
-        specifier: ^1.5.1
+        specifier: ^1.6.0
         version: 1.6.0(@babel/core@7.28.6)(antd@5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
       '@sapp-fe/sapp-common-package':
-        specifier: 1.6.14
-        version: 1.6.14(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.104.1)
+        specifier: 1.6.16
+        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.104.1)
       '@sapp-fe/sapp-notification':
         specifier: ^1.2.2
         version: 1.2.3(antd@5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3)))
       '@sentry/nextjs':
         specifier: '8'
-        version: 8.55.0(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.57.2(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0))(encoding@0.1.13)(next@12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react@18.2.0)(webpack@5.104.1)
+        version: 8.55.0(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.57.2(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0))(encoding@0.1.13)(next@14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react@18.2.0)(webpack@5.104.1)
       '@tiptap/core':
         specifier: ^2.12.0
         version: 2.27.2(@tiptap/pm@2.27.2)
@@ -614,17 +617,17 @@ importers:
         specifier: ^2.4.1
         version: 2.4.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       next:
-        specifier: ^12.3.7
-        version: 12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2)
+        specifier: ^14.2.35
+        version: 14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2)
       next-compose-plugins:
         specifier: ^2.2.1
         version: 2.2.1
       next-i18next:
         specifier: ^13.2.2
-        version: 13.3.0(@types/react@18.2.21)(i18next@22.5.1)(next@12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react-i18next@12.3.1(i18next@22.5.1)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0))(react@18.2.0)
+        version: 13.3.0(@types/react@18.2.21)(i18next@22.5.1)(next@14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react-i18next@12.3.1(i18next@22.5.1)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0))(react@18.2.0)
       next-redux-wrapper:
         specifier: ^8.1.0
-        version: 8.1.0(next@12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0)
+        version: 8.1.0(next@14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0)
       next-remove-imports:
         specifier: ^1.0.12
         version: 1.0.12(webpack@5.104.1)
@@ -735,10 +738,10 @@ importers:
         specifier: ^4.14.202
         version: 4.17.23
       '@types/node':
-        specifier: ^18.0.0
+        specifier: ^18.19.130
         version: 18.19.130
       '@types/react':
-        specifier: ^18.0.14
+        specifier: ^18.2.21
         version: 18.2.21
       '@types/react-dom':
         specifier: ^18.2.17
@@ -762,7 +765,7 @@ importers:
         specifier: 7.32.0
         version: 7.32.0
       eslint-config-next:
-        specifier: ^12.2.0
+        specifier: ^12.3.7
         version: 12.3.7(eslint@7.32.0)(typescript@5.9.3)
       eslint-config-prettier:
         specifier: ^8.5.0
@@ -789,7 +792,7 @@ importers:
         specifier: 3.4.17
         version: 3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))
       typescript:
-        specifier: ^5.5.4
+        specifier: ^5.9.3
         version: 5.9.3
 
   apps/lms-zoom:
@@ -976,8 +979,8 @@ importers:
         specifier: workspace:*
         version: link:../../libs/utils
       '@sapp-fe/sapp-common-package':
-        specifier: ^1.6.14
-        version: 1.6.14(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)
+        specifier: ^1.6.16
+        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)
       antd:
         specifier: ^5.25.0
         version: 5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -1033,7 +1036,7 @@ importers:
         specifier: workspace:*
         version: link:../../libs/utils
       '@sapp-fe/explanation-package':
-        specifier: ^1.4.13
+        specifier: ^1.5.5
         version: 1.5.5(@babel/core@7.28.6)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)
       '@sapp-fe/quiz-result-package':
         specifier: ^1.5.0
@@ -1263,8 +1266,8 @@ importers:
   libs/core:
     dependencies:
       '@sapp-fe/sapp-common-package':
-        specifier: ^1.6.14
-        version: 1.6.14(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)
+        specifier: ^1.6.16
+        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)
       antd:
         specifier: ^5.25.0
         version: 5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -1385,8 +1388,8 @@ importers:
         specifier: ^2.0.2
         version: 2.0.2(react@18.2.0)
       '@sapp-fe/sapp-common-package':
-        specifier: ^1.6.14
-        version: 1.6.14(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)
+        specifier: ^1.6.16
+        version: 1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)
       '@sapp-fe/sapp-notification':
         specifier: ^1.2.2
         version: 1.2.3(antd@5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6)))
@@ -1426,6 +1429,9 @@ importers:
       lottie-react:
         specifier: ^2.4.1
         version: 2.4.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      next:
+        specifier: 14.2.35
+        version: 14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2)
       react-draggable:
         specifier: ^4.5.0
         version: 4.5.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -4129,8 +4135,8 @@ packages:
       antd: ^5.25.0
       react: ^16.0.0
 
-  '@sapp-fe/sapp-common-package@1.6.14':
-    resolution: {integrity: sha1-3bPJQzMuq9rQRoEUoSxxxxlSw8M=, tarball: https://gitlab.sapp.edu.vn/api/v4/projects/22/packages/npm/@sapp-fe/sapp-common-package/-/@sapp-fe/sapp-common-package-1.6.14.tgz}
+  '@sapp-fe/sapp-common-package@1.6.16':
+    resolution: {integrity: sha1-3viGU4RhON2QUZLqqX87heKPjIk=, tarball: https://gitlab.sapp.edu.vn/api/v4/projects/22/packages/npm/@sapp-fe/sapp-common-package/-/@sapp-fe/sapp-common-package-1.6.16.tgz}
     engines: {node: '>=10'}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -14513,7 +14519,7 @@ snapshots:
       consola: 3.4.2
       detect-libc: 2.1.2
       https-proxy-agent: 7.0.6
-      node-fetch: 2.6.9(encoding@0.1.13)
+      node-fetch: 2.7.0(encoding@0.1.13)
       nopt: 8.1.0
       semver: 7.7.3
       tar: 7.5.2
@@ -14613,9 +14619,9 @@ snapshots:
   '@next/swc-win32-x64-msvc@14.2.33':
     optional: true
 
-  '@next/third-parties@14.2.35(next@12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react@18.2.0)':
+  '@next/third-parties@14.2.35(next@14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react@18.2.0)':
     dependencies:
-      next: 12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2)
+      next: 14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2)
       react: 18.2.0
       third-party-capital: 1.0.20
 
@@ -15416,7 +15422,7 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
 
-  '@sapp-fe/sapp-common-package@1.6.14(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.104.1)':
+  '@sapp-fe/sapp-common-package@1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.104.1)':
     dependencies:
       '@_ueberdosis/prosemirror-tables': 1.1.3
       '@floating-ui/react': 0.27.16(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -15464,7 +15470,7 @@ snapshots:
       - ts-node
       - webpack
 
-  '@sapp-fe/sapp-common-package@1.6.14(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)':
+  '@sapp-fe/sapp-common-package@1.6.16(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.8)(typescript@5.1.6))(webpack@5.104.1)':
     dependencies:
       '@_ueberdosis/prosemirror-tables': 1.1.3
       '@floating-ui/react': 0.27.16(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -15617,33 +15623,6 @@ snapshots:
       - supports-color
 
   '@sentry/core@8.55.0': {}
-
-  '@sentry/nextjs@8.55.0(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.57.2(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0))(encoding@0.1.13)(next@12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react@18.2.0)(webpack@5.104.1)':
-    dependencies:
-      '@opentelemetry/api': 1.9.0
-      '@opentelemetry/semantic-conventions': 1.38.0
-      '@rollup/plugin-commonjs': 28.0.1(rollup@3.29.5)
-      '@sentry-internal/browser-utils': 8.55.0
-      '@sentry/core': 8.55.0
-      '@sentry/node': 8.55.0
-      '@sentry/opentelemetry': 8.55.0(@opentelemetry/api@1.9.0)(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.57.2(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.38.0)
-      '@sentry/react': 8.55.0(react@18.2.0)
-      '@sentry/vercel-edge': 8.55.0
-      '@sentry/webpack-plugin': 2.22.7(encoding@0.1.13)(webpack@5.104.1)
-      chalk: 3.0.0
-      next: 12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2)
-      resolve: 1.22.8
-      rollup: 3.29.5
-      stacktrace-parser: 0.1.11
-    transitivePeerDependencies:
-      - '@opentelemetry/context-async-hooks'
-      - '@opentelemetry/core'
-      - '@opentelemetry/instrumentation'
-      - '@opentelemetry/sdk-trace-base'
-      - encoding
-      - react
-      - supports-color
-      - webpack
 
   '@sentry/nextjs@8.55.0(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.57.2(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0))(encoding@0.1.13)(next@14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react@18.2.0)(webpack@5.104.1)':
     dependencies:
@@ -21425,7 +21404,7 @@ snapshots:
 
   next-compose-plugins@2.2.1: {}
 
-  next-i18next@13.3.0(@types/react@18.2.21)(i18next@22.5.1)(next@12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react-i18next@12.3.1(i18next@22.5.1)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0))(react@18.2.0):
+  next-i18next@13.3.0(@types/react@18.2.21)(i18next@22.5.1)(next@14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react-i18next@12.3.1(i18next@22.5.1)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0))(react@18.2.0):
     dependencies:
       '@babel/runtime': 7.28.6
       '@types/hoist-non-react-statics': 3.3.7(@types/react@18.2.21)
@@ -21433,7 +21412,7 @@ snapshots:
       hoist-non-react-statics: 3.3.2
       i18next: 22.5.1
       i18next-fs-backend: 2.6.1
-      next: 12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2)
+      next: 14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2)
       react: 18.2.0
       react-i18next: 12.3.1(i18next@22.5.1)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)
     transitivePeerDependencies:
@@ -21442,6 +21421,12 @@ snapshots:
   next-redux-wrapper@8.1.0(next@12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0):
     dependencies:
       next: 12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2)
+      react: 18.2.0
+      react-redux: 8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1)
+
+  next-redux-wrapper@8.1.0(next@14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2))(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1))(react@18.2.0):
+    dependencies:
+      next: 14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2)
       react: 18.2.0
       react-redux: 8.1.3(@types/react-dom@18.3.7(@types/react@18.2.21))(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@18.2.21)(react@18.2.0))(react@18.2.0)(redux@4.2.1)
 
@@ -21458,12 +21443,12 @@ snapshots:
     dependencies:
       enhanced-resolve: 5.18.4
 
-  next-with-less@3.0.1(less-loader@12.3.0(less@4.5.1)(webpack@5.104.1))(less@4.5.1)(next@12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2)):
+  next-with-less@3.0.1(less-loader@12.3.0(less@4.5.1)(webpack@5.104.1))(less@4.5.1)(next@14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2)):
     dependencies:
       clone-deep: 4.0.1
       less: 4.5.1
       less-loader: 12.3.0(less@4.5.1)(webpack@5.104.1)
-      next: 12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2)
+      next: 14.2.35(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2)
 
   next@12.3.7(@babel/core@7.28.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.97.2):
     dependencies:

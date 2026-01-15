@@ -4,7 +4,7 @@ import {
   ButtonPrimary,
   ButtonText,
   SappButtonIcon,
-  SappModalV2,
+  SappModalV3,
 } from "@lms/ui";
 import { trackGAEvent } from "@lms/utils";
 
@@ -41,9 +41,9 @@ const ConFirmSubmit = ({
     setOpen(false);
   };
   return (
-    <SappModalV2
+    <SappModalV3
       open={open}
-      //   cancelButtonCaption="Quit"
+      handleClose={() => setOpen(false)}
       okButtonCaption="Submit"
       okButtonClass="!text-base"
       cancelButtonClass="!text-base"
@@ -84,7 +84,7 @@ const ConFirmSubmit = ({
           )}
         </div>
       </div>
-    </SappModalV2>
+    </SappModalV3>
   );
 };
 

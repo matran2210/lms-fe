@@ -6,16 +6,16 @@ import { SAPPSelect } from '@lms/ui'
 import FormAddProgress from '@components/my-class/progress-form/FormAddProgress'
 import FormViewProgress from '@components/my-class/progress-form/FormViewProgress'
 import ProgressTable from '@components/my-class/progress-table/ProgressTable'
-import { ProgressAPI } from '@pages/api/progress'
-import { ProgressKey } from '@pages/api/queryKey'
 import { cleanParams } from '@lms/utils'
 import { CONSTRUCTION, OPTIONS_PROGRESS_CLASS, PROGRAM } from '@lms/core'
-import { useRouter } from 'next/router'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { IClassDetail, IProgressFilterForm } from '@lms/core'
 import { SAPPInput } from '@lms/ui'
 import { useSappPaging } from '@lms/hooks'
+import { ProgressKey } from 'src/api/queryKey'
+import { ProgressAPI } from 'src/api/progress'
 
 interface FilterParams {
   progress?: string
@@ -38,7 +38,10 @@ const Progress = ({ classDetail }: { classDetail: IClassDetail }) => {
   const [isView, setIsView] = useState<boolean>(false)
   const [params, setParams] = useState<FilterParams>(initialValues)
   const router = useRouter()
-  const { id } = router.query
+  const searchParams = useSearchParams()
+  const query = Object.fromEntries(searchParams.entries())
+
+  const { id } = query
   const { control, getValues, reset } = useForm<IProgressFilterForm>()
   const allowSection = !classDetail?.course?.course_categories?.some(
     (item) => item?.name === PROGRAM.ACCA || item?.name === PROGRAM.CD,

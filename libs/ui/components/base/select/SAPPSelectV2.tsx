@@ -1,3 +1,4 @@
+'use client';
 import { ArrowDownIcon } from "@lms/assets";
 import { Select } from "antd";
 import { ButtonSize } from "antd/es/button";

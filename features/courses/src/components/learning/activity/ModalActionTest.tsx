@@ -266,12 +266,7 @@ const ModalActionTest = ({
   const handleStartANewAttempt = async () => {
     //to do: start test
     try {
-      router.push({
-        pathname: `/test/${data.quiz.id}`,
-        query: {
-          class_user_id: class_user_id,
-        },
-      });
+      router.push(`/test/${data.quiz.id}?class_user_id=${class_user_id}`);
       status
         ? () => trackGAEvent("Click Button Retake Modal Test")
         : () => trackGAEvent("Click Button Start Modal Test");
@@ -558,10 +553,7 @@ const ModalActionTest = ({
         `/courses/test/your-answers-detail/${attempt?.id}`,
       );
     } else {
-      router.push({
-        pathname: `/courses/test/test-result/${selectedResult?.value ?? attempt?.id}`,
-        query: { attempt: selectedResult?.label },
-      });
+      router.push(`/courses/test/test-result/${selectedResult?.value ?? attempt?.id}?attempt=${selectedResult?.label}`);
     }
   };
 

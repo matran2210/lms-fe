@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 // import '@sapp-fe/explanation-package/dist/index.css'
 import { AltArrowLeft, CloseIconV2 } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
-import { SappLoading } from "@lms/ui";
+import { PDFViewer, SappLoading } from "@lms/ui";
 import { Modal } from "antd";
 
 export enum QUESTION_LEVELS {
@@ -139,7 +139,7 @@ const ModalExplanationPackage = ({
       onCancel={setOpen}
       footer={[]}
       closable={false}
-      //   closeIcon={<CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />}
+      //   closeIcon={<CloseIcon className="transform stroke-gray-800 transition-all duration-300 ease-in-out group-hover:stroke-primary" />}
       style={{ top: 0, left: 0, padding: 0, maxWidth: "100%", height: "100%" }}
       width="100vw"
       centered={false}
@@ -168,6 +168,12 @@ const ModalExplanationPackage = ({
                 activeQuestion={activeQuestion}
                 document_id={document_id}
                 handleDownload={handleDownload}
+                renderPdf={({ url, fileName }: {
+                  url: string;
+                  fileName?: string | undefined;
+                }) => {
+                  return <PDFViewer file={url} />
+                }}
               />
             ) : (
               <SappLoading />
