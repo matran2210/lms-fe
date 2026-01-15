@@ -6,7 +6,7 @@ import { useZoomElementAdjustment } from '@/hooks/useZoomElementAdjustment'
 import { useZoomSDK } from '@/hooks/useZoomSDK'
 import { ZoomMeetingConfig } from '@/types/zoom'
 import { toggleMeetingContainer } from '@/utils'
-import { notFound, usePathname, useRouter } from 'next/navigation'
+import { notFound, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import FloatingUser from './FloatingUser'
 import SAPPLoading from './loading/SAPPLoading'
@@ -21,8 +21,8 @@ export const ZoomMeeting = () => {
 
   useZoomElementAdjustment(isJoined)
 
-  const getZoomMeeting = async (token: string) => {
-    const userInfoData = await ZoomApi.getZoomToken(token)
+  const getZoomMeeting = async (token: string, schedule_id?: string) => {
+    const userInfoData = await ZoomApi.getZoomToken(token, schedule_id)
     const signatureData = await ZoomApi.getZoomSignature(userInfoData.data?.meeting_id || '')
 
     return {
@@ -32,6 +32,8 @@ export const ZoomMeeting = () => {
   }
 
   // Process token and prepare meeting data
+  const searchParams = useSearchParams()
+  const query = Object.fromEntries(searchParams?.entries() || [])
   useEffect(() => {
     if (loadingMeetingToken) return
 
@@ -44,7 +46,7 @@ export const ZoomMeeting = () => {
         setIsLoadingMeetingData(true)
 
         const decodedToken = decodeURIComponent(meetingToken)
-        const meetingData = await getZoomMeeting(decodedToken)
+        const meetingData = await getZoomMeeting(decodedToken, query?.schedule_id)
 
         if (!meetingData.userInfo || !meetingData.signature) {
           notFound()
