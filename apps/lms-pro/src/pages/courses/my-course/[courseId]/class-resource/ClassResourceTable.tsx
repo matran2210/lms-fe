@@ -16,6 +16,7 @@ import {
   SAPPVideo,
   TextPreview,
   Tooltip,
+  SAPPAudio,
 } from '@lms/ui'
 import { UploadAPI } from '@pages/api/upload'
 import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
@@ -181,14 +182,34 @@ const ClassResourceTable = ({
   }
 
   const renderPreviewContent = (resource: IClassResource) => {
+    const videoUrl = process.env.NEXT_PUBLIC_VIDEO_URL as string
     switch (resource.suffix_type) {
       case 'VIDEO':
         return (
           <SAPPVideo
             isFetchCaptions={false}
             streamRef={internalRef}
-            options={{ src: resource.sub_url }}
+            options={{
+              src: resource.url
+                ? resource.url
+                    .replace(videoUrl || '', '')
+                    .replace('/manifest/video.m3u8', '')
+                : resource.sub_url,
+            }}
           ></SAPPVideo>
+        )
+      case 'AUDIO':
+        return (
+          <SAPPAudio
+            streamRef={internalRef}
+            options={{
+              src: resource.url
+                ? resource.url
+                    .replace(videoUrl || '', '')
+                    .replace('/manifest/video.m3u8', '')
+                : resource.sub_url,
+            }}
+          ></SAPPAudio>
         )
       case 'SHEET':
       case 'WORD_DOCUMENT':
@@ -265,8 +286,22 @@ const ClassResourceTable = ({
             modalIndex={1}
             title={previewResource.name}
             width={900}
-            height={548}
-            className={clsx('!z-40 !rounded-lg')}
+            height={previewResource.suffix_type === 'AUDIO' ? 100 : 548}
+            minHeight={
+              previewResource.suffix_type === 'AUDIO' ? 100 : undefined
+            }
+            maxHeight={
+              previewResource.suffix_type === 'AUDIO' ? 100 : undefined
+            }
+            minWidth={
+              ['AUDIO', 'VIDEO'].includes(previewResource.suffix_type)
+                ? 430
+                : undefined
+            }
+            className={clsx('!z-40 !rounded-lg', {
+              '!min-h-0 !overflow-visible':
+                previewResource.suffix_type === 'AUDIO',
+            })}
             position="center"
             handleCloseScratchPad={() => {
               setOpenPreview(false)
@@ -279,6 +314,10 @@ const ClassResourceTable = ({
                 </div>
                 <button
                   onClick={() => {
+                    setOpenPreview(false)
+                    setPreviewResource(null)
+                  }}
+                  onTouchEnd={() => {
                     setOpenPreview(false)
                     setPreviewResource(null)
                   }}
