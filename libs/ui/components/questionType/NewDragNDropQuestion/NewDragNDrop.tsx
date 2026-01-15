@@ -179,8 +179,7 @@ const [src, setSrc] = useState<string>();
               );
               if (correct) {
                 if (
-                  correct.is_correct &&
-                  correct.answer_position === (slot?.position ?? 0)
+                  correct.is_correct
                 ) {
                   status = "success";
                 } else {
