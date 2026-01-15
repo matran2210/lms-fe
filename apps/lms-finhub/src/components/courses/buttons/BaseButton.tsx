@@ -43,7 +43,7 @@ export default function BaseButton({
     variant === 'primary'
       ? 'text-white bg-primary hover:bg-primary-400'
       : variant === 'secondary'
-        ? 'text-gray-800 bg-gray-100hover:text-white hover:bg-primary'
+        ? 'text-gray-800 bg-gray-100 hover:text-white hover:bg-primary'
         : variant === 'black'
           ? 'bg-secondary-600 text-white rounded-lg hover:bg-secondary'
           : 'bg-white text-gray-14 rounded-lg border border-secondary hover:bg-secondary-600 hover:text-white hover:border-0'

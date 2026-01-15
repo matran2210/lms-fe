@@ -930,7 +930,7 @@ const CaseStudyResultTeacher = () => {
                       </div>
                     </div>
                     {showListExhibits && (
-                      <div className="sapp-separateLine bg-gray-100shadow-questions-exhibits absolute bottom-full h-fit justify-center 3xl:w-full">
+                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-100 shadow-questions-exhibits 3xl:w-full">
                         {exhibits?.map(
                           (
                             e: { label: string; value: string },
