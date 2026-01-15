@@ -391,7 +391,7 @@ export default function MenuItem({
     <>
       {isActivity && name === TitleSidebar.CALCULATOR && (
         <div className="mx-auto w-[calc(100%-48px)] text-center">
-          <Divider className="my-2 bg-[#DCDDDD]" />
+          <Divider className="my-2 bg-divider" />
         </div>
       )}
       <div

@@ -246,7 +246,7 @@ const LearningResults = () => {
                   <div className="flex flex-row items-start justify-center gap-5 xl:flex-col xl:gap-4">
                     {!isNormal && (
                       <div className="flex items-center justify-center gap-2.5 text-sm font-medium xl:text-base">
-                        <span className="min-h-3 min-w-3 rounded-full bg-dashboard-mock-test"></span>
+                        <span className="min-h-3 min-w-3 rounded-full bg-[#FB8C5B]"></span>
                         <Link
                           href={
                             mockTestId
@@ -254,7 +254,7 @@ const LearningResults = () => {
                               : ""
                           }
                           target="_blank"
-                          className={`inline-block min-w-fit text-base font-bold text-gray-800 ${!mockTestId ? "pointer-events-none" : "hover:text-dashboard-learing"}`}
+                          className={`inline-block min-w-fit text-base font-bold text-gray-800 ${!mockTestId ? "pointer-events-none" : "hover:text-[#6FD3B0]"}`}
                           rel="noreferrer"
                         >
                           Mock test results
@@ -263,7 +263,7 @@ const LearningResults = () => {
                     )}
 
                     <div className="flex items-center justify-center gap-2.5">
-                      <span className="min-h-3 min-w-3 rounded-full bg-dashboard-learing"></span>
+                      <span className="min-h-3 min-w-3 rounded-full bg-[#6FD3B0]"></span>
                       <span className="min-w-fit text-sm font-medium text-gray-800 xl:text-base">
                         Learning results
                       </span>

@@ -1,27 +1,27 @@
-import { Icon } from '@lms/assets'
-import clsx from 'clsx'
-import React from 'react'
-import { IUserContact } from '@lms/contexts'
+import { Icon } from "@lms/assets";
+import clsx from "clsx";
+import React from "react";
+import { IUserContact } from "@lms/contexts";
 
 interface IProps {
-  data: IUserContact
-  index: number
-  className?: string
-  isEdit: boolean
+  data: IUserContact;
+  index: number;
+  className?: string;
+  isEdit: boolean;
   setMakeDefaultDrawer: React.Dispatch<
     React.SetStateAction<
       | {
-          status: boolean
-          email: string
-          phone: string
-          address: string
-          index: number
-          id: string
-          is_default: boolean
+          status: boolean;
+          email: string;
+          phone: string;
+          address: string;
+          index: number;
+          id: string;
+          is_default: boolean;
         }
       | undefined
     >
-  >
+  >;
 }
 
 const ProfileItem = ({
@@ -35,7 +35,7 @@ const ProfileItem = ({
     <div className={className}>
       <div
         className={clsx(
-          'group rounded-md bg-gray-canvas p-3 text-sm hover:bg-primary-50 md:px-6 md:py-4 md:text-base',
+          "group rounded-md bg-gray-100 p-3 text-sm hover:bg-primary-50 md:px-6 md:py-4 md:text-base",
         )}
         onClick={() =>
           setMakeDefaultDrawer({
@@ -64,7 +64,7 @@ const ProfileItem = ({
             <div className="mt-4 font-normal text-secondary">
               <div className="flex w-fit flex-col gap-2 md:flex-row">
                 <div className="flex">
-                  <Icon type="phone-ring" className="mr-2" />{' '}
+                  <Icon type="phone-ring" className="mr-2" />{" "}
                   {e?.phone && e?.phone}
                 </div>
                 {e?.email && e?.phone && (
@@ -98,7 +98,7 @@ const ProfileItem = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProfileItem
+export default ProfileItem;

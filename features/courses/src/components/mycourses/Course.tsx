@@ -479,7 +479,7 @@ const Course = ({
           hideBadge={true}
           badgeCode={{
             badge: category,
-            className: "bg-badge-200 text-badge-500 font-medium",
+            className: "bg-[#B3CEE0] text-[#08719D] font-medium",
           }}
           classNameCard="lg:h-[434px] md:h-[390px] h-[312px]"
           onClick={() => {
@@ -583,7 +583,7 @@ const Course = ({
                       <Icon
                         type={enableCourse ? iconType : "expired"}
                         className={`relative ${
-                          enableCourse ? "text-[#050505]" : "text-gray-300"
+                          enableCourse ? "text-gray-800" : "text-gray-300"
                         }`}
                       />
                       <p
@@ -597,7 +597,7 @@ const Course = ({
                     <div className="number">
                       <p
                         className={`text-sm font-normal ${
-                          enableCourse ? "text-[#050505]" : "text-gray-300"
+                          enableCourse ? "text-gray-800" : "text-gray-300"
                         }`}
                       >
                         {progressPart}%

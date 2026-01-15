@@ -2,7 +2,7 @@ import React from 'react'
 
 export const ActivityLeftSkeleton = () => {
   return (
-    <div className="flex flex-col gap-6 lg:w-6.5">
+    <div className="flex flex-col gap-6 lg:w-[65%]">
       {/* Learning Outcome skeleton */}
       <div className="rounded-lg bg-white p-4 shadow">
         <div className="mb-3 h-10 w-10/12 rounded bg-skeleton" />
@@ -29,7 +29,7 @@ export const ActivityLeftSkeleton = () => {
 
 export const ActivityRightSkeleton = () => {
   return (
-    <section className="w-3.5 space-y-6">
+    <section className="w-[35%] space-y-6">
       {/* SectionContentModal skeleton */}
       <div className="rounded-lg bg-white p-4 shadow">
         <div className="mb-3 h-10 w-10/12 rounded bg-skeleton" />

@@ -12,7 +12,7 @@ const Heading = ({ greeting, title, des }: IProps) => {
   return (
     <div className="w-full px-7.5 py-7.5 shadow-sidebar">
       <div>
-        <h1 className="line-clamp-1 text-2xl font-light text-bw-1">
+        <h1 className="line-clamp-1 text-2xl font-light text-gray-800">
           {greeting}
           <span className="ml-1.5 font-medium">
             <Tooltip title={title}>{truncateString(title, 80)}</Tooltip>
@@ -21,7 +21,7 @@ const Heading = ({ greeting, title, des }: IProps) => {
       </div>
       {des && (
         <div className="mt-4 flex w-full">
-          <div className="w-full text-medium-sm text-bw-1">{des}</div>
+          <div className="w-full text-sm text-gray-800">{des}</div>
         </div>
       )}
     </div>

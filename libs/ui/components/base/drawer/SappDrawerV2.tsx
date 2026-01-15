@@ -37,7 +37,7 @@ const SappDrawerV2 = ({
       <div className={clsx(`w-full bg-white`, className)}>
         <div
           className={clsx(
-            'relative bg-[#050505] p-4 text-2xl text-white md:px-8 md:py-6',
+            'relative bg-gray-800 p-4 text-2xl text-white md:px-8 md:py-6',
             classNameHeader,
           )}
         >

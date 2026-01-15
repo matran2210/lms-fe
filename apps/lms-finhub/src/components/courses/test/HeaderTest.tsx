@@ -23,7 +23,7 @@ export default function HeaderTest({
   return (
     <div className="relative z-50 flex min-h-[76px] items-center justify-between gap-4 bg-white px-4 py-3 shadow-search lg:px-8">
       <span
-        className="bg-gray-17 cursor-pointer overflow-hidden rounded-md p-2 text-bw-13"
+        className="bg-gray-17 cursor-pointer overflow-hidden rounded-md p-2 text-gray-800"
         onClick={(e) => {
           e.preventDefault()
           setOpenQuit(true)
@@ -36,7 +36,7 @@ export default function HeaderTest({
         <Close className="h-6 w-6" />
       </span>
       <div className="flex flex-col items-center gap-1">
-        <div className="truncate text-base font-normal text-bw-13">
+        <div className="truncate text-base font-normal text-gray-800">
           {quizDetail?.name}
         </div>
         {quizDetail?.quiz_timed && (

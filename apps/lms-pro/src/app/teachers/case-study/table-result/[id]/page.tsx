@@ -3,7 +3,12 @@
 import { CloseIcon } from '@lms/assets'
 import { UserType } from '@lms/contexts'
 import { ANIMATION, LAYOUT, QUESTION_TYPES } from '@lms/core'
-import { ButtonPrimary, ButtonSecondary, FullScreenLayout, SappBaseTable } from '@lms/ui'
+import {
+  ButtonPrimary,
+  ButtonSecondary,
+  FullScreenLayout,
+  SappBaseTable,
+} from '@lms/ui'
 import { roundNumber } from '@utils/helpers'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -15,28 +20,24 @@ import { buildQueryString } from '@lms/utils'
 const headers = [
   {
     label: '#',
-    className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-62px',
+    className: 'text-left pb-3 text-sm text-gray font-semibold min-w-[62px]',
   },
   {
     label: 'Question',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-max xl:min-w-[725px]',
+      'text-left pb-3 text-sm text-gray font-semibold min-w-max xl:min-w-[725px]',
   },
   {
     label: 'Type',
-    className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold  min-w-[117px]',
+    className: 'text-left pb-3 text-sm text-gray font-semibold  min-w-[117px]',
   },
   {
     label: 'Result',
-    className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold  min-w-[70px]',
+    className: 'text-left pb-3 text-sm text-gray font-semibold  min-w-[70px]',
   },
   {
     label: '',
-    className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[20px]',
+    className: 'text-left pb-3 text-sm text-gray font-semibold min-w-[20px]',
   },
 ]
 
@@ -159,11 +160,11 @@ const TableCaseStudyResultTeacher = () => {
         <div className="m-auto max-h-full max-w-[1144px] bg-white pt-8">
           <div className="mb-10 flex flex-row items-center justify-between px-6 xl:px-0">
             <div className="pr-4">
-              <div className="line-clamp-1 text-xl font-medium text-bw-1">
+              <div className="line-clamp-1 text-xl font-medium text-gray-800">
                 {topicAttemptDetail?.question_topic?.name}
               </div>
               <div className="pt-2.5 text-base">
-                <span className="pt-1.5 font-normal text-gray-1">
+                <span className="pt-1.5 font-normal text-gray">
                   Your Score:
                 </span>{' '}
                 <span className="font-bold text-state-error">
@@ -243,13 +244,13 @@ const TableCaseStudyResultTeacher = () => {
                 {scoreDetail?.answers?.map((e: any, index: number) => {
                   return (
                     <tr
-                      className="border-b border-dashed border-gray-2"
+                      className="border-b border-dashed border-secondary-100"
                       key={e?.id}
                     >
-                      <td className="pr-1 text-bw-1">{index + 1}</td>
+                      <td className="pr-1 text-gray-800">{index + 1}</td>
                       <td className="m-6 pr-4 text-start">
                         <div
-                          className={`line-clamp-1 cursor-pointer text-bw-1 hover:font-semibold`}
+                          className={`line-clamp-1 cursor-pointer text-gray-800 hover:font-semibold`}
                           dangerouslySetInnerHTML={{
                             __html: String(
                               e?.question?.question_content ?? '--',
@@ -262,8 +263,8 @@ const TableCaseStudyResultTeacher = () => {
                           }}
                         ></div>
                       </td>
-                      <td className="m-6 pr-4 text-start text-bw-1">
-                        <div className="mb-6 mr-6 mt-6 min-w-132px">
+                      <td className="m-6 pr-4 text-start text-gray-800">
+                        <div className="min-w-132px mb-6 mr-6 mt-6">
                           {getTypeName(e?.question?.qType ?? '--')}
                         </div>
                       </td>
@@ -286,7 +287,7 @@ const TableCaseStudyResultTeacher = () => {
                           </>
                         )}
                       </td>
-                      <td className="m-6 pr-4 text-start text-gray-1">
+                      <td className="m-6 pr-4 text-start text-gray">
                         {e?.question?.qType !== 'ESSAY' && (
                           <div className="ml-1 flex items-center">
                             <img

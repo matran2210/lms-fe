@@ -85,7 +85,7 @@ const SappTextFieldV2 = ({
   }
   // Dấu (*) khi trường bắt buộc
   const requiredMark = required ? (
-    <span className="text-[#d35563]">*</span>
+    <span className="text-error-300">*</span>
   ) : null
 
   return (

@@ -42,7 +42,7 @@ const SappActionCell = ({
               handleDelayAction(handleClickView)
             }}
             isShow={isShowViewButton}
-            className="hover:bg-[#FFFDF6] hover:text-[#FFB800]"
+            className="hover:bg-[#FFFDF6] hover:text-primary"
           />
           <ActionItem
             title={labelButtonEdit}

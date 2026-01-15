@@ -81,12 +81,12 @@ const FullScreenQuizComponent: React.FC<FullScreenQuizComponentProps> = ({
                   : !isConfirmQuestion
                     ? 'Submit'
                     : 'Finish',
-                className: '!h-9.5',
+                className: '!h-[38px]',
                 onClick: handleSubmitQuestion,
               }}
               cancel={{
                 title: finishAll ? '' : !isConfirmQuestion ? 'Skip' : '',
-                className: '!h-9.5',
+                className: '!h-[38px]',
                 onClick: handleCancelQuestion,
                 isUnderLine: false,
               }}

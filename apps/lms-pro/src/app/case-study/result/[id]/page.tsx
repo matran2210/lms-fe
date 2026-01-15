@@ -710,7 +710,7 @@ const CaseStudyResult = () => {
                 </div>
               </div>
               <div
-                className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-[#99A1B7]"
+                className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-accent"
                 onMouseDown={() => {
                   setStartResize(true)
                   setCurrentMousePos(x || 0)
@@ -796,7 +796,7 @@ const CaseStudyResult = () => {
                   }
                 >
                   <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl">
-                    <div className="flex w-full items-center justify-between bg-gray-v2-100 px-4 py-3">
+                    <div className="flex w-full items-center justify-between bg-gray-100 px-4 py-3">
                       <div className="text-sm font-bold">Scratch Pad</div>
                       {/* <CloseIcon */}
                       <button onClick={() => handleCloseScratchPad(e)}>

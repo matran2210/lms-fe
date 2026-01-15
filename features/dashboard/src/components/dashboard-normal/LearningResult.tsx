@@ -408,7 +408,7 @@ const LearningResultTest = () => {
               </div>
               {isNormal && (
                 <div className="flex items-center justify-center gap-2.5">
-                  <span className="min-h-3 min-w-3 rounded-full bg-dashboard-learing"></span>
+                  <span className="min-h-3 min-w-3 rounded-full bg-[#6FD3B0]"></span>
                   <span className="min-w-fit text-sm font-medium text-gray-800 xl:text-base">
                     Learning results
                   </span>

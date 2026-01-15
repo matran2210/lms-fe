@@ -1,7 +1,7 @@
-import { calculateTimeAgo } from '@utils/helpers'
 import clsx from 'clsx'
 import React, { Dispatch, SetStateAction, useMemo } from 'react'
 import { IDeviceItem } from '@lms/core'
+import { calculateTimeAgo } from '@lms/utils'
 
 interface IProps {
   data: IDeviceItem
@@ -29,7 +29,7 @@ const DeviceItem = ({ data, setSelectedDrawer }: IProps) => {
     <div className="mb-4">
       <div
         className={clsx(
-          'cursor-pointer rounded-md bg-[#F9F9F9] p-3 hover:bg-primary-50 md:p-4',
+          'cursor-pointer rounded-md bg-gray-100 p-3 hover:bg-primary-50 md:p-4',
           {
             'bg-primary-50': data.is_current,
           },

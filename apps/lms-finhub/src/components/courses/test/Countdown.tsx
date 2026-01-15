@@ -23,7 +23,7 @@ const CountDown = forwardRef(
       }
     }, [time[2]])
     return (
-      <div className="flex justify-center text-lg font-medium leading-7 text-bw-13">
+      <div className="flex justify-center text-lg font-medium leading-7 text-gray-800">
         {formatTime(time[2])}
       </div>
     )
