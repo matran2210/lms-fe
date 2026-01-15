@@ -1,6 +1,7 @@
 import ClassResourceTeacherFilter from '@components/teacher/components/ClassResourceTeacherFilter'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { CloseIcon, DownloadIcon } from '@lms/assets'
+import { useFeature } from '@lms/contexts'
 import {
   CLASS_SUFFIX_TYPE,
   ClassKey,
@@ -30,6 +31,7 @@ import { ClassAPI } from 'src/api/class'
 import { UploadAPI } from 'src/api/upload'
 
 export default function ClassResourceTeacher() {
+  const { videoUrl } = useFeature()
   const param = useParams();
   const { id } = param
   const internalRef = useRef<HTMLVideoElement>(null)
@@ -197,11 +199,18 @@ export default function ClassResourceTeacher() {
   const renderPreviewContent = (resource: IClassResource) => {
     switch (resource.suffix_type) {
       case 'VIDEO':
+      case 'AUDIO':
         return (
           <SAPPVideo
             isFetchCaptions={false}
             streamRef={internalRef}
-            options={{ src: resource.sub_url }}
+            options={{
+              src: resource.url
+                ? resource.url
+                    .replace(videoUrl || '', '')
+                    .replace('/manifest/video.m3u8', '')
+                : resource.sub_url,
+            }}
           ></SAPPVideo>
         )
       case 'SHEET':
