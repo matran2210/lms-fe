@@ -14,7 +14,7 @@ import {
   RESPONSE_OPTION,
   SheetData,
 } from "@lms/core";
-import { runHighlight } from "@lms/utils";
+import { convertMathHtmlToImage, runHighlight } from "@lms/utils";
 import clsx from "clsx";
 import { cloneDeep, isNull, isUndefined, uniqueId } from "lodash";
 import React, {
