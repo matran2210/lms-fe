@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import {
   ArrowUpIcon,
   CalculatorIcon,
@@ -436,7 +436,7 @@ const TestDetail = () => {
 
   const router = useRouter()
   const searchParam = useSearchParams()
-  const params = useParams();
+  const params = useParams()
   const { id } = params
   const query = Object.fromEntries(searchParam.entries())
 
@@ -2827,7 +2827,7 @@ const TestDetail = () => {
           {/** End Question Content */}
 
           {/** Scratchpads */}
-          <div className="bg-gray-100shadow-question-footer z-10 flex h-[48px] items-center justify-between">
+          <div className="z-10 flex h-[48px] items-center justify-between bg-gray-100 shadow-question-footer">
             <div className="flex h-full items-center">
               <button
                 className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
@@ -3025,7 +3025,7 @@ const TestDetail = () => {
                 currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
                 !currentTabContent.done && (
                   <div className="flex gap-1">
-                    <div className="3xl-wide:block hidden">
+                    <div className="hidden 3xl-wide:block">
                       Choose response option:
                     </div>
                     <button

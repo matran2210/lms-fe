@@ -1004,7 +1004,7 @@ const CaseStudyResult = () => {
                 )
               }
             })}
-            <div className=" bg-gray-100shadow-question-footer relative flex h-[48px] items-center justify-between">
+            <div className=" relative flex h-[48px] items-center justify-between bg-gray-100 shadow-question-footer">
               <div className="flex h-full items-center">
                 <button
                   className={`h-full ${allowHighLight && 'bg-yellow-300'}`}

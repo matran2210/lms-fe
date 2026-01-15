@@ -1231,7 +1231,7 @@ const CaseStudyDetailTeacher = () => {
                 )
               }
             })}
-            <div className="bg-gray-100shadow-question-footer relative flex h-[48px] items-center justify-between">
+            <div className="relative flex h-[48px] items-center justify-between bg-gray-100 shadow-question-footer">
               <div className="flex h-full items-center">
                 {/* <button className="h-full">
                   <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
