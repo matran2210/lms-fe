@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "author": "SAPP",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint .",
+    "dev": "pnpm exec next dev",
+    "build": "pnpm exec next build",
+    "start": "pnpm exec next start",
+    "lint": "pnpm exec next lint",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "check-types": "tsc --noEmit"
