@@ -6,6 +6,7 @@ import {
   DATE_FORMAT,
   ILearningResult,
   IMockTestResult,
+  PROGRAM,
 } from "@lms/core";
 import { useReponsive } from "@lms/hooks";
 import { EChart, NoData, Tooltip } from "@lms/ui";
@@ -48,9 +49,11 @@ const LearningResults = () => {
   );
   const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE;
   const resultFormula =
-    courseInfo?.category === "ACCA"
-      ? "%Results = Graded activities (70%) + Final test (30%)"
-      : "%Results = Module test (40%) + Topic test (60%)";
+    courseInfo?.category === PROGRAM.LD
+      ? "% Results = Topic test (30%) + Final test (70%)"
+      : courseInfo?.category === "ACCA"
+        ? "%Results = Graded activities (70%) + Final test (30%)"
+        : "%Results = Module test (40%) + Topic test (60%)";
 
   const { isMobile, isTablet } = useReponsive();
 
