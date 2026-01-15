@@ -275,6 +275,20 @@ export function Providers({ children }: { children: ReactNode }) {
     prevPathRef.current = pathname
   }, [pathname])
 
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    if (!window.gtag) return
+
+    const url =
+      pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '')
+
+    window.gtag('config', process.env.NEXT_PUBLIC_GA_ID!, {
+      page_path: url,
+    })
+  }, [pathname, searchParams])
+  console.log('API HIT', process.env.NODE_ENV)
+
   return (
     <AntConfigProvider>
       <Provider store={store}>
