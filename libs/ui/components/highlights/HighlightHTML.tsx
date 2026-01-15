@@ -1,6 +1,7 @@
+"use client";
+import { doHighlight, optionsImpl } from "@funktechno/texthighlighter/lib";
 import { PointerIcon, ShowCommentIcon } from "@lms/assets";
 import { useCourseNoteContext, useFeature } from "@lms/contexts";
-import { doHighlight, optionsImpl } from "@funktechno/texthighlighter/lib";
 import {
   replaceTextAlignCenterToWebKitCenter,
   replaceWhiteSpacePreWrapToNormal,
@@ -8,7 +9,6 @@ import {
 import { Button, Divider, Input, Modal, Popover } from "antd";
 import dayjs from "dayjs";
 import parseHTML, { Element } from "html-react-parser";
-import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import {
@@ -44,8 +44,8 @@ export const HighlightableHTML: React.FC<Props> = ({
   isShowNote = false,
   className,
 }) => {
-  const { router, courseApi, videoUrl } = useFeature();
-  const activityId = router.query.activityId;
+  const { courseApi, videoUrl, query } = useFeature();
+  const activityId = query.activityId;
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRefs = useRef<Record<string, React.RefObject<HTMLVideoElement>>>(
     {},

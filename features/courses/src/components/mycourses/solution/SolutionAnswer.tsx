@@ -15,7 +15,7 @@ const SolutionAnswer = ({
     ? isCorrect
       ? "text-success-600"
       : "text-error"
-    : "text-[#050505]";
+    : "text-gray-800";
 
   return (
     <>
@@ -30,7 +30,7 @@ const SolutionAnswer = ({
         <div className="w-fit">
           {message}
           {isYourAnswer && (
-            <span className="ml-3 inline-block border-[#DCDDDD] bg-[#F9F9F9] px-2 py-0.5 text-xs text-[#050505]">
+            <span className="ml-3 inline-block border bg-gray-100 px-2 py-0.5 text-xs text-gray-800">
               Your Answer
             </span>
           )}

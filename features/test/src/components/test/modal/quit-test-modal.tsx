@@ -35,6 +35,7 @@ const QuitTestModal = ({
   return (
     <SappModalV3
       open={open}
+      handleClose={() => setOpen(false)}
       cancelButtonCaption="Quit Anyway"
       okButtonCaption="Cancel"
       handleCancel={onSubmit}
@@ -42,7 +43,7 @@ const QuitTestModal = ({
       fullWidthBtn={true}
       buttonSize="medium"
       icon={<QuitIcon />}
-      header="Are you sure?"
+      header="Are you sure ?"
       content={content}
       cancelButtonClass="underline !p-0 !w-fit hover:text-primary"
       {...props}

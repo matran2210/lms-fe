@@ -1,3 +1,4 @@
+"use client"
 import { useAppSelector, userReducer, UserType } from "@lms/contexts";
 import { useMemo } from "react";
 

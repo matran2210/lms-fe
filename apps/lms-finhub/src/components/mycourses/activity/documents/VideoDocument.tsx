@@ -6,15 +6,14 @@ import {
   IActivityStateQuestion,
   useAppDispatch,
 } from '@lms/contexts'
+import { IQuestion, IVideo } from '@lms/core'
+import { SappButton, SappModal, SAPPVideo } from '@lms/ui'
 import { debounce } from '@utils/helpers'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import { IQuestion, IVideo } from '@lms/core'
-import { QuestionAPI } from '@pages/api/question'
-import { CoursesAPI } from '@pages/api/courses'
-import { SappButton, SappModal, SAPPVideo } from '@lms/ui'
-import { TestServiceAPI } from '@pages/api/test-api'
+import { TestServiceAPI } from 'src/api/test-api'
+import { CoursesAPI } from 'src/api/courses'
 
 type Props = {
   videos?: IVideo[]
@@ -354,19 +353,19 @@ const VideoDocument = ({
         <div>
           {(videos as IVideo[])?.length > 1 && (
             <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
-              <span className="font-semibold text-bw-1">Video mode:</span>
-              <div className="flex gap-2 rounded-sm bg-gray-4 p-1">
+              <span className="font-semibold text-gray-800">Video mode:</span>
+              <div className="flex gap-2 rounded-sm bg-gray-100 p-1">
                 {videos?.map((v, i) => {
                   return (
                     <label
-                      className=" flex cursor-pointer select-none items-center gap-2"
+                      className="flex cursor-pointer select-none items-center gap-2"
                       key={v?.file?.id ?? i}
                     >
                       {/* Radio button for video selection */}
                       <SappButton
                         key={v?.file?.id ?? i}
                         size="small"
-                        className="rounded-md !px-3 py-2 text-medium-sm !font-normal"
+                        className="rounded-md !px-3 py-2 text-sm !font-normal"
                         title={'Video ' + (i + 1)}
                         toolTipTitle=""
                         onClick={() =>
@@ -388,11 +387,11 @@ const VideoDocument = ({
         <div className="group relative z-[1051] hidden cursor-pointer select-none items-center md:flex">
           {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (
             <>
-              <span className="mr-2 text-bw-15 group-hover:text-primary">
+              <span className="mr-2 text-gray-800 group-hover:text-primary">
                 Timeline
               </span>
               {/* Icon for course video timeline */}
-              <Soundwave className="text-bw-15 group-hover:text-primary" />
+              <Soundwave className="text-gray-800 group-hover:text-primary" />
             </>
           ) : (
             <></>
@@ -405,13 +404,13 @@ const VideoDocument = ({
             onClose={() => handleCloseTab?.('')}
             onGoTimeline={handleGoTimeline}
           />
-          <div className="absolute bottom-0 right-0 hidden w-[407px] translate-y-full animate-fade-in-overlay overflow-hidden rounded-lg border border-[#E5E7EB] bg-white py-3 shadow-single-dialog group-hover:block">
+          <div className="absolute bottom-0 right-0 hidden w-[407px] translate-y-full animate-fade-in-overlay overflow-hidden rounded-lg border border-gray-200 bg-white py-3 shadow-single-dialog group-hover:block">
             <div className="h-full max-h-[412px] flex-1 snap-y overflow-y-auto bg-white">
               {timeLine?.map((e, i) => {
                 return (
                   <div
                     key={i}
-                    className="mx-3 grid grid-cols-[1.3fr,6fr] gap-3 rounded-[4px] p-3 text-medium-sm text-bw-1 hover:bg-gray-4 hover:text-primary-2"
+                    className="mx-3 grid grid-cols-[1.3fr,6fr] gap-3 rounded-[4px] p-3 text-sm text-gray-800 hover:bg-gray-100 hover:text-primary-400"
                     onClick={() => {
                       handleGoTimeline(e?.time)
                     }}
@@ -419,7 +418,7 @@ const VideoDocument = ({
                     <div className="mim-w-[62px] text-state-info">
                       {formatTime(e?.time)}
                     </div>
-                    <div className="text-inherit line-clamp-2 text-bw-1">
+                    <div className="text-inherit line-clamp-2 text-gray-800">
                       {htmlToRaw(e?.text)}
                     </div>
                   </div>
@@ -456,8 +455,8 @@ const VideoDocument = ({
             position="center"
             isInner={true}
             isBordered={true}
-            okButtonClass="!w-20 h-8.5 !px-0"
-            cancelButtonClass="!w-20 h-8.5 !px-0 !w-fit"
+            okButtonClass="!w-20 h-[34px] !px-0"
+            cancelButtonClass="!w-20 h-[34px] !px-0 !w-fit"
             footerButtonClassName="!justify-between flex flex-row-reverse items-center"
             handleSubmit={handleSubmitQuestion}
             handleCancel={handleCancelQuestion}

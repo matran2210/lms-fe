@@ -31,7 +31,7 @@
   }
 
   progress::-moz-progress-bar {
-    @apply border border-[#F9F9F9] bg-[#FFFFFF66];
+    @apply border border-gray-100 bg-[#FFFFFF66];
   }
 
   .seek:hover + .seek-tooltip {
@@ -72,7 +72,7 @@
       @apply right-8;
     }
 
-    &[data-title='Unmute']:before {
+    &[data-title="Unmute"]:before {
       top: -47px;
     }
   }
@@ -97,63 +97,63 @@
     border-radius: 80px;
   }
 
-  input[type='range'] {
+  input[type="range"] {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     @apply h-[6px] cursor-pointer bg-[#FFFFFF66];
   }
 
-  input[type='range']:focus {
+  input[type="range"]:focus {
     outline: none;
   }
 
-  input[type='range']::-webkit-slider-runnable-track {
+  input[type="range"]::-webkit-slider-runnable-track {
     @apply w-full cursor-pointer;
     border-radius: 1.3px;
     -webkit-appearance: none;
     transition: all 0.4s ease;
   }
 
-  input[type='range']::-webkit-slider-thumb {
-    @apply h-4 w-4 cursor-pointer bg-[#F1F1F1];
+  input[type="range"]::-webkit-slider-thumb {
+    @apply h-4 w-4 cursor-pointer bg-gray-200;
     -webkit-appearance: none;
     border-radius: 16px;
   }
 
-  input[type='range']:focus::-webkit-slider-runnable-track {
+  input[type="range"]:focus::-webkit-slider-runnable-track {
     background: transparent;
   }
 
-  input[type='range'].volume {
+  input[type="range"].volume {
     @apply h-[6px] bg-white;
   }
 
-  input[type='range'].volume::-webkit-slider-runnable-track {
+  input[type="range"].volume::-webkit-slider-runnable-track {
     @apply bg-transparent;
   }
 
-  input[type='range'].volume::-webkit-slider-thumb {
-    @apply ml-0 h-3.5 w-3.5 bg-white;
+  input[type="range"].volume::-webkit-slider-thumb {
+    @apply ml-0 h-3.5 w-[35%] bg-white;
   }
 
-  input[type='range']::-moz-range-track {
+  input[type="range"]::-moz-range-track {
     @apply h-[6px] w-full cursor-pointer;
     border: 1px solid transparent;
     background: transparent;
     border-radius: 1.3px;
   }
 
-  input[type='range']::-moz-range-thumb {
-    @apply h-3.5 w-3.5 cursor-pointer border border-[#F9F9F9] bg-[#F3F3F3];
+  input[type="range"]::-moz-range-thumb {
+    @apply h-3.5 w-[35%] cursor-pointer border border-gray-100 bg-[#F3F3F3];
     border-radius: 50px;
   }
 
-  input[type='range']:focus::-moz-range-track {
+  input[type="range"]:focus::-moz-range-track {
     outline: none;
   }
 
-  input[type='range'].volume::-moz-range-thumb {
+  input[type="range"].volume::-moz-range-thumb {
     @apply border border-white bg-white;
   }
 

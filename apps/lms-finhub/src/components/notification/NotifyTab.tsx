@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { trackGAEvent } from '@lms/utils'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 interface Tab {
   label: string
@@ -22,11 +22,11 @@ interface TabsProps {
 const NotifyTab: React.FC<TabsProps> = ({
   tabs,
   classUl = 'tab-buttons d-flex flex gap-10',
-  currentClass = 'activecolor text-bw-1 absolute w-full h-px bg-primary bottom-0 left-0',
+  currentClass = 'activecolor text-gray-800 absolute w-full h-px bg-primary bottom-0 left-0',
   tabClass = 'item text-base relative py-4.5 block',
   liClass,
-  tabCurrentClass = 'text-bw-1',
-  tabNotCurrentClass = 'text-gray-1',
+  tabCurrentClass = 'text-gray-800',
+  tabNotCurrentClass = 'text-gray',
 }) => {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState<number>(0)
@@ -36,6 +36,12 @@ const NotifyTab: React.FC<TabsProps> = ({
     trackGAEvent('Click Button Tab Notification')
   }
 
+  const pathname = usePathname()
+const searchParams = useSearchParams()
+
+const asPath =
+  pathname + (searchParams.toString() ? `?${searchParams}` : '')
+
   return (
     <ul className={classUl}>
       {tabs.map((tab, index) => (
@@ -44,7 +50,7 @@ const NotifyTab: React.FC<TabsProps> = ({
             <a
               onClick={() => handleTabClick(index)}
               className={`${tabClass} ${
-                router.asPath.includes(tab.path) ||
+                asPath.includes(tab.path) ||
                 (activeTab == 0 && tab?.label == 'All')
                   ? `${tabCurrentClass}`
                   : `${tabNotCurrentClass}`
@@ -54,7 +60,7 @@ const NotifyTab: React.FC<TabsProps> = ({
               {tab?.total !== undefined && (
                 <span className="ml-1">{`(${tab?.total})`}</span>
               )}
-              {router.asPath.includes(tab.path) ||
+              {asPath.includes(tab.path) ||
               (activeTab == 0 && tab?.label == 'All') ? (
                 <span className={currentClass}></span>
               ) : (

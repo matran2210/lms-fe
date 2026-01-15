@@ -5,10 +5,7 @@ import {
   FREQUENCY_UNITS_LABEL_PLURAL,
 } from "../enums";
 import { ISelectOption } from "../types/courses";
-import getConfig from "next/config";
 
-const { publicRuntimeConfig } = getConfig();
-export const { apiURL } = publicRuntimeConfig;
 export const TitleSidebar = {
   DASHBOARD: "Dashboard",
   COURSES: "My Course",
@@ -474,7 +471,7 @@ export const statusMap = {
   },
   NOT_STARTED: {
     label: "Not Started",
-    color: "text-primary-4",
+    color: "text-[#f57c00]",
     bg: "bg-primary-5",
   },
   ended: { label: "Ended", color: "text-gray-600", bg: "bg-gray-100" },

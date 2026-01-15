@@ -13,7 +13,7 @@ const GuidelineField = ({ guideline, classString = 'mt-1' }: Props) => {
         className={clsx(
           'sapp-guideline',
           guideline.length < 2
-            ? 'text-xsm font-semibold text-gray-2'
+            ? 'text-sm font-semibold text-secondary-100'
             : 'font-semibold',
           classString,
         )}

@@ -1,16 +1,16 @@
 interface IProps {
-  total: number
-  className?: string
+  total: number;
+  className?: string;
 }
 
-const TotalResullt = ({ total, className = '' }: IProps) => {
+const TotalResullt = ({ total, className = "" }: IProps) => {
   return (
     <div
-      className={`border-r border-gray-1 pr-6 font-normal text-gray-1 ${className}`}
+      className={`border-r border-gray pr-6 font-normal text-gray ${className}`}
     >
-      {`${total} ${total > 1 ? 'Results' : 'Result'}`}
+      {`${total} ${total > 1 ? "Results" : "Result"}`}
     </div>
-  )
-}
+  );
+};
 
-export default TotalResullt
+export default TotalResullt;

@@ -1,16 +1,16 @@
-import React from 'react';
-import { SappModalV3 } from '@lms/ui'
-import { TimeOutIcon, RemainingTimeIcon } from '@lms/assets'
-import { TEST_TYPE } from '@lms/core'
-import clsx from 'clsx'
+import React from "react";
+import { SappModalV3 } from "@lms/ui";
+import { TimeOutIcon, RemainingTimeIcon } from "@lms/assets";
+import { TEST_TYPE } from "@lms/core";
+import clsx from "clsx";
 
 interface IProps {
-  open: boolean
-  setOpen: any
-  handleSubmit: any
-  handleQuit: any
-  okButtonCaption?: string
-  type: string | string[] | undefined
+  open: boolean;
+  setOpen: any;
+  handleSubmit: any;
+  handleQuit: any;
+  okButtonCaption?: string;
+  type: string | string[] | undefined;
 }
 const TestTimeOutModal = ({
   open,
@@ -18,7 +18,7 @@ const TestTimeOutModal = ({
   handleSubmit,
   handleQuit,
   type,
-  okButtonCaption = 'View Results',
+  okButtonCaption = "View Results",
 }: IProps) => {
   // const dispatch = useAppDispatch()
   // const {} = useAppSelector()
@@ -27,22 +27,22 @@ const TestTimeOutModal = ({
   //   //dispatch(getDetailTest)
   // }, [])
   const onSubmit = () => {
-    handleSubmit()
+    handleSubmit();
     //to do: start test
-  }
+  };
   const onCancel = () => {
-    setOpen(false)
-    handleQuit()
-  }
+    setOpen(false);
+    handleQuit();
+  };
 
   const content =
-    type === 'event-test' ? (
+    type === "event-test" ? (
       <span>
         The test has timed out and has been submitted automatically. Your test
         result will <strong>be emailed to you on June 28, 2025.</strong> Please
         check your email regularly to receive the earliest update.
       </span>
-    ) : type === 'entrance' ? (
+    ) : type === "entrance" ? (
       <div className="text-center font-normal text-gray-800">
         <div className="text-sm md:text-base">
           <div className="mb-2">
@@ -57,16 +57,17 @@ const TestTimeOutModal = ({
             Your remaining time:
           </div>
           <div className={clsx(`text-base font-bold text-error`)}>
-            <>{'00:00:00'}</>
+            <>{"00:00:00"}</>
           </div>
         </div>
       </div>
     ) : (
-      'You are running out of time to do your test.'
-    )
+      "You are running out of time to do your test."
+    );
 
   return (
     <SappModalV3
+      handleClose={() => setOpen(false)}
       open={open}
       cancelButtonCaption="Quit"
       okButtonCaption={okButtonCaption}
@@ -76,12 +77,12 @@ const TestTimeOutModal = ({
       fullWidthBtn={true}
       buttonSize="medium"
       icon={<TimeOutIcon />}
-      header={type === 'entrance' ? TEST_TYPE.ENTRANCE_TEST : 'Time Out'}
+      header={type === "entrance" ? TEST_TYPE.ENTRANCE_TEST : "Time Out"}
       content={content}
       isMaskClosable={false}
-      isClosable={type === 'entrance'}
+      isClosable={type === "entrance"}
     />
-  )
-}
+  );
+};
 
-export default TestTimeOutModal
+export default TestTimeOutModal;

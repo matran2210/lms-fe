@@ -36,7 +36,7 @@ const ModalHeader = ({ date, handleClose }: IModalHeaderProps) => {
         </span>
       </div>
       <div onClick={handleClose} className="cursor-pointer">
-        <SappIcon icon="closeicon" className="text-[#99A1B7]" />
+        <SappIcon icon="closeicon" className="text-accent" />
       </div>
     </div>
   )
@@ -60,6 +60,7 @@ const ModalContent = ({ events }: IModalContentProps) => {
 const EventDetails = ({ details, handleClose }: IProps) => {
   return (
     <SappModalV3
+      handleClose={handleClose}
       open={details != null}
       size="max-w-[630px]"
       title={

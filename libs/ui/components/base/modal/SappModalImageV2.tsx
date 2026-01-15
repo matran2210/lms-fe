@@ -1,6 +1,7 @@
-import Image from "next/future/image";
+"use client";
 import { useEffect, useState } from "react";
 import SappModalV2 from "./SappModalV2";
+import Image from "next/image";
 
 type Props = {
   src?: string;

@@ -26,7 +26,7 @@ export default function MobileFilter3Level({
             setTempStatus(filterStatus)
             setOpenDrawer(true)
           }}
-          className="flex items-center gap-2 text-base font-normal leading-6 text-bw-15"
+          className="flex items-center gap-2 text-base font-normal leading-6 text-gray-800"
         >
           <FineTuninIcon /> Filter
         </ButtonIcon>
@@ -40,7 +40,7 @@ export default function MobileFilter3Level({
       >
         {/* Category */}
         <div className="mb-4">
-          <div className="mb-2 text-base font-semibold leading-6 text-bw-15">
+          <div className="mb-2 text-base font-semibold leading-6 text-gray-800">
             Category
           </div>
           <div className="space-y-2">
@@ -78,8 +78,8 @@ export default function MobileFilter3Level({
         </div>
 
         {/* Status */}
-        <div className="mb-4 border-t border-gray-17 pt-4">
-          <div className="mb-2 text-base font-semibold leading-6 text-bw-15">
+        <div className="mb-4 border-t border-gray-200 pt-4">
+          <div className="mb-2 text-base font-semibold leading-6 text-gray-800">
             Status
           </div>
           <div className="space-y-2">

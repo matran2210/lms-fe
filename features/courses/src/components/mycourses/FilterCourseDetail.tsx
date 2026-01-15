@@ -12,9 +12,9 @@ const FilterCourseDetail = ({
   totalResult: number;
   isTeacher?: boolean;
 }) => {
-  const { router, pageLink } = useFeature();
+  const { router, pageLink, params, query } = useFeature();
 
-  const apiUrl = `${getUserPrefix(isTeacher, pageLink)}/courses/my-course/${router.query.courseId}`;
+  const apiUrl = `${getUserPrefix(isTeacher, pageLink)}/courses/my-course/${params?.courseId || query.courseId}`;
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
 
   const { control, watch } = useForm();
@@ -38,7 +38,7 @@ const FilterCourseDetail = ({
 
   // defailtvalue của status
   const statusDetail = defaultStatusDetail?.find(
-    (item) => item?.value === router.query.user_section_learning_status,
+    (item) => item?.value === query.user_section_learning_status,
   );
 
   return (

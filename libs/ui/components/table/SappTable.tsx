@@ -1,3 +1,4 @@
+"use client"
 import type { TablePaginationConfig, TableProps } from 'antd'
 import { Table, Typography } from 'antd'
 import { ColumnsType } from 'antd/es/table'
@@ -77,7 +78,7 @@ const SappTable = <DataType, ParamType extends TablePaginationParams>({
   return (
     <>
       {titleTable?.isShowTitle && titleTable?.title && (
-        <Title level={5} className="mt-6 text-[#374151]">
+        <Title level={5} className="mt-6 text-gray-700">
           {titleTable.title}
         </Title>
       )}

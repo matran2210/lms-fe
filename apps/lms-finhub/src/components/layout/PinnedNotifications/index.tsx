@@ -1,15 +1,16 @@
 import { CloseIconNote, IconLoudSpeaker } from '@lms/assets'
 import { EditorReader } from '@lms/ui'
 import { Col, Row } from 'antd'
-import { useRouter } from 'next/router'
 import React from 'react'
 import { PageLink } from 'src/constants/routes'
 import Marquee from 'react-fast-marquee'
 import clsx from 'clsx'
 import { usePinnedNotifyContext } from '@lms/contexts'
+import { usePathname, useRouter } from 'next/navigation'
 
 function PinnedNotifications() {
   const router = useRouter()
+  const pathName = usePathname()
   const { openPinned, setOpenPinned, pinnedNotifications } =
     usePinnedNotifyContext()
 
@@ -26,7 +27,7 @@ function PinnedNotifications() {
     PageLink.COURSE_DETAIL,
     PageLink.COURSE_PART_DETAIL,
     PageLink.COURSE_ACTIVITY,
-  ].includes(router.pathname)
+  ].includes(pathName)
 
   return (
     <React.Fragment>
@@ -35,7 +36,7 @@ function PinnedNotifications() {
         pinnedNotifications?.data?.content && (
           <React.Fragment>
             <div
-              className={`fixed top-0 z-50 h-12 w-full bg-support-1 text-white`}
+              className={`fixed top-0 z-50 h-12 w-full bg-[#33475B]  text-white`}
             >
               <Row className="flex h-12 flex-row">
                 <Col span={1}></Col>

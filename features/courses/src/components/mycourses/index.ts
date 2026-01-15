@@ -15,7 +15,6 @@ export { default as PopupCompletedCourse } from "./PopupCompletedCourse";
 export { default as PopupExtend } from "./PopupExtend";
 export { default as PopupLesson } from "./PopupLesson";
 export { default as PopupOpenClass } from "./PopupOpenClass";
-export { default as PreviewNoteList } from "./PreviewNoteList";
 export { default as Tabs } from "./Tabs";
 export * from "./solution";
 export { default as PopupLockContent } from "./hubspot/PopupLockContent";
