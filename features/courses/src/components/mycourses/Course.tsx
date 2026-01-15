@@ -11,7 +11,6 @@ import {
 } from "@lms/utils";
 import { differenceInDays, parseISO, startOfDay } from "date-fns";
 import { isNull, round } from "lodash";
-import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 // import {Tooltip} from '@lms/ui' lỗi monorepo
@@ -49,13 +48,12 @@ const Course = ({
   refetch: () => void;
   isTeacher?: boolean;
 }) => {
-  const { courseApi, pageLink } = useFeature();
+  const {courseApi, pageLink, router} = useFeature();
   const [openExtend, setOpenExtend] = useState<boolean>(false);
   const [openActive, setOpenActive] = useState<boolean>(false);
   const [timeActive, setTimeActive] = useState<number>();
   const [openLesson, setOpenLesson] = useState<boolean>(false);
   const [openClass, setOpenClass] = useState<boolean>(false);
-  const router = useRouter();
   const student = course?.classes?.[0]?.class_user_instances?.[0];
   const classInstance = course?.classes[0];
   const [daysDifference, setDaysDifference] = useState(0);
@@ -333,7 +331,7 @@ const Course = ({
     classInstance?.class_user_instances?.[0]?.started_at,
   );
   const isNotOpened = !classInstance?.class_user_instances?.[0]?.is_opened;
-  const isCanceled = course.status === CLASS_USER_STATUS.CANCELED;
+  const isCanceled = classInstance?.status === CLASS_USER_STATUS.CANCELED;
 
   const courseAction = () => {
     // Handle pending lesson cases

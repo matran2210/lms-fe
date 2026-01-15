@@ -1,52 +1,52 @@
-import { LockSectionIcon, ThankYouIcon, UnlockIcon } from '@lms/assets'
-import { useFeature } from '@lms/contexts'
-import { SappModalV3 } from '@lms/ui'
-import React, { Dispatch, SetStateAction } from 'react'
+import { LockSectionIcon, ThankYouIcon, UnlockIcon } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
+import { SappModalV3 } from "@lms/ui";
+import React, { Dispatch, SetStateAction } from "react";
 
 export interface IPopupFormState {
-  lockSection: boolean
-  ctaUpgrade: boolean
-  thankYou: boolean
-  thankYouLater: boolean
+  lockSection: boolean;
+  ctaUpgrade: boolean;
+  thankYou: boolean;
+  thankYouLater: boolean;
 }
 
 interface PopupLockContentProps {
-  showForm: IPopupFormState
-  setShowForm: Dispatch<SetStateAction<IPopupFormState>>
+  showForm: IPopupFormState;
+  setShowForm: Dispatch<SetStateAction<IPopupFormState>>;
 }
 
 const MODAL_CONTENT = {
   lockSection: {
-    header: 'This content is locked',
+    header: "This content is locked",
     content:
-      'Sorry, you do not have access to this content. Click ‘Upgrade Now’ to receive a personalized learning consultation call from our admissions consultant .',
+      "Sorry, you do not have access to this content. Click ‘Upgrade Now’ to receive a personalized learning consultation call from our admissions consultant .",
     icon: <LockSectionIcon />,
   },
   ctaUpgrade: {
-    header: 'Unlock Your Learning Journey',
+    header: "Unlock Your Learning Journey",
     content:
       "Click 'Upgrade Now' to receive a personalized learning consultation call from our admissions consultant .",
     icon: <UnlockIcon />,
   },
   thankYou: {
-    header: 'Thank you!',
+    header: "Thank you!",
     content:
       "We'll contact you within 24 hours to unlock your full trial experience!",
     icon: <ThankYouIcon />,
   },
   thankYouLater: {
-    header: 'Thank you!',
+    header: "Thank you!",
     content:
       "We've already received your request. Our team will be in touch within 24 hours.",
     icon: <ThankYouIcon />,
   },
-}
+};
 
 const PopupLockContent: React.FC<PopupLockContentProps> = ({
   showForm,
   setShowForm,
 }) => {
-  const {courseApi, router}= useFeature()
+  const {courseApi, router, params}= useFeature()
 
   /**
    * Xử lý đóng modal bằng cách reset tất cả các trạng thái về false
@@ -58,8 +58,8 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
       ctaUpgrade: false,
       thankYou: false,
       thankYouLater: false,
-    })
-  }
+    });
+  };
 
   /**
    * Lấy nội dung hiển thị cho modal dựa trên trạng thái hiện tại
@@ -69,10 +69,10 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
   const getModalContent = () => {
     const activeKey = (Object.entries(showForm).find(
       ([_, value]) => value,
-    )?.[0] || 'thankYou') as keyof typeof MODAL_CONTENT
+    )?.[0] || "thankYou") as keyof typeof MODAL_CONTENT;
 
-    return MODAL_CONTENT[activeKey]
-  }
+    return MODAL_CONTENT[activeKey];
+  };
 
   /**
    * Xử lý khi người dùng click nút "Upgrade Now"
@@ -82,40 +82,40 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
 
   const handleUpgrade = async () => {
     const res = await courseApi.upgradeNowTrial(
-      router.query.courseId || router.query.id,
+      params?.courseId || params?.id,
     ) as { data?: { upgrade_now_available: boolean } }
 
-    const isAvailable = !!res?.data?.upgrade_now_available
+    const isAvailable = !!res?.data?.upgrade_now_available;
 
     setShowForm({
       lockSection: false,
       ctaUpgrade: false,
       thankYou: isAvailable,
       thankYouLater: !isAvailable,
-    })
-  }
+    });
+  };
 
   const handleOk = () => {
     if (showForm.thankYou || showForm.thankYouLater) {
-      handleClose()
+      handleClose();
     } else {
-      handleUpgrade()
+      handleUpgrade();
     }
-  }
+  };
 
-  const isOpen = Object.values(showForm).some(Boolean)
-  const { header, content, icon } = getModalContent()
+  const isOpen = Object.values(showForm).some(Boolean);
+  const { header, content, icon } = getModalContent();
 
   const okButtonCaption =
     showForm.thankYou || showForm.thankYouLater
-      ? 'Back to Study'
-      : 'Upgrade Now'
+      ? "Back to Study"
+      : "Upgrade Now";
 
   const cancelButtonCaption =
-    showForm.lockSection || showForm.ctaUpgrade ? 'Maybe Later' : ''
+    showForm.lockSection || showForm.ctaUpgrade ? "Maybe Later" : "";
 
-  const showFooter = isOpen
-  const isUnderLine = showForm.lockSection || showForm.ctaUpgrade
+  const showFooter = isOpen;
+  const isUnderLine = showForm.lockSection || showForm.ctaUpgrade;
 
   return (
     <SappModalV3
@@ -134,7 +134,7 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
       buttonSize="medium"
       isClosable={showFooter}
     />
-  )
-}
+  );
+};
 
-export default PopupLockContent
+export default PopupLockContent;

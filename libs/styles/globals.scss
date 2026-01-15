@@ -13,6 +13,7 @@
 @import "video.scss";
 @import "activity.scss";
 @import "test.scss";
+@import "animation.scss";
 @import "./course-3-level.scss";
 @import "./components/_calculator.scss";
 @import "./components/_event-repeat.scss";
@@ -821,6 +822,7 @@ textarea.is-invalid:focus {
   }
 }
 .sapp-modal.ant-modal {
+  will-change: transform, opacity;
   @apply max-w-[calc(100vw-2rem)] md:max-w-[calc(100vw-1rem)];
   .ant-modal-content {
     @apply rounded-2xl p-6 md:p-10;
@@ -1607,4 +1609,24 @@ mark {
       @apply mx-10 py-10;
     }
   }
+}
+
+.sapp-action-popover {
+  .ant-popover-inner {
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .ant-popover-arrow {
+    display: none !important;
+  }
+}
+
+.flag {
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity 200ms ease-out,
+    transform 200ms ease-out;
 }

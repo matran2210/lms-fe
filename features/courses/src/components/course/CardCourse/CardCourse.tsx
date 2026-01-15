@@ -8,7 +8,6 @@ import Badge from "./CardCourseBadge";
 import { useAppSelector } from "@lms/contexts";
 import { useTailwindBreakpoint } from "@lms/hooks";
 
-
 const mappingBadgeFromStatus: Partial<
   Record<EAttemptStatus, { badge: string; className: string }>
 > = {
@@ -49,8 +48,8 @@ const mappingBadgeFromStatus: Partial<
     className: "bg-success-50 text-success",
   },
   [EAttemptStatus.EXPIRED]: {
-    badge: 'Expired',
-    className: 'bg-error-50 text-error',
+    badge: "Expired",
+    className: "bg-error-50 text-error",
   },
 };
 
@@ -96,8 +95,10 @@ const CardCourse = forwardRef<
     return (
       <div data-aos={ANIMATION.DATA_AOS}>
         <div
+          data-guide-id="courses-card"
           className={clsx(
-            "relative flex flex-col rounded-xl bg-white p-4 shadow-card transition-colors duration-300 ease-in-out hover:border hover:border-primary hover:shadow-md md:p-6 lg:rounded-2xl lg:p-8",
+            "relative flex flex-col rounded-xl bg-white p-4 md:p-6 lg:rounded-2xl lg:p-8",
+            "hover-ring-primary hover-shadow-card",
             {
               "border-white bg-white":
                 !isMobileView && guideStatus && guideStep === 5,

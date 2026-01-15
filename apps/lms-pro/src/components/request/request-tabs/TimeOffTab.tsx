@@ -3,18 +3,16 @@ import { FilterGrid, SAPPButtonV2 } from '@lms/ui'
 import { SAPPInput } from '@lms/ui'
 import { SAPPRangePicker } from '@lms/ui'
 import { SAPPSelect } from '@lms/ui'
-import { RequestAPI } from '@pages/api/request'
-import { cleanParams } from '@lms/utils'
+import { RequestAPI } from 'src/api/request'
+import { buildQueryString, cleanParams } from '@lms/utils'
 import { TablePaginationConfig } from 'antd'
-import { useRouter } from 'next/router'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
-  DRAWER_REQUEST_TYPE,
   E_REQUEST_TYPE,
   OPTIONS_REQUEST_STATUS,
   OPTIONS_TIME_OFF_REQUEST_TYPE,
-  REQUEST_TYPE,
 } from '@lms/core'
 import { IRequest, IRequestFilterForm } from '@lms/core'
 import FormRequest from '../request-forms/FormRequest'
@@ -38,6 +36,9 @@ const TimeOffTab = () => {
     isOpenViewModal,
   } = useRequestContext()
   const router = useRouter()
+  const searchParam = useSearchParams()
+  const pathname = usePathname()
+  const query = Object.fromEntries(searchParam.entries())
 
   const { control, getValues, reset } = useForm<IRequestFilterForm>()
 
@@ -53,11 +54,11 @@ const TimeOffTab = () => {
   })
 
   const getParams = () => ({
-    request_name: router.query?.request_name,
-    type: router.query?.type,
-    status: router.query?.status,
-    from_date: router.query?.from_date,
-    to_date: router.query?.to_date,
+    request_name: query?.request_name,
+    type: query?.type,
+    status: query?.status,
+    from_date: query?.from_date,
+    to_date: query?.to_date,
   })
 
   const fetchRequests = async (
@@ -67,7 +68,7 @@ const TimeOffTab = () => {
   ) => {
     otherParams['type'] = otherParams['type']
       ? [otherParams['type']]
-      : [E_REQUEST_TYPE.TEACHER_SCHEDULE_TIME_OFF, REQUEST_TYPE.TEACHING_MODE]
+      : [E_REQUEST_TYPE.TEACHER_SCHEDULE_TIME_OFF, E_REQUEST_TYPE.TEACHING_MODE]
 
     setIsLoading(true)
     try {
@@ -120,15 +121,8 @@ const TimeOffTab = () => {
 
   const handleResetFilter = () => {
     reset()
-    const preservedQuery = { tab: router.query.tab } // ✅ preserve only needed query if needed
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: preservedQuery,
-      },
-      undefined,
-      { shallow: true },
-    )
+    const preservedQuery = { tab: query.tab } // ✅ preserve only needed query if needed
+    router.replace(`${pathname}?${buildQueryString(preservedQuery)}`)
     fetchRequests(1, 10)
   }
 

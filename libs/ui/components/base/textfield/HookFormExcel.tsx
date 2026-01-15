@@ -1,3 +1,4 @@
+"use client"
 import { Workbook } from '@fortune-sheet/react'
 import { isEmpty, isNull, isUndefined } from 'lodash'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'

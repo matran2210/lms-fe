@@ -270,5 +270,5 @@ deploy_lms_zoom:
 #       "
 #   environment: production
 #   tags:
-#   - shell
+#   - ec2-runner-shell
 #   resource_group: lms-fe

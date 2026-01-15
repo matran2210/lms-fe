@@ -5,7 +5,6 @@ import { useSappPaging } from "@lms/hooks";
 import { isQuizExpired } from "@lms/utils";
 import { Collapse } from "antd";
 import clsx from "clsx";
-import router from "next/router";
 import { useEffect, useState } from "react";
 import TableListQuizInActivity from "./TableListQuizInActivity";
 import ModalActionTest from "./ModalActionTest";
@@ -15,7 +14,7 @@ interface CollapseActivityProps {
 }
 
 const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
-  const { courseApi } = useFeature();
+  const { courseApi, router, params, query } = useFeature();
   const [activeKey, setActiveKey] = useState<string | string[]>([]);
   const [hasDataLoaded, setHasDataLoaded] = useState(false);
   const [open, setOpen] = useState<{ status: boolean; data: QuizActivity | null }>({
@@ -81,7 +80,7 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
   const handleViewActivity = (record: QuizActivity) => {
     if (!record?.id) return;
 
-    const courseId = router.query.courseId as string;
+    const courseId = params?.courseId || query.courseId as string;
     const quiz = record;
     const attempt = quiz?.attempts?.[0];
     // Logic điều hướng theo yêu cầu:
@@ -98,7 +97,7 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
         }
         );
       } else {
-        if (record?.attempts) {
+        if (record?.attempts && record?.attempts?.length > 0) {
         if (
           record?.attempts?.[0]?.status === EAttemptStatus.IN_PROGRESS
         ) {
@@ -141,7 +140,7 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
         openInNewTab({ url: `/courses/${courseId}/activity/${record.activity_id}?tabId=${record?.tab_id}`, });
       } else {
         // handleOpenTest(record)
-        if (record?.attempts) {
+        if (record?.attempts && record?.attempts?.length > 0) {
           if (
             record?.attempts?.[0]?.status === EAttemptStatus.SUBMITTED
           ) {
@@ -180,16 +179,16 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
   } = useSappPaging({
     uniqueKey: `course-results-${resultData?.id}`, // Unique key cho mỗi section
     queryFn: () => {
-      return courseApi?.getCourseResults!(router.query.courseId as string, {
-        class_id: router.query.classId as string,
+      return courseApi?.getCourseResults!(params?.courseId || query.courseId as string, {
+        class_id: query.classId as string,
         section_id: resultData?.id,
         page_index: pagination.current,
         page_size: pagination.pageSize,
       });
     },
     params: {
-      courseId: router.query.courseId,
-      classId: router.query.classId,
+      courseId: params?.courseId || query.courseId,
+      classId: query.classId,
       sectionId: resultData?.id,
     },
     enabled: hasDataLoaded, // Chỉ gọi API khi collapse được mở

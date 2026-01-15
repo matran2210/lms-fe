@@ -1,10 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { COMMENTS } from '@lms/core'
 import { ButtonPrimary, HookFormTextArea } from '@lms/ui'
-import { ClassAPI } from '@pages/api/class'
 import { Dispatch, SetStateAction, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { ClassAPI } from 'src/api/class'
 import { z } from 'zod'
 interface IProps {
   classId: string

@@ -24,6 +24,7 @@ const ChangeAnywayModal = ({
 }: IProps) => {
   return (
     <SappModalV3
+      handleClose={() => setOpenConfirmModal(false)}
       open={openConfirmModal}
       cancelButtonCaption="No"
       okButtonCaption="Change Anyway"

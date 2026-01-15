@@ -15,9 +15,9 @@ import {
   SAPPSelect,
 } from '@lms/ui'
 import { cleanParams } from '@lms/utils'
-import { RequestAPI } from '@pages/api/request'
+import { RequestAPI } from 'src/api/request'
 import { TablePaginationConfig } from 'antd'
-import { useRouter } from 'next/router'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import FormRequest from '../request-forms/FormRequest'
@@ -43,6 +43,8 @@ const PersonalScheduleTab = () => {
     setIsReFetch,
   } = useRequestContext()
   const router = useRouter()
+  const searchParam = useSearchParams()
+  const query = Object.fromEntries(searchParam.entries())
 
   const { control, getValues, reset } = useForm<IRequestFilterForm>()
 
@@ -58,11 +60,11 @@ const PersonalScheduleTab = () => {
   })
 
   const getParams = () => ({
-    request_name: router.query?.request_name,
-    type: router.query?.type,
-    status: router.query?.status,
-    from_date: router.query?.from_date,
-    to_date: router.query?.to_date,
+    request_name: query?.request_name,
+    type: query?.type,
+    status: query?.status,
+    from_date: query?.from_date,
+    to_date: query?.to_date,
   })
 
   const fetchRequests = async (

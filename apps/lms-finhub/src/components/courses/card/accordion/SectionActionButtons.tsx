@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react'
 import { ICourseSectionButtonProps } from 'src/type/courses-3-level'
-import { useRouter } from 'next/router'
 import { TEST_TYPE_ENUM } from '@lms/core'
 import { ButtonPrimary, ButtonSecondary, ButtonText } from '@lms/ui'
+import { useRouter } from 'next/navigation'
 
 export default function SectionActionButtons({
   section,

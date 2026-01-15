@@ -1,8 +1,9 @@
+"use client"
 // ConfirmDialog.tsx
-import router from 'next/router'
+import { AlertCircleSharp } from '@lms/assets'
+import { useFeature } from '@lms/contexts'
 import { FC, useEffect } from 'react'
 import SappModal from '../modal/SappModal'
-import { AlertCircleSharp } from '@lms/assets'
 
 // define the props for the confirm dialog component
 export type SappConfirmDialogProps = {
@@ -26,24 +27,19 @@ const SappConfirmDialog: FC<SappConfirmDialogProps> = ({
   onConfirm,
   closeConfirmation,
 }) => {
+  const { pathname } = useFeature()
   const handleCancel = async () => {
     onCancel && (await onCancel())
   }
   const handleConfirm = async () => {
     await onConfirm()
   }
+  // ✅ Close dialog when route changes
   useEffect(() => {
-    // on route change start - hide dialog
     if (open) {
-      router.events.on('routeChangeComplete', closeConfirmation)
-    } else {
-      router.events.off('routeChangeComplete', closeConfirmation)
+      closeConfirmation()
     }
-    // unsubscribe from events in useEffect return function
-    return () => {
-      router.events.off('routeChangeComplete', closeConfirmation)
-    }
-  }, [open])
+  }, [pathname])
 
   return (
     <>

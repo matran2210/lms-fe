@@ -1,3 +1,4 @@
+"use client"
 import type { TablePaginationConfig, TableProps } from 'antd'
 import { Table, Typography } from 'antd'
 import { ColumnsType } from 'antd/es/table'

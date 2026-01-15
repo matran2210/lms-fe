@@ -1,23 +1,22 @@
 import { EChart } from "@lms/ui";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { DashboardAPI } from "@pages/api/dashboard";
 import { DATE_FORMAT } from "@lms/core";
 import { IOverProgress, IExamPrediction } from "@lms/core";
 import dayjs from "dayjs";
 import { IconEssentional } from "@lms/assets";
-import useReponsive from "src/hooks/useReponsive";
 import { EChartsOption } from "echarts";
+import { useReponsive } from "@lms/hooks";
+import { useFeature } from "@lms/contexts";
 
 interface ChartData {
   exam_prediction: number;
 }
 
 const OverProgress = () => {
-  const router = useRouter();
   const [option, setOption] = useState<EChartsOption | null>();
   const { isMobile } = useReponsive();
-
+  const {dashboardApi, params, query} = useFeature()
+  const {courseId } = params || query
   const handlePieChartOption = (
     data: IOverProgress | IExamPrediction | ChartData,
   ) => {
@@ -114,7 +113,7 @@ const OverProgress = () => {
 
   const getOverProgress = async (id: string) => {
     try {
-      const res = await DashboardAPI.getExamPrediction(id);
+      const res = await dashboardApi?.getExamPrediction(id);
 
       if (res && res.success) handlePieChartOption(res.data);
     } catch (error) {
@@ -123,9 +122,9 @@ const OverProgress = () => {
   };
 
   useEffect(() => {
-    if (router?.query?.courseId)
-      getOverProgress(router.query.courseId as string);
-  }, [router?.query?.courseId]);
+    if (courseId)
+      getOverProgress(courseId as string);
+  }, [courseId]);
 
   return (
     <div className="mb-5 mt-6 flex w-full flex-col rounded-2xl bg-white p-4 text-gray-700 shadow-small md:mb-0 md:p-6 lg:h-auto xl:mt-0 xl:h-auto xl:w-[566px] xl:p-8">

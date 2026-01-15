@@ -1,5 +1,6 @@
 import { FlagIcon } from "@lms/assets";
-import React from "react";
+import clsx from "clsx";
+import React, { useEffect } from "react";
 
 interface PageLinkProps extends React.LiHTMLAttributes<HTMLLIElement> {
   active?: boolean;
@@ -21,6 +22,19 @@ const PageLinkPagination = ({
   isFlagedProp,
   ...otherProps
 }: PageLinkProps) => {
+  function usePrevious<T>(value: T) {
+    const ref = React.useRef<T | undefined>(undefined);
+    React.useEffect(() => {
+      ref.current = value;
+    }, [value]);
+    return ref.current;
+  }
+
+  const prevIsFlagged = usePrevious(isFlagedProp);
+
+  const shouldAnimate =
+    prevIsFlagged !== undefined && prevIsFlagged !== isFlagedProp;
+
   if (arrow && disabled) {
     return (
       <li
@@ -81,11 +95,15 @@ const PageLinkPagination = ({
       {...otherProps}
     >
       <span className="h-[22px] w-4 text-center">{children}</span>
-      {isFlagedProp && (
-        <div className="absolute -right-1 -top-[5px]">
-          <FlagIcon width="16" height="16" />
-        </div>
-      )}
+      <div
+        className={clsx(
+          "absolute -right-1 -top-[5px] z-[99]",
+          isFlagedProp ? "flag-static-on" : "flag-static-off",
+          shouldAnimate && (isFlagedProp ? "flag-enter" : "flag-exit"),
+        )}
+      >
+        <FlagIcon width="16" height="16" />
+      </div>
     </li>
   );
 };

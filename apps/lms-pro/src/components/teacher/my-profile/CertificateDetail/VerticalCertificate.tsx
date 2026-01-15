@@ -3,8 +3,8 @@ import { Button } from 'antd'
 import Image from 'next/image'
 import { CertificateImg, Icon, SappLogoImage } from '@lms/assets'
 import { ButtonPrimary, ClickToCopyButton } from '@lms/ui'
-import { ICertificate } from '@pages/certificates/[id]'
 import { CertificateCard } from '@lms/feature-user'
+import { ICertificate } from '@lms/core'
 
 interface CertificateVerticalProps {
   certificate?: ICertificate

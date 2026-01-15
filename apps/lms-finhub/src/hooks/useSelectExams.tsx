@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from 'react-query'
-import { ClassAPI } from 'src/pages/api/class'
-import { ClassKey } from 'src/pages/api/queryKey'
+import { ClassAPI } from 'src/api/class'
+import { ClassKey } from 'src/api/queryKey'
 
 const useSelectExams = (courseId: string) => {
   const DEFAULT_PAGESIZE = 10
