@@ -1,3 +1,4 @@
+"use client"
 import React, { Component } from "react";
 
 // Định nghĩa các trạng thái của component

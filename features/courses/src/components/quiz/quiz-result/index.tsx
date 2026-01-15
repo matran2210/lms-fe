@@ -7,10 +7,10 @@ import { IQuestionResultResponse } from "@sapp-fe/quiz-result-package/dist/type"
 import { useEffect, useState } from "react";
 
 const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
-  const { router, pageLink, courseApi } = useFeature();
+  const { router, pageLink, courseApi, query, params } = useFeature();
 
   const [activityInfo, setActivitiInfo] = useState<ActivityInfo | null>(null);
-  const { id } = router.query;
+  const { id } = params || query;
   const [loading, setLoading] = useState<boolean>(false);
   const [modalResult, setModalResult] = useState<{
     status?: boolean;
@@ -75,13 +75,13 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
           className="fixed right-8 top-5 z-20 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-gray-200 transition-colors hover:bg-gray-300"
           onClick={() => {
             if (activityInfo !== null) {
-              if (router.query?.tabId) {
+              if (query?.tabId) {
                 router.push(
-                  `${isTeacher ? pageLink.TEACHER_MY_COURSE : "/courses"}/${activityInfo?.class_id}/activity/${activityInfo?.activity_id}?tabId=${router.query?.tabId}`,
+                  `${isTeacher ? pageLink.TEACHER_MY_COURSE : "/courses"}/${activityInfo?.class_id}/activity/${activityInfo?.activity_id}?tabId=${query?.tabId}`,
                 );
               } else {
                 router.push(
-                  `/courses/my-course/${router.query?.courseId}/results`,
+                  `/courses/my-course/${query?.courseId}/results`,
                 );
               }
             }

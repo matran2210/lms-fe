@@ -1,8 +1,9 @@
-import React from "react";
-import { useLayoutEffect, useState } from "react";
-import { Divider, Table, TableProps } from "antd";
-import { CertificateImg, Icon, NoCertificationIcon } from "@lms/assets";
-import { useDownloadImage } from "@lms/hooks";
+"use client"
+import React from 'react';
+import { useLayoutEffect, useState } from 'react'
+import { Divider, Table, TableProps } from 'antd'
+import { CertificateImg, Icon, NoCertificationIcon } from '@lms/assets'
+import {useDownloadImage} from '@lms/hooks'
 
 import Image from "next/image";
 import { sappFormatDate } from "@lms/utils";

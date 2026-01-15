@@ -55,6 +55,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   onClick = () => {},
 }) => {
   const [size, setSize] = useState({ width, height });
+  const clamp = (value: number) => Math.abs(value);
   const [closing, setClosing] = useState(false);
   const EXIT_DURATION = 300;
 
@@ -79,64 +80,41 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
     const scrollX = window.scrollX;
     const scrollY = window.scrollY;
     const shift = offset * 20; // mỗi modal lệch 20px
-    // const positions = {
-    //   'top left': { x: 0, y: 0 },
-    //   'top middle': { x: (windowWidth - modalWidth) / 2, y: 0 },
-    //   'bottom left': { x: 0, y: windowHeight - modalHeight },
-    //   'bottom middle': {
-    //     x: (windowWidth - modalWidth) / 2,
-    //     y: windowHeight - modalHeight,
-    //   },
-    //   'bottom right': {
-    //     x: windowWidth - modalWidth,
-    //     y: windowHeight - modalHeight,
-    //   },
-    //   'top right': { x: windowWidth - modalWidth, y: 0 },
-    //   'center left': { x: 0, y: (windowHeight - modalHeight) / 2 },
-    //   'center right': {
-    //     x: windowWidth - modalWidth,
-    //     y: (windowHeight - modalHeight) / 2,
-    //   },
-    //   center: {
-    //     x: (windowWidth - modalWidth) / 2,
-    //     y: (windowHeight - modalHeight) / 2,
-    //   },
-    // }
     const positions = {
-      "top left": { x: shift, y: shift },
+      "top left": { x: clamp(shift), y: clamp(shift) },
       "top middle": {
-        x: (windowWidth - modalWidth) / 2 + shift,
-        y: shift,
+        x: clamp((windowWidth - modalWidth) / 2 + shift),
+        y: clamp(shift),
       },
       "top right": {
-        x: windowWidth - modalWidth - shift,
-        y: shift,
+        x: clamp(windowWidth - modalWidth - shift),
+        y: clamp(shift),
       },
 
       "center left": {
-        x: shift,
-        y: (windowHeight - modalHeight) / 2 + shift,
+        x: clamp(shift),
+        y: clamp((windowHeight - modalHeight) / 2 + shift),
       },
       center: {
-        x: (windowWidth - modalWidth) / 2 + shift,
-        y: (windowHeight - modalHeight) / 2 + shift,
+        x: clamp((windowWidth - modalWidth) / 2 + shift),
+        y: clamp((windowHeight - modalHeight) / 2 + shift),
       },
       "center right": {
-        x: windowWidth - modalWidth - shift,
-        y: (windowHeight - modalHeight) / 2 + shift,
+        x: clamp(windowWidth - modalWidth - shift),
+        y: clamp((windowHeight - modalHeight) / 2 + shift),
       },
 
       "bottom left": {
-        x: shift,
-        y: windowHeight - modalHeight - shift,
+        x: clamp(shift),
+        y: clamp(windowHeight - modalHeight - shift),
       },
       "bottom middle": {
-        x: (windowWidth - modalWidth) / 2 + shift,
-        y: windowHeight - modalHeight - shift,
+        x: clamp((windowWidth - modalWidth) / 2 + shift),
+        y: clamp(windowHeight - modalHeight - shift),
       },
       "bottom right": {
-        x: windowWidth - modalWidth - shift,
-        y: windowHeight - modalHeight - shift,
+        x: clamp(windowWidth - modalWidth - shift),
+        y: clamp(windowHeight - modalHeight - shift),
       },
     };
 
@@ -169,8 +147,8 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
           size={{ width: size.width, height: size.height }}
           position={modalPosition}
           onDragStop={(e, d) => {
-            const maxX = window.innerWidth - size.width;
-            const maxY = window.innerHeight - size.height;
+            const maxX = clamp(window.innerWidth - size.width);
+            const maxY = clamp(window.innerHeight - size.height);
             setModalPosition({
               x: Math.min(Math.max(0, d.x), maxX),
               y: Math.min(Math.max(0, d.y), maxY),
@@ -182,7 +160,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
             const maxX = window.innerWidth - newWidth;
             const maxY = window.innerHeight - newHeight;
 
-            setSize({ width: newWidth, height: newHeight });
+            setSize({ width: clamp(newWidth), height: clamp(newHeight) });
             setModalPosition({
               x: Math.min(Math.max(0, newPos.x), maxX),
               y: Math.min(Math.max(0, newPos.y), maxY),

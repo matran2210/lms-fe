@@ -1,3 +1,4 @@
+"use client"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ExceptionErrorCode, VALIDATE_PASSWORD } from "@lms/core";
 import { isEmpty } from "lodash";

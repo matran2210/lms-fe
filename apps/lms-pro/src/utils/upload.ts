@@ -1,5 +1,4 @@
-import toast from 'react-hot-toast'
-import { TestAPI } from 'src/pages/api/test'
+import { TestAPI } from 'src/api/test'
 
 export const mergeImageToEditor = async (data: string) => {
   const div = document.createElement('div')

@@ -76,13 +76,11 @@ const SappModalV3 = ({
   ...otherProps
 }: IProps) => {
   const [closing, setClosing] = useState(false);
-  const EXIT_DURATION = 400;
+  const EXIT_DURATION = 300;
 
   useEffect(() => {
     if (open) {
-      requestAnimationFrame(() => {
-        setClosing(false);
-      });
+      setClosing(false);
     }
   }, [open]);
 
@@ -99,6 +97,7 @@ const SappModalV3 = ({
 
   return (
     <Modal
+      forceRender={false}
       maskClosable
       open={open}
       className={clsx(

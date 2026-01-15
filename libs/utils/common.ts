@@ -19,6 +19,12 @@ import {
 } from "@funktechno/texthighlighter/lib";
 import { Correct } from './answer';
 
+declare global {
+  interface Window {
+    gtag: (command: string, targetId: string, config?: any) => void;
+  }
+}
+
 dayjs.extend(utc);
 dayjs.extend(weekday);
 

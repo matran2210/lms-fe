@@ -34,7 +34,7 @@ services:
   lms-zoom:
     build:
       context: .
-      dockerfile: ./prod.zoom.Dockerfile
+      dockerfile: ./prod.Dockerfile
       args:
         APP_NAME: "lms-zoom"
     container_name: lms-zoom

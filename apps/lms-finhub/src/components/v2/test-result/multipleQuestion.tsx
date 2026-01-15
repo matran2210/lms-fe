@@ -1,12 +1,12 @@
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
-import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
 import Recommendation from '@components/v2/test-result/Recommendation'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { COMMENTS, GRADE_STATUS, IAnswer } from '@lms/core'
 import { PageLink } from 'src/constants/routes'
 import { ButtonPrimary } from '@lms/ui'
+import { useRouter } from 'next/navigation'
 
 interface MultipleQuestionProps {
   questions: any

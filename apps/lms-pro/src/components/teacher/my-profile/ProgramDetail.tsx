@@ -2,12 +2,12 @@ import { Icon } from '@lms/assets'
 import { ISubjectItem, IUser, useAppSelector, userReducer } from '@lms/contexts'
 import { PROGRAM } from '@lms/core'
 import { SappCollapse } from '@lms/ui'
-import { UserApi } from '@pages/api/user'
 import { Divider } from 'antd'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import MyProfileAPI from 'src/pages/api/profile'
 import AttempItem from './SubjectInformation/AttempItem'
+import { UserApi } from 'src/api/user'
+import MyProfileAPI from 'src/api/profile'
 
 interface IProps {
   typeProgram: PROGRAM

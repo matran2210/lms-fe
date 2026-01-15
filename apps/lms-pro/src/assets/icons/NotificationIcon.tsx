@@ -1,3 +1,4 @@
+"use client"
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { useNotification } from 'src/hooks/useNotification'

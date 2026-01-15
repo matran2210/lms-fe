@@ -1,3 +1,4 @@
+"use client"
 import { SadIcon } from '@lms/assets'
 import { isMobileExtensive } from '@utils/helpers'
 import { Modal } from 'antd'

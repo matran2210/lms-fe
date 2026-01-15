@@ -1,3 +1,4 @@
+"use client"
 import { BlankAvatarImage, CheckCircleOutlineYellow, CloseIconV2, PencilFillV2Icon, PencilV2Icon } from '@lms/assets'
 import {
   getLogoutUser,
@@ -184,7 +185,7 @@ const ProfileHeader = ({
               loading ? 'animate-pulse' : ''
             } w-100 h-100 absolute bottom-0 left-0 right-0 top-0 overflow-hidden rounded-full lg:block`}
           >
-            <div className="group absolute left-1/2 top-1/2 h-fit w-fit -translate-x-1/2 -translate-y-1/2 transform overflow-hidden rounded-full leading-[0]">
+            <div className="group absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transform overflow-hidden rounded-full leading-[0]">
               {/* {isEdit && ( */}
               <div
                 className={clsx(
@@ -241,12 +242,12 @@ const ProfileHeader = ({
                   BlankAvatarImage
                 }
                 alt="avatar"
-                className=""
                 width={100}
                 height={100}
                 layout="fixed"
                 objectFit={'cover'}
-                priority={true}
+                priority
+                className="object-cover rounded-full"
               />
             </div>
           </div>

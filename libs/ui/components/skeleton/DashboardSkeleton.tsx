@@ -1,3 +1,4 @@
+"use client";
 import { Skeleton } from "antd";
 import clsx from "clsx";
 import { forwardRef, HTMLAttributes } from "react";

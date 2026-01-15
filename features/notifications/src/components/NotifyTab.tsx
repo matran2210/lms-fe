@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { trackGAEvent } from '@lms/utils'
+import { useFeature } from '@lms/contexts'
 
 interface Tab {
   label: string
@@ -28,7 +28,7 @@ const NotifyTab: React.FC<TabsProps> = ({
   tabCurrentClass = 'text-gray-800',
   tabNotCurrentClass = 'text-[#A1A1A1]',
 }) => {
-  const router = useRouter()
+  const {router} = useFeature()
   const [activeTab, setActiveTab] = useState<number>(0)
 
   const handleTabClick = (index: number) => {

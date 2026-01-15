@@ -24,12 +24,12 @@ import clsx from 'clsx'
 import DOMPurify from 'dompurify'
 import { isEmpty } from 'lodash'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
-import React from 'react'
+import React, { use } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
 import { PageLink } from 'src/constants/routes'
-import { CoursesAPI } from '../../pages/api/courses/index'
+import { useParams, useRouter } from 'next/navigation'
+import { CoursesAPI } from 'src/api/courses'
 
 const commonHeaderClass = 'text-left p-0 text-base font-medium text-gray'
 
@@ -51,6 +51,7 @@ const TableQuestions = ({
   isTeacher,
 }: ScoreDetailProps) => {
   const router = useRouter()
+  const params = useParams()
   const headers = [
     {
       label: '#',
@@ -85,10 +86,10 @@ const TableQuestions = ({
     isLoading,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ['scoreDetails', router.query.id],
+    queryKey: ['scoreDetails', params.id],
     queryFn: async ({ pageParam }) => {
       const res = await CoursesAPI.getQuizAttemptsTable(
-        router.query.id as string,
+        params.id as string,
         {
           page_index: pageParam,
           page_size: DEFAULT_PAGESIZE,
@@ -106,7 +107,7 @@ const TableQuestions = ({
           : undefined
       }
     },
-    enabled: router.query.id !== undefined,
+    enabled: params.id !== undefined,
     retry: false,
   })
 
@@ -235,8 +236,8 @@ const TableQuestions = ({
             {getGradingStatusLabel(gradingStatus || '')}
           </span>
         </div>
-        {router?.query?.attempt && (
-          <div className="mb-6 text-base text-gray-400">{`attempt: ${router?.query?.attempt}`}</div>
+        {params?.attempt && (
+          <div className="mb-6 text-base text-gray-400">{`attempt: ${params?.attempt}`}</div>
         )}
       </div>
       <div

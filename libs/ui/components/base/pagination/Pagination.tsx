@@ -1,3 +1,4 @@
+"use client";
 import { getPaginationItems } from "./pagination-fn";
 import PageLinkPagination from "./PageLink";
 import { Dispatch, ReactNode, SetStateAction, useRef } from "react";

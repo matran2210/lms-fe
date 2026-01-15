@@ -8,7 +8,6 @@ import {
   CALENDAR_FILTER_TYPE,
   LEARNING_USER_STATUS,
 } from "@lms/core";
-import { useRouter } from "next/router";
 import { CourseSectionType, TEST_TYPE_ENUM } from "@lms/core";
 import { LearningMode } from "@lms/core";
 import { buildQueryString } from "@lms/utils";

@@ -6,7 +6,7 @@ import { SappHookFormSelect } from '@lms/ui'
 import { buildQueryString } from '@lms/utils'
 import { getUserPrefix } from '@utils/helpers'
 import { isEmpty } from 'lodash'
-import { useRouter } from 'next/router'
+import { useParams, useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 interface IProps {
@@ -17,6 +17,7 @@ interface IProps {
 
 const Filter = ({ courses, setPage, isTeacher = false }: IProps) => {
   const router = useRouter()
+  const params = useParams()
   const { control, watch, setValue } = useForm()
   const [activeStatus, setActiveStatus] = useState<boolean>(false)
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
@@ -44,7 +45,7 @@ const Filter = ({ courses, setPage, isTeacher = false }: IProps) => {
       (userSectionLearningType !== undefined ||
         userSectionLearningStatus !== undefined)
     ) {
-      router.push(`${apiUrl}?name=${router.query.name || ''}${queryString}`)
+      router.push(`${apiUrl}?name=${params.name || ''}${queryString}`)
       setPage && setPage(9)
     }
   }, [apiUrl, queryString, watch])
@@ -57,19 +58,19 @@ const Filter = ({ courses, setPage, isTeacher = false }: IProps) => {
    * @description set lại value của status khi router query rỗng
    */
   useEffect(() => {
-    if (isEmpty(router?.query?.status)) {
+    if (isEmpty(params?.status)) {
       setValue('status', '')
     }
-  }, [router?.query?.status])
+  }, [params?.status])
 
   /**
    * @description set lại value của type khi router query rỗng
    */
   useEffect(() => {
-    if (isEmpty(router?.query?.type)) {
+    if (isEmpty(params?.type)) {
       setValue('type', '')
     }
-  }, [router?.query?.type])
+  }, [params?.type])
 
   return (
     <div className="flex items-center filter">

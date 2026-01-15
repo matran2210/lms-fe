@@ -17,13 +17,13 @@ interface IProps {
 }
 
 const CreateNote = ({ id, content, uuid, count }: IProps) => {
-  const { courseApi, router } = useFeature();
+  const { courseApi, params } = useFeature();
 
-  const activityId = router.query.activityId;
-  const [activeSectionId, setActiveSectionId] = useState<string>();
-  const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState<boolean>(false);
-  const { isMobileView } = useTailwindBreakpoint();
+  const activityId = params?.activityId
+  const [activeSectionId, setActiveSectionId] = useState<string>()
+  const dispatch = useAppDispatch()
+  const [loading, setLoading] = useState<boolean>(false)
+  const { isMobileView } = useTailwindBreakpoint()
   const validationSchema = z.object({
     [`description_${id ? id : uuid}`]: z
       .string()

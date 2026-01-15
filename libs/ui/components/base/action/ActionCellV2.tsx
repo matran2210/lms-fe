@@ -1,11 +1,12 @@
-import { Icon } from "@lms/assets";
-import { Popover } from "antd";
-import clsx from "clsx";
-import { ReactNode, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+"use client"
+import { Icon } from '@lms/assets'
+import { Popover } from "antd"
+import clsx from 'clsx'
+import { AnimatePresence, motion } from "framer-motion"
+import { ReactNode, useState } from 'react'
 
-import { Placement, arrowClassMap, arrowRotationMap } from "./placement";
-import { tooltipMotionByPlacement } from "./tooltip.motion";
+import { Placement, arrowClassMap, arrowRotationMap } from "./placement"
+import { tooltipMotionByPlacement } from "./tooltip.motion"
 
 interface ActionItem {
   icon: ReactNode;

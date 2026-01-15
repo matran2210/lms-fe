@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 import { buildQueryString } from '@lms/utils'
 import { Controller, useForm } from 'react-hook-form'
 import { debounce, isEmpty } from 'lodash'
@@ -7,6 +6,7 @@ import { IconSearch } from '../icons'
 import { ISearchFormProps } from 'src/type/courses-3-level'
 import clsx from 'clsx'
 import SidebarMobile from '../menu/MenuSideBarMobile'
+import { useParams, useRouter } from 'next/navigation'
 
 export default function SearchForm({
   placeholder,
@@ -15,12 +15,13 @@ export default function SearchForm({
   className,
 }: ISearchFormProps) {
   const router = useRouter()
+  const params = useParams()
   const { control, watch, setValue } = useForm()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const queryString = buildQueryString({
-    status: router.query.status || '',
-    type: router.query.type ?? '',
+    status: params.status || '',
+    type: params.type ?? '',
   })
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
 
@@ -72,10 +73,10 @@ export default function SearchForm({
    * @description set lại value của name khi router query rỗng
    */
   useEffect(() => {
-    if (isEmpty(router?.query?.name)) {
+    if (isEmpty(params?.name)) {
       setValue('name', '')
     }
-  }, [router?.query?.name, setValue])
+  }, [params?.name, setValue])
 
   return (
     <div
@@ -99,7 +100,7 @@ export default function SearchForm({
           <Controller
             control={control}
             name="name"
-            defaultValue={router.query.name ?? ''}
+            defaultValue={params.name ?? ''}
             render={({ field }) => (
               <input
                 {...field}

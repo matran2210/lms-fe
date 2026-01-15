@@ -2,9 +2,9 @@ import { IconBuildingModify } from '@lms/assets'
 import { ECourseProgram } from '@lms/core'
 import { SappModalV3 } from '@lms/ui'
 import { onLinkSocial } from '@lms/utils'
-import { CoursesAPI } from '@pages/api/courses'
-import { useRouter } from 'next/router'
+import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import { CoursesAPI } from 'src/api/courses'
 
 interface SurveyModalProps {
   class_code?: string
@@ -72,8 +72,8 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
 
   const completeFinal = progress >= 0.6 && progress <= 1
 
-  const router = useRouter()
-
+  const params = useParams();
+  const { courseId } = params
   /**
    * Xác định loại khảo sát hiện tại dựa trên trạng thái
    */
@@ -116,7 +116,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
    * Xử lý khi người dùng hoàn thành khảo sát
    */
   const handleCompleteSurvey = async () => {
-    await CoursesAPI.changeSurvey(router?.query?.courseId, {
+    await CoursesAPI.changeSurvey(courseId, {
       is_disabled: true,
     })
   }
@@ -125,7 +125,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
    * Xử lý khi người dùng muốn nhắc lại khảo sát sau
    */
   const handleRemindSurvey = async () => {
-    await CoursesAPI.changeSurvey(router?.query?.courseId, {
+    await CoursesAPI.changeSurvey(courseId, {
       remind_late: true,
     })
   }

@@ -1,11 +1,8 @@
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
-import getConfig from 'next/config'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
-import toast from 'react-hot-toast'
 import { ExceptionErrorCode } from '@lms/core'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
+import toast from 'react-hot-toast'
 
-const { publicRuntimeConfig } = getConfig()
-export const { apiURL } = publicRuntimeConfig
 
 let store: any
 export const injectStore = (_store: any) => {

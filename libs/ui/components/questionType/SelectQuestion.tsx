@@ -1,3 +1,4 @@
+"use client";
 import { IExhibitData, MY_COURSES } from "@lms/core";
 import { useTooltipModal } from "@lms/hooks";
 import { replaceWhiteSpacePreWrapToNormal, runHighlight } from "@lms/utils";

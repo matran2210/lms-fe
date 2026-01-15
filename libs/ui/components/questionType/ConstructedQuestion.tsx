@@ -1,3 +1,4 @@
+"use client";
 import { CloseIcon, UploadIcon } from "@lms/assets";
 import {
   disableUnsavedChange,
@@ -106,6 +107,7 @@ const EssayQuestionPreview = ({
   const dispatch = useAppDispatch();
   const refSheet = useRef(null) as any;
   const [key, setKey] = useState("1");
+  const {query} = useFeature()
 
   const editorRef = useRef<SAPPEditorHandle>(null);
   // Cờ chặn tạm thời onChange trong lúc đang thực hiện các thao tác cấu trúc
@@ -231,13 +233,12 @@ const EssayQuestionPreview = ({
   };
   if (externalRef) {
     externalRef.current = {
-      reset: (templateValue?: string) => {
+      reset: async (templateValue?: string) => {
         // editorRef.current?.moveSelectionOutOfTable()
-        editorRef.current?.resetContentSafe(
-          templateValue !== undefined
-            ? templateValue
-            : defaultValue || DEFAULT_EDITOR_VALUE,
-        );
+        const converted = await convertMathHtmlToImage(templateValue !== undefined
+          ? templateValue
+          : defaultValue || DEFAULT_EDITOR_VALUE);
+        editorRef.current?.resetContentSafe(converted);
       },
       resetSheet: () => {
         setKey((prev) => {
@@ -480,7 +481,7 @@ const EssayQuestionPreview = ({
             initialHTML={question_content || ""}
             storageKey={
               storageKey ||
-              `${router.query.id}-${fullData?.data?.qType}-question-${fullData?.id}`
+              `${query.id}-${fullData?.data?.qType}-question-${fullData?.id}`
             }
             className="sapp-questions sapp-editor-reader"
           />
@@ -531,7 +532,7 @@ const EssayQuestionPreview = ({
               <>
                 <HighlightableHTML
                   initialHTML={data?.description || ""}
-                  storageKey={`${router.query.id}-${fullData?.data?.qType}-requirement-description-${question_data?.requirements?.[index || 0]?.id}`}
+                  storageKey={`${query.id}-${fullData?.data?.qType}-requirement-description-${question_data?.requirements?.[index || 0]?.id}`}
                   className="sapp-questions mb-6"
                 />
                 {/* <EditorReader

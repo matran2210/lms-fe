@@ -1,3 +1,4 @@
+"use client"
 import { CollapseArrowIcon } from '@lms/assets'
 import React, { useState } from 'react'
 

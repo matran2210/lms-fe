@@ -1,3 +1,4 @@
+"use client"
 import { Icon } from "@lms/assets";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import { FullScreenMobile } from "@lms/ui";
