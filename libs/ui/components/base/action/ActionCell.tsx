@@ -1,3 +1,4 @@
+"use client";
 import { Dispatch, ReactNode, SetStateAction, useRef } from "react";
 import useClickOutside from "../clickoutside/HookClick";
 import clsx from "clsx";

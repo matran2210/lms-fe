@@ -1,6 +1,4 @@
-import { ClassAPI } from '@pages/api/class'
-import { ClassKey } from '@pages/api/queryKey'
-import { useRouter } from 'next/router'
+
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from 'react'
 import { useQuery, useQueryClient, useMutation } from 'react-query'
 import { PencilV2Icon } from '@lms/assets'
@@ -22,6 +20,9 @@ import { COURSE_TYPE, Data, TitleSidebar, zodMsg } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { getDuration } from '@lms/utils'
 import { SappDrawerV3 } from '@lms/ui'
+import { useParams, useRouter } from 'next/navigation'
+import { ClassKey } from 'src/api/queryKey'
+import { ClassAPI } from 'src/api/class'
 
 type Props = {
   open: boolean
@@ -93,7 +94,8 @@ const ExaminationInfo = ({
 }: Props) => {
   const { isTabletView, isMobileView } = useTailwindBreakpoint()
   const router = useRouter()
-  const [classId, setClassId] = useState(router.query.courseId as string)
+  const params = useParams()
+  const [classId, setClassId] = useState(params.courseId as string)
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: [ClassKey.ExamInfo, classId],
     queryFn: () =>

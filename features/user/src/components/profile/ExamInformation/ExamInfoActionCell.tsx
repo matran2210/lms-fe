@@ -1,3 +1,4 @@
+"use client"
 import { useClickOutside } from '@lms/ui'
 import { Icon } from '@lms/assets'
 import clsx from 'clsx'

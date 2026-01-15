@@ -1,3 +1,4 @@
+"use client";
 import { Upload, UploadProps } from "antd";
 import ButtonSecondary from "./ButtonSecondary";
 import { UploadIcon } from "@lms/assets";

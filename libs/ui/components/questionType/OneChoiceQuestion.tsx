@@ -1,3 +1,4 @@
+"use client";
 import { IExhibitData, MY_COURSES } from "@lms/core";
 import { getUppercaseByNumber, runHighlight } from "@lms/utils";
 import clsx from "clsx";
@@ -59,7 +60,7 @@ const OneChoiceQuestion = ({
   explainClassname,
   storageKey,
 }: IPreviewProp) => {
-  const { router } = useFeature();
+  const { router, query } = useFeature();
   useEffect(() => {
     if (defaultValues) {
       setValue(name, defaultValues);
@@ -120,7 +121,7 @@ const OneChoiceQuestion = ({
           initialHTML={data?.question_content || ""}
           storageKey={
             storageKey ||
-            `${router.query.id}-${data?.qType}-question-${data?.id}`
+            `${query.id}-${data?.qType}-question-${data?.id}`
           }
           className="sapp-questions sapp-editor-reader mb-6"
         />

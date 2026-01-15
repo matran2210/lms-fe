@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
-import { AuthAPI } from 'src/pages/api/profile'
 import { RootState } from '../../store'
 import {
   ChangePasswordReq,
   ChangePasswordRes,
   LoginState,
 } from '../../types/Login/login'
+import { AuthAPI } from 'src/api/profile'
 
 const initialState: LoginState = {
   accessToken: '',

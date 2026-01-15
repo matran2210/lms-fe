@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -101,10 +102,11 @@ const ExaminationInfo = ({
   onSuccess,
 }: Props) => {
   const { isTabletView, isMobileView } = useTailwindBreakpoint();
-  const { router, classApi } = useFeature();
+  const { router, classApi, params, query } = useFeature();
+  const { courseId } = params || query;
   const [direction, setDirection] = useState<1 | -1>(1);
   const [isOpenSelectExam, setIsOpenSelectExam] = useState<boolean>(false);
-  const [classId, setClassId] = useState(router.query?.courseId as string);
+  const [classId, setClassId] = useState(courseId as string);
 
   const { data, isLoading, isError, isSuccess, refetch } = useQuery({
     queryKey: [ClassKey.ExamInfo, classId],

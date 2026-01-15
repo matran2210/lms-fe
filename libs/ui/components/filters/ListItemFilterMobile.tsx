@@ -1,3 +1,4 @@
+"use client";
 import { CheckIconV2 } from "@lms/assets";
 import {
   allTypes,

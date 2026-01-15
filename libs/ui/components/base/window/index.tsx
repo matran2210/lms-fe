@@ -1,3 +1,4 @@
+"use client"
 import { moveAndResizeElement } from '@lms/utils'
 import { useEffect, useRef } from 'react'
 

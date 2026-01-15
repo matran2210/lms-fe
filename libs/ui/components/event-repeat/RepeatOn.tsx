@@ -1,3 +1,4 @@
+"use client"
 import { Checkbox } from 'antd'
 import clsx from 'clsx'
 import { memo, useCallback, useEffect, useState } from 'react'

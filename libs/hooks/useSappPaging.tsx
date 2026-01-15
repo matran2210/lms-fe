@@ -1,3 +1,4 @@
+"use client"
 import { useQuery, UseQueryResult } from 'react-query'
 import { TablePaginationConfig } from 'antd'
 import { Dispatch, SetStateAction, useState, useEffect } from 'react'
@@ -25,10 +26,10 @@ const useSappPaging = ({
   params,
   enabled = true,
 }: UsePagingProps): UsePagingResultSapp => {
-  const { router } = useFeature()
+  const { query } = useFeature()
   const [pagination, setPagination] = useState<TablePaginationConfig>({
-    current: Number(router.query.page_index) || 1,
-    pageSize: Number(router.query.page_size) || 10,
+    current: Number(query.page_index) || 1,
+    pageSize: Number(query.page_size) || 10,
     total: 10,
     showSizeChanger: true, // Hiển thị lựa chọn số lượng trang
     showQuickJumper: true, // Hiển thị tùy chọn chuyển nhanh trang
@@ -50,22 +51,19 @@ const useSappPaging = ({
   }
 
   useEffect(() => {
-    if (
-      data?.meta?.total_records ||
-      data?.metadata?.total_records ||
-      data?.data?.metadata?.total_records ||
-      data?.data?.meta?.total_records
-    ) {
-      setPagination((prev) => ({
-        ...prev,
-        total:
-          data?.meta?.total_records ||
-          data?.metadata?.total_records ||
-          data?.data?.metadata?.total_records ||
-          data?.data?.meta?.total_records,
-      }))
-    }
-  }, [data])
+  const total =
+    data?.meta?.total_records ??
+    data?.metadata?.total_records ??
+    data?.data?.metadata?.total_records ??
+    data?.data?.meta?.total_records
+
+  if (total !== undefined && total !== null) {
+    setPagination((prev) => ({
+      ...prev,
+      total,
+    }))
+  }
+}, [data])
 
   return {
     data, // Dữ liệu trả về từ queryFn, thường là danh sách hoặc object chứa dữ liệu phân trang

@@ -1,3 +1,4 @@
+"use client"
 import { ArrowIcon, PlusIcon } from '@lms/assets'
 import Link from 'next/link'
 import { useState } from 'react'

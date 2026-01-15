@@ -1,4 +1,4 @@
-import { MyRequestAPI } from '@pages/api/my-request'
+import { MyRequestAPI } from 'src/api/my-request'
 import { useEffect } from 'react'
 import { useInfiniteQuery } from 'react-query' // Import useInfiniteQuery
 

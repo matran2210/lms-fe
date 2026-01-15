@@ -1,3 +1,4 @@
+"use client"
 import { EmptyCourseProps } from 'src/type/courses-3-level'
 import { EmptyCoursesIcon } from '../icons'
 

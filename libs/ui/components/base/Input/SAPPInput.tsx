@@ -1,3 +1,4 @@
+"use client";
 import { StyleProvider } from "@ant-design/cssinjs";
 import { IBaseFormFieldProps } from "@lms/core";
 import { Input, InputRef } from "antd";

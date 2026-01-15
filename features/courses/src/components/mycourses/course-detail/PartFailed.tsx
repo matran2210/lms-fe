@@ -1,10 +1,15 @@
 import { ConfirmIcon } from "@lms/assets";
 import { useCourseContext, useFeature } from "@lms/contexts";
-import { EAttemptStatus, GRADE_STATUS, GRADING_METHOD, IMyCourseDetail, TEST_TYPE } from "@lms/core";
+import {
+  EAttemptStatus,
+  GRADE_STATUS,
+  GRADING_METHOD,
+  IMyCourseDetail,
+  TEST_TYPE,
+} from "@lms/core";
 import { ButtonSecondary, ButtonText, SappModalV3 } from "@lms/ui";
-import { formatTimer, getUserPrefix, trackGAEvent } from "@lms/utils";
+import { buildQueryString, formatTimer, getUserPrefix, trackGAEvent } from "@lms/utils";
 import clsx from "clsx";
-import router from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { CardCourse } from "../../course";
 import { TestModal, TestModalTeacher } from "../test";
@@ -27,10 +32,11 @@ const PartFailed = ({
   isTeacher: boolean;
   hasCertificate?: boolean;
 }) => {
-  const { pageLink } = useFeature();
+  const { pageLink, router } = useFeature();
 
-  const noOfAttempts = `${coursePart?.quiz?.attempt?.number_of_attempts || 0}/${coursePart?.quiz?.is_limited ? coursePart?.quiz?.limit_count : "Unlimited"
-    }`;
+  const noOfAttempts = `${coursePart?.quiz?.attempt?.number_of_attempts || 0}/${
+    coursePart?.quiz?.is_limited ? coursePart?.quiz?.limit_count : "Unlimited"
+  }`;
   const isSubmitted =
     coursePart?.quiz?.attempt &&
     coursePart?.quiz?.attempt?.status === "SUBMITTED";
@@ -78,7 +84,7 @@ const PartFailed = ({
   const runOutAttemp =
     Number(
       coursePart?.quiz?.attempt?.number_of_attempts /
-      coursePart?.quiz?.limit_count,
+        coursePart?.quiz?.limit_count,
     ) || 0;
 
   const showTitleFinalTest =
@@ -113,7 +119,7 @@ const PartFailed = ({
       // & Case: Last attempt
       if (
         coursePart?.quiz?.attempt?.number_of_attempts ===
-        coursePart?.quiz?.limit_count &&
+          coursePart?.quiz?.limit_count &&
         !isSubmitted
       )
         return true;
@@ -162,8 +168,11 @@ const PartFailed = ({
   const handleRedirectResult = () => {
     if (
       isManualGradingAndNotFinishedGrading &&
-      [GRADE_STATUS.AWAITING_GRADING, GRADE_STATUS.IN_REVIEW, GRADE_STATUS.REGRADING].includes(coursePart?.quiz?.attempt?.grading_status || '')
-
+      [
+        GRADE_STATUS.AWAITING_GRADING,
+        GRADE_STATUS.IN_REVIEW,
+        GRADE_STATUS.REGRADING,
+      ].includes(coursePart?.quiz?.attempt?.grading_status || "")
     ) {
       router.push(
         `${userPrefix}/courses/test/your-answers-detail/${quizAttempt?.attempt?.id}`,
@@ -171,7 +180,7 @@ const PartFailed = ({
     } else if (
       isManualGradingAndNotFinishedGrading &&
       coursePart?.quiz?.attempt?.grading_status !==
-      GRADE_STATUS.AWAITING_GRADING
+        GRADE_STATUS.AWAITING_GRADING
     ) {
       if (quizAttempt?.attempt && quizAttempt?.attempt?.id) {
         router.push(
@@ -179,13 +188,10 @@ const PartFailed = ({
         );
       }
     } else {
-      router.push({
-        pathname: `${userPrefix}/courses/test/test-result/${selectedResult?.value}`,
-        query: {
+      router.push(`${userPrefix}/courses/test/test-result/${selectedResult?.value}?${buildQueryString({
           attempt: selectedResult?.label,
           ...(hasCertificate && { hasCertificate }),
-        },
-      });
+        })}`);
     }
     trackGAEvent(`Click Button Result ${showTitleFinalTest}`);
   };
@@ -275,12 +281,12 @@ const PartFailed = ({
                     isManualGradingAndAwaitGrading
                       ? "--"
                       : selectedResult?.score !== undefined &&
-                        selectedResult?.score !== null
+                          selectedResult?.score !== null
                         ? //  || (coursePart?.quiz?.attempt?.score !== undefined &&
-                        //   coursePart?.quiz?.attempt?.score !== null)
-                        `${selectedResult?.score}%`
+                          //   coursePart?.quiz?.attempt?.score !== null)
+                          `${selectedResult?.score}%`
                         : // ? `${coursePart?.quiz?.attempt?.score}%`
-                        "--"
+                          "--"
                   }
                 />
               </>
@@ -296,27 +302,28 @@ const PartFailed = ({
               selectedResult={selectedResult}
               setSelectedResult={setSelectedResult}
               isTeacher={isTeacher}
-            // setLabelResult={setLabelResult}
+              // setLabelResult={setLabelResult}
             />
           </div>
 
           <div className="action flex items-center justify-end">
             {!checkFinished ? (
               !coursePart?.quiz?.is_limited ||
-                (coursePart?.quiz?.attempt?.number_of_attempts !==
-                  coursePart?.quiz?.limit_count &&
-                  isRunoutAttemp) ? (
+              (coursePart?.quiz?.attempt?.number_of_attempts !==
+                coursePart?.quiz?.limit_count &&
+                isRunoutAttemp) ? (
                 <ButtonSecondary
                   size="small"
                   disabled={
                     coursePart?.quiz?.is_limited &&
                     coursePart?.quiz?.attempt?.number_of_attempts ===
-                    coursePart?.quiz?.limit_count
+                      coursePart?.quiz?.limit_count
                   }
                   title={`Start`}
-                  className={`${coursePart?.quiz?.attempt?.number_of_attempts !==
-                    coursePart?.quiz?.limit_count && ""
-                    } ml-auto w-full md:w-[84px]`}
+                  className={`${
+                    coursePart?.quiz?.attempt?.number_of_attempts !==
+                      coursePart?.quiz?.limit_count && ""
+                  } ml-auto w-full md:w-[84px]`}
                   onClick={() => {
                     if (
                       coursePart?.course_section_link_parents?.[0]
@@ -390,8 +397,7 @@ const PartFailed = ({
           is_passed_course={is_passed_course}
         />
       ) : (
-        <>{
-          open && <TestModal
+        <TestModal
           open={open}
           setOpen={setOpen}
           title={coursePart?.name}
@@ -400,12 +406,12 @@ const PartFailed = ({
           is_passed_course={is_passed_course}
           selectedResultCourse={selectedResult}
         />
-        }</>
       )}
       <SappModalV3
+        handleClose={() => setOpenReport(false)}
         open={openReport}
         okButtonCaption="Back"
-        handleCancel={() => { }}
+        handleCancel={() => {}}
         onOk={() => {
           setOpenReport(false);
         }}
