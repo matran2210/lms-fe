@@ -9,7 +9,7 @@ import {
 } from '@utils/helpers/button'
 
 const LoadingSpinner = () => (
-  <div className="w-100 h-100 absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center space-x-2 bg-none dark:invert">
+  <div className="w-full h-100 absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center space-x-2 bg-none dark:invert">
     <span className="sr-only">Loading...</span>
     <div className="h-2 w-2 animate-bounce rounded-full bg-white [animation-delay:-0.3s]" />
     <div className="h-2 w-2 animate-bounce rounded-full bg-white [animation-delay:-0.15s]" />
