@@ -3,6 +3,7 @@ import { isEmpty, isNull, isUndefined } from "lodash";
 import { useQuery } from "react-query";
 import dayjs, { Dayjs } from "dayjs";
 import {
+  AnswerItem,
   DATE_FORMAT,
   DAYS_IN_WEEK,
   GRADE_STATUS,
@@ -17,7 +18,6 @@ import {
   removeHighlights,
   serializeHighlights,
 } from "@funktechno/texthighlighter/lib";
-import { Correct } from './answer';
 
 declare global {
   interface Window {
@@ -702,16 +702,22 @@ export const getGradingStatusLabel = (status: string) => {
 
 export const handleMultipleCorrectAnswer = (
   dragDropAnswers: IDragDropAnswer[],
-  answers: Correct[],
+  answers: AnswerItem[],
 ) => {
-  answers?.forEach((item: Correct) => {
-    dragDropAnswers?.forEach((correctItem: IDragDropAnswer) => {
-      if (correctItem?.answer_ids?.includes(item?.id)) {
-        item.answer_position = correctItem?.answer_position;
-        item.is_correct = true;
-      }
-    });
+  console.log("dragDropAnswers", dragDropAnswers);
+  console.log("answers", answers);
+  const answersMapped = dragDropAnswers?.map((correctItem: IDragDropAnswer) => {
+    const dragDropCurrent = answers?.find(
+      (item: AnswerItem) =>
+        correctItem.answer_position === item.answer_position,
+    );
+    const isCorrect =
+      correctItem?.answer_ids?.includes(dragDropCurrent?.answer_id || "") ||
+      false;
+    return {
+      ...dragDropCurrent,
+      is_correct: isCorrect,
+    };
   });
-
-  return answers;
+  return answersMapped;
 };

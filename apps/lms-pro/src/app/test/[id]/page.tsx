@@ -370,19 +370,25 @@ const TestDetail = () => {
           }
 
           if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
-            const answersTemp = (answers || []).sort(
+            const answersTemp = (answersSubmitted?.[0]?.answer || [])?.sort(
               (
                 a: { answer_position: number },
                 b: { answer_position: number },
               ) => a?.answer_position - b?.answer_position,
             )
-
+            const correctsTemp = (answers || [])?.sort(
+              (
+                a: { answer_position: number },
+                b: { answer_position: number },
+              ) => a?.answer_position - b?.answer_position,
+            )
             return {
               corrects: {
-                corrects: handleMultipleCorrectAnswer(
+                answers: handleMultipleCorrectAnswer(
                   drag_drop_answers,
                   answersTemp,
                 ),
+                corrects: correctsTemp,
               },
               solution,
               isSelfReflection: is_self_reflection || false,
@@ -1022,7 +1028,7 @@ const TestDetail = () => {
             onChange={(data: SlotValue[]) => {
               setValue(`${currentTabID}_drag_drop_answer`, data)
             }}
-            corrects={corrects?.corrects}
+            corrects={corrects}
             solution={solution}
             explainClassname="!mt-8 !p-0 !bg-transparent"
           />

@@ -33,7 +33,10 @@ interface DragDropQuestionProps {
   };
   defaultValue: SlotValue[];
   onChange?: (data: SlotValue[]) => void;
-  corrects?: Correct[];
+  corrects?: {
+    corrects: Correct[];
+    answers: Correct[];
+  };
   solution?: string;
   explainClassname?: string;
 }
@@ -102,10 +105,11 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
   solution,
   explainClassname,
 }) => {
+  console.log("corrects", corrects);
   const contentRef = React.useRef<HTMLSpanElement | null>(null);
   const [slots, setSlots] = useState<SlotValue[]>([]);
   const [items, setItems] = useState<Answer[]>([]);
-const [src, setSrc] = useState<string>();
+  const [src, setSrc] = useState<string>();
   const [type, setType] = useState<"VIDEO" | "IMG">("VIDEO");
   // Tạo slots từ question_content
   const parsedSlots = useMemo(() => {
@@ -141,80 +145,81 @@ const [src, setSrc] = useState<string>();
 
   // Parse lại HTML thành JSX + DroppableSlot hoặc SlotWithValue
   const isDisabled = !!(
-    corrects &&
-    Array.isArray(corrects) &&
-    corrects.length > 0
+    corrects?.answers &&
+    Array.isArray(corrects.answers) &&
+    corrects.answers.length > 0
   );
 
   const handleOnclick = async (e: React.MouseEvent<HTMLDivElement>) => {
-      const target = e?.target as HTMLElement;
-     if (target?.tagName === "IMG") {
-        const imageSrc = target?.getAttribute("src");
-        if (imageSrc) {
-          setSrc(() => {
-            setType("IMG");
-            return imageSrc;
-          });
-        }
+    const target = e?.target as HTMLElement;
+    if (target?.tagName === "IMG") {
+      const imageSrc = target?.getAttribute("src");
+      if (imageSrc) {
+        setSrc(() => {
+          setType("IMG");
+          return imageSrc;
+        });
       }
-    };
+    }
+  };
   const renderedContent = useMemo(() => {
-    return <div onClick={handleOnclick}>{parse(data.question_content, {
-      replace: (domNode) => {
-        if (
-          domNode instanceof Element &&
-          domNode.name === "span" &&
-          domNode.attribs?.class?.includes("question-content-tag")
-        ) {
-          const id = domNode.attribs.id;
-          const slot = slots.find((s) => s.id === id);
-          const value = slot?.value || "";
+    return (
+      <div onClick={handleOnclick}>
+        {parse(data.question_content, {
+          replace: (domNode) => {
+            if (
+              domNode instanceof Element &&
+              domNode.name === "span" &&
+              domNode.attribs?.class?.includes("question-content-tag")
+            ) {
+              const id = domNode.attribs.id;
+              const slot = slots.find((s) => s.id === id);
+              const value = slot?.value || "";
 
-          // Xác định status
-          let status: "success" | "error" | "empty" | "normal" = "normal";
-          if (value) {
-            if (corrects && Array.isArray(corrects)) {
-              const correct = corrects.find(
-                (c: any) => c.id === slot?.idAnswer,
-              );
-              if (correct) {
-                if (
-                  correct.is_correct
-                ) {
-                  status = "success";
-                } else {
-                  status = "error";
+              // Xác định status
+              let status: "success" | "error" | "empty" | "normal" = "normal";
+              if (value) {
+                if (corrects?.answers && Array.isArray(corrects.answers)) {
+                  const correct = corrects.answers.find(
+                    (c: any) => c.answer_position === slot?.position,
+                  );
+
+                  if (correct?.is_correct) {
+                    status = "success";
+                  } else {
+                    status = "error";
+                  }
                 }
+                return (
+                  <SlotWithValue
+                    key={id}
+                    id={id}
+                    value={value}
+                    status={status}
+                    disabled={isDisabled}
+                  />
+                );
               } else {
-                status = "error";
+                // Slot chưa điền
+                return (
+                  <DroppableSlot
+                    key={id}
+                    id={id}
+                    value=""
+                    index={
+                      typeof slot?.position === "number" ? slot.position : 0
+                    }
+                    disabled={isDisabled}
+                  />
+                );
               }
             }
-            return (
-              <SlotWithValue
-                key={id}
-                id={id}
-                value={value}
-                status={status}
-                disabled={isDisabled}
-              />
-            );
-          } else {
-            // Slot chưa điền
-            return (
-              <DroppableSlot
-                key={id}
-                id={id}
-                value=""
-                index={typeof slot?.position === "number" ? slot.position : 0}
-                disabled={isDisabled}
-              />
-            );
-          }
-        }
-        return undefined;
-      },
-    })}</div>;
-  }, [data.question_content, slots, corrects]);
+            return undefined;
+          },
+        })}
+      </div>
+    );
+  }, [data.question_content, slots, corrects?.corrects, isDisabled]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { over, active } = event;
@@ -427,14 +432,16 @@ const [src, setSrc] = useState<string>();
   return (
     <DndContext onDragEnd={handleDragEnd}>
       <div>
-        <span ref={contentRef} className="editor-wrap dragNdrop-question">{renderedContent}</span>
+        <span ref={contentRef} className="editor-wrap dragNdrop-question">
+          {renderedContent}
+        </span>
         {!isDisabled && <BankArea items={items} />}
-        {corrects && (
+        {corrects?.corrects && (
           <>
             <SappDivider />
             <CorrectAnswer
               questionContent={data.question_content}
-              corrects={corrects}
+              corrects={corrects.corrects}
             />
           </>
         )}
