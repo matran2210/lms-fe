@@ -78,8 +78,8 @@ export const ZoomMeeting = () => {
   // Auto join meeting when SDK is loaded and meeting config is ready
   useEffect(() => {
     if (isSDKLoaded && meetingConfig && !isJoining && !error) {
-      if (meetingToken) {
-        router.replace(pathname, { scroll: false })
+      if (meetingToken && query?.schedule_id) {
+        router.replace(`${pathname}?schedule_id=${query.schedule_id}`, { scroll: false })
       }
       handleJoinMeeting()
     }
