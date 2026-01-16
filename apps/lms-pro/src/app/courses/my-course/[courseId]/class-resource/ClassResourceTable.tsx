@@ -177,10 +177,8 @@ const ClassResourceTable = ({
   }
 
   const renderPreviewContent = (resource: IClassResource) => {
-    const videoUrl = process.env.NEXT_PUBLIC_VIDEO_URL as string
     switch (resource.suffix_type) {
       case 'VIDEO':
-      case 'AUDIO':
         return (
           <SAPPVideo
             isFetchCaptions={false}
@@ -222,7 +220,7 @@ const ClassResourceTable = ({
         return <TextPreview url={resource.url} />
       case 'ZIP':
         return (
-          <div className="text-gray-500 flex h-full items-center justify-center text-base font-medium">
+          <div className="flex h-full items-center justify-center text-base font-medium text-gray-500">
             Không thể hiển thị file ZIP, vui lòng tải xuống
           </div>
         )
@@ -293,8 +291,7 @@ const ClassResourceTable = ({
                 : undefined
             }
             className={clsx('!z-40 !rounded-lg', {
-              '!min-h-0 !overflow-visible':
-                previewResource.suffix_type === 'AUDIO',
+              '!overflow-visible': previewResource.suffix_type === 'AUDIO',
             })}
             position="center"
             handleCloseScratchPad={() => {
