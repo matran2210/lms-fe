@@ -1,8 +1,9 @@
-import React from "react";
-import { useLayoutEffect, useState } from "react";
-import { Divider, Table, TableProps } from "antd";
-import { CertificateImg, Icon, NoCertificationIcon } from "@lms/assets";
-import { useDownloadImage } from "@lms/hooks";
+"use client"
+import React from 'react';
+import { useLayoutEffect, useState } from 'react'
+import { Divider, Table, TableProps } from 'antd'
+import { CertificateImg, Icon, NoCertificationIcon } from '@lms/assets'
+import {useDownloadImage} from '@lms/hooks'
 
 import Image from "next/image";
 import { sappFormatDate } from "@lms/utils";
@@ -199,7 +200,7 @@ const Certificate = () => {
   return (
     <div className="mb-6 mt-0 md:mb-0 md:mt-8 lg:mt-10">
       {certificateData && !certificateData?.length ? (
-        <div className="flex min-h-[calc(100vh-120px)] flex-col items-center justify-center gap-2 md:min-h-352">
+        <div className="flex min-h-[calc(100vh-120px)] flex-col items-center justify-center gap-2 md:min-h-[352px] ">
           <NoCertificationIcon />
           <div className="text-small text-gray-400">
             You don&rsquo;t have any certificate!

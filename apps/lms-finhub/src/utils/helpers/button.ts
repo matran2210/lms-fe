@@ -12,7 +12,7 @@ export const getTextSizeClass = (size: ButtonSize): string => {
 }
 
 export const getPaddingVerticalClass = (size: ButtonSize): string => {
-  return size === 'large' ? 'py-2.8' : 'py-2'
+  return size === 'large' ? 'py-3' : 'py-2'
 }
 
 export const getPaddingHorizontalClass = (size: ButtonSize): string => {

@@ -16,7 +16,7 @@ const TabLayout: React.FC<TabheaderProps> = ({
   return (
     <div className="relative">
       <div
-        className="sticky top-0 hidden items-center justify-between border-b border-[#F1F1F1] bg-white md:flex"
+        className="sticky top-0 hidden items-center justify-between border-b border-gray-200 bg-white md:flex"
         {...props}
       >
         <div className="ml-6 pb-5 pt-6 text-xl font-medium">{title}</div>

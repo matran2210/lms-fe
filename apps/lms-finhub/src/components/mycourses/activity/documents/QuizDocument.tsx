@@ -25,19 +25,18 @@ import {
 } from '@lms/core'
 import { SappButton, SappIcon, SappModal, SappModalV3 } from '@lms/ui'
 import { isValidatedAnswer, trackGAEvent } from '@lms/utils'
-import { QuestionAPI } from '@pages/api/question'
-import ConFirmSubmit from '@pages/short-course/test/conFirmSubmit'
+import { QuizResultComponent } from '@sapp-fe/quiz-result-package'
+import { IQuestionResult } from '@sapp-fe/quiz-result-package/dist/type'
 import dayjs from 'dayjs'
 import { isNull } from 'lodash'
-import { useRouter } from 'next/router'
-import { QuizResultComponent } from '@sapp-fe/quiz-result-package'
 import toast from 'react-hot-toast'
 import { PageLink } from 'src/constants/routes'
-import { CoursesAPI } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import { IQuestionResult } from '@sapp-fe/quiz-result-package/dist/type'
-import { TestServiceAPI } from '@pages/api/test-api'
+import { useRouter } from 'next/navigation'
+import ConFirmSubmit from 'src/app/short-course/test/conFirmSubmit'
+import { TestServiceAPI } from 'src/api/test-api'
+import { CoursesAPI } from 'src/api/courses'
 
 type Props = {
   questions: IQuestion[]
@@ -139,7 +138,7 @@ const QuizDocument = ({
   }>()
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       if (questions?.[0]?.id) {
         setStartWorkTime(Date.now())
         // Load the first question when the component mounts
@@ -568,12 +567,12 @@ const QuizDocument = ({
           </div>
           <div className="body-modal-white -mt-2">
             <div id="hightlight_area">
-              <div className="my-6 border border-b-gray-2"></div>
+              <div className="my-6 border border-b-secondary-100"></div>
               <div className="mb-4 flex items-center">
                 <div className="font-semibold">{exhibitText}s (6)</div>
                 <div className="ml-4">
                   <span className="text-state-error">* </span>
-                  <span className="text-gray-1">Click to view</span>
+                  <span className="text-gray">Click to view</span>
                 </div>
               </div>
               <div className="flex flex-col gap-2">
@@ -593,7 +592,7 @@ const QuizDocument = ({
                   {exhibitText} 5: csv short
                 </div>
               </div>
-              <div className="my-6 border border-b-gray-2"></div>
+              <div className="my-6 border border-b-secondary-100"></div>
               <div className="questions editor-wrap mce-content-body" id="">
                 <div className="">
                   <p>
@@ -605,7 +604,7 @@ const QuizDocument = ({
             </div>
             <div className="answer-area">
               <div
-                className="sapp-store storage2 flex min-h-large w-full flex-wrap gap-5 border p-5"
+                className="sapp-store storage2 min-h-large flex w-full flex-wrap gap-5 border p-5"
                 id="storage"
               >
                 <span className="answer-box" draggable="true">
@@ -707,7 +706,7 @@ const QuizDocument = ({
       />
 
       <div
-        className={`text-black-1 h-[500px] select-none overflow-auto border border-gray-2 p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
+        className={`text-black-1 h-[500px] select-none overflow-auto border border-secondary-100 p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
         data-aos={ANIMATION.DATA_AOS}
       >
         {!quizSetting?.allow_attempt && !isNull(quizSetting) && (
@@ -734,7 +733,7 @@ const QuizDocument = ({
             />
           )}
       </div>
-      <div className="grid min-h-[50px] grid-cols-3 items-center gap-3 bg-gray-3 px-6 py-2">
+      <div className="bg-gray-100px-6 grid min-h-[50px] grid-cols-3 items-center gap-3 py-2">
         <div className="col-span-1 flex flex-wrap items-center gap-2">
           <div
             className={`${
@@ -850,7 +849,7 @@ const QuizDocument = ({
               setModalResult(undefined)
             }}
           >
-            <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+            <CloseIcon className="transform stroke-gray-800 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
           </div>
           <QuizResultComponent
             questionResponse={modalResult?.questions || []}

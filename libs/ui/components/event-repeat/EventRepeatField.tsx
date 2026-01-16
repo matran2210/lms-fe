@@ -1,3 +1,4 @@
+"use client";
 import { convertLocalWeekDaysToUTC, reverseDaysOfWeek } from "@lms/utils";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";

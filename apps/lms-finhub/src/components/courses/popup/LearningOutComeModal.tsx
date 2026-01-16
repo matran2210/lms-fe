@@ -106,7 +106,7 @@ const LearningOutComeModal: React.FC<IProps> = ({
               <div className="mt-[0.05em]">
                 <BlackStarIcon />
               </div>
-              <div className="flex select-none items-start gap-1 text-sm font-normal text-bw-15 lg:text-base">
+              <div className="flex select-none items-start gap-1 text-sm font-normal text-gray-800 lg:text-base">
                 <span>LO{index + 1}:</span>
                 <EditorReader text_editor_content={outcome?.description} />
               </div>

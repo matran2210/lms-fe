@@ -1,3 +1,4 @@
+"use client"
 import { useAppDispatch, confirmDialog } from '@lms/contexts'
 import ButtonPrimary from './button/ButtonPrimary'
 import { ReactNode, useEffect, useRef, useState } from 'react'

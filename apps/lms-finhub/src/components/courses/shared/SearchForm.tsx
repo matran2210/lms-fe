@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 import { buildQueryString } from '@lms/utils'
 import { Controller, useForm } from 'react-hook-form'
 import { debounce, isEmpty } from 'lodash'
@@ -7,6 +6,7 @@ import { IconSearch } from '../icons'
 import { ISearchFormProps } from 'src/type/courses-3-level'
 import clsx from 'clsx'
 import SidebarMobile from '../menu/MenuSideBarMobile'
+import { useParams, useRouter } from 'next/navigation'
 
 export default function SearchForm({
   placeholder,
@@ -15,12 +15,13 @@ export default function SearchForm({
   className,
 }: ISearchFormProps) {
   const router = useRouter()
+  const params = useParams()
   const { control, watch, setValue } = useForm()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const queryString = buildQueryString({
-    status: router.query.status || '',
-    type: router.query.type ?? '',
+    status: params.status || '',
+    type: params.type ?? '',
   })
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
 
@@ -72,10 +73,10 @@ export default function SearchForm({
    * @description set lại value của name khi router query rỗng
    */
   useEffect(() => {
-    if (isEmpty(router?.query?.name)) {
+    if (isEmpty(params?.name)) {
       setValue('name', '')
     }
-  }, [router?.query?.name, setValue])
+  }, [params?.name, setValue])
 
   return (
     <div
@@ -86,7 +87,7 @@ export default function SearchForm({
     >
       <SidebarMobile />
       <div
-        className={`border-transparent flex max-w-1524 flex-1 items-center justify-between rounded-lg border border-white bg-white px-2 py-3 shadow-small transition-all duration-300 focus-within:border-primary focus-within:outline-none hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4`}
+        className={`flex max-w-[1524px] flex-1 items-center justify-between rounded-lg border border-transparent border-white bg-white px-2 py-3 shadow-small transition-all duration-300 focus-within:border-primary focus-within:outline-none hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4`}
       >
         <form
           className={`flex w-full items-center ${formStyle}`}
@@ -99,13 +100,13 @@ export default function SearchForm({
           <Controller
             control={control}
             name="name"
-            defaultValue={router.query.name ?? ''}
+            defaultValue={params.name ?? ''}
             render={({ field }) => (
               <input
                 {...field}
                 type="text"
                 placeholder={placeholder}
-                className="placeholder-gray-v2-400 h-6 w-full border-0 px-4 text-sm leading-[22px] text-bw-15 focus:border-0 focus:outline-0 focus:ring-0 md:text-base md:leading-6"
+                className="placeholder-gray-v2-400 h-6 w-full border-0 px-4 text-sm leading-[22px] text-gray-800 focus:border-0 focus:outline-0 focus:ring-0 md:text-base md:leading-6"
               />
             )}
           />

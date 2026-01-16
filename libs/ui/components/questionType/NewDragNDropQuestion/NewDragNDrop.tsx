@@ -1,3 +1,4 @@
+"use client";
 import SappDivider from "../../base/divider/Divider";
 import { DndContext, DragEndEvent, useDroppable } from "@dnd-kit/core";
 import parse, { Element } from "html-react-parser";
@@ -178,8 +179,7 @@ const [src, setSrc] = useState<string>();
               );
               if (correct) {
                 if (
-                  correct.is_correct &&
-                  correct.answer_position === (slot?.position ?? 0)
+                  correct.is_correct
                 ) {
                   status = "success";
                 } else {

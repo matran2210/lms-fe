@@ -13,10 +13,10 @@ interface ISelectExamPopup {
 }
 
 const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
-  const { router, classApi } = useFeature();
-  const { control, watch } = useForm({ defaultValues: { exam_date: null } });
-  const selectedExam = watch("exam_date");
-  const [examModal, setExamModal] = useState(false);
+  const {router, classApi, query, params} = useFeature()
+  const { control, watch } = useForm({ defaultValues: { exam_date: null } })
+  const selectedExam = watch('exam_date')
+  const [examModal, setExamModal] = useState(false)
 
   const remindChoosingExam: RemindChoosingExam =
     courseData?.pages?.[0]?.courseDetail?.remind_choosing_exam;
@@ -25,12 +25,14 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
     api: {
       getExams: classApi.getExams,
     },
-    courseId: router.query.courseId as string,
-  });
+    courseId: params?.courseId as string || query.courseId as string
+  }
+    
+  )
 
   const { mutate: updateExamDate, isLoading } = useMutation({
     mutationFn: (formData: FormData) =>
-      classApi.changeExamDate(router.query.courseId as string, formData),
+      classApi.changeExamDate(params?.courseId as string || query.courseId as string, formData),
     onSuccess: (res: any) => {
       if (res.data.success) {
         setExamModal(false);
@@ -88,7 +90,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
   const renderExamContent = () => {
     if (remainingChanges === 0) {
       return (
-        <p className="text-sm text-gray-1">
+        <p className="text-sm text-gray">
           <span>
             If you have changed your exam date, please contact our support at
             hotline 1900 2225 or submit a support ticket{" "}
@@ -108,7 +110,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
 
     return (
       <>
-        <p className="mb-2 text-sm text-gray-1">
+        <p className="mb-2 text-sm text-gray">
           {getTitleMessage(remindChoosingExam)}
         </p>
         <SAPPSelectV2

@@ -5,7 +5,7 @@ const Heading = ({ title }: { title: string }) => {
     <div className="flex content-center items-center justify-between">
       <div>
         <p className="mb-2">
-          <span className="font-sans text-base font-normal leading-6 tracking-normal text-[#99A1B7]">
+          <span className="font-sans text-base font-normal leading-6 tracking-normal text-accent">
             LMS{' '}
           </span>
           <span className="font-fira text-sm font-normal leading-[21px] tracking-normal text-gray-800">

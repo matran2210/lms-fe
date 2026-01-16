@@ -1,18 +1,18 @@
 import { IconEssentional, MatchFailIcon, SuccessMatchIcon } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
 import {
   ANIMATION,
   COURSE_TYPE,
   DATE_FORMAT,
   ILearningResult,
   IMockTestResult,
+  PROGRAM,
 } from "@lms/core";
 import { useReponsive } from "@lms/hooks";
 import { EChart, NoData, Tooltip } from "@lms/ui";
-import { DashboardAPI } from "@pages/api/dashboard";
 import dayjs from "dayjs";
 import { EChartsOption } from "echarts";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 
 interface CourseInfo {
@@ -34,13 +34,13 @@ interface TooltipParams {
 }
 
 const LearningResults = () => {
-  const router = useRouter();
   const [results, setResults] = useState<ILearningResult[] | IMockTestResult[]>(
     [],
   );
-
+  const {query, params, dashboardApi} = useFeature()
+  const {courseId } = params || query
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [hasLearning, setHasLearning] = useState<boolean>(false);
+  // const [hasLearning, setHasLearning] = useState<boolean>(false);
   const [mockTestId, setMockTestId] = useState<string>("");
   const courseInfo = useMemo(
     () =>
@@ -49,22 +49,24 @@ const LearningResults = () => {
   );
   const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE;
   const resultFormula =
-    courseInfo?.category === "ACCA"
-      ? "%Results = Graded activities (70%) + Final test (30%)"
-      : "%Results = Module test (40%) + Topic test (60%)";
+    courseInfo?.category === PROGRAM.LD
+      ? "% Results = Topic test (30%) + Final test (70%)"
+      : courseInfo?.category === "ACCA"
+        ? "%Results = Graded activities (70%) + Final test (30%)"
+        : "%Results = Module test (40%) + Topic test (60%)";
 
   const { isMobile, isTablet } = useReponsive();
 
   useEffect(() => {
     const getLearningResults = async (id: string) => {
       try {
-        const res = (await DashboardAPI.getMockTestResults(
+        const res = (await dashboardApi?.getMockTestResults(
           id,
         )) as MockTestResponse;
         if (res && res.success) {
           const data = res.data.reports;
           setResults(data);
-          setHasLearning(data.some((e: ILearningResult) => e.score));
+          // setHasLearning(data.some((e: ILearningResult) => e.score));
           if (!isNormal && res.data.mock_tests?.length === 1) {
             setMockTestId(res.data.mock_tests[0].id);
           }
@@ -75,9 +77,9 @@ const LearningResults = () => {
         setIsLoading(false);
       }
     };
-    if (router?.query?.courseId)
-      getLearningResults(router.query.courseId as string);
-  }, [router?.query?.courseId, isNormal]);
+    if (courseId)
+      getLearningResults(courseId as string);
+  }, [courseId, isNormal]);
 
   const option = useMemo(() => {
     if (!results || results.length === 0) return null;
@@ -244,7 +246,7 @@ const LearningResults = () => {
                   <div className="flex flex-row items-start justify-center gap-5 xl:flex-col xl:gap-4">
                     {!isNormal && (
                       <div className="flex items-center justify-center gap-2.5 text-sm font-medium xl:text-base">
-                        <span className="min-h-3 min-w-3 rounded-full bg-dashboard-mock-test"></span>
+                        <span className="min-h-3 min-w-3 rounded-full bg-[#FB8C5B]"></span>
                         <Link
                           href={
                             mockTestId
@@ -252,7 +254,7 @@ const LearningResults = () => {
                               : ""
                           }
                           target="_blank"
-                          className={`inline-block min-w-fit text-base font-bold text-gray-800 ${!mockTestId ? "pointer-events-none" : "hover:text-dashboard-learing"}`}
+                          className={`inline-block min-w-fit text-base font-bold text-gray-800 ${!mockTestId ? "pointer-events-none" : "hover:text-[#6FD3B0]"}`}
                           rel="noreferrer"
                         >
                           Mock test results
@@ -261,7 +263,7 @@ const LearningResults = () => {
                     )}
 
                     <div className="flex items-center justify-center gap-2.5">
-                      <span className="min-h-3 min-w-3 rounded-full bg-dashboard-learing"></span>
+                      <span className="min-h-3 min-w-3 rounded-full bg-[#6FD3B0]"></span>
                       <span className="min-w-fit text-sm font-medium text-gray-800 xl:text-base">
                         Learning results
                       </span>

@@ -1,7 +1,8 @@
+"use client";
 import React, { useEffect, Dispatch, SetStateAction } from "react";
-import router, { useRouter } from "next/router";
 import { CourseSearchIcon } from "@lms/assets";
 import { Controller, useFormContext } from "react-hook-form";
+import { useFeature } from "@lms/contexts";
 
 interface IProps {
   placeholder: string;
@@ -30,7 +31,7 @@ const SearchForm = ({
   redirectLink,
   control,
 }: IProps) => {
-  const { query, push } = useRouter();
+  const { query, router } = useFeature();
   const { watch, setValue } = useFormContext();
 
   useEffect(() => {
@@ -40,7 +41,7 @@ const SearchForm = ({
       // }
       if (!isFocused && !watch("name")?.trim()?.length && isCoursePage) {
         // push(PageLink.COURSES);
-        push(redirectLink);
+        router.push(redirectLink);
       }
     }
   }, [isFocused, watch("name"), isCoursePage]);
@@ -63,7 +64,7 @@ const SearchForm = ({
       <Controller
         control={control}
         name="name"
-        defaultValue={router.query.name ?? ""}
+        defaultValue={query.name ?? ""}
         render={({ field }) => (
           <input
             {...field}

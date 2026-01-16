@@ -1,11 +1,12 @@
+"use client";
 import { ExpandIcon } from "@lms/assets";
 import { useAppSelector, useFeature } from "@lms/contexts";
 import { trackGAEvent } from "@lms/utils";
 import { Divider } from "antd";
 import clsx from "clsx";
 import { Dispatch, SetStateAction } from "react";
-import MenuItemsList from "../MenuItemsList";
 import { ExaminationInfo, LearningResource } from "../../components";
+import MenuItemsList from "../MenuItemsList";
 type SidebarProps = {
   isOpened: boolean;
   className: string;
@@ -25,7 +26,7 @@ export default function Sidebar({
   openExaminationInfo,
   setOpenExaminationInfo,
 }: SidebarProps) {
-  const { pageLink, menuItems, menuItemsEvent, menuBottom, router } =
+  const { pageLink, menuItems, menuItemsEvent, menuBottom, router, pathname } =
     useFeature();
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status);
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step);
@@ -40,10 +41,10 @@ export default function Sidebar({
     }, 1000);
   };
   const isLevel1 =
-    router.pathname === pageLink.COURSES ||
-    router.pathname === pageLink.CALENDAR ||
-    router.pathname === pageLink.ENTRANCE_TEST ||
-    router.pathname === pageLink.EXAM_LIST;
+    pathname === pageLink.COURSES ||
+    pathname === pageLink.CALENDAR ||
+    pathname === pageLink.ENTRANCE_TEST ||
+    pathname === pageLink.EXAM_LIST;
   const isGuideActive = guideStatus && (guideStep === 2 || guideStep === 3);
   return (
     <div className="group relative">
@@ -94,7 +95,7 @@ export default function Sidebar({
           </div>
           {/* Divider */}
           <div className="mx-auto w-[calc(100%-70px)] min-w-[50px] text-center">
-            <Divider className="my-6 bg-[#DCDDDD]" />
+            <Divider className="my-6 bg-divider" />
           </div>
           <MenuItemsList
             options={
@@ -112,8 +113,8 @@ export default function Sidebar({
         ${guideStatus && guideStep === 3 ? "z-50" : ""}`}
         >
           {isLevel1 && (
-            <div className="mx-auto w-[calc(100%-48px)] bg-[#DCDDDD] text-center">
-              <Divider className="mb-8 mt-0 bg-[#DCDDDD]" />
+            <div className="mx-auto w-[calc(100%-48px)] bg-divider text-center">
+              <Divider className="mb-8 mt-0 bg-divider" />
             </div>
           )}
           <MenuItemsList

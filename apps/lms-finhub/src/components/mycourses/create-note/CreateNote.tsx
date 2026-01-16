@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
-import { useRouter } from 'next/router'
 import { SaveIcon, PlusIcon, CloseIconNote } from '@lms/assets'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
-import { CoursesAPI } from 'src/pages/api/courses'
 import toast from 'react-hot-toast'
 import { closeNote, pushNotes, useAppDispatch } from '@lms/contexts'
 import { v4 as uuidv4 } from 'uuid'
 import { HookFormTextArea, MovableWindow } from '@lms/ui'
+import { useParams, useRouter } from 'next/navigation'
+import { CoursesAPI } from 'src/api/courses'
 
 interface IProps {
   id: string | undefined
@@ -20,7 +20,8 @@ interface IProps {
 
 const CreateNote = ({ id, content, uuid, count }: IProps) => {
   const router = useRouter()
-  const activityId = router.query.activityId
+  const params = useParams()
+  const activityId = params.activityId
   const [activeSectionId, setActiveSectionId] = useState<string>()
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -104,9 +105,9 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
         fixed
       >
         <div className="absolute left-0 top-0  h-full w-full border bg-white">
-          <div className="flex h-10 w-6-percent w-full items-center justify-between bg-gray-3 px-2.5">
+          <div className="bg-gray-100px-2.5 flex h-10 w-full items-center justify-between">
             <button
-              className="text-gray-1"
+              className="text-gray"
               onClick={() => {
                 handleAddNote()
               }}
@@ -115,7 +116,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
             </button>
             <div className="flex items-center">
               <button
-                className="text-gray-1"
+                className="text-gray"
                 onClick={() => {
                   handleSubmit((data: any) => {
                     onSubmit(data)
@@ -125,9 +126,9 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
               >
                 <SaveIcon />
               </button>
-              <span className="mx-4 h-4 w-px bg-gray-1"></span>
+              <span className="mx-4 h-4 w-px bg-gray"></span>
               <button
-                className="text-gray-1"
+                className="text-gray"
                 onClick={() => {
                   removeNote()
                 }}
@@ -142,7 +143,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
               placeholder="Take a note..."
               control={control}
               name={`description_${id ? id : uuid}`}
-              className="not-resizer sapp-text-area h-[calc(100%-40px)] w-full whitespace-pre-wrap px-4 py-4 placeholder:text-medium-sm placeholder:font-normal placeholder:text-gray-1"
+              className="not-resizer sapp-text-area h-[calc(100%-40px)] w-full whitespace-pre-wrap px-4 py-4 placeholder:text-sm placeholder:font-normal placeholder:text-gray"
               defaultValue={content}
             />
           </div>

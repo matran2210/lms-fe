@@ -12,18 +12,21 @@ import {
   TestAnnouncementModal,
   TestPopup,
 } from '@lms/feature-courses'
-import { useTailwindBreakpoint } from '@lms/hooks'
 import { ButtonPrimary, ButtonSecondary, ButtonText } from '@lms/ui'
-import { capitalizeFirstLetter, formatTimer, trackGAEvent } from '@lms/utils'
-import { CoursesAPI } from '@pages/api/courses'
-import { TestServiceAPI } from '@pages/api/test-api'
-import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
+import {
+  capitalizeFirstLetter,
+  formatTimer,
+  isQuizExpired,
+  trackGAEvent,
+} from '@lms/utils'
 import { Select } from 'antd'
 import dayjs from 'dayjs'
 import { isNull } from 'lodash'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ClassAPI } from 'src/pages/api/class'
+import { ClassAPI } from 'src/api/class'
+import { TestServiceAPI } from 'src/api/test-api'
+
 enum StatusQuizAttempt {
   Passed = 'PASSED',
   Failed = 'FAILED',
@@ -78,6 +81,7 @@ const TestModal = ({
   activeCourse,
   is_passed_course,
 }: IProps) => {
+  console.log('class_user_id', class_user_id)
   const router = useRouter()
   const isSubmitted =
     data?.quiz?.attempt && data?.quiz?.attempt?.status === 'SUBMITTED'
@@ -313,15 +317,12 @@ const TestModal = ({
   }, [selectedResult?.value, data?.quiz?.attempt])
 
   const handleStartANewAttempt = async () => {
-    //to do: start test
+    if (!class_user_id) return
     try {
       activeCourse && (await activeCourse())
-      router.push({
-        pathname: `/short-course/test/${data.quiz.id}`,
-        query: {
-          class_user_id: class_user_id,
-        },
-      })
+      router.push(
+        `/short-course/test/${data?.quiz?.id}?class_user_id=${class_user_id}`,
+      )
       status
         ? () => trackGAEvent('Click Button Retake Modal Test')
         : () => trackGAEvent('Click Button Start Modal Test')
@@ -658,13 +659,12 @@ const TestModal = ({
   const handleRedirectResult = () => {
     if (isManualGradingAndNotFinishedGrading) {
       router.push(
-        `/short-course/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
+        `/short-course/test/your-answers-detail?attempt=${selectedResult?.label}`,
       )
     } else {
-      router.push({
-        pathname: `/short-course/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
-        query: { attempt: selectedResult?.label },
-      })
+      router.push(
+        `/short-course/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
+      )
     }
   }
 
@@ -785,13 +785,12 @@ const TestModal = ({
                         onClick={() => {
                           if (isManualGradingAndNotFinishedGrading) {
                             router.push(
-                              `/short-course/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
+                              `/short-course/test/your-answers-detail/${data?.quiz?.attempt?.id}?attempt=${selectedResult?.label}`,
                             )
                           } else {
-                            router.push({
-                              pathname: `/short-course/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
-                              query: { attempt: selectedResult?.label },
-                            })
+                            router.push(
+                              `/short-course/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}?attempt=${selectedResult?.label}?attempt=${selectedResult?.label}`,
+                            )
                           }
 
                           trackGAEvent('Click Button View Modal Result')

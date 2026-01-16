@@ -218,7 +218,7 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
       showHeader={false}
       showFooter={false}
     >
-      <h2 className="py-6 text-xl font-bold text-[#050505]">
+      <h2 className="py-6 text-xl font-bold text-gray-800">
         Your Score Details
       </h2>
       <div

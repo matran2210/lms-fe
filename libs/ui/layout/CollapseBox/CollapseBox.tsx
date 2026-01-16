@@ -1,3 +1,4 @@
+"use client"
 import { CollapseArrowIcon } from '@lms/assets'
 import React, { useState } from 'react'
 
@@ -9,9 +10,9 @@ type IProps = {
 function CollapseBox({ title, children }: IProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   return (
-    <div className="w-full rounded-lg border border-[#7E8299] px-7 py-4">
+    <div className="w-full rounded-lg border border-gray px-7 py-4">
       <div
-        className={`flex items-center justify-between ${isOpen && 'mb-4 border-b border-[#7E8299] pb-3'}`}
+        className={`flex items-center justify-between ${isOpen && 'mb-4 border-b border-gray pb-3'}`}
       >
         <div className="text-base font-semibold text-gray-600">{title}</div>
         <div className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>

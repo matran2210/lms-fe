@@ -41,7 +41,7 @@ const CreateNoteDesktop = ({
           </div>
         </div>
       )}
-      rootClassName="rounded-xl overflow-hidden border-gray-12"
+      rootClassName="rounded-xl overflow-hidden border-gray"
     >
       <div className="relative h-[calc(100%-8px)] w-full">
         <div className="h-[calc(100%-54px)]">

@@ -1,3 +1,4 @@
+"use client"
 import { Skeleton } from 'antd'
 import clsx from 'clsx'
 import { forwardRef, HTMLAttributes } from 'react'
@@ -8,7 +9,7 @@ export const WeeklyReportSkeleton = forwardRef<
 >((props, ref) => {
   return (
     <div ref={ref} {...props} className={clsx(props.className)}>
-      <div className="flex w-full flex-col gap-4 bg-[#F9F9F9] md:gap-6 xl:gap-8">
+      <div className="flex w-full flex-col gap-4 bg-gray-100 md:gap-6 xl:gap-8">
         <div className="mt-6 rounded-2xl bg-white p-4 shadow-small md:p-6 xl:mt-0">
           <div className="mb-4">
             <Skeleton.Input style={{ width: 300 }} active size="small" />

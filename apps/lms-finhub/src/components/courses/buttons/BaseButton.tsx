@@ -23,8 +23,8 @@ export default function BaseButton({
     small: 'text-sm leading-5.5 py-2 px-4',
     medium:
       'text-sm leading-5.5 md:text-base md:leading-6 py-1.5 md:py-3 px-4 md:px-[31px] min-w-[92px] md:min-w-[120px]',
-    large: 'text-lg leading-6.5 py-2.8 px-9',
-    extra: 'text-xl leading-6.5 py-2.8 px-9',
+    large: 'text-lg leading-6.5 py-3 px-9',
+    extra: 'text-xl leading-6.5 py-3 px-9',
   }
 
   const isDisabled = disabled || loading
@@ -41,12 +41,12 @@ export default function BaseButton({
 
   const variantClass =
     variant === 'primary'
-      ? 'text-white bg-primary hover:bg-primary-2'
+      ? 'text-white bg-primary hover:bg-primary-400'
       : variant === 'secondary'
-        ? 'text-bw-1 bg-gray-3 hover:text-white hover:bg-primary'
+        ? 'text-gray-800 bg-gray-100 hover:text-white hover:bg-primary'
         : variant === 'black'
-          ? 'bg-bw-17 text-white rounded-lg hover:bg-bw-18'
-          : 'bg-white text-gray-14 rounded-lg border border-black-1 hover:bg-bw-17 hover:text-white hover:border-0'
+          ? 'bg-secondary-600 text-white rounded-lg hover:bg-secondary'
+          : 'bg-white text-gray-14 rounded-lg border border-secondary hover:bg-secondary-600 hover:text-white hover:border-0'
 
   const componentClass = `${baseClass} ${variantClass}`.trim()
 

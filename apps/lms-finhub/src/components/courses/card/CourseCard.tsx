@@ -1,3 +1,4 @@
+'use client'
 import PopupActive from '@components/mycourses/PopupActive'
 import PopupExtend from '@components/mycourses/PopupExtend'
 import PopupLesson from '@components/mycourses/PopupLesson'
@@ -6,15 +7,15 @@ import { useCourseContext } from '@lms/contexts'
 import { ANIMATION, CLASS_USER_STATUS, ICourse, ROUTES } from '@lms/core'
 import { useCourseStatus } from '@lms/hooks'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { CoursesAPI } from 'src/pages/api/courses'
 import CourseAction from './course/CourseAction'
 import CourseClass from './course/CourseClass'
 import CourseDescription from './course/CourseDescription'
 import CourseProgress from './course/CourseProgress'
 import CourseTitle from './course/CourseTitle'
+import { useRouter } from 'next/navigation'
+import { CoursesAPI } from 'src/api/courses'
 
 export default function CourseCard({
   course,
@@ -169,7 +170,7 @@ export default function CourseCard({
             // data-aos={ANIMATION.DATA_AOS}
             ref={lastElementRef}
           >
-            <div className="flex min-h-352 flex-col">
+            <div className="flex min-h-[352px] flex-col">
               {/* <div className="mb-3">{renderBadge(course)}</div> */}
               <CourseTitle
                 course={course}

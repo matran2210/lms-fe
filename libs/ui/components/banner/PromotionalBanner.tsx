@@ -1,3 +1,4 @@
+"use client"
 import { useCourseContext } from '@lms/contexts'
 import { useEffect, useState } from 'react'
 
