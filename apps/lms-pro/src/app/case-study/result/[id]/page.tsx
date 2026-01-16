@@ -215,7 +215,7 @@ const CaseStudyResult = () => {
             onChange={(data: SlotValue[]) => {
               setValue?.(`${index}_answer`, data)
             }}
-            corrects={corrects?.corrects}
+            corrects={corrects}
             solution={solution}
           />
         )
@@ -318,7 +318,7 @@ const CaseStudyResult = () => {
     }
   }, [x, startResize])
 
-  const getResult = (question: IQuestionResult) => {
+  const getResult = (question: IQuestionResult, item?: any) => {
     if (
       question.qType === QUESTION_TYPES.ONE_CHOICE ||
       question.qType === QUESTION_TYPES.TRUE_FALSE ||
@@ -341,12 +341,17 @@ const CaseStudyResult = () => {
     } else if (question.qType === QUESTION_TYPES.MATCHING) {
       return { corrects: [...question.question_matchings] }
     } else if (question.qType === QUESTION_TYPES.DRAG_DROP) {
+      const answerTemp = handleMultipleCorrectAnswer(
+        question?.drag_drop_answers,
+        item?.answer,
+      )
       return {
         corrects: [
           ...question.answers?.sort(
             (a: any, b: any) => a?.answer_position - b?.answer_position,
           ),
         ],
+        answers: answerTemp,
       }
     }
   }
@@ -579,7 +584,7 @@ const CaseStudyResult = () => {
         item.question.qType === QUESTION_TYPES.ESSAY
           ? item?.requirement?.explanation
           : item.question.solution
-      const corrects = getResult(question)
+      const corrects = getResult(question, item)
       const requirementIndex = getIndexOfRequirement(
         item?.requirement,
         question.id,
