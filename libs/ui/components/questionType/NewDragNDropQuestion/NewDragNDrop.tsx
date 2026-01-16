@@ -181,7 +181,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
               if (value) {
                 if (corrects?.answers && Array.isArray(corrects.answers)) {
                   const correct = corrects.answers.find(
-                    (c: any) => c.answer_position === slot?.position,
+                    (c: any) => (c?.answer_position || c?.position) === slot?.position,
                   );
 
                   if (correct?.is_correct) {
@@ -219,7 +219,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
         })}
       </div>
     );
-  }, [data.question_content, slots, corrects?.corrects, isDisabled]);
+  }, [data.question_content, slots, corrects]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { over, active } = event;

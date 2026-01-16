@@ -709,11 +709,13 @@ export const handleMultipleCorrectAnswer = (
   const answersMapped = dragDropAnswers?.map((correctItem: IDragDropAnswer) => {
     const dragDropCurrent = answers?.find(
       (item: AnswerItem) =>
-        correctItem.answer_position === item.answer_position,
+        correctItem?.answer_position ===
+        (item?.position || item?.answer_position),
     );
     const isCorrect =
-      correctItem?.answer_ids?.includes(dragDropCurrent?.answer_id || "") ||
-      false;
+      correctItem?.answer_ids?.includes(
+        dragDropCurrent?.answer_id || dragDropCurrent?.idAnswer || "",
+      ) || false;
     return {
       ...dragDropCurrent,
       is_correct: isCorrect,

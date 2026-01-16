@@ -695,16 +695,20 @@ const TestDetail = () => {
         }
       } else {
         if (objTab?.data?.qType === QUESTION_TYPES.DRAG_DROP) {
-          return {
-            ...objTab,
-            corrects: {
-              corrects: handleMultipleCorrectAnswer(
-                objTab?.data?.drag_drop_answers,
-                objTab?.corrects?.corrects,
-              ),
-            },
+          if (!isEmpty(objTab?.corrects?.corrects)) {
+            return {
+              ...objTab,
+              corrects: {
+                answers: handleMultipleCorrectAnswer(
+                  objTab?.data?.drag_drop_answers,
+                  objTab?.answer,
+                ),
+                corrects: objTab?.corrects?.corrects,
+              },
+            }
           }
         }
+
         return objTab
       }
     } else return undefined
