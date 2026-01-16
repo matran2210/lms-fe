@@ -171,12 +171,6 @@ const SAPPAudio = ({
         streamRef.current.addEventListener("volumechange", updateVolumeIcon);
         streamRef.current.addEventListener("click", togglePlay);
         streamRef.current.addEventListener("click", animatePlayback);
-        streamRef.current.addEventListener("mousemove", showControls);
-        streamRef.current.addEventListener("mouseleave", hideControls);
-      }
-      if (videoControlsRef.current) {
-        videoControlsRef.current.addEventListener("mousemove", showControls);
-        videoControlsRef.current.addEventListener("mouseleave", hideControls);
       }
       if (seekRef.current) {
         seekRef.current.addEventListener("mousemove", updateSeekTooltip);
@@ -214,18 +208,6 @@ const SAPPAudio = ({
           );
           streamRef.current.removeEventListener("click", togglePlay);
           streamRef.current.removeEventListener("click", animatePlayback);
-          streamRef.current.removeEventListener("mousemove", showControls);
-          streamRef.current.removeEventListener("mouseleave", hideControls);
-        }
-        if (videoControlsRef.current) {
-          videoControlsRef.current.removeEventListener(
-            "mousemove",
-            showControls,
-          );
-          videoControlsRef.current.removeEventListener(
-            "mouseleave",
-            hideControls,
-          );
         }
         if (seekRef.current) {
           seekRef.current.removeEventListener("mousemove", updateSeekTooltip);
@@ -515,26 +497,6 @@ const SAPPAudio = ({
     }
   }
 
-  // hideControls hides the video controls when not in use
-  // if the video is paused, the controls must remain visible
-  function hideControls() {
-    if (streamRef?.current?.paused) {
-      return;
-    }
-    if (videoControlsRef?.current) {
-      videoControlsRef.current.classList.add("hide");
-    }
-  }
-
-  // showControls displays the video controls
-  function showControls() {
-    if (videoControlsRef.current) {
-      videoControlsRef.current.classList.remove("hide");
-      clearTimeout(hideTimerRef.current);
-      hideTimerRef.current = setTimeout(hideControls, 3000);
-    }
-  }
-
   // Event handler for changing video speed
   const handlePlaybackRateChange = (event: React.MouseEvent<HTMLLIElement>) => {
     const target = event.target as HTMLLIElement;
@@ -632,7 +594,7 @@ const SAPPAudio = ({
                 controlsList="nodownload"
               />
               <div
-                className="video-controls !opacity-100 flex-center absolute bottom-0 left-0 right-0 h-14 w-full rounded-b-lg px-4 py-3"
+                className="video-controls flex-center absolute bottom-0 left-0 right-0 h-14 w-full rounded-b-lg px-4 py-3"
                 ref={videoControlsRef}
               >
                 <div
