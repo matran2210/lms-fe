@@ -230,6 +230,7 @@ const ResultsTable = ({
 
       {/* Grading modal */}
       <SappModalV3
+        handleClose={() => setOpenReport(false)}
         open={openReport}
         okButtonCaption="Back"
         handleCancel={() => {}}

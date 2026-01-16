@@ -53,6 +53,7 @@ const TestAnnouncementModal = ({
   if (type === "NOT_OPEN_YET") {
     return (
       <SappModalV3
+        handleClose={handleCancel}
         open={open}
         showCancelButton={false}
         handleCancel={handleCancel}

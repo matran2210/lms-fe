@@ -76,6 +76,7 @@ const EventTestList = ({
         )}
       </div>
       <SappModalV3
+        handleClose={handleCancelModalSubmitTest}
         open={submitEventTest}
         okButtonCaption="Back"
         handleCancel={handleCancelModalSubmitTest}

@@ -93,6 +93,7 @@ const ReasonModal = ({
   }
   return (
     <SappModalV3
+      handleClose={handleCancel}
       open={open.open}
       handleCancel={handleCancel}
       onOk={handleSubmit}
