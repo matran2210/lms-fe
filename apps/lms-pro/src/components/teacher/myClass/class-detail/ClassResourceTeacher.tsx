@@ -21,6 +21,7 @@ import {
   SAPPVideo,
   Tooltip,
   TextPreview,
+  SAPPAudio,
 } from '@lms/ui'
 import { formatDate } from '@lms/utils'
 import { ClassAPI } from '@pages/api/class'
@@ -198,7 +199,6 @@ export default function ClassResourceTeacher() {
   const renderPreviewContent = (resource: IClassResource) => {
     switch (resource.suffix_type) {
       case 'VIDEO':
-      case 'AUDIO':
         return (
           <SAPPVideo
             isFetchCaptions={false}
@@ -211,6 +211,19 @@ export default function ClassResourceTeacher() {
                 : resource.sub_url,
             }}
           ></SAPPVideo>
+        )
+      case 'AUDIO':
+        return (
+          <SAPPAudio
+            streamRef={internalRef}
+            options={{
+              src: resource.url
+                ? resource.url
+                    .replace(videoUrl || '', '')
+                    .replace('/manifest/video.m3u8', '')
+                : resource.sub_url,
+            }}
+          ></SAPPAudio>
         )
       case 'SHEET':
       case 'WORD_DOCUMENT':
@@ -298,6 +311,10 @@ export default function ClassResourceTeacher() {
                 </div>
                 <button
                   onClick={() => {
+                    setOpenPreview(false)
+                    setPreviewResource(null)
+                  }}
+                  onTouchEnd={() => {
                     setOpenPreview(false)
                     setPreviewResource(null)
                   }}

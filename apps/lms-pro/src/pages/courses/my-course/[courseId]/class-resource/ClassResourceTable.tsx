@@ -172,7 +172,6 @@ const ClassResourceTable = ({
     const videoUrl = process.env.NEXT_PUBLIC_VIDEO_URL as string
     switch (resource.suffix_type) {
       case 'VIDEO':
-      case 'AUDIO':
         return (
           <SAPPVideo
             isFetchCaptions={false}
