@@ -81,3 +81,37 @@ export function fileToBase64(file: File) {
     reader.readAsDataURL(file)
   })
 }
+export const convertMathHtmlToImage = async (html: string): Promise<string> => {
+  if (!html) return html;
+  if (typeof window === "undefined") return html;
+  if (!(window as any).com) return html;
+
+  const viewer = (window as any)?.com?.wiris?.js?.JsPluginViewer;
+  if (!viewer) return html;
+
+  // DOM tạm (không attach vào body)
+  const container = document.createElement("div");
+  container.innerHTML = html;
+
+  const mathElements = container.querySelectorAll("math");
+
+  if (!mathElements.length) return html;
+
+  // Wiris cần element tồn tại trong DOM
+  document.body.appendChild(container);
+  container.style.position = "absolute";
+  container.style.left = "-99999px";
+  container.style.top = "-99999px";
+
+  try {
+    await viewer.parseElement(container, true);
+  } catch (err) {
+    console.warn("Wiris convert failed", err);
+  }
+
+  const result = container.innerHTML;
+
+  document.body.removeChild(container);
+
+  return result;
+};

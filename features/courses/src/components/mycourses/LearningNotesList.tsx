@@ -39,14 +39,10 @@ import { cleanParamsAPI } from "@lms/utils";
 import clsx from "clsx";
 import { format } from "date-fns";
 import { isEmpty } from "lodash";
-import getConfig from "next/config";
 import { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
-
-const { publicRuntimeConfig } = getConfig();
-export const { apiURL } = publicRuntimeConfig;
 
 const DEFAULT_PAGESIZE = 20;
 
@@ -55,7 +51,7 @@ type Props = {
 };
 const LearningNotesList = ({ appType }: Props) => {
   const [direction, setDirection] = useState<1 | -1>(1);
-  const { courseApi, pageLink, router } = useFeature();
+  const { courseApi, pageLink, router, pathname, query, params: param } = useFeature();
   const { isMobileView, isAlwaysShowSidebar } = useTailwindBreakpoint();
   const notesListStatus = useAppSelector(
     (state) => appType === AppType.LMS_PRO ? state.notesListReducer?.status : state.shortNotesListReducer?.status,
@@ -72,11 +68,10 @@ const LearningNotesList = ({ appType }: Props) => {
   });
 
   const isNotBottomDrawer =
-    router.pathname === "/courses/[id]/section/[course_section_id]" ||  
-    router.pathname === "/short-course/detail/[courseId]" ||
-    router.pathname === "/short-course/detail/[courseId]/activity/[id]" ||
-    (router.pathname === "/courses/[id]/activity/[activityId]" &&
-      !isMobileView);
+    pathname === "/courses/[id]/section/[course_section_id]" ||  
+    pathname === "/short-course/detail/[courseId]" ||
+    pathname === "/short-course/detail/[courseId]/activity/[id]" ||
+    (pathname === "/courses/[id]/activity/[activityId]" && !isMobileView);
 
   const userType = useAppSelector(userReducer).user.type;
 
@@ -115,15 +110,15 @@ const LearningNotesList = ({ appType }: Props) => {
 
 
   //Tạo các biến để lấy id trên thanh url
-  const isCourseDetail = pageLink.COURSE_DETAIL === router.pathname;
-  const isCoursePartDetail = router.pathname.includes("/section");
-  const isActivityDetail = router.pathname.includes("/activity");
-  const courseId = router.query?.courseId;
-  const queryId = router.query?.id;
-  const activityId = router.query?.activityId;
-  const chapterId = router.query?.chapter;
-  const unitId = router.query?.unit;
-  const courseSectionId = router.query.course_section_id;
+  const isCourseDetail = pageLink.COURSE_DETAIL === pathname;
+  const isCoursePartDetail = pathname?.includes("/section");
+  const isActivityDetail = pathname?.includes("/activity");
+  const courseId = param?.courseId ||  query?.courseId;
+  const queryId = param?.id || query?.id;
+  const activityId = param?.activityId || query?.activityId;
+  const chapterId = query?.chapter;
+  const unitId = query?.unit;
+  const courseSectionId = param?.course_section_id || query.course_section_id;
 
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_NUMBER);
   const [isFirstCallApi, setIsFirstCallApi] = useState(false);
@@ -456,12 +451,7 @@ const LearningNotesList = ({ appType }: Props) => {
                           }
                         };
                         const handleView = async () => {
-                          await router.push({
-                            pathname: `/courses/${queryId || courseId}/activity/${note?.course_section_id}`,
-                            query: {
-                              note_id: note?.id,
-                            },
-                          });
+                          await router.push(`/courses/${queryId || courseId}/activity/${note?.course_section_id}?note_id=${note?.id}`);
                           handleOpenNote(note, true);
                           handleEditNote(note?.id, note?.description);
                           onClose();

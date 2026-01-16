@@ -78,6 +78,13 @@ export interface AnswerItem extends DragDropAnswerItem {
   answer_text: string
 }
 
+export interface IAnswerMultipleChoice {
+  id: string
+  answer: {
+    id: string
+  }
+}
+
 export interface IDataQuestion {
   id: string
   key: string

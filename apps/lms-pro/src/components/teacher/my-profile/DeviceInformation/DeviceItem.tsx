@@ -53,7 +53,7 @@ const DeviceItem = ({ data, setSelectedDrawer }: IProps) => {
                 {`${data.user_agent.browserName} ${data.user_agent.browserVersion} (${data.user_agent.osName})`}
               </span>
               {sessionId === data.id && (
-                <span className="inline-block select-none rounded bg-accent-success bg-opacity-5 px-2 py-1 text-v2-xs font-medium text-accent-success">
+                <span className="inline-block select-none rounded bg-accent-success bg-opacity-5 px-2 py-1 text-xs font-medium text-accent-success">
                   This device
                 </span>
               )}

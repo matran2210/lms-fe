@@ -1,5 +1,9 @@
 export const CLASS_SUFFIX_TYPE = [
   {
+    label: "Audio",
+    value: "AUDIO",
+  },
+  {
     label: "Video",
     value: "VIDEO",
   },
@@ -39,8 +43,8 @@ export const CLASS_SUFFIX_TYPE = [
 
 export const CLASS_SUFFIX_TYPE_FILTER = [
   {
-    label: "Video",
-    value: "VIDEO",
+    label: "Media",
+    value: "MEDIA",
   },
   {
     label: "Image",

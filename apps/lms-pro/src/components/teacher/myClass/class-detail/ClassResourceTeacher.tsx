@@ -1,6 +1,7 @@
 import ClassResourceTeacherFilter from '@components/teacher/components/ClassResourceTeacherFilter'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { CloseIcon, DownloadIcon } from '@lms/assets'
+import { useFeature } from '@lms/contexts'
 import {
   CLASS_SUFFIX_TYPE,
   ClassKey,
@@ -18,19 +19,21 @@ import {
   SappModalImage,
   SappTable,
   SAPPVideo,
-  Tooltip,
   TextPreview,
+  Tooltip,
 } from '@lms/ui'
 import { formatDate } from '@lms/utils'
-import { ClassAPI } from '@pages/api/class'
-import { UploadAPI } from '@pages/api/upload'
 import clsx from 'clsx'
-import { useRouter } from 'next/router'
+import { useParams } from 'next/navigation'
 import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { ClassAPI } from 'src/api/class'
+import { UploadAPI } from 'src/api/upload'
 
 export default function ClassResourceTeacher() {
-  const router = useRouter()
+  const { videoUrl } = useFeature()
+  const param = useParams();
+  const { id } = param
   const internalRef = useRef<HTMLVideoElement>(null)
   const { control, reset, getValues } = useForm()
   const [params, setParams] = useState<IListClassResourceParams>({
@@ -53,7 +56,7 @@ export default function ClassResourceTeacher() {
     useSappPaging({
       uniqueKey: ClassKey.ClassResource,
       queryFn: () =>
-        ClassAPI.getClassResource(router.query.id as string, {
+        ClassAPI.getClassResource(id as string, {
           ...params,
           page_index: pagination.current as number,
           page_size: pagination.pageSize as number,
@@ -152,19 +155,9 @@ export default function ClassResourceTeacher() {
     {
       title: 'Lesson',
       render: (record: IClassResource) =>
-        record?.class_resource_permissions?.schedules.map((item) => (
-          <div>{item?.name}</div>
+        record?.class_resource_permissions?.schedules.map((item, index) => (
+          <div key={index}>{item?.name}</div>
         )),
-    },
-    {
-      title: 'Location',
-      render: (record: IClassResource) => (
-        <Tooltip placement="bottomLeft" title={record?.location}>
-          <div className={clsx(textTruncateStyle, 'font-normal')}>
-            {record?.location}
-          </div>
-        </Tooltip>
-      ),
     },
     {
       title: '',
@@ -206,11 +199,18 @@ export default function ClassResourceTeacher() {
   const renderPreviewContent = (resource: IClassResource) => {
     switch (resource.suffix_type) {
       case 'VIDEO':
+      case 'AUDIO':
         return (
           <SAPPVideo
             isFetchCaptions={false}
             streamRef={internalRef}
-            options={{ src: resource.sub_url }}
+            options={{
+              src: resource.url
+                ? resource.url
+                    .replace(videoUrl || '', '')
+                    .replace('/manifest/video.m3u8', '')
+                : resource.sub_url,
+            }}
           ></SAPPVideo>
         )
       case 'SHEET':

@@ -14,7 +14,7 @@ export default function ActivityResourceDesktop({
 
   return (
     <div className="hidden overflow-hidden rounded-xl bg-white p-6 shadow-search lg:block">
-      <h2 className="mb-6 text-lg font-semibold leading-7 text-bw-15">
+      <h2 className="mb-6 text-lg font-semibold leading-7 text-gray-800">
         {title}
       </h2>
       <div className="list-active">
@@ -24,11 +24,11 @@ export default function ActivityResourceDesktop({
             key={index}
             onClick={() => handleOpenModal(item)}
           >
-            <div className="content flex gap-3 rounded-md bg-gray-4 px-3 py-2 text-bw-15 hover:bg-secondary-50 hover:text-primary">
+            <div className="content flex gap-3 rounded-md bg-gray-100 px-3 py-2 text-gray-800 hover:bg-secondary-50 hover:text-primary">
               <div>
                 <Docs />
               </div>
-              <div className="truncate text-ssm md:text-base">{item.title}</div>
+              <div className="truncate text-xs md:text-base">{item.title}</div>
               <div className="ml-auto cursor-pointer" onClick={item.download}>
                 <IconDownload />
               </div>

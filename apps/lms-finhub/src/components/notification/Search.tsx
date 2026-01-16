@@ -1,8 +1,8 @@
 // components/SearchForm.tsx
 
 import React, { useState } from 'react'
-import { useRouter } from 'next/router'
 import { Icon } from '@lms/assets'
+import { useRouter } from 'next/navigation'
 
 interface IProps {
   placeholder: string
@@ -27,7 +27,7 @@ const SearchForm = ({ placeholder, formStyle }: IProps) => {
       <input
         type="text"
         placeholder={placeholder}
-        className="placeholder-text-gray-1 h-6 border-0 px-4 text-gray-1 focus:border-0 focus:outline-0 focus:ring-0"
+        className="placeholder-text-gray h-6 border-0 px-4 text-gray focus:border-0 focus:outline-0 focus:ring-0"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />

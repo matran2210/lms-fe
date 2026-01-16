@@ -108,3 +108,10 @@ export const isValidatedAnswer = (
       return false
   }
 }
+
+export interface Correct {
+  id: string;
+  is_correct: boolean;
+  answer: string;
+  answer_position: number;
+}

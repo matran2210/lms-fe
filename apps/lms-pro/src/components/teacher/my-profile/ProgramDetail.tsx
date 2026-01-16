@@ -2,12 +2,12 @@ import { Icon } from '@lms/assets'
 import { ISubjectItem, IUser, useAppSelector, userReducer } from '@lms/contexts'
 import { PROGRAM } from '@lms/core'
 import { SappCollapse } from '@lms/ui'
-import { UserApi } from '@pages/api/user'
 import { Divider } from 'antd'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import MyProfileAPI from 'src/pages/api/profile'
 import AttempItem from './SubjectInformation/AttempItem'
+import { UserApi } from 'src/api/user'
+import MyProfileAPI from 'src/api/profile'
 
 interface IProps {
   typeProgram: PROGRAM
@@ -112,7 +112,7 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
               <span>Account ID Number:</span>
               <span className="font-bold">
                 {' '}
-                <div className="col-span-1 max-w-[300px] flex-auto font-medium text-[#050505]">
+                <div className="col-span-1 max-w-[300px] flex-auto font-medium text-gray-800">
                   {programData?.hubspot_account_info}
                 </div>
               </span>
@@ -147,7 +147,7 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
                   {
                     key: '1',
                     label: (
-                      <div className="flex flex-none items-center text-base font-semibold text-[#374151] md:text-xl ">
+                      <div className="flex flex-none items-center text-base font-semibold text-gray-700 md:text-xl ">
                         {subject?.name}
                       </div>
                     ),

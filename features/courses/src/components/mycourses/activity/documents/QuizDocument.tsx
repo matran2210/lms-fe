@@ -1158,6 +1158,7 @@ const QuizDocument = ({
       })}
     >
       <SappModalV3
+        handleClose={() => setOpenUnsubmitWarning(false)}
         open={openUnsubmitWarning}
         setOpen={setOpenUnsubmitWarning}
         onOk={handleFinishQuiz}
@@ -1174,7 +1175,7 @@ const QuizDocument = ({
           <AlertTriagle />
         </div>
         <div className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-8 md:text-[32px]">
-          Are you sure?
+          Are you sure ?
         </div>
         <div className="text-center text-sm md:text-base">
           <span className="text-center font-normal text-gray-800">
@@ -1267,7 +1268,7 @@ const QuizDocument = ({
                       </span>
                     </button>
                   )}
-                  <div className="text-sm text-bw-13 md:text-base">
+                  <div className="text-sm text-gray-800 md:text-base">
                     Question: {activeQuestionIndex + 1} of{" "}
                     {questions?.length || 0}
                   </div>
@@ -1455,7 +1456,7 @@ const QuizDocument = ({
                     ? null
                     : "You should select an answer before click"
                 }
-                classNames={{ root: "max-w-72" }}
+                classNames={{ root: "max-w-[288px]" }}
                 trigger={"hover"}
               >
                 <>

@@ -1,14 +1,14 @@
-import { ConfirmIcon } from '@lms/assets'
-import { SappModalV3 } from '@lms/ui'
+import { ConfirmIcon } from "@lms/assets";
+import { SappModalV3 } from "@lms/ui";
 
 interface IProps {
-  open: boolean
-  setOpen: any
+  open: boolean;
+  setOpen: any;
 }
 const PopupLesson = ({ open, setOpen }: IProps) => {
   const onOk = () => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
   const ContentLesson = () => {
     return (
       <div className="justify-center self-stretch text-center">
@@ -16,11 +16,12 @@ const PopupLesson = ({ open, setOpen }: IProps) => {
           Please pass the Foundation Class to activate this course
         </span>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <SappModalV3
+      handleClose={() => setOpen(false)}
       open={open}
       handleCancel={onOk}
       onOk={onOk}
@@ -34,7 +35,7 @@ const PopupLesson = ({ open, setOpen }: IProps) => {
       showCancelButton={false}
       isUnderLine
     />
-  )
-}
+  );
+};
 
-export default PopupLesson
+export default PopupLesson;

@@ -5,7 +5,7 @@ export default function TabButton({ items, className }: IButtonTabProps) {
   return (
     items.length > 0 && (
       <div className="sapp-tab-button inline-block">
-        <div className="flex flex-row-reverse gap-2 rounded-[7px] bg-gray-4 p-1 md:flex-row">
+        <div className="flex flex-row-reverse gap-2 rounded-[7px] bg-gray-100 p-1 md:flex-row">
           {items.map((item, index) => (
             <BaseButton
               key={index}

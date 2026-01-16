@@ -1,3 +1,4 @@
+"use client"
 import { EmptyCourseProps } from 'src/type/courses-3-level'
 import { EmptyCoursesIcon } from '../icons'
 
@@ -7,7 +8,7 @@ export default function EmptyCourses({
   return (
     <div className="flex flex-col items-center justify-center">
       <EmptyCoursesIcon />
-      <div className="pt-4 text-gray-1">{description}</div>
+      <div className="pt-4 text-gray">{description}</div>
     </div>
   )
 }
