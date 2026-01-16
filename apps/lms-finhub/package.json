@@ -5,16 +5,16 @@
   "author": "catfish",
   "license": "MIT",
   "scripts": {
-    "dev": "pnpm exec next dev",
-    "build": "pnpm exec next build",
-    "start": "pnpm exec next start",
-    "lint": "pnpm exec next lint",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
     "create-network": "docker network create my_network",
     "run:dev": "COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.dev.yml build --parallel && docker-compose -f docker-compose.dev.yml up",
     "run:prod": "COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.prod.yml build --parallel && docker-compose -f docker-compose.prod.yml up -d",
     "stop-all-running-containers": "docker kill $(docker ps -q) && docker rm $(docker ps -a -q)",
     "free-space": "docker system prune -af --volumes",
-    "analyze": "ANALYZE=true pnpm exec next build"
+    "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
