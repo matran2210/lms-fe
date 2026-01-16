@@ -1,4 +1,4 @@
-import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from "@lms/assets";
+import { DeleteIcon, EllipsisIcon, PencilIcon } from "@lms/assets";
 import {
   AppType,
   backTypeMap,
@@ -458,7 +458,7 @@ const LearningNotesList = ({ appType }: Props) => {
                           ...(isEdit
                             ? [
                                 {
-                                  icon: <PencilV2Icon className="h-5 w-5" />,
+                                  icon: <PencilIcon className="h-5 w-5" />,
                                   nameAction: "Edit",
                                   action: handleEdit,
                                 },
@@ -483,7 +483,7 @@ const LearningNotesList = ({ appType }: Props) => {
                               </div>
                               <div onClick={(e) => e.stopPropagation()}>
                                 <ActionCellV2
-                                  icon={<EllipsisIconV2 />}
+                                  icon={<EllipsisIcon />}
                                   listAction={listAction}
                                 />
                               </div>

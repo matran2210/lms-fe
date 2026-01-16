@@ -1,4 +1,4 @@
-import { fetcher, fetchFormData } from '@services/requestV2'
+import { fetcher, fetchFormData } from '@services/request'
 import { AxiosPromise } from 'axios'
 import { IQuizResultList, ExamInformation, IResponse } from '@lms/core'
 import { ExaminationsResponse } from '@lms/contexts'

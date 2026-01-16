@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import * as Sentry from '@sentry/nextjs'
-import { fetcher } from '@services/requestV2'
+import { fetcher } from '@services/request'
 
 export default function Page() {
   return (

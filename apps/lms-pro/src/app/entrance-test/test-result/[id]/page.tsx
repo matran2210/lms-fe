@@ -3,7 +3,7 @@ import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { CloseIcon } from '@lms/assets'
 import { UserType } from '@lms/contexts'
 import { ANIMATION } from '@lms/core'
-import { Layout, PinnedNotificationsV2 } from '@lms/ui'
+import { Layout, PinnedNotificationWrapper } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import QuizResult from '@sapp-fe/entrance-test-result-package'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
@@ -70,7 +70,7 @@ const TestEntranceResult = () => {
               <div
                 className={`sticky bottom-4 z-10 mt-10 transition-opacity duration-300 ${isFading ? 'opacity-0' : 'opacity-100'}`}
               >
-                <PinnedNotificationsV2
+                <PinnedNotificationWrapper
                   bgColor="bg-primary-200"
                   borderColor="border-primary"
                   classPinned="items-start justify-between lg:items-center"
@@ -102,7 +102,7 @@ const TestEntranceResult = () => {
                   >
                     <CloseIcon />
                   </span>
-                </PinnedNotificationsV2>
+                </PinnedNotificationWrapper>
               </div>
             )}
           </div>

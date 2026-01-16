@@ -1,6 +1,6 @@
 'use client'
 import Layout from '@components/layout'
-import TestResultPage from '@components/v2/test-result/testResultPage'
+import TestResultPage from '@components/test-result/testResultPage'
 import { CloseModalIcon, MenuDotsIcon } from '@lms/assets'
 import { GRADE_STATUS } from '@lms/core'
 import { ButtonSecondary, Tooltip } from '@lms/ui'

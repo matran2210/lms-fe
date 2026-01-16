@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 
-const PinnedNotificationsV2 = ({
+const PinnedNotificationWrapper = ({
   children,
   bgColor = 'bg-primary-200',
   borderColor = 'border-primary',
@@ -28,4 +28,4 @@ const PinnedNotificationsV2 = ({
   )
 }
 
-export default PinnedNotificationsV2
+export default PinnedNotificationWrapper

@@ -12,7 +12,7 @@ import {
   TestAnnouncementModal,
   TestPopup,
 } from '@lms/feature-courses'
-import { ButtonPrimary, ButtonSecondary, ButtonText } from '@lms/ui'
+import { ButtonPrimary, ButtonSecondary, ButtonTextV2 } from '@lms/ui'
 import {
   capitalizeFirstLetter,
   formatTimer,
@@ -401,7 +401,7 @@ const TestModal = ({
   }
 
   const renderBackButton = () => (
-    <ButtonText
+    <ButtonTextV2
       title="Cancel"
       // icon={<BackIcon />}
       size="medium"
@@ -565,7 +565,7 @@ const TestModal = ({
               full
               onClick={handleSubmitNow}
             />
-            <ButtonText
+            <ButtonTextV2
               title="Start a new attempt"
               full
               size="medium"
@@ -591,7 +591,7 @@ const TestModal = ({
               full
               onClick={handleRedirectResult}
             />
-            <ButtonText
+            <ButtonTextV2
               title="Start a new attempt"
               size="medium"
               full
@@ -616,7 +616,7 @@ const TestModal = ({
             full
             onClick={handleSubmitNow}
           />
-          <ButtonText
+          <ButtonTextV2
             title="Start a new attempt"
             size="medium"
             full
@@ -733,7 +733,7 @@ const TestModal = ({
                         //   root: 'select-result-attempt',
                         //   popup: { root: 'select-result-attempt-option' },
                         // }}
-                        className="custom-select-v2 h-8 pr-2"
+                        className="custom-select h-8 pr-2"
                         popupClassName="select-card-course"
                         variant="borderless"
                         value={selectedResult?.value}

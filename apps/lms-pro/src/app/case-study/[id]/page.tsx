@@ -1,11 +1,11 @@
 /* eslint-disable prefer-const */
 'use client'
 import {
-  CalculatorIconV2,
+  CalculatorIcon,
   DownloadIcon,
   FileTextIcon,
   ResizeIcon,
-  ScratchPadIconV2,
+  NewScratchPadIcon,
 } from '@lms/assets'
 
 import {
@@ -1679,7 +1679,7 @@ const CaseStudyDetail = () => {
                     handleOpenScratchPad('scratch_pad')
                   }}
                 >
-                  <ScratchPadIconV2 isActive className="h-6 w-6" />
+                  <NewScratchPadIcon isActive className="h-6 w-6" />
                 </div>
               </Popover>
               <Popover
@@ -1701,7 +1701,7 @@ const CaseStudyDetail = () => {
                   }}
                   disabled={checkCalExist > -1}
                 >
-                  <CalculatorIconV2 isActive className="h-6 w-6" />
+                  <CalculatorIcon className="h-6 w-6 text-white" />
                 </button>
               </Popover>
             </div>

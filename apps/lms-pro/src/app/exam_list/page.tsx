@@ -1,6 +1,6 @@
 'use client'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
-import { PencilV2Icon } from '@lms/assets'
+import { PencilIcon } from '@lms/assets'
 import { IExamInformation, TitleSidebar } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
@@ -170,7 +170,7 @@ const ExamInformation = () => {
                 <ActionCellV2
                   listAction={[
                     {
-                      icon: <PencilV2Icon className="h-5 w-5" />,
+                      icon: <PencilIcon className="h-5 w-5" />,
                       nameAction: 'Edit',
                       action: () => handleEdit(record),
                     },
@@ -225,7 +225,7 @@ const ExamInformation = () => {
                 Edit
               </div>
               <div>
-                <PencilV2Icon />
+                <PencilIcon />
               </div>
             </div>
           </div>
@@ -256,7 +256,7 @@ const ExamInformation = () => {
                 }}
                 loading={isNormalLoading}
                 isShowPagination={false}
-                className="style-table-v2 rounded-xl"
+                className="style-table rounded-xl"
               />
               {!isEmpty(normalData) && (
                 <PaginationSappV2

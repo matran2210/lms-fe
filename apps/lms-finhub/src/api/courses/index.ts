@@ -4,7 +4,7 @@ import {
   IResponse,
   IScoreDetails,
 } from '@lms/core'
-import { fetcher } from '@services/requestV2'
+import { fetcher } from '@services/request'
 import url from 'src/redux/services/Course/MyCourse/Test/url'
 export class CoursesAPI {
   static getNoteDetail(

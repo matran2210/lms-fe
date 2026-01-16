@@ -310,7 +310,7 @@ export default function MenuItem({
             className={animationClass}
           />
         );
-      case "caculator":
+      case "calculator":
         return (
           <Lottie
             animationData={CalculatorAnimation}

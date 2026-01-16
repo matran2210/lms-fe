@@ -10,7 +10,7 @@ type Props = {
 
 const MAX_RATIO = 0.9;
 
-function SappModalImageV2({ src, setSrc }: Props) {
+function SappModalImageOriginalRatio({ src, setSrc }: Props) {
   const [modalWidth, setModalWidth] = useState<number>(560);
   const [imgRatio, setImgRatio] = useState<number>(1);
 
@@ -46,7 +46,7 @@ function SappModalImageV2({ src, setSrc }: Props) {
       handleCancel={() => setSrc(undefined)}
       showFooter={false}
       width={modalWidth}
-      classNameModal="sapp-preview--image-v2"
+      classNameModal="sapp-preview--image"
       onOk={() => {}}
     >
       {src && (
@@ -63,4 +63,4 @@ function SappModalImageV2({ src, setSrc }: Props) {
   );
 }
 
-export default SappModalImageV2;
+export default SappModalImageOriginalRatio;

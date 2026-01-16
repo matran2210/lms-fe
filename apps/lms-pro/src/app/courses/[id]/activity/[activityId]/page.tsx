@@ -1,14 +1,14 @@
 'use client'
 import {
-  CalculatorIconV2,
+  CalculatorIcon,
   CloseIcon,
   CloseIconNote,
   DiscussionIcon,
   DocumentTextIcon,
   ExpandIcon,
   HourglassIcon,
+  NewScratchPadIcon,
   ResourceIcon,
-  ScratchPadIconV2,
   TimeLineIcon,
 } from '@lms/assets'
 import {
@@ -65,11 +65,10 @@ import {
 import { useSmartModalSize, useTailwindBreakpoint } from '@lms/hooks'
 import {
   AssistiveTouch,
-  BackToTop,
   BottomMenu,
   CtaTrial,
   HeaderMobile,
-  SappBreadCrumbs,
+  SappBreadCrumbs
 } from '@lms/ui'
 import { Divider } from 'antd'
 import clsx from 'clsx'
@@ -81,12 +80,11 @@ import {
   useSearchParams,
 } from 'next/navigation'
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
 import { useQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/api/courses'
-import { v4 as uuidv4 } from 'uuid'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { v4 as uuidv4 } from 'uuid'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string
@@ -452,7 +450,7 @@ const ActivityPage = () => {
     {
       label: (
         <div className={assistiveItemClass}>
-          <ExpandIcon type="caculator" className="h-6 w-6" />
+          <ExpandIcon type="calculator" className="h-6 w-6" />
           <span className="text-xs">Calculator</span>
         </div>
       ),
@@ -719,7 +717,7 @@ const ActivityPage = () => {
                 <div className="hidden items-center justify-center gap-5 md:flex">
                   <CardMenuItem
                     title="Calculator"
-                    icon={<CalculatorIconV2 isActive className="h-6 w-6" />}
+                    icon={<CalculatorIcon className="h-6 w-6" />}
                     onClick={() => {
                       handleOpenScratchPad({
                         type: 'calculator',
@@ -728,7 +726,7 @@ const ActivityPage = () => {
                   />
                   <CardMenuItem
                     title="New Note"
-                    icon={<ScratchPadIconV2 isActive className="h-6 w-6" />}
+                    icon={<NewScratchPadIcon isActive className="h-6 w-6" />}
                     onClick={handleAddNote}
                   />
                 </div>
@@ -856,13 +854,13 @@ const ActivityPage = () => {
                 <CtaTrial />
               </div>
             </div>
-            {createPortal(
+            {/* {createPortal(
               <BackToTop
                 scrollContainerRef={scrollRef}
                 className={clsx('!bottom-[230px] !right-4 md:hidden')}
               />,
               document.body,
-            )}
+            )} */}
             <PopupLockContent
               showForm={openPopupCTA}
               setShowForm={setOpenPopupCTA}

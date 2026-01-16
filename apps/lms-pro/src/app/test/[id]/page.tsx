@@ -1,11 +1,11 @@
 'use client'
 import {
-  CalculatorIconV2,
+  CalculatorIcon,
   DownloadIcon,
   FileTextIcon,
   FlagIcon,
   ResizeIcon,
-  ScratchPadIconV2,
+  NewScratchPadIcon,
   ShowLessIcon,
   ShowMoreIcon,
 } from '@lms/assets'
@@ -86,7 +86,6 @@ import { RequirementsTab, TabSlide } from '@lms/feature-test'
 import {
   ButtonPrimary,
   ButtonSecondary,
-  ButtonText,
   ButtonTextV2,
   HighlightableHTML,
   MatchQuizComponent,
@@ -2795,7 +2794,7 @@ const TestDetail = () => {
             {isGradingAfterEachQuestion &&
             currentTabContent?.is_viewed_answer &&
             indexTab < filteredTabs.length - 1 ? (
-              <ButtonText
+              <ButtonTextV2
                 onClick={() => {
                   handleChangeTab(filteredTabs[indexTab + 1].id)
                   trackGAEvent('Click Button Next Question')
@@ -2804,7 +2803,7 @@ const TestDetail = () => {
                 <div className="flex items-center gap-2">
                   Next Question <Icon type="arrow-right" />
                 </div>
-              </ButtonText>
+              </ButtonTextV2>
             ) : (
               <ButtonPrimary
                 className="bg-gray-100 hover:!bg-gray-100"
@@ -3100,7 +3099,7 @@ const TestDetail = () => {
                     }}
                   >
                     <ButtonContent
-                      icon={<ScratchPadIconV2 isActive={isScatchPadEnabled} />}
+                      icon={<NewScratchPadIcon isActive={isScatchPadEnabled} />}
                       content=""
                     />
                   </button>
@@ -3125,7 +3124,7 @@ const TestDetail = () => {
                     disabled={checkCalExist > -1}
                   >
                     <ButtonContent
-                      icon={<CalculatorIconV2 isActive={checkCalExist > -1} />}
+                      icon={<CalculatorIcon className={checkCalExist > -1 ? "text-white": "text-primary"} />}
                       content=""
                     />
                   </button>
@@ -3732,7 +3731,7 @@ const TestDetail = () => {
           { '!bg-primary': isScatchPadEnabled },
         )}
       >
-        <ScratchPadIconV2 isActive={isScatchPadEnabled} className="size-8" />
+        <NewScratchPadIcon isActive={isScatchPadEnabled} className="size-8" />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <div
@@ -3745,7 +3744,7 @@ const TestDetail = () => {
           { '!bg-primary': checkCalExist > -1 },
         )}
       >
-        <CalculatorIconV2 isActive={checkCalExist > -1} className="size-8" />
+        <CalculatorIcon className={`size-8 ${checkCalExist > -1 ? 'text-white' : 'text-primary'}`} />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <div

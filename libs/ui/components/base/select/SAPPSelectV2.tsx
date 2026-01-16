@@ -113,7 +113,7 @@ const SAPPSelectV2 = ({
                 <Select
                   {...field}
                   className={clsx(
-                    "custom-select-v2 w-full",
+                    "custom-select w-full",
                     heightCustom,
                     className,
                   )}

@@ -1,7 +1,7 @@
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
 import React, { useRef, useState } from 'react'
-import Recommendation from '@components/v2/test-result/Recommendation'
+import Recommendation from '@components/test-result/Recommendation'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { COMMENTS, GRADE_STATUS, IAnswer } from '@lms/core'
 import { PageLink } from 'src/constants/routes'

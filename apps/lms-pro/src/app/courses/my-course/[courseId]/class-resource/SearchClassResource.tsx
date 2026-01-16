@@ -1,7 +1,7 @@
 'use client'
 import {
   ArrowActionSearchIcon,
-  CloseIconV2,
+  CloseIcon,
   HamburgerMenuLargeIcon,
 } from '@lms/assets'
 import { AppType, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '@lms/core'
@@ -139,7 +139,7 @@ const SearchClassResource = ({
                   },
                 },
                 {
-                  icon: <CloseIconV2 />,
+                  icon: <CloseIcon />,
                   className: 'p-1',
                   action: () => {
                     handleClearSearch()

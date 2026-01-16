@@ -1,5 +1,5 @@
 'use client'
-import { AltArrowLeft, CloseIconV2, MenuDotsIcon } from '@lms/assets'
+import { AltArrowLeft, CloseIcon, MenuDotsIcon } from '@lms/assets'
 import { UserType } from '@lms/contexts'
 import {
   IAtempt,
@@ -177,7 +177,7 @@ const Explanation = () => {
             <AltArrowLeft />
           </div>
           <div className="rounded-md bg-gray-200 p-2 transition-all duration-300 ease-in-out hover:bg-gray-300 md:!hidden">
-            <CloseIconV2 className="h-[18px] w-[18px]" />
+            <CloseIcon className="h-[18px] w-[18px]" />
           </div>
         </div>
         <div className="absolute right-8 top-6 z-10 flex cursor-pointer items-center justify-center">

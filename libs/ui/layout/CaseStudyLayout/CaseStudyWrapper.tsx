@@ -1,4 +1,4 @@
-import { CloseIconV2, NextIcon, PreviousIcon } from "@lms/assets";
+import { CloseIcon, NextIcon, PreviousIcon } from "@lms/assets";
 import { disableUnsavedChange, useFeature } from "@lms/contexts";
 import { Layout } from "antd";
 import clsx from "clsx";
@@ -63,7 +63,7 @@ const CaseStudyWrapper = ({
                 onQuit && onQuit();
               }}
             >
-              <CloseIconV2 />
+              <CloseIcon />
             </div>
           </div>
 

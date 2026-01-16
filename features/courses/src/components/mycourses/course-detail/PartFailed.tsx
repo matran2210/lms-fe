@@ -7,7 +7,7 @@ import {
   IMyCourseDetail,
   TEST_TYPE,
 } from "@lms/core";
-import { ButtonSecondary, ButtonText, SappModalV3 } from "@lms/ui";
+import { ButtonSecondary, ButtonTextV2, SappModalV3 } from "@lms/ui";
 import { buildQueryString, formatTimer, getUserPrefix, trackGAEvent } from "@lms/utils";
 import clsx from "clsx";
 import { useEffect, useMemo, useState } from "react";
@@ -350,7 +350,7 @@ const PartFailed = ({
                   (Number(currentAttemptNumber) >
                     Number(selectedAttemptNumber) ||
                     getAttemptStatus() !== EAttemptStatus.IN_PROGRESS) && (
-                    <ButtonText
+                    <ButtonTextV2
                       size="small"
                       title={titleButtonViewResult()}
                       onClick={handleRedirectResult}

@@ -1,7 +1,7 @@
 import {
   CircleCheckIcon,
   CircleInfoIcon,
-  CloseIconV2,
+  CloseIcon,
   CollapseArrowIcon,
   DownloadIcon,
   FileTextIcon,
@@ -1427,7 +1427,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           <Modal
             onCancel={onCloseExhibitModal}
             title="Exhibit"
-            closeIcon={<CloseIconV2 />}
+            closeIcon={<CloseIcon />}
             centered
             open={openExhibitModal}
             footer={null}

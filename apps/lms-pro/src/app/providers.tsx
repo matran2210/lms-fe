@@ -28,7 +28,7 @@ import {
   SappConfirmDialogContainer,
 } from '@lms/ui'
 import { initializeGA, pageview } from '@lms/utils'
-import { fetcher } from '@services/requestV2'
+import { fetcher } from '@services/request'
 import { App as AntdApp, ConfigProvider } from 'antd'
 import Aos from 'aos'
 import dayjs from 'dayjs'

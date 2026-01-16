@@ -2,14 +2,14 @@
 'use client'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import {
-  CalculatorIconV2,
+  CalculatorIcon,
   CloseModalIcon,
   DownloadIcon,
   FileTextIcon,
   NotesOutline,
   PulsingExclamation,
   ResizeIcon,
-  ScratchPadIconV2,
+  NewScratchPadIcon,
   Triangle,
 } from '@lms/assets'
 import { loadMoreQuestion } from '@lms/contexts'
@@ -1054,7 +1054,7 @@ const CaseStudyResult = () => {
                     handleOpenScratchPad('scratch_pad')
                   }}
                 >
-                  <ScratchPadIconV2 isActive className="h-6 w-6" />
+                  <NewScratchPadIcon isActive className="h-6 w-6" />
                 </div>
               </Popover>
               <Popover
@@ -1076,7 +1076,7 @@ const CaseStudyResult = () => {
                   }}
                   disabled={checkCalExist > -1}
                 >
-                  <CalculatorIconV2 isActive className="h-6 w-6" />
+                  <CalculatorIcon className="h-6 w-6 text-white" />
                 </button>
               </Popover>
             </div>

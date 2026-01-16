@@ -35,7 +35,7 @@ const ButtonTextV2 = ({
     text-center 
     font-medium
     !border-none
-    text-gray-v2-800
+    text-gray-800
     hover:!text-primary
     ${isUnderline}
     ${fullWidthClass} 

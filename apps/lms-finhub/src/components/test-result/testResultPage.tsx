@@ -1,7 +1,7 @@
 import { useMemo, useRef } from 'react'
 import SappLoading from '@components/common/SappLoading'
-import MultipleChoiceScore from '@components/v2/test-result/MultipleChoiceScore'
-import ScoreDetail from '@components/v2/test-result/ScoreDetail'
+import MultipleChoiceScore from '@components/test-result/MultipleChoiceScore'
+import ScoreDetail from '@components/test-result/ScoreDetail'
 import {
   IQuizAttempt,
   IQuizAttemptChartType,

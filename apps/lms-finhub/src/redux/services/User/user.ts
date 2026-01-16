@@ -1,6 +1,6 @@
 import url from './url'
 import { IResponse, PinnedNotifications } from '@lms/core'
-import { fetchFormData } from '@services/requestV2'
+import { fetchFormData } from '@services/request'
 import { IDeviceItem } from '@lms/core'
 import { IUser } from '@lms/contexts'
 import { AuthAPI } from 'src/api/profile'
@@ -51,9 +51,6 @@ const UserApi = {
     return fetchFormData({ url: `/users/avatar`, formData })
   },
   getListDevices: async (): Promise<IDeviceItem[]> => {
-    return AuthAPI.getListDevices()
-  },
-  getListDevicesV2: async (): Promise<IDeviceItem[]> => {
     return AuthAPI.getListDevices()
   },
   getListHistory: async ({

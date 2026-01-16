@@ -60,7 +60,7 @@ const MENU_OPTIONS: MenuOption[] = [
   },
   {
     name: `${TitleSidebar.CALCULATOR}`,
-    icon: 'caculator',
+    icon: 'calculator',
     url: '#',
     type: 'level-1',
   },

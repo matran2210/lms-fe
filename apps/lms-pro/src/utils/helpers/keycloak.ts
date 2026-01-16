@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { fetcher } from '@services/requestV2'
+import { fetcher } from '@services/request'
 import { CERTIFICATE } from '@lms/core'
 import { getMessagingToken } from '@lms/utils'
 import Keycloak from 'keycloak-js'

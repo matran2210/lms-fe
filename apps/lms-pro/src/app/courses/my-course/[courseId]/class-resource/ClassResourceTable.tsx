@@ -13,7 +13,7 @@ import {
   FileViewer,
   ModalResizeable,
   PaginationSappV2,
-  SappModalImageV2,
+  SappModalImageOriginalRatio,
   SappTable,
   SAPPVideo,
   TextPreview,
@@ -242,7 +242,7 @@ const ClassResourceTable = ({
         loading={isLoading}
         rowKey="id"
         pagination={pagination}
-        className="style-table-v2 rounded-xl bg-white"
+        className="style-table rounded-xl bg-white"
         isShowPagination={false}
       />
       <PaginationSappV2
@@ -326,7 +326,7 @@ const ClassResourceTable = ({
       {openPreview &&
         previewResource &&
         previewResource.suffix_type === 'IMAGE' && (
-          <SappModalImageV2
+          <SappModalImageOriginalRatio
             src={previewResource.url}
             setSrc={() => setOpenPreview(false)}
           />

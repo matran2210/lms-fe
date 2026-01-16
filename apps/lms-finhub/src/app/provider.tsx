@@ -23,7 +23,7 @@ import {
   PinnedNotifications,
   SappConfirmDialogContainer,
 } from '@lms/ui'
-import { fetcher } from '@services/requestV2'
+import { fetcher } from '@services/request'
 import '@xyflow/react/dist/style.css'
 import Aos from 'aos'
 import 'aos/dist/aos.css'

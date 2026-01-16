@@ -1,4 +1,4 @@
-import MultipleQuestion from '@components/v2/test-result/multipleQuestion'
+import MultipleQuestion from '@components/test-result/multipleQuestion'
 import { GRADE_STATUS, IQuizAttempt } from '@lms/core'
 import { GlobalAverage } from '@lms/feature-courses'
 import { isNull, isUndefined } from 'lodash'

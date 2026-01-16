@@ -1,8 +1,8 @@
 import {
   BlankAvatarImage,
   CheckCircleOutlineYellow,
-  CloseIconV2,
-  PencilFillV2Icon,
+  CloseIcon,
+  PencilFillIcon,
 } from '@lms/assets'
 import {
   getLogoutUser,
@@ -283,7 +283,7 @@ const ProfileHeader = ({
                   })}
                 />
               ) : (
-                <CloseIconV2 className="h-5 w-5" />
+                <CloseIcon className="h-5 w-5" />
               )}
             </div>
           ) : (
@@ -291,7 +291,7 @@ const ProfileHeader = ({
               className="absolute -right-[0.5px] bottom-0 z-[1] cursor-pointer rounded-full bg-primary p-1 text-white shadow-small"
               onClick={() => setIsEditAvatar(true)}
             >
-              <PencilFillV2Icon className="h-5 w-5" />
+              <PencilFillIcon className="h-5 w-5" />
             </div>
           )}
         </div>

@@ -1,5 +1,5 @@
-import { ArrowRightV2Icon } from "@lms/assets";
-import PinnedNotificationsV2 from "./PinnedNotificationsV2";
+import { ArrowRightIcon } from "@lms/assets";
+import PinnedNotificationWrapper from "./PinnedNotificationWrapper";
 import { formatDateToLongString } from "@lms/utils";
 import Image from "next/image";
 import React from "react";
@@ -51,7 +51,7 @@ const SeeCertificateButton = React.memo(
         See Certificate
       </div>
       <div>
-        <ArrowRightV2Icon />
+        <ArrowRightIcon />
       </div>
     </div>
   ),
@@ -76,7 +76,7 @@ const PinnedCompletedCourse: React.FC<IProps> = React.memo(
     if (!isOpen) return null;
 
     return (
-      <PinnedNotificationsV2
+      <PinnedNotificationWrapper
         bgColor="bg-primary-200"
         borderColor="border-primary"
         classPinned={clsx(
@@ -92,7 +92,7 @@ const PinnedCompletedCourse: React.FC<IProps> = React.memo(
           <NotificationMessage courseName={courseName} passedAt={passedAt} />
         </div>
         <SeeCertificateButton onClick={onSeeCertificate} />
-      </PinnedNotificationsV2>
+      </PinnedNotificationWrapper>
     );
   },
 );

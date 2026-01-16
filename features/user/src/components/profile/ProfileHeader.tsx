@@ -1,5 +1,5 @@
 "use client"
-import { BlankAvatarImage, CheckCircleOutlineYellow, CloseIconV2, PencilFillV2Icon, PencilV2Icon } from '@lms/assets'
+import { BlankAvatarImage, CheckCircleOutlineYellow, CloseIcon, PencilFillIcon, PencilIcon } from '@lms/assets'
 import {
   getLogoutUser,
   getMe,
@@ -203,7 +203,7 @@ const ProfileHeader = ({
                 <div className="flex h-full w-full items-center justify-center bg-black bg-opacity-40">
                   {!loadingEditAvatar ? (
                     <div className="flex flex-col items-center justify-center gap-1">
-                      <PencilFillV2Icon className="h-6 w-6 text-white" />
+                      <PencilFillIcon className="h-6 w-6 text-white" />
                       <span className="text-xs font-medium text-white">
                         Edit
                       </span>
@@ -271,7 +271,7 @@ const ProfileHeader = ({
                   })}
                 />
               ) : (
-                <CloseIconV2 className="h-5 w-5" />
+                <CloseIcon className="h-5 w-5" />
               )}
             </div>
           ) : (
@@ -279,7 +279,7 @@ const ProfileHeader = ({
               className="absolute -right-[0.5px] bottom-0 z-[1] cursor-pointer rounded-full bg-white p-1 shadow-small hover:text-primary md:hidden"
               onClick={() => setIsEdit(true)}
             >
-              <PencilV2Icon className="h-5 w-5" />
+              <PencilIcon className="h-5 w-5" />
             </div>
           )}
         </div>
@@ -310,7 +310,7 @@ const ProfileHeader = ({
                   })}
                 />
               ) : (
-                <CloseIconV2 className="h-5 w-5" />
+                <CloseIcon className="h-5 w-5" />
               )}
               {/* <svg
                 xmlns="http://www.w3.org/2000/svg"

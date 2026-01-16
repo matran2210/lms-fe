@@ -1,6 +1,6 @@
 import { Icon } from '@lms/assets'
 import { userReducer } from '@lms/contexts'
-import { ButtonPrimary, ButtonText, SappModalV2 } from '@lms/ui'
+import { ButtonPrimary, ButtonTextV2, SappModalV2 } from '@lms/ui'
 import type { GetProps } from 'antd'
 import { Input } from 'antd'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
@@ -169,7 +169,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
             onClick={verifyCode}
             disabled={code.some((e) => e === '') || time <= 0}
           />
-          <ButtonText
+          <ButtonTextV2
             title="Resend Code"
             full={true}
             disabled={!canResend}

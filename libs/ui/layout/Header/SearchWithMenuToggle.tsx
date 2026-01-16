@@ -1,6 +1,6 @@
 
 "use client";
-import { ArrowActionSearchIcon, HamburgerMenuLargeIcon, CloseIconV2, TourGuideStartAnimation } from "@lms/assets";
+import { ArrowActionSearchIcon, HamburgerMenuLargeIcon, CloseIcon, TourGuideStartAnimation } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
 import { AppType, MY_COURSES } from "@lms/core";
 import { buildQueryString } from "@lms/utils";
@@ -120,7 +120,7 @@ const SearchWithMenuToggle = ({
                   },
                 },
                 {
-                  icon: <CloseIconV2 />,
+                  icon: <CloseIcon />,
                   className: "p-1",
                   action: () => {
                     methods.setValue("name", "");

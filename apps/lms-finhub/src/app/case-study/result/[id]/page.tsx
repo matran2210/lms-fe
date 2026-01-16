@@ -35,7 +35,7 @@ import {
 import {
   AddWordPreview,
   ButtonPrimary,
-  ButtonText,
+  ButtonTextV2,
   Calculator,
   CaseStudyWrapper,
   EditorReader,
@@ -694,36 +694,9 @@ const CaseStudyResult = () => {
               ['--footer-h' as any]: '80px',
             }}
           >
-            {/* <div className="hidden h-full w-[150px] items-center gap-1 lg:flex">
-              <button
-                className={`h-fit rounded-lg ${isScatchPadEnabled && 'bg-primary'
-                  }`}
-                onClick={() => {
-                  handleOpenScratchPad('scratch_pad')
-                }}
-              >
-                <ButtonContent
-                  icon={<ScratchPadIcon isActive={isScatchPadEnabled} />}
-                  content=""
-                />
-              </button>
-              <button
-                className={`h-fit rounded-lg ${checkCalExist > -1 && 'bg-primary'
-                  }`}
-                onClick={() => {
-                  handleOpenScratchPad('calculator')
-                }}
-                disabled={checkCalExist > -1}
-              >
-                <ButtonContent
-                  icon={<CalculatorIcon isActive={checkCalExist > -1} />}
-                  content=""
-                />
-              </button>
-            </div> */}
             <div className="flex items-center justify-center">
               {!isNull(result?.previous_topic) && (
-                <ButtonText
+                <ButtonTextV2
                   title="Previous"
                   onClick={handlePeriousTopic}
                   className="me-6"

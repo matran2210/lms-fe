@@ -7,7 +7,7 @@ import {
   usePinnedNotifyContext,
 } from '@lms/contexts'
 import { useLayoutEffect, useMemo } from 'react'
-import PinnedNotificationsV2 from './PinnedNotificationsV2'
+import PinnedNotificationWrapper from './PinnedNotificationWrapper'
 
 type CourseRouteType = 'LIST' | 'DETAIL' | 'SECTION' | 'ACTIVITY' | 'OTHER'
 
@@ -77,7 +77,7 @@ export default function CtaTrial() {
   return (
     <>
       {isEnablePinnedNotiPages && openPinned && (
-        <PinnedNotificationsV2
+        <PinnedNotificationWrapper
           bgColor="bg-info-100"
           borderColor="border-info"
           classPinned="items-start justify-between lg:items-center"
@@ -103,7 +103,7 @@ export default function CtaTrial() {
           <div className="cursor-pointer" onClick={handleClose}>
             <CloseIconNote />
           </div>
-        </PinnedNotificationsV2>
+        </PinnedNotificationWrapper>
       )}
     </>
   )

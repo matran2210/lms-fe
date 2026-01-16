@@ -1,14 +1,14 @@
 'use client'
 import SappLoading from '@components/common/SappLoading'
 import {
-  CalculatorIconV2,
+  CalculatorIcon,
   DownloadIcon,
   FileTextIcon,
   FlagIcon,
   Icon,
   NotesOutline,
   ResizeIcon,
-  ScratchPadIconV2,
+  NewScratchPadIcon,
   ShowLessIcon,
   ShowMoreIcon,
 } from '@lms/assets'
@@ -60,7 +60,7 @@ import {
   BackToTop,
   ButtonPrimary,
   ButtonSecondary,
-  ButtonText,
+  ButtonTextV2,
   FilterRadioGroup,
   HighlightableHTML,
   MatchQuizComponent,
@@ -1820,7 +1820,7 @@ const TestDetail = () => {
             {isGradingAfterEachQuestion &&
             currentTabContent?.is_viewed_answer &&
             indexTab < filteredTabs.length - 1 ? (
-              <ButtonText
+              <ButtonTextV2
                 className="bg-gray-100 hover:!bg-gray-100"
                 onClick={() => {
                   handleChangeTab(filteredTabs[indexTab + 1].id)
@@ -1830,7 +1830,7 @@ const TestDetail = () => {
                 <div className="flex items-center gap-2">
                   Next Question <Icon type="arrow-right" />
                 </div>
-              </ButtonText>
+              </ButtonTextV2>
             ) : (
               <ButtonPrimary
                 className="bg-gray-100 hover:!bg-gray-100"
@@ -1984,7 +1984,7 @@ const TestDetail = () => {
                     }}
                   >
                     <ButtonContent
-                      icon={<ScratchPadIconV2 isActive={isScatchPadEnabled} />}
+                      icon={<NewScratchPadIcon isActive={isScatchPadEnabled} />}
                       content=""
                     />
                   </button>
@@ -2009,7 +2009,9 @@ const TestDetail = () => {
                     disabled={checkCalExist > -1}
                   >
                     <ButtonContent
-                      icon={<CalculatorIconV2 isActive={checkCalExist > -1} />}
+                      icon={<CalculatorIcon className={
+                        checkCalExist > -1 ? 'text-white' : 'text-primary'
+                      } />}
                       content=""
                     />
                   </button>
@@ -2557,7 +2559,7 @@ const TestDetail = () => {
           { '!bg-primary': isScatchPadEnabled },
         )}
       >
-        <ScratchPadIconV2 isActive={isScatchPadEnabled} />
+        <NewScratchPadIcon isActive={isScatchPadEnabled} />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <div
@@ -2570,7 +2572,7 @@ const TestDetail = () => {
           { '!bg-primary': checkCalExist > -1 },
         )}
       >
-        <CalculatorIconV2 isActive={checkCalExist > -1} />
+        <CalculatorIcon className={checkCalExist > -1 ? 'text-primary' : 'text-white'} />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <div

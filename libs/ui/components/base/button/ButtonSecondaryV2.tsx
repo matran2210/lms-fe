@@ -30,7 +30,7 @@ const ButtonSecondaryV2 = ({
 
   const fullWidthClass = full ? "block w-full" : "inline-block";
   const disabledClass = disabled
-    ? "cursor-not-allowed !bg-gray-100 b!text-gray-v2-400 hover:!bg-gray-100 hover:b!text-gray-v2-400 hover:!border-gray-100"
+    ? "cursor-not-allowed !bg-gray-100 b!text-gray-400 hover:!bg-gray-100 hover:b!text-gray-400 hover:!border-gray-100"
     : "cursor-pointer";
 
   const componentClass = `

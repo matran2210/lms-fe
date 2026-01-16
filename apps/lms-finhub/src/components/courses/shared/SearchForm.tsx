@@ -106,7 +106,7 @@ export default function SearchForm({
                 {...field}
                 type="text"
                 placeholder={placeholder}
-                className="h-6 w-full border-0 px-4 text-sm leading-[22px] text-gray-800 placeholder-gray-v2-400 focus:border-0 focus:outline-0 focus:ring-0 md:text-base md:leading-6"
+                className="h-6 w-full border-0 px-4 text-sm leading-[22px] text-gray-800 placeholder-gray-400 focus:border-0 focus:outline-0 focus:ring-0 md:text-base md:leading-6"
               />
             )}
           />

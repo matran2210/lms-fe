@@ -2,7 +2,7 @@ import { ConfirmIcon } from "@lms/assets";
 import { BackIcon } from "@lms/assets";
 import {
   ButtonPrimary,
-  ButtonText,
+  ButtonTextV2,
   SappButtonIcon,
   SappModalV3,
 } from "@lms/ui";
@@ -80,7 +80,7 @@ const ConFirmSubmit = ({
               <div className="text-base font-semibold">Back to My Course</div>
             </SappButtonIcon>
           ) : (
-            <ButtonText title="Cancel" className="w-full" onClick={onCancel} />
+            <ButtonTextV2 title="Cancel" className="w-full" onClick={onCancel} />
           )}
         </div>
       </div>
