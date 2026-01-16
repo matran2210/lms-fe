@@ -18,6 +18,7 @@ import {
   removeHighlights,
   serializeHighlights,
 } from "@funktechno/texthighlighter/lib";
+import { Correct } from "./answer";
 
 declare global {
   interface Window {
@@ -703,6 +704,7 @@ export const getGradingStatusLabel = (status: string) => {
 export const handleMultipleCorrectAnswer = (
   dragDropAnswers: IDragDropAnswer[],
   answers: AnswerItem[],
+  corrects?: Correct[],
 ) => {
   console.log("dragDropAnswers", dragDropAnswers);
   console.log("answers", answers);
@@ -719,7 +721,17 @@ export const handleMultipleCorrectAnswer = (
     return {
       ...dragDropCurrent,
       is_correct: isCorrect,
+      id: dragDropCurrent?.id || dragDropCurrent?.answer_id,
+      idAnswer: dragDropCurrent?.idAnswer || dragDropCurrent?.id,
+      ...(corrects
+        ? {
+            answer: corrects.find(
+              (item) => item?.id === dragDropCurrent?.answer_id,
+            )?.answer,
+          }
+        : {}),
     };
   });
+  console.log("answersMapped", answersMapped);
   return answersMapped;
 };
