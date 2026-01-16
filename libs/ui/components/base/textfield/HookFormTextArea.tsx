@@ -74,7 +74,7 @@ const HookFormTextArea = ({
             <Skeleton.Input
               active
               size="large"
-              className="w-100 h-150px"
+              className="w-full h-[150px]"
             ></Skeleton.Input>
           )}
           <ErrorMessage>{error?.message ?? ""}</ErrorMessage>
