@@ -201,14 +201,6 @@ const CaseStudyResult = () => {
         )
       case QUESTION_TYPES.DRAG_DROP:
         return (
-          // <DragNDropPreview
-          //   data={data}
-          //   allowHighLight={allowHighLight}
-          //   allowUnHighLight={allowUnHighLight}
-          //   defaultAnswer={defaultValue}
-          //   corrects={corrects?.corrects}
-          //   solution={solution}
-          // />
           <NewDragNDropQuestion
             data={data as any}
             defaultValue={defaultValue}
@@ -217,6 +209,7 @@ const CaseStudyResult = () => {
             }}
             corrects={corrects}
             solution={solution}
+            isMultiCorrect
           />
         )
       case QUESTION_TYPES.SELECT_WORD:

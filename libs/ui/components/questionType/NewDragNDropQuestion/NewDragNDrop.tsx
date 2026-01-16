@@ -11,6 +11,7 @@ import DroppableSlot from "./DroppableSlot";
 import { SappTitleSolution } from "../../common";
 import { EditorReader, SappModalImage } from "../../base";
 import { Correct } from "@lms/utils";
+import { isEmpty } from "lodash";
 declare var com: any;
 
 interface Answer {
@@ -33,12 +34,10 @@ interface DragDropQuestionProps {
   };
   defaultValue: SlotValue[];
   onChange?: (data: SlotValue[]) => void;
-  corrects?: {
-    corrects: Correct[];
-    answers: Correct[];
-  };
+  corrects?: any;
   solution?: string;
   explainClassname?: string;
+  isMultiCorrect?: boolean;
 }
 
 // Component cho bank area
@@ -104,8 +103,10 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
   corrects,
   solution,
   explainClassname,
+  isMultiCorrect = false,
 }) => {
   console.log("corrects", corrects);
+  const correctCurrent = isMultiCorrect ? corrects?.corrects : corrects;
   const contentRef = React.useRef<HTMLSpanElement | null>(null);
   const [slots, setSlots] = useState<SlotValue[]>([]);
   const [items, setItems] = useState<Answer[]>([]);
@@ -144,11 +145,9 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
   }, [parsedSlots, data.answers]);
 
   // Parse lại HTML thành JSX + DroppableSlot hoặc SlotWithValue
-  const isDisabled = !!(
-    corrects?.answers &&
-    Array.isArray(corrects.answers) &&
-    corrects.answers.length > 0
-  );
+  const isDisabledMultiCorrect = !isEmpty(corrects?.answers);
+  const isDisabledNormal = !isEmpty(correctCurrent);
+  const isDisabled = isMultiCorrect ? isDisabledMultiCorrect : isDisabledNormal;
 
   const handleOnclick = async (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e?.target as HTMLElement;
@@ -179,11 +178,15 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
               // Xác định status
               let status: "success" | "error" | "empty" | "normal" = "normal";
               if (value) {
-                if (corrects?.answers && Array.isArray(corrects.answers)) {
-                  const correct = corrects.answers.find(
-                    (c: any) => (c?.answer_position || c?.position) === slot?.position,
+                if (!isEmpty(correctCurrent) || !isEmpty(corrects?.answers)) {
+                  const multiCorrect = corrects?.answers?.find(
+                    (c: any) =>
+                      (c?.answer_position || c?.position) === slot?.position,
                   );
-
+                  const correctNormal = correctCurrent?.find(
+                    (c: any) => c.id === slot?.idAnswer,
+                  );
+                  const correct = isMultiCorrect ? multiCorrect : correctNormal;
                   if (correct?.is_correct) {
                     status = "success";
                   } else {
@@ -436,12 +439,12 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
           {renderedContent}
         </span>
         {!isDisabled && <BankArea items={items} />}
-        {corrects?.corrects && (
+        {(!isEmpty(correctCurrent)) && (
           <>
             <SappDivider />
             <CorrectAnswer
               questionContent={data.question_content}
-              corrects={corrects.corrects}
+              corrects={correctCurrent}
             />
           </>
         )}

@@ -1035,6 +1035,7 @@ const TestDetail = () => {
             corrects={corrects}
             solution={solution}
             explainClassname="!mt-8 !p-0 !bg-transparent"
+            isMultiCorrect
           />
         )
       case QUESTION_TYPES.SELECT_WORD:
