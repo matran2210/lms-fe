@@ -1539,6 +1539,7 @@ const QuizDocument = ({
 
       {openGradedReport && (
         <SappModalV3
+          handleClose={handleCalcelModalResult}
           open={openGradedReport}
           okButtonCaption={
             is_graded && grading_method === GRADING_METHOD.MANUAL
