@@ -8,6 +8,10 @@ export const CLASS_SUFFIX_TYPE = [
     value: "VIDEO",
   },
   {
+    label: "Audio",
+    value: "AUDIO",
+  },
+  {
     label: "Image",
     value: "IMAGE",
   },
