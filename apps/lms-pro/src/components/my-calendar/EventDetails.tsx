@@ -60,6 +60,7 @@ const ModalContent = ({ events }: IModalContentProps) => {
 const EventDetails = ({ details, handleClose }: IProps) => {
   return (
     <SappModalV3
+      handleClose={handleClose}
       open={details != null}
       size="max-w-[630px]"
       title={

@@ -11,6 +11,7 @@ interface ModalResizeableProps {
   height?: number;
   minWidth?: number;
   minHeight?: number;
+  maxHeight?: number
   dragHandleClassName?: string;
   header?: ReactNode | ((actions: { requestClose: () => void }) => ReactNode); // requestClose dùng để close modal mà vẫn giữ được animation khi đóng modal
   handleCloseScratchPad?: (pad: any) => void;
@@ -41,6 +42,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   height = 400,
   minWidth = 200,
   minHeight = 200,
+  maxHeight,
   header,
   dragHandleClassName, //Determine the drag handle class name
   handleCloseScratchPad,
@@ -168,6 +170,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
           }}
           minWidth={minWidth}
           minHeight={minHeight}
+          maxHeight={maxHeight}
           bounds="window"
           style={{
             background: "white",

@@ -275,6 +275,19 @@ function Providers({ children }: { children: ReactNode }) {
     prevPathRef.current = pathname
   }, [pathname])
 
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    if (!window.gtag) return
+
+    const url =
+      pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '')
+
+    window.gtag('config', process.env.NEXT_PUBLIC_GA_ID!, {
+      page_path: url,
+    })
+  }, [pathname, searchParams])
+
   return (
       <AntConfigProvider>
         {/* <Provider store={store}> */}
