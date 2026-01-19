@@ -17,6 +17,7 @@ import { useSearchParams } from 'next/navigation'
 import { useRef, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
+import clsx from 'clsx'
 
 const breadcrumbs: ITabs[] = [
   {
@@ -50,7 +51,18 @@ const MyProfilePage = () => {
   const searchParam = useSearchParams()
   const query = Object.fromEntries(searchParam.entries())
   const inputFileRef = useRef<HTMLInputElement | null>(null)
+  const [activeTab, setActiveTab] = useState('my-profile')
+  const [tabAnimating, setTabAnimating] = useState(false)
+  const handleTabChange = (newTab: string) => {
+    if (newTab === activeTab) return
 
+    setTabAnimating(true)
+    setActiveTab(newTab)
+
+    setTimeout(() => {
+      setTabAnimating(false)
+    }, 500)
+  }
   const selectedTab = query.tab
     ? (tabs.find((item) => item.id == query.tab)?.id ?? tabs[0].id)
     : tabs[0].id
@@ -67,14 +79,11 @@ const MyProfilePage = () => {
   const handleSetAvatar = (avatar: File | undefined) => {
     setAvatar(avatar)
   }
-  const items = [
-    {
-      key: 'my-profile',
-      label: (
-        <TabHeaderItem icon={<Icon type="my-profile" />} title="My profile" />
-      ),
-      children: (
-        <>
+
+  const getTabContent = (key: string) => {
+    switch (key) {
+      case 'my-profile':
+        return (
           <MyProfile
             isEdit={isEdit}
             setIsEdit={setIsEdit}
@@ -82,7 +91,35 @@ const MyProfilePage = () => {
             handleSetAvatar={handleSetAvatar}
             setReViewImageSrc={setReViewImageSrc}
           />
-        </>
+        )
+      case 'certificates':
+        return <Certificate />
+      case 'setting':
+        return <Settings />
+      case 'sercurity':
+        return (
+          <>
+            {isChangePassword ? (
+              <ChangePassword handleCancel={() => setIsChangePassword(false)} />
+            ) : (
+              <div className="flex flex-col">
+                <MyPasword setIsChangePassword={setIsChangePassword} />
+                <DeviceList />
+                <LoginHistoryList />
+              </div>
+            )}
+          </>
+        )
+      default:
+        return null
+    }
+  }
+
+  const items = [
+    {
+      key: 'my-profile',
+      label: (
+        <TabHeaderItem icon={<Icon type="my-profile" />} title="My profile" />
       ),
     },
     {
@@ -93,7 +130,6 @@ const MyProfilePage = () => {
           title="Certificates"
         />
       ),
-      children: <Certificate />,
     },
 
     {
@@ -101,24 +137,10 @@ const MyProfilePage = () => {
       label: (
         <TabHeaderItem icon={<Icon type="sercurity" />} title="Security" />
       ),
-      children: (
-        <>
-          {isChangePassword ? (
-            <ChangePassword handleCancel={() => setIsChangePassword(false)} />
-          ) : (
-            <div className="flex flex-col">
-              <MyPasword setIsChangePassword={setIsChangePassword} />
-              <DeviceList />
-              <LoginHistoryList />
-            </div>
-          )}
-        </>
-      ),
     },
     {
       key: 'setting',
       label: <TabHeaderItem icon={<Icon type="setting" />} title="Setting" />,
-      children: <Settings />,
     },
   ]
 
@@ -147,7 +169,22 @@ const MyProfilePage = () => {
                   className="sapp-tabs-profile hidden md:block"
                   defaultActiveKey="my-profile"
                   items={items}
+                  activeKey={activeTab}
+                  onChange={handleTabChange}
                 />
+                {/* Tab content with animation */}
+                <div className="tab-content-container relative hidden md:block">
+                  {/* Current tab - sliding in */}
+                  <div
+                    key={activeTab}
+                    className={clsx(
+                      'tab-content',
+                      tabAnimating && 'tab-content-enter',
+                    )}
+                  >
+                    {getTabContent(activeTab)}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

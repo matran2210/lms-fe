@@ -111,7 +111,7 @@ const SappDrawer = ({
         <div className="flex flex-col justify-between">
           <div
             className={clsx(
-              'w-100 relative flex min-h-[80px] items-center justify-between border-b bg-transparent px-8 py-2 text-2xl font-medium text-white',
+              'w-full relative flex min-h-[80px] items-center justify-between border-b bg-transparent px-8 py-2 text-2xl font-medium text-white',
               headerClassName,
             )}
           >

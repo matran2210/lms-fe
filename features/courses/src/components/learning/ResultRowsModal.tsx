@@ -210,7 +210,7 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
       open={open}
       setOpen={setOpen}
       size="max-w-full w-full"
-      refClass="max-h-100vh animate-jump-in relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all"
+      refClass="max-h-screen animate-jump-in relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all"
       childClass=""
       parentChildClass="max-w-[1144px] mx-auto px-6 2xl:px-0"
       footerButtonClassName="justify-center flex flex-row-reverse"

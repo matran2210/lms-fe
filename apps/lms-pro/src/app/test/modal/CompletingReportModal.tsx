@@ -14,6 +14,7 @@ const CompletingReportModal = (props: IProps) => {
   const { open, handleCancel, onOk, quizName } = props
   return (
     <SappModalV3
+      handleClose={handleCancel}
       open={open}
       okButtonCaption="Back"
       handleCancel={handleCancel}

@@ -187,7 +187,7 @@ const ProfileHeader = ({
           <div
             className={`${
               loading ? 'animate-pulse' : ''
-            } w-100 h-100 absolute bottom-0 left-0 right-0 top-0 overflow-hidden rounded-full lg:block`}
+            } absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden rounded-full lg:block`}
           >
             <div className="absolute left-1/2 top-1/2 h-fit w-fit -translate-x-1/2 -translate-y-1/2 transform overflow-hidden rounded-full leading-[0]">
               {(isEdit || isEditAvatar) && (
@@ -224,7 +224,7 @@ const ProfileHeader = ({
                       <div role="status">
                         <svg
                           aria-hidden="true"
-                          className="fill-blue-600 text-divider h-8 w-8 animate-spin dark:text-[#4b5563]"
+                          className="h-8 w-8 animate-spin fill-blue-600 text-divider dark:text-[#4b5563]"
                           viewBox="0 0 100 101"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
