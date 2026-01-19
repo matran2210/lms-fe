@@ -1,4 +1,8 @@
-import { BlankAvatarImage, CheckCircleOutlineYellow, PencilFillV2Icon } from '@lms/assets'
+import {
+  BlankAvatarImage,
+  CheckCircleOutlineYellow,
+  PencilFillV2Icon,
+} from '@lms/assets'
 import { TextSkeleton } from '@lms/ui'
 import { CloseIconV2 } from '@lms/assets'
 import { Divider, Tag } from 'antd'
@@ -12,7 +16,16 @@ import {
   useState,
 } from 'react'
 import toast from 'react-hot-toast'
-import { getLogoutUser, getMe, getUserInformation, updateUser, updateUserAvatar, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
+import {
+  getLogoutUser,
+  getMe,
+  getUserInformation,
+  updateUser,
+  updateUserAvatar,
+  useAppDispatch,
+  useAppSelector,
+  userReducer,
+} from '@lms/contexts'
 import UserApi from 'src/redux/services/User/user'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
 interface IProps {
@@ -128,7 +141,9 @@ const ProfileHeader = ({
       // Nếu không có avatar và người dùng có avatar hiện tại
       if (!avatar && user?.detail?.avatar) {
         // Gọi hành động thunk updateUser để cập nhật tên và avatar của người dùng
-        await dispatch(updateUser({ full_name, avatar: null, api: UserApi })).unwrap()
+        await dispatch(
+          updateUser({ full_name, avatar: null, api: UserApi }),
+        ).unwrap()
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
         dispatch(getMe(UserApi))
         // Đặt trạng thái isEdit thành false
@@ -154,9 +169,11 @@ const ProfileHeader = ({
       setIsEditAvatar(false)
       setReViewImageSrc(undefined)
       if (error?.response?.data?.error?.code === '403|1002') {
-        await dispatch(getLogoutUser({
-          authManager: new AuthenticationManager(),
-        }))
+        await dispatch(
+          getLogoutUser({
+            authManager: new AuthenticationManager(),
+          }),
+        )
       }
     }
   }
@@ -171,7 +188,7 @@ const ProfileHeader = ({
           <div
             className={`${
               loading ? 'animate-pulse' : ''
-            } w-100 h-100 absolute bottom-0 left-0 right-0 top-0 overflow-hidden rounded-full lg:block`}
+            } absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden rounded-full lg:block`}
           >
             <div className="absolute left-1/2 top-1/2 h-fit w-fit -translate-x-1/2 -translate-y-1/2 transform overflow-hidden rounded-full leading-[0]">
               {(isEdit || isEditAvatar) && (
@@ -208,7 +225,7 @@ const ProfileHeader = ({
                       <div role="status">
                         <svg
                           aria-hidden="true"
-                          className="fill-blue-600 text-divider h-8 w-8 animate-spin dark:text-[#4b5563]"
+                          className="h-8 w-8 animate-spin fill-blue-600 text-divider dark:text-[#4b5563]"
                           viewBox="0 0 100 101"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"

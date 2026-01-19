@@ -28,6 +28,7 @@ export * from "./skeleton/index";
 export { default as YourAnswer } from "./tags/YourAnswer";
 export * from "./textfield/index";
 export * from "./video/index";
+export * from "./audio/index";
 export { default as MovableWindow } from "./window/index";
 export * from "./datetime/index";
 export * from "./collapse/index";

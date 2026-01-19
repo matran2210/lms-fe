@@ -18,6 +18,7 @@ import {
   SAPPVideo,
   TextPreview,
   Tooltip,
+  SAPPAudio,
 } from '@lms/ui'
 import { UploadAPI } from 'src/api/upload'
 import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
@@ -178,7 +179,6 @@ const ClassResourceTable = ({
   const renderPreviewContent = (resource: IClassResource) => {
     switch (resource.suffix_type) {
       case 'VIDEO':
-      case 'AUDIO':
         return (
           <SAPPVideo
             isFetchCaptions={false}
@@ -191,6 +191,19 @@ const ClassResourceTable = ({
                 : resource.sub_url,
             }}
           ></SAPPVideo>
+        )
+      case 'AUDIO':
+        return (
+          <SAPPAudio
+            streamRef={internalRef}
+            options={{
+              src: resource.url
+                ? resource.url
+                    .replace(videoUrl || '', '')
+                    .replace('/manifest/video.m3u8', '')
+                : resource.sub_url,
+            }}
+          ></SAPPAudio>
         )
       case 'SHEET':
       case 'WORD_DOCUMENT':
@@ -207,7 +220,7 @@ const ClassResourceTable = ({
         return <TextPreview url={resource.url} />
       case 'ZIP':
         return (
-          <div className="text-gray-500 flex h-full items-center justify-center text-base font-medium">
+          <div className="flex h-full items-center justify-center text-base font-medium text-gray-500">
             Không thể hiển thị file ZIP, vui lòng tải xuống
           </div>
         )
@@ -265,8 +278,21 @@ const ClassResourceTable = ({
             modalIndex={1}
             title={previewResource.name}
             width={900}
-            height={548}
-            className={clsx('!z-40 !rounded-lg')}
+            height={previewResource.suffix_type === 'AUDIO' ? 100 : 548}
+            minHeight={
+              previewResource.suffix_type === 'AUDIO' ? 100 : undefined
+            }
+            maxHeight={
+              previewResource.suffix_type === 'AUDIO' ? 100 : undefined
+            }
+            minWidth={
+              ['AUDIO', 'VIDEO'].includes(previewResource.suffix_type)
+                ? 430
+                : undefined
+            }
+            className={clsx('!z-40 !rounded-lg', {
+              '!overflow-visible': previewResource.suffix_type === 'AUDIO',
+            })}
             position="center"
             handleCloseScratchPad={() => {
               setOpenPreview(false)
@@ -281,6 +307,10 @@ const ClassResourceTable = ({
                   onClick={() => {
                     requestClose()
                     setTimeout(() => setOpenPreview(false), 300)
+                  }}
+                  onTouchEnd={() => {
+                    setOpenPreview(false)
+                    setPreviewResource(null)
                   }}
                 >
                   <CloseIcon />

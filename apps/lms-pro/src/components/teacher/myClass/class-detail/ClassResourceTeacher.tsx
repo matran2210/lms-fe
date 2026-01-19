@@ -1,6 +1,7 @@
 import ClassResourceTeacherFilter from '@components/teacher/components/ClassResourceTeacherFilter'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { CloseIcon, DownloadIcon } from '@lms/assets'
+import { useFeature } from '@lms/contexts'
 import {
   CLASS_SUFFIX_TYPE,
   ClassKey,
@@ -15,6 +16,7 @@ import {
   FileViewer,
   LayoutFilter,
   ModalResizeable,
+  SAPPAudio,
   SappModalImage,
   SappTable,
   SAPPVideo,
@@ -30,7 +32,8 @@ import { ClassAPI } from 'src/api/class'
 import { UploadAPI } from 'src/api/upload'
 
 export default function ClassResourceTeacher() {
-  const param = useParams();
+  const { videoUrl } = useFeature()
+  const param = useParams()
   const { id } = param
   const internalRef = useRef<HTMLVideoElement>(null)
   const { control, reset, getValues } = useForm()
@@ -201,8 +204,27 @@ export default function ClassResourceTeacher() {
           <SAPPVideo
             isFetchCaptions={false}
             streamRef={internalRef}
-            options={{ src: resource.sub_url }}
+            options={{
+              src: resource.url
+                ? resource.url
+                    .replace(videoUrl || '', '')
+                    .replace('/manifest/video.m3u8', '')
+                : resource.sub_url,
+            }}
           ></SAPPVideo>
+        )
+      case 'AUDIO':
+        return (
+          <SAPPAudio
+            streamRef={internalRef}
+            options={{
+              src: resource.url
+                ? resource.url
+                    .replace(videoUrl || '', '')
+                    .replace('/manifest/video.m3u8', '')
+                : resource.sub_url,
+            }}
+          ></SAPPAudio>
         )
       case 'SHEET':
       case 'WORD_DOCUMENT':
@@ -219,7 +241,7 @@ export default function ClassResourceTeacher() {
         return <TextPreview url={resource.url} />
       case 'ZIP':
         return (
-          <div className="text-gray-500 flex h-full items-center justify-center text-base font-medium">
+          <div className="flex h-full items-center justify-center text-base font-medium text-gray-500">
             Không thể hiển thị file ZIP, vui lòng tải xuống
           </div>
         )
@@ -263,8 +285,21 @@ export default function ClassResourceTeacher() {
             modalIndex={1}
             title={previewResource.name}
             width={900}
-            height={548}
-            className={clsx('!z-40 !rounded-lg')}
+            height={previewResource.suffix_type === 'AUDIO' ? 100 : 548}
+            minHeight={
+              previewResource.suffix_type === 'AUDIO' ? 100 : undefined
+            }
+            maxHeight={
+              previewResource.suffix_type === 'AUDIO' ? 100 : undefined
+            }
+            minWidth={
+              ['AUDIO', 'VIDEO'].includes(previewResource.suffix_type)
+                ? 430
+                : undefined
+            }
+            className={clsx('!z-40 !rounded-lg', {
+              '!overflow-visible': previewResource.suffix_type === 'AUDIO',
+            })}
             position="center"
             handleCloseScratchPad={() => {
               setOpenPreview(false)
@@ -277,6 +312,10 @@ export default function ClassResourceTeacher() {
                 </div>
                 <button
                   onClick={() => {
+                    setOpenPreview(false)
+                    setPreviewResource(null)
+                  }}
+                  onTouchEnd={() => {
                     setOpenPreview(false)
                     setPreviewResource(null)
                   }}

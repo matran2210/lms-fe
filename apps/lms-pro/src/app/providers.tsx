@@ -288,7 +288,6 @@ export function Providers({ children }: { children: ReactNode }) {
     })
   }, [pathname, searchParams])
 
-
   return (
     <AntConfigProvider>
       <Provider store={store}>
