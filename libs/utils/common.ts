@@ -706,8 +706,6 @@ export const handleMultipleCorrectAnswer = (
   answers: AnswerItem[],
   corrects?: Correct[],
 ) => {
-  console.log("dragDropAnswers", dragDropAnswers);
-  console.log("answers", answers);
   const answersMapped = dragDropAnswers?.map((correctItem: IDragDropAnswer) => {
     const dragDropCurrent = answers?.find(
       (item: AnswerItem) =>
@@ -732,6 +730,6 @@ export const handleMultipleCorrectAnswer = (
         : {}),
     };
   });
-  console.log("answersMapped", answersMapped);
+
   return answersMapped;
 };

@@ -105,7 +105,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
   explainClassname,
   isMultiCorrect = false,
 }) => {
-  console.log("corrects", corrects);
+
   const correctCurrent = isMultiCorrect ? corrects?.corrects : corrects;
   const contentRef = React.useRef<HTMLSpanElement | null>(null);
   const [slots, setSlots] = useState<SlotValue[]>([]);

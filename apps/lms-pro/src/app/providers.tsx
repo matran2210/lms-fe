@@ -287,7 +287,7 @@ export function Providers({ children }: { children: ReactNode }) {
       page_path: url,
     })
   }, [pathname, searchParams])
-  console.log('API HIT', process.env.NODE_ENV)
+
 
   return (
     <AntConfigProvider>
