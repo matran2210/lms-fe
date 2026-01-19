@@ -209,7 +209,6 @@ const CaseStudyResult = () => {
             }}
             corrects={corrects}
             solution={solution}
-            isMultiCorrect
           />
         )
       case QUESTION_TYPES.SELECT_WORD:

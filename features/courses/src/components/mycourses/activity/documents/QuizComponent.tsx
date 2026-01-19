@@ -714,7 +714,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               corrects={showCorrect ? correctsDragDrop : undefined}
               solution={activeQuestion?.solution}
               explainClassname="!mt-8 !p-0 !bg-transparent"
-              isMultiCorrect
             />
           );
 
