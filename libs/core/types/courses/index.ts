@@ -105,7 +105,7 @@ export enum CLASS_USER_STATUS {
   READY_TO_LEARN = 'READY_TO_LEARN', // 1
   IN_PROGRESS = 'IN_PROGRESS', // 2
   COMPLETED = 'COMPLETED', // 3
-  CANCELED = 'ENDED', // 4
+  CANCELED = 'CANCELED', // 4
 }
 
 export interface IClassUserInstances {
