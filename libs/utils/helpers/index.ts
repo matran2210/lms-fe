@@ -115,13 +115,6 @@ export const normalizeToArray = (
   return Array.isArray(value) ? value : [value];
 };
 
-export const normalizeStringQuery = (value: any) => {
-  return typeof value === "string" && value.trim() !== "" ? value : undefined;
-};
-
-export const cleanArray = (arr?: (string | undefined)[]) =>
-  arr?.filter((v): v is string => typeof v === "string");
-
 export function makeMenuLevel(options: MenuOption[], depth = 0): MenuItem[] {
   return options.map((option, idx) => ({
     ...option,

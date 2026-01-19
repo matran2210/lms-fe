@@ -1,17 +1,7 @@
 import { SappModalV3 } from "@lms/ui";
-import dayjs from "dayjs";
 import { Dispatch, FC, SetStateAction, useMemo } from "react";
 import { entranceTestReducer, useFeature } from "@lms/contexts";
 import EntrancePopupContent from "./EntrancePopupContent";
-
-const calculateEndTime = (createdAt: Date, quizTimed: number): Date => {
-  return dayjs(createdAt).add(quizTimed, "minutes").toDate();
-};
-
-export const isQuizExpired = (createdAt: Date, quizTimed: number): boolean => {
-  const endTime = calculateEndTime(createdAt, quizTimed);
-  return dayjs().isAfter(endTime);
-};
 
 // define the props for the confirm dialog component
 export type EntrancePopupProps = {
