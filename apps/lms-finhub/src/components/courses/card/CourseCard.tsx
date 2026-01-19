@@ -66,7 +66,7 @@ export default function CourseCard({
       localStorage.removeItem('daysDifference')
     }
   }
-  console.log('course', course)
+
   const courseAction = () => {
     if (classInstance?.type === 'LESSON' && student?.is_passed === false) {
       setOpenLesson(true)
