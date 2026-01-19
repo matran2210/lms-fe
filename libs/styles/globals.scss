@@ -4,7 +4,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css");
 @import "variables.scss";
-@import "fonts.scss";
 @import "select.scss";
 @import "datetime-picker.scss";
 @import "sidebar.scss";
@@ -24,7 +23,6 @@
 @import "./components/_popover.scss";
 @import "./components/_container.scss";
 @import "./components/_table.scss";
-@import "progress.scss";
 @import "./components/_input.scss";
 @import "./components/_tooltip.scss";
 @import "./components/drag-n-drop-question.scss";
@@ -39,19 +37,6 @@
   src: url("../assets/fonts/Technology/Technology.ttf");
 }
 
-#globalLoader {
-  position: fixed;
-  z-index: 9999;
-  top: 50%;
-  left: 50%;
-  @apply backdrop-blur-sm;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-}
 .slick-list {
   padding-left: 0 !important; /* bỏ padding trái */
 }
@@ -181,18 +166,6 @@ img.Wirisformula {
     }
   }
 }
-.sapp-explanation {
-  p {
-    @apply m-0 break-words text-xl font-semibold text-gray-800;
-  }
-  span {
-    font-family: "Roboto", sans-serif !important;
-    background-color: transparent !important;
-    font-size: 16px !important;
-    font-weight: 400 !important;
-    color: #1f2937 !important;
-  }
-}
 
 .editor-wrap:has(table) {
   @apply overflow-x-auto;
@@ -303,59 +276,6 @@ img.Wirisformula {
   margin-bottom: 4px;
 
   @apply bg-gray-100 text-center text-base font-bold focus:border-primary focus:shadow-0 focus:outline-none;
-}
-
-.sapp-select--selectword-preview,
-.sapp-select--selectword-preview:focus {
-  @apply min-w-[78px] rounded;
-  --tw-ring-color: unset;
-  --tw-ring-offset-shadow: unset;
-  --tw-ring-shadow: unset;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background: #f9f9f9;
-  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" fill="non"><path d="M10.9827 0.571289H9.97827C9.90996 0.571289 9.84568 0.604771 9.8055 0.659682L6.00059 5.90433L2.19568 0.659682C2.1555 0.604771 2.09121 0.571289 2.02291 0.571289H1.01845C0.931392 0.571289 0.880499 0.670396 0.931392 0.741379L5.65371 7.25165C5.82514 7.48736 6.17603 7.48736 6.34612 7.25165L11.0684 0.741379C11.1207 0.670396 11.0698 0.571289 10.9827 0.571289Z" fill="%23DCDDDD" /></svg>');
-  background-repeat: no-repeat;
-  background-position-x: 90%;
-  background-position-y: 50%;
-  border: 1px solid #dfdfdf;
-  border-radius: 2px;
-  padding-right: 1.5rem;
-  padding-left: 0.5rem;
-  width: 110px;
-  // height: 35px;
-  max-width: 150px;
-  margin-bottom: 8px;
-
-  &:required:invalid {
-    color: #dcdddd;
-  }
-
-  option {
-    max-width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  option[value=""][disabled] {
-    display: none;
-  }
-
-  option[disabled] {
-    color: #dcdddd;
-  }
-
-  option {
-    color: #404041;
-  }
-
-  &.sapp-select-confirmed {
-    background-image: none;
-    text-align: center;
-    padding: 0;
-    @apply bg-gray-100;
-  }
 }
 
 .sapp-notched-container {
@@ -523,10 +443,6 @@ img.Wirisformula {
   @apply mb-4 font-sans text-lg font-semibold text-gray-800;
 }
 
-.sapp-seprate-line-preview {
-  @apply -ms-6 mb-4 h-3 w-[calc(100%+48px)] border-b border-t border-b-gray-200 border-t-gray-200;
-}
-
 .sapp-upload-file-preview {
   @apply flex items-center justify-start gap-12 px-0;
 }
@@ -605,10 +521,6 @@ img.Wirisformula {
 .result p {
   font-size: 40px;
   margin: 5px;
-}
-
-.calculator-body {
-  @apply flex h-[calc(100%-40px)] w-full flex-col;
 }
 
 .button {
@@ -738,14 +650,6 @@ textarea.is-invalid:focus {
   }
 }
 
-.min-w-\[63px\] {
-  min-width: 63px;
-}
-
-.max-w-40 {
-  max-width: 10rem;
-}
-
 .hover-transition-font-weight {
   transition: all color 0.2s ease-in-out;
   &:hover {
@@ -839,16 +743,6 @@ textarea.is-invalid:focus {
     @apply p-8;
     @apply rounded-lg;
   }
-}
-
-.sapp-modal--math .ant-modal-content {
-  width: fit-content;
-  padding: 20px !important;
-  margin: auto;
-}
-
-.sapp-modal--math.ant-modal {
-  width: fit-content !important;
 }
 
 .sapp-modal .ant-modal-content .ant-modal-header {
@@ -1039,101 +933,11 @@ p a {
     shadow-strong;
 }
 
-.sapp-pinned-noti-header {
-  padding: 12px 24px 12px 233px;
-  background: #18355d;
-}
-
-.sapp-pinned-noti-header {
-  padding: 12px 24px 12px 233px;
-  @apply bg-gray-800;
-}
-
-@keyframes moveDown {
-  0% {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
 .plus {
   animation: plus-out 0.3s;
   transition: all 0.3s;
   @apply left-[-2px] h-[60px] w-[60px];
 }
-
-#container-floating {
-  @apply fixed bottom-[30px] right-[20px] z-[50px] h-[60px] w-[60px];
-}
-
-// @keyframes edit-in {
-//   from {
-//     opacity: 0;
-//     transform: rotateZ(-70deg);
-//   }
-//   to {
-//     opacity: 1;
-//     transform: rotateZ(0deg);
-//   }
-// }
-
-// @keyframes edit-out {
-//   from {
-//     opacity: 1;
-//     transform: rotateZ(0deg);
-//   }
-//   to {
-//     opacity: 0;
-//     transform: rotateZ(-70deg);
-//   }
-// }
-
-// @keyframes plus-in {
-//   from {
-//     opacity: 1;
-//     transform: rotateZ(0deg);
-//   }
-//   to {
-//     opacity: 0;
-//     transform: rotateZ(180deg);
-//   }
-// }
-
-// @keyframes plus-out {
-//   from {
-//     opacity: 0;
-//     transform: rotateZ(180deg);
-//   }
-//   to {
-//     opacity: 1;
-//     transform: rotateZ(0deg);
-//   }
-// }
-
-// @keyframes bounce-nds {
-//   from {
-//     opacity: 0;
-//   }
-//   to {
-//     opacity: 1;
-//     transform: scale(1);
-//   }
-// }
-
-// @keyframes bounce-out-nds {
-//   from {
-//     opacity: 1;
-//     transform: scale(1);
-//   }
-//   to {
-//     opacity: 0;
-//     transform: scale(0);
-//   }
-// }
 
 .ant-popover-inner {
   @apply short:!mb-0 short:!p-4;
@@ -1236,19 +1040,6 @@ p a {
   }
 }
 
-.dashboard-scroll-x,
-.dashboard-scroll-y {
-  overflow: hidden;
-}
-
-.dashboard-scroll-x:hover {
-  overflow-x: auto;
-}
-
-.dashboard-scroll-y:hover {
-  overflow-y: auto;
-}
-
 .sapp-custom-hover.button-icon:hover {
   @apply bg-transparent;
 }
@@ -1262,10 +1053,6 @@ td.py-5.px-3.sapp-table-quiz {
   border-width: 0px;
 }
 
-.sapp-border-none {
-  border: 0;
-}
-
 .card {
   width: 100%;
   border-radius: var(--border-radius);
@@ -1274,46 +1061,6 @@ td.py-5.px-3.sapp-table-quiz {
 .card .inner {
   color: #fff;
   border-radius: var(--border-radius);
-}
-
-.active-section {
-  outline-width: 1px;
-  outline-offset: 0;
-  outline-color: #ffb800;
-  outline-style: solid;
-  animation: animateOutline 4s ease infinite;
-}
-
-@keyframes animateOutline {
-  0% {
-    outline-width: 1px;
-    outline-offset: 0;
-    outline-color: rgba(0, 130, 206, 0);
-  }
-
-  10% {
-    outline-color: #ffb800;
-  }
-
-  /* The animation finishes at 50% */
-  50% {
-    outline-width: 3px;
-    outline-offset: 4px;
-    outline-color: rgba(0, 130, 206, 0);
-  }
-
-  100% {
-    outline-width: 4px;
-    outline-offset: 4px;
-    outline-color: rgba(102, 102, 102, 0);
-  }
-}
-
-.responsive-truncate-container {
-  overflow: auto;
-  width: 95%;
-  min-width: 100px;
-  max-width: 100%;
 }
 
 .pined-noti p {
@@ -1483,14 +1230,6 @@ select:focus {
 
 .ant-spin .ant-spin-dot-item {
   background-color: #ffb800 !important;
-}
-
-.dashboard_tooltip {
-  @apply max-w-max;
-}
-
-.sapp-tab-button .secondary {
-  @apply bg-gray-100 text-gray-800;
 }
 
 [type="search"]:focus {
