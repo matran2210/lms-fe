@@ -4,7 +4,7 @@ import { PencilIcon } from '@lms/assets'
 import { IExamInformation, TitleSidebar } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
-  ActionCellV2,
+  ActionCellWithPopover,
   ExaminationInfo,
   HeaderMobile,
   InfoItemProps,
@@ -167,7 +167,7 @@ const ExamInformation = () => {
           <div className="flex justify-end">
             {!record?.is_final_examination_subject &&
               record?.remaining_changes > 0 && (
-                <ActionCellV2
+                <ActionCellWithPopover
                   listAction={[
                     {
                       icon: <PencilIcon className="h-5 w-5" />,

@@ -1,4 +1,4 @@
-import { LoadingButtonAnimation } from "@lms/assets";
+import React from "react";
 import { IButtonBaseProps } from "@lms/core";
 import BaseButton from "./BaseButton";
 
@@ -13,7 +13,6 @@ const ButtonText = ({
   endIcon,
   full = false,
   isUnderLine = true,
-  loading,
   children,
   ...props
 }: IButtonBaseProps) => {
@@ -26,7 +25,7 @@ const ButtonText = ({
 
   const fullWidthClass = full ? "block w-full" : "inline-block w-fit";
   const disabledClass = disabled
-    ? "cursor-not-allowed !text-secondary-100 hover:!text-secondary-100"
+    ? "cursor-not-allowed !bg-transparent !text-secondary-100 hover:!text-secondary-100"
     : "cursor-pointer";
 
   const isUnderline = isUnderLine ? "underline" : "";
@@ -37,7 +36,6 @@ const ButtonText = ({
     font-medium
     !border-none
     text-gray-800
-    !bg-transparent
     hover:!text-primary
     ${isUnderline}
     ${fullWidthClass} 
@@ -55,15 +53,9 @@ const ButtonText = ({
       {...props}
     >
       <div className="flex items-center gap-2">
-        {loading ? (
-          <LoadingButtonAnimation />
-        ) : (
-          <>
-            {startIcon && <div className="w-full">{startIcon}</div>}
-            <div className="w-full">{title || children}</div>
-            {endIcon && <div className="w-full">{endIcon}</div>}
-          </>
-        )}
+        {startIcon && <div className="w-full">{startIcon}</div>}
+        <div className="w-full">{title || children}</div>
+        {endIcon && <div className="w-full">{endIcon}</div>}
       </div>
     </BaseButton>
   );

@@ -35,7 +35,7 @@ import {
 import {
   AddWordPreview,
   ButtonPrimary,
-  ButtonTextV2,
+  ButtonText,
   Calculator,
   CaseStudyWrapper,
   EditorReader,
@@ -696,7 +696,7 @@ const CaseStudyResult = () => {
           >
             <div className="flex items-center justify-center">
               {!isNull(result?.previous_topic) && (
-                <ButtonTextV2
+                <ButtonText
                   title="Previous"
                   onClick={handlePeriousTopic}
                   className="me-6"

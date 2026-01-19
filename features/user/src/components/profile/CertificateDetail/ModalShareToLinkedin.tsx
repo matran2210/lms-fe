@@ -1,7 +1,7 @@
 import { ButtonPrimary } from "@lms/ui";
 import { HookFormCheckBox } from "@lms/ui";
 import { SappModalV3 } from "@lms/ui";
-import { HookFormTextAreaV2 } from "@lms/ui";
+import { HookFormTextAreaWithRow } from "@lms/ui";
 import { ICertificate } from "@lms/core";
 import { openLinkedInPopup } from "@lms/utils";
 import { Image } from "antd";
@@ -176,7 +176,7 @@ const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
                     //   height={125}
                   />
                 )}
-                <HookFormTextAreaV2
+                <HookFormTextAreaWithRow
                   className="h-full flex-1"
                   control={form.control}
                   variant="borderless"

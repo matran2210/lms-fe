@@ -11,7 +11,7 @@ import {
   CollapseBox,
   CollapseItem,
   HookformTimePicker,
-  SAPPButtonV2,
+  SAPPButtonCustom,
   SappIcon,
   SAPPInput,
   SAPPSelect,
@@ -501,13 +501,13 @@ function FormViewProgress({
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 flex w-full justify-end border-t border-t-[#7E8299] bg-white px-8 py-5">
-          <SAPPButtonV2
+          <SAPPButtonCustom
             title={'Cancel'}
             onClick={handleClose}
             className="mb-4 mr-4"
             color="secondary"
           />
-          {!isView && <SAPPButtonV2 title={'Save'} onClick={handleSubmit} />}
+          {!isView && <SAPPButtonCustom title={'Save'} onClick={handleSubmit} />}
         </div>
       </div>
     </Drawer>

@@ -18,7 +18,7 @@ import {
 } from '@lms/core'
 import {
   HookFormDateRangeV2,
-  SAPPButtonV2,
+  SAPPButtonCustom,
   SappIcon,
   HookFormEventRepeat,
 } from '@lms/ui'
@@ -247,13 +247,13 @@ const NewEventSidebar = ({
             )}
           </div>
           <div className="flex justify-end border-t border-t-[#7E8299] px-8 py-5">
-            <SAPPButtonV2
+            <SAPPButtonCustom
               title={CALENDAR_SIDEBAR_CANCEL_BUTTON}
               onClick={handleCancel}
               className="mr-4"
               color="secondary"
             />
-            <SAPPButtonV2
+            <SAPPButtonCustom
               title={CALENDAR_SIDEBAR_SAVE_BUTTON}
               onClick={handleSubmit(onSubmit)}
               loading={isLoading}

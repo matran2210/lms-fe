@@ -13,7 +13,7 @@ import {
 } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import {
-  ActionCellV2,
+  ActionCellWithPopover,
   FilterCourseSection,
   ListFilterMobile,
   ListItemFilterMobile,
@@ -482,7 +482,7 @@ const LearningNotesList = ({ appType }: Props) => {
                                 {note?.course_section_path?.length > 0 ?  note?.course_section_path[0]?.name : ''}
                               </div>
                               <div onClick={(e) => e.stopPropagation()}>
-                                <ActionCellV2
+                                <ActionCellWithPopover
                                   icon={<EllipsisIcon />}
                                   listAction={listAction}
                                 />

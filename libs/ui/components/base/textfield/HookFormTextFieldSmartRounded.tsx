@@ -1,7 +1,7 @@
 import React from "react";
 import { Control, Controller } from "react-hook-form";
-import { ErrorMessage, GuidelineFieldV2 } from "../../common";
-import SappTextFieldV2 from "./SappTextFieldV2";
+import { ErrorMessage, GuidelineField } from "../../common";
+import SappTextFieldCustom from "./SappTextFieldCustom";
 
 interface IProps {
   name: string;
@@ -26,7 +26,7 @@ interface IProps {
   placeholderIcon?: React.ReactNode;
 }
 
-const HookFormTextFieldV2 = ({
+const HookFormTextFieldSmartRounded = ({
   name,
   control,
   defaultValue,
@@ -52,7 +52,7 @@ const HookFormTextFieldV2 = ({
           <div className="h-full w-full">
             {!skeleton ? (
               <div>
-                <SappTextFieldV2
+                <SappTextFieldCustom
                   type={type}
                   value={field.value ?? ""}
                   defaultValue={field.value ? undefined : defaultValue}
@@ -75,7 +75,7 @@ const HookFormTextFieldV2 = ({
                   name={name}
                   control={control}
                 />
-                <GuidelineFieldV2 guideline={guideline} />
+                <GuidelineField guideline={guideline} />
                 <>
                   {error?.message && (
                     <div>
@@ -94,4 +94,4 @@ const HookFormTextFieldV2 = ({
   );
 };
 
-export default HookFormTextFieldV2;
+export default HookFormTextFieldSmartRounded;

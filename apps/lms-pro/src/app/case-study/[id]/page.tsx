@@ -41,7 +41,7 @@ import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
 import { useSmartModalSize, useTailwindBreakpoint } from '@lms/hooks'
 import {
   AddWordPreview,
-  ButtonTextV2,
+  ButtonText,
   CaseStudyWrapper,
   EditorReader,
   EssayQuestionPreview,
@@ -1296,7 +1296,7 @@ const CaseStudyDetail = () => {
                             question.qType === QUESTION_TYPES.ESSAY &&
                             isShowTemplate && (
                               <div className="mt-8 flex items-center justify-end gap-3">
-                                <ButtonTextV2
+                                <ButtonText
                                   title="Reset to Answer Template"
                                   onClick={() =>
                                     onOpenResetToTemplateModal({

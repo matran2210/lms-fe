@@ -12,7 +12,7 @@ import {
   TestAnnouncementModal,
   TestPopup,
 } from '@lms/feature-courses'
-import { ButtonPrimary, ButtonSecondary, ButtonTextV2 } from '@lms/ui'
+import { ButtonPrimary, ButtonSecondary, ButtonText } from '@lms/ui'
 import {
   capitalizeFirstLetter,
   formatTimer,
@@ -401,7 +401,7 @@ const TestModal = ({
   }
 
   const renderBackButton = () => (
-    <ButtonTextV2
+    <ButtonText
       title="Cancel"
       // icon={<BackIcon />}
       size="medium"
@@ -565,7 +565,7 @@ const TestModal = ({
               full
               onClick={handleSubmitNow}
             />
-            <ButtonTextV2
+            <ButtonText
               title="Start a new attempt"
               full
               size="medium"
@@ -591,7 +591,7 @@ const TestModal = ({
               full
               onClick={handleRedirectResult}
             />
-            <ButtonTextV2
+            <ButtonText
               title="Start a new attempt"
               size="medium"
               full
@@ -616,7 +616,7 @@ const TestModal = ({
             full
             onClick={handleSubmitNow}
           />
-          <ButtonTextV2
+          <ButtonText
             title="Start a new attempt"
             size="medium"
             full

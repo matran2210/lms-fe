@@ -50,7 +50,7 @@ export interface IFieldInputProps extends IBaseInputProps {
   }
 }
 
-const SappTextFieldV2 = ({
+const SappTextFieldCustom = ({
   type,
   value,
   defaultValue,
@@ -176,4 +176,4 @@ const SappTextFieldV2 = ({
   )
 }
 
-export default SappTextFieldV2
+export default SappTextFieldCustom

@@ -86,7 +86,7 @@ import { RequirementsTab, TabSlide } from '@lms/feature-test'
 import {
   ButtonPrimary,
   ButtonSecondary,
-  ButtonTextV2,
+  ButtonText,
   HighlightableHTML,
   MatchQuizComponent,
   ModalUploadFile,
@@ -2746,7 +2746,7 @@ const TestDetail = () => {
             currentTabContent.qType === QUESTION_TYPES.ESSAY &&
             isShowTemplate && (
               <div className="flex items-center justify-end gap-3">
-                <ButtonTextV2
+                <ButtonText
                   title="Reset to Answer Template"
                   onClick={onOpenResetToTemplateModal}
                   className="bg-transparent hover:!bg-transparent"
@@ -2794,7 +2794,7 @@ const TestDetail = () => {
             {isGradingAfterEachQuestion &&
             currentTabContent?.is_viewed_answer &&
             indexTab < filteredTabs.length - 1 ? (
-              <ButtonTextV2
+              <ButtonText
                 onClick={() => {
                   handleChangeTab(filteredTabs[indexTab + 1].id)
                   trackGAEvent('Click Button Next Question')
@@ -2803,7 +2803,7 @@ const TestDetail = () => {
                 <div className="flex items-center gap-2">
                   Next Question <Icon type="arrow-right" />
                 </div>
-              </ButtonTextV2>
+              </ButtonText>
             ) : (
               <ButtonPrimary
                 className="bg-gray-100 hover:!bg-gray-100"

@@ -6,7 +6,7 @@ import clsx from "clsx";
 import { isEmpty } from "lodash";
 import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { SAPPSelectV2 } from "../base";
+import { SAPPSelectTooltip } from "../base";
 
 const DEFAULT_SELECT = [{ label: "All Section", value: "" }];
 
@@ -174,7 +174,7 @@ const FilterCourseSection = ({
         !showOnlySection && (heightCustom ? "gap-2" : "gap-4"),
       )}
     >
-      <SAPPSelectV2
+      <SAPPSelectTooltip
         control={control}
         name="section"
         placeholder="Section"
@@ -200,7 +200,7 @@ const FilterCourseSection = ({
       />
       {!showOnlySection && (
         <>
-          <SAPPSelectV2
+          <SAPPSelectTooltip
             control={control}
             name="subsection"
             placeholder="Subsection"
@@ -217,7 +217,7 @@ const FilterCourseSection = ({
             disabled={!selectedSection}
             heightCustom={heightCustom}
           />
-          <SAPPSelectV2
+          <SAPPSelectTooltip
             control={control}
             name="unit"
             placeholder="Unit"
@@ -234,7 +234,7 @@ const FilterCourseSection = ({
             heightCustom={heightCustom}
             allowClear={allowClear}
           />
-          <SAPPSelectV2
+          <SAPPSelectTooltip
             control={control}
             name="activity"
             placeholder="Activity"

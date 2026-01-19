@@ -60,7 +60,7 @@ import {
   BackToTop,
   ButtonPrimary,
   ButtonSecondary,
-  ButtonTextV2,
+  ButtonText,
   FilterRadioGroup,
   HighlightableHTML,
   MatchQuizComponent,
@@ -1820,7 +1820,7 @@ const TestDetail = () => {
             {isGradingAfterEachQuestion &&
             currentTabContent?.is_viewed_answer &&
             indexTab < filteredTabs.length - 1 ? (
-              <ButtonTextV2
+              <ButtonText
                 className="bg-gray-100 hover:!bg-gray-100"
                 onClick={() => {
                   handleChangeTab(filteredTabs[indexTab + 1].id)
@@ -1830,7 +1830,7 @@ const TestDetail = () => {
                 <div className="flex items-center gap-2">
                   Next Question <Icon type="arrow-right" />
                 </div>
-              </ButtonTextV2>
+              </ButtonText>
             ) : (
               <ButtonPrimary
                 className="bg-gray-100 hover:!bg-gray-100"
@@ -2009,9 +2009,13 @@ const TestDetail = () => {
                     disabled={checkCalExist > -1}
                   >
                     <ButtonContent
-                      icon={<CalculatorIcon className={
-                        checkCalExist > -1 ? 'text-white' : 'text-primary'
-                      } />}
+                      icon={
+                        <CalculatorIcon
+                          className={
+                            checkCalExist > -1 ? 'text-white' : 'text-primary'
+                          }
+                        />
+                      }
                       content=""
                     />
                   </button>
@@ -2572,7 +2576,9 @@ const TestDetail = () => {
           { '!bg-primary': checkCalExist > -1 },
         )}
       >
-        <CalculatorIcon className={checkCalExist > -1 ? 'text-primary' : 'text-white'} />
+        <CalculatorIcon
+          className={checkCalExist > -1 ? 'text-primary' : 'text-white'}
+        />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <div

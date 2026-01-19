@@ -9,7 +9,7 @@ import {
 } from '@lms/core'
 import {
   HookformTimePicker,
-  SAPPButtonV2,
+  SAPPButtonCustom,
   SappIcon,
   SAPPInput,
   SAPPSelect,
@@ -351,13 +351,13 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
           />
         </div>
         <div className="flex justify-end border-t border-t-[#7E8299] px-8 py-5">
-          <SAPPButtonV2
+          <SAPPButtonCustom
             title={'Cancel'}
             onClick={handleCancel}
             className="mr-4"
             color="secondary"
           />
-          <SAPPButtonV2
+          <SAPPButtonCustom
             loading={loading}
             title={'Save'}
             onClick={handleSubmit}

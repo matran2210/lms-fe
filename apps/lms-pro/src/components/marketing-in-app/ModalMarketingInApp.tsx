@@ -3,7 +3,7 @@ import type { Settings } from 'react-slick'
 import ReactSlick from 'react-slick'
 import Image from 'next/image'
 import { ButtonPrimary } from '@lms/ui'
-import { ButtonTextV2 } from '@lms/ui'
+import { ButtonText } from '@lms/ui'
 import { Dispatch, SetStateAction } from 'react'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -166,7 +166,7 @@ const ModalMarketingInApp = ({
                   }}
                 />
                 {!isMobileView && (
-                  <ButtonTextV2
+                  <ButtonText
                     size={isTabletView || isShortScreen ? 'small' : 'medium'}
                     onClick={handleClose}
                     title="Skip"

@@ -5,7 +5,7 @@ import {
     IQuizResultList,
     TEST_TYPE_LABELS
 } from "@lms/core";
-import { ButtonPrimary, ButtonSecondary, ButtonTextV2 } from "@lms/ui";
+import { ButtonPrimary, ButtonSecondary, ButtonText } from "@lms/ui";
 import { isQuizExpired, trackGAEvent } from "@lms/utils";
 import dayjs from "dayjs";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -294,7 +294,7 @@ const ModalActionTest = ({
     attempt?.status === "SUBMITTED";
 
   const renderBackButton = () => (
-    <ButtonTextV2
+    <ButtonText
       title="Cancel"
       // icon={<BackIcon />}
       size="medium"
@@ -457,7 +457,7 @@ const ModalActionTest = ({
               full
               onClick={() => handleSubmitNow()}
             />
-            <ButtonTextV2
+            <ButtonText
               title="Start a new attempt"
               full
               size="medium"
@@ -483,7 +483,7 @@ const ModalActionTest = ({
               full
               onClick={handleRedirectResult}
             />
-            <ButtonTextV2
+            <ButtonText
               title="Start a new attempt"
               size="medium"
               full
@@ -508,7 +508,7 @@ const ModalActionTest = ({
             full
             onClick={() => handleSubmitNow()}
           />
-          <ButtonTextV2
+          <ButtonText
             title="Start a new attempt"
             size="medium"
             full

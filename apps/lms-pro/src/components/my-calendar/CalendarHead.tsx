@@ -1,6 +1,6 @@
 import { Plus } from '@lms/assets'
 import { FilterGrid, SAPPInput } from '@lms/ui'
-import { SAPPButtonV2 } from '@lms/ui'
+import { SAPPButtonCustom } from '@lms/ui'
 import { SAPPSelect } from '@lms/ui'
 import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
@@ -67,19 +67,19 @@ const CalendarHead = ({ onSearch, onOpenCreate, loading }: IProps) => {
         </FilterGrid>
         <div className="flex justify-between">
           <div className="flex gap-3">
-            <SAPPButtonV2
+            <SAPPButtonCustom
               title="Reset"
               color="secondary"
               onClick={handleReset}
               disabled={loading}
             />
-            <SAPPButtonV2
+            <SAPPButtonCustom
               title="Search"
               onClick={handleSubmit(onSubmit)}
               disabled={loading}
             />
           </div>
-          <SAPPButtonV2
+          <SAPPButtonCustom
             title="Add Busy Schedule"
             icon={<Plus />}
             onClick={handleOpenCreate}

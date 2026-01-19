@@ -1,4 +1,3 @@
-// import { StyleProvider } from '@ant-design/cssinjs'
 import { Button } from 'antd'
 import { ButtonSize, ButtonType } from 'antd/es/button'
 import clsx from 'clsx'
@@ -20,7 +19,7 @@ interface SAPPButtonProps {
   disabled?: boolean
 }
 
-const SAPPButtonV2 = ({
+const SAPPButtonCustom = ({
   type = 'primary',
   title,
   children,
@@ -65,4 +64,4 @@ const SAPPButtonV2 = ({
   )
 }
 
-export default SAPPButtonV2
+export default SAPPButtonCustom

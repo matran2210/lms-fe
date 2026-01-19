@@ -12,7 +12,7 @@ import {
 } from '@lms/core'
 import { useSappPaging, useUserRole } from '@lms/hooks'
 import {
-  ActionCellV2,
+  ActionCellWithPopover,
   FileViewer,
   LayoutFilter,
   ModalResizeable,
@@ -169,7 +169,7 @@ export default function ClassResourceTeacher() {
               'pointer-events-none opacity-40': !allowDownload,
             })}
           >
-            <ActionCellV2
+            <ActionCellWithPopover
               className=""
               listAction={[
                 {

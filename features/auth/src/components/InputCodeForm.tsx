@@ -1,5 +1,5 @@
 import { IAuthAPI } from "@lms/core";
-import { ButtonTextV2, SappButton, SAPPTextFiled } from "@lms/ui";
+import { ButtonText, SappButton, SAPPTextFiled } from "@lms/ui";
 import { useFeature } from "@lms/contexts";
 import { useCountdownTest } from "@lms/hooks";
 import { createRef, useEffect, useState } from "react";
@@ -172,7 +172,7 @@ const InputCodeForm = ({
         onClick={handleVerifyCode}
         disabled={code.some((e) => e === "") || time <= 0}
       />
-      <ButtonTextV2
+      <ButtonText
         title="Resend Code"
         full={true}
         disabled={!canResend}

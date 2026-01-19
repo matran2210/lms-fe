@@ -31,7 +31,7 @@ interface SAPPSelectProps {
   allowClear?: boolean;
 }
 
-const SAPPSelectV2 = ({
+const SAPPSelectTooltip = ({
   control,
   name,
   defaultValue,
@@ -164,4 +164,4 @@ const SAPPSelectV2 = ({
   );
 };
 
-export default SAPPSelectV2;
+export default SAPPSelectTooltip;

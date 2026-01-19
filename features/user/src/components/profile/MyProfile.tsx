@@ -19,7 +19,7 @@ import {
   ButtonSecondary,
   FullScreenMobile,
   HookFormTextField,
-  HookFormTextFieldV2,
+  HookFormTextFieldSmartRounded,
   ProfileSkeleton,
 } from "@lms/ui";
 import {
@@ -537,7 +537,7 @@ const TextWrapper = ({
           "w-full md:block lg:hidden": isEdit,
         })}
       >
-        <HookFormTextFieldV2
+        <HookFormTextFieldSmartRounded
           label={title}
           placeholder="Enter Text..."
           control={control}
@@ -550,7 +550,7 @@ const TextWrapper = ({
           textSize="sm"
           defaultValue={value}
           type={type}
-        ></HookFormTextFieldV2>
+        ></HookFormTextFieldSmartRounded>
       </div>
 
       <div

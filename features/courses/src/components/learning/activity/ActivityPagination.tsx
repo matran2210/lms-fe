@@ -4,7 +4,7 @@ import {
   CollapseArrowIcon,
   LockClosedIcon,
 } from '@lms/assets'
-import { ButtonTextV2 } from '@lms/ui'
+import { ButtonText } from '@lms/ui'
 import { useCourseContext, useFeature } from '@lms/contexts'
 import { trackGAEvent, truncateString} from '@lms/utils'
 import clsx from 'clsx'
@@ -88,7 +88,7 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
           >
             {activity?.previous_activity?.id && (
               <div className="flex w-1/2 flex-col items-start">
-                <ButtonTextV2
+                <ButtonText
                   title="Previous Activity"
                   className="mb-3"
                   startIcon={<ArrowLeft />}
@@ -133,7 +133,7 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
             {!activity?.previous_activity?.id && <></>}
             {activity?.next_activity?.id && (
               <div className="flex w-1/2 flex-col items-end">
-                <ButtonTextV2
+                <ButtonText
                   title="Next Activity"
                   className="mb-3"
                   endIcon={<ArrowRight />}

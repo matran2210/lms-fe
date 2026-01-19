@@ -21,9 +21,9 @@ import {
 import {
   HookFormDateRangeV2,
   HookFormEventRepeat,
-  SAPPButtonV2,
+  SAPPButtonCustom,
   SappIcon,
-  SAPPSelectV2,
+  SAPPSelectTooltip,
 } from '@lms/ui'
 import {
   capitalizeFirstLetter,
@@ -661,7 +661,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
               />
             </div>
             <div className="mb-6">
-              <SAPPSelectV2
+              <SAPPSelectTooltip
                 control={control}
                 label="Request Type"
                 name="request_type"
@@ -676,7 +676,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
             {isEdit ? (
               <>
                 <div className="mb-6">
-                  <SAPPSelectV2
+                  <SAPPSelectTooltip
                     control={control}
                     label="Status"
                     name="request_status"
@@ -738,7 +738,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   REQUEST_TYPE.TEACHING_MODE.value,
                   REQUEST_TYPE.TIMEOFF.value,
                 ].includes(requestType) ? (
-                <SAPPSelectV2
+                <SAPPSelectTooltip
                   control={control}
                   label="Class Code"
                   required
@@ -902,7 +902,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                       <div className="mb-6">
                         <div className="grid w-full grid-cols-2 gap-x-6">
                           <div className="mb-6">
-                            <SAPPSelectV2
+                            <SAPPSelectTooltip
                               control={control}
                               label="Lesson"
                               required
@@ -1040,13 +1040,13 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
               ) : null)}
           </div>
           <div className="flex justify-end border-t border-t-[#7E8299] px-8 py-5">
-            <SAPPButtonV2
+            <SAPPButtonCustom
               title={'Cancel'}
               onClick={handleCancel}
               className="mr-4"
               color="secondary"
             />
-            <SAPPButtonV2 title={'Save'} onClick={handleSubmit(onSubmit)} />
+            <SAPPButtonCustom title={'Save'} onClick={handleSubmit(onSubmit)} />
           </div>
         </div>
       </Drawer>

@@ -24,7 +24,7 @@ interface IProps {
   autoSize?: boolean | object | undefined;
 }
 
-const HookFormTextAreaV2 = ({
+const HookFormTextAreaWithRow = ({
   name,
   control,
   defaultValue,
@@ -88,4 +88,4 @@ const HookFormTextAreaV2 = ({
   );
 };
 
-export default HookFormTextAreaV2;
+export default HookFormTextAreaWithRow;

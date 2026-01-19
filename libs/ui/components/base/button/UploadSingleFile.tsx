@@ -10,7 +10,7 @@ interface IProps extends UploadProps {
   fileList?: RcFile[];
 }
 
-const UploadSingleFileV2 = ({
+const UploadSingleFile = ({
   title = "Choose file upload",
   fileList = [],
   ...props
@@ -71,4 +71,4 @@ const UploadSingleFileV2 = ({
   );
 };
 
-export default UploadSingleFileV2;
+export default UploadSingleFile;

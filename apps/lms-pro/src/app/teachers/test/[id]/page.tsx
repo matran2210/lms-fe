@@ -83,7 +83,7 @@ import {
   TestTimeOutModal,
   UnSubmitAnswerModal,
 } from '@lms/feature-test'
-import { ButtonPrimaryV2, ButtonTextV2 } from '@lms/ui'
+import { ButtonPrimary, ButtonText } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
 
 import { EventTestAPI } from 'src/api/event-test'
@@ -2718,7 +2718,7 @@ const TestDetail = () => {
                         currentTabContent.qType === QUESTION_TYPES.ESSAY &&
                         isShowTemplate && (
                           <div className="mt-8 flex items-center justify-end gap-3">
-                            <ButtonTextV2
+                            <ButtonText
                               disabled={currentTabContent.is_viewed_answer}
                               title="Reset to Answer Template"
                               onClick={onOpenResetToTemplateModal}
@@ -2812,7 +2812,7 @@ const TestDetail = () => {
                       currentTabContent.qType === QUESTION_TYPES.ESSAY &&
                       isShowTemplate && (
                         <div className="mt-8 flex justify-end">
-                          <ButtonPrimaryV2
+                          <ButtonPrimary
                             disabled={currentTabContent.is_viewed_answer}
                             title="Reset to Answer Template"
                             onClick={onOpenResetToTemplateModal}

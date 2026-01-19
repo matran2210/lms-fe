@@ -8,7 +8,7 @@ import { EyeIcon, CloseEyeIcon } from '@lms/assets'
 interface IProps {
   inputRef?: React.LegacyRef<HTMLInputElement>
   onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
-  type?: 'number' | 'password' | 'email' | 'text'
+  type?: 'number' | 'password' | 'email' | 'text' | 'date'
   placeholder?: string
   placeholderIcon?: React.ReactNode
   className?: string

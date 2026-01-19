@@ -9,7 +9,7 @@ import {
 } from '@lms/core'
 import { useUserRole } from '@lms/hooks'
 import {
-  ActionCellV2,
+  ActionCellWithPopover,
   FileViewer,
   ModalResizeable,
   PaginationSappV2,
@@ -149,7 +149,7 @@ const ClassResourceTable = ({
               'pointer-events-none opacity-40': !allowDownload,
             })}
           >
-            <ActionCellV2
+            <ActionCellWithPopover
               className=""
               listAction={[
                 {

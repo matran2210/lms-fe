@@ -14,19 +14,19 @@ interface ActionItem {
   action: () => void;
 }
 
-interface ActionCellV2Props {
+interface ActionCellProps {
   icon?: ReactNode;
   className?: string;
   listAction?: ActionItem[];
   placement?: Placement;
 }
 
-const ActionCellV2 = ({
+const ActionCellWithPopover = ({
   icon = <Icon type="pencil" />,
   className,
   listAction = [],
   placement = "left",
-}: ActionCellV2Props) => {
+}: ActionCellProps) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -86,4 +86,4 @@ const ActionCellV2 = ({
   );
 };
 
-export default ActionCellV2;
+export default ActionCellWithPopover;

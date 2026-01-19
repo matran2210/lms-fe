@@ -1,7 +1,7 @@
 import { CheckedIcon, FilterCourseIcon } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
 import { useTailwindBreakpoint } from "@lms/hooks";
-import { SappDrawerV3, SAPPSelectV2 } from "@lms/ui";
+import { SappDrawerV3, SAPPSelectTooltip } from "@lms/ui";
 import { buildQueryString } from "@lms/utils";
 import { Divider } from "antd";
 import { DefaultOptionType } from "antd/es/select";
@@ -93,7 +93,7 @@ const FilterCourse = ({
           </div>
           <div className="flex gap-2">
             {listFilter?.map((item, index) => (
-              <SAPPSelectV2
+              <SAPPSelectTooltip
                 key={index}
                 control={control}
                 name={item.name}
