@@ -520,6 +520,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }
 
     const renderQuestion = () => {
+       const correctsDragDrop = activeQuestion?.corrects
+        ? {
+            corrects: activeQuestion?.corrects,
+            answers: activeQuestion?.answer,
+          }
+        : undefined;
       switch (activeQuestion?.qType) {
         case QUESTION_TYPES.ONE_CHOICE:
         case QUESTION_TYPES.TRUE_FALSE:
@@ -591,7 +597,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               onChange={(data: SlotValue[]) => {
                 setValue?.(`${activeQuestion?.id}_${document_id}_answer`, data)
               }}
-              corrects={showCorrect ? activeQuestion.corrects : undefined}
+              corrects={showCorrect ? correctsDragDrop : undefined}
               solution={activeQuestion?.solution}
               explainClassname="!mt-8 !p-0 !bg-transparent"
             />
