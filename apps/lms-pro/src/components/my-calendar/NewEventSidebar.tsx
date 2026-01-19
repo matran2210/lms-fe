@@ -17,7 +17,7 @@ import {
   REPEAT_TYPE,
 } from '@lms/core'
 import {
-  HookFormDateRangeV2,
+  HookFormDateRange,
   SAPPButtonCustom,
   SappIcon,
   HookFormEventRepeat,
@@ -207,7 +207,7 @@ const NewEventSidebar = ({
 
                 {/* Start Time - end time */}
                 <div className="mb-6">
-                  <HookFormDateRangeV2
+                  <HookFormDateRange
                     name="range"
                     label="Start Time - End Time"
                     control={control}

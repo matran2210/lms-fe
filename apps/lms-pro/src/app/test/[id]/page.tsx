@@ -4,10 +4,14 @@ import {
   DownloadIcon,
   FileTextIcon,
   FlagIcon,
-  ResizeIcon,
   NewScratchPadIcon,
+  ResizeIcon,
   ShowLessIcon,
   ShowMoreIcon,
+  CheckCircleOutlineYellow,
+  Icon,
+  NotesOutline,
+  PulsingExclamation,
 } from '@lms/assets'
 import {
   CourseProvider,
@@ -48,17 +52,11 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import styles from '../test.module.scss'
 
+import SappLoading from '@components/common/SappLoading'
 import {
   removeHighlights,
   serializeHighlights,
 } from '@funktechno/texthighlighter/lib'
-import {
-  CheckCircleOutlineYellow,
-  FlagIconV2,
-  Icon,
-  NotesOutline,
-  PulsingExclamation,
-} from '@lms/assets'
 import { showPopupCompletedCourse } from '@lms/contexts'
 import {
   Answer,
@@ -101,6 +99,11 @@ import {
   runHighlight,
   trackGAEvent,
 } from '@lms/utils'
+import {
+  hasEditorValueFromHtml,
+  isValuesEqual,
+  isWorkbookEmpty,
+} from '@utils/helpers'
 import { TabsProps, Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
@@ -108,17 +111,11 @@ import { EventTestAPI } from 'src/api/event-test'
 import { TestServiceAPI } from 'src/api/test-api'
 import { PageLink } from 'src/constants/routers'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import SappLoading from '@components/common/SappLoading'
 import useGetQuestionTabs from '../custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from '../custom-hook/useGetQuizDetail'
 import LimitQuizModal from '../limitQuizModal'
-import TestScratchPads from '../TestScratchPads'
-import {
-  hasEditorValueFromHtml,
-  isValuesEqual,
-  isWorkbookEmpty,
-} from '@utils/helpers'
 import SuccessSubmittedConstructorModal from '../SuccessSubmittedConstructorModal'
+import TestScratchPads from '../TestScratchPads'
 
 declare global {
   interface Window {
@@ -3754,7 +3751,7 @@ const TestDetail = () => {
         }}
         className="group fixed bottom-[422px] right-8 grid cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden"
       >
-        <FlagIconV2 isActive={currentTabContent?.flag} />
+        <FlagIcon />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <BackToTop

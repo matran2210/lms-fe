@@ -12,7 +12,7 @@ import {
   ActionCellWithPopover,
   FileViewer,
   ModalResizeable,
-  PaginationSappV2,
+  PaginationSapp,
   SappModalImageOriginalRatio,
   SappTable,
   SAPPVideo,
@@ -245,7 +245,7 @@ const ClassResourceTable = ({
         className="style-table rounded-xl bg-white"
         isShowPagination={false}
       />
-      <PaginationSappV2
+      <PaginationSapp
         currentPage={pagination?.current || DEFAULT_PAGE_NUMBER}
         pageSize={pagination?.pageSize || 10}
         totalItems={pagination?.total || 0}

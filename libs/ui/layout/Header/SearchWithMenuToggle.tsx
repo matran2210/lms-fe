@@ -183,7 +183,7 @@ const SearchWithMenuToggle = ({
               )}
             >
               <SearchForm
-                placeholder={MY_COURSES.placeholderSearchV2}
+                placeholder={MY_COURSES.placeholderSearchCourse}
                 formStyle="w-full flex items-center"
                 disabled={disabledSearch}
                 inputRef={inputRef}

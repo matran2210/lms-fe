@@ -9,7 +9,7 @@ import {
   HeaderMobile,
   InfoItemProps,
   Layout,
-  PaginationSappV2,
+  PaginationSapp,
   SappTable,
 } from '@lms/ui'
 import { getDuration } from '@lms/utils'
@@ -259,7 +259,7 @@ const ExamInformation = () => {
                 className="style-table rounded-xl"
               />
               {!isEmpty(normalData) && (
-                <PaginationSappV2
+                <PaginationSapp
                   currentPage={normalData?.metadata?.page_index || 1}
                   pageSize={normalData?.metadata?.page_size || 10}
                   totalItems={normalData?.metadata?.total_records || 0}

@@ -19,7 +19,7 @@ import {
   REQUEST_TYPE,
 } from '@lms/core'
 import {
-  HookFormDateRangeV2,
+  HookFormDateRange,
   HookFormEventRepeat,
   SAPPButtonCustom,
   SappIcon,
@@ -783,7 +783,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
             {requestType == REQUEST_TYPE.BUSY_SCHEDULE.value && (
               <>
                 <div className="mb-6">
-                  <HookFormDateRangeV2
+                  <HookFormDateRange
                     name={`request_busy_schedule.0.date_range`}
                     label="Start Date - End Date"
                     format="YYYY-MM-DD | HH:mm"
@@ -838,7 +838,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                     <div className="mb-6">
                       <div className="grid w-full grid-cols-2 gap-x-6">
                         <div>
-                          <HookFormDateRangeV2
+                          <HookFormDateRange
                             control={control}
                             required
                             label="Start Date - End Date"
