@@ -1,17 +1,17 @@
 'use client'
 import {
   CalculatorIcon,
+  CheckCircleOutlineYellow,
   DownloadIcon,
   FileTextIcon,
   FlagIcon,
+  Icon,
   NewScratchPadIcon,
+  NotesOutline,
+  PulsingExclamation,
   ResizeIcon,
   ShowLessIcon,
   ShowMoreIcon,
-  CheckCircleOutlineYellow,
-  Icon,
-  NotesOutline,
-  PulsingExclamation,
 } from '@lms/assets'
 import {
   CourseProvider,

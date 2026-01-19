@@ -278,7 +278,7 @@ const TabSlide = ({
                       key={pageNum.id}
                       active={currentTab === pageNum.id}
                       onClick={() => {
-                        if (setCurrentTab !== undefined) {
+                        if (setCurrentTab !== undefined && currentTab !== pageNum.id) {
                           handleChangeTab(pageNum.id);
                         }
                       }}
@@ -300,7 +300,7 @@ const TabSlide = ({
                       key={pageNum.id}
                       active={currentTab === pageNum.id}
                       onClick={() => {
-                        if (setCurrentTab !== undefined) {
+                        if (setCurrentTab !== undefined && currentTab !== pageNum.id) {
                           handleChangeTab(pageNum.id);
                         }
                       }}
@@ -327,7 +327,7 @@ const TabSlide = ({
                           key={pageNum.id}
                           active={currentTab === pageNum.id}
                           onClick={() => {
-                            if (setCurrentTab !== undefined) {
+                            if (setCurrentTab !== undefined && currentTab !== pageNum.id) {
                               handleChangeTab(pageNum.id);
                             }
                           }}
