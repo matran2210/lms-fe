@@ -243,7 +243,7 @@ const EventTest = ({
         footer={cardFooter}
       >
         <div>
-          <div className="info border-l border px-2 md:px-4">
+          <div className="info border-l px-2 md:px-4">
             <div className="flex justify-between text-sm capitalize text-gray md:text-base">
               {renderTimeContent()}
             </div>
