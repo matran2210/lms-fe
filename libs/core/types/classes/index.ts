@@ -210,3 +210,11 @@ export interface IListClassResourceParams {
   search_key?: string;
   suffix_types?: string[];
 }
+
+export interface IClassResourcePreview {
+  is_encrypted: boolean;
+  iv: string;
+  suffix_type: string;
+  url: string;
+}
+

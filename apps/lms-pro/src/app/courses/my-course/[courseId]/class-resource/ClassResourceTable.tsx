@@ -21,9 +21,15 @@ import {
 import { UploadAPI } from 'src/api/upload'
 import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import clsx from 'clsx'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import {
+  usePathname,
+  useRouter,
+  useSearchParams,
+  useParams,
+} from 'next/navigation'
 import { Dispatch, SetStateAction, useRef, useState } from 'react'
 import { buildQueryString } from '@lms/utils'
+import { ClassAPI } from 'src/api/class'
 
 const ClassResourceTable = ({
   data,
@@ -39,7 +45,7 @@ const ClassResourceTable = ({
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-
+  const params = useParams()
   const query = Object.fromEntries(searchParams.entries())
   const textStyle = 'text-base font-medium text-gray-800'
   const className = 'custom-column-table'
@@ -51,10 +57,21 @@ const ClassResourceTable = ({
   )
   const [openPreview, setOpenPreview] = useState(false)
 
-  const handleOpenPreview = (resource: IClassResource) => {
-    if (!resource?.url && !resource?.sub_url) return
-    setPreviewResource(resource)
-    setOpenPreview(true)
+  const handleOpenPreview = async (resource: IClassResource) => {
+    try {
+      const res = await ClassAPI.previewClassFile(
+        params.courseId as string,
+        resource.id,
+      )
+      if (res) {
+        if (!res.url) return
+        setPreviewResource({
+          ...resource,
+          url: res.url,
+        })
+        setOpenPreview(true)
+      }
+    } catch (error) {}
   }
   const canDownload = (record: IClassResource, isTeacher: boolean) => {
     const perms = record?.class_resource_permissions
