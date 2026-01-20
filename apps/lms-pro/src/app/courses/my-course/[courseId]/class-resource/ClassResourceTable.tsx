@@ -58,20 +58,26 @@ const ClassResourceTable = ({
   const [openPreview, setOpenPreview] = useState(false)
 
   const handleOpenPreview = async (resource: IClassResource) => {
-    try {
-      const res = await ClassAPI.previewClassFile(
-        params.courseId as string,
-        resource.id,
-      )
-      if (res) {
-        if (!res.url) return
-        setPreviewResource({
-          ...resource,
-          url: res.url,
-        })
-        setOpenPreview(true)
-      }
-    } catch (error) {}
+    if (['VIDEO', 'AUDIO', 'IMAGE'].includes(resource.suffix_type)) {
+      if (!resource?.url && !resource?.sub_url) return
+      setPreviewResource(resource)
+      setOpenPreview(true)
+    } else {
+      try {
+        const res = await ClassAPI.previewClassFile(
+          params.courseId as string,
+          resource.id,
+        )
+        if (res) {
+          if (!res.url) return
+          setPreviewResource({
+            ...resource,
+            url: res.url,
+          })
+          setOpenPreview(true)
+        }
+      } catch (error) {}
+    }
   }
   const canDownload = (record: IClassResource, isTeacher: boolean) => {
     const perms = record?.class_resource_permissions
