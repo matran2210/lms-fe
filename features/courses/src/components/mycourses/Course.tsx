@@ -48,7 +48,7 @@ const Course = ({
   refetch: () => void;
   isTeacher?: boolean;
 }) => {
-  const {courseApi, pageLink, router} = useFeature();
+  const { courseApi, pageLink, router } = useFeature();
   const [openExtend, setOpenExtend] = useState<boolean>(false);
   const [openActive, setOpenActive] = useState<boolean>(false);
   const [timeActive, setTimeActive] = useState<number>();
@@ -331,7 +331,9 @@ const Course = ({
     classInstance?.class_user_instances?.[0]?.started_at,
   );
   const isNotOpened = !classInstance?.class_user_instances?.[0]?.is_opened;
-  const isCanceled = classInstance?.status === CLASS_USER_STATUS.CANCELED;
+  const isCanceled =
+    classInstance?.class_user_instances?.[0]?.status ===
+    CLASS_USER_STATUS.CANCELED;
 
   const courseAction = () => {
     // Handle pending lesson cases

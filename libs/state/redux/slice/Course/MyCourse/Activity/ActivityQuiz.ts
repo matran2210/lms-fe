@@ -859,9 +859,9 @@ const quizSlice: Slice = createSlice({
                   questionToUpdate.corrects = corrects.sort(
                     (a: any, b: any) => a.answer_position - b.answer_position,
                   );
-                  questionToUpdate.corrects = handleMultipleCorrectAnswer(
+                  questionToUpdate.answer = handleMultipleCorrectAnswer(
                     payload?.question?.drag_drop_answers,
-                    questionToUpdate.corrects,
+                    payload?.myAnswers,
                   );
                   break;
                 }

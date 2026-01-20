@@ -200,7 +200,7 @@ const CaseStudyDetail = () => {
             onChange={(data: SlotValue[]) => {
               setValue?.(`${index}_answer`, data)
             }}
-            corrects={corrects?.corrects}
+            corrects={corrects}
             solution={solution}
             explainClassname="!mt-8 !p-0 !bg-transparent"
           />
