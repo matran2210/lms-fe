@@ -27,7 +27,7 @@ let nextConfig = {
   },
 
   experimental: {
-    optimizeCss: true,
+    optimizeCss: !isDevelopment,
     instrumentationHook: false,
   },
 }
@@ -37,7 +37,8 @@ let nextConfig = {
 // =========================
 nextConfig = withBundleAnalyzer(nextConfig)
 
-nextConfig = withSentryConfig(
+
+nextConfig = isDevelopment ? nextConfig : withSentryConfig(
   nextConfig,
   {
     telemetry: false,

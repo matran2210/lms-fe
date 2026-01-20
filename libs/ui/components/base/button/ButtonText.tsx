@@ -35,6 +35,7 @@ const ButtonText = ({
     text-center 
     font-medium
     !border-none
+    !bg-transparent
     text-gray-800
     hover:!text-primary
     ${isUnderline}

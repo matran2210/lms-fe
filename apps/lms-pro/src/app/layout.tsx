@@ -76,18 +76,16 @@ export const metadata: Metadata = {
     images: ['https://sapp-lms-fe-prod.vercel.app/thumbnail.webp'],
   },
 
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-  },
-
   other: {
     'X-UA-Compatible': 'IE=edge,chrome=1',
     analytics: 'G-HRLKW6S3X0',
     'csrf-token': 'Hl4U5KjkBFkHN2m2ptOE1L8QbTGV19yrEINaOrsd',
   },
 }
-
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+}
 export const revalidate = 0
 
 const roboto = Roboto({
