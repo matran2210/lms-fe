@@ -352,12 +352,11 @@ export function Providers({ children }: { children: ReactNode }) {
                       <SappConfirmDialogContainer />
                       <RouteGuard>
                         <ConfigProvider>
+                          <div className="relative">
+                            <PinnedNotifications />
+                          </div>
                           <AntdApp>{children}</AntdApp>
                           <>
-                            <div className="relative">
-                              <PinnedNotifications />
-                              {/* <Component {...pageProps} /> */}
-                            </div>
                             {showBackToTop && <BackToTop />}
                             <MKTInApp showMKTInApp={showMKTInApp} />
                             {showHelp && <div id="floating-btn-divider" />}
