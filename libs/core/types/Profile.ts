@@ -37,9 +37,20 @@ export interface UserAgent {
   deviceType: string;
 }
 export interface ICertificate {
+  certificate: {
+    html_template: string;
+    name: string;
+  };
   certificate_url: string;
   course: {
     name: string;
   };
   id: string;
+  user: {
+    detail: {
+      full_name: string;
+      id: string
+    },
+    id: string;
+  }
 }

@@ -3,18 +3,19 @@ import React from 'react';
 import { useLayoutEffect, useState } from 'react'
 import { Divider, Table, TableProps } from 'antd'
 import { CertificateImg, Icon, NoCertificationIcon } from '@lms/assets'
-import {useDownloadImage} from '@lms/hooks'
+import {useDownloadCertificate} from '@lms/hooks'
 
-import Image from "next/image";
 import { sappFormatDate } from "@lms/utils";
 import clsx from "clsx";
-import { useFeature } from "@lms/contexts";
+import { useAppSelector, useFeature, userReducer } from "@lms/contexts";
 import PopUpCertificate from "./popupCertificate/PopupCertificare";
+import { ImageCertificateRenderFromHtml } from "./CertificateDetail";
 
 interface ICertificate {
   certificate: {
     id: string;
     name: string;
+    html_template: string;
   };
   certificate_id: string;
   certificate_url: string;
@@ -86,14 +87,13 @@ const CertificateTableSkeleton = ({ rows = 6 }: { rows?: number }) => {
 };
 
 const Certificate = () => {
+  const { detail } = useAppSelector(userReducer).user;
   const { authApi } = useFeature();
-  const { downloadImage } = useDownloadImage();
   const [certificateData, setCertificateData] = useState<
     ICertificate[] | undefined
   >(undefined);
   const [modalOpen, setOpenModal] = useState(false);
   const [userDetail, setUserDetail] = useState("");
-
   const fetchChapterDetail = async () => {
     try {
       const res = await authApi.getCertificate(1, 30);
@@ -108,6 +108,9 @@ const Certificate = () => {
     fetchChapterDetail();
   }, []);
   const [certificateDataPopup, setCertificateDataPopup] = useState<unknown>();
+  const handleDownload = (certificate: ICertificate) => {
+    useDownloadCertificate(certificate?.certificate?.html_template, detail?.full_name || '');
+  }
 
   const columns: TableProps<ICertificate>["columns"] = [
     {
@@ -123,14 +126,9 @@ const Certificate = () => {
             )
           }
         >
-          {record?.certificate_url ? (
-            <Image
-              src={record?.certificate_url || ""}
-              alt={record?.course?.name || ""}
-              className="ratio-16/9 max-h-50 max-w-80 object-contain"
-              width={50}
-              height={50}
-              priority
+          {record?.certificate?.html_template ? (
+            <ImageCertificateRenderFromHtml
+              html={record.certificate.html_template}
             />
           ) : (
             <CertificateImg className="border-none text-[#A1A1A1] group-hover:text-primary" />
@@ -166,7 +164,7 @@ const Certificate = () => {
         <div className="flex items-center justify-center gap-1">
           <div
             onClick={() =>
-              record?.certificate_url && downloadImage(record.certificate_url)
+              handleDownload(record)
             }
           >
             <Icon
@@ -257,8 +255,10 @@ const CertificateItem = ({
   record: ICertificate;
   isLastItem: boolean;
 }) => {
-  const { downloadImage } = useDownloadImage();
-
+  const { detail } = useAppSelector(userReducer).user;
+  const handleDownload = (certificate: ICertificate) => {
+    useDownloadCertificate(certificate?.certificate?.html_template, detail?.full_name || '');
+  }
   return (
     <div
       className={clsx(
@@ -277,14 +277,11 @@ const CertificateItem = ({
           )
         }
       >
-        {record?.certificate_url ? (
-          <Image
-            src={record?.certificate_url || ""}
-            alt={record?.course?.name || ""}
-            className="ratio-16/9 max-h-50 max-w-80 object-contain"
-            width={80}
-            height={80}
-            priority
+        {record?.certificate?.html_template ? (
+          <ImageCertificateRenderFromHtml
+            html={record.certificate.html_template}
+            previewWidth={80}
+            previewHeight={80}
           />
         ) : (
           <CertificateImg
@@ -307,7 +304,7 @@ const CertificateItem = ({
           <div className="flex items-center justify-center gap-[11px]">
             <div
               onClick={() =>
-                record?.certificate_url && downloadImage(record.certificate_url)
+                handleDownload(record)
               }
             >
               <Icon

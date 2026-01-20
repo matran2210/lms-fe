@@ -5,18 +5,23 @@ import Image from "next/image";
 import React from "react";
 import CertificateCard from "./CertificateCard";
 import { ICertificate } from "@lms/core";
+import { ImageCertificateRenderFromHtml } from ".";
+import useDownloadCertificate from "@lms/hooks/useDownloadCertificate";
 
 interface HorizontalCertificateProps {
   certificate?: ICertificate;
   issuedBy?: string;
-  onDownload?: () => void;
 }
 
 const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
   certificate,
   issuedBy = "SAPP Academy",
-  onDownload,
 }) => {
+  const previewWidth = document.getElementById("preview-container")?.clientWidth;
+  const previewHeight = document.getElementById("preview-container")?.clientHeight;
+  const handleDownload = () => {
+    useDownloadCertificate(certificate?.certificate?.html_template as string, certificate?.user.detail.full_name || '');
+  }
   return (
     <CertificateCard
       bodyClassName="flex h-screen justify-center container mx-auto"
@@ -37,13 +42,9 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
           </div>
         </div>
 
-        <div className="mb-6 flex w-full items-center justify-center overflow-hidden md:mb-0 md:flex-1">
-          {certificate?.certificate_url ? (
-            <img
-              src={certificate?.certificate_url || ""}
-              alt={certificate?.course.name}
-              className="max-h-full max-w-full object-contain"
-            />
+        <div id="preview-container" className="h-full mb-6 flex w-full items-center justify-center overflow-hidden md:mb-0 md:flex-1">
+          {certificate?.certificate?.html_template ? (
+            <ImageCertificateRenderFromHtml html={certificate.certificate.html_template} previewWidth={previewWidth} previewHeight={previewHeight} name={certificate.user.detail.full_name}/>
           ) : (
             <CertificateImg
               size={400}
@@ -69,7 +70,7 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
                 size="medium"
                 icon={<Icon type="download" />}
                 iconPosition="end"
-                onClick={onDownload}
+                onClick={handleDownload}
                 className="px-[37.5px] py-2 sm:!px-[29px]"
               >
                 Download

@@ -8,38 +8,37 @@ import CertificateCard from "./CertificateCard";
 import ModalShareToLinkedin from "./ModalShareToLinkedin";
 import { ICertificate } from "@lms/core";
 import { Divider } from "antd";
+import { ImageCertificateRenderFromHtml } from "./index";
+import useDownloadCertificate from "@lms/hooks/useDownloadCertificate";
 
 interface CertificateVerticalProps {
   certificate?: ICertificate;
   issuedBy?: string;
-  onDownload?: () => void;
 }
 
 const CertificateVertical: React.FC<CertificateVerticalProps> = ({
   certificate,
   issuedBy = "SAPP Academy",
-  onDownload,
 }) => {
   const [openModalShare, setOpenModalShare] = useState(false);
   const onOpenModalShare = () => setOpenModalShare(true);
   const onCloseModalShare = () => setOpenModalShare(false);
+  const handleDownload = () => {
+    useDownloadCertificate(certificate?.certificate?.html_template as string, certificate?.user.detail.full_name || '');
+  }
   return (
     <CertificateCard
       bodyClassName="2xl:px-[373px] py-[138px] px-[70px] justify-center"
       className=" hidden lg:block"
     >
-      <div className="flex h-full items-center gap-12 xl:gap-20">
-        <div className="flex h-full w-[55%] items-center justify-center">
-          {certificate?.certificate_url ? (
-            <img
-              src={certificate?.certificate_url || ""}
-              alt={certificate?.course.name}
-              className="max-h-full max-w-full object-contain"
-            />
+      <div className="flex w-full h-full items-center gap-12 xl:gap-20">
+        <div id="certificate-container-andrew" className="flex h-full w-[55%] items-center justify-center">
+          {certificate?.certificate?.html_template ? (
+            <ImageCertificateRenderFromHtml html={certificate.certificate.html_template} previewWidth={500} previewHeight={500} name={certificate.user.detail.full_name}/>
           ) : (
             <CertificateImg
               size={800}
-              className=" max-w-[500px] border-none text-[#A1A1A1] group-hover:text-primary"
+              className="max-w-[500px] border-none text-[#A1A1A1] group-hover:text-primary"
             />
           )}
         </div>
@@ -73,7 +72,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
                 size="medium"
                 icon={<Icon type="download" />}
                 iconPosition="end"
-                onClick={onDownload}
+                onClick={handleDownload}
                 className="!px-[29px]"
               >
                 Download
