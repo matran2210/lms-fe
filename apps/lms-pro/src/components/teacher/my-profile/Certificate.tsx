@@ -2,7 +2,7 @@ import { useLayoutEffect, useState } from 'react'
 import PopUpCertificate from './popupCertificate'
 import { Divider, Table, TableProps } from 'antd'
 import { CertificateImg, Icon } from '@lms/assets'
-import { useDownloadCertificate } from '@lms/hooks'
+import { useDownloadImage } from '@lms/hooks'
 import { sappFormatDate } from '@lms/utils'
 import clsx from 'clsx'
 import { HaveNoItemIcon } from '@lms/assets'
@@ -31,7 +31,8 @@ interface ICertificate {
 }
 
 const Certificate = () => {
-  const { detail } = useAppSelector(userReducer).user;
+  const { detail } = useAppSelector(userReducer).user
+  const { downloadCertificate } = useDownloadImage()
   const [certificateData, setCertificateData] = useState<
     ICertificate[] | undefined
   >(undefined)
@@ -53,7 +54,10 @@ const Certificate = () => {
   }, [])
   const [certificateDataPopup, setCertificateDataPopup] = useState<any>()
   const handleDownload = (certificate: ICertificate) => {
-    useDownloadCertificate(certificate?.certificate?.html_template, detail?.full_name || '');
+    downloadCertificate(
+      certificate?.certificate?.html_template,
+      detail?.full_name || '',
+    )
   }
 
   const columns: TableProps<ICertificate>['columns'] = [
@@ -106,11 +110,7 @@ const Certificate = () => {
       align: 'center',
       render: (record) => (
         <div className="flex items-center justify-center gap-1">
-          <div
-            onClick={() =>
-              handleDownload(record)
-            }
-          >
+          <div onClick={() => handleDownload(record)}>
             <Icon
               type="download"
               className="cursor-pointer text-secondary hover:text-primary"
@@ -193,9 +193,13 @@ const CertificateItem = ({
   record: ICertificate
   isLastItem: boolean
 }) => {
-  const { detail } = useAppSelector(userReducer).user;
+  const { detail } = useAppSelector(userReducer).user
+  const { downloadCertificate } = useDownloadImage()
   const handleDownload = (certificate: ICertificate) => {
-    useDownloadCertificate(certificate?.certificate?.html_template, detail?.full_name || '');
+    downloadCertificate(
+      certificate?.certificate?.html_template,
+      detail?.full_name || '',
+    )
   }
   return (
     <div
@@ -240,11 +244,7 @@ const CertificateItem = ({
       <InfoWrapper
         value={
           <div className="flex items-center justify-center gap-1">
-            <div
-              onClick={() =>
-                handleDownload(record)
-              }
-            >
+            <div onClick={() => handleDownload(record)}>
               <Icon
                 type="download"
                 className="cursor-pointer text-secondary hover:text-primary"

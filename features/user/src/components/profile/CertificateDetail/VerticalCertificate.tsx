@@ -9,7 +9,7 @@ import ModalShareToLinkedin from "./ModalShareToLinkedin";
 import { ICertificate } from "@lms/core";
 import { Divider } from "antd";
 import { ImageCertificateRenderFromHtml } from "./index";
-import useDownloadCertificate from "@lms/hooks/useDownloadCertificate";
+import { useDownloadImage } from "@lms/hooks";
 
 interface CertificateVerticalProps {
   certificate?: ICertificate;
@@ -23,8 +23,9 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
   const [openModalShare, setOpenModalShare] = useState(false);
   const onOpenModalShare = () => setOpenModalShare(true);
   const onCloseModalShare = () => setOpenModalShare(false);
+  const { downloadCertificate } = useDownloadImage();
   const handleDownload = () => {
-    useDownloadCertificate(certificate?.certificate?.html_template as string, certificate?.user.detail.full_name || '');
+    downloadCertificate(certificate?.certificate?.html_template as string, certificate?.user.detail.full_name || '');
   }
   return (
     <CertificateCard
@@ -34,7 +35,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
       <div className="flex w-full h-full items-center gap-12 xl:gap-20">
         <div id="certificate-container-andrew" className="flex h-full w-[55%] items-center justify-center">
           {certificate?.certificate?.html_template ? (
-            <ImageCertificateRenderFromHtml html={certificate.certificate.html_template} previewWidth={500} previewHeight={500} name={certificate.user.detail.full_name}/>
+            <ImageCertificateRenderFromHtml html={certificate.certificate.html_template} previewWidth={500} previewHeight={700} name={certificate.user.detail.full_name}/>
           ) : (
             <CertificateImg
               size={800}

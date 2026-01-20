@@ -16,4 +16,3 @@ export * from "./useNotification";
 export * from "./useSappEditorImageUpload";
 export * from "./useUserRole";
 export * from "./useSmartModalSize";
-export { default as useDownloadCertificate } from "./useDownloadCertificate";

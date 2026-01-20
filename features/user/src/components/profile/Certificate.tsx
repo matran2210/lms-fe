@@ -3,7 +3,7 @@ import React from 'react';
 import { useLayoutEffect, useState } from 'react'
 import { Divider, Table, TableProps } from 'antd'
 import { CertificateImg, Icon, NoCertificationIcon } from '@lms/assets'
-import {useDownloadCertificate} from '@lms/hooks'
+import {useDownloadImage} from '@lms/hooks'
 
 import { sappFormatDate } from "@lms/utils";
 import clsx from "clsx";
@@ -94,6 +94,7 @@ const Certificate = () => {
   >(undefined);
   const [modalOpen, setOpenModal] = useState(false);
   const [userDetail, setUserDetail] = useState("");
+  const { downloadCertificate } = useDownloadImage();
   const fetchChapterDetail = async () => {
     try {
       const res = await authApi.getCertificate(1, 30);
@@ -109,7 +110,7 @@ const Certificate = () => {
   }, []);
   const [certificateDataPopup, setCertificateDataPopup] = useState<unknown>();
   const handleDownload = (certificate: ICertificate) => {
-    useDownloadCertificate(certificate?.certificate?.html_template, detail?.full_name || '');
+    downloadCertificate(certificate?.certificate?.html_template, detail?.full_name || '');
   }
 
   const columns: TableProps<ICertificate>["columns"] = [
@@ -256,8 +257,9 @@ const CertificateItem = ({
   isLastItem: boolean;
 }) => {
   const { detail } = useAppSelector(userReducer).user;
+  const { downloadCertificate } = useDownloadImage();
   const handleDownload = (certificate: ICertificate) => {
-    useDownloadCertificate(certificate?.certificate?.html_template, detail?.full_name || '');
+    downloadCertificate(certificate?.certificate?.html_template, detail?.full_name || '');
   }
   return (
     <div

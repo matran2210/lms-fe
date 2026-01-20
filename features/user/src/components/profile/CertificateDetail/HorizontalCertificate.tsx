@@ -2,11 +2,11 @@ import { CertificateImg, Icon, SappLogoImage } from "@lms/assets";
 import { ButtonPrimary, ClickToCopyButton } from "@lms/ui";
 import { Button } from "antd";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CertificateCard from "./CertificateCard";
 import { ICertificate } from "@lms/core";
 import { ImageCertificateRenderFromHtml } from ".";
-import useDownloadCertificate from "@lms/hooks/useDownloadCertificate";
+import { useDownloadImage } from "@lms/hooks";
 
 interface HorizontalCertificateProps {
   certificate?: ICertificate;
@@ -17,10 +17,26 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
   certificate,
   issuedBy = "SAPP Academy",
 }) => {
-  const previewWidth = document.getElementById("preview-container")?.clientWidth;
-  const previewHeight = document.getElementById("preview-container")?.clientHeight;
+  const { downloadCertificate } = useDownloadImage();
+  const previewRef = useRef<HTMLDivElement>(null);
+  const [previewSize, setPreviewSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const updateSize = () => {
+      if (!previewRef.current) return;
+      const { clientWidth, clientHeight } = previewRef.current;
+      setPreviewSize({ width: clientWidth, height: clientHeight });
+    };
+
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
+  const previewWidth = previewSize.width;
+  const previewHeight = previewSize.height;
   const handleDownload = () => {
-    useDownloadCertificate(certificate?.certificate?.html_template as string, certificate?.user.detail.full_name || '');
+    downloadCertificate(certificate?.certificate?.html_template as string, certificate?.user.detail.full_name || '');
   }
   return (
     <CertificateCard
@@ -42,7 +58,10 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
           </div>
         </div>
 
-        <div id="preview-container" className="h-full mb-6 flex w-full items-center justify-center overflow-hidden md:mb-0 md:flex-1">
+        <div
+          ref={previewRef}
+          className="h-full mb-6 flex w-full items-center justify-center overflow-hidden md:mb-0 md:flex-1"
+        >
           {certificate?.certificate?.html_template ? (
             <ImageCertificateRenderFromHtml html={certificate.certificate.html_template} previewWidth={previewWidth} previewHeight={previewHeight} name={certificate.user.detail.full_name}/>
           ) : (
