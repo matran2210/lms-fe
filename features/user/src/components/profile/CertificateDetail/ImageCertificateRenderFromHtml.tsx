@@ -13,7 +13,7 @@ const ImageCertificateRenderFromHtml = ({
   previewWidth = 50,
   previewHeight = 50,
   className,
-  name = "Ngô Quang Dũng",
+  name = "Student Name",
 }: IProps) => {
   const injectNameAndSanitize = (input: string): string => {
     try {

@@ -8,7 +8,7 @@ const useDownloadImage = () => {
       const image = await fetch(originalImage);
 
       if (!image.ok) {
-        message.error("Tải ảnh thất bại. Vui lòng thử lagi!");
+        message.error("Tải ảnh thất bại. Vui lòng thử lại!");
       }
 
       // Split image name
@@ -31,7 +31,6 @@ const useDownloadImage = () => {
       message.error("Tải ảnh thất bại. Vui lòng thử lại!");
     }
   };
-
   const downloadCertificate = async (html: string, name: string) => {
     const container = document.createElement("div");
     container.innerHTML = html;
