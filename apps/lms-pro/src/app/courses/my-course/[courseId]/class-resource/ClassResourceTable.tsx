@@ -58,11 +58,7 @@ const ClassResourceTable = ({
   const [openPreview, setOpenPreview] = useState(false)
 
   const handleOpenPreview = async (resource: IClassResource) => {
-    if (['VIDEO', 'AUDIO', 'IMAGE'].includes(resource.suffix_type)) {
-      if (!resource?.url && !resource?.sub_url) return
-      setPreviewResource(resource)
-      setOpenPreview(true)
-    } else {
+    if (['PDF', 'SHEET', 'WORD_DOCUMENT'].includes(resource.suffix_type)) {
       try {
         const res = await ClassAPI.previewClassFile(
           params.courseId as string,
@@ -77,6 +73,10 @@ const ClassResourceTable = ({
           setOpenPreview(true)
         }
       } catch (error) {}
+    } else {
+      if (!resource?.url && !resource?.sub_url) return
+      setPreviewResource(resource)
+      setOpenPreview(true)
     }
   }
   const canDownload = (record: IClassResource, isTeacher: boolean) => {
