@@ -32,30 +32,39 @@ const useDownloadImage = () => {
     }
   };
 
-  const downloadCertificate = async (html: HTMLElement, stringHtml: string, name: string, certificateName: string) => {
-    const bodyStringHtml = stringHtml.match(/body\s*\{([\s\S]*?)\}/i)?.[1] ?? "";
-    const widthCertificate = Number(
-      bodyStringHtml.match(/(^|\s)width\s*:\s*(\d+)px\s*;/i)?.[2]
-    );
-    const heightCertificate = Number(
-      bodyStringHtml.match(/(^|\s)height\s*:\s*(\d+)px\s*;/i)?.[2]
-    );
+  const downloadCertificate = async (
+    html: HTMLElement,
+    stringHtml: string,
+    name: string,
+    certificateName: string,
+  ) => {
     if (!html) return;
-    const widthCertificateElement = html.clientWidth;
-    htmlToImage.toPng(html, {
-      pixelRatio: 1,
-      width: widthCertificate,
-      height: heightCertificate,
-      style: {
-        transform: `scale(${widthCertificate / widthCertificateElement})`,
-        transformOrigin: 'top left',
-      },
-    }).then((dataUrl) => {
+    try {
+      const bodyStringHtml = stringHtml.match(/body\s*\{([\s\S]*?)\}/i)?.[1] ?? "";
+      const widthCertificate = Number(
+        bodyStringHtml.match(/(^|\s)width\s*:\s*(\d+)px\s*;/i)?.[2]
+      );
+      const heightCertificate = Number(
+        bodyStringHtml.match(/(^|\s)height\s*:\s*(\d+)px\s*;/i)?.[2]
+      );
+      const widthCertificateElement = html.clientWidth;
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const dataUrl = await htmlToImage.toPng(html, {
+        pixelRatio: 1,
+        width: widthCertificate,
+        height: heightCertificate,
+        style: {
+          transform: `scale(${widthCertificate / widthCertificateElement})`,
+          transformOrigin: 'top left',
+        },
+      });
       const link = document.createElement("a");
       link.href = dataUrl;
       link.download = `${name}-${certificateName}-certificate.png`;
       link.click();
-    });
+    } catch (error) {
+      message.error("Tải ảnh thất bại. Vui lòng thử lại!");
+    }
   };
 
   return { downloadImage, downloadCertificate };

@@ -7,6 +7,7 @@ import CertificateCard from "./CertificateCard";
 import { ICertificate } from "@lms/core";
 import { ImageCertificateRenderFromHtml } from ".";
 import { useDownloadImage } from "@lms/hooks";
+import clsx from "clsx";
 
 interface HorizontalCertificateProps {
   certificate?: ICertificate;
@@ -20,7 +21,7 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
   const { downloadCertificate } = useDownloadImage();
   const previewRef = useRef<HTMLDivElement>(null);
   const [previewSize, setPreviewSize] = useState({ width: 0, height: 0 });
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const updateSize = () => {
       if (!previewRef.current) return;
@@ -35,8 +36,20 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
 
   const previewWidth = previewSize.width;
   const previewHeight = previewSize.height;
-  const handleDownload = () => {
-    downloadCertificate(document.getElementById(certificate?.id || '') as HTMLElement, certificate?.certificate?.html_template as string, certificate?.user.detail.full_name || '', certificate?.certificate?.name || '');
+  const handleDownload = async () => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      await downloadCertificate(
+        document.getElementById(`horizontal-${certificate?.id}`) as HTMLElement, 
+        certificate?.certificate?.html_template as string, 
+        certificate?.user.detail.full_name || '', 
+        certificate?.certificate?.name || ''
+      );
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
   }
   return (
     <CertificateCard
@@ -63,7 +76,7 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
           className="h-full mb-6 flex w-full items-center justify-center overflow-hidden md:mb-0 md:flex-1"
         >
           {certificate?.certificate?.html_template ? (
-            <ImageCertificateRenderFromHtml id={certificate?.id} html={certificate.certificate.html_template} previewWidth={previewWidth} previewHeight={previewHeight} name={certificate.user.detail.full_name}/>
+            <ImageCertificateRenderFromHtml id={`horizontal-${certificate?.id}`} html={certificate.certificate.html_template} previewWidth={previewWidth} previewHeight={previewHeight} name={certificate.user.detail.full_name}/>
           ) : (
             <CertificateImg
               size={400}
@@ -90,7 +103,10 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
                 icon={<Icon type="download" />}
                 iconPosition="end"
                 onClick={handleDownload}
-                className="px-[37.5px] py-2 sm:!px-[29px]"
+                className={clsx("px-[37.5px] py-2 sm:!px-[29px]", {
+                  "opacity-50 !cursor-not-allowed": loading,
+                })}
+                loading={loading}
               >
                 Download
               </ButtonPrimary>

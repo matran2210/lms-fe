@@ -10,6 +10,7 @@ import { ICertificate } from "@lms/core";
 import { Divider } from "antd";
 import { ImageCertificateRenderFromHtml } from "./index";
 import { useDownloadImage } from "@lms/hooks";
+import clsx from "clsx";
 
 interface CertificateVerticalProps {
   certificate?: ICertificate;
@@ -24,8 +25,21 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
   const onOpenModalShare = () => setOpenModalShare(true);
   const onCloseModalShare = () => setOpenModalShare(false);
   const { downloadCertificate } = useDownloadImage();
-  const handleDownload = () => {
-    downloadCertificate(document.getElementById(certificate?.id || '') as HTMLElement, certificate?.certificate?.html_template as string, certificate?.user.detail.full_name || '', certificate?.certificate?.name || '');
+  const [loading, setLoading] = useState(false);
+  const handleDownload = async () => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      await downloadCertificate(
+        document.getElementById(`vertical-${certificate?.id}`) as HTMLElement, 
+        certificate?.certificate?.html_template as string, 
+        certificate?.user.detail.full_name || '', 
+        certificate?.certificate?.name || ''
+      );
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
   }
   return (
     <CertificateCard
@@ -35,7 +49,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
       <div className="flex w-full h-full items-center gap-12 xl:gap-20">
         <div id="certificate-container-andrew" className="flex h-full w-[55%] items-center justify-center">
           {certificate?.certificate?.html_template ? (
-            <ImageCertificateRenderFromHtml id={certificate?.id} html={certificate.certificate.html_template} previewWidth={500} previewHeight={700} name={certificate.user.detail.full_name}/>
+            <ImageCertificateRenderFromHtml id={`vertical-${certificate?.id}`} html={certificate.certificate.html_template} previewWidth={500} previewHeight={700} name={certificate.user.detail.full_name}/>
           ) : (
             <CertificateImg
               size={800}
@@ -74,7 +88,10 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
                 icon={<Icon type="download" />}
                 iconPosition="end"
                 onClick={handleDownload}
-                className="!px-[29px]"
+                className={clsx("!px-[29px]", {
+                  "opacity-50 !cursor-not-allowed": loading,
+                })}
+                loading={loading}
               >
                 Download
               </ButtonPrimary>
