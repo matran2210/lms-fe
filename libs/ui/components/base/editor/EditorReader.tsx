@@ -152,7 +152,8 @@ const EditorReader = ({
    */
   useEffect(() => {
     // Lấy tất cả các bảng trong tài liệu
-    const tableElements = document?.querySelectorAll("table");
+    const editorWraper = editorRef?.current;
+    const tableElements = editorWraper?.querySelectorAll("table");
 
     tableElements?.forEach((tableElement) => {
       if (tableElement) {

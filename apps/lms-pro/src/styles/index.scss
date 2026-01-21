@@ -2,4 +2,7 @@
 
 .word-document-preview {
   @apply select-none;
+  .docx table {
+    @apply p-0;
+  }
 }
