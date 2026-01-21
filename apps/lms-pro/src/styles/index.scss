@@ -1,1 +1,5 @@
 @import 'src/components/marketing-in-app/_modal-marketing-in-app.scss';
+
+.word-document-preview {
+  @apply select-none;
+}

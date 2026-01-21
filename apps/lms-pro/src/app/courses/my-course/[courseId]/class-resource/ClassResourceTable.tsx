@@ -1,4 +1,5 @@
 'use client'
+import { LoadingIcon } from '@assets/icons'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { CloseIcon, DownloadIcon } from '@lms/assets'
 import {
@@ -9,6 +10,7 @@ import {
 import { useUserRole } from '@lms/hooks'
 import {
   ActionCellV2,
+  EditorReader,
   FileViewer,
   ModalResizeable,
   PaginationSappV2,
@@ -18,18 +20,22 @@ import {
   TextPreview,
   Tooltip,
 } from '@lms/ui'
-import { UploadAPI } from 'src/api/upload'
+import { buildQueryString } from '@lms/utils'
+import request from '@services/requestV2'
+import { handleDocUploadFromBlob } from '@utils/helpers'
 import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
+import { AxiosResponse } from 'axios'
 import clsx from 'clsx'
 import {
+  useParams,
   usePathname,
   useRouter,
   useSearchParams,
-  useParams,
 } from 'next/navigation'
 import { Dispatch, SetStateAction, useRef, useState } from 'react'
-import { buildQueryString } from '@lms/utils'
 import { ClassAPI } from 'src/api/class'
+import { UploadAPI } from 'src/api/upload'
+import { getBaseUrl } from 'src/redux/services/httpService'
 
 const ClassResourceTable = ({
   data,
@@ -56,6 +62,8 @@ const ClassResourceTable = ({
     null,
   )
   const [openPreview, setOpenPreview] = useState(false)
+  const [defaultEditor, setDefaultEditor] = useState<string>()
+  const [loadingEditor, setLoadingEditor] = useState<boolean>(false)
 
   const handleOpenPreview = async (resource: IClassResource) => {
     if (['PDF', 'SHEET', 'WORD_DOCUMENT'].includes(resource.suffix_type)) {
@@ -71,6 +79,12 @@ const ClassResourceTable = ({
             url: res.url,
           })
           setOpenPreview(true)
+          if (resource.suffix_type === 'WORD_DOCUMENT') {
+            setLoadingEditor(true)
+            const defaultEditor = await getEditorData(resource)
+            setDefaultEditor(defaultEditor)
+            setLoadingEditor(false)
+          }
         }
       } catch (error) {}
     } else {
@@ -210,7 +224,48 @@ const ClassResourceTable = ({
       ],
     })
   }
+  /**
+   * @static
+   * @description Download file từ resource
+   * @param {number} fileSize
+   * @param {{files: {name: string; file_key: string}}} {files}
+   * @memberof ResourcesAPI
+   */
+  const loadDocFile = async (data: {
+    files: { name: string; file_key: string }[]
+  }) => {
+    try {
+      const responseToken: AxiosResponse<{
+        data: string
+        success: boolean
+      }> = await request('resource/get-token-download', {
+        method: 'POST',
+        data,
+      })
+      if (responseToken?.data?.success) {
+        const res = await fetch(
+          `${getBaseUrl()}/resource/download?token=${responseToken.data.data}`,
+        )
+        const blob = await res.blob()
+        return await handleDocUploadFromBlob(blob)
+      }
+    } catch (error) {
+      return ''
+    }
+  }
 
+  async function getEditorData(resource: IClassResource) {
+    const fileName = resource.name || ''
+    const fileKey = resource.file_key || ''
+    return loadDocFile({
+      files: [
+        {
+          name: fileName,
+          file_key: fileKey,
+        },
+      ],
+    })
+  }
   const renderPreviewContent = (resource: IClassResource) => {
     switch (resource.suffix_type) {
       case 'VIDEO':
@@ -221,8 +276,16 @@ const ClassResourceTable = ({
             options={{ src: resource.sub_url }}
           ></SAPPVideo>
         )
-      case 'SHEET':
       case 'WORD_DOCUMENT':
+        return loadingEditor ? (
+          <LoadingIcon stroke="#404041" />
+        ) : (
+          <div className="word-document-preview">
+            <EditorReader text_editor_content={defaultEditor || ''} />
+          </div>
+        )
+
+      case 'SHEET':
       case 'POWER_POINT':
       case 'PDF':
         return (
@@ -289,7 +352,9 @@ const ClassResourceTable = ({
         previewResource &&
         previewResource.suffix_type !== 'IMAGE' && (
           <ModalResizeable
-            bodyClassName={clsx('px-5')}
+            bodyClassName={clsx('px-5', {
+              'pb-5': previewResource.suffix_type === 'WORD_DOCUMENT',
+            })}
             key={previewResource.url}
             modalIndex={1}
             title={previewResource.name}

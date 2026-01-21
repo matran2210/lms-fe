@@ -64,6 +64,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^3.0.6",
     "dayjs": "^1.11.12",
+    "docx-preview": "^0.3.7",
     "dompurify": "^3.1.6",
     "echarts": "^5.6.0",
     "file-saver": "^2.0.5",
