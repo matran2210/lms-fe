@@ -19,6 +19,7 @@ export { default as DeviceItem } from "./deviceItem/DeviceItem";
 export * from "./drawer/index";
 export * from "./editor/index";
 export { default as FileViewer } from "./fileViewer/FileViewer";
+export { default as SheetViewer } from "./fileViewer/SheetViewer";
 export * from "./modal/index";
 export * from "./pagination/index";
 export * from "./pdf/index";

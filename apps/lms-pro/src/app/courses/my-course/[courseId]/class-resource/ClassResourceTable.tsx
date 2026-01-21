@@ -12,6 +12,7 @@ import {
   ActionCellV2,
   EditorReader,
   FileViewer,
+  SheetViewer,
   ModalResizeable,
   PaginationSappV2,
   SappModalImageV2,
@@ -286,6 +287,7 @@ const ClassResourceTable = ({
         )
 
       case 'SHEET':
+        return <SheetViewer fileUrl={resource.url} fileName={resource.name} />
       case 'POWER_POINT':
       case 'PDF':
         return (
