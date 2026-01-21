@@ -48,7 +48,6 @@ const useDownloadImage = () => {
         bodyStringHtml.match(/(^|\s)height\s*:\s*(\d+)px\s*;/i)?.[2]
       );
       const widthCertificateElement = html.clientWidth;
-      await new Promise(resolve => setTimeout(resolve, 1000));
       const dataUrl = await htmlToImage.toPng(html, {
         pixelRatio: 1,
         width: widthCertificate,
