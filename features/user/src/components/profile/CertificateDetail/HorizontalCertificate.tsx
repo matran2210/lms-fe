@@ -36,7 +36,7 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
   const previewWidth = previewSize.width;
   const previewHeight = previewSize.height;
   const handleDownload = () => {
-    downloadCertificate(certificate?.certificate?.html_template as string, certificate?.user.detail.full_name || '');
+    downloadCertificate(document.getElementById(certificate?.id || '') as HTMLElement, certificate?.certificate?.html_template as string, certificate?.user.detail.full_name || '', certificate?.certificate?.name || '');
   }
   return (
     <CertificateCard
@@ -63,7 +63,7 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
           className="h-full mb-6 flex w-full items-center justify-center overflow-hidden md:mb-0 md:flex-1"
         >
           {certificate?.certificate?.html_template ? (
-            <ImageCertificateRenderFromHtml html={certificate.certificate.html_template} previewWidth={previewWidth} previewHeight={previewHeight} name={certificate.user.detail.full_name}/>
+            <ImageCertificateRenderFromHtml id={certificate?.id} html={certificate.certificate.html_template} previewWidth={previewWidth} previewHeight={previewHeight} name={certificate.user.detail.full_name}/>
           ) : (
             <CertificateImg
               size={400}

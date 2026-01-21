@@ -55,8 +55,10 @@ const Certificate = () => {
   const [certificateDataPopup, setCertificateDataPopup] = useState<any>()
   const handleDownload = (certificate: ICertificate) => {
     downloadCertificate(
+      document.getElementById(certificate?.certificate_id) as HTMLElement,
       certificate?.certificate?.html_template,
-      detail?.full_name || '',
+      detail?.full_name,
+      certificate.certificate.name,
     )
   }
 
@@ -76,6 +78,7 @@ const Certificate = () => {
         >
           {record?.certificate?.html_template ? (
             <ImageCertificateRenderFromHtml
+              id={record?.certificate_id}
               html={record?.certificate?.html_template}
               previewWidth={80}
               previewHeight={80}
@@ -197,8 +200,10 @@ const CertificateItem = ({
   const { downloadCertificate } = useDownloadImage()
   const handleDownload = (certificate: ICertificate) => {
     downloadCertificate(
+      document.getElementById(certificate?.certificate_id) as HTMLElement,
       certificate?.certificate?.html_template,
-      detail?.full_name || '',
+      detail?.full_name,
+      certificate.certificate.name,
     )
   }
   return (
@@ -221,6 +226,7 @@ const CertificateItem = ({
       >
         {record?.certificate?.html_template ? (
           <ImageCertificateRenderFromHtml
+            id={record?.certificate_id}
             html={record.certificate.html_template}
             previewWidth={80}
             previewHeight={80}

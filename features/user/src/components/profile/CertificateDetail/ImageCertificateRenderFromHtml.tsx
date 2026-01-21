@@ -6,6 +6,7 @@ interface IProps {
   previewHeight?: number;
   className?: string;
   name?: string;
+  id?: string;
 }
 
 const ImageCertificateRenderFromHtml = ({
@@ -14,6 +15,7 @@ const ImageCertificateRenderFromHtml = ({
   previewHeight = 50,
   className,
   name = "Student Name",
+  id = "certificate-image-id",
 }: IProps) => {
   const injectNameAndSanitize = (input: string): string => {
     try {
@@ -64,7 +66,7 @@ const ImageCertificateRenderFromHtml = ({
       )}
       style={{ width: previewWidth, height: previewHeight }}
     >
-      <div style={{ width: scaledWidth, height: scaledHeight }}>
+      <div id={id} style={{ width: scaledWidth, height: scaledHeight }}>
         <div
           style={{
             width: certWidth,

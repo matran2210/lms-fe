@@ -31,39 +31,30 @@ const useDownloadImage = () => {
       message.error("Tải ảnh thất bại. Vui lòng thử lại!");
     }
   };
-  const downloadCertificate = async (html: string, name: string) => {
-    const container = document.createElement("div");
-    container.innerHTML = html;
 
-    const label = container.querySelector(".label.as-label");
-    if (label) {
-      label.remove();
-    }
-    const nameField = container.querySelector<HTMLTextAreaElement>(
-      "#sapp-certificate-name",
+  const downloadCertificate = async (html: HTMLElement, stringHtml: string, name: string, certificateName: string) => {
+    const bodyStringHtml = stringHtml.match(/body\s*\{([\s\S]*?)\}/i)?.[1] ?? "";
+    const widthCertificate = Number(
+      bodyStringHtml.match(/(^|\s)width\s*:\s*(\d+)px\s*;/i)?.[2]
     );
-    if (nameField) {
-      nameField.innerHTML = name;
-      nameField.value = name;
-    }
-
-    document.body.appendChild(container);
-    const images = container.querySelectorAll("img");
-    await Promise.all(
-      Array.from(images).map(
-        (img) =>
-          new Promise<void>((resolve) => {
-            if (img.complete) resolve();
-            else img.onload = () => resolve();
-          }),
-      ),
+    const heightCertificate = Number(
+      bodyStringHtml.match(/(^|\s)height\s*:\s*(\d+)px\s*;/i)?.[2]
     );
-    htmlToImage.toPng(container).then((dataUrl) => {
+    if (!html) return;
+    const widthCertificateElement = html.clientWidth;
+    htmlToImage.toPng(html, {
+      pixelRatio: 1,
+      width: widthCertificate,
+      height: heightCertificate,
+      style: {
+        transform: `scale(${widthCertificate / widthCertificateElement})`,
+        transformOrigin: 'top left',
+      },
+    }).then((dataUrl) => {
       const link = document.createElement("a");
       link.href = dataUrl;
-      link.download = `${name}-certificate.png`;
+      link.download = `${name}-${certificateName}-certificate.png`;
       link.click();
-      document.body.removeChild(container);
     });
   };
 

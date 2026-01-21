@@ -38,6 +38,7 @@ export interface UserAgent {
 }
 export interface ICertificate {
   certificate: {
+    id: string;
     html_template: string;
     name: string;
   };

@@ -3,7 +3,7 @@ import React from 'react';
 import { useLayoutEffect, useState } from 'react'
 import { Divider, Table, TableProps } from 'antd'
 import { CertificateImg, Icon, NoCertificationIcon } from '@lms/assets'
-import {useDownloadImage} from '@lms/hooks'
+import { useDownloadImage } from '@lms/hooks'
 
 import { sappFormatDate } from "@lms/utils";
 import clsx from "clsx";
@@ -102,7 +102,7 @@ const Certificate = () => {
       const userDetail = res.username;
       setCertificateData(certificate);
       setUserDetail(userDetail);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   useLayoutEffect(() => {
@@ -110,7 +110,7 @@ const Certificate = () => {
   }, []);
   const [certificateDataPopup, setCertificateDataPopup] = useState<unknown>();
   const handleDownload = (certificate: ICertificate) => {
-    downloadCertificate(certificate?.certificate?.html_template, detail?.full_name || '');
+    downloadCertificate(document.getElementById(certificate?.certificate_id) as HTMLElement, certificate.certificate.html_template, detail?.full_name, certificate.certificate.name);
   }
 
   const columns: TableProps<ICertificate>["columns"] = [
@@ -128,9 +128,13 @@ const Certificate = () => {
           }
         >
           {record?.certificate?.html_template ? (
-            <ImageCertificateRenderFromHtml
-              html={record.certificate.html_template}
-            />
+            <div>
+              <ImageCertificateRenderFromHtml
+                id={record?.certificate_id}
+                html={record.certificate.html_template}
+                name={detail?.full_name || ''}
+              />
+            </div>
           ) : (
             <CertificateImg className="border-none text-[#A1A1A1] group-hover:text-primary" />
           )}
@@ -223,12 +227,12 @@ const Certificate = () => {
         ) : null}
         {certificateData?.length
           ? certificateData.map((item: ICertificate, index: number) => (
-              <CertificateItem
-                key={item?.id}
-                record={item}
-                isLastItem={index === certificateData.length - 1}
-              />
-            ))
+            <CertificateItem
+              key={item?.id}
+              record={item}
+              isLastItem={index === certificateData.length - 1}
+            />
+          ))
           : null}
       </div>
 
@@ -259,7 +263,7 @@ const CertificateItem = ({
   const { detail } = useAppSelector(userReducer).user;
   const { downloadCertificate } = useDownloadImage();
   const handleDownload = (certificate: ICertificate) => {
-    downloadCertificate(certificate?.certificate?.html_template, detail?.full_name || '');
+    downloadCertificate(document.getElementById(certificate?.certificate_id) as HTMLElement, certificate.certificate.html_template, detail?.full_name, certificate.certificate.name);
   }
   return (
     <div
@@ -281,9 +285,11 @@ const CertificateItem = ({
       >
         {record?.certificate?.html_template ? (
           <ImageCertificateRenderFromHtml
+            id={record?.certificate_id}
             html={record.certificate.html_template}
             previewWidth={80}
             previewHeight={80}
+            name={detail?.full_name || ''}
           />
         ) : (
           <CertificateImg

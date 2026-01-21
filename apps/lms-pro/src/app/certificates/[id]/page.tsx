@@ -1,13 +1,11 @@
 'use client'
 import { UserType } from '@lms/contexts'
 import { LAYOUT } from '@lms/core'
-import { useDownloadCertificate, useDownloadImage } from '@lms/hooks'
 import { useQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { SappLoadingGlobal, SinglePageLayout } from '@lms/ui'
 import { CertificateVertical, HorizontalCertificate } from '@lms/feature-user'
 import { CoursesAPI } from 'src/api/courses'
-import { useRef } from 'react'
 
 export interface ICertificate {
   certificate_url: string
@@ -43,9 +41,7 @@ const Certificate = ({ params }: { params: { id: string } }) => {
     <SappLoadingGlobal loading={isLoading}>
       <SinglePageLayout title="Certificate">
         <CertificateVertical certificate={certificate} />
-        <HorizontalCertificate
-          certificate={certificate}
-        />
+        <HorizontalCertificate certificate={certificate} />
       </SinglePageLayout>
     </SappLoadingGlobal>
   )
