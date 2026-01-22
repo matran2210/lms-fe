@@ -52,7 +52,7 @@
     "@sapp-fe/quiz-result-package": "^1.5.1",
     "@sapp-fe/sapp-common-package": "^1.6.14",
     "@sapp-fe/sapp-notification": "^1.2.2",
-    "@sentry/nextjs": "8",
+    "@sentry/nextjs": "^10.35.0",
     "@tiptap/core": "^2.12.0",
     "@tiptap/react": "^2.12.0",
     "@tiptap/starter-kit": "^2.12.0",

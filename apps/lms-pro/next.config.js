@@ -9,7 +9,7 @@ const isDevelopment = process.env.NODE_ENV === 'development'
 // =========================
 // Base Next.js config
 // =========================
-let nextConfig = {
+const nextConfig = {
   reactStrictMode: !isDevelopment,
   swcMinify: true,
   productionBrowserSourceMaps: false,
@@ -33,28 +33,26 @@ let nextConfig = {
 }
 
 // =========================
-// Bundle analyzer
+// Wrap plugins
 // =========================
-nextConfig = withBundleAnalyzer(nextConfig)
+const configWithPlugins = withBundleAnalyzer(nextConfig)
 
-
-nextConfig = isDevelopment ? nextConfig : withSentryConfig(
-  nextConfig,
+// =========================
+// Sentry config
+// =========================
+module.exports = withSentryConfig(
+  configWithPlugins,
   {
-    telemetry: false,
     org: process.env.NEXT_PUBLIC_SENTRY_NAME,
     project: process.env.NEXT_PUBLIC_SENTRY_PROJECT,
     silent: !process.env.CI,
-    widenClientFileUpload: false,
-    hideSourceMaps: true,
-    disableLogger: true,
+    widenClientFileUpload: true,
     tunnelRoute: '/monitoring',
-    automaticVercelMonitors: false,
-  },
-  {
-    transpileClientSDK: false,
-    hideSourcemaps: true,
-  },
+    webpack: {
+      automaticVercelMonitors: true,
+      treeshake: {
+        removeDebugLogging: true,
+      },
+    },
+  }
 )
-
-module.exports = nextConfig
