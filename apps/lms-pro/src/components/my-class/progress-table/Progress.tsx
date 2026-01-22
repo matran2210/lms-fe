@@ -16,6 +16,7 @@ import { SAPPInput } from '@lms/ui'
 import { useSappPaging } from '@lms/hooks'
 import { ProgressKey } from 'src/api/queryKey'
 import { ProgressAPI } from 'src/api/progress'
+import { useFeature } from '@lms/contexts'
 
 interface FilterParams {
   progress?: string
@@ -37,10 +38,9 @@ const Progress = ({ classDetail }: { classDetail: IClassDetail }) => {
   const [idProgress, setIdProgress] = useState<string | null>(null)
   const [isView, setIsView] = useState<boolean>(false)
   const [params, setParams] = useState<FilterParams>(initialValues)
-  const router = useRouter()
   const searchParams = useSearchParams()
   const query = Object.fromEntries(searchParams.entries())
-
+  const { params: classParams } = useFeature()
   const { id } = query
   const { control, getValues, reset } = useForm<IProgressFilterForm>()
   const allowSection = !classDetail?.course?.course_categories?.some(
@@ -77,7 +77,7 @@ const Progress = ({ classDetail }: { classDetail: IClassDetail }) => {
       ProgressAPI.getProgressList({
         page_index: pagination.current ?? 1,
         page_size: pagination.pageSize ?? 10,
-        params: { ...cleanedParams, class_id: id },
+        params: { ...cleanedParams, class_id: classParams?.id },
       }),
     params,
   })
