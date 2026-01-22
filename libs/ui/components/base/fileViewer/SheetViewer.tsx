@@ -4,10 +4,11 @@ import { Workbook } from "@fortune-sheet/react";
 import * as XLSX from "xlsx";
 import { useEffect, useMemo, useState } from "react";
 import { generateSheetId } from "@lms/core";
+import { LoadingIcon } from "@lms/assets";
 
-type SheetViewerProps = {
-  fileUrl?: string;
-  fileName?: string;
+type IProps = {
+  fileUrl: string;
+  fileName: string;
 };
 
 const createEmptySheet = () => ({
@@ -18,29 +19,24 @@ const createEmptySheet = () => ({
   celldata: [],
 });
 
-const SheetViewer = ({ fileUrl, fileName }: SheetViewerProps) => {
+const SheetViewer = ({ fileUrl, fileName }: IProps) => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string>();
   const [rawData, setRawData] = useState<any[] | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!fileUrl) {
-        setError("Không tìm thấy URL sheet");
-        return;
-      }
       setLoading(true);
-      setError(undefined);
       try {
         const res = await fetch(fileUrl);
         const buffer = await res.arrayBuffer();
         const workbook = XLSX.read(buffer, { type: "array" });
+        console.log("workbook", workbook);
 
         const sheets = workbook.SheetNames.map((sheetName, idx) => {
           const ws = workbook.Sheets[sheetName];
-          const rows: any[][] = XLSX.utils.sheet_to_json(ws, { header: 1, raw: true });
+          const rows = XLSX.utils.sheet_to_json(ws, { header: 1, raw: true });
           const data = rows;
-          const celldata: any[] = [];
+          const celldata = [];
 
           rows.forEach((row, r) => {
             if (!Array.isArray(row)) return;
@@ -69,7 +65,6 @@ const SheetViewer = ({ fileUrl, fileName }: SheetViewerProps) => {
 
         setRawData(sheets.length > 0 ? sheets : [createEmptySheet()]);
       } catch (err) {
-        setError("Không thể tải hoặc parse dữ liệu sheet");
         setRawData([createEmptySheet()]);
       } finally {
         setLoading(false);
@@ -77,7 +72,7 @@ const SheetViewer = ({ fileUrl, fileName }: SheetViewerProps) => {
     };
 
     fetchData();
-  }, [fileUrl]);
+  }, []);
 
   const normalizedData = useMemo(() => {
     const source = rawData && rawData.length > 0 ? rawData : [createEmptySheet()];
@@ -103,23 +98,13 @@ const SheetViewer = ({ fileUrl, fileName }: SheetViewerProps) => {
 
   if (loading) {
     return (
-      <div className="flex h-full items-center justify-center text-sm text-gray-500">
-        Đang tải sheet...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex h-full items-center justify-center text-sm text-red-500">
-        {error}
-      </div>
+        <LoadingIcon stroke="#404041" />
     );
   }
 
   return (
     <Workbook
-      key={`${normalizedData.length}-${fileUrl || "sheet-viewer"}`}
+      key={`${fileName} - sheet-viewer`}
       data={normalizedData}
       allowEdit={false}
       showToolbar={false}
