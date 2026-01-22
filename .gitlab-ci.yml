@@ -32,8 +32,6 @@ deploy_staging_lms:
   extends: .deploy_staging_template
   variables:
     APP_NAME: lms-pro
-  only: 
-    - staging
   script:
     - npm install -g vercel
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID
@@ -44,8 +42,6 @@ deploy_staging_finhub:
   extends: .deploy_staging_template
   variables:
     APP_NAME: lms-finhub
-  only: 
-    - staging
   script:
     - npm install -g vercel
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_FINHUB
@@ -56,8 +52,6 @@ deploy_staging_zoom:
   extends: .deploy_staging_template
   variables:
     APP_NAME: lms-zoom
-  only: 
-    - staging
   script:
     - npm install -g vercel
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_ZOOM
