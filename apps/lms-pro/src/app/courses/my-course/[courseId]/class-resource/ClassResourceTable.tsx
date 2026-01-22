@@ -12,6 +12,7 @@ import {
   ActionCellV2,
   EditorReader,
   FileViewer,
+  SheetViewer,
   ModalResizeable,
   PaginationSappV2,
   SappModalImageV2,
@@ -64,6 +65,7 @@ const ClassResourceTable = ({
   const [openPreview, setOpenPreview] = useState(false)
   const [defaultEditor, setDefaultEditor] = useState<string>()
   const [loadingEditor, setLoadingEditor] = useState<boolean>(false)
+  const [loadingSheet, setLoadingSheet] = useState<boolean>(false)
 
   const handleOpenPreview = async (resource: IClassResource) => {
     if (['PDF', 'SHEET', 'WORD_DOCUMENT'].includes(resource.suffix_type)) {
@@ -81,7 +83,7 @@ const ClassResourceTable = ({
           setOpenPreview(true)
           if (resource.suffix_type === 'WORD_DOCUMENT') {
             setLoadingEditor(true)
-            const defaultEditor = await getEditorData(resource)
+            const defaultEditor = await getEditorData(res.url)
             setDefaultEditor(defaultEditor)
             setLoadingEditor(false)
           }
@@ -231,40 +233,19 @@ const ClassResourceTable = ({
    * @param {{files: {name: string; file_key: string}}} {files}
    * @memberof ResourcesAPI
    */
-  const loadDocFile = async (data: {
-    files: { name: string; file_key: string }[]
-  }) => {
+  const loadDocFile = async (url: string) => {
     try {
-      const responseToken: AxiosResponse<{
-        data: string
-        success: boolean
-      }> = await request('resource/get-token-download', {
-        method: 'POST',
-        data,
-      })
-      if (responseToken?.data?.success) {
-        const res = await fetch(
-          `${getBaseUrl()}/resource/download?token=${responseToken.data.data}`,
-        )
-        const blob = await res.blob()
-        return await handleDocUploadFromBlob(blob)
-      }
+      const res = await fetch(url)
+      console.log('res', res)
+      const blob = await res.blob()
+      return await handleDocUploadFromBlob(blob)
     } catch (error) {
       return ''
     }
   }
 
-  async function getEditorData(resource: IClassResource) {
-    const fileName = resource.name || ''
-    const fileKey = resource.file_key || ''
-    return loadDocFile({
-      files: [
-        {
-          name: fileName,
-          file_key: fileKey,
-        },
-      ],
-    })
+  async function getEditorData(url: string) {
+    return loadDocFile(url)
   }
   const renderPreviewContent = (resource: IClassResource) => {
     switch (resource.suffix_type) {
@@ -286,6 +267,7 @@ const ClassResourceTable = ({
         )
 
       case 'SHEET':
+        return <SheetViewer fileUrl={resource.url} fileName={resource.name} />
       case 'POWER_POINT':
       case 'PDF':
         return (
