@@ -322,3 +322,7 @@ export interface IDashboardAPI {
 
   getExamPrediction:(id: string)=> Promise<IResponse<IExamPrediction>> 
 }
+
+export interface ICourseActivationAPI {
+  getSubjectByProgram: (program_name?: string) => Promise<any>;
+}

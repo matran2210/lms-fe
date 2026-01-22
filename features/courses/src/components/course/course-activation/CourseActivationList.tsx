@@ -84,7 +84,7 @@ const CourseActivationList: React.FC<CoursesProps> = ({
         open={openActiveCourse}
         onCancel={handleCloseActiveCourse}
       />
-      <ModalChoosingClass open={true} onCancel={handleCloseChooseClass} />
+      <ModalChoosingClass open={openChooseClass} onCancel={handleCloseChooseClass} />
     </>
   );
 };

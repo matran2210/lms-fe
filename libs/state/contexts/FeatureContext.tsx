@@ -6,6 +6,7 @@ import {
   ICalendarAPI,
   ICertificateAPI,
   IClassAPI,
+  ICourseActivationAPI,
   ICourseActivityAPI,
   ICoursesAPI,
   IDashboardAPI,
@@ -83,6 +84,7 @@ interface FeatureContextProps {
     text: string,
     imageBuffer: string
   ) => Promise<AxiosResponse<any, any, {}>>;
+  courseActivationAPI: ICourseActivationAPI;
 }
 
 const FeatureContext = createContext<FeatureContextProps>(

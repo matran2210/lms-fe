@@ -29,6 +29,7 @@ import {
   SappConfirmDialogContainer,
 } from '@lms/ui'
 import { initializeGA, pageview } from '@lms/utils'
+import { CoursesActivationAPI } from '@pages/api/course-activation'
 import { fetcher } from '@services/requestV2'
 import { App as AntdApp, ConfigProvider } from 'antd'
 import Aos from 'aos'
@@ -324,6 +325,7 @@ export function Providers({ children }: { children: ReactNode }) {
               uploadImageToLinkedIn,
             },
             uploadImageToLinkedIn: uploadImageToLinkedIn,
+            courseActivationAPI: CoursesActivationAPI,
           }}
         >
           <PinnedNotifyProvider

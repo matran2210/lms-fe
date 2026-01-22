@@ -1,8 +1,10 @@
 import { useAppDispatch, useCourseContext, UserType } from '@lms/contexts'
 import { ANIMATION, defaultStatusCourse, ICoursesAPI } from '@lms/core'
-import { CourseActivationList, FilterCourse } from '@lms/feature-courses'
-import { useTailwindBreakpoint } from '@lms/hooks'
+import { CourseActivationList } from '@lms/feature-courses'
+import FilterCourseActivation from '@lms/feature-courses/src/components/course/course-activation/FilterCourseActivation'
+import { useSelectSubject, useTailwindBreakpoint } from '@lms/hooks'
 import { Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
+import { CoursesActivationAPI } from '@pages/api/course-activation'
 import Aos from 'aos'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
@@ -11,7 +13,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { CoursesAPI } from '../api/courses'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -25,16 +26,15 @@ type IProps = {
   api: ICoursesAPI
 }
 const CourseActivation = () => {
-  const dispatch = useAppDispatch()
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
   const router = useRouter()
+
   /**
    * @description lấy state trong context
    */
 
-  const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
   const observer = useRef<IntersectionObserver>()
 
   /**
@@ -53,14 +53,14 @@ const CourseActivation = () => {
    * @description Gọi API My Course
    * @param {pageParam, params} pageParam: number, params: Object
    */
-  const fetchMyCourse = async ({
+  const fetchCourseActivation = async ({
     pageParam,
     params,
   }: {
     pageParam: number
     params: Object
   }) => {
-    const { data } = await CoursesAPI.get(
+    const { data } = await CoursesActivationAPI.get(
       pageParam || 1,
       DEFAULT_PAGESIZE,
       params,
@@ -72,10 +72,8 @@ const CourseActivation = () => {
    * @description config params khi filter
    */
   const params = {
-    name: router.query?.name || undefined,
-    status: router.query?.status || undefined,
-    type: router.query?.type || undefined,
-    template: '4',
+    program: router.query?.program || undefined,
+    subject: router.query?.subject || undefined,
   }
 
   /**
@@ -90,8 +88,8 @@ const CourseActivation = () => {
     refetch,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ['myCourse'],
-    queryFn: ({ pageParam }) => fetchMyCourse({ pageParam, params }),
+    queryKey: ['courseActivation'],
+    queryFn: ({ pageParam }) => fetchCourseActivation({ pageParam, params }),
     getNextPageParam: (lastPage, allPages) => {
       return lastPage?.data.length ? allPages.length + 1 : undefined
     },
@@ -130,7 +128,7 @@ const CourseActivation = () => {
   // Use useEffect to refetch data when params change
   useEffect(() => {
     refetch()
-  }, [params?.name, params?.status, params?.type, refetch])
+  }, [params?.program, params?.subject, refetch])
 
   /**
    * @description gọi lại animation khi reload lại component
@@ -193,7 +191,7 @@ const CourseActivation = () => {
             Course Activation
           </h1>
           <div className="relative">
-            <FilterCourse totalResult={totalRecords} listFilter={listFilter} />
+            <FilterCourseActivation totalResult={totalRecords} />
           </div>
         </div>
         <div
