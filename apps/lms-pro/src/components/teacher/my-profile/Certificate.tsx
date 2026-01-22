@@ -8,7 +8,7 @@ import clsx from 'clsx'
 import { HaveNoItemIcon } from '@lms/assets'
 import { AuthAPI } from 'src/api/profile'
 import { useAppSelector, userReducer } from '@lms/contexts'
-import { ImageCertificateRenderFromHtml } from '@lms/feature-user/src/components/profile/CertificateDetail'
+import { ImageCertificateRenderFromHtml } from '@lms/feature-user'
 
 interface ICertificate {
   certificate: {
