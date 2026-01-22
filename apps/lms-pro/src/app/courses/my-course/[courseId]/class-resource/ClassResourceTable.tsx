@@ -28,6 +28,7 @@ import { handleDocUploadFromBlob } from '@utils/helpers'
 import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import { AxiosResponse } from 'axios'
 import clsx from 'clsx'
+import CryptoJS from 'crypto-js'
 import {
   useParams,
   usePathname,
@@ -81,14 +82,16 @@ const ClassResourceTable = ({
         )
         if (res) {
           if (!res.url) return
+          const rawDecoded = CryptoJS.AES.decrypt(res.url, 'randomSecretKey')
+          const originalUrl = rawDecoded.toString(CryptoJS.enc.Utf8)
           setPreviewResource({
             ...resource,
-            url: res.url,
+            url: originalUrl,
           })
           setOpenPreview(true)
           if (resource.suffix_type === 'WORD_DOCUMENT') {
             setLoadingEditor(true)
-            const defaultEditor = await getEditorData(res.url)
+            const defaultEditor = await getEditorData(originalUrl)
             setDefaultEditor(defaultEditor)
             setLoadingEditor(false)
           }
