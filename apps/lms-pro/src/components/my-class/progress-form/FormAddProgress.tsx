@@ -1,12 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { confirmDialog, useAppDispatch } from '@lms/contexts'
+import { confirmDialog, useAppDispatch, useFeature } from '@lms/contexts'
 import {
-  CONFIRM_CANCEL, IContentCompleted,
+  CONFIRM_CANCEL,
+  IContentCompleted,
   IDefaultFormAddProgress,
   ILesson,
-  IRequestCreateProgress
+  IRequestCreateProgress,
 } from '@lms/core'
-import { HookformTimePicker, SAPPButtonV2, SappIcon, SAPPInput, SAPPSelect } from '@lms/ui'
+import {
+  HookformTimePicker,
+  SAPPButtonV2,
+  SappIcon,
+  SAPPInput,
+  SAPPSelect,
+} from '@lms/ui'
 import { buildQueryString, sortSectionsByPosition } from '@lms/utils'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { Drawer } from 'antd'
@@ -38,11 +45,11 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const query = Object.fromEntries(searchParams.entries())
+  const { params: progressParam } = useFeature()
 
   const currentQuery = { ...query }
   const params = query?.id
   const dispatch = useAppDispatch()
-  const { id } = query
   const [lesson, setLesson] = useState<ILesson[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [treeDataNotConvert, setTreeDataNotConvert] = useState<
@@ -193,9 +200,11 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
 
   useLayoutEffect(() => {
     const fetchDataLesson = async () => {
-      if (id) {
+      if (progressParam?.id) {
         try {
-          const res = await ProgressAPI.getListLesson(id as string)
+          const res = await ProgressAPI.getListLesson(
+            progressParam?.id as string,
+          )
           if (res?.data && res?.data?.length > 0) {
             const newData = res?.data?.map((item: ILesson) => ({
               ...item,
@@ -224,9 +233,12 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
     setTreeDataNotConvert([])
 
     const fetchDataSection = async () => {
-      if (id && value) {
+      if (progressParam?.id && value) {
         try {
-          const res = await ProgressAPI.getListSection(id as string, value)
+          const res = await ProgressAPI.getListSection(
+            progressParam?.id as string,
+            value,
+          )
           if (res?.data && res?.data?.length > 0) {
             const nameSection = res.data
               ?.filter((item: { main: boolean }) => item.main)[0]
