@@ -27,6 +27,7 @@
         - .dockerignore
         - prod.Dockerfile
         - .gitlab-ci.yml
+        
 
 # Job deploy staging cho LMS
 deploy_staging_lms:
