@@ -20,6 +20,7 @@ import {
   SAPPVideo,
   TextPreview,
   Tooltip,
+  PdfViewer,
 } from '@lms/ui'
 import { buildQueryString } from '@lms/utils'
 import request from '@services/requestV2'
@@ -68,7 +69,11 @@ const ClassResourceTable = ({
   const [loadingSheet, setLoadingSheet] = useState<boolean>(false)
 
   const handleOpenPreview = async (resource: IClassResource) => {
-    if (['PDF', 'SHEET', 'WORD_DOCUMENT'].includes(resource.suffix_type)) {
+    if (
+      ['PDF', 'SHEET', 'WORD_DOCUMENT', 'POWER_POINT'].includes(
+        resource.suffix_type,
+      )
+    ) {
       try {
         const res = await ClassAPI.previewClassFile(
           params.courseId as string,
@@ -268,8 +273,9 @@ const ClassResourceTable = ({
 
       case 'SHEET':
         return <SheetViewer fileUrl={resource.url} fileName={resource.name} />
-      case 'POWER_POINT':
       case 'PDF':
+        return <PdfViewer url={resource.url} />
+      case 'POWER_POINT':
         return (
           <FileViewer
             fileName={resource.name}
