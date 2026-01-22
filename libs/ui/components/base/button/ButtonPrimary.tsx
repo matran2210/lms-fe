@@ -56,9 +56,16 @@ const ButtonPrimary = ({
       {...props}
     >
       <div className="flex items-center gap-2.5">
-        {startIcon && <div className="w-full">{startIcon}</div>}
-        <div className="w-full">{title || children}</div>
-        {endIcon && <div className="w-full">{endIcon}</div>}
+        {loading ? (
+          <LoadingButtonAnimation />
+        ) : (
+          <>
+            {startIcon && <div className="w-full">{startIcon}</div>}
+            <div className="w-full">{title || children}</div>
+            {endIcon && <div className="w-full">{endIcon}</div>}
+          </>
+        )}
+
       </div>
     </BaseButton>
   );
