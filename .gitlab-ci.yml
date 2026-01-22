@@ -10,7 +10,7 @@
     - shell-docker
   resource_group: lms-fe
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_BRANCH == "staging"'
       changes:
         - apps/$APP_NAME/**/*
         - libs/**/*
