@@ -4,13 +4,12 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
-const isDevelopment = process.env.NODE_ENV === 'development'
-
+const isProd = process.env.NODE_ENV === 'production'
 // =========================
 // Base Next.js config
 // =========================
 const nextConfig = {
-  reactStrictMode: !isDevelopment,
+  reactStrictMode: isProd,
   swcMinify: true,
   productionBrowserSourceMaps: false,
   poweredByHeader: false,
@@ -23,33 +22,30 @@ const nextConfig = {
 
   compiler: {
     styledComponents: true,
-    removeConsole: process.env.NODE_ENV === 'production',
+    removeConsole: isProd,
   },
 
   experimental: {
-    optimizeCss: !isDevelopment,
+    optimizeCss: isProd,
     instrumentationHook: false,
   },
 }
 
 // =========================
-// Wrap plugins
+// Plugins
 // =========================
 const configWithPlugins = withBundleAnalyzer(nextConfig)
 
 // =========================
 // Sentry config
 // =========================
-module.exports = withSentryConfig(configWithPlugins, {
-  org: process.env.NEXT_PUBLIC_SENTRY_NAME,
-  project: process.env.NEXT_PUBLIC_SENTRY_PROJECT,
-  silent: !process.env.CI,
-  widenClientFileUpload: true,
-  tunnelRoute: '/monitoring',
-  webpack: {
-    automaticVercelMonitors: true,
-    treeshake: {
-      removeDebugLogging: true,
-    },
-  },
-})
+module.exports =
+  process.env.NEXT_PUBLIC_ENABLE_SENTRY === 'true'
+    ? withSentryConfig(configWithPlugins, {
+        org: process.env.NEXT_PUBLIC_SENTRY_NAME,
+        project: process.env.NEXT_PUBLIC_SENTRY_PROJECT,
+        silent: !process.env.CI,
+        widenClientFileUpload: true,
+        tunnelRoute: '/monitoring',
+      })
+    : configWithPlugins

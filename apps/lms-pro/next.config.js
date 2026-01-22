@@ -5,7 +5,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 })
 
 const isProd = process.env.NODE_ENV === 'production'
-console.log('isProd', process.env.NEXT_PUBLIC_ENABLE_SENTRY)
 // =========================
 // Base Next.js config
 // =========================
@@ -38,7 +37,7 @@ const nextConfig = {
 const configWithPlugins = withBundleAnalyzer(nextConfig)
 
 // =========================
-// Export
+// Sentry config
 // =========================
 module.exports = process.env.NEXT_PUBLIC_ENABLE_SENTRY === 'true'
   ? withSentryConfig(
@@ -49,12 +48,6 @@ module.exports = process.env.NEXT_PUBLIC_ENABLE_SENTRY === 'true'
         silent: !process.env.CI,
         widenClientFileUpload: true,
         tunnelRoute: '/monitoring',
-        webpack: {
-          automaticVercelMonitors: true,
-          treeshake: {
-            removeDebugLogging: true,
-          },
-        },
       }
     )
   : configWithPlugins
