@@ -1307,7 +1307,7 @@ const QuizDocument = ({
               <div className="mr-1 flex size-6 items-center justify-center">
                 <CircleInfoIcon />
               </div>
-              Your Attemp: {number_of_attempts ?? 0}
+              Your Attempt: {number_of_attempts ?? 0}
               {typeof limit_count === "number" && limit_count > 0
                 ? `/${limit_count}`
                 : ""}
