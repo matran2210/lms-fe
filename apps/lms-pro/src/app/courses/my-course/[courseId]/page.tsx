@@ -231,7 +231,7 @@ const CourseDetail = () => {
       setPinnedCompletedCourse({
         isOpen: isPassed,
         passedAt,
-        userCertificateHtml: courseDetail.certificate.html_template,
+        userCertificateHtml: courseDetail.certificate?.html_template || '',
         userCertificateId,
         courseName: courseNameDetail || '',
       })
