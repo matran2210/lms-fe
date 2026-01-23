@@ -177,6 +177,7 @@ const ClassResourceTable = ({
   }
 
   const renderPreviewContent = (resource: IClassResource) => {
+    const videoUrl = process.env.NEXT_PUBLIC_VIDEO_URL as string
     switch (resource.suffix_type) {
       case 'VIDEO':
         return (
