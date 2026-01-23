@@ -2,7 +2,7 @@ import SappTeacherTextField from '@components/teacher/components/sapp-textfield/
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconMinusSquared, IconPlusSquared } from '@lms/assets'
 import { confirmDialog, getUserInformation, IResponse, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
-import { ANT_THEME_CONFIG, CONFIRM_CANCEL, IMyRequest, IRecurringSchedule, ISelect, IWeeklyNorm, REPEAT_TYPE, REQUEST_STATUS, REQUEST_TYPE } from '@lms/core'
+import { ANT_THEME_CONFIG, CONFIRM_CANCEL, IMyRequest, IRecurringSchedule, ISelect, IWeeklyNorm, OPTIONS_TIME_OFF_REQUEST_TYPE, REPEAT_TYPE, REQUEST_STATUS, REQUEST_TYPE } from '@lms/core'
 import { HookFormDateRangeV2, SAPPButtonV2, SappIcon, SAPPSelectV2 } from '@lms/ui'
 import HookFormEventRepeat from '@lms/ui/components/event-repeat/HookFormEventRepeatField'
 import { capitalizeFirstLetter, formatDateTimeWithTimeZone, VALIDATE_REQUIRED } from '@lms/utils'
@@ -558,13 +558,12 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
   const requestTypeOption = useMemo(() => {
     if (query.tab === 'personal')
       return [REQUEST_TYPE.BUSY_SCHEDULE, REQUEST_TYPE.WEEKLY_NORM]
-
     if (query.tab === 'timeoff')
-      return [REQUEST_TYPE.TIMEOFF, REQUEST_TYPE.TEACHING_MODE]
+      return OPTIONS_TIME_OFF_REQUEST_TYPE
     else {
       return [REQUEST_TYPE.BUSY_SCHEDULE, REQUEST_TYPE.WEEKLY_NORM]
     }
-  }, [])
+  }, [query.tab])
 
   const handleChangeClassCode = (e: string) => {
     setValue('class_code', e)
