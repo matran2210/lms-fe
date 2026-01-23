@@ -13,7 +13,7 @@ interface IProps {
     url: string;
 }
 
-export default function PdfViewer({ url }: IProps) {
+const PdfViewer = ({ url }: IProps) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const [numPages, setNumPages] = useState<number>(0);
     const [pageWidth, setPageWidth] = useState<number>();
@@ -51,3 +51,5 @@ export default function PdfViewer({ url }: IProps) {
         </div>
     );
 }
+
+export default PdfViewer;
