@@ -1,6 +1,6 @@
 "use client";
-import { CERTIFICATE_DETAIL } from "@lms/core";
-import { getLocalStorageItem, setLocalStorageItem, convertUTCToLocalTime } from "@lms/utils";
+import { PinnedNotifications } from "@lms/core";
+import { convertUTCToLocalTime, getLocalStorageItem, isMatchedPathPinNoti, setLocalStorageItem } from "@lms/utils";
 import {
   PropsWithChildren,
   createContext,
@@ -8,8 +8,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { ENTRANCE_TEST_RESULT, ENTRANCE_TEST_TABLE_RESULT } from "@lms/core";
-import { PinnedNotifications } from "@lms/core";
 import { useFeature } from "./FeatureContext";
 
 // type for context
@@ -112,11 +110,7 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{
 
   useEffect(() => {
     if (
-      ![
-        ENTRANCE_TEST_TABLE_RESULT,
-        ENTRANCE_TEST_RESULT,
-        CERTIFICATE_DETAIL,
-      ].includes(pathname as string)
+     isMatchedPathPinNoti(pathname ?? '')
     ) {
       getPinnedData();
     }

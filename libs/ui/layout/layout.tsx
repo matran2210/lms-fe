@@ -172,7 +172,7 @@ export default function Layout(props: LayoutProps): ReactElement {
               "menu-sidebar-left--hover !w-[220px]":
                 (guideStatus && (guideStep === 2 || guideStep === 3)) ||
                 isShowMenuContent,
-              "h-[calc(100vh-32px-60px)]": !openPinned,
+              "h-[calc(100vh-32px-60px)]": openPinned,
               // 'hidden': !showSidebar,
               // 'w-[220px]': isOpenSidebar,
               "w-[220px] translate-x-0": showSidebar,
