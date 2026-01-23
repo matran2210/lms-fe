@@ -20,6 +20,7 @@ const LimitQuizModal = ({ open, setOpen, handleQuit }: IProps) => {
   return (
     <SappModalV3
       open={open}
+      handleClose={() => setOpen(false)}
       showCancelButton={false}
       okButtonCaption="Quit"
       onOk={onSubmit}

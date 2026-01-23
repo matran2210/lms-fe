@@ -90,7 +90,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
   const renderExamContent = () => {
     if (remainingChanges === 0) {
       return (
-        <p className="text-sm text-gray-1">
+        <p className="text-sm text-gray">
           <span>
             If you have changed your exam date, please contact our support at
             hotline 1900 2225 or submit a support ticket{" "}
@@ -110,7 +110,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
 
     return (
       <>
-        <p className="mb-2 text-sm text-gray-1">
+        <p className="mb-2 text-sm text-gray">
           {getTitleMessage(remindChoosingExam)}
         </p>
         <SAPPSelectV2

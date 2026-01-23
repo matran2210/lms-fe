@@ -19,10 +19,10 @@ export default function CourseDescriptionText({
       }}
       className={clsx(
         {
-          'line-clamp-4 h-[80px] lg:line-clamp-3 lg:h-[72px] text-ellipsis text-ssm lg:text-base':
+          'line-clamp-4 h-[80px] text-ellipsis text-xs lg:line-clamp-3 lg:h-[72px] lg:text-base':
             !isTooltip,
         },
-        enableCourse ? 'text-bw-15' : 'text-gray-2',
+        enableCourse ? 'text-gray-800' : 'text-secondary-100',
       )}
     />
   )

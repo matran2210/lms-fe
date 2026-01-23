@@ -81,7 +81,6 @@ const TestModal = ({
   activeCourse,
   is_passed_course,
 }: IProps) => {
-  console.log('class_user_id', class_user_id)
   const router = useRouter()
   const isSubmitted =
     data?.quiz?.attempt && data?.quiz?.attempt?.status === 'SUBMITTED'

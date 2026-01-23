@@ -53,6 +53,7 @@ const TestAnnouncementModal = ({
   if (type === "NOT_OPEN_YET") {
     return (
       <SappModalV3
+        handleClose={handleCancel}
         open={open}
         showCancelButton={false}
         handleCancel={handleCancel}
@@ -63,7 +64,7 @@ const TestAnnouncementModal = ({
         icon={<AlertTriagle />}
         header={"Unopened Test"}
       >
-        <p className="mt-5 text-center text-[#A1A1A1]">
+        <p className="mt-5 text-center text-gray-400">
           This test will be opened at{" "}
           <span className="font-bold text-primary">
             {dayjs(start_time).format("DD/MM/YYYY HH:mm:ss")}

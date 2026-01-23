@@ -24,6 +24,7 @@ import { UserType } from 'src/redux/types/User/urser'
 import { useParams, useRouter } from 'next/navigation'
 import { CoursesAPI } from 'src/api/courses'
 import { TestServiceAPI } from 'src/api/test-api'
+import { handleMultipleCorrectAnswer } from '@lms/utils'
 
 const Explanation = () => {
   const router = useRouter()
@@ -70,6 +71,8 @@ const Explanation = () => {
         resultResponse?.data?.answer?.question?.question_topic_id,
         resultResponse?.data?.answer?.quiz_attempt?.quiz?.id,
       ) // const newActiveQuestion = { ...selectedResponseAnswers[0].question }
+      const questionType = resultResponse?.data?.answer?.question?.qType
+      const answerTemp = resultResponse?.data?.answer?.question?.answers || []
       setAttempt(resultResponse?.data?.answer?.quiz_attempt)
       setActiveQuestion({
         ...resultResponse.data.answer.question,
@@ -79,15 +82,21 @@ const Explanation = () => {
         confirmed: true,
         grading_question: resultResponse.data.answer.grading_question,
         corrects: getCorrect(
-          resultResponse?.data?.answer?.question?.qType !==
-            QUESTION_TYPES.MATCHING
-            ? resultResponse?.data?.answer?.question?.answers
+          questionType !== QUESTION_TYPES.MATCHING
+            ? answerTemp
             : resultResponse?.data?.answer?.answer_matching_mapping,
           resultResponse?.data?.answer?.question?.qType,
         ),
         question_matchings:
           resultResponse?.data?.answer?.answer_matching_mapping,
-        answers: resultResponse?.data?.answer?.question?.answers || [],
+        answers:
+          questionType === QUESTION_TYPES.DRAG_DROP
+            ? handleMultipleCorrectAnswer(
+                resultResponse?.data?.answer?.question?.drag_drop_answers,
+                resultResponse?.data?.answer?.answer,
+                answerTemp,
+              )
+            : answerTemp,
         myAnswers: [
           {
             question_id: resultResponse?.data?.answer?.question?.id,

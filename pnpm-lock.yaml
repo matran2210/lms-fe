@@ -24,7 +24,7 @@ importers:
         specifier: ^3.10.0
         version: 3.10.0(react-hook-form@7.48.2(react@18.2.0))
       '@sapp-fe/explanation-package':
-        specifier: ^1.5.5
+        specifier: ^1.5.6
         version: 1.5.6(@babel/core@7.28.6)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.9)(typescript@5.1.6))(webpack@5.104.1)
       '@sapp-fe/sapp-common-package':
         specifier: ^1.6.16
@@ -208,7 +208,7 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0(@babel/core@7.28.6)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@sapp-fe/explanation-package':
-        specifier: ^1.5.5
+        specifier: ^1.5.6
         version: 1.5.6(@babel/core@7.28.6)(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.104.1)
       '@sapp-fe/preview-activity':
         specifier: ^1.1.43
@@ -533,7 +533,7 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0(@babel/core@7.28.6)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@sapp-fe/explanation-package':
-        specifier: ^1.5.5
+        specifier: ^1.5.6
         version: 1.5.6(@babel/core@7.28.6)(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@types/react@18.2.21)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.104.1)
       '@sapp-fe/preview-activity':
         specifier: ^1.1.43
@@ -1036,7 +1036,7 @@ importers:
         specifier: workspace:*
         version: link:../../libs/utils
       '@sapp-fe/explanation-package':
-        specifier: ^1.5.5
+        specifier: ^1.5.6
         version: 1.5.6(@babel/core@7.28.6)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.2(@types/node@24.10.9)(typescript@5.1.6))(webpack@5.104.1)
       '@sapp-fe/quiz-result-package':
         specifier: ^1.5.0
@@ -14533,7 +14533,7 @@ snapshots:
       consola: 3.4.2
       detect-libc: 2.1.2
       https-proxy-agent: 7.0.6
-      node-fetch: 2.7.0(encoding@0.1.13)
+      node-fetch: 2.6.9(encoding@0.1.13)
       nopt: 8.1.0
       semver: 7.7.3
       tar: 7.5.6

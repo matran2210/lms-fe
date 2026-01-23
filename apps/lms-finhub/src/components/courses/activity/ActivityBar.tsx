@@ -62,7 +62,7 @@ export default function ActivityBar({
         title="Section content"
         onClick={() => onTabChange('content')}
         className={clsx(getButtonClass('content'), 'gap-2')}
-        classTitle="text-v2-sm font-normal"
+        classTitle="text-sm font-normal"
       >
         <List />
       </ButtonIcon>

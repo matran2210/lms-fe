@@ -35,7 +35,7 @@ import {
   ScratchPadValue,
   TEST_TYPE,
 } from '@lms/core'
-import { runHighlight, trackGAEvent } from '@lms/utils'
+import { handleMultipleCorrectAnswer, runHighlight, trackGAEvent } from '@lms/utils'
 import { cloneDeep, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -279,6 +279,7 @@ const TestDetail = () => {
             solution,
             is_self_reflection,
             requirements,
+            drag_drop_answers,
           } = answerSubmitted?.[0]
 
           // Handle different question types
@@ -327,10 +328,25 @@ const TestDetail = () => {
           }
 
           if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
+             const answersTemp = (answersSubmitted?.[0]?.answer || [])?.sort(
+              (
+                a: { answer_position: number },
+                b: { answer_position: number },
+              ) => a?.answer_position - b?.answer_position,
+            )
+            const correctsTemp = (answers || [])?.sort(
+              (
+                a: { answer_position: number },
+                b: { answer_position: number },
+              ) => a?.answer_position - b?.answer_position,
+            )
+
             return {
               corrects: {
-                corrects: (answers || []).sort(
-                  (a: any, b: any) => a?.answer_position - b?.answer_position,
+                corrects: correctsTemp,
+                answers: handleMultipleCorrectAnswer(
+                  drag_drop_answers,
+                  answersTemp,
                 ),
               },
               solution,
@@ -508,6 +524,21 @@ const TestDetail = () => {
           return updatedObjTab
         }
       } else {
+         if (objTab?.data?.qType === QUESTION_TYPES.DRAG_DROP) {
+          if (!isEmpty(objTab?.corrects?.corrects)) {
+            return {
+              ...objTab,
+              corrects: {
+                answers: handleMultipleCorrectAnswer(
+                  objTab?.data?.drag_drop_answers,
+                  objTab?.answer,
+                ),
+                corrects: objTab?.corrects?.corrects,
+              },
+            }
+          }
+        }
+
         return objTab
       }
     } else return undefined
@@ -677,7 +708,7 @@ const TestDetail = () => {
             onChange={(data: SlotValue[]) => {
               setValue(`${currentTabID}_drag_drop_answer`, data)
             }}
-            corrects={corrects?.corrects}
+            corrects={corrects}
             solution={solution}
             explainClassname="!mt-8 !p-0 !bg-transparent"
           />
@@ -1811,7 +1842,7 @@ const TestDetail = () => {
                 : 'You should select an answer before click'
             }
             classNames={{
-              root: 'max-w-72 rounded-md',
+              root: 'max-w-[288px] rounded-md',
               body: 'text-sm !py-1 !px-2 flex items-center',
             }}
             getPopupContainer={(triggerNode) => triggerNode.parentElement!}
@@ -2162,7 +2193,7 @@ const TestDetail = () => {
                       </div>
                     </div>
                     <div
-                      className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-[#99A1B7]"
+                      className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-accent"
                       onMouseDown={() => setStartResize(true)}
                       onTouchStart={(e) => {
                         e.preventDefault()

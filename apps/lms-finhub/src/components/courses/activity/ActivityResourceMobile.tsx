@@ -24,12 +24,12 @@ export default function ActivityResourcesMobile({
     >
       {items.map((item, index) => (
         <div className="item mb-2 last:mb-0" key={index}>
-          <div className="content flex gap-2 rounded-md bg-gray-4 px-3 py-2 hover:bg-secondary">
+          <div className="content flex gap-2 rounded-md bg-gray-100 px-3 py-2 hover:bg-secondary">
             <div>
               <Docs className="h-5 w-5" />
             </div>
             <div
-              className="cursor-pointer truncate text-ssm md:text-base"
+              className="cursor-pointer truncate text-xs md:text-base"
               onClick={item.download}
             >
               {item.title}

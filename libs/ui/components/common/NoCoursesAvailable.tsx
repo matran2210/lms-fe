@@ -1,6 +1,6 @@
-import React from 'react'
-import { ANIMATION } from '@lms/core'
-import { NoCoursesAvailableIcon } from '@lms/assets'
+import React from "react";
+import { ANIMATION } from "@lms/core";
+import { NoCoursesAvailableIcon } from "@lms/assets";
 
 const NoCoursesAvailable = () => {
   return (
@@ -9,11 +9,11 @@ const NoCoursesAvailable = () => {
       className="flex flex-col items-center justify-center"
     >
       <NoCoursesAvailableIcon />
-      <div className="text-center text-base font-normal leading-6 text-gray-1">
+      <div className="text-center text-base font-normal leading-6 text-gray">
         No Data Found :(
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default NoCoursesAvailable
+export default NoCoursesAvailable;

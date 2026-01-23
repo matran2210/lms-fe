@@ -51,7 +51,7 @@ import {
   SelectWord,
   SlotValue,
 } from '@lms/ui'
-import { runHighlight } from '@lms/utils'
+import { handleMultipleCorrectAnswer, runHighlight } from '@lms/utils'
 import clsx from 'clsx'
 import { isNull, uniqueId } from 'lodash'
 import { useParams, useRouter } from 'next/navigation'
@@ -203,7 +203,7 @@ const CaseStudyResult = () => {
             onChange={(data: SlotValue[]) => {
               setValue?.(`${index}_answer`, data)
             }}
-            corrects={corrects?.corrects}
+            corrects={corrects}
             solution={solution}
             explainClassname="!mt-8 !p-0 !bg-transparent"
           />
@@ -343,7 +343,7 @@ const CaseStudyResult = () => {
     }
   }, [x, startResize])
 
-  const getResult = (question: IQuestionResult) => {
+  const getResult = (question: IQuestionResult, item: any) => {
     if (
       question.qType === QUESTION_TYPES.ONE_CHOICE ||
       question.qType === QUESTION_TYPES.TRUE_FALSE ||
@@ -366,12 +366,17 @@ const CaseStudyResult = () => {
     } else if (question.qType === QUESTION_TYPES.MATCHING) {
       return { corrects: [...question.question_matchings] }
     } else if (question.qType === QUESTION_TYPES.DRAG_DROP) {
+      const answerTemp = handleMultipleCorrectAnswer(
+        question?.drag_drop_answers,
+        item?.answer,
+      )
       return {
         corrects: [
           ...question.answers?.sort(
             (a: any, b: any) => a?.answer_position - b?.answer_position,
           ),
         ],
+        answers: answerTemp,
       }
     }
   }
@@ -603,7 +608,7 @@ const CaseStudyResult = () => {
         item.question.qType === QUESTION_TYPES.ESSAY
           ? item?.requirement?.explanation
           : item.question.solution
-      const corrects = getResult(question)
+      const corrects = getResult(question, item)
       const requirementIndex = getIndexOfRequirement(
         item?.requirement,
         question.id,
@@ -791,7 +796,7 @@ const CaseStudyResult = () => {
                 </div>
               </div>
               <div
-                className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-[#99A1B7]"
+                className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-accent"
                 onMouseDown={() => {
                   setStartResize(true)
                   setCurrentMousePos(x || 0)
@@ -1004,7 +1009,7 @@ const CaseStudyResult = () => {
                 )
               }
             })}
-            <div className=" relative flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
+            <div className=" relative flex h-[48px] items-center justify-between bg-gray-100 shadow-question-footer">
               <div className="flex h-full items-center">
                 <button
                   className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
@@ -1077,7 +1082,7 @@ const CaseStudyResult = () => {
                       </div>
                     </div>
                     {showListExhibits && (
-                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
+                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-100 shadow-questions-exhibits 3xl:w-full">
                         {exhibits?.map(
                           (
                             e: { label: string; value: string },
@@ -1088,7 +1093,7 @@ const CaseStudyResult = () => {
                                 key={e?.value}
                                 className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px] ' : 'min-w-[100px] '} ${
                                   !watch('exhibits')?.includes(e?.value) &&
-                                  'text-gray-1 '
+                                  'text-gray '
                                 }`}
                                 onClick={() => handleOpenExhibit(e?.value)}
                               >{`${exhibitText} ${index + 1}`}</button>

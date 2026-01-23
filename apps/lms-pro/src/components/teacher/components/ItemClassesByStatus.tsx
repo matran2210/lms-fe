@@ -188,7 +188,7 @@ const ItemClassesByStatus = ({
       <div className={`flex flex-col gap-6`}>
         <div className="flex items-center justify-between">
           {enableCourse ? (
-            <span className="flex items-center gap-2 text-sm text-[#a1a1aa]">
+            <span className="flex items-center gap-2 text-sm text-zinc-400">
               <BookInClassIcon />
               <Tooltip
                 title={classes?.code}
@@ -198,17 +198,17 @@ const ItemClassesByStatus = ({
               </Tooltip>
             </span>
           ) : (
-            <div className="name-class text-sm text-[#a1a1aa]">
-              <span className="ml-1 font-medium text-[#050505]" />
+            <div className="name-class text-sm text-zinc-400">
+              <span className="ml-1 font-medium text-gray-800" />
             </div>
           )}
-          <div className="time-class text-sm text-[#a1a1aa]">
+          <div className="time-class text-sm text-zinc-400">
             {determineButtonToShow !== 'Active' && (
               <span className="flex items-center">
                 <ClockInClassIcon />
                 <span
                   className={`font-medium ${
-                    enableCourse ? 'text-[#050505]' : 'text-[#a1a1aa]'
+                    enableCourse ? 'text-gray-800' : 'text-zinc-400'
                   } ml-2`}
                 >
                   {daysDifference}{' '}
@@ -219,12 +219,12 @@ const ItemClassesByStatus = ({
           </div>
         </div>
 
-        <div className={`text-lg font-semibold text-[#374151] xl:h-[47px]`}>
+        <div className={`text-lg font-semibold text-gray-700 xl:h-[47px]`}>
           <div className="line-clamp-2 cursor-pointer text-ellipsis">
             {truncateString(classes?.course?.name, 50)}
           </div>
         </div>
-        <div className="mt-[-12px] text-sm font-normal text-[#27272a] xl:h-[72px]">
+        <div className="mt-[-12px] text-sm font-normal text-zinc-800 xl:h-[72px]">
           {classes?.description}
         </div>
 
@@ -234,12 +234,12 @@ const ItemClassesByStatus = ({
               <Icon
                 type={enableCourse ? iconType : 'expired'}
                 className={`relative ${
-                  enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
+                  enableCourse ? 'text-gray-800' : 'text-divider'
                 }`}
               />
               <p
                 className={`text-sm font-medium ${
-                  enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD] '
+                  enableCourse ? 'text-gray-800' : 'text-divider '
                 } ml-px pl-2`}
               >
                 {enableCourse ? showStatus : 'Expired'}
@@ -248,17 +248,17 @@ const ItemClassesByStatus = ({
             <div className="number">
               <p
                 className={`text-sm font-medium ${
-                  enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD] '
+                  enableCourse ? 'text-gray-800' : 'text-divider '
                 }`}
               >
                 {classes?.progress?.toFixed(2)}%
               </p>
             </div>
           </div>
-          <div className="progressbar h-[6px] bg-[#F1F1F1]">
+          <div className="progressbar h-[6px] bg-gray-200">
             <div
               className={`progress-percentage ${
-                enableCourse ? 'bg-primary' : 'bg-[#DCDDDD]'
+                enableCourse ? 'bg-primary' : 'bg-divider'
               } h-[6px]`}
               style={{ width: `${classes?.progress}%` }}
             />
@@ -276,7 +276,7 @@ const ItemClassesByStatus = ({
               iconColorProps={isProgress ? '#ffb800' : '#374151'}
               className={
                 isProgress
-                  ? 'text- border border-primary text-[#FFB800]'
+                  ? 'text- border border-primary text-primary'
                   : 'border border-[#1f2937]'
               }
               link={`${PageLink.TEACHER_MY_CLASS}/${classes?.id}`}

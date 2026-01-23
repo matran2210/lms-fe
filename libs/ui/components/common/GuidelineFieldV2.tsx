@@ -1,17 +1,17 @@
-import clsx from 'clsx'
-import React from 'react'
+import clsx from "clsx";
+import React from "react";
 
 interface Props {
-  guideline?: Array<string>
-  classString?: string
+  guideline?: Array<string>;
+  classString?: string;
 }
 
-const GuidelineFieldV2 = ({ guideline, classString = '' }: Props) => {
+const GuidelineFieldV2 = ({ guideline, classString = "" }: Props) => {
   return (
     guideline?.length && (
       <div
         className={clsx(
-          'ms-3 mt-1 justify-start text-xs font-normal leading-[18px] text-badge-canceled',
+          "ms-3 mt-1 justify-start text-xs font-normal leading-[18px] text-accent",
           classString,
         )}
       >
@@ -23,7 +23,7 @@ const GuidelineFieldV2 = ({ guideline, classString = '' }: Props) => {
         ))}
       </div>
     )
-  )
-}
+  );
+};
 
-export default GuidelineFieldV2
+export default GuidelineFieldV2;

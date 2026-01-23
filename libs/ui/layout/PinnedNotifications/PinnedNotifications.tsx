@@ -7,7 +7,7 @@ import Marquee from "react-fast-marquee";
 import { EditorReader } from "../../components/base";
 
 function PinnedNotifications() {
-  const { pageLink, router } = useFeature();
+  const { pathname } = useFeature();
   const { openPinned, setOpenPinned, pinnedNotifications } =
     usePinnedNotifyContext();
 
@@ -18,17 +18,14 @@ function PinnedNotifications() {
 
   const showPinNoti = pinnedNotifications?.data?.content?.length < 200;
 
-  const isEnablePinnedPages = [
-    pageLink.COURSES,
-    pageLink.USERPAGE,
-    pageLink.COURSE_DETAIL,
-    pageLink.COURSE_PART_DETAIL,
-    pageLink.COURSE_ACTIVITY,
-  ].includes(router.pathname);
+  const isMatchedPath = (path: string) =>
+    /^\/courses$|^\/[^/]+$|^\/courses\/[^/]+\/section\/[^/]+$|^\/courses\/[^/]+\/activity\/[^/]+$|^\/courses\/my-course\/[^/]+$/.test(
+      path,
+    )
 
   return (
     <React.Fragment>
-      {isEnablePinnedPages &&
+      {isMatchedPath(pathname ?? '') &&
         openPinned &&
         pinnedNotifications?.data?.content && (
           <React.Fragment>

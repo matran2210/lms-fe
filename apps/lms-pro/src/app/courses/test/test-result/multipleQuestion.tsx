@@ -256,7 +256,7 @@ const MultipleQuestion = ({
           {isGradeFinish && (
             <ButtonPrimary
               size={'medium'}
-              className={'mb-0 mt-6 px-11 text-medium-sm !font-medium'}
+              className={'mb-0 mt-6 px-11 text-sm !font-medium'}
               title={COMMENTS.REQUEST_REGRADING}
               onClick={() => setOpenRecommendation(true)}
             />

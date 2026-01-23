@@ -370,19 +370,25 @@ const TestDetail = () => {
           }
 
           if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
-            const answersTemp = (answers || []).sort(
+            const answersTemp = (answersSubmitted?.[0]?.answer || [])?.sort(
               (
                 a: { answer_position: number },
                 b: { answer_position: number },
               ) => a?.answer_position - b?.answer_position,
             )
-
+            const correctsTemp = (answers || [])?.sort(
+              (
+                a: { answer_position: number },
+                b: { answer_position: number },
+              ) => a?.answer_position - b?.answer_position,
+            )
             return {
               corrects: {
-                corrects: handleMultipleCorrectAnswer(
+                answers: handleMultipleCorrectAnswer(
                   drag_drop_answers,
                   answersTemp,
                 ),
+                corrects: correctsTemp,
               },
               solution,
               isSelfReflection: is_self_reflection || false,
@@ -689,16 +695,20 @@ const TestDetail = () => {
         }
       } else {
         if (objTab?.data?.qType === QUESTION_TYPES.DRAG_DROP) {
-          return {
-            ...objTab,
-            corrects: {
-              corrects: handleMultipleCorrectAnswer(
-                objTab?.data?.drag_drop_answers,
-                objTab?.corrects?.corrects,
-              ),
-            },
+          if (!isEmpty(objTab?.corrects?.corrects)) {
+            return {
+              ...objTab,
+              corrects: {
+                answers: handleMultipleCorrectAnswer(
+                  objTab?.data?.drag_drop_answers,
+                  objTab?.answer,
+                ),
+                corrects: objTab?.corrects?.corrects,
+              },
+            }
           }
         }
+
         return objTab
       }
     } else return undefined
@@ -1022,7 +1032,7 @@ const TestDetail = () => {
             onChange={(data: SlotValue[]) => {
               setValue(`${currentTabID}_drag_drop_answer`, data)
             }}
-            corrects={corrects?.corrects}
+            corrects={corrects}
             solution={solution}
             explainClassname="!mt-8 !p-0 !bg-transparent"
           />
@@ -2786,7 +2796,7 @@ const TestDetail = () => {
                 : 'You should select an answer before click'
             }
             classNames={{
-              root: 'max-w-72 rounded-md',
+              root: 'max-w-[288px] rounded-md',
               body: 'text-sm !py-1 !px-2 flex items-center',
             }}
             getPopupContainer={(triggerNode) => triggerNode.parentElement!}
@@ -3280,7 +3290,7 @@ const TestDetail = () => {
                       </div>
                     </div>
                     <div
-                      className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-[#99A1B7]"
+                      className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-accent"
                       onMouseDown={() => setStartResize(true)}
                       onTouchStart={(e) => {
                         e.preventDefault()

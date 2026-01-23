@@ -201,21 +201,13 @@ const CaseStudyResult = () => {
         )
       case QUESTION_TYPES.DRAG_DROP:
         return (
-          // <DragNDropPreview
-          //   data={data}
-          //   allowHighLight={allowHighLight}
-          //   allowUnHighLight={allowUnHighLight}
-          //   defaultAnswer={defaultValue}
-          //   corrects={corrects?.corrects}
-          //   solution={solution}
-          // />
           <NewDragNDropQuestion
             data={data as any}
             defaultValue={defaultValue}
             onChange={(data: SlotValue[]) => {
               setValue?.(`${index}_answer`, data)
             }}
-            corrects={corrects?.corrects}
+            corrects={corrects}
             solution={solution}
           />
         )
@@ -318,7 +310,7 @@ const CaseStudyResult = () => {
     }
   }, [x, startResize])
 
-  const getResult = (question: IQuestionResult) => {
+  const getResult = (question: IQuestionResult, item?: any) => {
     if (
       question.qType === QUESTION_TYPES.ONE_CHOICE ||
       question.qType === QUESTION_TYPES.TRUE_FALSE ||
@@ -341,12 +333,17 @@ const CaseStudyResult = () => {
     } else if (question.qType === QUESTION_TYPES.MATCHING) {
       return { corrects: [...question.question_matchings] }
     } else if (question.qType === QUESTION_TYPES.DRAG_DROP) {
+      const answerTemp = handleMultipleCorrectAnswer(
+        question?.drag_drop_answers,
+        item?.answer,
+      )
       return {
         corrects: [
           ...question.answers?.sort(
             (a: any, b: any) => a?.answer_position - b?.answer_position,
           ),
         ],
+        answers: answerTemp,
       }
     }
   }
@@ -579,7 +576,7 @@ const CaseStudyResult = () => {
         item.question.qType === QUESTION_TYPES.ESSAY
           ? item?.requirement?.explanation
           : item.question.solution
-      const corrects = getResult(question)
+      const corrects = getResult(question, item)
       const requirementIndex = getIndexOfRequirement(
         item?.requirement,
         question.id,
@@ -710,7 +707,7 @@ const CaseStudyResult = () => {
                 </div>
               </div>
               <div
-                className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-[#99A1B7]"
+                className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-accent"
                 onMouseDown={() => {
                   setStartResize(true)
                   setCurrentMousePos(x || 0)
@@ -796,7 +793,7 @@ const CaseStudyResult = () => {
                   }
                 >
                   <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl">
-                    <div className="flex w-full items-center justify-between bg-gray-v2-100 px-4 py-3">
+                    <div className="flex w-full items-center justify-between bg-gray-100 px-4 py-3">
                       <div className="text-sm font-bold">Scratch Pad</div>
                       {/* <CloseIcon */}
                       <button onClick={() => handleCloseScratchPad(e)}>

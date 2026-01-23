@@ -520,6 +520,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }
 
     const renderQuestion = () => {
+       const correctsDragDrop = activeQuestion?.corrects
+        ? {
+            corrects: activeQuestion?.corrects,
+            answers: activeQuestion?.answer,
+          }
+        : undefined;
       switch (activeQuestion?.qType) {
         case QUESTION_TYPES.ONE_CHOICE:
         case QUESTION_TYPES.TRUE_FALSE:
@@ -591,7 +597,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               onChange={(data: SlotValue[]) => {
                 setValue?.(`${activeQuestion?.id}_${document_id}_answer`, data)
               }}
-              corrects={showCorrect ? activeQuestion.corrects : undefined}
+              corrects={showCorrect ? correctsDragDrop : undefined}
               solution={activeQuestion?.solution}
               explainClassname="!mt-8 !p-0 !bg-transparent"
             />
@@ -669,7 +675,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 </div>
                 {!!activeQuestion?.requirements?.length && (
                   <>
-                    <div className="my-6 border border-b-gray-2"></div>
+                    <div className="my-6 border border-b-secondary-100"></div>
                     <div className="flex cursor-pointer select-none items-center">
                       <div className="relative">
                         <div
@@ -682,7 +688,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                           </div>
                           <div>
                             <SappIcon
-                              className="-mt-1 ml-2 fill-bw-1 group-hover:fill-primary"
+                              className="-mt-1 ml-2 fill-gray-800 group-hover:fill-primary"
                               icon="arrow_down"
                             ></SappIcon>
                           </div>
@@ -714,7 +720,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       </div>
                       <div className="ml-4">
                         <span className="text-state-error">* </span>
-                        <span className="text-gray-1">
+                        <span className="text-gray">
                           You must finished{' '}
                           {activeQuestion?.requirements?.length || 0}{' '}
                           requirements to complete this question (Your answer is
@@ -726,14 +732,14 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 )}
                 {exhibitData && exhibitData?.length > 0 && (
                   <>
-                    <div className="my-6 border border-b-gray-2"></div>
+                    <div className="my-6 border border-b-secondary-100"></div>
                     <div className="mb-4 flex items-center">
                       <div className="font-semibold">
                         {exhibitText}s ({exhibitData?.length || 0})
                       </div>
                       <div className="ml-4">
                         <span className="text-state-error">* </span>
-                        <span className="text-gray-1">Click to view</span>
+                        <span className="text-gray">Click to view</span>
                       </div>
                     </div>
                     <div className="flex flex-col gap-2">
@@ -882,7 +888,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           {activeQuestion?.question_topic?.files?.length > 0 && (
             <div className="mb-2">
               {!!activeQuestion?.question_topic?.description && (
-                <div className="my-6 border border-b-gray-2" />
+                <div className="my-6 border border-b-secondary-100" />
               )}
               <div className="mb-2 font-semibold">Topic Resource:</div>
               {activeQuestion?.question_topic?.files.map(
@@ -905,7 +911,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   )
                 },
               )}
-              <div className="my-6 border border-b-gray-2" />
+              <div className="my-6 border border-b-secondary-100" />
             </div>
           )}
           {renderQuestion()}
@@ -914,7 +920,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           {activeQuestion?.confirmed &&
             activeQuestion.qType !== 'ESSAY' &&
             showCorrect && (
-              <div className="mt-8 bg-gray-4 p-4">
+              <div className="mt-8 bg-gray-100 p-4">
                 <div className="font-semibold">{MY_COURSES.explanations}</div>
                 {activeQuestion?.solution && (
                   <EditorReader

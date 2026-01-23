@@ -150,7 +150,7 @@ const TableCaseStudyResult = () => {
         <div className="m-auto max-h-full max-w-[1144px] bg-white pt-8">
           <div className="mb-10 flex flex-row items-center justify-between px-6 xl:px-0">
             <div className="pr-4">
-              <div className="line-clamp-1 text-xl font-medium text-[#050505]">
+              <div className="line-clamp-1 text-xl font-medium text-gray-800">
                 {topicAttemptDetail?.question_topic?.name}
               </div>
               <div className="pt-2.5 text-base">
@@ -234,13 +234,13 @@ const TableCaseStudyResult = () => {
                 {scoreDetail?.answers?.map((e: any, index: number) => {
                   return (
                     <tr
-                      className="border-b border-dashed border-[#DCDDDD]"
+                      className="border-b border-dashed border"
                       key={e?.id}
                     >
-                      <td className="pr-1 text-[#050505]">{index + 1}</td>
+                      <td className="pr-1 text-gray-800">{index + 1}</td>
                       <td className="m-6 pr-4 text-start">
                         <div
-                          className={`line-clamp-1 cursor-pointer text-[#050505] hover:font-semibold`}
+                          className={`line-clamp-1 cursor-pointer text-gray-800 hover:font-semibold`}
                           dangerouslySetInnerHTML={{
                             __html: String(
                               e?.question?.question_content ?? '--',
@@ -251,7 +251,7 @@ const TableCaseStudyResult = () => {
                           }}
                         ></div>
                       </td>
-                      <td className="m-6 pr-4 text-start text-[#050505]">
+                      <td className="m-6 pr-4 text-start text-gray-800">
                         <div className="mb-6 mr-6 mt-6 min-w-[132px]">
                           {getTypeName(e?.question?.qType ?? '--')}
                         </div>

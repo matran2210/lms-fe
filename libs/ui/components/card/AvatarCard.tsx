@@ -45,7 +45,7 @@ const AvatarCard = ({
       <div
         className={`label avatar pl-4 text-base font-normal text-gray-800 transition-all duration-150 group-hover:text-white`}
       >
-        <div className="line-clamp-1 text-base font-semibold text-[#050505] group-hover:text-white">
+        <div className="line-clamp-1 text-base font-semibold text-gray-800 group-hover:text-white">
           {user?.detail?.full_name}
         </div>
         {description && (
