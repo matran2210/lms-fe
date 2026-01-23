@@ -2,14 +2,15 @@ import { Divider, Drawer } from 'antd'
 import { useState } from 'react'
 import MenuItemsList from '@components/courses/menu/MenuItemsList'
 import { LogoMobile } from '@components/courses/icons'
-import { useRouter } from 'next/router'
 import clsx from 'clsx'
 import { HamburgerMenuLargeIcon } from '@lms/assets'
 import { MENU_BOTTOM, MENU_ITEMS } from 'src/constants/menu-items'
+import { useRouter, usePathname } from 'next/navigation'
 
 export default function SidebarMobile() {
   const [open, setOpen] = useState<boolean>(false)
   const router = useRouter()
+  const pathname = usePathname()
 
   const toggleDrawer = () => {
     setOpen(!open)
@@ -19,7 +20,7 @@ export default function SidebarMobile() {
     '/short-course/detail/[courseId]/activity/[id]',
   ]
 
-  const isInMyProfile = router.pathname === '/overview'
+  const isInMyProfile = pathname === '/overview'
   return (
     <>
       {/* Top bar with hamburger and title */}
@@ -28,9 +29,9 @@ export default function SidebarMobile() {
           'h-12 w-12 items-center justify-center rounded-lg bg-white p-2 shadow-small md:h-14 md:w-14 lg:hidden',
           {
             hidden:
-              listPathHiddenSidebar.includes(router.pathname) && !isInMyProfile,
+              listPathHiddenSidebar.includes(pathname) && !isInMyProfile,
             flex:
-              !listPathHiddenSidebar.includes(router.pathname) &&
+              !listPathHiddenSidebar.includes(pathname) &&
               !isInMyProfile,
             'hidden md:flex': isInMyProfile,
           },
@@ -58,7 +59,7 @@ export default function SidebarMobile() {
             </div>
             {/* Divider */}
             <div className="mx-auto w-[calc(100%-48px)] text-center">
-              <Divider className="my-6 bg-[#DCDDDD]" />
+              <Divider className="my-6 bg-divider" />
             </div>
             {/* Menu Items */}
             <MenuItemsList
@@ -68,8 +69,8 @@ export default function SidebarMobile() {
             />
           </div>
           <div>
-            <div className="mx-auto w-[calc(100%-48px)] bg-[#DCDDDD] text-center">
-              <Divider className="mb-8 mt-0 bg-[#DCDDDD]" />
+            <div className="mx-auto w-[calc(100%-48px)] bg-divider text-center">
+              <Divider className="mb-8 mt-0 bg-divider" />
             </div>
             <MenuItemsList
               options={MENU_BOTTOM}
@@ -79,7 +80,7 @@ export default function SidebarMobile() {
 
             {/* <TabButton
               items={itemButtonTab}
-              className="!rounded !px-1 !py-2 text-ssm"
+              className="!rounded !px-1 !py-2 text-xs"
             /> */}
           </div>
         </div>

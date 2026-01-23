@@ -1,8 +1,8 @@
 // components/SearchForm.tsx
 
 import React, { useState } from 'react'
-import { useRouter } from 'next/router'
 import { Icon } from '@lms/assets'
+import { useFeature } from '@lms/contexts'
 
 interface IProps {
   placeholder: string
@@ -10,7 +10,7 @@ interface IProps {
 }
 
 const SearchForm = ({ placeholder, formStyle }: IProps) => {
-  const router = useRouter()
+  const {router} = useFeature()
   const [query, setQuery] = useState('')
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

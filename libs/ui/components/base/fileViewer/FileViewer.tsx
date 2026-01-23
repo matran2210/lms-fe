@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { OFFICE_VIEWER_URL } from "@lms/core";
 import { downloadFileByURL, isPdfFile } from "@lms/utils";

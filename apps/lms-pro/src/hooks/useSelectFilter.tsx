@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { CourseKey } from 'src/pages/api/queryKey'
+import { CoursesAPI } from 'src/api/courses'
+import { CourseKey } from 'src/api/queryKey'
 import { ISection } from '@lms/core'
 import {
   IGetCourseActivityList,

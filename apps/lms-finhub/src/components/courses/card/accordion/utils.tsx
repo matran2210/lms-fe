@@ -51,11 +51,11 @@ export const renderBadge = (status: string) => {
 }
 
 const activityIconMap: Record<string, JSX.Element> = {
-  VIDEO: <PlayIcon className="w-4.5 md:w-6" />,
-  TEXT: <TextIcon className="w-4.5 md:w-6" />,
-  QUIZ: <ListIcon className="w-4.5 md:w-6" />,
-  TEST: <ListIcon className="w-4.5 md:w-6" />,
-  PAST_EXAM_ANALYSIS: <PastExamAnalysisIcon className="w-4.5 md:w-6" />,
+  VIDEO: <PlayIcon className="w-[18px] md:w-6" />,
+  TEXT: <TextIcon className="w-[18px] md:w-6" />,
+  QUIZ: <ListIcon className="w-[18px] md:w-6" />,
+  TEST: <ListIcon className="w-[18px] md:w-6" />,
+  PAST_EXAM_ANALYSIS: <PastExamAnalysisIcon className="w-[18px] md:w-6" />,
 }
 
 export const renderIconActivity = (type: string) => {

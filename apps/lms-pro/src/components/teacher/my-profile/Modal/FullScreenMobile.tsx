@@ -22,8 +22,8 @@ const FullScreenMobile = ({
       handleBack={onClose}
       title={title}
       isShowBtnClose={false}
-      classNameHeader="pt-2 px-4 !mb-0 pb-6 bg-gray-canvas"
-      classNameBody="!p-0 !bg-gray-canvas"
+      classNameHeader="pt-2 px-4 !mb-0 pb-6 bg-gray-100"
+      classNameBody="!p-0 !bg-gray-100"
       rootClassName="full-screen-mobile"
       push={{ distance: 0 }}
     >

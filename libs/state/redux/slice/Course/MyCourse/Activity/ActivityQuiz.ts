@@ -1,10 +1,17 @@
 import { Slice, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { FieldValues } from "react-hook-form";
-import { ICoursesAPI, IQuestionAPI, ITestServiceAPI, QUESTION_TYPES } from "@lms/core";
+import {
+  ICoursesAPI,
+  IDragDropAnswer,
+  IQuestionAPI,
+  ITestServiceAPI,
+  QUESTION_TYPES,
+} from "@lms/core";
 import { RootState } from "../../../../store";
 import { IRequirement } from "@lms/core";
 import { IQuestion } from "@lms/core";
 import { IEssayAnswer } from "@lms/core";
+import { handleMultipleCorrectAnswer } from "@lms/utils";
 
 /**
  * Interface mô tả thông tin về câu hỏi trong trạng thái Redux.
@@ -20,6 +27,7 @@ export interface IActivityStateQuestion extends IQuestion {
   defaultValue?: any;
   isDrafAnswer?: boolean;
   answer_template?: string;
+  drag_drop_answers: IDragDropAnswer[];
 }
 
 /**
@@ -853,7 +861,10 @@ const quizSlice: Slice = createSlice({
                   questionToUpdate.corrects = corrects.sort(
                     (a: any, b: any) => a.answer_position - b.answer_position,
                   );
-
+                  questionToUpdate.answer = handleMultipleCorrectAnswer(
+                    payload?.question?.drag_drop_answers,
+                    payload?.myAnswers,
+                  );
                   break;
                 }
                 case QUESTION_TYPES.ESSAY:

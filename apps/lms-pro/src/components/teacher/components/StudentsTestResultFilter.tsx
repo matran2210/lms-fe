@@ -17,7 +17,7 @@ const StudentsTestResultFilter: React.FC<StudentsTestResultFilterProps> = ({
         name="quiz_name"
         placeholder={'Search test/quiz'}
         placeholderIcon={<SearchIcon />}
-        inputClassName="placeholder:text-sm placeholder:text-[#99A1B7] placeholder:font-medium"
+        inputClassName="placeholder:text-sm placeholder:text-accent placeholder:font-medium"
         style={{
           borderRadius: '6px',
           height: 40,

@@ -1,18 +1,18 @@
-import { isEmpty } from 'lodash'
-import { NoData, SappModalV3 } from '@lms/ui'
-import EventTest from './EventTest'
-import { IEventTest } from '@lms/core'
-import { useCourseContext } from '@lms/contexts'
-import { IconCongrats } from '@lms/assets'
-import ContentTestCongratution from './ContentTestCongratution'
+import { isEmpty } from "lodash";
+import { NoData, SappModalV3 } from "@lms/ui";
+import EventTest from "./EventTest";
+import { IEventTest } from "@lms/core";
+import { useCourseContext } from "@lms/contexts";
+import { IconCongrats } from "@lms/assets";
+import ContentTestCongratution from "./ContentTestCongratution";
 // import { ANIMATION } from '@lms/core'
 
 const EventTestList = ({
   eventTestLists,
   onRefetch,
 }: {
-  eventTestLists: IEventTest[]
-  onRefetch: () => void
+  eventTestLists: IEventTest[];
+  onRefetch: () => void;
 }) => {
   const { setSubmitEventTest, submitEventTest } = useCourseContext();
 
@@ -60,41 +60,42 @@ const EventTestList = ({
   return (
     <>
       <div
-      className={`${
-        !isEmpty(eventTestLists)
-          ? 'grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3'
-          : 'flex min-h-[calc(100vh-15rem)] items-center justify-center'
-      }`}
-      // data-aos={ANIMATION.DATA_AOS}
-    >
-      {!isEmpty(eventTestLists) ? (
-        eventTestLists?.map((e: IEventTest, index) => (
-          <EventTest key={index} data={e} onRefetch={onRefetch} />
-        ))
-      ) : (
-        <NoData />
-      )}
-    </div>
-    <SappModalV3
-      open={submitEventTest}
-      okButtonCaption="Back"
-      handleCancel={handleCancelModalSubmitTest}
-      onOk={handleCancelModalSubmitTest}
-      fullWidthBtn={true}
-      buttonSize="medium"
-      icon={<IconCongrats />}
-      header={
-        <div className={`flex items-center justify-center`}>
-          Congratulations
-        </div>
-      }
-    >
-      {renderContentPopup(
-        JSON.parse(localStorage.getItem("category") as any),
-      )}
-    </SappModalV3>
+        className={`${
+          !isEmpty(eventTestLists)
+            ? "grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3"
+            : "flex min-h-[calc(100vh-15rem)] items-center justify-center"
+        }`}
+        // data-aos={ANIMATION.DATA_AOS}
+      >
+        {!isEmpty(eventTestLists) ? (
+          eventTestLists?.map((e: IEventTest, index) => (
+            <EventTest key={index} data={e} onRefetch={onRefetch} />
+          ))
+        ) : (
+          <NoData />
+        )}
+      </div>
+      <SappModalV3
+        handleClose={handleCancelModalSubmitTest}
+        open={submitEventTest}
+        okButtonCaption="Back"
+        handleCancel={handleCancelModalSubmitTest}
+        onOk={handleCancelModalSubmitTest}
+        fullWidthBtn={true}
+        buttonSize="medium"
+        icon={<IconCongrats />}
+        header={
+          <div className={`flex items-center justify-center`}>
+            Congratulations
+          </div>
+        }
+      >
+        {renderContentPopup(
+          JSON.parse(localStorage.getItem("category") as any),
+        )}
+      </SappModalV3>
     </>
-  )
-}
+  );
+};
 
-export default EventTestList
+export default EventTestList;

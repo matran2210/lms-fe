@@ -46,11 +46,9 @@
 }
 
 .warning .fas {
-  font-size: 7.5rem;
-  margin-bottom: 2rem;
+  @apply short:text-[4rem] text-[5.5rem] mb-8;
 }
 
 .warning p {
-  font-size: 2.5rem;
-  font-weight: 900;
+  @apply short:text-sm text-base font-black;
 }

@@ -1,3 +1,4 @@
+"use client";
 import {
   ReactFlowProvider,
   addEdge,
@@ -15,7 +16,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { MY_COURSES } from "@lms/core";
+import { AnswerItem, IAnswerMultipleChoice, MY_COURSES } from "@lms/core";
 import { IExhibitData } from "@lms/core";
 import CustomEdge from "./CustomEdge";
 import { CustomNode } from "./CustomNode";
@@ -24,10 +25,10 @@ import { runHighlight } from "@lms/utils";
 import clsx from "clsx";
 import { Grid } from "antd";
 import SappDivider from "../../base/divider/Divider";
-import { useRouter } from "next/router";
 import { HighlightableHTML } from "../../highlights";
 import { SappTitleSolution } from "../../common";
 import { EditorReader } from "../../base";
+import { useFeature } from "@lms/contexts";
 
 interface IProps {
   data: any;
@@ -108,8 +109,7 @@ const MatchQuiz = forwardRef(
     ref: ForwardedRef<any>,
   ) => {
 
-    console.log("corrects", corrects)
-    const router = useRouter();
+    const { params, query } = useFeature()
     const [edges, setEdges] = useState<Edge[]>([]);
     const flowRef = useRef<HTMLDivElement>(null);
     const [nodes, setNodes] = useState<MatchNode[]>([]);
@@ -320,7 +320,8 @@ const MatchQuiz = forwardRef(
           ? corrects.some(
               (c: any) =>
                 String(c?.id) === String(pair.question_id) &&
-                String(c?.answer?.id) === String(pair.answer_id),
+                (String(c?.answer?.id) === String(pair.answer_id) ||
+                  c?.answer_ids?.includes(pair?.answer_id)),
             )
           : false;
 
@@ -381,11 +382,15 @@ const MatchQuiz = forwardRef(
 
       const connectedIds = new Set<string>();
       const nodeColors = new Map<string, string>();
-
       edges.forEach((edge) => {
-        const isCorrect = correctMap.get(edge.source) === edge.target;
-        connectedIds.add(edge.source);
-        connectedIds.add(edge.target);
+        const answerCurrent = corrects?.find(
+          (item: { id: string }) => item?.id === edge?.source,
+        );
+        const isMultiAnswer = answerCurrent?.answer_ids?.includes(edge?.target);
+        const isCorrect =
+          correctMap.get(edge?.source) === edge?.target || isMultiAnswer;
+        connectedIds.add(edge?.source);
+        connectedIds.add(edge?.target);
 
         nodeColors.set(edge.source, isCorrect ? Color.Success : Color.Error);
         nodeColors.set(edge.target, isCorrect ? Color.Success : Color.Error);
@@ -488,20 +493,21 @@ const MatchQuiz = forwardRef(
     const correctFlow = useMemo(() => {
       if (!corrects || nodes.length === 0) return { nodes: [], edges: [] };
 
-      const allAnswersCorrect = (defaultAnswer?.length > 0) ? (defaultAnswer)?.every((pair: any) =>
-        corrects.some(
-          (c: any) =>
-            String(c.id) === String(pair.question_id) &&
-            String(c?.answer?.id) === String(pair.answer_id),
-        ),
-      ): false;
+      const allAnswersCorrect =
+        defaultAnswer?.length > 0
+          ? defaultAnswer?.every((pair: AnswerItem) =>
+              corrects?.some(
+                (c: IAnswerMultipleChoice) =>
+                  String(c?.id) === String(pair?.question_id) &&
+                  String(c?.answer?.id) === String(pair?.answer_id),
+              ),
+            )
+          : false;
 
       if (allAnswersCorrect) return { nodes: [], edges: [] };
 
       return generateCorrectFlow(corrects, nodes);
     }, [corrects, nodes, defaultAnswer]);
-
-    console.log('nodes', nodes)
 
     useEffect(() => {
       setCorrectEdges(correctFlow.edges);
@@ -619,7 +625,7 @@ const MatchQuiz = forwardRef(
             initialHTML={data?.question_content || ""}
             storageKey={
               storageKey ||
-              `${router.query.id}-${data?.qType}-question-${data?.id}`
+              `${params?.id || query.id}-${data?.qType}-question-${data?.id}`
             }
             className="sapp-questions sapp-editor-reader !mb-8"
           />

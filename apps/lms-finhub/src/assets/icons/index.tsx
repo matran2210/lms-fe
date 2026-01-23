@@ -245,7 +245,7 @@ import { ISVG } from '@lms/core'
 import 'tailwindcss/tailwind.css'
 
 export const CloseIcon = ({
-  className = 'stroke-bw-1 ',
+  className = 'stroke-gray-800 ',
 }: {
   className?: string
 }) => {

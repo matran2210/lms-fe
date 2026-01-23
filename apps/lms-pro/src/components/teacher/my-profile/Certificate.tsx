@@ -1,5 +1,4 @@
 import { useLayoutEffect, useState } from 'react'
-import { AuthAPI } from 'src/pages/api/profile'
 import PopUpCertificate from './popupCertificate'
 import { Divider, Table, TableProps } from 'antd'
 import { CertificateImg, Icon } from '@lms/assets'
@@ -8,6 +7,7 @@ import Image from 'next/image'
 import { sappFormatDate } from '@lms/utils'
 import clsx from 'clsx'
 import { HaveNoItemIcon } from '@lms/assets'
+import { AuthAPI } from 'src/api/profile'
 
 interface ICertificate {
   certificate: {
@@ -137,9 +137,9 @@ const Certificate = () => {
   return (
     <div className="mb-6 mt-0 md:mb-0 md:mt-8 lg:mt-10">
       {certificateData && !certificateData?.length ? (
-        <div className="flex min-h-352 flex-col items-center justify-center gap-8">
+        <div className="flex min-h-[352px]  flex-col items-center justify-center gap-8">
           <HaveNoItemIcon />
-          <div className="text-xl text-txt-secondary">
+          <div className="text-xl text-gray-400">
             You don&rsquo;t have any certificate!
           </div>
         </div>

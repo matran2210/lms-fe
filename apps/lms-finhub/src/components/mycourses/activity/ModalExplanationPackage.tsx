@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 
-import { SappModal } from '@lms/ui'
+import { PDFViewer, SappModal } from '@lms/ui'
 import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 // import '@sapp-fe/explanation-package/dist/index.css'
 import SappLoading from '@components/common/SappLoading'
 import { CloseIcon } from '@lms/assets'
-import { TestServiceAPI } from '@pages/api/test-api'
-import { ActivityAPI } from '../../../pages/api/activity/index'
+import { ActivityAPI } from 'src/api/activity'
+import { TestServiceAPI } from 'src/api/test-api'
 
 export enum QUESTION_LEVELS {
   FUNDAMENTAL = 'FUNDAMENTAL',
@@ -155,7 +155,7 @@ const ModalExplanationPackage = ({
             className="absolute right-6 top-[14px]  ml-auto cursor-pointer"
             onClick={() => setOpen(undefined)}
           >
-            <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+            <CloseIcon className="transform stroke-gray-800 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
           </div>
           <div className="mx-auto">
             <div className="mx-auto">
@@ -165,6 +165,15 @@ const ModalExplanationPackage = ({
                   activeQuestion={activeQuestion}
                   document_id={document_id}
                   handleDownload={handleDownload}
+                  renderPdf={({
+                    url,
+                    fileName,
+                  }: {
+                    url: string
+                    fileName?: string | undefined
+                  }) => {
+                    return <PDFViewer file={url} />
+                  }}
                 />
               ) : (
                 <SappLoading />

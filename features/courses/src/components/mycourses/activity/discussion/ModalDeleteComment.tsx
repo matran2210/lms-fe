@@ -1,11 +1,11 @@
-import { DeleteCommentIcon } from '@lms/assets'
-import { SappModalV3 } from '@lms/ui'
-import React, { Dispatch, SetStateAction } from 'react'
+import { DeleteCommentIcon } from "@lms/assets";
+import { SappModalV3 } from "@lms/ui";
+import React, { Dispatch, SetStateAction } from "react";
 
 interface IProps {
-  isDelete: boolean
-  setIsDelete: Dispatch<SetStateAction<boolean>>
-  onDeleteComment: () => void
+  isDelete: boolean;
+  setIsDelete: Dispatch<SetStateAction<boolean>>;
+  onDeleteComment: () => void;
 }
 
 const ModalDeleteComment = ({
@@ -20,8 +20,8 @@ const ModalDeleteComment = ({
           Are you sure you want to delete this comment?
         </span>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <SappModalV3
@@ -40,7 +40,7 @@ const ModalDeleteComment = ({
       headerClassName="text-center"
       isUnderLine
     />
-  )
-}
+  );
+};
 
-export default ModalDeleteComment
+export default ModalDeleteComment;

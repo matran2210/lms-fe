@@ -13,6 +13,7 @@
 @import "video.scss";
 @import "activity.scss";
 @import "test.scss";
+@import "animation.scss";
 @import "./course-3-level.scss";
 @import "./components/_calculator.scss";
 @import "./components/_event-repeat.scss";
@@ -259,7 +260,7 @@ img.Wirisformula {
   }
 
   hr {
-    @apply border-[#DCDDDD];
+    @apply border;
   }
 
   .sapp_overlay_video {
@@ -301,7 +302,7 @@ img.Wirisformula {
   height: 35px;
   margin-bottom: 4px;
 
-  @apply bg-[#F9F9F9] text-center text-base font-bold focus:border-primary focus:shadow-0 focus:outline-none;
+  @apply bg-gray-100 text-center text-base font-bold focus:border-primary focus:shadow-0 focus:outline-none;
 }
 
 .sapp-select--selectword-preview,
@@ -353,12 +354,12 @@ img.Wirisformula {
     background-image: none;
     text-align: center;
     padding: 0;
-    @apply bg-[#F9F9F9];
+    @apply bg-gray-100;
   }
 }
 
 .sapp-notched-container {
-  @apply relative z-10 flex h-full flex-1 items-center justify-start break-words border border-solid border-[#D8D8E5] bg-[#F1F1F1] p-5 ps-8;
+  @apply relative z-10 flex h-full flex-1 items-center justify-start break-words border border-solid border-gray-200 bg-gray-200 p-5 ps-8;
 
   &.dragging {
     @apply z-20;
@@ -373,11 +374,11 @@ img.Wirisformula {
   height: 30px;
   transform: translate(-50%, 0) rotate(-135deg);
   // clipPath: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply absolute z-0 border border-r-0 border-t-0 border-solid border-[#D8D8E5] bg-white;
+  @apply absolute z-0 border border-r-0 border-t-0 border-solid border-gray-200 bg-white;
 }
 
 .sapp-arrowed-container {
-  @apply relative flex h-auto w-[40%] items-center justify-start break-words border border-solid border-[#D8D8E5] bg-[#F1F1F1] p-5;
+  @apply relative flex h-auto w-[40%] items-center justify-start break-words border border-solid border-gray-200 bg-gray-200 p-5;
 }
 
 .sapp-arrowed-container:before {
@@ -389,7 +390,7 @@ img.Wirisformula {
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
   // clipPath: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply absolute z-0 border border-r-0 border-t-0 border-solid border-[#D8D8E5] bg-[#F1F1F1];
+  @apply absolute z-0 border border-r-0 border-t-0 border-solid border-gray-200 bg-gray-200;
 }
 
 .sapp-arrowed-container-corrects {
@@ -519,11 +520,11 @@ img.Wirisformula {
 
 .sapp-questions-essay {
   line-height: 27px;
-  @apply mb-4 font-sans text-lg font-semibold text-[#050505];
+  @apply mb-4 font-sans text-lg font-semibold text-gray-800;
 }
 
 .sapp-seprate-line-preview {
-  @apply -ms-6 mb-4 h-3 w-[calc(100%+48px)] border-b border-t border-b-[#F1F1F1] border-t-[#F1F1F1];
+  @apply -ms-6 mb-4 h-3 w-[calc(100%+48px)] border-b border-t border-b-gray-200 border-t-gray-200;
 }
 
 .sapp-upload-file-preview {
@@ -598,7 +599,7 @@ img.Wirisformula {
 .result {
   height: 60px;
   width: 100%;
-  @apply bg-[#DCDDDD];
+  @apply bg-divider;
 }
 
 .result p {
@@ -612,7 +613,7 @@ img.Wirisformula {
 
 .button {
   display: block;
-  @apply flex-1 bg-[#DCDDDD];
+  @apply flex-1 bg-divider;
 }
 
 .stream-player__progress-bar {
@@ -682,7 +683,7 @@ img.Wirisformula {
 
   ::after {
     content: "";
-    @apply bg-[#F1F1F1];
+    @apply bg-gray-200;
     // background: white;
     opacity: 0.6;
     width: calc(100% - 2px);
@@ -693,7 +694,7 @@ img.Wirisformula {
 }
 
 .sapp-separateLine :not(:last-child) {
-  @apply border-b border-[#F9F9F9];
+  @apply border-b border-gray-100;
 }
 
 .active {
@@ -821,6 +822,7 @@ textarea.is-invalid:focus {
   }
 }
 .sapp-modal.ant-modal {
+  will-change: transform, opacity;
   @apply max-w-[calc(100vw-2rem)] md:max-w-[calc(100vw-1rem)];
   .ant-modal-content {
     @apply rounded-2xl p-6 md:p-10;
@@ -854,7 +856,7 @@ textarea.is-invalid:focus {
 }
 
 .sapp-modal .ant-modal-content .ant-modal-header .ant-modal-title {
-  @apply text-4xl font-semibold text-[#050505];
+  @apply text-4xl font-semibold text-gray-800;
 }
 
 .ant-modal-root .ant-modal-mask {
@@ -932,7 +934,7 @@ $focus: (
 .secondary {
   color: #404041;
   transition: 0.25s;
-  @apply bg-[#F1F1F1];
+  @apply bg-gray-200;
 
   &:hover {
     @apply text-white;
@@ -994,7 +996,7 @@ textarea:focus {
 }
 
 textarea {
-  @apply border-[1px] border-[#DCDDDD];
+  @apply border-[1px] border;
 }
 
 .button-icon {
@@ -1044,7 +1046,7 @@ p a {
 
 .sapp-pinned-noti-header {
   padding: 12px 24px 12px 233px;
-  @apply bg-[#050505];
+  @apply bg-gray-800;
 }
 
 @keyframes moveDown {
@@ -1183,7 +1185,7 @@ p a {
 }
 
 .content-course div strong {
-  @apply font-medium text-[#050505];
+  @apply font-medium text-gray-800;
 }
 
 .sapp-custom--modal .ant-modal-content {
@@ -1209,7 +1211,7 @@ p a {
 
 .loadingOverlay {
   transform: translate(-50%, -50%);
-  @apply absolute left-[50%] top-[50%] z-10 rounded-[5px] p-2.5 text-[#050505];
+  @apply absolute left-[50%] top-[50%] z-10 rounded-[5px] p-2.5 text-gray-800;
 }
 
 .hotline ins {
@@ -1315,8 +1317,9 @@ td.py-5.px-3.sapp-table-quiz {
 }
 
 .pined-noti p {
-  @apply mb-0;
+  @apply my-0;
 }
+
 .ant-menu {
   @apply bg-[#091D37];
 }
@@ -1410,7 +1413,7 @@ fieldset.form-columns-1 .hs-input {
 .hs_khu_v_c.hs-khu_v_c {
   label {
     span {
-      @apply text-sm font-medium text-[#050505];
+      @apply text-sm font-medium text-gray-800;
     }
 
     .hs-form-required {
@@ -1488,7 +1491,7 @@ select:focus {
 }
 
 .sapp-tab-button .secondary {
-  @apply bg-gray-4 text-bw-15;
+  @apply bg-gray-100 text-gray-800;
 }
 
 [type="search"]:focus {
@@ -1532,7 +1535,7 @@ mark {
 
 .style-modal-result {
   .ant-modal-content {
-    @apply bg-gray-canvas;
+    @apply bg-gray-100;
   }
 }
 
@@ -1583,7 +1586,7 @@ mark {
   .ant-modal-content {
     @apply p-0;
     .ant-modal-header {
-      @apply my-0 py-5 border-b border-solid border-b-gray-5;
+      @apply my-0 py-5 border-b border-solid border-b-gray-400;
       .ant-modal-title {
         @apply text-lg font-semibold text-gray-800 mx-5;
       }
@@ -1598,7 +1601,7 @@ mark {
   .ant-modal-content {
     @apply p-0;
     .ant-modal-header {
-      @apply my-0 py-5 border-b border-solid border-b-gray-5;
+      @apply my-0 py-5 border-b border-solid border-b-gray-400;
       .ant-modal-title {
         @apply text-lg font-semibold text-gray-800 mx-5;
       }
@@ -1607,4 +1610,33 @@ mark {
       @apply mx-10 py-10;
     }
   }
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.sapp-action-popover {
+  .ant-popover-inner {
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .ant-popover-arrow {
+    display: none !important;
+  }
+}
+
+.flag {
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity 200ms ease-out,
+    transform 200ms ease-out;
 }

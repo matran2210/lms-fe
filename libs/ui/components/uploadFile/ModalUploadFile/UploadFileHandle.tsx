@@ -1,3 +1,4 @@
+"use client"
 import { Progress } from "antd";
 import { RcFile, UploadChangeParam, UploadFile } from "antd/es/upload";
 import dynamic from "next/dynamic";
@@ -87,7 +88,7 @@ const UploadFileHandle = ({
     return (
       <>
         <div className="sapp-upload-file-progress mt-2 items-center">
-          <div className="w-100 sapp-upload-file-content">
+          <div className="w-full sapp-upload-file-content">
             <div className="sapp-upload-file-name">
               {_file?.name ?? _file?.originFileObj?.name}
             </div>

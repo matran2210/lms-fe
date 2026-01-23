@@ -1,9 +1,9 @@
 import { formatTime } from '@components/common/timer'
 import { SelectArrow } from '@components/courses/icons'
 import { formatNumber } from '@lms/utils'
-import { ClassAPI } from '@pages/api/class'
 import { Select } from 'antd'
 import { useEffect, useState } from 'react'
+import { ClassAPI } from 'src/api/class'
 import { IAttempt, ICourseAttemptProps } from 'src/type/courses-3-level'
 
 export default function SectionAttempts({
@@ -46,8 +46,8 @@ export default function SectionAttempts({
   }, [])
 
   return (
-    <div className="flex max-w-[265px] gap-8 border-l border-gray-2 pl-4 md:ml-5 md:justify-between">
-      <div className="space-y-2 text-sm leading-5.5 text-bw-15 md:space-y-4 md:text-base md:leading-6">
+    <div className="flex max-w-[265px] gap-8 border-l border-secondary-100 pl-4 md:ml-5 md:justify-between">
+      <div className="space-y-2 text-sm leading-5.5 text-gray-800 md:space-y-4 md:text-base md:leading-6">
         <p>Time Spent:</p>
         <p>Latest Result:</p>
         {hasAttempts ? (
@@ -78,7 +78,7 @@ export default function SectionAttempts({
           <p>Attempt :</p>
         )}
       </div>
-      <div className="space-y-2 text-sm font-medium leading-5.5 text-bw-15 md:space-y-4 md:text-base md:leading-6">
+      <div className="space-y-2 text-sm font-medium leading-5.5 text-gray-800 md:space-y-4 md:text-base md:leading-6">
         <p>
           {!!section?.quiz?.attempt?.total_attempt_time
             ? formatTime(section?.quiz?.attempt?.total_attempt_time)
