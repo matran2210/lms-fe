@@ -5,6 +5,7 @@ import clsx from "clsx";
 import React from "react";
 import Marquee from "react-fast-marquee";
 import { EditorReader } from "../../components/base";
+import { isMatchedPathPinNoti } from "@lms/utils";
 
 function PinnedNotifications() {
   const { pathname } = useFeature();
@@ -18,17 +19,11 @@ function PinnedNotifications() {
 
   const showPinNoti = pinnedNotifications?.data?.content?.length < 200;
 
-  const isMatchedPath = (path: string) =>
-    /^\/courses$|^\/[^/]+$|^\/courses\/[^/]+\/section\/[^/]+$|^\/courses\/[^/]+\/activity\/[^/]+$|^\/courses\/my-course\/[^/]+$/.test(
-      path,
-    )
-
   return (
     <React.Fragment>
-      {isMatchedPath(pathname ?? '') &&
+      {isMatchedPathPinNoti(pathname ?? '') &&
         openPinned &&
         pinnedNotifications?.data?.content && (
-          <React.Fragment>
             <div
               className={`sticky top-0 z-50 h-[60px] w-full bg-secondary-600 text-xs font-medium text-white md:text-base`}
             >
@@ -70,7 +65,6 @@ function PinnedNotifications() {
                 </Col>
               </Row>
             </div>
-          </React.Fragment>
         )}
     </React.Fragment>
   );

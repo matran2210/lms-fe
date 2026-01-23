@@ -291,45 +291,45 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <AntConfigProvider>
       <Provider store={store}>
-        <PinnedNotifyProvider
-          router={router}
-          api={{
-            getPinnedNotifications: UserApi.getPinnedNotifications,
+        <FeatureProvider
+          value={{
+            courseApi: CoursesAPI,
+            questionApi: QuestionAPI,
+            uploadApi: UploadAPI,
+            userApi: UserApi,
+            notificationApi: NotificationAPI,
+            authApi: AuthAPI,
+            classApi: ClassAPI,
+            activityApi: ActivityAPI,
+            courseActivityApi: CourseActivityApi,
+            entranceTestApi: EntranceTestAPI,
+            eventTestApi: EventTestAPI,
+            calendarApi: CalendarApi,
+            myProfileApi: MyProfileAPI,
+            submitQuizTest: TestServiceAPI.submitQuizTest,
+            dashboardApi: DashboardAPI,
+            authManager: new AuthenticationManager(),
+            pageLink: PageLink,
+            menuItems: MENU_ITEMS,
+            menuItemsEvent: MENU_ITEMS_EVENT,
+            menuBottom: MENU_BOTTOM,
+            router: router,
+            pathname,
+            params,
+            query: Object.fromEntries(query.entries()),
+            fetcher: fetcher,
+            videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
+            testServiceApi: TestServiceAPI,
+            certificateApi: {
+              uploadImageToLinkedIn,
+            },
+            uploadImageToLinkedIn: uploadImageToLinkedIn,
           }}
         >
-          <FeatureProvider
-            value={{
-              courseApi: CoursesAPI,
-              questionApi: QuestionAPI,
-              uploadApi: UploadAPI,
-              userApi: UserApi,
-              notificationApi: NotificationAPI,
-              authApi: AuthAPI,
-              classApi: ClassAPI,
-              activityApi: ActivityAPI,
-              courseActivityApi: CourseActivityApi,
-              entranceTestApi: EntranceTestAPI,
-              eventTestApi: EventTestAPI,
-              calendarApi: CalendarApi,
-              myProfileApi: MyProfileAPI,
-              submitQuizTest: TestServiceAPI.submitQuizTest,
-              dashboardApi: DashboardAPI,
-              authManager: new AuthenticationManager(),
-              pageLink: PageLink,
-              menuItems: MENU_ITEMS,
-              menuItemsEvent: MENU_ITEMS_EVENT,
-              menuBottom: MENU_BOTTOM,
-              router: router,
-              pathname,
-              params,
-              query: Object.fromEntries(query.entries()),
-              fetcher: fetcher,
-              videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
-              testServiceApi: TestServiceAPI,
-              certificateApi: {
-                uploadImageToLinkedIn,
-              },
-              uploadImageToLinkedIn: uploadImageToLinkedIn,
+          <PinnedNotifyProvider
+            router={router}
+            api={{
+              getPinnedNotifications: UserApi.getPinnedNotifications,
             }}
           >
             <CourseProvider
@@ -352,9 +352,7 @@ export function Providers({ children }: { children: ReactNode }) {
                       <SappConfirmDialogContainer />
                       <RouteGuard>
                         <ConfigProvider>
-                          <div className="relative">
-                            <PinnedNotifications />
-                          </div>
+                          <PinnedNotifications />
                           <AntdApp>{children}</AntdApp>
                           <>
                             {showBackToTop && <BackToTop />}
@@ -371,8 +369,8 @@ export function Providers({ children }: { children: ReactNode }) {
                 </QueryClientProvider>
               </CourseNoteProvider>
             </CourseProvider>
-          </FeatureProvider>
-        </PinnedNotifyProvider>
+          </PinnedNotifyProvider>
+        </FeatureProvider>
       </Provider>
     </AntConfigProvider>
   )
