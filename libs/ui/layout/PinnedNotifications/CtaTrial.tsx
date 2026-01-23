@@ -12,28 +12,9 @@ import PinnedNotificationsV2 from './PinnedNotificationsV2'
 type CourseRouteType = 'LIST' | 'DETAIL' | 'SECTION' | 'ACTIVITY' | 'OTHER'
 
 export default function CtaTrial() {
-  const { pageLink, pathname } = useFeature()
+  const { pathname } = useFeature()
   const { setShowPinnedTrial, setOpenPopupCTA } = useCourseContext()
   const { openPinned, setOpenPinned } = usePinnedNotifyContext()
-
-  const ENABLED_PINNED_PAGES = useMemo(
-    () => [
-      pageLink.TEACHER_COURSE_DETAIL_ID,
-      pageLink.TEACHER_COURSE_PART_DETAIL,
-      pageLink.TEACHER_COURSE_ACTIVITY,
-    ],
-    [pageLink],
-  )
-
-  const ENABLED_PINNED_NOTI_PAGES = useMemo(
-    () => [
-      pageLink.COURSES,
-      pageLink.TEACHERS,
-      pageLink.USERPAGE,
-      ...ENABLED_PINNED_PAGES,
-    ],
-    [pageLink, ENABLED_PINNED_PAGES],
-  )
 
   const courseRouteType: CourseRouteType = useMemo(() => {
     if (/^\/courses\/my-course\/[^/]+$/.test(pathname as string)) return 'DETAIL'
@@ -47,9 +28,6 @@ export default function CtaTrial() {
     courseRouteType === 'DETAIL' ||
     courseRouteType === 'SECTION' ||
     courseRouteType === 'ACTIVITY'
-
-  const isEnablePinnedNotiPages =
-    ENABLED_PINNED_NOTI_PAGES.includes(pathname as string) || isCourseDetailLike
 
   useLayoutEffect(() => {
     const shouldShow =
@@ -76,7 +54,7 @@ export default function CtaTrial() {
 
   return (
     <>
-      {isEnablePinnedNotiPages && openPinned && (
+      {isCourseDetailLike && openPinned && (
         <PinnedNotificationsV2
           bgColor="bg-info-100"
           borderColor="border-info"
