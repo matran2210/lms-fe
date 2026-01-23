@@ -152,6 +152,12 @@ export function getCourseContentSubContext(pathname: string) {
 
   return null;
 }
+
+export const isMatchedPathPinNoti = (path: string) =>
+    /^\/courses$|^\/[^/]+$|^\/courses\/[^/]+\/section\/[^/]+$|^\/courses\/[^/]+\/activity\/[^/]+$|^\/courses\/my-course\/[^/]+$/.test(
+      path,
+)
+
 export * from "./timer";
 export * from "./date";
 export * from "./quiz-test";
