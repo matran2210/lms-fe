@@ -35,3 +35,4 @@ export * from "./collapse/index";
 export * from "./divider/index";
 export { default as Popover } from "./popover/Popover";
 export { default as TextPreview } from "./text-preview/index";
+export { default as ImageRenderFromHtml } from "./image/ImageRenderFromHtml";

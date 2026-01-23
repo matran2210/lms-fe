@@ -9,7 +9,7 @@ import { sappFormatDate } from "@lms/utils";
 import clsx from "clsx";
 import { useAppSelector, useFeature, userReducer } from "@lms/contexts";
 import PopUpCertificate from "./popupCertificate/PopupCertificare";
-import { ImageCertificateRenderFromHtml } from "./CertificateDetail";
+import { ImageRenderFromHtml } from "@lms/ui";
 
 interface ICertificate {
   certificate: {
@@ -141,7 +141,7 @@ const Certificate = () => {
         >
           {record?.certificate?.html_template ? (
             <div>
-              <ImageCertificateRenderFromHtml
+              <ImageRenderFromHtml
                 id={`desktop-${record?.certificate_id}`}
                 html={record.certificate.html_template}
                 name={detail?.full_name || ''}
@@ -319,7 +319,7 @@ const CertificateItem = ({
         }
       >
         {record?.certificate?.html_template ? (
-          <ImageCertificateRenderFromHtml
+          <ImageRenderFromHtml
             id={`mobile-${record?.certificate_id}`}
             html={record.certificate.html_template}
             previewWidth={80}

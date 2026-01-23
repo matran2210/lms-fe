@@ -8,7 +8,7 @@ import CertificateCard from "./CertificateCard";
 import ModalShareToLinkedin from "./ModalShareToLinkedin";
 import { ICertificate } from "@lms/core";
 import { Divider } from "antd";
-import { ImageCertificateRenderFromHtml } from "./index";
+import { ImageRenderFromHtml } from "@lms/ui";
 import { useDownloadImage } from "@lms/hooks";
 import clsx from "clsx";
 
@@ -49,7 +49,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
       <div className="flex w-full h-full items-center gap-12 xl:gap-20">
         <div id="certificate-container-andrew" className="flex h-full w-[55%] items-center justify-center">
           {certificate?.certificate?.html_template ? (
-            <ImageCertificateRenderFromHtml id={`vertical-${certificate?.id}`} html={certificate.certificate.html_template} previewWidth={500} previewHeight={700} name={certificate.user.detail.full_name}/>
+            <ImageRenderFromHtml id={`vertical-${certificate?.id}`} html={certificate.certificate.html_template} previewWidth={500} previewHeight={700} name={certificate.user.detail.full_name}/>
           ) : (
             <CertificateImg
               size={800}

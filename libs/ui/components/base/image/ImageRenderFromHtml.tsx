@@ -9,7 +9,7 @@ interface IProps {
   id?: string;
 }
 
-const ImageCertificateRenderFromHtml = ({
+const ImageRenderFromHtml = ({
   html,
   previewWidth = 50,
   previewHeight = 50,
@@ -82,4 +82,4 @@ const ImageCertificateRenderFromHtml = ({
   );
 };
 
-export default ImageCertificateRenderFromHtml;
+export default ImageRenderFromHtml;

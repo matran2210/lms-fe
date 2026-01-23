@@ -8,7 +8,7 @@ import clsx from 'clsx'
 import { HaveNoItemIcon } from '@lms/assets'
 import { AuthAPI } from 'src/api/profile'
 import { useAppSelector, userReducer } from '@lms/contexts'
-import { ImageCertificateRenderFromHtml } from '@lms/feature-user'
+import { ImageRenderFromHtml } from '@lms/ui'
 
 interface ICertificate {
   certificate: {
@@ -87,7 +87,7 @@ const Certificate = () => {
           }
         >
           {record?.certificate?.html_template ? (
-            <ImageCertificateRenderFromHtml
+            <ImageRenderFromHtml
               id={`teacher-desktop-${record?.certificate_id}`}
               html={record?.certificate?.html_template}
               previewWidth={80}
@@ -261,7 +261,7 @@ const CertificateItem = ({
         }
       >
         {record?.certificate?.html_template ? (
-          <ImageCertificateRenderFromHtml
+          <ImageRenderFromHtml
             id={`teacher-mobile-${record?.certificate_id}`}
             html={record.certificate.html_template}
             previewWidth={80}

@@ -5,7 +5,7 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import CertificateCard from "./CertificateCard";
 import { ICertificate } from "@lms/core";
-import { ImageCertificateRenderFromHtml } from ".";
+import { ImageRenderFromHtml } from "@lms/ui";
 import { useDownloadImage } from "@lms/hooks";
 import clsx from "clsx";
 
@@ -76,7 +76,7 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
           className="h-full mb-6 flex w-full items-center justify-center overflow-hidden md:mb-0 md:flex-1"
         >
           {certificate?.certificate?.html_template ? (
-            <ImageCertificateRenderFromHtml id={`horizontal-${certificate?.id}`} html={certificate.certificate.html_template} previewWidth={previewWidth} previewHeight={previewHeight} name={certificate.user.detail.full_name}/>
+            <ImageRenderFromHtml id={`horizontal-${certificate?.id}`} html={certificate.certificate.html_template} previewWidth={previewWidth} previewHeight={previewHeight} name={certificate.user.detail.full_name}/>
           ) : (
             <CertificateImg
               size={400}
