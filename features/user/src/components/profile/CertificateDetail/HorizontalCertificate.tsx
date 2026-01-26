@@ -1,4 +1,4 @@
-import { CertificateImg, Icon, SappLogoImage } from "@lms/assets";
+import { CertificateImg, Icon, LoadingButtonAnimation, SappLogoImage } from "@lms/assets";
 import { ButtonPrimary, ClickToCopyButton } from "@lms/ui";
 import { Button } from "antd";
 import Image from "next/image";
@@ -100,13 +100,12 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
             <div className="flex w-full items-stretch justify-center gap-4">
               <ButtonPrimary
                 size="medium"
-                icon={<Icon type="download" />}
+                icon={<div className="size-[22px]">{loading ? <LoadingButtonAnimation /> : <Icon type="download" />}</div>}
                 iconPosition="end"
                 onClick={handleDownload}
                 className={clsx("px-[37.5px] py-2 sm:!px-[29px]", {
                   "opacity-50 !cursor-not-allowed": loading,
                 })}
-                loading={loading}
               >
                 Download
               </ButtonPrimary>
