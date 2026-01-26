@@ -15,6 +15,7 @@ import {
 } from '@lms/core'
 import { deleteCookie, getCookie, setCookie } from '@lms/utils'
 import { apiURL } from 'src/constants'
+import { useMemo } from 'react'
 
 export const getBaseUrl = () => {
   if (typeof window !== 'undefined') {
@@ -40,12 +41,11 @@ export const fetcher = (url: string, config: AxiosRequestConfig = {}) =>
 // Request Interceptor
 request.interceptors.request.use(async (config: any) => {
   const authenticationManager = new AuthenticationManager()
-const pathname = typeof window !== 'undefined' ? window.location.pathname : ''
-  const checkRouteCertificate = [
-    ENTRANCE_TEST_RESULT,
-    CERTIFICATE_DETAIL,
-    ENTRANCE_TEST_TABLE_RESULT,
-  ].includes(pathname)
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : ''
+  const checkRouteCertificate =
+    /^\/entrance-test\/test-result\/[^/]+$/.test(pathname) ||
+    /^\/entrance-test\/table-result\/[^/]+$/.test(pathname) ||
+    /^\/certificates\/[^/]+$/.test(pathname)
 
   if (authenticationManager.getToken() || checkRouteCertificate) {
     config.headers = {
@@ -162,13 +162,11 @@ const toastExceptions = [
 ]
 
 // Map exceptions
-const formattedExceptions: { [key: string]: string } = ExceptionErrorCode.reduce(
-  (acc: any, { code, message }) => {
+const formattedExceptions: { [key: string]: string } =
+  ExceptionErrorCode.reduce((acc: any, { code, message }) => {
     acc[code] = message
     return acc
-  },
-  {},
-)
+  }, {})
 
 // Global error handler
 request.interceptors.response.use(
