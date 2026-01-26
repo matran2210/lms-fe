@@ -1,16 +1,13 @@
-import { ButtonPrimary } from "@lms/ui";
-import { HookFormCheckBox } from "@lms/ui";
-import { SappModalV3 } from "@lms/ui";
-import { HookFormTextAreaV2 } from "@lms/ui";
+import { useFeature } from "@lms/contexts";
 import { ICertificate } from "@lms/core";
+import { useDownloadImage } from "@lms/hooks";
+import { ButtonPrimary, HookFormCheckBox, HookFormTextAreaV2, SappModalV3 } from "@lms/ui";
 import { openLinkedInPopup } from "@lms/utils";
 import { Image } from "antd";
 import dayjs from "dayjs";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useFeature } from "@lms/contexts";
-import { useDownloadImage } from "@lms/hooks";
 
 interface IProps {
   open: boolean;
@@ -26,7 +23,7 @@ const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
   const { certificateApi } = useFeature();
   const [loading, setLoading] = useState(false);
   const certId = certificate?.id || "";
-  const certURL = certificate?.certificate_url || `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`;
+  const certURL = certificate?.certificate_url || `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}?isShareLinkedin=true`;
   const shareUrl = encodeURIComponent(certURL);
   const SAPP_LINKEDIN_ID = 15236709;
   const linkedInUrl =

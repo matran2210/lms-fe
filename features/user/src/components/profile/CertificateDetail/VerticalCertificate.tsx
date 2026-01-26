@@ -1,16 +1,16 @@
 "use client"
 import { CertificateImg, CopyIcon, Icon, SappLogoImage } from "@lms/assets";
-import { ButtonPrimary, ClickToCopyButton } from "@lms/ui";
+import { useFeature } from "@lms/contexts";
+import { ICertificate } from "@lms/core";
+import { useDownloadImage } from "@lms/hooks";
+import { ButtonPrimary, ClickToCopyButton, ImageRenderFromHtml } from "@lms/ui";
+import { Divider } from "antd";
+import clsx from "clsx";
 import Image from "next/image";
 import React, { useState } from "react";
 import { LinkedInShareButton } from "./ButtonShareLinkedin";
 import CertificateCard from "./CertificateCard";
 import ModalShareToLinkedin from "./ModalShareToLinkedin";
-import { ICertificate } from "@lms/core";
-import { Divider } from "antd";
-import { ImageRenderFromHtml } from "@lms/ui";
-import { useDownloadImage } from "@lms/hooks";
-import clsx from "clsx";
 
 interface CertificateVerticalProps {
   certificate?: ICertificate;
@@ -21,6 +21,8 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
   certificate,
   issuedBy = "SAPP Academy",
 }) => {
+  const { query } = useFeature();
+  const isShareLinkedin = !!query?.isShareLinkedin
   const [openModalShare, setOpenModalShare] = useState(false);
   const onOpenModalShare = () => setOpenModalShare(true);
   const onCloseModalShare = () => setOpenModalShare(false);
@@ -77,7 +79,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
                 Congratulation!
               </div>
               <div className="text-center">
-                <p>Congratulations, you have achieved the</p>
+                <p>Congratulations, {isShareLinkedin ? certificate?.user?.detail?.full_name : "you"} have achieved the</p>
                 <p className="font-bold">{certificate?.course?.name}</p>
                 <p>issued by {issuedBy}!</p>
               </div>
