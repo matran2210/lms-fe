@@ -1,5 +1,5 @@
 "use client"
-import { CertificateImg, CopyIcon, Icon, SappLogoImage } from "@lms/assets";
+import { CertificateImg, CopyIcon, Icon, LoadingButtonAnimation, SappLogoImage } from "@lms/assets";
 import { ButtonPrimary, ClickToCopyButton } from "@lms/ui";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -85,13 +85,12 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
             <div className="flex items-center justify-center">
               <ButtonPrimary
                 size="medium"
-                icon={<Icon type="download" />}
+                icon={<div className="size-[22px]">{loading ? <LoadingButtonAnimation /> : <Icon type="download" />}</div>}
                 iconPosition="end"
                 onClick={handleDownload}
                 className={clsx("!px-[29px]", {
                   "opacity-50 !cursor-not-allowed": loading,
                 })}
-                loading={loading}
               >
                 Download
               </ButtonPrimary>
