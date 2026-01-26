@@ -21,6 +21,7 @@ import {
   DISPLAY_TYPE,
   EXHIBIT_TEXT_REPLACE,
   GRADING_METHOD,
+  IDragDropAnswer,
   IExhibit,
   PROGRAM,
   QUESTION_TYPES,
@@ -150,7 +151,12 @@ const TestDetail = () => {
   const { questions } = useGetQuestionTabs(id as string)
   const type = query.type
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
-  const [currentDragDrop, setCurrentDragDrop] = useState<any>([])
+  const [currentDragDrop, setCurrentDragDrop] = useState<
+    {
+      currentTabId: string
+      drag_drop_answers: IDragDropAnswer[]
+    }[]
+  >([])
   const { control, watch, getValues, setValue, resetField } = useForm()
   const { control: controlFilter, watch: watchFilter } = useForm()
   const {
@@ -701,8 +707,9 @@ const TestDetail = () => {
               corrects: {
                 answers: handleMultipleCorrectAnswer(
                   objTab?.data?.drag_drop_answers ||
-                    currentDragDrop?.find((item: any) => item?.currentTabId === objTab?.id)
-                      ?.drag_drop_answers,
+                    currentDragDrop?.find(
+                      (item: any) => item?.currentTabId === objTab?.id,
+                    )?.drag_drop_answers,
                   objTab?.answer,
                 ),
                 corrects: objTab?.corrects?.corrects,
@@ -1510,7 +1517,18 @@ const TestDetail = () => {
         currentTabId: currentTabContent?.id,
         drag_drop_answers: res?.data?.[0]?.drag_drop_answers,
       }
-      setCurrentDragDrop([...currentDragDrop, dragDropCurrentTemp])
+
+      setCurrentDragDrop((prev) => {
+        const exists = prev.some(
+          (item) => item.currentTabId === dragDropCurrentTemp.currentTabId,
+        )
+
+        if (!exists) {
+          return [...prev, dragDropCurrentTemp]
+        }
+
+        return prev
+      })
     }
     return {
       corrects: corrects,
