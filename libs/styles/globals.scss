@@ -1320,6 +1320,10 @@ td.py-5.px-3.sapp-table-quiz {
   @apply my-0;
 }
 
+.pined-noti p a {
+  @apply text-primary;
+}
+
 .ant-menu {
   @apply bg-[#091D37];
 }
