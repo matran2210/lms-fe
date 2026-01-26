@@ -715,7 +715,7 @@ const TestDetail = () => {
       }
     } else return undefined
   }, [currentPage, tabs, answersSubmitted, essayData, currentDragDrop])
-  console.log('currentTabContent', currentTabContent)
+
   const remainingTimeinSeconds = quizDetail?.quiz_timed
     ? (dayjs(
         dayjs(new Date(quizAttempt.created_at ?? '')).add(
@@ -3477,12 +3477,6 @@ const TestDetail = () => {
                           `/courses/test/test-result/${QuizResultId}`,
                         )
                       }
-                      // } else {
-                      //   console.log('back backs')
-                      //   router.back()
-                      //   setScoreQuestion(scoreFinalTest)
-                      //   setSubmitTest(true)
-                      // }
                     }
                     trackGAEvent('Click Button Submit Time Out Test')
                   })
