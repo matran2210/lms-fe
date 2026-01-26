@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react'
+import { useLayoutEffect, useMemo, useState } from 'react'
 import PopUpCertificate from './popupCertificate'
 import { Divider, Table, TableProps } from 'antd'
 import { CertificateImg, Icon, LoadingButtonAnimation } from '@lms/assets'
@@ -28,6 +28,39 @@ interface ICertificate {
   user_id: string
   pass_point: number
   received_times: string
+}
+
+const CertificatePreview = ({
+  record,
+  userName,
+  variant = 'desktop',
+}: {
+  record: ICertificate
+  userName?: string
+  variant?: 'desktop' | 'mobile'
+}) => {
+  const isMobile = variant === 'mobile'
+
+  const certificateView = useMemo(() => {
+    if (record?.certificate?.html_template) {
+      return (
+        <ImageRenderFromHtml
+          id={`${variant}-${record?.certificate_id}`}
+          html={record.certificate.html_template}
+          name={userName || ''}
+          {...(isMobile ? { previewWidth: 80, previewHeight: 80 } : {})}
+        />
+      )
+    }
+    return (
+      <CertificateImg
+        {...(isMobile ? { size: 80 } : {})}
+        className="border-none text-[#A1A1A1] group-hover:text-primary"
+      />
+    )
+  }, [isMobile, record?.certificate?.html_template])
+
+  return certificateView
 }
 
 const Certificate = () => {
@@ -86,16 +119,11 @@ const Certificate = () => {
             )
           }
         >
-          {record?.certificate?.html_template ? (
-            <ImageRenderFromHtml
-              id={`teacher-desktop-${record?.certificate_id}`}
-              html={record?.certificate?.html_template}
-              previewWidth={80}
-              previewHeight={80}
-            />
-          ) : (
-            <CertificateImg className="border-none text-[#A1A1A1] group-hover:text-primary" />
-          )}
+          <CertificatePreview
+            record={record}
+            userName={detail?.full_name || ''}
+            variant="desktop"
+          />
           <span className="font-semibold group-hover:text-primary">
             {record?.course?.name}
           </span>
@@ -260,19 +288,11 @@ const CertificateItem = ({
           )
         }
       >
-        {record?.certificate?.html_template ? (
-          <ImageRenderFromHtml
-            id={`teacher-mobile-${record?.certificate_id}`}
-            html={record.certificate.html_template}
-            previewWidth={80}
-            previewHeight={80}
-          />
-        ) : (
-          <CertificateImg
-            size={80}
-            className="border-none text-[#A1A1A1] group-hover:text-primary"
-          />
-        )}
+        <CertificatePreview
+          record={record}
+          userName={detail?.full_name || ''}
+          variant="mobile"
+        />
         <span className="text-base font-medium group-hover:text-primary md:text-lg md:font-semibold">
           {record?.course?.name}
         </span>

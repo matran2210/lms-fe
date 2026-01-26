@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useLayoutEffect, useState } from 'react'
 import { Divider, Table, TableProps } from 'antd'
 import { CertificateImg, Icon, NoCertificationIcon, LoadingButtonAnimation } from '@lms/assets'
@@ -86,6 +86,39 @@ const CertificateTableSkeleton = ({ rows = 6 }: { rows?: number }) => {
   );
 };
 
+const CertificatePreview = ({
+  record,
+  userName,
+  variant = "desktop",
+}: {
+  record: ICertificate;
+  userName?: string;
+  variant?: "desktop" | "mobile";
+}) => {
+  const isMobile = variant === "mobile";
+
+  const certificateView = useMemo(() => {
+    if (record?.certificate?.html_template) {
+      return (
+        <ImageRenderFromHtml
+          id={`${variant}-${record?.certificate_id}`}
+          html={record.certificate.html_template}
+          name={userName || ''}
+          {...(isMobile ? { previewWidth: 80, previewHeight: 80 } : {})}
+        />
+      );
+    }
+    return (
+      <CertificateImg
+        {...(isMobile ? { size: 80 } : {})}
+        className="border-none text-[#A1A1A1] group-hover:text-primary"
+      />
+    );
+  }, [isMobile, record?.certificate?.html_template]);
+
+  return certificateView;
+};
+
 const Certificate = () => {
   const { detail } = useAppSelector(userReducer).user;
   const { authApi } = useFeature();
@@ -139,17 +172,7 @@ const Certificate = () => {
             )
           }
         >
-          {record?.certificate?.html_template ? (
-            <div>
-              <ImageRenderFromHtml
-                id={`desktop-${record?.certificate_id}`}
-                html={record.certificate.html_template}
-                name={detail?.full_name || ''}
-              />
-            </div>
-          ) : (
-            <CertificateImg className="border-none text-[#A1A1A1] group-hover:text-primary" />
-          )}
+          <CertificatePreview record={record} userName={detail?.full_name || ''} variant="desktop" />
           <span className="text-base font-medium group-hover:text-primary">
             {record?.course?.name}
           </span>
@@ -318,20 +341,7 @@ const CertificateItem = ({
           )
         }
       >
-        {record?.certificate?.html_template ? (
-          <ImageRenderFromHtml
-            id={`mobile-${record?.certificate_id}`}
-            html={record.certificate.html_template}
-            previewWidth={80}
-            previewHeight={80}
-            name={detail?.full_name || ''}
-          />
-        ) : (
-          <CertificateImg
-            size={80}
-            className="border-none text-[#A1A1A1] group-hover:text-primary"
-          />
-        )}
+        <CertificatePreview record={record} userName={detail?.full_name || ''} variant="mobile" />
         <span className="text-base font-medium group-hover:text-primary md:text-lg md:font-semibold">
           {record?.course?.name}
         </span>

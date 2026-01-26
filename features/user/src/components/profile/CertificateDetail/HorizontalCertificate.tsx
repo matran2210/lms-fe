@@ -2,7 +2,7 @@ import { CertificateImg, Icon, LoadingButtonAnimation, SappLogoImage } from "@lm
 import { ButtonPrimary, ClickToCopyButton } from "@lms/ui";
 import { Button } from "antd";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import CertificateCard from "./CertificateCard";
 import { ICertificate } from "@lms/core";
 import { ImageRenderFromHtml } from "@lms/ui";
@@ -51,6 +51,15 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
       setLoading(false);
     }
   }
+
+  const certificateView = useMemo(() => {
+    return certificate?.certificate?.html_template ? (
+      <ImageRenderFromHtml id={`horizontal-${certificate?.id}`} html={certificate.certificate.html_template} previewWidth={previewWidth} previewHeight={previewHeight} name={certificate.user.detail.full_name}/>
+    ) : (
+      <CertificateImg size={400} className=" max-w-full border-none text-[#A1A1A1] group-hover:text-primary"/>
+    );
+  }, [previewWidth, previewHeight]);
+  
   return (
     <CertificateCard
       bodyClassName="flex h-screen justify-center container mx-auto"
@@ -75,14 +84,7 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
           ref={previewRef}
           className="h-full mb-6 flex w-full items-center justify-center overflow-hidden md:mb-0 md:flex-1"
         >
-          {certificate?.certificate?.html_template ? (
-            <ImageRenderFromHtml id={`horizontal-${certificate?.id}`} html={certificate.certificate.html_template} previewWidth={previewWidth} previewHeight={previewHeight} name={certificate.user.detail.full_name}/>
-          ) : (
-            <CertificateImg
-              size={400}
-              className=" max-w-full border-none text-[#A1A1A1] group-hover:text-primary"
-            />
-          )}
+          {certificateView}
         </div>
 
         <div className="flex h-[200px] flex-shrink-0 flex-col items-center gap-12">
