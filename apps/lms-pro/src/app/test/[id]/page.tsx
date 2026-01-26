@@ -150,6 +150,7 @@ const TestDetail = () => {
   const { questions } = useGetQuestionTabs(id as string)
   const type = query.type
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
+  const [currentDragDrop, setCurrentDragDrop] = useState<any>([])
   const { control, watch, getValues, setValue, resetField } = useForm()
   const { control: controlFilter, watch: watchFilter } = useForm()
   const {
@@ -323,7 +324,6 @@ const TestDetail = () => {
             requirements,
             drag_drop_answers,
           } = answerSubmitted?.[0]
-
           // Handle different question types
           if (
             [
@@ -700,7 +700,9 @@ const TestDetail = () => {
               ...objTab,
               corrects: {
                 answers: handleMultipleCorrectAnswer(
-                  objTab?.data?.drag_drop_answers,
+                  objTab?.data?.drag_drop_answers ||
+                    currentDragDrop?.find((item: any) => item?.currentTabId === objTab?.id)
+                      ?.drag_drop_answers,
                   objTab?.answer,
                 ),
                 corrects: objTab?.corrects?.corrects,
@@ -712,8 +714,8 @@ const TestDetail = () => {
         return objTab
       }
     } else return undefined
-  }, [currentPage, tabs, answersSubmitted, essayData])
-
+  }, [currentPage, tabs, answersSubmitted, essayData, currentDragDrop])
+  console.log('currentTabContent', currentTabContent)
   const remainingTimeinSeconds = quizDetail?.quiz_timed
     ? (dayjs(
         dayjs(new Date(quizAttempt.created_at ?? '')).add(
@@ -1504,6 +1506,11 @@ const TestDetail = () => {
           ),
         ],
       }
+      const dragDropCurrentTemp = {
+        currentTabId: currentTabContent?.id,
+        drag_drop_answers: res?.data?.[0]?.drag_drop_answers,
+      }
+      setCurrentDragDrop([...currentDragDrop, dragDropCurrentTemp])
     }
     return {
       corrects: corrects,
