@@ -13,8 +13,8 @@ type CourseRouteType = 'LIST' | 'DETAIL' | 'SECTION' | 'ACTIVITY' | 'OTHER'
 
 export default function CtaTrial() {
   const { pathname } = useFeature()
-  const { setShowPinnedTrial, setOpenPopupCTA } = useCourseContext()
-  const { openPinned, setOpenPinned } = usePinnedNotifyContext()
+  const { setShowPinnedTrial, setOpenPopupCTA, showPinnedTrial } = useCourseContext()
+  const { setOpenPinned } = usePinnedNotifyContext()
 
   const courseRouteType: CourseRouteType = useMemo(() => {
     if (/^\/courses\/my-course\/[^/]+$/.test(pathname as string)) return 'DETAIL'
@@ -29,13 +29,13 @@ export default function CtaTrial() {
     courseRouteType === 'SECTION' ||
     courseRouteType === 'ACTIVITY'
 
-  useLayoutEffect(() => {
-    const shouldShow =
-      localStorage.getItem('showPinTrial') === 'true' &&
-      isCourseDetailLike
+  const shouldShow =
+    localStorage.getItem('showPinTrial') === 'true'
 
-    setShowPinnedTrial(shouldShow)
-  }, [pathname, isCourseDetailLike, setShowPinnedTrial])
+  useLayoutEffect(() => {
+
+    setShowPinnedTrial(shouldShow || false)
+  }, [pathname, shouldShow])
 
   const handleClose = () => {
     localStorage.setItem('showPinTrial', 'false')
@@ -51,10 +51,10 @@ export default function CtaTrial() {
       thankYouLater: false,
     })
   }
-
+  console.log(showPinnedTrial)
   return (
     <>
-      {isCourseDetailLike && openPinned && (
+      {isCourseDetailLike && showPinnedTrial && (
         <PinnedNotificationsV2
           bgColor="bg-info-100"
           borderColor="border-info"
