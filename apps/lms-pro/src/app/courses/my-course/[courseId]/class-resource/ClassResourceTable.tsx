@@ -2,6 +2,7 @@
 import { LoadingIcon } from '@assets/icons'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { CloseIcon, DownloadIcon } from '@lms/assets'
+import { useFeature } from '@lms/contexts'
 import {
   CLASS_SUFFIX_TYPE,
   DEFAULT_PAGE_NUMBER,
@@ -20,6 +21,7 @@ import {
   SAPPVideo,
   TextPreview,
   Tooltip,
+  PdfViewer,
 } from '@lms/ui'
 import { buildQueryString } from '@lms/utils'
 import request from '@services/requestV2'
@@ -27,6 +29,7 @@ import { handleDocUploadFromBlob } from '@utils/helpers'
 import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import { AxiosResponse } from 'axios'
 import clsx from 'clsx'
+import CryptoJS from 'crypto-js'
 import {
   useParams,
   usePathname,
@@ -49,6 +52,7 @@ const ClassResourceTable = ({
   isLoading: boolean
   setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
 }) => {
+  const { videoUrl } = useFeature()
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -65,35 +69,33 @@ const ClassResourceTable = ({
   const [openPreview, setOpenPreview] = useState(false)
   const [defaultEditor, setDefaultEditor] = useState<string>()
   const [loadingEditor, setLoadingEditor] = useState<boolean>(false)
-  const [loadingSheet, setLoadingSheet] = useState<boolean>(false)
 
   const handleOpenPreview = async (resource: IClassResource) => {
-    if (['PDF', 'SHEET', 'WORD_DOCUMENT'].includes(resource.suffix_type)) {
-      try {
-        const res = await ClassAPI.previewClassFile(
-          params.courseId as string,
-          resource.id,
-        )
-        if (res) {
-          if (!res.url) return
-          setPreviewResource({
-            ...resource,
-            url: res.url,
-          })
-          setOpenPreview(true)
-          if (resource.suffix_type === 'WORD_DOCUMENT') {
-            setLoadingEditor(true)
-            const defaultEditor = await getEditorData(res.url)
-            setDefaultEditor(defaultEditor)
-            setLoadingEditor(false)
-          }
+    try {
+      const res = await ClassAPI.previewClassFile(
+        params.courseId as string,
+        resource.id,
+      )
+      if (res) {
+        let originalUrl = res.url
+        if (res.is_encrypted) {
+          const rawDecoded = CryptoJS.AES.decrypt(res.url, 'randomSecretKey')
+          originalUrl = rawDecoded.toString(CryptoJS.enc.Utf8)
         }
-      } catch (error) {}
-    } else {
-      if (!resource?.url && !resource?.sub_url) return
-      setPreviewResource(resource)
-      setOpenPreview(true)
-    }
+        setPreviewResource({
+          ...resource,
+          url: originalUrl,
+          is_encrypted: res.is_encrypted,
+        })
+        setOpenPreview(true)
+        if (resource.suffix_type === 'WORD_DOCUMENT') {
+          setLoadingEditor(true)
+          const defaultEditor = await getEditorData(originalUrl)
+          setDefaultEditor(defaultEditor)
+          setLoadingEditor(false)
+        }
+      }
+    } catch (error) {}
   }
   const canDownload = (record: IClassResource, isTeacher: boolean) => {
     const perms = record?.class_resource_permissions
@@ -236,7 +238,6 @@ const ClassResourceTable = ({
   const loadDocFile = async (url: string) => {
     try {
       const res = await fetch(url)
-      console.log('res', res)
       const blob = await res.blob()
       return await handleDocUploadFromBlob(blob)
     } catch (error) {
@@ -248,28 +249,59 @@ const ClassResourceTable = ({
     return loadDocFile(url)
   }
   const renderPreviewContent = (resource: IClassResource) => {
+    console.log('resource', resource)
     switch (resource.suffix_type) {
       case 'VIDEO':
-        return (
+      case 'AUDIO':
+        return resource.url ? (
           <SAPPVideo
             isFetchCaptions={false}
             streamRef={internalRef}
-            options={{ src: resource.sub_url }}
+            options={{
+              src: resource.url
+                .replace(videoUrl || '', '')
+                .replace('/manifest/video.m3u8', ''),
+            }}
           ></SAPPVideo>
+        ) : (
+          <div className="flex h-full items-center justify-center text-base text-gray-400">
+            File đang trong quá trình xử lý
+          </div>
         )
       case 'WORD_DOCUMENT':
         return loadingEditor ? (
           <LoadingIcon stroke="#404041" />
-        ) : (
+        ) : resource.is_encrypted ? (
           <div className="word-document-preview">
             <EditorReader text_editor_content={defaultEditor || ''} />
           </div>
+        ) : (
+          <FileViewer
+            fileName={resource.name}
+            fileUrl={resource.url}
+            onlyView
+          />
         )
 
       case 'SHEET':
-        return <SheetViewer fileUrl={resource.url} fileName={resource.name} />
-      case 'POWER_POINT':
+        return resource.is_encrypted ? (
+          <div className="word-document-preview">
+            <EditorReader text_editor_content={defaultEditor || ''} />
+          </div>
+        ) : (
+          <SheetViewer fileUrl={resource.url} fileName={resource.name} />
+        )
       case 'PDF':
+        return resource.is_encrypted ? (
+          <PdfViewer url={resource.url} />
+        ) : (
+          <FileViewer
+            fileName={resource.name}
+            fileUrl={resource.url}
+            onlyView
+          />
+        )
+      case 'POWER_POINT':
         return (
           <FileViewer
             fileName={resource.name}

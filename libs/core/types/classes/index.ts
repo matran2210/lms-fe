@@ -190,6 +190,7 @@ export interface IClassResource extends IResource {
   };
   url: string;
   sub_url: string;
+  is_encrypted: boolean;
 }
 
 export interface IClassResourceList {
