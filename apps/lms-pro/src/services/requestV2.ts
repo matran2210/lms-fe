@@ -1,3 +1,6 @@
+import { COOKIE_INFO, ExceptionErrorCode } from '@lms/core'
+import { deleteCookie, getCookie, setCookie } from '@lms/utils'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 import axios, {
   AxiosInstance,
   AxiosRequestConfig,
@@ -5,17 +8,7 @@ import axios, {
   Method,
 } from 'axios'
 import { toast } from 'react-hot-toast'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
-import {
-  CERTIFICATE_DETAIL,
-  COOKIE_INFO,
-  ENTRANCE_TEST_RESULT,
-  ENTRANCE_TEST_TABLE_RESULT,
-  ExceptionErrorCode,
-} from '@lms/core'
-import { deleteCookie, getCookie, setCookie } from '@lms/utils'
 import { apiURL } from 'src/constants'
-import { useMemo } from 'react'
 
 export const getBaseUrl = () => {
   if (typeof window !== 'undefined') {

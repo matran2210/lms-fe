@@ -61,7 +61,6 @@ const EventTest = () => {
   }
 
   useEffect(() => {
-    console.log('vo day à')
     getEventTestCount()
   }, [])
 
