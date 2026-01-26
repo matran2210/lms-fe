@@ -2,7 +2,7 @@
 import { CertificateImg, CopyIcon, Icon, LoadingButtonAnimation, SappLogoImage } from "@lms/assets";
 import { ButtonPrimary, ClickToCopyButton } from "@lms/ui";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { LinkedInShareButton } from "./ButtonShareLinkedin";
 import CertificateCard from "./CertificateCard";
 import ModalShareToLinkedin from "./ModalShareToLinkedin";
@@ -40,7 +40,25 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
     } finally {
       setLoading(false);
     }
-  }
+  };
+
+  const certificateView = useMemo(() => {
+    return certificate?.certificate?.html_template ? (
+      <ImageRenderFromHtml
+        id={`vertical-${certificate?.id}`}
+        html={certificate.certificate.html_template}
+        previewWidth={500}
+        previewHeight={700}
+        name={certificate.user.detail.full_name}
+      />
+    ) : (
+      <CertificateImg
+        size={800}
+        className="max-w-[500px] border-none text-[#A1A1A1] group-hover:text-primary"
+      />
+    );
+  }, []);
+
   return (
     <CertificateCard
       bodyClassName="2xl:px-[373px] py-[138px] px-[70px] justify-center"
@@ -48,14 +66,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
     >
       <div className="flex w-full h-full items-center gap-12 xl:gap-20">
         <div id="certificate-container-andrew" className="flex h-full w-[55%] items-center justify-center">
-          {certificate?.certificate?.html_template ? (
-            <ImageRenderFromHtml id={`vertical-${certificate?.id}`} html={certificate.certificate.html_template} previewWidth={500} previewHeight={700} name={certificate.user.detail.full_name}/>
-          ) : (
-            <CertificateImg
-              size={800}
-              className="max-w-[500px] border-none text-[#A1A1A1] group-hover:text-primary"
-            />
-          )}
+          {certificateView}
         </div>
         <div className="flex flex-col items-center gap-12">
           <div
