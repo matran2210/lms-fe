@@ -2,21 +2,55 @@ import { CertificateImg, Icon, SappLogoImage } from "@lms/assets";
 import { ButtonPrimary, ClickToCopyButton } from "@lms/ui";
 import { Button } from "antd";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CertificateCard from "./CertificateCard";
 import { ICertificate } from "@lms/core";
+import { ImageRenderFromHtml } from "@lms/ui";
+import { useDownloadImage } from "@lms/hooks";
+import clsx from "clsx";
 
 interface HorizontalCertificateProps {
   certificate?: ICertificate;
   issuedBy?: string;
-  onDownload?: () => void;
 }
 
 const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
   certificate,
   issuedBy = "SAPP Academy",
-  onDownload,
 }) => {
+  const { downloadCertificate } = useDownloadImage();
+  const previewRef = useRef<HTMLDivElement>(null);
+  const [previewSize, setPreviewSize] = useState({ width: 0, height: 0 });
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const updateSize = () => {
+      if (!previewRef.current) return;
+      const { clientWidth, clientHeight } = previewRef.current;
+      setPreviewSize({ width: clientWidth, height: clientHeight });
+    };
+
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
+  const previewWidth = previewSize.width;
+  const previewHeight = previewSize.height;
+  const handleDownload = async () => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      await downloadCertificate(
+        document.getElementById(`horizontal-${certificate?.id}`) as HTMLElement, 
+        certificate?.certificate?.html_template as string, 
+        certificate?.user.detail.full_name || '', 
+        certificate?.certificate?.name || ''
+      );
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  }
   return (
     <CertificateCard
       bodyClassName="flex h-screen justify-center container mx-auto"
@@ -37,13 +71,12 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
           </div>
         </div>
 
-        <div className="mb-6 flex w-full items-center justify-center overflow-hidden md:mb-0 md:flex-1">
-          {certificate?.certificate_url ? (
-            <img
-              src={certificate?.certificate_url || ""}
-              alt={certificate?.course.name}
-              className="max-h-full max-w-full object-contain"
-            />
+        <div
+          ref={previewRef}
+          className="h-full mb-6 flex w-full items-center justify-center overflow-hidden md:mb-0 md:flex-1"
+        >
+          {certificate?.certificate?.html_template ? (
+            <ImageRenderFromHtml id={`horizontal-${certificate?.id}`} html={certificate.certificate.html_template} previewWidth={previewWidth} previewHeight={previewHeight} name={certificate.user.detail.full_name}/>
           ) : (
             <CertificateImg
               size={400}
@@ -69,8 +102,11 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
                 size="medium"
                 icon={<Icon type="download" />}
                 iconPosition="end"
-                onClick={onDownload}
-                className="px-[37.5px] py-2 sm:!px-[29px]"
+                onClick={handleDownload}
+                className={clsx("px-[37.5px] py-2 sm:!px-[29px]", {
+                  "opacity-50 !cursor-not-allowed": loading,
+                })}
+                loading={loading}
               >
                 Download
               </ButtonPrimary>

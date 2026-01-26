@@ -1,16 +1,18 @@
 import { useLayoutEffect, useState } from 'react'
 import PopUpCertificate from './popupCertificate'
 import { Divider, Table, TableProps } from 'antd'
-import { CertificateImg, Icon } from '@lms/assets'
+import { CertificateImg, Icon, LoadingButtonAnimation } from '@lms/assets'
 import { useDownloadImage } from '@lms/hooks'
-import Image from 'next/image'
 import { sappFormatDate } from '@lms/utils'
 import clsx from 'clsx'
 import { HaveNoItemIcon } from '@lms/assets'
 import { AuthAPI } from 'src/api/profile'
+import { useAppSelector, userReducer } from '@lms/contexts'
+import { ImageRenderFromHtml } from '@lms/ui'
 
 interface ICertificate {
   certificate: {
+    html_template: string
     id: string
     name: string
   }
@@ -29,12 +31,14 @@ interface ICertificate {
 }
 
 const Certificate = () => {
-  const { downloadImage } = useDownloadImage()
+  const { detail } = useAppSelector(userReducer).user
+  const { downloadCertificate } = useDownloadImage()
   const [certificateData, setCertificateData] = useState<
     ICertificate[] | undefined
   >(undefined)
   const [modalOpen, setOpenModal] = useState(false)
   const [userDetail, setUserDetail] = useState('')
+  const [listLoadingId, setListLoadingId] = useState<string[]>([])
 
   const fetchChapterDetail = async () => {
     try {
@@ -50,6 +54,23 @@ const Certificate = () => {
     fetchChapterDetail()
   }, [])
   const [certificateDataPopup, setCertificateDataPopup] = useState<any>()
+  const handleDownload = async (certificate: ICertificate) => {
+    if (listLoadingId.includes(certificate.id)) return
+    setListLoadingId((prev) => [...prev, certificate.id])
+    try {
+      await downloadCertificate(
+        document.getElementById(
+          `teacher-desktop-${certificate?.certificate_id}`,
+        ) as HTMLElement,
+        certificate?.certificate?.html_template,
+        detail?.full_name,
+        certificate.certificate.name,
+      )
+    } catch (error) {
+    } finally {
+      setListLoadingId((prev) => prev.filter((item) => item !== certificate.id))
+    }
+  }
 
   const columns: TableProps<ICertificate>['columns'] = [
     {
@@ -65,14 +86,12 @@ const Certificate = () => {
             )
           }
         >
-          {record?.certificate_url ? (
-            <Image
-              src={record?.certificate_url || ''}
-              alt={record?.course?.name || ''}
-              className="ratio-16/9 max-h-50 max-w-80 object-contain"
-              width={50}
-              height={50}
-              priority
+          {record?.certificate?.html_template ? (
+            <ImageRenderFromHtml
+              id={`teacher-desktop-${record?.certificate_id}`}
+              html={record?.certificate?.html_template}
+              previewWidth={80}
+              previewHeight={80}
             />
           ) : (
             <CertificateImg className="border-none text-[#A1A1A1] group-hover:text-primary" />
@@ -105,14 +124,21 @@ const Certificate = () => {
       render: (record) => (
         <div className="flex items-center justify-center gap-1">
           <div
-            onClick={() =>
-              record?.certificate_url && downloadImage(record.certificate_url)
-            }
+            className={clsx('cursor-pointer', {
+              '!cursor-not-allowed opacity-50': listLoadingId.includes(
+                record.id,
+              ),
+            })}
+            onClick={() => handleDownload(record)}
           >
-            <Icon
-              type="download"
-              className="cursor-pointer text-secondary hover:text-primary"
-            />
+            {listLoadingId.includes(record.id) ? (
+              <LoadingButtonAnimation />
+            ) : (
+              <Icon
+                type="download"
+                className="cursor-pointer text-secondary hover:text-primary"
+              />
+            )}
           </div>
 
           <Divider type="vertical" className="border-black" />
@@ -162,6 +188,8 @@ const Certificate = () => {
                 key={item?.id}
                 record={item}
                 isLastItem={index === certificateData.length - 1}
+                listLoadingId={listLoadingId}
+                setListLoadingId={setListLoadingId}
               />
             ))
           : null}
@@ -187,12 +215,33 @@ const Certificate = () => {
 const CertificateItem = ({
   record,
   isLastItem,
+  listLoadingId,
+  setListLoadingId,
 }: {
   record: ICertificate
   isLastItem: boolean
+  listLoadingId: string[]
+  setListLoadingId: React.Dispatch<React.SetStateAction<string[]>>
 }) => {
-  const { downloadImage } = useDownloadImage()
-
+  const { detail } = useAppSelector(userReducer).user
+  const { downloadCertificate } = useDownloadImage()
+  const handleDownload = async (certificate: ICertificate) => {
+    if (listLoadingId.includes(certificate.id)) return
+    setListLoadingId((prev) => [...prev, certificate.id])
+    try {
+      await downloadCertificate(
+        document.getElementById(
+          `teacher-mobile-${certificate?.certificate_id}`,
+        ) as HTMLElement,
+        certificate?.certificate?.html_template,
+        detail?.full_name,
+        certificate.certificate.name,
+      )
+    } catch (error) {
+    } finally {
+      setListLoadingId((prev) => prev.filter((item) => item !== certificate.id))
+    }
+  }
   return (
     <div
       className={clsx(
@@ -211,14 +260,12 @@ const CertificateItem = ({
           )
         }
       >
-        {record?.certificate_url ? (
-          <Image
-            src={record?.certificate_url || ''}
-            alt={record?.course?.name || ''}
-            className="ratio-16/9 max-h-50 max-w-80 object-contain"
-            width={80}
-            height={80}
-            priority
+        {record?.certificate?.html_template ? (
+          <ImageRenderFromHtml
+            id={`teacher-mobile-${record?.certificate_id}`}
+            html={record.certificate.html_template}
+            previewWidth={80}
+            previewHeight={80}
           />
         ) : (
           <CertificateImg
@@ -240,14 +287,21 @@ const CertificateItem = ({
         value={
           <div className="flex items-center justify-center gap-1">
             <div
-              onClick={() =>
-                record?.certificate_url && downloadImage(record.certificate_url)
-              }
+              className={clsx('cursor-pointer', {
+                '!cursor-not-allowed opacity-50': listLoadingId.includes(
+                  record.id,
+                ),
+              })}
+              onClick={() => handleDownload(record)}
             >
-              <Icon
-                type="download"
-                className="cursor-pointer text-secondary hover:text-primary"
-              />
+              {listLoadingId.includes(record.id) ? (
+                <LoadingButtonAnimation />
+              ) : (
+                <Icon
+                  type="download"
+                  className="cursor-pointer text-secondary hover:text-primary"
+                />
+              )}
             </div>
 
             <Divider type="vertical" className="border-black" />
