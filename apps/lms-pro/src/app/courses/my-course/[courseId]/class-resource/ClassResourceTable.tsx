@@ -79,7 +79,10 @@ const ClassResourceTable = ({
       if (res) {
         let originalUrl = res.url
         if (res.is_encrypted) {
-          const rawDecoded = CryptoJS.AES.decrypt(res.url, 'randomSecretKey')
+          const rawDecoded = CryptoJS.AES.decrypt(
+            res.url,
+            process.env.NEXT_PUBLIC_DECRYPT_CRYPTO_KEY || '',
+          )
           originalUrl = rawDecoded.toString(CryptoJS.enc.Utf8)
         }
         setPreviewResource({
