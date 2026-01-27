@@ -249,7 +249,6 @@ const ClassResourceTable = ({
     return loadDocFile(url)
   }
   const renderPreviewContent = (resource: IClassResource) => {
-    console.log('resource', resource)
     switch (resource.suffix_type) {
       case 'VIDEO':
       case 'AUDIO':
@@ -285,11 +284,13 @@ const ClassResourceTable = ({
 
       case 'SHEET':
         return resource.is_encrypted ? (
-          <div className="word-document-preview">
-            <EditorReader text_editor_content={defaultEditor || ''} />
-          </div>
-        ) : (
           <SheetViewer fileUrl={resource.url} fileName={resource.name} />
+        ) : (
+          <FileViewer
+            fileName={resource.name}
+            fileUrl={resource.url}
+            onlyView
+          />
         )
       case 'PDF':
         return resource.is_encrypted ? (

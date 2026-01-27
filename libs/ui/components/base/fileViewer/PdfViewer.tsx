@@ -21,6 +21,19 @@ const PdfViewer = ({ url }: IProps) => {
         setNumPages(numPages);
     }
 
+    const handleItemClick = ({ pageNumber }: { pageNumber: number }) => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const pageEl = container.querySelector(
+          `[data-page-number="${pageNumber}"]`,
+        ) as HTMLElement | null;
+
+        if (pageEl) {
+          container.scrollTo({ top: pageEl.offsetTop, behavior: 'auto' });
+        }
+    };
+
     const pages = useMemo(
         () => (numPages ? Array.from({ length: numPages }, (_, i) => i + 1) : []),
         [numPages],
@@ -32,10 +45,11 @@ const PdfViewer = ({ url }: IProps) => {
       });
 
     return (
-        <div ref={containerRef} className="w-full">
+        <div ref={containerRef} className="w-full h-full overflow-y-scroll">
             <Document
               file={url}
               onLoadSuccess={onDocumentLoadSuccess}
+              onItemClick={handleItemClick}
               loading={<LoadingIcon stroke="#404041" />}
             >
               {pages.map((pageNumber) => (

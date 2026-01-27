@@ -30,7 +30,6 @@ const SheetViewer = ({ fileUrl, fileName }: IProps) => {
         const res = await fetch(fileUrl);
         const buffer = await res.arrayBuffer();
         const workbook = XLSX.read(buffer, { type: "array" });
-        console.log("workbook", workbook);
 
         const sheets = workbook.SheetNames.map((sheetName, idx) => {
           const ws = workbook.Sheets[sheetName];
