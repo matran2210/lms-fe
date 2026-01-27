@@ -18,6 +18,8 @@ export { default as HookFormDateRangePicker } from "./date-range/HookFormDateRan
 export * from "./drawer/index";
 export * from "./editor/index";
 export { default as FileViewer } from "./fileViewer/FileViewer";
+export { default as SheetViewer } from "./fileViewer/SheetViewer";
+export { default as PdfViewer } from "./fileViewer/PdfViewer";
 export * from "./modal/index";
 export * from "./pagination/index";
 export * from "./pdf/index";

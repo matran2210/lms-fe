@@ -1,4 +1,5 @@
 'use client'
+import { LoadingIcon } from '@assets/icons'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { CloseIcon, DownloadIcon } from '@lms/assets'
 import { useFeature } from '@lms/contexts'
@@ -10,7 +11,9 @@ import {
 import { useUserRole } from '@lms/hooks'
 import {
   ActionCellV2,
+  EditorReader,
   FileViewer,
+  SheetViewer,
   ModalResizeable,
   PaginationSappV2,
   SappModalImageV2,
@@ -18,14 +21,26 @@ import {
   SAPPVideo,
   TextPreview,
   Tooltip,
+  PdfViewer,
   SAPPAudio,
 } from '@lms/ui'
-import { UploadAPI } from 'src/api/upload'
-import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
-import clsx from 'clsx'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { Dispatch, SetStateAction, useRef, useState } from 'react'
 import { buildQueryString } from '@lms/utils'
+import request from '@services/requestV2'
+import { handleDocUploadFromBlob } from '@utils/helpers'
+import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
+import { AxiosResponse } from 'axios'
+import clsx from 'clsx'
+import CryptoJS from 'crypto-js'
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation'
+import { Dispatch, SetStateAction, useRef, useState } from 'react'
+import { ClassAPI } from 'src/api/class'
+import { UploadAPI } from 'src/api/upload'
+import { getBaseUrl } from 'src/redux/services/httpService'
 
 const ClassResourceTable = ({
   data,
@@ -42,7 +57,7 @@ const ClassResourceTable = ({
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-
+  const params = useParams()
   const query = Object.fromEntries(searchParams.entries())
   const textStyle = 'text-base font-medium text-gray-800'
   const className = 'custom-column-table'
@@ -53,11 +68,38 @@ const ClassResourceTable = ({
     null,
   )
   const [openPreview, setOpenPreview] = useState(false)
+  const [defaultEditor, setDefaultEditor] = useState<string>()
+  const [loadingEditor, setLoadingEditor] = useState<boolean>(false)
 
-  const handleOpenPreview = (resource: IClassResource) => {
-    if (!resource?.url && !resource?.sub_url) return
-    setPreviewResource(resource)
-    setOpenPreview(true)
+  const handleOpenPreview = async (resource: IClassResource) => {
+    try {
+      const res = await ClassAPI.previewClassFile(
+        params.courseId as string,
+        resource.id,
+      )
+      if (res) {
+        let originalUrl = res.url
+        if (res.is_encrypted) {
+          const rawDecoded = CryptoJS.AES.decrypt(
+            res.url,
+            process.env.NEXT_PUBLIC_DECRYPT_CRYPTO_KEY || '',
+          )
+          originalUrl = rawDecoded.toString(CryptoJS.enc.Utf8)
+        }
+        setPreviewResource({
+          ...resource,
+          url: originalUrl,
+          is_encrypted: res.is_encrypted,
+        })
+        setOpenPreview(true)
+        if (resource.suffix_type === 'WORD_DOCUMENT') {
+          setLoadingEditor(true)
+          const defaultEditor = await getEditorData(originalUrl)
+          setDefaultEditor(defaultEditor)
+          setLoadingEditor(false)
+        }
+      }
+    } catch (error) {}
   }
   const canDownload = (record: IClassResource, isTeacher: boolean) => {
     const perms = record?.class_resource_permissions
@@ -155,7 +197,7 @@ const ClassResourceTable = ({
                 {
                   icon: <DownloadIcon className="h-5 w-5" />,
                   nameAction: 'Download',
-                  action: () => download(record.name, record.file_key),
+                  action: () => download(params.courseId as string, record.id),
                 },
               ]}
             />
@@ -165,33 +207,47 @@ const ClassResourceTable = ({
     },
   ]
 
-  const download = async (name: string, file_key: string) => {
-    await UploadAPI.downloadFile({
-      files: [
-        {
-          name: name,
-          file_key: file_key,
-        },
-      ],
-    })
+  const download = async (class_id: string, resource_id: string) => {
+    await UploadAPI.downloadFileClassResource(class_id, resource_id)
+  }
+  /**
+   * @static
+   * @description Download file từ resource
+   * @param {number} fileSize
+   * @param {{files: {name: string; file_key: string}}} {files}
+   * @memberof ResourcesAPI
+   */
+  const loadDocFile = async (url: string) => {
+    try {
+      const res = await fetch(url)
+      const blob = await res.blob()
+      return await handleDocUploadFromBlob(blob)
+    } catch (error) {
+      return ''
+    }
   }
 
+  async function getEditorData(url: string) {
+    return loadDocFile(url)
+  }
   const renderPreviewContent = (resource: IClassResource) => {
     const videoUrl = process.env.NEXT_PUBLIC_VIDEO_URL as string
     switch (resource.suffix_type) {
       case 'VIDEO':
-        return (
+        return resource.url ? (
           <SAPPVideo
             isFetchCaptions={false}
             streamRef={internalRef}
             options={{
               src: resource.url
-                ? resource.url
-                    .replace(videoUrl || '', '')
-                    .replace('/manifest/video.m3u8', '')
-                : resource.sub_url,
+                .replace(videoUrl || '', '')
+                .replace('/manifest/video.m3u8', ''),
             }}
           ></SAPPVideo>
+        ) : (
+          <div className="flex h-full items-center justify-center text-base text-gray-400">
+            File đang trong quá trình xử lý
+          </div>
         )
       case 'AUDIO':
         return (
@@ -199,17 +255,47 @@ const ClassResourceTable = ({
             streamRef={internalRef}
             options={{
               src: resource.url
-                ? resource.url
-                    .replace(videoUrl || '', '')
-                    .replace('/manifest/video.m3u8', '')
-                : resource.sub_url,
+                .replace(videoUrl || '', '')
+                .replace('/manifest/video.m3u8', ''),
             }}
           ></SAPPAudio>
         )
-      case 'SHEET':
       case 'WORD_DOCUMENT':
-      case 'POWER_POINT':
+        return loadingEditor ? (
+          <LoadingIcon stroke="#404041" />
+        ) : resource.is_encrypted ? (
+          <div className="word-document-preview">
+            <EditorReader text_editor_content={defaultEditor || ''} />
+          </div>
+        ) : (
+          <FileViewer
+            fileName={resource.name}
+            fileUrl={resource.url}
+            onlyView
+          />
+        )
+
+      case 'SHEET':
+        return resource.is_encrypted ? (
+          <SheetViewer fileUrl={resource.url} fileName={resource.name} />
+        ) : (
+          <FileViewer
+            fileName={resource.name}
+            fileUrl={resource.url}
+            onlyView
+          />
+        )
       case 'PDF':
+        return resource.is_encrypted ? (
+          <PdfViewer url={resource.url} />
+        ) : (
+          <FileViewer
+            fileName={resource.name}
+            fileUrl={resource.url}
+            onlyView
+          />
+        )
+      case 'POWER_POINT':
         return (
           <FileViewer
             fileName={resource.name}
@@ -274,7 +360,9 @@ const ClassResourceTable = ({
         previewResource &&
         previewResource.suffix_type !== 'IMAGE' && (
           <ModalResizeable
-            bodyClassName={clsx('px-5')}
+            bodyClassName={clsx('px-5', {
+              'pb-5': previewResource.suffix_type === 'WORD_DOCUMENT',
+            })}
             key={previewResource.url}
             modalIndex={1}
             title={previewResource.name}

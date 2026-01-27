@@ -21,7 +21,9 @@ export function isMobile() {
 
 export const isMobileExtensive = () =>
   typeof navigator !== 'undefined' &&
-  /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent)
+  /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(
+    navigator.userAgent,
+  )
 
 /**
  * Hàm này định dạng một chuỗi ngày giờ theo định dạng dd/mm/yyyy hh:mm
@@ -311,3 +313,4 @@ export const getUserPrefix = (isTeacher: boolean) =>
   isTeacher ? PageLink.TEACHERS : ''
 
 export * from './quiz-test/helper'
+export * from './editor-helper'
