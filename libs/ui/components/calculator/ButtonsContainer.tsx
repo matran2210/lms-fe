@@ -6,16 +6,17 @@ interface IProps {
   click: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   keyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   isMobileCalc?: boolean;
+  isShortScreen?: boolean;
 }
 
 const ButtonsContainer = (props: IProps) => {
-  const { click, keyDown, isMobileCalc = false } = props;
+  const { click, keyDown, isMobileCalc = false, isShortScreen = false } = props;
 
-  const btnClassName = isMobileCalc ? "w-[48px] h-[48px]" : "";
+  const btnClassName = isShortScreen || isMobileCalc ? "w-[48px] h-[48px]" : "";
   return (
     <div
       className={clsx("calc__btns-container", {
-        "!p-4": isMobileCalc,
+        "!p-4": isMobileCalc || isShortScreen,
       })}
       onClick={click}
       onKeyDown={keyDown}

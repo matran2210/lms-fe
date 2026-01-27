@@ -1,14 +1,13 @@
-import { CollapseArrowIcon, DownloadIcon } from '@lms/assets'
-import { SUFFIX_TYPE } from '@lms/core'
-import { trackGAEvent } from '@lms/utils'
-import { Collapse } from 'antd'
-import clsx from 'clsx'
-import React from 'react'
-import {Tooltip} from '@lms/ui'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { IActivity } from '@lms/core'
-import { useFeature } from '@lms/contexts'
-
+import { CollapseArrowIcon, DownloadIcon } from "@lms/assets";
+import { SUFFIX_TYPE } from "@lms/core";
+import { trackGAEvent } from "@lms/utils";
+import { Collapse } from "antd";
+import clsx from "clsx";
+import React from "react";
+import { Tooltip } from "@lms/ui";
+import { useTailwindBreakpoint } from "@lms/hooks";
+import { IActivity } from "@lms/core";
+import { useFeature } from "@lms/contexts";
 
 interface IProps {
   activity: IActivity;
@@ -20,24 +19,24 @@ interface IProps {
   ) => void;
 }
 const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
-  const {uploadApi} = useFeature();
-const download = async (name: string, file_key: string) => {
-  await uploadApi.downloadFile({
-    files: [
-      {
-        name: name,
-        file_key: file_key,
-      },
-    ],
-  });
-};
+  const { uploadApi } = useFeature();
+  const download = async (name: string, file_key: string) => {
+    await uploadApi.downloadFile({
+      files: [
+        {
+          name: name,
+          file_key: file_key,
+        },
+      ],
+    });
+  };
 
   const { isAlwaysShowSidebar } = useTailwindBreakpoint();
   const getItemsActivityResource = [
     {
       key: "activity_resource",
       label: (
-        <div className={"select-none text-lg font-medium text-bw-13"}>
+        <div className={"select-none text-lg font-medium text-gray-800"}>
           Activity Resource
         </div>
       ),
@@ -52,17 +51,16 @@ const download = async (name: string, file_key: string) => {
                   e.resource.name.slice(-4) !== ".csv";
 
                 return (
-                  <div key={index} className=''>
+                  <div key={index} className="">
                     <div
                       className={clsx(
                         "group inline-flex cursor-pointer items-center gap-3",
                         { "mb-3": index < activity?.files?.length - 1 },
                       )}
-                
                     >
                       {/* Text */}
                       <Tooltip title="Preview File">
-                        <p 
+                        <p
                           className="text-info-600 underline group-hover:text-primary  transition-all"
                           onClick={() => {
                             isPreviewFile
@@ -71,8 +69,11 @@ const download = async (name: string, file_key: string) => {
                                   e?.resource?.url,
                                   e?.resource?.name,
                                 )
-                              : download(e?.resource?.name, e?.resource?.file_key);
-    
+                              : download(
+                                  e?.resource?.name,
+                                  e?.resource?.file_key,
+                                );
+
                             trackGAEvent("Click Open File Resource");
                           }}
                         >
@@ -85,7 +86,9 @@ const download = async (name: string, file_key: string) => {
                         className="block cursor-pointer text-icon group-hover:block group-hover:text-primary lg:hidden"
                         onClick={() => {
                           download(e?.resource?.name, e?.resource?.file_key);
-                          trackGAEvent("Click Button Download Resource Activity");
+                          trackGAEvent(
+                            "Click Button Download Resource Activity",
+                          );
                         }}
                       >
                         <DownloadIcon color="currentColor" />

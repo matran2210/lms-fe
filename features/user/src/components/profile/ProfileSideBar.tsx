@@ -409,7 +409,7 @@ const {router, params} = useFeature()
                     </div>
                   )}
                   <div
-                    className={`hover-transition-font-weight relative top-px border-b border-[#F1F1F1] `}
+                    className={`hover-transition-font-weight relative top-px border-b border-gray-200 `}
                   />
                 </li>
               );

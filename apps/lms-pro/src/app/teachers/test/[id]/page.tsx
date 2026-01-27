@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import {
   ArrowUpIcon,
   CalculatorIcon,
@@ -436,7 +436,7 @@ const TestDetail = () => {
 
   const router = useRouter()
   const searchParam = useSearchParams()
-  const params = useParams();
+  const params = useParams()
   const { id } = params
   const query = Object.fromEntries(searchParam.entries())
 
@@ -2597,7 +2597,7 @@ const TestDetail = () => {
 
             {/** Tabs */}
             {tabs?.length > 0 && (
-              <div className="relative z-10 w-full bg-gray-4 px-6 py-2 shadow-pagination">
+              <div className="relative z-10 w-full bg-gray-100 px-6 py-2 shadow-pagination">
                 <TabSlide
                   data={filteredTabs}
                   currentTab={currentPage}
@@ -2627,7 +2627,7 @@ const TestDetail = () => {
               {currentTabContent?.data?.display_type ===
               DISPLAY_TYPE.VERTICAL ? (
                 <div
-                  className={`flex flex-1 overflow-auto bg-gray-3`}
+                  className={`flex flex-1 overflow-auto bg-gray-200`}
                   id={'preview-question'}
                 >
                   <div
@@ -2692,7 +2692,7 @@ const TestDetail = () => {
                     </div>
                   </div>
                   <div
-                    className="h-full w-[20px] cursor-ew-resize bg-gray-3"
+                    className="h-full w-[20px] cursor-ew-resize bg-gray-200"
                     onMouseDown={() => {
                       setStartResize(true)
                     }}
@@ -2827,7 +2827,7 @@ const TestDetail = () => {
           {/** End Question Content */}
 
           {/** Scratchpads */}
-          <div className="z-10 flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
+          <div className="z-10 flex h-[48px] items-center justify-between bg-gray-100 shadow-question-footer">
             <div className="flex h-full items-center">
               <button
                 className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
@@ -2892,7 +2892,7 @@ const TestDetail = () => {
                     </div>
                   </div>
                   {showListExhibits && (
-                    <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
+                    <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-100 shadow-questions-exhibits 3xl:w-full">
                       {exhibits?.map(
                         (
                           e: { label: string; value: string },
@@ -2903,7 +2903,7 @@ const TestDetail = () => {
                               key={e?.value}
                               className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px]' : 'min-w-[100px]'} ${
                                 !watch('exhibits')?.includes(e?.value) &&
-                                'text-gray-1'
+                                'text-gray'
                               }`}
                               onClick={() => handleOpenExhibit(e?.value)}
                             >{`${exhibitText} ${index + 1}`}</button>
@@ -2934,14 +2934,14 @@ const TestDetail = () => {
                     </div>
                   </div>
                   {showListRequirement && (
-                    <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
+                    <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-100 shadow-questions-exhibits 3xl:w-full">
                       {currentTabContent?.data?.requirements?.map(
                         (e: any, indexReq: number) => {
                           return (
                             <button
                               key={e.id}
                               className={`p-3 ${
-                                essayData?.index !== indexReq && 'text-gray-1'
+                                essayData?.index !== indexReq && 'text-gray'
                               }`}
                               onClick={() => {
                                 if (e?.id !== essayData?.req?.id) {
@@ -3025,7 +3025,7 @@ const TestDetail = () => {
                 currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
                 !currentTabContent.done && (
                   <div className="flex gap-1">
-                    <div className="hidden 3.5xl:block">
+                    <div className="hidden 3xl-wide:block">
                       Choose response option:
                     </div>
                     <button
@@ -3073,14 +3073,14 @@ const TestDetail = () => {
                   </div>
                 )}
               <button
-                className="flex items-center justify-center gap-3 border border-gray-1 px-3 py-2 3xl:w-[150px]"
+                className="flex items-center justify-center gap-3 border border-gray px-3 py-2 3xl:w-[150px]"
                 onClick={() => {
                   handleFlagQuestion(currentPage)
                   trackGAEvent('Click Button Flag To Review Test')
                 }}
               >
                 <FlagIcon />
-                <div className="hidden text-medium-sm font-medium lg:block">
+                <div className="hidden text-sm font-medium lg:block">
                   Flag to Review
                 </div>
               </button>
@@ -3088,24 +3088,22 @@ const TestDetail = () => {
                 disabled={currentTabContent?.is_viewed_answer}
                 className={`flex items-center gap-3 border border-solid ${
                   !currentTabContent?.is_viewed_answer
-                    ? 'border-gray-1 text-bw-1'
-                    : 'border-default text-gray-2'
+                    ? 'border-gray text-gray-800'
+                    : 'border-default text-secondary-100'
                 } w-[150px] justify-center p-1 py-2`}
                 onClick={() => {
                   handleClearSelection(currentTabContent)
                   trackGAEvent('Click Button Clear Selection Test')
                 }}
               >
-                <div className="text-medium-sm font-medium">
-                  Clear Selection
-                </div>
+                <div className="text-sm font-medium">Clear Selection</div>
               </button>
               {/* )} */}
               {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
               !currentTabContent?.is_viewed_answer &&
               quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                 <button
-                  className="flex w-45 items-center justify-center gap-3 border border-gray-1 px-3 py-2"
+                  className="w-45 flex items-center justify-center gap-3 border border-gray px-3 py-2"
                   onClick={async () => {
                     const data = await getResult(currentTabContent)
                     handleSubmitAnswer('view-answer')
@@ -3119,7 +3117,7 @@ const TestDetail = () => {
                     trackGAEvent('Click Button Submit & View Answer Test')
                   }}
                 >
-                  <div className="text-medium-sm font-medium">
+                  <div className="text-sm font-medium">
                     Submit & View Answer
                   </div>
                 </button>
@@ -3127,7 +3125,7 @@ const TestDetail = () => {
                 filteredTabs.findIndex((e: any) => e.id === currentPage) <
                   filteredTabs.length - 1 && (
                   <button
-                    className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2"
+                    className="flex w-[150px] items-center justify-center gap-3 border border-gray px-3 py-2"
                     onClick={async () => {
                       const index = filteredTabs.findIndex(
                         (e: any) => e.id === currentPage,
@@ -3140,9 +3138,7 @@ const TestDetail = () => {
                       }
                     }}
                   >
-                    <div className="text-medium-sm font-medium">
-                      Next Question
-                    </div>
+                    <div className="text-sm font-medium">Next Question</div>
                   </button>
                 )
               )}

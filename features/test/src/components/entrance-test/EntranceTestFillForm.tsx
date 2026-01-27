@@ -182,7 +182,7 @@ const EntranceTestFillForm = ({
       closeAfterSubmit={false}
       title={undefined}
     >
-      <h2 className="mb-4 max-w-screen-sm text-4xl font-bold text-[#050505]">
+      <h2 className="mb-4 max-w-screen-sm text-4xl font-bold text-gray-800">
         Fill This Form
       </h2>
       <div className="text-sm text-[#A1A1A1]">

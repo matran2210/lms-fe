@@ -41,7 +41,7 @@ const SappTabs: React.FC<SappTabsProps> = ({
                 'after:absolute after:bottom-[-1px] after:left-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300',
                 {
                   'text-primary after:w-full': isActive,
-                  'text-[#a1a1aa] after:w-0 hover:after:w-full': !isActive,
+                  'text-zinc-400 after:w-0 hover:after:w-full': !isActive,
                 },
               )}
             >

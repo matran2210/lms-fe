@@ -303,7 +303,7 @@ const ProfilePage = () => {
             <CollapseArrowIcon selected={isActive} />
           )}
           items={myProfileItems}
-          className="bg-gray-canvas p-0"
+          className="bg-gray-100 p-0"
           rootClassName="mobile-collapse"
         />
       ),
@@ -335,7 +335,7 @@ const ProfilePage = () => {
             <CollapseArrowIcon selected={isActive} />
           )}
           items={mySecurityItems}
-          className="bg-gray-canvas p-0"
+          className="bg-gray-100 p-0"
           rootClassName="mobile-collapse"
         />
       ),
@@ -454,7 +454,7 @@ const ProfilePage = () => {
       </div>
       {isMobileView && openFullScreenMobile.open && (
         <FullScreenMobile
-          className="h-full bg-gray-canvas px-4 pb-4"
+          className="h-full bg-gray-100 px-4 pb-4"
           title={openFullScreenMobile.title}
           open={openFullScreenMobile.open}
           onClose={onCloseFullScreenMobile}

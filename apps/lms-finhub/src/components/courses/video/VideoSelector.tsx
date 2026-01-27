@@ -1,5 +1,5 @@
-import { IVideo } from "@lms/core"
-import { SAPPRadio } from "@lms/ui"
+import { IVideo } from '@lms/core'
+import { SAPPRadio } from '@lms/ui'
 
 type Props = {
   videos: IVideo[]
@@ -25,7 +25,7 @@ export default function VideoSelector({
             size={'small'}
           />
           <span
-            className={`radio-item-label ${v?.file?.id === currentVideoId ? 'text-bw-1' : 'text-gray-1'}`}
+            className={`radio-item-label ${v?.file?.id === currentVideoId ? 'text-gray-800' : 'text-gray'}`}
           >
             Video {i + 1}
           </span>

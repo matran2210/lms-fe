@@ -21,6 +21,7 @@ import {
   DISPLAY_TYPE,
   EXHIBIT_TEXT_REPLACE,
   GRADING_METHOD,
+  IDragDropAnswer,
   IExhibit,
   PROGRAM,
   QUESTION_TYPES,
@@ -150,6 +151,12 @@ const TestDetail = () => {
   const { questions } = useGetQuestionTabs(id as string)
   const type = query.type
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
+  const [currentDragDrop, setCurrentDragDrop] = useState<
+    {
+      currentTabId: string
+      drag_drop_answers: IDragDropAnswer[]
+    }[]
+  >([])
   const { control, watch, getValues, setValue, resetField } = useForm()
   const { control: controlFilter, watch: watchFilter } = useForm()
   const {
@@ -323,7 +330,6 @@ const TestDetail = () => {
             requirements,
             drag_drop_answers,
           } = answerSubmitted?.[0]
-
           // Handle different question types
           if (
             [
@@ -370,19 +376,25 @@ const TestDetail = () => {
           }
 
           if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
-            const answersTemp = (answers || []).sort(
+            const answersTemp = (answersSubmitted?.[0]?.answer || [])?.sort(
               (
                 a: { answer_position: number },
                 b: { answer_position: number },
               ) => a?.answer_position - b?.answer_position,
             )
-
+            const correctsTemp = (answers || [])?.sort(
+              (
+                a: { answer_position: number },
+                b: { answer_position: number },
+              ) => a?.answer_position - b?.answer_position,
+            )
             return {
               corrects: {
-                corrects: handleMultipleCorrectAnswer(
+                answers: handleMultipleCorrectAnswer(
                   drag_drop_answers,
                   answersTemp,
                 ),
+                corrects: correctsTemp,
               },
               solution,
               isSelfReflection: is_self_reflection || false,
@@ -689,20 +701,27 @@ const TestDetail = () => {
         }
       } else {
         if (objTab?.data?.qType === QUESTION_TYPES.DRAG_DROP) {
-          return {
-            ...objTab,
-            corrects: {
-              corrects: handleMultipleCorrectAnswer(
-                objTab?.data?.drag_drop_answers,
-                objTab?.corrects?.corrects,
-              ),
-            },
+          if (!isEmpty(objTab?.corrects?.corrects)) {
+            return {
+              ...objTab,
+              corrects: {
+                answers: handleMultipleCorrectAnswer(
+                  objTab?.data?.drag_drop_answers ||
+                    currentDragDrop?.find(
+                      (item) => item?.currentTabId === objTab?.id,
+                    )?.drag_drop_answers,
+                  objTab?.answer,
+                ),
+                corrects: objTab?.corrects?.corrects,
+              },
+            }
           }
         }
+
         return objTab
       }
     } else return undefined
-  }, [currentPage, tabs, answersSubmitted, essayData])
+  }, [currentPage, tabs, answersSubmitted, essayData, currentDragDrop])
 
   const remainingTimeinSeconds = quizDetail?.quiz_timed
     ? (dayjs(
@@ -1022,7 +1041,7 @@ const TestDetail = () => {
             onChange={(data: SlotValue[]) => {
               setValue(`${currentTabID}_drag_drop_answer`, data)
             }}
-            corrects={corrects?.corrects}
+            corrects={corrects}
             solution={solution}
             explainClassname="!mt-8 !p-0 !bg-transparent"
           />
@@ -1494,6 +1513,22 @@ const TestDetail = () => {
           ),
         ],
       }
+      const dragDropCurrentTemp = {
+        currentTabId: currentTabContent?.id,
+        drag_drop_answers: res?.data?.[0]?.drag_drop_answers,
+      }
+
+      setCurrentDragDrop((prev) => {
+        const exists = prev.some(
+          (item) => item.currentTabId === dragDropCurrentTemp.currentTabId,
+        )
+
+        if (!exists) {
+          return [...prev, dragDropCurrentTemp]
+        }
+
+        return prev
+      })
     }
     return {
       corrects: corrects,
@@ -2786,7 +2821,7 @@ const TestDetail = () => {
                 : 'You should select an answer before click'
             }
             classNames={{
-              root: 'max-w-72 rounded-md',
+              root: 'max-w-[288px] rounded-md',
               body: 'text-sm !py-1 !px-2 flex items-center',
             }}
             getPopupContainer={(triggerNode) => triggerNode.parentElement!}
@@ -3280,7 +3315,7 @@ const TestDetail = () => {
                       </div>
                     </div>
                     <div
-                      className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-[#99A1B7]"
+                      className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-accent"
                       onMouseDown={() => setStartResize(true)}
                       onTouchStart={(e) => {
                         e.preventDefault()
@@ -3460,12 +3495,6 @@ const TestDetail = () => {
                           `/courses/test/test-result/${QuizResultId}`,
                         )
                       }
-                      // } else {
-                      //   console.log('back backs')
-                      //   router.back()
-                      //   setScoreQuestion(scoreFinalTest)
-                      //   setSubmitTest(true)
-                      // }
                     }
                     trackGAEvent('Click Button Submit Time Out Test')
                   })

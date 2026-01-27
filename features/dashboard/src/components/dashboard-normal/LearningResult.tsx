@@ -10,7 +10,7 @@ import {
 } from "recharts";
 import dayjs from "dayjs";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ILearningResult, IMockTestResult } from "@lms/core";
+import { ILearningResult, IMockTestResult, PROGRAM } from "@lms/core";
 import { COURSE_TYPE, DATE_FORMAT } from "@lms/core";
 import { IconEssentional } from "@lms/assets";
 import { Tooltip } from "@lms/ui";
@@ -227,9 +227,11 @@ const LearningResultTest = () => {
   }, [courseId]);
 
   const resultFormula =
-    courseInfo?.category === "ACCA"
-      ? "%Results = Graded activities (70%) + Final test (30%)"
-      : "%Results = Module test (40%) + Topic test (60%)";
+    courseInfo?.category === PROGRAM.LD
+      ? "% Results = Topic test (30%) + Final test (70%)"
+      : courseInfo?.category === "ACCA"
+        ? "%Results = Graded activities (70%) + Final test (30%)"
+        : "%Results = Module test (40%) + Topic test (60%)";
 
   return (
     <div className="flex h-auto w-full rounded-2xl bg-white p-4 md:p-6">
@@ -406,7 +408,7 @@ const LearningResultTest = () => {
               </div>
               {isNormal && (
                 <div className="flex items-center justify-center gap-2.5">
-                  <span className="min-h-3 min-w-3 rounded-full bg-dashboard-learing"></span>
+                  <span className="min-h-3 min-w-3 rounded-full bg-[#6FD3B0]"></span>
                   <span className="min-w-fit text-sm font-medium text-gray-800 xl:text-base">
                     Learning results
                   </span>

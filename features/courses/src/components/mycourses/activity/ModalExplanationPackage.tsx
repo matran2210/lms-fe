@@ -139,7 +139,7 @@ const ModalExplanationPackage = ({
       onCancel={setOpen}
       footer={[]}
       closable={false}
-      //   closeIcon={<CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />}
+      //   closeIcon={<CloseIcon className="transform stroke-gray-800 transition-all duration-300 ease-in-out group-hover:stroke-primary" />}
       style={{ top: 0, left: 0, padding: 0, maxWidth: "100%", height: "100%" }}
       width="100vw"
       centered={false}

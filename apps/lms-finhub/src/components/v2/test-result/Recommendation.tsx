@@ -65,7 +65,7 @@ const Recommendation = ({
             >
               {/* Header */}
               <div className="flex-shrink-0 border-b px-6 py-4">
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-gray-70000 text-lg font-semibold">
                   {COMMENTS?.STUDENT_COMMENT}
                 </h3>
               </div>
@@ -84,7 +84,7 @@ const Recommendation = ({
               </div>
 
               {/* Footer */}
-              <div className="flex flex-shrink-0 items-center justify-between border-t bg-gray-50 px-6 py-4">
+              <div className="bg-gray-50 flex flex-shrink-0 items-center justify-between border-t px-6 py-4">
                 <button
                   type="button"
                   className="focus:ring-2focus:ring-offset-2 inline-flex items-center px-4 py-2 text-sm font-medium transition-colors  duration-200 focus:outline-none"

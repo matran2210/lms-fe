@@ -610,7 +610,7 @@ const ActivityPage = () => {
                   isHidden={focusOnlyQuiz.open}
                   extraActions={
                     focusOnlyDiscussion ? null : (
-                      <div className="flex items-center gap-1 whitespace-nowrap rounded-md bg-warning-100 px-3 py-1 text-xs text-orange-5 md:py-[6px] md:text-sm">
+                      <div className="flex items-center gap-1 whitespace-nowrap rounded-md bg-warning-100 px-3 py-1 text-xs text-warning md:py-[6px] md:text-sm">
                         <HourglassIcon className="shrink-0" />
                         <div>{`${convertMinutesToHourFormat(activity?.duration || 0)} estimated`}</div>
                       </div>

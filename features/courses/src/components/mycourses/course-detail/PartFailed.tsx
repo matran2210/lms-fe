@@ -257,7 +257,7 @@ const PartFailed = ({
         }}
       >
         <div className="flex h-full flex-1 flex-col justify-between">
-          <div className="info mb-6 mt-4 border-l border-gray-2 pl-4 md:mt-6">
+          <div className="info mb-6 mt-4 border-l border-secondary-100 pl-4 md:mt-6">
             {checkFinished && (
               <>
                 <PartInfoItem

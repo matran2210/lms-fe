@@ -394,7 +394,7 @@ export const ScratchPadIcon = ({ className }: { className?: string }) => {
 };
 
 export const CloseIcon = ({
-  className = "stroke-[#050505] ",
+  className = "stroke-gray-800 ",
 }: {
   className?: string;
 }) => {

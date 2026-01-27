@@ -170,7 +170,7 @@ export default function CourseCard({
             // data-aos={ANIMATION.DATA_AOS}
             ref={lastElementRef}
           >
-            <div className="flex min-h-352 flex-col">
+            <div className="flex min-h-[352px] flex-col">
               {/* <div className="mb-3">{renderBadge(course)}</div> */}
               <CourseTitle
                 course={course}
