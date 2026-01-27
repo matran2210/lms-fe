@@ -7,6 +7,7 @@ interface IProps {
   className?: string;
   name?: string;
   id?: string;
+  isOriginCertRatio?: boolean;
 }
 
 const ImageRenderFromHtml = ({
@@ -16,6 +17,7 @@ const ImageRenderFromHtml = ({
   className,
   name = "Student Name",
   id = "certificate-image-id",
+  isOriginCertRatio = false,
 }: IProps) => {
   const injectNameAndSanitize = (input: string): string => {
     try {
@@ -64,7 +66,7 @@ const ImageRenderFromHtml = ({
         "flex items-center justify-center overflow-hidden",
         className,
       )}
-      style={{ width: previewWidth, height: previewHeight }}
+      style={{ width: isOriginCertRatio ? scaledWidth : previewWidth, height: isOriginCertRatio ? scaledHeight : previewHeight }}
     >
       <div id={id} style={{ width: scaledWidth, height: scaledHeight }}>
         <div

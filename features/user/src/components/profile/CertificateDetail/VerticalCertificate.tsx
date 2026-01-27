@@ -3,7 +3,7 @@ import { CertificateImg, CopyIcon, Icon, SappLogoImage } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
 import { ICertificate } from "@lms/core";
 import { useDownloadImage } from "@lms/hooks";
-import { ButtonPrimary, ClickToCopyButton, ImageRenderFromHtml } from "@lms/ui";
+import { ButtonPrimary, ClickToCopyButton, ImageRenderFromHtml, PreviewImageModal } from "@lms/ui";
 import { Divider } from "antd";
 import clsx from "clsx";
 import Image from "next/image";
@@ -28,6 +28,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
   const onCloseModalShare = () => setOpenModalShare(false);
   const { downloadCertificate } = useDownloadImage();
   const [loading, setLoading] = useState(false);
+  const [openPreviewImage, setOpenPreviewImage] = useState(false);
   const handleDownload = async () => {
     if (loading) return;
     setLoading(true);
@@ -49,7 +50,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
       className=" hidden lg:block"
     >
       <div className="flex w-full h-full items-center gap-12 xl:gap-20">
-        <div id="certificate-container-andrew" className="flex h-full w-[55%] items-center justify-center">
+        <div id="certificate-container-andrew" className="flex h-full w-[55%] items-center justify-center cursor-pointer" onClick={() => setOpenPreviewImage(true)}>
           {certificate?.certificate?.html_template ? (
             <ImageRenderFromHtml id={`vertical-${certificate?.id}`} html={certificate.certificate.html_template} previewWidth={500} previewHeight={700} name={certificate.user.detail.full_name}/>
           ) : (
@@ -122,6 +123,16 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
           certificate={certificate}
         />
       )}
+      <PreviewImageModal open={openPreviewImage} setOpen={setOpenPreviewImage}>
+        {certificate?.certificate?.html_template ? (
+          <ImageRenderFromHtml id={`vertical-${certificate?.id}`} html={certificate.certificate.html_template} previewWidth={500} previewHeight={700} isOriginCertRatio name={certificate.user.detail.full_name} />
+        ) : (
+          <CertificateImg
+            size={800}
+            className="max-w-[500px] border-none text-[#A1A1A1] group-hover:text-primary"
+          />
+        )}
+      </PreviewImageModal>
     </CertificateCard>
   );
 };
