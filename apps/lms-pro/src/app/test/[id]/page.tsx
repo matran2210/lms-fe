@@ -21,6 +21,7 @@ import {
   DISPLAY_TYPE,
   EXHIBIT_TEXT_REPLACE,
   GRADING_METHOD,
+  IDragDropAnswer,
   IExhibit,
   PROGRAM,
   QUESTION_TYPES,
@@ -150,6 +151,12 @@ const TestDetail = () => {
   const { questions } = useGetQuestionTabs(id as string)
   const type = query.type
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
+  const [currentDragDrop, setCurrentDragDrop] = useState<
+    {
+      currentTabId: string
+      drag_drop_answers: IDragDropAnswer[]
+    }[]
+  >([])
   const { control, watch, getValues, setValue, resetField } = useForm()
   const { control: controlFilter, watch: watchFilter } = useForm()
   const {
@@ -323,7 +330,6 @@ const TestDetail = () => {
             requirements,
             drag_drop_answers,
           } = answerSubmitted?.[0]
-
           // Handle different question types
           if (
             [
@@ -700,7 +706,10 @@ const TestDetail = () => {
               ...objTab,
               corrects: {
                 answers: handleMultipleCorrectAnswer(
-                  objTab?.data?.drag_drop_answers,
+                  objTab?.data?.drag_drop_answers ||
+                    currentDragDrop?.find(
+                      (item) => item?.currentTabId === objTab?.id,
+                    )?.drag_drop_answers,
                   objTab?.answer,
                 ),
                 corrects: objTab?.corrects?.corrects,
@@ -712,7 +721,7 @@ const TestDetail = () => {
         return objTab
       }
     } else return undefined
-  }, [currentPage, tabs, answersSubmitted, essayData])
+  }, [currentPage, tabs, answersSubmitted, essayData, currentDragDrop])
 
   const remainingTimeinSeconds = quizDetail?.quiz_timed
     ? (dayjs(
@@ -1504,6 +1513,22 @@ const TestDetail = () => {
           ),
         ],
       }
+      const dragDropCurrentTemp = {
+        currentTabId: currentTabContent?.id,
+        drag_drop_answers: res?.data?.[0]?.drag_drop_answers,
+      }
+
+      setCurrentDragDrop((prev) => {
+        const exists = prev.some(
+          (item) => item.currentTabId === dragDropCurrentTemp.currentTabId,
+        )
+
+        if (!exists) {
+          return [...prev, dragDropCurrentTemp]
+        }
+
+        return prev
+      })
     }
     return {
       corrects: corrects,
@@ -3470,12 +3495,6 @@ const TestDetail = () => {
                           `/courses/test/test-result/${QuizResultId}`,
                         )
                       }
-                      // } else {
-                      //   console.log('back backs')
-                      //   router.back()
-                      //   setScoreQuestion(scoreFinalTest)
-                      //   setSubmitTest(true)
-                      // }
                     }
                     trackGAEvent('Click Button Submit Time Out Test')
                   })

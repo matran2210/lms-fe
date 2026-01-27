@@ -20,7 +20,7 @@ type Context = {
 
 // initContext
 const initContext: Context = {
-  openPinned: true,
+  openPinned: false,
   setOpenPinned: () => true,
   pinnedNotifications: {
     data: {
@@ -54,7 +54,7 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{
   const { api } = props
   const {pathname}  = useFeature()
 
-  const [openPinned, setOpenPinned] = useState(true);
+  const [openPinned, setOpenPinned] = useState(false);
   const [pinnedNotifications, setPinnedNotifications] =
     useState<PinnedNotifications>({
       data: {
@@ -100,7 +100,7 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{
         setLocalStorageItem("pinnedStatus", res?.data?.status);
       }
     } else {
-      if (oldPinnedFlag === "false") {
+      if (Boolean(oldPinnedFlag === "false")) {
         setOpenPinned(false);
       } else {
         setOpenPinned(true);

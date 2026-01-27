@@ -1,8 +1,8 @@
-import { CertificateImg, Icon, SappLogoImage } from "@lms/assets";
+import { CertificateImg, Icon, LoadingButtonAnimation, SappLogoImage } from "@lms/assets";
 import { ButtonPrimary, ClickToCopyButton, PreviewImageModal } from "@lms/ui";
 import { Button } from "antd";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import CertificateCard from "./CertificateCard";
 import { ICertificate } from "@lms/core";
 import { ImageRenderFromHtml } from "@lms/ui";
@@ -55,6 +55,15 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
       setLoading(false);
     }
   }
+
+  const certificateView = useMemo(() => {
+    return certificate?.certificate?.html_template ? (
+      <ImageRenderFromHtml id={`horizontal-${certificate?.id}`} html={certificate.certificate.html_template} previewWidth={previewWidth} previewHeight={previewHeight} name={certificate.user.detail.full_name}/>
+    ) : (
+      <CertificateImg size={400} className=" max-w-full border-none text-[#A1A1A1] group-hover:text-primary"/>
+    );
+  }, [previewWidth, previewHeight]);
+  
   return (
     <CertificateCard
       bodyClassName="flex h-screen justify-center container mx-auto"
@@ -77,17 +86,10 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
 
         <div
           ref={previewRef}
-          className="h-full mb-6 flex w-full items-center justify-center overflow-hidden md:mb-0 md:flex-1 cursor-pointer" 
+          className="h-full mb-6 flex w-full items-center justify-center overflow-hidden md:mb-0 md:flex-1 cursor-pointer"
           onClick={() => setOpenPreviewImage(true)}
         >
-          {certificate?.certificate?.html_template ? (
-            <ImageRenderFromHtml id={`horizontal-${certificate?.id}`} html={certificate.certificate.html_template} previewWidth={previewWidth} previewHeight={previewHeight} name={certificate.user.detail.full_name}/>
-          ) : (
-            <CertificateImg
-              size={400}
-              className=" max-w-full border-none text-[#A1A1A1] group-hover:text-primary"
-            />
-          )}
+          {certificateView}
         </div>
 
         <div className="flex h-[200px] flex-shrink-0 flex-col items-center gap-12">
@@ -105,13 +107,12 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
             <div className="flex w-full items-stretch justify-center gap-4">
               <ButtonPrimary
                 size="medium"
-                icon={<Icon type="download" />}
+                icon={<div className="size-[22px]">{loading ? <LoadingButtonAnimation /> : <Icon type="download" />}</div>}
                 iconPosition="end"
                 onClick={handleDownload}
                 className={clsx("px-[37.5px] py-2 sm:!px-[29px]", {
                   "opacity-50 !cursor-not-allowed": loading,
                 })}
-                loading={loading}
               >
                 Download
               </ButtonPrimary>
