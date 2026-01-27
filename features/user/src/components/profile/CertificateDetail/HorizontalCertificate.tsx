@@ -1,5 +1,5 @@
 import { CertificateImg, Icon, LoadingButtonAnimation, SappLogoImage } from "@lms/assets";
-import { ButtonPrimary, ClickToCopyButton } from "@lms/ui";
+import { ButtonPrimary, ClickToCopyButton, PreviewImageModal } from "@lms/ui";
 import { Button } from "antd";
 import Image from "next/image";
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -8,6 +8,7 @@ import { ICertificate } from "@lms/core";
 import { ImageRenderFromHtml } from "@lms/ui";
 import { useDownloadImage } from "@lms/hooks";
 import clsx from "clsx";
+import { useFeature } from "@lms/contexts";
 
 interface HorizontalCertificateProps {
   certificate?: ICertificate;
@@ -18,10 +19,13 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
   certificate,
   issuedBy = "SAPP Academy",
 }) => {
+  const { query } = useFeature();
+  const isShareLinkedin = !!query?.isShareLinkedin
   const { downloadCertificate } = useDownloadImage();
   const previewRef = useRef<HTMLDivElement>(null);
   const [previewSize, setPreviewSize] = useState({ width: 0, height: 0 });
   const [loading, setLoading] = useState(false);
+  const [openPreviewImage, setOpenPreviewImage] = useState(false);
   useEffect(() => {
     const updateSize = () => {
       if (!previewRef.current) return;
@@ -82,7 +86,8 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
 
         <div
           ref={previewRef}
-          className="h-full mb-6 flex w-full items-center justify-center overflow-hidden md:mb-0 md:flex-1"
+          className="h-full mb-6 flex w-full items-center justify-center overflow-hidden md:mb-0 md:flex-1 cursor-pointer"
+          onClick={() => setOpenPreviewImage(true)}
         >
           {certificateView}
         </div>
@@ -94,7 +99,7 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
                 Congratulation!
               </div>
               <div className="text-center text-sm md:text-base">
-                Congratulations, you have achieved the{" "}
+                Congratulations, {isShareLinkedin ? certificate?.user?.detail?.full_name : "you"} have achieved the{" "}
                 <span className="font-bold">{certificate?.course.name}</span>{" "}
                 issued by {issuedBy}!
               </div>
@@ -127,6 +132,16 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
           </div>
         </div>
       </div>
+      <PreviewImageModal open={openPreviewImage} setOpen={setOpenPreviewImage}>
+        {certificate?.certificate?.html_template ? (
+          <ImageRenderFromHtml id={`horizontal-${certificate?.id}`} html={certificate.certificate.html_template} previewWidth={500} previewHeight={700} isOriginCertRatio name={certificate.user.detail.full_name} />
+        ) : (
+          <CertificateImg
+            size={800}
+            className="max-w-[500px] border-none text-[#A1A1A1] group-hover:text-primary"
+          />
+        )}
+      </PreviewImageModal>
     </CertificateCard>
   );
 };

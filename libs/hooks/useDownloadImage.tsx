@@ -102,8 +102,53 @@ const useDownloadImage = () => {
       message.error("Tải ảnh thất bại. Vui lòng thử lại!");
     }
   };
+  const getCertificateBase64 = async (
+    html: HTMLElement,
+    stringHtml: string,
+    name: string,
+    certificateName: string,
+  ) => {
+    if (!html) return;
+    
+    try {
+      // Đợi tất cả fonts load xong
+      await document.fonts.ready;
 
-  return { downloadImage, downloadCertificate };
+      // Lấy embedded font CSS
+      const fontEmbedCSS = await getEmbeddedFontCSS();
+
+      const bodyStringHtml = stringHtml.match(/body\s*\{([\s\S]*?)\}/i)?.[1] ?? "";
+      const widthCertificate = Number(
+        bodyStringHtml.match(/(^|\s)width\s*:\s*(\d+)px\s*;/i)?.[2]
+      );
+      const heightCertificate = Number(
+        bodyStringHtml.match(/(^|\s)height\s*:\s*(\d+)px\s*;/i)?.[2]
+      );
+      const widthCertificateElement = html.clientWidth;
+
+      const dataUrl = await htmlToImage.toPng(html, {
+        pixelRatio: 1,
+        width: widthCertificate,
+        height: heightCertificate,
+        fontEmbedCSS, // Sử dụng fonts đã embed sẵn
+        cacheBust: false, // Tắt cache busting
+        skipFonts: true, // Skip việc fetch fonts mới
+        style: {
+          transform: `scale(${widthCertificate / widthCertificateElement})`,
+          transformOrigin: 'top left',
+        },
+      });
+
+      return {
+        url: dataUrl,
+        name: `${name}-${certificateName}-certificate.png`
+      }
+    } catch (error) {
+      return { url: '', name: ''}
+    }
+  };
+
+  return { downloadImage, downloadCertificate, getCertificateBase64 };
 };
 
 export default useDownloadImage;

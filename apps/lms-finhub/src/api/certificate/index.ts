@@ -5,13 +5,15 @@ export const uploadImageToLinkedIn = async (
   personURN: string,
   shareUrl: string,
   text: string,
+  imageBase64: string,
 ) => {
   try {
     const res = await axios.post('/api/auth/linkedin/post', {
       accessToken: token,
       personURN,
-      shareUrl,
+      // shareUrl,
       text,
+      imageBase64,
     })
 
     if (res.data.success) {

@@ -1,15 +1,21 @@
-"use client"
+'use client'
 import {
   UserType,
   getEventCount,
   useAppDispatch,
-  useCourseContext
+  useCourseContext,
 } from '@lms/contexts'
 import { ANIMATION, AppType, LANG_SIGNIN } from '@lms/core'
 import { Heading } from '@lms/feature-courses'
 import { EventTestFilter, EventTestList } from '@lms/feature-test'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { CourseSkeleton, Footer, Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
+import {
+  CourseSkeleton,
+  Footer,
+  Layout,
+  SappLoadingGlobal,
+  SearchWithMenuToggle,
+} from '@lms/ui'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -18,10 +24,8 @@ import { EventTestAPI } from 'src/api/event-test'
 import { PageLink } from 'src/constants/routers'
 
 const EventTest = () => {
-  const router = useRouter()
-   const searchParam = useSearchParams()
-      const params = useParams();
-      const query = Object.fromEntries(searchParam.entries())
+  const searchParam = useSearchParams()
+  const query = Object.fromEntries(searchParam.entries())
   const dispatch = useAppDispatch()
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()
@@ -42,7 +46,8 @@ const EventTest = () => {
     { retry: false },
   )
 
-  const getEventTestCount = async () => await dispatch(getEventCount(EventTestAPI))
+  const getEventTestCount = async () =>
+    await dispatch(getEventCount(EventTestAPI))
   /**
    * @description handle open and close sidebar
    */

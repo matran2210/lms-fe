@@ -1,16 +1,16 @@
 "use client"
 import { CertificateImg, CopyIcon, Icon, LoadingButtonAnimation, SappLogoImage } from "@lms/assets";
-import { ButtonPrimary, ClickToCopyButton } from "@lms/ui";
+import { useFeature } from "@lms/contexts";
+import { ICertificate } from "@lms/core";
+import { useDownloadImage } from "@lms/hooks";
+import { ButtonPrimary, ClickToCopyButton, ImageRenderFromHtml, PreviewImageModal } from "@lms/ui";
+import { Divider } from "antd";
+import clsx from "clsx";
 import Image from "next/image";
 import React, { useMemo, useState } from "react";
 import { LinkedInShareButton } from "./ButtonShareLinkedin";
 import CertificateCard from "./CertificateCard";
 import ModalShareToLinkedin from "./ModalShareToLinkedin";
-import { ICertificate } from "@lms/core";
-import { Divider } from "antd";
-import { ImageRenderFromHtml } from "@lms/ui";
-import { useDownloadImage } from "@lms/hooks";
-import clsx from "clsx";
 
 interface CertificateVerticalProps {
   certificate?: ICertificate;
@@ -21,11 +21,14 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
   certificate,
   issuedBy = "SAPP Academy",
 }) => {
+  const { query } = useFeature();
+  const isShareLinkedin = !!query?.isShareLinkedin
   const [openModalShare, setOpenModalShare] = useState(false);
   const onOpenModalShare = () => setOpenModalShare(true);
   const onCloseModalShare = () => setOpenModalShare(false);
   const { downloadCertificate } = useDownloadImage();
   const [loading, setLoading] = useState(false);
+  const [openPreviewImage, setOpenPreviewImage] = useState(false);
   const handleDownload = async () => {
     if (loading) return;
     setLoading(true);
@@ -65,7 +68,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
       className=" hidden lg:block"
     >
       <div className="flex w-full h-full items-center gap-12 xl:gap-20">
-        <div id="certificate-container-andrew" className="flex h-full w-[55%] items-center justify-center">
+        <div id="certificate-container-andrew" className="flex h-full w-[55%] items-center justify-center cursor-pointer" onClick={() => setOpenPreviewImage(true)}>
           {certificateView}
         </div>
         <div className="flex flex-col items-center gap-12">
@@ -88,7 +91,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
                 Congratulation!
               </div>
               <div className="text-center">
-                <p>Congratulations, you have achieved the</p>
+                <p>Congratulations, {isShareLinkedin ? certificate?.user?.detail?.full_name : "you"} have achieved the</p>
                 <p className="font-bold">{certificate?.course?.name}</p>
                 <p>issued by {issuedBy}!</p>
               </div>
@@ -130,6 +133,16 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
           certificate={certificate}
         />
       )}
+      <PreviewImageModal open={openPreviewImage} setOpen={setOpenPreviewImage}>
+        {certificate?.certificate?.html_template ? (
+          <ImageRenderFromHtml id={`vertical-${certificate?.id}`} html={certificate.certificate.html_template} previewWidth={500} previewHeight={700} isOriginCertRatio name={certificate.user.detail.full_name} />
+        ) : (
+          <CertificateImg
+            size={800}
+            className="max-w-[500px] border-none text-[#A1A1A1] group-hover:text-primary"
+          />
+        )}
+      </PreviewImageModal>
     </CertificateCard>
   );
 };

@@ -10,6 +10,7 @@ import {
 } from "../../state";
 import { ExamInformation, IQuestion } from "./course";
 import { IExamPrediction, ILearningResult, IMockTestResult, IOverProgress, ITopicProgress, IWeeklyReport } from "./dashboard";
+import { ICertificate } from "./Profile";
 import {
   IAnswerQuizLastestAttempt,
   IQuizResultList,
@@ -305,6 +306,7 @@ export interface ICertificateAPI {
     personURN: string,
     shareUrl: string,
     text: string,
+    imageBase64: string,
   ) => Promise<AxiosResponse<any, any, {}>>;
 }
 export interface IDashboardAPI {

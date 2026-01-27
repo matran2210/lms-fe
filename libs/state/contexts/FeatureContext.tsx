@@ -81,6 +81,7 @@ interface FeatureContextProps {
     personURN: string,
     shareUrl: string,
     text: string,
+    imageBuffer: string
   ) => Promise<AxiosResponse<any, any, {}>>;
 }
 

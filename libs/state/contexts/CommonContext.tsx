@@ -4,6 +4,7 @@ import React, {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react'
 import {
@@ -11,6 +12,7 @@ import {
   ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,IPopupFormState
 } from '@lms/core'
+import { useFeature } from './FeatureContext'
 
 // type for context
 type Context = {
@@ -66,6 +68,7 @@ export function CourseProvider(props: PropsWithChildren<{
   }
 }>) {
   const { router, api } = props
+  const { pathname } = useFeature();
   /**
    * @description state này để xác định mở popup khi làm xong bài Final Test
    */
@@ -122,14 +125,20 @@ export function CourseProvider(props: PropsWithChildren<{
     }
   }
 
+    const checkRouteCertificate = useMemo(() => {
+      const path = pathname as string
+  
+      return (
+        /^\/entrance-test\/test-result\/[^/]+$/.test(path) ||
+        /^\/entrance-test\/table-result\/[^/]+$/.test(path) ||
+        /^\/certificates\/[^/]+$/.test(path)
+      )
+    }, [pathname])
+
+
   useEffect(() => {
-    if (
-      ![
-        ENTRANCE_TEST_RESULT,
-        CERTIFICATE_DETAIL,
-        ENTRANCE_TEST_TABLE_RESULT,
-      ].includes(router.pathname)
-    ) {
+   
+    if (!checkRouteCertificate) {
       fetchEventTest()
     }
   }, [])

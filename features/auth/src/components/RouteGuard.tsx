@@ -5,14 +5,14 @@ import {
   ENTRANCE_TEST_TABLE_RESULT
 } from "@lms/core";
 import { setCookie } from "@lms/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface IProps {
   children: JSX.Element;
 }
 
 export const RouteGuard = ({ children }: IProps) => {
-  const { userApi, router } = useFeature();
+  const { userApi, router, pathname } = useFeature();
 
   const [authorized, setAuthorized] = useState(false);
   const dispatch = useAppDispatch();
@@ -20,17 +20,22 @@ export const RouteGuard = ({ children }: IProps) => {
   // First useEffect for getMe
   useEffect(() => {
     callGetMe();
-  }, [router.pathname, userSlice.user.keycloak_user_id]);
+  }, [pathname, userSlice.user.keycloak_user_id]);
 
+  const checkRouteCertificate = useMemo(() => {
+    const path = pathname as string
+
+    return (
+      /^\/entrance-test\/test-result\/[^/]+$/.test(path) ||
+      /^\/entrance-test\/table-result\/[^/]+$/.test(path) ||
+      /^\/certificates\/[^/]+$/.test(path)
+    )
+  }, [pathname])
   const callGetMe = async () => {
     if (
       userSlice.user.id ||
       userSlice.user.keycloak_user_id ||
-      [
-        CERTIFICATE_DETAIL,
-        ENTRANCE_TEST_RESULT,
-        ENTRANCE_TEST_TABLE_RESULT,
-      ].includes(router.pathname)
+      checkRouteCertificate
     ) {
       setAuthorized(true);
       setCookie(
