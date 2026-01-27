@@ -197,7 +197,7 @@ const ClassResourceTable = ({
                 {
                   icon: <DownloadIcon className="h-5 w-5" />,
                   nameAction: 'Download',
-                  action: () => download(params.courseId, record.id),
+                  action: () => download(params.courseId as string, record.id),
                 },
               ]}
             />
