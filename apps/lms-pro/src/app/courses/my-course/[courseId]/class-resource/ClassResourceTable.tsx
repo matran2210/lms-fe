@@ -197,8 +197,7 @@ const ClassResourceTable = ({
                 {
                   icon: <DownloadIcon className="h-5 w-5" />,
                   nameAction: 'Download',
-                  action: () =>
-                    download(router.query.courseId as string, record.id),
+                  action: () => download(params.courseId, record.id),
                 },
               ]}
             />
