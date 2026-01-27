@@ -35,7 +35,7 @@ const SheetViewer = ({ fileUrl, fileName }: IProps) => {
           const ws = workbook.Sheets[sheetName];
           const rows = XLSX.utils.sheet_to_json(ws, { header: 1, raw: true });
           const data = rows;
-          const celldata = [];
+          const celldata: any[] = [];
 
           rows.forEach((row, r) => {
             if (!Array.isArray(row)) return;
@@ -107,10 +107,6 @@ const SheetViewer = ({ fileUrl, fileName }: IProps) => {
       data={normalizedData}
       allowEdit={false}
       showToolbar={false}
-      showinfobar={false}
-      allowCopy={false}
-      enableAddRow={false}
-      enableAddCol={false}
     />
   );
 };
