@@ -708,7 +708,7 @@ const TestDetail = () => {
                 answers: handleMultipleCorrectAnswer(
                   objTab?.data?.drag_drop_answers ||
                     currentDragDrop?.find(
-                      (item: any) => item?.currentTabId === objTab?.id,
+                      (item) => item?.currentTabId === objTab?.id,
                     )?.drag_drop_answers,
                   objTab?.answer,
                 ),
