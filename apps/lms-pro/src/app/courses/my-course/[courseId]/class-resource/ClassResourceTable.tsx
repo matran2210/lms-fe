@@ -23,6 +23,7 @@ import {
   Tooltip,
   PdfViewer,
   SAPPAudio,
+  Popover,
 } from '@lms/ui'
 import { buildQueryString } from '@lms/utils'
 import request from '@services/requestV2'
@@ -171,13 +172,41 @@ const ClassResourceTable = ({
       dataIndex: 'lesson',
       key: 'lesson',
       className: clsx(className, 'text-center'),
-      align: 'center',
-      render: (_, record) =>
-        record?.class_resource_permissions?.schedules.map((item, index) => (
-          <div key={index} className="text-base text-gray-400">
-            {item?.name}
+      align: 'left',
+      render: (_, record) => {
+        const schedules = record?.class_resource_permissions?.schedules || []
+        const preview = schedules.slice(0, 2)
+
+        return (
+          <div>
+            {preview.map((i) => (
+              <div key={i.name} className="text-base text-gray-400">
+                {i.name}
+              </div>
+            ))}
+            <Popover
+              placement="right"
+              content={
+                <div className="tooltip-scroll flex max-h-60 flex-col gap-1 overflow-auto">
+                  {schedules.map((i, idx) => (
+                    <div className="p-2 text-sm" key={idx}>
+                      {i.name}
+                    </div>
+                  ))}
+                </div>
+              }
+            >
+              <div className="inline cursor-pointer">
+                {schedules.length > 2 && (
+                  <span className="text-sm font-medium text-primary">
+                    +{schedules.length - 2} more
+                  </span>
+                )}
+              </div>
+            </Popover>
           </div>
-        )),
+        )
+      },
       width: 400,
     },
     {
