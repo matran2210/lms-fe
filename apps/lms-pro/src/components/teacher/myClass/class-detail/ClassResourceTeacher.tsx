@@ -16,6 +16,7 @@ import {
   FileViewer,
   LayoutFilter,
   ModalResizeable,
+  Popover,
   SAPPAudio,
   SappModalImage,
   SappTable,
@@ -155,10 +156,41 @@ export default function ClassResourceTeacher() {
     },
     {
       title: 'Lesson',
-      render: (record: IClassResource) =>
-        record?.class_resource_permissions?.schedules.map((item, index) => (
-          <div key={index}>{item?.name}</div>
-        )),
+      align: 'left',
+      render: (record: IClassResource) => {
+        const schedules = record?.class_resource_permissions?.schedules || []
+        const preview = schedules.slice(0, 2)
+
+        return (
+          <div>
+            {preview.map((i) => (
+              <div key={i.name} className="text-base text-gray-400">
+                {i.name}
+              </div>
+            ))}
+            <Popover
+              placement="right"
+              content={
+                <div className="tooltip-scroll flex max-h-60 flex-col gap-1 overflow-auto">
+                  {schedules.map((i, idx) => (
+                    <div className="p-2 text-sm" key={idx}>
+                      {i.name}
+                    </div>
+                  ))}
+                </div>
+              }
+            >
+              <div className="inline cursor-pointer">
+                {schedules.length > 2 && (
+                  <span className="text-sm font-medium text-primary">
+                    +{schedules.length - 2} more
+                  </span>
+                )}
+              </div>
+            </Popover>
+          </div>
+        )
+      },
     },
     {
       title: '',
