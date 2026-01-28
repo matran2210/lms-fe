@@ -80,7 +80,10 @@ const ClassResourceTable = ({
       if (res) {
         let originalUrl = res.url
         if (res.is_encrypted) {
-          const rawDecoded = CryptoJS.AES.decrypt(res.url, 'randomSecretKey')
+          const rawDecoded = CryptoJS.AES.decrypt(
+            res.url,
+            process.env.NEXT_PUBLIC_DECRYPT_CRYPTO_KEY || '',
+          )
           originalUrl = rawDecoded.toString(CryptoJS.enc.Utf8)
         }
         setPreviewResource({
@@ -209,7 +212,8 @@ const ClassResourceTable = ({
                 {
                   icon: <DownloadIcon className="h-5 w-5" />,
                   nameAction: 'Download',
-                  action: () => download(record.name, record.file_key),
+                  action: () =>
+                    download(router.query.courseId as string, record.id),
                 },
               ]}
             />
@@ -219,15 +223,8 @@ const ClassResourceTable = ({
     },
   ]
 
-  const download = async (name: string, file_key: string) => {
-    await UploadAPI.downloadFile({
-      files: [
-        {
-          name: name,
-          file_key: file_key,
-        },
-      ],
-    })
+  const download = async (class_id: string, resource_id: string) => {
+    await UploadAPI.downloadFileClassResource(class_id, resource_id)
   }
   /**
    * @static
@@ -250,7 +247,6 @@ const ClassResourceTable = ({
     return loadDocFile(url)
   }
   const renderPreviewContent = (resource: IClassResource) => {
-    console.log('resource', resource)
     switch (resource.suffix_type) {
       case 'VIDEO':
       case 'AUDIO':
