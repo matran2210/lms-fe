@@ -56,9 +56,6 @@ export default function ClassResourceTeacher() {
   const [sheetResizeVersion, setSheetResizeVersion] = useState(0)
 
   const handleOpenPreview = async (resource: IClassResource) => {
-    // if (!resource?.url && !resource?.sub_url) return
-    // setPreviewResource(resource)
-    // setOpenPreview(true)
     try {
       const res = await ClassAPI.previewClassFile(
         param.id as string,
@@ -359,6 +356,7 @@ export default function ClassResourceTeacher() {
         previewResource &&
         previewResource.suffix_type !== 'IMAGE' && (
           <ModalResizeable
+            isInBody={true}
             bodyClassName={clsx('px-5', {
               'pb-5': previewResource.suffix_type === 'WORD_DOCUMENT',
             })}
