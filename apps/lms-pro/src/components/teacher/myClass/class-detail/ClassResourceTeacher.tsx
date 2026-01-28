@@ -1,6 +1,6 @@
 import ClassResourceTeacherFilter from '@components/teacher/components/ClassResourceTeacherFilter'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
-import { CloseIcon, DownloadIcon } from '@lms/assets'
+import { CloseIcon, DownloadIcon, LoadingIcon } from '@lms/assets'
 import { useFeature } from '@lms/contexts'
 import {
   CLASS_SUFFIX_TYPE,
@@ -13,13 +13,16 @@ import {
 import { useSappPaging, useUserRole } from '@lms/hooks'
 import {
   ActionCellV2,
+  EditorReader,
   FileViewer,
   LayoutFilter,
   ModalResizeable,
+  PdfViewer,
   SAPPAudio,
   SappModalImage,
   SappTable,
   SAPPVideo,
+  SheetViewer,
   TextPreview,
   Tooltip,
 } from '@lms/ui'
@@ -30,6 +33,8 @@ import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ClassAPI } from 'src/api/class'
 import { UploadAPI } from 'src/api/upload'
+import CryptoJS from 'crypto-js'
+import { handleDocUploadFromBlob } from '@utils/helpers/editor-helper'
 
 export default function ClassResourceTeacher() {
   const { videoUrl } = useFeature()
@@ -46,11 +51,39 @@ export default function ClassResourceTeacher() {
     null,
   )
   const [openPreview, setOpenPreview] = useState(false)
+  const [defaultEditor, setDefaultEditor] = useState<string>()
+  const [loadingEditor, setLoadingEditor] = useState<boolean>(false)
+  const [sheetResizeVersion, setSheetResizeVersion] = useState(0)
 
-  const handleOpenPreview = (resource: IClassResource) => {
-    if (!resource?.url && !resource?.sub_url) return
-    setPreviewResource(resource)
-    setOpenPreview(true)
+  const handleOpenPreview = async (resource: IClassResource) => {
+    try {
+      const res = await ClassAPI.previewClassFile(
+        param.id as string,
+        resource.id,
+      )
+      if (res) {
+        let originalUrl = res.url
+        if (res.is_encrypted) {
+          const rawDecoded = CryptoJS.AES.decrypt(
+            res.url,
+            process.env.NEXT_PUBLIC_DECRYPT_CRYPTO_KEY || '',
+          )
+          originalUrl = rawDecoded.toString(CryptoJS.enc.Utf8)
+        }
+        setPreviewResource({
+          ...resource,
+          url: originalUrl,
+          is_encrypted: res.is_encrypted,
+        })
+        setOpenPreview(true)
+        if (resource.suffix_type === 'WORD_DOCUMENT') {
+          setLoadingEditor(true)
+          const defaultEditor = await getEditorData(originalUrl)
+          setDefaultEditor(defaultEditor)
+          setLoadingEditor(false)
+        }
+      }
+    } catch (error) {}
   }
 
   const { data, pagination, isLoading, handleChangeParams, setPagination } =
@@ -176,7 +209,7 @@ export default function ClassResourceTeacher() {
                 {
                   icon: <DownloadIcon className="h-5 w-5" />,
                   nameAction: 'Download',
-                  action: () => download(record.name, record.file_key),
+                  action: () => download(param.id as string, record.id),
                 },
               ]}
             />
@@ -186,15 +219,22 @@ export default function ClassResourceTeacher() {
     },
   ]
 
-  const download = async (name: string, file_key: string) => {
-    await UploadAPI.downloadFile({
-      files: [
-        {
-          name: name,
-          file_key: file_key,
-        },
-      ],
-    })
+  const download = async (class_id: string, resource_id: string) => {
+    await UploadAPI.downloadFileClassResource(class_id, resource_id)
+  }
+
+  const loadDocFile = async (url: string) => {
+    try {
+      const res = await fetch(url)
+      const blob = await res.blob()
+      return await handleDocUploadFromBlob(blob)
+    } catch (error) {
+      return ''
+    }
+  }
+
+  async function getEditorData(url: string) {
+    return loadDocFile(url)
   }
 
   const renderPreviewContent = (resource: IClassResource) => {
@@ -226,10 +266,46 @@ export default function ClassResourceTeacher() {
             }}
           ></SAPPAudio>
         )
-      case 'SHEET':
       case 'WORD_DOCUMENT':
-      case 'POWER_POINT':
+        return loadingEditor ? (
+          <LoadingIcon stroke="#404041" />
+        ) : resource.is_encrypted ? (
+          <div className="word-document-preview">
+            <EditorReader text_editor_content={defaultEditor || ''} />
+          </div>
+        ) : (
+          <FileViewer
+            fileName={resource.name}
+            fileUrl={resource.url}
+            onlyView
+          />
+        )
+
+      case 'SHEET':
+        return resource.is_encrypted ? (
+          <SheetViewer
+            fileUrl={resource.url}
+            fileName={resource.name}
+            resizeVersion={sheetResizeVersion}
+          />
+        ) : (
+          <FileViewer
+            fileName={resource.name}
+            fileUrl={resource.url}
+            onlyView
+          />
+        )
       case 'PDF':
+        return resource.is_encrypted ? (
+          <PdfViewer url={resource.url} />
+        ) : (
+          <FileViewer
+            fileName={resource.name}
+            fileUrl={resource.url}
+            onlyView
+          />
+        )
+      case 'POWER_POINT':
         return (
           <FileViewer
             fileName={resource.name}
@@ -280,7 +356,10 @@ export default function ClassResourceTeacher() {
         previewResource &&
         previewResource.suffix_type !== 'IMAGE' && (
           <ModalResizeable
-            bodyClassName={clsx('px-5')}
+            isInBody={true}
+            bodyClassName={clsx('px-5', {
+              'pb-5': previewResource.suffix_type === 'WORD_DOCUMENT',
+            })}
             key={previewResource.url}
             modalIndex={1}
             title={previewResource.name}
@@ -324,6 +403,9 @@ export default function ClassResourceTeacher() {
                 </button>
               </div>
             }
+            onResizeStopDone={() => {
+              setSheetResizeVersion((v) => v + 1)
+            }}
           >
             <div className="h-full bg-white">
               {renderPreviewContent(previewResource)}
