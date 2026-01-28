@@ -40,9 +40,7 @@ const getBorderStyle = (border?: Partial<ExcelJS.Border>) => {
 
   return {
     style: styleMap[border.style] || 1,
-    color: border.color?.argb
-      ? `#${border.color.argb.slice(2)}`
-      : "#000000",
+    color: border.color?.argb ? `#${border.color.argb.slice(2)}` : "#000000",
   };
 };
 
@@ -126,12 +124,12 @@ const SheetViewer = ({ fileUrl, fileName, resizeVersion }: IProps) => {
 
           // Row height
           ws.eachRow({ includeEmpty: true }, (row, rowIndex) => {
-            config.rowlen[rowIndex - 1] =
-              row.height || DEFAULT_ROW_HEIGHT;
+            config.rowlen[rowIndex - 1] = row.height || DEFAULT_ROW_HEIGHT;
           });
 
           // Merge normalize
-          Object.values(ws._merges || {}).forEach((merge: any) => {
+          const merges = (ws as any)._merges || {};
+          Object.values(merges).forEach((merge: any) => {
             if (merge.bottom - merge.top + 1 > 1) {
               normalizeMergedRowHeight(
                 merge,
@@ -153,18 +151,18 @@ const SheetViewer = ({ fileUrl, fileName, resizeVersion }: IProps) => {
                 config.columnlen[c] = w ? w * 8 : DEFAULT_COL_WIDTH;
               }
 
-              const merge = ws._merges?.[cell.address];
+              const merge = (ws as any)._merges?.[cell.address];
               const isMerged = !!merge;
               const isMaster =
-                isMerged &&
-                merge.top - 1 === r &&
-                merge.left - 1 === c;
+                isMerged && merge.top - 1 === r && merge.left - 1 === c;
 
               let value: any = null;
               if (!isMerged || isMaster) {
                 if (typeof cell.value === "object" && cell.value) {
                   if ("richText" in cell.value)
-                    value = cell.value.richText.map((t: any) => t.text).join("");
+                    value = cell.value.richText
+                      .map((t: any) => t.text)
+                      .join("");
                   else if ("result" in cell.value) value = cell.value.result;
                 } else value = cell.value ?? null;
               }
@@ -222,7 +220,7 @@ const SheetViewer = ({ fileUrl, fileName, resizeVersion }: IProps) => {
           return {
             name: ws.name,
             id: sheetId,
-            status: ws.orderNo === 0 ? 1 : 0,
+            status: (ws as any).orderNo === 0 ? 1 : 0,
             data,
             celldata,
             config,
