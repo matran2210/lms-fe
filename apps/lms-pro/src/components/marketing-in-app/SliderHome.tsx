@@ -71,7 +71,7 @@ const SliderHome = () => {
   return (
     <SlickSlider {...settings}>
       {listSlides.map((src, index) => (
-        <div key={index}>
+        <div key={index} className="outline-none">
           <Image
             className="rounded-lg md:rounded-2xl"
             src={src}

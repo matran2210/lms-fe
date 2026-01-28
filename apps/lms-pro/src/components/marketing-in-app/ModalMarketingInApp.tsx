@@ -46,13 +46,13 @@ const ModalMarketingInApp = ({
   }
 
   const settings = {
-    infinite: true,
+    // infinite: true,
     speed: 1000,
     slidesToShow: 1,
     slidesToScroll: 1,
     centerMode: true,
     centerPadding: isMobileView ? '8px' : isTabletView ? '12px' : '16px',
-    autoplay: true,
+    // autoplay: true,
     autoplaySpeed: 2000,
     initialSlide: 0,
     arrows: false,
@@ -126,7 +126,7 @@ const ModalMarketingInApp = ({
 
             <SlickSlider {...settings}>
               {listSlides.map((src, index) => (
-                <div key={index}>
+                <div key={index} className="outline-none">
                   <Image
                     className="rounded-lg md:rounded-2xl"
                     src={src}
