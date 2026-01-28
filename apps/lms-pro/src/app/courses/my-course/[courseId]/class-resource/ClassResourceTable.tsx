@@ -70,6 +70,7 @@ const ClassResourceTable = ({
   const [openPreview, setOpenPreview] = useState(false)
   const [defaultEditor, setDefaultEditor] = useState<string>()
   const [loadingEditor, setLoadingEditor] = useState<boolean>(false)
+  const [sheetResizeVersion, setSheetResizeVersion] = useState(0)
 
   const handleOpenPreview = async (resource: IClassResource) => {
     try {
@@ -277,7 +278,11 @@ const ClassResourceTable = ({
 
       case 'SHEET':
         return resource.is_encrypted ? (
-          <SheetViewer fileUrl={resource.url} fileName={resource.name} />
+          <SheetViewer
+            fileUrl={resource.url}
+            fileName={resource.name}
+            resizeVersion={sheetResizeVersion}
+          />
         ) : (
           <FileViewer
             fileName={resource.name}
@@ -406,6 +411,9 @@ const ClassResourceTable = ({
                 </button>
               </div>
             )}
+            onResizeStopDone={() => {
+              setSheetResizeVersion((v) => v + 1)
+            }}
           >
             <div className="h-full bg-white">
               {renderPreviewContent(previewResource)}
