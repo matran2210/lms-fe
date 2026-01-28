@@ -33,6 +33,7 @@ interface ModalResizeableProps {
   contentClassName?: string;
   isInBody?: boolean;
   onClick?: () => void;
+  onResizeStopDone?: (size: { width: number; height: number }) => void;
 }
 
 const ModalResizeable: React.FC<ModalResizeableProps> = ({
@@ -55,6 +56,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   contentClassName,
   isInBody = false,
   onClick = () => {},
+  onResizeStopDone,
 }) => {
   const [size, setSize] = useState({ width, height });
   const clamp = (value: number) => Math.abs(value);
@@ -166,6 +168,10 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
             setModalPosition({
               x: Math.min(Math.max(0, newPos.x), maxX),
               y: Math.min(Math.max(0, newPos.y), maxY),
+            });
+            onResizeStopDone?.({
+              width: newWidth,
+              height: newHeight,
             });
           }}
           minWidth={minWidth}
