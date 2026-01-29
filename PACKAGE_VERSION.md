@@ -89,7 +89,7 @@ npm publish
 ### Bước 6: update lên version mới nhất của package ở monorepo
 
 ```bash
-pnpm -r up @sapp-fe/explanation-package --latest
+pnpm -r up @sapp-fe/preview-part --latest
 ```
 
 ---
