@@ -4,7 +4,7 @@ import TotalResullt from '@components/common/TotalResullt'
 import { defaultStatusDetail } from '@lms/core'
 import { SappHookFormSelect } from '@lms/ui'
 import { getUserPrefix } from '@utils/helpers'
-import { useRouter } from 'next/router'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -16,7 +16,8 @@ const FilterCourseDetail = ({
   isTeacher?: boolean
 }) => {
   const router = useRouter()
-  let apiUrl = `${getUserPrefix(isTeacher)}/courses/my-course/${router.query.courseId}`
+  const params = useParams()
+  let apiUrl = `${getUserPrefix(isTeacher)}/courses/my-course/${params.courseId}`
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
 
   const { control, watch } = useForm()
@@ -38,7 +39,7 @@ const FilterCourseDetail = ({
 
   // defailtvalue của status
   const statusDetail = defaultStatusDetail?.find(
-    (item) => item?.value === router.query.user_section_learning_status,
+    (item) => item?.value === params.user_section_learning_status,
   )
 
   return (

@@ -1,5 +1,6 @@
-import { CERTIFICATE_DETAIL } from "@lms/core";
-import { getLocalStorageItem, setLocalStorageItem, convertUTCToLocalTime } from "@lms/utils";
+"use client";
+import { PinnedNotifications } from "@lms/core";
+import { convertUTCToLocalTime, getLocalStorageItem, isMatchedPathPinNoti, setLocalStorageItem } from "@lms/utils";
 import {
   PropsWithChildren,
   createContext,
@@ -7,8 +8,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { ENTRANCE_TEST_RESULT, ENTRANCE_TEST_TABLE_RESULT } from "@lms/core";
-import { PinnedNotifications } from "@lms/core";
+import { useFeature } from "./FeatureContext";
 
 // type for context
 type Context = {
@@ -20,7 +20,7 @@ type Context = {
 
 // initContext
 const initContext: Context = {
-  openPinned: true,
+  openPinned: false,
   setOpenPinned: () => true,
   pinnedNotifications: {
     data: {
@@ -51,9 +51,10 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{
     getPinnedNotifications: () => Promise<PinnedNotifications>
   }
 }>) {
-  const { api, router } = props
+  const { api } = props
+  const {pathname}  = useFeature()
 
-  const [openPinned, setOpenPinned] = useState(true);
+  const [openPinned, setOpenPinned] = useState(false);
   const [pinnedNotifications, setPinnedNotifications] =
     useState<PinnedNotifications>({
       data: {
@@ -99,7 +100,7 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{
         setLocalStorageItem("pinnedStatus", res?.data?.status);
       }
     } else {
-      if (oldPinnedFlag === "false") {
+      if (Boolean(oldPinnedFlag === "false")) {
         setOpenPinned(false);
       } else {
         setOpenPinned(true);
@@ -109,15 +110,11 @@ export function PinnedNotifyProvider(props: PropsWithChildren<{
 
   useEffect(() => {
     if (
-      ![
-        ENTRANCE_TEST_TABLE_RESULT,
-        ENTRANCE_TEST_RESULT,
-        CERTIFICATE_DETAIL,
-      ].includes(router.pathname)
+     isMatchedPathPinNoti(pathname ?? '')
     ) {
       getPinnedData();
     }
-  }, [router.pathname]);
+  }, [pathname]);
 
   return (
     <PinnedNotifyContext.Provider

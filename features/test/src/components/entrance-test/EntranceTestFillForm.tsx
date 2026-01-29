@@ -2,11 +2,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { getMe, useAppDispatch, useAppSelector, useFeature, userReducer } from "@lms/contexts";
 import { SappHookFormSelect, SappModalV2 } from "@lms/ui";
 import { VALIDATE_REQUIRED } from "@lms/utils";
-import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-// import { EntranceTestAPI } from 'src/pages/api/entrance-test'
 import { entranceTestReducer } from "@lms/contexts";
 
 interface IProps {
@@ -18,9 +16,7 @@ interface IProps {
 const EntranceTestFillForm = ({
   open,
   setOpen,
-  entrancePopupContent,
   setOpenTestInfo,
-
 }: IProps) => {
   const { entranceTestApi, userApi } = useFeature();
   const [listUnivers, setListUnivers] = useState<any>();
@@ -186,7 +182,7 @@ const EntranceTestFillForm = ({
       closeAfterSubmit={false}
       title={undefined}
     >
-      <h2 className="mb-4 max-w-screen-sm text-4xl font-bold text-[#050505]">
+      <h2 className="mb-4 max-w-screen-sm text-4xl font-bold text-gray-800">
         Fill This Form
       </h2>
       <div className="text-sm text-[#A1A1A1]">

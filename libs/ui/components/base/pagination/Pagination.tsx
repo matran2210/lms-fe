@@ -1,3 +1,4 @@
+"use client";
 import { getPaginationItems } from "./pagination-fn";
 import PageLinkPagination from "./PageLink";
 import { Dispatch, ReactNode, SetStateAction, useRef } from "react";
@@ -147,7 +148,7 @@ const Pagination = ({
           <div className="flex items-center">
             {!activeShowAll && optionShowAll}
             <div
-              className={`ml-6 w-max cursor-pointer text-sm font-semibold leading-[17px] text-[#050505] underline ${
+              className={`ml-6 w-max cursor-pointer text-sm font-semibold leading-[17px] text-gray-800 underline ${
                 activeShowAll && "absolute -right-28 top-0 translate-y-1/2"
               }`}
               onClick={() => {

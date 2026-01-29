@@ -104,6 +104,7 @@ export interface IQuestion {
   solution: string
   hint: string
   tags?: IQuestionTag[]
+  answer?: IQuestionAnswer[]
   answers?: IQuestionAnswer[]
   question_matchings?: {
     content: string

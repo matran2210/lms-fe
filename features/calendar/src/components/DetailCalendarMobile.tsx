@@ -245,7 +245,7 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
         }
         title={""}
       >
-        <div className="relative flex h-full flex-col bg-white !text-bw-13">
+        <div className="relative flex h-full flex-col bg-white !text-gray-800">
           <div className="mb-4 flex items-center gap-2">
             <div onClick={() => setOpen({ isOpen: false, data: null })}>
               <CollapseArrowIcon className="rotate-90" />

@@ -26,13 +26,13 @@ export default function SectionItem({
         <div
           className={`flex flex-col-reverse gap-2 md:flex-row md:items-center md:gap-3`}
         >
-          <span className="text-base font-medium text-bw-15 md:text-xl md:leading-7">
+          <span className="text-base font-medium text-gray-800 md:text-xl md:leading-7">
             {section?.name}
           </span>
           <div className="flex items-center gap-3">
             {!isFinish &&
               section?.course_section_type == TEST_TYPE_ENUM.PART && (
-                <span className="hidden text-nowrap text-sm text-gray-1 md:inline-block">
+                <span className="hidden text-nowrap text-sm text-gray md:inline-block">
                   {totalActivities} Activities
                 </span>
               )}
@@ -44,13 +44,13 @@ export default function SectionItem({
           </div>
         </div>
         {section?.course_section_type == TEST_TYPE_ENUM.PART && (
-          <span className="mb-2 text-nowrap text-sm text-gray-1 md:hidden">
+          <span className="mb-2 text-nowrap text-sm text-gray md:hidden">
             {totalActivities} Activities
           </span>
         )}
         {section?.cta_status !== 'Finished' && section?.description && (
           <p
-            className="mt-2 line-clamp-3 text-sm text-bw-15 md:line-clamp-1 md:text-base md:text-bw-15"
+            className="mt-2 line-clamp-3 text-sm text-gray-800 md:line-clamp-1 md:text-base md:text-gray-800"
             dangerouslySetInnerHTML={{
               __html: clearStylesHtml(section?.description),
             }}

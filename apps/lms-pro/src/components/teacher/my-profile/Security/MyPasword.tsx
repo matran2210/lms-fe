@@ -29,7 +29,7 @@ const MyPasword = ({ setIsChangePassword }: IProps) => {
             className="flex items-center justify-end gap-2"
             onClick={handleClickEdit}
           >
-            <PencilFillV2Icon className="h-6 w-6 text-txt-secondary" />
+            <PencilFillV2Icon className="h-6 w-6 text-gray-400" />
             <div className="text-sm font-medium text-gray-800">
               Change Password
             </div>
@@ -38,7 +38,7 @@ const MyPasword = ({ setIsChangePassword }: IProps) => {
       </div>
       {isMobileView && openChangePassword && (
         <FullScreenMobile
-          className="bg-gray-canvas px-4 pb-4"
+          className="bg-gray-100 px-4 pb-4"
           title={'Security'}
           open={openChangePassword}
           onClose={onCloseChangePassword}

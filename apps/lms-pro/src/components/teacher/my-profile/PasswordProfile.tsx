@@ -11,7 +11,7 @@ import {
 } from 'react'
 import { UseFormGetValues, UseFormReset } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { AuthAPI } from 'src/pages/api/profile'
+import { AuthAPI } from 'src/api/profile'
 import { IChangePassword } from './ChangePassword'
 import { useCountdownTest } from '@lms/hooks'
 
@@ -154,7 +154,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
                 className={`min-w-fit text-right text-sm font-semibold ${
                   timeCountDown === '00 : 00'
                     ? 'text-error-400'
-                    : 'text-[#050505]'
+                    : 'text-gray-800'
                 }`}
               >
                 {timeCountDown}

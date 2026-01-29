@@ -1,5 +1,5 @@
 import { CloseIconPreview } from '@lms/assets'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction } from 'react'
 import SappModalCerti from './CertificatePopup'
 
@@ -45,7 +45,7 @@ const PopUpCertificate = ({
     >
       <div className="w-full">
         <div className="flex w-full justify-between border-b border-solid border-[#F1F1F1] pb-6">
-          <div className=" flex w-full pr-4 font-sans text-xl font-medium leading-[25px] text-[#050505]">
+          <div className=" flex w-full pr-4 font-sans text-xl font-medium leading-[25px] text-gray-800">
             {data?.course?.name}
           </div>
           <div className="cursor-pointer" onClick={handleOnClose}>

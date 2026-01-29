@@ -54,7 +54,7 @@ const EventTest = ({
     try {
       const res = await testServiceApi.submitAllQuestion(
         data?.quiz_attempt_id as string,
-      )
+      );
       if (res.success) {
         await onRefetch();
         setSubmitEventTest(true);
@@ -107,12 +107,7 @@ const EventTest = ({
         handleClickContinue();
       } else {
         localStorage.removeItem("quizAttempt");
-        router.push({
-          pathname: `/test/${data?.id}`,
-          query: {
-            type: "event-test",
-          },
-        });
+        router.push(`/test/${data?.id}?type=event-test`)
       }
     }
   };
@@ -128,12 +123,7 @@ const EventTest = ({
         created_at: data?.created_at,
       }),
     );
-    router.push({
-      pathname: `/test/${data?.id}`,
-      query: {
-        type: "event-test",
-      },
-    });
+    router.push(`/test/${data?.id}?type=event-test`)
   };
 
   const renderButton = () => {
@@ -146,7 +136,7 @@ const EventTest = ({
             className="ml-auto"
             onClick={handleSubmitQuestion}
           />
-        )
+        );
       }
       return (
         <ButtonSecondary
@@ -217,30 +207,29 @@ const EventTest = ({
     }
   };
 
-
   const getEventTestStatus = (
     textDoneAttempt: string | number | any,
     textNotAttempt: string | number,
   ) => {
-    if (data?.attempt_status === EAttemptStatus['SUBMITTED']) {
-      return textDoneAttempt
+    if (data?.attempt_status === EAttemptStatus["SUBMITTED"]) {
+      return textDoneAttempt;
     } else {
-      return textNotAttempt
+      return textNotAttempt;
     }
-  }
-  
+  };
+
   const resultDate = (category: string) => {
     switch (category) {
-      case 'ACCA':
-        return '11/11/2025'
-      case 'CFA':
-        return '26/01/2026'
-      case 'CMA':
-        return '14/10/2025'
+      case "ACCA":
+        return "11/11/2025";
+      case "CFA":
+        return "26/01/2026";
+      case "CMA":
+        return "14/10/2025";
       default:
-        break
+        break;
     }
-  }
+  };
 
   return (
     <>
@@ -254,7 +243,7 @@ const EventTest = ({
         footer={cardFooter}
       >
         <div>
-          <div className="info border-l border-[#DCDDDD] px-2 md:px-4">
+          <div className="info border-l px-2 md:px-4">
             <div className="flex justify-between text-sm capitalize text-gray md:text-base">
               {renderTimeContent()}
             </div>
@@ -279,7 +268,7 @@ const EventTest = ({
               className={`flex justify-between pt-4 text-base capitalize text-gray`}
             >
               <p>
-                {getEventTestStatus('Result Release Date:', 'No of Questions:')}
+                {getEventTestStatus("Result Release Date:", "No of Questions:")}
               </p>
               <p className={`font-medium text-gray-800`}>
                 {getEventTestStatus(
@@ -333,7 +322,7 @@ const EventTest = ({
           buttonSize="medium"
           icon={undefined}
         >
-          <div className="my-4 text-start text-sm text-[#A1A1A1]">
+          <div className="my-4 text-start text-sm text-gray-400">
             <div>
               {`Your last attempt was unexpectedly ended. Please click 'Continue'
               to proceed with the test.`}
@@ -343,6 +332,7 @@ const EventTest = ({
       )} */}
 
       <SappModalV3
+        handleClose={() => setOpen(false)}
         open={open}
         okButtonCaption="Back"
         handleCancel={() => setOpen(false)}
@@ -357,7 +347,7 @@ const EventTest = ({
           "Ended Event Test",
         )}
       >
-        <div className="text-center text-sm text-[#A1A1A1]">
+        <div className="text-center text-sm text-gray-400">
           This Event Test{" "}
           {checkEventStatus(
             resultStartAt,

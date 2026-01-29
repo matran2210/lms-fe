@@ -30,7 +30,7 @@ const ClassCard = ({
         {dataDetail?.facility?.address && (
           <>
             <GeoLocationIcon />
-            <span className="ml-1 mr-6 text-sm font-medium text-[#a1a1aa]">
+            <span className="ml-1 mr-6 text-sm font-medium text-zinc-400">
               {dataDetail?.facility?.address}
             </span>
           </>
@@ -38,7 +38,7 @@ const ClassCard = ({
         {dataDetail?.started_at && dataDetail?.finished_at && (
           <>
             <CalendarIcon />
-            <span className="ml-1  text-sm font-medium text-[#a1a1aa]">
+            <span className="ml-1  text-sm font-medium text-zinc-400">
               {formatDateFromUTC(dataDetail?.started_at)}&nbsp;-&nbsp;
               {formatDateFromUTC(dataDetail?.finished_at)}
             </span>
@@ -54,7 +54,7 @@ const ClassCard = ({
   return (
     <div className="h-fit w-full rounded-xl bg-white">
       <div className="flex flex-col">
-        <Title level={4} className="text-[#374151]">
+        <Title level={4} className="text-gray-700">
           {dataDetail?.course?.name}
         </Title>
         <InfoCourse />

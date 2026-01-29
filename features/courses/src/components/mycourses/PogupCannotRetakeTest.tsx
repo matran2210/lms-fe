@@ -1,17 +1,17 @@
-import { AlertIcon } from '@lms/assets'
-import { SappModalV2 } from '@lms/ui'
-import { Dispatch, SetStateAction } from 'react'
+import { AlertIcon } from "@lms/assets";
+import { SappModalV2 } from "@lms/ui";
+import { Dispatch, SetStateAction } from "react";
 
 interface IProps {
-  open: boolean
-  onCancel: () => void
-  setOpen: Dispatch<SetStateAction<boolean>>
+  open: boolean;
+  onCancel: () => void;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 const PopupCanNotRetakeTest = ({ open, onCancel, setOpen }: IProps) => {
   const onOk = () => {
-    onCancel()
-    setOpen(false)
-  }
+    onCancel();
+    setOpen(false);
+  };
   return (
     <SappModalV2
       open={open}
@@ -32,15 +32,15 @@ const PopupCanNotRetakeTest = ({ open, onCancel, setOpen }: IProps) => {
       <div className="mx-auto mb-6 flex w-max items-center justify-center rounded-full bg-secondary p-8">
         <AlertIcon />
       </div>
-      <div className="flex justify-center text-2xl font-semibold text-[#050505] md:text-4xl">
+      <div className="flex justify-center text-2xl font-semibold text-gray-800 md:text-4xl">
         No Retake
       </div>
-      <div className="mb-1 mt-4 text-center text-sm text-[#A1A1A1] 2xl:mb-11">
+      <div className="mb-1 mt-4 text-center text-sm text-gray-400 2xl:mb-11">
         You cannot retake the test because you have already passed this course.
         Congratulations!
       </div>
     </SappModalV2>
-  )
-}
+  );
+};
 
-export default PopupCanNotRetakeTest
+export default PopupCanNotRetakeTest;

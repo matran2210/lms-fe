@@ -33,7 +33,7 @@
 
   .select-3lv {
     .select__placeholder {
-      @apply font-normal text-bw-2;
+      @apply font-normal text-[#141414];
     }
 
     &.select-single.status-course .select__value-container {
@@ -41,10 +41,10 @@
     }
 
     &.select-single .select__indicator {
-      @apply text-bw-2;
+      @apply text-[#141414];
     }
     &.select-single .select__single-value {
-      @apply font-normal text-bw-2;
+      @apply font-normal text-[#141414];
     }
   }
 }

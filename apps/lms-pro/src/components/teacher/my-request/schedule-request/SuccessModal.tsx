@@ -9,6 +9,7 @@ interface IProps {
 const SuccessModal = ({ open, setOpen }: IProps) => {
   return (
     <SappModalV3
+      handleClose={() => setOpen(false)}
       open={open}
       icon={<CheckIcon />}
       header={'Your comment has been submitted successfully.'}
@@ -18,7 +19,7 @@ const SuccessModal = ({ open, setOpen }: IProps) => {
       okButtonCaption={'Submit'}
       footerButtonClassName="flex flex-row-reverse justify-center gap-4"
       okButtonClass="rounded-md"
-      cancelButtonClass="bg-[#F9F9F9] hover:bg-gay-6 text-gray-300 !no-underline rounded-md px-4 py-2"
+      cancelButtonClass="bg-gray-100 hover:bg-gay-6 text-gray-300 !no-underline rounded-md px-4 py-2"
       buttonSize="medium"
       handleCancel={() => {
         setOpen(false)

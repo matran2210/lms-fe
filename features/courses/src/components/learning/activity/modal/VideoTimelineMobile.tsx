@@ -37,7 +37,7 @@ const VideoTimelineMobile = ({ open, onClose, currentVideo }: IProps) => {
             return (
               <div
                 key={i}
-                className="mb-2 grid grid-cols-[1.3fr,6fr] gap-3 rounded p-2 text-sm text-[#050505] hover:bg-gray-100"
+                className="mb-2 grid grid-cols-[1.3fr,6fr] gap-3 rounded p-2 text-sm text-gray-800 hover:bg-gray-100"
                 onClick={() => {
                   handleGoTimeline(e?.time)
                 }}

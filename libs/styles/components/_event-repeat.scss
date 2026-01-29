@@ -13,7 +13,7 @@
     }
 
     & .custom-checkbox {
-      @apply bg-[#F9F9F9] text-[#99A1B7];
+      @apply bg-gray-100 text-accent;
     }
 
     &.ant-checkbox-wrapper-checked .custom-checkbox {

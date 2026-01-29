@@ -15,7 +15,7 @@
   }
   .learning-outcome-content {
     p {
-      @apply mb-0;
+      @apply my-0;
     }
   }
 }
@@ -48,7 +48,7 @@
     }
 
     .learning-act-editor {
-      @apply overflow-hidden rounded-lg border-2 border-[#e5e7eb];
+      @apply overflow-hidden rounded-lg border-2 border-gray-200;
       .tox-tinymce {
         @apply border-none;
       }
@@ -121,7 +121,7 @@
       @apply bg-primary text-white;
     }
     &.disabled {
-      @apply cursor-not-allowed bg-[#DCDDDD] text-[#1C274C] opacity-50;
+      @apply cursor-not-allowed bg-divider text-[#1C274C] opacity-50;
       &:hover {
         @apply text-[#1C274C];
       }

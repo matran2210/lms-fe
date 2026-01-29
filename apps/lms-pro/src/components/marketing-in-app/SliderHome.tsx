@@ -1,9 +1,9 @@
 import type { ComponentType } from 'react'
 import type { Settings } from 'react-slick'
-import { linkCdnMktInApp } from '@pages/lms-pro-new-version'
 import Image from 'next/image'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import ReactSlick from 'react-slick'
+import { linkCdnMktInApp } from 'src/constants'
 const SlickSlider = ReactSlick as unknown as ComponentType<Settings>
 const SliderHome = () => {
   const {
@@ -71,7 +71,7 @@ const SliderHome = () => {
   return (
     <SlickSlider {...settings}>
       {listSlides.map((src, index) => (
-        <div key={index}>
+        <div key={index} className="outline-none">
           <Image
             className="rounded-lg md:rounded-2xl"
             src={src}

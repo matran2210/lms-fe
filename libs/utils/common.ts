@@ -1,12 +1,30 @@
-
 import DOMPurify from "dompurify";
 import { isEmpty, isNull, isUndefined } from "lodash";
 import { useQuery } from "react-query";
 import dayjs, { Dayjs } from "dayjs";
-import { DATE_FORMAT, DAYS_IN_WEEK, GRADE_STATUS } from '@lms/core';
+import {
+  AnswerItem,
+  DATE_FORMAT,
+  DAYS_IN_WEEK,
+  GRADE_STATUS,
+  IDragDropAnswer,
+} from "@lms/core";
 import weekday from "dayjs/plugin/weekday";
 import utc from "dayjs/plugin/utc";
-import { deserializeHighlights, doHighlight, optionsImpl, removeHighlights, serializeHighlights } from "@funktechno/texthighlighter/lib";
+import {
+  deserializeHighlights,
+  doHighlight,
+  optionsImpl,
+  removeHighlights,
+  serializeHighlights,
+} from "@funktechno/texthighlighter/lib";
+import { Correct } from "./answer";
+
+declare global {
+  interface Window {
+    gtag: (command: string, targetId: string, config?: any) => void;
+  }
+}
 
 dayjs.extend(utc);
 dayjs.extend(weekday);
@@ -330,7 +348,6 @@ export const convertFractionToPercentage = (fraction: string) => {
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
 export const pageview = (url: URL) => {
-  // @ts-ignore: Unreachable code error
   window.gtag(
     "config",
     `${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}` as string,
@@ -682,4 +699,37 @@ export const getGradingStatusLabel = (status: string) => {
     default:
       return "Awaiting Grading";
   }
+};
+
+export const handleMultipleCorrectAnswer = (
+  dragDropAnswers: IDragDropAnswer[],
+  answers: AnswerItem[],
+  corrects?: Correct[],
+) => {
+  const answersMapped = dragDropAnswers?.map((correctItem: IDragDropAnswer) => {
+    const dragDropCurrent = answers?.find(
+      (item: AnswerItem) =>
+        correctItem?.answer_position ===
+        (item?.position || item?.answer_position),
+    );
+    const isCorrect =
+      correctItem?.answer_ids?.includes(
+        dragDropCurrent?.answer_id || dragDropCurrent?.idAnswer || "",
+      ) || false;
+    return {
+      ...dragDropCurrent,
+      is_correct: isCorrect,
+      id: dragDropCurrent?.id || dragDropCurrent?.answer_id,
+      idAnswer: dragDropCurrent?.idAnswer || dragDropCurrent?.id,
+      ...(corrects
+        ? {
+            answer: corrects.find(
+              (item) => item?.id === dragDropCurrent?.answer_id,
+            )?.answer,
+          }
+        : {}),
+    };
+  });
+
+  return answersMapped;
 };

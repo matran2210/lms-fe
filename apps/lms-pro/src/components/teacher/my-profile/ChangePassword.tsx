@@ -10,7 +10,7 @@ import {
 import { isEmpty } from 'lodash'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { AuthAPI } from 'src/pages/api/profile'
+import { AuthAPI } from 'src/api/profile'
 import { z } from 'zod'
 import PasswordProfile from './PasswordProfile'
 import { ButtonSecondary } from '@lms/ui'
@@ -107,7 +107,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
             <div className="relative">
               <HookFormTextField
                 label="Current Password"
-                labelClass="textfield-label as-label z-10 text-ssm font-normal"
+                labelClass="textfield-label as-label z-10 text-xs font-normal"
                 inputClassName="rounded-lg"
                 control={control}
                 name="password"
@@ -119,7 +119,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
             <div className="relative">
               <HookFormTextField
                 label="New Password"
-                labelClass="textfield-label as-label z-10 text-ssm font-normal"
+                labelClass="textfield-label as-label z-10 text-xs font-normal"
                 inputClassName="rounded-lg"
                 required
                 control={control}
@@ -131,7 +131,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
             <div className="relative">
               <HookFormTextField
                 label="Confirm New Password"
-                labelClass="textfield-label as-label z-10 text-ssm font-normal"
+                labelClass="textfield-label as-label z-10 text-xs font-normal"
                 inputClassName="rounded-lg"
                 required
                 control={control}

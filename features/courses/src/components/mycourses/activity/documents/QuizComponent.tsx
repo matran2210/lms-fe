@@ -116,9 +116,9 @@ export type QuizComponentRef = {
   onResetAnswerEssayToTemplate: () => void;
   getEssayData: () =>
     | {
-      req?: IRequirement;
-      index?: number;
-    }
+        req?: IRequirement;
+        index?: number;
+      }
     | undefined;
 };
 
@@ -335,19 +335,19 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           switch (activeQuestion?.qType) {
             case QUESTION_TYPES.ONE_CHOICE:
             case QUESTION_TYPES.TRUE_FALSE: {
-                setValue?.(
-                  `${activeQuestion?.id}_${document_id}_answer`,
-                  activeQuestion?.defaultValue,
-                );
+              setValue?.(
+                `${activeQuestion?.id}_${document_id}_answer`,
+                activeQuestion?.defaultValue,
+              );
 
               break;
             }
 
             case QUESTION_TYPES.MULTIPLE_CHOICE: {
-                setValue?.(
-                  `${activeQuestion?.id}_${document_id}_answer`,
-                  activeQuestion?.defaultValue,
-                );
+              setValue?.(
+                `${activeQuestion?.id}_${document_id}_answer`,
+                activeQuestion?.defaultValue,
+              );
               break;
             }
 
@@ -606,6 +606,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     };
 
     const renderQuestion = () => {
+      const correctsDragDrop = activeQuestion?.corrects
+        ? {
+            corrects: activeQuestion?.corrects,
+            answers: activeQuestion?.answer,
+          }
+        : undefined;
       switch (activeQuestion?.qType) {
         case QUESTION_TYPES.ONE_CHOICE:
         case QUESTION_TYPES.TRUE_FALSE:
@@ -705,7 +711,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               onChange={(data: SlotValue[]) => {
                 setValue?.(`${activeQuestion?.id}_${document_id}_answer`, data);
               }}
-              corrects={showCorrect ? activeQuestion.corrects : undefined}
+              corrects={showCorrect ? correctsDragDrop : undefined}
               solution={activeQuestion?.solution}
               explainClassname="!mt-8 !p-0 !bg-transparent"
             />
@@ -873,6 +879,13 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       }}
                       isShowContent={showQuestionContent}
                       externalRef={refEditor}
+                      setOpenPdf={(type: string, file?: string | undefined, fileName?: string | undefined) => { 
+                        handleOpenFile({resource: {
+                            name: fileName as string,
+                            url: file as string,
+                          }
+                        } as IFile)
+                      }}
                     />
                   </div>
                 ),
@@ -1221,34 +1234,34 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const exhibitItems: CollapseProps["items"] = exhibitData?.length
       ? exhibitData?.map((item: IExhibit, index) => ({
-        key: item?.id,
-        label: (
-          <p className="mb-[10px] flex items-center gap-2 text-xs font-semibold text-gray-800">
-            <NotesOutline className="h-5 w-5 shrink-0 text-icon" />
-            {`${exhibitText} ${index + 1}: ${item?.name}`}
-          </p>
-        ),
-        children: (
-          <div className="text-xs">
-            <EditorReader
-              text_editor_content={item?.description}
-              className="w-full"
-            />
-            {item?.files?.length > 0 &&
-              item?.files.map((e: any, index: number) => {
-                return (
-                  <div key={index} className="h-full cursor-pointer">
-                    <FileViewer
-                      fileName={e?.resource?.name}
-                      fileUrl={e?.resource?.url}
-                    />
-                  </div>
-                );
-              })}
-          </div>
-        ),
-        className: "mb-2 p-2 !border-none !rounded-md bg-gray-100",
-      }))
+          key: item?.id,
+          label: (
+            <p className="mb-[10px] flex items-center gap-2 text-xs font-semibold text-gray-800">
+              <NotesOutline className="h-5 w-5 shrink-0 text-icon" />
+              {`${exhibitText} ${index + 1}: ${item?.name}`}
+            </p>
+          ),
+          children: (
+            <div className="text-xs">
+              <EditorReader
+                text_editor_content={item?.description}
+                className="w-full"
+              />
+              {item?.files?.length > 0 &&
+                item?.files.map((e: any, index: number) => {
+                  return (
+                    <div key={index} className="h-full cursor-pointer">
+                      <FileViewer
+                        fileName={e?.resource?.name}
+                        fileUrl={e?.resource?.url}
+                      />
+                    </div>
+                  );
+                })}
+            </div>
+          ),
+          className: "mb-2 p-2 !border-none !rounded-md bg-gray-100",
+        }))
       : [];
 
     return (

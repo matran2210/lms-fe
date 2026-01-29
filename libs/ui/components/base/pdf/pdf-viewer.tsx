@@ -1,3 +1,4 @@
+"use client"
 /* eslint-disable */
 import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer'
 import { memo, useEffect, useState } from 'react'

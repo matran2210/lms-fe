@@ -1,32 +1,33 @@
-import React, { Component } from 'react'
+"use client"
+import React, { Component } from "react";
 
 // Định nghĩa các trạng thái của component
 enum Status {
-  UNMOUNTED = 'unmounted',
-  EXITED = 'exited',
-  ENTERING = 'entering',
-  ENTERED = 'entered',
-  EXITING = 'exiting',
+  UNMOUNTED = "unmounted",
+  EXITED = "exited",
+  ENTERING = "entering",
+  ENTERED = "entered",
+  EXITING = "exiting",
 }
 
 // Định nghĩa kiểu dữ liệu cho props của component
 interface FadeInOutProps {
   // Biến boolean để quyết định có hiển thị component hay không
-  show: boolean
+  show: boolean;
   // Thời gian chuyển đổi trạng thái của component (tính bằng mili giây)
-  duration: number
+  duration: number;
   // Tên lớp CSS của component
-  className?: string
+  className?: string;
   // Đối tượng style của component
-  style?: React.CSSProperties
+  style?: React.CSSProperties;
   // Nội dung của component
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 // Định nghĩa kiểu dữ liệu cho state của component
 interface FadeInOutState {
   // Trạng thái hiện tại của component
-  status: Status
+  status: Status;
 }
 
 // Định nghĩa các style cho các trạng thái khác nhau của component
@@ -36,94 +37,94 @@ const transitionStyles: Record<Status, React.CSSProperties> = {
   entered: { opacity: 1 },
   exiting: { opacity: 0 },
   exited: { opacity: 0 },
-}
+};
 
 // Component FadeInOut sử dụng hiệu ứng fade in và fade out khi thay đổi trạng thái
 class FadeInOut extends Component<FadeInOutProps, FadeInOutState> {
-  static defaultProps: FadeInOutProps // Thêm khai báo kiểu dữ liệu cho defaultProps
+  static defaultProps: FadeInOutProps; // Thêm khai báo kiểu dữ liệu cho defaultProps
 
-  private coverRef: React.RefObject<HTMLDivElement> | null = null
-  private elementRef: React.RefObject<HTMLDivElement> | null = null
+  private coverRef: React.RefObject<HTMLDivElement> | null = null;
+  private elementRef: React.RefObject<HTMLDivElement> | null = null;
 
   constructor(props: FadeInOutProps) {
-    super(props)
-    this.state = { status: Status.UNMOUNTED }
+    super(props);
+    this.state = { status: Status.UNMOUNTED };
 
-    this.coverRef = React.createRef()
-    this.elementRef = React.createRef()
+    this.coverRef = React.createRef();
+    this.elementRef = React.createRef();
   }
 
   componentDidMount() {
-    const { show } = this.props
+    const { show } = this.props;
     if (show) {
-      this.performEnter()
+      this.performEnter();
     }
   }
 
   componentDidUpdate(prevProps: FadeInOutProps) {
-    let nextStatus: Status | null = null
+    let nextStatus: Status | null = null;
     if (prevProps !== this.props) {
-      const { status } = this.state
+      const { status } = this.state;
       if (this.props.show) {
         if (status !== Status.ENTERING && status !== Status.ENTERED) {
-          nextStatus = Status.ENTERING
+          nextStatus = Status.ENTERING;
         }
       } else {
         if (status === Status.ENTERING || status === Status.ENTERED) {
-          nextStatus = Status.EXITING
+          nextStatus = Status.EXITING;
         }
       }
     }
-    this.updateStatus(nextStatus)
+    this.updateStatus(nextStatus);
   }
 
   updateStatus(nextStatus: Status | null) {
     if (nextStatus !== null) {
       if (nextStatus === Status.ENTERING) {
-        this.performEnter()
+        this.performEnter();
       } else {
-        this.performExit()
+        this.performExit();
       }
     } else if (this.state.status === Status.EXITED) {
-      this.setState({ status: Status.UNMOUNTED })
+      this.setState({ status: Status.UNMOUNTED });
     }
   }
 
   performEnter() {
     this.setState({ status: Status.ENTERING }, () => {
       setTimeout(() => {
-        this.setState({ status: Status.ENTERED }, () => undefined)
-      }, 100)
-    })
+        this.setState({ status: Status.ENTERED }, () => undefined);
+      }, 100);
+    });
   }
 
   performExit() {
     if (this.elementRef?.current && this.coverRef?.current) {
-      const height = this.elementRef.current?.offsetHeight
-      this.coverRef.current.style.minHeight = height + 'px'
+      const height = this.elementRef.current?.offsetHeight;
+      this.coverRef.current.style.minHeight = height + "px";
     }
     this.setState({ status: Status.EXITING }, () => {
       setTimeout(() => {
-        this.setState({ status: Status.EXITED }, () => undefined)
-      }, 0)
-    })
+        this.setState({ status: Status.EXITED }, () => undefined);
+      }, 0);
+    });
   }
 
   render() {
-    const { status } = this.state
-    const { children, duration, className, style } = this.props
+    const { status } = this.state;
+    const { children, duration, className, style } = this.props;
     return (
       <div className="relative">
         <div
           ref={this.coverRef}
           className={`absolute inset-0 z-50 flex h-full w-full items-center justify-center bg-black opacity-50 transition-all ease-in-out ${
-            status !== Status.ENTERED ? '' : 'hidden'
+            status !== Status.ENTERED ? "" : "hidden"
           }`}
         >
           <div role="status">
             <svg
               aria-hidden="true"
-              className="fill-blue-600 h-8 w-8 animate-spin text-gray-2 dark:text-gray-600"
+              className="fill-blue-600 h-8 w-8 animate-spin text-secondary-100 dark:text-gray-600"
               viewBox="0 0 100 101"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -151,7 +152,7 @@ class FadeInOut extends Component<FadeInOutProps, FadeInOutState> {
           {children}
         </div>
       </div>
-    )
+    );
   }
 }
 
@@ -159,6 +160,6 @@ FadeInOut.defaultProps = {
   show: false,
   duration: 300,
   children: <></>, // Thêm giá trị cho thuộc tính children
-}
+};
 
-export default FadeInOut
+export default FadeInOut;

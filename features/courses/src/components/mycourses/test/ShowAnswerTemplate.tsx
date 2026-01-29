@@ -5,9 +5,7 @@ import EssayQuestionPreview from "@lms/ui/components/questionType/ConstructedQue
 import clsx from "clsx";
 import { useFeature } from "@lms/contexts";
 import { useLayoutEffect, useState } from "react";
-import {
-  useForm
-} from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 interface IProps {
   currentTabContent: any;
@@ -23,7 +21,6 @@ const ShowAnswerTemplate = ({
   essayData,
   isQuiz,
   className,
-  
 }: IProps) => {
   const { uploadApi } = useFeature();
 
@@ -98,7 +95,7 @@ const ShowAnswerTemplate = ({
           height={response_option === RESPONSE_OPTION.SHEET ? 600 : 530}
           minHeight={response_option === RESPONSE_OPTION.SHEET ? 600 : 530}
           width={800}
-          header={
+          header={({ requestClose }) => (
             <div className="relative mb-4">
               <div className="modal-header modal-dragger flex w-full items-center justify-between rounded-xl bg-white">
                 <div className="truncate">
@@ -107,14 +104,11 @@ const ShowAnswerTemplate = ({
                   </span>
                 </div>
               </div>
-              <button
-                className="absolute right-0 top-0"
-                onClick={handleCloseModal}
-              >
+              <button className="absolute right-0 top-0" onClick={requestClose}>
                 <CircleCloseIcon />
               </button>
             </div>
-          }
+          )}
           isInBody
         >
           <div
