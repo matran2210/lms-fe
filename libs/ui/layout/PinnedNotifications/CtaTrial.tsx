@@ -51,7 +51,7 @@ export default function CtaTrial() {
       thankYouLater: false,
     })
   }
-  console.log(showPinnedTrial)
+  
   return (
     <>
       {isCourseDetailLike && showPinnedTrial && (
