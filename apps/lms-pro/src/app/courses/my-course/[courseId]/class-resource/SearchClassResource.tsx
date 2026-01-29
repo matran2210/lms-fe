@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import {
   ArrowActionSearchIcon,
   CloseIconV2,
@@ -8,7 +8,7 @@ import { AppType, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '@lms/core'
 import { SearchForm } from '@lms/ui'
 import { buildQueryString } from '@lms/utils'
 import clsx from 'clsx'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants/routers'
@@ -37,9 +37,9 @@ const SearchClassResource = ({
   appType,
 }: IProps) => {
   const { push } = useRouter()
-      const searchParams = useSearchParams()
+  const searchParams = useSearchParams()
   const params = useParams()
-      const query = Object.fromEntries(searchParams.entries())
+  const query = Object.fromEntries(searchParams.entries())
   const methods = useForm<{ name: string }>({
     defaultValues: {
       name: '',
@@ -59,7 +59,9 @@ const SearchClassResource = ({
 
     const { search_key, ...restQuery } = query
 
-    push(`${PageLink.CLASS_RESOURCE}?${buildQueryString(restQuery)}`)
+    push(
+      `/courses/my-course/${params.courseId}/class-resource?${buildQueryString(restQuery)}`,
+    )
   }
 
   const handleSubmit = () => {
@@ -67,13 +69,15 @@ const SearchClassResource = ({
 
     if (!courseId) return
 
-    push(`${PageLink.CLASS_RESOURCE}?${buildQueryString({
+    push(
+      `/courses/my-course/${params.courseId}/class-resource?${buildQueryString({
         ...query,
         page_index: DEFAULT_PAGE_NUMBER,
         page_size: DEFAULT_PAGE_SIZE,
         courseId,
         search_key: methods.watch('name')?.trim() || undefined,
-      })}`)
+      })}`,
+    )
   }
 
   useEffect(() => {
@@ -187,7 +191,7 @@ const SearchClassResource = ({
           {!isCoursePage && (
             <div
               className={clsx(
-                'border-transparent flex w-full items-center justify-between rounded-lg border border-white bg-white px-2 py-3 shadow-small transition-all duration-300 focus-within:border-primary hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4',
+                'flex w-full items-center justify-between rounded-lg border border-transparent border-white bg-white px-2 py-3 shadow-small transition-all duration-300 focus-within:border-primary hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4',
               )}
             >
               <SearchForm
