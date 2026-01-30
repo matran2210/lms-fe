@@ -49,7 +49,7 @@
     "@sapp-fe/preview-activity": "^1.1.43",
     "@sapp-fe/preview-part": "^1.7.6",
     "@sapp-fe/quiz-result-package": "^1.6.0",
-    "@sapp-fe/sapp-common-package": "1.6.16",
+    "@sapp-fe/sapp-common-package": "1.7.2",
     "@sapp-fe/sapp-notification": "^1.2.2",
     "@sentry/nextjs": "8",
     "@tiptap/core": "^2.12.0",
