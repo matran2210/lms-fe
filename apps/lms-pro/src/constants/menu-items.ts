@@ -17,7 +17,7 @@ const MENU_OPTIONS: MenuOption[] = [
   },
   {
     name: TitleSidebar.COURSE_ACTIVATION,
-    icon: 'event-test',
+    icon: 'course-activation',
     url: PageLink.COURSE_ACTIVATION,
     type: 'level-1',
   },

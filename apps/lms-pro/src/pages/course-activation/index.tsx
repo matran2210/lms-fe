@@ -85,13 +85,7 @@ const CourseActivation = () => {
     Aos.init({ duration: ANIMATION.DURATION, once: true })
   })
 
-  const firstPage = data?.pages?.[0]
-  const totalRecords = firstPage?.category?.metadata?.total_records || 0
-  const dynamicCategoryOptions =
-    firstPage?.category?.total?.map((category: { categoryName: string }) => ({
-      label: category.categoryName,
-      value: category.categoryName,
-    })) || []
+  const totalRecords = data?.length || 0
 
   return (
     <SappLoadingGlobal loading={isLoading}>

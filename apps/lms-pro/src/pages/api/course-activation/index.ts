@@ -1,40 +1,37 @@
-import { ICourse, IResponse } from '@lms/core'
+import {
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  IClassForActivation,
+  ICourse,
+  IResponse,
+  ISubjectByProgram,
+  ISubjectWaitingActivation,
+} from '@lms/core'
 import { fetcher } from '@services/requestV2'
 
 export class CoursesActivationAPI {
   static get(
-    params: Object,
-    page_index?: number,
-    page_size?: number,
-  ): Promise<IResponse<any[]>> {
+    params: Record<string, any>,
+    page_index: number = DEFAULT_PAGE_NUMBER,
+    page_size: number = DEFAULT_PAGE_SIZE,
+  ): Promise<IResponse<ISubjectWaitingActivation[]>> {
     return fetcher(
-      `course-activations/subjects-waiting-activation?page_index=${1}&page_size=${10}`,
+      `course-activations/subjects-waiting-activation?page_index=${page_index}&page_size=${page_size}`,
       {
-        params: params,
+        params,
       },
     )
   }
 
   static getSubjectByProgram(
     program_name: string | null | undefined,
-  ): Promise<IResponse<any[]>> {
+  ): Promise<IResponse<ISubjectByProgram[]>> {
     return fetcher(`subjects/program-name?program_name=${program_name}`)
-  }
-
-  static getSubjectWaitingActivation(params: {
-    page_index: number
-    page_size: number
-    program_name?: string
-    subject_name?: string
-  }): Promise<IResponse<any[]>> {
-    return fetcher(`course-activations/subjects-waiting-activation`, {
-      params: params,
-    })
   }
 
   static getSubjectClassForActivateSubject(
     subject_id: string,
-  ): Promise<IResponse<any[]>> {
+  ): Promise<IResponse<IClassForActivation[]>> {
     return fetcher(`course-activations/suggest-class-for-activate-subject`, {
       params: { subject_id },
     })

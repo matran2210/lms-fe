@@ -1,21 +1,19 @@
 import { CalendarIconOutline } from "@lms/assets";
 import { ButtonSecondary } from "@lms/ui";
-import { ICourseActivation } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import clsx from "clsx";
 import { CardCourseActivation } from "../card-course";
 import { formatDate } from "@lms/utils";
+import { ISubjectWaitingActivation } from "@lms/core";
 
 const CourseActivation = ({
   course,
   index,
-  refetch,
-  setOpenChooseClass,
+  setCourseActive,
 }: {
-  course: ICourseActivation;
+  course: ISubjectWaitingActivation;
   index: number;
-  refetch: () => void;
-  setOpenChooseClass: React.Dispatch<React.SetStateAction<{courseId: string; open: boolean, courseName?: string}>>;
+  setCourseActive: React.Dispatch<React.SetStateAction<ISubjectWaitingActivation | null>>;
 }) => {
   const { isMobileView, isDesktopView, isTabletView } = useTailwindBreakpoint();
 
@@ -72,7 +70,7 @@ const CourseActivation = ({
                 size="small"
                 title={"Activate"}
                 className="w-full md:w-[84px]"
-                onClick={() => setOpenChooseClass({courseId: course.subject_id, open: true, courseName: course.subject_name})}
+                onClick={() => setCourseActive(course)}
               />
             </div>
           </div>

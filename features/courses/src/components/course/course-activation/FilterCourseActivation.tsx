@@ -16,15 +16,16 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
     { label: "ACCA", value: "ACCA" },
     { label: "Cert/Dip", value: "Cert/Dip" },
   ];
-  const { control, setValue, getValues, watch, reset } = useForm({
+  const { control, setValue, watch, reset } = useForm({
     defaultValues: {
       program: PROGRAM_OPTIONS[0]?.value,
+      subject: 'all'
     },
   });
   const router = useRouter();
   const { isMobileView } = useTailwindBreakpoint();
   const [openMobileFilter, setOpenMobileFilter] = useState(false);
-  const [filters, setFilters] = useState<IFilters>();
+  const [filters, setFilters] = useState<IFilters>({});
   const filterValues = useWatch({ control });
 
   const onOpenMobileFilter = () => {
@@ -35,29 +36,31 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
   };
 
   const handleSelect = (option: DefaultOptionType, name: string) => {
-    if (filters?.[name] === option.value) {
-      delete filters?.[name];
-    } else {
-      setFilters({
-        ...filters,
-        [name]: option.value,
-      });
-    }
+    setFilters((prev) => {
+      const next = { ...(prev ?? {}) };
+      if (next[name] === option.value) {
+        delete next[name];
+      } else {
+        next[name] = option.value;
+      }
+      return next;
+    });
   };
+
   const onConfirm = () => {
     reset(filters);
     onCloseMobileFilter();
   };
-  const { data: dataSubjects } = useSelectSubject(
-    watch("program"),
-    !!watch("program"),
-  );
+  const program = watch("program");
+  const { data: dataSubjects } = useSelectSubject(program, Boolean(program));
 
   const listFilter = useMemo(() => {
-    const subjectOptions = dataSubjects?.map((subject) => ({
-      label: subject.name,
-      value: subject.name,
-    }));
+    const subjectOptions =
+      dataSubjects?.map((subject) => ({
+        label: subject.name,
+        value: subject.name,
+      })) ?? [];
+
     return [
       {
         name: "program",
@@ -67,18 +70,18 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
       {
         name: "subject",
         placeholder: "Subject",
-        options: subjectOptions || [],
+        options: subjectOptions,
       },
     ];
-  }, [watch("program")]);
-  
+  }, [dataSubjects]);
+
   useEffect(() => {
     const currentQuery = { ...router.query };
 
     listFilter?.forEach((filter) => {
-      const val = filterValues?.[filter.name];
+      const val = filterValues?.[filter.name as 'program' | 'subject'];
       if (val) {
-        currentQuery[filter.name] = val.value ?? val;
+        currentQuery[filter.name] = val;
       } else {
         delete currentQuery[filter.name];
       }
@@ -121,7 +124,12 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
                 name={item.name}
                 placeholder={item.placeholder}
                 required
-                onChange={(e) => setValue(item.name, e)}
+                onChange={(e) => {
+                  setValue(item.name as 'program' | 'subject', e);
+                  if (item.name === "program") {
+                    setValue("subject", 'all');
+                  }
+                }}
                 options={item.options ?? []}
                 className="min-w-36"
                 heightCustom="h-10"
@@ -160,7 +168,7 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
                         !filters?.[item.name] && !el.value;
                       return (
                         <div
-                          key={el.id}
+                          key={el.value}
                           className="flex items-center justify-between py-2"
                           onClick={() => handleSelect(el, item.name)}
                         >

@@ -631,7 +631,7 @@ export default function MenuItem({
               name === TitleSidebar.RESULTS ||
               name === TitleSidebar.EXAM ||
               name === TitleSidebar.DASHBOARD ||
-              name === TitleSidebar.CLASS_RESOURCE ||
+              name === TitleSidebar.CLASS_RESOURCE ||  
               Icon === "stats-chart-sharp" ||
               Icon === "profile-detail")
             ? "hidden"

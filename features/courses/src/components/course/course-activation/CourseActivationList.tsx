@@ -1,18 +1,17 @@
-import { ICourseActivation } from "@lms/core";
-import { isEmpty } from "lodash";
-import React, { useState } from "react";
-import CourseActivation from "./CourseActivation";
-import ModalActiveCourseActivation from "./ModalActiveCourseActivation";
-import ModalChoosingClass from "./ModalChoosingClass";
+import { useFeature } from "@lms/contexts";
+import { ISubjectWaitingActivation } from "@lms/core";
 import { NoCoursesAvailable } from "@lms/ui";
+import { isEmpty } from "lodash";
+import React, { useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import CourseActivation from "./CourseActivation";
+import ModalActiveCourseActivationFailed from "./ModalActiveCourseActivationFailed";
+import ModalChoosingClass from "./ModalChoosingClass";
 
 interface CoursesProps {
-  courses: ICourseActivation[];
-  lastElementRef: (node: HTMLDivElement) => void;
+  courses?: ISubjectWaitingActivation[];
   refetch: () => void;
   isFetching: boolean;
-  isFetchingNextPage: boolean;
-  isTeacher?: boolean;
 }
 
 const CourseActivationList: React.FC<CoursesProps> = ({
@@ -20,15 +19,35 @@ const CourseActivationList: React.FC<CoursesProps> = ({
   refetch,
   isFetching,
 }) => {
-  const [openActiveCourse, setOpenActiveCourse] = useState<{courseId: string; open: boolean}>({courseId: '', open: false});
-  const [openChooseClass, setOpenChooseClass] = useState<{courseId: string; open: boolean, courseName?: string}>({courseId: '', open: false, courseName: ''});
+  const { courseActivationAPI } = useFeature();
+  const [courseActive, setCourseActive] =
+    useState<ISubjectWaitingActivation | null>(null);
 
-  const handleCloseChooseClass = () => {
-    setOpenChooseClass({courseId: '', open: false, courseName: ''});
-  };
+  const { data: dataCourseActive, isLoading: isLoadingCourseActive,isSuccess: isSuccessCourseActive, refetch: refetchCourseActive } = useQuery(
+    {
+      queryKey: ["class-for-activate-subject", courseActive?.subject_id],
+      queryFn: () =>
+        courseActivationAPI.getSubjectClassForActivateSubject(
+          courseActive?.subject_id || "",
+        ),
+      enabled: !!courseActive?.subject_id,
+      retry: false,
+    },
+  );
+
+  const canActive = dataCourseActive?.data?.can_active
+
+  const classes = dataCourseActive?.data;
+
+  const mergedClasses = [
+    classes?.class_suggest_on_going,
+    classes?.class_suggest_upcoming,
+  ].filter(Boolean);
+
   const handleCloseActiveCourse = () => {
-    setOpenActiveCourse({courseId: '', open: false});
+    setCourseActive(null);
   };
+
 
   if (isFetching) {
     return (
@@ -71,16 +90,22 @@ const CourseActivationList: React.FC<CoursesProps> = ({
               key={index}
               course={course}
               index={index}
-              refetch={refetch}
-              setOpenChooseClass={setOpenChooseClass}
-              />
+              setCourseActive={setCourseActive}
+            />
           ))}
         </div>
       )}
-      <ModalChoosingClass open={openChooseClass} onCancel={handleCloseChooseClass} />
-      <ModalActiveCourseActivation
-        open={openActiveCourse}
+      <ModalChoosingClass
+        open={canActive && isSuccessCourseActive && !!courseActive}
         onCancel={handleCloseActiveCourse}
+        classes={mergedClasses}
+        isLoading={isLoadingCourseActive}
+        courseName={courseActive?.subject_name}
+      />
+      <ModalActiveCourseActivationFailed
+        open={!canActive &&isSuccessCourseActive && !!courseActive}
+        onCancel={handleCloseActiveCourse}
+        error = {dataCourseActive?.data?.message}
       />
     </>
   );

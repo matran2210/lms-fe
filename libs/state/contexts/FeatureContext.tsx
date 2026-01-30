@@ -85,6 +85,7 @@ interface FeatureContextProps {
     imageBuffer: string
   ) => Promise<AxiosResponse<any, any, {}>>;
   courseActivationAPI: ICourseActivationAPI;
+
 }
 
 const FeatureContext = createContext<FeatureContextProps>(

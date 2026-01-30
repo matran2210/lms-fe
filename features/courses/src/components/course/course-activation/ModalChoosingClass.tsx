@@ -6,9 +6,15 @@ import { ClassSelectTable } from "./ClassSelectTable";
 const ModalChoosingClass = ({
   open,
   onCancel,
+  classes,
+  isLoading,
+  courseName
 }: {
-  open: { courseId: string; open: boolean; courseName?: string };
+  courseName?: string
+  open: boolean;
   onCancel: () => void;
+  classes?: any;
+  isLoading: boolean
 }) => {
   const { router } = useFeature();
   const [selectedClassId, setSelectedClassId] = useState<string | null>(null);
@@ -25,7 +31,7 @@ const ModalChoosingClass = ({
     <p className="text-center text-base leading-relaxed text-gray-900 pb-6">
       Select the class you want to learn <br />
       <span className="font-semibold text-black">
-        {open.courseName || "this course"}
+        {courseName || "this course"}
       </span>
       .
       <br />
@@ -37,7 +43,7 @@ const ModalChoosingClass = ({
   return (
     <SappModalV3
       width={721}
-      open={open?.open}
+      open={open}
       cancelButtonCaption="Cancel"
       okButtonCaption={"Confirm"}
       showCancelButton={false}
@@ -50,9 +56,10 @@ const ModalChoosingClass = ({
         <>
           {instructionContent}
           <ClassSelectTable
-            courseId={open.courseId}
             setSelectedClassId={setSelectedClassId}
             selectedClassId={selectedClassId}
+            classes={classes}
+            isLoading={isLoading}
           />
         </>
       }

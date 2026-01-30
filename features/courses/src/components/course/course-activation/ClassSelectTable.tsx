@@ -1,48 +1,23 @@
-import { useFeature } from "@lms/contexts";
+import { IClassForActivation } from "@lms/core";
 import { SAPPRadio } from "@lms/ui";
 import { formatDate } from "@lms/utils";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { useQuery } from "react-query";
 
-type ClassItem = {
-  id: string;
-  finished_at: string;
-  code: string;
-  name: string;
-  examination_subject: {
-    id: string;
-    examination: {
-      id: string;
-      name: string;
-    };
-  };
-};
 export const ClassSelectTable = ({
-  courseId,
   selectedClassId,
   setSelectedClassId,
+  classes,
+  isLoading
 }: {
-  courseId: string;
   selectedClassId: string | null;
   setSelectedClassId: (id: string) => void;
+  classes?: any;
+  isLoading: boolean
 }) => {
-  const { courseActivationAPI } = useFeature();
-  const { data, isLoading } = useQuery({
-    queryKey: ["class-for-activate-subject", courseId],
-    queryFn: () =>
-      courseActivationAPI.getSubjectClassForActivateSubject(courseId),
-    enabled: !!courseId,
-    retry: false,
-  });
-  const classes = data?.data;
 
-  const mergedClasses = [
-    classes?.class_suggest_on_going,
-    classes?.class_suggest_upcoming,
-  ].filter(Boolean);
 
-  const columns: ColumnsType<ClassItem> = [
+  const columns: ColumnsType<IClassForActivation> = [
     {
       title: "",
       width: 48,
@@ -93,14 +68,14 @@ export const ClassSelectTable = ({
       loading={isLoading}
       className="style-table-choose-class"
       columns={columns}
-      dataSource={mergedClasses}
+      dataSource={classes}
       pagination={false}
-      rowKey="key"
+      rowKey="id"
       onRow={(record) => ({
-        onClick: () => setSelectedClassId(record.key),
+        onClick: () => setSelectedClassId(record.id),
       })}
       rowClassName={(record) =>
-        record.key === selectedClassId ? "bg-gray-50" : ""
+        record.id === selectedClassId ? "bg-gray-50" : ""
       }
     />
   );
