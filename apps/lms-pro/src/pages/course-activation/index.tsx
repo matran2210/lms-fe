@@ -1,26 +1,20 @@
-import { useAppDispatch, useCourseContext, UserType } from '@lms/contexts'
-import { ANIMATION, defaultStatusCourse, ICoursesAPI } from '@lms/core'
-import { CourseActivationList } from '@lms/feature-courses'
-import FilterCourseActivation from '@lms/feature-courses/src/components/course/course-activation/FilterCourseActivation'
-import { useSelectSubject, useTailwindBreakpoint } from '@lms/hooks'
+import { useCourseContext, UserType } from '@lms/contexts'
+import { ANIMATION, ICoursesAPI } from '@lms/core'
+import {
+  CourseActivationList,
+  FilterCourseActivation,
+} from '@lms/feature-courses'
+import { useTailwindBreakpoint } from '@lms/hooks'
 import { Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
 import { CoursesActivationAPI } from '@pages/api/course-activation'
 import Aos from 'aos'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useInfiniteQuery } from 'react-query'
+import { useEffect, useRef, useState } from 'react'
+import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-
-const DEFAULT_PAGESIZE = 9
-const defaultCategory = [
-  {
-    label: `All`,
-    value: '',
-  },
-]
 
 type IProps = {
   api: ICoursesAPI
@@ -53,19 +47,9 @@ const CourseActivation = () => {
    * @description Gọi API My Course
    * @param {pageParam, params} pageParam: number, params: Object
    */
-  const fetchCourseActivation = async ({
-    pageParam,
-    params,
-  }: {
-    pageParam: number
-    params: Object
-  }) => {
-    const { data } = await CoursesActivationAPI.get(
-      pageParam || 1,
-      DEFAULT_PAGESIZE,
-      params,
-    )
-    return { data: data?.courses || [], category: data }
+  const fetchCourseActivation = async ({ params }: { params: Object }) => {
+    const { data } = await CoursesActivationAPI.get(params)
+    return data
   }
 
   /**
@@ -79,51 +63,15 @@ const CourseActivation = () => {
   /**
    * @description sử dụng react-query để lấy data sau khi call API
    */
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetching,
-    isLoading,
-    refetch,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
+  const { data, isFetching, isLoading, refetch } = useQuery({
     queryKey: ['courseActivation'],
-    queryFn: ({ pageParam }) => fetchCourseActivation({ pageParam, params }),
-    getNextPageParam: (lastPage, allPages) => {
-      return lastPage?.data.length ? allPages.length + 1 : undefined
-    },
+    queryFn: () => fetchCourseActivation({ params }),
     retry: false,
   })
 
   /**
    * @description check ref khi scroll đến cuối page thì call API
    */
-  const lastElementRef = useCallback(
-    (node: HTMLDivElement) => {
-      if (isLoading) return
-
-      if (observer.current) observer.current.disconnect()
-
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetching) {
-          fetchNextPage()
-        }
-      })
-
-      if (node) observer.current.observe(node)
-    },
-    [fetchNextPage, hasNextPage, isFetching, isLoading],
-  )
-
-  /**
-   * @description lấy data của course khi call API get course
-   */
-  const courses = useMemo(() => {
-    return data?.pages.reduce((acc: any, page) => {
-      return [...acc, ...page?.data]
-    }, [])
-  }, [data])
 
   // Use useEffect to refetch data when params change
   useEffect(() => {
@@ -137,15 +85,6 @@ const CourseActivation = () => {
     Aos.init({ duration: ANIMATION.DURATION, once: true })
   })
 
-  /**
-   * @description lưu tổng số course vào session mỗi khi course thay đổi
-   */
-  useEffect(() => {
-    if (courses) {
-      window.sessionStorage.setItem('totalCourse', courses?.length)
-    }
-  }, [courses])
-
   const firstPage = data?.pages?.[0]
   const totalRecords = firstPage?.category?.metadata?.total_records || 0
   const dynamicCategoryOptions =
@@ -153,18 +92,6 @@ const CourseActivation = () => {
       label: category.categoryName,
       value: category.categoryName,
     })) || []
-  const listFilter = [
-    {
-      name: 'program',
-      placeholder: 'Program',
-      options: defaultCategory.concat(dynamicCategoryOptions),
-    },
-    {
-      name: 'subject',
-      placeholder: 'Subject',
-      options: defaultStatusCourse,
-    },
-  ]
 
   return (
     <SappLoadingGlobal loading={isLoading}>
@@ -196,17 +123,15 @@ const CourseActivation = () => {
         </div>
         <div
           className={`relative mx-auto my-0 ${
-            isEmpty(courses)
+            isEmpty(data)
               ? 'flex min-h-[calc(100vh-21rem)] items-center justify-center'
               : ''
           }`}
         >
           <CourseActivationList
-            courses={courses}
-            lastElementRef={lastElementRef}
+            courses={data}
             refetch={refetch}
             isFetching={isFetching}
-            isFetchingNextPage={isFetchingNextPage}
           />
         </div>
       </Layout>

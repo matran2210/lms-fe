@@ -1,32 +1,46 @@
+import { useFeature } from "@lms/contexts";
 import { SAPPRadio } from "@lms/ui";
+import { formatDate } from "@lms/utils";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { useState } from "react";
+import { useQuery } from "react-query";
 
 type ClassItem = {
-  key: string;
-  classCode: string;
-  duration: string;
-  exam: string;
+  id: string;
+  finished_at: string;
+  code: string;
+  name: string;
+  examination_subject: {
+    id: string;
+    examination: {
+      id: string;
+      name: string;
+    };
+  };
 };
+export const ClassSelectTable = ({
+  courseId,
+  selectedClassId,
+  setSelectedClassId,
+}: {
+  courseId: string;
+  selectedClassId: string | null;
+  setSelectedClassId: (id: string) => void;
+}) => {
+  const { courseActivationAPI } = useFeature();
+  const { data, isLoading } = useQuery({
+    queryKey: ["class-for-activate-subject", courseId],
+    queryFn: () =>
+      courseActivationAPI.getSubjectClassForActivateSubject(courseId),
+    enabled: !!courseId,
+    retry: false,
+  });
+  const classes = data?.data;
 
-const dataSource: ClassItem[] = [
-  {
-    key: "F7.01",
-    classCode: "F7.01",
-    duration: "24/12/2025 - 24/02/2025",
-    exam: "Kỳ tháng 3/2026",
-  },
-  {
-    key: "F7.0101",
-    classCode: "F7.0101",
-    duration: "24/12/2025 - 24/02/2025",
-    exam: "Kỳ tháng 6/2026",
-  },
-];
-
-export const ClassSelectTable = () => {
-  const [selectedKey, setSelectedKey] = useState<string>("F7.01");
+  const mergedClasses = [
+    classes?.class_suggest_on_going,
+    classes?.class_suggest_upcoming,
+  ].filter(Boolean);
 
   const columns: ColumnsType<ClassItem> = [
     {
@@ -35,53 +49,58 @@ export const ClassSelectTable = () => {
       render: (_, record) => (
         <SAPPRadio
           name="class-select"
-          checked={record.key === selectedKey}
-          onChange={() => setSelectedKey(record.key)}
+          checked={record.id === selectedClassId}
+          onChange={() => setSelectedClassId(record.id)}
         />
       ),
       align: "left",
     },
     {
       title: "Class code",
-      dataIndex: "classCode",
+      dataIndex: "code",
       render: (value) => (
-        <span className="font-normal text-base text-gray-900">{value}</span>
+        <span className="font-normal text-base text-gray-900">{value || '_'}</span>
       ),
       width: 180,
       align: "left",
     },
     {
       title: "Duration",
-      dataIndex: "duration",
+      dataIndex: "finished_at",
       width: 224,
       align: "center",
       render: (value) => (
-        <span className="font-normal text-base text-gray-900">{value}</span>
+        <span className="font-normal text-base text-gray-900">
+          {formatDate(value)}
+        </span>
       ),
     },
     {
       title: "Exam",
-      dataIndex: "exam",
+      dataIndex: "subject_name",
       width: 185,
       align: "center",
-      render: (value) => (
-        <span className="font-normal text-base text-gray-900">{value}</span>
+      render: (_, record) => (
+        <span className="font-normal text-base text-gray-900">
+          {record?.examination_subject?.examination?.name || '_'}
+        </span>
       ),
     },
   ];
 
   return (
     <Table
+      loading={isLoading}
       className="style-table-choose-class"
       columns={columns}
-      dataSource={dataSource}
+      dataSource={mergedClasses}
       pagination={false}
       rowKey="key"
       onRow={(record) => ({
-        onClick: () => setSelectedKey(record.key),
+        onClick: () => setSelectedClassId(record.key),
       })}
       rowClassName={(record) =>
-        record.key === selectedKey ? "bg-gray-50" : ""
+        record.key === selectedClassId ? "bg-gray-50" : ""
       }
     />
   );

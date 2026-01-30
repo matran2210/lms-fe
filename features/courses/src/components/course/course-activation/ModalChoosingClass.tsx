@@ -1,19 +1,31 @@
+import { useFeature } from "@lms/contexts";
 import { SappModalV3 } from "@lms/ui";
+import { useState } from "react";
 import { ClassSelectTable } from "./ClassSelectTable";
 
 const ModalChoosingClass = ({
   open,
   onCancel,
 }: {
-  open: boolean;
+  open: { courseId: string; open: boolean; courseName?: string };
   onCancel: () => void;
 }) => {
-  const onSubmit = () => {};
+  const { router } = useFeature();
+  const [selectedClassId, setSelectedClassId] = useState<string | null>(null);
+  const { courseActivationAPI } = useFeature();
+  const onSubmit = async () => {
+    if (selectedClassId) {
+      const res = await courseActivationAPI.activateClass(selectedClassId);
+      if (res?.success === true) {
+        router.push("/courses");
+      }
+    }
+  };
   const instructionContent = (
     <p className="text-center text-base leading-relaxed text-gray-900 pb-6">
       Select the class you want to learn <br />
       <span className="font-semibold text-black">
-        “FR (F7) Financial Reporting”
+        {open.courseName || "this course"}
       </span>
       .
       <br />
@@ -25,7 +37,7 @@ const ModalChoosingClass = ({
   return (
     <SappModalV3
       width={721}
-      open={open}
+      open={open?.open}
       cancelButtonCaption="Cancel"
       okButtonCaption={"Confirm"}
       showCancelButton={false}
@@ -37,7 +49,11 @@ const ModalChoosingClass = ({
       content={
         <>
           {instructionContent}
-          <ClassSelectTable />
+          <ClassSelectTable
+            courseId={open.courseId}
+            setSelectedClassId={setSelectedClassId}
+            selectedClassId={selectedClassId}
+          />
         </>
       }
       isMaskClosable={false}

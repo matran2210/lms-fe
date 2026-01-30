@@ -5,7 +5,7 @@ const ModalActiveCourseActivation = ({
   open,
   onCancel,
 }: {
-  open: boolean;
+  open: {courseId: string; open: boolean};
   onCancel: () => void;
 }) => {
   const okButtonCaption = "Service Request Form";
@@ -150,7 +150,7 @@ const ModalActiveCourseActivation = ({
   return (
     <SappModalV3
       width={560}
-      open={open}
+      open={open?.open}
       cancelButtonCaption="Quit"
       okButtonCaption={okButtonCaption}
       showCancelButton={false}

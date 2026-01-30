@@ -14,7 +14,6 @@ const CardCourseActivation = forwardRef<
     disabledTitle?: boolean;
     hideBadge?: boolean;
     badgeCode?: {
-      badge: string;
       className: string;
     };
     classNameTitle?: string;
@@ -39,9 +38,9 @@ const CardCourseActivation = forwardRef<
       <div data-aos={ANIMATION.DATA_AOS}>
         <div
           className={clsx(
-            "h-[220px] relative flex flex-col rounded-xl bg-white p-4 shadow-card transition-colors duration-300 ease-in-out hover:border hover:border-primary hover:shadow-md md:p-6 lg:rounded-2xl lg:p-8",
-            classNameCard,
-          )}
+                     "relative flex flex-col rounded-xl bg-white p-4 shadow-card transition-colors duration-300 ease-in-out hover:border hover:border-primary hover:shadow-md md:p-6 lg:rounded-2xl lg:p-8",
+                     classNameCard,
+                   )}
           ref={ref}
         >
           <div className={clsx("flex justify-between", classNameTitle)}>

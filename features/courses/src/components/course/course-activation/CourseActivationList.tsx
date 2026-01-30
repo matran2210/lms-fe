@@ -1,13 +1,13 @@
-import { ICourse } from "@lms/core";
-import { NoCoursesAvailable } from "@lms/ui";
+import { ICourseActivation } from "@lms/core";
 import { isEmpty } from "lodash";
 import React, { useState } from "react";
 import CourseActivation from "./CourseActivation";
 import ModalActiveCourseActivation from "./ModalActiveCourseActivation";
 import ModalChoosingClass from "./ModalChoosingClass";
+import { NoCoursesAvailable } from "@lms/ui";
 
 interface CoursesProps {
-  courses: ICourse[];
+  courses: ICourseActivation[];
   lastElementRef: (node: HTMLDivElement) => void;
   refetch: () => void;
   isFetching: boolean;
@@ -17,22 +17,20 @@ interface CoursesProps {
 
 const CourseActivationList: React.FC<CoursesProps> = ({
   courses,
-  lastElementRef,
   refetch,
   isFetching,
-  isFetchingNextPage,
 }) => {
-  const [openActiveCourse, setOpenActiveCourse] = useState(false);
-  const [openChooseClass, setOpenChooseClass] = useState(false);
+  const [openActiveCourse, setOpenActiveCourse] = useState<{courseId: string; open: boolean}>({courseId: '', open: false});
+  const [openChooseClass, setOpenChooseClass] = useState<{courseId: string; open: boolean, courseName?: string}>({courseId: '', open: false, courseName: ''});
 
   const handleCloseChooseClass = () => {
-    setOpenChooseClass(false);
+    setOpenChooseClass({courseId: '', open: false, courseName: ''});
   };
   const handleCloseActiveCourse = () => {
-    setOpenActiveCourse(false);
+    setOpenActiveCourse({courseId: '', open: false});
   };
 
-  if (isFetching && !isFetchingNextPage) {
+  if (isFetching) {
     return (
       <div className="mb-6 grid w-full gap-6 sm:grid-cols-2 xl:grid-cols-3 xl-max:px-6">
         {Array(9)
@@ -73,18 +71,17 @@ const CourseActivationList: React.FC<CoursesProps> = ({
               key={index}
               course={course}
               index={index}
-              lastElementRef={lastElementRef}
               refetch={refetch}
-              setOpenActiveCourse={setOpenActiveCourse}
-            />
+              setOpenChooseClass={setOpenChooseClass}
+              />
           ))}
         </div>
       )}
+      <ModalChoosingClass open={openChooseClass} onCancel={handleCloseChooseClass} />
       <ModalActiveCourseActivation
         open={openActiveCourse}
         onCancel={handleCloseActiveCourse}
       />
-      <ModalChoosingClass open={openChooseClass} onCancel={handleCloseChooseClass} />
     </>
   );
 };
