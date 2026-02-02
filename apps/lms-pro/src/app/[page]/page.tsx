@@ -366,7 +366,6 @@ const ProfilePage = () => {
           isShowToggle
           className={'mb-4 hidden md:flex'}
           redirectLink={PageLink.COURSES}
-          appType={AppType.LMS_PRO}
         />
         <div className="mx-auto my-0 flex w-full grow flex-col">
           <div className="main hidden md:mb-6 md:mt-2 md:block lg:mx-0">

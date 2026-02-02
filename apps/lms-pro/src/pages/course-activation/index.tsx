@@ -1,36 +1,17 @@
-'use client'
-import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
-import {
-  active,
-  clearGuideState,
-  useAppDispatch,
-  useAppSelector,
-  useCourseContext,
-  UserType,
-} from '@lms/contexts'
-import { ANIMATION, AppType, defaultStatusCourse, ICoursesAPI } from '@lms/core'
-import { CoursesList, FilterCourse, Heading } from '@lms/feature-courses'
+import { useAppDispatch, useCourseContext, UserType } from '@lms/contexts'
+import { ANIMATION, defaultStatusCourse, ICoursesAPI } from '@lms/core'
+import { CourseActivationList, FilterCourse } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import {
-  Layout,
-  PopupWelcome,
-  SappLoadingGlobal,
-  SearchWithMenuToggle,
-} from '@lms/ui'
+import { Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
 import Aos from 'aos'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import {
-  TourGuideCoursesAnimation,
-  TourGuideCourseTabAnimation,
-  TourGuideFilterAnimation,
-} from '@lms/assets'
-import { CoursesAPI } from 'src/api/courses'
+import { CoursesAPI } from '../api/courses'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -40,26 +21,15 @@ const defaultCategory = [
   },
 ]
 
-const MyCourse = () => {
-  const isEndGuide = Number(window.sessionStorage.getItem('totalCourse')) <= 0
-  const {
-    status: guideStatus,
-    isActive: guideIsActive,
-    step: guideStep,
-  } = useAppSelector((state) => state.userGuideReducer)
+type IProps = {
+  api: ICoursesAPI
+}
+const CourseActivation = () => {
   const dispatch = useAppDispatch()
-  const [openModalMarketingInApp, setOpenModalMarketingInApp] = useState(false)
-  const { isAlwaysShowSidebar, isMobileView, isTabletView } =
-    useTailwindBreakpoint()
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
   const router = useRouter()
-  const searchParams = useSearchParams()
-
-  const query = Object.fromEntries(searchParams.entries())
-  const userGuideLine = useAppSelector(
-    (state) => state.userReducer.user.detail.settings?.course_guide,
-  )
   /**
    * @description lấy state trong context
    */
@@ -78,24 +48,6 @@ const MyCourse = () => {
     setShowSidebar(false)
     setOpenSidebar(false)
   }
-  const closeUserGuide = () => {
-    if (confirmDialogOverLayRef.current) {
-      confirmDialogOverLayRef.current.classList.add('animate-fade-out-overlay')
-      confirmDialogOverLayRef.current.classList.add('pointer-events-none')
-    }
-    // Remove hidden scroll when close user guide
-    document.body.style.removeProperty('padding-right')
-    document.body.classList.remove('overflow-hidden')
-    setTimeout(() => {
-      dispatch(clearGuideState())
-    }, 50)
-  }
-
-  useEffect(() => {
-    if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
-      dispatch(active())
-    }
-  }, [dispatch, guideIsActive, userGuideLine])
 
   /**
    * @description Gọi API My Course
@@ -120,9 +72,9 @@ const MyCourse = () => {
    * @description config params khi filter
    */
   const params = {
-    name: query?.name || undefined,
-    status: query?.status || undefined,
-    type: query?.type || undefined,
+    name: router.query?.name || undefined,
+    status: router.query?.status || undefined,
+    type: router.query?.type || undefined,
     template: '4',
   }
 
@@ -196,13 +148,6 @@ const MyCourse = () => {
     }
   }, [courses])
 
-  useEffect(() => {
-    const hasOpened = localStorage.getItem('openModalMarketingInApp')
-    if (!hasOpened) {
-      setOpenModalMarketingInApp(true)
-    }
-  }, [])
-
   const firstPage = data?.pages?.[0]
   const totalRecords = firstPage?.category?.metadata?.total_records || 0
   const dynamicCategoryOptions =
@@ -212,13 +157,13 @@ const MyCourse = () => {
     })) || []
   const listFilter = [
     {
-      name: 'type',
-      placeholder: 'Category',
+      name: 'program',
+      placeholder: 'Program',
       options: defaultCategory.concat(dynamicCategoryOptions),
     },
     {
-      name: 'status',
-      placeholder: 'Status',
+      name: 'subject',
+      placeholder: 'Subject',
       options: defaultStatusCourse,
     },
   ]
@@ -227,62 +172,25 @@ const MyCourse = () => {
     <SappLoadingGlobal loading={isLoading}>
       <Layout
         title="My Course"
-        showSidebar={
-          showSidebar ||
-          isAlwaysShowSidebar ||
-          (guideIsActive &&
-            isTabletView &&
-            (guideStep === 2 || guideStep === 3))
-        }
+        showSidebar={showSidebar || isAlwaysShowSidebar}
         handleToggleSidebar={handleCloseSidebar}
         className="relative"
-        isEndGuide={isEndGuide}
-        closeUserGuide={closeUserGuide}
       >
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}
           isShowToggle
           isShowUserGuide
-          disabledSearch={guideIsActive}
-          redirectLink={PageLink.COURSES}
+          redirectLink={PageLink.COURSE_ACTIVATION}
         />
 
         <div
-          className="mt-2 flex justify-center rounded-md bg-white shadow-medium md:mt-4 md:justify-between lg:rounded-xl"
-          data-aos={!guideStatus ? ANIMATION.DATA_AOS : ''}
-        >
-          <div
-            data-guide-id="welcome-to"
-            className={`relative flex items-center rounded-md bg-white p-3 md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 4 && !isMobileView ? 'z-50' : ''}`}
-          >
-            <Heading
-              greeting="Welcome to"
-              title={'My Course'}
-              showShadow={false}
-              showWavingHand
-              des={
-                <span>
-                  Here you can find all your courses, each packed with{' '}
-                  <strong>
-                    expert lessons, study materials, and interactive exercises
-                  </strong>
-                  . Select a course to start learning!
-                </span>
-              }
-            />
-          </div>
-        </div>
-        <div
           className={clsx(
             'mx-auto mb-6 mt-8 flex items-center justify-between lg:mt-11',
-            {
-              'relative z-50': guideStatus && guideStep === 6,
-            },
           )}
           data-aos={ANIMATION.DATA_AOS}
         >
           <h1 className="text-lg font-semibold text-gray-800 md:text-xl lg:text-2xl">
-            Course List
+            Course Activation
           </h1>
           <div className="relative">
             <FilterCourse totalResult={totalRecords} listFilter={listFilter} />
@@ -293,34 +201,19 @@ const MyCourse = () => {
             isEmpty(courses)
               ? 'flex min-h-[calc(100vh-21rem)] items-center justify-center'
               : ''
-          } ${guideStatus && guideStep === 5 && !isMobileView && 'tour-guide-course-active z-50'}`}
+          }`}
         >
-          <CoursesList
+          <CourseActivationList
             courses={courses}
             lastElementRef={lastElementRef}
             refetch={refetch}
             isFetching={isFetching}
             isFetchingNextPage={isFetchingNextPage}
-            guideIsActive={guideStatus === true && !isEndGuide}
           />
         </div>
-
-        {guideStatus && guideStep === 0 && (
-          <PopupWelcome confirmDialogOverLayRef={confirmDialogOverLayRef} />
-        )}
-        {guideStatus && (
-          <div
-            ref={confirmDialogOverLayRef}
-            className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-[.55] transition-opacity`}
-          />
-        )}
-        <ModalMarketingInApp
-          open={openModalMarketingInApp}
-          setOpen={setOpenModalMarketingInApp}
-        />
       </Layout>
     </SappLoadingGlobal>
   )
 }
 
-export default withAuthorization([UserType.STUDENT])(MyCourse)
+export default withAuthorization<IProps>([UserType.STUDENT])(CourseActivation)

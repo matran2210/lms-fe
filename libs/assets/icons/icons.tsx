@@ -7,7 +7,7 @@ interface IProps {
 interface IIconProps {
   className?: string;
   color?: string;
-  type?: string
+  type?: string;
 }
 
 export const DownloadIcon = ({ className }: IIconProps) => {
@@ -2030,6 +2030,49 @@ export const CalendarIcon = () => {
     </svg>
   );
 };
+
+export const CalendarIconOutline = () => {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 18 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M13.125 10.2083C13.5852 10.2083 13.9583 9.83524 13.9583 9.375C13.9583 8.91476 13.5852 8.54167 13.125 8.54167C12.6648 8.54167 12.2917 8.91476 12.2917 9.375C12.2917 9.83524 12.6648 10.2083 13.125 10.2083Z"
+        fill="#1C274C"
+      />
+      <path
+        d="M13.125 13.5417C13.5852 13.5417 13.9583 13.1686 13.9583 12.7083C13.9583 12.2481 13.5852 11.875 13.125 11.875C12.6648 11.875 12.2917 12.2481 12.2917 12.7083C12.2917 13.1686 12.6648 13.5417 13.125 13.5417Z"
+        fill="#1C274C"
+      />
+      <path
+        d="M9.79167 9.375C9.79167 9.83524 9.41857 10.2083 8.95833 10.2083C8.4981 10.2083 8.125 9.83524 8.125 9.375C8.125 8.91476 8.4981 8.54167 8.95833 8.54167C9.41857 8.54167 9.79167 8.91476 9.79167 9.375Z"
+        fill="#1C274C"
+      />
+      <path
+        d="M9.79167 12.7083C9.79167 13.1686 9.41857 13.5417 8.95833 13.5417C8.4981 13.5417 8.125 13.1686 8.125 12.7083C8.125 12.2481 8.4981 11.875 8.95833 11.875C9.41857 11.875 9.79167 12.2481 9.79167 12.7083Z"
+        fill="#1C274C"
+      />
+      <path
+        d="M4.79167 10.2083C5.2519 10.2083 5.625 9.83524 5.625 9.375C5.625 8.91476 5.2519 8.54167 4.79167 8.54167C4.33143 8.54167 3.95833 8.91476 3.95833 9.375C3.95833 9.83524 4.33143 10.2083 4.79167 10.2083Z"
+        fill="#1C274C"
+      />
+      <path
+        d="M4.79167 13.5417C5.2519 13.5417 5.625 13.1686 5.625 12.7083C5.625 12.2481 5.2519 11.875 4.79167 11.875C4.33143 11.875 3.95833 12.2481 3.95833 12.7083C3.95833 13.1686 4.33143 13.5417 4.79167 13.5417Z"
+        fill="#1C274C"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M4.79167 0C5.13685 0 5.41667 0.279822 5.41667 0.625V1.2606C5.96833 1.24999 6.57611 1.24999 7.24455 1.25H10.672C11.3405 1.24999 11.9483 1.24999 12.5 1.2606V0.625C12.5 0.279822 12.7798 0 13.125 0C13.4702 0 13.75 0.279822 13.75 0.625V1.31424C13.9666 1.33075 14.1717 1.35152 14.3659 1.37761C15.3429 1.50897 16.1337 1.78573 16.7573 2.40937C17.3809 3.03301 17.6577 3.8238 17.7891 4.80081C17.9167 5.75015 17.9167 6.96317 17.9167 8.49462V10.2553C17.9167 11.7868 17.9167 12.9998 17.7891 13.9492C17.6577 14.9262 17.3809 15.717 16.7573 16.3406C16.1337 16.9643 15.3429 17.241 14.3659 17.3724C13.4165 17.5 12.2035 17.5 10.672 17.5H7.24466C5.71321 17.5 4.50015 17.5 3.55081 17.3724C2.5738 17.241 1.78301 16.9643 1.15937 16.3406C0.535734 15.717 0.258969 14.9262 0.127613 13.9492C-2.31837e-05 12.9998 -1.28481e-05 11.7868 2.64963e-07 10.2553V8.49465C-1.28481e-05 6.96319 -2.31837e-05 5.75016 0.127613 4.80081C0.258969 3.8238 0.535734 3.03301 1.15937 2.40937C1.78301 1.78573 2.5738 1.50897 3.55081 1.37761C3.74492 1.35152 3.95005 1.33075 4.16667 1.31424V0.625C4.16667 0.279822 4.44649 0 4.79167 0ZM3.71737 2.61647C2.87897 2.72919 2.39593 2.94058 2.04325 3.29325C1.69058 3.64593 1.47919 4.12897 1.36647 4.96737C1.34738 5.10936 1.33142 5.25884 1.31807 5.41667H16.5986C16.5853 5.25884 16.5693 5.10936 16.5502 4.96737C16.4375 4.12897 16.2261 3.64593 15.8734 3.29325C15.5207 2.94058 15.0377 2.72919 14.1993 2.61647C13.3429 2.50133 12.214 2.5 10.625 2.5H7.29167C5.70265 2.5 4.57376 2.50133 3.71737 2.61647ZM1.25 8.54167C1.25 7.82999 1.25027 7.21061 1.2609 6.66667H16.6558C16.6664 7.21061 16.6667 7.82999 16.6667 8.54167V10.2083C16.6667 11.7973 16.6653 12.9262 16.5502 13.7826C16.4375 14.621 16.2261 15.1041 15.8734 15.4567C15.5207 15.8094 15.0377 16.0208 14.1993 16.1335C13.3429 16.2487 12.214 16.25 10.625 16.25H7.29167C5.70265 16.25 4.57376 16.2487 3.71737 16.1335C2.87897 16.0208 2.39593 15.8094 2.04325 15.4567C1.69058 15.1041 1.47919 14.621 1.36647 13.7826C1.25133 12.9262 1.25 11.7973 1.25 10.2083V8.54167Z"
+        fill="#1C274C"
+      />
+    </svg>
+  );
+};
 export const SearchIcon = ({ className }: { className?: string }) => {
   return (
     <svg
@@ -2763,7 +2806,7 @@ export const HourglassIcon = ({ className }: { className?: string }) => {
   );
 };
 
-export const StarCircleIcon = ({ color } : { color?: string }) => {
+export const StarCircleIcon = ({ color }: { color?: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -4305,8 +4348,8 @@ export const PulsingExclamation = ({ ...props }) => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};
 
 export const NotesOutline = ({ ...props }) => (
   <svg
@@ -4322,7 +4365,7 @@ export const NotesOutline = ({ ...props }) => (
       clipRule="evenodd"
     />
   </svg>
-)
+);
 
 export const TimeOutIcon = () => {
   return (
@@ -4340,8 +4383,8 @@ export const TimeOutIcon = () => {
         fill="#FFB700"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const VerifiedIcon = ({ className }: { className?: string }) => {
   return (
@@ -4375,8 +4418,8 @@ export const VerifiedIcon = ({ className }: { className?: string }) => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};
 
 export const ArrowDownIcon = ({ className }: { className?: string }) => (
   <svg
@@ -4394,7 +4437,7 @@ export const ArrowDownIcon = ({ className }: { className?: string }) => (
       fill="currentColor"
     />
   </svg>
-)
+);
 
 export const CourseSearchIcon = () => (
   <svg
@@ -4411,7 +4454,7 @@ export const CourseSearchIcon = () => (
       fill="#404041"
     />
   </svg>
-)
+);
 
 export const HandShake = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="88" height="88" fill="none">
@@ -4422,7 +4465,7 @@ export const HandShake = () => (
       clipRule="evenodd"
     />
   </svg>
-)
+);
 
 export const CloseIconV2 = ({ className }: { className?: string }) => (
   <svg
@@ -4448,7 +4491,7 @@ export const CloseIconV2 = ({ className }: { className?: string }) => (
       strokeLinejoin="round"
     />
   </svg>
-)
+);
 
 export const NoDataIconV2 = ({ className }: { className?: string }) => (
   <svg
@@ -4622,7 +4665,7 @@ export const NoDataIconV2 = ({ className }: { className?: string }) => (
       </filter>
     </defs>
   </svg>
-)
+);
 
 export const NoCoursesAvailableIcon = () => (
   <svg
@@ -4730,14 +4773,14 @@ export const NoCoursesAvailableIcon = () => (
       </filter>
     </defs>
   </svg>
-)
+);
 
 export const GraduationCapIcon = ({
   className,
-  fill = '#1C274C',
+  fill = "#1C274C",
 }: {
-  className?: string
-  fill?: string
+  className?: string;
+  fill?: string;
 }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -4754,7 +4797,7 @@ export const GraduationCapIcon = ({
       fill={fill}
     />
   </svg>
-)
+);
 
 export const CourseTimeIcon = ({ className }: { className?: string }) => (
   <svg
@@ -4772,12 +4815,12 @@ export const CourseTimeIcon = ({ className }: { className?: string }) => (
       fill="currentColor"
     />
   </svg>
-)
+);
 
 export function Icon({ type, className }: IIconProps) {
   return (
     <>
-      {type === 'check' && (
+      {type === "check" && (
         <svg
           width="13"
           height="14"
@@ -4810,7 +4853,7 @@ export function Icon({ type, className }: IIconProps) {
           </defs>
         </svg>
       )}
-      {type === 'global' && (
+      {type === "global" && (
         <svg
           width="16"
           height="16"
@@ -4836,7 +4879,7 @@ export function Icon({ type, className }: IIconProps) {
           </defs>
         </svg>
       )}
-      {type === 'pencil' && (
+      {type === "pencil" && (
         <svg
           width="24"
           height="24"
@@ -4851,7 +4894,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'ant-right' && (
+      {type === "ant-right" && (
         <svg
           width="16"
           height="16"
@@ -4869,7 +4912,7 @@ export function Icon({ type, className }: IIconProps) {
           </g>
         </svg>
       )}
-      {type === 'ant-left' && (
+      {type === "ant-left" && (
         <svg
           width="16"
           height="16"
@@ -4884,7 +4927,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'arrows' && (
+      {type === "arrows" && (
         <svg
           width="12"
           height="12"
@@ -4902,7 +4945,7 @@ export function Icon({ type, className }: IIconProps) {
           </g>
         </svg>
       )}
-      {type === 'group-empty' && (
+      {type === "group-empty" && (
         <svg
           width="18"
           height="18"
@@ -4924,7 +4967,7 @@ export function Icon({ type, className }: IIconProps) {
           </g>
         </svg>
       )}
-      {type === 'group-fill' && (
+      {type === "group-fill" && (
         <svg
           width="18"
           height="18"
@@ -4948,7 +4991,7 @@ export function Icon({ type, className }: IIconProps) {
           </g>
         </svg>
       )}
-      {type === 'ellip' && (
+      {type === "ellip" && (
         <svg
           width="8"
           height="8"
@@ -4960,7 +5003,7 @@ export function Icon({ type, className }: IIconProps) {
           <circle cx="4" cy="4" r="4" fill="currentColor" />
         </svg>
       )}
-      {type === 'cross' && (
+      {type === "cross" && (
         <svg
           width="24"
           height="24"
@@ -4975,7 +5018,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'like' && (
+      {type === "like" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="20"
@@ -4995,7 +5038,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'time' && (
+      {type === "time" && (
         <svg
           width="13"
           height="14"
@@ -5042,7 +5085,7 @@ export function Icon({ type, className }: IIconProps) {
           </defs>
         </svg>
       )}
-      {type === 'hour' && (
+      {type === "hour" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="20"
@@ -5056,7 +5099,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'completed' && (
+      {type === "completed" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="20"
@@ -5072,7 +5115,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'expired' && (
+      {type === "expired" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="13"
@@ -5097,7 +5140,7 @@ export function Icon({ type, className }: IIconProps) {
           </defs>
         </svg>
       )}
-      {type === 'search' && (
+      {type === "search" && (
         <svg
           width="24"
           height="24"
@@ -5114,7 +5157,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'play-circle-sharp' && (
+      {type === "play-circle-sharp" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="100"
@@ -5131,7 +5174,7 @@ export function Icon({ type, className }: IIconProps) {
           </g>
         </svg>
       )}
-      {type === 'learning-resource' && (
+      {type === "learning-resource" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -5146,7 +5189,7 @@ export function Icon({ type, className }: IIconProps) {
           ></path>
         </svg>
       )}
-      {type === 'entrance-test' && (
+      {type === "entrance-test" && (
         <svg
           width="24"
           height="24"
@@ -5168,7 +5211,7 @@ export function Icon({ type, className }: IIconProps) {
         </svg>
       )}
 
-      {type === 'event-test' && (
+      {type === "event-test" && (
         <svg
           width="24"
           height="24"
@@ -5195,7 +5238,7 @@ export function Icon({ type, className }: IIconProps) {
         </svg>
       )}
 
-      {type === 'circle' && (
+      {type === "circle" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -5208,7 +5251,7 @@ export function Icon({ type, className }: IIconProps) {
         </svg>
       )}
 
-      {type === 'arrow-bottom' && (
+      {type === "arrow-bottom" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -5226,7 +5269,7 @@ export function Icon({ type, className }: IIconProps) {
           ></path>
         </svg>
       )}
-      {type === 'volume' && (
+      {type === "volume" && (
         <svg
           className={className}
           xmlns="http://www.w3.org/2000/svg"
@@ -5246,7 +5289,7 @@ export function Icon({ type, className }: IIconProps) {
           </defs>
         </svg>
       )}
-      {type === 'fullscreen' && (
+      {type === "fullscreen" && (
         <svg
           className={className}
           xmlns="http://www.w3.org/2000/svg"
@@ -5262,7 +5305,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'close' && (
+      {type === "close" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -5287,7 +5330,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'arrow-right' && (
+      {type === "arrow-right" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -5304,7 +5347,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'my-profile' && (
+      {type === "my-profile" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -5327,7 +5370,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'certificates' && (
+      {type === "certificates" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -5344,7 +5387,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'setting' && (
+      {type === "setting" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -5367,7 +5410,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'sercurity' && (
+      {type === "sercurity" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -5389,7 +5432,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'logout' && (
+      {type === "logout" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -5408,7 +5451,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'phone-ring' && (
+      {type === "phone-ring" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -5435,7 +5478,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'email' && (
+      {type === "email" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -5452,7 +5495,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'contact' && (
+      {type === "contact" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -5493,7 +5536,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'edit' && (
+      {type === "edit" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="22"
@@ -5510,7 +5553,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'arrow-select' && (
+      {type === "arrow-select" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="22"
@@ -5527,7 +5570,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'download' && (
+      {type === "download" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="22"
@@ -5546,7 +5589,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'eye-view' && (
+      {type === "eye-view" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="22"
@@ -5569,7 +5612,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'sapp-logo' && (
+      {type === "sapp-logo" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="89"
@@ -5664,7 +5707,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'share' && (
+      {type === "share" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -5681,7 +5724,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'shield-warning' && (
+      {type === "shield-warning" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -5698,7 +5741,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'delete' && (
+      {type === "delete" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -5727,7 +5770,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'mail-box' && (
+      {type === "mail-box" && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="88"
@@ -5744,7 +5787,7 @@ export function Icon({ type, className }: IIconProps) {
           />
         </svg>
       )}
-      {type === 'fullscreen-exit' && (
+      {type === "fullscreen-exit" && (
         <svg
           width="23"
           height="23"
@@ -5759,21 +5802,21 @@ export function Icon({ type, className }: IIconProps) {
             strokeLinejoin="round"
           ></g>
           <g id="SVGRepo_iconCarrier">
-            {' '}
+            {" "}
             <polygon
               fill="var(--ci-primary-color, #fff)"
               points="204 181.372 38.628 16 16 16 16 38.628 181.372 204 44 204 44 236 236 236 236 44 204 44 204 181.372"
               className="ci-primary"
-            ></polygon>{' '}
+            ></polygon>{" "}
             <polygon
               fill="var(--ci-primary-color, #fff)"
               points="326.628 304 464 304 464 272 272 272 272 464 304 464 304 326.628 473.372 496 496 496 496 473.372 326.628 304"
               className="ci-primary"
-            ></polygon>{' '}
+            ></polygon>{" "}
           </g>
         </svg>
       )}
-      {type === 'loading' && (
+      {type === "loading" && (
         <svg
           className={className}
           xmlns="http://www.w3.org/2000/svg"
@@ -5782,9 +5825,9 @@ export function Icon({ type, className }: IIconProps) {
           width="24"
           height="24"
           style={{
-            shapeRendering: 'auto',
-            display: 'block',
-            background: 'transparent',
+            shapeRendering: "auto",
+            display: "block",
+            background: "transparent",
           }}
           xmlnsXlink="http://www.w3.org/1999/xlink"
         >
@@ -6034,7 +6077,7 @@ export function Icon({ type, className }: IIconProps) {
         </svg>
       )}
     </>
-  )
+  );
 }
 
 export { default as NotificationIcon } from "./NotificationIcon";

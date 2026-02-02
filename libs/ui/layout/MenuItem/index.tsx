@@ -425,6 +425,15 @@ export default function MenuItem({
             className={animationClass}
           />
         );
+      case "course-activation":
+        return (
+          <Lottie
+            animationData={OpenBookAnimation}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        );
 
       default:
         return (
@@ -632,7 +641,8 @@ export default function MenuItem({
             (name === TitleSidebar.COURSES ||
               name === TitleSidebar.EXAM_LIST ||
               name === TitleSidebar.ENTRANCE_TEST ||
-              // hidden when in course
+              name === TitleSidebar.COURSE_ACTIVATION ||
+            // hidden when in course
               name === TitleSidebar.CALENDAR ||
               // hidden when in course
               name === LANG_SIGNIN.eventTest ||

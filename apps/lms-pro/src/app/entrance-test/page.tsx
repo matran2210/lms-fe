@@ -1,12 +1,23 @@
-"use client"
+'use client'
 import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
-import { UserType, getEntranceCount, useAppDispatch, useCourseContext } from '@lms/contexts'
+import {
+  UserType,
+  getEntranceCount,
+  useAppDispatch,
+  useCourseContext,
+} from '@lms/contexts'
 import { ANIMATION, AppType } from '@lms/core'
 import { Heading } from '@lms/feature-courses'
 import EntranceTestFilter from '@lms/feature-test/src/components/entrance-test/EntranceTestFilter'
 import EntranceTestList from '@lms/feature-test/src/components/entrance-test/EntranceTestList'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { CourseSkeleton, Footer, Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
+import {
+  CourseSkeleton,
+  Footer,
+  Layout,
+  SappLoadingGlobal,
+  SearchWithMenuToggle,
+} from '@lms/ui'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -38,7 +49,8 @@ const EntranceTest = () => {
     { retry: false },
   )
 
-  const getEntranceTestCount = async () => await dispatch(getEntranceCount(EntranceTestAPI))
+  const getEntranceTestCount = async () =>
+    await dispatch(getEntranceCount(EntranceTestAPI))
   /**
    * @description handle open and close sidebar
    */
@@ -77,7 +89,6 @@ const EntranceTest = () => {
           isShowToggle
           className="mb-6 mt-4"
           redirectLink={PageLink.COURSES}
-          appType={AppType.LMS_PRO}
         />
         <div className="my-0">
           {isLoading ? (

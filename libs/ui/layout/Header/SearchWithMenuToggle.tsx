@@ -1,10 +1,14 @@
 "use client";
-import { ArrowActionSearchIcon, HamburgerMenuLargeIcon, CloseIconV2, TourGuideStartAnimation } from "@lms/assets";
+import {
+  ArrowActionSearchIcon,
+  CloseIconV2,
+  HamburgerMenuLargeIcon
+} from "@lms/assets";
 import { useAppSelector, useFeature } from "@lms/contexts";
 import { AppType, MY_COURSES } from "@lms/core";
 import { buildQueryString } from "@lms/utils";
 import clsx from "clsx";
- import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import SearchForm from "./SearchForm";
 
