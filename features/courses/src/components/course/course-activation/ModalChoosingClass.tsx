@@ -44,6 +44,7 @@ const ModalChoosingClass = ({
     <SappModalV3
       width={721}
       open={open}
+      disabled={!selectedClassId}
       cancelButtonCaption="Cancel"
       okButtonCaption={"Confirm"}
       showCancelButton={false}

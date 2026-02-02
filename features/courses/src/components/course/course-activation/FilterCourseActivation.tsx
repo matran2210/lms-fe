@@ -19,7 +19,7 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
   const { control, setValue, watch, reset } = useForm({
     defaultValues: {
       program: PROGRAM_OPTIONS[0]?.value,
-      subject: 'all'
+      subject: "all",
     },
   });
   const router = useRouter();
@@ -55,11 +55,13 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
   const { data: dataSubjects } = useSelectSubject(program, Boolean(program));
 
   const listFilter = useMemo(() => {
-    const subjectOptions =
-      dataSubjects?.map((subject) => ({
+    const subjectOptions = [
+      { label: "Subject: All", value: "all" },
+      ...(dataSubjects?.map((subject) => ({
         label: subject.name,
         value: subject.name,
-      })) ?? [];
+      })) ?? []),
+    ];
 
     return [
       {
@@ -79,7 +81,7 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
     const currentQuery = { ...router.query };
 
     listFilter?.forEach((filter) => {
-      const val = filterValues?.[filter.name as 'program' | 'subject'];
+      const val = filterValues?.[filter.name as "program" | "subject"];
       if (val) {
         currentQuery[filter.name] = val;
       } else {
@@ -125,9 +127,9 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
                 placeholder={item.placeholder}
                 required
                 onChange={(e) => {
-                  setValue(item.name as 'program' | 'subject', e);
+                  setValue(item.name as "program" | "subject", e);
                   if (item.name === "program") {
-                    setValue("subject", 'all');
+                    setValue("subject", "all");
                   }
                 }}
                 options={item.options ?? []}

@@ -17,6 +17,7 @@ import {
   OpenBookAnimation,
   ResourceAnimation,
   TestQuizListAnimation,
+  CourseActivationAnimation
 } from "@lms/assets";
 import {
   activeNotesList,
@@ -264,6 +265,7 @@ export default function MenuItem({
     courseId ||
     (activityId && name !== TitleSidebar.EXAM) ||
     (course_section_id && name !== TitleSidebar.EXAM);
+
   const isInMyProfile = pathname === pageLink.MYPROFILE;
 
   const checkIsHiddenDashboard = (info: any) => {
@@ -428,7 +430,7 @@ export default function MenuItem({
       case "course-activation":
         return (
           <Lottie
-            animationData={OpenBookAnimation}
+            animationData={CourseActivationAnimation}
             loop
             autoplay
             className={animationClass}
@@ -584,7 +586,7 @@ export default function MenuItem({
             ) : (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-3 text-base font-normal opacity-0 transition-all duration-200 ease-in-out md:pl-4 ${selected ? "bg-primary text-white" : "text-gray-800"
+                  `label invisible line-clamp-1 pl-3 text-base font-normal opacity-0 transition-all duration-200 ease-in-out md:pl-4 whitespace-nowrap ${selected ? "bg-primary text-white" : "text-gray-800"
                   }`,
                   {
                     "group-hover:text-gray-800": !selected,

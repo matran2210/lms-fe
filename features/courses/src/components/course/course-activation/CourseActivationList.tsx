@@ -2,11 +2,12 @@ import { useFeature } from "@lms/contexts";
 import { ISubjectWaitingActivation } from "@lms/core";
 import { NoCoursesAvailable } from "@lms/ui";
 import { isEmpty } from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
 import CourseActivation from "./CourseActivation";
 import ModalActiveCourseActivationFailed from "./ModalActiveCourseActivationFailed";
 import ModalChoosingClass from "./ModalChoosingClass";
+import NoAvailableClasses from "./NoAvailableClasses";
 
 interface CoursesProps {
   courses?: ISubjectWaitingActivation[];
@@ -96,12 +97,13 @@ const CourseActivationList: React.FC<CoursesProps> = ({
         </div>
       )}
       <ModalChoosingClass
-        open={canActive && isSuccessCourseActive && !!courseActive}
+        open={canActive && isSuccessCourseActive && !!courseActive && mergedClasses.length > 0}
         onCancel={handleCloseActiveCourse}
         classes={mergedClasses}
         isLoading={isLoadingCourseActive}
         courseName={courseActive?.subject_name}
       />
+      <NoAvailableClasses open={canActive && isSuccessCourseActive && !!courseActive && mergedClasses.length === 0} onCancel={handleCloseActiveCourse}/>
       <ModalActiveCourseActivationFailed
         open={!canActive &&isSuccessCourseActive && !!courseActive}
         onCancel={handleCloseActiveCourse}

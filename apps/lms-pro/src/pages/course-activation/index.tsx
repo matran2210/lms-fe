@@ -5,7 +5,7 @@ import {
   FilterCourseActivation,
 } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
+import { Layout, SappLoadingGlobal } from '@lms/ui'
 import { CoursesActivationAPI } from '@pages/api/course-activation'
 import Aos from 'aos'
 import clsx from 'clsx'
@@ -13,7 +13,6 @@ import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
-import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 
 type IProps = {
@@ -34,10 +33,7 @@ const CourseActivation = () => {
   /**
    * @description handle open and close sidebar
    */
-  const handleOpenSidebar = () => {
-    setShowSidebar(true)
-    setOpenSidebar(true)
-  }
+
   const handleCloseSidebar = () => {
     setShowSidebar(false)
     setOpenSidebar(false)
@@ -95,13 +91,6 @@ const CourseActivation = () => {
         handleToggleSidebar={handleCloseSidebar}
         className="relative"
       >
-        <SearchWithMenuToggle
-          handleOpenSidebar={handleOpenSidebar}
-          isShowToggle
-          isShowUserGuide
-          redirectLink={PageLink.COURSE_ACTIVATION}
-        />
-
         <div
           className={clsx(
             'mx-auto mb-6 mt-8 flex items-center justify-between lg:mt-11',
