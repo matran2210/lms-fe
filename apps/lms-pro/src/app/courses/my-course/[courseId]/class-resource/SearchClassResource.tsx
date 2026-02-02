@@ -74,7 +74,6 @@ const SearchClassResource = ({
         ...query,
         page_index: DEFAULT_PAGE_NUMBER,
         page_size: DEFAULT_PAGE_SIZE,
-        courseId,
         search_key: methods.watch('name')?.trim() || undefined,
       })}`,
     )
