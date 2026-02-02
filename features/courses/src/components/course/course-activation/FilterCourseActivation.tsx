@@ -1,10 +1,11 @@
 import { CheckIconV2, FilterCourseIcon } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
 import { useSelectSubject, useTailwindBreakpoint } from "@lms/hooks";
 import { SappDrawerV3, SAPPSelectV2 } from "@lms/ui";
+import { buildQueryString } from "@lms/utils";
 import { Divider } from "antd";
 import { DefaultOptionType } from "antd/es/select";
 import clsx from "clsx";
-import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 
@@ -22,7 +23,7 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
       subject: "all",
     },
   });
-  const router = useRouter();
+  const { router, query, pathname } = useFeature()
   const { isMobileView } = useTailwindBreakpoint();
   const [openMobileFilter, setOpenMobileFilter] = useState(false);
   const [filters, setFilters] = useState<IFilters>({});
@@ -78,7 +79,7 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
   }, [dataSubjects]);
 
   useEffect(() => {
-    const currentQuery = { ...router.query };
+    const currentQuery = { ...query };
 
     listFilter?.forEach((filter) => {
       const val = filterValues?.[filter.name as "program" | "subject"];
@@ -89,14 +90,7 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
       }
     });
 
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: currentQuery,
-      },
-      undefined,
-      { shallow: true },
-    );
+    router.push(`${pathname}?${buildQueryString(currentQuery)}`);
   }, [filterValues]);
 
   return (

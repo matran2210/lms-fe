@@ -1,34 +1,25 @@
-import { useCourseContext, UserType } from '@lms/contexts'
-import { ANIMATION, ICoursesAPI } from '@lms/core'
+'use client'
+import { useCourseContext, useFeature, UserType } from '@lms/contexts'
+import { ANIMATION } from '@lms/core'
 import {
   CourseActivationList,
   FilterCourseActivation,
 } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { Layout, SappLoadingGlobal } from '@lms/ui'
-import { CoursesActivationAPI } from '@pages/api/course-activation'
 import Aos from 'aos'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
-import { useRouter } from 'next/router'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
+import { CoursesActivationAPI } from 'src/api/course-activation'
 import withAuthorization from 'src/HOC/withAuthorization'
 
-type IProps = {
-  api: ICoursesAPI
-}
 const CourseActivation = () => {
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
-  const router = useRouter()
-
-  /**
-   * @description lấy state trong context
-   */
-
-  const observer = useRef<IntersectionObserver>()
+  const { query } = useFeature()
 
   /**
    * @description handle open and close sidebar
@@ -52,8 +43,8 @@ const CourseActivation = () => {
    * @description config params khi filter
    */
   const params = {
-    program: router.query?.program || undefined,
-    subject: router.query?.subject || undefined,
+    program: query?.program || undefined,
+    subject: query?.subject || undefined,
   }
 
   /**
@@ -122,4 +113,4 @@ const CourseActivation = () => {
   )
 }
 
-export default withAuthorization<IProps>([UserType.STUDENT])(CourseActivation)
+export default withAuthorization([UserType.STUDENT])(CourseActivation)

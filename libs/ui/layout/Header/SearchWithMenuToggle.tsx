@@ -1,19 +1,15 @@
 import {
   ArrowActionSearchIcon,
   CloseIconV2,
-  HamburgerMenuLargeIcon,
-  TourGuideStartAnimation,
+  HamburgerMenuLargeIcon
 } from "@lms/assets";
-import { useAppSelector } from "@lms/contexts";
-import { MY_COURSES, UserGuide } from "@lms/core";
+import { useAppSelector, useFeature } from "@lms/contexts";
+import { MY_COURSES } from "@lms/core";
 import { buildQueryString } from "@lms/utils";
 import clsx from "clsx";
-import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { PopupStep } from "../../components";
 import SearchForm from "./SearchForm";
-
 interface IProps {
   handleOpenSidebar: () => void;
   disabledSearch?: boolean;
@@ -40,7 +36,8 @@ const SearchWithMenuToggle = ({
   const { status: guideStatus, step: guideStep } = useAppSelector(
     (state) => state.userGuideReducer,
   );
-  const { query, push } = useRouter();
+  const {router, query} = useFeature()
+  const { push } = router
   const methods = useForm<{ name: string }>({
     defaultValues: {
       name: "",
@@ -202,16 +199,6 @@ const SearchWithMenuToggle = ({
           )}
         </div>
       </FormProvider>
-      {isShowUserGuide && guideStatus && guideStep === 1 && (
-        <PopupStep
-          content={UserGuide.CONTENT_STEP_1}
-          className="left-1/2 top-[85%] sm:top-1/2 -translate-x-1/2 -translate-y-1/2 md:left-0 md:top-[68px] md:-translate-x-0 md:-translate-y-0 lg:top-[78px]"
-          title={"Search box"}
-          index={1}
-          total={6}
-          imgSrc={TourGuideStartAnimation}
-        />
-      )}
     </>
   );
 };
