@@ -306,6 +306,26 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                     )}
                   </div>
                 </div>
+                {data?.mode === LearningMode.LIVE_ONLINE &&
+                  data.class.link_meeting && (
+                    <>
+                      <Divider />
+                      <div className={"flex flex-col gap-3"}>
+                        <div className="text-lg font-semibold">Classroom Detail</div>
+                        <div className="flex flex-col gap-2">
+                          <div className="grid grid-cols-2">
+                            <div>Platform:</div>
+                            <div
+                              className="flex cursor-pointer justify-end"
+                              onClick={handleRedirectZoom}
+                            >
+                              <ZoomIcon />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 {!(data?.is_case_study || data?.schedule?.is_holiday) &&
                   !isOnlyMidTermOrFinalTest && (
                     <>
@@ -367,27 +387,6 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
               </div>
             )}
           </div>
-
-          {data?.mode === LearningMode.LIVE_ONLINE &&
-            data.class.link_meeting && (
-              <>
-                <Divider />
-                <div className="flex flex-col gap-3">
-                  <div className="text-lg font-semibold">Classroom Detail</div>
-                  <div className="flex flex-col gap-2">
-                    <div className="grid grid-cols-2">
-                      <div>Platform:</div>
-                      <div
-                        className="flex cursor-pointer justify-end"
-                        onClick={handleRedirectZoom}
-                      >
-                        <ZoomIcon />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
 
           {/* Fixed Start button at bottom */}
           {(isOfflineOrLiveOnlineWithReview || isOnlineAndOpen) && (

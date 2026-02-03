@@ -254,6 +254,28 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
               )}
             </div>
           </div>
+          {data?.mode === LearningMode.LIVE_ONLINE &&
+            data.class.link_meeting && (
+              <>
+                <Divider />
+                <div className="flex flex-col gap-5">
+                  <div className="text-lg font-semibold text-[#1F2937]">
+                    Classroom Detail
+                  </div>
+                  <div className="flex flex-col gap-4">
+                    <div className="grid grid-cols-2">
+                      <div>Platform:</div>
+                      <div
+                        className="flex cursor-pointer justify-end"
+                        onClick={handleRedirectZoom}
+                      >
+                        <ZoomIcon />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           {!data?.schedule?.is_holiday && !isOnlyMidTermOrFinalTest && (
             <>
               <Divider />
@@ -307,28 +329,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
               </div>
             </>
           )}
-          {data?.mode === LearningMode.LIVE_ONLINE &&
-            data.class.link_meeting && (
-              <>
-                <Divider />
-                <div className="flex flex-col gap-5">
-                  <div className="text-lg font-semibold text-[#1F2937]">
-                    Classroom Detail
-                  </div>
-                  <div className="flex flex-col gap-4">
-                    <div className="grid grid-cols-2">
-                      <div>Platform:</div>
-                      <div
-                        className="flex cursor-pointer justify-end"
-                        onClick={handleRedirectZoom}
-                      >
-                        <ZoomIcon />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
+         
           {/* Footer action button */}
           {(isOfflineOrLiveOnlineWithReview || isOnlineAndOpen) && (
             <div className="mt-auto flex justify-end">
