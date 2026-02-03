@@ -10,6 +10,7 @@ const NoAvailableClasses = ({
 }) => {
   return (
     <SappModalV3
+      handleClose={onCancel}
       width={721}
       open={open}
       showOkButton={false}
