@@ -301,6 +301,32 @@ const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
                   )}
                 </div>
               </div>
+              {data?.mode === LearningMode.OFFLINE && (
+                <>
+                  <Divider />
+                  <div className="flex flex-col gap-5">
+                    <div className="text-lg font-semibold">
+                      Classroom Detail
+                    </div>
+
+                    <div className="flex flex-col gap-4">
+                      <div className="grid grid-cols-2">
+                        <div>Classroom:</div>
+                        <div className="break-words text-right font-semibold">
+                          {data?.room?.name}
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2">
+                        <div>Classroom Address:</div>
+                        <div className="break-words text-right font-semibold">
+                          {data?.room?.address}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
               {data?.mode === LearningMode.LIVE_ONLINE && data.class.link_meeting && (
                 <>
                   <Divider />
@@ -347,33 +373,6 @@ const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
                     </div>
                   </>
                 )}
-
-              {data?.mode === LearningMode.OFFLINE && (
-                <>
-                  <Divider />
-                  <div className="flex flex-col gap-5">
-                    <div className="text-lg font-semibold">
-                      Classroom Detail
-                    </div>
-
-                    <div className="flex flex-col gap-4">
-                      <div className="grid grid-cols-2">
-                        <div>Classroom:</div>
-                        <div className="break-words text-right font-semibold">
-                          {data?.room?.name}
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-2">
-                        <div>Classroom Address:</div>
-                        <div className="break-words text-right font-semibold">
-                          {data?.room?.address}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
             </>
           ) : (
             <div className="flex h-full flex-col items-center justify-center">
