@@ -35,9 +35,9 @@ export default function NextPrevActivityButton({
         >
           {!loading ? (
             <span className="flex items-center gap-2">
-              <Arrows />
+              <Arrows className="shrink-0" />
               {titlePrev}
-              {isLockPrevious ? <LockClosedIcon /> : null}
+              {isLockPrevious ? <LockClosedIcon className="shrink-0" /> : null}
             </span>
           ) : (
             <>
@@ -56,7 +56,9 @@ export default function NextPrevActivityButton({
             disabled={disabled}
             loading={loading}
             size="medium"
-            endIcon={isLockedNext ? <LockClosedIcon /> : null}
+            endIcon={
+              isLockedNext ? <LockClosedIcon className="shrink-0" /> : null
+            }
           />
         </div>
       )}
