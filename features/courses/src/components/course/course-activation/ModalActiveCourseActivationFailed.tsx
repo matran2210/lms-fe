@@ -34,6 +34,7 @@ const ModalActiveCourseActivationFailed = ({
 }) => {
   return (
     <SappModalV3
+      handleClose={onCancel}
       width={560}
       open={open}
       cancelButtonCaption="Quit"

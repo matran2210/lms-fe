@@ -42,6 +42,7 @@ const ModalChoosingClass = ({
 
   return (
     <SappModalV3
+      handleClose={onCancel}
       width={721}
       open={open}
       disabled={!selectedClassId}
