@@ -42,7 +42,6 @@ const ModalMarketingInApp = ({
 
   const handleClose = () => {
     setOpen(false)
-    localStorage.setItem('openModalMarketingInApp', 'true')
   }
 
   const settings = {
