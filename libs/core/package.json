@@ -10,7 +10,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@sapp-fe/sapp-common-package": "^1.7.3",
+    "@sapp-fe/sapp-common-package": "^1.7.4",
     "antd": "^5.25.0",
     "axios": "^1.6.2",
     "dayjs": "^1.11.12",

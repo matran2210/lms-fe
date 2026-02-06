@@ -62,7 +62,7 @@
     "@funktechno/texthighlighter": "^2.1.2",
     "@hookform/resolvers": "^3.10.0",
     "@sapp-fe/explanation-package": "^1.5.6",
-    "@sapp-fe/sapp-common-package": "^1.7.3",
+    "@sapp-fe/sapp-common-package": "^1.7.4",
     "antd": "^5.25.0",
     "critters": "^0.0.19",
     "eslint-plugin-react": "^7.37.5",
