@@ -43,6 +43,7 @@ import {
   useSearchParams,
 } from 'next/navigation'
 import { CoursesAPI } from 'src/api/courses'
+import StoryOverview from '@components/storyline/modal/StoryOverview'
 
 const CourseDetail = () => {
   const dispatch = useAppDispatch()
@@ -65,6 +66,7 @@ const CourseDetail = () => {
   const [isPassedCourse, setIsPassedCourse] = useState<boolean>(false)
   const [isOpenChapter, setIsOpenChapter] = useState<boolean>(false)
   const [openResource, setOpenResource] = useState<boolean>(false)
+  const [openStory, setOpenStory] = useState<boolean>(false)
   const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
   const { setOpenSidebar } = useCourseContext()
@@ -348,6 +350,7 @@ const CourseDetail = () => {
 
     return []
   }, [partDetail, chapterDetail])
+
   return (
     <Layout
       showSidebar={showSidebar || isAlwaysShowSidebar}
@@ -357,7 +360,7 @@ const CourseDetail = () => {
     >
       <PromotionalBanner />
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
-        <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
+        <div className="relative flex h-16 w-full items-center justify-center border-b-[0.57px] border-zinc-100 bg-white">
           <Alert
             message={
               <div className="flex items-center gap-2">
@@ -447,6 +450,7 @@ const CourseDetail = () => {
             isMobileView={isMobileView}
             isTabletView={isTabletView}
             isShortCourse
+            setOpenStoryline={setOpenStory}
           />
         </div>
         <BottomMenu>
@@ -496,6 +500,12 @@ const CourseDetail = () => {
         <LearningResource
           open={openResource}
           setOpenResource={setOpenResource}
+        />
+        <StoryOverview
+          open={openStory}
+          setOpen={setOpenStory}
+          storylineId={''}
+          name={''}
         />
       </div>
       <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />
