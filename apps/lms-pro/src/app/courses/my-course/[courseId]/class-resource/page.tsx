@@ -210,7 +210,7 @@ const ClassResource = () => {
         }),
       )
     } else {
-      setDirection(1)
+      setDirection(-1)
       setOpenChooseItem(false)
       setTitleFilterMobile('Filter')
       setSelectedFilters(
@@ -389,7 +389,9 @@ const ClassResource = () => {
             <HeaderMobile
               title="Class Resource"
               showIcon={true}
-              onBack={() => router.back()}
+              onBack={() =>
+                router.push(`/courses/my-course/${param?.courseId}`)
+              }
               className="mb-2 mt-4 flex w-full"
               extraActions={
                 <div
