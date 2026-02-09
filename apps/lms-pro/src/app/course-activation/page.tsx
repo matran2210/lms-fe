@@ -43,8 +43,8 @@ const CourseActivation = () => {
    * @description config params khi filter
    */
   const params = {
-    program: query?.program || undefined,
-    subject: query?.subject || undefined,
+    program_name: query?.program || undefined,
+    subject_name: query?.subject || undefined,
   }
 
   /**
@@ -63,7 +63,7 @@ const CourseActivation = () => {
   // Use useEffect to refetch data when params change
   useEffect(() => {
     refetch()
-  }, [params?.program, params?.subject, refetch])
+  }, [params?.program_name, params?.subject_name, refetch])
 
   /**
    * @description gọi lại animation khi reload lại component

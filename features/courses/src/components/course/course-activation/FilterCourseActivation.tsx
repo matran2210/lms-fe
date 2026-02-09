@@ -20,10 +20,10 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
   const { control, setValue, watch, reset } = useForm({
     defaultValues: {
       program: PROGRAM_OPTIONS[0]?.value,
-      subject: "all",
+      subject: null,
     },
   });
-  const { router, query, pathname } = useFeature()
+  const { router, query, pathname } = useFeature();
   const { isMobileView } = useTailwindBreakpoint();
   const [openMobileFilter, setOpenMobileFilter] = useState(false);
   const [filters, setFilters] = useState<IFilters>({});
@@ -56,13 +56,10 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
   const { data: dataSubjects } = useSelectSubject(program, Boolean(program));
 
   const listFilter = useMemo(() => {
-    const subjectOptions = [
-      { label: "Subject: All", value: "all" },
-      ...(dataSubjects?.map((subject) => ({
-        label: subject.name,
-        value: subject.name,
-      })) ?? []),
-    ];
+    const subjectOptions = dataSubjects?.map((subject) => ({
+      label: subject.name,
+      value: subject.name,
+    }));
 
     return [
       {
@@ -72,7 +69,7 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
       },
       {
         name: "subject",
-        placeholder: "Subject",
+        placeholder: "Subject: all",
         options: subjectOptions,
       },
     ];
@@ -123,12 +120,13 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
                 onChange={(e) => {
                   setValue(item.name as "program" | "subject", e);
                   if (item.name === "program") {
-                    setValue("subject", "all");
+                    setValue("subject", null);
                   }
                 }}
                 options={item.options ?? []}
                 className="min-w-36"
                 heightCustom="h-10"
+                allowClear={item.name === "program" ? false : true}
               />
             ))}
           </div>
