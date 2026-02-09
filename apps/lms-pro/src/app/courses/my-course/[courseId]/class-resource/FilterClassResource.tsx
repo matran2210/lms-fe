@@ -1,10 +1,15 @@
-"use client"
+'use client'
 import { CLASS_SUFFIX_TYPE_FILTER, DEFAULT_PAGE_NUMBER } from '@lms/core'
 import { SappSelectMultiple, SAPPSelectV2 } from '@lms/ui'
 import { buildQueryString, normalizeToArray } from '@lms/utils'
 import { getSelectOptions } from '@utils/helpers'
 import { debounce } from 'lodash'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import useSelectClassSchedule from 'src/hooks/useSelectClassSchedule'
@@ -17,9 +22,9 @@ type FilterFormValues = {
 const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
   const router = useRouter()
   const pathname = usePathname()
-    const searchParams = useSearchParams()
+  const searchParams = useSearchParams()
   const params = useParams()
-    const query = Object.fromEntries(searchParams.entries())
+  const query = Object.fromEntries(searchParams.entries())
   const { courseId } = params
   const [search, setSearch] = useState('')
 
@@ -31,6 +36,15 @@ const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
   })
 
   useEffect(() => {
+    const convertScheduleIdsToArray = () => {
+      if (!query.schedule_ids) return []
+      return query.schedule_ids.includes(',')
+        ? query.schedule_ids
+            .split(',')
+            .map((id) => id.trim())
+            .filter((id) => id)
+        : [query.schedule_ids]
+    }
     reset({
       suffix_types:
         typeof query.suffix_types === 'string' &&
@@ -38,12 +52,12 @@ const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
           ? query.suffix_types
           : undefined,
 
-      schedule_ids: normalizeToArray(query.schedule_ids),
+      schedule_ids: convertScheduleIdsToArray(),
     })
   }, [query.suffix_types, query.schedule_ids, reset])
 
   const { classSchedule, hasNextPage, fetchNextPage, isLoading, refetch } =
-    useSelectClassSchedule(courseId as string, search)
+    useSelectClassSchedule(courseId as string, search, true)
 
   const debouncedSearch = useRef(
     debounce((value: string) => {
@@ -69,11 +83,15 @@ const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
   }, [classSchedule])
 
   const pushQuery = (next: Record<string, any>) => {
-    router.push(`${pathname}?${buildQueryString(cleanQuery({
+    router.push(
+      `${pathname}?${buildQueryString(
+        cleanQuery({
           ...query,
           ...next,
           page_index: DEFAULT_PAGE_NUMBER,
-        }))}`)
+        }),
+      )}`,
+    )
   }
 
   const cleanQuery = (query: Record<string, any>) => {
