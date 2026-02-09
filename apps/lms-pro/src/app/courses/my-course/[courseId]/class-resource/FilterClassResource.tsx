@@ -2,7 +2,7 @@
 import { CLASS_SUFFIX_TYPE_FILTER, DEFAULT_PAGE_NUMBER } from '@lms/core'
 import { SappSelectMultiple, SAPPSelectV2 } from '@lms/ui'
 import { buildQueryString, normalizeToArray } from '@lms/utils'
-import { getSelectOptions } from '@utils/helpers'
+import { getSelectOptions, pushQueryClassResource } from '@utils/helpers'
 import { debounce } from 'lodash'
 import {
   useParams,
@@ -83,31 +83,7 @@ const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
   }, [classSchedule])
 
   const pushQuery = (next: Record<string, any>) => {
-    router.push(
-      `${pathname}?${buildQueryString(
-        cleanQuery({
-          ...query,
-          ...next,
-          page_index: DEFAULT_PAGE_NUMBER,
-        }),
-      )}`,
-    )
-  }
-
-  const cleanQuery = (query: Record<string, any>) => {
-    const result: Record<string, any> = {}
-
-    Object.entries(query).forEach(([key, value]) => {
-      if (
-        value !== undefined &&
-        value !== null &&
-        !(typeof value === 'string' && value.trim() === '')
-      ) {
-        result[key] = value
-      }
-    })
-
-    return result
+    pushQueryClassResource(router, pathname, query, next)
   }
 
   return (

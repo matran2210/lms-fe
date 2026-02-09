@@ -37,7 +37,7 @@ import { ClassAPI } from 'src/api/class'
 import { FilterCourseIcon } from '@lms/assets'
 import CardFileItem from './CardFileItem'
 import useSelectClassSchedule from 'src/hooks/useSelectClassSchedule'
-import { getSelectOptions } from '@utils/helpers'
+import { getSelectOptions, pushQueryClassResource } from '@utils/helpers'
 interface ISelectItem {
   label: string
   value: string
@@ -285,32 +285,8 @@ const ClassResource = () => {
     }
   }, [data?.data, isLoading, params.page_index])
 
-  const cleanQuery = (query: Record<string, any>) => {
-    const result: Record<string, any> = {}
-
-    Object.entries(query).forEach(([key, value]) => {
-      if (
-        value !== undefined &&
-        value !== null &&
-        !(typeof value === 'string' && value.trim() === '')
-      ) {
-        result[key] = value
-      }
-    })
-
-    return result
-  }
-
   const pushQuery = (next: Record<string, any>) => {
-    router.push(
-      `${pathname}?${buildQueryString(
-        cleanQuery({
-          ...query,
-          ...next,
-          page_index: DEFAULT_PAGE_NUMBER,
-        }),
-      )}`,
-    )
+    pushQueryClassResource(router, pathname, query, next)
   }
 
   const handleSubmitFilterMobile = () => {
