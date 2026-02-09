@@ -1,6 +1,6 @@
 import { useFeature } from "@lms/contexts";
 import { SappModalV3 } from "@lms/ui";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ClassSelectTable } from "./ClassSelectTable";
 
 const ModalChoosingClass = ({
@@ -39,6 +39,12 @@ const ModalChoosingClass = ({
       duration to ensure adequate time for course completion.
     </p>
   );
+
+  useEffect(() => {
+    if (!open) {
+      setSelectedClassId(null);
+    }
+  }, [open]);
 
   return (
     <SappModalV3

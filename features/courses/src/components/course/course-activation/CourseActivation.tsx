@@ -13,7 +13,9 @@ const CourseActivation = ({
 }: {
   course: ISubjectWaitingActivation;
   index: number;
-  setCourseActive: React.Dispatch<React.SetStateAction<ISubjectWaitingActivation | null>>;
+  setCourseActive: React.Dispatch<
+    React.SetStateAction<ISubjectWaitingActivation | null>
+  >;
 }) => {
   const { isMobileView, isDesktopView, isTabletView } = useTailwindBreakpoint();
 
@@ -58,8 +60,10 @@ const CourseActivation = ({
                 </div>
               </div>
 
-              <div className="flex items-center gap-1 font-semibold text-xs">
-                {formatDate(course?.activation_expiry_date)}
+              <div className="flex items-center gap-1 font-semibold text-xs justify-center">
+                {course?.activation_expiry_date
+                  ? formatDate(course.activation_expiry_date)
+                  : "--"}
               </div>
             </div>
           </div>
@@ -69,6 +73,7 @@ const CourseActivation = ({
                 full
                 size="small"
                 title={"Activate"}
+                disabled={course?.can_active === false}
                 className="w-full md:w-[84px]"
                 onClick={() => setCourseActive(course)}
               />

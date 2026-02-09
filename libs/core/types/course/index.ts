@@ -36,6 +36,7 @@ export interface ISubjectByProgram {
 export interface IClassForActivation {
   id: string;
   finished_at: string;
+  started_at: string;
   code: string;
   name: string;
   examination_subject: {

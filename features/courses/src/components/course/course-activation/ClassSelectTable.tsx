@@ -34,19 +34,19 @@ export const ClassSelectTable = ({
       title: "Class code",
       dataIndex: "code",
       render: (value) => (
-        <span className="font-normal text-base text-gray-900">{value || '_'}</span>
+        <span className="font-normal text-base text-gray-900">{value || '--'}</span>
       ),
       width: 180,
       align: "left",
     },
     {
       title: "Duration",
-      dataIndex: "finished_at",
+      dataIndex: "duration",
       width: 224,
       align: "center",
-      render: (value) => (
+      render: (_, record) => (
         <span className="font-normal text-base text-gray-900">
-          {formatDate(value)}
+          {formatDate(record.started_at)} - {formatDate(record.finished_at)}
         </span>
       ),
     },
@@ -57,7 +57,7 @@ export const ClassSelectTable = ({
       align: "center",
       render: (_, record) => (
         <span className="font-normal text-base text-gray-900">
-          {record?.examination_subject?.examination?.name || '_'}
+          {record?.examination_subject?.examination?.name || '--'}
         </span>
       ),
     },
