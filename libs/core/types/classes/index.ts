@@ -210,6 +210,7 @@ export interface IListClassResourceParams {
   page_index: number;
   search_key?: string;
   suffix_types?: string[];
+  schedule_ids?: string[];
 }
 
 export interface IClassResourcePreview {
