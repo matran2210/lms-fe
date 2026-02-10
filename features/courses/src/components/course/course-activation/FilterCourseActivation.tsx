@@ -112,6 +112,7 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
           <div className="flex gap-2">
             {listFilter?.map((item, index) => (
               <SAPPSelectV2
+                isSearchable
                 key={index}
                 control={control}
                 name={item.name}
