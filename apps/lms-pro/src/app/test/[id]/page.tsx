@@ -29,7 +29,11 @@ import {
   TEST_TYPE,
 } from '@lms/core'
 import {
+  buildQuestionResult,
+  checkAnsweredPure,
+  formatSubmitAnswer,
   QuitTestModal,
+  TestGroupAction,
   TestTimeOutModal,
   UnSubmitAnswerModal,
   validateAnswer,
@@ -74,7 +78,6 @@ import {
   defaultSheetData,
   DragDropAnswerItem,
   GradingPreference,
-  IDataQuestion,
   IQuestion,
   IRequirement,
   Requirement,
@@ -1020,7 +1023,6 @@ const TestDetail = () => {
             name={`${currentTabID}_fillword`}
             data={data}
             setValue={setValue}
-            action={getValueFillText}
             handleSaveHighLight={handleSaveHighLight}
             highlighted={highlighted}
             removeHighlight={removeHighlight}
@@ -1250,7 +1252,6 @@ const TestDetail = () => {
     return result
   }
 
-
   const handleOpenScratchPad = (
     type: string,
     file?: string,
@@ -1317,197 +1318,75 @@ const TestDetail = () => {
       </div>
     )
   }
+
+  // Check answered question
   const checkAnswered = (currentContent: any, isSubmit = false) => {
-    if (
-      currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
-      currentContent.qType === QUESTION_TYPES.TRUE_FALSE ||
-      currentContent.qType === QUESTION_TYPES.MATCHING
-    ) {
-      if (
-        !isEmpty(getValues(`${currentContent?.id}_answer`)) &&
-        getValues(`${currentContent?.id}_answer`)?.length > 0
-      ) {
-        return true
-      }
-      return false
-    } else if (currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
-      if (
-        !isEmpty(getValues(`${currentContent?.id}_answer`)) &&
-        getValues(`${currentContent?.id}_answer`)?.length > 0
-      ) {
-        return true
-      }
-      return false
-    } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
-      if (getValues(`${currentContent?.id}_drag_drop_answer`)) {
-        for (const e of getValues(`${currentContent?.id}_drag_drop_answer`)) {
-          if (e?.idAnswer && e?.value !== '') {
-            return true
-          }
-        }
-      }
-
-      return false
-    } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
-      for (const e of getValueSelectText()) {
-        if (e && e !== '') {
-          return true
-        }
-      }
-
-      return false
-    } else if (currentContent.qType === QUESTION_TYPES.FILL_WORD) {
-      if (
-        getValues(`${currentContent?.id}_fillword`) &&
-        getValues(`${currentContent?.id}_fillword`)?.length > 0
-      ) {
-        for (const e of getValues(`${currentContent?.id}_fillword`)) {
-          if (e) {
-            return true
-          }
-        }
-        return false
-      }
-      return false
-    } else if (currentContent?.qType === QUESTION_TYPES.ESSAY) {
-      if (Array.isArray(currentContent.data?.requirements)) {
-        for (const req of currentContent.data?.requirements) {
-          if (
-            req?.answer_file?.file_key ||
-            answerListRef?.current?.[req?.id || '']
-          ) {
-            return true
-          }
-        }
-      }
-      if (currentContent?.answer_file?.file_key) {
-        return true
-      }
-
-      const hasRequirements =
-        Array.isArray(currentContent?.data?.requirements) &&
-        (currentContent?.data?.requirements?.length ?? 0) > 0
-
-      // If essay has requirements, check each requirement's editor value
-      if (hasRequirements) {
-        const isSheet =
-          currentContent?.data?.response_option === RESPONSE_OPTION.SHEET ||
-          currentContent?.response_type === 1
-
-        for (
-          let idx = 0;
-          idx < (currentContent?.data?.requirements?.length ?? 0);
-          idx++
-        ) {
-          const reqValue = getValues(`${currentPage}_${idx}_answer`)
-          if (isSheet) {
-            if (checkSheetAnswered(reqValue)) return true
-          } else {
-            if (reqValue) return true
-          }
-        }
-        return false
-      }
-
-      // No requirements -> fall back to single editor value
-      const singleValue =
-        isSubmit && (currentContent?.data?.requirements?.length ?? 0) <= 1
-          ? getValues(
-              `${currentContent?.id}_${currentContent?.data?.requirements?.length ? 0 : undefined}_answer`,
-            )
-          : getValues(`${currentPage}_${essayData?.index}_answer`)
-
-      if (
-        currentContent?.data?.response_option &&
-        currentContent?.data?.response_option !== null
-      ) {
-        if (currentContent?.data?.response_option === RESPONSE_OPTION.SHEET) {
-          return checkSheetAnswered(singleValue)
-        } else {
-          if (!singleValue || singleValue === DEFAULT_EDITOR_VALUE) {
-            return false
-          }
-          return true
-        }
-      } else {
-        if (currentContent.response_type === 1) {
-          return checkSheetAnswered(singleValue)
-        } else {
-          if (!singleValue || singleValue === DEFAULT_EDITOR_VALUE) {
-            return false
-          }
-          return true
-        }
-      }
-    }
+    return checkAnsweredPure({
+      qType: currentContent.qType,
+      answer: getValues(`${currentContent?.id}_answer`),
+      dragDropAnswer: getValues(`${currentContent?.id}_drag_drop_answer`),
+      fillWordAnswer: getValues(`${currentContent?.id}_fillword`),
+      selectWordAnswer: getValueSelectText(),
+      essay: {
+        requirements: currentContent.data?.requirements,
+        answer_file: currentContent.answer_file,
+        response_option: currentContent.data?.response_option,
+        response_type: currentContent.response_type,
+        editorValues: currentContent.data?.requirements?.map(
+          (_: unknown, idx: number) =>
+            getValues(`${currentPage}_${idx}_answer`),
+        ),
+      },
+      isSubmit,
+    })
   }
+
   // TODO: Implement this
-  const getValueFillText = () => {}
   const getValueSelectText = () => {
     const value = getValues(`${currentPage}_answer`) || []
     return value
   }
   const getResult = async (currentTabContent: any) => {
     const res = await TestServiceAPI.getQuestionAnswer(currentTabContent.id)
-    let corrects = {} as any
-    if (
-      currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
-      currentTabContent.qType === QUESTION_TYPES.TRUE_FALSE ||
-      currentTabContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
-    ) {
-      corrects = res?.data?.[0].answers?.reduce(
-        (previousValue: any, currentValue: any) => {
-          return {
-            ...previousValue,
-            [currentValue.id]: currentValue.is_correct,
-          }
-        },
-        {} as { [key: string]: boolean },
-      )
-    } else if (
-      currentTabContent.qType === QUESTION_TYPES.FILL_WORD ||
-      currentTabContent.qType === QUESTION_TYPES.SELECT_WORD
-    ) {
-      corrects = { corrects: [...res?.data?.[0]?.answers] }
-    } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
-      corrects = { corrects: [...res?.data?.[0]?.question_matchings] }
-    } else if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
-      corrects = {
-        corrects: [
-          ...res?.data?.[0]?.answers?.sort(
-            (a: any, b: any) => a?.answer_position - b?.answer_position,
-          ),
-        ],
-      }
-      const dragDropCurrentTemp = {
-        currentTabId: currentTabContent?.id,
-        drag_drop_answers: res?.data?.[0]?.drag_drop_answers,
-      }
+    const response = res?.data?.[0]
 
+    const result = buildQuestionResult(currentTabContent.qType, response)
+
+    if (
+      currentTabContent.qType === QUESTION_TYPES.DRAG_DROP &&
+      result.dragDropAnswers
+    ) {
       setCurrentDragDrop((prev) => {
         const exists = prev.some(
-          (item) => item.currentTabId === dragDropCurrentTemp.currentTabId,
+          (item) => item.currentTabId === currentTabContent.id,
         )
 
         if (!exists) {
-          return [...prev, dragDropCurrentTemp]
+          return [
+            ...prev,
+            {
+              currentTabId: currentTabContent.id,
+              drag_drop_answers: result.dragDropAnswers,
+            },
+          ]
         }
 
         return prev
       })
     }
+
     return {
-      corrects: corrects,
-      solution: res?.data?.[0]?.solution,
-      isSelfReflection: res?.data?.[0]?.is_self_reflection,
-      requirements: res?.data?.[0]?.requirements,
+      corrects: result.corrects,
+      solution: result.solution,
+      isSelfReflection: result.isSelfReflection,
+      requirements: result.requirements,
     }
   }
+
   const confirmAnswer = async (
     corrects: any,
     solution: any,
     currentTabContent: any,
-    isSelfReflection: boolean,
     requirements?: IRequirement[],
   ) => {
     setLoading(true)
@@ -1987,135 +1866,21 @@ const TestDetail = () => {
   }
   // Helper function to format answer based on question type
   const formatAnswerItem = (question: any) => {
-    const baseAnswer = {
-      question_id: question.id,
-      time_spent: Math.ceil(question.timeSpent / 1000),
-    }
-    // Handle essay questions
-    if (question.qType === QUESTION_TYPES.ESSAY) {
-      if (!checkAnswered(question, true)) return null
-      const requirements =
-        question?.data?.requirements?.length > 0
-          ? question?.data?.requirements
-          : []
+    const isAnswered = checkAnswered(question, true)
 
-      if (requirements?.length > 0) {
-        const requirementAnswers = requirements.map(
-          (requirement: Requirement | null) => ({
-            question_id: question.id,
-            short_answer: requirement?.answer_text ?? '',
-            requirement_id: requirement?.id || null,
-            response_option:
-              question?.data?.response_option ??
-              (question?.response_type === 0 ? 'WORD' : 'SHEET'),
-            time_spent: Math.ceil(question.timeSpent / 1000),
-            ...(!!(
-              requirement?.answer_text ||
-              requirement?.answer_file ||
-              question?.answer_file
-            ) && {
-              active: 'SUBMITED',
-            }),
-            answer_file:
-              requirement?.answer_file || question?.answer_file || null,
-          }),
-        )
+    const timeSpent = Math.ceil(question.timeSpent / 1000)
 
-        return {
-          question_id: question.id,
-          total_attempt_time:
-            quizDetail?.quiz_timed * 60 -
-            (quizDetail?.quiz_timed
-              ? timeRef?.current?.handleGetTime() || 0
-              : 0),
-          scratch_pads: scratchPads || [],
-          answer: requirementAnswers,
-        }
-      }
+    const totalAttemptTime = quizDetail?.quiz_timed
+      ? quizDetail.quiz_timed * 60 - (timeRef?.current?.handleGetTime() || 0)
+      : undefined
 
-      return {
-        ...baseAnswer,
-        short_answer: question?.answer || '',
-        requirement_id: null,
-        response_option:
-          question?.data?.response_option ??
-          (question?.response_type === 0 ? 'WORD' : 'SHEET'),
-        ...(!!(question?.answer || question?.answer_file) && {
-          active: 'SUBMITED',
-        }),
-        answer_file: question?.answer_file || null,
-      }
-    }
-
-    // Handle single choice and true/false questions
-    if (
-      [QUESTION_TYPES.ONE_CHOICE, QUESTION_TYPES.TRUE_FALSE].includes(
-        question.qType,
-      )
-    ) {
-      if (question?.answer) {
-        return {
-          ...baseAnswer,
-          question_answer_id: question?.answer,
-        }
-      } else {
-        return baseAnswer
-      }
-    }
-
-    // Handle multiple choice questions
-    if (question.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
-      return {
-        ...baseAnswer,
-        answer: (question?.answer || [])?.map((el: string) => ({
-          answer_id: el,
-        })),
-      }
-    }
-
-    // Handle matching questions
-    if (question.qType === QUESTION_TYPES.MATCHING) {
-      return {
-        ...baseAnswer,
-        answer: question.answer,
-      }
-    }
-
-    // Handle drag and drop questions
-    if (question.qType === QUESTION_TYPES.DRAG_DROP) {
-      return {
-        ...baseAnswer,
-        answer: (question.answer ?? [])
-          .filter((item: any) => item?.idAnswer)
-          .map((item: any) => ({
-            answer_id: item.idAnswer,
-            answer_position: item.position,
-          })),
-      }
-    }
-
-    // Handle select word questions
-    if (question.qType === QUESTION_TYPES.SELECT_WORD) {
-      return {
-        ...baseAnswer,
-        answer: question?.answer,
-      }
-    }
-
-    // Handle fill word questions
-    if (question.qType === QUESTION_TYPES.FILL_WORD) {
-      return {
-        ...baseAnswer,
-        answer: question.answer
-          .filter((item: string) => item && item !== '')
-          .map((item: string, index: number) => ({
-            answer_text: item,
-            answer_position: index + 1,
-          })),
-      }
-    }
-
-    return null
+    return formatSubmitAnswer({
+      question,
+      isAnswered,
+      timeSpent,
+      totalAttemptTime,
+      scratchPads,
+    })
   }
   // Helper function to handle submission errors
   const handleSubmissionError = (payload: any) => {
@@ -2292,6 +2057,7 @@ const TestDetail = () => {
       }
     }
   }
+
   const handleClearFile = (requirementIndex: number) => {
     const newTabs = tabs.map((tab: any) => {
       if (tab.id === currentPage) {
@@ -2595,21 +2361,9 @@ const TestDetail = () => {
       return (e.returnValue = warningText)
     }
 
-    // TODO: next14
-    // const handleBrowseAway = () => {
-    //   if (unsavedChange === true && routeBack === false) {
-    //     if (!unsavedChange) return
-    //     if (window.confirm(warningText)) return
-    //     router.events.emit('routeChangeError')
-    //     throw 'routeChange aborted.'
-    //   }
-    // }
-
     window.addEventListener('beforeunload', handleWindowClose)
-    // router.events.on('routeChangeStart', handleBrowseAway)
     return () => {
       window.removeEventListener('beforeunload', handleWindowClose)
-      // router.events.off('routeChangeStart', handleBrowseAway)
     }
   }, [unsavedChange, isQuizAttemptCreated])
 
@@ -2624,20 +2378,6 @@ const TestDetail = () => {
     }
   }, [startResize])
 
-  // const handleResetRequirementIndex = () => {
-  //   if (
-  //     tabs &&
-  //     tabs.length > 0 &&
-  //     currentTabContent &&
-  //     currentTabContent?.data?.requirements
-  //     // && !essayData
-  //   ) {
-  //     setEssayData({
-  //       req: currentTabContent?.data?.requirements?.[0],
-  //       index: currentTabContent?.data?.requirements?.[0] ? 0 : undefined,
-  //     })
-  //   }
-  // }
   useEffect(() => {
     if (
       tabs &&
@@ -2733,136 +2473,68 @@ const TestDetail = () => {
   }
   const isGradingAfterEachQuestion =
     quizDetail?.grading_preference === GradingPreference.AFTER_EACH_QUESTION
-  const groupAction = () => {
-    const indexTab = filteredTabs.findIndex((e: any) => e.id === currentPage)
 
+  const groupAction = () => {
+    const indexTab = filteredTabs.findIndex((e) => e.id === currentPage)
     const currentAnswer = watch(`${currentPage}_answer`)
+
     return (
-      <div>
-        <div
-          className={clsx('flex items-center justify-end gap-2', {
-            'gap-3': isShowTemplate,
-            'gap-2': !isShowTemplate,
-          })}
-        >
-          {currentTabContent &&
-            currentTabContent.qType === QUESTION_TYPES.ESSAY &&
-            isShowTemplate && (
-              <div className="flex items-center justify-end gap-3">
-                <ButtonTextV2
-                  title="Reset to Answer Template"
-                  onClick={onOpenResetToTemplateModal}
-                  className="bg-transparent hover:!bg-transparent"
-                />
-                <ShowAnswerTemplate
-                  {...{
-                    currentTabContent,
-                    essayData,
-                  }}
-                />
-              </div>
-            )}
-          {[QUESTION_TYPES.ONE_CHOICE].includes(currentTabContent?.qType) &&
-            !currentTabContent?.is_viewed_answer && (
-              <ButtonSecondary
-                className={clsx({ '!bg-white !font-semibold': currentAnswer })}
-                disabled={!currentAnswer}
-                onClick={() => {
-                  handleClearSelection(currentTabContent)
-                  trackGAEvent('Click Button Clear Selection Test')
-                }}
-                title="Clear Selection"
-              />
-            )}
-          <Tooltip
-            title={
-              currentTabContent?.is_viewed_answer ||
-              ![
-                QUESTION_TYPES.TRUE_FALSE,
-                QUESTION_TYPES.ONE_CHOICE,
-                QUESTION_TYPES.MULTIPLE_CHOICE,
-              ].includes(currentTabContent?.qType) ||
-              !!currentAnswer
-                ? null
-                : 'You should select an answer before click'
-            }
-            classNames={{
-              root: 'max-w-[288px] rounded-md',
-              body: 'text-sm !py-1 !px-2 flex items-center',
-            }}
-            getPopupContainer={(triggerNode) => triggerNode.parentElement!}
-            placement="top"
-            color={'#404041'}
-          >
-            {isGradingAfterEachQuestion &&
-            currentTabContent?.is_viewed_answer &&
-            indexTab < filteredTabs.length - 1 ? (
-              <ButtonText
-                onClick={() => {
-                  handleChangeTab(filteredTabs[indexTab + 1].id)
-                  trackGAEvent('Click Button Next Question')
-                }}
-              >
-                <div className="flex items-center gap-2">
-                  Next Question <Icon type="arrow-right" />
-                </div>
-              </ButtonText>
-            ) : (
-              <ButtonPrimary
-                className="bg-gray-100 hover:!bg-gray-100"
-                onClick={async () => {
-                  if (isGradingAfterEachQuestion) {
-                    if (currentTabContent?.is_viewed_answer) {
-                      if (indexTab === filteredTabs.length - 1) {
-                        handleSubmitAnswer('finish')
-                        if (checkUnSubmitAnswer()?.length > 0) {
-                          setUnSubmitAnswer(true)
-                        } else {
-                          setOpenSubmit(true)
-                        }
-                        dispatch(disableUnsavedChange())
-                      }
-                    } else {
-                      const data = await getResult(currentTabContent)
-                      handleSubmitAnswer('view-answer')
-                      confirmAnswer(
-                        data?.corrects,
-                        data?.solution,
-                        currentTabContent,
-                        data?.isSelfReflection,
-                        data?.requirements,
-                      )
-                    }
-                  } else {
-                    if (indexTab < filteredTabs.length - 1) {
-                      handleChangeTab(filteredTabs[indexTab + 1].id)
-                      handleSubmitAnswer('change-tab')
-                    } else if (indexTab === filteredTabs.length - 1) {
-                      handleSubmitAnswer('finish')
-                      if (checkUnSubmitAnswer()?.length > 0) {
-                        setUnSubmitAnswer(true)
-                      } else {
-                        setOpenSubmit(true)
-                      }
-                      dispatch(disableUnsavedChange())
-                    }
-                  }
-                  trackGAEvent('Click Button Confirm Answer')
-                }}
-                title={
-                  isGradingAfterEachQuestion
-                    ? currentTabContent?.is_viewed_answer
-                      ? 'Finish'
-                      : 'Confirm'
-                    : indexTab < filteredTabs.length - 1
-                      ? 'Confirm & Next'
-                      : 'Confirm'
+      <TestGroupAction
+        currentTabContent={currentTabContent}
+        currentAnswer={currentAnswer}
+        indexTab={indexTab}
+        totalTabs={filteredTabs.length}
+        isShowTemplate={isShowTemplate}
+        isGradingAfterEachQuestion={isGradingAfterEachQuestion}
+        onClearSelection={() => {
+          handleClearSelection(currentTabContent)
+          trackGAEvent('Click Button Clear Selection Test')
+        }}
+        onNextQuestion={() => {
+          handleChangeTab(filteredTabs[indexTab + 1].id)
+          trackGAEvent('Click Button Next Question')
+        }}
+        onResetTemplate={onOpenResetToTemplateModal}
+        onConfirm={async () => {
+          if (isGradingAfterEachQuestion) {
+            if (currentTabContent?.is_viewed_answer) {
+              if (indexTab === filteredTabs.length - 1) {
+                handleSubmitAnswer('finish')
+                if (checkUnSubmitAnswer()?.length > 0) {
+                  setUnSubmitAnswer(true)
+                } else {
+                  setOpenSubmit(true)
                 }
-              />
-            )}
-          </Tooltip>
-        </div>
-      </div>
+                dispatch(disableUnsavedChange())
+              }
+            } else {
+              const data = await getResult(currentTabContent)
+              handleSubmitAnswer('view-answer')
+              confirmAnswer(
+                data?.corrects,
+                data?.solution,
+                currentTabContent,
+                data?.requirements,
+              )
+            }
+          } else {
+            if (indexTab < filteredTabs.length - 1) {
+              handleChangeTab(filteredTabs[indexTab + 1].id)
+              handleSubmitAnswer('change-tab')
+            } else if (indexTab === filteredTabs.length - 1) {
+              handleSubmitAnswer('finish')
+              if (checkUnSubmitAnswer()?.length > 0) {
+                setUnSubmitAnswer(true)
+              } else {
+                setOpenSubmit(true)
+              }
+              dispatch(disableUnsavedChange())
+            }
+          }
+
+          trackGAEvent('Click Button Confirm Answer')
+        }}
+      />
     )
   }
   const isShowTemplate =
