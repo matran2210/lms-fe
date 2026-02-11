@@ -9,3 +9,6 @@ hoistPattern:
   - react*
   - antd
   - '@ant-design/*'
+
+overrides:
+  '@sapp-fe/preview-part': link:../../../AppData/Local/pnpm/global/5/node_modules/@sapp-fe/preview-part

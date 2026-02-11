@@ -1,14 +1,22 @@
 'use client'
 
-import { useStory } from '@contexts/StorylineContext'
-import { StepRenderer } from './blocks/StepRenderer'
-import { useEffect, useRef } from 'react'
-import Sidebar from './sidebar'
-import StoryHeader from './header/StoryHeader'
-import StoryFooter from './footer/StoryFooter'
-import { Select } from '@lms/ui'
 import { SelectArrow } from '@components/courses/icons'
+import { useStory } from '@contexts/StorylineContext'
+import { ButtonPrimary, Select } from '@lms/ui'
+import { scrollToYFramer } from '@utils/helpers/storyline/engine'
 import clsx from 'clsx'
+import { motion } from 'framer-motion'
+import { useEffect, useRef } from 'react'
+import { StepRenderer } from './blocks/StepRenderer'
+import StoryFooter from './footer/StoryFooter'
+import StoryHeader from './header/StoryHeader'
+import Sidebar from './sidebar'
+import ContinueButton from './ContinueButton'
+import {
+  lockScroll,
+  scrollToY,
+  unlockScroll,
+} from '@utils/helpers/storyline/scrollManager'
 
 export default function Player() {
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -17,21 +25,32 @@ export default function Player() {
     steps,
     stepRefs,
     currentStepIndex,
-    hasNextStep,
+    hasNextBlock,
     visibleBlocks,
     continueAction,
     goToBlockSmart,
     maxVisibleBlockMap,
     currentStep,
+    showSidebar,
   } = useStory()
 
+  const prevStepRef = useRef(currentStepIndex)
+
   useEffect(() => {
+    if (prevStepRef.current === currentStepIndex) return
+    prevStepRef.current = currentStepIndex
+
     const el = stepRefs.current[currentStepIndex]
     if (!el) return
 
-    el.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
+    lockScroll()
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const y = el.getBoundingClientRect().top + window.scrollY
+        scrollToY(y, { duration: 0.6, offset: 0 })
+        unlockScroll()
+      })
     })
   }, [currentStepIndex])
 
@@ -39,10 +58,19 @@ export default function Player() {
     <div>
       <StoryHeader steps={steps} currentStepId={currentStep.id} />
 
-      <main ref={containerRef} className="relative flex w-full pl-8 pt-3">
-        <Sidebar />
-
-        <div className="mx-auto flex min-h-screen max-w-4xl flex-1 flex-col">
+      <Sidebar />
+      <main ref={containerRef} className="flex w-full flex-col">
+        <motion.div
+          layout
+          animate={{
+            paddingLeft: showSidebar ? 320 : 0,
+          }}
+          transition={{
+            duration: 0.25,
+            ease: 'easeOut',
+          }}
+          className="mx-auto flex min-h-screen w-full max-w-5xl flex-1 flex-col"
+        >
           {steps.map((step, stepIndex) => {
             const isActive = stepIndex === currentStepIndex
 
@@ -93,7 +121,8 @@ export default function Player() {
               </section>
             )
           })}
-        </div>
+        </motion.div>
+        <ContinueButton onClick={continueAction} />
       </main>
 
       <StoryFooter onClick={continueAction} />

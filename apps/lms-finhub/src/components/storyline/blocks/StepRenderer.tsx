@@ -1,7 +1,9 @@
-import { StoryBlockRenderer } from './StoryBlockRenderer'
+import { scrollToYFramer } from '@utils/helpers/storyline/engine'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useRef } from 'react'
 import { Block } from 'src/type/storyline'
+import { StoryBlockRenderer } from './StoryBlockRenderer'
+import { scrollToY } from '@utils/helpers/storyline/scrollManager'
 
 interface Props {
   visibleBlocks: Block[]
@@ -21,9 +23,9 @@ export function StepRenderer({ visibleBlocks, stepIndex }: Props) {
     if (!el) return
 
     requestAnimationFrame(() => {
-      el.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
+      requestAnimationFrame(() => {
+        const y = el.getBoundingClientRect().top + window.scrollY
+        scrollToY(y, { duration: 0.6, offset: 80 })
       })
     })
   }, [visibleBlocks.length])
@@ -43,7 +45,7 @@ export function StepRenderer({ visibleBlocks, stepIndex }: Props) {
               delay: index * 0.03,
               ease: 'easeOut',
             }}
-            className="mb-16 scroll-mt-24"
+            className="mb-16"
           >
             <StoryBlockRenderer block={block} />
           </motion.div>

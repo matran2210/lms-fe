@@ -66,7 +66,6 @@ const CourseDetail = () => {
   const [isPassedCourse, setIsPassedCourse] = useState<boolean>(false)
   const [isOpenChapter, setIsOpenChapter] = useState<boolean>(false)
   const [openResource, setOpenResource] = useState<boolean>(false)
-  const [openStory, setOpenStory] = useState<boolean>(false)
   const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
   const { setOpenSidebar } = useCourseContext()
@@ -450,7 +449,6 @@ const CourseDetail = () => {
             isMobileView={isMobileView}
             isTabletView={isTabletView}
             isShortCourse
-            setOpenStoryline={setOpenStory}
           />
         </div>
         <BottomMenu>
@@ -500,12 +498,6 @@ const CourseDetail = () => {
         <LearningResource
           open={openResource}
           setOpenResource={setOpenResource}
-        />
-        <StoryOverview
-          open={openStory}
-          setOpen={setOpenStory}
-          storylineId={''}
-          name={''}
         />
       </div>
       <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />

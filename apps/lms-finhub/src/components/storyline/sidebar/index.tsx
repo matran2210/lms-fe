@@ -3,6 +3,8 @@ import clsx from 'clsx'
 import LearningItem from '../modal/LearningItem'
 import { useStory } from '@contexts/StorylineContext'
 import { StoryStep } from 'src/type/storyline'
+import { Divider } from 'antd'
+import { CloseDetailIcon } from '@lms/assets'
 
 export default function Sidebar() {
   const {
@@ -13,7 +15,9 @@ export default function Sidebar() {
     maxUnlockedStepIndex,
     steps,
     currentStep,
+    setShowSidebar,
   } = useStory()
+  const toggleSidebar = () => setShowSidebar(!showSidebar)
 
   const getStepProgress = (index: number) => {
     const total = steps[index].blocks.length
@@ -37,8 +41,18 @@ export default function Sidebar() {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: -40, opacity: 0 }}
           transition={{ duration: 0.25, ease: 'easeOut' }}
-          className="sticky top-22 max-h-[calc(100vh-380px)] w-80 rounded-2xl bg-white p-6 shadow-md"
+          className="fixed bottom-0 top-0 z-10 h-full w-80 bg-white p-6 shadow-md"
         >
+          <div className="flex items-center justify-between gap-2">
+            <div className="text-lg font-semibold text-gray-800">
+              Case Study — Applying the HR Value Chain at Telline | Strategic HR
+              Metrics
+            </div>
+            <div className="cursor-pointer" onClick={toggleSidebar}>
+              <CloseDetailIcon className="shrink-0 rotate-180" />
+            </div>
+          </div>
+          <Divider className="my-4" />
           <div className="flex h-full flex-col gap-4 overflow-auto">
             {steps.map((step, index) => {
               const isActive = step.id === currentStep.id
@@ -47,10 +61,7 @@ export default function Sidebar() {
               return (
                 <div
                   key={step.id}
-                  className={`
-                                        transition-opacity
-                                        ${!isUnlocked ? 'pointer-events-none opacity-40' : ''}
-                                    `}
+                  className={`transition-opacity ${!isUnlocked ? 'pointer-events-none opacity-40' : ''}`}
                 >
                   <LearningItem
                     name={step.title ?? ''}

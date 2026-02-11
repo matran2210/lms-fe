@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { motion } from 'framer-motion'
 import CircularProgress from '../header/CircularProgress'
+import { ProgressIcon } from '@lms/assets'
 
 const LearningItem = ({
   name,
@@ -20,7 +21,7 @@ const LearningItem = ({
       onClick={onClick}
       className={clsx(
         'flex w-full cursor-pointer items-center justify-between rounded-xl p-4 transition-colors',
-        active ? 'bg-[#EAEAEA]' : 'hover:bg-gray-100',
+        active ? 'bg-[#FFF1CC]' : 'hover:bg-[#FFF1CC]',
         disabled && 'cursor-not-allowed opacity-50',
       )}
     >
@@ -43,7 +44,11 @@ const LearningItem = ({
           {name}
         </div>
       </div>
-      <CircularProgress progress={progress} />
+      {progress === 100 ? (
+        <ProgressIcon />
+      ) : (
+        <CircularProgress progress={progress} />
+      )}
     </motion.div>
   )
 }

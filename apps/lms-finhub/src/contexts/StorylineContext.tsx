@@ -1,8 +1,9 @@
 'use client'
+import { scrollToYFramer } from '@utils/helpers/storyline/engine'
+import { scrollToY } from '@utils/helpers/storyline/scrollManager'
 import { useRouter } from 'next/navigation'
 import React, {
   createContext,
-  use,
   useContext,
   useEffect,
   useMemo,
@@ -108,14 +109,13 @@ export function StoryProvider({ children }: { children: React.ReactNode }) {
       [currentStepIndex]: index,
     }))
 
-    requestAnimationFrame(() => {
-      document
-        .getElementById(`block-${currentStepIndex}-${index}`)
-        ?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        })
-    })
+    const el = document.getElementById(`block-${currentStepIndex}-${index}`)
+    if (el) {
+      requestAnimationFrame(() => {
+        const y = el.getBoundingClientRect().top + window.scrollY
+        scrollToY(y, { duration: 0.6, offset: 80 })
+      })
+    }
   }
 
   const backToPreviousStep = () => {

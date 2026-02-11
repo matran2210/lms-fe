@@ -1,11 +1,12 @@
-import { useStory } from '@contexts/StorylineContext'
+import { useStoryline } from '@contexts/StorylineContext'
 import { FlagIcon } from '@lms/assets'
 import { ButtonPrimary } from '@lms/ui'
 import clsx from 'clsx'
 import React, { useEffect, useState } from 'react'
 
 const StoryFooter = ({ onClick }: { onClick: () => void }) => {
-  const { hasNextBlock, hasNextStep } = useStory()
+  const hasNextBlock = true,
+    hasNextStep = true
   const [isVisible, setIsVisible] = useState(false)
   useEffect(() => {
     const handleScroll = () => {

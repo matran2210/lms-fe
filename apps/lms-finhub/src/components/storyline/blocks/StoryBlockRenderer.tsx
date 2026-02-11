@@ -6,8 +6,6 @@ import { Block } from 'src/type/storyline'
 import { QUESTION_TYPES } from '@lms/core'
 
 export function StoryBlockRenderer({ block }: { block: Block }) {
-  console.log(block.type, '909090')
-
   switch (block.type) {
     case 'text':
       return <TextBlock text={block.text!} />
