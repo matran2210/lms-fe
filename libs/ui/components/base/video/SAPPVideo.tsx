@@ -629,15 +629,24 @@ const SAPPVideo = ({
   // then it should exit and vice versa.
   function toggleFullScreen() {
     const video = streamRef.current;
+    // Check case fullscreen for iphone
+    if (typeof video.webkitEnterFullscreen === "function") {
+      video.webkitEnterFullscreen();
+      return;
+    }
+    
+    // Check case fullscreen for normal 
     if (document?.fullscreenElement) {
       document.exitFullscreen();
-    } else if (
+      return;
+    }
+
+    if (
       videoContainerRef?.current &&
       videoContainerRef?.current?.requestFullscreen
     ) {
       videoContainerRef?.current?.requestFullscreen();
-    } else if (video.webkitRequestFullscreen) {
-      video.webkitRequestFullscreen();
+      return;
     }
   }
 
