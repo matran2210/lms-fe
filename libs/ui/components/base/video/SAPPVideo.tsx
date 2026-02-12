@@ -628,6 +628,7 @@ const SAPPVideo = ({
   // If the browser is currently in fullscreen mode,
   // then it should exit and vice versa.
   function toggleFullScreen() {
+    const video = streamRef.current;
     if (document?.fullscreenElement) {
       document.exitFullscreen();
     } else if (
@@ -635,6 +636,8 @@ const SAPPVideo = ({
       videoContainerRef?.current?.requestFullscreen
     ) {
       videoContainerRef?.current?.requestFullscreen();
+    } else if (video.webkitRequestFullscreen) {
+      video.webkitRequestFullscreen();
     }
   }
 
