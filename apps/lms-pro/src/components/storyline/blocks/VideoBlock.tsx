@@ -1,3 +1,7 @@
+import { SappModalVideo, SAPPVideo } from '@lms/ui'
+import { useRef } from 'react'
+
 export default function VideoBlock({ src }: { src: string }) {
-  return <video src={src || ''} controls className="" />
+  const streamRef = useRef<any>()
+  return <SAPPVideo streamRef={streamRef} options={{ src }}></SAPPVideo>
 }

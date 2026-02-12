@@ -20,7 +20,6 @@ interface StorylineContextValue {
   /** document control */
   visibleDocumentCount: number
   setVisibleDocumentCount: React.Dispatch<React.SetStateAction<number>>
-
   continueAction: (storyline_item_document_id: string) => void
 }
 

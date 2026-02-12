@@ -3,6 +3,7 @@ import Player from '@components/storyline/Player'
 import { StorylineProvider } from '@contexts/StorylineContext'
 import { StorylineSidebarProvider } from '@contexts/StorylineSidebarContext'
 import { UserType } from '@lms/contexts'
+import { LAYOUT } from '@lms/core'
 import { useParams, useSearchParams } from 'next/navigation'
 import { useQuery } from 'react-query'
 import { StorylineAPI } from 'src/api/storyline'
@@ -39,4 +40,5 @@ function StoryLinePage() {
   )
 }
 
-export default withAuthorization([UserType.STUDENT])(StoryLinePage)
+export default StoryLinePage
+StoryLinePage.layout = LAYOUT.FULLSCREEN_LAYOUT

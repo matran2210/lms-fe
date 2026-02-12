@@ -11,6 +11,7 @@ import {
   AddWordPreview,
   EditorReader,
   EssayQuestionPreview,
+  HighlightableHTML,
   MatchQuizComponent,
   MultiChoiceQuestion,
   NewDragNDropQuestion,
@@ -18,20 +19,32 @@ import {
   SelectWord,
   SlotValue,
 } from '@lms/ui'
-import { checkSheetAnswered, isEmptyParagraph } from '@lms/utils'
-import { Tabs } from 'antd'
+import {
+  checkSheetAnswered,
+  handleMultipleCorrectAnswer,
+  isEmptyParagraph,
+} from '@lms/utils'
+import { Divider, Tabs } from 'antd'
 import clsx from 'clsx'
-import { useRef } from 'react'
+import { isUndefined } from 'lodash'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { TestServiceAPI } from 'src/api/test-api'
+import { IMultiChoiceQuestion, IQuiz } from 'src/type/storyline'
 import { v4 as uuidv4 } from 'uuid'
 
 interface QuizBlockProps {
-  question: IQuestion
+  minimalQuestion: IMultiChoiceQuestion
+  quiz_id: string
 }
 
-export default function QuizBlock({ question }: QuizBlockProps) {
+const QuizBlock = ({ minimalQuestion, quiz_id }: QuizBlockProps) => {
   const MatchQuizRef = useRef(null) as any
   const questionRef = useRef<HTMLDivElement>(null)
+  const [activeQuestion, setActiveQuestion] = useState<any>()
+  const [loading, setLoading] = useState<boolean>(false)
+  const [question, setQuestion] = useState<IQuestion | null>(null)
+  const [topicDescription, setTopicDescription] = useState<any>()
 
   const { setValue, control } = useForm()
   const getAnswerMatching = () => {
@@ -47,6 +60,109 @@ export default function QuizBlock({ question }: QuizBlockProps) {
       value?.push(e?.value)
     }
     return value
+  }
+  function getCorrect(answers: any, questionType: any) {
+    switch (questionType as QUESTION_TYPES) {
+      case QUESTION_TYPES.ONE_CHOICE:
+      case QUESTION_TYPES.TRUE_FALSE:
+        const correctAnswers = answers
+        const corrects = Object?.fromEntries(
+          correctAnswers?.map((answer: any) => [answer.id, answer.is_correct]),
+        )
+        return corrects
+      case QUESTION_TYPES.MULTIPLE_CHOICE:
+        return Object.fromEntries(
+          (answers || [])?.map((originalAnswer: any) => [
+            originalAnswer.id,
+            originalAnswer.is_correct,
+          ]),
+        )
+      case QUESTION_TYPES.FILL_WORD:
+      case QUESTION_TYPES.SELECT_WORD:
+        return answers || []
+      case QUESTION_TYPES.MATCHING:
+        return answers || []
+      case QUESTION_TYPES.DRAG_DROP:
+        return answers || []
+      default:
+        return {}
+    }
+  }
+  const getActiveQuestion = async (id: string) => {
+    setLoading(true)
+    try {
+      // const quizAttempts = axiosInstance.get('')
+      // const selectedResponseAnswers = data.data.selectedResponseAnswers
+      const resultResponse = await TestServiceAPI.getQuestionAnswer(id)
+
+      const questionType = resultResponse?.data?.answer?.question?.qType
+      const answerTemp = resultResponse?.data?.answer?.question?.answers || []
+      setActiveQuestion({
+        ...resultResponse.data.answer.question,
+        program: resultResponse.data.program,
+        answer_file: resultResponse.data.answer.answer_file,
+        active: resultResponse.data.answer.active,
+        confirmed: true,
+        grading_question: resultResponse.data.answer.grading_question,
+        corrects: getCorrect(
+          questionType !== QUESTION_TYPES.MATCHING
+            ? answerTemp
+            : resultResponse?.data?.answer?.answer_matching_mapping,
+          resultResponse?.data?.answer?.question?.qType,
+        ),
+        question_matchings:
+          resultResponse?.data?.answer?.answer_matching_mapping,
+        answers:
+          questionType === QUESTION_TYPES.DRAG_DROP
+            ? handleMultipleCorrectAnswer(
+                resultResponse?.data?.answer?.question?.drag_drop_answers,
+                resultResponse?.data?.answer?.answer,
+                answerTemp,
+              )
+            : answerTemp,
+        myAnswers: [
+          {
+            question_id: resultResponse?.data?.answer?.question?.id,
+            question_answer_id:
+              resultResponse?.data?.answer?.question_answer_id,
+            answer: resultResponse?.data?.answer?.answer,
+          },
+        ],
+        defaultValue: resultResponse?.data?.answer?.answer,
+        next: resultResponse?.data?.next,
+        previous: resultResponse?.data?.previous,
+        total_question: resultResponse?.data?.total_question,
+        index: resultResponse?.data?.index,
+        answer_position_mapping:
+          resultResponse?.data?.answer?.answer_position_mapping,
+        question_topic: topicDescription?.data,
+        short_answer: resultResponse?.data?.answer?.short_answer,
+        response_option_answer: resultResponse?.data?.answer?.response_option,
+      })
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function getDetail() {
+    let topicDescription
+    let question
+    try {
+      if (!isUndefined(minimalQuestion)) {
+        topicDescription = await TestServiceAPI.getTopicDescription(
+          minimalQuestion.question_topic.id,
+          quiz_id,
+        )
+        question = await TestServiceAPI.getQuestionDetail(minimalQuestion?.id)
+      }
+      return { topicDescription, question: question?.data }
+    } catch (err) {
+      return {
+        topicDescription: { data: {} },
+        question: null,
+      }
+    }
   }
 
   const renderQuestion = () => {
@@ -268,5 +384,39 @@ export default function QuizBlock({ question }: QuizBlockProps) {
     }
   }
 
-  return <div className="relative">{renderQuestion()}</div>
+  useEffect(() => {
+    if (minimalQuestion?.id) {
+      getDetail().then((res) => {
+        if (res.topicDescription) {
+          setTopicDescription(res.topicDescription.data)
+        }
+        if (res.question) {
+          setQuestion(res.question)
+        }
+      })
+    }
+  }, [minimalQuestion])
+
+  console.log(question, topicDescription, 'question, topicDescription')
+
+  return (
+    <div>
+      {!!topicDescription?.description &&
+        !isEmptyParagraph(topicDescription?.description) && (
+          <HighlightableHTML
+            initialHTML={topicDescription?.description ?? ''}
+            storageKey={`quiz-storyline-question-topic-${activeQuestion?.id}`}
+            className="sapp-questions"
+          />
+        )}
+
+      {!!topicDescription?.description &&
+        !isEmptyParagraph(topicDescription?.description) && (
+          <Divider className="my-4 bg-gray-300 md:my-8" />
+        )}
+      <div className="bg-gray-100 p-8">{renderQuestion()}</div>
+    </div>
+  )
 }
+
+export default QuizBlock

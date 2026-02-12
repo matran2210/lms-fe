@@ -1,6 +1,10 @@
 import { HamburgerMenuLargeIcon, SelectArrow } from '@assets/icons'
 import { useStorylineSidebar } from '@contexts/StorylineSidebarContext'
-import { CloseModalIcon } from '@lms/assets'
+import {
+  CheckCircleOutlineYellow,
+  CheckIcon,
+  CloseModalIcon,
+} from '@lms/assets'
 import { Select } from '@lms/ui'
 import clsx from 'clsx'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -42,7 +46,7 @@ const StoryHeader = ({ listStorylineData }: Props) => {
           </div>
           <div>
             <Select
-              className="custom-select-v2 h-8 rounded-full bg-[#EEEEEE] p-[10px]"
+              className="custom-select-v2 h-8 w-48 rounded-full p-[10px]"
               variant="borderless"
               value={
                 listStorylineData?.storyline?.items
@@ -57,6 +61,19 @@ const StoryHeader = ({ listStorylineData }: Props) => {
                   }
                 },
               )}
+              optionRender={(option) => {
+                const isSelected =
+                  option.value === searchParams.get('storylineItemId')
+
+                return (
+                  <div className="flex w-full items-center justify-between">
+                    <span>{option.label}</span>
+                    {isSelected && (
+                      <CheckCircleOutlineYellow className="h-5 w-5" />
+                    )}
+                  </div>
+                )
+              }}
               suffixIcon={<SelectArrow />}
               onChange={handleSubmit}
             />

@@ -2,22 +2,18 @@
 
 import { useStoryline } from '@contexts/StorylineContext'
 import { useStorylineSidebar } from '@contexts/StorylineSidebarContext'
-import {
-  scrollToY,
-  scrollWithBounce,
-} from '@utils/helpers/storyline/scrollManager'
-import clsx from 'clsx'
+import { scrollToY } from '@utils/helpers/storyline/scrollManager'
 import { motion } from 'framer-motion'
 import { useParams, useSearchParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
+import { useQuery } from 'react-query'
+import { StorylineAPI } from 'src/api/storyline'
 import { IStoryline } from 'src/type/storyline'
 import { StepRenderer } from './blocks/StepRenderer'
 import ContinueButton from './ContinueButton'
-import StoryFooter from './footer/StoryFooter'
 import StoryHeader from './header/StoryHeader'
 import Sidebar from './sidebar'
-import { StorylineAPI } from 'src/api/storyline'
-import { useQuery } from 'react-query'
+import StoryFooter from './footer/StoryFooter'
 
 interface IProps {
   listStorylineData: IStoryline | undefined
@@ -25,20 +21,15 @@ interface IProps {
 export default function Player({ listStorylineData }: IProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const searchParams = useSearchParams()
-  const storylineItemId = searchParams.get('storylineItemId')
   const class_id = searchParams.get('class_id')
   const params = useParams()
-  const { section_storyline_id } = params
   const {
-    steps,
     stepRefs,
     currentStepIndex,
     currentStep,
     continueAction,
     visibleDocumentCount,
   } = useStoryline()
-  const { showSidebar } = useStorylineSidebar()
-  const lastScrollRef = useRef<number | null>(null)
   const useGetStorylineDocument = (queryKey: string) => {
     const fetchData = async () => {
       const { data } = await StorylineAPI.getStorylineDocument({
@@ -58,21 +49,6 @@ export default function Player({ listStorylineData }: IProps) {
     `storyline-document-${currentStep?.id}`,
   )
 
-  useEffect(() => {
-    if (lastScrollRef.current === currentStepIndex) return
-    lastScrollRef.current = currentStepIndex
-
-    const el = stepRefs.current[currentStepIndex]
-    if (!el) return
-
-    requestAnimationFrame(() => {
-      const rect = el.getBoundingClientRect()
-      const y = rect.top + window.scrollY
-
-      scrollWithBounce(y, { duration: 1.5, offset: 100, bounce: 10 })
-    })
-  }, [currentStepIndex])
-
   if (!currentStep) return null
 
   return (
@@ -80,28 +56,17 @@ export default function Player({ listStorylineData }: IProps) {
       <StoryHeader listStorylineData={listStorylineData} />
 
       <Sidebar listStorylineData={listStorylineData} />
-      <main
-        ref={containerRef}
-        className="flex w-full flex-col"
-        style={{ overflowAnchor: 'none' }}
-      >
+      <main ref={containerRef} className="flex w-full flex-col">
         <motion.div
-          layout
-          initial={{ paddingLeft: 0 }}
-          animate={
-            showSidebar
-              ? {
-                  paddingLeft: 320,
-                }
-              : {}
-          }
+          layout="position"
           transition={{
             layout: {
-              duration: 0.3,
-              ease: 'easeOut',
+              type: 'spring',
+              stiffness: 72,
+              damping: 32,
+              mass: 1.15,
+              restDelta: 0.0008,
             },
-            duration: 0.3,
-            ease: 'easeOut',
           }}
           className="mx-auto flex w-full max-w-5xl flex-1 flex-col"
         >
@@ -115,23 +80,41 @@ export default function Player({ listStorylineData }: IProps) {
 
             {/* Render blocks của step hiện tại */}
             <StepRenderer
-              key={currentStep?.id}
               documents={
                 storylinyeDocument?.slice(0, visibleDocumentCount) ?? []
               }
+              onNewBlockMounted={(el) => {
+                const rect = el.getBoundingClientRect()
+                const targetY = rect.top + window.scrollY
+
+                scrollToY(targetY, {
+                  offset: 100,
+                  duration: 0.6,
+                })
+              }}
             />
           </section>
+          {visibleDocumentCount < (storylinyeDocument?.length ?? 0) && (
+            <ContinueButton
+              onClick={() =>
+                continueAction(
+                  storylinyeDocument?.[visibleDocumentCount - 1]?.id as string,
+                )
+              }
+            />
+          )}
         </motion.div>
-        <ContinueButton
+      </main>
+
+      {visibleDocumentCount === (storylinyeDocument?.length ?? 0) && (
+        <StoryFooter
           onClick={() =>
             continueAction(
               storylinyeDocument?.[visibleDocumentCount - 1]?.id as string,
             )
           }
         />
-      </main>
-
-      {/* <StoryFooter onClick={() => continueAction(storylinyeDocument?.[visibleDocumentCount]?.id as string)} /> */}
+      )}
     </div>
   )
 }
