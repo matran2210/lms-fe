@@ -24,19 +24,24 @@ const CourseActivationList: React.FC<CoursesProps> = ({
   const [courseActive, setCourseActive] =
     useState<ISubjectWaitingActivation | null>(null);
 
-  const { data: dataCourseActive, isLoading: isLoadingCourseActive,isSuccess: isSuccessCourseActive, refetch: refetchCourseActive } = useQuery(
-    {
-      queryKey: ["class-for-activate-subject", courseActive?.subject_id],
-      queryFn: () =>
-        courseActivationAPI.getSubjectClassForActivateSubject(
-          courseActive?.subject_id || "",
-        ),
-      enabled: !!courseActive?.subject_id,
-      retry: false,
-    },
-  );
+  const {
+    data: dataCourseActive,
+    isLoading: isLoadingCourseActive,
+    isSuccess: isSuccessCourseActive,
+  } = useQuery({
+    queryKey: ["class-for-activate-subject", courseActive?.subject_id],
+    queryFn: () =>
+      courseActivationAPI.getSubjectClassForActivateSubject(
+        courseActive?.subject_id || "",
+      ),
+    enabled: !!courseActive?.subject_id,
+    staleTime: 0, 
+    cacheTime: 0, 
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+  });
 
-  const canActive = dataCourseActive?.data?.can_active
+  const canActive = dataCourseActive?.data?.can_active;
 
   const classes = dataCourseActive?.data;
 
@@ -48,7 +53,6 @@ const CourseActivationList: React.FC<CoursesProps> = ({
   const handleCloseActiveCourse = () => {
     setCourseActive(null);
   };
-
 
   if (isFetching) {
     return (
@@ -97,17 +101,30 @@ const CourseActivationList: React.FC<CoursesProps> = ({
         </div>
       )}
       <ModalChoosingClass
-        open={canActive && isSuccessCourseActive && !!courseActive && mergedClasses.length > 0}
+        open={
+          canActive &&
+          isSuccessCourseActive &&
+          !!courseActive &&
+          mergedClasses.length > 0
+        }
         onCancel={handleCloseActiveCourse}
         classes={mergedClasses}
         isLoading={isLoadingCourseActive}
         courseName={courseActive?.subject_name}
       />
-      <NoAvailableClasses open={canActive && isSuccessCourseActive && !!courseActive && mergedClasses.length === 0} onCancel={handleCloseActiveCourse}/>
-      <ModalActiveCourseActivationFailed
-        open={!canActive &&isSuccessCourseActive && !!courseActive}
+      <NoAvailableClasses
+        open={
+          canActive &&
+          isSuccessCourseActive &&
+          !!courseActive &&
+          mergedClasses.length === 0
+        }
         onCancel={handleCloseActiveCourse}
-        error = {dataCourseActive?.data?.message}
+      />
+      <ModalActiveCourseActivationFailed
+        open={!canActive && isSuccessCourseActive && !!courseActive}
+        onCancel={handleCloseActiveCourse}
+        error={dataCourseActive?.data?.message}
       />
     </>
   );
