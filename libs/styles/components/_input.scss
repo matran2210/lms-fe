@@ -21,7 +21,7 @@
   .ant-input-outlined:focus
   // .ant-input-affix-wrapper:not(.ant-input-disabled):hover,
   {
-    @apply border-[#FFB800] shadow-none outline-none;
+    @apply border-primary shadow-none outline-none;
     box-shadow: none;
     outline: none;
   }
@@ -45,7 +45,7 @@
     @apply text-gray-800;
   }
   .ant-input::placeholder {
-    @apply text-[#99A1B7];
+    @apply text-accent;
     @apply font-normal;
     @apply text-sm;
   }

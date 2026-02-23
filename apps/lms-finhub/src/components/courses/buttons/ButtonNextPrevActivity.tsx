@@ -48,7 +48,7 @@ export default function NextPrevActivityButton({
       )}
 
       {showNext && (
-        <div className="w-100">
+        <div className="w-full">
           <ButtonPrimary
             className={classNameNext}
             title={titleNext}

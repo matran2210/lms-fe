@@ -190,6 +190,7 @@ export interface IClassResource extends IResource {
   };
   url: string;
   sub_url: string;
+  is_encrypted: boolean;
 }
 
 export interface IClassResourceList {
@@ -209,4 +210,13 @@ export interface IListClassResourceParams {
   page_index: number;
   search_key?: string;
   suffix_types?: string[];
+  schedule_ids?: string[];
 }
+
+export interface IClassResourcePreview {
+  is_encrypted: boolean;
+  iv: string;
+  suffix_type: string;
+  url: string;
+}
+

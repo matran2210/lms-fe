@@ -13,11 +13,11 @@ const RenderDateFormat = ({ date }: { date: string }) =>
 const DateActionCell: FC<Props> = ({ dataColumn }) => {
   return (
     <div className="flex flex-col">
-      <span className="text-sm font-normal text-[#a1a1aa]">
+      <span className="text-sm font-normal text-zinc-400">
         <RenderDateFormat date={dataColumn?.startTime as string} />
       </span>
       {dataColumn?.endTime && (
-        <span className="text-sm font-normal text-[#a1a1aa]">
+        <span className="text-sm font-normal text-zinc-400">
           <RenderDateFormat date={dataColumn?.endTime} />
         </span>
       )}

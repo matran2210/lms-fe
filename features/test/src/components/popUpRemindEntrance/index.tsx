@@ -30,6 +30,7 @@ const PopUpRemindEntrance = ({
 
   return (
     <SappModalV3
+      handleClose={onCancel}
       open={openModal}
       cancelButtonCaption="Close"
       okButtonCaption="Take Your Test"

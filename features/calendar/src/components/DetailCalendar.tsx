@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
-import { IEvent } from "@sapp-fe/sapp-common-package/dist/types";
+import { IEvent } from "@sapp-fe/sapp-common-package";
 import { ICalendarDetail } from "@lms/core";
 import CourseTree from "./CourseTree";
 import dayjs, { Dayjs } from "dayjs";
@@ -8,7 +8,6 @@ import {
   CALENDAR_FILTER_TYPE,
   LEARNING_USER_STATUS,
 } from "@lms/core";
-import { useRouter } from "next/router";
 import { CourseSectionType, TEST_TYPE_ENUM } from "@lms/core";
 import { LearningMode } from "@lms/core";
 import { buildQueryString } from "@lms/utils";
@@ -194,7 +193,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
   return (
     <div
       className={clsx(
-        "sticky top-4 h-[calc(100vh-32px)] w-full flex-col overflow-y-auto rounded-2xl bg-white p-8 !text-bw-13 shadow-table lg:flex",
+        "sticky top-4 h-[calc(100vh-32px)] w-full flex-col overflow-y-auto rounded-2xl bg-white p-8 !text-gray-800 shadow-table lg:flex",
         "transition-all duration-300 ease-in-out",
         open.isOpen
           ? "translate-x-0 opacity-100"
@@ -255,33 +254,6 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
               )}
             </div>
           </div>
-          {!data?.schedule?.is_holiday && !isOnlyMidTermOrFinalTest && (
-            <>
-              <Divider />
-              <div className="flex flex-col gap-5">
-                <div className="text-lg font-semibold text-[#1F2937]">
-                  Course Content
-                </div>
-                <CourseTree data={data?.sections ?? []} />
-              </div>
-            </>
-          )}
-
-          {!data?.schedule.is_holiday &&
-            data?.key_after_contents?.length > 0 && (
-              <>
-                <Divider />
-                <div className="flex flex-col gap-5">
-                  <div className="col-span-1 text-lg font-semibold">
-                    Key Content Before
-                  </div>
-                  <div className="col-span-1 flex flex-wrap gap-2 text-right font-semibold">
-                    {getKeyContent()}
-                  </div>
-                </div>
-              </>
-            )}
-
           {data?.mode === LearningMode.OFFLINE && (
             <>
               <Divider />
@@ -330,6 +302,33 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
                 </div>
               </>
             )}
+          {!data?.schedule?.is_holiday && !isOnlyMidTermOrFinalTest && (
+            <>
+              <Divider />
+              <div className="flex flex-col gap-5">
+                <div className="text-lg font-semibold text-[#1F2937]">
+                  Course Content
+                </div>
+                <CourseTree data={data?.sections ?? []} />
+              </div>
+            </>
+          )}
+
+          {!data?.schedule.is_holiday &&
+            data?.key_after_contents?.length > 0 && (
+              <>
+                <Divider />
+                <div className="flex flex-col gap-5">
+                  <div className="col-span-1 text-lg font-semibold">
+                    Key Content Before
+                  </div>
+                  <div className="col-span-1 flex flex-wrap gap-2 text-right font-semibold">
+                    {getKeyContent()}
+                  </div>
+                </div>
+              </>
+            )}
+         
           {/* Footer action button */}
           {(isOfflineOrLiveOnlineWithReview || isOnlineAndOpen) && (
             <div className="mt-auto flex justify-end">

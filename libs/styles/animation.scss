@@ -121,11 +121,11 @@
 /* ===== ANTD MODAL ANIMATION ===== */
 
 .modal-slide-up {
-  animation: slideUpFadeIn 400ms ease-out forwards;
+  animation: slideUpFadeIn 300ms ease-out forwards;
 }
 
 .modal-slide-down {
-  animation: slideDownFadeOut 400ms ease-in forwards;
+  animation: slideDownFadeOut 300ms ease-in forwards;
 }
 
 /* ===== Slide up sâu + fade in ===== */
@@ -163,7 +163,7 @@
 .mask-fade-enter-active,
 .mask-fade-appear-active {
   opacity: 1;
-  transition: opacity 400ms ease-out;
+  transition: opacity 300ms ease-out;
 }
 
 .mask-fade-leave {
@@ -172,64 +172,5 @@
 
 .mask-fade-leave-active {
   opacity: 0;
-  transition: opacity 400ms ease-in;
-}
-
-/* ===== ANTD DRAWER ANIMATION ===== */
-
-/* =========================
-   ANTD DRAWER ANIMATION (PC ONLY)
-   ========================= */
-@media (min-width: 1024px) {
-  .ant-drawer-content-wrapper {
-    transition: none !important;
-  }
-
-  /* ===== OPEN ===== */
-  .ant-drawer-open .ant-drawer-content-wrapper {
-    animation: drawerSlideInBounce 400ms cubic-bezier(0.22, 1.2, 0.36, 1);
-  }
-
-  /* ===== CLOSE ===== */
-  .ant-drawer-content-wrapper {
-    animation: drawerSlideOut 300ms ease-in;
-  }
-
-  /* ===== KEYFRAMES ===== */
-
-  @keyframes drawerSlideInBounce {
-    0% {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-
-    70% {
-      transform: translateX(-24px);
-      opacity: 1;
-    }
-
-    100% {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes drawerSlideOut {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(100%);
-    }
-  }
-
-  /* ===== MASK ===== */
-  .ant-drawer-mask {
-    transition: opacity 300ms ease;
-    opacity: 0;
-  }
-
-  .ant-drawer-open .ant-drawer-mask {
-    opacity: 1;
-  }
+  transition: opacity 300ms ease-in;
 }

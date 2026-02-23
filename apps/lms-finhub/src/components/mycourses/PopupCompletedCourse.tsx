@@ -15,6 +15,7 @@ const PopupCert = () => {
       <EditorReader
         text_editor_content={selector?.content}
         className="content-course text-center text-sm text-gray-800 md:text-base"
+        isAddBorder={false}
       />
     )
   }

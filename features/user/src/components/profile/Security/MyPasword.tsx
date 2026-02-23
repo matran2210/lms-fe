@@ -1,3 +1,4 @@
+"use client"
 import { Icon } from "@lms/assets";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import { FullScreenMobile } from "@lms/ui";
@@ -36,7 +37,7 @@ const MyPasword = ({ setIsChangePassword }: IProps) => {
       </div>
       {isMobileView && openChangePassword && (
         <FullScreenMobile
-          className="bg-gray-canvas px-4 pb-4"
+          className="bg-gray-100 px-4 pb-4"
           title={"Security"}
           open={openChangePassword}
           onClose={onCloseChangePassword}

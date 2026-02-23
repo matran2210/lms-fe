@@ -1,23 +1,27 @@
-import { createContext, useContext } from "react";
-import { AxiosRequestConfig, AxiosResponse } from "axios";
-import { QueryClient } from "react-query";
+"use client";
 import {
   IActivityAPI,
   IAuthAPI,
   IAuthManager,
   ICalendarAPI,
-  ICaseStudyAPI,
+  ICertificateAPI,
   IClassAPI,
   ICourseActivityAPI,
   ICoursesAPI,
+  IDashboardAPI,
   IEntranceTestAPI,
   IEventTestAPI,
   INotificationAPI,
   IQuestionAPI,
   ITestServiceAPI,
   IUploadAPI,
-  MenuItem,
+  MenuItem
 } from "@lms/core";
+import {
+  AxiosRequestConfig,
+  AxiosResponse,
+} from 'axios';
+import { createContext, useContext } from "react";
 import { IUserAPI } from "../redux/types/User/urser";
 interface FeatureContextProps {
   courseApi: ICoursesAPI;
@@ -32,6 +36,7 @@ interface FeatureContextProps {
   entranceTestApi?: IEntranceTestAPI;
   eventTestApi?: IEventTestAPI;
   calendarApi?: ICalendarAPI;
+  dashboardApi?: IDashboardAPI;
   myProfileApi?: {
     getProfile: () => Promise<any>;
     getSubjectOfhubspot: (courseCategoryName: string) => Promise<any>;
@@ -64,6 +69,10 @@ interface FeatureContextProps {
   menuItemsEvent: MenuItem[];
   menuBottom: MenuItem[];
   router: any;
+  pathname: string | null
+  params: Record<string, string | string[]> | null
+  query: any
+  certificateApi: ICertificateAPI
   fetcher: (url: string, config?: AxiosRequestConfig<any>) => Promise<any>;
   videoUrl: string;
   testServiceApi: ITestServiceAPI;
@@ -72,6 +81,7 @@ interface FeatureContextProps {
     personURN: string,
     shareUrl: string,
     text: string,
+    imageBuffer: string
   ) => Promise<AxiosResponse<any, any, {}>>;
 }
 

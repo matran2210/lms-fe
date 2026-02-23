@@ -1,20 +1,20 @@
-import clsx from 'clsx'
-import React from 'react'
+import clsx from "clsx";
+import React from "react";
 
 interface Props {
-  guideline: Array<string> | undefined
-  classString?: string
+  guideline: Array<string> | undefined;
+  classString?: string;
 }
 
-const GuidelineField = ({ guideline, classString = 'mt-1' }: Props) => {
+const GuidelineField = ({ guideline, classString = "mt-1" }: Props) => {
   return (
     guideline?.length && (
       <div
         className={clsx(
-          'sapp-guideline',
+          "sapp-guideline",
           guideline.length < 2
-            ? 'text-xsm font-semibold text-gray-2'
-            : 'font-semibold',
+            ? "text-sm font-semibold text-secondary-100"
+            : "font-semibold",
           classString,
         )}
       >
@@ -26,7 +26,7 @@ const GuidelineField = ({ guideline, classString = 'mt-1' }: Props) => {
         ))}
       </div>
     )
-  )
-}
+  );
+};
 
-export default GuidelineField
+export default GuidelineField;

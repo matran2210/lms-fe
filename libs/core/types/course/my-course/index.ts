@@ -12,10 +12,17 @@ export interface CourseDetail {
   passed_at: string
   user_certificate_id: string
   user_certificate_url: string
+  certificate?: CourseCertificate | null
   remind_choosing_exam: RemindChoosingExam
   exam: ExaminationSubject | null
   data: Data
   class_type: string
+}
+
+export interface CourseCertificate {
+  id: string
+  html_template: string
+  name: string
 }
 
 export interface RemindChoosingExam {

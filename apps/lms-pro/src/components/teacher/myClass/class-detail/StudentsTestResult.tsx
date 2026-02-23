@@ -1,20 +1,17 @@
-import {LayoutFilter} from '@lms/ui'
-import {SappTable} from '@lms/ui'
-import React, { useState } from 'react'
-import { useRouter } from 'next/router'
-import { formatDateFromUTC } from '@lms/utils'
-import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
-import NameActionCell from '@components/teacher/components/NameActionCell'
-import { TeacherAPI } from '@pages/api/teacher'
-import StudentsTestResultFilter from '@components/teacher/components/StudentsTestResultFilter'
-import { useForm } from 'react-hook-form'
-import { DATE_FORMAT } from '@lms/core'
-import { IStudentTestResult } from '@lms/core'
-import { GradingMethod } from '@lms/core'
-import { StudentKey } from '@pages/api/queryKey'
 import DateActionCell from '@components/teacher/components/DateActionCell'
-import { PageLink } from 'src/constants/routers'
+import NameActionCell from '@components/teacher/components/NameActionCell'
+import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
+import StudentsTestResultFilter from '@components/teacher/components/StudentsTestResultFilter'
+import { DATE_FORMAT, GradingMethod, IStudentTestResult } from '@lms/core'
 import { useSappPaging } from '@lms/hooks'
+import { LayoutFilter, SappTable } from '@lms/ui'
+import { formatDateFromUTC } from '@lms/utils'
+import { useParams } from 'next/navigation'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { StudentKey } from 'src/api/queryKey'
+import { TeacherAPI } from 'src/api/teacher'
+import { PageLink } from 'src/constants/routers'
 
 interface FilterParams {
   quiz_name?: string
@@ -30,8 +27,9 @@ const initialValues: FilterParams = {
 
 export default function StudentsTestResult() {
   const { control, reset, getValues } = useForm()
-  const router = useRouter()
-  const studentId = router?.query?.id as string
+  const param = useParams();
+  const { id } = param
+  const studentId = id as string
   const [params, setParams] = useState<FilterParams>(initialValues)
 
   const { data, pagination, isLoading, handleChangeParams, setPagination } =

@@ -2,16 +2,16 @@ import SappTeacherTextField from '@components/teacher/components/sapp-textfield/
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconMinusSquared, IconPlusSquared } from '@lms/assets'
 import { confirmDialog, getUserInformation, IResponse, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
-import { ANT_THEME_CONFIG, CONFIRM_CANCEL, IMyRequest, IRecurringSchedule, ISelect, IWeeklyNorm, REPEAT_TYPE, REQUEST_STATUS, REQUEST_TYPE } from '@lms/core'
+import { ANT_THEME_CONFIG, CONFIRM_CANCEL, IMyRequest, IRecurringSchedule, ISelect, IWeeklyNorm, OPTIONS_TIME_OFF_REQUEST_TYPE, REPEAT_TYPE, REQUEST_STATUS, REQUEST_TYPE } from '@lms/core'
 import { HookFormDateRangeV2, SAPPButtonV2, SappIcon, SAPPSelectV2 } from '@lms/ui'
 import HookFormEventRepeat from '@lms/ui/components/event-repeat/HookFormEventRepeatField'
 import { capitalizeFirstLetter, formatDateTimeWithTimeZone, VALIDATE_REQUIRED } from '@lms/utils'
-import { MyRequestAPI } from '@pages/api/my-request'
+import { MyRequestAPI } from 'src/api/my-request'
 import { formatRecurringSchedule, getRecurringSchedule, getSelectOptions, requestValidationSchema } from '@utils/index'
 import { ConfigProvider, Drawer } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import { isEmpty, isInteger } from 'lodash'
-import { useRouter } from 'next/router'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -28,8 +28,10 @@ export interface IProps {
 
 function FormRequest({ open, setOpen, reloadPage }: IProps) {
   const router = useRouter()
-  const { pathname, query } = router
-  const params = router.query?.id
+  const searchParam = useSearchParams()
+  const pathname = usePathname()
+  const query = Object.fromEntries(searchParam.entries())
+  const params = query?.id
   const isEdit = params && params !== 'new' ? true : false
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -305,9 +307,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         reloadPage()
         toast.success('Request saved successfully!')
         setOpen(false)
-        router.replace({ pathname, query: { tab: query.tab } }, undefined, {
-          shallow: true,
-        })
+        router.replace(`${pathname}?tab=${query.tab}`)
       } else {
         toast.error('Something went wrong. Please try again.')
       }
@@ -543,11 +543,9 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
   }
   const handleClose = () => {
     if (requestType == REQUEST_TYPE.BUSY_SCHEDULE.value) {
-      router.push('/teachers/my-request', undefined, { shallow: true })
+      router.push('/teachers/my-request')
     } else if (requestType == REQUEST_TYPE.TIMEOFF.value) {
-      router.push('/teachers/my-request?tab=timeoff', undefined, {
-        shallow: true,
-      })
+      router.push('/teachers/my-request?tab=timeoff')
     }
     setOpen(false)
     reset()
@@ -558,15 +556,14 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     )
   }
   const requestTypeOption = useMemo(() => {
-    if (router.query.tab === 'personal')
+    if (query.tab === 'personal')
       return [REQUEST_TYPE.BUSY_SCHEDULE, REQUEST_TYPE.WEEKLY_NORM]
-
-    if (router.query.tab === 'timeoff')
-      return [REQUEST_TYPE.TIMEOFF, REQUEST_TYPE.TEACHING_MODE]
+    if (query.tab === 'timeoff')
+      return OPTIONS_TIME_OFF_REQUEST_TYPE
     else {
       return [REQUEST_TYPE.BUSY_SCHEDULE, REQUEST_TYPE.WEEKLY_NORM]
     }
-  }, [])
+  }, [query.tab])
 
   const handleChangeClassCode = (e: string) => {
     setValue('class_code', e)
@@ -604,7 +601,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         <div className="flex h-full w-full flex-col">
           <div className="flex items-center justify-between border-b border-b-[#7E8299] px-8 py-5">
             <span className="text-xl font-semibold text-primary">
-              {router.query.id ? 'Edit' : 'Create'} Request
+              {query.id ? 'Edit' : 'Create'} Request
             </span>
             <span className="cursor-pointer" onClick={handleCancel}>
               <SappIcon icon="closeicon" />

@@ -6,7 +6,7 @@ const NoData = () => {
   return (
     <div data-aos={ANIMATION.DATA_AOS}>
       <SappIcon icon="nodata" />
-      <div className="text-base font-light text-gray-1">No Data Found</div>
+      <div className="text-base font-light text-gray">No Data Found</div>
     </div>
   )
 }

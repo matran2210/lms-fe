@@ -93,6 +93,7 @@ const ReasonModal = ({
   }
   return (
     <SappModalV3
+      handleClose={handleCancel}
       open={open.open}
       handleCancel={handleCancel}
       onOk={handleSubmit}
@@ -103,7 +104,7 @@ const ReasonModal = ({
       okButtonCaption={'Submit'}
       footerButtonClassName="flex flex-row-reverse justify-center gap-4"
       okButtonClass="rounded-md !px-5 !py-3 text-sm  !font-normal bg-[#f01919]"
-      cancelButtonClass="bg-[#F9F9F9] hover:bg-gay-6 text-[#99A1B7] !no-underline rounded-md !px-5 !py-3 text-sm !font-normal"
+      cancelButtonClass="bg-gray-100 hover:bg-gay-6 text-accent !no-underline rounded-md !px-5 !py-3 text-sm !font-normal"
       buttonSize="medium"
       color="danger"
       headerClassName="!text-sm !font-normal"

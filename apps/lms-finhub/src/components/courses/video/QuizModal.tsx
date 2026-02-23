@@ -48,16 +48,16 @@ export default function QuizModal({
       position="center"
       isInner={true}
       isBordered={true}
-      okButtonClass="!h-9.5"
-      cancelButtonClass="!h-9.5"
+      okButtonClass="!h-[38px]"
+      cancelButtonClass="!h-[38px]"
       footerButtonClassName="!justify-between flex flex-row-reverse"
       onOk={handleSubmit(onSubmit)}
       handleCancel={onCancel}
       closeAfterSubmit={false}
       cancelButtonCaption={`${finishAll ? '' : !isConfirmQuestion ? 'Skip' : ''}`}
       classNameModal="quiz-modal"
-    // footer={null}
-    // isCancelUnderLine={false}
+      // footer={null}
+      // isCancelUnderLine={false}
     >
       <div className="py-5">
         <QuizComponent

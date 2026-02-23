@@ -1,3 +1,4 @@
+"use client";
 import { DownloadIcon } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
 import {
@@ -29,22 +30,22 @@ const DEFAULT_PAGE_INDEX = 1;
 const DEFAULT_PAGESIZE = 20;
 
 const LearningResource = ({ open, setOpenResource }: IProps) => {
-  const { pageLink, router, courseApi, uploadApi } = useFeature();
+  const { pageLink, router, courseApi, uploadApi, pathname, query, params: param } = useFeature();
   const [direction, setDirection] = useState<1 | -1>(1);
   const { isMobileView, isTabletView, isAlwaysShowSidebar } =
     useTailwindBreakpoint();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [resources, setResources] = useState<IResourceDetail>();
   //Tạo các biến để lấy id trên thanh url
-  const isCourseDetail = pageLink.COURSE_DETAIL === router.pathname;
-  const isCoursePartDetail = router.pathname.includes("/section");
-  const isActivityDetail = router.pathname.includes("/activity");
-  const courseId = router.query?.courseId;
-  const queryId = router.query?.id;
-  const activityId = router.query?.activityId;
-  const chapterId = router.query?.chapter;
-  const unitId = router.query?.unit;
-  const courseSectionId = router.query.course_section_id;
+  const isCourseDetail = pageLink.COURSE_DETAIL === pathname;
+  const isCoursePartDetail = pathname?.includes("/section");
+  const isActivityDetail = pathname?.includes("/activity");
+  const courseId = param?.courseId || query?.courseId;
+  const queryId = param?.id || query?.id;
+  const activityId = param?.activityId || query?.activityId;
+  const chapterId = query?.chapter;
+  const unitId = query?.unit;
+  const courseSectionId = param?.course_section_id
 
   const [loading, setLoading] = useState<boolean>(false);
   const [isFirstCallApi, setIsFirstCallApi] = useState(false);
@@ -204,7 +205,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     const scrollEl = scrollRef.current;
     scrollEl?.addEventListener("scroll", handleScroll);
     return () => scrollEl?.removeEventListener("scroll", handleScroll);
-   }, [fetchData, pageIndex]);
+  }, [fetchData, pageIndex]);
 
   const download = async (name: string, file_key: string) => {
     await uploadApi.downloadFile({
@@ -220,7 +221,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const title = !openChooseItem.isOpen
     ? isOpenFilter
       ? "Filter"
-      : "Course Resource"
+      : "Course Resource1"
     : openChooseItem.name;
   const classNameHeader = openChooseItem.isOpen
     ? "pb-4 border-b border-gray-200"
@@ -254,10 +255,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     });
   };
   const heightContent = isMobileView
-    ? "120px"
+    ? "248px"
     : isTabletView
-      ? "128px"
-      : "136px";
+      ? "495px"
+      : "228px";
 
   const getSize = (size: number) => formatBytes(size);
 
@@ -286,6 +287,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         btnSubmitTile="Confirm"
         titleClassName={isOpenFilter ? "w-full pr-8 text-center" : ""}
         placement={!isAlwaysShowSidebar ? "bottom" : "right"}
+        classNameBody="overflow-hidden"
       >
         <FormProvider {...methods}>
           <CarouselSlideAnimation slideKey={title} direction={direction}>
@@ -315,7 +317,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
                     ref={scrollRef}
                     className="mt-6 flex flex-col gap-4 overflow-y-auto md:mt-8 pb-3"
                     style={{
-                      height: `calc(100vh - ${heightContent})`,
+                      height:
+                        isTabletView || isMobileView
+                          ? heightContent
+                          : `calc(100vh - ${heightContent})`,
                     }}
                   >
                     {resources?.resources?.map((resource) => (

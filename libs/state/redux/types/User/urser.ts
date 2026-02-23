@@ -243,4 +243,5 @@ export interface IUserAPI {
     getListHistory: ({ page_index, page_size, type }: any) => Promise<any>;
     getPinnedNotifications: () => Promise<PinnedNotifications>;
     getUserPrograms?: (course_category_id: string | undefined) => Promise<any>;
+    removeDevice: (session_id: string) => Promise<any>
 }

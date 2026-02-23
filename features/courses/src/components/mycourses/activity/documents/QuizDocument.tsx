@@ -722,7 +722,6 @@ const QuizDocument = ({
               );
             }, 2000);
           }
-          // getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
           if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
             setResultId(e.quizAttemptId);
             setOpenGradedReport(true);
@@ -744,15 +743,7 @@ const QuizDocument = ({
               }`,
             );
           }
-          // dispatch(
-          //   removeQuizFinished({
-          //     activityId,
-          //     tabId,
-          //     quizId: quizId,
-          //   }),
-          // )
           setQuizComponentKey((e) => e + 1);
-          // setActiveQuestionIndex(0)
         });
     } catch (error: any) {
       if (error?.response?.status === 422) {
@@ -763,63 +754,6 @@ const QuizDocument = ({
       setOpenUnsubmitWarning(false);
     }
   };
-
-  // const getTable = async ({
-  //   id,
-  //   page_index,
-  //   page_size,
-  // }: {
-  //   id?: string
-  //   page_index: number
-  //   page_size: number
-  // }) => {
-  //   setLoading(true)
-  //   try {
-  //     // const checkId = id || modalResult?.id
-  //     // if (checkId === resultId) return
-  //     setResultId(id ?? modalResult?.id ?? '')
-  //     const response = await CoursesAPI.getQuizAttemptsTable(
-  //       id || modalResult?.id || '',
-  //       {
-  //         page_index,
-  //         page_size,
-  //       },
-  //     )
-
-  //     const newQuestionResponse: IQuestionResultResponse = {
-  //       meta: response?.data?.metadata,
-  //       data: (modalResult?.questions?.data ?? []).concat(
-  //         response?.data?.answers?.map((answer) => {
-  //           return {
-  //             active: answer?.active,
-  //             id: answer?.id,
-  //             content: answer?.question?.question_content,
-  //             section: answer?.question?.question_filter?.part?.name,
-  //             type: answer?.question?.qType,
-  //             is_correct: answer?.is_correct,
-  //             time_spent: answer?.time_spent,
-  //             question: answer?.question,
-  //           }
-  //         }) || [],
-  //       ),
-  //       attempt_info: response?.data?.attempt_info,
-  //     }
-
-  //     if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
-  //       setOpenGradedReport(true)
-  //       return
-  //     } else {
-  //       setModalResult((e) => ({
-  //         id: id || e?.id,
-  //         status: true,
-  //         questions: newQuestionResponse,
-  //       }))
-  //     }
-  //   } catch (error) {
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
 
   const scrollToQuiz = (quizId: string) => {
     setTimeout(() => {
@@ -1006,7 +940,7 @@ const QuizDocument = ({
       }
 
       if (isLastQuestion && isQuestionConfirmed && isAFTEREACHQUESTION) {
-        return "Finish";
+        return "Finish & Save Progress";
       }
       if (
         activeQuestion?.qType !== "ESSAY" &&
@@ -1132,7 +1066,6 @@ const QuizDocument = ({
     reset({});
     setQuizComponentKey((e) => e + 1);
     setActiveQuestionIndex(0);
-    // setRunHandleFinishQuiz(1)
     setOpenFinishQuiz(false);
     setOpenGradedReport(false);
     setIsFinishQuiz(false);
@@ -1268,7 +1201,7 @@ const QuizDocument = ({
                       </span>
                     </button>
                   )}
-                  <div className="text-sm text-bw-13 md:text-base">
+                  <div className="text-sm text-gray-800 md:text-base">
                     Question: {activeQuestionIndex + 1} of{" "}
                     {questions?.length || 0}
                   </div>
@@ -1374,7 +1307,7 @@ const QuizDocument = ({
               <div className="mr-1 flex size-6 items-center justify-center">
                 <CircleInfoIcon />
               </div>
-              Your Attemp: {number_of_attempts ?? 0}
+              Your Attempt: {number_of_attempts ?? 0}
               {typeof limit_count === "number" && limit_count > 0
                 ? `/${limit_count}`
                 : ""}
@@ -1456,7 +1389,7 @@ const QuizDocument = ({
                     ? null
                     : "You should select an answer before click"
                 }
-                classNames={{ root: "max-w-72" }}
+                classNames={{ root: "max-w-[288px]" }}
                 trigger={"hover"}
               >
                 <>
@@ -1470,10 +1403,8 @@ const QuizDocument = ({
                         childClass="text-sm"
                         title={
                           isLastQuestion
-                            ? "Finish"
-                            : isAFTERAllQUESTION
-                              ? "Next Question"
-                              : "Next"
+                            ? isAFTERAllQUESTION ? "Finish" : "Finish & Save Progress"
+                            : isAFTERAllQUESTION ? "Next Question" : "Next"
                         }
                         full={false}
                         size={"small"}
@@ -1539,6 +1470,7 @@ const QuizDocument = ({
 
       {openGradedReport && (
         <SappModalV3
+          handleClose={handleCalcelModalResult}
           open={openGradedReport}
           okButtonCaption={
             is_graded && grading_method === GRADING_METHOD.MANUAL

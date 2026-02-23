@@ -1,3 +1,4 @@
+"use client";
 import { Skeleton } from "antd";
 import clsx from "clsx";
 import { forwardRef, HTMLAttributes } from "react";
@@ -20,7 +21,7 @@ const DashboardSkeleton = forwardRef<
           />
         </div>
       </div>
-      <div className="flex w-full flex-col gap-4 bg-[#F9F9F9] md:gap-6 xl:gap-8">
+      <div className="flex w-full flex-col gap-4 bg-gray-100 md:gap-6 xl:gap-8">
         <div className="grid xl:grid-cols-2 xl:gap-8">
           <div className="rounded-2xl bg-white p-4 shadow-small md:p-6">
             <div className="mb-6 flex items-center">

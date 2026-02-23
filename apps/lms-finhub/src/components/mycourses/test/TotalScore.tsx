@@ -26,7 +26,7 @@ const TotalScore = ({
     >
       <div className="flex w-full flex-row justify-between">
         <div className="block">
-          <div className="mb-3 text-xl font-semibold text-bw-1 xl:font-medium">
+          <div className="mb-3 text-xl font-semibold text-gray-800 xl:font-medium">
             {isGraded ? 'Overall Score' : 'Multiple Choice Score'}
           </div>
           <div
@@ -46,7 +46,7 @@ const TotalScore = ({
               height={16}
               alt="Globe"
             />
-            <div className={`text-sm leading-4.9 text-gray-1 ${classCountAll}`}>
+            <div className={`text-sm leading-4.9 text-gray ${classCountAll}`}>
               Global Average {globalAverage}%
             </div>
           </div>

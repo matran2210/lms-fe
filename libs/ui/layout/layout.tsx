@@ -1,3 +1,4 @@
+"use client";
 import {
   useAppSelector,
   useCourseContext,
@@ -7,7 +8,7 @@ import {
 import { useTailwindBreakpoint } from "@lms/hooks";
 import clsx from "clsx";
 import Head from "next/head";
-import { ReactElement, ReactNode, useState } from "react";
+import { ReactElement, ReactNode, useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import { PopupStep } from "../components";
 import { GuidePlacement, UserGuide } from "@lms/core";
@@ -142,11 +143,13 @@ export default function Layout(props: LayoutProps): ReactElement {
   const stepConfig = getGuideStepConfig(guideStep);
   const customOffset =
     isTabletView &&
-    (stepConfig?.targetId === "sidebar" ||
-      stepConfig?.targetId === "notification-profile")
+      (stepConfig?.targetId === "sidebar" ||
+        stepConfig?.targetId === "notification-profile")
       ? { x: 115, y: 0 }
       : undefined;
-      
+  useEffect(() => {
+    document.title = title
+  }, [title])
   return (
     <>
       <Head>
@@ -169,7 +172,7 @@ export default function Layout(props: LayoutProps): ReactElement {
               "menu-sidebar-left--hover !w-[220px]":
                 (guideStatus && (guideStep === 2 || guideStep === 3)) ||
                 isShowMenuContent,
-              "h-[calc(100vh-32px-60px)]": !openPinned,
+              "h-[calc(100vh-32px-60px)]": openPinned,
               // 'hidden': !showSidebar,
               // 'w-[220px]': isOpenSidebar,
               "w-[220px] translate-x-0": showSidebar,

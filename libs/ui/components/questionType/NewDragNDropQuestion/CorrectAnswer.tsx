@@ -1,10 +1,11 @@
+"use client"
 import React, { useMemo } from 'react'
 import parse, { Element } from 'html-react-parser'
 import { Correct } from '@lms/utils'
 
 interface CorrectAnswerProps {
   questionContent: string
-  corrects: Correct[]
+  corrects?: Correct[]
 }
 
 const CorrectAnswer: React.FC<CorrectAnswerProps> = ({
@@ -21,7 +22,7 @@ const CorrectAnswer: React.FC<CorrectAnswerProps> = ({
           domNode.name === 'span' &&
           domNode.attribs?.class?.includes('question-content-tag')
         ) {
-          const correct = corrects[slotIdx]
+          const correct = corrects?.[slotIdx]
           slotIdx++
           if (correct) {
             return (

@@ -118,7 +118,7 @@
 
 .style-table-quiz {
   .ant-table-thead > tr > th {
-    @apply bg-white text-ssm font-medium text-gray-400 sm:text-base;
+    @apply bg-white text-xs font-medium text-gray-400 sm:text-base;
 
     &::before {
       @apply hidden;
@@ -134,7 +134,7 @@
     }
   }
   .ant-table-tbody > tr > td {
-    @apply text-ssm sm:text-base;
+    @apply text-xs sm:text-base;
   }
 }
 .column-center {

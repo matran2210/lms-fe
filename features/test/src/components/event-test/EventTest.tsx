@@ -107,12 +107,7 @@ const EventTest = ({
         handleClickContinue();
       } else {
         localStorage.removeItem("quizAttempt");
-        router.push({
-          pathname: `/test/${data?.id}`,
-          query: {
-            type: "event-test",
-          },
-        });
+        router.push(`/test/${data?.id}?type=event-test`)
       }
     }
   };
@@ -128,12 +123,7 @@ const EventTest = ({
         created_at: data?.created_at,
       }),
     );
-    router.push({
-      pathname: `/test/${data?.id}`,
-      query: {
-        type: "event-test",
-      },
-    });
+    router.push(`/test/${data?.id}?type=event-test`)
   };
 
   const renderButton = () => {
@@ -253,7 +243,7 @@ const EventTest = ({
         footer={cardFooter}
       >
         <div>
-          <div className="info border-l border-[#DCDDDD] px-2 md:px-4">
+          <div className="info border-l px-2 md:px-4">
             <div className="flex justify-between text-sm capitalize text-gray md:text-base">
               {renderTimeContent()}
             </div>
@@ -332,7 +322,7 @@ const EventTest = ({
           buttonSize="medium"
           icon={undefined}
         >
-          <div className="my-4 text-start text-sm text-[#A1A1A1]">
+          <div className="my-4 text-start text-sm text-gray-400">
             <div>
               {`Your last attempt was unexpectedly ended. Please click 'Continue'
               to proceed with the test.`}
@@ -357,7 +347,7 @@ const EventTest = ({
           "Ended Event Test",
         )}
       >
-        <div className="text-center text-sm text-[#A1A1A1]">
+        <div className="text-center text-sm text-gray-400">
           This Event Test{" "}
           {checkEventStatus(
             resultStartAt,

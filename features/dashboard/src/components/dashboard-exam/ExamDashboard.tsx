@@ -11,7 +11,7 @@ const ExamDashboard = ({
   mockTestResultsData: IMockTestResult | null;
 }) => {
   return (
-    <div className="mx-auto w-full grow flex-col gap-4 bg-gray-canvas xl:flex-row 3xl:gap-6">
+    <div className="mx-auto w-full grow flex-col gap-4 bg-gray-100 xl:flex-row 3xl:gap-6">
       <div className="flex w-full flex-col gap-4 3xl:gap-6">
         <LearningResults />
       </div>

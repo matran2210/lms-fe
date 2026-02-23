@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { ITabsTeacher } from '@lms/core'
-import { useRouter } from 'next/router'
+import { useFeature } from '@lms/contexts'
+import { buildQueryString } from '@lms/utils'
 
 interface SappTabsProps {
   tabs: ITabsTeacher[]
@@ -15,8 +16,8 @@ const SappTabs: React.FC<SappTabsProps> = ({
   selected,
   bordered = false,
 }) => {
-  const router = useRouter()
-  const tabUrlTitleQuery = router.query.tabId as string
+  const { router, query, pathname } = useFeature()
+  const tabUrlTitleQuery = query.tabId as string
   // Nếu không có tabId trên url thì lấy tab đầu tiên hoặc selected
   const activeTabUrlTitle =
     tabUrlTitleQuery || tabs.find((tab) => tab.id === selected)?.urlTitle
@@ -31,14 +32,7 @@ const SappTabs: React.FC<SappTabsProps> = ({
             className="relative pr-6"
             onClick={() => {
               setSelected(tab.id)
-              router.push(
-                {
-                  pathname: router.pathname,
-                  query: { ...router.query, tabId: tab.urlTitle },
-                },
-                undefined,
-                { shallow: true },
-              )
+              router.push(`${pathname}?${buildQueryString({ ...query, tabId: tab.urlTitle })}`)
             }}
           >
             <span
@@ -47,7 +41,7 @@ const SappTabs: React.FC<SappTabsProps> = ({
                 'after:absolute after:bottom-[-1px] after:left-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300',
                 {
                   'text-primary after:w-full': isActive,
-                  'text-[#a1a1aa] after:w-0 hover:after:w-full': !isActive,
+                  'text-zinc-400 after:w-0 hover:after:w-full': !isActive,
                 },
               )}
             >

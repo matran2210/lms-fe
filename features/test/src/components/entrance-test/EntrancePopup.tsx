@@ -1,8 +1,7 @@
 import { SappModalV3 } from "@lms/ui";
 import dayjs from "dayjs";
-import { useRouter } from "next/router";
 import { Dispatch, FC, SetStateAction, useMemo } from "react";
-import { useAppSelector } from "@lms/contexts";
+import { useAppSelector, useFeature } from "@lms/contexts";
 import { entranceTestReducer } from "@lms/contexts";
 import EntrancePopupContent from "./EntrancePopupContent";
 
@@ -39,7 +38,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
   };
 
   const { count } = useAppSelector(entranceTestReducer);
-  const router = useRouter();
+  const {router} = useFeature()
 
   const checkLimit = useMemo(() => {
     if (data?.is_limited) {
@@ -58,14 +57,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         cancelButtonCaption="Back"
         okButtonCaption="Start"
         handleCancel={handleOnClick}
-        onOk={() => {
-          router.push({
-            pathname: `/test/${data?.id}`,
-            query: {
-              type: "entrance",
-            },
-          });
-        }}
+        onOk={() => router.push(`/test/${data?.id}?type=entrance`)}
         showOkButton={!checkLimit || count >= 1}
         showHeader={false}
         buttonSize="medium"

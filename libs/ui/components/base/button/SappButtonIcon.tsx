@@ -50,7 +50,7 @@ const SappButtonIcon = ({
         {children}
         <div
           className={`${classTitle} ms-2 text-sm font-medium ${
-            isTextPrimary ? 'text-white' : 'text-[#050505]'
+            isTextPrimary ? 'text-white' : 'text-gray-800'
           }`}
         >
           {title}
@@ -71,7 +71,7 @@ const SappButtonIcon = ({
       {children}
       <div
         className={`${classTitle} ms-2 text-sm font-medium ${
-          isTextPrimary ? 'text-white' : 'text-[#050505]'
+          isTextPrimary ? 'text-white' : 'text-gray-800'
         }`}
       >
         {title}
