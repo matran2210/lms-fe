@@ -14,6 +14,7 @@ import ContinueButton from './ContinueButton'
 import StoryHeader from './header/StoryHeader'
 import Sidebar from './sidebar'
 import StoryFooter from './footer/StoryFooter'
+import { SappLoadingGlobal } from '@lms/ui'
 
 interface IProps {
   listStorylineData: IStoryline | undefined
@@ -45,76 +46,77 @@ export default function Player({ listStorylineData }: IProps) {
     })
   }
 
-  const { data: storylinyeDocument } = useGetStorylineDocument(
+  const { data: storylinyeDocument, isLoading } = useGetStorylineDocument(
     `storyline-document-${currentStep?.id}`,
   )
 
   if (!currentStep) return null
 
+  const lastVisibleDocument = storylinyeDocument?.[visibleDocumentCount - 1]
   return (
-    <div>
-      <StoryHeader listStorylineData={listStorylineData} />
+    <SappLoadingGlobal loading={isLoading}>
+      <div className="min-h-screen bg-white">
+        <StoryHeader listStorylineData={listStorylineData} />
 
-      <Sidebar listStorylineData={listStorylineData} />
-      <main ref={containerRef} className="flex w-full flex-col">
-        <motion.div
-          layout="position"
-          transition={{
-            layout: {
-              type: 'spring',
-              stiffness: 72,
-              damping: 32,
-              mass: 1.15,
-              restDelta: 0.0008,
-            },
-          }}
-          className="mx-auto flex w-full max-w-5xl flex-1 flex-col"
-        >
-          <section
-            ref={(el) =>
-              (stepRefs.current[currentStepIndex] = el as HTMLDivElement | null)
-            }
-            data-storyline-id={currentStep.id}
+        <Sidebar listStorylineData={listStorylineData} />
+        <main ref={containerRef} className="flex w-full flex-col pb-28">
+          <motion.div
+            layout="position"
+            transition={{
+              layout: {
+                type: 'spring',
+                stiffness: 72,
+                damping: 32,
+                mass: 1.15,
+                restDelta: 0.0008,
+              },
+            }}
+            className="mx-auto flex w-full max-w-5xl flex-1 flex-col"
           >
-            <h2 className="mb-8 text-3xl font-semibold">{currentStep.name}</h2>
-
-            {/* Render blocks của step hiện tại */}
-            <StepRenderer
-              documents={
-                storylinyeDocument?.slice(0, visibleDocumentCount) ?? []
+            <section
+              ref={(el) =>
+                (stepRefs.current[currentStepIndex] =
+                  el as HTMLDivElement | null)
               }
-              onNewBlockMounted={(el) => {
-                const rect = el.getBoundingClientRect()
-                const targetY = rect.top + window.scrollY
+              data-storyline-id={currentStep.id}
+            >
+              <h2 className="mb-8 mt-12 text-3xl font-semibold">
+                {currentStep.name}
+              </h2>
 
-                scrollToY(targetY, {
-                  offset: 100,
-                  duration: 0.6,
-                })
-              }}
-            />
-          </section>
-          {visibleDocumentCount < (storylinyeDocument?.length ?? 0) && (
-            <ContinueButton
-              onClick={() =>
-                continueAction(
-                  storylinyeDocument?.[visibleDocumentCount - 1]?.id as string,
-                )
-              }
-            />
-          )}
-        </motion.div>
-      </main>
+              {/* Render blocks của step hiện tại */}
+              <StepRenderer
+                documents={
+                  storylinyeDocument?.slice(0, visibleDocumentCount) ?? []
+                }
+                onNewBlockMounted={(el) => {
+                  const rect = el.getBoundingClientRect()
+                  const targetY = rect.top + window.scrollY
 
-      {visibleDocumentCount === (storylinyeDocument?.length ?? 0) && (
-        <StoryFooter
-          onClick={() =>
-            continueAction(
-              storylinyeDocument?.[visibleDocumentCount - 1]?.id as string,
-            )
-          }
-        />
-      )}
-    </div>
+                  scrollToY(targetY, {
+                    offset: 100,
+                    duration: 0.6,
+                  })
+                }}
+              />
+            </section>
+            {visibleDocumentCount < (storylinyeDocument?.length ?? 0) &&
+              lastVisibleDocument?.type !== 'QUIZ' && (
+                <ContinueButton
+                  onClick={() =>
+                    continueAction(lastVisibleDocument?.id as string)
+                  }
+                />
+              )}
+          </motion.div>
+        </main>
+
+        {visibleDocumentCount === (storylinyeDocument?.length ?? 0) && (
+          <StoryFooter
+            onClick={() => continueAction(lastVisibleDocument?.id as string)}
+          />
+        )}
+      </div>
+    </SappLoadingGlobal>
   )
 }

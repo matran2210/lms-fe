@@ -6,11 +6,17 @@ import {
   QuestionTopic,
   Resource,
 } from '@lms/core'
+import { Correct } from '@lms/utils'
 import React from 'react'
 
 export type QuizOption = {
   id: string
   label: string
+}
+
+export interface IStorylineQuestion extends IQuestion {
+  corrects?: any
+  confirmed?: boolean
 }
 
 export type Block = {
@@ -19,7 +25,7 @@ export type Block = {
   reveal?: 'auto' | 'continue'
   text?: string
   src?: string
-  question?: IQuestion
+  question?: IStorylineQuestion
 }
 
 export type StoryStep = {

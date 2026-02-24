@@ -20,7 +20,7 @@ export function StorylineSidebarProvider({
 }: {
   children: React.ReactNode
 }) {
-  const [showSidebar, setShowSidebar] = useState(true)
+  const [showSidebar, setShowSidebar] = useState(false)
 
   return (
     <StorylineSidebarContext.Provider

@@ -29,7 +29,7 @@ const StoryHeader = ({ listStorylineData }: Props) => {
     })
   }
   return (
-    <div className="sticky top-0 z-10 shadow-sm">
+    <div className="sticky top-0 z-50 shadow-sm">
       <div className="bg-white px-8 py-4">
         <div className=" flex w-full items-center justify-between">
           <div

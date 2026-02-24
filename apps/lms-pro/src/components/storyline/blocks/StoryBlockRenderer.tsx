@@ -1,13 +1,18 @@
-import TextBlock from './TextBlock'
-import ImageBlock from './ImageBlock'
-import VideoBlock from './VideoBlock'
-import QuizBlock from './QuizBlock'
-import { Block, DocumentItem, IMultiChoiceQuestion } from 'src/type/storyline'
-import { QUESTION_TYPES } from '@lms/core'
 import { useFeature } from '@lms/contexts'
+import { QUESTION_TYPES } from '@lms/core'
+import { DocumentItem, IMultiChoiceQuestion } from 'src/type/storyline'
+import QuizBlock from './QuizBlock'
+import TextBlock from './TextBlock'
+import VideoBlock from './VideoBlock'
 
-export function StoryBlockRenderer({ doc }: { doc: DocumentItem }) {
-  const { questionApi, testServiceApi, courseApi, videoUrl } = useFeature()
+export function StoryBlockRenderer({
+  doc,
+  docIndex,
+}: {
+  doc: DocumentItem
+  docIndex: number
+}) {
+  const { videoUrl } = useFeature()
   switch (doc.type) {
     case 'TEXT':
       return <TextBlock text={doc.content} />
@@ -22,14 +27,16 @@ export function StoryBlockRenderer({ doc }: { doc: DocumentItem }) {
     case 'QUIZ':
       const quiz = doc.quiz
       const minimalQuestion =
-        quiz?.quiz_question_type === QUESTION_TYPES.MULTIPLE_CHOICE
-          ? quiz.multiple_choice_questions[0]
-          : (quiz?.constructed_questions[0] as IMultiChoiceQuestion)
+        // quiz?.quiz_question_type === QUESTION_TYPES.MULTIPLE_CHOICE
+        quiz?.multiple_choice_questions[0] ||
+        (quiz?.constructed_questions[0] as IMultiChoiceQuestion)
 
       return (
         <QuizBlock
           minimalQuestion={minimalQuestion}
           quiz_id={quiz?.id as string}
+          document_id={doc.id}
+          docIndex={docIndex}
         />
       )
 

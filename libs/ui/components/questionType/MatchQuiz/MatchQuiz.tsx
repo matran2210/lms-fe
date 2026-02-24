@@ -197,6 +197,13 @@ const MatchQuiz = forwardRef(
           return newKey;
         });
       },
+      handleResetEdges() {
+        setKey((prev) => {
+          const newKey = prev + 1;
+          return newKey;
+        });
+        setEdges([]);
+      },
       getMatchedPairs: () => getMatchedPairs(edges, nodes),
     }));
 
@@ -235,7 +242,7 @@ const MatchQuiz = forwardRef(
     useEffect(() => {
       // Transform question_matchings into questions and answers
       const questions: RawItem[] =
-        data?.question_matchings.map((item: any) => ({
+        data?.question_matchings?.map((item: any) => ({
           id: item.id,
           label: item.content,
           role: "question" as Role,

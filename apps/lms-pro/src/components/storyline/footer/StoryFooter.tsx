@@ -1,12 +1,12 @@
 import { RestartIcon } from '@lms/assets'
-import { ButtonPrimary } from '@lms/ui'
+import { ButtonPrimary, ButtonText } from '@lms/ui'
 import clsx from 'clsx'
 
 const StoryFooter = ({ onClick }: { onClick: () => void }) => {
   return (
     <div
       className={clsx(
-        'fixed bottom-0 flex w-full justify-center border-t border-t-success bg-success-50 px-8 py-6',
+        'fixed bottom-0 z-50 flex w-full justify-center border-t border-t-success bg-success-50 px-8 py-6',
       )}
     >
       <div
@@ -18,12 +18,14 @@ const StoryFooter = ({ onClick }: { onClick: () => void }) => {
           You have finished this section!
         </div>
         <div className="flex items-center justify-start gap-4">
-          <div className="flex items-center justify-center gap-2">
-            <RestartIcon className="h-6 w-6" />
-            <div className="text-base font-semibold leading-6 text-gray-800">
-              Redo Item
-            </div>
-          </div>
+          <ButtonText
+            isUnderLine={false}
+            size="medium"
+            startIcon={<RestartIcon className="h-6 w-6" />}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
+            Redo Item
+          </ButtonText>
           <ButtonPrimary size="medium" onClick={onClick}>
             Next Item
           </ButtonPrimary>

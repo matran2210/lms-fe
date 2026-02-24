@@ -43,11 +43,11 @@ export function StepRenderer({ documents = [], onNewBlockMounted }: Props) {
                 onNewBlockMounted?.(blockRefs.current[index]!)
               }
             }}
-            className="mb-16"
+            className="mb-8"
           >
-            <div className="mb-2 text-lg font-semibold">{doc.name}</div>
+            <div className="mb-6 text-lg font-semibold">{doc.name}</div>
 
-            <StoryBlockRenderer doc={doc} />
+            <StoryBlockRenderer doc={doc} docIndex={index + 1} />
           </motion.div>
         )
       })}
