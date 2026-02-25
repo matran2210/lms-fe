@@ -50,6 +50,8 @@ export function StorylineProvider({ storylineData, children }: Props) {
 
   const storylineItemId = searchParams.get('storylineItemId')
   const class_id = searchParams.get('class_id')
+  const course_section_id = searchParams.get('course_section_id')
+  const status = searchParams.get('status')
   const params = useParams()
   const { section_storyline_id } = params
 
@@ -61,11 +63,11 @@ export function StorylineProvider({ storylineData, children }: Props) {
   /* NORMALIZE STEPS FROM BE       */
   /* ----------------------------- */
   const steps: IStorylineItem[] = useMemo(() => {
-    if (!storylineData?.storyline?.items) return []
+    const storylineItemsHasDocs = storylineData?.storyline?.items || []
 
-    return [...storylineData.storyline.items].sort(
-      (a, b) => a.position - b.position,
-    )
+    if (!storylineItemsHasDocs) return []
+
+    return [...storylineItemsHasDocs].sort((a, b) => a.position - b.position)
   }, [storylineData])
 
   /* ----------------------------- */
@@ -105,7 +107,7 @@ export function StorylineProvider({ storylineData, children }: Props) {
 
     const totalDocs = currentStep.total_document
     // Reveal document
-    if (storyline_item_document_id) {
+    if (storyline_item_document_id && status !== 'Review') {
       const res = await CoursesAPI.learningOutcomeProgress(
         class_id as string,
         section_storyline_id as string,
@@ -114,9 +116,20 @@ export function StorylineProvider({ storylineData, children }: Props) {
         },
       )
       const progressRes: IStorylineProgressResponse = res.data
-      setListStorylines(progressRes?.storyline_section?.storyline.items || [])
+      const storylineItemsHasDocs =
+        progressRes?.storyline_section?.storyline.items || []
+      setListStorylines(storylineItemsHasDocs)
     }
     if (visibleDocumentCount < totalDocs) {
+      setVisibleDocumentCount((prev) => {
+        const nextCount = prev + 1
+        return nextCount
+      })
+      return
+    }
+
+    // if last step and all documents are visible, do nothing or show complete state
+    if (currentStepIndex === steps.length - 1) {
       setVisibleDocumentCount((prev) => {
         const nextCount = prev + 1
         return nextCount
@@ -129,9 +142,12 @@ export function StorylineProvider({ storylineData, children }: Props) {
     const next = steps[nextIndex]
     if (!next) return
 
-    router.replace(`?class_id=${class_id}&storylineItemId=${next.id}`, {
-      scroll: false,
-    })
+    router.replace(
+      `?class_id=${class_id}&course_section_id=${course_section_id}&storylineItemId=${next.id}&status=${status}`,
+      {
+        scroll: false,
+      },
+    )
   }
   return (
     <StorylineContext.Provider

@@ -1,3 +1,5 @@
+import { useStoryline } from '@contexts/StorylineContext'
+import { useStorylineSidebar } from '@contexts/StorylineSidebarContext'
 import { RestartIcon } from '@lms/assets'
 import { ButtonPrimary, ButtonText } from '@lms/ui'
 import clsx from 'clsx'
@@ -6,7 +8,7 @@ const StoryFooter = ({ onClick }: { onClick: () => void }) => {
   return (
     <div
       className={clsx(
-        'fixed bottom-0 z-50 flex w-full justify-center border-t border-t-success bg-success-50 px-8 py-6',
+        'fixed bottom-0 z-[201] flex w-full justify-center border-t border-t-success bg-success-50 px-8 py-6',
       )}
     >
       <div

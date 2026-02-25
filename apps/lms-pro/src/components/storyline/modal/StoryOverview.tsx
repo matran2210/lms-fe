@@ -14,17 +14,12 @@ interface IProps {
 const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
   const router = useRouter()
   const params = useParams()
-  const { id } = params
+  const { id, course_section_id } = params
+  const storylineItemsHasDocs = storylineData?.storyline?.items || []
   const onClose = () => {
     setOpen()
   }
-  const handleSubmit = (storylineItemId?: string) => {
-    const defaultStorylineItemId = storylineData?.storyline?.items[0]?.id
-    router.push(
-      `/storyline/${storylineData?.id}?class_id=${id}&storylineItemId=${storylineItemId || defaultStorylineItemId}`,
-      { scroll: false },
-    )
-  }
+
   const progress = useMemo(() => {
     if (!storylineData?.learning_progress) return 0
     const progressData =
@@ -40,6 +35,18 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
       return 'Continue'
     }
     return 'Start'
+  }
+  const handleSubmit = (storylineItemId?: string) => {
+    const defaultStorylineItemId =
+      storylineItemsHasDocs.find(
+        (item) =>
+          item.item_progress.total_document_completed !==
+          item.item_progress.total_document,
+      )?.id || storylineItemsHasDocs[0]?.id
+    router.push(
+      `/storyline/${storylineData?.id}?class_id=${id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=${okButtonCaption()}`,
+      { scroll: false },
+    )
   }
   return (
     <>
@@ -72,7 +79,7 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
               This Story Include:
             </div>
             <div className="hide-scrollbar flex max-h-72 flex-col items-start justify-start gap-2 overflow-y-auto">
-              {storylineData?.storyline.items.map((item, index) => {
+              {storylineItemsHasDocs?.map((item, index) => {
                 const itemProgress = Math.round(
                   (item.item_progress.total_document_completed /
                     item.item_progress.total_document) *

@@ -20,13 +20,19 @@ const StoryHeader = ({ listStorylineData }: Props) => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const class_id = searchParams.get('class_id')
+  const course_section_id = searchParams.get('course_section_id')
+  const storylineItemsHasDocs = listStorylineData?.storyline?.items || []
+  const status = searchParams.get('status')
   const { showSidebar, setShowSidebar } = useStorylineSidebar()
   const [open, setOpen] = useState(false)
   const toggleSidebar = () => setShowSidebar(!showSidebar)
   const handleSubmit = (storylineItemId?: string) => {
-    router.replace(`?class_id=${class_id}&storylineItemId=${storylineItemId}`, {
-      scroll: false,
-    })
+    router.replace(
+      `?class_id=${class_id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId}&status=${status}`,
+      {
+        scroll: false,
+      },
+    )
   }
   return (
     <div className="sticky top-0 z-50 shadow-sm">
@@ -49,18 +55,16 @@ const StoryHeader = ({ listStorylineData }: Props) => {
               className="custom-select-v2 h-8 w-48 rounded-full p-[10px]"
               variant="borderless"
               value={
-                listStorylineData?.storyline?.items
+                storylineItemsHasDocs
                   ? searchParams.get('storylineItemId')
                   : undefined
               }
-              options={listStorylineData?.storyline?.items.map(
-                (item, index) => {
-                  return {
-                    label: `Module ${index + 1} of ${listStorylineData?.storyline?.items.length}`,
-                    value: item.id,
-                  }
-                },
-              )}
+              options={storylineItemsHasDocs.map((item, index) => {
+                return {
+                  label: `Module ${index + 1} of ${storylineItemsHasDocs.length}`,
+                  value: item.id,
+                }
+              })}
               optionRender={(option) => {
                 const isSelected =
                   option.value === searchParams.get('storylineItemId')

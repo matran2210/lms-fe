@@ -29,13 +29,15 @@ const StorylineItem = ({
       )}
     >
       <div className="flex items-center gap-2">
-        <div className="font-medium text-gray">
-          {progress === 100 ? (
-            <ProgressIcon />
-          ) : (
-            <CircularProgress progress={progress} />
-          )}
-        </div>
+        {isShowProgress && (
+          <div className="font-medium text-gray">
+            {progress === 100 ? (
+              <ProgressIcon />
+            ) : (
+              <CircularProgress progress={progress} />
+            )}
+          </div>
+        )}
         <Tooltip title={name}>
           <div className="line-clamp-1 max-w-[160px] justify-start overflow-ellipsis text-base font-normal leading-6 text-gray-800">
             {name}
@@ -44,13 +46,7 @@ const StorylineItem = ({
       </div>
 
       <div className="font-medium text-gray">
-        {progress === 100 ? (
-          <ProgressIcon />
-        ) : isShowProgress ? (
-          <CircularProgress progress={progress} />
-        ) : (
-          `${progress}%`
-        )}
+        {progress === 100 ? <ProgressIcon /> : `${progress}%`}
       </div>
     </motion.div>
   )

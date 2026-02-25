@@ -14,13 +14,18 @@ export default function Sidebar({ listStorylineData }: IProps) {
   const searchParams = useSearchParams()
   const storylineItemId = searchParams.get('storylineItemId')
   const class_id = searchParams.get('class_id')
+  const course_section_id = searchParams.get('course_section_id')
+  const status = searchParams.get('status')
   const { showSidebar, setShowSidebar, listStorylines } = useStorylineSidebar()
   const toggleSidebar = () => setShowSidebar(!showSidebar)
 
   const handleSubmit = (storylineItemId?: string) => {
-    router.replace(`?class_id=${class_id}&storylineItemId=${storylineItemId}`, {
-      scroll: false,
-    })
+    router.replace(
+      `?class_id=${class_id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId}&status=${status}`,
+      {
+        scroll: false,
+      },
+    )
   }
 
   return (
@@ -32,7 +37,7 @@ export default function Sidebar({ listStorylineData }: IProps) {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: -40, opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="fixed bottom-0 top-0 z-50 h-full w-80 bg-white p-6 shadow-md"
+          className="fixed bottom-0 top-0 z-[201] h-full w-80 bg-white p-6 shadow-md"
         >
           <div className="flex items-center justify-between gap-2">
             <div className="text-lg font-semibold text-gray-800">
@@ -60,6 +65,7 @@ export default function Sidebar({ listStorylineData }: IProps) {
                     onClick={() => {
                       handleSubmit(storylineItem.id)
                     }}
+                    isShowProgress
                   />
                 </div>
               )
