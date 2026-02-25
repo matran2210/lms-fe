@@ -14,7 +14,7 @@ export default function Sidebar({ listStorylineData }: IProps) {
   const searchParams = useSearchParams()
   const storylineItemId = searchParams.get('storylineItemId')
   const class_id = searchParams.get('class_id')
-  const { showSidebar, setShowSidebar } = useStorylineSidebar()
+  const { showSidebar, setShowSidebar, listStorylines } = useStorylineSidebar()
   const toggleSidebar = () => setShowSidebar(!showSidebar)
 
   const handleSubmit = (storylineItemId?: string) => {
@@ -32,7 +32,7 @@ export default function Sidebar({ listStorylineData }: IProps) {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: -40, opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="fixed bottom-0 top-0 z-10 h-full w-80 bg-white p-6 shadow-md"
+          className="fixed bottom-0 top-0 z-50 h-full w-80 bg-white p-6 shadow-md"
         >
           <div className="flex items-center justify-between gap-2">
             <div className="text-lg font-semibold text-gray-800">
@@ -44,7 +44,7 @@ export default function Sidebar({ listStorylineData }: IProps) {
           </div>
           <Divider className="my-4" />
           <div className="hide-scrollbar flex max-h-[calc(100vh-90px)] flex-col overflow-y-auto">
-            {listStorylineData?.storyline?.items.map((storylineItem, index) => {
+            {listStorylines.map((storylineItem, index) => {
               const itemProgress = Math.round(
                 (storylineItem.item_progress.total_document_completed /
                   storylineItem.item_progress.total_document) *

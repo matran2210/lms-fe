@@ -1,7 +1,10 @@
 'use client'
 import Player from '@components/storyline/Player'
 import { StorylineProvider } from '@contexts/StorylineContext'
-import { StorylineSidebarProvider } from '@contexts/StorylineSidebarContext'
+import {
+  StorylineSidebarProvider,
+  useStorylineSidebar,
+} from '@contexts/StorylineSidebarContext'
 import { UserType } from '@lms/contexts'
 import { LAYOUT } from '@lms/core'
 import { useParams, useSearchParams } from 'next/navigation'

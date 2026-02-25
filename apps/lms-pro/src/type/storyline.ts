@@ -186,3 +186,13 @@ export interface IMultiChoiceQuestion {
   setting_grade: any
   time: any
 }
+
+export interface IStorylineProgress {
+  is_completed: boolean
+  content: any
+}
+export interface IStorylineProgressResponse {
+  status: boolean
+  progress: IStorylineProgress
+  storyline_section: IStoryline
+}

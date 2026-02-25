@@ -2,7 +2,7 @@
 import { AlertTriagle, ArrowActionIcon } from '@lms/assets'
 import { ExaminationForm, ExaminationsResponse } from '@lms/contexts'
 import { SappModalV3 } from '@lms/ui'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { UseFormReturn } from 'react-hook-form'
 
 interface IProps {
@@ -11,12 +11,15 @@ interface IProps {
 }
 const QuitLearningStoryline = ({ open, setOpen }: IProps) => {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const class_id = searchParams.get('class_id')
+  const params = useParams()
   const onClose = () => {
     setOpen(false)
   }
   const onSubmit = () => {
-    // router.push('/storyline')
-    console.log('back to section')
+    // router.push(`/courses/c5bfb6c8-8308-4f3b-baf9-4d86a0e63b21/section/cda6f760-bdcd-44a5-80ce-3171983cb4ee?&chapter=cc99e588-76e7-44e0-9ab4-ebdcecccf46f`)
+    // console.log('back to section')
   }
   return (
     <SappModalV3

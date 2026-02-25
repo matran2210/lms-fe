@@ -31,6 +31,8 @@ export default function Player({ listStorylineData }: IProps) {
     continueAction,
     visibleDocumentCount,
   } = useStoryline()
+  const { setListStorylines } = useStorylineSidebar()
+
   const useGetStorylineDocument = (queryKey: string) => {
     const fetchData = async () => {
       const { data } = await StorylineAPI.getStorylineDocument({
@@ -49,6 +51,9 @@ export default function Player({ listStorylineData }: IProps) {
   const { data: storylinyeDocument, isLoading } = useGetStorylineDocument(
     `storyline-document-${currentStep?.id}`,
   )
+  useEffect(() => {
+    setListStorylines(listStorylineData?.storyline?.items || [])
+  }, [listStorylineData])
 
   if (!currentStep) return null
 

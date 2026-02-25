@@ -10,7 +10,12 @@ import React, {
   useState,
 } from 'react'
 import { CoursesAPI } from 'src/api/courses'
-import { IStoryline, IStorylineItem } from 'src/type/storyline'
+import {
+  IStoryline,
+  IStorylineItem,
+  IStorylineProgressResponse,
+} from 'src/type/storyline'
+import { useStorylineSidebar } from './StorylineSidebarContext'
 
 interface StorylineContextValue {
   steps: IStorylineItem[]
@@ -41,6 +46,7 @@ interface Props {
 export function StorylineProvider({ storylineData, children }: Props) {
   const searchParams = useSearchParams()
   const router = useRouter()
+  const { setListStorylines } = useStorylineSidebar()
 
   const storylineItemId = searchParams.get('storylineItemId')
   const class_id = searchParams.get('class_id')
@@ -99,15 +105,17 @@ export function StorylineProvider({ storylineData, children }: Props) {
 
     const totalDocs = currentStep.total_document
     // Reveal document
-    // if (storyline_item_document_id) {
-    //   await CoursesAPI.learningOutcomeProgress(
-    //     class_id as string,
-    //     section_storyline_id as string,
-    //     {
-    //       storyline_item_document_id
-    //     }
-    //   )
-    // }
+    if (storyline_item_document_id) {
+      const res = await CoursesAPI.learningOutcomeProgress(
+        class_id as string,
+        section_storyline_id as string,
+        {
+          storyline_item_document_id,
+        },
+      )
+      const progressRes: IStorylineProgressResponse = res.data
+      setListStorylines(progressRes?.storyline_section?.storyline.items || [])
+    }
     if (visibleDocumentCount < totalDocs) {
       setVisibleDocumentCount((prev) => {
         const nextCount = prev + 1
