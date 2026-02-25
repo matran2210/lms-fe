@@ -74,7 +74,6 @@ const SearchClassResource = ({
         ...query,
         page_index: DEFAULT_PAGE_NUMBER,
         page_size: DEFAULT_PAGE_SIZE,
-        courseId,
         search_key: methods.watch('name')?.trim() || undefined,
       })}`,
     )
@@ -191,7 +190,7 @@ const SearchClassResource = ({
           {!isCoursePage && (
             <div
               className={clsx(
-                'flex w-full items-center justify-between rounded-lg border border-transparent border-white bg-white px-2 py-3 shadow-small transition-all duration-300 focus-within:border-primary hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4',
+                'flex w-full items-center justify-between rounded-lg border border-transparent border-white bg-white px-4 py-3 shadow-small transition-all duration-300 focus-within:border-primary hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4',
               )}
             >
               <SearchForm

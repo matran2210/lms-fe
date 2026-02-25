@@ -2763,7 +2763,7 @@ export const HourglassIcon = ({ className }: { className?: string }) => {
   );
 };
 
-export const StarCircleIcon = ({ color } : { color?: string }) => {
+export const StarCircleIcon = ({ color }: { color?: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -4447,6 +4447,18 @@ export const CloseIconV2 = ({ className }: { className?: string }) => (
       strokeLinecap="round"
       strokeLinejoin="round"
     />
+  </svg>
+)
+
+export const IncreaseIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 4V20M20 12L4 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+)
+
+export const DecreaseIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 12H4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
   </svg>
 )
 
