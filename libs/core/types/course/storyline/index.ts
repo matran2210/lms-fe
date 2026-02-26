@@ -105,12 +105,12 @@ export interface DocumentItem {
   storyline_item_id: string
   position: number
   videos?: VideoItem[]
-  quiz?: IQuiz
+  quiz?: IStorylineQuiz
 }
 
 export interface VideoItem {
   file: IVideoFile
-  quiz: IQuiz
+  quiz: IStorylineQuiz
 }
 
 export interface IVideoFile {
@@ -129,7 +129,7 @@ export interface IVideoFile {
   resource: Resource
 }
 
-export interface IQuiz {
+export interface IStorylineQuiz {
   id: string
   created_at: string
   updated_at: string
