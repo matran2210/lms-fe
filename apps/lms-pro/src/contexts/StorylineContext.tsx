@@ -18,7 +18,6 @@ import {
 import { useStorylineSidebar } from './StorylineSidebarContext'
 
 interface StorylineContextValue {
-  steps: IStorylineItem[]
   currentStepIndex: number
   currentStep: IStorylineItem | null
   stepRefs: React.MutableRefObject<(HTMLDivElement | null)[]>
@@ -47,7 +46,8 @@ interface Props {
 export function StorylineProvider({ storylineData, children }: Props) {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const { setListStorylines, setLearningProgress } = useStorylineSidebar()
+  const { setListStorylines, setLearningProgress, listStorylines } =
+    useStorylineSidebar()
 
   const storylineItemId = searchParams.get('storylineItemId')
   const class_id = searchParams.get('class_id')
@@ -62,15 +62,15 @@ export function StorylineProvider({ storylineData, children }: Props) {
   const [isCompleted, setIsCompleted] = useState(
     storylineData
       ? storylineData?.learning_progress?.total_course_sections_completed ===
-          storylineData?.learning_progress?.total_course_sections
+      storylineData?.learning_progress?.total_course_sections
       : false,
   )
   const storylineItemsHasDocs = storylineData?.storyline?.items || []
   const steps: IStorylineItem[] = useMemo(() => {
-    if (!storylineItemsHasDocs) return []
+    if (!listStorylines) return []
 
-    return [...storylineItemsHasDocs].sort((a, b) => a.position - b.position)
-  }, [storylineData])
+    return [...listStorylines].sort((a, b) => a.position - b.position)
+  }, [listStorylines])
   /* ----------------------------- */
   /* ID → INDEX MAP                */
   /* ----------------------------- */
@@ -133,8 +133,8 @@ export function StorylineProvider({ storylineData, children }: Props) {
       setIsCompleted(
         progressRes?.storyline_section.learning_progress
           .total_course_sections_completed ===
-          progressRes?.storyline_section.learning_progress
-            .total_course_sections,
+        progressRes?.storyline_section.learning_progress
+          .total_course_sections,
       )
       setListStorylines(storylineItemsHasDocs)
       setLearningProgress(progressRes?.storyline_section.learning_progress)
@@ -162,7 +162,6 @@ export function StorylineProvider({ storylineData, children }: Props) {
   return (
     <StorylineContext.Provider
       value={{
-        steps,
         currentStepIndex,
         currentStep,
         stepRefs,
