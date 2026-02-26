@@ -289,6 +289,7 @@ const Course = ({
       localStorage.removeItem("courseInfo");
     }
     if (
+      !isTeacher &&
       isRedirectDashboard &&
       (determineButtonToShow == BUTTON_STATUS.Review ||
         determineButtonToShow == BUTTON_STATUS.Resume)
