@@ -15,7 +15,7 @@ const StoryFooter = ({ onClick }: { onClick: () => void }) => {
         )}
       >
         <div className="justify-start text-xl font-semibold leading-7 text-gray-800">
-          You have finished this section!
+          You have finished this module!
         </div>
         <div className="flex items-center justify-start gap-4">
           <ButtonText

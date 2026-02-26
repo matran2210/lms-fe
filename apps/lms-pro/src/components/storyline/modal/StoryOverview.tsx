@@ -1,6 +1,6 @@
 'use client'
 import { StorylineItem } from '@lms/feature-courses'
-import { SappModalV3 } from '@lms/ui'
+import { EditorReader, SappModalV3 } from '@lms/ui'
 import clsx from 'clsx'
 import { useParams, useRouter } from 'next/navigation'
 import { useMemo } from 'react'
@@ -54,7 +54,7 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
         handleClose={onClose}
         open={open}
         handleCancel={onClose}
-        title={storylineData?.name}
+        title={storylineData?.storyline?.name}
         isShowBtnClose={false}
         isShowFooter
         submitButtonClassName="w-full h-10"
@@ -66,13 +66,12 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
         cancelButtonClass="w-full"
       >
         <div className="flex flex-col gap-10 text-left text-gray-800">
-          <div
+          <EditorReader
             className={clsx('text-base leading-6', {
-              'mt-10': storylineData?.description,
+              'mt-10': storylineData?.storyline?.description,
             })}
-          >
-            {storylineData?.description}
-          </div>
+            text_editor_content={storylineData?.storyline?.description || ''}
+          />
 
           <div className="flex flex-col gap-4">
             <div className="text-lg font-semibold leading-7">
