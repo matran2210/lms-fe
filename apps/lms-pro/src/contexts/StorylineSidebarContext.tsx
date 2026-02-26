@@ -1,12 +1,14 @@
 'use client'
 import React, { createContext, useContext, useState } from 'react'
-import { IStorylineItem } from '@lms/core'
+import { IStorylineItem, LearningProgress } from '@lms/core'
 
 interface StorySidebarContextValue {
   showSidebar: boolean
   setShowSidebar: (show: boolean) => void
   listStorylines: IStorylineItem[]
   setListStorylines: (list: IStorylineItem[]) => void
+  learning_progress: LearningProgress
+  setLearningProgress: (progress: LearningProgress) => void
 }
 
 export const StorylineSidebarContext =
@@ -25,6 +27,12 @@ export function StorylineSidebarProvider({
 }) {
   const [showSidebar, setShowSidebar] = useState(true)
   const [listStorylines, setListStorylines] = useState<IStorylineItem[]>([])
+  const [learning_progress, setLearningProgress] = useState<LearningProgress>({
+    total_course_sections: 1,
+    total_course_sections_completed: 0,
+    time_spent: 0,
+    duration: 0,
+  })
 
   return (
     <StorylineSidebarContext.Provider
@@ -33,6 +41,8 @@ export function StorylineSidebarProvider({
         setShowSidebar,
         listStorylines,
         setListStorylines,
+        learning_progress,
+        setLearningProgress,
       }}
     >
       {children}

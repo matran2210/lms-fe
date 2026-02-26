@@ -12,7 +12,7 @@ interface IProps {
 }
 
 const NextStorylineModal = ({ open, setOpen, next_activity, course_section_id }: IProps) => {
-  const {router, params} = useFeature()
+  const {router, params, query} = useFeature()
     const storylineItemsHasDocs = next_activity?.storyline?.items || []
     const onClose = () => {
     setOpen(false)
@@ -42,7 +42,7 @@ const NextStorylineModal = ({ open, setOpen, next_activity, course_section_id }:
           item.item_progress.total_document,
       )?.id || storylineItemsHasDocs[0]?.id
     router.push(
-      `/storyline/${next_activity?.id}?class_id=${params?.id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=${okButtonCaption()}`,
+      `/storyline/${next_activity?.id}?class_id=${query?.class_id || params?.id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=${okButtonCaption()}`,
       { scroll: false },
     )
   }

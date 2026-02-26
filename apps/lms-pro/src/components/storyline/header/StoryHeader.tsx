@@ -1,5 +1,8 @@
 import { HamburgerMenuLargeIcon, SelectArrow } from '@assets/icons'
-import { useStorylineSidebar } from '@contexts/StorylineSidebarContext'
+import {
+  StorylineSidebarContext,
+  useStorylineSidebar,
+} from '@contexts/StorylineSidebarContext'
 import {
   CheckCircleOutlineYellow,
   CheckIcon,
@@ -13,17 +16,15 @@ import ProgressBar from './ProgressBar'
 import { useState } from 'react'
 import QuitLearningStoryline from '../modal/QuitLearningStoryline'
 
-interface Props {
-  listStorylineData: IStoryline | undefined
-}
-const StoryHeader = ({ listStorylineData }: Props) => {
+const StoryHeader = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const class_id = searchParams.get('class_id')
   const course_section_id = searchParams.get('course_section_id')
-  const storylineItemsHasDocs = listStorylineData?.storyline?.items || []
+  const { showSidebar, setShowSidebar, listStorylines, learning_progress } =
+    useStorylineSidebar()
+  const storylineItemsHasDocs = listStorylines || []
   const status = searchParams.get('status')
-  const { showSidebar, setShowSidebar } = useStorylineSidebar()
   const [open, setOpen] = useState(false)
   const toggleSidebar = () => setShowSidebar(!showSidebar)
   const handleSubmit = (storylineItemId?: string) => {
@@ -92,11 +93,10 @@ const StoryHeader = ({ listStorylineData }: Props) => {
       </div>
       <ProgressBar
         percent={
-          listStorylineData?.learning_progress
+          learning_progress
             ? Math.round(
-                (listStorylineData?.learning_progress
-                  .total_course_sections_completed /
-                  listStorylineData?.learning_progress.total_course_sections) *
+                (learning_progress.total_course_sections_completed /
+                  learning_progress.total_course_sections) *
                   100,
               )
             : 70

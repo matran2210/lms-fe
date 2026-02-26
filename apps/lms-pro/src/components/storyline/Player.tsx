@@ -1,11 +1,10 @@
 'use client'
 
 import { useStoryline } from '@contexts/StorylineContext'
-import { useStorylineSidebar } from '@contexts/StorylineSidebarContext'
 import { scrollToY } from '@utils/helpers/storyline/scrollManager'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useParams, useSearchParams } from 'next/navigation'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { useQuery } from 'react-query'
 import { StorylineAPI } from 'src/api/storyline'
 import { IStoryline } from '@lms/core'
@@ -34,8 +33,8 @@ export default function Player({ listStorylineData }: IProps) {
     currentStep,
     continueAction,
     visibleDocumentCount,
+    isCompleted,
   } = useStoryline()
-  const { setListStorylines } = useStorylineSidebar()
 
   const useGetStorylineDocument = (queryKey: string) => {
     const fetchData = async () => {
@@ -55,19 +54,15 @@ export default function Player({ listStorylineData }: IProps) {
   const { data: storylinyeDocument, isLoading } = useGetStorylineDocument(
     `storyline-document-${currentStep?.id}`,
   )
-  useEffect(() => {
-    setListStorylines(storylineItemsHasDocs)
-  }, [listStorylineData])
 
   if (!currentStep) return null
 
   const lastVisibleDocument = storylinyeDocument?.[visibleDocumentCount - 1]
+
   return (
     <SappLoadingGlobal loading={false}>
       <AnimatePresence mode="wait">
-        {status !== 'Review' &&
-        (storylinyeDocument?.length || 0) === visibleDocumentCount - 1 &&
-        currentStepIndex + 1 === storylineItemsHasDocs?.length ? (
+        {status !== 'Review' && isCompleted ? (
           <motion.div
             key="complete"
             initial={{ opacity: 0, y: 40 }}
@@ -86,7 +81,7 @@ export default function Player({ listStorylineData }: IProps) {
             transition={{ duration: 0.3 }}
           >
             <div className="min-h-screen bg-white">
-              <StoryHeader listStorylineData={listStorylineData} />
+              <StoryHeader />
 
               <Sidebar listStorylineData={listStorylineData} />
               <main ref={containerRef} className="flex w-full flex-col pb-28">
@@ -142,7 +137,8 @@ export default function Player({ listStorylineData }: IProps) {
                 </motion.div>
               </main>
 
-              {visibleDocumentCount >= (storylinyeDocument?.length ?? 0) &&
+              {storylinyeDocument &&
+                visibleDocumentCount >= (storylinyeDocument?.length ?? 0) &&
                 (status !== 'Review' ||
                   (status === 'Review' &&
                     currentStepIndex + 1 < storylineItemsHasDocs?.length)) && (
