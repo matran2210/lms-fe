@@ -53,7 +53,7 @@ const StoryHeader = () => {
           </div>
           <div>
             <Select
-              className="custom-select-v2 h-8 w-48 rounded-full p-[10px]"
+              className="custom-select-v2 h-8 rounded-full p-[10px]"
               variant="borderless"
               value={
                 storylineItemsHasDocs
@@ -62,7 +62,7 @@ const StoryHeader = () => {
               }
               options={storylineItemsHasDocs.map((item, index) => {
                 return {
-                  label: `Module ${index + 1} of ${storylineItemsHasDocs.length}`,
+                  label: `Item ${index + 1} of ${storylineItemsHasDocs.length}`,
                   value: item.id,
                 }
               })}
@@ -79,6 +79,7 @@ const StoryHeader = () => {
                   </div>
                 )
               }}
+              dropdownStyle={{ width: 150 }}
               suffixIcon={<SelectArrow />}
               onChange={handleSubmit}
             />
