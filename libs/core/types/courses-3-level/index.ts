@@ -33,8 +33,8 @@ export interface INeighborActivity {
   display_icon: string;
   name: string;
   is_preview_locked: boolean;
-  course_section_type: string;
-  storyline: IStorylineDetail;
+  course_section_type?: string;
+  storyline?: IStorylineDetail;
   learning_progress?: LearningProgress;
 }
 
