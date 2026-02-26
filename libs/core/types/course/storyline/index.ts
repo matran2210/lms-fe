@@ -1,13 +1,9 @@
-import {
-  CourseSectionLinkParent,
-  IQuestion,
-  LearningProgress,
-  QUESTION_TYPES,
-  QuestionTopic,
-  Resource,
-} from '@lms/core'
-import { Correct } from '@lms/utils'
-import React from 'react'
+import { QUESTION_TYPES } from "../../../enums"
+import { INeighborActivity } from "../../courses-3-level"
+import { QuestionTopic, Resource } from "../../test"
+import { CourseSectionLinkParent, LearningProgress } from "../my-course"
+import { IQuestion } from "../Question"
+
 
 export type QuizOption = {
   id: string
@@ -61,6 +57,7 @@ export interface IStoryline {
     id: string
     name: string
   }
+  next_activity: INeighborActivity
 }
 
 export interface ICourseSectionLinkParent extends CourseSectionLinkParent {

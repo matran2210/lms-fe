@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { useRef } from 'react'
-import { DocumentItem } from 'src/type/storyline'
 import { StoryBlockRenderer } from './StoryBlockRenderer'
+import { DocumentItem } from '@lms/core'
 
 interface Props {
   documents: DocumentItem[] | undefined

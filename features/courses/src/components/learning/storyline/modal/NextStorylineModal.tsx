@@ -1,32 +1,30 @@
 'use client'
-import { StorylineItem } from '@lms/feature-courses'
+import { useFeature } from '@lms/contexts'
+import { INeighborActivity } from '@lms/core'
 import { SappModalV3 } from '@lms/ui'
-import clsx from 'clsx'
-import { useParams, useRouter } from 'next/navigation'
 import { useMemo } from 'react'
-import { IStoryline } from '@lms/core'
+import StorylineItem from './StorylineItem'
 interface IProps {
   open: boolean
-  setOpen: () => void
-  storylineData: IStoryline | undefined
+  setOpen: (status: boolean) => void
+  next_activity: INeighborActivity | undefined | null
+  course_section_id: string
 }
 
-const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
-  const router = useRouter()
-  const params = useParams()
-  const { id, course_section_id } = params
-  const storylineItemsHasDocs = storylineData?.storyline?.items || []
-  const onClose = () => {
-    setOpen()
+const NextStorylineModal = ({ open, setOpen, next_activity, course_section_id }: IProps) => {
+  const {router, params} = useFeature()
+    const storylineItemsHasDocs = next_activity?.storyline?.items || []
+    const onClose = () => {
+    setOpen(false)
   }
 
   const progress = useMemo(() => {
-    if (!storylineData?.learning_progress) return 0
+    if (!next_activity?.learning_progress) return 0
     const progressData =
-      storylineData?.learning_progress.total_course_sections_completed /
-      storylineData?.learning_progress.total_course_sections
+      next_activity?.learning_progress.total_course_sections_completed /
+      next_activity?.learning_progress.total_course_sections
     return Math.round(progressData * 100)
-  }, [storylineData?.learning_progress])
+  }, [next_activity?.learning_progress])
 
   const okButtonCaption = () => {
     if (progress === 100) {
@@ -44,7 +42,7 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
           item.item_progress.total_document,
       )?.id || storylineItemsHasDocs[0]?.id
     router.push(
-      `/storyline/${storylineData?.id}?class_id=${id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=${okButtonCaption()}`,
+      `/storyline/${next_activity?.id}?class_id=${params?.id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=${okButtonCaption()}`,
       { scroll: false },
     )
   }
@@ -54,7 +52,7 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
         handleClose={onClose}
         open={open}
         handleCancel={onClose}
-        title={storylineData?.name}
+        title={next_activity?.name}
         isShowBtnClose={false}
         isShowFooter
         submitButtonClassName="w-full h-10"
@@ -66,13 +64,13 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
         cancelButtonClass="w-full"
       >
         <div className="flex flex-col gap-10 text-left text-gray-800">
-          <div
+          {/* <div
             className={clsx('text-base leading-6', {
-              'mt-10': storylineData?.description,
+              'mt-10': next_activity?.description,
             })}
           >
-            {storylineData?.description}
-          </div>
+            {next_activity?.description}
+          </div> */}
 
           <div className="flex flex-col gap-4">
             <div className="text-lg font-semibold leading-7">
@@ -102,4 +100,4 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
   )
 }
 
-export default StoryOverview
+export default NextStorylineModal

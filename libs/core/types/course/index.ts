@@ -2,6 +2,7 @@ export * from './Question'
 export * from './my-course'
 export * from './exam-info'
 export * from "./activity"
+export * from "./storyline"
 
 export type CourseProgram =
   | ECourseProgram.ACCA

@@ -1,6 +1,5 @@
+import { DocumentItem, IResponse, IStoryline } from '@lms/core'
 import { fetcher } from '@services/requestV2'
-import { IQueryParams, IRequestList, IResponse } from '@lms/core'
-import { DocumentItem, IStoryline } from 'src/type/storyline'
 
 export class StorylineAPI {
   static getListStoryline({

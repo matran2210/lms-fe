@@ -8,7 +8,7 @@ import {
 import { Select } from '@lms/ui'
 import clsx from 'clsx'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { IStoryline } from 'src/type/storyline'
+import { IStoryline } from '@lms/core'
 import ProgressBar from './ProgressBar'
 import { useState } from 'react'
 import QuitLearningStoryline from '../modal/QuitLearningStoryline'

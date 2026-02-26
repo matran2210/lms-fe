@@ -43,7 +43,7 @@ import { TreeHelper } from 'src/helper/tree'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from 'src/api/courses/index'
 import StoryOverview from '@components/storyline/modal/StoryOverview'
-import { IStoryline } from 'src/type/storyline'
+import { IStoryline } from '@lms/core'
 
 interface IProps {
   course_section_type: string

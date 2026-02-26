@@ -1,4 +1,4 @@
-import { SappModalVideo, SAPPVideo } from '@lms/ui'
+import { SAPPVideo } from '@lms/ui'
 import { useRef } from 'react'
 
 export default function VideoBlock({ src }: { src: string }) {

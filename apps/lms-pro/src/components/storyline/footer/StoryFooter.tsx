@@ -1,5 +1,3 @@
-import { useStoryline } from '@contexts/StorylineContext'
-import { useStorylineSidebar } from '@contexts/StorylineSidebarContext'
 import { RestartIcon } from '@lms/assets'
 import { ButtonPrimary, ButtonText } from '@lms/ui'
 import clsx from 'clsx'

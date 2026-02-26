@@ -14,7 +14,7 @@ import {
   IStoryline,
   IStorylineItem,
   IStorylineProgressResponse,
-} from 'src/type/storyline'
+} from '@lms/core'
 import { useStorylineSidebar } from './StorylineSidebarContext'
 
 interface StorylineContextValue {

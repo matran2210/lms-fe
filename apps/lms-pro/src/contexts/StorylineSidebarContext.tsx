@@ -1,6 +1,6 @@
 'use client'
 import React, { createContext, useContext, useState } from 'react'
-import { IStorylineItem } from 'src/type/storyline'
+import { IStorylineItem } from '@lms/core'
 
 interface StorySidebarContextValue {
   showSidebar: boolean

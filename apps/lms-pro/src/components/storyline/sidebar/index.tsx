@@ -1,10 +1,10 @@
 import { useStorylineSidebar } from '@contexts/StorylineSidebarContext'
 import { CloseDetailIcon } from '@lms/assets'
+import { StorylineItem } from '@lms/feature-courses'
 import { Divider } from 'antd'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { IStoryline } from 'src/type/storyline'
-import StorylineItem from '../modal/StorylineItem'
+import { IStoryline } from '@lms/core'
 
 interface IProps {
   listStorylineData: IStoryline | undefined

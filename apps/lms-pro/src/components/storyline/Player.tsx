@@ -8,7 +8,7 @@ import { useParams, useSearchParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 import { useQuery } from 'react-query'
 import { StorylineAPI } from 'src/api/storyline'
-import { IStoryline } from 'src/type/storyline'
+import { IStoryline } from '@lms/core'
 import { StepRenderer } from './blocks/StepRenderer'
 import ContinueButton from './ContinueButton'
 import StoryHeader from './header/StoryHeader'
@@ -66,7 +66,7 @@ export default function Player({ listStorylineData }: IProps) {
     <SappLoadingGlobal loading={false}>
       <AnimatePresence mode="wait">
         {status !== 'Review' &&
-        (storylinyeDocument?.length || 0) < visibleDocumentCount &&
+        (storylinyeDocument?.length || 0) === visibleDocumentCount - 1 &&
         currentStepIndex + 1 === storylineItemsHasDocs?.length ? (
           <motion.div
             key="complete"
@@ -75,7 +75,7 @@ export default function Player({ listStorylineData }: IProps) {
             exit={{ opacity: 0, y: -40 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
           >
-            <CompleteStoryline />
+            <CompleteStoryline listStorylineData={listStorylineData} />
           </motion.div>
         ) : (
           <motion.div

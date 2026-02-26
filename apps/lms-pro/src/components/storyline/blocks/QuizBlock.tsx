@@ -5,7 +5,9 @@ import {
   DEFAULT_EDITOR_VALUE,
   defaultSheetData,
   IAnswerFillWord,
+  IMultiChoiceQuestion,
   IQuestion,
+  IStorylineQuestion,
   QUESTION_TYPES,
   RESPONSE_OPTION,
 } from '@lms/core'
@@ -36,7 +38,6 @@ import { isUndefined } from 'lodash'
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { TestServiceAPI } from 'src/api/test-api'
-import { IMultiChoiceQuestion, IStorylineQuestion } from 'src/type/storyline'
 import { v4 as uuidv4 } from 'uuid'
 
 interface QuizBlockProps {

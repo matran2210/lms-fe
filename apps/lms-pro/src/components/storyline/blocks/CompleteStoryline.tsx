@@ -1,16 +1,54 @@
-import { useRouter, useSearchParams } from 'next/navigation'
-import Image from 'next/image'
+import { ArrowLeft } from '@lms/assets'
+import { useCourseContext } from '@lms/contexts'
+import { IStoryline } from '@lms/core'
+import NextStorylineModal from '@lms/feature-courses/src/components/learning/storyline/modal/NextStorylineModal'
 import { ButtonPrimary, ButtonText } from '@lms/ui'
-import { ArrowLeft, PreviousIcon } from '@lms/assets'
 import { motion } from 'framer-motion'
-export default function CompleteStoryline() {
+import Image from 'next/image'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+interface IProps {
+  listStorylineData: IStoryline | undefined
+}
+export default function CompleteStoryline({ listStorylineData }: IProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const class_id = searchParams.get('class_id')
   const course_section_id = searchParams.get('course_section_id')
+  const nextActivity = listStorylineData?.next_activity
+  const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
 
+  const [open, setOpen] = useState(false)
   const backToCourse = () => {
     router.push(`/courses/${class_id}/section/${course_section_id}`)
+  }
+  const handleActivityNavigation = () => {
+    if (!!nextActivity?.is_preview_locked) {
+      // Nếu hoạt động bị khóa, hiển thị popup thông báo
+      setOpenPopupCTA({
+        lockSection: true,
+        ctaUpgrade: false,
+        thankYou: false,
+        thankYouLater: false,
+      })
+    } else if (!!nextActivity?.id) {
+      // Nếu hoạt động không bị khóa, điều hướng đến hoạt động và ghi nhận sự kiện
+      router.push(
+        `/courses/${class_id}/activity/${nextActivity?.id}?course_section_id=${course_section_id}`,
+      )
+    }
+  }
+  const continueStudy = () => {
+    switch (listStorylineData?.next_activity?.course_section_type) {
+      case 'STORY_LINE':
+        setOpen(true)
+        break
+      case 'ACTIVITY':
+        handleActivityNavigation()
+        break
+      default:
+        break
+    }
   }
   return (
     <motion.div
@@ -38,7 +76,7 @@ export default function CompleteStoryline() {
         </div>
       </div>
       <div className="inline-flex w-52 flex-col items-center justify-start gap-4">
-        <ButtonPrimary size="medium" onClick={backToCourse}>
+        <ButtonPrimary size="medium" onClick={continueStudy}>
           Continue to study
         </ButtonPrimary>
         <ButtonText
@@ -49,6 +87,14 @@ export default function CompleteStoryline() {
           Back to course
         </ButtonText>
       </div>
+      {open && (
+        <NextStorylineModal
+          open={open}
+          setOpen={setOpen}
+          next_activity={listStorylineData?.next_activity}
+          course_section_id={course_section_id as string}
+        />
+      )}
     </motion.div>
   )
 }

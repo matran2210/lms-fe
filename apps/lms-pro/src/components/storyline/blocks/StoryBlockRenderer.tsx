@@ -1,9 +1,8 @@
 import { useFeature } from '@lms/contexts'
-import { QUESTION_TYPES } from '@lms/core'
-import { DocumentItem, IMultiChoiceQuestion } from 'src/type/storyline'
 import QuizBlock from './QuizBlock'
 import TextBlock from './TextBlock'
 import VideoBlock from './VideoBlock'
+import { DocumentItem, IMultiChoiceQuestion } from '@lms/core'
 
 export function StoryBlockRenderer({
   doc,

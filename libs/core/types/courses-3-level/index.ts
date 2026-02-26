@@ -5,9 +5,10 @@ import {
   CourseSectionLinkParent,
   IActivity,
   ITab,
+  LearningProgress,
   RemindChoosingExam,
 } from "../course/my-course";
-import { CourseProgram, IQuestion, IVideo } from "../course";
+import { CourseProgram, IQuestion, IStorylineDetail, IVideo } from "../course";
 import { DrawerProps } from "antd";
 import {
   ICourseAll,
@@ -32,6 +33,9 @@ export interface INeighborActivity {
   display_icon: string;
   name: string;
   is_preview_locked: boolean;
+  course_section_type: string;
+  storyline: IStorylineDetail;
+  learning_progress?: LearningProgress;
 }
 
 export interface ICourseTabDocument {

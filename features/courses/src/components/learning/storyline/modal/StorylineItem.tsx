@@ -1,8 +1,8 @@
 import clsx from 'clsx'
 import { motion } from 'framer-motion'
-import CircularProgress from '../header/CircularProgress'
 import { ProgressIcon } from '@lms/assets'
 import { Tooltip } from '@lms/ui'
+import CircularProgress from '../header/CircularProgress'
 
 const StorylineItem = ({
   name,

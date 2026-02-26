@@ -58,6 +58,7 @@ import { EventTestAPI } from 'src/api/event-test'
 import { NotificationAPI } from 'src/api/notification'
 import MyProfileAPI, { AuthAPI } from 'src/api/profile'
 import { QuestionAPI } from 'src/api/question'
+import { StorylineAPI } from 'src/api/storyline'
 import { TestServiceAPI } from 'src/api/test-api'
 import { UploadAPI } from 'src/api/upload'
 import {
@@ -308,6 +309,7 @@ export function Providers({ children }: { children: ReactNode }) {
             myProfileApi: MyProfileAPI,
             submitQuizTest: TestServiceAPI.submitQuizTest,
             dashboardApi: DashboardAPI,
+            storylineApi: StorylineAPI,
             authManager: new AuthenticationManager(),
             pageLink: PageLink,
             menuItems: MENU_ITEMS,
