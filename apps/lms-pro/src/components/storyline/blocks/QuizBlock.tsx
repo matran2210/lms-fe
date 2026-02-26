@@ -1,5 +1,6 @@
 'use client'
 import { useStoryline } from '@contexts/StorylineContext'
+import { useStorylineSidebar } from '@contexts/StorylineSidebarContext'
 import { CircleCheckIcon, CircleInfoIcon, RestartIcon } from '@lms/assets'
 import {
   DEFAULT_EDITOR_VALUE,
@@ -35,6 +36,7 @@ import {
 import { Divider, Tabs } from 'antd'
 import clsx from 'clsx'
 import { isUndefined } from 'lodash'
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { TestServiceAPI } from 'src/api/test-api'
@@ -55,8 +57,16 @@ const QuizBlock = ({
 }: QuizBlockProps) => {
   const MatchQuizRef = useRef(null) as any
   const questionRef = useRef<HTMLDivElement>(null)
+  const searchParams = useSearchParams()
+  const status = searchParams.get('status')
+
   const { control, setValue, reset, getValues, watch, resetField } = useForm()
-  const { continueAction, visibleDocumentCount } = useStoryline()
+  const { continueAction, visibleDocumentCount, currentStep } = useStoryline()
+  const { listStorylines } = useStorylineSidebar()
+  const exactCurrentStoryline = listStorylines?.find(
+    (storyline) => storyline?.id === currentStep?.id,
+  )
+  const isShowActionBtn = status === 'Review'
   const [loading, setLoading] = useState<boolean>(false)
   const [question, setQuestion] = useState<IStorylineQuestion | null>(null)
   const [topicDescription, setTopicDescription] = useState<any>()
@@ -617,7 +627,7 @@ const QuizBlock = ({
         )}
       <div
         className={clsx('rounded-t-2xl bg-gray-100 p-8', {
-          'rounded-b-2xl': isLearnedBlock,
+          'rounded-b-2xl': isLearnedBlock && !isShowActionBtn,
         })}
       >
         {renderQuestion()}
@@ -631,6 +641,7 @@ const QuizBlock = ({
             'opacity-0': isLearnedBlock,
             'bg-primary-100': isQuestionConfirmed,
             'bg-success-50': !isQuestionConfirmed,
+            '!opacity-100': isShowActionBtn,
           },
         )}
       >
@@ -640,7 +651,7 @@ const QuizBlock = ({
               {getHintQuestion()}
             </div>
             <div className="flex items-center gap-4">
-              {!isShowClearSelection && (
+              {!isShowClearSelection && !isShowActionBtn && (
                 <ButtonText
                   size="medium"
                   disabled={loading}
@@ -696,6 +707,9 @@ const QuizBlock = ({
                 title="See Explain"
               />
               <ButtonPrimary
+                className={clsx({
+                  hidden: (openExplain || isCorrectAnswer) && isShowActionBtn,
+                })}
                 size="medium"
                 disabled={loading}
                 onClick={() =>

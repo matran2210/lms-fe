@@ -45,7 +45,7 @@ export function StepRenderer({ documents = [], onNewBlockMounted }: Props) {
             }}
             className="mb-8"
           >
-            <div className="mb-6 text-lg font-semibold">{doc.name}</div>
+            {/* <div className="mb-6 text-lg font-semibold">{doc.name}</div> */}
 
             <StoryBlockRenderer doc={doc} docIndex={index + 1} />
           </motion.div>
