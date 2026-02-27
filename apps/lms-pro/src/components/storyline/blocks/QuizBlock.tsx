@@ -277,10 +277,23 @@ const QuizBlock = ({
               ? question?.answers
               : answerTemp,
       }
-      setQuestion(activeQuestion as IStorylineQuestion)
-      setIsCorrectAnswer(
-        checkCorrectAnswer(activeQuestion as IStorylineQuestion),
-      )
+      const isCorrect = checkCorrectAnswer(activeQuestion as IStorylineQuestion)
+      setIsCorrectAnswer(isCorrect)
+      const activeQuestionFormat = {
+        ...activeQuestion,
+        answers:
+          questionType === QUESTION_TYPES.DRAG_DROP
+            ? isCorrect || openExplain
+              ? handleMultipleCorrectAnswer(
+                  responseFormat?.drag_drop_answers || [],
+                  getValues(`${question?.id}_answer`),
+                )
+              : []
+            : questionType === QUESTION_TYPES.MATCHING
+              ? question?.answers
+              : answerTemp,
+      }
+      setQuestion(activeQuestionFormat as IStorylineQuestion)
     } catch (error) {
     } finally {
       setLoading(false)
@@ -407,7 +420,13 @@ const QuizBlock = ({
             onChange={(data: SlotValue[]) => {
               setValue(`${question?.id}_answer`, data)
             }}
-            corrects={correctsDragDrop ? correctsDragDrop : undefined}
+            corrects={
+              isCorrectAnswer || openExplain
+                ? correctsDragDrop
+                  ? correctsDragDrop
+                  : undefined
+                : undefined
+            }
             solution={openExplain ? question?.solution : undefined}
             explainClassname="!mt-8 !p-0 !bg-transparent"
           />
