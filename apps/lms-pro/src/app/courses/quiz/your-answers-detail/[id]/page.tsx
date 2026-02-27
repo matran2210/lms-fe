@@ -24,7 +24,7 @@ const TestResultDetail = () => {
 
     // Sử dụng hook useGetQuizDetail trong component
     const { data: questions } = useGetQuizAttempts('quiz-attempts', {})
-    let linkTest = `/test/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}`
+    let linkTest = `${process.env.NEXT_PUBLIC_SUB_DOMAIN_TEST}/test/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}`
     const quiz = questions?.quizAttempt?.quiz
     if (
         quiz?.is_limited &&

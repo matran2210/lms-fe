@@ -65,7 +65,7 @@ const TestWrapper = ({
   resetWordBeforeAction,
 }: PropsWithChildren<IProps>) => {
   const dispatch = useAppDispatch();
-  const startTime = dayjs(quizAttempt.created_at);
+  const startTime = dayjs(quizAttempt?.created_at);
   const isValidStart = startTime.isValid();
   const duration = quizDetail?.quiz_timed;
 

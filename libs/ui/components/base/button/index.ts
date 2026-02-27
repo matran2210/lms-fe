@@ -1,10 +1,8 @@
 export { default as BaseButton } from "./BaseButton";
 export { default as ButtonCancelSubmit } from "./ButtonCancelSubmit";
-export { default as ButtonDanger } from "./ButtonDanger";
 export { default as ButtonIcon } from "./ButtonIcon";
 export { default as ButtonIconSapp } from "./ButtonIconSapp";
 export { default as ButtonIconV2 } from "./ButtonIconV2";
-export { default as ButtonOutlined } from "./ButtonOutlined";
 export { default as ButtonPrimary } from "./ButtonPrimary";
 export { default as ButtonPrimaryV2 } from "./ButtonPrimaryV2";
 export { default as ButtonSecondary } from "./ButtonSecondary";

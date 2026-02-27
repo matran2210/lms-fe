@@ -1,6 +1,7 @@
 'use client'
 import {
   CloseIcon,
+  CloseIconNote,
   CloseModalIcon,
   DownloadIcon,
   FileTextIcon,
@@ -59,12 +60,13 @@ import { Popover } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useParams, useRouter } from 'next/navigation'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import ConFirmSubmit from '../../short-course/test/conFirmSubmit'
 import LimitQuizModal from '../../short-course/test/limitQuizModal'
 import { TestServiceAPI } from 'src/api/test-api'
+import ScratchPatch from 'src/app/short-course/test/scratchPatch'
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
   const { width: widthFileViewer, height: heightFileViewer } =
@@ -1181,44 +1183,41 @@ const CaseStudyDetail = () => {
               )
             } else if (e.type === 'scratch_pad') {
               return (
-                <MovableWindow
-                  position={{
-                    width: '400px',
-                    height: '300px',
-                    top: 'calc(50% - 150px)',
-                    left: 'calc(50% - 200px)',
-                  }}
-                  key={e?.id}
-                  onClick={() => setOnFocusingPad(e?.id)}
-                  zIndex={
-                    onFocusingPad === e?.id
-                      ? openScratchPad?.length + 1001
-                      : index + 1001
-                  }
-                >
-                  <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl">
-                    <div className="flex w-full items-center justify-between bg-gray-100 px-4 py-3">
-                      <div className="text-sm font-bold">Scratch Pad</div>
-                      {/* <CloseIcon */}
-                      <button onClick={() => handleCloseScratchPad(e)}>
-                        <CloseModalIcon />
-                      </button>
-                    </div>
-                    <HookFormTextArea
-                      defaultValue={scratchPadValues?.value}
-                      placeholder="Take a note..."
+                <ModalResizeable
+                    key={e.id}
+                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                    position="center"
+                    width={412}
+                    height={350}
+                    header={({ requestClose }) => (
+                      <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
+                        <div className="text-sm font-semibold text-gray-800">
+                          Scratch Pad
+                        </div>
+                        <button
+                          className="text-icon"
+                          onClick={() => {
+                            requestClose()
+                            setTimeout(() => handleCloseScratchPad(e), 300)
+                          }}
+                        >
+                          <CloseIconNote />
+                        </button>
+                      </div>
+                    )}
+                  >
+                    <ScratchPatch
+                      scratchPads={scratchPadValues?.value}
+                      scratchPadValues={e}
                       control={controlScratch}
-                      name={e?.id ?? ''}
-                      onChange={(
-                        event: React.ChangeEvent<
-                          HTMLTextAreaElement | HTMLInputElement
-                        >,
-                      ) => handleChangeScratchPad(event, e?.id)}
-                      className="sapp-text-area not-resizer h-[calc(100%-48px)] w-full rounded-b-xl rounded-t-none px-5 py-3 placeholder:text-sm placeholder:font-normal"
+                      handleChangeScratchPad={(
+                        event: ChangeEvent<HTMLInputElement>,
+                      ) => {
+                        handleChangeScratchPad(event, e?.id)
+                      }}
+                      className="!h-fit"
                     />
-                    {/* </div> */}
-                  </div>
-                </MovableWindow>
+                  </ModalResizeable>
               )
             } else if (e.type === 'exhibits') {
               const i = exhibitData?.findIndex(

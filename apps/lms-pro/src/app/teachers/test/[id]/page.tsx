@@ -45,12 +45,11 @@ import NewFiltext from '@lms/ui/components/questionType/NewFillText'
 import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
-import { checkSheetAnswered, runHighlight } from '@lms/utils'
+import { checkSheetAnswered, checkTypeAndRenderTitle, isValuesEqual, isWorkbookEmpty, runHighlight } from '@lms/utils'
 import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import LimitQuizModal from 'src/app/test/limitQuizModal'
 
 import {
   removeHighlights,
@@ -78,25 +77,21 @@ import {
 } from '@lms/feature-courses'
 import {
   HeaderTest,
+  LimitQuizModal,
   QuitTestModal,
+  SuccessSubmittedConstructorModal,
   TabSlide,
   TestTimeOutModal,
 } from '@lms/feature-test'
+import { useGetQuestionTabs, useGetQuizDetail } from '@lms/hooks'
 import { ButtonPrimaryV2, ButtonTextV2, SappLoading } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
+import dayjs from 'dayjs'
 import { EventTestAPI } from 'src/api/event-test'
 import { TestServiceAPI } from 'src/api/test-api'
-import dayjs from 'dayjs'
-import { PageLink } from 'src/constants/routers'
-import SuccessSubmittedConstructorModal from 'src/app/test/SuccessSubmittedConstructorModal'
 import TestScratchPads from 'src/app/test/TestScratchPads'
-import useGetQuestionTabs from 'src/app/test/custom-hook/useGetQuestionTabs'
-import useGetQuizDetail from 'src/app/test/custom-hook/useGetQuizDetail'
-import {
-  checkTypeAndRenderTitle,
-  isValuesEqual,
-  isWorkbookEmpty,
-} from 'src/utils/helpers/quiz-test/helper'
+import { PageLink } from 'src/constants/routers'
+
 declare global {
   interface Window {
     userAgreed: any

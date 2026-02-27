@@ -16,3 +16,5 @@ export * from "./useNotification";
 export * from "./useSappEditorImageUpload";
 export * from "./useUserRole";
 export * from "./useSmartModalSize";
+export {default as useGetQuestionTabs} from "./useGetQuestionTabs"
+export {default as useGetQuizDetail} from "./useGetQuizDetail"

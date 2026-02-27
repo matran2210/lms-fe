@@ -312,5 +312,4 @@ export const formatTimeOnlyHourMinute = (rawTime: string) => {
 export const getUserPrefix = (isTeacher: boolean) =>
   isTeacher ? PageLink.TEACHERS : ''
 
-export * from './quiz-test/helper'
 export * from './editor-helper'

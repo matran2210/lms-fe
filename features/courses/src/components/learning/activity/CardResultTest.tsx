@@ -101,7 +101,7 @@ const CardResultTest = ({
   const handleOpenTest = () => {
     handleCheckQuizAttempt(resultData)
     openInNewTab({
-      url: `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
+      url: `${process.env.NEXT_PUBLIC_SUB_DOMAIN_TEST}/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
       isNewTab: false
     }
 

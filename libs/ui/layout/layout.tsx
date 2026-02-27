@@ -30,6 +30,7 @@ interface LayoutProps {
   childClassName?: string;
   isEndGuide?: boolean;
   closeUserGuide?: () => void;
+  hiddenSidebar?: boolean;
 }
 
 export default function Layout(props: LayoutProps): ReactElement {
@@ -44,6 +45,7 @@ export default function Layout(props: LayoutProps): ReactElement {
     childClassName,
     isEndGuide = false,
     closeUserGuide,
+    hiddenSidebar = false,
   } = props;
   const { pageLink, router } = useFeature();
   const { isShowMenuContent, isMobileView, isTabletView } =
@@ -143,8 +145,8 @@ export default function Layout(props: LayoutProps): ReactElement {
   const stepConfig = getGuideStepConfig(guideStep);
   const customOffset =
     isTabletView &&
-      (stepConfig?.targetId === "sidebar" ||
-        stepConfig?.targetId === "notification-profile")
+    (stepConfig?.targetId === "sidebar" ||
+      stepConfig?.targetId === "notification-profile")
       ? { x: 115, y: 0 }
       : undefined;
   useEffect(() => {
@@ -160,31 +162,32 @@ export default function Layout(props: LayoutProps): ReactElement {
           "lg:ml-[calc(5rem+32px)]": showSidebar,
         })}
       >
-        <Sidebar
-          isOpened={isOpenSidebar}
-          toggleDrawer={toggleDrawer}
-          className={clsx(
-            "menu-sidebar-left transition-all duration-300 ease-out",
-            "hover:menu-sidebar-left--hover", // This still won't work as explained earlier
-            `fixed left-0 h-[calc(100vh-32px)] bg-white shadow-[0_0_16px_0_rgba(0,0,0,0.08)] lg:block lg:w-20`,
-            {
-              // 'overflow-hidden': !guideStatus,
-              "menu-sidebar-left--hover !w-[220px]":
-                (guideStatus && (guideStep === 2 || guideStep === 3)) ||
-                isShowMenuContent,
-              "h-[calc(100vh-32px-60px)]": openPinned,
-              // 'hidden': !showSidebar,
-              // 'w-[220px]': isOpenSidebar,
-              "w-[220px] translate-x-0": showSidebar,
+          <Sidebar
+            isOpened={isOpenSidebar}
+            toggleDrawer={toggleDrawer}
+            className={clsx(
+              "menu-sidebar-left transition-all duration-300 ease-out",
+              "hover:menu-sidebar-left--hover", // This still won't work as explained earlier
+              `fixed left-0 h-[calc(100vh-32px)] bg-white shadow-[0_0_16px_0_rgba(0,0,0,0.08)] lg:block lg:w-20`,
+              {
+                // 'overflow-hidden': !guideStatus,
+                "menu-sidebar-left--hover !w-[220px]":
+                  (guideStatus && (guideStep === 2 || guideStep === 3)) ||
+                  isShowMenuContent,
+                "h-[calc(100vh-32px-60px)]": openPinned,
+                // 'hidden': !showSidebar,
+                // 'w-[220px]': isOpenSidebar,
+                "w-[220px] translate-x-0": showSidebar,
               "w-[220px] -translate-x-60": !showSidebar,
-            },
-            paddingTop,
-          )}
-          setOpenResource={setOpenResource}
-          openResource={openResource}
-          openExaminationInfo={openExaminationInfo}
-          setOpenExaminationInfo={setOpenExaminationInfo}
-        />
+              "!hidden": hiddenSidebar
+              },
+              paddingTop,
+            )}
+            setOpenResource={setOpenResource}
+            openResource={openResource}
+            openExaminationInfo={openExaminationInfo}
+            setOpenExaminationInfo={setOpenExaminationInfo}
+          />
 
         <div
           className={clsx("container min-h-screen", {

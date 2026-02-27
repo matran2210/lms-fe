@@ -15,6 +15,7 @@ interface TestGroupActionProps {
   onNextQuestion: () => void
   onConfirm: () => void
   onResetTemplate: () => void
+  essayData?: any;
 }
 
 function TestGroupAction({
@@ -28,6 +29,7 @@ function TestGroupAction({
   onNextQuestion,
   onConfirm,
   onResetTemplate,
+  essayData
 }: TestGroupActionProps) {
   return (
     <div className="flex items-center justify-end gap-2">
@@ -40,7 +42,7 @@ function TestGroupAction({
               className="bg-transparent hover:!bg-transparent"
             />
             <ShowAnswerTemplate
-              essayData={currentAnswer}
+              essayData={essayData}
               currentTabContent={currentTabContent}
             />
           </div>

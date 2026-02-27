@@ -32,27 +32,27 @@ import {
   buildQuestionResult,
   checkAnsweredPure,
   formatSubmitAnswer,
+  LimitQuizModal,
+  QuestionRenderer,
   QuitTestModal,
+  SuccessSubmittedConstructorModal,
   TestGroupAction,
   TestTimeOutModal,
   UnSubmitAnswerModal,
+  useResizeMouse,
+  useWindowWidth,
   validateAnswer,
   validateEssayAnswerWithRequirement,
 } from '@lms/feature-test'
 import {
   BackToTop,
-  EssayQuestionPreview,
   FilterRadioGroup,
   Layout,
-  MultiChoiceQuestion,
-  NewFillText,
-  OneChoiceQuestion,
   Popover,
   SappLoading,
-  SelectWord,
-  useClickOutside,
+  useClickOutside
 } from '@lms/ui'
-import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
+import { cloneDeep, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -63,17 +63,14 @@ import {
   serializeHighlights,
 } from '@funktechno/texthighlighter/lib'
 import {
-  CheckCircleOutlineYellow,
   FlagIconV2,
-  Icon,
   NotesOutline,
-  PulsingExclamation,
+  PulsingExclamation
 } from '@lms/assets'
 import { showPopupCompletedCourse } from '@lms/contexts'
 import {
   Answer,
   AnswerItem,
-  AnswerList,
   DEFAULT_EDITOR_VALUE,
   defaultSheetData,
   DragDropAnswerItem,
@@ -83,50 +80,36 @@ import {
   Requirement,
   RequirementItem,
   ScratchPad,
-  ScratchPadValue,
+  ScratchPadValue
 } from '@lms/core'
 import {
   ButtonContent,
   ConFirmSubmit,
-  ResetToAnswerTemplateModal,
-  ShowAnswerTemplate,
+  ResetToAnswerTemplateModal
 } from '@lms/feature-courses'
-import { RequirementsTab, TabSlide } from '@lms/feature-test'
+import { TabSlide } from '@lms/feature-test'
 import {
-  ButtonPrimary,
-  ButtonSecondary,
-  ButtonText,
-  ButtonTextV2,
   HighlightableHTML,
-  MatchQuizComponent,
   ModalUploadFile,
-  NewDragNDropQuestion,
-  SlotValue,
-  TestWrapper,
+  TestWrapper
 } from '@lms/ui'
 import {
-  checkSheetAnswered,
+  checkTypeAndRenderTitle,
   handleMultipleCorrectAnswer,
+  isValuesEqual,
+  isWorkbookEmpty,
   runHighlight,
-  trackGAEvent,
+  trackGAEvent
 } from '@lms/utils'
-import { TabsProps, Tooltip } from 'antd'
+import { Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { EventTestAPI } from 'src/api/event-test'
 import { TestServiceAPI } from 'src/api/test-api'
 import { PageLink } from 'src/constants/routers'
-import {
-  checkTypeAndRenderTitle,
-  hasEditorValueFromHtml,
-  isValuesEqual,
-  isWorkbookEmpty,
-} from 'src/utils/helpers/quiz-test/helper'
-import useGetQuestionTabs from '../custom-hook/useGetQuestionTabs'
-import useGetQuizDetail from '../custom-hook/useGetQuizDetail'
-import LimitQuizModal from '../limitQuizModal'
-import SuccessSubmittedConstructorModal from '../SuccessSubmittedConstructorModal'
-import TestScratchPads from '../TestScratchPads'
+
+import { useGetQuestionTabs, useGetQuizDetail } from '@lms/hooks'
+import TestScratchPads from '@lms/feature-test/src/components/scratchpad/TestScratchPads'
 
 declare global {
   interface Window {
@@ -144,7 +127,6 @@ const TestDetail = () => {
   const [, setHasScrollBar] = useState(undefined) as any
   const [editorReady, setEditorReady] = useState(true)
   const [tooltipOpen, setTooltipOpen] = useState(false)
-  const answerListRef = useRef<AnswerList>({})
   const { courseType, setSubmitEventTest } = useCourseContext()
   const scrollRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
@@ -246,7 +228,7 @@ const TestDetail = () => {
   const [trigger, setTrigger] = useState(false)
 
   // Tính toán số câu trên mỗi dòng dựa trên chiều rộng màn hình (responsive)
-  const [windowWidth, setWindowWidth] = useState(0)
+  const windowWidth = useWindowWidth()
   const MAX_ITEMS_PER_ROW = 25
   const MIN_ITEMS_PER_ROW = 14
   const ITEM_WIDTH = 38 // Ước tính chiều rộng mỗi item (bao gồm gap)
@@ -263,23 +245,6 @@ const TestDetail = () => {
     // Giới hạn trong khoảng MIN_ITEMS_PER_ROW đến MAX_ITEMS_PER_ROW
     return Math.max(MIN_ITEMS_PER_ROW, Math.min(MAX_ITEMS_PER_ROW, itemsPerRow))
   }, [windowWidth])
-
-  // Theo dõi chiều rộng màn hình
-  useEffect(() => {
-    const updateWindowWidth = () => {
-      setWindowWidth(window.innerWidth)
-    }
-
-    // Cập nhật ngay lập tức
-    updateWindowWidth()
-
-    // Thêm window resize listener
-    window.addEventListener('resize', updateWindowWidth)
-
-    return () => {
-      window.removeEventListener('resize', updateWindowWidth)
-    }
-  }, [])
 
   useClickOutside({
     ref: dropUpRequire,
@@ -775,451 +740,6 @@ const TestDetail = () => {
   const isScatchPadEnabled = useMemo(() => {
     return openScratchPad.some((item) => item.type === 'scratch_pad') || false
   }, [openScratchPad])
-
-  const checkType = (
-    data: any,
-    type: string,
-    currentTabID: string,
-    defaultValue: any,
-    corrects?: any,
-    highlighted?: any,
-    solution?: any,
-    done?: boolean,
-  ) => {
-    const handleEssayChange = (id: string) => {
-      setAnswerListValue(id as unknown as number)
-    }
-    const storageKey = `${id}-${currentTabContent?.data?.qType}-question-${currentTabContent?.id}`
-
-    const essayRequirementsItem = (): TabsProps['items'] => {
-      return (
-        currentTabContent?.data?.requirements?.map(
-          (requirement: any, index: number) => {
-            const hasAnswer =
-              currentTabContent?.data?.response_option === RESPONSE_OPTION.SHEET
-                ? checkSheetAnswered(
-                    getValues(`${currentTabID}_${index}_answer`),
-                  )
-                : hasEditorValueFromHtml(
-                    getValues(`${currentTabID}_${index}_answer`),
-                  )
-            const key = `${currentTabID}_${index}_answer`
-            const getDefaultValueEssay = () => {
-              const valueFromForm = getValues(key)
-              const response_option = currentTabContent?.data?.response_option
-              switch (response_option) {
-                case RESPONSE_OPTION.WORD:
-                  if (valueFromForm !== undefined && valueFromForm !== null) {
-                    return valueFromForm
-                  }
-
-                  if (requirement?.short_answer) {
-                    return requirement.short_answer
-                  }
-                  if (requirement?.answer_text) {
-                    return requirement.answer_text
-                  }
-                  if (requirement?.answer_template) {
-                    return requirement.answer_template
-                  }
-                  if (currentTabContent.answer) {
-                    return currentTabContent.answer
-                  }
-
-                  return currentTabContent?.data?.answer_template
-
-                case RESPONSE_OPTION.SHEET:
-                  const valueFromSheetForm = getValues(key)
-                  if (valueFromSheetForm) {
-                    const isEmptyWorkbook = isWorkbookEmpty(
-                      JSON.parse(valueFromSheetForm),
-                    )
-
-                    if (isEmptyWorkbook) {
-                      if (requirement?.short_answer) {
-                        return requirement.short_answer
-                      }
-                      if (requirement?.answer_text) {
-                        return requirement.answer_text
-                      }
-                      if (requirement?.answer_template) {
-                        return requirement.answer_template || defaultSheetData
-                      }
-                      if (currentTabContent.answer)
-                        return currentTabContent.answer
-                      return (
-                        currentTabContent?.data?.answer_template ||
-                        defaultSheetData
-                      )
-                    }
-                    return valueFromSheetForm
-                  }
-                  const requirementSheet =
-                    currentTabContent?.data?.requirements?.[essayData?.index]
-                  if (requirementSheet?.short_answer) {
-                    return requirementSheet.short_answer
-                  }
-                  if (requirementSheet?.answer_text) {
-                    return requirementSheet.answer_text
-                  }
-                  if (requirementSheet?.answer_template) {
-                    return requirementSheet.answer_template || defaultSheetData
-                  }
-                  if (currentTabContent.answer) return currentTabContent.answer
-                  return (
-                    currentTabContent?.data?.answer_template || defaultSheetData
-                  )
-                // return getCurrentDefaultSheetValue
-              }
-            }
-            return {
-              label: (
-                <span className="flex items-center gap-1 text-base font-normal">
-                  Requirement {index + 1}
-                  {hasAnswer && (
-                    <CheckCircleOutlineYellow className="text-primary" />
-                  )}
-                </span>
-              ),
-              key: index,
-              children: (
-                <>
-                  {editorReady && (
-                    <EssayQuestionPreview
-                      data={{
-                        ...currentTabContent?.data?.requirements?.[index],
-                        ...essayData?.req,
-                      }}
-                      question_content={
-                        currentTabContent?.data?.question_content
-                      }
-                      index={index}
-                      question_data={currentTabContent?.data}
-                      control={control}
-                      handleSaveHighLight={handleSaveHighLight}
-                      highlighted={highlighted}
-                      removeHighlight={removeHighlight}
-                      allowHighLight={allowHighLight}
-                      allowUnHighLight={allowUnHighLight}
-                      solution={solution}
-                      name={`${currentTabID}_${index}_answer`}
-                      setValue={setValue}
-                      defaultValue={getDefaultValueEssay()}
-                      response_option_custom={currentTabContent.response_type}
-                      externalRef={refEditor}
-                      fullData={currentTabContent}
-                      isShowContent={false}
-                      openChooseFile={() =>
-                        setOpenUpload({
-                          status: true,
-                          question_id: currentPage,
-                          requirementIndex: index,
-                        })
-                      }
-                      handleClearFile={handleClearFile}
-                      setOpenPdf={handleOpenScratchPad}
-                      handleSaveHighLightRequirement={
-                        handleSaveHighLightRequirement
-                      }
-                      showRequiment={showListRequirement}
-                      handleChange={handleEssayChange}
-                      explainClassname="!mt-8 !p-0 !bg-transparent"
-                      storageKey={storageKey}
-                    />
-                  )}
-                </>
-              ),
-            }
-          },
-        ) ?? []
-      )
-    }
-
-    switch (type) {
-      case QUESTION_TYPES.TRUE_FALSE:
-        return (
-          <OneChoiceQuestion
-            data={data}
-            control={control}
-            name={`${currentTabID}_answer`}
-            defaultValues={defaultValue}
-            setValue={setValue}
-            corrects={corrects}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            solution={solution}
-            explainClassname="!mt-8 !p-0 !bg-transparent"
-            storageKey={storageKey}
-          />
-        )
-      case QUESTION_TYPES.ONE_CHOICE:
-        return (
-          <OneChoiceQuestion
-            data={data}
-            control={control}
-            name={`${currentTabID}_answer`}
-            defaultValues={defaultValue}
-            setValue={setValue}
-            corrects={corrects}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            solution={solution}
-            explainClassname="!mt-8 !p-0 !bg-transparent"
-            storageKey={storageKey}
-          />
-        )
-      case QUESTION_TYPES.MULTIPLE_CHOICE:
-        return (
-          <MultiChoiceQuestion
-            data={data}
-            control={control}
-            name={`${currentTabID}_answer`}
-            defaultValues={defaultValue}
-            setValue={setValue}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            corrects={corrects}
-            solution={solution}
-            getValue={getValues}
-            tabs={tabs}
-            currentPage={currentPage}
-            explainClassname="!mt-8 !p-0 !bg-transparent"
-            storageKey={storageKey}
-          />
-        )
-      case QUESTION_TYPES.MATCHING:
-        return (
-          <MatchQuizComponent
-            onChangeMatchedPairs={(pairs) =>
-              setValue(`${currentTabID}_answer`, pairs)
-            }
-            data={data}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            defaultAnswer={defaultValue}
-            done={done}
-            corrects={corrects?.corrects}
-            solution={solution}
-            explainClassname="!mt-8 !p-0 !bg-transparent"
-            storageKey={storageKey}
-          />
-        )
-      case QUESTION_TYPES.FILL_WORD:
-        return (
-          <NewFillText
-            control={control}
-            name={`${currentTabID}_fillword`}
-            data={data}
-            setValue={setValue}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            defaultAnswer={defaultValue}
-            corrects={corrects?.corrects}
-            ref={ref}
-            solution={solution}
-            watch={watch}
-            explainClassname="!mt-8 !p-0 !bg-transparent"
-            storageKey={storageKey}
-          />
-        )
-      case QUESTION_TYPES.DRAG_DROP:
-        return (
-          <NewDragNDropQuestion
-            data={data}
-            defaultValue={defaultValue}
-            onChange={(data: SlotValue[]) => {
-              setValue(`${currentTabID}_drag_drop_answer`, data)
-            }}
-            corrects={corrects}
-            solution={solution}
-            explainClassname="!mt-8 !p-0 !bg-transparent"
-          />
-        )
-      case QUESTION_TYPES.SELECT_WORD:
-        return (
-          <SelectWord
-            onChange={(
-              value: Array<{
-                answer_id: string
-                answer_position: number
-              }>,
-            ) => setValue(`${currentTabID}_answer`, value)}
-            data={data}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            defaultAnswer={defaultValue}
-            corrects={corrects?.corrects}
-            ref={ref}
-            solution={solution}
-          />
-        )
-      case QUESTION_TYPES.ESSAY:
-        const key = `${currentTabID}_${essayData?.index}_answer`
-        const handleEssayChange = (id: string) => {
-          setAnswerListValue(id as unknown as number)
-        }
-        // Tạo data từng bước
-        const part1 =
-          currentTabContent?.data?.requirements?.[essayData?.index] || {}
-        const part2 = essayData?.req || {}
-        const dataEssay = { ...part1, ...part2 }
-        const defaultValueEssay = () => {
-          const valueFromForm = getValues(key)
-          const response_option = currentTabContent?.data?.response_option
-
-          switch (response_option) {
-            case RESPONSE_OPTION.WORD:
-              if (valueFromForm !== undefined && valueFromForm !== null) {
-                return valueFromForm
-              }
-              const requirement =
-                currentTabContent?.data?.requirements?.[essayData?.index]
-
-              if (requirement?.short_answer) {
-                return requirement.short_answer
-              }
-              if (requirement?.answer_text) {
-                return requirement.answer_text
-              }
-              if (requirement?.answer_template) {
-                return requirement.answer_template
-              }
-              if (currentTabContent.answer) {
-                return currentTabContent.answer
-              }
-
-              return currentTabContent?.data?.answer_template
-
-            case RESPONSE_OPTION.SHEET:
-              const valueFromSheetForm = getValues(key)
-              if (valueFromSheetForm) {
-                const isEmptyWorkbook = isWorkbookEmpty(
-                  JSON.parse(valueFromSheetForm),
-                )
-
-                if (isEmptyWorkbook) {
-                  const requirement =
-                    currentTabContent?.data?.requirements?.[essayData?.index]
-                  if (requirement?.short_answer) {
-                    return requirement.short_answer
-                  }
-                  if (requirement?.answer_text) {
-                    return requirement.answer_text
-                  }
-                  if (requirement?.answer_template) {
-                    return requirement.answer_template || defaultSheetData
-                  }
-                  if (currentTabContent.answer) return currentTabContent.answer
-                  return (
-                    currentTabContent?.data?.answer_template || defaultSheetData
-                  )
-                }
-                return valueFromSheetForm
-              }
-              const requirementSheet =
-                currentTabContent?.data?.requirements?.[essayData?.index]
-              if (requirementSheet?.short_answer) {
-                return requirementSheet.short_answer
-              }
-              if (requirementSheet?.answer_text) {
-                return requirementSheet.answer_text
-              }
-              if (requirementSheet?.answer_template) {
-                return requirementSheet.answer_template || defaultSheetData
-              }
-              if (currentTabContent.answer) return currentTabContent.answer
-              return (
-                currentTabContent?.data?.answer_template || defaultSheetData
-              )
-          }
-        }
-        return (
-          <>
-            <HighlightableHTML
-              initialHTML={currentTabContent?.data?.question_content || ''}
-              storageKey={
-                storageKey ||
-                `${id}-${currentTabContent?.data?.qType}-question-${currentTabContent?.id}`
-              }
-              className="sapp-questions sapp-editor-reader"
-            />
-            {/* <EditorReader
-              className="sapp-questions sapp-editor-reader"
-              text_editor_content={currentTabContent?.data?.question_content}
-              highlighted={highlighted}
-            /> */}
-            {currentTabContent?.data?.requirements?.length > 0 ? (
-              <RequirementsTab
-                destroyInactiveTabPane={true}
-                items={essayRequirementsItem()}
-                activeKey={essayData?.index ?? '0'}
-                defaultActiveKey="1"
-                onChange={(key) => {
-                  setEssayData({
-                    req: getValues(`${currentTabID}_${key}_answer`),
-                    index: key,
-                  })
-                  refEditor.current.reset()
-                }}
-              />
-            ) : (
-              <EssayQuestionPreview
-                isShowContent={false}
-                data={dataEssay}
-                question_content={currentTabContent?.data?.question_content}
-                index={essayData?.index}
-                question_data={currentTabContent?.data}
-                control={control}
-                handleSaveHighLight={handleSaveHighLight}
-                highlighted={highlighted}
-                removeHighlight={removeHighlight}
-                allowHighLight={allowHighLight}
-                allowUnHighLight={allowUnHighLight}
-                solution={solution}
-                name={key}
-                setValue={setValue}
-                defaultValue={defaultValueEssay()}
-                response_option_custom={currentTabContent.response_type}
-                externalRef={refEditor}
-                fullData={currentTabContent}
-                openChooseFile={() =>
-                  setOpenUpload({
-                    status: true,
-                    question_id: currentPage,
-                    requirementIndex: essayData?.index,
-                  })
-                }
-                handleClearFile={handleClearFile}
-                setOpenPdf={handleOpenScratchPad}
-                handleSaveHighLightRequirement={handleSaveHighLightRequirement}
-                showRequiment={showListRequirement}
-                handleChange={handleEssayChange}
-                storageKey={storageKey}
-              />
-            )}
-          </>
-        )
-      default:
-        return <div></div>
-    }
-  }
 
   /**
    * DES: confirm unfinished questions before submitting
@@ -1751,36 +1271,7 @@ const TestDetail = () => {
     setTabs(newTabs)
   }
 
-  // Initialize answerListRef values once when component mounts
-  useEffect(() => {
-    if (
-      currentTabContent?.data?.response_option === 'SHEET' ||
-      currentTabContent?.data?.response_option === 'WORD'
-    ) {
-      currentTabContent?.data?.requirements?.forEach((req: Requirement) => {
-        if (req?.id) {
-          if (req?.answer_file?.file_key) {
-            answerListRef.current[req.id] = req?.answer_file?.file_key
-          } else if (req?.answer_text) {
-            if (currentTabContent?.data?.response_option === 'SHEET') {
-              answerListRef.current[req.id] = checkSheetAnswered(
-                req.answer_text,
-              )
-                ? req.answer_text
-                : ''
-            } else {
-              answerListRef.current[req.id] = req.answer_text
-            }
-          }
-        }
-      })
-    }
-  }, [currentTabContent])
 
-  const setAnswerListValue = debounce((requirementId: number) => {
-    answerListRef.current[requirementId] =
-      getValues(`${currentPage}_${essayData?.index}_answer`) || ''
-  }, 200)
   const handleSubmitAnswer = async (action?: string) => {
     if (!currentTabContent) return
     if (currentTabContent?.is_viewed_answer) return
@@ -2220,53 +1711,6 @@ const TestDetail = () => {
   }, [watchFilter('filter')])
 
   useEffect(() => {
-    const updateMousePosition = (ev: MouseEvent | TouchEvent) => {
-      const clientX =
-        ev instanceof TouchEvent ? ev.touches[0].clientX : ev.clientX
-      const clientY =
-        ev instanceof TouchEvent ? ev.touches[0].clientY : ev.clientY
-
-      setMousePosition({ x: clientX as number, y: clientY as number })
-    }
-
-    const clickPosition = (ev: MouseEvent | TouchEvent) => {
-      const clientX =
-        ev instanceof TouchEvent ? ev.touches[0].clientX : ev.clientX
-      const clientY =
-        ev instanceof TouchEvent ? ev.touches[0].clientY : ev.clientY
-
-      setMousePosition(() => {
-        setCurrentMousePos(clientX)
-        return { x: clientX, y: clientY }
-      })
-    }
-
-    if (startResize) {
-      window.addEventListener('mousemove', updateMousePosition)
-      window.addEventListener('mousedown', clickPosition)
-
-      window.addEventListener('touchmove', updateMousePosition, {
-        passive: false,
-      })
-      window.addEventListener('touchstart', clickPosition, { passive: false })
-    } else {
-      window.removeEventListener('mousemove', updateMousePosition)
-      window.removeEventListener('mousedown', clickPosition)
-
-      window.removeEventListener('touchmove', updateMousePosition)
-      window.removeEventListener('touchstart', clickPosition)
-    }
-
-    return () => {
-      window.removeEventListener('mousemove', updateMousePosition)
-      window.removeEventListener('mousedown', clickPosition)
-
-      window.removeEventListener('touchmove', updateMousePosition)
-      window.removeEventListener('touchstart', clickPosition)
-    }
-  }, [startResize])
-
-  useEffect(() => {
     dispatch(loginSlice.actions.enableUnsavedChange())
   }, [dispatch])
 
@@ -2352,6 +1796,12 @@ const TestDetail = () => {
     }
   }, [id])
 
+  useResizeMouse({
+    startResize,
+    setMousePosition,
+    setCurrentMousePos,
+  })
+
   useEffect(() => {
     if (!isQuizAttemptCreated) return
 
@@ -2366,17 +1816,6 @@ const TestDetail = () => {
       window.removeEventListener('beforeunload', handleWindowClose)
     }
   }, [unsavedChange, isQuizAttemptCreated])
-
-  useEffect(() => {
-    if (startResize) {
-      document.body.style.userSelect = 'none'
-    } else {
-      document.body.style.userSelect = 'unset'
-    }
-    return () => {
-      document.body.style.userSelect = 'unset'
-    }
-  }, [startResize])
 
   useEffect(() => {
     if (
@@ -2534,6 +1973,7 @@ const TestDetail = () => {
 
           trackGAEvent('Click Button Confirm Answer')
         }}
+        essayData={essayData}
       />
     )
   }
@@ -2989,16 +2429,41 @@ const TestDetail = () => {
                           },
                         )}
                       >
-                        {checkType(
-                          currentTabContent?.data,
-                          currentTabContent?.data?.qType,
-                          currentTabContent?.id,
-                          currentTabContent?.answer,
-                          currentTabContent?.corrects,
-                          currentTabContent?.hightlight,
-                          currentTabContent?.solution,
-                          currentTabContent?.done,
-                        )}
+                        <QuestionRenderer
+                          currentTabContent={currentTabContent}
+                          type={currentTabContent?.data?.qType}
+                          data={currentTabContent?.data}
+                          currentTabID={currentTabContent?.id}
+                          defaultValue={currentTabContent?.answer}
+                          corrects={currentTabContent?.corrects}
+                          highlighted={currentTabContent?.hightlight}
+                          solution={currentTabContent?.solution}
+                          done={currentTabContent?.done}
+                          control={control}
+                          setValue={setValue}
+                          getValues={getValues}
+                          watch={watch}
+                          tabs={tabs}
+                          currentPage={currentPage}
+                          ref={ref}
+                          handleSaveHighLight={handleSaveHighLight}
+                          removeHighlight={removeHighlight}
+                          allowHighLight={allowHighLight}
+                          allowUnHighLight={allowUnHighLight}
+                          storageKey={`${id}-${currentTabContent?.data?.qType}-question-${currentTabContent?.id}`}
+                          // Essay-only props
+                          essayData={essayData}
+                          refEditor={refEditor}
+                          setEssayData={setEssayData}
+                          setOpenUpload={setOpenUpload}
+                          handleClearFile={handleClearFile}
+                          handleOpenScratchPad={handleOpenScratchPad}
+                          handleSaveHighLightRequirement={
+                            handleSaveHighLightRequirement
+                          }
+                          showListRequirement={showListRequirement}
+                          editorReady={editorReady}
+                        />
 
                         {groupAction()}
                       </div>
@@ -3062,16 +2527,41 @@ const TestDetail = () => {
                         },
                       )}
                     >
-                      {checkType(
-                        currentTabContent?.data,
-                        currentTabContent?.data?.qType,
-                        currentTabContent?.id,
-                        currentTabContent?.answer,
-                        currentTabContent?.corrects,
-                        currentTabContent?.hightlight,
-                        currentTabContent?.solution,
-                        currentTabContent?.done,
-                      )}
+                       <QuestionRenderer
+                          currentTabContent={currentTabContent}
+                          type={currentTabContent?.data?.qType}
+                          data={currentTabContent?.data}
+                          currentTabID={currentTabContent?.id}
+                          defaultValue={currentTabContent?.answer}
+                          corrects={currentTabContent?.corrects}
+                          highlighted={currentTabContent?.hightlight}
+                          solution={currentTabContent?.solution}
+                          done={currentTabContent?.done}
+                          control={control}
+                          setValue={setValue}
+                          getValues={getValues}
+                          watch={watch}
+                          tabs={tabs}
+                          currentPage={currentPage}
+                          ref={ref}
+                          handleSaveHighLight={handleSaveHighLight}
+                          removeHighlight={removeHighlight}
+                          allowHighLight={allowHighLight}
+                          allowUnHighLight={allowUnHighLight}
+                          storageKey={`${id}-${currentTabContent?.data?.qType}-question-${currentTabContent?.id}`}
+                          // Essay-only props
+                          essayData={essayData}
+                          refEditor={refEditor}
+                          setEssayData={setEssayData}
+                          setOpenUpload={setOpenUpload}
+                          handleClearFile={handleClearFile}
+                          handleOpenScratchPad={handleOpenScratchPad}
+                          handleSaveHighLightRequirement={
+                            handleSaveHighLightRequirement
+                          }
+                          showListRequirement={showListRequirement}
+                          editorReady={editorReady}
+                        />
                       {groupAction()}
                     </div>
                   </div>
@@ -3164,12 +2654,6 @@ const TestDetail = () => {
                     break
                   }
                 }
-                // if (type === 'event-test') {
-                //
-                //   // setSubmitEventTest(true)
-                // } else {
-                //   router.back()
-                // }
               }}
               handleCancel={() =>
                 dispatch(loginSlice.actions.enableUnsavedChange())

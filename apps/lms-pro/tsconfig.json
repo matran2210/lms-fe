@@ -39,6 +39,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "../../features/test/src/components/scratchpad/TestScratchPads.tsx"  ],
   "exclude": ["node_modules"]
 }

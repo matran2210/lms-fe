@@ -107,7 +107,7 @@ const EventTest = ({
         handleClickContinue();
       } else {
         localStorage.removeItem("quizAttempt");
-        router.push(`/test/${data?.id}?type=event-test`)
+        router.push(`${process.env.NEXT_PUBLIC_SUB_DOMAIN_TEST}/test/${data?.id}?type=event-test`)
       }
     }
   };
@@ -123,7 +123,7 @@ const EventTest = ({
         created_at: data?.created_at,
       }),
     );
-    router.push(`/test/${data?.id}?type=event-test`)
+    router.push(`${process.env.NEXT_PUBLIC_SUB_DOMAIN_TEST}/test/${data?.id}?type=event-test`)
   };
 
   const renderButton = () => {

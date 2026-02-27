@@ -2,7 +2,7 @@ import { isEmpty } from "lodash";
 import { NoData, SappModalV3 } from "@lms/ui";
 import EventTest from "./EventTest";
 import { IEventTest } from "@lms/core";
-import { useCourseContext } from "@lms/contexts";
+import { useCourseContext, useFeature } from "@lms/contexts";
 import { IconCongrats } from "@lms/assets";
 import ContentTestCongratution from "./ContentTestCongratution";
 // import { ANIMATION } from '@lms/core'
@@ -15,12 +15,17 @@ const EventTestList = ({
   onRefetch: () => void;
 }) => {
   const { setSubmitEventTest, submitEventTest } = useCourseContext();
+  const { query } = useFeature()
+  const category = query?.category
 
   const handleCancelModalSubmitTest = () => {
     setSubmitEventTest(false);
   };
 
+  console.log('category', category, query)
+
   const renderContentPopup = (type: string) => {
+    console.log('type', type)
     switch (type) {
       case "ACCA":
         return (
@@ -91,7 +96,8 @@ const EventTestList = ({
         }
       >
         {renderContentPopup(
-          JSON.parse(localStorage.getItem("category") as any),
+          // JSON.parse(localStorage.getItem("category") as any),
+          category as string
         )}
       </SappModalV3>
     </>
