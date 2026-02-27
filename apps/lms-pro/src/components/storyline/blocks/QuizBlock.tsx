@@ -79,7 +79,10 @@ const QuizBlock = ({
   const [isCorrectAnswer, setIsCorrectAnswer] = useState(false)
   const [isRetakeQuestion, setIsRetakeQuestion] = useState(false)
   const isLearnedBlock = docIndex < visibleDocumentCount
+  const isLastVisibleDocument = docIndex === storylinyeDocument.length
+
   const isQuestionConfirmed = !!question?.confirmed
+
   const isShowClearSelection =
     ([
       QUESTION_TYPES.TRUE_FALSE,
@@ -323,7 +326,13 @@ const QuizBlock = ({
         return (
           <OneChoiceQuestion
             data={question}
-            corrects={question?.corrects ? question?.corrects : undefined}
+            corrects={
+              isCorrectAnswer || openExplain
+                ? question?.corrects
+                  ? question?.corrects
+                  : undefined
+                : undefined
+            }
             name={`${question?.id}_answer`}
             setValue={setValue}
             solution={openExplain ? question?.solution : undefined}
@@ -337,7 +346,13 @@ const QuizBlock = ({
           <MultiChoiceQuestion
             data={question}
             control={control}
-            corrects={question?.corrects ? question?.corrects : undefined}
+            corrects={
+              isCorrectAnswer || openExplain
+                ? question?.corrects
+                  ? question?.corrects
+                  : undefined
+                : undefined
+            }
             name={`${question?.id}_answer`}
             setValue={setValue}
             solution={openExplain ? question?.solution : undefined}
@@ -351,7 +366,13 @@ const QuizBlock = ({
             data={question}
             action={getAnswerMatching}
             defaultAnswer={getAnswerMatching()}
-            corrects={question?.corrects ? question?.corrects : undefined}
+            corrects={
+              isCorrectAnswer || openExplain
+                ? question?.corrects
+                  ? question?.corrects
+                  : undefined
+                : undefined
+            }
             uuid={'_' + uuidv4().replaceAll('-', '_')}
             solution={openExplain ? question?.solution : undefined}
             ref={MatchQuizRef}
@@ -366,7 +387,11 @@ const QuizBlock = ({
             data={question}
             defaultAnswer={getValueFillText()}
             corrects={
-              question?.corrects ? (question?.corrects as any) : undefined
+              isCorrectAnswer || openExplain
+                ? question?.corrects
+                  ? (question?.corrects as any)
+                  : undefined
+                : undefined
             }
             solution={openExplain ? question?.solution : undefined}
             explainClassname="!mt-8 !p-0 !bg-transparent"
@@ -400,7 +425,11 @@ const QuizBlock = ({
             data={question}
             defaultAnswer={getValues(`${question?.id}_answer`)}
             corrects={
-              question?.corrects ? (question?.corrects as any) : undefined
+              isCorrectAnswer || openExplain
+                ? question?.corrects
+                  ? (question?.corrects as any)
+                  : undefined
+                : undefined
             }
             solution={openExplain ? question?.solution : undefined}
           />
@@ -662,16 +691,18 @@ const QuizBlock = ({
               {getHintQuestion()}
             </div>
             <div className="flex items-center gap-4">
-              {!isShowClearSelection && !isShowActionBtn && (
-                <ButtonText
-                  size="medium"
-                  disabled={loading}
-                  isUnderLine={false}
-                  onClick={handleSkipQuestion}
-                >
-                  Skip Question
-                </ButtonText>
-              )}
+              {!isShowClearSelection &&
+                !isShowActionBtn &&
+                !isLastVisibleDocument && (
+                  <ButtonText
+                    size="medium"
+                    disabled={loading}
+                    isUnderLine={false}
+                    onClick={handleSkipQuestion}
+                  >
+                    Skip Question
+                  </ButtonText>
+                )}
               {isShowClearSelection ? (
                 <ButtonText
                   isUnderLine={false}
@@ -719,7 +750,9 @@ const QuizBlock = ({
               />
               <ButtonPrimary
                 className={clsx({
-                  hidden: (openExplain || isCorrectAnswer) && isShowActionBtn,
+                  hidden:
+                    (openExplain || isCorrectAnswer) &&
+                    (isShowActionBtn || isLastVisibleDocument),
                 })}
                 size="medium"
                 disabled={loading}
