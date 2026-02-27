@@ -4,7 +4,7 @@ import { useStoryline } from '@contexts/StorylineContext'
 import { scrollToY } from '@utils/helpers/storyline/scrollManager'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useParams, useSearchParams } from 'next/navigation'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useQuery } from 'react-query'
 import { StorylineAPI } from 'src/api/storyline'
 import { IStoryline } from '@lms/core'
@@ -32,8 +32,9 @@ export default function Player({ listStorylineData }: IProps) {
     currentStepIndex,
     currentStep,
     continueAction,
+    updateProgress,
     visibleDocumentCount,
-    isCompleted,
+    isCompletedProgress,
   } = useStoryline()
 
   const useGetStorylineDocument = (queryKey: string) => {
@@ -54,15 +55,24 @@ export default function Player({ listStorylineData }: IProps) {
   const { data: storylinyeDocument, isLoading } = useGetStorylineDocument(
     `storyline-document-${currentStep?.id}`,
   )
+  useEffect(() => {
+    if (visibleDocumentCount > 1) return
+    if (storylinyeDocument?.length === 0) return
+    const firstDocument = storylinyeDocument?.[0]
+    if (!firstDocument) return
+
+    updateProgress(firstDocument?.id as string)
+  }, [storylinyeDocument])
 
   if (!currentStep) return null
 
   const lastVisibleDocument = storylinyeDocument?.[visibleDocumentCount - 1]
+  const currentVisibleDocument = storylinyeDocument?.[visibleDocumentCount]
 
   return (
     <SappLoadingGlobal loading={false}>
       <AnimatePresence mode="wait">
-        {status !== 'Review' && isCompleted ? (
+        {status !== 'Review' && isCompletedProgress === 101 ? (
           <motion.div
             key="complete"
             initial={{ opacity: 0, y: 40 }}
@@ -115,6 +125,7 @@ export default function Player({ listStorylineData }: IProps) {
                       documents={
                         storylinyeDocument?.slice(0, visibleDocumentCount) ?? []
                       }
+                      storylinyeDocument={storylinyeDocument}
                       onNewBlockMounted={(el) => {
                         const rect = el.getBoundingClientRect()
                         const targetY = rect.top + window.scrollY
@@ -127,10 +138,14 @@ export default function Player({ listStorylineData }: IProps) {
                     />
                   </section>
                   {visibleDocumentCount < (storylinyeDocument?.length ?? 0) &&
-                    lastVisibleDocument?.type !== 'QUIZ' && (
+                    lastVisibleDocument?.type !== 'QUIZ' &&
+                    !!currentVisibleDocument && (
                       <ContinueButton
                         onClick={() =>
-                          continueAction(lastVisibleDocument?.id as string)
+                          continueAction(
+                            currentVisibleDocument?.id as string,
+                            currentVisibleDocument?.type !== 'QUIZ',
+                          )
                         }
                       />
                     )}
@@ -139,12 +154,19 @@ export default function Player({ listStorylineData }: IProps) {
 
               {storylinyeDocument &&
                 visibleDocumentCount >= (storylinyeDocument?.length ?? 0) &&
-                (status !== 'Review' ||
+                ((status !== 'Review' &&
+                  (currentStepIndex + 1 < storylineItemsHasDocs?.length ||
+                    (currentStepIndex + 1 === storylineItemsHasDocs?.length &&
+                      isCompletedProgress === 100))) ||
                   (status === 'Review' &&
                     currentStepIndex + 1 < storylineItemsHasDocs?.length)) && (
                   <StoryFooter
                     onClick={() =>
-                      continueAction(lastVisibleDocument?.id as string)
+                      continueAction(
+                        currentVisibleDocument?.id as string,
+                        false,
+                        isCompletedProgress === 100,
+                      )
                     }
                   />
                 )}

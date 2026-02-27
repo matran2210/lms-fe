@@ -70,9 +70,8 @@ export default function CompleteStoryline({ listStorylineData }: IProps) {
           alt="clap image"
         />
         <div className="justify-start text-center font-['Roboto'] text-4xl font-semibold leading-[50px] text-slate-800">
-          Congratulation,
-          <br />
-          You have finished the Story!
+          Your learning progress has been saved. You can return and continue
+          anytime
         </div>
       </div>
       <div className="inline-flex w-52 flex-col items-center justify-start gap-4">

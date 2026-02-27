@@ -30,6 +30,7 @@ const QuitLearningStoryline = ({ open, setOpen }: IProps) => {
       fullWidthBtn={true}
       icon={<ArrowActionIcon className="h-22 w-22 text-primary" />}
       header="Are you sure?"
+      buttonSize="medium"
     >
       If you quit at this time, the test results will not be saved
     </SappModalV3>

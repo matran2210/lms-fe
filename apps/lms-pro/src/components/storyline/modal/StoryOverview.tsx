@@ -64,6 +64,7 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
         footerButtonClassName={'w-full flex flex-col gap-2 justify-center'}
         okButtonClass="w-full"
         cancelButtonClass="w-full"
+        buttonSize="medium"
       >
         <div className="flex flex-col gap-10 text-left text-gray-800">
           <EditorReader

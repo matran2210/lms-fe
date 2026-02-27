@@ -24,8 +24,13 @@ interface StorylineContextValue {
   /** document control */
   visibleDocumentCount: number
   setVisibleDocumentCount: React.Dispatch<React.SetStateAction<number>>
-  continueAction: (storyline_item_document_id: string) => void
-  isCompleted: boolean
+  continueAction: (
+    storyline_item_document_id: string,
+    isUpdateProgress?: boolean,
+    isFinish?: boolean,
+  ) => void
+  updateProgress: (storyline_item_document_id: string) => void
+  isCompletedProgress: number
 }
 
 export const StorylineContext = createContext<StorylineContextValue | null>(
@@ -59,11 +64,12 @@ export function StorylineProvider({ storylineData, children }: Props) {
   const stepRefs = useRef<(HTMLDivElement | null)[]>([])
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [visibleDocumentCount, setVisibleDocumentCount] = useState(1)
-  const [isCompleted, setIsCompleted] = useState(
+  const [isCompletedProgress, setIsCompletedProgress] = useState(
     storylineData
-      ? storylineData?.learning_progress?.total_course_sections_completed ===
-      storylineData?.learning_progress?.total_course_sections
-      : false,
+      ? (storylineData?.learning_progress?.total_course_sections_completed /
+          storylineData?.learning_progress?.total_course_sections) *
+          100
+      : 0,
   )
   const storylineItemsHasDocs = storylineData?.storyline?.items || []
   const steps: IStorylineItem[] = useMemo(() => {
@@ -81,43 +87,10 @@ export function StorylineProvider({ storylineData, children }: Props) {
     })
     return map
   }, [steps])
-
-  useEffect(() => {
-    setListStorylines(storylineItemsHasDocs)
-    setLearningProgress(
-      storylineData?.learning_progress || {
-        total_course_sections: 1,
-        total_course_sections_completed: 0,
-        time_spent: 0,
-        duration: 0,
-      },
-    )
-  }, [storylineData])
-  /* ----------------------------- */
-  /* SYNC URL → CURRENT STEP       */
-  /* ----------------------------- */
-  useEffect(() => {
-    if (!storylineItemId) return
-    if (!steps.length) return
-
-    const index = stepIdToIndexMap[storylineItemId]
-    if (index === undefined) return
-
-    setCurrentStepIndex(index)
-  }, [storylineItemId, stepIdToIndexMap, steps.length])
-
   const currentStep = steps[currentStepIndex] ?? null
-  useEffect(() => {
+
+  const updateProgress = async (storyline_item_document_id: string) => {
     if (!currentStep) return
-
-    const completed = currentStep.item_progress?.total_document_completed ?? 0
-    setVisibleDocumentCount(completed + 1)
-  }, [currentStep?.id])
-
-  const continueAction = async (storyline_item_document_id: string) => {
-    if (!currentStep) return
-
-    const totalDocs = currentStep.total_document
     // Reveal document
     if (storyline_item_document_id && status !== 'Review') {
       const res = await CoursesAPI.learningOutcomeProgress(
@@ -130,14 +103,30 @@ export function StorylineProvider({ storylineData, children }: Props) {
       const progressRes: IStorylineProgressResponse = res.data
       const storylineItemsHasDocs =
         progressRes?.storyline_section?.storyline.items || []
-      setIsCompleted(
-        progressRes?.storyline_section.learning_progress
-          .total_course_sections_completed ===
-        progressRes?.storyline_section.learning_progress
-          .total_course_sections,
+      setIsCompletedProgress(
+        (progressRes?.storyline_section.learning_progress
+          .total_course_sections_completed /
+          progressRes?.storyline_section.learning_progress
+            .total_course_sections) *
+          100,
       )
       setListStorylines(storylineItemsHasDocs)
       setLearningProgress(progressRes?.storyline_section.learning_progress)
+    }
+  }
+  const continueAction = async (
+    storyline_item_document_id: string,
+    isUpdateProgress = true,
+    isFinish = false,
+  ) => {
+    if (!currentStep) return
+
+    const totalDocs = currentStep.total_document
+    // Reveal document
+    if (isFinish) {
+      setIsCompletedProgress(isCompletedProgress + 1)
+    } else {
+      if (isUpdateProgress) await updateProgress(storyline_item_document_id)
     }
     if (visibleDocumentCount < totalDocs) {
       setVisibleDocumentCount((prev) => {
@@ -159,6 +148,43 @@ export function StorylineProvider({ storylineData, children }: Props) {
       },
     )
   }
+
+  useEffect(() => {
+    if (!storylineData) return
+    setListStorylines(storylineItemsHasDocs)
+    setLearningProgress(
+      storylineData?.learning_progress || {
+        total_course_sections: 1,
+        total_course_sections_completed: 0,
+        time_spent: 0,
+        duration: 0,
+      },
+    )
+    setIsCompletedProgress(
+      (storylineData?.learning_progress?.total_course_sections_completed /
+        storylineData?.learning_progress?.total_course_sections) *
+        100,
+    )
+  }, [storylineData])
+  /* ----------------------------- */
+  /* SYNC URL → CURRENT STEP       */
+  /* ----------------------------- */
+  useEffect(() => {
+    if (!storylineItemId) return
+    if (!steps.length) return
+
+    const index = stepIdToIndexMap[storylineItemId]
+    if (index === undefined) return
+
+    setCurrentStepIndex(index)
+  }, [storylineItemId, stepIdToIndexMap, steps.length])
+
+  useEffect(() => {
+    if (!currentStep) return
+    const completed = currentStep.item_progress?.total_document_completed ?? 0
+    setVisibleDocumentCount(completed + 1)
+  }, [currentStep?.id])
+
   return (
     <StorylineContext.Provider
       value={{
@@ -168,7 +194,8 @@ export function StorylineProvider({ storylineData, children }: Props) {
         visibleDocumentCount,
         setVisibleDocumentCount,
         continueAction,
-        isCompleted,
+        updateProgress,
+        isCompletedProgress,
       }}
     >
       {children}

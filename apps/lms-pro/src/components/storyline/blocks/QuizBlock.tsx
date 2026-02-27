@@ -5,6 +5,7 @@ import { CircleCheckIcon, CircleInfoIcon, RestartIcon } from '@lms/assets'
 import {
   DEFAULT_EDITOR_VALUE,
   defaultSheetData,
+  DocumentItem,
   IAnswerFillWord,
   IMultiChoiceQuestion,
   IQuestion,
@@ -47,6 +48,7 @@ interface QuizBlockProps {
   quiz_id: string
   document_id: string
   docIndex: number
+  storylinyeDocument: DocumentItem[]
 }
 
 const QuizBlock = ({
@@ -54,6 +56,7 @@ const QuizBlock = ({
   quiz_id,
   document_id,
   docIndex,
+  storylinyeDocument,
 }: QuizBlockProps) => {
   const MatchQuizRef = useRef(null) as any
   const questionRef = useRef<HTMLDivElement>(null)
@@ -63,6 +66,8 @@ const QuizBlock = ({
   const { control, setValue, reset, getValues, watch, resetField } = useForm()
   const { continueAction, visibleDocumentCount, currentStep } = useStoryline()
   const { listStorylines } = useStorylineSidebar()
+  const currentVisibleDocument = storylinyeDocument?.[visibleDocumentCount]
+
   const exactCurrentStoryline = listStorylines?.find(
     (storyline) => storyline?.id === currentStep?.id,
   )
@@ -461,6 +466,7 @@ const QuizBlock = ({
                       data: { ...question },
                       solution: question?.solution ?? '',
                     }}
+                    isShowContent={false}
                   />
                 </div>
               ),
@@ -504,6 +510,7 @@ const QuizBlock = ({
                     }}
                     data={question}
                     index={undefined}
+                    isShowContent={false}
                   />
                 </div>
               )}
@@ -567,7 +574,11 @@ const QuizBlock = ({
     }
   }
   const handleSkipQuestion = () => {
-    continueAction(document_id as string)
+    continueAction(
+      currentVisibleDocument && currentVisibleDocument?.type !== 'QUIZ'
+        ? currentVisibleDocument?.id
+        : document_id,
+    )
   }
 
   const getHintQuestion = () => {

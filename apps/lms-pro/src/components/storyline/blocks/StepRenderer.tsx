@@ -5,10 +5,15 @@ import { DocumentItem } from '@lms/core'
 
 interface Props {
   documents: DocumentItem[] | undefined
+  storylinyeDocument: DocumentItem[] | undefined
   onNewBlockMounted?: (el: HTMLElement) => void
 }
 
-export function StepRenderer({ documents = [], onNewBlockMounted }: Props) {
+export function StepRenderer({
+  documents = [],
+  storylinyeDocument = [],
+  onNewBlockMounted,
+}: Props) {
   const blockRefs = useRef<(HTMLElement | null)[]>([])
 
   return (
@@ -47,7 +52,11 @@ export function StepRenderer({ documents = [], onNewBlockMounted }: Props) {
           >
             {/* <div className="mb-6 text-lg font-semibold">{doc.name}</div> */}
 
-            <StoryBlockRenderer doc={doc} docIndex={index + 1} />
+            <StoryBlockRenderer
+              doc={doc}
+              docIndex={index + 1}
+              storylinyeDocument={storylinyeDocument}
+            />
           </motion.div>
         )
       })}
