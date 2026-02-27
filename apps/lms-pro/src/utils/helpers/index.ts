@@ -313,3 +313,4 @@ export const getUserPrefix = (isTeacher: boolean) =>
   isTeacher ? PageLink.TEACHERS : ''
 
 export * from './editor-helper'
+export * from './class-resource/helper'
