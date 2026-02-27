@@ -1,6 +1,6 @@
 'use client'
 import { AltArrowLeft, CloseIconV2, MenuDotsIcon } from '@lms/assets'
-import { UserType } from '@lms/contexts'
+import { UserType, useFeature } from '@lms/contexts'
 import {
   IAtempt,
   IRequirement,
@@ -29,10 +29,14 @@ const Explanation = () => {
   const params = useParams()
   const { id } = params
   const query = Object.fromEntries(searchParam.entries())
+  const { query: queryParams } = useFeature()
   const { attempt: noOfAttempt } = query
   const [activeQuestion, setActiveQuestion] = useState<any>()
   const [attempt, setAttempt] = useState<IAtempt>()
   const [loading, setLoading] = useState<boolean>(false)
+  const previousUrl = queryParams?.tabId
+    ? localStorage.getItem('previousUrl') + `?tabId=${queryParams?.tabId}`
+    : localStorage.getItem('previousUrl')
   function getCorrect(answers: any, questionType: any) {
     switch (questionType as QUESTION_TYPES) {
       case QUESTION_TYPES.ONE_CHOICE:
@@ -169,15 +173,10 @@ const Explanation = () => {
                     router.push(`/courses/test/test-result/${attempt?.id}`)
                     break
                   default:
-                    router.push(
-                      localStorage.getItem('previousUrl') ??
-                        PageLink.ENTRANCE_TEST,
-                    )
+                    router.push(previousUrl ?? PageLink.ENTRANCE_TEST)
                 }
               } else {
-                router.push(
-                  localStorage.getItem('previousUrl') ?? PageLink.ENTRANCE_TEST,
-                )
+                router.push(previousUrl ?? PageLink.ENTRANCE_TEST)
               }
             }
           }}

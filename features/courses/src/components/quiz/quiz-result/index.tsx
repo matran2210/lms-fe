@@ -102,9 +102,13 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
                 questionResponse={modalResult?.questions || []}
                 getTable={getTable}
                 onShowDetail={(e) => {
-                  router.push(
-                    `${isTeacher ? pageLink.TEACHER_EXPLANATION : "/explanation"}/${e.id}?title=Quiz Result`,
-                  );
+                  query?.tabId
+                    ? router.push(
+                      `${isTeacher ? pageLink.TEACHER_EXPLANATION : "/explanation"}/${e.id}?title=Quiz Result&tabId=${query?.tabId}`
+                    )
+                    : router.push(
+                      `${isTeacher ? pageLink.TEACHER_EXPLANATION : "/explanation"}/${e.id}?title=Quiz Result`,
+                    );
                 }}
                 loading={loading}
                 is_lms_v2
