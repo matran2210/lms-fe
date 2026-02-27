@@ -32,7 +32,7 @@ const QuitLearningStoryline = ({ open, setOpen }: IProps) => {
       header="Are you sure?"
       buttonSize="medium"
     >
-      If you quit at this time, the test results will not be saved
+      Your learning progress has been saved. You can return and continue anytime
     </SappModalV3>
   )
 }

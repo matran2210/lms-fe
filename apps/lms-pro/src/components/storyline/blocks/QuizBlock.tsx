@@ -65,12 +65,7 @@ const QuizBlock = ({
 
   const { control, setValue, reset, getValues, watch, resetField } = useForm()
   const { continueAction, visibleDocumentCount, currentStep } = useStoryline()
-  const { listStorylines } = useStorylineSidebar()
   const currentVisibleDocument = storylinyeDocument?.[visibleDocumentCount]
-
-  const exactCurrentStoryline = listStorylines?.find(
-    (storyline) => storyline?.id === currentStep?.id,
-  )
   const isShowActionBtn = status === 'Review'
   const [loading, setLoading] = useState<boolean>(false)
   const [question, setQuestion] = useState<IStorylineQuestion | null>(null)
@@ -698,8 +693,8 @@ const QuizBlock = ({
           'flex items-center justify-end gap-4 rounded-b-2xl p-6 transition-all duration-200',
           {
             'opacity-0': isLearnedBlock,
-            'bg-primary-100': isQuestionConfirmed,
-            'bg-success-50': !isQuestionConfirmed,
+            'bg-primary-100': isQuestionConfirmed || !isCorrectAnswer,
+            'bg-success-50': !isQuestionConfirmed || isCorrectAnswer,
             '!opacity-100': isShowActionBtn,
           },
         )}
@@ -764,7 +759,10 @@ const QuizBlock = ({
                 })}
                 isUnderLine={false}
                 size={'medium'}
-                onClick={() => setOpenExplain(true)}
+                onClick={() => {
+                  setOpenExplain(true)
+                  isLastVisibleDocument && handleSkipQuestion()
+                }}
                 title="See Explain"
               />
               <ButtonPrimary

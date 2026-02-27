@@ -18,14 +18,14 @@ const StoryFooter = ({ onClick }: { onClick: () => void }) => {
           You have finished this item!
         </div>
         <div className="flex items-center justify-start gap-4">
-          <ButtonText
+          {/* <ButtonText
             isUnderLine={false}
             size="medium"
             startIcon={<RestartIcon className="h-6 w-6" />}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             Redo Item
-          </ButtonText>
+          </ButtonText> */}
           <ButtonPrimary size="medium" onClick={onClick}>
             Next Item
           </ButtonPrimary>
