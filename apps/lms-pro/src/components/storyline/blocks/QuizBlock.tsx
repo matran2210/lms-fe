@@ -63,16 +63,18 @@ const QuizBlock = ({
   const { control, setValue, reset, getValues, watch, resetField } = useForm()
   const { continueAction, visibleDocumentCount, currentStep } = useStoryline()
   const currentVisibleDocument = storylinyeDocument?.[visibleDocumentCount]
-  const isShowActionBtn = status === 'Review'
+  const isLearnedBlock = docIndex < visibleDocumentCount
+  const isLastVisibleDocument = docIndex === storylinyeDocument.length
   const [loading, setLoading] = useState<boolean>(false)
   const [question, setQuestion] = useState<IStorylineQuestion | null>(null)
   const [topicDescription, setTopicDescription] = useState<any>()
   const [openExplain, setOpenExplain] = useState(false)
   const [isCorrectAnswer, setIsCorrectAnswer] = useState(false)
   const [isRetakeQuestion, setIsRetakeQuestion] = useState(false)
-  const isLearnedBlock = docIndex < visibleDocumentCount
-  const isLastVisibleDocument = docIndex === storylinyeDocument.length
-
+  const [skipQuestion, setSkipQuestion] = useState(false)
+  const isShowActionBtn =
+    status === 'Review' ||
+    (status !== 'Review' && isLearnedBlock && !skipQuestion)
   const isQuestionConfirmed = !!question?.confirmed
 
   const isShowClearSelection =
@@ -614,6 +616,7 @@ const QuizBlock = ({
     }
   }
   const handleSkipQuestion = () => {
+    setSkipQuestion(true)
     continueAction(
       currentVisibleDocument && currentVisibleDocument?.type !== 'QUIZ'
         ? currentVisibleDocument?.id
@@ -689,7 +692,8 @@ const QuizBlock = ({
         className={clsx(
           'flex items-center justify-end gap-4 rounded-b-2xl p-6 transition-all duration-200',
           {
-            'max-h-0 overflow-hidden !p-0 opacity-0': isLearnedBlock,
+            'max-h-0 overflow-hidden !p-0 opacity-0':
+              isLearnedBlock && !isShowActionBtn,
             'bg-primary-100': isQuestionConfirmed || !isCorrectAnswer,
             'bg-success-50': !isQuestionConfirmed || isCorrectAnswer,
             '!opacity-100': isShowActionBtn,
