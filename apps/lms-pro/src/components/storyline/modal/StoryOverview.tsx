@@ -11,6 +11,7 @@ import clsx from 'clsx'
 import { useParams, useRouter } from 'next/navigation'
 import { useMemo } from 'react'
 import { IStoryline } from '@lms/core'
+import { StorylineAPI } from 'src/api/storyline'
 interface IProps {
   open: boolean
   setOpen: () => void
@@ -42,7 +43,7 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
     }
     return 'Start'
   }
-  const handleSubmit = ({
+  const handleSubmit = async ({
     storylineItemId,
     isRetake = false,
   }: {
@@ -55,8 +56,23 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
           item.item_progress.total_document_completed !==
           item.item_progress.total_document,
       )?.id || storylineItemsHasDocs[0]?.id
+
+    if (isRetake) {
+      const res = await StorylineAPI.retakeStoryline({
+        class_id: id as string,
+        course_section_id: storylineData?.id as string,
+      })
+      if (res) {
+        router.push(
+          `/storyline/${storylineData?.id}?class_id=${id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=Start`,
+          { scroll: false },
+        )
+        return
+      }
+    }
+
     router.push(
-      `/storyline/${storylineData?.id}?class_id=${id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=${isRetake ? 'Start' : okButtonCaption()}&isRetake=${isRetake}`,
+      `/storyline/${storylineData?.id}?class_id=${id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=${okButtonCaption()}`,
       { scroll: false },
     )
   }
@@ -78,12 +94,17 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
         cancelButtonClass="w-full"
         buttonSize="medium"
         showFooter={progress < 100}
+        className="storyline-overview"
+        width={638}
       >
         <div className="flex flex-col gap-10 text-left text-gray-800">
           <EditorReader
-            className={clsx('max-h-60 overflow-y-auto text-base leading-6', {
-              'mt-10': storylineData?.storyline?.description,
-            })}
+            className={clsx(
+              'max-h-60 overflow-y-auto !font-sans text-base leading-6',
+              {
+                'mt-10': storylineData?.storyline?.description,
+              },
+            )}
             text_editor_content={storylineData?.storyline?.description || ''}
           />
 
@@ -98,8 +119,16 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
                     item.item_progress.total_document) *
                     100,
                 )
+                const firstItemContinueLearning =
+                  storylineItemsHasDocs.findIndex(
+                    (item) =>
+                      item.item_progress.total_document_completed !==
+                      item.item_progress.total_document,
+                  )
+
                 return (
                   <StorylineItem
+                    active={firstItemContinueLearning === index}
                     key={index}
                     name={item.name}
                     progress={itemProgress}

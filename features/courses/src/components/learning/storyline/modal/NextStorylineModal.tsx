@@ -63,6 +63,7 @@ const NextStorylineModal = ({ open, setOpen, next_activity, course_section_id }:
         okButtonClass="w-full"
         cancelButtonClass="w-full"
         buttonSize='medium'
+        className='storyline-overview'
       >
         <div className="flex flex-col gap-10 text-left text-gray-800">
           {/* <div

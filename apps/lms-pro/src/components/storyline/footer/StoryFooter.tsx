@@ -7,7 +7,7 @@ const StoryFooter = ({ onClick }: { onClick: () => void }) => {
   return (
     <div
       className={clsx(
-        'fixed bottom-0 z-[201] flex w-full justify-center border-t border-t-success bg-success-50 px-8 py-6',
+        'fixed bottom-0 z-[201] flex w-full justify-center border-t border-t-success bg-success-50 px-8 py-4',
       )}
     >
       <div

@@ -59,7 +59,7 @@ export default function CompleteStoryline({ listStorylineData }: IProps) {
         type: 'spring',
         stiffness: 80,
       }}
-      className="mx-auto flex h-[calc(100vh-200px)] w-full max-w-7xl flex-col items-center justify-center gap-22 py-22"
+      className="m-auto flex h-[calc(100vh-100px)] w-full max-w-7xl flex-col items-center justify-center gap-22"
     >
       <div className="inline-flex flex-col items-center justify-start gap-14">
         <Image

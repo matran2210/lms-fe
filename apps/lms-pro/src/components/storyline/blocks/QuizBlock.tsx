@@ -12,7 +12,6 @@ import {
   RESPONSE_OPTION,
 } from '@lms/core'
 import {
-  AddWordPreview,
   ButtonPrimary,
   ButtonSecondary,
   ButtonText,
@@ -21,6 +20,7 @@ import {
   MatchQuizComponent,
   MultiChoiceQuestion,
   NewDragNDropQuestion,
+  NewFillText,
   OneChoiceQuestion,
   SelectWord,
   SlotValue,
@@ -33,12 +33,12 @@ import {
 import { Divider, Tabs } from 'antd'
 import clsx from 'clsx'
 import { isUndefined } from 'lodash'
+import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { TestServiceAPI } from 'src/api/test-api'
 import { v4 as uuidv4 } from 'uuid'
-import Image from 'next/image'
 
 interface QuizBlockProps {
   minimalQuestion: IMultiChoiceQuestion
@@ -57,6 +57,7 @@ const QuizBlock = ({
 }: QuizBlockProps) => {
   const MatchQuizRef = useRef(null) as any
   const questionRef = useRef<HTMLDivElement>(null)
+  const FillWordRef = useRef(null) as any
   const searchParams = useSearchParams()
   const status = searchParams.get('status')
 
@@ -143,7 +144,7 @@ const QuizBlock = ({
           return true
         })
       case QUESTION_TYPES.FILL_WORD:
-        const textAnswers = getValueFillText()
+        const textAnswers = getValues(`${question?.id}_answer`)
         const correctAnswers: IAnswerFillWord[] =
           question?.corrects
             ?.filter((answer: IAnswerFillWord) => answer?.is_correct)
@@ -392,9 +393,12 @@ const QuizBlock = ({
 
       case QUESTION_TYPES.FILL_WORD:
         return (
-          <AddWordPreview
+          <NewFillText
+            control={control}
+            name={`${question?.id}_answer`}
             data={question}
-            defaultAnswer={getValueFillText()}
+            setValue={setValue}
+            defaultAnswer={getValues(`${question?.id}_answer`)}
             corrects={
               isCorrectAnswer || openExplain
                 ? question?.corrects
@@ -402,9 +406,10 @@ const QuizBlock = ({
                   : undefined
                 : undefined
             }
+            ref={FillWordRef}
             solution={openExplain ? question?.solution : undefined}
+            watch={watch}
             explainClassname="!mt-8 !p-0 !bg-transparent"
-            correctAnswerClass="!mt-8 !pt-0"
           />
         )
 
@@ -697,7 +702,7 @@ const QuizBlock = ({
       {/* Not Confirm */}
       <div
         className={clsx(
-          'flex items-center justify-end gap-4 rounded-b-2xl p-6 transition-all duration-300',
+          'flex items-center justify-end gap-4 rounded-b-2xl px-6 py-4 transition-all duration-300',
           {
             'max-h-0 overflow-hidden !p-0 opacity-0':
               isLearnedBlock && !isShowActionBtn,
@@ -746,6 +751,7 @@ const QuizBlock = ({
                   onClick={() => {
                     handleClearSelection(question)
                   }}
+                  className="font-semibold"
                   title="Clear Selection"
                 />
               ) : null}
@@ -810,7 +816,7 @@ const QuizBlock = ({
             </div>
             <div className="flex items-center gap-4">
               <ButtonSecondary
-                className={clsx({
+                className={clsx('bg-white', {
                   hidden: openExplain || isCorrectAnswer,
                 })}
                 isUnderLine={false}

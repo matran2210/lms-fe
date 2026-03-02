@@ -36,7 +36,7 @@ const StoryHeader = () => {
     )
   }
   return (
-    <div className="sticky top-0 z-[201] shadow-sm">
+    <div className="sticky top-0 z-[201] shadow-medium">
       <div className="relative bg-white px-8 py-4">
         <div className=" flex w-full items-center justify-between">
           <div
@@ -53,7 +53,7 @@ const StoryHeader = () => {
           </div>
           <div>
             <Select
-              className="custom-select-v2 h-8 rounded-full p-[10px]"
+              className="custom-select-v2 h-8 rounded-full p-[10px] text-lg"
               variant="borderless"
               value={
                 storylineItemsHasDocs
@@ -66,13 +66,16 @@ const StoryHeader = () => {
                   value: item.id,
                 }
               })}
+              labelRender={(option) => {
+                return <span className="text-lg">{option.label}</span>
+              }}
               optionRender={(option) => {
                 const isSelected =
                   option.value === searchParams.get('storylineItemId')
 
                 return (
                   <div className="flex w-full items-center justify-between">
-                    <span>{option.label}</span>
+                    <span className="text-base">{option.label}</span>
                     {isSelected && (
                       <CheckCircleOutlineYellow className="h-5 w-5" />
                     )}

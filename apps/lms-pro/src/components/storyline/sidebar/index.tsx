@@ -33,11 +33,11 @@ export default function Sidebar({ listStorylineData }: IProps) {
       {showSidebar && (
         <motion.aside
           key="sidebar"
-          initial={{ x: -40, opacity: 0 }}
+          initial={{ x: -240, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          exit={{ x: -40, opacity: 0 }}
+          exit={{ x: -240, opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="fixed bottom-0 top-0 z-[202] h-full w-80 bg-white p-6 shadow-md"
+          className="fixed bottom-0 top-0 z-[202] h-full w-[278px] bg-white p-6 shadow-md"
         >
           <div className="flex items-center justify-between gap-2">
             <div className="text-lg font-semibold text-gray-800">
@@ -48,7 +48,7 @@ export default function Sidebar({ listStorylineData }: IProps) {
             </div>
           </div>
           <Divider className="my-4" />
-          <div className="hide-scrollbar flex max-h-[calc(100vh-90px)] flex-col overflow-y-auto">
+          <div className="hide-scrollbar flex max-h-[calc(100vh-90px)] flex-col gap-2 overflow-y-auto">
             {listStorylines.map((storylineItem, index) => {
               const itemProgress = Math.round(
                 (storylineItem.item_progress.total_document_completed /
