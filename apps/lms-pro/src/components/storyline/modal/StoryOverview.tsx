@@ -56,7 +56,7 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
           item.item_progress.total_document,
       )?.id || storylineItemsHasDocs[0]?.id
     router.push(
-      `/storyline/${storylineData?.id}?class_id=${id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=${okButtonCaption()}&isRetake=${isRetake}`,
+      `/storyline/${storylineData?.id}?class_id=${id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=${isRetake ? 'Start' : okButtonCaption()}&isRetake=${isRetake}`,
       { scroll: false },
     )
   }

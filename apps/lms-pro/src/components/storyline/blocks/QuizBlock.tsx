@@ -1,14 +1,12 @@
 'use client'
 import { useStoryline } from '@contexts/StorylineContext'
-import { useStorylineSidebar } from '@contexts/StorylineSidebarContext'
-import { CircleCheckIcon, CircleInfoIcon, RestartIcon } from '@lms/assets'
+import { CircleCheckIcon, RestartIcon } from '@lms/assets'
 import {
   DEFAULT_EDITOR_VALUE,
   defaultSheetData,
   DocumentItem,
   IAnswerFillWord,
   IMultiChoiceQuestion,
-  IQuestion,
   IStorylineQuestion,
   QUESTION_TYPES,
   RESPONSE_OPTION,
@@ -20,7 +18,6 @@ import {
   ButtonText,
   EditorReader,
   EssayQuestionPreview,
-  HighlightableHTML,
   MatchQuizComponent,
   MultiChoiceQuestion,
   NewDragNDropQuestion,
@@ -30,7 +27,6 @@ import {
 } from '@lms/ui'
 import {
   checkSheetAnswered,
-  Correct,
   handleMultipleCorrectAnswer,
   isEmptyParagraph,
 } from '@lms/utils'
@@ -42,6 +38,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { TestServiceAPI } from 'src/api/test-api'
 import { v4 as uuidv4 } from 'uuid'
+import Image from 'next/image'
 
 interface QuizBlockProps {
   minimalQuestion: IMultiChoiceQuestion
@@ -692,7 +689,7 @@ const QuizBlock = ({
         className={clsx(
           'flex items-center justify-end gap-4 rounded-b-2xl p-6 transition-all duration-200',
           {
-            'opacity-0': isLearnedBlock,
+            'max-h-0 overflow-hidden !p-0 opacity-0': isLearnedBlock,
             'bg-primary-100': isQuestionConfirmed || !isCorrectAnswer,
             'bg-success-50': !isQuestionConfirmed || isCorrectAnswer,
             '!opacity-100': isShowActionBtn,
@@ -701,8 +698,17 @@ const QuizBlock = ({
       >
         {!isQuestionConfirmed ? (
           <>
-            <div className="flex-1 text-lg font-semibold text-gray-800">
-              {getHintQuestion()}
+            <div className="flex flex-1 items-center gap-2">
+              <Image
+                src="/assets/images/pointerIcon.png"
+                alt="pointer"
+                width={24}
+                height={24}
+                className="shrink-0"
+              />
+              <div className="text-lg font-semibold text-gray-800">
+                {getHintQuestion()}
+              </div>
             </div>
             <div className="flex items-center gap-4">
               {!isShowClearSelection &&
@@ -746,11 +752,46 @@ const QuizBlock = ({
         ) : (
           <>
             <div className="flex-1 text-lg font-semibold text-gray-800">
-              {openExplain
-                ? 'This is an explaination'
-                : isCorrectAnswer
-                  ? 'You correct the question!'
-                  : 'Incorrect!'}
+              {openExplain ? (
+                <ExplainQuiz
+                  text={'This is an explaination'}
+                  icon={
+                    <Image
+                      src="/assets/images/zoomIcon.png"
+                      alt="explain"
+                      width={24}
+                      height={24}
+                      className="shrink-0"
+                    />
+                  }
+                />
+              ) : isCorrectAnswer ? (
+                <ExplainQuiz
+                  text={'You correct the question!'}
+                  icon={
+                    <Image
+                      src="/assets/images/cheerIcon.png"
+                      alt="correct"
+                      width={24}
+                      height={24}
+                      className="shrink-0"
+                    />
+                  }
+                />
+              ) : (
+                <ExplainQuiz
+                  text={'Incorrect!'}
+                  icon={
+                    <Image
+                      src="/assets/images/sadIcon.png"
+                      alt="incorrect"
+                      width={24}
+                      height={24}
+                      className="shrink-0"
+                    />
+                  }
+                />
+              )}
             </div>
             <div className="flex items-center gap-4">
               <ButtonSecondary
@@ -789,4 +830,18 @@ const QuizBlock = ({
   )
 }
 
+const ExplainQuiz = ({
+  text,
+  icon,
+}: {
+  text: string
+  icon: React.ReactNode
+}) => {
+  return (
+    <div className="flex items-center gap-3">
+      {icon}
+      <div>{text}</div>
+    </div>
+  )
+}
 export default QuizBlock

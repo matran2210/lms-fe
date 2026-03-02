@@ -1,6 +1,7 @@
 import { RestartIcon } from '@lms/assets'
 import { ButtonPrimary, ButtonText } from '@lms/ui'
 import clsx from 'clsx'
+import Image from 'next/image'
 
 const StoryFooter = ({ onClick }: { onClick: () => void }) => {
   return (
@@ -14,8 +15,17 @@ const StoryFooter = ({ onClick }: { onClick: () => void }) => {
           'mx-auto flex w-full max-w-5xl items-center justify-between',
         )}
       >
-        <div className="justify-start text-xl font-semibold leading-7 text-gray-800">
-          You have finished this item!
+        <div className="flex justify-start gap-3">
+          <Image
+            src="/assets/images/fire.png"
+            alt="check"
+            width={24}
+            height={24}
+            className="shrink-0"
+          />
+          <div className=" text-xl font-semibold leading-7 text-gray-800">
+            You have finished this item!
+          </div>
         </div>
         <div className="flex items-center justify-start gap-4">
           {/* <ButtonText

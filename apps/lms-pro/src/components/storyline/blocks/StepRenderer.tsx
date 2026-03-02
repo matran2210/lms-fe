@@ -48,7 +48,7 @@ export function StepRenderer({
                 onNewBlockMounted?.(blockRefs.current[index]!)
               }
             }}
-            className="mb-8"
+            className="mb-12"
           >
             {/* <div className="mb-6 text-lg font-semibold">{doc.name}</div> */}
 
