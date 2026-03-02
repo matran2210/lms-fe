@@ -182,7 +182,7 @@ export function StorylineProvider({ storylineData, children }: Props) {
   useEffect(() => {
     if (!currentStep) return
     const completed = currentStep.item_progress?.total_document_completed ?? 0
-    setVisibleDocumentCount(completed + 1)
+    setVisibleDocumentCount(!completed ? completed + 1 : completed)
   }, [currentStep?.id])
 
   return (
