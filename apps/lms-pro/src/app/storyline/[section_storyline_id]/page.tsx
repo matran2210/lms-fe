@@ -12,8 +12,16 @@ function StoryLinePage() {
   const params = useParams()
   const { section_storyline_id } = params
   const class_id = searchParams.get('class_id')
+  const isRetake = searchParams.get('isRetake') === 'true'
   const useGetData = (queryKey: string) => {
     const fetchData = async () => {
+      if (isRetake) {
+        const { data } = await StorylineAPI.retakeStoryline({
+          class_id: class_id as string,
+          course_section_id: section_storyline_id as string,
+        })
+        return data
+      }
       const { data } = await StorylineAPI.getListStoryline({
         class_id: class_id as string,
         section_storyline_id: section_storyline_id as string,

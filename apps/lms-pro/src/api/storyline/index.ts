@@ -20,4 +20,18 @@ export class StorylineAPI {
   }): Promise<IResponse<DocumentItem[]>> {
     return fetcher(`/course-sections/${class_id}/storyline/${item_id}`)
   }
+  static retakeStoryline({
+    class_id,
+    course_section_id,
+  }: {
+    class_id: string
+    course_section_id: string
+  }): Promise<IResponse<IStoryline>> {
+    return fetcher(
+      `course-sections/${class_id}/storyline/${course_section_id}/retake`,
+      {
+        method: 'PUT',
+      },
+    )
+  }
 }

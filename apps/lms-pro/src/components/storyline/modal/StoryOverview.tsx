@@ -1,6 +1,12 @@
 'use client'
 import { StorylineItem } from '@lms/feature-courses'
-import { EditorReader, SappModalV3 } from '@lms/ui'
+import {
+  ButtonPrimary,
+  ButtonSecondary,
+  ButtonText,
+  EditorReader,
+  SappModalV3,
+} from '@lms/ui'
 import clsx from 'clsx'
 import { useParams, useRouter } from 'next/navigation'
 import { useMemo } from 'react'
@@ -36,7 +42,13 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
     }
     return 'Start'
   }
-  const handleSubmit = (storylineItemId?: string) => {
+  const handleSubmit = ({
+    storylineItemId,
+    isRetake = false,
+  }: {
+    storylineItemId?: string
+    isRetake?: boolean
+  }) => {
     const defaultStorylineItemId =
       storylineItemsHasDocs.find(
         (item) =>
@@ -44,7 +56,7 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
           item.item_progress.total_document,
       )?.id || storylineItemsHasDocs[0]?.id
     router.push(
-      `/storyline/${storylineData?.id}?class_id=${id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=${okButtonCaption()}`,
+      `/storyline/${storylineData?.id}?class_id=${id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=${okButtonCaption()}&isRetake=${isRetake}`,
       { scroll: false },
     )
   }
@@ -56,15 +68,16 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
         handleCancel={onClose}
         title={storylineData?.storyline?.name}
         isShowBtnClose={false}
-        isShowFooter
+        isShowFooter={progress < 100}
         submitButtonClassName="w-full h-10"
-        onOk={handleSubmit}
+        onOk={() => handleSubmit({ isRetake: false })}
         cancelButtonCaption={'Cancel'}
         okButtonCaption={okButtonCaption()}
         footerButtonClassName={'w-full flex flex-col gap-2 justify-center'}
         okButtonClass="w-full"
         cancelButtonClass="w-full"
         buttonSize="medium"
+        showFooter={progress < 100}
       >
         <div className="flex flex-col gap-10 text-left text-gray-800">
           <EditorReader
@@ -90,13 +103,34 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
                     key={index}
                     name={item.name}
                     progress={itemProgress}
-                    onClick={() => handleSubmit(item.id)}
+                    onClick={() => handleSubmit({ storylineItemId: item.id })}
                   />
                 )
               })}
             </div>
           </div>
         </div>
+        {progress === 100 && (
+          <div className="flex w-full flex-col items-center justify-center gap-2 pt-10">
+            <ButtonPrimary
+              full
+              size="medium"
+              onClick={() => handleSubmit({ isRetake: false })}
+            >
+              Review
+            </ButtonPrimary>
+            <ButtonSecondary
+              full
+              size="medium"
+              onClick={() => handleSubmit({ isRetake: true })}
+            >
+              Retake
+            </ButtonSecondary>
+            <ButtonText size="medium" onClick={onClose}>
+              Cancel
+            </ButtonText>
+          </div>
+        )}
       </SappModalV3>
     </>
   )
