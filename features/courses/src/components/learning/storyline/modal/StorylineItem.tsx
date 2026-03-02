@@ -11,6 +11,7 @@ const StorylineItem = ({
   onClick,
   disabled = false,
   isShowProgress = false,
+  className
 }: {
   name: string
   progress: number
@@ -18,15 +19,19 @@ const StorylineItem = ({
   onClick?: () => void
   disabled?: boolean
   isShowProgress?: boolean
+  className?: string
 }) => {
   return (
     <motion.div
       onClick={onClick}
       className={clsx(
-        'flex w-full cursor-pointer items-center justify-between rounded-xl p-3 transition-colors',
-        active ? 'bg-[#FFF1CC]' : '',
+        'flex w-full cursor-pointer items-center justify-between rounded-xl p-3 transition-colors duration-200',
+        active ? 'bg-primary-100' : '',
         disabled && 'cursor-not-allowed opacity-50',
-      )}
+        className,
+        {
+          'hover:bg-primary-100': !active && !disabled,
+        })}
     >
       <div className="flex items-center gap-2">
         {isShowProgress && (

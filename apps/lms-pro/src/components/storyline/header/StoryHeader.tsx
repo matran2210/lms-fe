@@ -37,11 +37,11 @@ const StoryHeader = () => {
   }
   return (
     <div className="sticky top-0 z-[201] shadow-sm">
-      <div className="bg-white px-8 py-4">
+      <div className="relative bg-white px-8 py-4">
         <div className=" flex w-full items-center justify-between">
           <div
             className={clsx(
-              'flex  cursor-pointer items-center justify-start gap-2.5 rounded-lg p-2 transition-all duration-300',
+              'flex  cursor-pointer items-center justify-start gap-2.5 rounded-lg transition-all duration-300',
               {
                 'bg-inherit': !showSidebar,
                 'bg-neutral-200': showSidebar,
@@ -91,18 +91,19 @@ const StoryHeader = () => {
             <CloseModalIcon />
           </div>
         </div>
+        <ProgressBar
+          percent={
+            learning_progress
+              ? Math.round(
+                  (learning_progress.total_course_sections_completed /
+                    learning_progress.total_course_sections) *
+                    100,
+                )
+              : 70
+          }
+        />
       </div>
-      <ProgressBar
-        percent={
-          learning_progress
-            ? Math.round(
-                (learning_progress.total_course_sections_completed /
-                  learning_progress.total_course_sections) *
-                  100,
-              )
-            : 70
-        }
-      />
+
       <QuitLearningStoryline open={open} setOpen={setOpen} />
     </div>
   )

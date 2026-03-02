@@ -104,6 +104,7 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
                     name={item.name}
                     progress={itemProgress}
                     onClick={() => handleSubmit({ storylineItemId: item.id })}
+                    className="!p-2"
                   />
                 )
               })}

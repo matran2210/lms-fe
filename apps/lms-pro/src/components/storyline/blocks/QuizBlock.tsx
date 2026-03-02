@@ -34,7 +34,7 @@ import { Divider, Tabs } from 'antd'
 import clsx from 'clsx'
 import { isUndefined } from 'lodash'
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { TestServiceAPI } from 'src/api/test-api'
 import { v4 as uuidv4 } from 'uuid'
@@ -659,7 +659,7 @@ const QuizBlock = ({
     }
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (minimalQuestion?.id) {
       getDetail().then((res) => {
         if (res.topicDescription) {
@@ -697,7 +697,7 @@ const QuizBlock = ({
       {/* Not Confirm */}
       <div
         className={clsx(
-          'flex items-center justify-end gap-4 rounded-b-2xl p-6 transition-all duration-200',
+          'flex items-center justify-end gap-4 rounded-b-2xl p-6 transition-all duration-300',
           {
             'max-h-0 overflow-hidden !p-0 opacity-0':
               isLearnedBlock && !isShowActionBtn,

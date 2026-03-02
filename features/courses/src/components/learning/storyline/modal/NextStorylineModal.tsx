@@ -62,6 +62,7 @@ const NextStorylineModal = ({ open, setOpen, next_activity, course_section_id }:
         footerButtonClassName={'w-full flex flex-col gap-2 justify-center'}
         okButtonClass="w-full"
         cancelButtonClass="w-full"
+        buttonSize='medium'
       >
         <div className="flex flex-col gap-10 text-left text-gray-800">
           {/* <div
@@ -72,7 +73,7 @@ const NextStorylineModal = ({ open, setOpen, next_activity, course_section_id }:
             {next_activity?.description}
           </div> */}
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 mt-10">
             <div className="text-lg font-semibold leading-7">
               This Story Include:
             </div>
@@ -89,6 +90,7 @@ const NextStorylineModal = ({ open, setOpen, next_activity, course_section_id }:
                     name={item.name}
                     progress={itemProgress}
                     onClick={() => handleSubmit(item.id)}
+                    className='!p-2'
                   />
                 )
               })}
