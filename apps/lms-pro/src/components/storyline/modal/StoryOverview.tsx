@@ -81,7 +81,7 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
       >
         <div className="flex flex-col gap-10 text-left text-gray-800">
           <EditorReader
-            className={clsx('text-base leading-6', {
+            className={clsx('max-h-60 overflow-y-auto text-base leading-6', {
               'mt-10': storylineData?.storyline?.description,
             })}
             text_editor_content={storylineData?.storyline?.description || ''}
