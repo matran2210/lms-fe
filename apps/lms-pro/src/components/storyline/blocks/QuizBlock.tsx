@@ -61,7 +61,8 @@ const QuizBlock = ({
   const status = searchParams.get('status')
 
   const { control, setValue, reset, getValues, watch, resetField } = useForm()
-  const { continueAction, visibleDocumentCount, currentStep } = useStoryline()
+  const { continueAction, visibleDocumentCount, updateProgress } =
+    useStoryline()
   const currentVisibleDocument = storylinyeDocument?.[visibleDocumentCount]
   const isLearnedBlock = docIndex < visibleDocumentCount
   const isLastVisibleDocument = docIndex === storylinyeDocument.length
@@ -290,6 +291,7 @@ const QuizBlock = ({
       setQuestion(activeQuestionFormat as IStorylineQuestion)
     } catch (error) {
     } finally {
+      updateProgress(document_id)
       setLoading(false)
     }
   }
@@ -615,12 +617,17 @@ const QuizBlock = ({
         break
     }
   }
-  const handleSkipQuestion = () => {
+  const handleSkipQuestion = ({
+    isUpdateProgress = true,
+  }: {
+    isUpdateProgress?: boolean
+  }) => {
     setSkipQuestion(true)
     continueAction(
       currentVisibleDocument && currentVisibleDocument?.type !== 'QUIZ'
         ? currentVisibleDocument?.id
         : document_id,
+      isUpdateProgress,
     )
   }
 
@@ -722,7 +729,11 @@ const QuizBlock = ({
                     size="medium"
                     disabled={loading}
                     isUnderLine={false}
-                    onClick={handleSkipQuestion}
+                    onClick={() =>
+                      handleSkipQuestion({
+                        isUpdateProgress: true,
+                      })
+                    }
                   >
                     Skip Question
                   </ButtonText>
@@ -806,7 +817,10 @@ const QuizBlock = ({
                 size={'medium'}
                 onClick={() => {
                   setOpenExplain(true)
-                  isLastVisibleDocument && handleSkipQuestion()
+                  isLastVisibleDocument &&
+                    handleSkipQuestion({
+                      isUpdateProgress: false,
+                    })
                 }}
                 title="See Explain"
               />
@@ -820,7 +834,11 @@ const QuizBlock = ({
                 disabled={loading}
                 onClick={() =>
                   openExplain || isCorrectAnswer
-                    ? handleSkipQuestion()
+                    ? handleSkipQuestion({
+                        isUpdateProgress:
+                          currentVisibleDocument &&
+                          currentVisibleDocument?.type !== 'QUIZ',
+                      })
                     : handleRetakeQuestion()
                 }
               >
