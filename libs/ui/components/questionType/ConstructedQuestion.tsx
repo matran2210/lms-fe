@@ -65,6 +65,7 @@ export type IPreviewProp = {
   uniqueKey?: string;
   isInTest?: boolean;
   storageKey?: string;
+  disable?: boolean
 };
 type SAPPEditorHandle = {
   moveSelectionOutOfTable: () => void;
@@ -101,6 +102,7 @@ const EssayQuestionPreview = ({
   uniqueKey,
   isInTest = false,
   storageKey,
+  disable = false,
 }: IPreviewProp) => {
   const { testServiceApi, router } = useFeature();
 
@@ -431,7 +433,7 @@ const EssayQuestionPreview = ({
         disabled={
           fullData?.confirmed ||
           fullData?.data?.confirmed ||
-          fullData?.is_viewed_answer
+          fullData?.is_viewed_answer || disable
         }
         handleChange={() => handleChange && handleChange(data?.id)}
         // externalRef={externalRef}

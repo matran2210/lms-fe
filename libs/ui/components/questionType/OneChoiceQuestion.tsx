@@ -35,6 +35,7 @@ export type IPreviewProp = {
   isShowWarning?: boolean;
   explainClassname?: string;
   storageKey?: string;
+  disabled?: boolean;
 };
 
 type IAnswers = {
@@ -59,6 +60,7 @@ const OneChoiceQuestion = ({
   isShowWarning = false,
   explainClassname,
   storageKey,
+  disabled = false,
 }: IPreviewProp) => {
   const { router, query } = useFeature();
   useEffect(() => {
@@ -186,6 +188,7 @@ const OneChoiceQuestion = ({
         }}
       >
         <HookFormRadioGroup
+          disabled={disabled}
           options={convertAnswer || []}
           control={control}
           name={name || "answer"}

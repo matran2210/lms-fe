@@ -348,6 +348,7 @@ const QuizBlock = ({
             solution={openExplain ? question?.solution : undefined}
             explainClassname="!mt-8 !p-0 !bg-transparent"
             control={control}
+            disabled={isQuestionConfirmed}
           />
         )
 
@@ -367,6 +368,7 @@ const QuizBlock = ({
             setValue={setValue}
             solution={openExplain ? question?.solution : undefined}
             explainClassname="!mt-8 !p-0 !bg-transparent"
+            disabled={isQuestionConfirmed}
           />
         )
 
@@ -516,6 +518,7 @@ const QuizBlock = ({
                       solution: question?.solution ?? '',
                     }}
                     isShowContent={false}
+                    disable={isQuestionConfirmed}
                   />
                 </div>
               ),
@@ -560,6 +563,7 @@ const QuizBlock = ({
                     data={question}
                     index={undefined}
                     isShowContent={false}
+                    disable={isQuestionConfirmed}
                   />
                 </div>
               )}
