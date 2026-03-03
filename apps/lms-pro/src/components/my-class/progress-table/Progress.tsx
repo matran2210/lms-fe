@@ -1,22 +1,29 @@
-import { Plus } from '@lms/assets'
-import { FilterGrid, SAPPRangePicker } from '@lms/ui'
-import { ButtonPrimary } from '@lms/ui'
-import { ButtonSecondary } from '@lms/ui'
-import { SAPPSelect } from '@lms/ui'
 import FormAddProgress from '@components/my-class/progress-form/FormAddProgress'
 import FormViewProgress from '@components/my-class/progress-form/FormViewProgress'
 import ProgressTable from '@components/my-class/progress-table/ProgressTable'
+import { Plus } from '@lms/assets'
+import { useFeature } from '@lms/contexts'
+import {
+  CONSTRUCTION,
+  IClassDetail,
+  IProgressFilterForm,
+  OPTIONS_PROGRESS_CLASS,
+  PROGRAM,
+} from '@lms/core'
+import { useSappPaging } from '@lms/hooks'
+import {
+  ButtonPrimary,
+  ButtonSecondary,
+  FilterGrid,
+  SAPPInput,
+  SAPPRangePicker,
+  SAPPSelect,
+} from '@lms/ui'
 import { cleanParams } from '@lms/utils'
-import { CONSTRUCTION, OPTIONS_PROGRESS_CLASS, PROGRAM } from '@lms/core'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { IClassDetail, IProgressFilterForm } from '@lms/core'
-import { SAPPInput } from '@lms/ui'
-import { useSappPaging } from '@lms/hooks'
-import { ProgressKey } from 'src/api/queryKey'
 import { ProgressAPI } from 'src/api/progress'
-
+import { ProgressKey } from 'src/api/queryKey'
 interface FilterParams {
   progress?: string
   fromDate?: string
@@ -37,11 +44,8 @@ const Progress = ({ classDetail }: { classDetail: IClassDetail }) => {
   const [idProgress, setIdProgress] = useState<string | null>(null)
   const [isView, setIsView] = useState<boolean>(false)
   const [params, setParams] = useState<FilterParams>(initialValues)
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const query = Object.fromEntries(searchParams.entries())
-
-  const { id } = query
+  const { params: classParams } = useFeature()
+  const { params: progressParams } = useFeature()
   const { control, getValues, reset } = useForm<IProgressFilterForm>()
   const allowSection = !classDetail?.course?.course_categories?.some(
     (item) => item?.name === PROGRAM.ACCA || item?.name === PROGRAM.CD,
@@ -77,7 +81,7 @@ const Progress = ({ classDetail }: { classDetail: IClassDetail }) => {
       ProgressAPI.getProgressList({
         page_index: pagination.current ?? 1,
         page_size: pagination.pageSize ?? 10,
-        params: { ...cleanedParams, class_id: id },
+        params: { ...cleanedParams, class_id: classParams?.id },
       }),
     params,
   })
@@ -175,7 +179,7 @@ const Progress = ({ classDetail }: { classDetail: IClassDetail }) => {
           setOpen={setIsOpenViewModal}
           refresh={handleRefetchData}
           allowSection={allowSection}
-          classId={id as string}
+          classId={progressParams?.id as string}
         />
       ) : null}
     </div>

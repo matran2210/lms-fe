@@ -14,6 +14,7 @@ import {
   IRecurringSchedule,
   ISelect,
   IWeeklyNorm,
+  OPTIONS_TIME_OFF_REQUEST_TYPE,
   REPEAT_TYPE,
   REQUEST_STATUS,
   REQUEST_TYPE,
@@ -591,13 +592,12 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
   const requestTypeOption = useMemo(() => {
     if (query.tab === 'personal')
       return [REQUEST_TYPE.BUSY_SCHEDULE, REQUEST_TYPE.WEEKLY_NORM]
-
     if (query.tab === 'timeoff')
-      return [REQUEST_TYPE.TIMEOFF, REQUEST_TYPE.TEACHING_MODE]
+      return OPTIONS_TIME_OFF_REQUEST_TYPE
     else {
       return [REQUEST_TYPE.BUSY_SCHEDULE, REQUEST_TYPE.WEEKLY_NORM]
     }
-  }, [])
+  }, [query.tab])
 
   const handleChangeClassCode = (e: string) => {
     setValue('class_code', e)

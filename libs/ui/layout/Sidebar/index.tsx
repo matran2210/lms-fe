@@ -67,7 +67,7 @@ export default function Sidebar({
           className={`max-h-[calc(100vh-145px)] relative rounded-xl pb-6 pt-[25px] ${
             guideStatus && guideStep === 2
               ? "z-50 bg-white"
-              : "overflow-y-auto overflow-x-hidden"
+            : "overflow-y-auto overflow-x-hidden no-scrollbar"
           }`}
         >
           <div

@@ -1,7 +1,6 @@
 'use client'
 import { UserType } from '@lms/contexts'
 import { LAYOUT } from '@lms/core'
-import { useDownloadImage } from '@lms/hooks'
 import { useQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { SappLoadingGlobal, SinglePageLayout } from '@lms/ui'
@@ -17,7 +16,6 @@ export interface ICertificate {
 }
 
 const Certificate = ({ params }: { params: { id: string } }) => {
-  const { downloadImage } = useDownloadImage()
   const { id } = params
   /**
    * @description sử dụng react query để call API get certificate
@@ -39,22 +37,12 @@ const Certificate = ({ params }: { params: { id: string } }) => {
    */
   const { data: certificate, isLoading } = useGetData('certificate', {})
 
-  /**
-   * @description function download certificate từ url
-   */
-  const download = async () => {
-    const originalImage = certificate?.certificate_url
-    if (!originalImage) return
-    downloadImage(originalImage)
-  }
-
   return (
     <SappLoadingGlobal loading={isLoading}>
       <SinglePageLayout title="Certificate">
-        <CertificateVertical certificate={certificate} onDownload={download} />
+        <CertificateVertical certificate={certificate} />
         <HorizontalCertificate
           certificate={certificate}
-          onDownload={download}
         />
       </SinglePageLayout>
     </SappLoadingGlobal>

@@ -2,6 +2,7 @@ import { ExaminationsResponse } from '@lms/contexts'
 import {
   ExamInformation,
   IClassResourceList,
+  IClassResourcePreview,
   IListClassResourceParams,
   IQuizResultList,
   IResponse,
@@ -76,5 +77,12 @@ export class ClassAPI {
     params: IListClassResourceParams,
   ): Promise<IResponse<IClassResourceList>> {
     return fetcher(`class-resource`, { params: { class_id, ...params } })
+  }
+
+  static previewClassFile(
+    class_id: string,
+    resource_id: string,
+  ): Promise<IClassResourcePreview> {
+    return fetcher(`class-resource/${class_id}/preview/${resource_id}`)
   }
 }

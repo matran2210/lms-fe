@@ -186,6 +186,15 @@
     @apply text-gray-800;
   }
 
+  &.ant-select-allow-clear:hover:has(.ant-select-selection-item) {
+    .ant-select-arrow {
+      @apply hidden;
+    }
+  }
+  .ant-select-clear {
+    @apply right-4;
+  }
+
   .ant-select-selection-placeholder {
     @apply text-left text-gray-800;
   }

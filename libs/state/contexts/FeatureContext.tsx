@@ -84,6 +84,7 @@ interface FeatureContextProps {
     personURN: string,
     shareUrl: string,
     text: string,
+    imageBuffer: string
   ) => Promise<AxiosResponse<any, any, {}>>;
   dispatch?: AppLikeDispatch
   useAppSelector?: <T>(fn: (state: any) => T) => T

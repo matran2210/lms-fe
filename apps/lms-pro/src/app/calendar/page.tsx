@@ -15,14 +15,13 @@ import {
 } from '@lms/feature-calendar'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { HeaderMobile, Layout } from '@lms/ui'
+import { IEvent, IFilter, SAPPCalendar } from '@sapp-fe/sapp-common-package'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
-import { SAPPCalendar } from '@sapp-fe/sapp-common-package'
-import { IEvent, IFilter } from '@sapp-fe/sapp-common-package/dist/types'
-import { PageLink } from 'src/constants/routers'
 import CalendarApi from 'src/api/calendar'
+import { PageLink } from 'src/constants/routers'
 
 const CalendarPage = () => {
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =

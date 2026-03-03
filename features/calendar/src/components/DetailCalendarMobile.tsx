@@ -17,7 +17,7 @@ import { Divider } from "antd";
 import clsx from "clsx";
 import dayjs, { Dayjs } from "dayjs";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
-import { IEvent } from "@sapp-fe/sapp-common-package/dist/types";
+import { IEvent } from "@sapp-fe/sapp-common-package";
 import CourseTree from "./CourseTree";
 import { buildQueryString } from "@lms/utils";
 import { useFeature } from "../../../../libs/state";
@@ -306,6 +306,52 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                     )}
                   </div>
                 </div>
+                {data?.mode === LearningMode.OFFLINE && (
+                  <>
+                    <Divider />
+                    <div className="flex flex-col gap-3">
+                      <div className="text-lg font-semibold ">
+                        Classroom Detail
+                      </div>
+
+                      <div className="flex flex-col gap-2">
+                        <div className="grid grid-cols-2">
+                          <div>Classroom:</div>
+                          <div className="break-words text-right font-semibold">
+                            {data?.room?.name}
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2">
+                          <div>Classroom Address:</div>
+                          <div className="break-words text-right font-semibold">
+                            {data?.room?.address}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+                {data?.mode === LearningMode.LIVE_ONLINE &&
+                  data.class.link_meeting && (
+                    <>
+                      <Divider />
+                      <div className={"flex flex-col gap-3"}>
+                        <div className="text-lg font-semibold">Classroom Detail</div>
+                        <div className="flex flex-col gap-2">
+                          <div className="grid grid-cols-2">
+                            <div>Platform:</div>
+                            <div
+                              className="flex cursor-pointer justify-end"
+                              onClick={handleRedirectZoom}
+                            >
+                              <ZoomIcon />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 {!(data?.is_case_study || data?.schedule?.is_holiday) &&
                   !isOnlyMidTermOrFinalTest && (
                     <>
@@ -333,33 +379,6 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                       </div>
                     </>
                   )}
-
-                {data?.mode === LearningMode.OFFLINE && (
-                  <>
-                    <Divider />
-                    <div className="flex flex-col gap-3">
-                      <div className="text-lg font-semibold ">
-                        Classroom Detail
-                      </div>
-
-                      <div className="flex flex-col gap-2">
-                        <div className="grid grid-cols-2">
-                          <div>Classroom:</div>
-                          <div className="break-words text-right font-semibold">
-                            {data?.room?.name}
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-2">
-                          <div>Classroom Address:</div>
-                          <div className="break-words text-right font-semibold">
-                            {data?.room?.address}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                )}
               </>
             ) : (
               <div className="flex h-full flex-col items-center justify-center ">
@@ -367,27 +386,6 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
               </div>
             )}
           </div>
-
-          {data?.mode === LearningMode.LIVE_ONLINE &&
-            data.class.link_meeting && (
-              <>
-                <Divider />
-                <div className="flex flex-col gap-3">
-                  <div className="text-lg font-semibold">Classroom Detail</div>
-                  <div className="flex flex-col gap-2">
-                    <div className="grid grid-cols-2">
-                      <div>Platform:</div>
-                      <div
-                        className="flex cursor-pointer justify-end"
-                        onClick={handleRedirectZoom}
-                      >
-                        <ZoomIcon />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
 
           {/* Fixed Start button at bottom */}
           {(isOfflineOrLiveOnlineWithReview || isOnlineAndOpen) && (

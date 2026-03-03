@@ -193,7 +193,7 @@ const CoursePartDetailTeacher = () => {
         thankYouLater: false,
       })
     } else {
-      router.push(`${PageLink.TEACHER_MY_COURSE}/${id}/activity/${id}`)
+      router.push(`${PageLink.TEACHER_MY_COURSE}/${params.id}/activity/${id}`)
     }
   }
 
@@ -459,7 +459,7 @@ const CoursePartDetailTeacher = () => {
       isCourseDetail
     >
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
-        <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
+        <div className="relative flex h-16 w-full items-center justify-center border-b-[0.57px] border-zinc-100 bg-white">
           <Alert
             message={
               <div className="flex items-center gap-2">

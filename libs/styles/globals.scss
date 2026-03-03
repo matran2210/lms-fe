@@ -1064,8 +1064,13 @@ td.py-5.px-3.sapp-table-quiz {
 }
 
 .pined-noti p {
-  @apply mb-0;
+  @apply my-0;
 }
+
+.pined-noti p a {
+  @apply text-primary;
+}
+
 .ant-menu {
   @apply bg-[#091D37];
 }
@@ -1334,6 +1339,36 @@ mark {
     }
   }
 }
+.sapp-preview--image-v2 {
+  @apply max-w-[500px] lg:max-w-[40%] !w-auto;
+  .ant-modal-content {
+    @apply p-0;
+    .ant-modal-header {
+      @apply my-0 py-5 border-b border-solid border-b-gray-400;
+      .ant-modal-title {
+        @apply text-lg font-semibold text-gray-800 mx-5;
+      }
+    }
+    .ant-modal-body {
+      @apply mx-10 py-10;
+    }
+  }
+}
+.sapp-preview--certificate {
+  @apply max-w-[500px] md:max-w-[70%] lg:max-w-[60%] !w-auto;
+  .ant-modal-content {
+    @apply p-0;
+    .ant-modal-header {
+      @apply my-0 py-5;
+      .ant-modal-title {
+        @apply text-lg font-semibold text-gray-800 mx-5;
+      }
+    }
+    .ant-modal-body {
+      @apply mx-8 pb-8;
+    }
+  }
+}
 
 .hide-scrollbar {
   scrollbar-width: none;
@@ -1362,4 +1397,16 @@ mark {
   transition:
     opacity 200ms ease-out,
     transform 200ms ease-out;
+}
+
+.modal-view-more-lesson {
+  .ant-modal-content {
+    @apply p-4 rounded-lg;
+  }
+}
+
+.modal-preview-class-resource {
+  .ant-modal-content {
+    @apply p-0 rounded-lg overflow-hidden;
+  }
 }

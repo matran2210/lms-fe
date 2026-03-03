@@ -1,6 +1,6 @@
 import { EVENT_REPEAT_TYPES, FREQUENCY_UNITS_OBJECT } from "../../constants";
 import { FREQUENCY_UNITS } from "../../enums";
-import { IEvent } from "@sapp-fe/sapp-common-package/dist/types";
+import { IEvent } from "@sapp-fe/sapp-common-package";
 
 export type RecurringScheduleCalendarType = keyof typeof EVENT_REPEAT_TYPES;
 

@@ -1,15 +1,13 @@
-import { ButtonPrimary } from "@lms/ui";
-import { HookFormCheckBox } from "@lms/ui";
-import { SappModalV3 } from "@lms/ui";
-import { HookFormTextAreaWithRow } from "@lms/ui";
+import { useFeature } from "@lms/contexts";
 import { ICertificate } from "@lms/core";
+import { useDownloadImage } from "@lms/hooks";
+import { ButtonPrimary, HookFormCheckBox, HookFormTextAreaWithRow, SappModalV3 } from "@lms/ui";
 import { openLinkedInPopup } from "@lms/utils";
 import { Image } from "antd";
 import dayjs from "dayjs";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useFeature } from "@lms/contexts";
 
 interface IProps {
   open: boolean;
@@ -22,10 +20,10 @@ interface IForm {
   text?: string;
 }
 const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
-  const { uploadImageToLinkedIn, certificateApi } = useFeature();
+  const { certificateApi } = useFeature();
   const [loading, setLoading] = useState(false);
   const certId = certificate?.id || "";
-  const certURL = certificate?.certificate_url || "";
+  const certURL = certificate?.certificate_url || `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}?isShareLinkedin=true`;
   const shareUrl = encodeURIComponent(certURL);
   const SAPP_LINKEDIN_ID = 15236709;
   const linkedInUrl =
@@ -55,10 +53,29 @@ const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
     onResetForm();
     onClose();
   };
+   const { getCertificateBase64 } = useDownloadImage();
+    const handleCovertBase64ToBuffer = async () => {
+      if (loading) return;
+      try {
+        const base64Data = await getCertificateBase64(
+          document.getElementById(`vertical-${certificate?.id}`) as HTMLElement, 
+          certificate?.certificate?.html_template as string, 
+          certificate?.user.detail.full_name || '', 
+          certificate?.certificate?.name || ''
+        );
+
+        const pureBase64 = base64Data!.url.replace(/^data:image\/\w+;base64,/, "");
+        return pureBase64
+
+      } catch (error) {
+      } finally {
+      }
+    }
   const handleShareToFeed = async (data: IForm, callback?: () => void) => {
     const token = sessionStorage.getItem("linkedin_access_token");
     const personURN = sessionStorage.getItem("urn");
 
+    const bufferImage = await handleCovertBase64ToBuffer();
     if (!token || !personURN) {
       // Chưa có token → mở popup login LinkedIn
       const popup = window.open(
@@ -88,6 +105,7 @@ const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
             personURN,
             shareUrl,
             data.text || "",
+            bufferImage!
           );
           setLoading(false);
           if (res && res?.data?.success) {
@@ -113,6 +131,7 @@ const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
         personURN,
         shareUrl,
         data.text || "",
+        bufferImage!
       );
       setLoading(false);
       if (res && res?.data?.success) {
@@ -127,6 +146,8 @@ const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
   };
 
   const onSubmit = async (data: IForm) => {
+
+
     if (data.addToProfile && data.shareToFeed) {
       handleShareToFeed(data, () =>
         openLinkedInPopup(linkedInUrl, handleClose),

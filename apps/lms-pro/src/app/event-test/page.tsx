@@ -5,20 +5,17 @@ import { Heading } from '@lms/feature-courses'
 import { EventTestFilter, EventTestList } from '@lms/feature-test'
 import { useTailwindBreakpoint } from '@lms/hooks'
 
-import { CourseSkeleton, Footer, Layout, SearchWithMenuToggle } from '@lms/ui'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { CourseSkeleton, Footer, Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { EventTestAPI } from 'src/api/event-test'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch } from 'src/redux/hook'
-import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 
 const EventTest = () => {
-  const router = useRouter()
   const searchParam = useSearchParams()
-  const params = useParams()
   const query = Object.fromEntries(searchParam.entries())
   const dispatch = useAppDispatch()
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()

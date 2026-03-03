@@ -1,6 +1,6 @@
 import { IResponse } from '@lms/core'
 import request, { fetcher, getBaseUrl } from '@services/request'
-import axios, { AxiosResponse, CancelTokenSource } from 'axios'
+import axios, { AxiosProgressEvent, AxiosResponse, CancelTokenSource } from 'axios'
 
 type PartUploadDto = { part_number: number; upload_url: string }
 
@@ -87,6 +87,25 @@ export class UploadAPI {
       },
     })
   }
+  static downloadFileClassResource = async (
+    class_id: string,
+    resource_id: string,
+  ) => {
+    try {
+      const response = await request.get(
+        `/class-resource/${class_id}/download/${resource_id}`,
+      )
+      if (response.status === 200) {
+        const link = document.createElement('a')
+        link.href = `${getBaseUrl()}/resource/download?token=${response.data}`
+        link.download = ''
+        link.style.display = 'none'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      }
+    } catch (error) {}
+  }
 }
 
 const preUpload = async ({
@@ -131,7 +150,8 @@ const uploadFile = async (
 ) => {
   const fileBlob = file.blob
   if (file.type === 'SINGLE_PART') {
-    const onUploadProgress = (progressEvent: any) => {
+    const onUploadProgress = (progressEvent: AxiosProgressEvent) => {
+      if (!progressEvent.total) return
       const percent = Math.round(
         (progressEvent.loaded * 100) / progressEvent.total,
       )

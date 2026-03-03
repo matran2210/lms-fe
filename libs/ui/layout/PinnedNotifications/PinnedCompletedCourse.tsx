@@ -1,17 +1,17 @@
 import { ArrowRightIcon } from "@lms/assets";
-import PinnedNotificationWrapper from "./PinnedNotificationWrapper";
+import { IUser, useFeature, userReducer } from "@lms/contexts";
 import { formatDateToLongString } from "@lms/utils";
-import Image from "next/image";
-import React from "react";
-import { useFeature } from "@lms/contexts";
 import clsx from "clsx";
+import React from "react";
+import ImageRenderFromHtml from "../../components/base/image/ImageRenderFromHtml";
+import PinnedNotificationWrapper from "./PinnedNotificationWrapper";
 
 interface PinnedCompletedCourseData {
   isOpen: boolean;
   passedAt: string;
   userCertificateId: string;
   courseName: string;
-  userCertificateUrl: string;
+  userCertificateHtml: string;
 }
 
 interface IProps {
@@ -34,9 +34,9 @@ const NotificationMessage = React.memo(
 );
 NotificationMessage.displayName = "NotificationMessage";
 
-const CertificateImage = React.memo(({ url }: { url: string }) => (
+const CertificateImage = React.memo(({ html_template, id, name }: { html_template: string, id: string, name: string }) => (
   <div className="hidden h-[50px] w-[77px] md:block">
-    <Image src={url} alt="pinned-completed-course" width={77} height={50} />
+    <ImageRenderFromHtml id={`pinned-${id}`} html={html_template} previewWidth={77} previewHeight={50} name={name || ''}/>
   </div>
 ));
 CertificateImage.displayName = "CertificateImage";
@@ -60,11 +60,12 @@ SeeCertificateButton.displayName = "SeeCertificateButton";
 
 const PinnedCompletedCourse: React.FC<IProps> = React.memo(
   ({ pinnedCompletedCourse }) => {
-    const {router} = useFeature();
+    const {router, useAppSelector} = useFeature();
+    const { detail } = useAppSelector?.(userReducer).user as IUser;
     const {
       isOpen,
       passedAt,
-      userCertificateUrl,
+      userCertificateHtml,
       userCertificateId,
       courseName,
     } = pinnedCompletedCourse;
@@ -88,7 +89,7 @@ const PinnedCompletedCourse: React.FC<IProps> = React.memo(
         )}
       >
         <div className="flex items-center gap-4">
-          <CertificateImage url={userCertificateUrl} />
+          <CertificateImage id={userCertificateId} html_template={userCertificateHtml} name={detail?.full_name}/>
           <NotificationMessage courseName={courseName} passedAt={passedAt} />
         </div>
         <SeeCertificateButton onClick={onSeeCertificate} />

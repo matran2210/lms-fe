@@ -192,6 +192,7 @@ const ActivityTeacherPage = () => {
       CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION = {}
       try {
         dispatch(courseActivityAction.setActivityState(activity))
+        dispatch(courseActivityAction.setCurrentTabId(activity?.tabs?.[0]?.id))
         dispatch(
           getDiscussion({
             api: CoursesAPI,
@@ -528,7 +529,7 @@ const ActivityTeacherPage = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <LayoutTeacher title="Activity" breadcrumbs={breadcrumbsData} isActivity>
-        <div className={`max-w-xxl mx-auto my-0 text-bw-1`}>
+        <div className={`max-w-xxl text-bw-1 mx-auto my-0`}>
           {/* Notes */}
           <>
             {getNotesData?.map((e: any, index: number) => {

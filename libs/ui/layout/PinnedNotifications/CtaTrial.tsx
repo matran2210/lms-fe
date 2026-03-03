@@ -12,28 +12,9 @@ import PinnedNotificationWrapper from './PinnedNotificationWrapper'
 type CourseRouteType = 'LIST' | 'DETAIL' | 'SECTION' | 'ACTIVITY' | 'OTHER'
 
 export default function CtaTrial() {
-  const { pageLink, pathname } = useFeature()
-  const { setShowPinnedTrial, setOpenPopupCTA } = useCourseContext()
-  const { openPinned, setOpenPinned } = usePinnedNotifyContext()
-
-  const ENABLED_PINNED_PAGES = useMemo(
-    () => [
-      pageLink.TEACHER_COURSE_DETAIL_ID,
-      pageLink.TEACHER_COURSE_PART_DETAIL,
-      pageLink.TEACHER_COURSE_ACTIVITY,
-    ],
-    [pageLink],
-  )
-
-  const ENABLED_PINNED_NOTI_PAGES = useMemo(
-    () => [
-      pageLink.COURSES,
-      pageLink.TEACHERS,
-      pageLink.USERPAGE,
-      ...ENABLED_PINNED_PAGES,
-    ],
-    [pageLink, ENABLED_PINNED_PAGES],
-  )
+  const { pathname } = useFeature()
+  const { setShowPinnedTrial, setOpenPopupCTA, showPinnedTrial } = useCourseContext()
+  const { setOpenPinned } = usePinnedNotifyContext()
 
   const courseRouteType: CourseRouteType = useMemo(() => {
     if (/^\/courses\/my-course\/[^/]+$/.test(pathname as string)) return 'DETAIL'
@@ -48,16 +29,13 @@ export default function CtaTrial() {
     courseRouteType === 'SECTION' ||
     courseRouteType === 'ACTIVITY'
 
-  const isEnablePinnedNotiPages =
-    ENABLED_PINNED_NOTI_PAGES.includes(pathname as string) || isCourseDetailLike
+  const shouldShow =
+    localStorage.getItem('showPinTrial') === 'true'
 
   useLayoutEffect(() => {
-    const shouldShow =
-      localStorage.getItem('showPinTrial') === 'true' &&
-      isCourseDetailLike
 
-    setShowPinnedTrial(shouldShow)
-  }, [pathname, isCourseDetailLike, setShowPinnedTrial])
+    setShowPinnedTrial(shouldShow || false)
+  }, [pathname, shouldShow])
 
   const handleClose = () => {
     localStorage.setItem('showPinTrial', 'false')
@@ -73,10 +51,10 @@ export default function CtaTrial() {
       thankYouLater: false,
     })
   }
-
+  
   return (
     <>
-      {isEnablePinnedNotiPages && openPinned && (
+      {isCourseDetailLike && showPinnedTrial && (
         <PinnedNotificationWrapper
           bgColor="bg-info-100"
           borderColor="border-info"

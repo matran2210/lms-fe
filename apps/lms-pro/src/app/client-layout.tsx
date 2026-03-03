@@ -1,31 +1,29 @@
 'use client'
 import { getCountUnRead, showNotification } from '@lms/contexts'
-import {
-  CERTIFICATE_DETAIL,
-  ENTRANCE_TEST_RESULT,
-  ENTRANCE_TEST_TABLE_RESULT,
-} from '@lms/core'
-import { usePathname } from 'next/navigation'
-import { NotificationAPI } from 'src/api/notification'
 import { onMessageListener } from '@lms/utils'
-import { useEffect } from 'react'
+import { usePathname } from 'next/navigation'
+import { useEffect, useMemo } from 'react'
+import { NotificationAPI } from 'src/api/notification'
 import { useAppDispatch } from 'src/redux/hook'
 export default function ClientLayout() {
   const dispatch = useAppDispatch()
   const pathname = usePathname()
+  const checkRouteCertificate = useMemo(() => {
+    const path = pathname as string
+
+    return (
+      /^\/entrance-test\/test-result\/[^/]+$/.test(path) ||
+      /^\/entrance-test\/table-result\/[^/]+$/.test(path) ||
+      /^\/certificates\/[^/]+$/.test(path)
+    )
+  }, [pathname])
   useEffect(() => {
     onMessageListener().then((data: any) => {
       dispatch(showNotification())
     })
   })
   useEffect(() => {
-    if (
-      ![
-        ENTRANCE_TEST_TABLE_RESULT,
-        ENTRANCE_TEST_RESULT,
-        CERTIFICATE_DETAIL,
-      ].includes(pathname as string)
-    ) {
+    if (!checkRouteCertificate) {
       try {
         dispatch(getCountUnRead(NotificationAPI))
       } catch (error) {}
@@ -33,3 +31,4 @@ export default function ClientLayout() {
   }, [])
   return null
 }
+

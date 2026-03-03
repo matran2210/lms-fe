@@ -2,21 +2,37 @@
 .deploy_staging_template:
   stage: deploy
   image: node:20
-
   script:
     - export VERCEL_TOKEN=$VERCEL_TOKEN
     - export VERCEL_ORG_ID=$VERCEL_ORG_ID
-
   environment: staging
   tags:
     - shell-docker
   resource_group: lms-fe
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "staging"'
+      changes:
+        - apps/$APP_NAME/**/*
+        - libs/**/*
+        - features/**/*
+        - tools/**/*
+        - scripts/**/*
+        - package.json
+        - pnpm-lock.yaml
+        - pnpm-workspace.yaml
+        - turbo.json
+        - tsconfig.json
+        - .babelrc
+        - .npmrc
+        - .dockerignore
+        - prod.Dockerfile
+        - .gitlab-ci.yml
 
 # Job deploy staging cho LMS
 deploy_staging_lms:
   extends: .deploy_staging_template
-  only: 
-    - staging
+  variables:
+    APP_NAME: lms-pro
   script:
     - npm install -g vercel
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID
@@ -25,8 +41,8 @@ deploy_staging_lms:
 # Job deploy staging cho Lms-finhub
 deploy_staging_finhub:
   extends: .deploy_staging_template
-  only: 
-    - staging
+  variables:
+    APP_NAME: lms-finhub
   script:
     - npm install -g vercel
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_FINHUB
@@ -35,8 +51,8 @@ deploy_staging_finhub:
 # Job deploy staging cho Lms-zoom
 deploy_staging_zoom:
   extends: .deploy_staging_template
-  only: 
-    - staging
+  variables:
+    APP_NAME: lms-zoom
   script:
     - npm install -g vercel
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_ZOOM
@@ -65,6 +81,23 @@ variables:
   stage: build
   extends: .prepare
   image: docker:latest
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      changes:
+        - apps/$APP_NAME/**/*
+        - libs/**/*
+        - features/**/*
+        - tools/**/*
+        - scripts/**/*
+        - package.json
+        - pnpm-lock.yaml
+        - pnpm-workspace.yaml
+        - turbo.json
+        - tsconfig.json
+        - .babelrc
+        - .npmrc
+        - .dockerignore
+        - prod.Dockerfile
   script:
     - cp $ENV_FILE apps/$APP_NAME/.env
     - cp $ENV_FILE .env
@@ -74,7 +107,7 @@ variables:
     - |
       docker build \
         --build-arg APP_NAME=$APP_NAME \
-        -f $DOCKERFILE \
+        -f prod.Dockerfile \
         -t $IMAGE_NAME:$IMAGE_TAG .
 
     - docker push $IMAGE_NAME:$IMAGE_TAG
@@ -90,30 +123,12 @@ build_lms_pro:
   variables:
     APP_NAME: lms-pro
     IMAGE_TAG: lms-pro-$CI_PIPELINE_IID
-    DOCKERFILE: prod.Dockerfile
     ENV_FILE: $ENV_PROD_LMS_FILE
-  only:
-    # variables:
-    #   - $CI_COMMIT_MESSAGE =~ /build/
-    refs:
-      - master
-  # rules:
-  #   - if: '$CI_COMMIT_BRANCH == "master"'
-  #     changes:
-  #       - apps/lms-pro/**/*
-  #       - libs/**/*
-  #       - features/**/*
-  #       - tools/**/*
-  #       - scripts/**/*
-  #       - package.json
-  #       - pnpm-lock.yaml
-  #       - pnpm-workspace.yaml
-  #       - turbo.json
-  #       - tsconfig.json
-  #       - .babelrc
-  #       - .npmrc
-  #       - .dockerignore
-  #       - prod.Dockerfile
+  # only:
+  #   # variables:
+  #   #   - $CI_COMMIT_MESSAGE =~ /build/
+  #   refs:
+  #     - master
 
 # Build lms-finhub
 build_lms_finhub:
@@ -121,30 +136,12 @@ build_lms_finhub:
   variables:
     APP_NAME: lms-finhub
     IMAGE_TAG: lms-finhub-$CI_PIPELINE_IID
-    DOCKERFILE: prod.Dockerfile
     ENV_FILE: $ENV_PROD_FINHUB_FILE
-  only:
-    # variables:
-    #   - $CI_COMMIT_MESSAGE =~ /build/
-    refs:
-      - master
-  # rules:
-  #   - if: '$CI_COMMIT_BRANCH == "master"'
-  #     changes:
-  #       - apps/lms-finhub/**/*
-  #       - libs/**/*
-  #       - features/**/*
-  #       - tools/**/*
-  #       - scripts/**/*
-  #       - package.json
-  #       - pnpm-lock.yaml
-  #       - pnpm-workspace.yaml
-  #       - turbo.json
-  #       - tsconfig.json
-  #       - .babelrc
-  #       - .npmrc
-  #       - .dockerignore
-  #       - prod.Dockerfile
+  # only:
+  #   # variables:
+  #   #   - $CI_COMMIT_MESSAGE =~ /build/
+  #   refs:
+  #     - master
 
 # Build lms-zoom
 build_lms_zoom:
@@ -152,30 +149,12 @@ build_lms_zoom:
   variables:
     APP_NAME: lms-zoom
     IMAGE_TAG: lms-zoom-$CI_PIPELINE_IID
-    DOCKERFILE: prod.zoom.Dockerfile
     ENV_FILE: $ENV_PROD_ZOOM_FILE
-  only:
-    # variables:
-    #   - $CI_COMMIT_MESSAGE =~ /build/
-    refs:
-      - master
-  # rules:
-  #   - if: '$CI_COMMIT_BRANCH == "master"'
-  #     changes:
-  #       - apps/lms-zoom/**/*
-  #       - libs/**/*
-  #       - features/**/*
-  #       - tools/**/*
-  #       - scripts/**/*
-  #       - package.json
-  #       - pnpm-lock.yaml
-  #       - pnpm-workspace.yaml
-  #       - turbo.json
-  #       - tsconfig.json
-  #       - .babelrc
-  #       - .npmrc
-  #       - .dockerignore
-  #       - prod.zoom.Dockerfile
+  # only:
+  #   # variables:
+  #   #   - $CI_COMMIT_MESSAGE =~ /build/
+  #   refs:
+  #     - master
 
 # Deploy
 .deploy_template:

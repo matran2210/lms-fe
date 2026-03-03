@@ -2680,7 +2680,7 @@ export const CompletedIcon = ({ className }: IIconProps) => {
     </svg>
   )
 }
-export const StarCircleIcon = ({ color } : { color?: string }) => {
+export const StarCircleIcon = ({ color }: { color?: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -4319,7 +4319,33 @@ export const HandShake = () => (
   </svg>
 )
 
-export const NoDataIcon = ({ className }: { className?: string }) => (
+export const CloseIconV2 = ({ className }: { className?: string }) => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    <path
+      d="M18 18L6 6"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M6 18L18 6"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+)
+
+export const NoDataIconV2 = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="203"
@@ -5903,6 +5929,37 @@ export function Icon({ type, className }: IIconProps) {
         </svg>
       )}
     </>
+  )
+}
+
+export const IncreaseIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 4V20M20 12L4 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+)
+
+export const DecreaseIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 12H4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+)
+
+export const CheckIconV2 = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M17.1084 5.39155C17.3525 5.63563 17.3525 6.03136 17.1084 6.27544L9.95359 13.4302C9.05867 14.3252 7.60767 14.3252 6.71272 13.4302L3.72456 10.4421C3.48049 10.198 3.48049 9.80233 3.72456 9.55824C3.96864 9.31416 4.36437 9.31416 4.60844 9.55824L7.5966 12.5464C8.00339 12.9532 8.66292 12.9532 9.06975 12.5464L16.2246 5.39155C16.4687 5.14748 16.8643 5.14748 17.1084 5.39155Z"
+        fill="#FFB800"
+      />
+    </svg>
   )
 }
 

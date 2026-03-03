@@ -354,12 +354,9 @@ function Providers({ children }: { children: ReactNode }) {
                       <SappConfirmDialogContainer />
                       <RouteGuard>
                         <ConfigProvider>
+                          <PinnedNotifications />
                           <AntdApp>{children}</AntdApp>
                           <>
-                            <div className="relative">
-                              <PinnedNotifications />
-                              {/* <Component {...pageProps} /> */}
-                            </div>
                             {showBackToTop && <BackToTop />}
                             <MKTInApp showMKTInApp={showMKTInApp} />
                             {showHelp && <div id="floating-btn-divider" />}

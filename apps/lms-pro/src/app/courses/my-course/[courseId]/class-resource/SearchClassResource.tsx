@@ -10,13 +10,11 @@ import { buildQueryString } from '@lms/utils'
 import clsx from 'clsx'
 import {
   useParams,
-  usePathname,
   useRouter,
-  useSearchParams,
+  useSearchParams
 } from 'next/navigation'
 import React, { useEffect, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { PageLink } from 'src/constants/routers'
 
 interface IProps {
   handleOpenSidebar: () => void
@@ -64,7 +62,9 @@ const SearchClassResource = ({
 
     const { search_key, ...restQuery } = query
 
-    push(`${PageLink.CLASS_RESOURCE}?${buildQueryString(restQuery)}`)
+    push(
+      `/courses/my-course/${params.courseId}/class-resource?${buildQueryString(restQuery)}`,
+    )
   }
 
   const handleSubmit = () => {
@@ -73,11 +73,10 @@ const SearchClassResource = ({
     if (!courseId) return
 
     push(
-      `${PageLink.CLASS_RESOURCE}?${buildQueryString({
+      `/courses/my-course/${params.courseId}/class-resource?${buildQueryString({
         ...query,
         page_index: DEFAULT_PAGE_NUMBER,
         page_size: DEFAULT_PAGE_SIZE,
-        courseId,
         search_key: methods.watch('name')?.trim() || undefined,
       })}`,
     )
@@ -194,7 +193,7 @@ const SearchClassResource = ({
           {!isCoursePage && (
             <div
               className={clsx(
-                'border-transparent flex w-full items-center justify-between rounded-lg border border-white bg-white px-2 py-3 shadow-small transition-all duration-300 focus-within:border-primary hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4',
+                'flex w-full items-center justify-between rounded-lg border border-transparent border-white bg-white px-4 py-3 shadow-small transition-all duration-300 focus-within:border-primary hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4',
               )}
             >
               <SearchForm

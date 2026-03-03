@@ -1,11 +1,9 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
+import { NextResponse } from 'next/server'
 import axios from 'axios'
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
-  const { accessToken, personURN, shareUrl, text } = req.body
+export async function POST(req: Request) {
+  const { accessToken, personURN, shareUrl, text, imageBase64 } =
+    await req.json()
 
   try {
     // Step 1: Register upload
@@ -39,14 +37,22 @@ export default async function handler(
     const asset = registerRes.data.value.asset
 
     // Step 2. Download image from shareUrl
-    const decodedUrl = decodeURIComponent(shareUrl as string)
-    const imageRes = await axios.get(decodedUrl as string, {
-      responseType: 'arraybuffer',
-    })
+    // const decodedUrl = decodeURIComponent(shareUrl as string)
+    // const imageRes = await axios.get(decodedUrl as string, {
+    //   responseType: 'arraybuffer',
+    // })
     // Step 2.5 Upload image binary lên LinkedIn
-    const contentType = imageRes.headers['content-type'] || 'image/png'
+    // const contentType = imageRes.headers['content-type'] || 'image/png'
 
-    await axios.put(uploadUrl, imageRes.data, {
+    // await axios.put(uploadUrl, imageRes.data, {
+    //   headers: {
+    //     'Content-Type': contentType, // hoặc 'image/jpeg' tùy loại ảnh thật sự
+    //   },
+    // })
+    const contentType = 'image/png'
+    const bufferImage = Buffer.from(imageBase64, 'base64')
+
+    await axios.put(uploadUrl, bufferImage, {
       headers: {
         'Content-Type': contentType, // hoặc 'image/jpeg' tùy loại ảnh thật sự
       },
@@ -75,12 +81,15 @@ export default async function handler(
       },
     )
 
-    res.json({ success: true, message: 'Post successfully!' })
+    return NextResponse.json({ success: true, message: 'Post successfully!' })
   } catch (err: any) {
-    res.status(500).json({
-      status: err.response?.status,
-      data: err.response?.data,
-      message: err.message,
-    })
+    return NextResponse.json(
+      {
+        status: err.response?.status,
+        data: err.response?.data,
+        message: err.message,
+      },
+      { status: 500 },
+    )
   }
 }

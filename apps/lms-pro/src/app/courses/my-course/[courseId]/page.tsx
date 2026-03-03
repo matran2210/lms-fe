@@ -48,7 +48,7 @@ const CourseDetail = () => {
   const [pinnedCompletedCourse, setPinnedCompletedCourse] = useState({
     isOpen: false,
     passedAt: '',
-    userCertificateUrl: '',
+    userCertificateHtml: '',
     userCertificateId: '',
     courseName: '',
   })
@@ -223,7 +223,6 @@ const CourseDetail = () => {
 
     const {
       is_passed: isPassed,
-      user_certificate_url: userCertificateUrl,
       user_certificate_id: userCertificateId,
       passed_at: passedAt,
     } = courseDetail
@@ -232,7 +231,7 @@ const CourseDetail = () => {
       setPinnedCompletedCourse({
         isOpen: isPassed,
         passedAt,
-        userCertificateUrl,
+        userCertificateHtml: courseDetail.certificate?.html_template || '',
         userCertificateId,
         courseName: courseNameDetail || '',
       })

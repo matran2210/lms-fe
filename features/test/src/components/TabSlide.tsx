@@ -23,6 +23,7 @@ const TabSlide = ({
   isScrollCenter = true,
   setHasScrollBar,
 }: IProps) => {
+
   const { isMobileView } = useTailwindBreakpoint();
   const MAX_ITEMS_PER_ROW = 25;
   const MIN_ITEMS_PER_ROW = 14;
