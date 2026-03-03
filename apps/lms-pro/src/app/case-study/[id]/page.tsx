@@ -39,6 +39,7 @@ import {
   ResetToAnswerTemplateModal,
   ShowAnswerTemplate,
 } from '@lms/feature-courses'
+import { LimitQuizModal } from '@lms/feature-test'
 import QuitTestModal from '@lms/feature-test/src/components/test/modal/quit-test-modal'
 import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
 import { useSmartModalSize, useTailwindBreakpoint } from '@lms/hooks'
@@ -71,7 +72,6 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { TestServiceAPI } from 'src/api/test-api'
-import LimitQuizModal from 'src/app/test/limitQuizModal'
 
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])

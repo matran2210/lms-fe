@@ -27,7 +27,7 @@ import {
   QUESTION_TYPES,
 } from '@lms/core'
 import { CalculatorModal, ConFirmSubmit } from '@lms/feature-courses'
-import { QuitTestModal } from '@lms/feature-test'
+import { LimitQuizModal, QuitTestModal } from '@lms/feature-test'
 import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
 import { useMousePosition, useSmartModalSize } from '@lms/hooks'
 import {
@@ -58,7 +58,6 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import LimitQuizModal from 'src/app/test/limitQuizModal'
 
 const CaseStudyDetailTeacher = () => {
   const checkType = (

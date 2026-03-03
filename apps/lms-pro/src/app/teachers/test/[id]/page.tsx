@@ -45,7 +45,13 @@ import NewFiltext from '@lms/ui/components/questionType/NewFillText'
 import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
 import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
 import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
-import { checkSheetAnswered, checkTypeAndRenderTitle, isValuesEqual, isWorkbookEmpty, runHighlight } from '@lms/utils'
+import {
+  checkSheetAnswered,
+  checkTypeAndRenderTitle,
+  isValuesEqual,
+  isWorkbookEmpty,
+  runHighlight,
+} from '@lms/utils'
 import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -81,6 +87,7 @@ import {
   QuitTestModal,
   SuccessSubmittedConstructorModal,
   TabSlide,
+  TestScratchPads,
   TestTimeOutModal,
 } from '@lms/feature-test'
 import { useGetQuestionTabs, useGetQuizDetail } from '@lms/hooks'
@@ -89,7 +96,6 @@ import { trackGAEvent } from '@lms/utils'
 import dayjs from 'dayjs'
 import { EventTestAPI } from 'src/api/event-test'
 import { TestServiceAPI } from 'src/api/test-api'
-import TestScratchPads from 'src/app/test/TestScratchPads'
 import { PageLink } from 'src/constants/routers'
 
 declare global {
