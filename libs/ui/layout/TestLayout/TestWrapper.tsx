@@ -54,8 +54,6 @@ const TestWrapper = ({
   timeRef,
   setOpenSubmit,
   setOpenQuit,
-  type,
-  setSubmitEventTest,
   setUnSubmitAnswer,
   checkUnSubmitAnswer,
   footer,

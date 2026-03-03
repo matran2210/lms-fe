@@ -1,11 +1,10 @@
-import { isEmpty } from "lodash";
-import { NoData, SappModalV3 } from "@lms/ui";
-import EventTest from "./EventTest";
-import { IEventTest } from "@lms/core";
-import { useCourseContext, useFeature } from "@lms/contexts";
 import { IconCongrats } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
+import { IEventTest } from "@lms/core";
+import { NoData, SappModalV3 } from "@lms/ui";
+import { isEmpty } from "lodash";
 import ContentTestCongratution from "./ContentTestCongratution";
-// import { ANIMATION } from '@lms/core'
+import EventTest from "./EventTest";
 
 const EventTestList = ({
   eventTestLists,
@@ -14,18 +13,22 @@ const EventTestList = ({
   eventTestLists: IEventTest[];
   onRefetch: () => void;
 }) => {
-  const { setSubmitEventTest, submitEventTest } = useCourseContext();
-  const { query } = useFeature()
-  const category = query?.category
+  const { query, router, pathname } = useFeature();
+  const category = query?.category;
+  const submitedTest = query?.submitted;
 
   const handleCancelModalSubmitTest = () => {
-    setSubmitEventTest(false);
+    const params = new URLSearchParams(query);
+    params.delete("submitted");
+
+    const newUrl = params.toString()
+      ? `${pathname}?${params.toString()}`
+      : pathname;
+
+    router.replace(newUrl, { scroll: false });
   };
 
-  console.log('category', category, query)
-
   const renderContentPopup = (type: string) => {
-    console.log('type', type)
     switch (type) {
       case "ACCA":
         return (
@@ -82,7 +85,7 @@ const EventTestList = ({
       </div>
       <SappModalV3
         handleClose={handleCancelModalSubmitTest}
-        open={submitEventTest}
+        open={submitedTest}
         okButtonCaption="Back"
         handleCancel={handleCancelModalSubmitTest}
         onOk={handleCancelModalSubmitTest}
@@ -97,7 +100,7 @@ const EventTestList = ({
       >
         {renderContentPopup(
           // JSON.parse(localStorage.getItem("category") as any),
-          category as string
+          category as string,
         )}
       </SappModalV3>
     </>

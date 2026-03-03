@@ -11,7 +11,6 @@ export default function DragDropQuestionBlock({
   solution,
   setValue,
 }: CommonQuestionBlockProps) {
-  console.log('data', data, defaultValue, corrects)
   return (
 
     <NewDragNDropQuestion

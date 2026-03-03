@@ -122,7 +122,8 @@ const TestDetail = () => {
   const [, setHasScrollBar] = useState(undefined) as any;
   const [editorReady, setEditorReady] = useState(true);
   const [tooltipOpen, setTooltipOpen] = useState(false);
-  const { courseType, setSubmitEventTest } = useCourseContext();
+  const { setSubmitEventTest } = useCourseContext();
+  const [courseType, setCourseType] = useState<string>("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const searchParam = useSearchParams();
@@ -218,8 +219,6 @@ const TestDetail = () => {
 
   const {
     data: quizAttemptData,
-    isLoading,
-    error,
   } = useQuery({
     queryKey: ["quizAttempt", quizAttemptId],
     queryFn: () => CoursesAPI.getQuizAttempts(quizAttemptId as string),
@@ -245,8 +244,9 @@ const TestDetail = () => {
   }, [quizAttempt?.id]);
 
   useEffect(() => {
-    if (quizAttemptData?.data?.quizAttempt) {
-      setQuizAttempt(quizAttemptData.data.quizAttempt);
+    if (quizAttemptData?.data) {
+      setQuizAttempt(quizAttemptData?.data?.quizAttempt);
+      setCourseType(quizAttemptData?.data?.course?.course_type || null);
     }
   }, [quizAttemptData]);
   const onOpenResetToTemplateModal = () => {
@@ -318,6 +318,22 @@ const TestDetail = () => {
           ),
         ],
       };
+      const dragDropCurrentTemp = {
+        currentTabId: currentTabContent?.id,
+        drag_drop_answers: res?.data?.[0]?.drag_drop_answers,
+      };
+
+      setCurrentDragDrop((prev) => {
+        const exists = prev.some(
+          (item) => item.currentTabId === dragDropCurrentTemp.currentTabId,
+        );
+
+        if (!exists) {
+          return [...prev, dragDropCurrentTemp];
+        }
+
+        return prev;
+      });
     }
     return {
       corrects: corrects,
@@ -1456,13 +1472,6 @@ const TestDetail = () => {
       );
       if (res?.success) {
         setSubmited(true);
-        // localStorage.setItem(
-        //   "quizAttempt",
-        //   JSON.stringify({
-        //     ...quizAttempt,
-        //     is_submitted: true,
-        //   }),
-        // );
         setQuizAttempt((prev: any) => ({
           ...prev,
           is_submitted: true,
@@ -1496,23 +1505,27 @@ const TestDetail = () => {
               `${WEB_LMS_URL}/entrance-test/test-result/${res?.data?.id}?${searchParams}`,
             );
           } else if (type === "event-test") {
-            router.push(`${WEB_LMS_URL}/event-test?category=${res?.data?.course_category?.name}`);
-            setSubmitEventTest(true);
-            // localStorage.setItem(
-            //   "category",
-            //   JSON.stringify(res?.data?.course_category?.name),
-            // );
+            router.push(
+              `${WEB_LMS_URL}/event-test?category=${res?.data?.course_category?.name}&submitted=true`,
+            );
           } else {
             if (type !== "entrance" && quizDetail?.quiz_type !== "FINAL_TEST") {
-              router.push(`${WEB_LMS_URL}/courses/test/test-result/${res?.data?.id}`);
+              router.push(
+                `${WEB_LMS_URL}/courses/test/test-result/${res?.data?.id}`,
+              );
             } else {
               if (
                 courseType === "FOUNDATION_COURSE" &&
                 quizDetail?.quiz_type == "FINAL_TEST"
               ) {
-                router.push(localStorage.getItem("courseDetail") || "");
+                router.push(
+                  `${WEB_LMS_URL}/courses/my-course/${class_id}`,
+                );
+                return
               } else {
-                router.push(`${WEB_LMS_URL}/courses/test/test-result/${res?.data?.id}`);
+                router.push(
+                  `${WEB_LMS_URL}/courses/test/test-result/${res?.data?.id}`,
+                );
               }
             }
           }
@@ -1782,21 +1795,23 @@ const TestDetail = () => {
   }, [watchExhibits("exhibits")]);
 
   useEffect(() => {
-  if (quizAttemptId || !id) return;
+    if (quizAttemptId || !id) return;
 
-  const createQuizAttempt = async () => {
-    try {
-      const res = await TestServiceAPI.createQuizAttempt(
-        id as string,
-        query.class_user_id as string,
-      );
-      setQuizAttempt(res.data);
-    } catch (err) {
-    }
-  };
+    const createQuizAttempt = async () => {
+      try {
+        const res = await TestServiceAPI.createQuizAttempt(
+          id as string,
+          query.class_user_id as string,
+        );
+        setQuizAttempt(res.data);
+        setCourseType(res?.data?.course?.course_type || null);
+      } catch (err) {}
+    };
 
-  createQuizAttempt();
-}, [quizAttemptId, id]);
+    createQuizAttempt();
+  }, [quizAttemptId, id]);
+
+   const class_id = query.class_id;
 
   useEffect(() => {
     if (quizAttempt?.id) {
@@ -2712,7 +2727,9 @@ const TestDetail = () => {
                   default: {
                     const class_id = query.class_id;
                     if (class_id) {
-                      router.push(`${WEB_LMS_URL}/courses/my-course/${class_id}`);
+                      router.push(
+                        `${WEB_LMS_URL}/courses/my-course/${class_id}`,
+                      );
                     } else {
                       router.back();
                     }

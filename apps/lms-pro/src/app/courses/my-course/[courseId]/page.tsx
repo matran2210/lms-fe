@@ -188,7 +188,7 @@ const CourseDetail = () => {
       }
       setCourseType(data.pages[0].courseDetail.data.course_type ?? '')
     }
-  })
+  },[])
 
   const canShowExam = (remindChoosingExam: RemindChoosingExam) => {
     return (

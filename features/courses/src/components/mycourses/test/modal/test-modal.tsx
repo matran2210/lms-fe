@@ -58,7 +58,8 @@ const TestModal = ({
   is_passed_course,
   selectedResultCourse,
 }: IProps) => {
-  const { router, testServiceApi, classApi } = useFeature();
+  const { router, testServiceApi, classApi, params } = useFeature();
+
   const isSubmitted =
     data?.quiz?.attempt && data?.quiz?.attempt?.status === "SUBMITTED";
   const isUnsubmitted =
@@ -325,10 +326,10 @@ const TestModal = ({
       activeCourse && (await activeCourse());
       const quizAttempt = JSON.parse(localStorage.getItem("quizAttempt") || "{}");
       if (!quizAttempt || !quizAttempt?.id) {
-         router.push(`${SUB_DOMAIN_TEST}/test/${data.quiz.id}?class_user_id=${class_user_id}`);
+         router.push(`${SUB_DOMAIN_TEST}/test/${data.quiz.id}?class_user_id=${class_user_id}&class_id=${params?.courseId}`);
           return;
       } else {
-        router.push(`${SUB_DOMAIN_TEST}/test/${data.quiz.id}?class_user_id=${class_user_id}&quizAttemptId=${quizAttempt?.id}`);
+        router.push(`${SUB_DOMAIN_TEST}/test/${data.quiz.id}?class_user_id=${class_user_id}&quizAttemptId=${quizAttempt?.id}&class_id=${params?.courseId}`);
       }
       status
         ? () => trackGAEvent("Click Button Retake Modal Test")
