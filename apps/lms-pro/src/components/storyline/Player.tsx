@@ -1,20 +1,17 @@
 'use client'
 
 import { useStoryline } from '@contexts/StorylineContext'
-import { scrollToY } from '@utils/helpers/storyline/scrollManager'
-import { motion, AnimatePresence } from 'framer-motion'
+import { IStoryline } from '@lms/core'
+import { SappLoadingGlobal } from '@lms/ui'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useParams, useSearchParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
-import { useQuery } from 'react-query'
-import { StorylineAPI } from 'src/api/storyline'
-import { IStoryline } from '@lms/core'
+import CompleteStoryline from './blocks/CompleteStoryline'
 import { StepRenderer } from './blocks/StepRenderer'
 import ContinueButton from './ContinueButton'
+import StoryFooter from './footer/StoryFooter'
 import StoryHeader from './header/StoryHeader'
 import Sidebar from './sidebar'
-import StoryFooter from './footer/StoryFooter'
-import { SappLoadingGlobal } from '@lms/ui'
-import CompleteStoryline from './blocks/CompleteStoryline'
 
 interface IProps {
   listStorylineData: IStoryline | undefined
@@ -35,26 +32,9 @@ export default function Player({ listStorylineData }: IProps) {
     updateProgress,
     visibleDocumentCount,
     isCompletedProgress,
+    storylinyeDocument,
   } = useStoryline()
 
-  const useGetStorylineDocument = (queryKey: string) => {
-    const fetchData = async () => {
-      const { data } = await StorylineAPI.getStorylineDocument({
-        class_id: class_id as string,
-        item_id: currentStep?.id as string,
-      })
-      return data
-    }
-
-    return useQuery([queryKey, params], fetchData, {
-      enabled: class_id !== undefined && currentStep?.id !== undefined,
-      retry: false,
-    })
-  }
-
-  const { data: storylinyeDocument, isLoading } = useGetStorylineDocument(
-    `storyline-document-${currentStep?.id}`,
-  )
   useEffect(() => {
     if (visibleDocumentCount > 1) return
     if (storylinyeDocument?.length === 0) return
@@ -126,15 +106,6 @@ export default function Player({ listStorylineData }: IProps) {
                         storylinyeDocument?.slice(0, visibleDocumentCount) ?? []
                       }
                       storylinyeDocument={storylinyeDocument}
-                      onNewBlockMounted={(el) => {
-                        const rect = el.getBoundingClientRect()
-                        const targetY = rect.top + window.scrollY
-
-                        scrollToY(targetY, {
-                          offset: 100,
-                          duration: 0.3,
-                        })
-                      }}
                     />
                   </section>
                   {visibleDocumentCount < (storylinyeDocument?.length ?? 0) &&

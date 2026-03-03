@@ -1,65 +1,74 @@
-import { motion } from 'framer-motion'
-import { useRef } from 'react'
-import { StoryBlockRenderer } from './StoryBlockRenderer'
 import { DocumentItem } from '@lms/core'
+import Aos from 'aos'
+import 'aos/dist/aos.css'
+import { useEffect, useRef } from 'react'
+import { StoryBlockRenderer } from './StoryBlockRenderer'
+import { useStoryline } from '@contexts/StorylineContext'
 
 interface Props {
   documents: DocumentItem[] | undefined
   storylinyeDocument: DocumentItem[] | undefined
-  onNewBlockMounted?: (el: HTMLElement) => void
 }
 
 export function StepRenderer({
   documents = [],
   storylinyeDocument = [],
-  onNewBlockMounted,
 }: Props) {
+  const containerRef = useRef<HTMLDivElement | null>(null)
   const blockRefs = useRef<(HTMLElement | null)[]>([])
+  const { visibleDocumentCount } = useStoryline()
+
+  console.log(visibleDocumentCount, storylinyeDocument.length)
+  // ✅ Init AOS chỉ 1 lần
+  useEffect(() => {
+    Aos.init({
+      duration: 650,
+      once: true,
+      easing: 'ease-out-cubic',
+      // disableMutationObserver: true,
+    })
+  }, [])
+
+  // ✅ Khi documents thay đổi → refresh AOS + scroll block mới
+  useEffect(() => {
+    if (!documents.length) return
+
+    const lastIndex = documents.length - 1
+    const newBlock = blockRefs.current[lastIndex]
+
+    if (!newBlock) return
+
+    // Đợi layout + AOS tính xong
+    setTimeout(() => {
+      newBlock.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+
+      // onNewBlockMounted?.(newBlock)
+    }, 200)
+  }, [visibleDocumentCount])
 
   return (
-    <motion.section
-      layout
-      transition={{
-        layout: {
-          type: 'spring',
-          stiffness: 85,
-          damping: 26,
-          mass: 0.9,
-        },
-      }}
-      className="mx-auto"
-    >
+    <div ref={containerRef} className="mx-auto" data-aos="fade-up">
       {documents.map((doc, index) => {
-        const isNew = index === documents.length - 1
-
         return (
-          <motion.div
+          <div
             key={doc.id}
-            ref={(el) => (blockRefs.current[index] = el)}
-            layout
-            initial={isNew ? { opacity: 0, y: 16 } : false}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              opacity: { duration: 0.25 },
-              y: { duration: 0.35, ease: 'easeOut' },
-            }}
-            onAnimationComplete={() => {
-              if (isNew && blockRefs.current[index]) {
-                onNewBlockMounted?.(blockRefs.current[index]!)
-              }
+            ref={(el) => {
+              blockRefs.current[index] = el
             }}
             className="mb-12"
+            data-aos="fade-up"
           >
-            {/* <div className="mb-6 text-lg font-semibold">{doc.name}</div> */}
-
             <StoryBlockRenderer
               doc={doc}
               docIndex={index + 1}
               storylinyeDocument={storylinyeDocument}
             />
-          </motion.div>
+          </div>
         )
       })}
-    </motion.section>
+    </div>
   )
 }

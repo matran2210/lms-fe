@@ -11,11 +11,17 @@ import React, {
 } from 'react'
 import { CoursesAPI } from 'src/api/courses'
 import {
+  DocumentItem,
+  IMultiChoiceQuestion,
   IStoryline,
   IStorylineItem,
   IStorylineProgressResponse,
+  IStorylineQuestion,
 } from '@lms/core'
 import { useStorylineSidebar } from './StorylineSidebarContext'
+import { TestServiceAPI } from 'src/api/test-api'
+import { StorylineAPI } from 'src/api/storyline'
+import { useQuery } from 'react-query'
 
 interface StorylineContextValue {
   currentStepIndex: number
@@ -31,6 +37,10 @@ interface StorylineContextValue {
   ) => void
   updateProgress: (storyline_item_document_id: string) => void
   isCompletedProgress: number
+  storylinyeDocument: DocumentItem[] | undefined
+  question: IStorylineQuestion | null
+  setQuestion: React.Dispatch<React.SetStateAction<IStorylineQuestion | null>>
+  topicDescription: any
 }
 
 export const StorylineContext = createContext<StorylineContextValue | null>(
@@ -62,6 +72,8 @@ export function StorylineProvider({ storylineData, children }: Props) {
   const { section_storyline_id } = params
 
   const stepRefs = useRef<(HTMLDivElement | null)[]>([])
+  const [question, setQuestion] = useState<IStorylineQuestion | null>(null)
+  const [topicDescription, setTopicDescription] = useState<any>()
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [visibleDocumentCount, setVisibleDocumentCount] = useState(1)
   const [isCompletedProgress, setIsCompletedProgress] = useState(
@@ -88,7 +100,24 @@ export function StorylineProvider({ storylineData, children }: Props) {
     return map
   }, [steps])
   const currentStep = steps[currentStepIndex] ?? null
+  const useGetStorylineDocument = (queryKey: string) => {
+    const fetchData = async () => {
+      const { data } = await StorylineAPI.getStorylineDocument({
+        class_id: class_id as string,
+        item_id: currentStep?.id as string,
+      })
+      return data
+    }
 
+    return useQuery([queryKey, params], fetchData, {
+      enabled: class_id !== undefined && currentStep?.id !== undefined,
+      retry: false,
+    })
+  }
+
+  const { data: storylinyeDocument, isLoading } = useGetStorylineDocument(
+    `storyline-document-${currentStep?.id}`,
+  )
   const updateProgress = async (storyline_item_document_id: string) => {
     if (!currentStep) return
     // Reveal document
@@ -196,6 +225,10 @@ export function StorylineProvider({ storylineData, children }: Props) {
         continueAction,
         updateProgress,
         isCompletedProgress,
+        storylinyeDocument,
+        question,
+        setQuestion,
+        topicDescription,
       }}
     >
       {children}

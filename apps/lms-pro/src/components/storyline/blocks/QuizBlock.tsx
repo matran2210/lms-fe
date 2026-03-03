@@ -2,6 +2,7 @@
 import { useStoryline } from '@contexts/StorylineContext'
 import { CircleCheckIcon, RestartIcon } from '@lms/assets'
 import {
+  ANIMATION,
   DEFAULT_EDITOR_VALUE,
   defaultSheetData,
   DocumentItem,
@@ -31,11 +32,12 @@ import {
   isEmptyParagraph,
 } from '@lms/utils'
 import { Divider, Tabs } from 'antd'
+import Aos from 'aos'
 import clsx from 'clsx'
 import { isUndefined } from 'lodash'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { TestServiceAPI } from 'src/api/test-api'
 import { v4 as uuidv4 } from 'uuid'
@@ -96,16 +98,7 @@ const QuizBlock = ({
     const value = MatchQuizRef?.current?.getMatchedPairs?.()
     return isRetakeQuestion ? [] : value || []
   }
-  const getValueFillText = () => {
-    const value = []
-    const inputs = questionRef?.current?.querySelectorAll(
-      'input[stringHTML="true"]',
-    ) as any
-    for (const e of inputs) {
-      value?.push(e?.value)
-    }
-    return isRetakeQuestion ? [] : value
-  }
+
   const checkCorrectAnswer = (question: IStorylineQuestion) => {
     switch (question.qType) {
       case QUESTION_TYPES.ONE_CHOICE:
@@ -701,9 +694,10 @@ const QuizBlock = ({
           <Divider className="my-4 bg-gray-300 md:my-8" />
         )}
       <div
-        className={clsx('rounded-t-2xl bg-gray-100 p-8', {
+        className={clsx('min-h-[200px] rounded-t-2xl bg-gray-100 p-8', {
           'rounded-b-2xl': isLearnedBlock && !isShowActionBtn,
         })}
+        data-aos={'fade-up'}
       >
         {renderQuestion()}
       </div>
@@ -711,15 +705,17 @@ const QuizBlock = ({
       {/* Not Confirm */}
       <div
         className={clsx(
-          'flex items-center justify-end gap-4 rounded-b-2xl px-6 py-4 transition-all duration-300',
+          'flex items-center justify-end gap-4 rounded-b-2xl px-6 py-4',
+          'transition-transform duration-200 ease-out will-change-transform',
           {
-            'max-h-0 overflow-hidden !p-0 opacity-0':
+            'max-h-0 translate-y-full !p-0 opacity-0':
               isLearnedBlock && !isShowActionBtn,
             'bg-primary-100': isQuestionConfirmed || !isCorrectAnswer,
             'bg-success-50': !isQuestionConfirmed || isCorrectAnswer,
-            '!opacity-100': isShowActionBtn,
+            'translate-y-0 opacity-100': isShowActionBtn,
           },
         )}
+        // data-aos={'fade-up'}
       >
         {!isQuestionConfirmed ? (
           <>
