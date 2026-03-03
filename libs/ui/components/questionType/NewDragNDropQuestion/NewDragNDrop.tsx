@@ -40,6 +40,7 @@ interface DragDropQuestionProps {
   };
   solution?: string;
   explainClassname?: string;
+  disabled?: boolean; 
 }
 
 // Component cho bank area
@@ -105,6 +106,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
   corrects,
   solution,
   explainClassname,
+  disabled
 }) => {
   const correctCurrent = corrects?.corrects;
   const contentRef = React.useRef<HTMLSpanElement | null>(null);
@@ -144,7 +146,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
     setItems(remaining);
   }, [parsedSlots, data.answers]);
 
-  const isDisabled = !isEmpty(correctCurrent);
+  const isDisabled = !isEmpty(correctCurrent) || disabled;
 
   const handleOnclick = async (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e?.target as HTMLElement;
@@ -215,7 +217,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
         })}
       </div>
     );
-  }, [data.question_content, slots, corrects]);
+  }, [data.question_content, slots, corrects, isDisabled]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { over, active } = event;

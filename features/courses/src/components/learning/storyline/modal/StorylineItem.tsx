@@ -33,7 +33,7 @@ const StorylineItem = ({
           'hover:bg-primary-100': !active && !disabled,
         })}
     >
-      <div className="flex items-center gap-2">
+      <div className="flex flex-1 items-center gap-2">
         {isShowProgress && (
           <div className="font-medium text-gray">
             {progress === 100 ? (
@@ -44,14 +44,14 @@ const StorylineItem = ({
           </div>
         )}
         <Tooltip title={name}>
-          <div className="line-clamp-1 max-w-[160px] justify-start overflow-ellipsis text-base font-normal leading-6 text-gray-800">
+          <div className="line-clamp-1 max-w-32 justify-start overflow-ellipsis text-base font-normal leading-6 text-gray-800">
             {name}
           </div>
         </Tooltip>
       </div>
 
       <div className="font-medium text-gray">
-        {progress === 100 ? <ProgressIcon /> : `${progress}%`}
+        {progress === 100 && !isShowProgress ? <ProgressIcon /> : `${progress}%`}
       </div>
     </motion.div>
   )

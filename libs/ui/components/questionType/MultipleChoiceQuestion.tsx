@@ -36,7 +36,7 @@ const MultiChoiceQuestion = ({
   isShowWarning = false,
   explainClassname,
   storageKey,
-  disabled
+  readOnly
 }: IPreviewProp) => {
   const { query, params } = useFeature()
   const convertAnswer = useMemo(() => {
@@ -178,7 +178,7 @@ const MultiChoiceQuestion = ({
           corrects={corrects}
           defaultValue={defaultValues || ""}
           positionCheckBox="start"
-          disabled={disabled}
+          readOnly={readOnly}
         />
       </div>
 

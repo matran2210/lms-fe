@@ -348,7 +348,7 @@ const QuizBlock = ({
             solution={openExplain ? question?.solution : undefined}
             explainClassname="!mt-8 !p-0 !bg-transparent"
             control={control}
-            disabled={isQuestionConfirmed}
+            readOnly={isQuestionConfirmed}
           />
         )
 
@@ -368,7 +368,7 @@ const QuizBlock = ({
             setValue={setValue}
             solution={openExplain ? question?.solution : undefined}
             explainClassname="!mt-8 !p-0 !bg-transparent"
-            disabled={isQuestionConfirmed}
+            readOnly={isQuestionConfirmed}
           />
         )
 
@@ -390,6 +390,7 @@ const QuizBlock = ({
             ref={MatchQuizRef}
             explainClassname="!mt-0 !p-0 !bg-transparent"
             correctAnswerClass="!mt-0 !pt-0"
+            disabled={isQuestionConfirmed}
           />
         )
 
@@ -412,6 +413,7 @@ const QuizBlock = ({
             solution={openExplain ? question?.solution : undefined}
             watch={watch}
             explainClassname="!mt-8 !p-0 !bg-transparent"
+            readOnly={isQuestionConfirmed}
           />
         )
 
@@ -432,6 +434,7 @@ const QuizBlock = ({
             }
             solution={openExplain ? question?.solution : undefined}
             explainClassname="!mt-8 !p-0 !bg-transparent"
+            disabled={isQuestionConfirmed}
           />
         )
 
@@ -454,6 +457,8 @@ const QuizBlock = ({
                 : undefined
             }
             solution={openExplain ? question?.solution : undefined}
+            disabled={isQuestionConfirmed}
+            className="!bg-white"
           />
         )
 
