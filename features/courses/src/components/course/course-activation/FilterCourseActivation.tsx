@@ -1,7 +1,7 @@
 import { CheckIconV2, FilterCourseIcon } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
 import { useSelectSubject, useTailwindBreakpoint } from "@lms/hooks";
-import { SappDrawerV3, SAPPSelectV2 } from "@lms/ui";
+import { SappDrawerV3, SAPPSelect } from "@lms/ui";
 import { buildQueryString } from "@lms/utils";
 import { Divider } from "antd";
 import { DefaultOptionType } from "antd/es/select";
@@ -111,7 +111,7 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
           </div>
           <div className="flex gap-2">
             {listFilter?.map((item, index) => (
-              <SAPPSelectV2
+              <SAPPSelect
                 isSearchable
                 key={index}
                 control={control}
@@ -126,7 +126,6 @@ const FilterCourseActivation = ({ totalResult }: { totalResult: number }) => {
                 }}
                 options={item.options ?? []}
                 className="min-w-36"
-                heightCustom="h-10"
                 allowClear={item.name === "program" ? false : true}
               />
             ))}

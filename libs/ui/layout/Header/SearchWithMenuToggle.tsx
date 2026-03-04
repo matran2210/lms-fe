@@ -52,7 +52,7 @@ const SearchWithMenuToggle = ({
   const appCourseLink = redirectLink;
   const handleSubmit = () => {
     // Redirect to the search results page with the query as a query parameter
-    push(
+    router.push(
       `${appCourseLink}${
         methods.watch("name")?.trim()?.length
           ? `?name=${methods.watch("name")}`
