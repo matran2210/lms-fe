@@ -24,6 +24,7 @@ const TabSlide = ({
   isScrollCenter = true,
   setHasScrollBar,
 }: IProps) => {
+
   const { isMobileView } = useTailwindBreakpoint();
   const MAX_ITEMS_PER_ROW = 25;
   const MIN_ITEMS_PER_ROW = 14;
@@ -279,7 +280,7 @@ const TabSlide = ({
                       key={pageNum.id}
                       active={currentTab === pageNum.id}
                       onClick={() => {
-                        if (setCurrentTab !== undefined) {
+                        if (setCurrentTab !== undefined && currentTab !== pageNum.id) {
                           handleChangeTab(pageNum.id);
                         }
                       }}
@@ -301,7 +302,7 @@ const TabSlide = ({
                       key={pageNum.id}
                       active={currentTab === pageNum.id}
                       onClick={() => {
-                        if (setCurrentTab !== undefined) {
+                        if (setCurrentTab !== undefined && currentTab !== pageNum.id) {
                           handleChangeTab(pageNum.id);
                         }
                       }}
@@ -328,7 +329,7 @@ const TabSlide = ({
                           key={pageNum.id}
                           active={currentTab === pageNum.id}
                           onClick={() => {
-                            if (setCurrentTab !== undefined) {
+                            if (setCurrentTab !== undefined && currentTab !== pageNum.id) {
                               handleChangeTab(pageNum.id);
                             }
                           }}

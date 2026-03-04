@@ -44,6 +44,7 @@ const CardFileItem = ({ data, name }: IProps) => {
   const { isTeacher } = useUserRole()
   const params = useParams()
   const internalRef = useRef<HTMLVideoElement>(null)
+  const isLandscape = window.matchMedia('(orientation: landscape)').matches
 
   const heightPreview = useMemo(() => {
     if (previewResource?.suffix_type === 'VIDEO') {
@@ -51,7 +52,7 @@ const CardFileItem = ({ data, name }: IProps) => {
     } else if (previewResource?.suffix_type === 'AUDIO') {
       return 'h-[56px]'
     }
-    return 'h-[500px]'
+    return 'h-[calc(100vh-100px)]'
   }, [previewResource?.suffix_type])
   const canDownload = (record: IClassResource, isTeacher: boolean) => {
     const perms = record?.class_resource_permissions
@@ -137,7 +138,7 @@ const CardFileItem = ({ data, name }: IProps) => {
           </div>
         )
       case 'AUDIO':
-        return (
+        return resource.url ? (
           <SAPPAudio
             streamRef={internalRef}
             options={{
@@ -146,6 +147,10 @@ const CardFileItem = ({ data, name }: IProps) => {
                 .replace('/manifest/video.m3u8', ''),
             }}
           ></SAPPAudio>
+        ) : (
+          <div className="flex h-full items-center justify-center text-base text-gray-400">
+            File đang trong quá trình xử lý
+          </div>
         )
       case 'WORD_DOCUMENT':
         return loadingEditor ? (
@@ -307,9 +312,14 @@ const CardFileItem = ({ data, name }: IProps) => {
           onCancel={() => setOpenPreview(false)}
           title=""
           footer={false}
-          width={window.innerWidth * 0.9}
+          width={
+            previewResource.suffix_type === 'VIDEO' && isLandscape
+              ? window.innerWidth * 0.8
+              : window.innerWidth * 0.9
+          }
           centered
           closable={false}
+          destroyOnHidden
         >
           <header className="flex items-center justify-between px-3 py-2">
             <div className="line-clamp-1 text-sm font-medium text-gray-800">
