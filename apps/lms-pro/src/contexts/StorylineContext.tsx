@@ -212,7 +212,7 @@ export function StorylineProvider({ storylineData, children }: Props) {
     if (!currentStep) return
     const completed = currentStep.item_progress?.total_document_completed ?? 0
     setVisibleDocumentCount(!completed ? completed + 1 : completed)
-  }, [currentStep?.id])
+  }, [currentStep?.id, storylinyeDocument])
 
   return (
     <StorylineContext.Provider

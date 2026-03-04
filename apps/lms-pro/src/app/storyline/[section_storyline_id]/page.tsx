@@ -21,7 +21,7 @@ function StoryLinePage() {
       return data
     }
 
-    return useQuery([queryKey, params], fetchData, {
+    return useQuery([queryKey, section_storyline_id], fetchData, {
       enabled:
         class_id !== undefined && params.section_storyline_id !== undefined,
       retry: false,

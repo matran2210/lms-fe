@@ -7,11 +7,9 @@ import { DocumentItem, IMultiChoiceQuestion } from '@lms/core'
 export function StoryBlockRenderer({
   doc,
   docIndex,
-  storylinyeDocument,
 }: {
   doc: DocumentItem
   docIndex: number
-  storylinyeDocument: DocumentItem[]
 }) {
   const { videoUrl } = useFeature()
   switch (doc.type) {
@@ -38,7 +36,6 @@ export function StoryBlockRenderer({
           quiz_id={quiz?.id as string}
           document_id={doc.id}
           docIndex={docIndex}
-          storylinyeDocument={storylinyeDocument}
         />
       )
 

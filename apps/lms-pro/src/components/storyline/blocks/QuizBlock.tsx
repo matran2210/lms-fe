@@ -47,7 +47,6 @@ interface QuizBlockProps {
   quiz_id: string
   document_id: string
   docIndex: number
-  storylinyeDocument: DocumentItem[]
 }
 
 const QuizBlock = ({
@@ -55,7 +54,6 @@ const QuizBlock = ({
   quiz_id,
   document_id,
   docIndex,
-  storylinyeDocument,
 }: QuizBlockProps) => {
   const MatchQuizRef = useRef(null) as any
   const questionRef = useRef<HTMLDivElement>(null)
@@ -64,11 +62,15 @@ const QuizBlock = ({
   const status = searchParams.get('status')
 
   const { control, setValue, reset, getValues, watch, resetField } = useForm()
-  const { continueAction, visibleDocumentCount, updateProgress } =
-    useStoryline()
+  const {
+    continueAction,
+    visibleDocumentCount,
+    updateProgress,
+    storylinyeDocument,
+  } = useStoryline()
   const currentVisibleDocument = storylinyeDocument?.[visibleDocumentCount]
   const isLearnedBlock = docIndex < visibleDocumentCount
-  const isLastVisibleDocument = docIndex === storylinyeDocument.length
+  const isLastVisibleDocument = docIndex === storylinyeDocument?.length
   const [loading, setLoading] = useState<boolean>(false)
   const [question, setQuestion] = useState<IStorylineQuestion | null>(null)
   const [topicDescription, setTopicDescription] = useState<any>()

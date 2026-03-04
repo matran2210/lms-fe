@@ -4,7 +4,7 @@ import { useStoryline } from '@contexts/StorylineContext'
 import { IStoryline } from '@lms/core'
 import { SappLoadingGlobal } from '@lms/ui'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useParams, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 import CompleteStoryline from './blocks/CompleteStoryline'
 import { StepRenderer } from './blocks/StepRenderer'
@@ -19,9 +19,7 @@ interface IProps {
 export default function Player({ listStorylineData }: IProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const searchParams = useSearchParams()
-  const class_id = searchParams.get('class_id')
   const status = searchParams.get('status')
-  const params = useParams()
   const storylineItemsHasDocs = listStorylineData?.storyline?.items || []
 
   const {
@@ -42,7 +40,7 @@ export default function Player({ listStorylineData }: IProps) {
     if (!firstDocument) return
 
     updateProgress(firstDocument?.id as string)
-  }, [storylinyeDocument])
+  }, [storylinyeDocument, visibleDocumentCount])
 
   if (!currentStep) return null
 
@@ -75,17 +73,17 @@ export default function Player({ listStorylineData }: IProps) {
 
               <Sidebar listStorylineData={listStorylineData} />
               <main ref={containerRef} className="flex w-full flex-col pb-28">
-                <motion.div
-                  layout="position"
-                  transition={{
-                    layout: {
-                      type: 'spring',
-                      stiffness: 72,
-                      damping: 32,
-                      mass: 1.15,
-                      restDelta: 0.0008,
-                    },
-                  }}
+                <div
+                  // layout="position"
+                  // transition={{
+                  //   layout: {
+                  //     type: 'spring',
+                  //     stiffness: 72,
+                  //     damping: 32,
+                  //     mass: 1.15,
+                  //     restDelta: 0.0008,
+                  //   },
+                  // }}
                   className="mx-auto flex w-full max-w-5xl flex-1 flex-col"
                 >
                   <section
@@ -120,7 +118,7 @@ export default function Player({ listStorylineData }: IProps) {
                         }
                       />
                     )}
-                </motion.div>
+                </div>
               </main>
 
               {storylinyeDocument &&

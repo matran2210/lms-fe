@@ -1,9 +1,37 @@
+import { useStorylineSidebar } from '@contexts/StorylineSidebarContext'
 import { RestartIcon } from '@lms/assets'
 import { ButtonPrimary, ButtonText } from '@lms/ui'
 import clsx from 'clsx'
 import Image from 'next/image'
-
+import { useParams, useSearchParams } from 'next/navigation'
+import { useQueryClient } from 'react-query'
+import { StorylineAPI } from 'src/api/storyline'
 const StoryFooter = ({ onClick }: { onClick: () => void }) => {
+  const searchParams = useSearchParams()
+  const class_id = searchParams.get('class_id')
+  const storylineItemId = searchParams.get('storylineItemId')
+  const queryClient = useQueryClient()
+  const { setListStorylines, setLearningProgress } = useStorylineSidebar()
+  const params = useParams()
+  const { section_storyline_id } = params
+  const handleRedoItem = async () => {
+    const res = await StorylineAPI.retakeStoryline({
+      class_id: class_id as string,
+      course_section_id: section_storyline_id as string,
+      storyline_item_id: storylineItemId as string,
+    })
+    if (res) {
+      setListStorylines(res?.data.storyline.items)
+      setLearningProgress(res?.data.learning_progress)
+      queryClient.invalidateQueries({
+        queryKey: ['storyline'],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`storyline-document-${storylineItemId}`],
+      })
+    }
+  }
+
   return (
     <div
       className={clsx(
@@ -28,14 +56,14 @@ const StoryFooter = ({ onClick }: { onClick: () => void }) => {
           </div>
         </div>
         <div className="flex items-center justify-start gap-4">
-          {/* <ButtonText
+          <ButtonText
             isUnderLine={false}
             size="medium"
             startIcon={<RestartIcon className="h-6 w-6" />}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={handleRedoItem}
           >
             Redo Item
-          </ButtonText> */}
+          </ButtonText>
           <ButtonPrimary size="medium" onClick={onClick}>
             Next Item
           </ButtonPrimary>

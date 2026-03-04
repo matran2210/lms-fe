@@ -23,14 +23,17 @@ export class StorylineAPI {
   static retakeStoryline({
     class_id,
     course_section_id,
+    storyline_item_id,
   }: {
     class_id: string
     course_section_id: string
+    storyline_item_id?: string
   }): Promise<IResponse<IStoryline>> {
     return fetcher(
       `course-sections/${class_id}/storyline/${course_section_id}/retake`,
       {
         method: 'PUT',
+        data: { storyline_item_id },
       },
     )
   }

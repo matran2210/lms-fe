@@ -1,7 +1,7 @@
 import { DocumentItem } from '@lms/core'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { StoryBlockRenderer } from './StoryBlockRenderer'
 import { useStoryline } from '@contexts/StorylineContext'
 
@@ -10,29 +10,63 @@ interface Props {
   storylinyeDocument: DocumentItem[] | undefined
 }
 
-export function StepRenderer({
-  documents = [],
-  storylinyeDocument = [],
-}: Props) {
+export function StepRenderer({ documents = [] }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const blockRefs = useRef<(HTMLElement | null)[]>([])
-  const { visibleDocumentCount } = useStoryline()
+  const prevVisibleDocsRef = useRef<number>(0)
+  const prevStepRef = useRef<string | null>('')
 
-  console.log(visibleDocumentCount, storylinyeDocument.length)
-  // ✅ Init AOS chỉ 1 lần
+  const { visibleDocumentCount, currentStep, storylinyeDocument } =
+    useStoryline()
   useEffect(() => {
     Aos.init({
-      duration: 650,
+      duration: 750,
       once: true,
       easing: 'ease-out-cubic',
       // disableMutationObserver: true,
     })
   }, [])
 
-  // ✅ Khi documents thay đổi → refresh AOS + scroll block mới
+  useEffect(() => {
+    const docs = storylinyeDocument?.slice(0, visibleDocumentCount)
+    if (!docs?.length) return
+    if (!currentStep?.id) return
+    if (!storylinyeDocument?.length) return
+
+    const visibleDocs =
+      currentStep?.item_progress?.total_document_completed || 1
+
+    // Nếu không phải chuyển step → bỏ qua
+    if (prevStepRef.current === currentStep?.id) return
+    // Nếu
+    if (prevVisibleDocsRef.current === visibleDocs) return
+
+    const isCompleted = visibleDocs >= (storylinyeDocument?.length || 0)
+    const targetIndex = isCompleted ? 0 : docs.length - 1
+
+    const targetBlock = blockRefs.current[targetIndex]
+    if (targetBlock) {
+      requestAnimationFrame(() => {
+        targetBlock.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        })
+      })
+    }
+    prevStepRef.current = currentStep?.id as string
+    prevVisibleDocsRef.current = visibleDocs
+  }, [currentStep?.id, storylinyeDocument])
+
   useEffect(() => {
     if (!documents.length) return
+    if (!storylinyeDocument?.length) return
 
+    const visibleDocs =
+      currentStep?.item_progress?.total_document_completed || 1
+
+    const isCompleted = visibleDocs >= storylinyeDocument?.length
+
+    if (isCompleted) return
     const lastIndex = documents.length - 1
     const newBlock = blockRefs.current[lastIndex]
 
@@ -44,8 +78,6 @@ export function StepRenderer({
         behavior: 'smooth',
         block: 'start',
       })
-
-      // onNewBlockMounted?.(newBlock)
     }, 200)
   }, [visibleDocumentCount])
 
@@ -61,11 +93,7 @@ export function StepRenderer({
             className="mb-12"
             data-aos="fade-up"
           >
-            <StoryBlockRenderer
-              doc={doc}
-              docIndex={index + 1}
-              storylinyeDocument={storylinyeDocument}
-            />
+            <StoryBlockRenderer doc={doc} docIndex={index + 1} />
           </div>
         )
       })}
