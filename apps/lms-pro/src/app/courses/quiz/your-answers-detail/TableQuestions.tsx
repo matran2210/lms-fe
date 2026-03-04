@@ -1,6 +1,5 @@
-"use client"
+'use client'
 import { SappBaseTable } from '@lms/ui'
-import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
 import { CloseIcon } from '@lms/assets'
 import {
   ANIMATION,
@@ -23,10 +22,12 @@ import { useInfiniteQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses/index'
 import { PageLink } from 'src/constants/routers'
 import {
+  convertSecondsToMinutesSeconds,
   convertSlugToTitle,
   getGradingStatusLabel,
   handleReplaceText,
   removeHtmlTags,
+  roundNumber,
   truncateString,
 } from '@lms/utils'
 import { ListScoreCollapse } from '@lms/feature-courses'
@@ -52,7 +53,7 @@ const TableQuestions = ({
   const router = useRouter()
   const searchParams = useSearchParams()
   const params = useParams()
-        const query = Object.fromEntries(searchParams.entries())
+  const query = Object.fromEntries(searchParams.entries())
   const headers = [
     {
       label: '#',
@@ -89,14 +90,11 @@ const TableQuestions = ({
   } = useInfiniteQuery({
     queryKey: ['scoreDetails', params.id],
     queryFn: async ({ pageParam }) => {
-      const res = await CoursesAPI.getQuizAttemptsTable(
-        params.id as string,
-        {
-          page_index: pageParam,
-          page_size: DEFAULT_PAGESIZE,
-          no_group_view: true,
-        },
-      )
+      const res = await CoursesAPI.getQuizAttemptsTable(params.id as string, {
+        page_index: pageParam,
+        page_size: DEFAULT_PAGESIZE,
+        no_group_view: true,
+      })
       if (res.success) {
         return res.data
       }

@@ -1,6 +1,7 @@
 import { MenuItem, MenuOption, ProfilePages, TitleSidebar } from '@lms/core'
 import { PageLink } from './routers'
 import { LANG_SIGNIN } from '@lms/core'
+import { makeMenuLevel } from '@lms/utils'
 
 const MENU_OPTIONS: MenuOption[] = [
   {
@@ -59,7 +60,7 @@ const MENU_OPTIONS: MenuOption[] = [
   },
   {
     name: `${TitleSidebar.CALCULATOR}`,
-    icon: 'caculator',
+    icon: 'calculator',
     url: '#',
     type: 'level-1',
   },
@@ -112,18 +113,6 @@ const MENU_OPTIONS_BOTTOM: MenuOption[] = [
     type: 'level-1',
   },
 ]
-
-function makeMenuLevel(options: MenuOption[], depth = 0): MenuItem[] {
-  return options.map((option, idx) => ({
-    ...option,
-    id: depth === 0 ? idx.toString() : `${depth}.${idx}`,
-    depth,
-    subItems:
-      option.subItems && option.subItems.length > 0
-        ? makeMenuLevel(option.subItems, depth + 1)
-        : undefined,
-  }))
-}
 
 export const MENU_ITEMS: MenuItem[] = makeMenuLevel(MENU_OPTIONS)
 export const MENU_ITEMS_EVENT: MenuItem[] = makeMenuLevel(

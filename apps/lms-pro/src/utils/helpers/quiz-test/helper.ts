@@ -1,110 +1,5 @@
-import { QUESTION_TYPES, Sheet, TEST_TYPE } from '@lms/core'
-import { TestServiceAPI } from 'src/api/test-api'
-import dayjs from 'dayjs'
+import { QUESTION_TYPES, Sheet } from '@lms/core'
 import { FieldValues, UseFormGetValues } from 'react-hook-form'
-
-export const getResult = async (currentTabContent: any) => {
-  const res = await TestServiceAPI.getQuestionAnswer(currentTabContent.id)
-  let corrects = {} as any
-  if (
-    currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
-    currentTabContent.qType === QUESTION_TYPES.TRUE_FALSE ||
-    currentTabContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
-  ) {
-    corrects = res?.data?.[0].answers?.reduce(
-      (previousValue: any, currentValue: any) => {
-        return {
-          ...previousValue,
-          [currentValue.id]: currentValue.is_correct,
-        }
-      },
-      {} as { [key: string]: boolean },
-    )
-  } else if (
-    currentTabContent.qType === QUESTION_TYPES.FILL_WORD ||
-    currentTabContent.qType === QUESTION_TYPES.SELECT_WORD
-  ) {
-    corrects = { corrects: [...res?.data?.[0]?.answers] }
-  } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
-    corrects = { corrects: [...res?.data?.[0]?.question_matchings] }
-  } else if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
-    corrects = {
-      corrects: [
-        ...res?.data?.[0]?.answers?.sort(
-          (a: any, b: any) => a?.answer_position - b?.answer_position,
-        ),
-      ],
-    }
-  }
-  return {
-    corrects: corrects,
-    solution: res?.data?.[0]?.solution,
-    isSelfReflection: res?.data?.[0]?.is_self_reflection,
-    requirements: res?.data?.[0]?.requirements,
-  }
-}
-
-export const checkTypeAndRenderTitle = (type: string) => {
-  let pageTitle = ''
-  switch (type) {
-    case TEST_TYPE.MID_TERM_TEST:
-      return (pageTitle = 'Midterm Test')
-    case TEST_TYPE.FINAL_TEST:
-      return (pageTitle = 'Final Test')
-    case TEST_TYPE.TOPIC_TEST:
-      return (pageTitle = 'Topic Test')
-    case TEST_TYPE.CHAPTER_TEST:
-      return (pageTitle = 'Chapter Test')
-    case TEST_TYPE.PART_TEST:
-      return (pageTitle = 'Part Test')
-    case TEST_TYPE.ENTRANCE_TEST:
-      return (pageTitle = 'Entrance Test')
-    case TEST_TYPE.EVENT_TEST:
-      return (pageTitle = 'Event Test')
-    default:
-      return pageTitle
-  }
-}
-
-// Get Value Answer
-
-/**
- * @description Get fill text answers from form
- * @return {void}
- */
-export const getValueFillText = () => {}
-
-/**
- * @description Get select word answers from DOM elements
- * @return {Array} Array of selected values
- */
-const getValueSelectText = () => {
-  let value = [] as any
-  const inputs = document.querySelectorAll('div.sapp-select--question') as any
-
-  for (let e of inputs) {
-    value.push(e?.dataset.value)
-  }
-  return value
-}
-/**
- * @description Get drag and drop answers from DOM elements
- * @return {Array<Object>} Array of objects containing id, value and idAnswer
- */
-export const getAnswerDragNDrop = () => {
-  let value = [] as any
-  const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
-  inputs.forEach((e: HTMLElement, index: number) => {
-    const idAnswer = e.querySelector('.answer-box') as HTMLElement | null
-    value.push({
-      id: e?.id,
-      value: e?.innerText,
-      idAnswer: idAnswer?.id,
-      position: index,
-    })
-  })
-  return value
-}
 
 /**
  * @description Process and encode answer data to base64
@@ -208,15 +103,6 @@ export const isValuesEqual = async (
   // }
 
   return false
-}
-
-const calculateEndTime = (createdAt: Date, quizTimed: number): Date => {
-  return dayjs(createdAt).add(quizTimed, 'minutes').toDate()
-}
-
-export const isQuizExpired = (createdAt: Date, quizTimed: number): boolean => {
-  const endTime = calculateEndTime(createdAt, quizTimed)
-  return dayjs().isAfter(endTime)
 }
 
 export const isWorkbookEmpty = (sheets: Sheet[] | undefined): boolean => {

@@ -6,7 +6,7 @@ import {
   getPaddingHorizontalClass,
   getPaddingVerticalClass,
   getTextSizeClass,
-} from "@utils/helpers/button";
+} from "@lms/utils";
 
 const ButtonOutlined = ({
   title,

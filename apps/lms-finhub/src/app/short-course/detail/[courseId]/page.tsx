@@ -1,4 +1,8 @@
 'use client'
+import { Breadcrumb3Level } from '@components/courses'
+import LearningOutComeModal from '@components/courses/popup/LearningOutComeModal'
+import TestModal from '@components/courses/popup/TestModal'
+import Layout from '@components/layout'
 import {
   AlertInfoIcon,
   ChapterIcon,
@@ -6,43 +10,39 @@ import {
   DocumentTextIcon,
   ResourceIcon,
 } from '@lms/assets'
-import { Breadcrumb3Level } from '@components/courses'
-import LearningOutComeModal from '@components/courses/popup/LearningOutComeModal'
-import TestModal from '@components/courses/popup/TestModal'
-import Layout from '@components/layout'
-import BottomMenu from '@components/v2/course-detail/BottomMenu'
-import CardMenuItem from '@components/v2/course-detail/CardMenuItem'
+import {
+  activeNotesList3Level,
+  useCourseContext,
+  UserType,
+} from '@lms/contexts'
+import {
+  ANIMATION,
+  DEFAULT_PAGESIZE,
+  ISubSection,
+  ROUTES,
+  TEST_TYPE,
+} from '@lms/core'
+import { CardMenuItem, PopupLockContent } from '@lms/feature-courses'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { BottomMenu, LearningResource, PromotionalBanner } from '@lms/ui'
 import { buildQueryString, formatDate } from '@lms/utils'
+import PreviewPartDetail from '@sapp-fe/preview-part'
 import { Alert, Divider, Skeleton } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { useEffect, useMemo, useState } from 'react'
-import { useQuery } from 'react-query'
-import PreviewPartDetail from '@sapp-fe/preview-part'
-import { ANIMATION, DEFAULT_PAGESIZE, ROUTES, TEST_TYPE } from '@lms/core'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import {
-  activeNotesList3Level,
-  useAppDispatch,
-  useCourseContext,
-  useFeature,
-  UserType,
-} from '@lms/contexts'
-import { ISubSection } from 'src/type/courses-3-level'
 import { isEmpty } from 'lodash'
-import { PageLink } from 'src/constants/routes'
-import { PopupLockContent } from '@lms/feature-courses'
-import { LearningResource } from '@lms/ui'
-// import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
-import PromotionalBanner from '@lms/ui/components/banner/PromotionalBanner'
 import {
   useParams,
   usePathname,
   useRouter,
   useSearchParams,
 } from 'next/navigation'
+import { useEffect, useMemo, useState } from 'react'
+import { useQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
+import { PageLink } from 'src/constants/routes'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { useAppDispatch } from 'src/redux/hook'
 import StoryOverview from '@components/storyline/modal/StoryOverview'
 
 const CourseDetail = () => {
@@ -58,6 +58,8 @@ const CourseDetail = () => {
   )
   const router = useRouter()
   const params = useParams()
+  const searchParams = useSearchParams()
+  const query = Object.fromEntries(searchParams.entries())
   const [readMore, setReadMore] = useState<boolean>(false)
   const [open, setOpen] = useState<boolean>(false)
   const [chapterData, setChapterData] = useState<any>({})
@@ -69,8 +71,6 @@ const CourseDetail = () => {
   const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
   const { setOpenSidebar } = useCourseContext()
-  const { query } = useFeature()
-
   // const handleOpenSidebar = () => {
   //   setShowSidebar(true)
   //   setOpenSidebar(true)
@@ -284,7 +284,6 @@ const CourseDetail = () => {
   }
 
   const pathname = usePathname()
-  const searchParams = useSearchParams()
   const asPath = pathname + (searchParams.toString() ? `?${searchParams}` : '')
 
   useEffect(() => {

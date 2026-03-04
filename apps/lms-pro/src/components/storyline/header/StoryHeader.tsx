@@ -1,20 +1,13 @@
-import { HamburgerMenuLargeIcon, SelectArrow } from '@assets/icons'
 import {
-  StorylineSidebarContext,
-  useStorylineSidebar,
+  useStorylineSidebar
 } from '@contexts/StorylineSidebarContext'
-import {
-  CheckCircleOutlineYellow,
-  CheckIcon,
-  CloseModalIcon,
-} from '@lms/assets'
+import { CheckCircleOutlineYellow, CloseModalIcon, HamburgerMenuLargeIcon, SelectArrow } from '@lms/assets'
 import { Select } from '@lms/ui'
 import clsx from 'clsx'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { IStoryline } from '@lms/core'
-import ProgressBar from './ProgressBar'
 import { useState } from 'react'
 import QuitLearningStoryline from '../modal/QuitLearningStoryline'
+import ProgressBar from './ProgressBar'
 
 const StoryHeader = () => {
   const router = useRouter()

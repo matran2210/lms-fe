@@ -5,8 +5,6 @@ import {
   saveAnswer,
   selectQuestions,
   submitQuiz,
-  useAppDispatch,
-  useAppSelector,
 } from '@lms/contexts'
 import { useEffect, useRef, useState } from 'react'
 
@@ -37,6 +35,7 @@ import { useRouter } from 'next/navigation'
 import ConFirmSubmit from 'src/app/short-course/test/conFirmSubmit'
 import { TestServiceAPI } from 'src/api/test-api'
 import { CoursesAPI } from 'src/api/courses'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 type Props = {
   questions: IQuestion[]
@@ -58,29 +57,6 @@ type Props = {
   attemptId?: string
   isTeacher?: boolean
 }
-
-interface IAnswer {
-  active: string
-  id: string
-  is_correct: false
-  quiz_attempt_id: string
-  time_spent: number
-  topic_attempt_id: string
-  question: {
-    id: string
-    qType: string
-    question_content: string
-    question_filter_id: {
-      part: {
-        name: string
-      }
-    }
-  }
-}
-
-// interface IAnswers {
-//   answers: IAnswer[]
-// }
 
 const QuizDocument = ({
   questions,
@@ -253,7 +229,7 @@ const QuizDocument = ({
     } else {
       await questionRef.current?.onResetWord(
         name,
-        activeQuestion?.response_option,
+        activeQuestion?.response_option as RESPONSE_OPTION,
         defaultValue,
       )
     }
@@ -636,13 +612,13 @@ const QuizDocument = ({
     switch (status) {
       case GRADE_STATUS.FINISHED_GRADING:
         return (
-          <div className="bg-blur-green text-green-800 rounded px-2 font-medium">
+          <div className="bg-blur-green rounded px-2 font-medium text-green-800">
             Finished Grading
           </div>
         )
       case GRADE_STATUS.AWAITING_GRADING:
         return (
-          <div className="bg-blur-yellow  text-amber-400 rounded px-2 font-medium">
+          <div className="bg-blur-yellow  rounded px-2 font-medium text-amber-400">
             Awaiting Grading
           </div>
         )

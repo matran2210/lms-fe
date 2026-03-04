@@ -1,15 +1,15 @@
 import { ButtonSecondary } from "@lms/ui";
 import { CardCourse } from "../course/index";
-import { Icon, CourseTimeIcon, GraduationCapIcon } from "@lms/assets/icons";
 import { clearStylesHtml } from "@lms/utils";
 import clsx from "clsx";
 import { isEmpty } from "lodash";
 import React from "react";
-import { useAppSelector } from "@lms/contexts";
 import { ICourse } from "@lms/core";
 import Course from "./Course";
 import { NoCoursesAvailable, Tooltip } from "@lms/ui";
 import { useTailwindBreakpoint } from "@lms/hooks";
+import { useFeature } from "@lms/contexts";
+import { CourseTimeIcon, GraduationCapIcon, Icon } from "@lms/assets";
 
 interface CoursesProps {
   courses: ICourse[];
@@ -30,7 +30,8 @@ const CoursesList: React.FC<CoursesProps> = ({
   guideIsActive,
   isTeacher = false,
 }) => {
-  const { status: guideStatus, step: guideStep } = useAppSelector(
+  const { useAppSelector } = useFeature();
+  const { status: guideStatus, step: guideStep } = useAppSelector?.(
     (state) => state.userGuideReducer,
   );
 

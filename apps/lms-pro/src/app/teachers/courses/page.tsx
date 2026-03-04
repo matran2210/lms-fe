@@ -1,8 +1,9 @@
-"use client"
+'use client'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { UserType } from '@lms/contexts'
 import { ANIMATION, ITabs, MY_COURSES } from '@lms/core'
 import { CoursesList, Filter } from '@lms/feature-courses'
-import { LayoutTeacher, SappLoadingGlobal, SearchForm } from '@lms/ui'
+import { LayoutTeacher, SearchForm } from '@lms/ui'
 import { buildQueryString } from '@lms/utils'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'

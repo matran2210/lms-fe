@@ -6,7 +6,7 @@ import { useMutation } from "react-query";
 import { useFeature } from "@lms/contexts";
 import { ClassKey, RemindChoosingExam } from "@lms/core";
 import { useSelectExams } from "@lms/hooks";
-import { SappModalV3, SAPPSelectV2 } from "@lms/ui";
+import { SappModalV3, SAPPSelectTooltip } from "@lms/ui";
 
 interface ISelectExamPopup {
   courseData: any;
@@ -113,7 +113,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
         <p className="mb-2 text-sm text-gray">
           {getTitleMessage(remindChoosingExam)}
         </p>
-        <SAPPSelectV2
+        <SAPPSelectTooltip
           placeholder="Exam Date"
           options={examOptions}
           control={control}

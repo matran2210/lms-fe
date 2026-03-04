@@ -1,5 +1,5 @@
+import { IPdfModal } from '@lms/core'
 import { FileViewer, ModalResizeable } from '@lms/ui'
-import { IPdfModal } from 'src/type/courses-3-level'
 
 export default function PdfModal({
   open,

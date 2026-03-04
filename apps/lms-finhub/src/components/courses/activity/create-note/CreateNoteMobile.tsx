@@ -1,8 +1,8 @@
 import { CloseNone, SaveIcon } from '@lms/assets'
 import BaseModal from '@components/courses/popup/BaseModal'
 import { Control, UseFormHandleSubmit } from 'react-hook-form'
-import { NoteFormData } from 'src/type/courses-3-level'
 import { ButtonPrimary, HookFormTextArea } from '@lms/ui'
+import { NoteFormData } from '@lms/core'
 
 interface IProps {
   id?: string | number

@@ -7,7 +7,7 @@ import {
   IQuizResultList,
   IResponse,
 } from '@lms/core'
-import { fetcher, fetchFormData } from '@services/requestV2'
+import { fetcher, fetchFormData } from '@services/request'
 import { AxiosPromise } from 'axios'
 import { apiURL } from 'src/constants'
 

@@ -1,5 +1,10 @@
-import { ChangePasswordReq, ResetPassword, SendEmailReq, VerifyOtpReq } from '@lms/contexts'
-import { fetcher } from '@services/requestV2'
+import {
+  ChangePasswordReq,
+  ResetPassword,
+  SendEmailReq,
+  VerifyOtpReq,
+} from '@lms/contexts'
+import { fetcher } from '@services/request'
 import { apiURL } from 'src/constants'
 
 const MyProfileAPI = {

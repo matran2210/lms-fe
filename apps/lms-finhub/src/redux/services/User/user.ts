@@ -1,8 +1,8 @@
-import { IUser } from 'src/redux/types/User/urser'
 import url from './url'
 import { IResponse, PinnedNotifications } from '@lms/core'
-import { fetchFormData } from '@services/requestV2'
+import { fetchFormData } from '@services/request'
 import { IDeviceItem } from '@lms/core'
+import { IUser } from '@lms/contexts'
 import { AuthAPI } from 'src/api/profile'
 
 const UserApi = {
@@ -53,9 +53,6 @@ const UserApi = {
   getListDevices: async (): Promise<IDeviceItem[]> => {
     return AuthAPI.getListDevices()
   },
-  getListDevicesV2: async (): Promise<IDeviceItem[]> => {
-    return AuthAPI.getListDevices()
-  },
   getListHistory: async ({
     page_index,
     page_size,
@@ -75,7 +72,7 @@ const UserApi = {
   },
   removeDevice: (session_id: string): Promise<any> => {
     return AuthAPI.removeDevice(session_id)
-  }
+  },
 }
 
 export default UserApi

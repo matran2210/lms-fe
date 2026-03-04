@@ -1,6 +1,6 @@
 'use client'
 import { CLASS_SUFFIX_TYPE_FILTER, DEFAULT_PAGE_NUMBER } from '@lms/core'
-import { SappSelectMultiple, SAPPSelectV2 } from '@lms/ui'
+import { SappSelectMultiple, SAPPSelectTooltip } from '@lms/ui'
 import { buildQueryString, normalizeToArray } from '@lms/utils'
 import { getSelectOptions, pushQueryClassResource } from '@utils/helpers'
 import { debounce } from 'lodash'
@@ -95,7 +95,7 @@ const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
       <div className="flex justify-end gap-4">
         <div className="flex gap-2">
           {/* ===== Suffix type ===== */}
-          <SAPPSelectV2
+          <SAPPSelectTooltip
             control={control}
             name="suffix_types"
             placeholder="Type"

@@ -2,7 +2,7 @@
 import { useRef, useState, useEffect } from 'react'
 import { isEmpty } from 'lodash'
 import { INotificationAPI, LOCAL_STORAGE_KEYS } from '@lms/core'
-import { useAppDispatch, useAppSelector ,getCountUnRead,
+import { getCountUnRead,
   getNotification,
   getNotificationDetail,
   loadMoreNotification,
@@ -15,13 +15,12 @@ import { useAppDispatch, useAppSelector ,getCountUnRead,
 import { useTailwindBreakpoint } from './useTailwindBreakpoint'
 
 export const useNotification = (notificationApi: INotificationAPI) => {
-  const { router } = useFeature()
-  const dispatch = useAppDispatch()
-  const notifyDetail = useAppSelector((state) => state.notificationReducer)
-  const notifyLists = useAppSelector(
+  const { router, useAppSelector, dispatch } = useFeature()
+  const notifyDetail = useAppSelector?.((state) => state.notificationReducer)
+  const notifyLists = useAppSelector?.(
     (state) => state.notificationReducer.list_notifications,
   )
-  const pagination = useAppSelector((state) => state.notificationReducer.meta)
+  const pagination = useAppSelector?.((state) => state.notificationReducer.meta)
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [isDesktopView, setIsDesktopView] = useState(false)
   const [isViewDetail, setIsViewDetail] = useState(false)
@@ -42,9 +41,9 @@ export const useNotification = (notificationApi: INotificationAPI) => {
     const loadMultiplePages = async () => {
       const screenHeight = window.innerHeight
 
-      isRefresh && (await dispatch(getCountUnRead(notificationApi)))
+      isRefresh && (await dispatch?.(getCountUnRead(notificationApi)))
 
-      const firstPageAction = await dispatch(
+      const firstPageAction = await dispatch?.(
         getNotification({
           api: notificationApi,
           params: {
@@ -57,14 +56,14 @@ export const useNotification = (notificationApi: INotificationAPI) => {
         }),
       )
 
-      const totalPages = firstPageAction.payload?.meta?.total_pages || 1
+      const totalPages = firstPageAction?.payload?.meta?.total_pages || 1
       const baseHeight = 911
       const heightRatio = screenHeight / baseHeight
       const calculatedPages = Math.ceil(heightRatio)
       const pagesToLoad = Math.min(calculatedPages, totalPages)
 
       for (let page = 2; page <= pagesToLoad; page++) {
-        await dispatch(
+        await dispatch?.(
           loadMoreNotification({
             api: notificationApi,
             params: {
@@ -83,15 +82,15 @@ export const useNotification = (notificationApi: INotificationAPI) => {
   }
 
   const countNotificationsUnRead = async () => {
-      await dispatch(getCountUnRead(notificationApi))
+      await dispatch?.(getCountUnRead(notificationApi))
   }
 
   const markAllRead = async (selectedTab: number) => {
-      await dispatch(markAllNotifications(notificationApi))
+      await dispatch?.(markAllNotifications(notificationApi))
       if (selectedTab === 2) {
-        dispatch(deleteAllNotifications())
+        dispatch?.(deleteAllNotifications())
       } else {
-        dispatch(updateStatusAll())
+        dispatch?.(updateStatusAll())
       }
       await countNotificationsUnRead()
   }
@@ -105,12 +104,12 @@ export const useNotification = (notificationApi: INotificationAPI) => {
       if (!res?.data) {
         return
       }
-      dispatch(getCountUnRead(notificationApi))
+      dispatch?.(getCountUnRead(notificationApi))
       ids.forEach((id) => {
         if (selectedTab === 2) {
-          dispatch(deleteNotificationById(id))
+          dispatch?.(deleteNotificationById(id))
         } else {
-          dispatch(toggleStatusById(id))
+          dispatch?.(toggleStatusById(id))
         }
       })
   }
@@ -121,9 +120,9 @@ export const useNotification = (notificationApi: INotificationAPI) => {
         return
       }
       ids.forEach((id) => {
-        dispatch(toggleStatusById(id))
+        dispatch?.(toggleStatusById(id))
       })
-      dispatch(getCountUnRead(notificationApi))
+      dispatch?.(getCountUnRead(notificationApi))
   }
 
   const getApiNotificationDetail = async (
@@ -132,7 +131,7 @@ export const useNotification = (notificationApi: INotificationAPI) => {
     content: string,
   ) => {
       if (id !== notifyDetail?.id) {
-        const res = await dispatch(getNotificationDetail({ api: notificationApi, id }))
+        const res = await dispatch?.(getNotificationDetail({ api: notificationApi, id }))
         if (res) {
           await countNotificationsUnRead()
         }
@@ -187,7 +186,7 @@ export const useNotification = (notificationApi: INotificationAPI) => {
           if (page_index >= total_pages || isFetching.current) return
           try {
             isFetching.current = true
-            await dispatch(
+            await dispatch?.(
               loadMoreNotification({
                 api: notificationApi,
                 params: {

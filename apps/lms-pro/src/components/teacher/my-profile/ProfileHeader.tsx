@@ -1,10 +1,19 @@
 import {
   BlankAvatarImage,
   CheckCircleOutlineYellow,
-  PencilFillV2Icon,
+  CloseIcon,
+  PencilFillIcon,
 } from '@lms/assets'
+import {
+  getLogoutUser,
+  getMe,
+  getUserInformation,
+  updateUser,
+  updateUserAvatar,
+  userReducer,
+} from '@lms/contexts'
 import { TextSkeleton } from '@lms/ui'
-import { CloseIconV2 } from '@lms/assets'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { Divider, Tag } from 'antd'
 import clsx from 'clsx'
 import Image, { StaticImageData } from 'next/image'
@@ -16,18 +25,8 @@ import {
   useState,
 } from 'react'
 import toast from 'react-hot-toast'
-import {
-  getLogoutUser,
-  getMe,
-  getUserInformation,
-  updateUser,
-  updateUserAvatar,
-  useAppDispatch,
-  useAppSelector,
-  userReducer,
-} from '@lms/contexts'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import UserApi from 'src/redux/services/User/user'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
 interface IProps {
   isEdit: boolean
   avatar: File | undefined
@@ -284,7 +283,7 @@ const ProfileHeader = ({
                   })}
                 />
               ) : (
-                <CloseIconV2 className="h-5 w-5" />
+                <CloseIcon className="h-5 w-5" />
               )}
             </div>
           ) : (
@@ -292,7 +291,7 @@ const ProfileHeader = ({
               className="absolute -right-[0.5px] bottom-0 z-[1] cursor-pointer rounded-full bg-primary p-1 text-white shadow-small"
               onClick={() => setIsEditAvatar(true)}
             >
-              <PencilFillV2Icon className="h-5 w-5" />
+              <PencilFillIcon className="h-5 w-5" />
             </div>
           )}
         </div>

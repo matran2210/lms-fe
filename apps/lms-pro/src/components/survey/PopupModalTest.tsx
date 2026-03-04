@@ -72,7 +72,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
 
   const completeFinal = progress >= 0.6 && progress <= 1
 
-  const params = useParams();
+  const params = useParams()
   const { courseId } = params
   /**
    * Xác định loại khảo sát hiện tại dựa trên trạng thái

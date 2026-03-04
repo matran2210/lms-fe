@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../../store";
 
 // Tạo một đối tượng Notification với giá trị mặc định
 export interface GuideState {
@@ -45,5 +44,11 @@ export const userGuideSlice = createSlice({
 
 export const { increment, active, reset, clearGuideState, decrement } =
   userGuideSlice.actions;
-export const userGuideReducer = (state: RootState) => state.userGuideReducer;
+export const userGuideReducer = <
+  T extends {
+    userGuideReducer: GuideState;
+  },
+>(
+  state: T,
+) => state.userGuideReducer;
 export default userGuideSlice.reducer;

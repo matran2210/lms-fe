@@ -1,6 +1,9 @@
-import { DEFAULT_TOOLTIP_BG_COLOR, DEFAULT_TOOLTIP_COLOR } from '@lms/core'
+import {
+  DEFAULT_TOOLTIP_BG_COLOR,
+  DEFAULT_TOOLTIP_COLOR,
+  ITooltip,
+} from '@lms/core'
 import { Tooltip as AntdTooltip, ConfigProvider } from 'antd'
-import { ITooltip } from 'src/type/courses-3-level'
 
 export default function TooltipCourses({
   showTooltip = true,

@@ -3,10 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "turbo run build",
-    "build:lms-pro": "pnpm --filter ./apps/lms-pro build",
-    "build:lms-finhub": "pnpm --filter ./apps/lms-finhub build",
-    "build:lms-zoom": "pnpm --filter ./apps/lms-zoom build",
+    "build": "turbo run build --cache-dir=.turbo",
+    "build:lms-pro": "turbo run build --filter=lms-pro --cache-dir=.turbo",
+    "build:lms-finhub": "turbo run build --filter=lms-finhub --cache-dir=.turbo",
+    "build:lms-zoom": "turbo run build --filter=lms-zoom --cache-dir=.turbo",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
@@ -18,10 +18,14 @@
     "start:lms-finhub": "pnpm --filter ./apps/lms-finhub start",
     "start:lms-zoom": "pnpm --filter ./apps/lms-zoom start",
     "prepare": "husky install",
+    "clean": "node scripts/clean.cjs",
+    "clean:all": "node scripts/clean.cjs --all",
     "lint-staged": "lint-staged",
     "gen:assets": "node scripts/generate-assets-index.js"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.3.1",
+    "@commitlint/config-conventional": "^20.3.1",
     "@eslint/js": "^8.0.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.10",
@@ -37,7 +41,7 @@
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.0.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.0.0",
+    "lint-staged": "^16.1.5",
     "postcss-nesting": "^12.1.5",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
@@ -49,16 +53,85 @@
   },
   "packageManager": "pnpm@10.22.0",
   "lint-staged": {
-    "**/*.ts": "eslint --fix",
-    "**/*.tsx": "eslint --fix",
-    "**/*.js": "eslint --fix",
-    "**/*.json": "prettier --write",
-    "**/*.md": "prettier --write"
+    "apps/lms-finhub/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter lms-finhub tsc --noEmit"
+    ],
+    "apps/lms-pro/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter lms-pro tsc --noEmit"
+    ],
+    "apps/lms-zoom/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter lms-zoom tsc --noEmit"
+    ],
+    "libs/ui/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/ui tsc --noEmit"
+    ],
+    "libs/styles/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/styles tsc --noEmit"
+    ],
+    "libs/state/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/state tsc --noEmit"
+    ],
+    "libs/core/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/core tsc --noEmit"
+    ],
+    "libs/hooks/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/hooks tsc --noEmit"
+    ],
+    "libs/utils/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/utils tsc --noEmit"
+    ],
+    "libs/assets/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/assets tsc --noEmit"
+    ],
+    "libs/contexts/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/contexts tsc --noEmit"
+    ],
+    "features/auth/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/feature-auth tsc --noEmit"
+    ],
+    "features/calendar/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/feature-calendar tsc --noEmit"
+    ],
+    "features/class/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/feature-class tsc --noEmit"
+    ],
+    "features/courses/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/feature-courses tsc --noEmit"
+    ],
+    "features/dashboard/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/feature-dashboard tsc --noEmit"
+    ],
+    "features/notifications/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/feature-notifications tsc --noEmit"
+    ],
+    "features/test/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/feature-test tsc --noEmit"
+    ],
+    "features/user/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "pnpm --filter @lms/feature-user tsc --noEmit"
+    ]
   },
   "dependencies": {
     "@ant-design/cssinjs": "^1.24.0",
-    "@babel/runtime": "^7.26.0",
-    "@eslint/js": "^8.0.0",
     "@funktechno/texthighlighter": "^2.1.2",
     "@hookform/resolvers": "^3.10.0",
     "@sapp-fe/explanation-package": "^1.5.6",
@@ -66,10 +139,7 @@
     "@sapp-fe/sapp-common-package": "^1.8.0",
     "antd": "^5.25.0",
     "critters": "^0.0.19",
-    "eslint-plugin-react": "^7.37.5",
-    "globals": "^16.0.0",
     "lodash": "^4.17.21",
-    "next": "12.3.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "7.48.2",

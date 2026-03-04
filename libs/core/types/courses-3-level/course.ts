@@ -1,8 +1,8 @@
 import { ICourse } from '../courses'
 
-export const allTypes = ['section', 'subsection', 'activity'] as const
+export const allTypes3Level = ['section', 'subsection', 'activity'] as const
 
-export type SectionField = (typeof allTypes)[number]
+export type SectionField3Level = (typeof allTypes3Level)[number]
 
 export interface Courses3LevelProps {
   courses: ICourse[]
@@ -44,38 +44,32 @@ export type ICourseTitle = {
   courseAction: () => void
 }
 
-export interface CourseDetail {
+export interface CourseDetail3Level {
   id: string
   title: string
   description: string
 }
 
-export const getTypeName = {
+export const getTypeName3Level = {
   section: 'Section',
   subsection: 'Subsection',
   activity: 'Activity',
-} as Record<SectionField, string>
+} as Record<SectionField3Level, string>
 
-export type SectionDropdownFormValues = {
-  section: string | null
-  subsection: string | null
-  unit: string | null
-  activity: string | null
-}
 
-export interface IOpenChooseItem {
+export interface IOpenChooseItem3Level {
   isOpen: boolean
-  type: SectionField
+  type: SectionField3Level
   name: string
   params?: string
 }
 
-export const nextTypeMap = {
+export const nextTypeMap3Level = {
   section: 'subsection',
   subsection: 'activity',
-} as Record<SectionField, SectionField>
+} as Record<SectionField3Level, SectionField3Level>
 
-export const backTypeMap = {
+export const backTypeMap3Level = {
   activity: 'subsection',
   subsection: 'section',
-} as Record<SectionField, SectionField>
+} as Record<SectionField3Level, SectionField3Level>

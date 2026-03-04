@@ -1,13 +1,42 @@
 import SappTeacherTextField from '@components/teacher/components/sapp-textfield/SappTeacherTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconMinusSquared, IconPlusSquared } from '@lms/assets'
-import { confirmDialog, getUserInformation, IResponse, useAppDispatch, useAppSelector, userReducer } from '@lms/contexts'
-import { ANT_THEME_CONFIG, CONFIRM_CANCEL, IMyRequest, IRecurringSchedule, ISelect, IWeeklyNorm, OPTIONS_TIME_OFF_REQUEST_TYPE, REPEAT_TYPE, REQUEST_STATUS, REQUEST_TYPE } from '@lms/core'
-import { HookFormDateRangeV2, SAPPButtonV2, SappIcon, SAPPSelectV2 } from '@lms/ui'
-import HookFormEventRepeat from '@lms/ui/components/event-repeat/HookFormEventRepeatField'
-import { capitalizeFirstLetter, formatDateTimeWithTimeZone, VALIDATE_REQUIRED } from '@lms/utils'
-import { MyRequestAPI } from 'src/api/my-request'
-import { formatRecurringSchedule, getRecurringSchedule, getSelectOptions, requestValidationSchema } from '@utils/index'
+import {
+  confirmDialog,
+  getUserInformation,
+  IResponse,
+  userReducer,
+} from '@lms/contexts'
+import {
+  ANT_THEME_CONFIG,
+  CONFIRM_CANCEL,
+  IMyRequest,
+  IRecurringSchedule,
+  ISelect,
+  IWeeklyNorm,
+  OPTIONS_TIME_OFF_REQUEST_TYPE,
+  REPEAT_TYPE,
+  REQUEST_STATUS,
+  REQUEST_TYPE,
+} from '@lms/core'
+import {
+  HookFormDateRange,
+  HookFormEventRepeat,
+  SAPPButtonCustom,
+  SappIcon,
+  SAPPSelectTooltip,
+} from '@lms/ui'
+import {
+  capitalizeFirstLetter,
+  formatDateTimeWithTimeZone,
+  VALIDATE_REQUIRED,
+} from '@lms/utils'
+import {
+  formatRecurringSchedule,
+  getRecurringSchedule,
+  getSelectOptions,
+  requestValidationSchema,
+} from '@utils/index'
 import { ConfigProvider, Drawer } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import { isEmpty, isInteger } from 'lodash'
@@ -15,10 +44,11 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { MyRequestAPI } from 'src/api/my-request'
 import useSelectClassCode from 'src/hooks/useSelectClassCode'
 import useLesson from 'src/hooks/useSelectLesson'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import UserApi from 'src/redux/services/User/user'
-
 
 export interface IProps {
   open: boolean
@@ -471,14 +501,16 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
           } else if (data.type == REQUEST_TYPE.WEEKLY_NORM.value) {
             setValue(
               'request_weekly_norm',
-              data.teacher_weekly_norms.map((item: { start_date: any; end_date: any; max_shift: any }) => {
-                const startTime = new Date(`${item.start_date}`).toISOString()
-                const endTime = new Date(`${item.end_date}`).toISOString()
-                return {
-                  date_range: [startTime, endTime],
-                  quantity: item.max_shift,
-                }
-              }),
+              data.teacher_weekly_norms.map(
+                (item: { start_date: any; end_date: any; max_shift: any }) => {
+                  const startTime = new Date(`${item.start_date}`).toISOString()
+                  const endTime = new Date(`${item.end_date}`).toISOString()
+                  return {
+                    date_range: [startTime, endTime],
+                    quantity: item.max_shift,
+                  }
+                },
+              ),
             )
           } else if (
             [
@@ -492,10 +524,12 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
             )
             setValue(
               'request_time_off',
-              data.teacher_schedules.map((item: { schedule: { id: any }; request_reason: any }) => ({
-                lessonId: item.schedule.id,
-                reason: item.request_reason,
-              })),
+              data.teacher_schedules.map(
+                (item: { schedule: { id: any }; request_reason: any }) => ({
+                  lessonId: item.schedule.id,
+                  reason: item.request_reason,
+                }),
+              ),
             )
           }
           setValue(
@@ -627,7 +661,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
               />
             </div>
             <div className="mb-6">
-              <SAPPSelectV2
+              <SAPPSelectTooltip
                 control={control}
                 label="Request Type"
                 name="request_type"
@@ -642,7 +676,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
             {isEdit ? (
               <>
                 <div className="mb-6">
-                  <SAPPSelectV2
+                  <SAPPSelectTooltip
                     control={control}
                     label="Status"
                     name="request_status"
@@ -704,7 +738,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   REQUEST_TYPE.TEACHING_MODE.value,
                   REQUEST_TYPE.TIMEOFF.value,
                 ].includes(requestType) ? (
-                <SAPPSelectV2
+                <SAPPSelectTooltip
                   control={control}
                   label="Class Code"
                   required
@@ -749,7 +783,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
             {requestType == REQUEST_TYPE.BUSY_SCHEDULE.value && (
               <>
                 <div className="mb-6">
-                  <HookFormDateRangeV2
+                  <HookFormDateRange
                     name={`request_busy_schedule.0.date_range`}
                     label="Start Date - End Date"
                     format="YYYY-MM-DD | HH:mm"
@@ -804,7 +838,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                     <div className="mb-6">
                       <div className="grid w-full grid-cols-2 gap-x-6">
                         <div>
-                          <HookFormDateRangeV2
+                          <HookFormDateRange
                             control={control}
                             required
                             label="Start Date - End Date"
@@ -868,7 +902,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                       <div className="mb-6">
                         <div className="grid w-full grid-cols-2 gap-x-6">
                           <div className="mb-6">
-                            <SAPPSelectV2
+                            <SAPPSelectTooltip
                               control={control}
                               label="Lesson"
                               required
@@ -1006,13 +1040,13 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
               ) : null)}
           </div>
           <div className="flex justify-end border-t border-t-[#7E8299] px-8 py-5">
-            <SAPPButtonV2
+            <SAPPButtonCustom
               title={'Cancel'}
               onClick={handleCancel}
               className="mr-4"
               color="secondary"
             />
-            <SAPPButtonV2 title={'Save'} onClick={handleSubmit(onSubmit)} />
+            <SAPPButtonCustom title={'Save'} onClick={handleSubmit(onSubmit)} />
           </div>
         </div>
       </Drawer>

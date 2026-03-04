@@ -1,7 +1,8 @@
 import { ILearningOutcomeProps } from '@lms/core'
 import { EditorReader } from '@lms/ui'
 import { useEffect, useRef, useState } from 'react'
-import { ArrowDownIcon, ArrowUpIcon, StarIcon } from '../icons'
+import { StarIcon } from '../icons'
+import { ArrowUpIcon, ArrowDownIcon } from '@lms/assets'
 
 export default function LearningOutcomeDesktop({
   title,

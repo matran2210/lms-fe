@@ -1,4 +1,5 @@
 'use client'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { CloseIcon, DownloadIcon, LinkIcon } from '@lms/assets'
 import {
   clearNote,
@@ -9,8 +10,6 @@ import {
   getDiscussion,
   resetQuizActivity,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
   UserType,
 } from '@lms/contexts'
@@ -32,16 +31,13 @@ import {
 } from '@lms/feature-courses'
 import {
   ActivitySkeleton,
-  Calculator,
   EditorReader,
   FileViewer,
   LayoutTeacher,
   ModalResizeable,
-  MovableWindow,
   SAPPBorder,
   SappButton,
   SappIcon,
-  SappLoadingGlobal,
   Tooltip,
 } from '@lms/ui'
 import { trackGAEvent, truncateBySpace, truncateString } from '@lms/utils'
@@ -62,6 +58,7 @@ import React, {
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { CoursesAPI, getActivityById } from 'src/api/courses'
 import { UploadAPI } from 'src/api/upload'
 

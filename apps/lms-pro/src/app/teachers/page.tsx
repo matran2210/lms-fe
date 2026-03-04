@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { UserType } from '@lms/contexts'
 import { LayoutTeacher } from '@lms/ui'
 import withAuthorization from 'src/HOC/withAuthorization'

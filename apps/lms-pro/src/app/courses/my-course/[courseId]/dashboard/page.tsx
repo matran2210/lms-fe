@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { UserType } from '@lms/contexts'
 import {
   ANIMATION,
@@ -30,7 +30,7 @@ const Dashboard = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const params = useParams()
-        const query = Object.fromEntries(searchParams.entries())
+  const query = Object.fromEntries(searchParams.entries())
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [infoCourse, setInfoCourse] = useState<ICourseInfo>({
     course_type: COURSE_TYPE.NORMAL_COURSE,
