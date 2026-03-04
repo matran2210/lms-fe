@@ -3,7 +3,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import { useQuery } from 'react-query'
 import { SAPPCalendar } from '@sapp-fe/sapp-common-package'
-import { IEvent } from '@sapp-fe/sapp-common-package/dist/types'
+import { IEvent } from '@sapp-fe/sapp-common-package'
 import {
   EVENT_REPEAT_LABEL,
   EVENT_REPEAT_TYPES,
@@ -109,9 +109,7 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
     }
   }
 
-  const enabled =
-    Boolean(startTime) &&
-    Boolean(endTime)
+  const enabled = Boolean(startTime) && Boolean(endTime)
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['schedules', startTime, endTime, eventName, eventType],
     queryFn: () => {

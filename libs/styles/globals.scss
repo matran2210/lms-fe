@@ -1680,3 +1680,15 @@ mark {
     opacity 200ms ease-out,
     transform 200ms ease-out;
 }
+
+.modal-view-more-lesson {
+  .ant-modal-content {
+    @apply p-4 rounded-lg;
+  }
+}
+
+.modal-preview-class-resource {
+  .ant-modal-content {
+    @apply p-0 rounded-lg overflow-hidden;
+  }
+}
