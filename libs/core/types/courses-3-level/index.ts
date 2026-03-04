@@ -4,11 +4,12 @@ import { Dispatch, ForwardedRef, ReactNode, SetStateAction } from "react";
 import { FieldValues, UseFormSetValue } from "react-hook-form";
 import { IBreadcrumb, IButtonProps, IExhibit, ITabs } from "..";
 import { IMetaData } from "../api-response";
-import { CourseProgram, IQuestion, IVideo } from "../course";
 import {
   CourseSectionLinkParent,
+  LearningProgress,
   RemindChoosingExam
 } from "../course/my-course";
+import { CourseProgram, IQuestion, IStorylineDetail, IVideo } from "../course";
 import {
   ICourseAll,
   ICourseSection,
@@ -31,6 +32,9 @@ export interface INeighborActivity {
   display_icon: string;
   name: string;
   is_preview_locked: boolean;
+  course_section_type?: string;
+  storyline?: IStorylineDetail;
+  learning_progress?: LearningProgress;
 }
 
 export interface ICourseTabDocument {

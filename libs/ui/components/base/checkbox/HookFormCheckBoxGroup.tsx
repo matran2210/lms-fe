@@ -17,6 +17,7 @@ interface IHookFormCheckBoxProps {
   label?: string | undefined;
   required?: boolean;
   disabled?: boolean;
+  readOnly?: boolean;
   classNameTitle?: string;
   options: Array<{
     label?: string;
@@ -45,6 +46,7 @@ const HookFormCheckBoxGroup = ({
   className = "",
   onChange,
   disabled,
+  readOnly,
   classNameTitle,
   options,
   direction = "vertical",
@@ -166,6 +168,7 @@ const HookFormCheckBoxGroup = ({
                         }
                       }}
                       disabled={disabled}
+                      readOnly={readOnly}
                       state={state}
                       value={option.value.toString()}
                       size={size}

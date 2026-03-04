@@ -20,6 +20,9 @@ importers:
       '@sapp-fe/explanation-package':
         specifier: ^1.5.6
         version: 1.6.0(@babel/core@7.29.0)(@types/react@18.2.21)(date-fns@3.6.0)(postcss@8.5.8)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@24.11.0)(typescript@5.1.6))(webpack@5.105.4)
+      '@sapp-fe/preview-part':
+        specifier: ^1.8.1
+        version: 1.8.1(@babel/core@7.29.0)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@sapp-fe/sapp-common-package':
         specifier: ^1.8.0
         version: 1.8.0(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.1(@types/node@24.11.0)(typescript@5.1.6))(webpack@5.105.4)
@@ -214,7 +217,7 @@ importers:
         specifier: ^1.1.43
         version: 1.1.43(@babel/core@7.29.0)(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.105.4)
       '@sapp-fe/preview-part':
-        specifier: ^1.7.6
+        specifier: ^1.8.1
         version: 1.8.1(@babel/core@7.29.0)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@sapp-fe/quiz-result-package':
         specifier: ^1.5.1
@@ -524,7 +527,7 @@ importers:
         specifier: ^1.1.43
         version: 1.1.43(@babel/core@7.29.0)(@types/react@18.2.21)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.105.4)
       '@sapp-fe/preview-part':
-        specifier: ^1.7.6
+        specifier: ^1.8.1
         version: 1.8.1(@babel/core@7.29.0)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@sapp-fe/quiz-result-package':
         specifier: ^1.6.0

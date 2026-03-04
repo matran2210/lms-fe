@@ -38,7 +38,7 @@ export default function TimeLineModal({
               <div className="min-w-[62px] font-medium text-state-info">
                 {formatTimer(e?.time)}
               </div>
-              <div className="text-inherit line-clamp-2 text-gray-800">
+              <div className="line-clamp-2 text-gray-800 text-inherit">
                 {e?.text}
               </div>
             </div>

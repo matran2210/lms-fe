@@ -24,6 +24,7 @@ interface IHookFormRadioGroupProps {
   labelClassChecked?: string;
   optionClassName?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   corrects?: { [key: string]: boolean };
 }
 
@@ -41,6 +42,7 @@ const HookFormRadioGroup = ({
   labelClassChecked = "",
   optionClassName = "",
   disabled,
+  readOnly,
   corrects,
 }: IHookFormRadioGroupProps) => {
   const count_items = options?.length - 1;
@@ -110,6 +112,7 @@ const HookFormRadioGroup = ({
                               ? option.disabled
                               : disabled
                           }
+                          readOnly={readOnly}
                           onChange={(e) => {
                             onChange && onChange(e);
                             field.onChange(e.target.value);

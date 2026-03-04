@@ -143,7 +143,7 @@ const TableQuestions = ({
       return gradingStatus === GRADE_STATUS.FINISHED_GRADING
         ? ' text-[#4077E0] border-[#18355D]'
         : data?.question?.qType === QUESTION_TYPES.ESSAY &&
-              data?.active === COMMON_TEXT_ENUM.SUBMITED
+            data?.active === COMMON_TEXT_ENUM.SUBMITED
           ? ' text-[#18355D] border-[#18355D]'
           : ' text-gray-400border-gray-400'
     }

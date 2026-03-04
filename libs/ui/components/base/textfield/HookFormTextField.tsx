@@ -12,6 +12,7 @@ interface IProps {
   placeholder?: string;
   className?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   label?: string;
   labelClass?: string;
   onChangeType?: () => void;
@@ -38,6 +39,7 @@ const HookFormTextField = ({
   placeholder,
   className = "",
   disabled,
+  readOnly,
   label,
   labelClass,
   skeleton,
@@ -87,6 +89,7 @@ const HookFormTextField = ({
                   placeholderIcon={placeholderIcon}
                   onBlur={onBlur}
                   onFocus={onFocus}
+                  readOnly={readOnly}
                 />
 
                 <>

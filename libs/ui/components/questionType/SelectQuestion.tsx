@@ -49,6 +49,8 @@ interface IProps {
     }>,
   ) => void;
   isShowWarning?: boolean;
+  disabled?: boolean;
+  className?: string;
 }
 
 // Constants
@@ -80,6 +82,8 @@ const SelectWord = forwardRef(
       exhibitText,
       isShowWarning = false,
       onChange,
+      disabled,
+      className = "",
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -247,6 +251,7 @@ const SelectWord = forwardRef(
         const dropdownContainer = document?.createElement("span");
         dropdownContainer.classList?.add(
           ...DROPDOWN_STYLES.container.split(" "),
+          className,
         );
         dropdownContainer.id = element?.id;
         dropdownContainer.setAttribute("data-value", "");
@@ -259,6 +264,13 @@ const SelectWord = forwardRef(
           defaultAnswer?.find((item) => item.answer_position === index + 1)
             ?.answer_id || "";
 
+        if (disabled) {
+          dropdownContainer.setAttribute("data-disabled", "true");
+          dropdownContainer.classList.add(
+            "pointer-events-none",
+            "cursor-not-allowed",
+          );
+        }
         if (corrects) {
           const isCorrect = corrects?.some(
             (correct) =>
@@ -307,7 +319,7 @@ const SelectWord = forwardRef(
         setAnswerContent(doc2);
       }
       setQuestionContent(doc);
-    }, [defaultAnswer, data]);
+    }, [defaultAnswer, data, disabled]);
     useEffect(() => {
       if (!answerContent) return;
 

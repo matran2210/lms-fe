@@ -58,6 +58,7 @@ interface IProps {
   explainClassname?: string;
   onChangeMatchedPairs?: (matchedPairs: any[]) => void;
   storageKey?: string;
+  disabled?: boolean;
 }
 
 type Role = "question" | "answer";
@@ -105,6 +106,7 @@ const MatchQuiz = forwardRef(
       explainClassname,
       onChangeMatchedPairs,
       storageKey,
+      disabled = false,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -127,6 +129,7 @@ const MatchQuiz = forwardRef(
     // Hàm xử lý khi click vào node
     const handleNodeClick = useCallback(
       (nodeId: string) => {
+        if (disabled) return;
         const clickedNode = nodes.find((n) => n.id === nodeId);
         if (!clickedNode) return;
 
@@ -166,7 +169,7 @@ const MatchQuiz = forwardRef(
           }
         }
       },
-      [nodes, selectedNodes],
+      [nodes, selectedNodes, disabled],
     );
 
     const getMatchedPairs = (edges: Edge[], nodes: MatchNode[]) => {
@@ -196,6 +199,13 @@ const MatchQuiz = forwardRef(
           const newKey = prev + 1;
           return newKey;
         });
+      },
+      handleResetEdges() {
+        setKey((prev) => {
+          const newKey = prev + 1;
+          return newKey;
+        });
+        setEdges([]);
       },
       getMatchedPairs: () => getMatchedPairs(edges, nodes),
     }));
@@ -235,7 +245,7 @@ const MatchQuiz = forwardRef(
     useEffect(() => {
       // Transform question_matchings into questions and answers
       const questions: RawItem[] =
-        data?.question_matchings.map((item: any) => ({
+        data?.question_matchings?.map((item: any) => ({
           id: item.id,
           label: item.content,
           role: "question" as Role,
@@ -278,14 +288,14 @@ const MatchQuiz = forwardRef(
                 isConnected,
                 onClick: (e: React.MouseEvent<HTMLDivElement>) => {
                   e.stopPropagation();
-                  if (!corrects) handleNodeClick(id);
+                  if (!corrects && !disabled) handleNodeClick(id);
                 },
               }}
             />
           );
         },
       }),
-      [selectedNodes, handleNodeClick, corrects, edges],
+      [selectedNodes, handleNodeClick, corrects, edges, disabled],
     );
 
     const edgeTypes = {
@@ -293,6 +303,7 @@ const MatchQuiz = forwardRef(
     };
 
     const onConnect = useCallback((connection: Connection) => {
+      if (disabled) return;
       setEdges((prev) => {
         // Xoá edge cũ có cùng target
         const filtered = prev.filter(
@@ -303,7 +314,7 @@ const MatchQuiz = forwardRef(
         // Thêm edge mới
         return addEdge({ ...connection, type: "custom" }, filtered);
       });
-    }, []);
+    }, [disabled]);
 
     useEffect(() => {
       if (!defaultAnswer || defaultAnswer.length === 0) return;
@@ -516,10 +527,11 @@ const MatchQuiz = forwardRef(
 
     // Thông báo matchedPairs lên parent mỗi khi edges hoặc nodes thay đổi
     useEffect(() => {
+      if (disabled) return;
       if (onChangeMatchedPairs) {
         onChangeMatchedPairs(getMatchedPairs(edges, nodes));
       }
-    }, [edges, nodes]);
+    }, [edges, nodes, disabled]);
 
     const correctNodeTypes = useMemo(
       () => ({
@@ -552,6 +564,7 @@ const MatchQuiz = forwardRef(
             "whitespace-normal break-words",
           )}
           onMouseUp={(e: any) => {
+            if (disabled) return;
             if (
               e?.target?.tagName?.charAt(0) !== "m" &&
               e?.target?.firstChild?.tagName !== "math"
