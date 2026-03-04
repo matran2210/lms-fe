@@ -1,6 +1,10 @@
-import { ICreateSchedulePayload, IResponseSchedule, IWeeklyNorm } from '@lms/contexts'
+import {
+  ICreateSchedulePayload,
+  IResponseSchedule,
+  IWeeklyNorm,
+} from '@lms/contexts'
 import { IResponse } from '@lms/core'
-import { fetcher } from '@services/requestV2'
+import { fetcher } from '@services/request'
 
 export class SchedulesAPI {
   static get(params: Object): Promise<IResponse<IResponseSchedule[]>> {

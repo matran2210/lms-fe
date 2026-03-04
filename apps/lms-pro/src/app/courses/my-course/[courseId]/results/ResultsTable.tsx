@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { ConfirmIcon } from '@lms/assets'
 import {
   IOpenChooseItem,
@@ -43,7 +43,7 @@ const ResultsTable = ({
   const router = useRouter()
   const searchParams = useSearchParams()
   const param = useParams()
-        const query = Object.fromEntries(searchParams.entries())
+  const query = Object.fromEntries(searchParams.entries())
   const [direction, setDirection] = useState<1 | -1>(1)
   const pageSize = 10
   const [openReport, setOpenReport] = useState<boolean>(false)

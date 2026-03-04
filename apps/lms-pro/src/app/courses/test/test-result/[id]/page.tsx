@@ -1,11 +1,11 @@
-"use client"
+'use client'
 import { CloseModalIcon, MenuDotsIcon } from '@lms/assets'
 import { ButtonSecondary } from '@lms/ui'
-
 import { GRADE_STATUS } from '@lms/core'
-import { SappLoading, Tooltip } from '@lms/ui'
+import { Tooltip } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import clsx from 'clsx'
+import SappLoading from '@components/common/SappLoading'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { CoursesAPI } from 'src/api/courses'
 import TestResultPage from '../testResultPage'
@@ -13,14 +13,14 @@ import TestResultPage from '../testResultPage'
 const TestResultDetail = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
-      const params = useParams()
-      const {id} = params
-        const query = Object.fromEntries(searchParams.entries())
+  const params = useParams()
+  const { id } = params
+  const query = Object.fromEntries(searchParams.entries())
   const useGetQuizAttempts = (queryKey: string, params: Object) => {
     return useGetDataQuery(
       queryKey,
       params,
-        () => CoursesAPI.getQuizAttempts(id),
+      () => CoursesAPI.getQuizAttempts(id),
       id !== undefined,
       () => router.replace('/courses'),
     )
@@ -60,7 +60,7 @@ const TestResultDetail = () => {
     quiz?.limit_count === questions?.quizAttempt?.number_of_attempts
   ) {
     // Nếu bài test đã quá số lần làm bài thì chỉ cho link đến trang kết quả, không cho làm lại
-      linkTest = `/courses/test/test-result/${params.id}`
+    linkTest = `/courses/test/test-result/${params.id}`
   }
 
   const handleRetake = () => {

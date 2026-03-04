@@ -1,6 +1,6 @@
 import React from 'react'
 import { Modal } from 'antd'
-import { BaseModalProps } from 'src/type/courses-3-level'
+import { BaseModalProps } from '@lms/core'
 
 export default function BaseModal({
   title = '',

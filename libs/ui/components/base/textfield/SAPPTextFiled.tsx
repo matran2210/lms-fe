@@ -3,12 +3,12 @@ import clsx from 'clsx'
 import React, { useState } from 'react'
 import { ControllerRenderProps } from 'react-hook-form'
 import SAPPLabel from '../Label/SAPPLabel'
-import { EyeV2Icon, CloseEyeIcon } from '@lms/assets'
+import { EyeIcon, CloseEyeIcon } from '@lms/assets'
 
 interface IProps {
   inputRef?: React.LegacyRef<HTMLInputElement>
   onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
-  type?: 'number' | 'password' | 'email' | 'text'
+  type?: 'number' | 'password' | 'email' | 'text' | 'date'
   placeholder?: string
   placeholderIcon?: React.ReactNode
   className?: string
@@ -109,7 +109,7 @@ const SAPPTextFiled = ({
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-4 top-1/2 -translate-y-1/2 text-[#A1A1A1] hover:text-[#050505] focus:outline-none"
           >
-            {showPassword ? <CloseEyeIcon /> : <EyeV2Icon />}
+            {showPassword ? <CloseEyeIcon /> : <EyeIcon />}
           </button>
         )}
       </div>

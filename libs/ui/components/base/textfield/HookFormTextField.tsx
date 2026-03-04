@@ -8,7 +8,7 @@ interface IProps {
   control: Control<any>;
   defaultValue?: any;
   onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
-  type?: "number" | "password" | "email" | "text";
+  type?: "number" | "password" | "email" | "text" | "date";
   placeholder?: string;
   className?: string;
   disabled?: boolean;

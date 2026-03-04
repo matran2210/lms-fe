@@ -14,31 +14,19 @@ import notesListReducer from './slice/Course/NotesList'
 import popupReducer from './slice/Popup/Result-test'
 import shortCourseActivityReducer from './slice/Course/ShortCourse/Activity/Activity'
 import shortNotesListReducer from './slice/Course/ShortCourse/NoteList/ShortNoteList'
-export const store = configureStore({
-  reducer: {
-    loginReducer,
-    userReducer,
-    confirmDialogReducer,
-    courseActivityReducer,
-    notificationReducer,
-    popupReducer,
-    courseActivityQuizReducer,
-    userGuideReducer,
-    caseStudyTestReducer,
-    entranceTestReducer,
-    eventTestReducer,
-    notesListReducer,
-    shortCourseActivityReducer,
-    shortNotesListReducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
-});
-
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
-
-const makeStore = () => store
-export const wrapper = createWrapper(makeStore)
+export const globalReducer = {
+  loginReducer,
+  userReducer,
+  confirmDialogReducer,
+  courseActivityReducer,
+  notificationReducer,
+  popupReducer,
+  courseActivityQuizReducer,
+  userGuideReducer,
+  caseStudyTestReducer,
+  entranceTestReducer,
+  eventTestReducer,
+  notesListReducer,
+  shortCourseActivityReducer,
+  shortNotesListReducer,
+};

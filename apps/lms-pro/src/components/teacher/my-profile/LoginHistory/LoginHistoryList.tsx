@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react'
+import TeacherProfileCard from '@components/common/TeacherProfileCard'
 import {
   getLoginHistory,
   loadMoreLoginHistory,
-  userReducer, useAppDispatch, useAppSelector } from '@lms/contexts'
-import HistoryItem from './HistoryItem'
-import TeacherProfileCard from '@components/common/TeacherProfileCard'
+  userReducer,
+} from '@lms/contexts'
+import { useEffect, useState } from 'react'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import UserApi from 'src/redux/services/User/user'
+import HistoryItem from './HistoryItem'
 
 const LoginHistoryList = () => {
   const dispatch = useAppDispatch()
@@ -32,7 +34,7 @@ const LoginHistoryList = () => {
               api: UserApi,
               page_index: prev + 1,
               page_size: pageSize,
-              type: undefined
+              type: undefined,
             }),
           )
           return prev + 1

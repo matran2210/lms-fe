@@ -1,13 +1,12 @@
 'use client'
 import DesktopFilter3Level from '@components/courses/filter/FilterDesktop'
 import MobileFilter3Level from '@components/courses/filter/FilterMobile'
-import { defaultStatusCourse } from '@lms/core'
+import { defaultStatusCourse, IFilterProps } from '@lms/core'
 import { formatPathWithQueryParams } from '@lms/utils'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants/routes'
-import { IFilterProps } from 'src/type/courses-3-level'
 
 export default function Filter3Level({ courses, setPage }: IFilterProps) {
   const router = useRouter()

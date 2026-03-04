@@ -1,10 +1,8 @@
-import {
-  ArrowActionSearchIcon,
-  CloseIconV2,
-  HamburgerMenuLargeIcon
-} from "@lms/assets";
-import { useAppSelector, useFeature } from "@lms/contexts";
-import { MY_COURSES } from "@lms/core";
+
+"use client";
+import { ArrowActionSearchIcon, HamburgerMenuLargeIcon, CloseIcon, TourGuideStartAnimation } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
+import { AppType, MY_COURSES } from "@lms/core";
 import { buildQueryString } from "@lms/utils";
 import clsx from "clsx";
 import React, { useEffect, useRef, useState } from "react";
@@ -33,11 +31,10 @@ const SearchWithMenuToggle = ({
   isCoursePage = false,
   redirectLink,
 }: IProps) => {
-  const { status: guideStatus, step: guideStep } = useAppSelector(
+  const { pageLink, useAppSelector, router, query } = useFeature();
+  const { status: guideStatus, step: guideStep } = useAppSelector?.(
     (state) => state.userGuideReducer,
-  );
-  const {router, query} = useFeature()
-  const { push } = router
+  ) || {};
   const methods = useForm<{ name: string }>({
     defaultValues: {
       name: "",
@@ -119,7 +116,7 @@ const SearchWithMenuToggle = ({
                   },
                 },
                 {
-                  icon: <CloseIconV2 />,
+                  icon: <CloseIcon />,
                   className: "p-1",
                   action: () => {
                     methods.setValue("name", "");
@@ -181,7 +178,7 @@ const SearchWithMenuToggle = ({
               )}
             >
               <SearchForm
-                placeholder={MY_COURSES.placeholderSearchV2}
+                placeholder={MY_COURSES.placeholderSearchCourse}
                 formStyle="w-full flex items-center"
                 disabled={disabledSearch}
                 inputRef={inputRef}

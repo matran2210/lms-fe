@@ -3,27 +3,28 @@ import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInAp
 import {
   UserType,
   getEntranceCount,
-  useAppDispatch,
+ 
   useCourseContext,
 } from '@lms/contexts'
 import { ANIMATION, AppType } from '@lms/core'
 import { Heading } from '@lms/feature-courses'
-import EntranceTestFilter from '@lms/feature-test/src/components/entrance-test/EntranceTestFilter'
-import EntranceTestList from '@lms/feature-test/src/components/entrance-test/EntranceTestList'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   CourseSkeleton,
   Footer,
   Layout,
-  SappLoadingGlobal,
+ 
   SearchWithMenuToggle,
 } from '@lms/ui'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import withAuthorization from 'src/HOC/withAuthorization'
 import { EntranceTestAPI } from 'src/api/entrance-test'
 import { PageLink } from 'src/constants/routers'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { useAppDispatch } from 'src/redux/hook'
+import { EntranceTestFilter, EntranceTestList } from '@lms/feature-test'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 
 const EntranceTest = () => {
   const searchParams = useSearchParams()

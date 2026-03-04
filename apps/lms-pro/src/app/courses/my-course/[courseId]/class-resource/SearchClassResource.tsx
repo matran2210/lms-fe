@@ -1,17 +1,20 @@
 'use client'
 import {
   ArrowActionSearchIcon,
-  CloseIconV2,
+  CloseIcon,
   HamburgerMenuLargeIcon,
 } from '@lms/assets'
 import { AppType, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '@lms/core'
 import { SearchForm } from '@lms/ui'
 import { buildQueryString } from '@lms/utils'
 import clsx from 'clsx'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import {
+  useParams,
+  useRouter,
+  useSearchParams
+} from 'next/navigation'
 import React, { useEffect, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { PageLink } from 'src/constants/routers'
 
 interface IProps {
   handleOpenSidebar: () => void
@@ -74,7 +77,6 @@ const SearchClassResource = ({
         ...query,
         page_index: DEFAULT_PAGE_NUMBER,
         page_size: DEFAULT_PAGE_SIZE,
-        courseId,
         search_key: methods.watch('name')?.trim() || undefined,
       })}`,
     )
@@ -139,7 +141,7 @@ const SearchClassResource = ({
                   },
                 },
                 {
-                  icon: <CloseIconV2 />,
+                  icon: <CloseIcon />,
                   className: 'p-1',
                   action: () => {
                     handleClearSearch()
@@ -194,7 +196,7 @@ const SearchClassResource = ({
           {!isCoursePage && (
             <div
               className={clsx(
-                'flex w-full items-center justify-between rounded-lg border border-transparent border-white bg-white px-2 py-3 shadow-small transition-all duration-300 focus-within:border-primary hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4',
+                'flex w-full items-center justify-between rounded-lg border border-transparent border-white bg-white px-4 py-3 shadow-small transition-all duration-300 focus-within:border-primary hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4',
               )}
             >
               <SearchForm

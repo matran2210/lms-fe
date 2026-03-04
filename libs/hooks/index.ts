@@ -15,4 +15,7 @@ export { default as useSelectExams } from "./useSelectExams";
 export * from "./useNotification";
 export * from "./useSappEditorImageUpload";
 export * from "./useUserRole";
-export * from "./useSmartModalSize";export { default as useSelectSubject } from "./useSelectSubject";
+export * from "./useSmartModalSize";
+export * from "./course/useInitialSections";
+export * from "./course/useSectionData";
+export { default as useSelectSubject } from "./useSelectSubject";

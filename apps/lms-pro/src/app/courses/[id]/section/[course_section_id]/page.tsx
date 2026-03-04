@@ -10,7 +10,6 @@ import {
 import {
   activeNotesList,
   resetNotesList,
-  useAppDispatch,
   useCourseContext,
   UserType,
 } from '@lms/contexts'
@@ -36,11 +35,12 @@ import {
   useSearchParams,
 } from 'next/navigation'
 import PreviewPartDetail from '@sapp-fe/preview-part'
-import { use, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import { TreeHelper } from 'src/helper/tree'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { useAppDispatch } from 'src/redux/hook'
 import { CoursesAPI } from 'src/api/courses/index'
 
 interface IProps {

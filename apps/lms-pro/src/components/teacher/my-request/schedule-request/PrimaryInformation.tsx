@@ -1,13 +1,24 @@
-
 import { CollapseArrowIcon } from '@lms/assets'
-import { ClassStandardScheduleItem, CONSTRUCTION_MODE, TYPE_TEACHING_REQUEST } from '@lms/core'
+import {
+  ClassStandardScheduleItem,
+  CONSTRUCTION_MODE,
+  TYPE_TEACHING_REQUEST,
+} from '@lms/core'
 import { ScheduleSkeleton, TooltipParagraph } from '@lms/ui'
 import { Collapse, CollapseProps } from 'antd'
 import Link from 'next/link'
-import { IScheduleRequestItem, ScheduleRequestDetail } from '../../../../type/teachers/request-schedule.interface'
-import { capitalizeFirstLetter, convertSlugToTitle, sappFormatDate, truncateString } from '@lms/utils'
+import {
+  IScheduleRequestItem,
+  ScheduleRequestDetail,
+} from '../../../../type/teachers/request-schedule.interface'
+import {
+  capitalizeFirstLetter,
+  convertSlugToTitle,
+  sappFormatDate,
+  truncateString,
+} from '@lms/utils'
 import PrimaryInfoItem from './PrimaryInfoItem'
-import { formatTimeOnlyHourMinute } from '../../../../utils'
+import { formatTimeOnlyHourMinute } from '@utils/helpers'
 
 interface IProps {
   dataDetail: ScheduleRequestDetail | undefined

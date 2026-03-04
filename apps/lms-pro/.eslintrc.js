@@ -24,5 +24,8 @@ module.exports = {
     'no-empty-pattern': 'off',
     'no-useless-escape': 'off',
     'no-var': 'off',
+    'react-hooks/exhaustive-deps': 'off',
+    '@next/next/no-img-element': 'off',
+    "no-unsafe-optional-chaining": "off"
   },
 }

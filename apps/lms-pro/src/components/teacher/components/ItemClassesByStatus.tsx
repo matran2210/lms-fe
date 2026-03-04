@@ -11,7 +11,7 @@ import {
 } from '@lms/core'
 import { ButtonIconSapp, Tooltip } from '@lms/ui'
 import { truncateString } from '@lms/utils'
-import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
+import { convertHourToDayLeft, convertLocalTimeToUTC } from '@lms/utils'
 import { isEmpty } from 'lodash'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routers'

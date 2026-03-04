@@ -1,6 +1,5 @@
 import { COOKIE_INFO, IDeviceItem } from '@lms/core'
-import { getCookie, getSessionIdFromToken } from '@lms/utils'
-import { calculateTimeAgo } from '@utils/helpers'
+import { calculateTimeAgo, getCookie, getSessionIdFromToken } from '@lms/utils'
 import clsx from 'clsx'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 

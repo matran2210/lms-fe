@@ -732,7 +732,7 @@ const TestModal = ({
                         //   root: 'select-result-attempt',
                         //   popup: { root: 'select-result-attempt-option' },
                         // }}
-                        className="custom-select-v2 h-8 pr-2"
+                        className="custom-select h-8 pr-2"
                         popupClassName="select-card-course"
                         variant="borderless"
                         value={selectedResult?.value}

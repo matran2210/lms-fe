@@ -5,8 +5,8 @@ import { truncateString } from "@lms/utils";
 import clsx from "clsx";
 import React, { forwardRef } from "react";
 import Badge from "./CardCourseBadge";
-import { useAppSelector } from "@lms/contexts";
 import { useTailwindBreakpoint } from "@lms/hooks";
+import { useFeature } from "@lms/contexts";
 
 const mappingBadgeFromStatus: Partial<
   Record<EAttemptStatus, { badge: string; className: string }>
@@ -88,7 +88,8 @@ const CardCourse = forwardRef<
     },
     ref,
   ) => {
-    const { status: guideStatus, step: guideStep } = useAppSelector(
+    const { useAppSelector } = useFeature();
+    const { status: guideStatus, step: guideStep } = useAppSelector?.(
       (state) => state.userGuideReducer,
     );
     const { isMobileView } = useTailwindBreakpoint();

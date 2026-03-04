@@ -1,11 +1,15 @@
 'use client'
 import {
-  CalculatorIconV2,
+  CalculatorIcon,
+  CheckCircleOutlineYellow,
   DownloadIcon,
   FileTextIcon,
   FlagIcon,
+  Icon,
+  NewScratchPadIcon,
+  NotesOutline,
+  PulsingExclamation,
   ResizeIcon,
-  ScratchPadIconV2,
   ShowLessIcon,
   ShowMoreIcon,
 } from '@lms/assets'
@@ -13,8 +17,6 @@ import {
   CourseProvider,
   disableUnsavedChange,
   loginSlice,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
 } from '@lms/contexts'
 import {
@@ -42,7 +44,6 @@ import {
   NewFillText,
   OneChoiceQuestion,
   Popover,
-  SappLoading,
   SelectWord,
   useClickOutside,
 } from '@lms/ui'
@@ -52,17 +53,11 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import styles from '../test.module.scss'
 
+import SappLoading from '@components/common/SappLoading'
 import {
   removeHighlights,
   serializeHighlights,
 } from '@funktechno/texthighlighter/lib'
-import {
-  CheckCircleOutlineYellow,
-  FlagIconV2,
-  Icon,
-  NotesOutline,
-  PulsingExclamation,
-} from '@lms/assets'
 import { showPopupCompletedCourse } from '@lms/contexts'
 import {
   Answer,
@@ -91,7 +86,6 @@ import {
   ButtonPrimary,
   ButtonSecondary,
   ButtonText,
-  ButtonTextV2,
   HighlightableHTML,
   MatchQuizComponent,
   ModalUploadFile,
@@ -101,22 +95,23 @@ import {
 } from '@lms/ui'
 import {
   checkSheetAnswered,
+  checkTypeAndRenderTitle,
   handleMultipleCorrectAnswer,
   runHighlight,
   trackGAEvent,
 } from '@lms/utils'
+import {
+  hasEditorValueFromHtml,
+  isValuesEqual,
+  isWorkbookEmpty,
+} from '@utils/helpers'
 import { TabsProps, Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { EventTestAPI } from 'src/api/event-test'
 import { TestServiceAPI } from 'src/api/test-api'
 import { PageLink } from 'src/constants/routers'
-import {
-  checkTypeAndRenderTitle,
-  hasEditorValueFromHtml,
-  isValuesEqual,
-  isWorkbookEmpty,
-} from 'src/utils/helpers/quiz-test/helper'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import useGetQuestionTabs from '../custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from '../custom-hook/useGetQuizDetail'
 import LimitQuizModal from '../limitQuizModal'
@@ -2783,7 +2778,7 @@ const TestDetail = () => {
             currentTabContent.qType === QUESTION_TYPES.ESSAY &&
             isShowTemplate && (
               <div className="flex items-center justify-end gap-3">
-                <ButtonTextV2
+                <ButtonText
                   title="Reset to Answer Template"
                   onClick={onOpenResetToTemplateModal}
                   className="bg-transparent hover:!bg-transparent"
@@ -3136,7 +3131,7 @@ const TestDetail = () => {
                     }}
                   >
                     <ButtonContent
-                      icon={<ScratchPadIconV2 isActive={isScatchPadEnabled} />}
+                      icon={<NewScratchPadIcon isActive={isScatchPadEnabled} />}
                       content=""
                     />
                   </button>
@@ -3161,7 +3156,7 @@ const TestDetail = () => {
                     disabled={checkCalExist > -1}
                   >
                     <ButtonContent
-                      icon={<CalculatorIconV2 isActive={checkCalExist > -1} />}
+                      icon={<CalculatorIcon className={checkCalExist > -1 ? "text-white": "text-primary"} />}
                       content=""
                     />
                   </button>
@@ -3762,7 +3757,7 @@ const TestDetail = () => {
           { '!bg-primary': isScatchPadEnabled },
         )}
       >
-        <ScratchPadIconV2 isActive={isScatchPadEnabled} className="size-8" />
+        <NewScratchPadIcon isActive={isScatchPadEnabled} className="size-8" />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <div
@@ -3775,7 +3770,7 @@ const TestDetail = () => {
           { '!bg-primary': checkCalExist > -1 },
         )}
       >
-        <CalculatorIconV2 isActive={checkCalExist > -1} className="size-8" />
+        <CalculatorIcon className={`size-8 ${checkCalExist > -1 ? 'text-white' : 'text-primary'}`} />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <div
@@ -3785,7 +3780,7 @@ const TestDetail = () => {
         }}
         className="group fixed bottom-[422px] right-8 grid cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden"
       >
-        <FlagIconV2 isActive={currentTabContent?.flag} />
+        <FlagIcon />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <BackToTop

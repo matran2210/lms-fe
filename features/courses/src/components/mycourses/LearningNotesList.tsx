@@ -1,4 +1,4 @@
-import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from "@lms/assets";
+import { DeleteIcon, EllipsisIcon, PencilIcon } from "@lms/assets";
 import {
   AppType,
   backTypeMap,
@@ -13,7 +13,7 @@ import {
 } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import {
-  ActionCellV2,
+  ActionCellWithPopover,
   FilterCourseSection,
   ListFilterMobile,
   ListItemFilterMobile,
@@ -27,8 +27,6 @@ import {
   pushNotes,
   resetNotesList,
   resetNotesList3Level,
-  useAppDispatch,
-  useAppSelector,
   useCourseNoteContext,
   useFeature,
   userReducer,
@@ -51,12 +49,12 @@ type Props = {
 };
 const LearningNotesList = ({ appType }: Props) => {
   const [direction, setDirection] = useState<1 | -1>(1);
-  const { courseApi, pageLink, router, pathname, query, params: param } = useFeature();
+  const { courseApi, pageLink, router, dispatch, useAppSelector, pathname, query, params: param } = useFeature();
   const { isMobileView, isAlwaysShowSidebar } = useTailwindBreakpoint();
-  const notesListStatus = useAppSelector(
+  const notesListStatus = useAppSelector?.(
     (state) => appType === AppType.LMS_PRO ? state.notesListReducer?.status : state.shortNotesListReducer?.status,
   );
-  const getNotesData = useAppSelector(
+  const getNotesData = useAppSelector?.(
     (state) => appType === AppType.LMS_PRO ? state.notesListReducer?.note_data: state.shortNotesListReducer?.note_data,
   );
   const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false);
@@ -73,7 +71,7 @@ const LearningNotesList = ({ appType }: Props) => {
     pathname === "/short-course/detail/[courseId]/activity/[id]" ||
     (pathname === "/courses/[id]/activity/[activityId]" && !isMobileView);
 
-  const userType = useAppSelector(userReducer).user.type;
+  const userType = useAppSelector?.(userReducer).user.type;
 
   const [listSection, setListSection] = useState<ISection[]>([]);
   const [listSubsection, setListSubsection] = useState<ISection[]>([]);
@@ -89,7 +87,6 @@ const LearningNotesList = ({ appType }: Props) => {
     setIsViewOnly,
     notesListData: notesListDataFromContext,
   } = useCourseNoteContext();
-  const dispatch = useAppDispatch();
   const [notesListData, setNotesListData] = useState<
     INotesListResponse | undefined
   >();
@@ -219,7 +216,7 @@ const LearningNotesList = ({ appType }: Props) => {
 
   useEffect(() => {
     if (
-      !(params.course_section_id || params.class_id) ||
+      !(courseSectionId || params.class_id) ||
       !notesListStatus ||
       isFetchingRef.current
     )
@@ -287,7 +284,7 @@ const LearningNotesList = ({ appType }: Props) => {
 
   const onClose = () => {
     document.body.style.overflow = "auto";
-    dispatch(appType === AppType.LMS_PRO ? resetNotesList() : resetNotesList3Level());
+    dispatch?.(appType === AppType.LMS_PRO ? resetNotesList() : resetNotesList3Level());
     resetFormFields(["section", "subsection", "unit", "activity"]);
     setIsPageStateVariables(true);
   };
@@ -324,9 +321,9 @@ const LearningNotesList = ({ appType }: Props) => {
       name: "Note",
       description: description,
     };
-    const isExist = getNotesData.find((item) => item.id === note.id);
+    const isExist = getNotesData.find((item: ICourseSectionNoteItem) => item.id === note.id);
     if (!isExist) {
-      dispatch(pushNotes(note));
+      dispatch?.(pushNotes(note));
     }
   };
 
@@ -441,7 +438,7 @@ const LearningNotesList = ({ appType }: Props) => {
                         const isEdit = activityId === note?.course_section_id;
                         const handleEdit = () => {
                           if (
-                            !getNotesData.some((item) =>
+                            !getNotesData.some((item: ICourseSectionNoteItem) =>
                               item.id.includes(note?.id),
                             )
                           ) {
@@ -461,7 +458,7 @@ const LearningNotesList = ({ appType }: Props) => {
                           ...(isEdit
                             ? [
                                 {
-                                  icon: <PencilV2Icon className="h-5 w-5" />,
+                                  icon: <PencilIcon className="h-5 w-5" />,
                                   nameAction: "Edit",
                                   action: handleEdit,
                                 },
@@ -485,8 +482,8 @@ const LearningNotesList = ({ appType }: Props) => {
                                 {note?.course_section_path?.length > 0 ?  note?.course_section_path[0]?.name : ''}
                               </div>
                               <div onClick={(e) => e.stopPropagation()}>
-                                <ActionCellV2
-                                  icon={<EllipsisIconV2 />}
+                                <ActionCellWithPopover
+                                  icon={<EllipsisIcon />}
                                   listAction={listAction}
                                 />
                               </div>

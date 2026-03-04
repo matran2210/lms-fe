@@ -1,6 +1,7 @@
 'use client'
-import { AltArrowLeft, CloseIconV2, MenuDotsIcon } from '@lms/assets'
-import { UserType } from '@lms/contexts'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
+import { AltArrowLeft, CloseIcon, MenuDotsIcon } from '@lms/assets'
+import { UserType, useFeature } from '@lms/contexts'
 import {
   IAtempt,
   IRequirement,
@@ -8,20 +9,15 @@ import {
   QUESTION_TYPES,
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
-import {
-  FullScreenLayout,
-  PDFViewer,
-  SappLoadingGlobal,
-  Tooltip,
-} from '@lms/ui'
-import { TestServiceAPI } from 'src/api/test-api'
+import { FullScreenLayout, PDFViewer, Tooltip } from '@lms/ui'
+import { handleMultipleCorrectAnswer } from '@lms/utils'
 import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { CoursesAPI } from 'src/api/courses'
+import { TestServiceAPI } from 'src/api/test-api'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { handleMultipleCorrectAnswer } from '@lms/utils'
-import { CoursesAPI } from 'src/api/courses'
 
 const Explanation = () => {
   const router = useRouter()
@@ -29,10 +25,14 @@ const Explanation = () => {
   const params = useParams()
   const { id } = params
   const query = Object.fromEntries(searchParam.entries())
+  const { query: queryParams } = useFeature()
   const { attempt: noOfAttempt } = query
   const [activeQuestion, setActiveQuestion] = useState<any>()
   const [attempt, setAttempt] = useState<IAtempt>()
   const [loading, setLoading] = useState<boolean>(false)
+  const previousUrl = queryParams?.tabId
+    ? localStorage.getItem('previousUrl') + `?tabId=${queryParams?.tabId}`
+    : localStorage.getItem('previousUrl')
   function getCorrect(answers: any, questionType: any) {
     switch (questionType as QUESTION_TYPES) {
       case QUESTION_TYPES.ONE_CHOICE:
@@ -169,15 +169,10 @@ const Explanation = () => {
                     router.push(`/courses/test/test-result/${attempt?.id}`)
                     break
                   default:
-                    router.push(
-                      localStorage.getItem('previousUrl') ??
-                        PageLink.ENTRANCE_TEST,
-                    )
+                    router.push(previousUrl ?? PageLink.ENTRANCE_TEST)
                 }
               } else {
-                router.push(
-                  localStorage.getItem('previousUrl') ?? PageLink.ENTRANCE_TEST,
-                )
+                router.push(previousUrl ?? PageLink.ENTRANCE_TEST)
               }
             }
           }}
@@ -186,7 +181,7 @@ const Explanation = () => {
             <AltArrowLeft />
           </div>
           <div className="rounded-md bg-gray-200 p-2 transition-all duration-300 ease-in-out hover:bg-gray-300 md:!hidden">
-            <CloseIconV2 className="h-[18px] w-[18px]" />
+            <CloseIcon className="h-[18px] w-[18px]" />
           </div>
         </div>
         <div className="absolute right-8 top-6 z-10 flex cursor-pointer items-center justify-center">

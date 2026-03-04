@@ -1,7 +1,7 @@
 import { useFeature } from "@lms/contexts";
 import { ICertificate } from "@lms/core";
 import { useDownloadImage } from "@lms/hooks";
-import { ButtonPrimary, HookFormCheckBox, HookFormTextAreaV2, SappModalV3 } from "@lms/ui";
+import { ButtonPrimary, HookFormCheckBox, HookFormTextAreaWithRow, SappModalV3 } from "@lms/ui";
 import { openLinkedInPopup } from "@lms/utils";
 import { Image } from "antd";
 import dayjs from "dayjs";
@@ -197,7 +197,7 @@ const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
                     //   height={125}
                   />
                 )}
-                <HookFormTextAreaV2
+                <HookFormTextAreaWithRow
                   className="h-full flex-1"
                   control={form.control}
                   variant="borderless"
