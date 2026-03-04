@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { GRADE_STATUS, IQuizAttempt } from '@lms/core'
 import clsx from 'clsx'
 import { isNull, isUndefined } from 'lodash'

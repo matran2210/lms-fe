@@ -23,8 +23,6 @@ import {
   clearNotifications,
   openCalculator,
   pushNotes,
-  useAppDispatch,
-  useAppSelector,
   useFeature,
   userReducer,
 } from "@lms/contexts";
@@ -55,7 +53,7 @@ export default function MenuItem({
   closeSideBar,
   setOpenExaminationInfo,
 }: MenuItemProps) {
-  const { notificationApi, pageLink, router, pathname, query, params } = useFeature();
+  const { notificationApi, pageLink, dispatch, useAppSelector, router, pathname, query, params  } = useFeature();
   const id = params?.id || query.id
   const courseId = params?.courseId || query.courseId
   const activityId = params?.activityId || query.activityId
@@ -79,7 +77,7 @@ export default function MenuItem({
     notificationUnread,
   } = useNotification(notificationApi);
 
-  const isLoading = useAppSelector(
+  const isLoading = useAppSelector?.(
     (state) => state.notificationReducer.loading,
   );
   const tabs = [
@@ -95,13 +93,12 @@ export default function MenuItem({
 
   useEffect(() => {
     if (selectedTab) {
-      dispatch(clearNotifications());
+      dispatch?.(clearNotifications());
     }
   }, [selectedTab]);
 
   const [isExpanded, toggleExpanded] = useState(false);
-  const dispatch = useAppDispatch();
-  const { user } = useAppSelector(userReducer);
+  const { user } = useAppSelector?.(userReducer) || {};
   const isNested = subItems && subItems?.length > 0;
   const courseContext = getCourseContentSubContext(pathname as string);
   const learningContext = getLearningSubContext(pathname as string);
@@ -156,7 +153,7 @@ export default function MenuItem({
   };
 
   const handleOpenNotesList = () => {
-    dispatch(activeNotesList());
+    dispatch?.(activeNotesList());
     document.body.style.overflow = "hidden";
   };
 
@@ -167,11 +164,11 @@ export default function MenuItem({
       name: "Note",
       description: "",
     };
-    dispatch(pushNotes(note));
+    dispatch?.(pushNotes(note));
   };
 
   const handleOpenCalculator = () => {
-    dispatch(openCalculator());
+    dispatch?.(openCalculator());
   };
 
   const handleOpenCourseContentPage = () => {
@@ -313,7 +310,7 @@ export default function MenuItem({
             className={animationClass}
           />
         );
-      case "caculator":
+      case "calculator":
         return (
           <Lottie
             animationData={CalculatorAnimation}
@@ -454,11 +451,11 @@ export default function MenuItem({
             })}
           >
             {user?.detail?.avatar?.["40x40"] ||
-              user.detail.avatar?.["ORIGIN"] ? (
+            user?.detail.avatar?.["ORIGIN"] ? (
               <Image
                 src={
-                  user.detail.avatar?.["40x40"] ||
-                  user.detail.avatar?.["ORIGIN"]
+                  user?.detail.avatar?.["40x40"] ||
+                  user?.detail.avatar?.["ORIGIN"]
                 }
                 alt="avatar"
                 className="h-9 w-9 rounded-full object-cover"
@@ -482,8 +479,8 @@ export default function MenuItem({
               <div className="h-10 w-10 shrink-0">
                 <Image
                   src={
-                    user.detail.avatar?.["40x40"] ||
-                    user.detail.avatar?.["ORIGIN"] ||
+                    user?.detail.avatar?.["40x40"] ||
+                    user?.detail.avatar?.["ORIGIN"] ||
                     BlankAvatarImage
                   }
                   alt="avatar"

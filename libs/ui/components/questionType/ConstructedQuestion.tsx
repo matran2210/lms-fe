@@ -3,7 +3,7 @@ import { CloseIcon, UploadIcon } from "@lms/assets";
 import {
   disableUnsavedChange,
   loginSlice,
-  useAppDispatch,
+ 
   useFeature,
 } from "@lms/contexts";
 import {
@@ -102,9 +102,8 @@ const EssayQuestionPreview = ({
   isInTest = false,
   storageKey,
 }: IPreviewProp) => {
-  const { testServiceApi, router } = useFeature();
+  const { testServiceApi, router, dispatch} = useFeature();
 
-  const dispatch = useAppDispatch();
   const refSheet = useRef(null) as any;
   const [key, setKey] = useState("1");
   const {query} = useFeature()
@@ -366,13 +365,13 @@ const EssayQuestionPreview = ({
   }) => {
     try {
       setUnsavedChanges && setUnsavedChanges(false);
-      dispatch(disableUnsavedChange());
+      dispatch?.(disableUnsavedChange());
       await testServiceApi.downloadFile(data);
     } catch (error) {
       // do nothing
     } finally {
       setUnsavedChanges && setUnsavedChanges(true);
-      dispatch(loginSlice.actions.enableUnsavedChange());
+      dispatch?.(loginSlice.actions.enableUnsavedChange());
     }
   };
 

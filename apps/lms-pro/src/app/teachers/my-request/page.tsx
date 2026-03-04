@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import PersonalScheduleTab from '@components/request/request-tabs/PersonalScheduleTab'
 import TimeOffTab from '@components/request/request-tabs/TimeOffTab'
 import ScheduleRequestTable from '@components/teacher/my-request/schedule-request'

@@ -1,19 +1,15 @@
 import { Icon } from '@lms/assets'
-import { useAppSelector, userReducer } from '@lms/contexts'
+import { userReducer } from '@lms/contexts'
 import { ButtonPrimary, ButtonText, SappModalV2 } from '@lms/ui'
 import type { GetProps } from 'antd'
 import { Input } from 'antd'
-import {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState
-} from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { UseFormGetValues, UseFormReset } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { AuthAPI } from 'src/api/profile'
 import { IChangePassword } from './ChangePassword'
 import { useCountdownTest } from '@lms/hooks'
+import { useAppSelector } from 'src/redux/hook'
 
 type OTPProps = GetProps<typeof Input.OTP>
 interface IProps {

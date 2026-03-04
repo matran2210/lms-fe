@@ -1,6 +1,3 @@
-import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
-
-import Tooltip from '@components/common/Tooltip'
 import { CloseIcon } from '@lms/assets'
 import {
   ANIMATION,
@@ -11,12 +8,14 @@ import {
   QUESTION_TYPES,
 } from '@lms/core'
 import { ListScoreCollapse } from '@lms/feature-courses'
-import { SappBaseTable } from '@lms/ui'
+import { SappBaseTable, Tooltip } from '@lms/ui'
 import {
+  convertSecondsToMinutesSeconds,
   convertSlugToTitle,
   getGradingStatusLabel,
   handleReplaceText,
   removeHtmlTags,
+  roundNumber,
   truncateString,
 } from '@lms/utils'
 import 'aos/dist/aos.css'
@@ -88,14 +87,11 @@ const TableQuestions = ({
   } = useInfiniteQuery({
     queryKey: ['scoreDetails', params.id],
     queryFn: async ({ pageParam }) => {
-      const res = await CoursesAPI.getQuizAttemptsTable(
-        params.id as string,
-        {
-          page_index: pageParam,
-          page_size: DEFAULT_PAGESIZE,
-          no_group_view: true,
-        },
-      )
+      const res = await CoursesAPI.getQuizAttemptsTable(params.id as string, {
+        page_index: pageParam,
+        page_size: DEFAULT_PAGESIZE,
+        no_group_view: true,
+      })
       if (res.success) {
         return res.data
       }
@@ -147,7 +143,7 @@ const TableQuestions = ({
       return gradingStatus === GRADE_STATUS.FINISHED_GRADING
         ? ' text-[#4077E0] border-[#18355D]'
         : data?.question?.qType === QUESTION_TYPES.ESSAY &&
-            data?.active === COMMON_TEXT_ENUM.SUBMITED
+              data?.active === COMMON_TEXT_ENUM.SUBMITED
           ? ' text-[#18355D] border-[#18355D]'
           : ' text-gray-400border-gray-400'
     }

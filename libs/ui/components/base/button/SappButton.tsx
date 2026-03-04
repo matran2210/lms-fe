@@ -45,26 +45,6 @@ const PADDINGS = {
   none: "",
 };
 
-const COLOR_LOADING = {
-  primary: "bg-white",
-  info: "bg-white",
-  success: "bg-white",
-  secondary: "bg-gray-800",
-  danger: "bg-white",
-  warning: "bg-white",
-  light: "bg-white",
-  dark: "bg-white",
-  white: "bg-gray-400",
-  outline: "bg-gray-400",
-  text: "bg-none",
-  textUnderline: "bg-none",
-  quizActivity: "bg-white",
-  okPopup: "bg-white",
-  cancelPopup: "bg-white",
-  gray: "bg-transparent",
-  "light-dark": "bg-white",
-};
-
 const SappButton = ({
   title,
   onClick,

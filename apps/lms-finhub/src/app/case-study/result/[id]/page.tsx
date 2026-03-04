@@ -1,4 +1,5 @@
 'use client'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import {
   CalculatorIcon,
   CloseIcon,
@@ -10,7 +11,7 @@ import {
   UnHighLightIcon,
 } from '@lms/assets'
 
-import { loadMoreQuestion, useAppDispatch, useFeature } from '@lms/contexts'
+import { loadMoreQuestion, useFeature } from '@lms/contexts'
 import {
   EXHIBIT_TEXT_REPLACE,
   IAnswerResult,
@@ -47,23 +48,24 @@ import {
   MultiChoiceQuestion,
   NewDragNDropQuestion,
   OneChoiceQuestion,
-  SappLoadingGlobal,
   SelectWord,
   SlotValue,
 } from '@lms/ui'
 import { handleMultipleCorrectAnswer, runHighlight } from '@lms/utils'
 import clsx from 'clsx'
 import { isNull, uniqueId } from 'lodash'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { CoursesAPI } from 'src/api/courses'
+import { useAppDispatch } from 'src/redux/hook'
 
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])
   const router = useRouter()
   const params = useParams()
-  const { query } = useFeature()
+  const searchParams = useSearchParams()
+  const query = Object.fromEntries(searchParams.entries())
   const containerRef = useRef(null)
   const { control, setValue, getValues } = useForm()
   const { control: controlScratch } = useForm()
@@ -697,33 +699,6 @@ const CaseStudyResult = () => {
               ['--footer-h' as any]: '80px',
             }}
           >
-            {/* <div className="hidden h-full w-[150px] items-center gap-1 lg:flex">
-              <button
-                className={`h-fit rounded-lg ${isScatchPadEnabled && 'bg-primary'
-                  }`}
-                onClick={() => {
-                  handleOpenScratchPad('scratch_pad')
-                }}
-              >
-                <ButtonContent
-                  icon={<ScratchPadIcon isActive={isScatchPadEnabled} />}
-                  content=""
-                />
-              </button>
-              <button
-                className={`h-fit rounded-lg ${checkCalExist > -1 && 'bg-primary'
-                  }`}
-                onClick={() => {
-                  handleOpenScratchPad('calculator')
-                }}
-                disabled={checkCalExist > -1}
-              >
-                <ButtonContent
-                  icon={<CalculatorIcon isActive={checkCalExist > -1} />}
-                  content=""
-                />
-              </button>
-            </div> */}
             <div className="flex items-center justify-center">
               {!isNull(result?.previous_topic) && (
                 <ButtonText

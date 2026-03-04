@@ -1,52 +1,29 @@
-import React from 'react'
-import { ReactNode } from 'react'
-
-interface Props {
-  className?: string
-  iconType?: 'chervon' | 'teeny'
-  right?: boolean
-  children?: ReactNode
-}
-
-const ArrowIcon = ({ className = '', iconType, right }: Props) => {
+export const ArrowIcon = ({
+  className = "",
+  right,
+  isDisabled = false,
+}: {
+  className?: string;
+  right?: boolean;
+  isDisabled?: boolean;
+}) => {
   return (
-    <>
-      {iconType === 'chervon' && (
-        <svg
-          className={`${className} ${right ? 'rotate-180' : ''}`}
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M14.5301 6.08L8.6001 12L14.5301 17.92"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      )}
-      {iconType === 'teeny' && (
-        <svg
-          className={`${className} ${right ? 'rotate-180' : ''}`}
-          width="6"
-          height="20"
-          viewBox="0 0 8 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M7.06508 22.4001L0.998413 12.0001L7.06508 1.6001"
-            stroke="currentColor"
-            strokeLinecap="square"
-          />
-        </svg>
-      )}
-    </>
-  )
-}
+    <svg
+      className={`${className} ${right ? "rotate-180" : ""}`}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M15.9881 4.43057C16.3026 4.70014 16.339 5.17361 16.0694 5.48811L10.4878 12L16.0694 18.5119C16.339 18.8264 16.3026 19.2999 15.9881 19.5695C15.6736 19.839 15.2001 19.8026 14.9306 19.4881L8.93056 12.4881C8.68981 12.2072 8.68981 11.7928 8.93056 11.5119L14.9306 4.51192C15.2001 4.19743 15.6736 4.161 15.9881 4.43057Z"
+        fill={isDisabled ? "#9CA3AF" : "#1C274C"}
+      />
+    </svg>
+  );
+};
 
-export default ArrowIcon
+export default ArrowIcon;

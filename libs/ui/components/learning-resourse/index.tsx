@@ -45,7 +45,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const activityId = param?.activityId || query?.activityId;
   const chapterId = query?.chapter;
   const unitId = query?.unit;
-  const courseSectionId = param?.course_section_id
+  const courseSectionId = param?.course_section_id || query?.course_section_id;
 
   const [loading, setLoading] = useState<boolean>(false);
   const [isFirstCallApi, setIsFirstCallApi] = useState(false);

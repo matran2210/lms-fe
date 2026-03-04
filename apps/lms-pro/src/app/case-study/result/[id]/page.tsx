@@ -1,17 +1,18 @@
 /* eslint-disable prefer-const */
 'use client'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import {
-  CalculatorIconV2,
+  CalculatorIcon,
   CloseModalIcon,
   DownloadIcon,
   FileTextIcon,
   NotesOutline,
   PulsingExclamation,
   ResizeIcon,
-  ScratchPadIconV2,
+  NewScratchPadIcon,
   Triangle,
 } from '@lms/assets'
-import { loadMoreQuestion, useAppDispatch } from '@lms/contexts'
+import { loadMoreQuestion } from '@lms/contexts'
 import {
   EXHIBIT_TEXT_REPLACE,
   IAnswerResult,
@@ -45,7 +46,6 @@ import {
   NewDragNDropQuestion,
   OneChoiceQuestion,
   Popover,
-  SappLoadingGlobal,
   SelectWord,
   SlotValue,
 } from '@lms/ui'
@@ -56,6 +56,7 @@ import { uniqueId } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useAppDispatch } from 'src/redux/hook'
 import { CoursesAPI } from 'src/api/courses'
 import { TestServiceAPI } from 'src/api/test-api'
 
@@ -1050,7 +1051,7 @@ const CaseStudyResult = () => {
                     handleOpenScratchPad('scratch_pad')
                   }}
                 >
-                  <ScratchPadIconV2 isActive className="h-6 w-6" />
+                  <NewScratchPadIcon isActive className="h-6 w-6" />
                 </div>
               </Popover>
               <Popover
@@ -1072,7 +1073,7 @@ const CaseStudyResult = () => {
                   }}
                   disabled={checkCalExist > -1}
                 >
-                  <CalculatorIconV2 isActive className="h-6 w-6" />
+                  <CalculatorIcon className="h-6 w-6 text-white" />
                 </button>
               </Popover>
             </div>

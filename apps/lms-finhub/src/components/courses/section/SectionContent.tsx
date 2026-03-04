@@ -1,6 +1,6 @@
 import React from 'react'
-import { SectionContentProps } from 'src/type/courses-3-level'
 import SectionContentAccoridior from '@components/courses/section/SectionContentAccoridior'
+import { SectionContentProps } from '@lms/core'
 
 function SectionContent({
   title = 'Section Content',

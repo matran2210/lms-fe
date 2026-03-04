@@ -1,7 +1,7 @@
 import {
   IActivityStateQuestion,
   fetchQuestionById,
-  useAppDispatch,
+ 
   useFeature,
 } from "@lms/contexts";
 import { ANIMATION, IQuestion, IVideo } from "@lms/core";
@@ -53,7 +53,7 @@ const VideoDocument = ({
   onUpdateActiveVideo,
   // newQuizModal,
 }: Props) => {
-  const { questionApi, testServiceApi, courseApi, videoUrl } = useFeature();
+  const { dispatch, testServiceApi, courseApi, videoUrl } = useFeature();
 
   const {
     control: controlAnswer,
@@ -71,16 +71,14 @@ const VideoDocument = ({
     [],
   );
   // const selector = useAppSelector(courseActivityQuizReducer)
-  const questionRef = useRef<QuizComponentRef>(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [activeQuestion, setActiveQuestion] =
-    useState<IActivityStateQuestion>();
-  const [isConfirmQuestion, setIsConfirmQuestion] = useState<boolean>(false);
-  const { handleSubmit, reset } = useForm();
-  const internalRef = useRef<any>();
-  const streamRef = streamRefProp?.current ? streamRefProp : internalRef;
-  const dispatch = useAppDispatch();
-  const { isMobileView } = useTailwindBreakpoint();
+  const questionRef = useRef<QuizComponentRef>(null)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [activeQuestion, setActiveQuestion] = useState<IActivityStateQuestion>()
+  const [isConfirmQuestion, setIsConfirmQuestion] = useState<boolean>(false)
+  const { handleSubmit, reset } = useForm()
+  const internalRef = useRef<any>()
+  const streamRef = streamRefProp?.current ? streamRefProp : internalRef
+  const { isMobileView } = useTailwindBreakpoint()
 
   useEffect(() => {
     if (videos?.[0]) {
@@ -96,7 +94,7 @@ const VideoDocument = ({
 
   useEffect(() => {
     if (activeQuestion?.id) {
-      dispatch(
+      dispatch?.(
         fetchQuestionById({
           api: testServiceApi,
           courseApi: courseApi,
@@ -170,7 +168,7 @@ const VideoDocument = ({
   }) => {
     try {
       if (open) {
-        await dispatch(
+        await dispatch?.(
           fetchQuestionById({
             api: testServiceApi,
             courseApi: courseApi,

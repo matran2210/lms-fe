@@ -1,13 +1,9 @@
 /** @type {import('tailwindcss').Config} */
-const colors = require("tailwindcss/colors"); //Default color tailwind config: https://v3.tailwindcss.com/docs/customizing-colors
+const { slate, gray, red, blue, green, yellow, white, black } = require("tailwindcss/colors"); //Default color tailwind config: https://v3.tailwindcss.com/docs/customizing-colors
 module.exports = {
   content: [
-    "../../apps/**/*.{js,ts,jsx,tsx}",
     "../../libs/**/*.{js,ts,jsx,tsx}",
     "../../features/**/*.{js,ts,jsx,tsx}",
-    "!../../**/node_modules", // bỏ node_modules
-    "!../../**/.next", // bỏ build output NextJS
-    "!../../**/dist", // bỏ dist
   ],
 
   theme: {
@@ -55,7 +51,14 @@ module.exports = {
     },
     extend: {
       colors: {
-        ...colors,
+        slate,
+        gray,
+        red,
+        blue,
+        green,
+        yellow,
+         white,
+          black,
         primary: {
           50: "#FFFBF2",
           100: "#FFF1CC",

@@ -1,8 +1,13 @@
-"use client"
+'use client'
 import { CloseIcon } from '@lms/assets'
 import { ANIMATION, LAYOUT, QUESTION_TYPES } from '@lms/core'
-import { ButtonPrimary, ButtonSecondary, FullScreenLayout, SappBaseTable } from '@lms/ui'
-import { roundNumber } from '@utils/helpers'
+import {
+  ButtonPrimary,
+  ButtonSecondary,
+  FullScreenLayout,
+  SappBaseTable,
+} from '@lms/ui'
+import { roundNumber } from '@lms/utils'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { CoursesAPI } from 'src/api/courses'
@@ -42,9 +47,9 @@ const TableCaseStudyResult = () => {
   })
   const [topicAttemptDetail, setTopicAttemptDetail] = useState<any>()
   const router = useRouter()
-    const searchParams = useSearchParams()
-    const params = useParams()
-    const query = Object.fromEntries(searchParams.entries())
+  const searchParams = useSearchParams()
+  const params = useParams()
+  const query = Object.fromEntries(searchParams.entries())
 
   const fetchScoreDetail = async (page_index: number, page_size: number) => {
     try {
@@ -93,7 +98,7 @@ const TableCaseStudyResult = () => {
   }
   const getScoreDetail = async () => {
     const res = await fetchScoreDetail(1, 20)
-      const topic = await fetchTopicAttemptDetail(params.id as string)
+    const topic = await fetchTopicAttemptDetail(params.id as string)
     setScoreDetail(res?.data)
     setTopicAttemptDetail(topic?.data)
   }
@@ -104,9 +109,9 @@ const TableCaseStudyResult = () => {
     class_id?: string,
     course_section_id?: string,
   ) => {
-      router.replace(
-          `/case-study/${topicId}?quiz_id=${quizId}&class_user_id=${class_user_id}&class_id=${class_id}&course_section_id=${course_section_id}`
-      )
+    router.replace(
+      `/case-study/${topicId}?quiz_id=${quizId}&class_user_id=${class_user_id}&class_id=${class_id}&course_section_id=${course_section_id}`,
+    )
   }
   // Hàm ánh xạ giá trị enum với tên tương ứng
   const getTypeName = (type: QUESTION_TYPES): string => {
@@ -133,7 +138,7 @@ const TableCaseStudyResult = () => {
   }
 
   useEffect(() => {
-      if (params.id) {
+    if (params.id) {
       getScoreDetail()
     }
   }, [params.id])

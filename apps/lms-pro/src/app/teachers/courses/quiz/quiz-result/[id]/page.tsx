@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { FullScreenLayout } from '@lms/ui'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from '@lms/contexts'

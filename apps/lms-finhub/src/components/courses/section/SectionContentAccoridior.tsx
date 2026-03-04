@@ -1,20 +1,17 @@
-import { CompletedIcon } from '@assets/icons'
-import Tooltip from '@components/common/Tooltip'
-import { LockClosedIcon } from '@lms/assets'
+import { ArrowDownIcon, CompletedIcon, LockClosedIcon } from '@lms/assets'
 import { useCourseContext } from '@lms/contexts'
-import { ROUTES, TEST_TYPE_ENUM } from '@lms/core'
+import { ROUTES, SectionContentProps, TEST_TYPE_ENUM } from '@lms/core'
 import { Collapse } from 'antd'
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
-import { SectionContentProps } from 'src/type/courses-3-level'
 import {
   formatDuration,
   formatDurationMenuActivity,
   renderBadge,
   renderIconActivity,
-} from '../card/accordion/utils'
-import { ArrowDownIcon } from '../icons'
+} from './Accoridior'
 import TestModal from '../popup/TestModal'
+import { Tooltip } from '@lms/ui'
 import { useParams, useRouter } from 'next/navigation'
 
 const { Panel } = Collapse
@@ -165,9 +162,13 @@ export default function SectionContentAccoridior({
                                         ?.id as string | undefined
 
                                       if (isCompleted && attemptId) {
-                                        router.push(`/case-study/result/${attemptId}?class_user_id=${class_user_id}&class_id=${params?.courseId}&course_section_id=${params?.id}&is_from_activity=true`)
+                                        router.push(
+                                          `/case-study/result/${attemptId}?class_user_id=${class_user_id}&class_id=${params?.courseId}&course_section_id=${params?.id}&is_from_activity=true`,
+                                        )
                                       } else {
-                                        router.push(`/case-study/${topicId}?quiz_id=${quizId}&class_user_id=${class_user_id}&caseStudyId=${caseStudyId}&class_id=${params?.courseId}&course_section_id=${params?.id}&is_from_activity=true`)
+                                        router.push(
+                                          `/case-study/${topicId}?quiz_id=${quizId}&class_user_id=${class_user_id}&caseStudyId=${caseStudyId}&class_id=${params?.courseId}&course_section_id=${params?.id}&is_from_activity=true`,
+                                        )
                                       }
                                     }}
                                   >

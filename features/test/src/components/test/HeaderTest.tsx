@@ -1,4 +1,4 @@
-import { disableUnsavedChange, useAppDispatch } from "@lms/contexts";
+import { disableUnsavedChange, useFeature } from "@lms/contexts";
 import { ButtonCancelSubmit, CountDown } from "@lms/ui";
 import dayjs from "dayjs";
 import { Dispatch, ForwardedRef, SetStateAction } from "react";
@@ -31,16 +31,6 @@ interface IProps {
   resetWordBeforeAction?: () => Promise<void>;
 }
 
-const calculateRemainingTime = (
-  createdAt: string | undefined,
-  quizTimed: number,
-): number => {
-  const endTime = dayjs(createdAt).add(quizTimed, "minutes");
-  const now = dayjs();
-  const diffInSeconds = endTime.diff(now, "second");
-  return Math.max(0, diffInSeconds); // Return 0 if time has expired
-};
-
 const HeaderTest = ({
   checkUnSubmitAnswer,
   quizAttempt,
@@ -48,14 +38,13 @@ const HeaderTest = ({
   setOpenQuit,
   setUnSubmitAnswer,
   timeRef,
-  type,
   setOpenSubmit,
   submited,
   onSubmitAnswer,
   handleTimeoutSubmit,
   resetWordBeforeAction,
 }: IProps) => {
-  const dispatch = useAppDispatch();
+  const { dispatch } = useFeature();
   // const remainingTime = calculateRemainingTime(quizAttempt?.created_at, quizAttempt?.quiz_timed);
   const remainingTimeinSeconds = quizDetail?.quiz_timed
     ? (dayjs(
@@ -105,7 +94,7 @@ const HeaderTest = ({
               } else {
                 setOpenSubmit(true);
               }
-              dispatch(disableUnsavedChange());
+              dispatch?.(disableUnsavedChange());
             },
           }}
           cancel={{
@@ -115,7 +104,7 @@ const HeaderTest = ({
             onClick: async () => {
               await resetWordBeforeAction?.();
               setOpenQuit(true);
-              dispatch(disableUnsavedChange());
+              dispatch?.(disableUnsavedChange());
               // if (type === 'event-test') {
               //   setSubmitEventTest(true)
               // }

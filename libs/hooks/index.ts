@@ -16,3 +16,5 @@ export * from "./useNotification";
 export * from "./useSappEditorImageUpload";
 export * from "./useUserRole";
 export * from "./useSmartModalSize";
+export * from "./course/useInitialSections";
+export * from "./course/useSectionData";

@@ -7,7 +7,7 @@ import { useDownloadImage } from '@lms/hooks'
 
 import { sappFormatDate } from "@lms/utils";
 import clsx from "clsx";
-import { useAppSelector, useFeature, userReducer } from "@lms/contexts";
+import { IUser, IUserDetail, useFeature, userReducer } from "@lms/contexts";
 import PopUpCertificate from "./popupCertificate/PopupCertificare";
 import { ImageRenderFromHtml } from "@lms/ui";
 
@@ -120,8 +120,9 @@ const CertificatePreview = ({
 };
 
 const Certificate = () => {
-  const { detail } = useAppSelector(userReducer).user;
-  const { authApi } = useFeature();
+  const { authApi, useAppSelector } = useFeature();
+  const { detail } = useAppSelector?.(userReducer).user as IUser;
+
   const [certificateData, setCertificateData] = useState<
     ICertificate[] | undefined
   >(undefined);
@@ -306,7 +307,8 @@ const CertificateItem = ({
   listLoadingId: string[];
   setListLoadingId: React.Dispatch<React.SetStateAction<string[]>>;
 }) => {
-  const { detail } = useAppSelector(userReducer).user;
+  const { useAppSelector } = useFeature()
+  const { detail } = useAppSelector?.(userReducer).user as IUser;
   const { downloadCertificate } = useDownloadImage();
   const handleDownload = async (certificate: ICertificate) => {
     if (listLoadingId.includes(certificate.id)) return;

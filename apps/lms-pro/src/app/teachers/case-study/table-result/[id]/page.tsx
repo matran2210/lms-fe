@@ -1,5 +1,4 @@
-
-"use client"
+'use client'
 import { CloseIcon } from '@lms/assets'
 import { UserType } from '@lms/contexts'
 import { ANIMATION, LAYOUT, QUESTION_TYPES } from '@lms/core'
@@ -9,13 +8,12 @@ import {
   FullScreenLayout,
   SappBaseTable,
 } from '@lms/ui'
-import { roundNumber } from '@utils/helpers'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from 'src/api/courses'
-import { buildQueryString } from '@lms/utils'
+import { buildQueryString, roundNumber } from '@lms/utils'
 
 const headers = [
   {
@@ -49,7 +47,7 @@ const TableCaseStudyResultTeacher = () => {
   const [topicAttemptDetail, setTopicAttemptDetail] = useState<any>()
   const router = useRouter()
   const searchParam = useSearchParams()
-  const params = useParams();
+  const params = useParams()
   const { id } = params
   const query = Object.fromEntries(searchParam.entries())
 
@@ -111,12 +109,14 @@ const TableCaseStudyResultTeacher = () => {
     class_id?: string,
     course_section_id?: string,
   ) => {
-    router.replace(`/case-study/${topicId}?${buildQueryString({
+    router.replace(
+      `/case-study/${topicId}?${buildQueryString({
         quiz_id: quizId,
         class_user_id: class_user_id,
         class_id: class_id,
         course_section_id: course_section_id,
-      })}`)
+      })}`,
+    )
   }
   // Hàm ánh xạ giá trị enum với tên tương ứng
   const getTypeName = (type: QUESTION_TYPES): string => {

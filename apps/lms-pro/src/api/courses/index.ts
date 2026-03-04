@@ -1,4 +1,4 @@
-import { fetcher } from '@services/requestV2'
+import { fetcher } from '@services/request'
 import url from 'src/redux/services/Course/MyCourse/Test/url'
 import { IAnswerQuizLastestAttempt, IResponse, IScoreDetails } from '@lms/core'
 import { CourseDetail } from '@lms/core'

@@ -14,9 +14,9 @@ import {
 import { SchedulesAPI } from 'src/api/schedules'
 import CalendarHead from './CalendarHead'
 import { pick } from 'lodash'
-import { formatRecurringSchedule } from '@utils/request'
 import { formatDateTimeWithTimeZone } from '@lms/utils'
 import { IResponseSchedule } from '@lms/contexts'
+import { formatRecurringSchedule } from '@utils/request'
 
 interface IProps {
   onOpenDetail: (date: Date, events: IEvent[]) => void

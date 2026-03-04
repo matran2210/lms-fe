@@ -1,5 +1,6 @@
 'use client'
-import { AltArrowLeft, CloseIconV2, MenuDotsIcon } from '@lms/assets'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
+import { AltArrowLeft, CloseIcon, MenuDotsIcon } from '@lms/assets'
 import { UserType, useFeature } from '@lms/contexts'
 import {
   IAtempt,
@@ -8,20 +9,15 @@ import {
   QUESTION_TYPES,
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
-import {
-  FullScreenLayout,
-  PDFViewer,
-  SappLoadingGlobal,
-  Tooltip,
-} from '@lms/ui'
-import { TestServiceAPI } from 'src/api/test-api'
+import { FullScreenLayout, PDFViewer, Tooltip } from '@lms/ui'
+import { handleMultipleCorrectAnswer } from '@lms/utils'
 import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { CoursesAPI } from 'src/api/courses'
+import { TestServiceAPI } from 'src/api/test-api'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { handleMultipleCorrectAnswer } from '@lms/utils'
-import { CoursesAPI } from 'src/api/courses'
 
 const Explanation = () => {
   const router = useRouter()
@@ -185,7 +181,7 @@ const Explanation = () => {
             <AltArrowLeft />
           </div>
           <div className="rounded-md bg-gray-200 p-2 transition-all duration-300 ease-in-out hover:bg-gray-300 md:!hidden">
-            <CloseIconV2 className="h-[18px] w-[18px]" />
+            <CloseIcon className="h-[18px] w-[18px]" />
           </div>
         </div>
         <div className="absolute right-8 top-6 z-10 flex cursor-pointer items-center justify-center">
