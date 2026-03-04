@@ -112,7 +112,10 @@ const SearchClassResource = ({
                 'inline-flex cursor-pointer flex-col items-center justify-center gap-2.5 rounded-lg bg-gray-200',
                 item.className,
               )}
-              onMouseDown={item.action}
+              onClick={(e) => {
+                e.preventDefault()
+                item.action?.(e)
+              }}
             >
               <div className="justify-start self-stretch text-center text-base font-normal leading-normal text-gray-600">
                 {item.icon}

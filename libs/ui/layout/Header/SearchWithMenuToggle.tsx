@@ -5,10 +5,9 @@ import { useFeature } from "@lms/contexts";
 import { AppType, MY_COURSES } from "@lms/core";
 import { buildQueryString } from "@lms/utils";
 import clsx from "clsx";
- import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import SearchForm from "./SearchForm";
-
 interface IProps {
   handleOpenSidebar: () => void;
   disabledSearch?: boolean;
@@ -17,7 +16,6 @@ interface IProps {
   className?: string;
   isCoursePage?: boolean;
   redirectLink: string;
-  appType: AppType;
 }
 interface IListIcon {
   icon: React.ReactNode;
@@ -32,7 +30,6 @@ const SearchWithMenuToggle = ({
   className,
   isCoursePage = false,
   redirectLink,
-  appType,
 }: IProps) => {
   const { pageLink, useAppSelector, router, query } = useFeature();
   const { status: guideStatus, step: guideStep } = useAppSelector?.(
@@ -52,8 +49,7 @@ const SearchWithMenuToggle = ({
     type: query.type ?? "",
   });
 
-  const appCourseLink =
-    appType === AppType.LMS_PRO ? pageLink.COURSES : pageLink.SHORT_COURSE;
+  const appCourseLink = redirectLink;
   const handleSubmit = () => {
     // Redirect to the search results page with the query as a query parameter
     router.push(
@@ -174,7 +170,6 @@ const SearchWithMenuToggle = ({
           )}
           {!isCoursePage && (
             <div
-              data-guide-id="search-box"
               className={clsx(
                 "border-transparent flex w-full items-center justify-between rounded-lg border border-white bg-white px-2 py-3 shadow-small transition-all duration-300 focus-within:border-primary hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4",
                 {

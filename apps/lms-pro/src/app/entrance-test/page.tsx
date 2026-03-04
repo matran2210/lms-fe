@@ -1,10 +1,21 @@
 'use client'
 import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
-import { UserType, getEntranceCount, useCourseContext } from '@lms/contexts'
+import {
+  UserType,
+  getEntranceCount,
+ 
+  useCourseContext,
+} from '@lms/contexts'
 import { ANIMATION, AppType } from '@lms/core'
 import { Heading } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { CourseSkeleton, Footer, Layout, SearchWithMenuToggle } from '@lms/ui'
+import {
+  CourseSkeleton,
+  Footer,
+  Layout,
+ 
+  SearchWithMenuToggle,
+} from '@lms/ui'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -79,7 +90,6 @@ const EntranceTest = () => {
           isShowToggle
           className="mb-6 mt-4"
           redirectLink={PageLink.COURSES}
-          appType={AppType.LMS_PRO}
         />
         <div className="my-0">
           {isLoading ? (

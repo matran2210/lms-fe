@@ -23,7 +23,7 @@ interface IProps {
   disabled?: boolean;
   onOk: () => void;
   handleCancel?: () => void;
-  handleClose?: () => void;
+  handleClose: () => void;
   icon?: ReactNode;
   header?: ReactNode;
   content?: string | undefined | ReactNode;
@@ -91,7 +91,7 @@ const SappModalV3 = ({
 
     setTimeout(() => {
       callback?.();
-      handleClose?.();
+      handleClose();
     }, EXIT_DURATION);
   };
 

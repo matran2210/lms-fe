@@ -235,7 +235,6 @@ const MyCourse = () => {
           isShowUserGuide
           disabledSearch={guideIsActive}
           redirectLink={PageLink.COURSES}
-          appType={AppType.LMS_PRO}
         />
 
         <div

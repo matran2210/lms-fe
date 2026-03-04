@@ -6,6 +6,7 @@ import {
   ICalendarAPI,
   ICertificateAPI,
   IClassAPI,
+  ICourseActivationAPI,
   ICourseActivityAPI,
   ICoursesAPI,
   IDashboardAPI,
@@ -90,6 +91,8 @@ interface FeatureContextProps {
   ) => Promise<AxiosResponse<any, any, {}>>;
   dispatch?: AppLikeDispatch
   useAppSelector?: <T>(fn: (state: any) => T) => T
+  courseActivationAPI: ICourseActivationAPI;
+
 }
 
 const FeatureContext = createContext<FeatureContextProps>(

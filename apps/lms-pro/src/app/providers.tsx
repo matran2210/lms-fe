@@ -50,6 +50,7 @@ import { ActivityAPI } from 'src/api/activity'
 import CalendarApi from 'src/api/calendar'
 import { uploadImageToLinkedIn } from 'src/api/certificate'
 import { ClassAPI } from 'src/api/class'
+import { CoursesActivationAPI } from 'src/api/course-activation'
 import { CoursesAPI } from 'src/api/courses'
 import { DashboardAPI } from 'src/api/dashboard'
 import { EntranceTestAPI } from 'src/api/entrance-test'
@@ -332,6 +333,7 @@ function Providers({ children }: { children: ReactNode }) {
                 uploadImageToLinkedIn,
               },
               uploadImageToLinkedIn: uploadImageToLinkedIn,
+            courseActivationAPI: CoursesActivationAPI,
               dispatch: dispatch,
               useAppSelector: useAppSelector,
             }}

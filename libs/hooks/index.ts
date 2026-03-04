@@ -18,3 +18,4 @@ export * from "./useUserRole";
 export * from "./useSmartModalSize";
 export * from "./course/useInitialSections";
 export * from "./course/useSectionData";
+export { default as useSelectSubject } from "./useSelectSubject";

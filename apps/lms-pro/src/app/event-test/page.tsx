@@ -71,7 +71,6 @@ const EventTest = () => {
           isShowToggle
           className="my-4"
           redirectLink={PageLink.COURSES}
-          appType={AppType.LMS_PRO}
         />
         <div className="my-0">
           {isLoading ? (
