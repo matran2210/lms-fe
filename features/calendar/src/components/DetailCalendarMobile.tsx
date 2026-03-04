@@ -17,7 +17,7 @@ import { Divider } from "antd";
 import clsx from "clsx";
 import dayjs, { Dayjs } from "dayjs";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
-import { IEvent } from "@sapp-fe/sapp-common-package/dist/types";
+import { IEvent } from "@sapp-fe/sapp-common-package";
 import CourseTree from "./CourseTree";
 import { buildQueryString } from "@lms/utils";
 import { useFeature } from "../../../../libs/state";

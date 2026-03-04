@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import {
   ANIMATION,
   CALENDAR_COLOR_TYPES,
@@ -20,7 +20,7 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { SAPPCalendarV2 } from '@sapp-fe/sapp-common-package'
-import { IEvent, IFilter } from '@sapp-fe/sapp-common-package/dist/types'
+import { IEvent, IFilter } from '@sapp-fe/sapp-common-package'
 import { PageLink } from 'src/constants/routers'
 import CalendarApi from 'src/api/calendar'
 

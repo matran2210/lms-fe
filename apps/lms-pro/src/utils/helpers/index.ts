@@ -314,3 +314,4 @@ export const getUserPrefix = (isTeacher: boolean) =>
 
 export * from './quiz-test/helper'
 export * from './editor-helper'
+export * from './class-resource/helper'

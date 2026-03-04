@@ -3,7 +3,7 @@ import { SappIcon } from '@lms/ui'
 import EventRowDetails from './EventRowDetails'
 import { SappModalV3 } from '@lms/ui'
 import { IPopupDetails } from '@lms/core'
-import { IEvent } from '@sapp-fe/sapp-common-package/dist/types'
+import { IEvent } from '@sapp-fe/sapp-common-package'
 
 interface IProps {
   details: IPopupDetails | null

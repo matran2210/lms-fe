@@ -280,7 +280,7 @@ const ClassResourceTable = ({
           </div>
         )
       case 'AUDIO':
-        return (
+        return resource.url ? (
           <SAPPAudio
             streamRef={internalRef}
             options={{
@@ -289,6 +289,10 @@ const ClassResourceTable = ({
                 .replace('/manifest/video.m3u8', ''),
             }}
           ></SAPPAudio>
+        ) : (
+          <div className="flex h-full items-center justify-center text-base text-gray-400">
+            File đang trong quá trình xử lý
+          </div>
         )
       case 'WORD_DOCUMENT':
         return loadingEditor ? (
