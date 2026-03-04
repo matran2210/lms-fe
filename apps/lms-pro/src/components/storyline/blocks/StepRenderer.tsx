@@ -35,24 +35,29 @@ export function StepRenderer({ documents = [] }: Props) {
 
     const visibleDocs =
       currentStep?.item_progress?.total_document_completed || 1
-
-    // Nếu không phải chuyển step → bỏ qua
     if (prevStepRef.current === currentStep?.id) return
-    // Nếu
     if (prevVisibleDocsRef.current === visibleDocs) return
 
     const isCompleted = visibleDocs >= (storylinyeDocument?.length || 0)
-    const targetIndex = isCompleted ? 0 : docs.length - 1
 
-    const targetBlock = blockRefs.current[targetIndex]
-    if (targetBlock) {
-      requestAnimationFrame(() => {
-        targetBlock.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        })
+    if (isCompleted) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
       })
+    } else {
+      const targetIndex = isCompleted ? 0 : docs.length - 1
+      const targetBlock = blockRefs.current[targetIndex]
+      if (targetBlock) {
+        requestAnimationFrame(() => {
+          targetBlock.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          })
+        })
+      }
     }
+
     prevStepRef.current = currentStep?.id as string
     prevVisibleDocsRef.current = visibleDocs
   }, [currentStep?.id, storylinyeDocument])
