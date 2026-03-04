@@ -42,6 +42,8 @@ import { TreeHelper } from 'src/helper/tree'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch } from 'src/redux/hook'
 import { CoursesAPI } from 'src/api/courses/index'
+import StoryOverview from '@components/storyline/modal/StoryOverview'
+import { IStoryline } from '@lms/core'
 
 interface IProps {
   course_section_type: string
@@ -97,6 +99,10 @@ const CoursePartDetail = () => {
   const [isOpenChapter, setIsOpenChapter] = useState<boolean>(false)
   const [loadingScreen, setLoadingScreen] = useState<boolean>(true)
   const [openResource, setOpenResource] = useState<boolean>(false)
+  const [openStory, setOpenStory] = useState<{
+    isOpen: boolean
+    storyline?: IStoryline
+  }>({ isOpen: false, storyline: undefined })
   const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
 
   const useGetData = (queryKey: string) => {
@@ -127,6 +133,18 @@ const CoursePartDetail = () => {
   const partDetail = tree[0] as any
   const [activeItem, setActiveItem] = useState<any>()
 
+  const handleRouterStoryline = (status: boolean, storyline: IStoryline) => {
+    setOpenStory({
+      isOpen: !!status,
+      storyline,
+    })
+  }
+  const closeStoryline = () => {
+    setOpenStory({
+      isOpen: false,
+      storyline: undefined,
+    })
+  }
   const handleActive = (item: any) => {
     setActiveItem(item)
     if (item?.id && item?.course_section_link_parents?.[0]?.is_preview_locked) {
@@ -494,7 +512,7 @@ const CoursePartDetail = () => {
   return (
     <Layout title="Course Part Detail" showSidebar={isAlwaysShowSidebar}>
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
-        <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
+        <div className="relative flex h-16 w-full items-center justify-center border-b-[0.57px] border-zinc-100 bg-white">
           <Alert
             message={
               <div className="flex items-center gap-2">
@@ -584,6 +602,7 @@ const CoursePartDetail = () => {
             isLMSV2
             isMobileView={isMobileView}
             isTabletView={isTabletView}
+            handleRouterStoryline={handleRouterStoryline}
           />
         </div>
         <BottomMenu>
@@ -684,6 +703,11 @@ const CoursePartDetail = () => {
         </div>
       </div>
       <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />
+      <StoryOverview
+        open={openStory.isOpen}
+        setOpen={closeStoryline}
+        storylineData={openStory.storyline}
+      />
     </Layout>
   )
 }

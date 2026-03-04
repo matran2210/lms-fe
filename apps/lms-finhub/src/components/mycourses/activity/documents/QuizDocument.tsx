@@ -612,13 +612,13 @@ const QuizDocument = ({
     switch (status) {
       case GRADE_STATUS.FINISHED_GRADING:
         return (
-          <div className="bg-blur-green text-green-800 rounded px-2 font-medium">
+          <div className="bg-blur-green rounded px-2 font-medium text-green-800">
             Finished Grading
           </div>
         )
       case GRADE_STATUS.AWAITING_GRADING:
         return (
-          <div className="bg-blur-yellow  text-amber-400 rounded px-2 font-medium">
+          <div className="bg-blur-yellow  rounded px-2 font-medium text-amber-400">
             Awaiting Grading
           </div>
         )

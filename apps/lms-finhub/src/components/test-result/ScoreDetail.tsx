@@ -391,7 +391,7 @@ const LoadingScoreDetail = () => {
   return (
     <div className="rounded-xl bg-white p-6">
       {/* Fake table header */}
-      <div className="border-gray-200 mb-3 flex w-full justify-between border-b pb-2">
+      <div className="mb-3 flex w-full justify-between border-b border-gray-200 pb-2">
         <div className="h-8 w-20 rounded bg-skeleton" />
         <div className="h-8 w-1/3 rounded bg-skeleton" />
         <div className="hidden h-8 w-20 rounded bg-skeleton md:block" />
@@ -407,7 +407,7 @@ const LoadingScoreDetail = () => {
             <div
               key={i}
               className={clsx(
-                'bg-gray-50 flex items-center justify-between rounded-lg py-3',
+                'flex items-center justify-between rounded-lg bg-gray-50 py-3',
               )}
             >
               <div className="h-8 w-20 rounded bg-skeleton" />

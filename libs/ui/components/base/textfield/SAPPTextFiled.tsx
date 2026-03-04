@@ -16,6 +16,7 @@ interface IProps {
   value?: any
   defaultValue?: string
   disabled?: boolean
+  readOnly?: boolean
   label?: string
   labelClass?: string
   tooltipIcon?: string | undefined
@@ -57,6 +58,7 @@ const SAPPTextFiled = ({
   onPaste,
   onFocus,
   onBlur,
+  readOnly
 }: IProps) => {
   const [showPassword, setShowPassword] = useState(false)
 
@@ -100,6 +102,7 @@ const SAPPTextFiled = ({
           onPaste={onPaste}
           onFocus={onFocus}
           onBlur={onBlur}
+          readOnly={readOnly}
         />
 
         {/* 👁 Icon hiện/ẩn mật khẩu */}

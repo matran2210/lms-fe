@@ -43,6 +43,7 @@ import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routes'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch } from 'src/redux/hook'
+import StoryOverview from '@components/storyline/modal/StoryOverview'
 
 const CourseDetail = () => {
   const dispatch = useAppDispatch()
@@ -347,6 +348,7 @@ const CourseDetail = () => {
 
     return []
   }, [partDetail, chapterDetail])
+
   return (
     <Layout
       showSidebar={showSidebar || isAlwaysShowSidebar}
@@ -356,7 +358,7 @@ const CourseDetail = () => {
     >
       <PromotionalBanner />
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
-        <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
+        <div className="relative flex h-16 w-full items-center justify-center border-b-[0.57px] border-zinc-100 bg-white">
           <Alert
             message={
               <div className="flex items-center gap-2">

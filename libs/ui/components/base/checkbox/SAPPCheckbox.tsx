@@ -4,6 +4,7 @@ import React from 'react'
 interface IProps {
   checked: boolean
   disabled?: boolean
+  readOnly?: boolean
   onChange?: React.ChangeEventHandler<HTMLInputElement>
   className?: string
   name?: string
@@ -33,6 +34,7 @@ const SIZES = {
 const SAPPCheckbox = ({
   checked,
   disabled,
+  readOnly,
   onChange,
   className,
   value,
@@ -58,8 +60,12 @@ const SAPPCheckbox = ({
         )}
         type="checkbox"
         checked={checked}
-        onChange={onChange}
+        onChange={(e) => {
+          if (readOnly) return;
+          onChange?.(e);
+        }}
         disabled={disabled}
+        readOnly={readOnly}
         value={value?.toString()}
       />
     </div>

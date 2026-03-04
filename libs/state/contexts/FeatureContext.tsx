@@ -14,6 +14,7 @@ import {
   IEventTestAPI,
   INotificationAPI,
   IQuestionAPI,
+  IStorylineAPI,
   ITestServiceAPI,
   IUploadAPI,
   MenuItem
@@ -62,6 +63,7 @@ interface FeatureContextProps {
         | undefined;
     }) => Promise<any>;
   };
+  storylineApi?: IStorylineAPI
   submitQuizTest: (
     id: string,
     data: any,

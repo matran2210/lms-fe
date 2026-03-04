@@ -45,10 +45,8 @@ const Certificate = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <SinglePageLayout title="Certificate">
-        <CertificateVertical certificate={certificate}/>
-        <HorizontalCertificate
-          certificate={certificate}
-        />
+        <CertificateVertical certificate={certificate} />
+        <HorizontalCertificate certificate={certificate} />
       </SinglePageLayout>
     </SappLoadingGlobal>
   )

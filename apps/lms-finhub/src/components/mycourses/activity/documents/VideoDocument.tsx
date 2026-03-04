@@ -414,7 +414,7 @@ const VideoDocument = ({
                     <div className="mim-w-[62px] text-state-info">
                       {formatTimer(e?.time)}
                     </div>
-                    <div className="text-inherit line-clamp-2 text-gray-800">
+                    <div className="line-clamp-2 text-gray-800 text-inherit">
                       {htmlToRaw(e?.text)}
                     </div>
                   </div>

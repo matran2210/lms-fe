@@ -37,6 +37,7 @@ interface IProps {
   watch?: UseFormWatch<FieldValues>;
   explainClassname?: string;
   storageKey?: string;
+  readOnly?: boolean;
 }
 
 const NewFilltext = forwardRef(
@@ -59,6 +60,7 @@ const NewFilltext = forwardRef(
       watch,
       explainClassname,
       storageKey,
+      readOnly = false,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -159,6 +161,7 @@ const NewFilltext = forwardRef(
                   inputClassName="border-none outline-none text-center"
                   onFocus={() => setFocusedIndex(index)}
                   onBlur={() => setFocusedIndex(null)}
+                  readOnly={readOnly}
                 />
               </span>
             );
