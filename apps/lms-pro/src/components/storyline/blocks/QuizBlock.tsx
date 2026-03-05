@@ -343,7 +343,7 @@ const QuizBlock = ({
             }
             name={`${question?.id}_answer`}
             setValue={setValue}
-            solution={openExplain ? question?.solution : undefined}
+            solution={isCorrectAnswer || openExplain ? question?.solution : undefined}
             explainClassname="!mt-8 !p-0 !bg-transparent"
             control={control}
             readOnly={isQuestionConfirmed}
@@ -365,7 +365,7 @@ const QuizBlock = ({
             }
             name={`${question?.id}_answer`}
             setValue={setValue}
-            solution={openExplain ? question?.solution : undefined}
+            solution={isCorrectAnswer || openExplain ? question?.solution : undefined}
             explainClassname="!mt-8 !p-0 !bg-transparent"
             readOnly={isQuestionConfirmed}
             isAnimationCorrectAnswer
@@ -386,7 +386,7 @@ const QuizBlock = ({
                 : undefined
             }
             uuid={'_' + uuidv4().replaceAll('-', '_')}
-            solution={openExplain ? question?.solution : undefined}
+            solution={isCorrectAnswer || openExplain ? question?.solution : undefined}
             ref={MatchQuizRef}
             explainClassname="!mt-0 !p-0 !bg-transparent"
             correctAnswerClass="!mt-0 !pt-0"
@@ -411,7 +411,7 @@ const QuizBlock = ({
                 : undefined
             }
             ref={FillWordRef}
-            solution={openExplain ? question?.solution : undefined}
+            solution={isCorrectAnswer || openExplain ? question?.solution : undefined}
             watch={watch}
             explainClassname="!mt-8 !p-0 !bg-transparent"
             readOnly={isQuestionConfirmed}
@@ -434,7 +434,7 @@ const QuizBlock = ({
                   : undefined
                 : undefined
             }
-            solution={openExplain ? question?.solution : undefined}
+            solution={isCorrectAnswer || openExplain ? question?.solution : undefined}
             explainClassname="!mt-8 !p-0 !bg-transparent"
             disabled={isQuestionConfirmed}
             isAnimationCorrectAnswer
@@ -459,7 +459,7 @@ const QuizBlock = ({
                   : undefined
                 : undefined
             }
-            solution={openExplain ? question?.solution : undefined}
+            solution={isCorrectAnswer || openExplain ? question?.solution : undefined}
             disabled={isQuestionConfirmed}
             className="!bg-white"
             isAnimationCorrectAnswer
