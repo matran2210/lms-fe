@@ -51,6 +51,7 @@ interface IProps {
   isShowWarning?: boolean;
   disabled?: boolean;
   className?: string;
+  isAnimationCorrectAnswer?: boolean;
 }
 
 // Constants
@@ -84,6 +85,7 @@ const SelectWord = forwardRef(
       onChange,
       disabled,
       className = "",
+      isAnimationCorrectAnswer = false,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -717,9 +719,10 @@ const SelectWord = forwardRef(
           }}
           highlighted={highlighted}
         />
+        <>
         {/* Correct Answer Section */}
         {answerContent && (
-          <>
+            <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="2000">
             <SappDivider />
             <div className="text-base font-semibold">Correct Answer</div>
             <EditorReader
@@ -729,17 +732,18 @@ const SelectWord = forwardRef(
                   ?.innerHTML || ""
               }
             />
-          </>
+          </div>
         )}
 
         {/* Solution Section */}
         {solution && (
-          <>
+            <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="1000">
             <SappDivider />
             <SappTitleSolution title={MY_COURSES.explanations} />
             <EditorReader className="mt-4" text_editor_content={solution} />
-          </>
+          </div>
         )}
+        </>
       </div>
     );
   },

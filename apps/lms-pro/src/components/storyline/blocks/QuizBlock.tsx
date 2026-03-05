@@ -347,6 +347,7 @@ const QuizBlock = ({
             explainClassname="!mt-8 !p-0 !bg-transparent"
             control={control}
             readOnly={isQuestionConfirmed}
+            isAnimationCorrectAnswer
           />
         )
 
@@ -367,6 +368,7 @@ const QuizBlock = ({
             solution={openExplain ? question?.solution : undefined}
             explainClassname="!mt-8 !p-0 !bg-transparent"
             readOnly={isQuestionConfirmed}
+            isAnimationCorrectAnswer
           />
         )
 
@@ -389,6 +391,7 @@ const QuizBlock = ({
             explainClassname="!mt-0 !p-0 !bg-transparent"
             correctAnswerClass="!mt-0 !pt-0"
             disabled={isQuestionConfirmed}
+            isAnimationCorrectAnswer
           />
         )
 
@@ -412,6 +415,7 @@ const QuizBlock = ({
             watch={watch}
             explainClassname="!mt-8 !p-0 !bg-transparent"
             readOnly={isQuestionConfirmed}
+            isAnimationCorrectAnswer
           />
         )
 
@@ -433,6 +437,7 @@ const QuizBlock = ({
             solution={openExplain ? question?.solution : undefined}
             explainClassname="!mt-8 !p-0 !bg-transparent"
             disabled={isQuestionConfirmed}
+            isAnimationCorrectAnswer
           />
         )
 
@@ -457,6 +462,7 @@ const QuizBlock = ({
             solution={openExplain ? question?.solution : undefined}
             disabled={isQuestionConfirmed}
             className="!bg-white"
+            isAnimationCorrectAnswer
           />
         )
 
@@ -522,6 +528,7 @@ const QuizBlock = ({
                     }}
                     isShowContent={false}
                     disable={isQuestionConfirmed}
+                    isAnimationCorrectAnswer
                   />
                 </div>
               ),
@@ -567,6 +574,7 @@ const QuizBlock = ({
                     index={undefined}
                     isShowContent={false}
                     disable={isQuestionConfirmed}
+                    isAnimationCorrectAnswer
                   />
                 </div>
               )}
