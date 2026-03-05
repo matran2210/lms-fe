@@ -28,10 +28,10 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
   }
 
   const progress = useMemo(() => {
-    if (!storylineData?.learning_progress) return 0
-    const progressData =
-      storylineData?.learning_progress.total_course_sections_completed /
-      storylineData?.learning_progress.total_course_sections
+    if (!storylineData) return 0
+    const totalDocument = storylineItemsHasDocs.reduce((acc, curr) => acc + curr.item_progress.total_document, 0)
+    const totalDocumentCompleted = storylineItemsHasDocs.reduce((acc, curr) => acc + curr.item_progress.total_document_completed, 0)
+    const progressData = totalDocumentCompleted / totalDocument
     return Math.round(progressData * 100)
   }, [storylineData?.learning_progress])
 

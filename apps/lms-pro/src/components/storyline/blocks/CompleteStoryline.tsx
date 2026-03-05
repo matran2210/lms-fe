@@ -39,6 +39,10 @@ export default function CompleteStoryline({ listStorylineData }: IProps) {
     }
   }
   const continueStudy = () => {
+    if (!nextActivity) {
+      backToCourse()
+      return
+    }
     switch (listStorylineData?.next_activity?.course_section_type) {
       case 'STORY_LINE':
         setOpen(true)

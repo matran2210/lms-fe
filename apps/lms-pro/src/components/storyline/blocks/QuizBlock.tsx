@@ -73,7 +73,7 @@ const QuizBlock = ({
   const isLastVisibleDocument = docIndex === storylineDocument?.length
   const [loading, setLoading] = useState<boolean>(false)
   const [question, setQuestion] = useState<IStorylineQuestion | null>(null)
-  const [topicDescription, setTopicDescription] = useState<any>()
+  // const [topicDescription, setTopicDescription] = useState<any>()
   const [openExplain, setOpenExplain] = useState(false)
   const [isCorrectAnswer, setIsCorrectAnswer] = useState(false)
   const [isRetakeQuestion, setIsRetakeQuestion] = useState(false)
@@ -297,16 +297,19 @@ const QuizBlock = ({
     let question
     try {
       if (!isUndefined(minimalQuestion)) {
-        topicDescription = await TestServiceAPI.getTopicDescription(
-          minimalQuestion.question_topic.id,
-          quiz_id,
-        )
+        // topicDescription = await TestServiceAPI.getTopicDescription(
+        //   minimalQuestion.question_topic.id,
+        //   quiz_id,
+        // )
         question = await TestServiceAPI.getQuestionDetail(minimalQuestion?.id)
       }
-      return { topicDescription, question: question?.data }
+      return { 
+        // topicDescription,
+         question: question?.data 
+        }
     } catch (err) {
       return {
-        topicDescription: { data: {} },
+        // topicDescription: { data: {} },
         question: null,
       }
     }
@@ -671,9 +674,9 @@ const QuizBlock = ({
   useLayoutEffect(() => {
     if (minimalQuestion?.id) {
       getDetail().then((res) => {
-        if (res.topicDescription) {
-          setTopicDescription(res.topicDescription.data)
-        }
+        // if (res.topicDescription) {
+        //   setTopicDescription(res.topicDescription.data)
+        // }
         if (res.question) {
           setQuestion(res.question)
         }
@@ -683,7 +686,7 @@ const QuizBlock = ({
 
   return (
     <div ref={questionRef}>
-      {!!topicDescription?.description &&
+      {/* {!!topicDescription?.description &&
         !isEmptyParagraph(topicDescription?.description) && (
           <EditorReader
             text_editor_content={topicDescription?.description ?? ''}
@@ -694,7 +697,7 @@ const QuizBlock = ({
       {!!topicDescription?.description &&
         !isEmptyParagraph(topicDescription?.description) && (
           <Divider className="my-4 bg-gray-300 md:my-8" />
-        )}
+        )} */}
       <div
         className={clsx('min-h-[200px] rounded-t-2xl bg-gray-100 p-8', {
           'rounded-b-2xl': isLearnedBlock && !isShowActionBtn,
