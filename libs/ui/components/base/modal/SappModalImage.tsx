@@ -28,13 +28,13 @@ function SappModalImage({ src, setSrc }: Props) {
       closeIcon
       
     >
-      <div className="mx-auto w-fit min-w-[100%] max-w-full md:min-h-[350px]">
+      <div className="mx-auto w-fit min-w-80 max-w-full md:min-h-[350px]">
         {src && (
           <Image
             src={src}
             width="1000"
             height="1000"
-            className="h-full max-h-[550px] w-full object-contain "
+            className="h-full max-h-[550px] w-full object-contain"
             alt={'image'}
             loading={'eager'}
             priority={true}
