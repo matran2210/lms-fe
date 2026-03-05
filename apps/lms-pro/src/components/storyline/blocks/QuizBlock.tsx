@@ -80,7 +80,7 @@ const QuizBlock = ({
   const [skipQuestion, setSkipQuestion] = useState(false)
   const isShowActionBtn =
     status === 'Review' ||
-    (status !== 'Review' && isLearnedBlock && !skipQuestion)
+    (status !== 'Review' && isLearnedBlock)
   const isQuestionConfirmed = !!question?.confirmed
 
   const isShowClearSelection =

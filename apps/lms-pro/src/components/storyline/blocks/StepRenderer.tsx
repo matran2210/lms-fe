@@ -41,10 +41,14 @@ export function StepRenderer({ documents = [] }: Props) {
     const totalCompleted = currentStep?.item_progress?.total_document_completed ?? 1
     const isStepCompleted = totalCompleted >= storylineDocument.length
 
+    if (!totalCompleted) {
+      window.scrollTo({ top: 0, behavior: 'instant' })
+      return
+    }
     if (isStepCompleted) {
       window.scrollTo({ top: 0, behavior: 'instant' })
     } else {
-      const lastVisibleIndex = visibleDocumentCount - 1
+      const lastVisibleIndex = totalCompleted - 1
       const targetBlock = blockRefs.current[lastVisibleIndex]
       if (targetBlock) {
         requestAnimationFrame(() => {
@@ -58,7 +62,7 @@ export function StepRenderer({ documents = [] }: Props) {
 
     // Lưu lại count tại thời điểm Effect 1 chạy cho step này
     stepInitMapRef.current[currentStep.id as string] = {
-      count: visibleDocumentCount,
+      count: 1,
       isCompleted: isStepCompleted,
     }
   }, [currentStep?.id, storylineDocument])
@@ -68,9 +72,8 @@ export function StepRenderer({ documents = [] }: Props) {
     if (!currentStep?.id) return
     const totalCompleted = currentStep?.item_progress?.total_document_completed ?? 1
     if (totalCompleted !== 0) return
-
     stepInitMapRef.current[currentStep.id as string] = {
-      count: visibleDocumentCount,
+      count: 1,
       isCompleted: false,
     }
   }, [currentStep?.item_progress?.total_document_completed])
@@ -96,7 +99,7 @@ export function StepRenderer({ documents = [] }: Props) {
     if (!newBlock) return
 
     setTimeout(() => {
-      newBlock.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      newBlock.scrollIntoView({ behavior: 'smooth', block: 'end' })
     }, 200)
 
     stepInitMapRef.current[currentStep.id as string] = {
