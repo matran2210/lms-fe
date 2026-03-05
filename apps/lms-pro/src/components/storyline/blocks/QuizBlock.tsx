@@ -66,11 +66,11 @@ const QuizBlock = ({
     continueAction,
     visibleDocumentCount,
     updateProgress,
-    storylinyeDocument,
+    storylineDocument,
   } = useStoryline()
-  const currentVisibleDocument = storylinyeDocument?.[visibleDocumentCount]
+  const currentVisibleDocument = storylineDocument?.[visibleDocumentCount]
   const isLearnedBlock = docIndex < visibleDocumentCount
-  const isLastVisibleDocument = docIndex === storylinyeDocument?.length
+  const isLastVisibleDocument = docIndex === storylineDocument?.length
   const [loading, setLoading] = useState<boolean>(false)
   const [question, setQuestion] = useState<IStorylineQuestion | null>(null)
   const [topicDescription, setTopicDescription] = useState<any>()

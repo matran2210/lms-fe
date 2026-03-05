@@ -30,22 +30,22 @@ export default function Player({ listStorylineData }: IProps) {
     updateProgress,
     visibleDocumentCount,
     isCompletedProgress,
-    storylinyeDocument,
+    storylineDocument,
   } = useStoryline()
 
   useEffect(() => {
     if (visibleDocumentCount > 1) return
-    if (storylinyeDocument?.length === 0) return
-    const firstDocument = storylinyeDocument?.[0]
+    if (storylineDocument?.length === 0) return
+    const firstDocument = storylineDocument?.[0]
     if (!firstDocument) return
 
     updateProgress(firstDocument?.id as string)
-  }, [storylinyeDocument, visibleDocumentCount])
+  }, [storylineDocument, visibleDocumentCount])
 
   if (!currentStep) return null
 
-  const lastVisibleDocument = storylinyeDocument?.[visibleDocumentCount - 1]
-  const currentVisibleDocument = storylinyeDocument?.[visibleDocumentCount]
+  const lastVisibleDocument = storylineDocument?.[visibleDocumentCount - 1]
+  const currentVisibleDocument = storylineDocument?.[visibleDocumentCount]
 
   return (
     <SappLoadingGlobal loading={false}>
@@ -101,12 +101,12 @@ export default function Player({ listStorylineData }: IProps) {
 
                     <StepRenderer
                       documents={
-                        storylinyeDocument?.slice(0, visibleDocumentCount) ?? []
+                        storylineDocument?.slice(0, visibleDocumentCount) ?? []
                       }
-                      storylinyeDocument={storylinyeDocument}
+                      storylineDocument={storylineDocument}
                     />
                   </section>
-                  {visibleDocumentCount < (storylinyeDocument?.length ?? 0) &&
+                  {visibleDocumentCount < (storylineDocument?.length ?? 0) &&
                     lastVisibleDocument?.type !== 'QUIZ' &&
                     !!currentVisibleDocument && (
                       <ContinueButton
@@ -121,8 +121,8 @@ export default function Player({ listStorylineData }: IProps) {
                 </div>
               </main>
 
-              {storylinyeDocument &&
-                visibleDocumentCount >= (storylinyeDocument?.length ?? 0) &&
+              {storylineDocument &&
+                visibleDocumentCount >= (storylineDocument?.length ?? 0) &&
                 ((status !== 'Review' &&
                   (currentStepIndex + 1 < storylineItemsHasDocs?.length ||
                     (currentStepIndex + 1 === storylineItemsHasDocs?.length &&

@@ -7,7 +7,7 @@ import { useStoryline } from '@contexts/StorylineContext'
 
 interface Props {
   documents: DocumentItem[] | undefined
-  storylinyeDocument: DocumentItem[] | undefined
+  storylineDocument: DocumentItem[] | undefined
 }
 
 export function StepRenderer({ documents = [] }: Props) {
@@ -16,11 +16,11 @@ export function StepRenderer({ documents = [] }: Props) {
   const prevVisibleDocsRef = useRef<number>(0)
   const prevStepRef = useRef<string | null>('')
 
-  const { visibleDocumentCount, currentStep, storylinyeDocument } =
+  const { visibleDocumentCount, currentStep, storylineDocument } =
     useStoryline()
   useEffect(() => {
     Aos.init({
-      duration: 750,
+      duration: 800,
       once: true,
       easing: 'ease-out-cubic',
       // disableMutationObserver: true,
@@ -28,17 +28,17 @@ export function StepRenderer({ documents = [] }: Props) {
   }, [])
 
   useEffect(() => {
-    const docs = storylinyeDocument?.slice(0, visibleDocumentCount)
+    const docs = storylineDocument?.slice(0, visibleDocumentCount)
     if (!docs?.length) return
     if (!currentStep?.id) return
-    if (!storylinyeDocument?.length) return
+    if (!storylineDocument?.length) return
 
     const visibleDocs =
       currentStep?.item_progress?.total_document_completed || 1
     if (prevStepRef.current === currentStep?.id) return
     if (prevVisibleDocsRef.current === visibleDocs) return
 
-    const isCompleted = visibleDocs >= (storylinyeDocument?.length || 0)
+    const isCompleted = visibleDocs >= (storylineDocument?.length || 0)
 
     if (isCompleted) {
       window.scrollTo({
@@ -60,16 +60,16 @@ export function StepRenderer({ documents = [] }: Props) {
 
     prevStepRef.current = currentStep?.id as string
     prevVisibleDocsRef.current = visibleDocs
-  }, [currentStep?.id, storylinyeDocument])
+  }, [currentStep?.id, storylineDocument])
 
   useEffect(() => {
     if (!documents.length) return
-    if (!storylinyeDocument?.length) return
+    if (!storylineDocument?.length) return
 
     const visibleDocs =
       currentStep?.item_progress?.total_document_completed || 1
 
-    const isCompleted = visibleDocs >= storylinyeDocument?.length
+    const isCompleted = visibleDocs >= storylineDocument?.length
 
     if (isCompleted) return
     const lastIndex = documents.length - 1
