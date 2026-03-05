@@ -10,80 +10,99 @@ interface Props {
   storylineDocument: DocumentItem[] | undefined
 }
 
+interface StepInitState {
+  count: number
+  isCompleted: boolean
+}
+
 export function StepRenderer({ documents = [] }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const blockRefs = useRef<(HTMLElement | null)[]>([])
-  const prevVisibleDocsRef = useRef<number>(0)
-  const prevStepRef = useRef<string | null>('')
 
-  const { visibleDocumentCount, currentStep, storylineDocument } =
-    useStoryline()
+  // Key: stepId → value: visibleDocumentCount lúc Effect 1 chạy xong
+  const stepInitMapRef = useRef<Record<string, StepInitState>>({})
+
+  const { visibleDocumentCount, currentStep, storylineDocument } = useStoryline()
+
+  // Init AOS
   useEffect(() => {
     Aos.init({
       duration: 800,
       once: true,
       easing: 'ease-out-cubic',
-      // disableMutationObserver: true,
     })
   }, [])
 
+  // Effect 1: Lần đầu vào hoặc đổi step
   useEffect(() => {
-    const docs = storylineDocument?.slice(0, visibleDocumentCount)
-    if (!docs?.length) return
     if (!currentStep?.id) return
     if (!storylineDocument?.length) return
 
-    const visibleDocs =
-      currentStep?.item_progress?.total_document_completed || 1
-    if (prevStepRef.current === currentStep?.id) return
-    if (prevVisibleDocsRef.current === visibleDocs) return
+    const totalCompleted = currentStep?.item_progress?.total_document_completed ?? 1
+    const isStepCompleted = totalCompleted >= storylineDocument.length
 
-    const isCompleted = visibleDocs >= (storylineDocument?.length || 0)
-
-    if (isCompleted) {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      })
+    if (isStepCompleted) {
+      window.scrollTo({ top: 0, behavior: 'instant' })
     } else {
-      const targetIndex = isCompleted ? 0 : docs.length - 1
-      const targetBlock = blockRefs.current[targetIndex]
+      const lastVisibleIndex = visibleDocumentCount - 1
+      const targetBlock = blockRefs.current[lastVisibleIndex]
       if (targetBlock) {
         requestAnimationFrame(() => {
           targetBlock.scrollIntoView({
             behavior: 'smooth',
-            block: 'start',
+            block: 'end',
           })
         })
       }
     }
 
-    prevStepRef.current = currentStep?.id as string
-    prevVisibleDocsRef.current = visibleDocs
+    // Lưu lại count tại thời điểm Effect 1 chạy cho step này
+    stepInitMapRef.current[currentStep.id as string] = {
+      count: visibleDocumentCount,
+      isCompleted: isStepCompleted,
+    }
   }, [currentStep?.id, storylineDocument])
 
+  // Effect retake: total_document_completed reset về 0 → update map về chưa hoàn thành
   useEffect(() => {
+    if (!currentStep?.id) return
+    const totalCompleted = currentStep?.item_progress?.total_document_completed ?? 1
+    if (totalCompleted !== 0) return
+
+    stepInitMapRef.current[currentStep.id as string] = {
+      count: visibleDocumentCount,
+      isCompleted: false,
+    }
+  }, [currentStep?.item_progress?.total_document_completed])
+
+  // Effect 2: Next document
+  useEffect(() => {
+    if (!currentStep?.id) return
     if (!documents.length) return
-    if (!storylineDocument?.length) return
 
-    const visibleDocs =
-      currentStep?.item_progress?.total_document_completed || 1
+    const stepState = stepInitMapRef.current[currentStep.id as string]
 
-    const isCompleted = visibleDocs >= storylineDocument?.length
+    // Effect 1 chưa chạy cho step này → bỏ qua
+    if (stepState === undefined) return
 
-    if (isCompleted) return
+    // Step đã hoàn thành → không cần scroll
+    if (stepState.isCompleted) return
+
+    // Count chưa tăng so với lúc Effect 1 khởi tạo → bỏ qua
+    if (visibleDocumentCount <= stepState.count) return
+
     const lastIndex = documents.length - 1
     const newBlock = blockRefs.current[lastIndex]
-
     if (!newBlock) return
 
-    // Đợi layout + AOS tính xong
     setTimeout(() => {
-      newBlock.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      })
+      newBlock.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }, 200)
+
+    stepInitMapRef.current[currentStep.id as string] = {
+      ...stepState,
+      count: visibleDocumentCount,
+    }
   }, [visibleDocumentCount])
 
   return (
