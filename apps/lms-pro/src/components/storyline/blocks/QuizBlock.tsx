@@ -66,21 +66,21 @@ const QuizBlock = ({
     continueAction,
     visibleDocumentCount,
     updateProgress,
-    storylinyeDocument,
+    storylineDocument,
   } = useStoryline()
-  const currentVisibleDocument = storylinyeDocument?.[visibleDocumentCount]
+  const currentVisibleDocument = storylineDocument?.[visibleDocumentCount]
   const isLearnedBlock = docIndex < visibleDocumentCount
-  const isLastVisibleDocument = docIndex === storylinyeDocument?.length
+  const isLastVisibleDocument = docIndex === storylineDocument?.length
   const [loading, setLoading] = useState<boolean>(false)
   const [question, setQuestion] = useState<IStorylineQuestion | null>(null)
-  const [topicDescription, setTopicDescription] = useState<any>()
+  // const [topicDescription, setTopicDescription] = useState<any>()
   const [openExplain, setOpenExplain] = useState(false)
   const [isCorrectAnswer, setIsCorrectAnswer] = useState(false)
   const [isRetakeQuestion, setIsRetakeQuestion] = useState(false)
   const [skipQuestion, setSkipQuestion] = useState(false)
   const isShowActionBtn =
     status === 'Review' ||
-    (status !== 'Review' && isLearnedBlock && !skipQuestion)
+    (status !== 'Review' && isLearnedBlock)
   const isQuestionConfirmed = !!question?.confirmed
 
   const isShowClearSelection =
@@ -297,16 +297,19 @@ const QuizBlock = ({
     let question
     try {
       if (!isUndefined(minimalQuestion)) {
-        topicDescription = await TestServiceAPI.getTopicDescription(
-          minimalQuestion.question_topic.id,
-          quiz_id,
-        )
+        // topicDescription = await TestServiceAPI.getTopicDescription(
+        //   minimalQuestion.question_topic.id,
+        //   quiz_id,
+        // )
         question = await TestServiceAPI.getQuestionDetail(minimalQuestion?.id)
       }
-      return { topicDescription, question: question?.data }
+      return { 
+        // topicDescription,
+         question: question?.data 
+        }
     } catch (err) {
       return {
-        topicDescription: { data: {} },
+        // topicDescription: { data: {} },
         question: null,
       }
     }
@@ -340,10 +343,11 @@ const QuizBlock = ({
             }
             name={`${question?.id}_answer`}
             setValue={setValue}
-            solution={openExplain ? question?.solution : undefined}
+            solution={isCorrectAnswer || openExplain ? question?.solution : undefined}
             explainClassname="!mt-8 !p-0 !bg-transparent"
             control={control}
             readOnly={isQuestionConfirmed}
+            isAnimationCorrectAnswer
           />
         )
 
@@ -361,9 +365,10 @@ const QuizBlock = ({
             }
             name={`${question?.id}_answer`}
             setValue={setValue}
-            solution={openExplain ? question?.solution : undefined}
+            solution={isCorrectAnswer || openExplain ? question?.solution : undefined}
             explainClassname="!mt-8 !p-0 !bg-transparent"
             readOnly={isQuestionConfirmed}
+            isAnimationCorrectAnswer
           />
         )
 
@@ -381,11 +386,12 @@ const QuizBlock = ({
                 : undefined
             }
             uuid={'_' + uuidv4().replaceAll('-', '_')}
-            solution={openExplain ? question?.solution : undefined}
+            solution={isCorrectAnswer || openExplain ? question?.solution : undefined}
             ref={MatchQuizRef}
             explainClassname="!mt-0 !p-0 !bg-transparent"
             correctAnswerClass="!mt-0 !pt-0"
             disabled={isQuestionConfirmed}
+            isAnimationCorrectAnswer
           />
         )
 
@@ -405,10 +411,11 @@ const QuizBlock = ({
                 : undefined
             }
             ref={FillWordRef}
-            solution={openExplain ? question?.solution : undefined}
+            solution={isCorrectAnswer || openExplain ? question?.solution : undefined}
             watch={watch}
             explainClassname="!mt-8 !p-0 !bg-transparent"
             readOnly={isQuestionConfirmed}
+            isAnimationCorrectAnswer
           />
         )
 
@@ -427,9 +434,10 @@ const QuizBlock = ({
                   : undefined
                 : undefined
             }
-            solution={openExplain ? question?.solution : undefined}
+            solution={isCorrectAnswer || openExplain ? question?.solution : undefined}
             explainClassname="!mt-8 !p-0 !bg-transparent"
             disabled={isQuestionConfirmed}
+            isAnimationCorrectAnswer
           />
         )
 
@@ -451,9 +459,10 @@ const QuizBlock = ({
                   : undefined
                 : undefined
             }
-            solution={openExplain ? question?.solution : undefined}
+            solution={isCorrectAnswer || openExplain ? question?.solution : undefined}
             disabled={isQuestionConfirmed}
             className="!bg-white"
+            isAnimationCorrectAnswer
           />
         )
 
@@ -519,6 +528,7 @@ const QuizBlock = ({
                     }}
                     isShowContent={false}
                     disable={isQuestionConfirmed}
+                    isAnimationCorrectAnswer
                   />
                 </div>
               ),
@@ -564,6 +574,7 @@ const QuizBlock = ({
                     index={undefined}
                     isShowContent={false}
                     disable={isQuestionConfirmed}
+                    isAnimationCorrectAnswer
                   />
                 </div>
               )}
@@ -671,9 +682,9 @@ const QuizBlock = ({
   useLayoutEffect(() => {
     if (minimalQuestion?.id) {
       getDetail().then((res) => {
-        if (res.topicDescription) {
-          setTopicDescription(res.topicDescription.data)
-        }
+        // if (res.topicDescription) {
+        //   setTopicDescription(res.topicDescription.data)
+        // }
         if (res.question) {
           setQuestion(res.question)
         }
@@ -683,7 +694,7 @@ const QuizBlock = ({
 
   return (
     <div ref={questionRef}>
-      {!!topicDescription?.description &&
+      {/* {!!topicDescription?.description &&
         !isEmptyParagraph(topicDescription?.description) && (
           <EditorReader
             text_editor_content={topicDescription?.description ?? ''}
@@ -694,7 +705,7 @@ const QuizBlock = ({
       {!!topicDescription?.description &&
         !isEmptyParagraph(topicDescription?.description) && (
           <Divider className="my-4 bg-gray-300 md:my-8" />
-        )}
+        )} */}
       <div
         className={clsx('min-h-[200px] rounded-t-2xl bg-gray-100 p-8', {
           'rounded-b-2xl': isLearnedBlock && !isShowActionBtn,

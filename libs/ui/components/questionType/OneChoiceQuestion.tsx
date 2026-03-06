@@ -36,6 +36,7 @@ export type IPreviewProp = {
   explainClassname?: string;
   storageKey?: string;
   readOnly?: boolean;
+  isAnimationCorrectAnswer?: boolean;
 };
 
 type IAnswers = {
@@ -61,6 +62,7 @@ const OneChoiceQuestion = ({
   explainClassname,
   storageKey,
   readOnly = false,
+  isAnimationCorrectAnswer = false,
 }: IPreviewProp) => {
   const { router, query } = useFeature();
   useEffect(() => {
@@ -199,13 +201,13 @@ const OneChoiceQuestion = ({
         />
       </div>
       {solution && (
-        <>
+        <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="1000">
           <SappDivider />
           <div className={clsx("mt-6", explainClassname)}>
             <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>
-        </>
+        </div>
       )}
     </div>
   );

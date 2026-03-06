@@ -19,10 +19,10 @@ const NextStorylineModal = ({ open, setOpen, next_activity, course_section_id }:
   }
 
   const progress = useMemo(() => {
-    if (!next_activity?.learning_progress) return 0
-    const progressData =
-      next_activity?.learning_progress.total_course_sections_completed /
-      next_activity?.learning_progress.total_course_sections
+    if (!next_activity) return 0
+    const totalDocument = storylineItemsHasDocs.reduce((acc, curr) => acc + curr.item_progress.total_document, 0)
+    const totalDocumentCompleted = storylineItemsHasDocs.reduce((acc, curr) => acc + curr.item_progress.total_document_completed, 0)
+    const progressData = totalDocumentCompleted / totalDocument
     return Math.round(progressData * 100)
   }, [next_activity?.learning_progress])
 

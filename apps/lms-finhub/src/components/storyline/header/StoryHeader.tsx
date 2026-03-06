@@ -1,8 +1,7 @@
 import React from 'react'
 import ProgressBar from './ProgressBar'
 import { StoryStep } from 'src/type/storyline'
-import { HamburgerMenuLargeIcon } from '@assets/icons'
-import { CloseModalIcon } from '@lms/assets'
+import { CloseModalIcon, HamburgerMenuLargeIcon } from '@lms/assets'
 import { useStory } from '@contexts/StorylineContext'
 import clsx from 'clsx'
 

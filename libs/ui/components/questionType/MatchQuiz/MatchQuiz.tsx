@@ -59,6 +59,7 @@ interface IProps {
   onChangeMatchedPairs?: (matchedPairs: any[]) => void;
   storageKey?: string;
   disabled?: boolean;
+  isAnimationCorrectAnswer?: boolean;
 }
 
 type Role = "question" | "answer";
@@ -107,6 +108,7 @@ const MatchQuiz = forwardRef(
       onChangeMatchedPairs,
       storageKey,
       disabled = false,
+      isAnimationCorrectAnswer = false,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -669,7 +671,7 @@ const MatchQuiz = forwardRef(
             </ReactFlowProvider>
           </div>
           {!!corrects && !!correctNodes?.length && (
-            <>
+            <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="1000">
               <SappDivider />
               <div className={clsx(correctAnswerClass)}>
                 <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
@@ -693,18 +695,18 @@ const MatchQuiz = forwardRef(
                   </ReactFlowProvider>
                 </div>
               </div>
-            </>
+            </div>
           )}
         </div>
 
         {solution && (
-          <>
+          <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="1000">
             <SappDivider />
             <div className={explainClassname}>
               <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
               <EditorReader className="mt-4" text_editor_content={solution} />
             </div>
-          </>
+          </div>
         )}
       </div>
     );

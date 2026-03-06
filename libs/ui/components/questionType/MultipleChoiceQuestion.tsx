@@ -36,7 +36,8 @@ const MultiChoiceQuestion = ({
   isShowWarning = false,
   explainClassname,
   storageKey,
-  readOnly
+  readOnly,
+  isAnimationCorrectAnswer = false,
 }: IPreviewProp) => {
   const { query, params } = useFeature()
   const convertAnswer = useMemo(() => {
@@ -183,7 +184,7 @@ const MultiChoiceQuestion = ({
       </div>
 
       {solution && (
-        <div className={explainClassname}>
+        <div className={explainClassname} data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="1000">
           <SappDivider />
           <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
           <EditorReader className="mt-4" text_editor_content={solution} />

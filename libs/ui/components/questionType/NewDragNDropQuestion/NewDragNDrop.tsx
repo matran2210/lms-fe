@@ -41,6 +41,7 @@ interface DragDropQuestionProps {
   solution?: string;
   explainClassname?: string;
   disabled?: boolean; 
+  isAnimationCorrectAnswer?: boolean
 }
 
 // Component cho bank area
@@ -106,7 +107,8 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
   corrects,
   solution,
   explainClassname,
-  disabled
+  disabled,
+  isAnimationCorrectAnswer = false
 }) => {
   const correctCurrent = corrects?.corrects;
   const contentRef = React.useRef<HTMLSpanElement | null>(null);
@@ -435,22 +437,22 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
         </span>
         {!isDisabled && <BankArea items={items} />}
         {!isEmpty(correctCurrent) && (
-          <>
+          <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="1000">
             <SappDivider />
             <CorrectAnswer
               questionContent={data.question_content}
               corrects={correctCurrent}
             />
-          </>
+          </div>
         )}
         {solution && (
-          <>
+          <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="1000">
             <SappDivider />
             <div className={explainClassname}>
               <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
               <EditorReader className="mt-4" text_editor_content={solution} />
             </div>
-          </>
+          </div>
         )}
         {type === "IMG" && (
           <SappModalImage src={src} setSrc={setSrc}></SappModalImage>

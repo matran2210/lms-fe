@@ -66,6 +66,7 @@ export type IPreviewProp = {
   isInTest?: boolean;
   storageKey?: string;
   disable?: boolean
+  isAnimationCorrectAnswer?: boolean
 };
 type SAPPEditorHandle = {
   moveSelectionOutOfTable: () => void;
@@ -103,6 +104,7 @@ const EssayQuestionPreview = ({
   isInTest = false,
   storageKey,
   disable = false,
+  isAnimationCorrectAnswer = false
 }: IPreviewProp) => {
   const { testServiceApi, router, dispatch} = useFeature();
 
@@ -724,7 +726,7 @@ const EssayQuestionPreview = ({
             fullData?.done ||
             fullData?.data?.confirmed) &&
             (fullData?.solution || data?.explanation?.trim()) && (
-              <div className={explainClassname}>
+            <div className={explainClassname} data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="1000">
                 <SappDivider />
                 <SappTitleSolution title={`${MY_COURSES.solution}:`} />
                 <EditorReader

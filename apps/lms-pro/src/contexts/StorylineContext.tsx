@@ -37,7 +37,8 @@ interface StorylineContextValue {
   ) => void
   updateProgress: (storyline_item_document_id: string) => void
   isCompletedProgress: number
-  storylinyeDocument: DocumentItem[] | undefined
+  setIsCompletedProgress: React.Dispatch<React.SetStateAction<number>>
+  storylineDocument: DocumentItem[] | undefined
   question: IStorylineQuestion | null
   setQuestion: React.Dispatch<React.SetStateAction<IStorylineQuestion | null>>
   topicDescription: any
@@ -115,7 +116,7 @@ export function StorylineProvider({ storylineData, children }: Props) {
     })
   }
 
-  const { data: storylinyeDocument, isLoading } = useGetStorylineDocument(
+  const { data: storylineDocument, isLoading } = useGetStorylineDocument(
     `storyline-document-${currentStep?.id}`,
   )
   const updateProgress = async (storyline_item_document_id: string) => {
@@ -212,7 +213,7 @@ export function StorylineProvider({ storylineData, children }: Props) {
     if (!currentStep) return
     const completed = currentStep.item_progress?.total_document_completed ?? 0
     setVisibleDocumentCount(!completed ? completed + 1 : completed)
-  }, [currentStep?.id, storylinyeDocument])
+  }, [currentStep?.id])
 
   return (
     <StorylineContext.Provider
@@ -225,7 +226,8 @@ export function StorylineProvider({ storylineData, children }: Props) {
         continueAction,
         updateProgress,
         isCompletedProgress,
-        storylinyeDocument,
+        setIsCompletedProgress,
+        storylineDocument,
         question,
         setQuestion,
         topicDescription,

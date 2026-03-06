@@ -1,9 +1,11 @@
+import { useStoryline } from '@contexts/StorylineContext'
 import { useStorylineSidebar } from '@contexts/StorylineSidebarContext'
 import { RestartIcon } from '@lms/assets'
 import { ButtonPrimary, ButtonText } from '@lms/ui'
 import clsx from 'clsx'
 import Image from 'next/image'
 import { useParams, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
 import { useQueryClient } from 'react-query'
 import { StorylineAPI } from 'src/api/storyline'
 const StoryFooter = ({ onClick }: { onClick: () => void }) => {
@@ -12,17 +14,23 @@ const StoryFooter = ({ onClick }: { onClick: () => void }) => {
   const storylineItemId = searchParams.get('storylineItemId')
   const queryClient = useQueryClient()
   const { setListStorylines, setLearningProgress } = useStorylineSidebar()
+  const { setIsCompletedProgress, setVisibleDocumentCount } = useStoryline()
   const params = useParams()
   const { section_storyline_id } = params
+  const [loading, setLoading] = useState(false)
   const handleRedoItem = async () => {
+    setLoading(true)
     const res = await StorylineAPI.retakeStoryline({
       class_id: class_id as string,
       course_section_id: section_storyline_id as string,
       storyline_item_id: storylineItemId as string,
     })
+    setLoading(false)
     if (res) {
       setListStorylines(res?.data.storyline.items)
       setLearningProgress(res?.data.learning_progress)
+      setIsCompletedProgress(0)
+      setVisibleDocumentCount(1)
       queryClient.invalidateQueries({
         queryKey: ['storyline'],
       })
@@ -37,6 +45,7 @@ const StoryFooter = ({ onClick }: { onClick: () => void }) => {
       className={clsx(
         'fixed bottom-0 z-[201] flex w-full justify-center border-t border-t-success bg-success-50 px-8 py-4',
       )}
+      data-aos="fade-up"
     >
       <div
         className={clsx(
@@ -61,6 +70,8 @@ const StoryFooter = ({ onClick }: { onClick: () => void }) => {
             size="medium"
             startIcon={<RestartIcon className="h-6 w-6" />}
             onClick={handleRedoItem}
+            loading={loading}
+            disabled={loading}
           >
             Redo Item
           </ButtonText>
