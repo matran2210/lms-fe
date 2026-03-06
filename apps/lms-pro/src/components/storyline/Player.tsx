@@ -39,7 +39,6 @@ export default function Player({ listStorylineData }: IProps) {
     const firstDocument = storylineDocument?.[0]
     if (!firstDocument) return
 
-    console.log("Vo day")
     updateProgress(firstDocument?.id as string)
   }, [storylineDocument, visibleDocumentCount])
 
@@ -85,7 +84,7 @@ export default function Player({ listStorylineData }: IProps) {
                   //     restDelta: 0.0008,
                   //   },
                   // }}
-                  className="mx-auto flex w-full max-w-5xl flex-1 flex-col min-h-[60vh]"
+                  className="mx-auto flex w-full max-w-5xl flex-1 flex-col"
                 >
                   <section
                     ref={(el) =>
