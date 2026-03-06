@@ -38,6 +38,7 @@ function SappModalImage({ src, setSrc }: Props) {
             alt={'image'}
             loading={'eager'}
             priority={true}
+            unoptimized
           />
         )}
       </div>

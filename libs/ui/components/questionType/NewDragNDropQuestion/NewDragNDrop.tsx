@@ -437,7 +437,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
         </span>
         {!isDisabled && <BankArea items={items} />}
         {!isEmpty(correctCurrent) && (
-          <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="1000">
+          <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
             <SappDivider />
             <CorrectAnswer
               questionContent={data.question_content}
@@ -446,7 +446,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
           </div>
         )}
         {solution && (
-          <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="1000">
+          <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
             <SappDivider />
             <div className={explainClassname}>
               <SappTitleSolution title={`${MY_COURSES.explanations}:`} />

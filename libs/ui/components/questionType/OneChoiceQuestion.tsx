@@ -201,7 +201,7 @@ const OneChoiceQuestion = ({
         />
       </div>
       {solution && (
-        <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="1000">
+        <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
           <SappDivider />
           <div className={clsx("mt-6", explainClassname)}>
             <SappTitleSolution title={`${MY_COURSES.explanations}:`} />

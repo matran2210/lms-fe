@@ -241,7 +241,7 @@ const NewFilltext = forwardRef(
         />
 
         {answerContent && (
-          <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="1000">
+          <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
             <SappDivider />
             <div className="mt-[38px] text-base font-semibold">
               Correct Answer:
@@ -257,7 +257,7 @@ const NewFilltext = forwardRef(
         )}
 
         {solution && (
-          <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="1000">
+          <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
             <SappDivider />
             <div className={explainClassname}>
               <SappTitleSolution title={`${MY_COURSES.solution}:`} />

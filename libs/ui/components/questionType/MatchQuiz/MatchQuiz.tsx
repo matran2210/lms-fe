@@ -671,7 +671,7 @@ const MatchQuiz = forwardRef(
             </ReactFlowProvider>
           </div>
           {!!corrects && !!correctNodes?.length && (
-            <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="1000">
+            <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
               <SappDivider />
               <div className={clsx(correctAnswerClass)}>
                 <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
@@ -700,7 +700,7 @@ const MatchQuiz = forwardRef(
         </div>
 
         {solution && (
-          <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="1000">
+          <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
             <SappDivider />
             <div className={explainClassname}>
               <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
