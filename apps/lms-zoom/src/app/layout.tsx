@@ -37,6 +37,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
+        <div id="zmmtg-root" />
+
         <div id="zoom-app">
           <Suspense fallback={<SAPPLoading />}>
             <AppProvider>
