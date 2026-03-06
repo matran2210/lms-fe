@@ -39,6 +39,16 @@ export function StepRenderer({ documents = [] }: Props) {
     })
   }, [])
 
+  // Effect retake: total_document_completed reset về 0 → update map về chưa hoàn thành
+  useEffect(() => {
+    if (!currentStep?.id) return
+    const totalCompleted = currentStep?.item_progress?.total_document_completed ?? 0
+    if (totalCompleted > 1) return
+    stepInitMapRef.current[currentStep.id as string] = {
+      count: 1,
+      isCompleted: false,
+    }
+  }, [currentStep?.item_progress?.total_document_completed])
 
   // Effect 1: Lần đầu vào hoặc đổi step
   useEffect(() => {
@@ -50,18 +60,15 @@ export function StepRenderer({ documents = [] }: Props) {
     const visibleDocs = !totalCompleted ? totalCompleted + 1 : totalCompleted
     const isStepCompleted = totalCompleted >= storylineDocument.length
 
-
-    console.log(totalCompleted, storylineDocument, "99999")
-    if (!totalCompleted) {
-      window.scrollTo({ top: 0, behavior: 'instant' })
-      return
-    }
-    if (isStepCompleted) {
+    if (totalCompleted <= 1) {
       window.scrollTo({ top: 0, behavior: 'instant' })
     } else {
-      const lastVisibleIndex = visibleDocs - 1
-      const targetBlock = blockRefs.current[lastVisibleIndex]
-      if (targetBlock) {
+      if (isStepCompleted) {
+        window.scrollTo({ top: 0, behavior: 'instant' })
+      } else {
+        // const lastVisibleIndex = visibleDocs - 1
+        // const targetBlock = blockRefs.current[lastVisibleIndex]
+        // if (targetBlock) {
         requestAnimationFrame(() => {
           // targetBlock.scrollIntoView({
           //   behavior: 'smooth',
@@ -69,9 +76,13 @@ export function StepRenderer({ documents = [] }: Props) {
           // })
           window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
         })
+        //  setTimeout(() => {
+        //    // newBlock.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        //    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+        //  }, 200)
+        // }
       }
     }
-
 
     // Lưu lại count tại thời điểm Effect 1 chạy cho step này
     stepInitMapRef.current[currentStep.id as string] = {
@@ -80,19 +91,6 @@ export function StepRenderer({ documents = [] }: Props) {
     }
   }, [currentStep?.id, storylineDocument])
 
-
-  // Effect retake: total_document_completed reset về 0 → update map về chưa hoàn thành
-  useEffect(() => {
-    if (!currentStep?.id) return
-    const totalCompleted = currentStep?.item_progress?.total_document_completed ?? 0
-    if (totalCompleted !== 0) return
-    stepInitMapRef.current[currentStep.id as string] = {
-      count: 1,
-      isCompleted: false,
-    }
-  }, [currentStep?.item_progress?.total_document_completed])
-
-
   // Effect 2: Next document
   useEffect(() => {
     if (!currentStep?.id) return
@@ -100,15 +98,17 @@ export function StepRenderer({ documents = [] }: Props) {
 
 
     const stepState = stepInitMapRef.current[currentStep.id as string]
+    const totalCompleted = currentStep?.item_progress?.total_document_completed ?? 0
 
-
-    console.log(stepState, visibleDocumentCount, "2222")
     // Effect 1 chưa chạy cho step này → bỏ qua
     if (stepState === undefined) return
 
+    // Khi reset thì bỏ qua
+    if (totalCompleted <= 1) return
 
     // Step đã hoàn thành → không cần scroll
     if (stepState.isCompleted) return
+
 
 
     // Count chưa tăng so với lúc Effect 1 khởi tạo → bỏ qua
@@ -119,9 +119,8 @@ export function StepRenderer({ documents = [] }: Props) {
     const newBlock = blockRefs.current[lastIndex]
     if (!newBlock) return
 
-
     setTimeout(() => {
-      // newBlock.scrollIntoView({ behavior: 'smooth', block: 'end' })
+      // newBlock.scrollIntoView({ behavior: 'smooth', block: 'center' })
       window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
     }, 200)
 

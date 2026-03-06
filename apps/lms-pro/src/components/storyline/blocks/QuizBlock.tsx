@@ -56,7 +56,7 @@ const QuizBlock = ({
   docIndex,
 }: QuizBlockProps) => {
   const MatchQuizRef = useRef(null) as any
-  const questionRef = useRef<HTMLDivElement>(null)
+  const questionRefs = useRef<(HTMLDivElement | null)[]>([])
   const FillWordRef = useRef(null) as any
   const searchParams = useSearchParams()
   const status = searchParams.get('status')
@@ -692,8 +692,24 @@ const QuizBlock = ({
     }
   }, [minimalQuestion])
 
+  useEffect(() => {
+    const target = questionRefs.current[docIndex]
+    if (!target) return
+    if (!openExplain && !isCorrectAnswer) return
+
+    requestAnimationFrame(() => {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      })
+    })
+  }, [openExplain, isCorrectAnswer])
+  
   return (
-    <div ref={questionRef}>
+    <div key={docIndex}
+      ref={(el) => {
+        questionRefs.current[docIndex] = el
+      }}>
       {/* {!!topicDescription?.description &&
         !isEmptyParagraph(topicDescription?.description) && (
           <EditorReader
@@ -841,10 +857,10 @@ const QuizBlock = ({
                 size={'medium'}
                 onClick={() => {
                   setOpenExplain(true)
-                  isLastVisibleDocument &&
-                    handleSkipQuestion({
-                      isUpdateProgress: false,
-                    })
+                  // isLastVisibleDocument &&
+                  //   handleSkipQuestion({
+                  //     isUpdateProgress: false,
+                  //   })
                 }}
                 title="See Explain"
               />
