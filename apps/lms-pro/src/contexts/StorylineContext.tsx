@@ -35,7 +35,7 @@ interface StorylineContextValue {
     isUpdateProgress?: boolean,
     isFinish?: boolean,
   ) => void
-  updateProgress: (storyline_item_document_id: string) => void
+  updateProgress: (storyline_item_document_id: string, isUpdateProgress?: boolean) => void
   isCompletedProgress: number
   setIsCompletedProgress: React.Dispatch<React.SetStateAction<number>>
   storylineDocument: DocumentItem[] | undefined
@@ -119,10 +119,10 @@ export function StorylineProvider({ storylineData, children }: Props) {
   const { data: storylineDocument, isLoading } = useGetStorylineDocument(
     `storyline-document-${currentStep?.id}`,
   )
-  const updateProgress = async (storyline_item_document_id: string) => {
+  const updateProgress = async (storyline_item_document_id: string, isUpdateProgress = false) => {
     if (!currentStep) return
     // Reveal document
-    if (storyline_item_document_id && status !== 'Review') {
+    if ((storyline_item_document_id && status !== 'Review') || isUpdateProgress) {
       const res = await CoursesAPI.learningOutcomeProgress(
         class_id as string,
         section_storyline_id as string,

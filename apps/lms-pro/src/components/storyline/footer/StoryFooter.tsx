@@ -4,7 +4,7 @@ import { RestartIcon } from '@lms/assets'
 import { ButtonPrimary, ButtonText } from '@lms/ui'
 import clsx from 'clsx'
 import Image from 'next/image'
-import { useParams, useSearchParams } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { useQueryClient } from 'react-query'
 import { StorylineAPI } from 'src/api/storyline'
@@ -14,10 +14,13 @@ const StoryFooter = ({ onClick }: { onClick: () => void }) => {
   const storylineItemId = searchParams.get('storylineItemId')
   const queryClient = useQueryClient()
   const { setListStorylines, setLearningProgress } = useStorylineSidebar()
-  const { setIsCompletedProgress, setVisibleDocumentCount } = useStoryline()
+  const { setIsCompletedProgress, setVisibleDocumentCount, storylineDocument, updateProgress } = useStoryline()
   const params = useParams()
   const { section_storyline_id } = params
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const course_section_id = searchParams.get('course_section_id')
+  const status = searchParams.get('status')
   const handleRedoItem = async () => {
     setLoading(true)
     const res = await StorylineAPI.retakeStoryline({
@@ -37,6 +40,19 @@ const StoryFooter = ({ onClick }: { onClick: () => void }) => {
       queryClient.invalidateQueries({
         queryKey: [`storyline-document-${storylineItemId}`],
       })
+      if (status === 'Review') {
+        router.replace(
+          `?class_id=${class_id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId}&status=Start`,
+          {
+            scroll: false,
+          },
+        )
+        if (storylineDocument?.length === 0) return
+        const firstDocument = storylineDocument?.[0]
+        if (!firstDocument) return
+
+        updateProgress(firstDocument?.id as string, true)
+      }
     }
   }
 

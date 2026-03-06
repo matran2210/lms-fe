@@ -184,7 +184,7 @@ const MultiChoiceQuestion = ({
       </div>
 
       {solution && (
-        <div className={explainClassname} data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="1000">
+        <div className={explainClassname} data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
           <SappDivider />
           <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
           <EditorReader className="mt-4" text_editor_content={solution} />
