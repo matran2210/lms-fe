@@ -96,6 +96,7 @@ const StoryOverview = ({ open, setOpen, storylineData }: IProps) => {
         showFooter={progress < 100}
         className="storyline-overview"
         width={638}
+        wrapClassName="!overflow-y-hidden"
       >
         <div className="flex flex-col gap-10 text-left text-gray-800">
           <EditorReader

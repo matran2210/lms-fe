@@ -3,8 +3,9 @@ import { uniqueId } from "lodash";
 import { Control, Controller } from "react-hook-form";
 import SAPPRadio from "./SAPPRadio";
 import { ErrorMessage } from "../../common";
-// import './HookFormRadioGroup.scss'
-
+import { useEffect } from "react";
+import Aos from 'aos'
+import 'aos/dist/aos.css'
 interface IHookFormRadioGroupProps {
   name: string;
   control: Control<any>;
@@ -26,6 +27,7 @@ interface IHookFormRadioGroupProps {
   disabled?: boolean;
   readOnly?: boolean;
   corrects?: { [key: string]: boolean };
+  isAnimationCorrectAnswer?: boolean
 }
 
 const HookFormRadioGroup = ({
@@ -44,9 +46,15 @@ const HookFormRadioGroup = ({
   disabled,
   readOnly,
   corrects,
+  isAnimationCorrectAnswer = false
 }: IHookFormRadioGroupProps) => {
   const count_items = options?.length - 1;
   gap = gap ? gap : direction === "horizontal" ? "gap-6" : "gap-4";
+  useEffect(() => {
+    Aos.init({
+      once: true,
+    })
+  }, [])
   return (
     <Controller
       control={control}
@@ -90,8 +98,11 @@ const HookFormRadioGroup = ({
 
                 return (
                   <div
-                    key={uniqueId("check")}
+                    key={isAnimationCorrectAnswer ? option.value?.toString() : uniqueId("check")}
                     className={`${!!corrects && "pointer-events-none"}`}
+                    data-aos={isAnimationCorrectAnswer ? "fade-left" : ""}
+                    data-aos-delay={index * 100}
+                    data-aos-once="true"
                   >
                     <div className="flex flex-row">
                       <label

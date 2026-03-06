@@ -57,8 +57,8 @@ module.exports = {
         blue,
         green,
         yellow,
-         white,
-          black,
+        white,
+        black,
         primary: {
           50: "#FFFBF2",
           100: "#FFF1CC",
@@ -151,7 +151,7 @@ module.exports = {
         icon: {
           DEFAULT: "#1C274C",
         },
-        divider:{
+        divider: {
           DEFAULT: "#D1D5DB",
         },
         accent: {
@@ -269,6 +269,16 @@ module.exports = {
           "0%": { right: "0" },
           "100%": { right: "-100%" },
         },
+        "aos-fade-up": {
+          "0%": {
+            opacity: "0",
+            transform: "translate3d(0, 40px, 0)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translate3d(0, 0, 0)",
+          },
+        },
       },
       animation: {
         "jump-in": "jump-in 0.1s ease-in-out",
@@ -279,6 +289,7 @@ module.exports = {
         "fade-out-sidebar": "fade-out-sidebar 0.3s ease-in-out",
         "fade-in-overlay-sidebar": "fade-in-overlay 0.3s ease-in-out",
         "fade-out-overlay-sidebar": "fade-out-overlay 0.3s ease-out",
+        "aos-fade-up": "aos-fade-up 0.6s ease forwards",
       },
       gridTemplateColumns: {
         "test-result": "minmax(0, 3fr) minmax(0, 1fr)",

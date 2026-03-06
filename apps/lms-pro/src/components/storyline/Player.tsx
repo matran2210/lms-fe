@@ -126,10 +126,10 @@ export default function Player({ listStorylineData }: IProps) {
                 ((status !== 'Review' &&
                   (currentStepIndex + 1 < storylineItemsHasDocs?.length ||
                     (currentStepIndex + 1 === storylineItemsHasDocs?.length &&
-                      isCompletedProgress === 100))) ||
-                  (status === 'Review' &&
-                    currentStepIndex + 1 < storylineItemsHasDocs?.length)) && (
+                      isCompletedProgress === 100))) || status === 'Review') && (
                   <StoryFooter
+                    key={currentStepIndex}
+                    listStorylineData={listStorylineData}
                     onClick={() =>
                       continueAction(
                         currentVisibleDocument?.id as string,

@@ -190,6 +190,7 @@ const OneChoiceQuestion = ({
         }}
       >
         <HookFormRadioGroup
+          isAnimationCorrectAnswer
           readOnly={readOnly}
           options={convertAnswer || []}
           control={control}
