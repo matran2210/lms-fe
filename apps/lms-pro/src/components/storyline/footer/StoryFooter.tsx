@@ -1,6 +1,7 @@
 import { useStoryline } from '@contexts/StorylineContext'
 import { useStorylineSidebar } from '@contexts/StorylineSidebarContext'
 import { RestartIcon } from '@lms/assets'
+import { IStoryline } from '@lms/core'
 import { ButtonPrimary, ButtonText } from '@lms/ui'
 import clsx from 'clsx'
 import Image from 'next/image'
@@ -8,13 +9,18 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { useQueryClient } from 'react-query'
 import { StorylineAPI } from 'src/api/storyline'
-const StoryFooter = ({ onClick }: { onClick: () => void }) => {
+
+interface IProps {
+  listStorylineData: IStoryline | undefined
+  onClick: () => void
+}
+const StoryFooter = ({ onClick, listStorylineData }: IProps) => {
   const searchParams = useSearchParams()
   const class_id = searchParams.get('class_id')
   const storylineItemId = searchParams.get('storylineItemId')
   const queryClient = useQueryClient()
   const { setListStorylines, setLearningProgress } = useStorylineSidebar()
-  const { setIsCompletedProgress, setVisibleDocumentCount, storylineDocument, updateProgress } = useStoryline()
+  const { setIsCompletedProgress, setVisibleDocumentCount, storylineDocument, updateProgress, currentStepIndex } = useStoryline()
   const params = useParams()
   const { section_storyline_id } = params
   const [loading, setLoading] = useState(false)
@@ -55,13 +61,11 @@ const StoryFooter = ({ onClick }: { onClick: () => void }) => {
       }
     }
   }
-
   return (
     <div
       className={clsx(
-        'fixed bottom-0 z-[201] flex w-full justify-center border-t border-t-success bg-success-50 px-8 py-4',
+        'fixed bottom-0 z-[201] flex w-full justify-center border-t border-t-success bg-success-50 px-8 py-4 animate-aos-fade-up',
       )}
-      data-aos="fade-up"
     >
       <div
         className={clsx(
@@ -84,7 +88,7 @@ const StoryFooter = ({ onClick }: { onClick: () => void }) => {
           <ButtonText
             isUnderLine={false}
             size="medium"
-            startIcon={<RestartIcon className="h-6 w-6" />}
+            startIcon={<RestartIcon className="h-6 w-6 hover:text-primary" />}
             onClick={handleRedoItem}
             loading={loading}
             disabled={loading}

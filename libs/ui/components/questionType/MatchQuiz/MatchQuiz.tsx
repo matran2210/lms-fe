@@ -650,7 +650,9 @@ const MatchQuiz = forwardRef(
             highlighted={highlighted}
           /> */}
         </div>
-        <div className="flex h-full w-full flex-col">
+        <div className="flex h-full w-full flex-col" data-aos={isAnimationCorrectAnswer ? "fade-left" : ""}
+          data-aos-delay={200}
+          data-aos-once="true">
           <div
             className={`relative w-full min-w-[${CONTAINER_WIDTH}]`}
             ref={flowRef}

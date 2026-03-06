@@ -333,6 +333,7 @@ const QuizBlock = ({
       case QUESTION_TYPES.TRUE_FALSE:
         return (
           <OneChoiceQuestion
+            key={`${question?.id}_answer`}
             data={question}
             corrects={
               isCorrectAnswer || openExplain
@@ -354,6 +355,7 @@ const QuizBlock = ({
       case QUESTION_TYPES.MULTIPLE_CHOICE:
         return (
           <MultiChoiceQuestion
+            key={`${question?.id}_answer`}
             data={question}
             control={control}
             corrects={

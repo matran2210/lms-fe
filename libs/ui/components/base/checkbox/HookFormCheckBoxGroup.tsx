@@ -4,6 +4,10 @@ import { Control, Controller } from "react-hook-form";
 import YourAnswer from "../tags/YourAnswer";
 import SAPPCheckbox from "./SAPPCheckbox";
 import { ErrorMessage } from "../../common";
+import { useEffect } from "react";
+import Aos from "aos";
+import 'aos/dist/aos.css'
+
 
 interface IHookFormCheckBoxProps {
   name: string;
@@ -37,6 +41,7 @@ interface IHookFormCheckBoxProps {
   seprateLine?: boolean;
   widthOptions?: string;
   maxWidthContent?: boolean;
+  isAnimationCorrectAnswer?: boolean;
 }
 
 const HookFormCheckBoxGroup = ({
@@ -61,6 +66,7 @@ const HookFormCheckBoxGroup = ({
   seprateLine = false,
   widthOptions = "",
   maxWidthContent = false,
+  isAnimationCorrectAnswer = false
 }: IHookFormCheckBoxProps) => {
   gap = !seprateLine
     ? gap
@@ -69,7 +75,11 @@ const HookFormCheckBoxGroup = ({
         ? "gap-6"
         : "gap-4"
     : "";
-
+  useEffect(() => {
+    Aos.init({
+      once: true,
+    })
+  }, [])
   return (
     <Controller
       control={control}
@@ -128,7 +138,10 @@ const HookFormCheckBoxGroup = ({
                     } ${corrects && "pointer-events-none"} ${
                       seprateLine && "py-2"
                     } ${widthOptions}`}
-                    key={uniqueId(option.label)}
+                    key={isAnimationCorrectAnswer ? option.value?.toString() : uniqueId(option.label)}
+                    data-aos={isAnimationCorrectAnswer ? "fade-left" : ""}
+                    data-aos-delay={index * 100}
+                    data-aos-once="true"
                   >
                     <SAPPCheckbox
                       className={`me-2 ${className}`}

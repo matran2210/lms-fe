@@ -39,6 +39,7 @@ export default function Player({ listStorylineData }: IProps) {
     const firstDocument = storylineDocument?.[0]
     if (!firstDocument) return
 
+    console.log("Vo day")
     updateProgress(firstDocument?.id as string)
   }, [storylineDocument, visibleDocumentCount])
 
@@ -84,7 +85,7 @@ export default function Player({ listStorylineData }: IProps) {
                   //     restDelta: 0.0008,
                   //   },
                   // }}
-                  className="mx-auto flex w-full max-w-5xl flex-1 flex-col"
+                  className="mx-auto flex w-full max-w-5xl flex-1 flex-col min-h-[60vh]"
                 >
                   <section
                     ref={(el) =>
@@ -126,10 +127,10 @@ export default function Player({ listStorylineData }: IProps) {
                 ((status !== 'Review' &&
                   (currentStepIndex + 1 < storylineItemsHasDocs?.length ||
                     (currentStepIndex + 1 === storylineItemsHasDocs?.length &&
-                      isCompletedProgress === 100))) ||
-                  (status === 'Review' &&
-                    currentStepIndex + 1 < storylineItemsHasDocs?.length)) && (
+                      isCompletedProgress === 100))) || status === 'Review') && (
                   <StoryFooter
+                    key={currentStepIndex}
+                    listStorylineData={listStorylineData}
                     onClick={() =>
                       continueAction(
                         currentVisibleDocument?.id as string,
