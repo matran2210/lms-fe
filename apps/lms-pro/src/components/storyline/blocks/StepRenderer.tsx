@@ -48,6 +48,7 @@ export function StepRenderer({ documents = [] }: Props) {
       count: 1,
       isCompleted: false,
     }
+    window.scrollTo({ top: 0, behavior: 'instant' })
   }, [currentStep?.item_progress?.total_document_completed])
 
   // Effect 1: Lần đầu vào hoặc đổi step
@@ -96,7 +97,6 @@ export function StepRenderer({ documents = [] }: Props) {
     if (!currentStep?.id) return
     if (!documents.length) return
 
-
     const stepState = stepInitMapRef.current[currentStep.id as string]
     const totalCompleted = currentStep?.item_progress?.total_document_completed ?? 0
 
@@ -115,9 +115,9 @@ export function StepRenderer({ documents = [] }: Props) {
     if (visibleDocumentCount < stepState.count) return
 
 
-    const lastIndex = documents.length - 1
-    const newBlock = blockRefs.current[lastIndex]
-    if (!newBlock) return
+    // const lastIndex = documents.length - 1
+    // const newBlock = blockRefs.current[lastIndex]
+    // if (!newBlock) return
 
     setTimeout(() => {
       // newBlock.scrollIntoView({ behavior: 'smooth', block: 'center' })
