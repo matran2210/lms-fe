@@ -10,7 +10,7 @@ const useSelectSubject = (
   const fetchClasses = async (
     program_name?: string,
   ) => {
-    const res = await courseActivationAPI.getSubjectByProgram(
+    const res = await courseActivationAPI?.getSubjectByProgram(
     program_name
     )
     return res

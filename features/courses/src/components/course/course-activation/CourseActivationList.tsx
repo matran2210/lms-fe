@@ -31,7 +31,7 @@ const CourseActivationList: React.FC<CoursesProps> = ({
   } = useQuery({
     queryKey: ["class-for-activate-subject", courseActive?.subject_id],
     queryFn: () =>
-      courseActivationAPI.getSubjectClassForActivateSubject(
+      courseActivationAPI?.getSubjectClassForActivateSubject(
         courseActive?.subject_id || "",
       ),
     enabled: !!courseActive?.subject_id,

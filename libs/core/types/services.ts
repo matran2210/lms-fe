@@ -350,15 +350,3 @@ export interface ICourseActivationAPI {
   activateClass: (class_id: string) => Promise<any>;
   getSubjectClassForActivateSubject: (subject_id: string) => Promise<any>;
 }
-
-
-export interface ICourseActivationAPI {
-  get: (
-    params: Object,
-    page_index?: number,
-    page_size?: number,
-  ) => Promise<any>;
-  getSubjectByProgram: (program_name?: string) => Promise<any>;
-  activateClass: (class_id: string) => Promise<any>;
-  getSubjectClassForActivateSubject: (subject_id: string) => Promise<any>;
-}

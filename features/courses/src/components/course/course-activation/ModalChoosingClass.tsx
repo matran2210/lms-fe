@@ -21,7 +21,7 @@ const ModalChoosingClass = ({
   const { courseActivationAPI } = useFeature();
   const onSubmit = async () => {
     if (selectedClassId) {
-      const res = await courseActivationAPI.activateClass(selectedClassId);
+      const res = await courseActivationAPI?.activateClass(selectedClassId);
       if (res?.success === true) {
         router.push("/courses");
       }
