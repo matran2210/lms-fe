@@ -1,7 +1,7 @@
 import { useStoryline } from '@contexts/StorylineContext'
 import { useStorylineSidebar } from '@contexts/StorylineSidebarContext'
 import { RestartIcon } from '@lms/assets'
-import { IStoryline } from '@lms/core'
+import { IStoryline, IStorylineItem } from '@lms/core'
 import { ButtonPrimary, ButtonText } from '@lms/ui'
 import clsx from 'clsx'
 import Image from 'next/image'
@@ -11,16 +11,16 @@ import { useQueryClient } from 'react-query'
 import { StorylineAPI } from 'src/api/storyline'
 
 interface IProps {
-  listStorylineData: IStoryline | undefined
+  storylineItemsHasDocs: IStorylineItem[]
   onClick: () => void
 }
-const StoryFooter = ({ onClick, listStorylineData }: IProps) => {
+const StoryFooter = ({ onClick, storylineItemsHasDocs }: IProps) => {
   const searchParams = useSearchParams()
   const class_id = searchParams.get('class_id')
   const storylineItemId = searchParams.get('storylineItemId')
   const queryClient = useQueryClient()
   const { setListStorylines, setLearningProgress } = useStorylineSidebar()
-  const { setIsCompletedProgress, setVisibleDocumentCount, storylineDocument, updateProgress, currentStepIndex } = useStoryline()
+  const { setIsCompletedProgress, setVisibleDocumentCount, storylineDocument, updateProgress, currentStepIndex, isCompletedProgress, currentStep } = useStoryline()
   const params = useParams()
   const { section_storyline_id } = params
   const [loading, setLoading] = useState(false)
@@ -53,6 +53,8 @@ const StoryFooter = ({ onClick, listStorylineData }: IProps) => {
             scroll: false,
           },
         )
+      }
+      if (status === 'Review' || storylineDocument?.length === 1) {
         if (storylineDocument?.length === 0) return
         const firstDocument = storylineDocument?.[0]
         if (!firstDocument) return
@@ -91,13 +93,18 @@ const StoryFooter = ({ onClick, listStorylineData }: IProps) => {
             startIcon={<RestartIcon className="h-6 w-6 hover:text-primary" />}
             onClick={handleRedoItem}
             loading={loading}
-            disabled={loading}
+            disabled={loading || currentStep?.item_progress.total_document_completed !== currentStep?.item_progress.total_document}
           >
             Redo Item
           </ButtonText>
-          <ButtonPrimary size="medium" onClick={onClick}>
+          {
+            (currentStepIndex + 1 < storylineItemsHasDocs.length ||
+            (currentStepIndex + 1 === storylineItemsHasDocs.length &&
+              isCompletedProgress === 100)) &&  <ButtonPrimary size="medium" onClick={onClick}>
             Next Item
           </ButtonPrimary>
+          }
+         
         </div>
       </div>
     </div>
