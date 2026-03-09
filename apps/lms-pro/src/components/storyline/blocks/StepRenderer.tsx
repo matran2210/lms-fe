@@ -121,10 +121,8 @@ export function StepRenderer({ documents = [] }: Props) {
           behavior: 'smooth',
         })
       } else {
-        window.scrollTo({
-          top: targetBlock.offsetTop,
-          behavior: 'smooth',
-        })
+        targetBlock.scrollIntoView({ behavior: 'smooth', block: 'start' })
+
       }
         // targetBlock.scrollIntoView({ behavior: 'smooth', block: currentDocument?.type === "QUIZ" ? 'center' : 'start' })
     }
