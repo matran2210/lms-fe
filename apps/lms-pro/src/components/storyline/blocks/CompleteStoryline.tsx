@@ -1,4 +1,4 @@
-import { ArrowLeft, ExpandIcon, SaoAnimation } from '@lms/assets'
+import { ArrowLeft, ExpandIcon, BlinkStartAnimation } from '@lms/assets'
 import { useCourseContext } from '@lms/contexts'
 import { IStoryline } from '@lms/core'
 import NextStorylineModal from '@lms/feature-courses/src/components/learning/storyline/modal/NextStorylineModal'
@@ -67,7 +67,7 @@ export default function CompleteStoryline({ listStorylineData }: IProps) {
         </div>
         <div className="inline-flex flex-col items-center justify-start gap-14 mb-20">
           <Lottie
-            animationData={SaoAnimation}
+            animationData={BlinkStartAnimation}
             loop
             autoplay
             className='w-[200px] h-[200px]'
