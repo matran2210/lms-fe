@@ -123,7 +123,6 @@ export function StepRenderer({ documents = [] }: Props) {
         // targetBlock.scrollIntoView({ behavior: 'smooth', block: 'start' })
 
       } else {
-        console.log("lai vao day")
         targetBlock.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }
         // targetBlock.scrollIntoView({ behavior: 'smooth', block: currentDocument?.type === "QUIZ" ? 'center' : 'start' })
