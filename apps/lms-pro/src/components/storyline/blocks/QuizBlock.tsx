@@ -67,6 +67,7 @@ const QuizBlock = ({
     visibleDocumentCount,
     updateProgress,
     storylineDocument,
+    currentStep
   } = useStoryline()
   const currentVisibleDocument = storylineDocument?.[visibleDocumentCount]
   const isLearnedBlock = docIndex < visibleDocumentCount
@@ -681,6 +682,13 @@ const QuizBlock = ({
     }
   }
 
+    // Effect retake: total_document_completed reset về 0 → update map về chưa hoàn thành
+    useEffect(() => {
+      if (!currentStep?.id) return
+      const totalCompleted = currentStep?.item_progress?.total_document_completed ?? 0
+      if (totalCompleted > 1) return
+      handleRetakeQuestion()
+    }, [currentStep?.item_progress?.total_document_completed])
   useLayoutEffect(() => {
     if (minimalQuestion?.id) {
       getDetail().then((res) => {
@@ -692,7 +700,7 @@ const QuizBlock = ({
         }
       })
     }
-  }, [minimalQuestion])
+  }, [minimalQuestion?.id])
 
   useEffect(() => {
     const target = questionRefs.current[docIndex]
@@ -702,7 +710,7 @@ const QuizBlock = ({
     requestAnimationFrame(() => {
       target.scrollIntoView({
         behavior: 'smooth',
-        block: 'center',
+        block: 'start',
       })
     })
   }, [openExplain, isCorrectAnswer])
@@ -741,7 +749,7 @@ const QuizBlock = ({
           {
             'max-h-0 translate-y-full !p-0 opacity-0':
               isLearnedBlock && !isShowActionBtn,
-            'bg-primary-100': isQuestionConfirmed || !isCorrectAnswer,
+            'bg-primary-100': isQuestionConfirmed || !isCorrectAnswer || openExplain,
             'bg-success-50': !isQuestionConfirmed || isCorrectAnswer,
             'translate-y-0 opacity-100': isShowActionBtn,
           },

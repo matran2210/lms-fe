@@ -84,6 +84,8 @@ export function StorylineProvider({ storylineData, children }: Props) {
           100
       : 0,
   )
+  const [isProcessing, setIsProcessing] = useState(false)
+
   const storylineItemsHasDocs = storylineData?.storyline?.items || []
   const steps: IStorylineItem[] = useMemo(() => {
     if (!listStorylines) return []
@@ -150,7 +152,8 @@ export function StorylineProvider({ storylineData, children }: Props) {
     isFinish = false,
   ) => {
     if (!currentStep) return
-
+    if (isProcessing) return
+    setIsProcessing(true)
     const totalDocs = currentStep.total_document
     // Reveal document
     if (isFinish) {
@@ -163,9 +166,10 @@ export function StorylineProvider({ storylineData, children }: Props) {
         const nextCount = prev + 1
         return nextCount
       })
+      setIsProcessing(false)
       return
     }
-
+    setIsProcessing(false)
     // Next step
     const nextIndex = currentStepIndex + 1
     const next = steps[nextIndex]
