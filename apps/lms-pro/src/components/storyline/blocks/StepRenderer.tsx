@@ -86,6 +86,8 @@ export function StepRenderer({ documents = [] }: Props) {
 
   // Effect 2: Next document
   useEffect(() => {
+    const currentDocument = storylineDocument?.[visibleDocumentCount - 1]
+    if (!currentDocument) return
     if (!currentStep?.id) return
     if (!documents.length) return
 
@@ -102,15 +104,30 @@ export function StepRenderer({ documents = [] }: Props) {
     if (stepState.isCompleted) return
 
 
-
     // Count chưa tăng so với lúc Effect 1 khởi tạo → bỏ qua
     if (visibleDocumentCount < stepState.count) return
 
     setTimeout(() => {
-      window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: 'smooth',
-      })
+      const lastVisibleIndex = visibleDocumentCount - 1
+      const targetBlock = blockRefs.current[lastVisibleIndex]
+      if (targetBlock) {
+      // window.scrollTo({
+      //   top: document.body.scrollHeight,
+      //   behavior: 'smooth',
+      // })
+      if(currentDocument?.type === "QUIZ") {
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth',
+        })
+      } else {
+        window.scrollTo({
+          top: targetBlock.offsetTop,
+          behavior: 'smooth',
+        })
+      }
+        // targetBlock.scrollIntoView({ behavior: 'smooth', block: currentDocument?.type === "QUIZ" ? 'center' : 'start' })
+    }
     }, 222)
 
     stepInitMapRef.current[currentStep.id as string] = {
@@ -129,7 +146,7 @@ export function StepRenderer({ documents = [] }: Props) {
             ref={(el) => {
               blockRefs.current[index] = el
             }}
-            className="mb-12"
+            className="mb-12 scroll-mt-[100px]"
             data-aos="fade-up"
           >
             <StoryBlockRenderer doc={doc} docIndex={index + 1} />

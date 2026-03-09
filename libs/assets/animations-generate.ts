@@ -15,6 +15,7 @@ export { default as NoteListAnimation } from "./animations/NoteList.json";
 export { default as NotificationAnimation } from "./animations/Notification.json";
 export { default as OpenBookAnimation } from "./animations/OpenBook.json";
 export { default as ResourceAnimation } from "./animations/Resource.json";
+export { default as SaoAnimation } from "./animations/Sao.json";
 export { default as TestQuizListAnimation } from "./animations/TestQuizList.json";
 export { default as TourGuideCoursesAnimation } from "./animations/TourGuideCourses.json";
 export { default as TourGuideCourseTabAnimation } from "./animations/TourGuideCourseTab.json";
