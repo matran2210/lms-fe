@@ -42,6 +42,7 @@ interface StorylineContextValue {
   question: IStorylineQuestion | null
   setQuestion: React.Dispatch<React.SetStateAction<IStorylineQuestion | null>>
   topicDescription: any
+  class_user_id: string
 }
 
 export const StorylineContext = createContext<StorylineContextValue | null>(
@@ -235,6 +236,7 @@ export function StorylineProvider({ storylineData, children }: Props) {
         question,
         setQuestion,
         topicDescription,
+        class_user_id: storylineData?.class_user_id as string,
       }}
     >
       {children}

@@ -1,9 +1,10 @@
 'use client'
 import { useFeature } from '@lms/contexts'
 import { INeighborActivity } from '@lms/core'
-import { SappModalV3 } from '@lms/ui'
+import { ButtonPrimary, ButtonSecondary, ButtonText, EditorReader, SappModalV3 } from '@lms/ui'
 import { useMemo } from 'react'
 import StorylineItem from './StorylineItem'
+import clsx from 'clsx'
 interface IProps {
   open: boolean
   setOpen: (status: boolean) => void
@@ -12,9 +13,9 @@ interface IProps {
 }
 
 const NextStorylineModal = ({ open, setOpen, next_activity, course_section_id }: IProps) => {
-  const {router, params, query} = useFeature()
-    const storylineItemsHasDocs = next_activity?.storyline?.items || []
-    const onClose = () => {
+  const { router, params, query, storylineApi } = useFeature()
+  const storylineItemsHasDocs = next_activity?.storyline?.items || []
+  const onClose = () => {
     setOpen(false)
   }
 
@@ -34,15 +35,36 @@ const NextStorylineModal = ({ open, setOpen, next_activity, course_section_id }:
     }
     return 'Start'
   }
-  const handleSubmit = (storylineItemId?: string) => {
+  const handleSubmit = async ({
+    storylineItemId,
+    isRetake = false,
+  }: {
+    storylineItemId?: string
+    isRetake?: boolean
+  }) => {
     const defaultStorylineItemId =
       storylineItemsHasDocs.find(
         (item) =>
           item.item_progress.total_document_completed !==
           item.item_progress.total_document,
       )?.id || storylineItemsHasDocs[0]?.id
+
+    if (isRetake) {
+      const res = await storylineApi?.retakeStoryline({
+        class_id: query?.class_id as string,
+        course_section_id: next_activity?.id as string,
+      })
+      if (res) {
+        router.push(
+          `/storyline/${next_activity?.id}?class_id=${query?.class_id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=Start`,
+          { scroll: false },
+        )
+        return
+      }
+    }
+
     router.push(
-      `/storyline/${next_activity?.id}?class_id=${query?.class_id || params?.id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=${okButtonCaption()}`,
+      `/storyline/${next_activity?.id}?class_id=${query?.class_id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=${okButtonCaption()}`,
       { scroll: false },
     )
   }
@@ -56,24 +78,28 @@ const NextStorylineModal = ({ open, setOpen, next_activity, course_section_id }:
         isShowBtnClose={false}
         isShowFooter
         submitButtonClassName="w-full h-10"
-        onOk={handleSubmit}
+        onOk={() => handleSubmit({ isRetake: false })}
         cancelButtonCaption={'Cancel'}
         okButtonCaption={okButtonCaption()}
         footerButtonClassName={'w-full flex flex-col gap-2 justify-center'}
         okButtonClass="w-full"
         cancelButtonClass="w-full"
         buttonSize='medium'
+        showFooter={progress < 100}
         className='storyline-overview'
+        width={638}
+        wrapClassName="!overflow-y-hidden"
       >
         <div className="flex flex-col gap-10 text-left text-gray-800">
-          {/* <div
-            className={clsx('text-base leading-6', {
-              'mt-10': next_activity?.description,
-            })}
-          >
-            {next_activity?.description}
-          </div> */}
-
+          <EditorReader
+            className={clsx(
+              'max-h-60 overflow-y-auto !font-sans text-base leading-6',
+              {
+                'mt-10': next_activity?.storyline?.description,
+              },
+            )}
+            text_editor_content={next_activity?.storyline?.description || ''}
+          />
           <div className="flex flex-col gap-4 mt-10">
             <div className="text-lg font-semibold leading-7">
               This Story Include:
@@ -83,14 +109,22 @@ const NextStorylineModal = ({ open, setOpen, next_activity, course_section_id }:
                 const itemProgress = Math.round(
                   (item.item_progress.total_document_completed /
                     item.item_progress.total_document) *
-                    100,
+                  100,
                 )
+                const firstItemContinueLearning =
+                  storylineItemsHasDocs.findIndex(
+                    (item) =>
+                      item.item_progress.total_document_completed !==
+                      item.item_progress.total_document,
+                  )
+
                 return (
                   <StorylineItem
+                    active={firstItemContinueLearning === index}
                     key={index}
                     name={item.name}
                     progress={itemProgress}
-                    onClick={() => handleSubmit(item.id)}
+                    onClick={() => handleSubmit({ storylineItemId: item.id })}
                     className='!p-2'
                   />
                 )
@@ -98,6 +132,27 @@ const NextStorylineModal = ({ open, setOpen, next_activity, course_section_id }:
             </div>
           </div>
         </div>
+        {progress === 100 && (
+          <div className="flex w-full flex-col items-center justify-center gap-2 pt-10">
+            <ButtonPrimary
+              full
+              size="medium"
+              onClick={() => handleSubmit({ isRetake: false })}
+            >
+              Review
+            </ButtonPrimary>
+            <ButtonSecondary
+              full
+              size="medium"
+              onClick={() => handleSubmit({ isRetake: true })}
+            >
+              Retake
+            </ButtonSecondary>
+            <ButtonText size="medium" onClick={onClose}>
+              Cancel
+            </ButtonText>
+          </div>
+        )}
       </SappModalV3>
     </>
   )

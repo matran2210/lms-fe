@@ -61,13 +61,6 @@ export default function CompleteStoryline({ listStorylineData }: IProps) {
         className="absolute inset-0 -z-[1] bg-[url('/assets/images/finish_storyline_bg.png')] bg-gray-300 bg-center bg-cover bg-no-repeat opacity-40"
       ></div>
       <div className='m-auto w-full max-w-7xl flex flex-col items-center justify-center mt-[90px]'>
-
-        <div className='flex items-end mb-40'>
-          <ExpandIcon
-            type="logo-default"
-            className={`!opacity-100 h-[75px] w-[64px]`}
-          /> <ExpandIcon type="logo-full" className='!opacity-100 w-[85px] h-[54px]' />
-        </div>
         <div className="inline-flex flex-col items-center justify-start gap-14 mb-20">
           <Lottie
             animationData={BlinkStartAnimation}

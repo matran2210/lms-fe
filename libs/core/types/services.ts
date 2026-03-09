@@ -324,20 +324,25 @@ export interface IDashboardAPI {
 }
 
 export interface IStorylineAPI {
-  getListStoryline({
+  getListStoryline: ({
     class_id,
     section_storyline_id,
   }: {
     class_id: string;
     section_storyline_id: string;
-  }): Promise<IResponse<IStoryline>>;
-  getStorylineDocument({
+  }) => Promise<IResponse<IStoryline>>;
+  getStorylineDocument: ({
     class_id,
     item_id,
   }: {
     class_id: string;
     item_id: string;
-  }): Promise<IResponse<DocumentItem[]>>;
+  }) => Promise<IResponse<DocumentItem[]>>;
+  retakeStoryline: ({ class_id, course_section_id, storyline_item_id, }: {
+    class_id: string;
+    course_section_id: string;
+    storyline_item_id?: string | undefined;
+}) => Promise<IResponse<IStoryline>>
 }
 
 export interface ICourseActivationAPI {

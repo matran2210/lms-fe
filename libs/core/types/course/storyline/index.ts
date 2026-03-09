@@ -35,29 +35,30 @@ export interface IStorylineData {
   steps: StoryStep[]
 }
 export interface IStoryline {
-  id: string
-  name: string
-  short_name: any
-  description: any
-  duration: number
-  is_graded: boolean
-  course_section_type: string
-  display_icon: any
-  storyline_id: string
-  course_section_link_parents: ICourseSectionLinkParent[]
-  quiz: any
-  storyline: IStorylineDetail
-  learning_progress: LearningProgress
-  position: number
-  parent_id: string
-  children: any[]
-  is_linked_section: boolean
-  is_linked_section_child: boolean
+  id: string;
+  name: string;
+  short_name: any;
+  description: any;
+  duration: number;
+  is_graded: boolean;
+  course_section_type: string;
+  display_icon: any;
+  storyline_id: string;
+  course_section_link_parents: ICourseSectionLinkParent[];
+  quiz: any;
+  storyline: IStorylineDetail;
+  learning_progress: LearningProgress;
+  position: number;
+  parent_id: string;
+  children: any[];
+  is_linked_section: boolean;
+  is_linked_section_child: boolean;
   section_root: {
-    id: string
-    name: string
-  }
-  next_activity: INeighborActivity
+    id: string;
+    name: string;
+  };
+  next_activity: INeighborActivity;
+  class_user_id: string;
 }
 
 export interface ICourseSectionLinkParent extends CourseSectionLinkParent {

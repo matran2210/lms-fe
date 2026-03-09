@@ -30,6 +30,7 @@ export function StoryBlockRenderer({
         quiz?.multiple_choice_questions[0] ||
         (quiz?.constructed_questions[0] as IMultiChoiceQuestion)
 
+        console.log(doc, "doc 88898")
       return (
         <QuizBlock
           minimalQuestion={minimalQuestion}

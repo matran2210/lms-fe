@@ -134,6 +134,9 @@ export default function Player({ listStorylineData }: IProps) {
                         isCompletedProgress === 100 && currentStepIndex + 1 === storylineItemsHasDocs.length,
                       )
                     }
+                    isFinished={
+                      isCompletedProgress === 100 && currentStepIndex + 1 === storylineItemsHasDocs.length
+                    }
                   />
                 )}
             </div>

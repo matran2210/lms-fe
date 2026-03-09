@@ -1,14 +1,22 @@
 'use client'
 import { useStoryline } from '@contexts/StorylineContext'
 import { CircleCheckIcon, RestartIcon } from '@lms/assets'
+import { IActivityStateQuestion } from '@lms/contexts'
 import {
   ANIMATION,
   DEFAULT_EDITOR_VALUE,
   defaultSheetData,
   DocumentItem,
   IAnswerFillWord,
+  IEssayAnswer,
   IMultiChoiceQuestion,
   IStorylineQuestion,
+  myAnswer,
+  myAnswerDragDrop,
+  myAnswerFillWord,
+  myAnswerMatching,
+  myAnswerMultipleChoice,
+  myAnswerSelectWord,
   QUESTION_TYPES,
   RESPONSE_OPTION,
 } from '@lms/core'
@@ -34,11 +42,12 @@ import {
 import { Divider, Tabs } from 'antd'
 import Aos from 'aos'
 import clsx from 'clsx'
-import { isUndefined } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import Image from 'next/image'
-import { useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { CoursesAPI } from 'src/api/courses'
 import { TestServiceAPI } from 'src/api/test-api'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -60,6 +69,7 @@ const QuizBlock = ({
   const FillWordRef = useRef(null) as any
   const searchParams = useSearchParams()
   const status = searchParams.get('status')
+  const { section_storyline_id } = useParams()
 
   const { control, setValue, reset, getValues, watch, resetField } = useForm()
   const {
@@ -67,7 +77,8 @@ const QuizBlock = ({
     visibleDocumentCount,
     updateProgress,
     storylineDocument,
-    currentStep
+    currentStep,
+    class_user_id
   } = useStoryline()
   const currentVisibleDocument = storylineDocument?.[visibleDocumentCount]
   const isLearnedBlock = docIndex < visibleDocumentCount
@@ -101,7 +112,71 @@ const QuizBlock = ({
     const value = MatchQuizRef?.current?.getMatchedPairs?.()
     return isRetakeQuestion ? [] : value || []
   }
+  const handleGetAnswer = (question: IStorylineQuestion) => {
+      switch (question?.qType as QUESTION_TYPES) {
+        case QUESTION_TYPES.ONE_CHOICE:
+        case QUESTION_TYPES.TRUE_FALSE:
+          return getValues(`${question?.id}_answer`);
+        case QUESTION_TYPES.MULTIPLE_CHOICE:
+          return getValues(`${question?.id}_answer`);
+        case QUESTION_TYPES.FILL_WORD:
+          return getValues(`${question?.id}_answer`);
+        case QUESTION_TYPES.SELECT_WORD:
+          return getValues(`${question?.id}_answer`);
+        case QUESTION_TYPES.MATCHING:
+          return getAnswerMatching();
+        case QUESTION_TYPES.DRAG_DROP:
+          return getValues(`${question?.id}_answer`);
+        case QUESTION_TYPES.ESSAY:
+          if (question?.requirements?.length) {
+            const answers: IEssayAnswer[] = [];
+            question?.requirements?.forEach((req, i) => {
+              const fieldName = `${question?.id}_${req.id}_essay`;
 
+              const answer = getValues?.(fieldName)
+              if (!!answer) {
+                answers.push({
+                  question_id: question?.id || "",
+                  answer_file: req?.answer_file,
+                  short_answer:
+                    !isUndefined(answer) && !isEmpty(answer)
+                      ? String(answer).trim()
+                      : "",
+                  response_option: question?.response_option
+                    ? question?.response_option
+                    : "WORD",
+
+                  requirement_id: req?.id,
+                  active:'SUBMITED',
+                });
+              }
+            });
+            return answers;
+          } else {
+            const answer = getValues?.(
+              `${question?.id}_${document_id}_essay`,
+            );
+            return [
+              {
+                question_id: question?.id,
+                answer_file: question.answer_file,
+                short_answer:
+                  !isUndefined(answer) && !isEmpty(answer)
+                    ? String(answer).trim()
+                    : "",
+                response_option: question?.response_option
+                  ? question?.response_option
+                  : "WORD",
+                requirement_id: null,
+                active: 'SUBMITED',
+              },
+            ];
+          }
+
+        default:
+          break;
+      }
+    };
   const checkCorrectAnswer = (question: IStorylineQuestion) => {
     switch (question.qType) {
       case QUESTION_TYPES.ONE_CHOICE:
@@ -243,8 +318,14 @@ const QuizBlock = ({
   const getActiveQuestion = async (id: string) => {
     setLoading(true)
     try {
+      const res = await handleSubmitAnswer()
       const resultResponse = await TestServiceAPI.getQuestionDetail(id, {
         after_test: true,
+      })
+
+      const questionAnsswer = CoursesAPI.getQuizAttemptsAnswer({
+        attempt_id: res.quizAttemptId,
+        question_id: question?.id as string,
       })
       const responseFormat = resultResponse?.data
       const questionType = responseFormat?.qType
@@ -291,6 +372,117 @@ const QuizBlock = ({
       updateProgress(document_id)
       setLoading(false)
     }
+  }
+
+  const formatMyAnswerFromForm = (
+      rawAnswer:
+        | string
+        | string[]
+        | { question_id: string; answer_id: string }[]
+        | { idAnswer: string; position: number }[]
+        | IEssayAnswer[],
+      question: IStorylineQuestion,
+      time_spent: number = 0,
+    ): myAnswer[] => {
+      if (!rawAnswer) return [];
+  
+      switch (question?.qType as QUESTION_TYPES) {
+        case QUESTION_TYPES.ONE_CHOICE:
+        case QUESTION_TYPES.TRUE_FALSE:
+          return [
+            {
+              question_id: question.id,
+              question_answer_id: rawAnswer as string,
+              time_spent: time_spent,
+            },
+          ];
+  
+        case QUESTION_TYPES.MULTIPLE_CHOICE:
+          return [
+            {
+              question_id: question.id,
+              answer: (rawAnswer as string[]).map((e: string) => ({
+                answer_id: e,
+              })),
+              time_spent: time_spent,
+            },
+          ] as myAnswerMultipleChoice[];
+  
+        case QUESTION_TYPES.FILL_WORD:
+          return [
+            {
+              question_id: question.id,
+              answer: (rawAnswer as string[]).map((e: string, i: number) => ({
+                answer_text: e,
+                answer_position: i + 1,
+              })),
+              time_spent: time_spent,
+            },
+          ] as myAnswerFillWord[];
+  
+        case QUESTION_TYPES.SELECT_WORD:
+          return [
+            {
+              question_id: question.id,
+              answer: rawAnswer || [],
+              time_spent: time_spent,
+            },
+          ] as myAnswerSelectWord[];
+  
+        case QUESTION_TYPES.MATCHING:
+          return [
+            {
+              question_id: question.id,
+              answer: (
+                rawAnswer as { question_id: string; answer_id: string }[]
+              ).map((e) => ({
+                question_id: e.question_id,
+                answer_id: e.answer_id,
+              })),
+              time_spent: time_spent,
+            },
+          ] as myAnswerMatching[];
+  
+        case QUESTION_TYPES.DRAG_DROP:
+          return [
+            {
+              question_id: question.id,
+              answer: (rawAnswer as { idAnswer: string; position: number }[]).map(
+                (e) => ({
+                  answer_id: e.idAnswer,
+                  answer_position: e.position,
+                }),
+              ),
+              time_spent: time_spent,
+            },
+          ] as myAnswerDragDrop[];
+  
+        case QUESTION_TYPES.ESSAY:
+          return (rawAnswer as IEssayAnswer[]).map((item) => ({
+            ...item,
+            time_spent: time_spent,
+          }));
+  
+        default:
+          return [];
+      }
+    };
+  const handleSubmitAnswer = async () => {
+    const myAnswers = handleGetAnswer(question as IStorylineQuestion);
+    const formattedAnswer = formatMyAnswerFromForm(
+      myAnswers,
+      question as IStorylineQuestion,
+      0,
+    );
+    // Create attempt & submit
+    return await TestServiceAPI.submitQuizTest(
+      quiz_id,
+      {
+        answers: formattedAnswer
+      },
+    class_user_id,
+    section_storyline_id as string
+    )
   }
 
   async function getDetail() {
