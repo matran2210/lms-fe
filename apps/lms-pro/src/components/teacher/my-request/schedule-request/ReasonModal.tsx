@@ -112,7 +112,7 @@ const ReasonModal = ({
       handleCancel={handleCancel}
       onOk={handleSubmit(onSubmit)}
       icon={<AlertIcon />}
-      header={'Please enter a reason for denying this request!2'}
+      header={'Please enter a reason for denying this request!'}
       showCancelButton
       cancelButtonCaption={'Cancel'}
       okButtonCaption={'Submit'}
