@@ -58,7 +58,7 @@ export default function CompleteStoryline({ listStorylineData }: IProps) {
     <div className="relative flex items-center justify-center overflow-hidden h-screen w-full"
     >
       <div
-        className="absolute inset-0 bg-[url('/assets/images/finish_storyline_bg.png')] bg-gray-300 bg-center bg-cover bg-no-repeat opacity-40"
+        className="absolute inset-0 -z-[1] bg-[url('/assets/images/finish_storyline_bg.png')] bg-gray-300 bg-center bg-cover bg-no-repeat opacity-40"
       ></div>
       <div className='m-auto w-full max-w-7xl flex flex-col items-center justify-center mt-[90px]'>
 
