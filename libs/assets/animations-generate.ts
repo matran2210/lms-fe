@@ -1,5 +1,6 @@
 // AUTO-GENERATED — DO NOT EDIT
 export { default as AddNoteAnimation } from "./animations/AddNote.json";
+export { default as BlinkStartAnimation } from "./animations/BlinkStart.json";
 export { default as CalculatorAnimation } from "./animations/Calculator.json";
 export { default as CalendarAnimation } from "./animations/Calendar.json";
 export { default as CourseActivationAnimation } from "./animations/CourseActivation.json";

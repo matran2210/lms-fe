@@ -98,9 +98,9 @@ const StoryFooter = ({ onClick, storylineItemsHasDocs }: IProps) => {
             Redo Item
           </ButtonText>
           {
-            (currentStepIndex + 1 < storylineItemsHasDocs.length ||
+            (status === 'Review' || (status !== "Review" && (currentStepIndex + 1 < storylineItemsHasDocs.length ||
             (currentStepIndex + 1 === storylineItemsHasDocs.length &&
-              isCompletedProgress === 100)) &&  <ButtonPrimary size="medium" onClick={onClick}>
+              isCompletedProgress === 100)))) &&  <ButtonPrimary size="medium" onClick={onClick}>
             Next Item
           </ButtonPrimary>
           }

@@ -722,7 +722,7 @@ const SelectWord = forwardRef(
         <>
         {/* Correct Answer Section */}
         {answerContent && (
-            <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="2000">
+            <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
             <SappDivider />
             <div className="text-base font-semibold">Correct Answer</div>
             <EditorReader
