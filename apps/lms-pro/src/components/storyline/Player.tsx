@@ -131,7 +131,7 @@ export default function Player({ listStorylineData }: IProps) {
                       continueAction(
                         currentVisibleDocument?.id as string,
                         false,
-                        isCompletedProgress === 100,
+                        isCompletedProgress === 100 && currentStepIndex + 1 === storylineItemsHasDocs.length,
                       )
                     }
                   />

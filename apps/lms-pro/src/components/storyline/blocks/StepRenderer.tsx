@@ -120,13 +120,15 @@ export function StepRenderer({ documents = [] }: Props) {
           top: document.body.scrollHeight,
           behavior: 'smooth',
         })
-      } else {
-        targetBlock.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        // targetBlock.scrollIntoView({ behavior: 'smooth', block: 'start' })
 
+      } else {
+        console.log("lai vao day")
+        targetBlock.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }
         // targetBlock.scrollIntoView({ behavior: 'smooth', block: currentDocument?.type === "QUIZ" ? 'center' : 'start' })
     }
-    }, 222)
+    }, 250)
 
     stepInitMapRef.current[currentStep.id as string] = {
       ...stepState,
