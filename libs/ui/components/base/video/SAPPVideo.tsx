@@ -26,6 +26,7 @@ interface IProp {
   children?: ReactNode;
   videoAttribs?: { [key: string]: string };
   isFetchCaptions?: boolean;
+  handlePlayVideo?:() => void
 }
 
 type ResolutionTypes =
@@ -66,6 +67,7 @@ const SAPPVideo = ({
   children,
   videoAttribs,
   isFetchCaptions = true,
+  handlePlayVideo
 }: IProp) => {
   const { fetcher, videoUrl, router } = useFeature();
   const [playerFunction, setPlayerFunction] = useState<any>();
@@ -977,6 +979,7 @@ const SAPPVideo = ({
                 autoPlay={false}
                 // disablePictureInPicture
                 controlsList="nodownload"
+                onPlay={handlePlayVideo}
               />
               <div
                 className="video-controls flex-center absolute bottom-0 left-0 right-0 h-14 w-full rounded-b-lg px-4 py-3"
