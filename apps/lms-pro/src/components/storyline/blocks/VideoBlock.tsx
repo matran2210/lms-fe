@@ -25,7 +25,7 @@ const VideoBlock = ({ src }: { src: string }) => {
     }
   };
 
-  return <SAPPVideo streamRef={streamRef} options={{ src }} handlePlayVideo={handlePlayVideo}></SAPPVideo>
+  return <SAPPVideo streamRef={streamRef} options={{ src }} handlePlayVideo={handlePlayVideo} />
 }
 
 export default VideoBlock

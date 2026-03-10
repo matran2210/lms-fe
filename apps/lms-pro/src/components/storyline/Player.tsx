@@ -75,7 +75,6 @@ export default function Player({ listStorylineData }: IProps) {
 
               <Sidebar listStorylineData={listStorylineData} />
               <main ref={containerRef} className="flex w-full pb-28">
-
                 <motion.div
                   key="content"
                   initial={{ x: 240 }}
