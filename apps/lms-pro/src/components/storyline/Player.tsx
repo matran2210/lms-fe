@@ -78,7 +78,7 @@ export default function Player({ listStorylineData }: IProps) {
                 <motion.div
                   key="content"
                   initial={{ x: 240 }}
-                  animate={{ x: showSidebar ? 240 : 0, }}
+                  animate={{ x: showSidebar ? 150 : 0, }}
                   transition={{ duration: 0.4, ease: 'easeOut' }}
                   exit={{ x: -240 }}
                   className="mx-auto flex w-full max-w-5xl flex-1 flex-col"
