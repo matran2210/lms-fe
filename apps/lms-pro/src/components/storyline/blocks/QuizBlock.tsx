@@ -1140,8 +1140,9 @@ const QuizBlock = ({
             'max-h-0 translate-y-full !p-0 opacity-0':
               isLearnedBlock && !isShowActionBtn,
             'bg-primary-100':
-              isQuestionConfirmed || !isCorrectAnswer || openExplain,
-            'bg-success-50': !isQuestionConfirmed || isCorrectAnswer,
+              isQuestionConfirmed && (!isCorrectAnswer || openExplain),
+            'bg-success-50': isCorrectAnswer,
+            'bg-info-50': !isQuestionConfirmed,
             'translate-y-0 opacity-100': isShowActionBtn,
           },
         )}
