@@ -2,7 +2,7 @@ import { useStoryline } from '@contexts/StorylineContext';
 import { SAPPVideo } from '@lms/ui'
 import { useRef } from 'react'
 
-const VideoBlock = ({ src, docIndex }: { src: string, docIndex: number }) => {
+const VideoBlock = ({ src }: { src: string }) => {
   const streamRef = useRef<any>()
   const playedOnceRef = useRef(false);
   const {
@@ -14,15 +14,13 @@ const VideoBlock = ({ src, docIndex }: { src: string, docIndex: number }) => {
   const currentVisibleDocument = storylineDocument?.[visibleDocumentCount - 1]
 
   const handlePlayVideo = async () => {
-    if (playedOnceRef.current) return; // đã chạy rồi thì bỏ qua
+    if (playedOnceRef.current) return;
 
     playedOnceRef.current = true;
 
     try {
       await streamRef.current?.play();
-      if (visibleDocumentCount - 1 < docIndex) {
-        await updateProgress(currentVisibleDocument?.id ?? '')
-      }
+      await updateProgress(currentVisibleDocument?.id ?? '')
     } catch {
     }
   };

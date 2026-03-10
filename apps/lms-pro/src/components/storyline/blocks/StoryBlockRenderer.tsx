@@ -21,7 +21,7 @@ export function StoryBlockRenderer({
         videoResource?.url
           ?.replace(videoUrl || '', '')
           .replace('/manifest/video.m3u8', '') || ''
-      return <VideoBlock src={src} docIndex={docIndex} />
+      return <VideoBlock src={src} />
 
     case 'QUIZ':
       const quiz = doc.quiz
