@@ -81,8 +81,8 @@ export function StorylineProvider({ storylineData, children }: Props) {
   const [isCompletedProgress, setIsCompletedProgress] = useState(
     storylineData
       ? (storylineData?.learning_progress?.total_course_sections_completed /
-          storylineData?.learning_progress?.total_course_sections) *
-          100
+        storylineData?.learning_progress?.total_course_sections) *
+      100
       : 0,
   )
   const [isProcessing, setIsProcessing] = useState(false)
@@ -122,6 +122,8 @@ export function StorylineProvider({ storylineData, children }: Props) {
   const { data: storylineDocument, isLoading } = useGetStorylineDocument(
     `storyline-document-${currentStep?.id}`,
   )
+  const currentDocument = storylineDocument?.[visibleDocumentCount - 1]
+
   const updateProgress = async (storyline_item_document_id: string, isUpdateProgress = false) => {
     if (!currentStep) return
     // Reveal document
@@ -141,7 +143,7 @@ export function StorylineProvider({ storylineData, children }: Props) {
           .total_course_sections_completed /
           progressRes?.storyline_section.learning_progress
             .total_course_sections) *
-          100,
+        100,
       )
       setListStorylines(storylineItemsHasDocs)
       setLearningProgress(progressRes?.storyline_section.learning_progress)
@@ -160,7 +162,7 @@ export function StorylineProvider({ storylineData, children }: Props) {
     if (isFinish) {
       setIsCompletedProgress(isCompletedProgress + 1)
     } else {
-      if (isUpdateProgress) await updateProgress(storyline_item_document_id)
+      if (isUpdateProgress && currentDocument?.type !== 'VIDEO') await updateProgress(storyline_item_document_id)
     }
     if (visibleDocumentCount < totalDocs) {
       setVisibleDocumentCount((prev) => {
@@ -198,7 +200,7 @@ export function StorylineProvider({ storylineData, children }: Props) {
     setIsCompletedProgress(
       (storylineData?.learning_progress?.total_course_sections_completed /
         storylineData?.learning_progress?.total_course_sections) *
-        100,
+      100,
     )
   }, [storylineData])
   /* ----------------------------- */

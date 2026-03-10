@@ -1,6 +1,7 @@
 'use client'
 
 import { useStoryline } from '@contexts/StorylineContext'
+import { useStorylineSidebar } from '@contexts/StorylineSidebarContext'
 import { IStoryline } from '@lms/core'
 import { SappLoadingGlobal } from '@lms/ui'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -46,6 +47,7 @@ export default function Player({ listStorylineData }: IProps) {
 
   const lastVisibleDocument = storylineDocument?.[visibleDocumentCount - 1]
   const currentVisibleDocument = storylineDocument?.[visibleDocumentCount]
+  const { showSidebar } = useStorylineSidebar()
 
   return (
     <SappLoadingGlobal loading={false}>
@@ -61,35 +63,26 @@ export default function Player({ listStorylineData }: IProps) {
             <CompleteStoryline listStorylineData={listStorylineData} />
           </motion.div>
         ) : (
-          <motion.div
-            key="player"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+          <div
           >
             <div className="min-h-screen bg-white">
               <StoryHeader />
 
               <Sidebar listStorylineData={listStorylineData} />
-              <main ref={containerRef} className="flex w-full flex-col pb-28">
-                <div
-                  // layout="position"
-                  // transition={{
-                  //   layout: {
-                  //     type: 'spring',
-                  //     stiffness: 72,
-                  //     damping: 32,
-                  //     mass: 1.15,
-                  //     restDelta: 0.0008,
-                  //   },
-                  // }}
+              <main ref={containerRef} className="flex w-full pb-28">
+
+                <motion.div
+                  key="content"
+                  initial={{ x: 240 }}
+                  animate={{ x: showSidebar ? 240 : 0, }}
+                  transition={{ duration: 0.4, ease: 'easeOut' }}
+                  exit={{ x: -240 }}
                   className="mx-auto flex w-full max-w-5xl flex-1 flex-col"
                 >
                   <section
                     ref={(el) =>
-                      (stepRefs.current[currentStepIndex] =
-                        el as HTMLDivElement | null)
+                    (stepRefs.current[currentStepIndex] =
+                      el as HTMLDivElement | null)
                     }
                     data-storyline-id={currentStep.id}
                   >
@@ -118,7 +111,7 @@ export default function Player({ listStorylineData }: IProps) {
                         }
                       />
                     )}
-                </div>
+                </motion.div>
               </main>
 
               {storylineDocument &&
@@ -140,7 +133,7 @@ export default function Player({ listStorylineData }: IProps) {
                   />
                 )}
             </div>
-          </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </SappLoadingGlobal>
