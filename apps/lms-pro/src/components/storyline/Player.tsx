@@ -63,8 +63,13 @@ export default function Player({ listStorylineData }: IProps) {
             <CompleteStoryline listStorylineData={listStorylineData} />
           </motion.div>
         ) : (
-          <div
-          >
+          <motion.div
+            key="player"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            >
             <div className="min-h-screen bg-white">
               <StoryHeader />
 
@@ -133,7 +138,7 @@ export default function Player({ listStorylineData }: IProps) {
                   />
                 )}
             </div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </SappLoadingGlobal>
