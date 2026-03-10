@@ -171,7 +171,7 @@ const MultiChoiceQuestion = ({
         }}
       >
         <HookFormCheckBoxGroup
-          isAnimationCorrectAnswer
+          isAnimationCorrectAnswer={isAnimationCorrectAnswer}
           options={convertAnswer || []}
           control={control}
           name={name || "multiples"}
