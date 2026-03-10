@@ -398,13 +398,14 @@ const QuizBlock = ({
         ...activeQuestion,
         answers:
           questionType === QUESTION_TYPES.DRAG_DROP
-            ? isCorrect || openExplain
-              ? handleMultipleCorrectAnswer(
+            // ? isCorrect || openExplain
+              ? 
+              handleMultipleCorrectAnswer(
                 responseFormat?.drag_drop_answers || [],
                 getValues(`${question?.id}_answer`),
                 correctsQuestion,
               )
-              : []
+              // : []
             : questionType === QUESTION_TYPES.MATCHING
               ? question?.answers
               : answerTemp,
@@ -767,6 +768,8 @@ const QuizBlock = ({
 
 
       case QUESTION_TYPES.DRAG_DROP:
+        console.log(question, "quétionj")
+
         return (
           <NewDragNDropQuestion
             data={question as any}
