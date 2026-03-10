@@ -1,7 +1,31 @@
+import { useStoryline } from '@contexts/StorylineContext';
 import { SAPPVideo } from '@lms/ui'
 import { useRef } from 'react'
 
-export default function VideoBlock({ src }: { src: string }) {
+const VideoBlock = ({ src }: { src: string }) => {
   const streamRef = useRef<any>()
-  return <SAPPVideo streamRef={streamRef} options={{ src }}></SAPPVideo>
+  const playedOnceRef = useRef(false);
+  const {
+    updateProgress,
+    visibleDocumentCount,
+    storylineDocument,
+  } = useStoryline()
+
+  const currentVisibleDocument = storylineDocument?.[visibleDocumentCount - 1]
+
+  const handlePlayVideo = async () => {
+    if (playedOnceRef.current) return;
+
+    playedOnceRef.current = true;
+
+    try {
+      await streamRef.current?.play();
+      await updateProgress(currentVisibleDocument?.id ?? '')
+    } catch {
+    }
+  };
+
+  return <SAPPVideo streamRef={streamRef} options={{ src }} handlePlayVideo={handlePlayVideo} />
 }
+
+export default VideoBlock

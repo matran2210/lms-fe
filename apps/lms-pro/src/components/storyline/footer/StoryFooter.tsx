@@ -13,8 +13,9 @@ import { StorylineAPI } from 'src/api/storyline'
 interface IProps {
   storylineItemsHasDocs: IStorylineItem[]
   onClick: () => void
+  isFinished: boolean
 }
-const StoryFooter = ({ onClick, storylineItemsHasDocs }: IProps) => {
+const StoryFooter = ({ onClick, storylineItemsHasDocs, isFinished = false }: IProps) => {
   const searchParams = useSearchParams()
   const class_id = searchParams.get('class_id')
   const storylineItemId = searchParams.get('storylineItemId')
@@ -101,7 +102,7 @@ const StoryFooter = ({ onClick, storylineItemsHasDocs }: IProps) => {
             (status === 'Review' || (status !== "Review" && (currentStepIndex + 1 < storylineItemsHasDocs.length ||
             (currentStepIndex + 1 === storylineItemsHasDocs.length &&
               isCompletedProgress === 100)))) &&  <ButtonPrimary size="medium" onClick={onClick}>
-            Next Item
+                {isFinished ? "Finish" : "Next Item"}
           </ButtonPrimary>
           }
          

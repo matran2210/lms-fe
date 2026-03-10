@@ -23,6 +23,7 @@ export function StoryBlockRenderer({
           .replace('/manifest/video.m3u8', '') || ''
       return <VideoBlock src={src} />
 
+
     case 'QUIZ':
       const quiz = doc.quiz
       const minimalQuestion =
@@ -30,14 +31,17 @@ export function StoryBlockRenderer({
         quiz?.multiple_choice_questions[0] ||
         (quiz?.constructed_questions[0] as IMultiChoiceQuestion)
 
+
       return (
         <QuizBlock
           minimalQuestion={minimalQuestion}
           quiz_id={quiz?.id as string}
           document_id={doc.id}
           docIndex={docIndex}
+          document={doc}
         />
       )
+
 
     default:
       return null
