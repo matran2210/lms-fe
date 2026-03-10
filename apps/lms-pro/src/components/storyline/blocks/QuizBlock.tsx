@@ -768,8 +768,6 @@ const QuizBlock = ({
 
 
       case QUESTION_TYPES.DRAG_DROP:
-        console.log(question, "quétionj")
-
         return (
           <NewDragNDropQuestion
             data={question as any}
