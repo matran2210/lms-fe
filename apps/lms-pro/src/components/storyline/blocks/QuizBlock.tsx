@@ -398,13 +398,14 @@ const QuizBlock = ({
         ...activeQuestion,
         answers:
           questionType === QUESTION_TYPES.DRAG_DROP
-            ? isCorrect || openExplain
-              ? handleMultipleCorrectAnswer(
+            // ? isCorrect || openExplain
+              ? 
+              handleMultipleCorrectAnswer(
                 responseFormat?.drag_drop_answers || [],
                 getValues(`${question?.id}_answer`),
                 correctsQuestion,
               )
-              : []
+              // : []
             : questionType === QUESTION_TYPES.MATCHING
               ? question?.answers
               : answerTemp,
@@ -1150,7 +1151,7 @@ const QuizBlock = ({
           <>
             <div className="flex flex-1 items-center gap-2">
               <Image
-                src="/assets/images/pointerIcon.png"
+                src="/assets/images/findAnswerIcon.png"
                 alt="pointer"
                 width={24}
                 height={24}

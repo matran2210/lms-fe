@@ -33,6 +33,7 @@ export default function Player({ listStorylineData }: IProps) {
     isCompletedProgress,
     storylineDocument,
   } = useStoryline()
+  const { showSidebar } = useStorylineSidebar()
 
   useEffect(() => {
     if (visibleDocumentCount > 1) return
@@ -47,7 +48,6 @@ export default function Player({ listStorylineData }: IProps) {
 
   const lastVisibleDocument = storylineDocument?.[visibleDocumentCount - 1]
   const currentVisibleDocument = storylineDocument?.[visibleDocumentCount]
-  const { showSidebar } = useStorylineSidebar()
 
   return (
     <SappLoadingGlobal loading={false}>
