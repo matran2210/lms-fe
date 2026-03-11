@@ -100,7 +100,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <Script
           src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
         <link
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
