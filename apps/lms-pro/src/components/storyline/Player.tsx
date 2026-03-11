@@ -1,5 +1,6 @@
 'use client'
 
+
 import { useStoryline } from '@contexts/StorylineContext'
 import { useStorylineSidebar } from '@contexts/StorylineSidebarContext'
 import { IStoryline } from '@lms/core'
@@ -14,6 +15,7 @@ import StoryFooter from './footer/StoryFooter'
 import StoryHeader from './header/StoryHeader'
 import Sidebar from './sidebar'
 
+
 interface IProps {
   listStorylineData: IStoryline | undefined
 }
@@ -22,6 +24,7 @@ export default function Player({ listStorylineData }: IProps) {
   const searchParams = useSearchParams()
   const status = searchParams.get('status')
   const storylineItemsHasDocs = listStorylineData?.storyline?.items || []
+
 
   const {
     stepRefs,
@@ -35,19 +38,24 @@ export default function Player({ listStorylineData }: IProps) {
   } = useStoryline()
   const { showSidebar } = useStorylineSidebar()
 
+
   useEffect(() => {
     if (visibleDocumentCount > 1) return
     if (storylineDocument?.length === 0) return
     const firstDocument = storylineDocument?.[0]
     if (!firstDocument) return
 
+
     updateProgress(firstDocument?.id as string)
   }, [storylineDocument, visibleDocumentCount])
 
+
   if (!currentStep) return null
+
 
   const lastVisibleDocument = storylineDocument?.[visibleDocumentCount - 1]
   const currentVisibleDocument = storylineDocument?.[visibleDocumentCount]
+
 
   return (
     <SappLoadingGlobal loading={false}>
@@ -69,16 +77,17 @@ export default function Player({ listStorylineData }: IProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            >
+          >
             <div className="min-h-screen bg-white">
               <StoryHeader />
+
 
               <Sidebar listStorylineData={listStorylineData} />
               <main ref={containerRef} className="flex w-full pb-28">
                 <motion.div
                   key="content"
                   initial={{ x: 240 }}
-                  animate={{ x: showSidebar ? 150 : 0, }}
+                  animate={{ x: showSidebar ? 150 : 0 }}
                   transition={{ duration: 0.4, ease: 'easeOut' }}
                   exit={{ x: -240 }}
                   className="mx-auto flex w-full max-w-5xl flex-1 flex-col"
@@ -94,7 +103,9 @@ export default function Player({ listStorylineData }: IProps) {
                       {currentStep.name}
                     </h2>
 
+
                     {/* Render blocks của step hiện tại */}
+
 
                     <StepRenderer
                       documents={
@@ -118,9 +129,12 @@ export default function Player({ listStorylineData }: IProps) {
                 </motion.div>
               </main>
 
+
               {storylineDocument &&
                 visibleDocumentCount >= (storylineDocument?.length ?? 0) &&
-                ((status !== 'Review' && currentStepIndex + 1 <= storylineItemsHasDocs?.length) || status === 'Review') && (
+                ((status !== 'Review' &&
+                  currentStepIndex + 1 <= storylineItemsHasDocs?.length) ||
+                  status === 'Review') && (
                   <StoryFooter
                     key={currentStepIndex}
                     storylineItemsHasDocs={storylineItemsHasDocs}
@@ -128,11 +142,13 @@ export default function Player({ listStorylineData }: IProps) {
                       continueAction(
                         currentVisibleDocument?.id as string,
                         false,
-                        isCompletedProgress === 100 && currentStepIndex + 1 === storylineItemsHasDocs.length,
+                        isCompletedProgress === 100 &&
+                        currentStepIndex + 1 === storylineItemsHasDocs.length,
                       )
                     }
                     isFinished={
-                      isCompletedProgress === 100 && currentStepIndex + 1 === storylineItemsHasDocs.length
+                      isCompletedProgress === 100 &&
+                      currentStepIndex + 1 === storylineItemsHasDocs.length
                     }
                   />
                 )}

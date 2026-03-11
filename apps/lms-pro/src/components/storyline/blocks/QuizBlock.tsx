@@ -18,7 +18,7 @@ import {
   myAnswerMultipleChoice,
   myAnswerSelectWord,
   QUESTION_TYPES,
-  RESPONSE_OPTION
+  RESPONSE_OPTION,
 } from '@lms/core'
 import {
   ButtonPrimary,
@@ -84,6 +84,7 @@ const QuizBlock = ({
     storylineDocument,
     currentStep,
     class_user_id,
+    refetchStorylineDocument,
   } = useStoryline()
   const currentVisibleDocument = storylineDocument?.[visibleDocumentCount]
   const isLearnedBlock = docIndex < visibleDocumentCount
@@ -99,6 +100,7 @@ const QuizBlock = ({
     status === 'Review' || (status !== 'Review' && isLearnedBlock)
   const attemptId = document?.quiz?.attempt?.id
   const isQuestionConfirmed = !!question?.confirmed || !!attemptId
+
 
   const isShowClearSelection =
     ([
@@ -184,7 +186,10 @@ const QuizBlock = ({
         break
     }
   }
-  const checkCorrectAnswer = (question: IStorylineQuestion, defaultAnswer?: any) => {
+  const checkCorrectAnswer = (
+    question: IStorylineQuestion,
+    defaultAnswer?: any,
+  ) => {
     switch (question.qType) {
       case QUESTION_TYPES.ONE_CHOICE:
       case QUESTION_TYPES.TRUE_FALSE:
@@ -208,7 +213,9 @@ const QuizBlock = ({
         }
         return true
       case QUESTION_TYPES.MATCHING:
-        const matchingAnswers = getAnswerMatching()?.length ? getAnswerMatching() : defaultAnswer || []
+        const matchingAnswers = getAnswerMatching()?.length
+          ? getAnswerMatching()
+          : defaultAnswer || []
         if (matchingAnswers?.length !== question?.answers?.length) {
           return false
         }
@@ -258,7 +265,9 @@ const QuizBlock = ({
           return true
         })
       case QUESTION_TYPES.DRAG_DROP:
-        const dragDropAnswers = getValues(`${question?.id}_answer`)?.length ? getValues(`${question?.id}_answer`) : defaultAnswer || []
+        const dragDropAnswers = getValues(`${question?.id}_answer`)?.length
+          ? getValues(`${question?.id}_answer`)
+          : defaultAnswer || []
         const correctDragDropAnswers =
           (question?.drag_drop_answers as any[]) || []
         if (dragDropAnswers?.length !== correctDragDropAnswers?.length) {
@@ -266,7 +275,9 @@ const QuizBlock = ({
         }
         return correctDragDropAnswers?.every((correct: any) => {
           const answer = dragDropAnswers?.find(
-            (a: any) => a?.position === correct?.answer_position || a?.answer_position === correct?.answer_position,
+            (a: any) =>
+              a?.position === correct?.answer_position ||
+              a?.answer_position === correct?.answer_position,
           )
           if (!answer || !correct?.answer_ids?.includes(answer?.idAnswer)) {
             return false
@@ -298,33 +309,42 @@ const QuizBlock = ({
     }
   }
   const getMultipleCorrectAnswer = (
-  dragDropAnswers: IDragDropAnswer[],
-  answers: AnswerItem[],
-  corrects?: Correct[],
-) => {
-  const answersMapped = dragDropAnswers?.map((correctItem: IDragDropAnswer) => {
-    const dragDropCurrent = answers?.find(
-      (item: AnswerItem) =>
-        correctItem?.answer_position ===
-        (item?.position || item?.answer_position),
-    );
-    const correctAnswer = corrects?.find((item) => item?.id === dragDropCurrent?.answer_id);
-    const isCorrect =
-      correctItem?.answer_ids?.includes(
-        dragDropCurrent?.answer_id || dragDropCurrent?.idAnswer || "",
-      ) || false;
-    return {
-      ...dragDropCurrent,
-      is_correct: isCorrect,
-      id: dragDropCurrent?.id || dragDropCurrent?.answer_id,
-      idAnswer: dragDropCurrent?.idAnswer || dragDropCurrent?.id || dragDropCurrent?.answer_id,
-      position: correctItem?.answer_position,
-      value: correctAnswer?.answer,
-    };
-  });
+    dragDropAnswers: IDragDropAnswer[],
+    answers: AnswerItem[],
+    corrects?: Correct[],
+  ) => {
+    const answersMapped = dragDropAnswers?.map(
+      (correctItem: IDragDropAnswer) => {
+        const dragDropCurrent = answers?.find(
+          (item: AnswerItem) =>
+            correctItem?.answer_position ===
+            (item?.position || item?.answer_position),
+        )
+        const correctAnswer = corrects?.find(
+          (item) => item?.id === dragDropCurrent?.answer_id,
+        )
+        const isCorrect =
+          correctItem?.answer_ids?.includes(
+            dragDropCurrent?.answer_id || dragDropCurrent?.idAnswer || '',
+          ) || false
+        return {
+          ...dragDropCurrent,
+          is_correct: isCorrect,
+          id: dragDropCurrent?.id || dragDropCurrent?.answer_id,
+          idAnswer:
+            dragDropCurrent?.idAnswer ||
+            dragDropCurrent?.id ||
+            dragDropCurrent?.answer_id,
+          position: correctItem?.answer_position,
+          value: correctAnswer?.answer,
+        }
+      },
+    )
 
-  return answersMapped;
-};
+
+    return answersMapped
+  }
+
 
   function getCorrect(answers: any, questionType: any) {
     switch (questionType as QUESTION_TYPES) {
@@ -398,15 +418,14 @@ const QuizBlock = ({
         ...activeQuestion,
         answers:
           questionType === QUESTION_TYPES.DRAG_DROP
-            // ? isCorrect || openExplain
-              ? 
-              handleMultipleCorrectAnswer(
-                responseFormat?.drag_drop_answers || [],
-                getValues(`${question?.id}_answer`),
-                correctsQuestion,
-              )
-              // : []
-            : questionType === QUESTION_TYPES.MATCHING
+            ? // ? isCorrect || openExplain
+            handleMultipleCorrectAnswer(
+              responseFormat?.drag_drop_answers || [],
+              getValues(`${question?.id}_answer`),
+              correctsQuestion,
+            )
+            : // : []
+            questionType === QUESTION_TYPES.MATCHING
               ? question?.answers
               : answerTemp,
       }
@@ -545,10 +564,10 @@ const QuizBlock = ({
       if (!isUndefined(minimalQuestion)) {
         if (attemptId) {
           const res = await CoursesAPI.getQuizAttemptsAnswer({
-            attempt_id: attemptId || "",
+            attempt_id: attemptId || '',
             question_id: questionId,
-          });
-          const responseData = res?.data?.answer;
+          })
+          const responseData = res?.data?.answer
           const responseFormat = responseData.question
           const questionType = responseFormat.qType
           const answerTemp = responseFormat.answers || []
@@ -558,28 +577,32 @@ const QuizBlock = ({
               : responseFormat?.question_matchings,
             questionType,
           )
-          const userAnswer = questionType === QUESTION_TYPES.ESSAY ?
-            responseFormat.requirements?.length ? responseFormat.requirement_answers : responseData?.short_answer : responseData?.answer
-            ? responseData?.answer?.map((answer) => {
-              if (
-                answer?.answer_id &&
-                !answer?.answer_text &&
-                !answer?.answer_position &&
-                !answer?.question_id
-              ) {
-                return answer?.answer_id;
-              } else if (
-                answer?.answer_text &&
-                answer?.answer_position &&
-                !answer?.answer_id &&
-                !answer?.question_id
-              ) {
-                return answer?.answer_text;
-              } else {
-                return answer;
-              }
-            })
-            : responseData?.question_answer_id;
+          const userAnswer =
+            questionType === QUESTION_TYPES.ESSAY
+              ? responseFormat.requirements?.length
+                ? responseFormat.requirement_answers
+                : responseData?.short_answer
+              : responseData?.answer
+                ? responseData?.answer?.map((answer) => {
+                  if (
+                    answer?.answer_id &&
+                    !answer?.answer_text &&
+                    !answer?.answer_position &&
+                    !answer?.question_id
+                  ) {
+                    return answer?.answer_id
+                  } else if (
+                    answer?.answer_text &&
+                    answer?.answer_position &&
+                    !answer?.answer_id &&
+                    !answer?.question_id
+                  ) {
+                    return answer?.answer_text
+                  } else {
+                    return answer
+                  }
+                })
+                : responseData?.question_answer_id
           const activeQuestion = {
             ...responseFormat,
             corrects: correctsQuestion,
@@ -589,14 +612,22 @@ const QuizBlock = ({
                 ? getMultipleCorrectAnswer(
                   responseFormat?.drag_drop_answers || [],
                   userAnswer,
-                  correctsQuestion
+                  correctsQuestion,
                 )
                 : questionType === QUESTION_TYPES.MATCHING
                   ? responseFormat.answers
                   : answerTemp,
           }
-          setValue(`${responseFormat?.id}_answer`, questionType === QUESTION_TYPES.DRAG_DROP ? activeQuestion.answers : userAnswer)
-          const isCorrect = checkCorrectAnswer(activeQuestion as IStorylineQuestion, userAnswer)
+          setValue(
+            `${responseFormat?.id}_answer`,
+            questionType === QUESTION_TYPES.DRAG_DROP
+              ? activeQuestion.answers
+              : userAnswer,
+          )
+          const isCorrect = checkCorrectAnswer(
+            activeQuestion as IStorylineQuestion,
+            userAnswer,
+          )
           setIsCorrectAnswer(isCorrect)
           if (res.success) {
             // Đảm bảo đối tượng trả về khớp với kiểu hành động đã được fulfill dự kiến
@@ -607,22 +638,25 @@ const QuizBlock = ({
                 answers:
                   questionType === QUESTION_TYPES.DRAG_DROP
                     ? getMultipleCorrectAnswer(
-                        responseFormat?.drag_drop_answers || [],
-                        userAnswer,
-                        correctsQuestion
-                      )
-                      
+                      responseFormat?.drag_drop_answers || [],
+                      userAnswer,
+                      correctsQuestion,
+                    )
                     : questionType === QUESTION_TYPES.MATCHING
                       ? responseFormat.answers || []
                       : answerTemp,
               },
-            };
+            }
           }
         } else {
-          const response = await TestServiceAPI.getQuestionDetail(minimalQuestion?.id)
+          const response = await TestServiceAPI.getQuestionDetail(
+            minimalQuestion?.id,
+          )
+
 
           if (response.success) {
             // Đảm bảo đối tượng trả về khớp với kiểu hành động đã được fulfill dự kiến
+
 
             return {
               question: {
@@ -634,7 +668,7 @@ const QuizBlock = ({
                   },
                 ],
               },
-            };
+            }
           }
         }
       }
@@ -678,7 +712,9 @@ const QuizBlock = ({
             name={`${question?.id}_answer`}
             setValue={setValue}
             solution={
-              isCorrectAnswer || openExplain || attemptId ? question?.solution : undefined
+              isCorrectAnswer || openExplain || attemptId
+                ? question?.solution
+                : undefined
             }
             explainClassname="!mt-8 !p-0 !bg-transparent"
             control={control}
@@ -705,7 +741,9 @@ const QuizBlock = ({
             name={`${question?.id}_answer`}
             setValue={setValue}
             solution={
-              isCorrectAnswer || openExplain || attemptId ? question?.solution : undefined
+              isCorrectAnswer || openExplain || attemptId
+                ? question?.solution
+                : undefined
             }
             explainClassname="!mt-8 !p-0 !bg-transparent"
             readOnly={isQuestionConfirmed}
@@ -729,7 +767,9 @@ const QuizBlock = ({
             }
             uuid={'_' + uuidv4().replaceAll('-', '_')}
             solution={
-              isCorrectAnswer || openExplain || attemptId ? question?.solution : undefined
+              isCorrectAnswer || openExplain || attemptId
+                ? question?.solution
+                : undefined
             }
             ref={MatchQuizRef}
             explainClassname="!mt-0 !p-0 !bg-transparent"
@@ -757,7 +797,9 @@ const QuizBlock = ({
             }
             ref={FillWordRef}
             solution={
-              isCorrectAnswer || openExplain || attemptId ? question?.solution : undefined
+              isCorrectAnswer || openExplain || attemptId
+                ? question?.solution
+                : undefined
             }
             watch={watch}
             explainClassname="!mt-8 !p-0 !bg-transparent"
@@ -783,7 +825,9 @@ const QuizBlock = ({
                 : undefined
             }
             solution={
-              (isCorrectAnswer || openExplain || attemptId) ? question?.solution : undefined
+              isCorrectAnswer || openExplain || attemptId
+                ? question?.solution
+                : undefined
             }
             explainClassname="!mt-8 !p-0 !bg-transparent"
             disabled={isQuestionConfirmed}
@@ -802,7 +846,9 @@ const QuizBlock = ({
               }>,
             ) => setValue(`${question?.id}_answer`, value)}
             data={question}
-            defaultAnswer={question?.defaultValue || getValues(`${question?.id}_answer`)}
+            defaultAnswer={
+              question?.defaultValue || getValues(`${question?.id}_answer`)
+            }
             corrects={
               isCorrectAnswer || openExplain || attemptId
                 ? question?.corrects
@@ -811,7 +857,9 @@ const QuizBlock = ({
                 : undefined
             }
             solution={
-              isCorrectAnswer || openExplain || attemptId ? question?.solution : undefined
+              isCorrectAnswer || openExplain || attemptId
+                ? question?.solution
+                : undefined
             }
             disabled={isQuestionConfirmed}
             className="!bg-white"
@@ -895,6 +943,7 @@ const QuizBlock = ({
             }
           }) ?? []
 
+
         return (
           <>
             <div>
@@ -919,7 +968,9 @@ const QuizBlock = ({
                     className="!rounded-none !bg-transparent !p-0 md:block"
                     editorClassName="learning-act-editor"
                     explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
-                      defaultValue={question?.answer_template || question.defaultValue}
+                    defaultValue={
+                      question?.answer_template || question.defaultValue
+                    }
                     question_content={question?.question_content}
                     question_data={question}
                     control={control}
@@ -1101,6 +1152,12 @@ const QuizBlock = ({
   }, [openExplain, isCorrectAnswer])
 
 
+  useEffect(() => {
+    return () => {
+      // hàm chạy khi component bị unmount
+      refetchStorylineDocument()
+    }
+  }, [])
   return (
     <div
       key={docIndex}
@@ -1115,6 +1172,8 @@ const QuizBlock = ({
             className="sapp-questions"
           />
         )}
+
+
 
 
       {!!topicDescription?.description &&
@@ -1184,6 +1243,7 @@ const QuizBlock = ({
                   isUnderLine={false}
                   startIcon={<RestartIcon className="h-6 w-6" />}
                   size={'medium'}
+                  disabled={loading}
                   onClick={() => {
                     handleClearSelection(question)
                   }}
@@ -1257,6 +1317,7 @@ const QuizBlock = ({
                 })}
                 isUnderLine={false}
                 size={'medium'}
+                disabled={loading}
                 onClick={() => {
                   setOpenExplain(true)
                   // isLastVisibleDocument &&
@@ -1284,7 +1345,9 @@ const QuizBlock = ({
                     : handleRetakeQuestion()
                 }
               >
-                {openExplain || isCorrectAnswer || attemptId ? 'Continue' : 'Try Again'}
+                {openExplain || isCorrectAnswer || attemptId
+                  ? 'Continue'
+                  : 'Try Again'}
               </ButtonPrimary>
             </div>
           </>
