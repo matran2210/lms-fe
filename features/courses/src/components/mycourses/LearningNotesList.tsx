@@ -311,12 +311,16 @@ const LearningNotesList = ({ appType }: Props) => {
 
   const handleDelete = async (id: string) => {
     try {
-      await courseApi.deleteCourseNoteList(id);
-      fetchData(pageIndex, params);
-      refetchNotesList();
+      const res = await courseApi.deleteCourseNoteList(id);
+
+      if(res?.success) {
+        refetchNotesList();
+        fetchData(pageIndex, params);
+      }
       toast.success("Xóa thành công!");
     } catch {}
   };
+  
   const handleEditNote = (id: string, description: string) => {
     const note = {
       uuid: uuidv4(),

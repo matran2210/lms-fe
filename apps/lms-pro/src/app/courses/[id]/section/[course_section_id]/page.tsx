@@ -279,7 +279,9 @@ const CoursePartDetail = () => {
       }
     } else {
       if (sectionId && caseStudyId) {
-        await handleCaseStudyProcess(sectionId, caseStudyId)
+        if (!chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
+          await handleCaseStudyProcess(sectionId, caseStudyId)
+        }
       }
       if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
         setOpenPopupCTA({
@@ -494,7 +496,7 @@ const CoursePartDetail = () => {
   return (
     <Layout title="Course Part Detail" showSidebar={isAlwaysShowSidebar}>
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
-        <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
+        <div className="relative flex h-16 w-full items-center justify-center border-b-[0.57px] border-zinc-100 bg-white">
           <Alert
             message={
               <div className="flex items-center gap-2">
