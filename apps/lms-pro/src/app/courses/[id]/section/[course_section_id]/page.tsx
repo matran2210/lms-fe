@@ -297,7 +297,9 @@ const CoursePartDetail = () => {
       }
     } else {
       if (sectionId && caseStudyId) {
-        await handleCaseStudyProcess(sectionId, caseStudyId)
+        if (!chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
+          await handleCaseStudyProcess(sectionId, caseStudyId)
+        }
       }
       if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
         setOpenPopupCTA({
