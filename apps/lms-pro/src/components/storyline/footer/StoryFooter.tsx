@@ -9,6 +9,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { useQueryClient } from 'react-query'
 import { StorylineAPI } from 'src/api/storyline'
+import { motion } from 'framer-motion'
 
 
 interface IProps {
@@ -25,7 +26,7 @@ const StoryFooter = ({
   const class_id = searchParams.get('class_id')
   const storylineItemId = searchParams.get('storylineItemId')
   const queryClient = useQueryClient()
-  const { setListStorylines, setLearningProgress } = useStorylineSidebar()
+  const { setListStorylines, setLearningProgress, showSidebar } = useStorylineSidebar()
   const {
     setIsCompletedProgress,
     setVisibleDocumentCount,
@@ -83,7 +84,11 @@ const StoryFooter = ({
         'fixed bottom-0 z-[201] flex w-full animate-aos-fade-up justify-center border-t border-t-success bg-success-50 px-8 py-4',
       )}
     >
-      <div
+      <motion.div
+        initial={{ x: 240 }}
+        animate={{ x: showSidebar ? 150 : 0 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+        exit={{ x: -240 }}
         className={clsx(
           'mx-auto flex w-full max-w-5xl items-center justify-between',
         )}
@@ -125,7 +130,7 @@ const StoryFooter = ({
               </ButtonPrimary>
             )}
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

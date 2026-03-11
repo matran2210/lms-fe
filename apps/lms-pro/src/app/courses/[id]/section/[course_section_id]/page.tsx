@@ -399,8 +399,16 @@ const CoursePartDetail = () => {
       // Handle activity or unit section
       lockSection || learningOutcome?.next_section?.is_preview_locked
         ? handleLockedSection()
-        : handleUnlockedSection(() =>
-            handleRouterActivity(course_section?.children?.[0]?.id, undefined),
+        : handleUnlockedSection(() => {
+          const firstChild = course_section?.children?.[0]
+          if (firstChild?.course_section_type === "STORY_LINE") {
+            handleCancel()
+            handleRouterStoryline(true, firstChild)
+          } else {
+            handleRouterActivity(course_section?.children?.[0]?.id, undefined)
+          }
+
+        }
           )
     } else if (course_section?.course_section_type === 'STORY') {
       // Handle story section

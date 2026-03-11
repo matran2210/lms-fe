@@ -1140,6 +1140,7 @@ const QuizBlock = ({
   useEffect(() => {
     const target = questionRefs.current[docIndex]
     if (!target) return
+    if(isLearnedBlock) return
     if (!openExplain && !isCorrectAnswer) return
 
 
