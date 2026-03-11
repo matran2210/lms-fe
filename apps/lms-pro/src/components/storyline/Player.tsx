@@ -7,7 +7,7 @@ import { IStoryline } from '@lms/core'
 import { SappLoadingGlobal } from '@lms/ui'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import CompleteStoryline from './blocks/CompleteStoryline'
 import { StepRenderer } from './blocks/StepRenderer'
 import ContinueButton from './ContinueButton'
@@ -24,7 +24,7 @@ export default function Player({ listStorylineData }: IProps) {
   const searchParams = useSearchParams()
   const status = searchParams.get('status')
   const storylineItemsHasDocs = listStorylineData?.storyline?.items || []
-
+  const [openCongratScreen, setOpenCongratScreen] = useState(false)
 
   const {
     stepRefs,
@@ -55,12 +55,14 @@ export default function Player({ listStorylineData }: IProps) {
 
   const lastVisibleDocument = storylineDocument?.[visibleDocumentCount - 1]
   const currentVisibleDocument = storylineDocument?.[visibleDocumentCount]
-
+  const isFinished = isCompletedProgress >= 100 &&
+    currentStepIndex + 1 === storylineItemsHasDocs.length
 
   return (
     <SappLoadingGlobal loading={false}>
       <AnimatePresence mode="wait">
-        {isCompletedProgress === 101 ? (
+        {/*  */}
+        {openCongratScreen ? (
           <motion.div
             key="complete"
             initial={{ opacity: 0, y: 40 }}
@@ -138,18 +140,18 @@ export default function Player({ listStorylineData }: IProps) {
                   <StoryFooter
                     key={currentStepIndex}
                     storylineItemsHasDocs={storylineItemsHasDocs}
-                    onClick={() =>
-                      continueAction(
-                        currentVisibleDocument?.id as string,
-                        false,
-                        isCompletedProgress >= 100 &&
-                        currentStepIndex + 1 === storylineItemsHasDocs.length,
-                      )
+                    onClick={() => {
+                      if (isFinished) {
+                        setOpenCongratScreen(true)
+                      } else {
+                        continueAction(
+                          currentVisibleDocument?.id as string,
+                          false,
+                        )
+                      }
                     }
-                    isFinished={
-                      isCompletedProgress >= 100 &&
-                      currentStepIndex + 1 === storylineItemsHasDocs.length
                     }
+                    isFinished={isFinished}
                   />
                 )}
             </div>
