@@ -10,18 +10,32 @@ import { useState } from 'react'
 import { useQueryClient } from 'react-query'
 import { StorylineAPI } from 'src/api/storyline'
 
+
 interface IProps {
   storylineItemsHasDocs: IStorylineItem[]
   onClick: () => void
   isFinished: boolean
 }
-const StoryFooter = ({ onClick, storylineItemsHasDocs, isFinished = false }: IProps) => {
+const StoryFooter = ({
+  onClick,
+  storylineItemsHasDocs,
+  isFinished = false,
+}: IProps) => {
   const searchParams = useSearchParams()
   const class_id = searchParams.get('class_id')
   const storylineItemId = searchParams.get('storylineItemId')
   const queryClient = useQueryClient()
   const { setListStorylines, setLearningProgress } = useStorylineSidebar()
-  const { setIsCompletedProgress, setVisibleDocumentCount, storylineDocument, updateProgress, currentStepIndex, isCompletedProgress, currentStep } = useStoryline()
+  const {
+    setIsCompletedProgress,
+    setVisibleDocumentCount,
+    storylineDocument,
+    updateProgress,
+    currentStepIndex,
+    isCompletedProgress,
+    currentStep,
+    refetchStorylineDocument,
+  } = useStoryline()
   const params = useParams()
   const { section_storyline_id } = params
   const [loading, setLoading] = useState(false)
@@ -44,9 +58,7 @@ const StoryFooter = ({ onClick, storylineItemsHasDocs, isFinished = false }: IPr
       queryClient.invalidateQueries({
         queryKey: ['storyline'],
       })
-      queryClient.invalidateQueries({
-        queryKey: [`storyline-document-${storylineItemId}`],
-      })
+      refetchStorylineDocument()
       if (status === 'Review') {
         router.replace(
           `?class_id=${class_id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId}&status=Start`,
@@ -60,6 +72,7 @@ const StoryFooter = ({ onClick, storylineItemsHasDocs, isFinished = false }: IPr
         const firstDocument = storylineDocument?.[0]
         if (!firstDocument) return
 
+
         updateProgress(firstDocument?.id as string, true)
       }
     }
@@ -67,7 +80,7 @@ const StoryFooter = ({ onClick, storylineItemsHasDocs, isFinished = false }: IPr
   return (
     <div
       className={clsx(
-        'fixed bottom-0 z-[201] flex w-full justify-center border-t border-t-success bg-success-50 px-8 py-4 animate-aos-fade-up',
+        'fixed bottom-0 z-[201] flex w-full animate-aos-fade-up justify-center border-t border-t-success bg-success-50 px-8 py-4',
       )}
     >
       <div
@@ -94,22 +107,28 @@ const StoryFooter = ({ onClick, storylineItemsHasDocs, isFinished = false }: IPr
             startIcon={<RestartIcon className="h-6 w-6 hover:text-primary" />}
             onClick={handleRedoItem}
             loading={loading}
-            disabled={loading || currentStep?.item_progress.total_document_completed !== currentStep?.item_progress.total_document}
+            disabled={
+              loading ||
+              currentStep?.item_progress.total_document_completed !==
+              currentStep?.item_progress.total_document
+            }
           >
             Redo Item
           </ButtonText>
-          {
-            (status === 'Review' || (status !== "Review" && (currentStepIndex + 1 < storylineItemsHasDocs.length ||
-            (currentStepIndex + 1 === storylineItemsHasDocs.length &&
-              isCompletedProgress === 100)))) &&  <ButtonPrimary size="medium" onClick={onClick}>
-                {isFinished ? "Finish" : "Next Item"}
-          </ButtonPrimary>
-          }
-         
+          {(status === 'Review' ||
+            (status !== 'Review' &&
+              (currentStepIndex + 1 < storylineItemsHasDocs.length ||
+                (currentStepIndex + 1 === storylineItemsHasDocs.length &&
+                  isCompletedProgress === 100)))) && (
+              <ButtonPrimary size="medium" onClick={onClick}>
+                {isFinished ? 'Finish' : 'Next Item'}
+              </ButtonPrimary>
+            )}
         </div>
       </div>
     </div>
   )
 }
+
 
 export default StoryFooter

@@ -1,5 +1,6 @@
 'use client'
 
+
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import React, {
   createContext,
@@ -21,7 +22,13 @@ import {
 import { useStorylineSidebar } from './StorylineSidebarContext'
 import { TestServiceAPI } from 'src/api/test-api'
 import { StorylineAPI } from 'src/api/storyline'
-import { useQuery } from 'react-query'
+import {
+  QueryObserverResult,
+  RefetchOptions,
+  RefetchQueryFilters,
+  useQuery,
+} from 'react-query'
+
 
 interface StorylineContextValue {
   currentStepIndex: number
@@ -35,7 +42,10 @@ interface StorylineContextValue {
     isUpdateProgress?: boolean,
     isFinish?: boolean,
   ) => void
-  updateProgress: (storyline_item_document_id: string, isUpdateProgress?: boolean) => void
+  updateProgress: (
+    storyline_item_document_id: string,
+    isUpdateProgress?: boolean,
+  ) => void
   isCompletedProgress: number
   setIsCompletedProgress: React.Dispatch<React.SetStateAction<number>>
   storylineDocument: DocumentItem[] | undefined
@@ -43,11 +53,16 @@ interface StorylineContextValue {
   setQuestion: React.Dispatch<React.SetStateAction<IStorylineQuestion | null>>
   topicDescription: any
   class_user_id: string
+  refetchStorylineDocument: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
+  ) => Promise<QueryObserverResult<DocumentItem[], unknown>>
 }
+
 
 export const StorylineContext = createContext<StorylineContextValue | null>(
   null,
 )
+
 
 export function useStoryline() {
   const ctx = useContext(StorylineContext)
@@ -55,10 +70,12 @@ export function useStoryline() {
   return ctx
 }
 
+
 interface Props {
   storylineData: IStoryline | undefined
   children: React.ReactNode
 }
+
 
 export function StorylineProvider({ storylineData, children }: Props) {
   const searchParams = useSearchParams()
@@ -66,12 +83,14 @@ export function StorylineProvider({ storylineData, children }: Props) {
   const { setListStorylines, setLearningProgress, listStorylines } =
     useStorylineSidebar()
 
+
   const storylineItemId = searchParams.get('storylineItemId')
   const class_id = searchParams.get('class_id')
   const course_section_id = searchParams.get('course_section_id')
   const status = searchParams.get('status')
   const params = useParams()
   const { section_storyline_id } = params
+
 
   const stepRefs = useRef<(HTMLDivElement | null)[]>([])
   const [question, setQuestion] = useState<IStorylineQuestion | null>(null)
@@ -87,9 +106,11 @@ export function StorylineProvider({ storylineData, children }: Props) {
   )
   const [isProcessing, setIsProcessing] = useState(false)
 
+
   const storylineItemsHasDocs = storylineData?.storyline?.items || []
   const steps: IStorylineItem[] = useMemo(() => {
     if (!listStorylines) return []
+
 
     return [...listStorylines].sort((a, b) => a.position - b.position)
   }, [listStorylines])
@@ -113,21 +134,32 @@ export function StorylineProvider({ storylineData, children }: Props) {
       return data
     }
 
+
     return useQuery([queryKey, params], fetchData, {
       enabled: class_id !== undefined && currentStep?.id !== undefined,
       retry: false,
     })
   }
 
-  const { data: storylineDocument, isLoading } = useGetStorylineDocument(
-    `storyline-document-${currentStep?.id}`,
-  )
+
+  const {
+    data: storylineDocument,
+    isLoading,
+    refetch,
+  } = useGetStorylineDocument(`storyline-document-${currentStep?.id}`)
   const currentDocument = storylineDocument?.[visibleDocumentCount - 1]
 
-  const updateProgress = async (storyline_item_document_id: string, isUpdateProgress = false) => {
+
+  const updateProgress = async (
+    storyline_item_document_id: string,
+    isUpdateProgress = false,
+  ) => {
     if (!currentStep) return
     // Reveal document
-    if ((storyline_item_document_id && status !== 'Review') || isUpdateProgress) {
+    if (
+      (storyline_item_document_id && status !== 'Review') ||
+      isUpdateProgress
+    ) {
       const res = await CoursesAPI.learningOutcomeProgress(
         class_id as string,
         section_storyline_id as string,
@@ -162,7 +194,8 @@ export function StorylineProvider({ storylineData, children }: Props) {
     if (isFinish) {
       setIsCompletedProgress(isCompletedProgress + 1)
     } else {
-      if (isUpdateProgress && currentDocument?.type !== 'VIDEO') await updateProgress(storyline_item_document_id)
+      if (isUpdateProgress && currentDocument?.type !== 'VIDEO')
+        await updateProgress(storyline_item_document_id)
     }
     if (visibleDocumentCount < totalDocs) {
       setVisibleDocumentCount((prev) => {
@@ -178,6 +211,7 @@ export function StorylineProvider({ storylineData, children }: Props) {
     const next = steps[nextIndex]
     if (!next) return
 
+
     router.replace(
       `?class_id=${class_id}&course_section_id=${course_section_id}&storylineItemId=${next.id}&status=${status}`,
       {
@@ -185,6 +219,7 @@ export function StorylineProvider({ storylineData, children }: Props) {
       },
     )
   }
+
 
   useEffect(() => {
     if (!storylineData) return
@@ -210,17 +245,21 @@ export function StorylineProvider({ storylineData, children }: Props) {
     if (!storylineItemId) return
     if (!steps.length) return
 
+
     const index = stepIdToIndexMap[storylineItemId]
     if (index === undefined) return
 
+
     setCurrentStepIndex(index)
   }, [storylineItemId, stepIdToIndexMap, steps.length])
+
 
   useEffect(() => {
     if (!currentStep) return
     const completed = currentStep.item_progress?.total_document_completed ?? 0
     setVisibleDocumentCount(!completed ? completed + 1 : completed)
   }, [currentStep?.id])
+
 
   return (
     <StorylineContext.Provider
@@ -239,6 +278,7 @@ export function StorylineProvider({ storylineData, children }: Props) {
         setQuestion,
         topicDescription,
         class_user_id: storylineData?.class_user_id as string,
+        refetchStorylineDocument: refetch,
       }}
     >
       {children}
