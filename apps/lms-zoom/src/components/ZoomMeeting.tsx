@@ -88,7 +88,7 @@ export const ZoomMeeting = () => {
   }, [isSDKLoaded, meetingConfig, isJoining, error, meetingToken, router, pathname])
 
   const handleJoinMeeting = async () => {
-    if (!meetingConfig) return
+    if (!meetingConfig || isJoining) return
 
     await joinMeeting(meetingConfig)
   }
