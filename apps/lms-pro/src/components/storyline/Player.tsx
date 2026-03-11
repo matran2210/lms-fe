@@ -60,7 +60,7 @@ export default function Player({ listStorylineData }: IProps) {
   return (
     <SappLoadingGlobal loading={false}>
       <AnimatePresence mode="wait">
-        {status !== 'Review' && isCompletedProgress === 101 ? (
+        {isCompletedProgress === 101 ? (
           <motion.div
             key="complete"
             initial={{ opacity: 0, y: 40 }}
@@ -142,12 +142,12 @@ export default function Player({ listStorylineData }: IProps) {
                       continueAction(
                         currentVisibleDocument?.id as string,
                         false,
-                        isCompletedProgress === 100 &&
+                        isCompletedProgress >= 100 &&
                         currentStepIndex + 1 === storylineItemsHasDocs.length,
                       )
                     }
                     isFinished={
-                      isCompletedProgress === 100 &&
+                      isCompletedProgress >= 100 &&
                       currentStepIndex + 1 === storylineItemsHasDocs.length
                     }
                   />
