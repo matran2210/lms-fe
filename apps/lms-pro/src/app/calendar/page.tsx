@@ -15,7 +15,7 @@ import {
 } from '@lms/feature-calendar'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { HeaderMobile, Layout } from '@lms/ui'
-import { IEvent, IFilter, SAPPCalendar } from '@sapp-fe/sapp-common-package'
+import { IEvent, IFilter, SAPPCalendarV2 } from '@sapp-fe/sapp-common-package'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/navigation'
@@ -155,7 +155,7 @@ const CalendarPage = () => {
               className="flex w-full min-w-0 justify-center lg:flex-1"
               data-aos={ANIMATION.DATA_AOS}
             >
-              <SAPPCalendar
+              <SAPPCalendarV2
                 showWeeklyNorm={false}
                 events={
                   events?.map((item) => {
