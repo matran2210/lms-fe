@@ -25,13 +25,18 @@ const PaginationSappV2 = ({
     { value: 25, label: '25' },
     { value: 50, label: '50' },
   ]
-  const handlePageChange = useCallback(
-    (page: number, newSize?: number) => {
-      const size = newSize || pageSize
-      setPageSize?.(size)
+  const handlePageChangeIndex = useCallback(
+    (page: number) => {
       setCurrentPage?.(page)
     },
-    [pageSize, setPageSize, setCurrentPage],
+    [currentPage, setCurrentPage],
+  )
+
+  const handleChangePageSize = useCallback(
+    (value: number) => {
+      setPageSize?.(value)
+    },
+    [setPageSize, pageSize],
   )
 
   const renderItem = (
@@ -73,7 +78,7 @@ const PaginationSappV2 = ({
           </span>
           <Select
             value={pageSize}
-            onChange={(value) => handlePageChange(1, value)}
+            onChange={(value) => handleChangePageSize(value)}
             options={options}
             className="custom-ant-select"
             popupClassName="select-card-course"
@@ -87,7 +92,7 @@ const PaginationSappV2 = ({
           pageSize={pageSize}
           className="custom-ant-pagination"
           current={currentPage}
-          onChange={handlePageChange}
+          onChange={handlePageChangeIndex}
           showSizeChanger={false}
           itemRender={(page, type, originalElement) => {
             return renderItem(page, type, originalElement)
