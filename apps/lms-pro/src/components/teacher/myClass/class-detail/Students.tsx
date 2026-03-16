@@ -67,31 +67,9 @@ export default function Students() {
 
   const columnsValue = [
     {
-      title: 'ID',
-      render: (record: IStudentClassDetail) => (
-        <NameNoActionCell dataColumn={record?.user?.hubspot_contact_id} />
-      ),
-    },
-    {
       title: 'Student Name',
       render: (record: IStudentClassDetail) => (
         <StudentCell dataColumn={record?.user?.detail?.full_name} />
-      ),
-    },
-    {
-      title: 'Email',
-      render: (record: IStudentClassDetail) => (
-        <NameNoActionCell
-          dataColumn={record?.user?.user_contacts?.[0]?.email}
-        />
-      ),
-    },
-    {
-      title: 'Phone',
-      render: (record: IStudentClassDetail) => (
-        <NameNoActionCell
-          dataColumn={record?.user?.user_contacts?.[0]?.phone}
-        />
       ),
     },
     {
