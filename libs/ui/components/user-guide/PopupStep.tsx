@@ -1,9 +1,9 @@
 "use client"
 import Lottie from 'lottie-react'
 import Image, { StaticImageData } from 'next/image'
-import { decrement, increment, useAppDispatch} from '@lms/contexts'
 import { ButtonPrimary, ButtonText } from '../base';
 import { useEffect, useRef, useState } from "react";
+import { decrement, increment, useFeature } from "@lms/contexts";
 import { motion } from "framer-motion";
 import { GuideOffset, GuidePlacement } from "@lms/core";
 
@@ -177,12 +177,12 @@ const PopupStep = ({
     };
   };
 
-  const dispatch = useAppDispatch();
+  const {dispatch} = useFeature();
   const confirmDialogRef = useRef<HTMLDivElement>(null);
   const [style, setStyle] = useState<React.CSSProperties | null>(null);
 
-  const nextStep = () => dispatch(increment());
-  const previousStep = () => dispatch(decrement());
+  const nextStep = () => dispatch?.(increment());
+  const previousStep = () => dispatch?.(decrement());
 
   const handleClose = () => {
     if (confirmDialogRef.current) {

@@ -2,7 +2,7 @@
 import { getPaginationItems } from "./pagination-fn";
 import PageLinkPagination from "./PageLink";
 import { Dispatch, ReactNode, SetStateAction, useRef } from "react";
-import ArrowIcon from "./ArrowIcon";
+import ComboArrowIcon from "./ComboArrowIcon";
 import { useState, useEffect } from "react";
 
 interface Props {
@@ -90,9 +90,9 @@ const Pagination = ({
             }}
             type={type}
           >
-            <ArrowIcon
+            <ComboArrowIcon
               iconType={`${type === "table" ? "chervon" : "teeny"}`}
-            ></ArrowIcon>
+            ></ComboArrowIcon>
           </PageLinkPagination>
         </div>
         <div
@@ -138,10 +138,10 @@ const Pagination = ({
             }}
             type={type}
           >
-            <ArrowIcon
+            <ComboArrowIcon
               iconType={`${type === "table" ? "chervon" : "teeny"}`}
               right={true}
-            ></ArrowIcon>
+            ></ComboArrowIcon>
           </PageLinkPagination>
         </div>
         {type === "row" && (

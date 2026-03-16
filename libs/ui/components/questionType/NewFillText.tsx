@@ -37,6 +37,8 @@ interface IProps {
   watch?: UseFormWatch<FieldValues>;
   explainClassname?: string;
   storageKey?: string;
+  readOnly?: boolean;
+  isAnimationCorrectAnswer?: boolean;
 }
 
 const NewFilltext = forwardRef(
@@ -59,6 +61,8 @@ const NewFilltext = forwardRef(
       watch,
       explainClassname,
       storageKey,
+      readOnly = false,
+      isAnimationCorrectAnswer = false,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -159,6 +163,7 @@ const NewFilltext = forwardRef(
                   inputClassName="border-none outline-none text-center"
                   onFocus={() => setFocusedIndex(index)}
                   onBlur={() => setFocusedIndex(null)}
+                  readOnly={readOnly}
                 />
               </span>
             );
@@ -236,7 +241,7 @@ const NewFilltext = forwardRef(
         />
 
         {answerContent && (
-          <>
+          <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
             <SappDivider />
             <div className="mt-[38px] text-base font-semibold">
               Correct Answer:
@@ -248,17 +253,17 @@ const NewFilltext = forwardRef(
                   ?.innerHTML || ""
               }
             />
-          </>
+          </div>
         )}
 
         {solution && (
-          <>
+          <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
             <SappDivider />
             <div className={explainClassname}>
               <SappTitleSolution title={`${MY_COURSES.solution}:`} />
               <EditorReader className="mt-4" text_editor_content={solution} />
             </div>
-          </>
+          </div>
         )}
       </div>
     );

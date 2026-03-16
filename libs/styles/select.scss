@@ -180,10 +180,19 @@
   @apply w-[6px] bg-primary !important;
 }
 
-.custom-select-v2 {
+.custom-select {
   /* Text mặc định */
   .ant-select-arrow {
     @apply text-gray-800;
+  }
+
+  &.ant-select-allow-clear:hover:has(.ant-select-selection-item) {
+    .ant-select-arrow {
+      @apply hidden;
+    }
+  }
+  .ant-select-clear {
+    @apply right-4;
   }
 
   .ant-select-selection-placeholder {

@@ -9,5 +9,5 @@ export { default as SappModalVideo } from "./SappModalVideo";
 export { default as SappModelSidebar } from "./SappModelSidebar";
 export { default as SappModalImage } from "./SappModalImage";
 export { default as FullScreenMobile } from "./FullScreenMobile";
-export { default as SappModalImageV2 } from "./SappModalImageV2";
+export { default as SappModalImageOriginalRatio } from "./SappModalImageOriginalRatio";
 export { default as PreviewImageModal } from "./PreviewImageModal";

@@ -1,4 +1,5 @@
 'use client'
+import { UserType } from '@lms/contexts'
 import { LAYOUT } from '@lms/core'
 import { CertificateVertical, HorizontalCertificate } from '@lms/feature-user'
 import { SappLoadingGlobal, SinglePageLayout } from '@lms/ui'
@@ -6,7 +7,6 @@ import { useParams } from 'next/navigation'
 import { useQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
 
 export interface ICertificate {
   certificate_url: string
@@ -45,10 +45,8 @@ const Certificate = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <SinglePageLayout title="Certificate">
-        <CertificateVertical certificate={certificate}/>
-        <HorizontalCertificate
-          certificate={certificate}
-        />
+        <CertificateVertical certificate={certificate} />
+        <HorizontalCertificate certificate={certificate} />
       </SinglePageLayout>
     </SappLoadingGlobal>
   )

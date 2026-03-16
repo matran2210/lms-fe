@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { CloseModalIcon } from '@lms/assets'
 import { UserType } from '@lms/contexts'
 import { LAYOUT } from '@lms/core'
@@ -13,9 +13,9 @@ import { CoursesAPI } from 'src/api/courses'
 const TableEntranceResult = () => {
   const router = useRouter()
   const searchParam = useSearchParams()
-      const params = useParams();
-      const {id} = params
-        const query = Object.fromEntries(searchParam.entries())
+  const params = useParams()
+  const { id } = params
+  const query = Object.fromEntries(searchParam.entries())
   const { attempt } = query
   const [loading, setLoading] = useState<boolean>(false)
   const [modalResult, setModalResult] = useState<{
@@ -105,11 +105,10 @@ const TableEntranceResult = () => {
               questionResponse={modalResult?.questions || []}
               getTable={getTable}
               onShowDetail={(e) => {
-                router
-                  .push(
-                    `/explanation/${e.id}?title=Entrance Test&${searchParams}`,
-                  )
-                  router.refresh()
+                router.push(
+                  `/explanation/${e.id}?title=Entrance Test&${searchParams}`,
+                )
+                router.refresh()
               }}
               loading={loading}
               showTotal={false}

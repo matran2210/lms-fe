@@ -1,5 +1,5 @@
 import { IQuestion, IResponse } from '@lms/core'
-import request, { fetcher } from '@services/requestV2'
+import request, { fetcher } from '@services/request'
 import axios from 'axios'
 
 type QuestionDetailQueryDTO = {

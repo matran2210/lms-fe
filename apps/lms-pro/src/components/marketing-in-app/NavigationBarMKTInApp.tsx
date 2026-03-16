@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import clsx from 'clsx'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { listTab } from 'src/constants'

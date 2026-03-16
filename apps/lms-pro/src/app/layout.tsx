@@ -1,8 +1,9 @@
 // app/layout.tsx
 import type { ReactNode } from 'react'
-import { Providers } from './providers'
-import '@lms/styles'
+import { ProvidersWrapper } from './providers'
+// TODO: Next14
 import '@fortune-sheet/react/dist/index.css'
+import '@lms/styles'
 import '@sapp-fe/entrance-test-result-package/dist/index.css'
 import '@sapp-fe/preview-part/dist/index.css'
 import '@sapp-fe/quiz-result-package/dist/index.css'
@@ -11,11 +12,11 @@ import '@sapp-fe/sapp-common-package/dist/sapp-editor.css'
 import '@sapp-fe/sapp-notification/dist/index.css'
 import '@styles/index.scss'
 import '@xyflow/react/dist/style.css'
+import 'aos/dist/aos.css'
+import Script from 'next/script'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
-import 'aos/dist/aos.css'
 import ClientLayout from './client-layout'
-import Script from 'next/script'
 import { Roboto } from 'next/font/google'
 import type { Metadata } from 'next'
 import { GoogleAnalytics } from '@next/third-parties/google'
@@ -75,18 +76,16 @@ export const metadata: Metadata = {
     images: ['https://sapp-lms-fe-prod.vercel.app/thumbnail.webp'],
   },
 
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-  },
-
   other: {
     'X-UA-Compatible': 'IE=edge,chrome=1',
     analytics: 'G-HRLKW6S3X0',
     'csrf-token': 'Hl4U5KjkBFkHN2m2ptOE1L8QbTGV19yrEINaOrsd',
   },
 }
-
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+}
 export const revalidate = 0
 
 const roboto = Roboto({
@@ -100,7 +99,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <Script
           src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
         <link
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
@@ -111,11 +110,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
       <body className={roboto.className}>
-        <Providers>
+        <ProvidersWrapper>
           <ClientLayout />
           {children}
           {/* </ClientLayout> */}
-        </Providers>
+        </ProvidersWrapper>
       </body>
     </html>
   )

@@ -1,11 +1,14 @@
 'use client'
 import SappLoading from '@components/common/SappLoading'
 import {
+  CalculatorIcon,
+  DownloadIcon,
   FileTextIcon,
   FlagIcon,
   Icon,
   NotesOutline,
   ResizeIcon,
+  NewScratchPadIcon,
   ShowLessIcon,
   ShowMoreIcon,
 } from '@lms/assets'
@@ -14,8 +17,6 @@ import {
   disableUnsavedChange,
   loginSlice,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
   useFeature,
 } from '@lms/contexts'
@@ -35,15 +36,18 @@ import {
   ScratchPadValue,
   TEST_TYPE,
 } from '@lms/core'
-import { handleMultipleCorrectAnswer, runHighlight, trackGAEvent } from '@lms/utils'
+import {
+  handleMultipleCorrectAnswer,
+  checkTypeAndRenderTitle,
+  runHighlight,
+  trackGAEvent,
+} from '@lms/utils'
 import { cloneDeep, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import ConFirmSubmit from '../conFirmSubmit'
 import LimitQuizModal from '../limitQuizModal'
 import styles from './test.module.scss'
-
-import { CalculatorIcon, DownloadIcon, ScratchPadIcon } from '@assets/icons'
 import Layout from '@components/layout'
 import {
   removeHighlights,
@@ -79,7 +83,7 @@ import { Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { PageLink } from 'src/constants/routes'
-import { checkTypeAndRenderTitle } from 'src/utils/helpers/quiz-test/helper'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import SuccessSubmittedConstructorModal from '../SuccessSubmittedConstructorModal'
 import TestScratchPads from '../TestScratchPads'
 import useGetQuestionTabs from '../custom-hook/useGetQuestionTabs'
@@ -328,7 +332,7 @@ const TestDetail = () => {
           }
 
           if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
-             const answersTemp = (answersSubmitted?.[0]?.answer || [])?.sort(
+            const answersTemp = (answersSubmitted?.[0]?.answer || [])?.sort(
               (
                 a: { answer_position: number },
                 b: { answer_position: number },
@@ -524,7 +528,7 @@ const TestDetail = () => {
           return updatedObjTab
         }
       } else {
-         if (objTab?.data?.qType === QUESTION_TYPES.DRAG_DROP) {
+        if (objTab?.data?.qType === QUESTION_TYPES.DRAG_DROP) {
           if (!isEmpty(objTab?.corrects?.corrects)) {
             return {
               ...objTab,
@@ -2016,7 +2020,7 @@ const TestDetail = () => {
                     }}
                   >
                     <ButtonContent
-                      icon={<ScratchPadIcon isActive={isScatchPadEnabled} />}
+                      icon={<NewScratchPadIcon isActive={isScatchPadEnabled} />}
                       content=""
                     />
                   </button>
@@ -2041,7 +2045,13 @@ const TestDetail = () => {
                     disabled={checkCalExist > -1}
                   >
                     <ButtonContent
-                      icon={<CalculatorIcon isActive={checkCalExist > -1} />}
+                      icon={
+                        <CalculatorIcon
+                          className={
+                            checkCalExist > -1 ? 'text-white' : 'text-primary'
+                          }
+                        />
+                      }
                       content=""
                     />
                   </button>
@@ -2589,7 +2599,7 @@ const TestDetail = () => {
           { '!bg-primary': isScatchPadEnabled },
         )}
       >
-        <ScratchPadIcon isActive={isScatchPadEnabled} />
+        <NewScratchPadIcon isActive={isScatchPadEnabled} />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <div
@@ -2602,7 +2612,9 @@ const TestDetail = () => {
           { '!bg-primary': checkCalExist > -1 },
         )}
       >
-        <CalculatorIcon isActive={checkCalExist > -1} />
+        <CalculatorIcon
+          className={checkCalExist > -1 ? 'text-primary' : 'text-white'}
+        />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <div

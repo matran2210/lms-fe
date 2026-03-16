@@ -1,8 +1,7 @@
 import clsx from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { QUESTION_TYPES } from "@lms/core";
-import { ArrowIconV2 } from "@lms/ui/components/base/pagination/ArrowIconV2";
-import { PageLinkPagination } from "@lms/ui";
+import { ArrowIcon, PageLinkPagination } from "@lms/ui";
 import { useTailwindBreakpoint } from "@lms/hooks";
 
 interface IProps {
@@ -24,6 +23,7 @@ const TabSlide = ({
   isScrollCenter = true,
   setHasScrollBar,
 }: IProps) => {
+
   const { isMobileView } = useTailwindBreakpoint();
   const MAX_ITEMS_PER_ROW = 25;
   const MIN_ITEMS_PER_ROW = 14;
@@ -240,7 +240,7 @@ const TabSlide = ({
                 "cursor-pointer",
               )}
             >
-              <ArrowIconV2 />
+              <ArrowIcon />
             </PageLinkPagination>
           </div>
         )}
@@ -279,7 +279,7 @@ const TabSlide = ({
                       key={pageNum.id}
                       active={currentTab === pageNum.id}
                       onClick={() => {
-                        if (setCurrentTab !== undefined) {
+                        if (setCurrentTab !== undefined && currentTab !== pageNum.id) {
                           handleChangeTab(pageNum.id);
                         }
                       }}
@@ -301,7 +301,7 @@ const TabSlide = ({
                       key={pageNum.id}
                       active={currentTab === pageNum.id}
                       onClick={() => {
-                        if (setCurrentTab !== undefined) {
+                        if (setCurrentTab !== undefined && currentTab !== pageNum.id) {
                           handleChangeTab(pageNum.id);
                         }
                       }}
@@ -328,7 +328,7 @@ const TabSlide = ({
                           key={pageNum.id}
                           active={currentTab === pageNum.id}
                           onClick={() => {
-                            if (setCurrentTab !== undefined) {
+                            if (setCurrentTab !== undefined && currentTab !== pageNum.id) {
                               handleChangeTab(pageNum.id);
                             }
                           }}
@@ -372,7 +372,7 @@ const TabSlide = ({
                 "cursor-pointer",
               )}
             >
-              <ArrowIconV2 right={true} />
+              <ArrowIcon right={true} />
             </PageLinkPagination>
           </div>
         )}

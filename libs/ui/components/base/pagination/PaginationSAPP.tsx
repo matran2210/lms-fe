@@ -1,81 +1,101 @@
-import { Dispatch, SetStateAction, ReactNode } from "react";
-import clsx from "clsx";
-import Pagination from "./Pagination";
+import { Pagination, Select } from 'antd'
+import { Dispatch, ReactNode, SetStateAction, useCallback } from 'react'
+import clsx from 'clsx'
+import { RightOutlined, AntSelectIcon } from '@lms/assets'
 
 interface IProps {
-  currentPage: number;
-  setCurrentPage?: Dispatch<SetStateAction<number>>;
-  pageSize: number;
-  setPageSize?: Dispatch<SetStateAction<number>>;
-  totalItems: number;
-  type?: "row" | "table";
-  children?: ReactNode;
-  optionShowAll?: ReactNode;
-  classname?: string;
+  currentPage: number
+  setCurrentPage?: Dispatch<SetStateAction<number>>
+  pageSize: number
+  setPageSize?: Dispatch<SetStateAction<number>>
+  totalItems: number
+  classname?: string
 }
 
-const PaginationSAPP = ({
+const PaginationSapp = ({
   currentPage,
   pageSize,
   setCurrentPage,
   setPageSize,
   totalItems,
-  type,
-  optionShowAll,
-  classname,
+  classname = 'mt-8',
 }: IProps) => {
   const options = [
-    { value: 10, label: "10" },
-    { value: 25, label: "25" },
-    { value: 50, label: "50" },
-    { value: 100, label: "100" },
-  ];
-  const handlePageChange = (size: number) => {
-    setCurrentPage && setCurrentPage(1);
-    setPageSize && setPageSize(size);
-  };
+    { value: 10, label: '10' },
+    { value: 25, label: '25' },
+    { value: 50, label: '50' },
+  ]
+  const handlePageChange = useCallback(
+    (page: number, newSize?: number) => {
+      const size = newSize || pageSize
+      setPageSize?.(size)
+      setCurrentPage?.(page)
+    },
+    [pageSize, setPageSize, setCurrentPage],
+  )
+
+  const renderItem = (
+    page: number,
+    type: 'page' | 'prev' | 'next' | 'jump-prev' | 'jump-next',
+    originalElement: ReactNode,
+  ) => {
+    if (type === 'next') {
+      return (
+        <div className="flex items-center gap-1">
+          <div className="text-base font-medium text-gray-600">Next</div>
+          <div>
+            <RightOutlined />
+          </div>
+        </div>
+      )
+    }
+    if (type === 'prev') {
+      if (currentPage < 2) return null
+      return (
+        <div className="flex items-center gap-1">
+          <div>
+            <RightOutlined className="rotate-180" />
+          </div>
+          <div className="text-base font-medium text-gray-600">Previous</div>
+        </div>
+      )
+    }
+
+    return <div>{originalElement}</div>
+  }
 
   return (
     <>
-      <div
-        className={clsx(
-          `flex flex-wrap items-center justify-center gap-4 overflow-hidden md:justify-between`,
-          classname,
-        )}
-      >
-        {type === "table" && (
-          <label className="flex items-center">
-            <span className="mr-2.5 text-sm text-[#A1A1A1]">Show</span>
-            <select
-              className="w-[70px] cursor-pointer border-0 bg-[#F9F9F9] px-2.5 py-1 shadow-0"
-              onChange={(e) => {
-                const pageNumber = parseInt(e.target.value);
-                handlePageChange(pageNumber);
-              }}
-            >
-              {options.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            <span className="ml-2.5 text-sm text-[#A1A1A1]">
-              of {totalItems} entries
-            </span>
-          </label>
-        )}
+      <div className={clsx(`flex justify-end gap-4`, classname)}>
+        <label className="flex items-center">
+          <span className="mr-2 text-base font-normal leading-normal text-gray-800">
+            Columns per page:
+          </span>
+          <Select
+            value={pageSize}
+            onChange={(value) => handlePageChange(1, value)}
+            options={options}
+            className="custom-ant-select"
+            popupClassName="select-card-course"
+            suffixIcon={<AntSelectIcon />}
+            dropdownStyle={{ minWidth: 60 }}
+          />
+        </label>
+
         <Pagination
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          pageSize={Math.ceil(totalItems / pageSize)}
-          maxLength={`${type === "table" ? 9 : totalItems}`}
-          totalItems={totalItems}
-          type={type}
-          optionShowAll={optionShowAll}
+          total={totalItems}
+          pageSize={pageSize}
+          className="custom-ant-pagination"
+          current={currentPage}
+          onChange={handlePageChange}
+          showSizeChanger={false}
+          itemRender={(page, type, originalElement) => {
+            return renderItem(page, type, originalElement)
+          }}
         />
       </div>
     </>
-  );
-};
+  )
+}
 
-export default PaginationSAPP;
+export default PaginationSapp

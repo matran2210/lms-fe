@@ -1,5 +1,4 @@
-import { fetcher } from '@services/requestV2'
-import { apiURL } from 'src/constants'
+import { fetcher } from '@services/request'
 
 export class NotificationAPI {
   static getCountUnRead(): Promise<any> {

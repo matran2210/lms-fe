@@ -4,11 +4,11 @@ import clsx from 'clsx'
 import { useDispatch } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
 import ButtonIcon from '../buttons/ButtonIcon'
-import { Soundwave } from '../icons'
 import { Archive } from '../icons/Archive'
 import { DocumentAdd } from '../icons/DocumentAdd'
 import { DocumentText } from '../icons/DocumentText'
 import { List } from '../icons/List'
+import { Soundwave } from '@lms/assets'
 
 const tabs: IActivityTab[] = [
   { key: 'add-note', icon: <DocumentAdd /> },

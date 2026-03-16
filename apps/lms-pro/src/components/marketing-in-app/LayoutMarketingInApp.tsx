@@ -6,7 +6,7 @@ import FooterMarketingInApp from '@components/marketing-in-app/FooterMarketingIn
 import SliderHome from '@components/marketing-in-app/SliderHome'
 import clsx from 'clsx'
 import { ValueSidebar } from '@lms/core'
-import {SappLoading } from '@lms/ui'
+import SappLoading from '@components/common/SappLoading'
 
 type LayoutTeacherProps = {
   title: string

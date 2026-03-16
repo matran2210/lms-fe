@@ -1,4 +1,4 @@
-import { fetcher } from '@services/requestV2'
+import { fetcher } from '@services/request'
 
 export class EventTestAPI {
   static get(params: Object): Promise<any> {

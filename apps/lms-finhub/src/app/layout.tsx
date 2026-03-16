@@ -12,7 +12,7 @@ import '@xyflow/react/dist/style.css'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import 'aos/dist/aos.css'
-import { Providers } from './provider'
+import { ProvidersWrapper } from './provider'
 import Script from 'next/script'
 import { Roboto } from 'next/font/google'
 import type { Metadata } from 'next'
@@ -97,7 +97,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <Script
           src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
         <link
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
@@ -105,7 +105,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
       <body className={roboto.className}>
-        <Providers>{children}</Providers>
+        <ProvidersWrapper>{children}</ProvidersWrapper>
       </body>
     </html>
   )

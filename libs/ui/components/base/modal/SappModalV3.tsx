@@ -23,7 +23,7 @@ interface IProps {
   disabled?: boolean;
   onOk: () => void;
   handleCancel?: () => void;
-  handleClose?: () => void;
+  handleClose: () => void;
   icon?: ReactNode;
   header?: ReactNode;
   content?: string | undefined | ReactNode;
@@ -39,6 +39,7 @@ interface IProps {
   loadingBtnSubmit?: boolean;
   // Các props còn lại sẽ được gom vào otherProps
   [key: string]: any;
+  isValidated?: boolean;
 }
 
 const SappModalV3 = ({
@@ -73,6 +74,7 @@ const SappModalV3 = ({
   customFooter,
   gapContent = "gap-4 md:gap-8",
   loadingBtnSubmit,
+  isValidated = false,
   ...otherProps
 }: IProps) => {
   const [closing, setClosing] = useState(false);
@@ -91,7 +93,7 @@ const SappModalV3 = ({
 
     setTimeout(() => {
       callback?.();
-      handleClose?.();
+      handleClose();
     }, EXIT_DURATION);
   };
 
@@ -153,7 +155,7 @@ const SappModalV3 = ({
               size: buttonSize,
               loading: loadingBtnSubmit ?? externalLoading ?? loading,
               disabled,
-              onClick: () => requestClose(onOk),
+              onClick: () => (isValidated ? onOk() : requestClose(onOk)),
               full: fullWidthBtn,
               className: okButtonClass,
             }}

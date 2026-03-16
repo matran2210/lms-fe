@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RootState } from '../../store'
 
 type ConfirmDialogState = {
   open?: boolean
@@ -55,6 +54,11 @@ const confirmDialogSlice = createSlice({
 })
 
 export const confirmDialogActions = confirmDialogSlice.actions
-export const confirmDialogReducer = (state: RootState) =>
-  state.confirmDialogReducer
+export const confirmDialogReducer = <
+  T extends {
+    confirmDialogReducer: ConfirmDialogState;
+  },
+>(
+  state: T,
+) => state.confirmDialogReducer;
 export default confirmDialogSlice.reducer

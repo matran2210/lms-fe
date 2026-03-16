@@ -35,6 +35,8 @@ export type IPreviewProp = {
   isShowWarning?: boolean;
   explainClassname?: string;
   storageKey?: string;
+  readOnly?: boolean;
+  isAnimationCorrectAnswer?: boolean;
 };
 
 type IAnswers = {
@@ -59,6 +61,8 @@ const OneChoiceQuestion = ({
   isShowWarning = false,
   explainClassname,
   storageKey,
+  readOnly = false,
+  isAnimationCorrectAnswer = false,
 }: IPreviewProp) => {
   const { router, query } = useFeature();
   useEffect(() => {
@@ -186,6 +190,8 @@ const OneChoiceQuestion = ({
         }}
       >
         <HookFormRadioGroup
+          isAnimationCorrectAnswer={isAnimationCorrectAnswer}
+          readOnly={readOnly}
           options={convertAnswer || []}
           control={control}
           name={name || "answer"}
@@ -196,13 +202,13 @@ const OneChoiceQuestion = ({
         />
       </div>
       {solution && (
-        <>
+        <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
           <SappDivider />
           <div className={clsx("mt-6", explainClassname)}>
             <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>
-        </>
+        </div>
       )}
     </div>
   );

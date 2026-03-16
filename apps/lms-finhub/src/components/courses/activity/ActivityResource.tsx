@@ -1,6 +1,6 @@
 import ActivityResourceDesktop from '@components/courses/activity/ActivityResourceDesktop'
 import ActivityResourcesMobile from '@components/courses/activity/ActivityResourceMobile'
-import { IActivityResourceProps } from 'src/type/courses-3-level'
+import { IActivityResourceProps } from '@lms/core'
 
 export default function ActivityResources({
   title,
