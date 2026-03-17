@@ -1,8 +1,9 @@
 import { CloseIcon } from "@lms/assets";
 import clsx from "clsx";
+import { ResizeDirection } from "re-resizable";
 import React, { ReactNode, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { Rnd } from "react-rnd";
+import { DraggableData, Rnd, RndDragEvent } from "react-rnd";
 
 interface ModalResizeableProps {
   title?: string | ReactNode;
@@ -11,7 +12,7 @@ interface ModalResizeableProps {
   height?: number;
   minWidth?: number;
   minHeight?: number;
-  maxHeight?: number
+  maxHeight?: number;
   dragHandleClassName?: string;
   header?: ReactNode | ((actions: { requestClose: () => void }) => ReactNode); // requestClose dùng để close modal mà vẫn giữ được animation khi đóng modal
   handleCloseScratchPad?: (pad: any) => void;
@@ -59,11 +60,12 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   onResizeStopDone,
 }) => {
   const [size, setSize] = useState({ width, height });
-  const clamp = (value: number) => Math.abs(value);
+  const clamp = (value: number) => Math.abs(value); // Đảm bảo giá trị luôn dương để tránh lỗi khi tính toán vị trí modal
   const [closing, setClosing] = useState(false);
   const EXIT_DURATION = 300;
 
   const requestClose = () => {
+    // Khi người dùng yêu cầu đóng modal, chúng ta sẽ kích hoạt animation đóng modal trước khi thực sự gỡ bỏ modal khỏi DOM
     if (closing) return;
 
     setClosing(true);
@@ -81,8 +83,6 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   ) => {
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
-    const scrollX = window.scrollX;
-    const scrollY = window.scrollY;
     const shift = offset * 20; // mỗi modal lệch 20px
     const positions = {
       "top left": { x: clamp(shift), y: clamp(shift) },
@@ -140,64 +140,112 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   }, [width, height]);
 
   const renderContent = () => {
-    return (
-      <div
-        className={clsx(
-          "pointer-events-none fixed inset-0 z-[1000] overflow-hidden modal-overlay",
-          closing ? "modal-zoom-out" : "modal-zoom-in",
-        )}
-      >
-        <Rnd
-          size={{ width: size.width, height: size.height }}
-          position={modalPosition}
-          onDragStop={(e, d) => {
-            const maxX = clamp(window.innerWidth - size.width);
-            const maxY = clamp(window.innerHeight - size.height);
-            setModalPosition({
-              x: Math.min(Math.max(0, d.x), maxX),
-              y: Math.min(Math.max(0, d.y), maxY),
-            });
-          }}
-          onResizeStop={(e, direction, ref, delta, newPos) => {
-            const newWidth = parseInt(ref.style.width);
-            const newHeight = parseInt(ref.style.height);
-            const maxX = window.innerWidth - newWidth;
-            const maxY = window.innerHeight - newHeight;
+    // ===== handlers =====
+    const handleDragStop = (e: RndDragEvent, d: DraggableData) => {
+      const maxX = clamp(window.innerWidth - size.width);
+      const maxY = clamp(window.innerHeight - size.height);
 
-            setSize({ width: clamp(newWidth), height: clamp(newHeight) });
-            setModalPosition({
-              x: Math.min(Math.max(0, newPos.x), maxX),
-              y: Math.min(Math.max(0, newPos.y), maxY),
-            });
-            onResizeStopDone?.({
-              width: newWidth,
-              height: newHeight,
-            });
-          }}
+      setModalPosition({
+        x: Math.min(Math.max(0, d.x), maxX),
+        y: Math.min(Math.max(0, d.y), maxY),
+      });
+    };
+
+    const handleResizeStop = (
+      e: MouseEvent | TouchEvent,
+      direction: ResizeDirection,
+      ref: HTMLElement,
+      delta: {
+        height: number;
+        width: number;
+      },
+      newPos: { x: number; y: number },
+    ) => {
+      const newWidth = parseInt(ref.style.width);
+      const newHeight = parseInt(ref.style.height);
+
+      const maxX = window.innerWidth - newWidth;
+      const maxY = window.innerHeight - newHeight;
+
+      setSize({
+        width: clamp(newWidth),
+        height: clamp(newHeight),
+      });
+
+      setModalPosition({
+        x: Math.min(Math.max(0, newPos.x), maxX),
+        y: Math.min(Math.max(0, newPos.y), maxY),
+      });
+
+      onResizeStopDone?.({
+        width: newWidth,
+        height: newHeight,
+      });
+    };
+
+    // ===== computed values =====
+    const overlayClass = clsx(
+      "pointer-events-none fixed inset-0 z-[1000] overflow-hidden modal-overlay",
+      closing ? "modal-zoom-out" : "modal-zoom-in",
+    );
+
+    const dragHandleClass = draggableFull
+      ? undefined
+      : dragHandleClassName || "modal-dragger";
+
+    const rndClass = clsx(
+      "modalResizeable",
+      "overflow-hidden rounded-xl",
+      className,
+      rootClassName,
+    );
+
+    // ===== render header =====
+    const renderHeader = () => {
+      if (!header) {
+        return (
+          <div className="modalHeader">
+            <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between px-5">
+              <div className="truncate">{title}</div>
+            </div>
+            <button className="absolute right-3 top-2" onClick={requestClose}>
+              <CloseIcon />
+            </button>
+          </div>
+        );
+      }
+
+      return typeof header === "function" ? header({ requestClose }) : header;
+    };
+
+    // ===== render content =====
+    const renderChildren = () => {
+      return typeof children === "function"
+        ? children({ requestClose })
+        : children;
+    };
+    const styleRnd: React.CSSProperties = {
+      background: "white",
+      boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+      border: "1px solid #DCDDDD",
+      position: "fixed",
+      pointerEvents: "auto",
+    };
+    // ===== JSX (clean) =====
+    return (
+      <div className={overlayClass}>
+        <Rnd
+          size={size}
+          position={modalPosition}
+          onDragStop={handleDragStop}
+          onResizeStop={handleResizeStop}
           minWidth={minWidth}
           minHeight={minHeight}
           maxHeight={maxHeight}
           bounds="window"
-          style={{
-            background: "white",
-            boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-            border: "1px solid #DCDDDD",
-            position: "fixed",
-            pointerEvents: "auto",
-          }}
-          dragHandleClassName={
-            draggableFull
-              ? undefined
-              : dragHandleClassName
-                ? dragHandleClassName
-                : "modal-dragger"
-          }
-          className={clsx(
-            "modalResizeable",
-            "overflow-hidden rounded-xl",
-            className,
-            rootClassName,
-          )}
+          dragHandleClassName={dragHandleClass}
+          className={rndClass}
+          style={styleRnd}
           onMouseDown={onClick}
           onTouchStart={onClick}
         >
@@ -207,35 +255,17 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
               bodyClassName,
             )}
           >
-            {header ? (
-              typeof header === "function" ? (
-                header({ requestClose })
-              ) : (
-                header
-              )
-            ) : (
-              <div className={"modalHeader"}>
-                <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between px-5">
-                  <div className="truncate">{title}</div>
-                </div>
-                <button
-                  className="absolute right-3 top-2"
-                  onClick={requestClose}
-                >
-                  <CloseIcon />
-                </button>
-              </div>
-            )}
+            {renderHeader()}
+
             <div className={clsx("modalContent", contentClassName)}>
-              {typeof children === "function"
-                ? children({ requestClose })
-                : children}
+              {renderChildren()}
             </div>
           </div>
         </Rnd>
       </div>
     );
   };
+
   return isInBody
     ? createPortal(renderContent(), document.body)
     : renderContent();

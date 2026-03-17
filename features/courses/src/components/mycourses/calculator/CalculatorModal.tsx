@@ -56,12 +56,11 @@ const CalculatorModal = ({
                   <CloseIcon />
                 </button>
               </div>
-              <div className="overflow-x-auto hide-scrollbar flex-1">
+
               <Calculator
                 isMobileCalc={isMobileCalc}
                 isShortScreen={isShortScreen}
               />
-            </div>
             </div>
           </div>
         )}
