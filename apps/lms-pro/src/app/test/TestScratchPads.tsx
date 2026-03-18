@@ -81,7 +81,7 @@ const TestScratchPads = ({
               </div>
               <button
                 className="text-icon"
-                onClick={() => {
+                onClick={(e) => {
                   e.stopPropagation()
                   requestClose()
                   setTimeout(() => handleCloseScratchPad(e), 300)
