@@ -1,17 +1,20 @@
 'use client'
 import {
   ArrowActionSearchIcon,
-  CloseIconV2,
+  CloseIcon,
   HamburgerMenuLargeIcon,
 } from '@lms/assets'
 import { AppType, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '@lms/core'
 import { SearchForm } from '@lms/ui'
 import { buildQueryString } from '@lms/utils'
 import clsx from 'clsx'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import {
+  useParams,
+  useRouter,
+  useSearchParams
+} from 'next/navigation'
 import React, { useEffect, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { PageLink } from 'src/constants/routers'
 
 interface IProps {
   handleOpenSidebar: () => void
@@ -109,7 +112,10 @@ const SearchClassResource = ({
                 'inline-flex cursor-pointer flex-col items-center justify-center gap-2.5 rounded-lg bg-gray-200',
                 item.className,
               )}
-              onMouseDown={item.action}
+              onClick={(e) => {
+                e.preventDefault()
+                item.action?.(e)
+              }}
             >
               <div className="justify-start self-stretch text-center text-base font-normal leading-normal text-gray-600">
                 {item.icon}
@@ -135,7 +141,7 @@ const SearchClassResource = ({
                   },
                 },
                 {
-                  icon: <CloseIconV2 />,
+                  icon: <CloseIcon />,
                   className: 'p-1',
                   action: () => {
                     handleClearSearch()

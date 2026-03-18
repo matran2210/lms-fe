@@ -1,15 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { createWrapper } from 'next-redux-wrapper'
-import loginReducer from './slice/Login/Login'
-import userReducer from './slice/User/User'
-import confirmDialogReducer from './slice/ConfirmDialog/ConfirmDialogSlice'
+import { globalReducer } from '@lms/contexts'
 
 export const store = configureStore({
-  reducer: {
-    loginReducer,
-    userReducer,
-    confirmDialogReducer,
-  },
+  reducer: globalReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,

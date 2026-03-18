@@ -12,7 +12,7 @@ import {
 } from '@lms/core'
 import { useSappPaging, useUserRole } from '@lms/hooks'
 import {
-  ActionCellV2,
+  ActionCellWithPopover,
   EditorReader,
   FileViewer,
   LayoutFilter,
@@ -25,17 +25,17 @@ import {
   SAPPVideo,
   SheetViewer,
   TextPreview,
-  Tooltip,
+  Tooltip
 } from '@lms/ui'
 import { formatDate } from '@lms/utils'
+import { handleDocUploadFromBlob } from '@utils/helpers/editor-helper'
 import clsx from 'clsx'
+import CryptoJS from 'crypto-js'
 import { useParams } from 'next/navigation'
 import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ClassAPI } from 'src/api/class'
 import { UploadAPI } from 'src/api/upload'
-import CryptoJS from 'crypto-js'
-import { handleDocUploadFromBlob } from '@utils/helpers/editor-helper'
 
 export default function ClassResourceTeacher() {
   const { videoUrl } = useFeature()
@@ -235,7 +235,7 @@ export default function ClassResourceTeacher() {
               'pointer-events-none opacity-40': !allowDownload,
             })}
           >
-            <ActionCellV2
+            <ActionCellWithPopover
               className=""
               listAction={[
                 {

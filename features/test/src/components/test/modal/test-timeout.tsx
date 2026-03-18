@@ -1,7 +1,6 @@
-import React from "react";
-import { SappModalV3 } from "@lms/ui";
-import { TimeOutIcon, RemainingTimeIcon } from "@lms/assets";
+import { RemainingTimeIcon, TimeOutIcon } from "@lms/assets";
 import { TEST_TYPE } from "@lms/core";
+import { SappModalV3 } from "@lms/ui";
 import clsx from "clsx";
 
 interface IProps {

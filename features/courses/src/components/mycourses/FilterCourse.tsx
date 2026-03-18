@@ -1,16 +1,13 @@
-import { SAPPSelectV2 } from "@lms/ui";
-import { useForm, useWatch } from "react-hook-form";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { DefaultOptionType } from "antd/es/select";
-import { useTailwindBreakpoint } from "@lms/hooks";
-import { CheckIconV2, FilterCourseIcon } from "@lms/assets";
-import { SappDrawerV3 } from "@lms/ui";
-import { Button, Divider } from "antd";
-import clsx from "clsx";
-import { ButtonPrimary } from "@lms/ui";
+import { CheckedIcon, FilterCourseIcon } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
+import { useTailwindBreakpoint } from "@lms/hooks";
+import { SappDrawerV3, SAPPSelectTooltip } from "@lms/ui";
 import { buildQueryString } from "@lms/utils";
+import { Divider } from "antd";
+import { DefaultOptionType } from "antd/es/select";
+import clsx from "clsx";
+import { useEffect, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 
 interface IFilters {
   [name: string]: React.Key | null | undefined;
@@ -96,7 +93,7 @@ const FilterCourse = ({
           </div>
           <div className="flex gap-2">
             {listFilter?.map((item, index) => (
-              <SAPPSelectV2
+              <SAPPSelectTooltip
                 key={index}
                 control={control}
                 name={item.name}
@@ -154,7 +151,7 @@ const FilterCourse = ({
                             {el.label}
                           </div>
                           <div>
-                            {(isSelected || defaultSelected) && <CheckIconV2 />}
+                            {(isSelected || defaultSelected) && <CheckedIcon />}
                           </div>
                         </div>
                       );

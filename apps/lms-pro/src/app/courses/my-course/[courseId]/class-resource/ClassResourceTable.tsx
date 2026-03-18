@@ -1,5 +1,5 @@
 'use client'
-import { LoadingIcon } from '@assets/icons'
+import { LoadingIcon } from '@lms/assets'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { CloseIcon, DownloadIcon } from '@lms/assets'
 import { useFeature } from '@lms/contexts'
@@ -10,26 +10,24 @@ import {
 } from '@lms/core'
 import { useUserRole } from '@lms/hooks'
 import {
-  ActionCellV2,
+  ActionCellWithPopover,
   EditorReader,
   FileViewer,
-  SheetViewer,
   ModalResizeable,
-  PaginationSappV2,
-  SappModalImageV2,
+  PaginationSapp,
+  PdfViewer,
+  Popover,
+  SAPPAudio,
+  SappModalImageOriginalRatio,
   SappTable,
   SAPPVideo,
+  SheetViewer,
   TextPreview,
-  Tooltip,
-  PdfViewer,
-  SAPPAudio,
-  Popover,
+  Tooltip
 } from '@lms/ui'
 import { buildQueryString } from '@lms/utils'
-import request from '@services/requestV2'
 import { handleDocUploadFromBlob } from '@utils/helpers'
 import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
-import { AxiosResponse } from 'axios'
 import clsx from 'clsx'
 import CryptoJS from 'crypto-js'
 import {
@@ -41,7 +39,6 @@ import {
 import { Dispatch, SetStateAction, useRef, useState } from 'react'
 import { ClassAPI } from 'src/api/class'
 import { UploadAPI } from 'src/api/upload'
-import { getBaseUrl } from 'src/redux/services/httpService'
 
 const ClassResourceTable = ({
   data,
@@ -221,7 +218,7 @@ const ClassResourceTable = ({
               'pointer-events-none opacity-40': !allowDownload,
             })}
           >
-            <ActionCellV2
+            <ActionCellWithPopover
               className=""
               listAction={[
                 {
@@ -367,10 +364,10 @@ const ClassResourceTable = ({
         loading={isLoading}
         rowKey="id"
         pagination={pagination}
-        className="style-table-v2 rounded-xl bg-white"
+        className="style-table rounded-xl bg-white"
         isShowPagination={false}
       />
-      <PaginationSappV2
+      <PaginationSapp
         currentPage={pagination?.current || DEFAULT_PAGE_NUMBER}
         pageSize={pagination?.pageSize || 10}
         totalItems={pagination?.total || 0}
@@ -460,7 +457,7 @@ const ClassResourceTable = ({
       {openPreview &&
         previewResource &&
         previewResource.suffix_type === 'IMAGE' && (
-          <SappModalImageV2
+          <SappModalImageOriginalRatio
             src={previewResource.url}
             setSrc={() => setOpenPreview(false)}
           />

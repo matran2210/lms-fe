@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import FullScreenMobile from '../Modal/FullScreenMobile'
 import ChangePassword from '../ChangePassword'
-import { PencilFillV2Icon } from '@lms/assets'
+import { PencilFillIcon } from '@lms/assets'
 import TeacherProfileCard from '@components/common/TeacherProfileCard'
 
 interface IProps {
@@ -29,7 +29,7 @@ const MyPasword = ({ setIsChangePassword }: IProps) => {
             className="flex items-center justify-end gap-2"
             onClick={handleClickEdit}
           >
-            <PencilFillV2Icon className="h-6 w-6 text-gray-400" />
+            <PencilFillIcon className="h-6 w-6 text-gray-400" />
             <div className="text-sm font-medium text-gray-800">
               Change Password
             </div>

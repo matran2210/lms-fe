@@ -14,8 +14,6 @@ import {
   loadMoreQuestion,
   saveFileEssayCaseStudy,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
   useFeature,
 } from '@lms/contexts'
 import {
@@ -44,27 +42,28 @@ import {
   HookFormTextArea,
   MatchQuizComponent,
   ModalResizeable,
+  ModalUploadFile,
   MovableWindow,
   MultiChoiceQuestion,
   NewDragNDropQuestion,
   OneChoiceQuestion,
-  SappLoadingGlobal,
   SelectWord,
   SlotValue,
 } from '@lms/ui'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight } from '@lms/utils'
 import { download } from '@utils/index'
 import { Popover } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import ConFirmSubmit from '../../short-course/test/conFirmSubmit'
 import LimitQuizModal from '../../short-course/test/limitQuizModal'
 import { TestServiceAPI } from 'src/api/test-api'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
   const { width: widthFileViewer, height: heightFileViewer } =
@@ -289,7 +288,8 @@ const CaseStudyDetail = () => {
   const [showWarning, setShowWarning] = useState(true)
   const MatchQuizRef = useRef(null) as any
   const params = useParams()
-  const { query } = useFeature()
+  const searchParams = useSearchParams()
+  const query = Object.fromEntries(searchParams.entries())
 
   const handleResetEssay = async (
     index: number,

@@ -10,7 +10,6 @@ import {
   PinnedNotifyProvider,
   PreviousSectionRouteProvider,
   SocketContext,
-  store,
 } from '@lms/contexts'
 import {
   ANIMATION,
@@ -29,7 +28,7 @@ import {
   SappConfirmDialogContainer,
 } from '@lms/ui'
 import { initializeGA, pageview } from '@lms/utils'
-import { fetcher } from '@services/requestV2'
+import { fetcher } from '@services/request'
 import { App as AntdApp, ConfigProvider } from 'antd'
 import Aos from 'aos'
 import dayjs from 'dayjs'
@@ -51,6 +50,7 @@ import { ActivityAPI } from 'src/api/activity'
 import CalendarApi from 'src/api/calendar'
 import { uploadImageToLinkedIn } from 'src/api/certificate'
 import { ClassAPI } from 'src/api/class'
+import { CoursesActivationAPI } from 'src/api/course-activation'
 import { CoursesAPI } from 'src/api/courses'
 import { DashboardAPI } from 'src/api/dashboard'
 import { EntranceTestAPI } from 'src/api/entrance-test'
@@ -58,6 +58,7 @@ import { EventTestAPI } from 'src/api/event-test'
 import { NotificationAPI } from 'src/api/notification'
 import MyProfileAPI, { AuthAPI } from 'src/api/profile'
 import { QuestionAPI } from 'src/api/question'
+import { StorylineAPI } from 'src/api/storyline'
 import { TestServiceAPI } from 'src/api/test-api'
 import { UploadAPI } from 'src/api/upload'
 import {
@@ -70,7 +71,8 @@ import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import UserApi from 'src/redux/services/User/user'
 import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
-
+import { store } from 'src/redux/store'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 dayjs.extend(utc)
 dayjs.extend(weekday)
 const showSupportWidget = [
@@ -82,12 +84,12 @@ const showSupportWidget = [
 ]
 
 const activityPath = ['/courses/[id]/activity/[activityId]']
-export function Providers({ children }: { children: ReactNode }) {
+function Providers({ children }: { children: ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
   const params = useParams()
   const query = useSearchParams()
-
+  const dispatch = useAppDispatch()
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -289,47 +291,51 @@ export function Providers({ children }: { children: ReactNode }) {
   }, [pathname, searchParams])
 
   return (
-    <AntConfigProvider>
-      <Provider store={store}>
-        <FeatureProvider
-          value={{
-            courseApi: CoursesAPI,
-            questionApi: QuestionAPI,
-            uploadApi: UploadAPI,
-            userApi: UserApi,
-            notificationApi: NotificationAPI,
-            authApi: AuthAPI,
-            classApi: ClassAPI,
-            activityApi: ActivityAPI,
-            courseActivityApi: CourseActivityApi,
-            entranceTestApi: EntranceTestAPI,
-            eventTestApi: EventTestAPI,
-            calendarApi: CalendarApi,
-            myProfileApi: MyProfileAPI,
-            submitQuizTest: TestServiceAPI.submitQuizTest,
-            dashboardApi: DashboardAPI,
-            authManager: new AuthenticationManager(),
-            pageLink: PageLink,
-            menuItems: MENU_ITEMS,
-            menuItemsEvent: MENU_ITEMS_EVENT,
-            menuBottom: MENU_BOTTOM,
-            router: router,
-            pathname,
-            params,
-            query: Object.fromEntries(query.entries()),
-            fetcher: fetcher,
-            videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
-            testServiceApi: TestServiceAPI,
-            certificateApi: {
-              uploadImageToLinkedIn,
-            },
-            uploadImageToLinkedIn: uploadImageToLinkedIn,
+      <AntConfigProvider>
+        {/* <Provider store={store}> */}
+        <PinnedNotifyProvider
+          router={router}
+          api={{
+            getPinnedNotifications: UserApi.getPinnedNotifications,
           }}
         >
-          <PinnedNotifyProvider
-            router={router}
-            api={{
-              getPinnedNotifications: UserApi.getPinnedNotifications,
+          <FeatureProvider
+            value={{
+              courseApi: CoursesAPI,
+              questionApi: QuestionAPI,
+              uploadApi: UploadAPI,
+              userApi: UserApi,
+              notificationApi: NotificationAPI,
+              authApi: AuthAPI,
+              classApi: ClassAPI,
+              activityApi: ActivityAPI,
+              courseActivityApi: CourseActivityApi,
+              entranceTestApi: EntranceTestAPI,
+              eventTestApi: EventTestAPI,
+              calendarApi: CalendarApi,
+              myProfileApi: MyProfileAPI,
+              submitQuizTest: TestServiceAPI.submitQuizTest,
+              dashboardApi: DashboardAPI,
+              storylineApi: StorylineAPI,
+            authManager: new AuthenticationManager(),
+              pageLink: PageLink,
+              menuItems: MENU_ITEMS,
+              menuItemsEvent: MENU_ITEMS_EVENT,
+              menuBottom: MENU_BOTTOM,
+              router: router,
+              pathname,
+              params,
+              query: Object.fromEntries(query.entries()),
+              fetcher: fetcher,
+              videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
+              testServiceApi: TestServiceAPI,
+              certificateApi: {
+                uploadImageToLinkedIn,
+              },
+              uploadImageToLinkedIn: uploadImageToLinkedIn,
+            courseActivationAPI: CoursesActivationAPI,
+              dispatch: dispatch,
+              useAppSelector: useAppSelector,
             }}
           >
             <CourseProvider
@@ -369,9 +375,17 @@ export function Providers({ children }: { children: ReactNode }) {
                 </QueryClientProvider>
               </CourseNoteProvider>
             </CourseProvider>
-          </PinnedNotifyProvider>
-        </FeatureProvider>
-      </Provider>
-    </AntConfigProvider>
+          </FeatureProvider>
+        </PinnedNotifyProvider>
+        {/* </Provider> */}
+      </AntConfigProvider>
+  )
+}
+
+export function ProvidersWrapper({ children }: { children: ReactNode }) {
+  return (
+    <Provider store={store}>
+      <Providers>{children}</Providers>
+    </Provider>
   )
 }

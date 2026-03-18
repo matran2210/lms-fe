@@ -1,6 +1,6 @@
 import React from 'react'
 import { Control, Controller } from 'react-hook-form'
-import { ErrorMessage, SappTextFieldV2, GuidelineFieldV2 } from '@lms/ui'
+import { ErrorMessage, SappTextFieldCustom, GuidelineField } from '@lms/ui'
 interface IProps {
   name: string
   control: Control<any>
@@ -51,7 +51,7 @@ const SappTeacherTextField = ({
           <div className="h-full w-full">
             {!skeleton ? (
               <div>
-                <SappTextFieldV2
+                <SappTextFieldCustom
                   type={type}
                   value={field.value ?? ''}
                   defaultValue={field.value ? undefined : defaultValue}
@@ -74,7 +74,7 @@ const SappTeacherTextField = ({
                   name={name}
                   control={control}
                 />
-                <GuidelineFieldV2 guideline={guideline} />
+                <GuidelineField guideline={guideline} />
                 <>
                   {error?.message && (
                     <div>

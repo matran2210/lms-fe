@@ -1,16 +1,10 @@
+import { IMetaData } from '@lms/core'
 import { UploadFile } from 'antd'
 
 export interface ExaminationsResponse {
-  metadata: Metadata
+  metadata: IMetaData
   data: Exam[]
   current_exam_name: string
-}
-
-export interface Metadata {
-  total_pages: number
-  total_records: number
-  page_index: number
-  page_size: number
 }
 
 export interface Exam {

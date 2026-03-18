@@ -1,14 +1,13 @@
-import { useLayoutEffect, useMemo, useState } from 'react'
-import PopUpCertificate from './popupCertificate'
-import { Divider, Table, TableProps } from 'antd'
-import { CertificateImg, Icon, LoadingButtonAnimation } from '@lms/assets'
+import { CertificateImg, HaveNoItemIcon, Icon, LoadingButtonAnimation } from '@lms/assets'
+import { IUser, useFeature, userReducer } from '@lms/contexts'
 import { useDownloadImage } from '@lms/hooks'
-import { sappFormatDate } from '@lms/utils'
-import clsx from 'clsx'
-import { HaveNoItemIcon } from '@lms/assets'
-import { AuthAPI } from 'src/api/profile'
-import { useAppSelector, userReducer } from '@lms/contexts'
 import { ImageRenderFromHtml } from '@lms/ui'
+import { sappFormatDate } from '@lms/utils'
+import { Divider, Table, TableProps } from 'antd'
+import clsx from 'clsx'
+import { useLayoutEffect, useMemo, useState } from 'react'
+import { AuthAPI } from 'src/api/profile'
+import PopUpCertificate from './popupCertificate'
 
 interface ICertificate {
   certificate: {
@@ -64,7 +63,8 @@ const CertificatePreview = ({
 }
 
 const Certificate = () => {
-  const { detail } = useAppSelector(userReducer).user
+  const {useAppSelector} = useFeature()
+  const { detail } = useAppSelector?.(userReducer).user as IUser
   const { downloadCertificate } = useDownloadImage()
   const [certificateData, setCertificateData] = useState<
     ICertificate[] | undefined
@@ -251,7 +251,8 @@ const CertificateItem = ({
   listLoadingId: string[]
   setListLoadingId: React.Dispatch<React.SetStateAction<string[]>>
 }) => {
-  const { detail } = useAppSelector(userReducer).user
+  const {useAppSelector} = useFeature()
+  const { detail } = useAppSelector?.(userReducer).user as IUser
   const { downloadCertificate } = useDownloadImage()
   const handleDownload = async (certificate: ICertificate) => {
     if (listLoadingId.includes(certificate.id)) return

@@ -7,6 +7,7 @@ export const CourseKey = {
   SubsectionList: "courseSubsectionList",
   UnitList: "courseUnitList",
   ActivityList: "courseActivityList",
+  SubjetcList: "courseSubjectList",
 };
 
 export const ClassKey = {

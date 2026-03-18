@@ -16,8 +16,6 @@ import {
   CourseProvider,
   disableUnsavedChange,
   loginSlice,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
 } from '@lms/contexts'
 import {
@@ -30,28 +28,30 @@ import {
   RESPONSE_OPTION,
   TEST_TYPE,
 } from '@lms/core'
-import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
 import {
+  DragNDropPreivew,
   EditorReader,
+  EssayQuestionPreview,
   FullScreenLayout,
   HookFormCheckBoxGroup,
+  MatchingQuestion,
+  ModalUploadFile,
+  MultiChoiceQuestion,
+  NewFillText,
+  OneChoiceQuestion,
+  SelectWord,
   useClickOutside,
 } from '@lms/ui'
-import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
-import DragNDropPreivew from '@lms/ui/components/questionType/DragNDrop'
-import MatchingQuestion from '@lms/ui/components/questionType/MatchingQuestion'
-import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
-import NewFiltext from '@lms/ui/components/questionType/NewFillText'
-import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
-import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
-import { checkSheetAnswered, runHighlight } from '@lms/utils'
+import {
+  checkSheetAnswered,
+  checkTypeAndRenderTitle,
+  runHighlight,
+} from '@lms/utils'
 import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import LimitQuizModal from 'src/app/test/limitQuizModal'
-
 import {
   removeHighlights,
   serializeHighlights,
@@ -81,9 +81,11 @@ import {
   QuitTestModal,
   TabSlide,
   TestTimeOutModal,
+  UnSubmitAnswerModal,
 } from '@lms/feature-test'
-import { ButtonPrimaryV2, ButtonTextV2, SappLoading } from '@lms/ui'
+import { ButtonPrimary, ButtonText } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
+
 import { EventTestAPI } from 'src/api/event-test'
 import { TestServiceAPI } from 'src/api/test-api'
 import dayjs from 'dayjs'
@@ -92,11 +94,9 @@ import SuccessSubmittedConstructorModal from 'src/app/test/SuccessSubmittedConst
 import TestScratchPads from 'src/app/test/TestScratchPads'
 import useGetQuestionTabs from 'src/app/test/custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from 'src/app/test/custom-hook/useGetQuizDetail'
-import {
-  checkTypeAndRenderTitle,
-  isValuesEqual,
-  isWorkbookEmpty,
-} from 'src/utils/helpers/quiz-test/helper'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import SappLoading from '@components/common/SappLoading'
+import { isValuesEqual, isWorkbookEmpty } from '@utils/helpers'
 declare global {
   interface Window {
     userAgreed: any
@@ -189,7 +189,7 @@ const TestDetail = () => {
         )
       case QUESTION_TYPES.FILL_WORD:
         return (
-          <NewFiltext
+          <NewFillText
             control={control}
             name={`${currentTabID}_fillword`}
             data={data}
@@ -486,7 +486,7 @@ const TestDetail = () => {
   const [currentMousePos, setCurrentMousePos] = useState(0)
   const [leftWidth, setLeftWidth] = useState(0)
   const [currentLeftWidth, setCurrentLeftWidth] = useState(0)
-  const { unsavedChange } = useAppSelector((state) => state.loginReducer)
+  const { unsavedChange } = useAppSelector((state) => state.loginReducer) || {}
   const rightSideRef = useRef<any>(null)
   const [mousePosition, setMousePosition] = useState({ x: null, y: null })
   const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
@@ -2718,7 +2718,7 @@ const TestDetail = () => {
                         currentTabContent.qType === QUESTION_TYPES.ESSAY &&
                         isShowTemplate && (
                           <div className="mt-8 flex items-center justify-end gap-3">
-                            <ButtonTextV2
+                            <ButtonText
                               disabled={currentTabContent.is_viewed_answer}
                               title="Reset to Answer Template"
                               onClick={onOpenResetToTemplateModal}
@@ -2812,7 +2812,7 @@ const TestDetail = () => {
                       currentTabContent.qType === QUESTION_TYPES.ESSAY &&
                       isShowTemplate && (
                         <div className="mt-8 flex justify-end">
-                          <ButtonPrimaryV2
+                          <ButtonPrimary
                             disabled={currentTabContent.is_viewed_answer}
                             title="Reset to Answer Template"
                             onClick={onOpenResetToTemplateModal}

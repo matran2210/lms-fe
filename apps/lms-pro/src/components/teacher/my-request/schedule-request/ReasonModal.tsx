@@ -8,7 +8,10 @@ import {
   IOpenReasonModal,
   UpdateStatusParams,
 } from 'src/components/teacher/my-request/schedule-request/TableContainer'
-
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { VALIDATE_REQUIRED } from '@lms/utils'
+import { isEmpty } from 'lodash'
 interface IProps {
   open: IOpenReasonModal
   setOpen: React.Dispatch<React.SetStateAction<IOpenReasonModal>>
@@ -26,7 +29,15 @@ const ReasonModal = ({
   setOpenSuccessModal,
   handleUpdateStatus,
 }: IProps) => {
-  const { control, getValues, reset } = useForm()
+  const schema = z.object({
+    request_reject_reason: z.string({ required_error: VALIDATE_REQUIRED }),
+  })
+  const { control, reset, handleSubmit } = useForm<{
+    request_reject_reason: string
+  }>({
+    resolver: zodResolver(schema),
+  })
+
   /**
    * Hàm xử lý khi người dùng hủy yêu cầu cập nhật trạng thái.
    * Reset giá trị của form và đóng modal hiện tại.
@@ -54,7 +65,7 @@ const ReasonModal = ({
    * Sau đó, sẽ gọi hàm handleUpdateStatus để cập nhật trạng thái lên server.
    * Nếu cập nhật thành công, sẽ gọi callback để đóng modal hiện tại và mở modal thành công.
    */
-  const handleSubmit = () => {
+  const onSubmit = (data: { request_reject_reason: string }) => {
     /**
      * Kiểm tra xem requestId có được định nghĩa hay không.
      * Nếu không, sẽ trả về ngay lập tức.
@@ -75,10 +86,13 @@ const ReasonModal = ({
      * @param {string} options.reason - Lý do cập nhật trạng thái.
      * @param {function} options.callback - Hàm callback sẽ được gọi sau khi cập nhật trạng thái thành công.
      */
+
+    if (isEmpty(data.request_reject_reason)) return
+    
     handleUpdateStatus({
       requestId: open.requestId,
       type: open.type,
-      reason: getValues('request_reject_reason'),
+      reason: data.request_reject_reason,
       callback: () => {
         /**
          * Đóng modal hiện tại.
@@ -96,7 +110,7 @@ const ReasonModal = ({
       handleClose={handleCancel}
       open={open.open}
       handleCancel={handleCancel}
-      onOk={handleSubmit}
+      onOk={handleSubmit(onSubmit)}
       icon={<AlertIcon />}
       header={'Please enter a reason for denying this request!'}
       showCancelButton
@@ -109,6 +123,7 @@ const ReasonModal = ({
       color="danger"
       headerClassName="!text-sm !font-normal"
       classNameModal={`sapp-custom-modal success-modal`}
+      isValidated
     >
       <SappTeacherTextField
         label="Reason"

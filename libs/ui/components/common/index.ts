@@ -4,7 +4,6 @@ export { default as ResponsiveTextTruncate } from "./ResponsiveTextTruncate";
 export { default as ErrorMessage } from "./ErrorMessage";
 export { default as FadeInOut } from "./FadeInOut";
 export { default as GuidelineField } from "./GuidelineField";
-export { default as GuidelineFieldV2 } from "./GuidelineFieldV2";
 export { default as NoCoursesAvailable } from "./NoCoursesAvailable";
 export { default as NoData } from "./NoData";
 export { default as SAPPBorder } from "./SAPPBorder";

@@ -256,7 +256,6 @@ const CourseDetail = () => {
             isShowToggle
             isCoursePage
             redirectLink={PageLink.COURSES}
-            appType={AppType.LMS_PRO}
           />
           <SappBreadCrumbs
             isTeacher={false}

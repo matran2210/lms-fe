@@ -2,6 +2,7 @@ import React from "react";
 import BaseButton from "./BaseButton";
 import { IButtonBaseProps } from "@lms/core";
 import clsx from "clsx";
+import { LoadingButtonAnimation } from "@lms/assets";
 
 const ButtonSecondary = ({
   title,
@@ -14,6 +15,7 @@ const ButtonSecondary = ({
   endIcon,
   full = false,
   children,
+  loading,
   ...props
 }: IButtonBaseProps) => {
   const textSizeClass =
@@ -61,9 +63,15 @@ const ButtonSecondary = ({
       {...props}
     >
       <div className="flex items-center gap-2.5">
-        {startIcon && <div className="w-full">{startIcon}</div>}
-        <div className="w-full">{title || children}</div>
-        {endIcon && <div className="w-full">{endIcon}</div>}
+        {loading ? (
+          <LoadingButtonAnimation />
+        ) : (
+          <>
+            {startIcon && <div className="w-full">{startIcon}</div>}
+            <div className="w-full">{title || children}</div>
+            {endIcon && <div className="w-full">{endIcon}</div>}
+          </>
+        )}
       </div>
     </BaseButton>
   );

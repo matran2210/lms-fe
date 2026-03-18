@@ -2,7 +2,7 @@
 import { Drawer, DrawerProps } from "antd";
 import React, { ReactNode, useEffect } from "react";
 import clsx from "clsx";
-import { CollapseArrowIcon, CloseIconV2 } from "@lms/assets";
+import { CollapseArrowIcon, CloseIcon } from "@lms/assets";
 import { ButtonPrimary, ButtonText } from "../button";
 
 interface IProps extends DrawerProps {
@@ -109,7 +109,7 @@ const SappDrawerV3: React.FC<IProps> = ({
                 className="cursor-pointer"
                 aria-label="Close"
               >
-                <CloseIconV2 />
+                <CloseIcon />
               </button>
             )}
           </div>

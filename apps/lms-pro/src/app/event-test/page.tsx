@@ -1,27 +1,18 @@
 'use client'
-import {
-  UserType,
-  getEventCount,
-  useAppDispatch,
-  useCourseContext,
-} from '@lms/contexts'
+import { UserType, getEventCount, useCourseContext } from '@lms/contexts'
 import { ANIMATION, AppType, LANG_SIGNIN } from '@lms/core'
 import { Heading } from '@lms/feature-courses'
 import { EventTestFilter, EventTestList } from '@lms/feature-test'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import {
-  CourseSkeleton,
-  Footer,
-  Layout,
-  SappLoadingGlobal,
-  SearchWithMenuToggle,
-} from '@lms/ui'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+
+import { CourseSkeleton, Footer, Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import withAuthorization from 'src/HOC/withAuthorization'
 import { EventTestAPI } from 'src/api/event-test'
 import { PageLink } from 'src/constants/routers'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { useAppDispatch } from 'src/redux/hook'
 
 const EventTest = () => {
   const searchParam = useSearchParams()
@@ -80,7 +71,6 @@ const EventTest = () => {
           isShowToggle
           className="my-4"
           redirectLink={PageLink.COURSES}
-          appType={AppType.LMS_PRO}
         />
         <div className="my-0">
           {isLoading ? (

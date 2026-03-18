@@ -1,6 +1,7 @@
-"use client"
+'use client'
+import SappLoading from '@components/common/SappLoading'
 import { GRADE_STATUS, ITabs, TEST_TYPE_LABELS } from '@lms/core'
-import { FullScreenLayout, SappBreadCrumbs, SappLoading } from '@lms/ui'
+import { FullScreenLayout, SappBreadCrumbs } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { CoursesAPI } from 'src/api/courses'
@@ -8,9 +9,9 @@ import TableQuestions from 'src/app/courses/quiz/your-answers-detail/TableQuesti
 
 const TestResultDetail = () => {
   const router = useRouter()
-    const searchParams = useSearchParams()
-    const params = useParams();
-    const {id} = params;
+  const searchParams = useSearchParams()
+  const params = useParams()
+  const { id } = params
   const useGetQuizAttempts = (queryKey: string, params: Object) => {
     return useGetDataQuery(
       queryKey,
@@ -31,7 +32,7 @@ const TestResultDetail = () => {
     quiz?.limit_count === questions?.quizAttempt?.number_of_attempts
   ) {
     // Nếu bài test đã quá số lần làm bài thì chỉ cho link đến trang kết quả, không cho làm lại
-      linkTest = `/courses/test/test-result/${id}`
+    linkTest = `/courses/test/test-result/${id}`
   }
 
   // Config Courses

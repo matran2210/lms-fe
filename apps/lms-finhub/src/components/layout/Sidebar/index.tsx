@@ -1,22 +1,19 @@
-import ExaminationInfo from '@components/mycourses/course-detail/ExaminationInfo'
 import { trackGAEvent } from '@lms/utils'
 import clsx from 'clsx'
 import { Dispatch, SetStateAction } from 'react'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
 
-import { Divider } from 'antd'
-import { useAppSelector } from '@lms/contexts'
-import { MENU_BOTTOM, MENU_ITEMS } from 'src/constants/menu-items'
 import { LearningResource } from '@lms/ui'
+import { Divider } from 'antd'
+import { MENU_BOTTOM, MENU_ITEMS } from 'src/constants/menu-items'
+import { useAppSelector } from 'src/redux/hook'
 type SidebarProps = {
   isOpened: boolean
   className: string
   toggleDrawer: () => void
   setOpenResource: Dispatch<SetStateAction<boolean>>
   openResource: boolean
-  openExaminationInfo: boolean
-  setOpenExaminationInfo: Dispatch<SetStateAction<boolean>>
 }
 
 export default function Sidebar({
@@ -25,8 +22,6 @@ export default function Sidebar({
   toggleDrawer,
   setOpenResource,
   openResource,
-  openExaminationInfo,
-  setOpenExaminationInfo,
 }: SidebarProps) {
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
@@ -85,7 +80,6 @@ export default function Sidebar({
             options={MENU_ITEMS}
             setOpenResource={setOpenResource}
             closeSideBar={closeSideBar}
-            setOpenExaminationInfo={setOpenExaminationInfo}
           />
         </div>
         <div
@@ -99,7 +93,6 @@ export default function Sidebar({
             options={MENU_BOTTOM}
             setOpenResource={setOpenResource}
             closeSideBar={closeSideBar}
-            setOpenExaminationInfo={setOpenExaminationInfo}
           />
         </div>
         {guideStatus && (guideStep === 2 || guideStep === 3) && (
@@ -121,13 +114,6 @@ export default function Sidebar({
         )}
       />
       <LearningResource open={openResource} setOpenResource={setOpenResource} />
-
-      {openExaminationInfo && (
-        <ExaminationInfo
-          open={openExaminationInfo}
-          setOpen={setOpenExaminationInfo}
-        />
-      )}
     </div>
   )
 }

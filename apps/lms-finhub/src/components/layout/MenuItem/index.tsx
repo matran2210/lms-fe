@@ -4,8 +4,6 @@ import {
   loadMoreNotification,
   openCalculator3Level,
   pushNotes3Level,
-  useAppDispatch,
-  useAppSelector,
   userReducer,
 } from '@lms/contexts'
 import { MenuItem as MenuItemType, TitleSidebar } from '@lms/core'
@@ -20,9 +18,8 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import SappNotificationComponent from '@sapp-fe/sapp-notification'
 import { PageLink } from 'src/constants/routes'
 import { v4 as uuidv4 } from 'uuid'
-import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
-import { BlankAvatarImage } from '@lms/assets'
+import { BlankAvatarImage, ExpandIcon } from '@lms/assets'
 import {
   useParams,
   usePathname,
@@ -30,19 +27,18 @@ import {
   useSearchParams,
 } from 'next/navigation'
 import { NotificationAPI } from 'src/api/notification'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 type MenuItemProps = {
   menuItem: MenuItemType
   setOpenResource?: Dispatch<SetStateAction<boolean>>
   closeSideBar: () => void
-  setOpenExaminationInfo?: Dispatch<SetStateAction<boolean>>
 }
 
 export default function MenuItem({
   menuItem: { name, icon: Icon, url, type, subItems },
   setOpenResource,
   closeSideBar,
-  setOpenExaminationInfo,
 }: MenuItemProps) {
   const {
     isViewDetail,
@@ -123,10 +119,6 @@ export default function MenuItem({
     router.push(link)
   }
 
-  const handleOpenExaminationInfoPage = () => {
-    setOpenExaminationInfo && setOpenExaminationInfo(true)
-  }
-
   const onClickMenuItem = () => {
     const hasCourseContext = params?.courseId || params?.id
 
@@ -158,9 +150,6 @@ export default function MenuItem({
           break
         case TitleSidebar.RESULTS:
           handleOpenResultsPage()
-          break
-        case TitleSidebar.EXAM_LIST:
-          handleOpenExaminationInfoPage()
           break
         case TitleSidebar.ACTIVITY:
           handleOpenCourseContentPage()
@@ -490,7 +479,6 @@ export default function MenuItem({
               options={subItems || []}
               setOpenResource={setOpenResource}
               closeSideBar={closeSideBar}
-              setOpenExaminationInfo={setOpenExaminationInfo}
             />
           </div>
         ) : null}

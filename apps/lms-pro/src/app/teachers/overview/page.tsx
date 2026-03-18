@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import Certificate from '@components/teacher/my-profile/Certificate'
 import ChangePassword from '@components/teacher/my-profile/ChangePassword'
 import DeviceList from '@components/teacher/my-profile/DeviceInformation/DeviceList'

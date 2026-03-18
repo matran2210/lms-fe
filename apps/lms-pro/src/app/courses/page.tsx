@@ -1,22 +1,15 @@
-"use client"
+'use client'
 import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
 import {
   active,
   clearGuideState,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
   UserType,
 } from '@lms/contexts'
 import { ANIMATION, AppType, defaultStatusCourse, ICoursesAPI } from '@lms/core'
 import { CoursesList, FilterCourse, Heading } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import {
-  Layout,
-  PopupWelcome,
-  SappLoadingGlobal,
-  SearchWithMenuToggle,
-} from '@lms/ui'
+import { Layout, PopupWelcome, SearchWithMenuToggle } from '@lms/ui'
 import Aos from 'aos'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
@@ -25,11 +18,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import {
-  TourGuideCoursesAnimation,
-  TourGuideCourseTabAnimation,
-  TourGuideFilterAnimation,
-} from '@lms/assets'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { CoursesAPI } from 'src/api/courses'
 
 const DEFAULT_PAGESIZE = 9
@@ -55,8 +45,8 @@ const MyCourse = () => {
   const [showSidebar, setShowSidebar] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
-      
-        const query = Object.fromEntries(searchParams.entries())
+
+  const query = Object.fromEntries(searchParams.entries())
   const userGuideLine = useAppSelector(
     (state) => state.userReducer.user.detail.settings?.course_guide,
   )
@@ -245,7 +235,6 @@ const MyCourse = () => {
           isShowUserGuide
           disabledSearch={guideIsActive}
           redirectLink={PageLink.COURSES}
-          appType={AppType.LMS_PRO}
         />
 
         <div

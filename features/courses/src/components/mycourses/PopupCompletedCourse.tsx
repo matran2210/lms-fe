@@ -1,19 +1,19 @@
 import { IRibbon } from '@lms/assets'
-import { hidePopup, useAppDispatch, useAppSelector } from '@lms/contexts'
+import { hidePopup, useFeature } from '@lms/contexts'
 import { EditorReader, SappModalV3 } from '@lms/ui'
 
 const PopupCert = () => {
-  const dispatch = useAppDispatch()
-  const selector = useAppSelector((state) => state.popupReducer)
+  const { dispatch, useAppSelector } = useFeature()
+  const selector = useAppSelector?.((state) => state.popupReducer)
 
   const onClickBackCourse = () => {
-    dispatch({ type: hidePopup })
+    dispatch?.({ type: hidePopup })
   }
 
   return (
     <SappModalV3
       title={undefined}
-      open={selector.is_open}
+      open={!!selector?.is_open}
       handleCancel={onClickBackCourse}
       onOk={onClickBackCourse}
       fullWidthBtn={true}

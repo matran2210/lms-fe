@@ -1,13 +1,13 @@
+
 "use client";
-import { ArrowActionSearchIcon, HamburgerMenuLargeIcon, CloseIconV2, TourGuideStartAnimation } from "@lms/assets";
-import { useAppSelector, useFeature } from "@lms/contexts";
+import { ArrowActionSearchIcon, HamburgerMenuLargeIcon, CloseIcon, TourGuideStartAnimation } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
 import { AppType, MY_COURSES } from "@lms/core";
 import { buildQueryString } from "@lms/utils";
 import clsx from "clsx";
- import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import SearchForm from "./SearchForm";
-
 interface IProps {
   handleOpenSidebar: () => void;
   disabledSearch?: boolean;
@@ -16,7 +16,6 @@ interface IProps {
   className?: string;
   isCoursePage?: boolean;
   redirectLink: string;
-  appType: AppType;
 }
 interface IListIcon {
   icon: React.ReactNode;
@@ -31,13 +30,11 @@ const SearchWithMenuToggle = ({
   className,
   isCoursePage = false,
   redirectLink,
-  appType,
 }: IProps) => {
-  const { pageLink, router, query } = useFeature();  
-  const {
-    status: guideStatus,
-    step: guideStep,
-  } = useAppSelector((state) => state.userGuideReducer);
+  const { pageLink, useAppSelector, router, query } = useFeature();
+  const { status: guideStatus, step: guideStep } = useAppSelector?.(
+    (state) => state.userGuideReducer,
+  ) || {};
   const methods = useForm<{ name: string }>({
     defaultValues: {
       name: "",
@@ -52,8 +49,7 @@ const SearchWithMenuToggle = ({
     type: query.type ?? "",
   });
 
-  const appCourseLink =
-    appType === AppType.LMS_PRO ? pageLink.COURSES : pageLink.SHORT_COURSE;
+  const appCourseLink = redirectLink;
   const handleSubmit = () => {
     // Redirect to the search results page with the query as a query parameter
     router.push(
@@ -120,7 +116,7 @@ const SearchWithMenuToggle = ({
                   },
                 },
                 {
-                  icon: <CloseIconV2 />,
+                  icon: <CloseIcon />,
                   className: "p-1",
                   action: () => {
                     methods.setValue("name", "");
@@ -174,7 +170,6 @@ const SearchWithMenuToggle = ({
           )}
           {!isCoursePage && (
             <div
-              data-guide-id="search-box"
               className={clsx(
                 "border-transparent flex w-full items-center justify-between rounded-lg border border-white bg-white px-2 py-3 shadow-small transition-all duration-300 focus-within:border-primary hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4",
                 {
@@ -183,7 +178,7 @@ const SearchWithMenuToggle = ({
               )}
             >
               <SearchForm
-                placeholder={MY_COURSES.placeholderSearchV2}
+                placeholder={MY_COURSES.placeholderSearchCourse}
                 formStyle="w-full flex items-center"
                 disabled={disabledSearch}
                 inputRef={inputRef}

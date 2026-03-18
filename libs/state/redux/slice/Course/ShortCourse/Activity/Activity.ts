@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { ActivityFile, IActivity3Level, IBreadcrumb, ICourseOutcomes, ICoursesAPI } from '@lms/core';
-import { RootState } from "../../../../store";
 
 // Tạo một đối tượng activity với giá trị mặc định
 export interface ICourseActivityState3Level extends IActivity3Level {
@@ -133,7 +132,13 @@ export const courseActivitySlice3Level = createSlice({
 });
 
 // export const selectAuthUser = (state: RootState) => state.loginReducer.authUser;
-export const shortCourseActivityReducer = (state: RootState) =>
+export const shortCourseActivityReducer = <
+  T extends {
+    shortCourseActivityReducer: ICourseActivityState3Level;
+  },
+>(
+  state: T,
+) =>
   state.shortCourseActivityReducer
 
 export const courseActivityAction3Level = courseActivitySlice3Level.actions;

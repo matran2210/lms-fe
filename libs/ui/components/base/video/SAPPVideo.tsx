@@ -1,13 +1,12 @@
 "use client";
 import { Stream } from "@cloudflare/stream-react";
-import { LoadingIcon, PiPIcon } from "@lms/assets";
-import { Icon } from "@lms/assets/icons";
+import { LoadingIcon, PiPIcon, Icon} from "@lms/assets";
 import { Thumbnail } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import Image from "next/image";
 import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import useClickOutside from "../clickoutside/HookClick";
-import { ArrowIcon } from "../pagination";
+import { ComboArrowIcon } from "../pagination";
 import {
   formatTimeToHourMinuteSecond,
   getResolution,
@@ -27,6 +26,7 @@ interface IProp {
   children?: ReactNode;
   videoAttribs?: { [key: string]: string };
   isFetchCaptions?: boolean;
+  handlePlayVideo?:() => void
 }
 
 type ResolutionTypes =
@@ -67,6 +67,7 @@ const SAPPVideo = ({
   children,
   videoAttribs,
   isFetchCaptions = true,
+  handlePlayVideo
 }: IProp) => {
   const { fetcher, videoUrl, router } = useFeature();
   const [playerFunction, setPlayerFunction] = useState<any>();
@@ -978,6 +979,7 @@ const SAPPVideo = ({
                 autoPlay={false}
                 // disablePictureInPicture
                 controlsList="nodownload"
+                onPlay={handlePlayVideo}
               />
               <div
                 className="video-controls flex-center absolute bottom-0 left-0 right-0 h-14 w-full rounded-b-lg px-4 py-3"
@@ -1259,11 +1261,11 @@ const SAPPVideo = ({
                                   {playbackQuality === "Auto"
                                     ? "Auto"
                                     : getResolution(Number(playbackQuality))}
-                                  <ArrowIcon
+                                  <ComboArrowIcon
                                     className={"h-4 w-3"}
                                     right={true}
                                     iconType={"chervon"}
-                                  ></ArrowIcon>
+                                  ></ComboArrowIcon>
                                 </span>
                               </div>
                               <div
@@ -1275,11 +1277,11 @@ const SAPPVideo = ({
                                 </span>
                                 <span className="flex items-center justify-between gap-1 text-sm font-medium">
                                   {playbackRate === 1 ? "Normal" : playbackRate}
-                                  <ArrowIcon
+                                  <ComboArrowIcon
                                     className={"h-4 w-3"}
                                     right={true}
                                     iconType={"chervon"}
-                                  ></ArrowIcon>
+                                  ></ComboArrowIcon>
                                 </span>
                               </div>
                               {listCaptions.length > 0 && (
@@ -1294,11 +1296,11 @@ const SAPPVideo = ({
                                     {playbackCC === -1
                                       ? "Off"
                                       : listCaptions[playbackCC].lang}
-                                    <ArrowIcon
+                                    <ComboArrowIcon
                                       className={"h-4 w-3"}
                                       right={true}
                                       iconType={"chervon"}
-                                    ></ArrowIcon>
+                                    ></ComboArrowIcon>
                                   </span>
                                 </div>
                               )}
@@ -1310,10 +1312,10 @@ const SAPPVideo = ({
                                 className="relative px-1.5 text-base font-semibold"
                                 onClick={() => setActiveQuality(false)}
                               >
-                                <ArrowIcon
+                                <ComboArrowIcon
                                   className={"absolute left-1 top-1 h-4 w-4"}
                                   iconType={"chervon"}
-                                ></ArrowIcon>
+                                ></ComboArrowIcon>
                                 Quality
                               </h4>
                               <ul
@@ -1360,10 +1362,10 @@ const SAPPVideo = ({
                                 className="relative px-1.5 text-base font-semibold"
                                 onClick={() => setActiveSpeed(false)}
                               >
-                                <ArrowIcon
+                                <ComboArrowIcon
                                   className={"absolute left-1 top-1 h-4 w-4"}
                                   iconType={"chervon"}
-                                ></ArrowIcon>
+                                ></ComboArrowIcon>
                                 Speed
                               </h4>
                               <ul
@@ -1393,10 +1395,10 @@ const SAPPVideo = ({
                                 className="relative px-1.5 text-base font-semibold"
                                 onClick={() => setActiveCC(false)}
                               >
-                                <ArrowIcon
+                                <ComboArrowIcon
                                   className={"absolute left-1 top-1 h-4 w-4"}
                                   iconType={"chervon"}
-                                ></ArrowIcon>
+                                ></ComboArrowIcon>
                                 CC
                               </h4>
                               <ul

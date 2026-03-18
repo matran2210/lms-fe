@@ -1,7 +1,9 @@
 import {
-  E_REQUEST_STATUS, E_REQUEST_TYPE, IRecurringSchedule, REPEAT_FREQUENCY,
+  IRecurringSchedule,
+  REPEAT_FREQUENCY,
   REPEAT_FREQUENCY_LABEL,
-  REPEAT_TYPE
+  REPEAT_TYPE,
+  WEEKDAYS,
 } from '@lms/core'
 import {
   convertLocalWeekDaysToUTC,
@@ -10,43 +12,6 @@ import {
 } from '@lms/utils'
 import dayjs from 'dayjs'
 import { UseFormGetValues } from 'react-hook-form'
-
-export const WEEKDAYS = [
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-  'Sunday',
-]
-
-export const requestStatusToBadge = {
-  [E_REQUEST_STATUS.APPROVED]: {
-    type: 'success',
-    label: 'Approved',
-  },
-  [E_REQUEST_STATUS.PENDING]: {
-    type: 'warning',
-    label: 'Pending',
-  },
-  [E_REQUEST_STATUS.REJECT]: {
-    type: 'error',
-    label: 'Rejected',
-  },
-  [E_REQUEST_STATUS.CANCEL]: {
-    type: 'default',
-    label: 'Canceled',
-  },
-} as const
-
-export const requestTypeToTitle = {
-  [E_REQUEST_TYPE.TEACHING_MODE]: 'Xin đổi hình thức',
-  [E_REQUEST_TYPE.TEACHER_SCHEDULE_BUSY]: 'Busy schedule',
-  [E_REQUEST_TYPE.TEACHER_SCHEDULE_TIME_OFF]: 'Lịch nghỉ',
-  [E_REQUEST_TYPE.TEACHER_WEEKLY_NORMS]: 'Weekly norm',
-  [E_REQUEST_TYPE.TEACHER_OTHER]: 'Lịch khác',
-} as const
 
 export const formatRecurringSchedule = (
   recurringSchedule: IRecurringSchedule,

@@ -93,12 +93,14 @@ export default function TableContainer({ params }: IProps) {
   })
 
   useEffect(() => {
-    router.replace(`${pathname}?${buildQueryString({
-          ...query,
-          page_index: pagination.current,
-          page_size: pagination.pageSize,
-          ...params,
-        })}`)
+    router.replace(
+      `${pathname}?${buildQueryString({
+        ...query,
+        page_index: pagination.current,
+        page_size: pagination.pageSize,
+        ...params,
+      })}`,
+    )
   }, [pagination, params])
 
   const Action = (data: IScheduleRequestItem) => {

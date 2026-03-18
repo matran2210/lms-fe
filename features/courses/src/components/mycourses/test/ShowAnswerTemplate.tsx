@@ -1,7 +1,6 @@
 import { CircleCloseIcon, Triangle } from "@lms/assets";
 import { defaultSheetData, RESPONSE_OPTION } from "@lms/core";
-import { ButtonSecondary, ModalResizeable } from "@lms/ui";
-import EssayQuestionPreview from "@lms/ui/components/questionType/ConstructedQuestion";
+import { ButtonSecondary, EssayQuestionPreview, ModalResizeable } from "@lms/ui";
 import clsx from "clsx";
 import { useFeature } from "@lms/contexts";
 import { useLayoutEffect, useState } from "react";
