@@ -174,7 +174,7 @@ const ClassResource = () => {
       page_index: query.page_index
         ? Number(query.page_index)
         : DEFAULT_PAGE_NUMBER,
-
+      page_size: query.page_size ? Number(query.page_size) : DEFAULT_PAGE_SIZE,
       suffix_types: normalizeToArray(query.suffix_types),
       schedule_ids: normalizeToArray(query.schedule_ids),
 
@@ -186,6 +186,7 @@ const ClassResource = () => {
     query.suffix_types,
     query.schedule_ids,
     query.search_key,
+    query.page_size,
   ])
 
   const handleOpenSidebar = () => {

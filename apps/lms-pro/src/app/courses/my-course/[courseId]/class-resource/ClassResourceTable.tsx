@@ -388,7 +388,11 @@ const ClassResourceTable = ({
               page_index: DEFAULT_PAGE_NUMBER,
             })}`,
           )
-          setPagination((prev) => ({ ...prev, pageSize: page as number }))
+          setPagination((prev) => ({
+            ...prev,
+            current: DEFAULT_PAGE_NUMBER,
+            pageSize: page as number,
+          }))
         }}
       />
       {openPreview &&
