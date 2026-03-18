@@ -14,6 +14,7 @@ interface IProps {
 
 const NextStorylineModal = ({ open, setOpen, next_activity, course_section_id }: IProps) => {
   const { router, params, query, storylineApi } = useFeature()
+  const classID = query?.class_id ?? params?.id
   const storylineItemsHasDocs = next_activity?.storyline?.items || []
   const onClose = () => {
     setOpen(false)
@@ -51,12 +52,12 @@ const NextStorylineModal = ({ open, setOpen, next_activity, course_section_id }:
 
     if (isRetake) {
       const res = await storylineApi?.retakeStoryline({
-        class_id: query?.class_id as string,
+        class_id: classID as string,
         course_section_id: next_activity?.id as string,
       })
       if (res) {
         router.push(
-          `/storyline/${next_activity?.id}?class_id=${query?.class_id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=Start`,
+          `/storyline/${next_activity?.id}?class_id=${classID}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=Start`,
           { scroll: false },
         )
         return
@@ -64,7 +65,7 @@ const NextStorylineModal = ({ open, setOpen, next_activity, course_section_id }:
     }
 
     router.push(
-      `/storyline/${next_activity?.id}?class_id=${query?.class_id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=${okButtonCaption()}`,
+      `/storyline/${next_activity?.id}?class_id=${classID}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=${okButtonCaption()}`,
       { scroll: false },
     )
   }
