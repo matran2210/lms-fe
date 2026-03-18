@@ -51,12 +51,12 @@ const NextStorylineModal = ({ open, setOpen, next_activity, course_section_id }:
 
     if (isRetake) {
       const res = await storylineApi?.retakeStoryline({
-        class_id: query?.class_id as string,
+        class_id: query?.class_id  ?? params?.id as string,
         course_section_id: next_activity?.id as string,
       })
       if (res) {
         router.push(
-          `/storyline/${next_activity?.id}?class_id=${query?.class_id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=Start`,
+          `/storyline/${next_activity?.id}?class_id=${query?.class_id ?? params?.id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=Start`,
           { scroll: false },
         )
         return
@@ -64,7 +64,7 @@ const NextStorylineModal = ({ open, setOpen, next_activity, course_section_id }:
     }
 
     router.push(
-      `/storyline/${next_activity?.id}?class_id=${query?.class_id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=${okButtonCaption()}`,
+      `/storyline/${next_activity?.id}?class_id=${query?.class_id ?? params?.id}&course_section_id=${course_section_id}&storylineItemId=${storylineItemId || defaultStorylineItemId}&status=${okButtonCaption()}`,
       { scroll: false },
     )
   }
