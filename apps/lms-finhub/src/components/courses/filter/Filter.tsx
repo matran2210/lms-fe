@@ -22,8 +22,6 @@ export default function Filter3Level({ courses, setPage }: IFilterProps) {
     label: string
     value: string
   }>({ label: 'All', value: '' })
-  const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
-
   const [openDrawer, setOpenDrawer] = useState<boolean>(false)
   const [tempType, setTempType] = useState<{ label: string; value: string }>({
     label: 'All',
@@ -37,35 +35,13 @@ export default function Filter3Level({ courses, setPage }: IFilterProps) {
   const totalResults = courses?.metadata?.total_records || 0
 
   useEffect(() => {
-    const queryStatus = params.status || ''
-    const queryType = params.type || ''
-
-    const foundStatus = defaultStatusCourse.find(
-      (item) => item.value === queryStatus,
-    )
-    const courseCategories =
-      courses?.total?.map((cat) => ({
-        label: cat.categoryName,
-        value: cat.categoryName,
-      })) || []
-
-    const foundType = courseCategories.find((item) => item.value === queryType)
-
-    setFilterStatus(foundStatus || { label: 'All', value: '' })
-    setFilterType(foundType || { label: 'All', value: '' })
-    setIsFirstRender(false)
-  }, [courses])
-
-  useEffect(() => {
-    if (!isFirstRender) {
-      const filterUrl = formatPathWithQueryParams(PageLink.SHORT_COURSE, {
-        name: params.name as string,
-        status: filterStatus.value,
-        type: filterType.value,
-      })
-      router.push(filterUrl)
-      setPage?.(9)
-    }
+    const filterUrl = formatPathWithQueryParams(PageLink.SHORT_COURSE, {
+      name: params.name as string,
+      status: filterStatus.value,
+      type: filterType.value,
+    })
+    router.push(filterUrl)
+    setPage?.(9)
   }, [filterType, filterStatus])
 
   useEffect(() => {
