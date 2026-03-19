@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useAppSelector, useFeature } from '@lms/contexts'
+import { useFeature } from '@lms/contexts'
 import { userReducer } from '@lms/contexts'
 import { Icon } from '@lms/assets'
 import { Divider } from 'antd'
@@ -29,13 +29,14 @@ interface ISubject {
 
 const ProgramDetail = ({ typeProgram }: IProps) => {
   const [subjects, setSubjects] = useState<ISubject>()
-  const { user } = useAppSelector(userReducer)
   const [typeOfProgram, setTypeOfProgram] = useState<string>('')
   const [userProgram, setUserProgram] = useState<IUser>()
-const {
-  myProfileApi,
-  userApi
-} = useFeature()
+  const {
+    myProfileApi,
+    userApi,
+    useAppSelector,
+  } = useFeature()
+  const { user } = useAppSelector?.(userReducer) || {}
   const { setValue, control, resetField } = useForm({
     mode: 'onSubmit',
   })
@@ -127,7 +128,7 @@ const {
       <Divider className="my-4 md:my-6" />
       <div>
         {subjects?.subjects?.map((subject: ISubjectItem, index: number) => {
-          const courseTabData = user.course_tab_groups?.[
+          const courseTabData = user?.course_tab_groups?.[
             typeProgram 
           ]?.user_hubspot_examination_subjects?.find(
             (item) => item.examination_subject.subject.id === subject.id,

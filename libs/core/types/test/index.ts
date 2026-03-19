@@ -77,6 +77,13 @@ export interface AnswerItem extends DragDropAnswerItem {
   answer_position: number
   answer_text: string
 }
+export interface IAnswerFillWord {
+  id: string;
+  answer: string;
+  is_correct: boolean;
+  feedback: string | null;
+  answer_position: number;
+}
 
 export interface IAnswerMultipleChoice {
   id: string

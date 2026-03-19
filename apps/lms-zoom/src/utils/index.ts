@@ -1,5 +1,6 @@
 import { HEADER_HEIGHT, TOKEN_STORAGE_KEY } from '@/constants'
 import { ZOOM_CONFIG } from '@/constants/zoom'
+import Cookies from 'js-cookie'
 
 export function setCookie(name: string, value: string, days = 7) {
   const expires = new Date(Date.now() + days * 864e5).toUTCString()
@@ -45,12 +46,16 @@ export function toggleMeetingContainer(display: 'block' | 'none') {
 export const getToken = (tokenFromParams: string | null): string | null => {
   if (typeof window === 'undefined') return null
 
-  if (tokenFromParams) {
-    sessionStorage.setItem(TOKEN_STORAGE_KEY, tokenFromParams)
+  if (tokenFromParams){
+    Cookies.set(TOKEN_STORAGE_KEY, tokenFromParams, {
+      expires: 4 / 24, // 4 hours
+      sameSite: 'lax',
+      secure: true,
+    })
     return tokenFromParams
   }
 
-  return sessionStorage.getItem(TOKEN_STORAGE_KEY)
+  return Cookies.get(TOKEN_STORAGE_KEY) || null
 }
 
 export const adjustElement = (selector: string) => {

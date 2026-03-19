@@ -7,7 +7,7 @@ import { RcFile } from "antd/es/upload";
 import { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useFeature } from "@lms/contexts";
-import { SAPPSelectV2, UploadSingleFileV2 } from "../base";
+import { SAPPSelectTooltip, UploadSingleFile } from "../base";
 import { ErrorMessage } from "../common";
 interface IProps {
   classId: string;
@@ -77,7 +77,7 @@ const ChangExamDate = ({
       <div className="mb-2 text-sm font-semibold leading-normal text-gray-800 md:text-base">
         New Exam Date
       </div>
-      <SAPPSelectV2
+      <SAPPSelectTooltip
         name="examination_subject_id"
         control={control}
         options={options ?? []}
@@ -108,7 +108,7 @@ const ChangExamDate = ({
           control={control}
           render={({ field, fieldState }) => (
             <div className="relative">
-              <UploadSingleFileV2
+              <UploadSingleFile
                 fileList={field.value || []}
                 {...getUploadProps(field.onChange)}
               />

@@ -49,6 +49,9 @@ interface IProps {
     }>,
   ) => void;
   isShowWarning?: boolean;
+  disabled?: boolean;
+  className?: string;
+  isAnimationCorrectAnswer?: boolean;
 }
 
 // Constants
@@ -80,6 +83,9 @@ const SelectWord = forwardRef(
       exhibitText,
       isShowWarning = false,
       onChange,
+      disabled,
+      className = "",
+      isAnimationCorrectAnswer = false,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -247,6 +253,7 @@ const SelectWord = forwardRef(
         const dropdownContainer = document?.createElement("span");
         dropdownContainer.classList?.add(
           ...DROPDOWN_STYLES.container.split(" "),
+          className,
         );
         dropdownContainer.id = element?.id;
         dropdownContainer.setAttribute("data-value", "");
@@ -259,6 +266,13 @@ const SelectWord = forwardRef(
           defaultAnswer?.find((item) => item.answer_position === index + 1)
             ?.answer_id || "";
 
+        if (disabled) {
+          dropdownContainer.setAttribute("data-disabled", "true");
+          dropdownContainer.classList.add(
+            "pointer-events-none",
+            "cursor-not-allowed",
+          );
+        }
         if (corrects) {
           const isCorrect = corrects?.some(
             (correct) =>
@@ -307,7 +321,7 @@ const SelectWord = forwardRef(
         setAnswerContent(doc2);
       }
       setQuestionContent(doc);
-    }, [defaultAnswer, data]);
+    }, [defaultAnswer, data, disabled]);
     useEffect(() => {
       if (!answerContent) return;
 
@@ -705,9 +719,10 @@ const SelectWord = forwardRef(
           }}
           highlighted={highlighted}
         />
+        <>
         {/* Correct Answer Section */}
         {answerContent && (
-          <>
+            <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
             <SappDivider />
             <div className="text-base font-semibold">Correct Answer</div>
             <EditorReader
@@ -717,17 +732,18 @@ const SelectWord = forwardRef(
                   ?.innerHTML || ""
               }
             />
-          </>
+          </div>
         )}
 
         {/* Solution Section */}
         {solution && (
-          <>
+            <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
             <SappDivider />
             <SappTitleSolution title={MY_COURSES.explanations} />
             <EditorReader className="mt-4" text_editor_content={solution} />
-          </>
+          </div>
         )}
+        </>
       </div>
     );
   },

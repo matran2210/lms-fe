@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import Progress from '@components/my-class/progress-table/Progress'
 import ClassResourceTeacher from '@components/teacher/myClass/class-detail/ClassResourceTeacher'
 import Overview from '@components/teacher/myClass/class-detail/OverView'
@@ -131,7 +131,7 @@ const getCertificateData = (data: any): ICertificateData[] => [
 const ClassDetail = () => {
   const [certificateData, setCertificateData] = useState<ICertificateData[]>([])
   const searchParam = useSearchParams()
-  const params = useParams();
+  const params = useParams()
   const { id } = params
   const query = Object.fromEntries(searchParam.entries())
   const classId = id as string

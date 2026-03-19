@@ -1,5 +1,5 @@
 import { Plus } from '@lms/assets'
-import { FilterGrid, SAPPButtonV2 } from '@lms/ui'
+import { FilterGrid, SAPPButtonCustom } from '@lms/ui'
 import { SAPPInput } from '@lms/ui'
 import { SAPPRangePicker } from '@lms/ui'
 import { SAPPSelect } from '@lms/ui'
@@ -158,15 +158,15 @@ const TimeOffTab = () => {
         </FilterGrid>
         <div className="flex justify-between">
           <div className="flex gap-3">
-            <SAPPButtonV2
+            <SAPPButtonCustom
               title="Reset"
               color="secondary"
               onClick={handleResetFilter}
             />
-            <SAPPButtonV2 title="Search" onClick={handleFilter} />
+            <SAPPButtonCustom title="Search" onClick={handleFilter} />
           </div>
           <div>
-            <SAPPButtonV2
+            <SAPPButtonCustom
               title="Create Request"
               className="flex"
               icon={<Plus />}

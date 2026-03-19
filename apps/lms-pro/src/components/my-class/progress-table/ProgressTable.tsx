@@ -11,8 +11,8 @@ import {
 import { SAPPDropdown } from '@lms/ui'
 import { TableColumn } from '@lms/core'
 import { round } from 'lodash'
-import { useSelector } from 'react-redux'
 import { userReducer } from '@lms/contexts'
+import { useAppSelector } from 'src/redux/hook'
 
 interface ProgressTableProps {
   loading: boolean
@@ -41,7 +41,7 @@ const ProgressTable = ({
   allowSection,
   allowCreateProgress,
 }: ProgressTableProps) => {
-  const { user } = useSelector(userReducer)
+  const { user } = useAppSelector(userReducer) || {}
   let columnsTitles: TableColumn<IProgress>[] = [
     {
       title: '#',

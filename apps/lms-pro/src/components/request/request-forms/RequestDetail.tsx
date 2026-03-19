@@ -5,13 +5,13 @@ import {
   DATE_FORMAT_DMY,
   DATE_TIME_FORMAT_DMY,
   E_REQUEST_STATUS,
+  ERequestStatus,
   EVENT_REPEAT_LABEL,
   EVENT_REPEAT_TYPES,
   IBusyRequestDetailResponse,
   IWeeklyNorms,
-   requestStatusToBadge,
+  requestStatusToBadge,
   requestStatusToTitle,
-  ERequestStatus
 } from '@lms/core'
 import { CollapseBox, CollapseItem } from '@lms/ui'
 import { capitalizeFirstLetter, formatDateTimeWithTimeZone } from '@lms/utils'
@@ -20,10 +20,11 @@ import dayjs from 'dayjs'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import toast from 'react-hot-toast'
 
-import { confirmDialog, useAppDispatch } from '@lms/contexts'
+import { confirmDialog } from '@lms/contexts'
 import { REQUEST_TYPE } from '@lms/core'
 import { SAPPBadge } from '@lms/ui'
 import { formatRecurringSchedule } from '@utils/request'
+import { useAppDispatch } from 'src/redux/hook'
 
 export interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -190,7 +191,8 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
   }
   const handleSubmit = () => {
     if (
-      requestDetail?.status.toLowerCase() == ERequestStatus.PENDING.toLowerCase()
+      requestDetail?.status.toLowerCase() ==
+      ERequestStatus.PENDING.toLowerCase()
     ) {
       handleEdit()
     } else if (

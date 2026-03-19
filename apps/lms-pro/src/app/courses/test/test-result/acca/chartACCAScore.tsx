@@ -1,9 +1,9 @@
-"use client"
-import { calculatePercentage } from '@utils/helpers'
+'use client'
 import { Tooltip } from '@lms/ui'
 import { useDraggable } from 'react-use-draggable-scroll'
 import { ChartDatum } from '@lms/core'
 import { useScrollShadows } from '@lms/hooks'
+import { calculatePercentage } from '@utils/helpers'
 interface IProps {
   data: ChartDatum[]
   loading?: boolean

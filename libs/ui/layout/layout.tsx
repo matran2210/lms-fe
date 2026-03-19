@@ -1,6 +1,5 @@
 "use client";
 import {
-  useAppSelector,
   useCourseContext,
   useFeature,
   usePinnedNotifyContext,
@@ -45,7 +44,7 @@ export default function Layout(props: LayoutProps): ReactElement {
     isEndGuide = false,
     closeUserGuide,
   } = props;
-  const { pageLink, router } = useFeature();
+  const { pageLink, router, useAppSelector } = useFeature();
   const { isShowMenuContent, isMobileView, isTabletView } =
     useTailwindBreakpoint();
 
@@ -58,7 +57,7 @@ export default function Layout(props: LayoutProps): ReactElement {
   const { openPinned, pinnedNotifications } = usePinnedNotifyContext();
   const { showPinnedTrial } = useCourseContext();
 
-  const guideStatus = useAppSelector(
+  const guideStatus = useAppSelector?.(
     (state: { userGuideReducer: { status: any } }) =>
       state.userGuideReducer?.status,
   );
@@ -80,7 +79,7 @@ export default function Layout(props: LayoutProps): ReactElement {
     paddingTop = showPinnedTrial ? "pt-[102px]" : "pt-12";
   }
 
-  const guideStep = useAppSelector((state) => state.userGuideReducer?.step);
+  const guideStep = useAppSelector?.((state) => state.userGuideReducer?.step);
   const getGuideStepConfig = (step: number) => {
     switch (step) {
       case 1:

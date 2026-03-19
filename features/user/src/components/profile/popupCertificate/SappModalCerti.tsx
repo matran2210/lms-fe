@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { useAppDispatch, confirmDialog } from '@lms/contexts'
+import { confirmDialog, useFeature } from '@lms/contexts'
 import { IButtonColors } from '@lms/core'
 
 import { CloseIcon } from '@lms/assets'
@@ -110,8 +110,6 @@ const SappModalCerti: React.FC<IProps> = ({
   parentChildClass = '',
   footerButtonClassName = 'justify-center sm:justify-end flex gap-3',
   overlayClass = '',
-  color,
-  colorCancel = 'text',
   position = 'start',
   fullWidthBtn = false,
 
@@ -127,7 +125,7 @@ const SappModalCerti: React.FC<IProps> = ({
   footerClassName,
   externalLoading,
 }) => {
-  const dispatch = useAppDispatch()
+  const {dispatch} = useFeature()
   const [loading, setLoading] = useState<boolean>(false)
 
   const confirmDialogRef = useRef<HTMLDivElement>(null)
@@ -211,7 +209,7 @@ const SappModalCerti: React.FC<IProps> = ({
     // Nếu confirmOnclose là true, thì mở một hộp thoại xác nhận
 
     if (confirmOnclose) {
-      dispatch(
+      dispatch?.(
         confirmDialog.open({
           // Nội dung của hộp thoại xác nhận
           message: 'Bạn có chắc chắn muốn hủy không?',

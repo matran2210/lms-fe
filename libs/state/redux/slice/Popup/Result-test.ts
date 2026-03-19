@@ -1,5 +1,4 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../../store";
 export interface ResultTestState {
   is_open: boolean;
   content: string;
@@ -24,6 +23,12 @@ export const popupSlice = createSlice({
   },
 });
 export const { showPopupCompletedCourse, hidePopup } = popupSlice.actions;
-export const popupReducer = (state: RootState) => state.popupReducer;
+export const popupReducer = <
+  T extends {
+    popupReducer: ResultTestState;
+  },
+>(
+  state: T,
+) => state.popupReducer;
 
 export default popupSlice.reducer;

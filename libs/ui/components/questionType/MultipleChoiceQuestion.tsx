@@ -36,6 +36,8 @@ const MultiChoiceQuestion = ({
   isShowWarning = false,
   explainClassname,
   storageKey,
+  readOnly,
+  isAnimationCorrectAnswer = false,
 }: IPreviewProp) => {
   const { query, params } = useFeature()
   const convertAnswer = useMemo(() => {
@@ -169,6 +171,7 @@ const MultiChoiceQuestion = ({
         }}
       >
         <HookFormCheckBoxGroup
+          isAnimationCorrectAnswer={isAnimationCorrectAnswer}
           options={convertAnswer || []}
           control={control}
           name={name || "multiples"}
@@ -177,11 +180,12 @@ const MultiChoiceQuestion = ({
           corrects={corrects}
           defaultValue={defaultValues || ""}
           positionCheckBox="start"
+          readOnly={readOnly}
         />
       </div>
 
       {solution && (
-        <div className={explainClassname}>
+        <div className={explainClassname} data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
           <SappDivider />
           <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
           <EditorReader className="mt-4" text_editor_content={solution} />

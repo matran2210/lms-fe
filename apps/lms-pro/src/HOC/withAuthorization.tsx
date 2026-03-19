@@ -1,11 +1,7 @@
-"use client"
-import {
-  useAppSelector,
-  useFeature,
-  userReducer,
-  UserType,
-} from '@lms/contexts'
+'use client'
+import { useFeature, userReducer, UserType } from '@lms/contexts'
 import { useEffect, useState } from 'react'
+import { useAppSelector } from 'src/redux/hook'
 
 const withAuthorization =
   <P extends object>(allowedRoles: string[]) =>

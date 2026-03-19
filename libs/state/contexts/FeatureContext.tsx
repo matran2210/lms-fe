@@ -6,6 +6,7 @@ import {
   ICalendarAPI,
   ICertificateAPI,
   IClassAPI,
+  ICourseActivationAPI,
   ICourseActivityAPI,
   ICoursesAPI,
   IDashboardAPI,
@@ -13,6 +14,7 @@ import {
   IEventTestAPI,
   INotificationAPI,
   IQuestionAPI,
+  IStorylineAPI,
   ITestServiceAPI,
   IUploadAPI,
   MenuItem
@@ -23,6 +25,9 @@ import {
 } from 'axios';
 import { createContext, useContext } from "react";
 import { IUserAPI } from "../redux/types/User/urser";
+import { AnyAction, ThunkDispatch, Dispatch } from "@reduxjs/toolkit";
+
+type AppLikeDispatch = ThunkDispatch<any, any, AnyAction>
 interface FeatureContextProps {
   courseApi: ICoursesAPI;
   questionApi: IQuestionAPI;
@@ -58,6 +63,7 @@ interface FeatureContextProps {
         | undefined;
     }) => Promise<any>;
   };
+  storylineApi?: IStorylineAPI
   submitQuizTest: (
     id: string,
     data: any,
@@ -83,6 +89,9 @@ interface FeatureContextProps {
     text: string,
     imageBuffer: string
   ) => Promise<AxiosResponse<any, any, {}>>;
+  dispatch?: AppLikeDispatch
+  useAppSelector?: <T>(fn: (state: any) => T) => T
+  courseActivationAPI?: ICourseActivationAPI;
 }
 
 const FeatureContext = createContext<FeatureContextProps>(

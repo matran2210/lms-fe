@@ -3,9 +3,9 @@ import { buildQueryString } from '@lms/utils'
 import { Controller, useForm } from 'react-hook-form'
 import { debounce, isEmpty } from 'lodash'
 import { IconSearch } from '../icons'
-import { ISearchFormProps } from 'src/type/courses-3-level'
 import clsx from 'clsx'
 import SidebarMobile from '../menu/MenuSideBarMobile'
+import { ISearchFormProps } from '@lms/core'
 import { useParams, useRouter } from 'next/navigation'
 
 export default function SearchForm({
@@ -106,7 +106,7 @@ export default function SearchForm({
                 {...field}
                 type="text"
                 placeholder={placeholder}
-                className="placeholder-gray-v2-400 h-6 w-full border-0 px-4 text-sm leading-[22px] text-gray-800 focus:border-0 focus:outline-0 focus:ring-0 md:text-base md:leading-6"
+                className="h-6 w-full border-0 px-4 text-sm leading-[22px] text-gray-800 placeholder-gray-400 focus:border-0 focus:outline-0 focus:ring-0 md:text-base md:leading-6"
               />
             )}
           />

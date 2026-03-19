@@ -1,11 +1,10 @@
-import { ArrowRightV2Icon } from "@lms/assets";
-import PinnedNotificationsV2 from "./PinnedNotificationsV2";
+import { ArrowRightIcon } from "@lms/assets";
+import { IUser, useFeature, userReducer } from "@lms/contexts";
 import { formatDateToLongString } from "@lms/utils";
-import Image from "next/image";
-import React from "react";
-import { useFeature, useAppSelector, userReducer } from "@lms/contexts";
 import clsx from "clsx";
+import React from "react";
 import ImageRenderFromHtml from "../../components/base/image/ImageRenderFromHtml";
+import PinnedNotificationWrapper from "./PinnedNotificationWrapper";
 
 interface PinnedCompletedCourseData {
   isOpen: boolean;
@@ -52,7 +51,7 @@ const SeeCertificateButton = React.memo(
         See Certificate
       </div>
       <div>
-        <ArrowRightV2Icon />
+        <ArrowRightIcon />
       </div>
     </div>
   ),
@@ -61,8 +60,8 @@ SeeCertificateButton.displayName = "SeeCertificateButton";
 
 const PinnedCompletedCourse: React.FC<IProps> = React.memo(
   ({ pinnedCompletedCourse }) => {
-    const { detail } = useAppSelector(userReducer).user;
-    const {router} = useFeature();
+    const {router, useAppSelector} = useFeature();
+    const { detail } = useAppSelector?.(userReducer).user as IUser;
     const {
       isOpen,
       passedAt,
@@ -78,7 +77,7 @@ const PinnedCompletedCourse: React.FC<IProps> = React.memo(
     if (!isOpen) return null;
 
     return (
-      <PinnedNotificationsV2
+      <PinnedNotificationWrapper
         bgColor="bg-primary-200"
         borderColor="border-primary"
         classPinned={clsx(
@@ -94,7 +93,7 @@ const PinnedCompletedCourse: React.FC<IProps> = React.memo(
           <NotificationMessage courseName={courseName} passedAt={passedAt} />
         </div>
         <SeeCertificateButton onClick={onSeeCertificate} />
-      </PinnedNotificationsV2>
+      </PinnedNotificationWrapper>
     );
   },
 );

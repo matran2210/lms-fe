@@ -64,10 +64,6 @@
   animation: slideUpBounce 600ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-.pinned-toast-exit {
-  animation: slideDown 600ms ease-in forwards;
-}
-
 @keyframes slideUpBounce {
   0% {
     transform: translate(-50%, 100%);

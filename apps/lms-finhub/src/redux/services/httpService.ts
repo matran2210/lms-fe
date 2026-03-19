@@ -3,7 +3,6 @@ import { AuthenticationManager } from '@utils/helpers/keycloak'
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import toast from 'react-hot-toast'
 
-
 let store: any
 export const injectStore = (_store: any) => {
   store = _store

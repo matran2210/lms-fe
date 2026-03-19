@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import LayoutMarketingInApp from '@components/marketing-in-app/LayoutMarketingInApp'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { useSearchParams } from 'next/navigation'

@@ -19,6 +19,10 @@ export const useZoomSDK = () => {
         await import('@zoom/meetingsdk')
 
         // Initialize SDK using window.ZoomMtg
+        window.ZoomMtg.setZoomJSLib(
+          'https://source.zoom.us/3.13.2/lib',
+          '/av'
+        )
         window.ZoomMtg.preLoadWasm()
         window.ZoomMtg.prepareWebSDK()
 

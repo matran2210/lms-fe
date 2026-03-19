@@ -2,7 +2,7 @@
 import React from "react";
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PencilV2Icon } from "@lms/assets";
+import { PencilIcon } from "@lms/assets";
 import { ExaminationForm, useFeature } from "@lms/contexts";
 import { ClassKey, COURSE_TYPE, Data, TitleSidebar, zodMsg } from "@lms/core";
 import { useSelectExams, useTailwindBreakpoint } from "@lms/hooks";
@@ -84,7 +84,7 @@ const ExamDate = ({
               setDirection(1);
             }}
           >
-            <PencilV2Icon />
+            <PencilIcon />
           </div>
         </Tooltip>
       )

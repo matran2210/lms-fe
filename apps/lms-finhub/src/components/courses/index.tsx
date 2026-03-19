@@ -29,9 +29,6 @@ export { default as MenuItemsList } from './menu/MenuItemsList'
 // Timelines
 export { default as TimeLineModal } from './timeline/TimeLineModal'
 
-// Videos
-export { default as VideoSection } from './video/VideoSection'
-
 // Shared
 export { default as Breadcrumb } from './shared/Breadcrumb'
 export { default as Tooltip } from './shared/Tooltip'

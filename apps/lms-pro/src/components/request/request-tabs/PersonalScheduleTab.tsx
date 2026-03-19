@@ -9,7 +9,7 @@ import {
 } from '@lms/core'
 import {
   FilterGrid,
-  SAPPButtonV2,
+  SAPPButtonCustom,
   SAPPInput,
   SAPPRangePicker,
   SAPPSelect,
@@ -167,20 +167,20 @@ const PersonalScheduleTab = () => {
         </FilterGrid>
         <div className="flex justify-between">
           <div className="flex gap-3">
-            <SAPPButtonV2
+            <SAPPButtonCustom
               title="Reset"
               color="secondary"
               onClick={handleResetFilter}
               disabled={isLoading}
             />
-            <SAPPButtonV2
+            <SAPPButtonCustom
               title="Search"
               onClick={handleFilter}
               disabled={isLoading}
             />
           </div>
           <div>
-            <SAPPButtonV2
+            <SAPPButtonCustom
               title="Create Request"
               className="flex"
               icon={<Plus />}

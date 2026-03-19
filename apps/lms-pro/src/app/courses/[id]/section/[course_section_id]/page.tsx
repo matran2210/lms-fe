@@ -10,7 +10,6 @@ import {
 import {
   activeNotesList,
   resetNotesList,
-  useAppDispatch,
   useCourseContext,
   UserType,
 } from '@lms/contexts'
@@ -36,12 +35,15 @@ import {
   useSearchParams,
 } from 'next/navigation'
 import PreviewPartDetail from '@sapp-fe/preview-part'
-import { use, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import { TreeHelper } from 'src/helper/tree'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { useAppDispatch } from 'src/redux/hook'
 import { CoursesAPI } from 'src/api/courses/index'
+import StoryOverview from '@components/storyline/modal/StoryOverview'
+import { IStoryline } from '@lms/core'
 
 interface IProps {
   course_section_type: string
@@ -97,6 +99,10 @@ const CoursePartDetail = () => {
   const [isOpenChapter, setIsOpenChapter] = useState<boolean>(false)
   const [loadingScreen, setLoadingScreen] = useState<boolean>(true)
   const [openResource, setOpenResource] = useState<boolean>(false)
+  const [openStory, setOpenStory] = useState<{
+    isOpen: boolean
+    storyline?: IStoryline
+  }>({ isOpen: false, storyline: undefined })
   const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
 
   const useGetData = (queryKey: string) => {
@@ -127,6 +133,18 @@ const CoursePartDetail = () => {
   const partDetail = tree[0] as any
   const [activeItem, setActiveItem] = useState<any>()
 
+  const handleRouterStoryline = (status: boolean, storyline: IStoryline) => {
+    setOpenStory({
+      isOpen: !!status,
+      storyline,
+    })
+  }
+  const closeStoryline = () => {
+    setOpenStory({
+      isOpen: false,
+      storyline: undefined,
+    })
+  }
   const handleActive = (item: any) => {
     setActiveItem(item)
     if (item?.id && item?.course_section_link_parents?.[0]?.is_preview_locked) {
@@ -278,7 +296,11 @@ const CoursePartDetail = () => {
         )
       }
     } else {
-      if (sectionId && caseStudyId) {
+      if (
+        sectionId &&
+        caseStudyId &&
+        !chapter?.course_section_link_parents?.[0]?.is_preview_locked
+      ) {
         await handleCaseStudyProcess(sectionId, caseStudyId)
       }
       if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
@@ -381,8 +403,16 @@ const CoursePartDetail = () => {
       // Handle activity or unit section
       lockSection || learningOutcome?.next_section?.is_preview_locked
         ? handleLockedSection()
-        : handleUnlockedSection(() =>
-            handleRouterActivity(course_section?.children?.[0]?.id, undefined),
+        : handleUnlockedSection(() => {
+          const firstChild = course_section?.children?.[0]
+          if (firstChild?.course_section_type === "STORY_LINE") {
+            handleCancel()
+            handleRouterStoryline(true, firstChild)
+          } else {
+            handleRouterActivity(course_section?.children?.[0]?.id, undefined)
+          }
+
+        }
           )
     } else if (course_section?.course_section_type === 'STORY') {
       // Handle story section
@@ -494,7 +524,7 @@ const CoursePartDetail = () => {
   return (
     <Layout title="Course Part Detail" showSidebar={isAlwaysShowSidebar}>
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
-        <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
+        <div className="relative flex h-16 w-full items-center justify-center border-b-[0.57px] border-zinc-100 bg-white">
           <Alert
             message={
               <div className="flex items-center gap-2">
@@ -584,6 +614,7 @@ const CoursePartDetail = () => {
             isLMSV2
             isMobileView={isMobileView}
             isTabletView={isTabletView}
+            handleRouterStoryline={handleRouterStoryline}
           />
         </div>
         <BottomMenu>
@@ -684,6 +715,11 @@ const CoursePartDetail = () => {
         </div>
       </div>
       <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />
+      <StoryOverview
+        open={openStory.isOpen}
+        setOpen={closeStoryline}
+        storylineData={openStory.storyline}
+      />
     </Layout>
   )
 }

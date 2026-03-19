@@ -1,12 +1,12 @@
 /* eslint-disable prefer-const */
 'use client'
 import {
-  CalculatorIconV2,
+  CalculatorIcon,
   CloseIconNote,
   DownloadIcon,
   FileTextIcon,
   ResizeIcon,
-  ScratchPadIconV2,
+  NewScratchPadIcon,
 } from '@lms/assets'
 
 import {
@@ -21,8 +21,6 @@ import {
   loadMoreQuestion,
   saveFileEssay,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
 } from '@lms/contexts'
 import {
   defaultSheetData,
@@ -40,29 +38,26 @@ import {
   ResetToAnswerTemplateModal,
   ShowAnswerTemplate,
 } from '@lms/feature-courses'
-import QuitTestModal from '@lms/feature-test/src/components/test/modal/quit-test-modal'
-import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
+import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
 import { useSmartModalSize, useTailwindBreakpoint } from '@lms/hooks'
 import {
-  ButtonTextV2,
+  AddWordPreview,
+  ButtonText,
+  CaseStudyWrapper,
   EditorReader,
+  EssayQuestionPreview,
   FileViewer,
   HookFormTextArea,
+  MatchQuizComponent,
   ModalResizeable,
+  ModalUploadFile,
+  MultiChoiceQuestion,
+  NewDragNDropQuestion,
+  OneChoiceQuestion,
   Popover,
-  SappLoadingGlobal,
-} from '@lms/ui'
-import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
-import AddWordPreview from '@lms/ui/components/questionType/FillText'
-import MatchQuizComponent from '@lms/ui/components/questionType/MatchQuiz/MatchQuiz'
-import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
-import DragDropQuestion, {
+  SelectWord,
   SlotValue,
-} from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
-import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
-import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
-import CaseStudyWrapper from '@lms/ui/layout/CaseStudyLayout/CaseStudyWrapper'
+} from '@lms/ui'
 import { runHighlight } from '@lms/utils'
 import { Divider } from 'antd'
 import clsx from 'clsx'
@@ -71,6 +66,8 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { TestServiceAPI } from 'src/api/test-api'
 import LimitQuizModal from 'src/app/test/limitQuizModal'
 import ScratchPatch from 'src/app/test/scratchPatch'
@@ -199,7 +196,7 @@ const CaseStudyDetail = () => {
           //   defaultAnswer={defaultValue}
           //   extenalRef={(el: any) => (valueRef.current[index || 0] = el)}
           // />
-          <DragDropQuestion
+          <NewDragNDropQuestion
             data={data}
             defaultValue={defaultValue}
             onChange={(data: SlotValue[]) => {
@@ -1301,7 +1298,7 @@ const CaseStudyDetail = () => {
                             question.qType === QUESTION_TYPES.ESSAY &&
                             isShowTemplate && (
                               <div className="mt-8 flex items-center justify-end gap-3">
-                                <ButtonTextV2
+                                <ButtonText
                                   title="Reset to Answer Template"
                                   onClick={() =>
                                     onOpenResetToTemplateModal({
@@ -1686,7 +1683,7 @@ const CaseStudyDetail = () => {
                     handleOpenScratchPad('scratch_pad')
                   }}
                 >
-                  <ScratchPadIconV2 isActive className="h-6 w-6" />
+                  <NewScratchPadIcon isActive className="h-6 w-6" />
                 </div>
               </Popover>
               <Popover
@@ -1708,7 +1705,7 @@ const CaseStudyDetail = () => {
                   }}
                   disabled={checkCalExist > -1}
                 >
-                  <CalculatorIconV2 isActive className="h-6 w-6" />
+                  <CalculatorIcon className="h-6 w-6 text-white" />
                 </button>
               </Popover>
             </div>

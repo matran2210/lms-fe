@@ -8,7 +8,6 @@ import {
   IDiscussion,
   reactDiscussion,
   uploadImagesDiscussion,
-  useAppDispatch, useAppSelector,
   useFeature,
   userReducer,
 } from '@lms/contexts'
@@ -33,12 +32,11 @@ type Props = {
  * @param {Props} props - Props của component.
  */
 const Discussion = ({ class_id,  }: Props) => {
-  const { activityApi, courseApi, courseActivityApi, router, params } = useFeature();
-  const dispatch = useAppDispatch()
-  const selector = useAppSelector(courseActivityReducer)
+  const { activityApi, courseApi, courseActivityApi, router, dispatch, useAppSelector, params } = useFeature();
+  const selector = useAppSelector?.(courseActivityReducer)
   const [idReply, setIdReply] = useState<string>()
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null)
-  const { user } = useAppSelector(userReducer)
+  const { user } = useAppSelector?.(userReducer) || {}
   // const [stream, setStream] = useState<MediaStream | null>(null)
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [rootSelectedFiles, setRootSetSelectedFiles] = useState<File[]>([])
@@ -133,7 +131,7 @@ const Discussion = ({ class_id,  }: Props) => {
         reset({ [fieldToReset]: '' })
         isRoot ? setRootSetSelectedFiles([]) : setSelectedFiles([])
 
-        await dispatch(
+        await dispatch?.(
           createDiscussion({
             api: activityApi,
             data: {
@@ -220,9 +218,9 @@ const Discussion = ({ class_id,  }: Props) => {
         return
       }
       try {
-        await dispatch(reactDiscussion({ api: activityApi, data  }))
+        await dispatch?.(reactDiscussion({ api: activityApi, data  }))
       } finally {
-        await dispatch(getDiscussion({api: courseApi, id: class_id, sectionId: params?.activityId as string}))
+        await dispatch?.(getDiscussion({api: courseApi, id: class_id, sectionId: params?.activityId as string}))
       }
     }, 1000)
   }
@@ -563,10 +561,10 @@ const Discussion = ({ class_id,  }: Props) => {
             height={40}
             className="h-8 w-8 rounded-full md:h-10 md:w-10"
             src={
-              selector.userInDiscussion?.is_sapp_supporter &&
-              selector.userInDiscussion?.avatar
-                ? selector.userInDiscussion?.avatar['50x50'] ||
-                  selector.userInDiscussion?.avatar['ORIGIN'] ||
+              selector?.userInDiscussion?.is_sapp_supporter &&
+              selector?.userInDiscussion?.avatar
+                ? selector?.userInDiscussion?.avatar['50x50'] ||
+                  selector?.userInDiscussion?.avatar['ORIGIN'] ||
                   BlankAvatarNotificationImage
                 : user?.detail?.avatar['50x50'] ||
                   user?.detail?.avatar['ORIGIN'] ||

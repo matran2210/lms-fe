@@ -1,6 +1,6 @@
 "use client"
 import { Icon } from "@lms/assets";
-import { useAppSelector, useFeature, userReducer } from "@lms/contexts";
+import { useFeature, userReducer } from "@lms/contexts";
 import { ButtonPrimary, ButtonText, SappModalV3 } from "@lms/ui";
 import type { GetProps } from "antd";
 import { Input } from "antd";
@@ -19,8 +19,8 @@ interface IProps {
 }
 
 const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
-  const { user } = useAppSelector(userReducer);
-  const {authApi} = useFeature()
+  const { authApi, useAppSelector } = useFeature()
+  const { user } = useAppSelector?.(userReducer) || {};
 
   const [code, setCode] = useState(Array(6).join(".").split("."));
   const [canResend, setCanResend] = useState(false);

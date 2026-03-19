@@ -45,7 +45,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const activityId = param?.activityId || query?.activityId;
   const chapterId = query?.chapter;
   const unitId = query?.unit;
-  const courseSectionId = param?.course_section_id
+  const courseSectionId = param?.course_section_id || query?.course_section_id;
 
   const [loading, setLoading] = useState<boolean>(false);
   const [isFirstCallApi, setIsFirstCallApi] = useState(false);
@@ -205,7 +205,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     const scrollEl = scrollRef.current;
     scrollEl?.addEventListener("scroll", handleScroll);
     return () => scrollEl?.removeEventListener("scroll", handleScroll);
-   }, [fetchData, pageIndex]);
+  }, [fetchData, pageIndex]);
 
   const download = async (name: string, file_key: string) => {
     await uploadApi.downloadFile({
@@ -255,10 +255,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     });
   };
   const heightContent = isMobileView
-    ? "120px"
+    ? "248px"
     : isTabletView
-      ? "128px"
-      : "136px";
+      ? "495px"
+      : "228px";
 
   const getSize = (size: number) => formatBytes(size);
 
@@ -287,6 +287,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         btnSubmitTile="Confirm"
         titleClassName={isOpenFilter ? "w-full pr-8 text-center" : ""}
         placement={!isAlwaysShowSidebar ? "bottom" : "right"}
+        classNameBody="overflow-hidden"
       >
         <FormProvider {...methods}>
           <CarouselSlideAnimation slideKey={title} direction={direction}>
@@ -316,7 +317,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
                     ref={scrollRef}
                     className="mt-6 flex flex-col gap-4 overflow-y-auto md:mt-8 pb-3"
                     style={{
-                      height: `calc(100vh - ${heightContent})`,
+                      height:
+                        isTabletView || isMobileView
+                          ? heightContent
+                          : `calc(100vh - ${heightContent})`,
                     }}
                   >
                     {resources?.resources?.map((resource) => (

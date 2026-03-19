@@ -1,15 +1,13 @@
+import { IAuthAPI, USER_STATUS, USER_TYPE } from '@lms/core'
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { USER_STATUS, USER_TYPE } from '@lms/core'
 import toast from 'react-hot-toast'
-import { RootState } from '../../store'
 import {
-  IUserStatus,
-  UserType,
-  UserState,
   ITemplateConfig,
   IUserAPI,
+  IUserStatus,
+  UserState,
+  UserType,
 } from '../../types/User/urser'
-import { IAuthAPI } from '@lms/core'
 
 const initialState: UserState = {
   loading: false,
@@ -321,6 +319,12 @@ export const userSlice = createSlice({
 })
 
 // export const selectAuthUser = (state: RootState) => state.loginReducer.authUser;
-export const userReducer = (state: RootState) => state.userReducer
+export const userReducer = <
+  T extends {
+    userReducer: UserState;
+  },
+>(
+  state: T,
+) => state.userReducer
 
 export default userSlice.reducer

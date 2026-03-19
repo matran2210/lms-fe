@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { RootState } from "../../../../store";
 
 // Tạo một đối tượng Notification với giá trị mặc định
 export interface NotesListState3Level {
@@ -53,6 +52,12 @@ export const {
   closeNote3Level,
   clearNote3Level,
 } = shortNotesListSlice.actions
-export const shortNotesListReducer = (state: RootState) =>
+export const shortNotesListReducer = <
+  T extends {
+    shortNotesListReducer: NotesListState3Level;
+  },
+>(
+  state: T,
+) =>
   state.shortNotesListReducer
 export default shortNotesListSlice.reducer

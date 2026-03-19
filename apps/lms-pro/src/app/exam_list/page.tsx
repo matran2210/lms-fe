@@ -1,15 +1,15 @@
-"use client"
+'use client'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
-import { PencilV2Icon } from '@lms/assets'
+import { PencilIcon } from '@lms/assets'
 import { IExamInformation, TitleSidebar } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
-  ActionCellV2,
+  ActionCellWithPopover,
   ExaminationInfo,
   HeaderMobile,
   InfoItemProps,
   Layout,
-  PaginationSappV2,
+  PaginationSapp,
   SappTable,
 } from '@lms/ui'
 import { getDuration } from '@lms/utils'
@@ -167,10 +167,10 @@ const ExamInformation = () => {
           <div className="flex justify-end">
             {!record?.is_final_examination_subject &&
               record?.remaining_changes > 0 && (
-                <ActionCellV2
+                <ActionCellWithPopover
                   listAction={[
                     {
-                      icon: <PencilV2Icon className="h-5 w-5" />,
+                      icon: <PencilIcon className="h-5 w-5" />,
                       nameAction: 'Edit',
                       action: () => handleEdit(record),
                     },
@@ -225,7 +225,7 @@ const ExamInformation = () => {
                 Edit
               </div>
               <div>
-                <PencilV2Icon />
+                <PencilIcon />
               </div>
             </div>
           </div>
@@ -256,10 +256,10 @@ const ExamInformation = () => {
                 }}
                 loading={isNormalLoading}
                 isShowPagination={false}
-                className="style-table-v2 rounded-xl"
+                className="style-table rounded-xl"
               />
               {!isEmpty(normalData) && (
-                <PaginationSappV2
+                <PaginationSapp
                   currentPage={normalData?.metadata?.page_index || 1}
                   pageSize={normalData?.metadata?.page_size || 10}
                   totalItems={normalData?.metadata?.total_records || 0}
