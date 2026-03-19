@@ -321,7 +321,7 @@ export default function SectionContentAccoridior({
                             </div>
                           </div>
                           {isShowLock ? (
-                            <LockClosedIcon />
+                            <LockClosedIcon className="shrink-0" />
                           ) : isActivityFinished ? (
                             <CompletedIcon className="shrink-0" />
                           ) : activity?.course_section_type ==
