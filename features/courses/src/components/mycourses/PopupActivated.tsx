@@ -9,7 +9,7 @@ import React, { Dispatch, SetStateAction } from "react";
 
 const PopupActivated = () => {
   const { dispatch, useAppSelector, courseApi } = useFeature();
-  const selector = useAppSelector?.((state) => state.popupActivateCourse);
+  const selector = useAppSelector?.((state) => state.activateCourseReducer);
   const handleCancel = () => {
     dispatch?.({ type: hidePopupActivatedCourse });
   };

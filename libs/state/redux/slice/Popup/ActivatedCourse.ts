@@ -19,7 +19,7 @@ const initialState: ActivatedCourseState = {
 // ✅ THUNK (xử lý async + side effects)
 //
 export const activeCourseThunk = createAsyncThunk(
-  "popupActivateCourse/activeCourse",
+  "activateCourseReducer/activeCourse",
   async (
     payload: {
       courseType: string;
@@ -61,7 +61,7 @@ export const activeCourseThunk = createAsyncThunk(
 // ✅ SLICE
 //
 export const popupSlice = createSlice({
-  name: "popupActivateCourse",
+  name: "activateCourseReducer",
   initialState,
   reducers: {
     showPopupActivatedCourse: (
@@ -106,10 +106,10 @@ export const { showPopupActivatedCourse, hidePopupActivatedCourse } =
 // ✅ SELECTOR
 //
 export const selectPopupActivateCourse = <
-  T extends { popupActivateCourse: ActivatedCourseState },
+  T extends { activateCourseReducer: ActivatedCourseState },
 >(
   state: T,
-) => state.popupActivateCourse;
+) => state.activateCourseReducer;
 
 //
 // ✅ REDUCER

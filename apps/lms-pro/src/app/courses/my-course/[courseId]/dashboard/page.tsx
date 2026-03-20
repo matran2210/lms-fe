@@ -32,7 +32,7 @@ const Dashboard = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { dispatch, useAppSelector } = useFeature()
-  const selector = useAppSelector?.((state) => state.popupActivateCourse)
+  const selector = useAppSelector?.((state) => state.activateCourseReducer)
   const params = useParams()
   const query = Object.fromEntries(searchParams.entries())
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()

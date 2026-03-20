@@ -14,7 +14,7 @@ import notesListReducer from "./slice/Course/NotesList";
 import popupReducer from "./slice/Popup/Result-test";
 import shortCourseActivityReducer from "./slice/Course/ShortCourse/Activity/Activity";
 import shortNotesListReducer from "./slice/Course/ShortCourse/NoteList/ShortNoteList";
-import popupActivateCourse from "./slice/Popup/ActivatedCourse";
+import activateCourseReducer from "./slice/Popup/ActivatedCourse";
 export const globalReducer = {
   loginReducer,
   userReducer,
@@ -30,5 +30,5 @@ export const globalReducer = {
   notesListReducer,
   shortCourseActivityReducer,
   shortNotesListReducer,
-  popupActivateCourse,
+  activateCourseReducer,
 };
