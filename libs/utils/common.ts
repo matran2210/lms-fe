@@ -19,6 +19,7 @@ import {
   serializeHighlights,
 } from "@funktechno/texthighlighter/lib";
 import { Correct } from "./answer";
+import { PageLink } from "../../apps/lms-pro/src/constants/routers";
 
 declare global {
   interface Window {
@@ -589,3 +590,51 @@ export const handleMultipleCorrectAnswer = (
 
   return answersMapped;
 };
+
+export const handleCheckIsNotActivated = (errorCode: string) => {
+  return errorCode === "400|100016";
+};
+
+export const handleCheckRedirectPage = (
+  isPassFoundation: boolean,
+  isACCACourse: boolean,
+) => {
+  if (!isPassFoundation) {
+    return PageLink.COURSES;
+  }
+  if (isACCACourse) {
+    return;
+  }
+  return null;
+};
+
+// async function activeCourse(foundation_class_id?: string) {
+//   if (course?.course_type === "TRIAL_COURSE") {
+//     localStorage.setItem(
+//       "daysDifference",
+//       course?.classes?.[0]?.flexible_days as any,
+//     );
+//     localStorage.setItem("showPinTrial", "true");
+//   } else {
+//     localStorage.removeItem("daysDifference");
+//     localStorage.removeItem("showPinTrial");
+//   }
+//   try {
+//     const params = {
+//       classId: foundation_class_id ? foundation_class_id : classInstance?.id,
+//     };
+//     const res = (await courseApi.activeCourse(params)) as {
+//       success: boolean;
+//     };
+//     if (res?.success) {
+//       // router.push(
+//       //   `${userPrefix}/courses/my-course/${foundation_class_id || classInstance?.id}`,
+//       // );
+
+//       // refetch();
+//       if (course?.course_categories?.[0]?.name !== "ACCA") {
+//         toast.success("Active thành công!");
+//       }
+//     }
+//   } catch {}
+// }

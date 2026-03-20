@@ -1,5 +1,5 @@
 'use client'
-import { UserType } from '@lms/contexts'
+import { useFeature, UserType } from '@lms/contexts'
 import {
   ANIMATION,
   COURSE_TYPE,
@@ -25,10 +25,14 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { handleCheckIsNotActivated, handleCheckRedirectPage } from '@lms/utils'
+import { showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 const Dashboard = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { dispatch, useAppSelector } = useFeature()
+  const selector = useAppSelector?.((state) => state.popupActivateCourse)
   const params = useParams()
   const query = Object.fromEntries(searchParams.entries())
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
@@ -76,8 +80,19 @@ const Dashboard = () => {
       if (res && res.success) {
         setOverallProgressData(res.data)
       }
-    } catch (error) {
+    } catch (error: any) {
       setOverallProgressData(null)
+      const isNotActivated = handleCheckIsNotActivated(
+        error?.response?.data?.error.code,
+      )
+      if (isNotActivated) {
+        const linkRedirectPage = handleCheckRedirectPage(true, false)
+        if (linkRedirectPage) {
+          router.push(linkRedirectPage)
+        } else {
+          dispatch?.(showPopupActivatedCourse(12))
+        }
+      }
     } finally {
       setIsLoadingOverallProgress(false)
     }
@@ -108,6 +123,7 @@ const Dashboard = () => {
       setIsLoadingMockTestResults(false)
     }
   }
+  const activeCourse = () => {}
 
   useEffect(() => {
     if (infoCourse?.course_type === COURSE_TYPE.NORMAL_COURSE) {
@@ -165,7 +181,7 @@ const Dashboard = () => {
   }, [infoCourse?.course_type, params?.courseId])
   return (
     <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar} size="xl">
-      {isLoading ? (
+      {isLoading || selector.openActive ? (
         <DashboardSkeleton />
       ) : (
         <div data-aos={ANIMATION.DATA_AOS}>
