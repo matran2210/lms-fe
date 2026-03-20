@@ -1,24 +1,30 @@
 import { ActiveIcon } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
-import { hidePopupActivatedCourse } from "@lms/contexts/redux/slice/Popup/ActivatedCourse";
+import {
+  activeCourseThunk,
+  hidePopupActivatedCourse,
+} from "@lms/contexts/redux/slice/Popup/ActivatedCourse";
 import { SappModalV3 } from "@lms/ui";
 import React, { Dispatch, SetStateAction } from "react";
 
 const PopupActivated = () => {
-  //   const handleCancel = () => {
-  //     setOpen(false);
-  //   };
-  const onOk = () => {
-    // activeCourse();
-  };
-  const { dispatch, useAppSelector } = useFeature();
+  const { dispatch, useAppSelector, courseApi } = useFeature();
   const selector = useAppSelector?.((state) => state.popupActivateCourse);
-
   const handleCancel = () => {
     dispatch?.({ type: hidePopupActivatedCourse });
   };
+  console.log("selector", selector);
+  const onOk = () => {
+    dispatch?.(
+      activeCourseThunk({
+        courseType: selector.courseType,
+        timeActive: selector.timeActive,
+        classId: selector.classId,
+        courseApi: courseApi,
+      }),
+    );
+  };
   const ContentActiveCourse = () => {
-    // if (activeContent) return activeContent;
     return (
       <div className="justify-center self-stretch text-center">
         <span className="text-base font-normal leading-normal text-gray-800">

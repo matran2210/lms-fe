@@ -90,7 +90,13 @@ const Dashboard = () => {
         if (linkRedirectPage) {
           router.push(linkRedirectPage)
         } else {
-          dispatch?.(showPopupActivatedCourse(12))
+          dispatch?.(
+            showPopupActivatedCourse({
+              timeActive: 12,
+              classId: '123',
+              courseType: 'acv',
+            }),
+          )
         }
       }
     } finally {
