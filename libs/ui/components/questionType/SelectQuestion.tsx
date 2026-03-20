@@ -169,28 +169,27 @@ const SelectWord = forwardRef(
             </svg>
         </span>
         <span class="dropdown-options ${DROPDOWN_STYLES.options}" style="display: none;" data-component-id="${componentId.current}">
-          ${
-            answerObj?.[+index + 1]?.length
-              ? answerObj?.[+index + 1]
-                  ?.map((e: any) => {
-                    if (e?.label?.length > 100) {
-                      return `
+          ${answerObj?.[+index + 1]?.length
+          ? answerObj?.[+index + 1]
+            ?.map((e: any) => {
+              if (e?.label?.length > 100) {
+                return `
                 <span class="option ${DROPDOWN_STYLES.option}" 
                      data-value="${e?.value}" data-component-id="${componentId.current}">
                   ${e.label}
                 </span>
               `;
-                    }
-                    return `
+              }
+              return `
               <span class="option ${DROPDOWN_STYLES.option}" 
                    data-value="${e?.value}" data-component-id="${componentId.current}">
                 ${e?.label}
               </span>
             `;
-                  })
-                  .join("")
-              : `<span class="option ${DROPDOWN_STYLES.option}" data-component-id="${componentId.current}">No options available</span>`
-          }
+            })
+            .join("")
+          : `<span class="option ${DROPDOWN_STYLES.option}" data-component-id="${componentId.current}">No options available</span>`
+        }
         </span>
       `;
     };
@@ -251,10 +250,13 @@ const SelectWord = forwardRef(
       // Process question content
       elements.forEach((element, index) => {
         const dropdownContainer = document?.createElement("span");
-        dropdownContainer.classList?.add(
-          ...DROPDOWN_STYLES.container.split(" "),
+        const classes = [
+          ...DROPDOWN_STYLES.container.split(/\s+/),
           className,
-        );
+        ].filter(Boolean);
+
+        dropdownContainer.classList.add(...classes);
+
         dropdownContainer.id = element?.id;
         dropdownContainer.setAttribute("data-value", "");
         dropdownContainer.setAttribute(
@@ -720,29 +722,29 @@ const SelectWord = forwardRef(
           highlighted={highlighted}
         />
         <>
-        {/* Correct Answer Section */}
-        {answerContent && (
+          {/* Correct Answer Section */}
+          {answerContent && (
             <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
-            <SappDivider />
-            <div className="text-base font-semibold">Correct Answer</div>
-            <EditorReader
-              className="questions mt-2"
-              text_editor_content={
-                answerContent?.documentElement?.querySelector("body")
-                  ?.innerHTML || ""
-              }
-            />
-          </div>
-        )}
+              <SappDivider />
+              <div className="text-base font-semibold">Correct Answer</div>
+              <EditorReader
+                className="questions mt-2"
+                text_editor_content={
+                  answerContent?.documentElement?.querySelector("body")
+                    ?.innerHTML || ""
+                }
+              />
+            </div>
+          )}
 
-        {/* Solution Section */}
-        {solution && (
+          {/* Solution Section */}
+          {solution && (
             <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
-            <SappDivider />
-            <SappTitleSolution title={MY_COURSES.explanations} />
-            <EditorReader className="mt-4" text_editor_content={solution} />
-          </div>
-        )}
+              <SappDivider />
+              <SappTitleSolution title={MY_COURSES.explanations} />
+              <EditorReader className="mt-4" text_editor_content={solution} />
+            </div>
+          )}
         </>
       </div>
     );
