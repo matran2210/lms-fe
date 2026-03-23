@@ -14,6 +14,8 @@
     "@lms/core": "workspace:*",
     "@lms/ui": "workspace:*",
     "@lms/utils": "workspace:*",
+    "@lms/hooks": "workspace:*",
+    "@lms/contexts": "workspace:*",
     "@sapp-fe/sapp-common-package": "^1.8.0",
     "antd": "^5.25.0",
     "clsx": "^2.1.1",

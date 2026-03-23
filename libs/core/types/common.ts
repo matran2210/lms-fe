@@ -138,3 +138,11 @@ export interface UserHubspotExaminationSubjectItem {
   };
   is_final_examination_subject: boolean;
 }
+
+export interface AppModule {
+  name: string;
+  routes: {
+    path: string;
+    element: React.ReactNode;
+  }[];
+}

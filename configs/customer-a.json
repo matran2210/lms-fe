@@ -1,0 +1,13 @@
+{
+  "name": "customer-a",
+  "features": [
+    "feature-auth",
+    "feature-calendar",
+    "feature-class",
+    "feature-courses",
+    "feature-dashboard",
+    "feature-notifications",
+    "feature-test",
+    "feature-user"
+  ]
+}

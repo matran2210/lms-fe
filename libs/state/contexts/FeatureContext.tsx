@@ -1,5 +1,6 @@
 "use client";
 import {
+  AppModule,
   IActivityAPI,
   IAuthAPI,
   IAuthManager,
@@ -57,10 +58,10 @@ interface FeatureContextProps {
     updateProgram: (data: {
       course_category_id?: string | undefined;
       user_hubspot_examination_subjects?:
-        | {
-            examination_subject_id?: string | undefined;
-          }[]
-        | undefined;
+      | {
+        examination_subject_id?: string | undefined;
+      }[]
+      | undefined;
     }) => Promise<any>;
   };
   storylineApi?: IStorylineAPI
@@ -92,6 +93,7 @@ interface FeatureContextProps {
   dispatch?: AppLikeDispatch
   useAppSelector?: <T>(fn: (state: any) => T) => T
   courseActivationAPI?: ICourseActivationAPI;
+  appModules?: AppModule[]
 }
 
 const FeatureContext = createContext<FeatureContextProps>(
