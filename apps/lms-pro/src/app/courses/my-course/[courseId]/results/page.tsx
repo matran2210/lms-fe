@@ -1,5 +1,5 @@
 'use client'
-import { UserType } from '@lms/contexts'
+import { useFeature, UserType } from '@lms/contexts'
 import { DEFAULT_PAGE_SIZE, TEST_AND_QUIZ_TITLE } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
@@ -17,11 +17,15 @@ import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import ResultsTable from './ResultsTable'
 import { CoursesAPI } from 'src/api/courses'
+import { handleCheckIsNotActivated } from '@lms/utils'
+import { showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 const Results = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const param = useParams()
+  const { dispatch, useAppSelector } = useFeature()
+  const selector = useAppSelector?.((state) => state.activateCourseReducer)
   const query = Object.fromEntries(searchParams.entries())
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =
     useTailwindBreakpoint()
@@ -60,6 +64,19 @@ const Results = () => {
   const { data: courseData } = useQuery({
     queryKey: ['courseDetail'],
     queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
+    onError: (error: any) => {
+      const errResponse = error?.response?.data?.error
+      const isNotActivated = handleCheckIsNotActivated(errResponse?.code)
+      if (isNotActivated) {
+        dispatch?.(
+          showPopupActivatedCourse({
+            timeActive: errResponse?.replacements?.FLEXIBLE_DAYS,
+            classId: errResponse?.replacements?.CLASS_ID,
+            courseType: errResponse?.replacements?.COURSE_TYPE,
+          }),
+        )
+      }
+    },
     refetchOnWindowFocus: true,
     retry: false,
   })
@@ -71,7 +88,7 @@ const Results = () => {
 
   return (
     <Layout title={TEST_AND_QUIZ_TITLE} showSidebar={isAlwaysShowSidebar}>
-      {!courseData ? (
+      {!courseData || selector.openActive ? (
         <TestQuizResultSkeleton />
       ) : (
         <>
