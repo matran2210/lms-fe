@@ -86,7 +86,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/api/courses'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { v4 as uuidv4 } from 'uuid'
-import { showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
+import { selectPopupActivateCourse, showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string
@@ -134,9 +134,7 @@ const ActivityPage = () => {
     useSmartModalSize()
 
   const dispatch = useAppDispatch()
-  const selectorActivated = useAppSelector?.(
-    (state) => state.activateCourseReducer,
-  )
+  const selectorActivated = useAppSelector?.(selectPopupActivateCourse)
   const selector = useAppSelector(courseActivityReducer)
   const getNotesData = useAppSelector(
     (state) => state.notesListReducer?.note_data,
@@ -551,7 +549,7 @@ const ActivityPage = () => {
         className={focusOnlyDiscussion ? 'h-full !bg-white' : ''}
         childClassName={focusOnlyDiscussion ? 'h-full' : ''}
       >
-        {isLoading || selectorActivated.openActive ? (
+        {isLoading || selectorActivated?.openActive ? (
           <ActivitySkeleton></ActivitySkeleton>
         ) : (
           <div data-aos={ANIMATION.DATA_AOS}>

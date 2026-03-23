@@ -48,7 +48,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { CoursesAPI } from 'src/api/courses/index'
 import StoryOverview from '@components/storyline/modal/StoryOverview'
 import { IStoryline } from '@lms/core'
-import { showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
+import { selectPopupActivateCourse, showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 interface IProps {
   course_section_type: string
@@ -105,9 +105,7 @@ const CoursePartDetail = () => {
   const [isOpenChapter, setIsOpenChapter] = useState<boolean>(false)
   const [loadingScreen, setLoadingScreen] = useState<boolean>(true)
   const [openResource, setOpenResource] = useState<boolean>(false)
-  const selectorActivated = useAppSelector?.(
-    (state) => state.activateCourseReducer,
-  )
+  const selectorActivated = useAppSelector?.(selectPopupActivateCourse)
   const [openStory, setOpenStory] = useState<{
     isOpen: boolean
     storyline?: IStoryline
@@ -539,7 +537,7 @@ const CoursePartDetail = () => {
     }
   }, [isLoading, loadingChapter])
 
-  const isLoadingActivity = selectorActivated.openActive
+  const isLoadingActivity = selectorActivated?.openActive
 
   return (
     <Layout title="Course Part Detail" showSidebar={isAlwaysShowSidebar}>
