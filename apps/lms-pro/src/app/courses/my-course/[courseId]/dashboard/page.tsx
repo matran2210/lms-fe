@@ -118,7 +118,6 @@ const Dashboard = () => {
       setIsLoadingMockTestResults(false)
     }
   }
-  const activeCourse = () => {}
 
   useEffect(() => {
     if (infoCourse?.course_type === COURSE_TYPE.NORMAL_COURSE) {
