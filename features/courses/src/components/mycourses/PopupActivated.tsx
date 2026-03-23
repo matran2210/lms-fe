@@ -5,15 +5,15 @@ import {
   hidePopupActivatedCourse,
 } from "@lms/contexts/redux/slice/Popup/ActivatedCourse";
 import { SappModalV3 } from "@lms/ui";
-import React, { Dispatch, SetStateAction } from "react";
 
 const PopupActivated = () => {
-  const { dispatch, useAppSelector, courseApi } = useFeature();
+  const { dispatch, useAppSelector, courseApi, router, pageLink } =
+    useFeature();
   const selector = useAppSelector?.((state) => state.activateCourseReducer);
   const handleCancel = () => {
-    dispatch?.({ type: hidePopupActivatedCourse });
+    dispatch?.(hidePopupActivatedCourse());
+    router.push(pageLink.COURSES);
   };
-  console.log("selector", selector);
   const onOk = () => {
     dispatch?.(
       activeCourseThunk({
@@ -21,6 +21,8 @@ const PopupActivated = () => {
         timeActive: selector.timeActive,
         classId: selector.classId,
         courseApi: courseApi,
+        router: router,
+        pageLink: pageLink.COURSES,
       }),
     );
   };
@@ -43,7 +45,7 @@ const PopupActivated = () => {
 
   return (
     <SappModalV3
-      handleClose={handleCancel}
+      handleClose={() => {}}
       open={selector.openActive}
       handleCancel={handleCancel}
       onOk={onOk}
@@ -56,6 +58,7 @@ const PopupActivated = () => {
       buttonSize="medium"
       cancelButtonCaption="I will begin later"
       isUnderLine
+      isValidated
     />
   );
 };

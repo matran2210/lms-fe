@@ -81,23 +81,22 @@ const Dashboard = () => {
         setOverallProgressData(res.data)
       }
     } catch (error: any) {
+      const errResponse = error?.response?.data?.error
       setOverallProgressData(null)
-      const isNotActivated = handleCheckIsNotActivated(
-        error?.response?.data?.error.code,
-      )
+      const isNotActivated = handleCheckIsNotActivated(errResponse?.code)
       if (isNotActivated) {
-        const linkRedirectPage = handleCheckRedirectPage(true, false)
-        if (linkRedirectPage) {
-          router.push(linkRedirectPage)
-        } else {
+        // const linkRedirectPage = handleCheckRedirectPage(true, false)
+        // if (linkRedirectPage) {
+        //   router.push(linkRedirectPage)
+        // } else {
           dispatch?.(
             showPopupActivatedCourse({
-              timeActive: 12,
-              classId: '123',
-              courseType: 'acv',
+              timeActive: errResponse?.replacements?.FLEXIBLE_DAYS,
+              classId: '12222' ,
+              courseType: errResponse?.replacements?.COURSE_TYPE,
             }),
           )
-        }
+        // }
       }
     } finally {
       setIsLoadingOverallProgress(false)

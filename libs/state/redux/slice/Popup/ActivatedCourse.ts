@@ -26,11 +26,14 @@ export const activeCourseThunk = createAsyncThunk(
       timeActive: number;
       classId: number;
       courseApi: any;
+      router: any;
+      pageLink: string;
     },
     { rejectWithValue },
   ) => {
-    const { courseType, timeActive, classId, courseApi } = payload;
-    
+    const { courseType, timeActive, classId, courseApi, router, pageLink } =
+      payload;
+
     // ⚠️ tránh lỗi khi chạy SSR (Next.js)
     if (typeof window !== "undefined") {
       if (courseType === "TRIAL_COURSE") {
@@ -43,15 +46,13 @@ export const activeCourseThunk = createAsyncThunk(
     }
 
     try {
-      console.log("Activating course with classId:");
       const res = await courseApi.activeCourse({ classId });
 
       if (res?.success) {
-        return res;
+        router.refresh();
       }
-
-      return rejectWithValue("Active failed");
     } catch (error) {
+      router.push(pageLink);
       return rejectWithValue(error);
     }
   },
@@ -88,10 +89,11 @@ export const popupSlice = createSlice({
     builder
       .addCase(activeCourseThunk.fulfilled, (state) => {
         toast.success("Active thành công!");
-        state.openActive = false; // 👉 optional: auto close popup
+        return initialState;
       })
       .addCase(activeCourseThunk.rejected, () => {
         toast.error("Active thất bại!");
+        return initialState;
       });
   },
 });
