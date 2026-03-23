@@ -1,7 +1,7 @@
 'use client'
 import PopupModalTest from '@components/survey/PopupModalTest'
 import { useCourseContext, useFeature, UserType } from '@lms/contexts'
-import { showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
+import { selectPopupActivateCourse, showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 import {
   ANIMATION,
   AppType,
@@ -42,7 +42,7 @@ const DEFAULT_PAGESIZE = 18
 const CourseDetail = () => {
   const searchParams = useSearchParams()
   const { dispatch, useAppSelector } = useFeature()
-  const selector = useAppSelector?.((state) => state.activateCourseReducer)
+  const selector = useAppSelector?.(selectPopupActivateCourse)
   const param = useParams()
   const query = Object.fromEntries(searchParams.entries())
   const observer = useRef<IntersectionObserver>()
@@ -265,7 +265,7 @@ const CourseDetail = () => {
       showSidebar={showSidebar || isAlwaysShowSidebar}
       handleToggleSidebar={handleCloseSidebar}
     >
-      {isLoading || selector.openActive ? (
+      {isLoading || selector?.openActive ? (
         <CourseDetailSkeleton />
       ) : (
         <>

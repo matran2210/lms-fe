@@ -16,47 +16,54 @@ const initialState: ActivatedCourseState = {
 };
 
 //
-// ✅ THUNK (xử lý async + side effects)
+// ✅ TYPE DEFINITIONS
 //
-export const activeCourseThunk = createAsyncThunk(
-  "activateCourseReducer/activeCourse",
-  async (
-    payload: {
-      courseType: string;
-      timeActive: number;
-      classId: number;
-      courseApi: any;
-      router: any;
-      pageLink: string;
-    },
-    { rejectWithValue },
-  ) => {
-    const { courseType, timeActive, classId, courseApi, router, pageLink } =
-      payload;
+interface ActiveCoursePayload {
+  courseType: string;
+  timeActive: number;
+  classId: string;
+  courseApi: {
+    activeCourse: (params: { classId: string }) => Promise<{ success: boolean }>;
+  };
+  router: {
+    refresh: () => void;
+    push: (path: string) => void;
+  };
+  pageLink: string;
+}
 
-    // ⚠️ tránh lỗi khi chạy SSR (Next.js)
-    if (typeof window !== "undefined") {
-      if (courseType === "TRIAL_COURSE") {
-        localStorage.setItem("daysDifference", String(timeActive));
-        localStorage.setItem("showPinTrial", "true");
-      } else {
-        localStorage.removeItem("daysDifference");
-        localStorage.removeItem("showPinTrial");
-      }
+//
+// ✅ THUNK
+//
+export const activeCourseThunk = createAsyncThunk<
+  void,
+  ActiveCoursePayload
+>("activateCourseReducer/activeCourse", async (payload, { rejectWithValue }) => {
+  const { courseType, timeActive, classId, courseApi, router, pageLink } =
+    payload;
+
+  // ✅ handle localStorage
+  if (typeof window !== "undefined") {
+    if (courseType === "TRIAL_COURSE") {
+      localStorage.setItem("daysDifference", String(timeActive));
+      localStorage.setItem("showPinTrial", "true");
+    } else {
+      localStorage.removeItem("daysDifference");
+      localStorage.removeItem("showPinTrial");
     }
+  }
 
-    try {
-      const res = await courseApi.activeCourse({ classId });
+  try {
+    const res = await courseApi.activeCourse({ classId });
 
-      if (res?.success) {
-        router.refresh();
-      }
-    } catch (error) {
-      router.push(pageLink);
-      return rejectWithValue(error);
+    if (res?.success) {
+      router.refresh();
     }
-  },
-);
+  } catch (error) {
+    router.push(pageLink);
+    return rejectWithValue(error);
+  }
+});
 
 //
 // ✅ SLICE
@@ -67,33 +74,30 @@ export const popupSlice = createSlice({
   reducers: {
     showPopupActivatedCourse: (
       state,
-      action: PayloadAction<{
+      { payload }: PayloadAction<{
         timeActive: number;
         classId: string;
         courseType: string;
       }>,
     ) => {
-      const { timeActive, classId, courseType } = action.payload;
-
-      state.openActive = true;
-      state.timeActive = timeActive;
-      state.classId = classId;
-      state.courseType = courseType;
+      Object.assign(state, {
+        openActive: true,
+        ...payload,
+      });
     },
 
-    hidePopupActivatedCourse: (state) => {
-      return initialState; // 🔥 clean hơn reset từng field
-    },
+    hidePopupActivatedCourse: () => initialState,
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(activeCourseThunk.fulfilled, (state) => {
         toast.success("Active thành công!");
-        return initialState;
+        Object.assign(state, initialState);
       })
-      .addCase(activeCourseThunk.rejected, () => {
+      .addCase(activeCourseThunk.rejected, (state) => {
         toast.error("Active thất bại!");
-        return initialState;
+        Object.assign(state, initialState);
       });
   },
 });
@@ -107,11 +111,9 @@ export const { showPopupActivatedCourse, hidePopupActivatedCourse } =
 //
 // ✅ SELECTOR
 //
-export const selectPopupActivateCourse = <
-  T extends { activateCourseReducer: ActivatedCourseState },
->(
-  state: T,
-) => state.activateCourseReducer;
+export const selectPopupActivateCourse = (state: {
+  activateCourseReducer: ActivatedCourseState;
+}) => state.activateCourseReducer;
 
 //
 // ✅ REDUCER

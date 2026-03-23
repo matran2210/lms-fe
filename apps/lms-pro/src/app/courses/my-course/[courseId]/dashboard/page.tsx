@@ -26,13 +26,13 @@ import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { handleCheckIsNotActivated, handleCheckRedirectPage } from '@lms/utils'
-import { showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
+import { selectPopupActivateCourse, showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 const Dashboard = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { dispatch, useAppSelector } = useFeature()
-  const selector = useAppSelector?.((state) => state.activateCourseReducer)
+  const selector = useAppSelector?.(selectPopupActivateCourse)
   const params = useParams()
   const query = Object.fromEntries(searchParams.entries())
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
@@ -186,7 +186,7 @@ const Dashboard = () => {
   }, [infoCourse?.course_type, params?.courseId])
   return (
     <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar} size="xl">
-      {isLoading || selector.openActive ? (
+      {isLoading || selector?.openActive ? (
         <DashboardSkeleton />
       ) : (
         <div data-aos={ANIMATION.DATA_AOS}>

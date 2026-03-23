@@ -21,6 +21,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { CoursesAPI } from 'src/api/courses'
+import { hidePopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -212,6 +213,10 @@ const MyCourse = () => {
       options: defaultStatusCourse,
     },
   ]
+
+  useEffect(() => {
+    dispatch(hidePopupActivatedCourse())
+  }, [])
 
   return (
     <SappLoadingGlobal loading={isLoading}>

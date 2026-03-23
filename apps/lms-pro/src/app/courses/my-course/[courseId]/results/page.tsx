@@ -18,14 +18,14 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import ResultsTable from './ResultsTable'
 import { CoursesAPI } from 'src/api/courses'
 import { handleCheckIsNotActivated } from '@lms/utils'
-import { showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
+import { selectPopupActivateCourse, showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 const Results = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const param = useParams()
   const { dispatch, useAppSelector } = useFeature()
-  const selector = useAppSelector?.((state) => state.activateCourseReducer)
+  const selector = useAppSelector?.(selectPopupActivateCourse)
   const query = Object.fromEntries(searchParams.entries())
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =
     useTailwindBreakpoint()
@@ -88,7 +88,7 @@ const Results = () => {
 
   return (
     <Layout title={TEST_AND_QUIZ_TITLE} showSidebar={isAlwaysShowSidebar}>
-      {!courseData || selector.openActive ? (
+      {!courseData || selector?.openActive ? (
         <TestQuizResultSkeleton />
       ) : (
         <>

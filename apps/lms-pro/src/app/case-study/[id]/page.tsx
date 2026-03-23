@@ -71,7 +71,7 @@ import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { TestServiceAPI } from 'src/api/test-api'
 import LimitQuizModal from 'src/app/test/limitQuizModal'
 import ScratchPatch from 'src/app/test/scratchPatch'
-import { showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
+import { selectPopupActivateCourse, showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
@@ -329,7 +329,7 @@ const CaseStudyDetail = () => {
     question: undefined,
     index: 0,
   })
-  const selector = useAppSelector?.((state) => state.activateCourseReducer)
+  const selector = useAppSelector?.(selectPopupActivateCourse)
   const onOpenResetToTemplateModal = ({
     question,
     index,
@@ -1069,7 +1069,7 @@ const CaseStudyDetail = () => {
   const { isDesktopView } = useTailwindBreakpoint()
 
   return (
-    <SappLoadingGlobal loading={loading || selector.openActive}>
+    <SappLoadingGlobal loading={loading || selector?.openActive}>
       <CaseStudyWrapper
         title={`${topics?.case_study_name} - ${topics?.name}`}
         setOpenSubmit={setOpenSubmit}
