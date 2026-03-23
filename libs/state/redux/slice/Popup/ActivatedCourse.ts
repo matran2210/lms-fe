@@ -23,47 +23,40 @@ interface ActiveCoursePayload {
   timeActive: number;
   classId: string;
   courseApi: {
-    activeCourse: (params: { classId: string }) => Promise<{ success: boolean }>;
+    activeCourse: (params: {
+      classId: string;
+    }) => Promise<{ success: boolean }>;
   };
-  router: {
-    refresh: () => void;
-    push: (path: string) => void;
-  };
-  pageLink: string;
 }
 
 //
 // ✅ THUNK
 //
-export const activeCourseThunk = createAsyncThunk<
-  void,
-  ActiveCoursePayload
->("activateCourseReducer/activeCourse", async (payload, { rejectWithValue }) => {
-  const { courseType, timeActive, classId, courseApi, router, pageLink } =
-    payload;
+export const activeCourseThunk = createAsyncThunk<boolean, ActiveCoursePayload>(
+  "activateCourseReducer/activeCourse",
+  async (payload, { rejectWithValue }) => {
+    const { courseType, timeActive, classId, courseApi } = payload;
 
-  // ✅ handle localStorage
-  if (typeof window !== "undefined") {
-    if (courseType === "TRIAL_COURSE") {
-      localStorage.setItem("daysDifference", String(timeActive));
-      localStorage.setItem("showPinTrial", "true");
-    } else {
-      localStorage.removeItem("daysDifference");
-      localStorage.removeItem("showPinTrial");
+    // ✅ handle localStorage
+    if (typeof window !== "undefined") {
+      if (courseType === "TRIAL_COURSE") {
+        localStorage.setItem("daysDifference", String(timeActive));
+        localStorage.setItem("showPinTrial", "true");
+      } else {
+        localStorage.removeItem("daysDifference");
+        localStorage.removeItem("showPinTrial");
+      }
     }
-  }
 
-  try {
-    const res = await courseApi.activeCourse({ classId });
+    try {
+      const res = await courseApi.activeCourse({ classId });
 
-    if (res?.success) {
-      router.refresh();
+      return res?.success ?? false;
+    } catch (error) {
+      return rejectWithValue(error);
     }
-  } catch (error) {
-    router.push(pageLink);
-    return rejectWithValue(error);
-  }
-});
+  },
+);
 
 //
 // ✅ SLICE
@@ -74,7 +67,9 @@ export const popupSlice = createSlice({
   reducers: {
     showPopupActivatedCourse: (
       state,
-      { payload }: PayloadAction<{
+      {
+        payload,
+      }: PayloadAction<{
         timeActive: number;
         classId: string;
         courseType: string;

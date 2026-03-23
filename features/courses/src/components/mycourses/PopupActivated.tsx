@@ -13,17 +13,23 @@ const PopupActivated = () => {
   const handleCancel = () => {
     router.push(pageLink.COURSES);
   };
-  const onOk = () => {
-    dispatch?.(
-      activeCourseThunk({
-        courseType: selector?.courseType || "",
-        timeActive: selector?.timeActive || 0,
-        classId: selector?.classId || "",
-        courseApi: courseApi,
-        router: router,
-        pageLink: pageLink.COURSES,
-      }),
-    );
+  const onOk = async () => {
+    try {
+      const res = await dispatch?.(
+        activeCourseThunk({
+          courseType: selector?.courseType || "",
+          timeActive: selector?.timeActive || 0,
+          classId: selector?.classId || "",
+          courseApi,
+        }),
+      ).unwrap();
+
+      if (res) {
+        window.location.reload();
+      }
+    } catch {
+      router.push(pageLink.COURSES);
+    }
   };
   const ContentActiveCourse = () => {
     return (
