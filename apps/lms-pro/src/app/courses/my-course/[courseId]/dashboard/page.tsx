@@ -25,8 +25,11 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { handleCheckIsNotActivated, handleCheckRedirectPage } from '@lms/utils'
-import { selectPopupActivateCourse, showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
+import { extractNotActivatedData } from '@lms/utils'
+import {
+  selectPopupActivateCourse,
+  showPopupActivatedCourse,
+} from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 const Dashboard = () => {
   const router = useRouter()
@@ -81,22 +84,9 @@ const Dashboard = () => {
         setOverallProgressData(res.data)
       }
     } catch (error: any) {
-      setOverallProgressData(null)
-      const errResponse = error?.response?.data?.error
-      const isNotActivated = handleCheckIsNotActivated(errResponse?.code)
-      if (isNotActivated) {
-        // const linkRedirectPage = handleCheckRedirectPage(true, false)
-        // if (linkRedirectPage) {
-        //   router.push(linkRedirectPage)
-        // } else {
-        dispatch?.(
-          showPopupActivatedCourse({
-            timeActive: errResponse?.replacements?.FLEXIBLE_DAYS,
-            classId: errResponse?.replacements?.CLASS_ID,
-            courseType: errResponse?.replacements?.COURSE_TYPE,
-          }),
-        )
-        // }
+      const data = extractNotActivatedData(error)
+      if (data) {
+        dispatch?.(showPopupActivatedCourse(data))
       }
     } finally {
       setIsLoadingOverallProgress(false)

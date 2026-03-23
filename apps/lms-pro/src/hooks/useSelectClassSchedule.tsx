@@ -1,10 +1,9 @@
-import { ClassKey } from '@lms/core'
+import { ApiError, ClassKey } from '@lms/core'
 import { ClassAPI } from 'src/api/class'
 import { useInfiniteQuery } from 'react-query' // Import useInfiniteQuery
-import { handleCheckIsNotActivated } from '@lms/utils'
+import { extractNotActivatedData } from '@lms/utils'
 import { useFeature } from '@lms/contexts'
 import { showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
-
 
 const useSelectClassSchedule = (
   id?: string,
@@ -38,18 +37,10 @@ const useSelectClassSchedule = (
     queryFn: ({ pageParam = 1 }) => {
       return fetchClasses(pageParam, 10, id) // Fetch with pageParam and a fixed page size
     },
-    onError: (error: any) => {
-      console.log('Error fetching class schedule:', error)
-      const errResponse = error?.response?.data?.error
-      const isNotActivated = handleCheckIsNotActivated(errResponse?.code)
-      if (isNotActivated) {
-        dispatch?.(
-          showPopupActivatedCourse({
-            timeActive: errResponse?.replacements?.FLEXIBLE_DAYS,
-            classId: '123213',
-            courseType: errResponse?.replacements?.COURSE_TYPE,
-          }),
-        )
+    onError: (error: ApiError) => {
+      const data = extractNotActivatedData(error)
+      if (data) {
+        dispatch?.(showPopupActivatedCourse(data))
       }
     },
     getNextPageParam: (lastPage) => {

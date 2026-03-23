@@ -3,6 +3,7 @@ import { useQuery } from "react-query";
 import dayjs, { Dayjs } from "dayjs";
 import {
   AnswerItem,
+  ApiError,
   DATE_FORMAT,
   DAYS_IN_WEEK,
   GRADE_STATUS,
@@ -590,7 +591,7 @@ export const handleMultipleCorrectAnswer = (
   return answersMapped;
 };
 
-export const handleCheckIsNotActivated = (errorCode: string) => {
+export const handleCheckIsNotActivated = (errorCode?: string) => {
   return errorCode === "400|100016";
 };
 
@@ -605,4 +606,16 @@ export const handleCheckRedirectPage = (
     return;
   }
   return null;
+};
+
+export const extractNotActivatedData = (error: ApiError) => {
+  const errResponse = error?.response?.data?.error;
+
+  if (!handleCheckIsNotActivated(errResponse?.code)) return null;
+
+  return {
+    timeActive: errResponse?.replacements?.FLEXIBLE_DAYS,
+    classId: errResponse?.replacements?.CLASS_ID,
+    courseType: errResponse?.replacements?.COURSE_TYPE,
+  };
 };

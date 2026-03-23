@@ -1,9 +1,13 @@
 'use client'
 import PopupModalTest from '@components/survey/PopupModalTest'
 import { useCourseContext, useFeature, UserType } from '@lms/contexts'
-import { selectPopupActivateCourse, showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
+import {
+  selectPopupActivateCourse,
+  showPopupActivatedCourse,
+} from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 import {
   ANIMATION,
+  ApiError,
   AppType,
   CLASS_TYPE,
   defaultStatusDetail,
@@ -27,7 +31,7 @@ import {
   SappBreadCrumbs,
   SearchWithMenuToggle,
 } from '@lms/ui'
-import { handleCheckIsNotActivated } from '@lms/utils'
+import { extractNotActivatedData } from '@lms/utils'
 
 import clsx from 'clsx'
 import { useParams, useSearchParams } from 'next/navigation'
@@ -114,17 +118,10 @@ const CourseDetail = () => {
   } = useInfiniteQuery({
     queryKey: ['courseDetail'],
     queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
-    onError: (error: any) => {
-      const errResponse = error?.response?.data?.error
-      const isNotActivated = handleCheckIsNotActivated(errResponse?.code)
-      if (isNotActivated) {
-        dispatch?.(
-          showPopupActivatedCourse({
-            timeActive: errResponse?.replacements?.FLEXIBLE_DAYS,
-            classId: errResponse?.replacements?.CLASS_ID,
-            courseType: errResponse?.replacements?.COURSE_TYPE,
-          }),
-        )
+    onError: (error: ApiError) => {
+      const data = extractNotActivatedData(error)
+      if (data) {
+        dispatch?.(showPopupActivatedCourse(data))
       }
     },
     getNextPageParam: (lastPage, allPages) => {

@@ -1,6 +1,6 @@
 'use client'
 import { useFeature, UserType } from '@lms/contexts'
-import { DEFAULT_PAGE_SIZE, TEST_AND_QUIZ_TITLE } from '@lms/core'
+import { ApiError, DEFAULT_PAGE_SIZE, TEST_AND_QUIZ_TITLE } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   HeaderMobile,
@@ -17,8 +17,11 @@ import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import ResultsTable from './ResultsTable'
 import { CoursesAPI } from 'src/api/courses'
-import { handleCheckIsNotActivated } from '@lms/utils'
-import { selectPopupActivateCourse, showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
+import { extractNotActivatedData } from '@lms/utils'
+import {
+  selectPopupActivateCourse,
+  showPopupActivatedCourse,
+} from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 const Results = () => {
   const router = useRouter()
@@ -64,17 +67,10 @@ const Results = () => {
   const { data: courseData } = useQuery({
     queryKey: ['courseDetail'],
     queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
-    onError: (error: any) => {
-      const errResponse = error?.response?.data?.error
-      const isNotActivated = handleCheckIsNotActivated(errResponse?.code)
-      if (isNotActivated) {
-        dispatch?.(
-          showPopupActivatedCourse({
-            timeActive: errResponse?.replacements?.FLEXIBLE_DAYS,
-            classId: errResponse?.replacements?.CLASS_ID,
-            courseType: errResponse?.replacements?.COURSE_TYPE,
-          }),
-        )
+    onError: (error: ApiError) => {
+      const data = extractNotActivatedData(error)
+      if (data) {
+        dispatch?.(showPopupActivatedCourse(data))
       }
     },
     refetchOnWindowFocus: true,

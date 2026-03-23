@@ -26,10 +26,7 @@ import {
   LearningResource,
   ModalResizeable,
 } from '@lms/ui'
-import {
-  convertMinutesToHourFormat,
-  handleCheckIsNotActivated,
-} from '@lms/utils'
+import { convertMinutesToHourFormat, extractNotActivatedData } from '@lms/utils'
 
 import { Triangle } from '@lms/assets'
 import {
@@ -48,6 +45,7 @@ import {
 } from '@lms/contexts'
 import {
   ANIMATION,
+  ApiError,
   CourseSectionType,
   EXHIBIT_TEXT_REPLACE,
   IActivity,
@@ -113,17 +111,10 @@ const ActivityPage = () => {
       ['activity', id, course_id],
       () => getActivityById(id, course_id),
       {
-        onError: (error: any) => {
-          const errResponse = error?.response?.data?.error
-          const isNotActivated = handleCheckIsNotActivated(errResponse?.code)
-          if (isNotActivated) {
-            dispatch?.(
-              showPopupActivatedCourse({
-                timeActive: errResponse?.replacements?.FLEXIBLE_DAYS,
-                classId: errResponse?.replacements?.CLASS_ID,
-                courseType: errResponse?.replacements?.COURSE_TYPE,
-              }),
-            )
+        onError: (error: ApiError) => {
+          const data = extractNotActivatedData(error)
+          if (data) {
+            dispatch?.(showPopupActivatedCourse(data))
           }
         },
         enabled: id !== undefined && course_id !== undefined,

@@ -13,7 +13,7 @@ import {
   useCourseContext,
   UserType,
 } from '@lms/contexts'
-import { ANIMATION, ILearningOutcome, TEST_TYPE } from '@lms/core'
+import { ANIMATION, ApiError, ILearningOutcome, TEST_TYPE } from '@lms/core'
 import { CardMenuItem, PopupLockContent, TestModal } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
@@ -26,8 +26,8 @@ import {
 } from '@lms/ui'
 import {
   buildQueryString,
+  extractNotActivatedData,
   formatDate,
-  handleCheckIsNotActivated,
 } from '@lms/utils'
 import { Alert, Divider, Skeleton } from 'antd'
 import clsx from 'clsx'
@@ -127,17 +127,10 @@ const CoursePartDetail = () => {
       enabled:
         params.id !== undefined && params.course_section_id !== undefined,
       retry: false,
-      onError: (error: any) => {
-        const errResponse = error?.response?.data?.error
-        const isNotActivated = handleCheckIsNotActivated(errResponse?.code)
-        if (isNotActivated) {
-          dispatch?.(
-            showPopupActivatedCourse({
-              timeActive: errResponse?.replacements?.FLEXIBLE_DAYS,
-              classId: errResponse?.replacements?.CLASS_ID,
-              courseType: errResponse?.replacements?.COURSE_TYPE,
-            }),
-          )
+      onError: (error: ApiError) => {
+        const data = extractNotActivatedData(error)
+        if (data) {
+          dispatch?.(showPopupActivatedCourse(data))
         }
       },
     })
@@ -218,16 +211,9 @@ const CoursePartDetail = () => {
         setChapterDetail(detail)
         localStorage.removeItem('course_chapter_id')
       } catch (error: any) {
-        const errResponse = error?.response?.data?.error
-        const isNotActivated = handleCheckIsNotActivated(errResponse?.code)
-        if (isNotActivated) {
-          dispatch?.(
-            showPopupActivatedCourse({
-              timeActive: errResponse?.replacements?.FLEXIBLE_DAYS,
-              classId: errResponse?.replacements?.CLASS_ID,
-              courseType: errResponse?.replacements?.COURSE_TYPE,
-            }),
-          )
+        const data = extractNotActivatedData(error)
+        if (data) {
+          dispatch?.(showPopupActivatedCourse(data))
         }
       } finally {
         setLoadingChapter(false)

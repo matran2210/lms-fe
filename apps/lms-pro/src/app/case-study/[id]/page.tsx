@@ -58,7 +58,10 @@ import {
   SelectWord,
   SlotValue,
 } from '@lms/ui'
-import { handleCheckIsNotActivated, runHighlight } from '@lms/utils'
+import {
+  extractNotActivatedData,
+  runHighlight,
+} from '@lms/utils'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
@@ -71,7 +74,10 @@ import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { TestServiceAPI } from 'src/api/test-api'
 import LimitQuizModal from 'src/app/test/limitQuizModal'
 import ScratchPatch from 'src/app/test/scratchPatch'
-import { selectPopupActivateCourse, showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
+import {
+  selectPopupActivateCourse,
+  showPopupActivatedCourse,
+} from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
@@ -490,16 +496,9 @@ const CaseStudyDetail = () => {
         setQuizAttempId(res.data.id)
       }
     } catch (err: any) {
-      const errResponse = err?.response?.data?.error
-      const isNotActivated = handleCheckIsNotActivated(errResponse?.code)
-      if (isNotActivated) {
-        dispatch?.(
-          showPopupActivatedCourse({
-            timeActive: errResponse?.replacements?.FLEXIBLE_DAYS,
-            classId: errResponse?.replacements?.CLASS_ID,
-            courseType: errResponse?.replacements?.COURSE_TYPE,
-          }),
-        )
+      const data = extractNotActivatedData(err)
+      if (data) {
+        dispatch?.(showPopupActivatedCourse(data))
       }
     }
   }
