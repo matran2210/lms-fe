@@ -18,7 +18,11 @@ import {
   SOCKET_EVENTS,
 } from '@lms/core'
 import { RouteGuard } from '@lms/feature-auth'
-import { LearningNotesList, PopupCompletedCourse } from '@lms/feature-courses'
+import {
+  LearningNotesList,
+  PopupActivated,
+  PopupCompletedCourse,
+} from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   AntConfigProvider,
@@ -291,94 +295,95 @@ function Providers({ children }: { children: ReactNode }) {
   }, [pathname, searchParams])
 
   return (
-      <AntConfigProvider>
-        {/* <Provider store={store}> */}
-        <PinnedNotifyProvider
-          router={router}
-          api={{
-            getPinnedNotifications: UserApi.getPinnedNotifications,
+    <AntConfigProvider>
+      {/* <Provider store={store}> */}
+      <PinnedNotifyProvider
+        router={router}
+        api={{
+          getPinnedNotifications: UserApi.getPinnedNotifications,
+        }}
+      >
+        <FeatureProvider
+          value={{
+            courseApi: CoursesAPI,
+            questionApi: QuestionAPI,
+            uploadApi: UploadAPI,
+            userApi: UserApi,
+            notificationApi: NotificationAPI,
+            authApi: AuthAPI,
+            classApi: ClassAPI,
+            activityApi: ActivityAPI,
+            courseActivityApi: CourseActivityApi,
+            entranceTestApi: EntranceTestAPI,
+            eventTestApi: EventTestAPI,
+            calendarApi: CalendarApi,
+            myProfileApi: MyProfileAPI,
+            submitQuizTest: TestServiceAPI.submitQuizTest,
+            dashboardApi: DashboardAPI,
+            storylineApi: StorylineAPI,
+            authManager: new AuthenticationManager(),
+            pageLink: PageLink,
+            menuItems: MENU_ITEMS,
+            menuItemsEvent: MENU_ITEMS_EVENT,
+            menuBottom: MENU_BOTTOM,
+            router: router,
+            pathname,
+            params,
+            query: Object.fromEntries(query.entries()),
+            fetcher: fetcher,
+            videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
+            testServiceApi: TestServiceAPI,
+            certificateApi: {
+              uploadImageToLinkedIn,
+            },
+            uploadImageToLinkedIn: uploadImageToLinkedIn,
+            courseActivationAPI: CoursesActivationAPI,
+            dispatch: dispatch,
+            useAppSelector: useAppSelector,
           }}
         >
-          <FeatureProvider
-            value={{
-              courseApi: CoursesAPI,
-              questionApi: QuestionAPI,
-              uploadApi: UploadAPI,
-              userApi: UserApi,
-              notificationApi: NotificationAPI,
-              authApi: AuthAPI,
-              classApi: ClassAPI,
-              activityApi: ActivityAPI,
-              courseActivityApi: CourseActivityApi,
-              entranceTestApi: EntranceTestAPI,
-              eventTestApi: EventTestAPI,
-              calendarApi: CalendarApi,
-              myProfileApi: MyProfileAPI,
-              submitQuizTest: TestServiceAPI.submitQuizTest,
-              dashboardApi: DashboardAPI,
-              storylineApi: StorylineAPI,
-            authManager: new AuthenticationManager(),
-              pageLink: PageLink,
-              menuItems: MENU_ITEMS,
-              menuItemsEvent: MENU_ITEMS_EVENT,
-              menuBottom: MENU_BOTTOM,
-              router: router,
-              pathname,
-              params,
-              query: Object.fromEntries(query.entries()),
-              fetcher: fetcher,
-              videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
-              testServiceApi: TestServiceAPI,
-              certificateApi: {
-                uploadImageToLinkedIn,
-              },
-              uploadImageToLinkedIn: uploadImageToLinkedIn,
-            courseActivationAPI: CoursesActivationAPI,
-              dispatch: dispatch,
-              useAppSelector: useAppSelector,
+          <CourseProvider
+            router={router}
+            api={{
+              get: EventTestAPI.get,
             }}
           >
-            <CourseProvider
-              router={router}
-              api={{
-                get: EventTestAPI.get,
-              }}
-            >
-              <CourseNoteProvider router={router} api={CoursesAPI}>
-                <QueryClientProvider client={queryClient}>
-                  <SocketContext.Provider value={socket}>
-                    <PreviousSectionRouteProvider pathname={pathname}>
-                      <Toaster
-                        toastOptions={{
-                          style: {
-                            maxWidth: '400px', // Tăng chiều rộng của toast
-                          },
-                        }}
-                      />
-                      <SappConfirmDialogContainer />
-                      <RouteGuard>
-                        <ConfigProvider>
-                          <PinnedNotifications />
-                          <AntdApp>{children}</AntdApp>
-                          <>
-                            {showBackToTop && <BackToTop />}
-                            <MKTInApp showMKTInApp={showMKTInApp} />
-                            {showHelp && <div id="floating-btn-divider" />}
-                            <Help showHelp={showHelp} />
-                            <LearningNotesList appType={AppType.LMS_PRO} />
-                            <PopupCompletedCourse />
-                          </>
-                        </ConfigProvider>
-                      </RouteGuard>
-                    </PreviousSectionRouteProvider>
-                  </SocketContext.Provider>
-                </QueryClientProvider>
-              </CourseNoteProvider>
-            </CourseProvider>
-          </FeatureProvider>
-        </PinnedNotifyProvider>
-        {/* </Provider> */}
-      </AntConfigProvider>
+            <CourseNoteProvider router={router} api={CoursesAPI}>
+              <QueryClientProvider client={queryClient}>
+                <SocketContext.Provider value={socket}>
+                  <PreviousSectionRouteProvider pathname={pathname}>
+                    <Toaster
+                      toastOptions={{
+                        style: {
+                          maxWidth: '400px', // Tăng chiều rộng của toast
+                        },
+                      }}
+                    />
+                    <SappConfirmDialogContainer />
+                    <RouteGuard>
+                      <ConfigProvider>
+                        <PinnedNotifications />
+                        <AntdApp>{children}</AntdApp>
+                        <>
+                          {showBackToTop && <BackToTop />}
+                          <MKTInApp showMKTInApp={showMKTInApp} />
+                          {showHelp && <div id="floating-btn-divider" />}
+                          <Help showHelp={showHelp} />
+                          <LearningNotesList appType={AppType.LMS_PRO} />
+                          <PopupCompletedCourse />
+                          <PopupActivated />
+                        </>
+                      </ConfigProvider>
+                    </RouteGuard>
+                  </PreviousSectionRouteProvider>
+                </SocketContext.Provider>
+              </QueryClientProvider>
+            </CourseNoteProvider>
+          </CourseProvider>
+        </FeatureProvider>
+      </PinnedNotifyProvider>
+      {/* </Provider> */}
+    </AntConfigProvider>
   )
 }
 

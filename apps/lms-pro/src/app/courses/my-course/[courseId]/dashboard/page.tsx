@@ -1,5 +1,5 @@
 'use client'
-import { UserType } from '@lms/contexts'
+import { useFeature, UserType } from '@lms/contexts'
 import {
   ANIMATION,
   COURSE_TYPE,
@@ -25,10 +25,17 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { extractNotActivatedData } from '@lms/utils'
+import {
+  selectPopupActivateCourse,
+  showPopupActivatedCourse,
+} from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 const Dashboard = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { dispatch, useAppSelector } = useFeature()
+  const selector = useAppSelector?.(selectPopupActivateCourse)
   const params = useParams()
   const query = Object.fromEntries(searchParams.entries())
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
@@ -76,8 +83,11 @@ const Dashboard = () => {
       if (res && res.success) {
         setOverallProgressData(res.data)
       }
-    } catch (error) {
-      setOverallProgressData(null)
+    } catch (error: any) {
+      const data = extractNotActivatedData(error)
+      if (data) {
+        dispatch?.(showPopupActivatedCourse(data))
+      }
     } finally {
       setIsLoadingOverallProgress(false)
     }
@@ -165,7 +175,7 @@ const Dashboard = () => {
   }, [infoCourse?.course_type, params?.courseId])
   return (
     <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar} size="xl">
-      {isLoading ? (
+      {isLoading || selector?.openActive ? (
         <DashboardSkeleton />
       ) : (
         <div data-aos={ANIMATION.DATA_AOS}>

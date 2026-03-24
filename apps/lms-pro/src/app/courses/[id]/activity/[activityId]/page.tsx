@@ -26,7 +26,7 @@ import {
   LearningResource,
   ModalResizeable,
 } from '@lms/ui'
-import { convertMinutesToHourFormat } from '@lms/utils'
+import { convertMinutesToHourFormat, extractNotActivatedData } from '@lms/utils'
 
 import { Triangle } from '@lms/assets'
 import {
@@ -45,6 +45,7 @@ import {
 } from '@lms/contexts'
 import {
   ANIMATION,
+  ApiError,
   CourseSectionType,
   EXHIBIT_TEXT_REPLACE,
   IActivity,
@@ -68,7 +69,7 @@ import {
   BottomMenu,
   CtaTrial,
   HeaderMobile,
-  SappBreadCrumbs
+  SappBreadCrumbs,
 } from '@lms/ui'
 import { Divider } from 'antd'
 import clsx from 'clsx'
@@ -85,6 +86,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/api/courses'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { v4 as uuidv4 } from 'uuid'
+import { selectPopupActivateCourse, showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string
@@ -99,6 +101,7 @@ const ActivityPage = () => {
   const query = Object.fromEntries(searchParams.entries())
   const { previousSection } = usePreviousSectionRoute()
   const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
+
   const scrollRef = useRef<HTMLDivElement>(null)
   const useGetActivityById = (
     id: string | string[] | undefined,
@@ -108,6 +111,12 @@ const ActivityPage = () => {
       ['activity', id, course_id],
       () => getActivityById(id, course_id),
       {
+        onError: (error: ApiError) => {
+          const data = extractNotActivatedData(error)
+          if (data) {
+            dispatch?.(showPopupActivatedCourse(data))
+          }
+        },
         enabled: id !== undefined && course_id !== undefined,
         retry: false,
       },
@@ -125,6 +134,7 @@ const ActivityPage = () => {
     useSmartModalSize()
 
   const dispatch = useAppDispatch()
+  const selectorActivated = useAppSelector?.(selectPopupActivateCourse)
   const selector = useAppSelector(courseActivityReducer)
   const getNotesData = useAppSelector(
     (state) => state.notesListReducer?.note_data,
@@ -539,7 +549,7 @@ const ActivityPage = () => {
         className={focusOnlyDiscussion ? 'h-full !bg-white' : ''}
         childClassName={focusOnlyDiscussion ? 'h-full' : ''}
       >
-        {isLoading ? (
+        {isLoading || selectorActivated?.openActive ? (
           <ActivitySkeleton></ActivitySkeleton>
         ) : (
           <div data-aos={ANIMATION.DATA_AOS}>

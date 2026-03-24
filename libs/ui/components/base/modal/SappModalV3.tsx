@@ -40,6 +40,7 @@ interface IProps {
   // Các props còn lại sẽ được gom vào otherProps
   [key: string]: any;
   isValidated?: boolean;
+  isOnCancel?: boolean;
 }
 
 const SappModalV3 = ({
@@ -75,6 +76,7 @@ const SappModalV3 = ({
   gapContent = "gap-4 md:gap-8",
   loadingBtnSubmit,
   isValidated = false,
+  isOnCancel = true,
   ...otherProps
 }: IProps) => {
   const [closing, setClosing] = useState(false);
@@ -112,7 +114,7 @@ const SappModalV3 = ({
       closeIcon={false}
       maskTransitionName="mask-fade"
       transitionName=""
-      onCancel={() => requestClose()}
+      onCancel={isOnCancel ? () => requestClose() : undefined}
       closable={isClosable}
       {...otherProps}
     >
