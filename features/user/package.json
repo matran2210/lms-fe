@@ -14,7 +14,6 @@
     "@lms/contexts": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/feature-auth": "workspace:*",
-    "@lms/feature-test": "workspace:*",
     "@lms/hooks": "workspace:*",
     "@lms/ui": "workspace:*",
     "@lms/utils": "workspace:*",
