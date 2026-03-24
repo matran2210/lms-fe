@@ -7,7 +7,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { CoursesAPI } from 'src/api/courses'
 import TestResultPage from 'src/app/courses/test/test-result/testResultPage'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 
 const TestResultDetailTeacher = () => {
   const router = useRouter()
@@ -78,7 +78,7 @@ const TestResultDetailTeacher = () => {
             subjectCode={questions?.course?.subject?.code ?? ''}
             score={
               questions?.quizAttempt?.grading_status ===
-              GRADE_STATUS.FINISHED_GRADING
+                GRADE_STATUS.FINISHED_GRADING
                 ? questions?.quizAttempt?.score
                 : chartData?.multiple_choice_score
             }

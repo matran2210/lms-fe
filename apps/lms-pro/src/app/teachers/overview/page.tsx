@@ -16,7 +16,7 @@ import { StaticImageData } from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { useRef, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 import clsx from 'clsx'
 
 const breadcrumbs: ITabs[] = [

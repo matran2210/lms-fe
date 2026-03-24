@@ -3,7 +3,7 @@ import type { Settings } from 'react-slick'
 import Image from 'next/image'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import ReactSlick from 'react-slick'
-import { linkCdnMktInApp } from 'src/constants'
+import { linkCdnMktInApp } from '@lms/core'
 const SlickSlider = ReactSlick as unknown as ComponentType<Settings>
 const SliderHome = () => {
   const {

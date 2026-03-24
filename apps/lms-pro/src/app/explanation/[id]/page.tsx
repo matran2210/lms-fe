@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react'
 import { CoursesAPI } from 'src/api/courses'
 import { TestServiceAPI } from 'src/api/test-api'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 
 const Explanation = () => {
   const router = useRouter()
@@ -91,10 +91,10 @@ const Explanation = () => {
         answers:
           questionType === QUESTION_TYPES.DRAG_DROP
             ? handleMultipleCorrectAnswer(
-                resultResponse?.data?.answer?.question?.drag_drop_answers,
-                resultResponse?.data?.answer?.answer,
-                answerTemp,
-              )
+              resultResponse?.data?.answer?.question?.drag_drop_answers,
+              resultResponse?.data?.answer?.answer,
+              answerTemp,
+            )
             : answerTemp,
         myAnswers: [
           {
@@ -132,7 +132,7 @@ const Explanation = () => {
   }) => {
     try {
       await TestServiceAPI.downloadFile(data)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const isUserViewAnswers = query?.title === 'Your Answers Detail'
@@ -188,7 +188,7 @@ const Explanation = () => {
           <Tooltip
             placement="left"
             title={
-              <span className="text-sm" onClick={() => {}}>
+              <span className="text-sm" onClick={() => { }}>
                 Show comment
               </span>
             }

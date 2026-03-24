@@ -13,6 +13,7 @@ const FEATURE_MODULE_MAP = {
   // example: @ops/feature-user => "feature-name": "nameModule"
   // Optional features
   "feature-calendar": "calendarModule",
+  "feature-test": "testModule",
 
   // Core features
   "feature-auth": "authModule",
@@ -20,7 +21,6 @@ const FEATURE_MODULE_MAP = {
   "feature-courses": "coursesModule",
   "feature-dashboard": "dashboardModule",
   "feature-notifications": "notificationsModule",
-  "feature-test": "testModule",
   "feature-user": "userModule",
 };
 
@@ -28,6 +28,7 @@ const FEATURE_FOLDER_MAP = {
   // example: @ops/feature-user => "feature-name": "folder-name"
   // Optional features
   "feature-calendar": "calendar",
+  "feature-test": "test",
 
   // Core features
   "feature-auth": "auth",
@@ -35,7 +36,6 @@ const FEATURE_FOLDER_MAP = {
   "feature-courses": "courses",
   "feature-dashboard": "dashboard",
   "feature-notifications": "notifications",
-  "feature-test": "test",
   "feature-user": "user",
 };
 

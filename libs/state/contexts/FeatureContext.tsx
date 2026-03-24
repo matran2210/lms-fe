@@ -77,7 +77,7 @@ interface FeatureContextProps {
   menuBottom: MenuItem[];
   router: any;
   pathname: string | null
-  params: Record<string, string | string[]> | null
+  params: any
   query: any
   certificateApi: ICertificateAPI
   fetcher: (url: string, config?: AxiosRequestConfig<any>) => Promise<any>;

@@ -22,3 +22,4 @@ export * from "./examination-info";
 export * from "./uploadFile/ModalUploadFile";
 export * from "./tag/StatusTag";
 export { default as PromotionalBanner } from "./banner/PromotionalBanner";
+export * from "./marketing-in-app";

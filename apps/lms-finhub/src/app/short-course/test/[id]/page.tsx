@@ -60,7 +60,7 @@ import {
   TabSlide,
   TestTimeOutModal,
   UnSubmitAnswerModal,
-} from '@lms/feature-test'
+} from '@lms/feature-courses'
 import {
   BackToTop,
   ButtonPrimary,

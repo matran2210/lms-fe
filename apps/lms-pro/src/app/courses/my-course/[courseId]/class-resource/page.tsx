@@ -26,7 +26,7 @@ import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 import ClassResourceTable from './ClassResourceTable'
 import FilterClassResource from './FilterClassResource'
 import SearchClassResource from './SearchClassResource'
@@ -116,9 +116,9 @@ const ClassResource = () => {
     if (query.schedule_ids) {
       scheduleIds = query.schedule_ids.includes(',')
         ? query.schedule_ids
-            .split(',')
-            .map((id) => id.trim())
-            .filter((id) => id)
+          .split(',')
+          .map((id) => id.trim())
+          .filter((id) => id)
         : [query.schedule_ids]
     }
     return {
@@ -293,14 +293,14 @@ const ClassResource = () => {
   const handleSubmitFilterMobile = () => {
     const lessonValue = Array.isArray(selectedFilters.Lesson)
       ? selectedFilters.Lesson.map((item) => item.value)
-          .filter((v) => v)
-          .join(',')
+        .filter((v) => v)
+        .join(',')
       : selectedFilters.Lesson.value
 
     pushQuery({
       suffix_types:
         typeof selectedFilters.Type === 'object' &&
-        !Array.isArray(selectedFilters.Type)
+          !Array.isArray(selectedFilters.Type)
           ? selectedFilters.Type.value
           : undefined,
       schedule_ids: lessonValue || undefined,
@@ -319,9 +319,9 @@ const ClassResource = () => {
       if (!query.schedule_ids) return []
       return query.schedule_ids.includes(',')
         ? query.schedule_ids
-            .split(',')
-            .map((id) => id.trim())
-            .filter((id) => id)
+          .split(',')
+          .map((id) => id.trim())
+          .filter((id) => id)
         : [query.schedule_ids]
     }
 
@@ -341,8 +341,8 @@ const ClassResource = () => {
           Type: {
             label: query.suffix_types
               ? CLASS_SUFFIX_TYPE_FILTER.find(
-                  (option) => option.value === query.suffix_types,
-                )?.label
+                (option) => option.value === query.suffix_types,
+              )?.label
               : '',
             value: query.suffix_types || '',
           },

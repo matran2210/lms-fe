@@ -26,7 +26,7 @@ import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { TeacherAPI } from 'src/api/teacher'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 import { ClassStandardScheduleItem } from 'src/type/teachers/request-schedule.interface'
 
 const breadcrumbs: ITabs[] = [
@@ -116,9 +116,8 @@ const getCertificateData = (data: any): ICertificateData[] => [
   { label: 'Capacity', value: data?.capacity ?? '-' },
   {
     label: 'Duration',
-    value: `${data?.started_at ? dayjs(data.started_at).format('DD/MM/YYYY') : '-'} - ${
-      data?.finished_at ? dayjs(data.finished_at).format('DD/MM/YYYY') : '-'
-    }`,
+    value: `${data?.started_at ? dayjs(data.started_at).format('DD/MM/YYYY') : '-'} - ${data?.finished_at ? dayjs(data.finished_at).format('DD/MM/YYYY') : '-'
+      }`,
   },
   { label: 'Standard Schedule', value: getStandardSchedule(data) },
   { label: 'Course', value: data?.course?.name },

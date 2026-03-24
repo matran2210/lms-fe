@@ -18,7 +18,7 @@ import { useForm } from 'react-hook-form'
 import { StudentKey } from 'src/api/queryKey'
 import { TeacherAPI } from 'src/api/teacher'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 
 interface FilterParams {
   status?: string
@@ -150,13 +150,13 @@ const ChapterTest = () => {
     },
     ...(manualGrading === 'true'
       ? [
-          {
-            title: 'Người chấm',
-            render: (record: IStudentClassDetail) => (
-              <NameNoActionCell dataColumn={record?.staff?.detail?.full_name} />
-            ),
-          },
-        ]
+        {
+          title: 'Người chấm',
+          render: (record: IStudentClassDetail) => (
+            <NameNoActionCell dataColumn={record?.staff?.detail?.full_name} />
+          ),
+        },
+      ]
       : []),
   ]
 

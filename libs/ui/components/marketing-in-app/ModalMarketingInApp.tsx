@@ -1,13 +1,12 @@
+import { linkCdnMktInApp } from '@lms/core'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { AnimatePresence, motion } from 'framer-motion'
+import Image from 'next/image'
 import type { ComponentType } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import type { Settings } from 'react-slick'
 import ReactSlick from 'react-slick'
-import Image from 'next/image'
-import { ButtonPrimary } from '@lms/ui'
-import { ButtonText } from '@lms/ui'
-import { Dispatch, SetStateAction } from 'react'
-import { useTailwindBreakpoint } from '@lms/hooks'
-import { motion, AnimatePresence } from 'framer-motion'
-import { linkCdnMktInApp } from 'src/constants'
+import { ButtonPrimary, ButtonText } from '../base'
 
 const SlickSlider = ReactSlick as unknown as ComponentType<Settings>
 const ModalMarketingInApp = ({

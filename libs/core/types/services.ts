@@ -9,7 +9,15 @@ import {
   VerifyOtpReq,
 } from "../../state";
 import { DocumentItem, ExamInformation, IQuestion, IStoryline } from "./course";
-import { IExamPrediction, ILearningResult, IMockTestResult, IOverProgress, ITopicProgress, IWeeklyReport } from "./dashboard";
+import {
+  IExamPrediction,
+  ILearningResult,
+  IMockTestResult,
+  IOverProgress,
+  ITopicProgress,
+  IWeeklyReport,
+} from "./dashboard";
+import { IEntranceTest } from "./entrance-test";
 import { ICertificate } from "./Profile";
 import {
   IAnswerQuizLastestAttempt,
@@ -28,6 +36,7 @@ export interface IEventTestAPI {
   getCount: () => Promise<any>;
 }
 export interface IEntranceTestAPI {
+  get: (params: Object) => Promise<IResponse<IEntranceTest[]>>;
   getEntranceCount: () => Promise<any>;
   getListUnivers: () => Promise<any>;
   getListUniversProgram: () => Promise<any>;
@@ -44,10 +53,7 @@ export interface ICaseStudyAPI {
 }
 export interface ICoursesAPI {
   getCourseActivityTapById: (courseId: string, id: string) => Promise<any>;
-  getDiscussion: (
-    class_id: string,
-    course_section_id: string,
-  ) => Promise<any>;
+  getDiscussion: (class_id: string, course_section_id: string) => Promise<any>;
   getQuizAttemptsAnswer: ({
     attempt_id,
     question_id,
@@ -57,6 +63,13 @@ export interface ICoursesAPI {
   }) => Promise<{
     success: boolean;
     data: IAnswerQuizLastestAttempt;
+  }>;
+  getQuizAttemptsTableEntranceTest(
+    id: string,
+    { page_index, page_size }: { page_index: number; page_size: number },
+  ): Promise<{
+    success: boolean;
+    data: IScoreDetails;
   }>;
   getCourseSubsectionList: (
     page_size: number,
@@ -106,10 +119,7 @@ export interface ICoursesAPI {
     id: string | string[] | undefined,
     params?: object,
   ) => Promise<any>;
-  getCourseResults?: (
-    id: string | string[],
-    params: object,
-  ) => Promise<any>;
+  getCourseResults?: (id: string | string[], params: object) => Promise<any>;
   getCourseResults3Level?: (
     id: string | string[],
     page_index: number,
@@ -124,9 +134,7 @@ export interface ICoursesAPI {
   ) => Promise<{ success: boolean }>;
 }
 export interface IActivityAPI {
-  createDiscussionComment: (
-    request: ICreateDiscussionRequest,
-  ) => Promise<any>;
+  createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<any>;
   reactDiscussion: (data: ICreateDiscussionResReact) => Promise<any>;
   getQuizAttemptsAnswer: (id: string) => Promise<any>;
   updateDiscussionComment: (
@@ -146,8 +154,7 @@ export interface ICourseActivityAPI {
 type QuestionDetailQueryDTO = {
   after_test: boolean;
 };
-export interface IQuestionAPI {
-}
+export interface IQuestionAPI {}
 
 export interface INotificationAPI {
   getCountUnRead: () => Promise<any>;
@@ -216,10 +223,7 @@ export interface IClassAPI {
     params?: { page_index: number; page_size: number },
   ) => Promise<IResponse<IQuizResultList>>;
   getExamInfo: (id: string) => Promise<ExamInformation>;
-  changeExamDate: (
-    id: string,
-    data: FormData,
-  ) => AxiosPromise<IResponse<any>>;
+  changeExamDate: (id: string, data: FormData) => AxiosPromise<IResponse<any>>;
   getExams: (
     id: string,
     params: { page_index: number; page_size: number },
@@ -297,7 +301,7 @@ export interface ITestServiceAPI {
       upload_url: string;
       name: string;
     }>
-  >
+  >;
 }
 
 export interface ICertificateAPI {
@@ -310,17 +314,17 @@ export interface ICertificateAPI {
   ) => Promise<AxiosResponse<any, any, {}>>;
 }
 export interface IDashboardAPI {
-  getOverProgress: (id: string) => Promise<IResponse<IOverProgress>>
+  getOverProgress: (id: string) => Promise<IResponse<IOverProgress>>;
 
-  getTopicProgress:(id: string)=> Promise<IResponse<ITopicProgress[]>>
+  getTopicProgress: (id: string) => Promise<IResponse<ITopicProgress[]>>;
 
-  getWeeklyReport:(id: string)=>Promise<IResponse<IWeeklyReport>>
+  getWeeklyReport: (id: string) => Promise<IResponse<IWeeklyReport>>;
 
-  getLearningResults:(id: string)=> Promise<IResponse<ILearningResult[]>> 
+  getLearningResults: (id: string) => Promise<IResponse<ILearningResult[]>>;
 
-  getMockTestResults:(id: string)=> Promise<IResponse<IMockTestResult>>
+  getMockTestResults: (id: string) => Promise<IResponse<IMockTestResult>>;
 
-  getExamPrediction:(id: string)=> Promise<IResponse<IExamPrediction>> 
+  getExamPrediction: (id: string) => Promise<IResponse<IExamPrediction>>;
 }
 
 export interface IStorylineAPI {
@@ -338,11 +342,15 @@ export interface IStorylineAPI {
     class_id: string;
     item_id: string;
   }) => Promise<IResponse<DocumentItem[]>>;
-  retakeStoryline: ({ class_id, course_section_id, storyline_item_id, }: {
+  retakeStoryline: ({
+    class_id,
+    course_section_id,
+    storyline_item_id,
+  }: {
     class_id: string;
     course_section_id: string;
     storyline_item_id?: string | undefined;
-}) => Promise<IResponse<IStoryline>>
+  }) => Promise<IResponse<IStoryline>>;
 }
 
 export interface ICourseActivationAPI {

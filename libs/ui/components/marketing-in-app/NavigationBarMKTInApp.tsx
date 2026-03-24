@@ -1,14 +1,10 @@
 'use client'
 import clsx from 'clsx'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { listTab } from 'src/constants'
+import { listTab } from '@lms/core'
+import { useFeature } from '@lms/contexts'
 
 const NavigationBarMKTInApp = () => {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const pathname = usePathname()
-  const query = Object.fromEntries(searchParams.entries())
-
+  const { query, pathname, router } = useFeature()
   const navigationItems = listTab.map(({ title, value }) => ({
     title,
     href: value,

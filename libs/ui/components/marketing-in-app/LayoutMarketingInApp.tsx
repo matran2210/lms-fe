@@ -1,12 +1,12 @@
 import { memo, useEffect, useState } from 'react'
 import Head from 'next/head'
-import NavigationBarMKTInApp from '@components/marketing-in-app/NavigationBarMKTInApp'
 import Image from 'next/image'
-import FooterMarketingInApp from '@components/marketing-in-app/FooterMarketingInApp'
-import SliderHome from '@components/marketing-in-app/SliderHome'
 import clsx from 'clsx'
 import { ValueSidebar } from '@lms/core'
-import SappLoading from '@components/common/SappLoading'
+import { SappLoading } from '../common'
+import NavigationBarMKTInApp from './NavigationBarMKTInApp'
+import SliderHome from './SliderHome'
+import FooterMarketingInApp from './FooterMarketingInApp'
 
 type LayoutTeacherProps = {
   title: string

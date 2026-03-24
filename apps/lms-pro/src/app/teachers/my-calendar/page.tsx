@@ -9,7 +9,7 @@ import dayjs from 'dayjs'
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { IEvent } from '@sapp-fe/sapp-common-package'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 
 const breadcrumbs = [
   {
@@ -39,7 +39,7 @@ const MyCalendar = () => {
     (date: Date) => {
       if (
         dayjs().format(DATE_TIME_FORMAT) !==
-          dayjs(date).format(DATE_TIME_FORMAT) &&
+        dayjs(date).format(DATE_TIME_FORMAT) &&
         dayjs().isAfter(date)
       ) {
         return toast.error('Cannot create event in the past')

@@ -30,6 +30,7 @@
       "@lms/utils": ["libs/utils/index.ts"],
       "@lms/core": ["libs/core/index.ts"],
       "@lms/hooks": ["libs/hooks/index.ts"],
+      "@lms/hoc": ["libs/hoc/index.ts"],
       "@lms/feature-user": ["features/user/index.ts"],
       "@lms/feature-auth": ["features/auth/index.ts"],
       "@lms/feature-class": ["features/class/index.ts"],

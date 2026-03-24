@@ -15,7 +15,7 @@ import {
   getTopicsCaseStudy,
   loadMoreQuestion,
   saveFileEssayCaseStudy,
-  showPopupCompletedCourse
+  showPopupCompletedCourse,
 } from '@lms/contexts'
 import {
   ESSAY_TYPE,
@@ -27,7 +27,7 @@ import {
   RESPONSE_OPTION,
   ROUTES,
 } from '@lms/core'
-import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
+import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-courses'
 import {
   useMousePosition,
   useSmartModalSize,
@@ -48,7 +48,7 @@ import {
   NewDragNDropQuestion,
   OneChoiceQuestion,
   SelectWord,
-  SlotValue
+  SlotValue,
 } from '@lms/ui'
 import { runHighlight } from '@lms/utils'
 import { download } from '@utils/index'

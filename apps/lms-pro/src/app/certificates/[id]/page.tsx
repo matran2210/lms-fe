@@ -2,7 +2,7 @@
 import { UserType } from '@lms/contexts'
 import { LAYOUT } from '@lms/core'
 import { useQuery } from 'react-query'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 import { SappLoadingGlobal, SinglePageLayout } from '@lms/ui'
 import { CertificateVertical, HorizontalCertificate } from '@lms/feature-user'
 import { CoursesAPI } from 'src/api/courses'

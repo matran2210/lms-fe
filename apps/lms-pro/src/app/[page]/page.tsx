@@ -47,16 +47,16 @@ import { Collapse, CollapseProps, Divider, Tabs } from 'antd'
 import clsx from 'clsx'
 import { StaticImageData } from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import UserApi from 'src/redux/services/User/user'
 
 interface IFullScreenMobile {
   open: boolean
   title: string
-  children: React.ReactNode
+  children: ReactNode
 }
 
 const ProfilePage = () => {
@@ -85,7 +85,7 @@ const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState('my-profile')
   const [tabAnimating, setTabAnimating] = useState(false)
 
-  const onOpenFullScreenMobile = (title: string, children: React.ReactNode) => {
+  const onOpenFullScreenMobile = (title: string, children: ReactNode) => {
     setOpenFullScreenMobile({
       open: true,
       title,

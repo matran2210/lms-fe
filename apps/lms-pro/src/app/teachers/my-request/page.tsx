@@ -8,7 +8,7 @@ import { LayoutTeacher, SappTabs } from '@lms/ui'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 
 const breadcrumbs: ITabs[] = [
   {

@@ -39,7 +39,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import { TreeHelper } from 'src/helper/tree'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 import { useAppDispatch } from 'src/redux/hook'
 import { CoursesAPI } from 'src/api/courses/index'
 import StoryOverview from '@components/storyline/modal/StoryOverview'
@@ -214,7 +214,7 @@ const CoursePartDetail = () => {
         params?.id || undefined,
       )
       setLearningOutcome(res?.data)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const handleOpenNotesList = () => {
@@ -394,8 +394,8 @@ const CoursePartDetail = () => {
       lockSection
         ? handleLockedSection()
         : handleUnlockedSection(() =>
-            handleRouterChapter(course_section?.quiz?.id),
-          )
+          handleRouterChapter(course_section?.quiz?.id),
+        )
     } else if (
       course_section?.course_section_type === 'ACTIVITY' ||
       course_section?.course_section_type === 'UNIT'
@@ -413,19 +413,19 @@ const CoursePartDetail = () => {
           }
 
         }
-          )
+        )
     } else if (course_section?.course_section_type === 'STORY') {
       // Handle story section
       lockSection
         ? handleLockedSection()
         : handleUnlockedSection(() =>
-            handleRouterCaseStudy(
-              quiz?.id,
-              quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
-              course_section?.id,
-              quiz?.case_study_story?.instances?.[0]?.id,
-            ),
-          )
+          handleRouterCaseStudy(
+            quiz?.id,
+            quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
+            course_section?.id,
+            quiz?.case_study_story?.instances?.[0]?.id,
+          ),
+        )
     }
   }
 
@@ -701,7 +701,7 @@ const CoursePartDetail = () => {
           setOpen={setOpen}
           data={chapterData}
           class_user_id={previewPart?.class_user_id}
-          activeCourse={() => {}}
+          activeCourse={() => { }}
           is_passed_course={isPassedCourse}
         />
         <LearningResource

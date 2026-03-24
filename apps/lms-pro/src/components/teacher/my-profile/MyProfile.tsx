@@ -29,7 +29,7 @@ import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { Tag } from 'antd'
 import clsx from 'clsx'
 import { StaticImageData } from 'next/image'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, ReactNode, SetStateAction, useState } from 'react'
 import { Control, useForm } from 'react-hook-form'
 import UserApi from 'src/redux/services/User/user'
 import { z } from 'zod'
@@ -450,9 +450,9 @@ const TextWrapper = ({
   hiddenOnEdit = false,
 }: {
   title: string
-  children?: React.ReactNode
+  children?: ReactNode
   isEdit?: boolean
-  value?: React.ReactNode
+  value?: ReactNode
   loading: boolean
   handleClickEdit?: () => void
   showEditIcon?: boolean

@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form'
 import { useQuery } from 'react-query'
 import { TeacherAPI } from 'src/api/teacher'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 
 const breadcrumbs: ITabs[] = [
   { link: PageLink.TEACHERS, title: 'LMS' },

@@ -1,9 +1,9 @@
 'use client'
-import LayoutMarketingInApp from '@components/marketing-in-app/LayoutMarketingInApp'
+import { listTab } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
+import { LayoutMarketingInApp } from '@lms/ui'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { listTab } from 'src/constants'
 
 const MarketingInApp = () => {
   const searchParam = useSearchParams()
