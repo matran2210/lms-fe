@@ -3,15 +3,16 @@ import RedirectNotBuyPage from './RedirectNotBuyPage';
 
 export interface SlotProps {
   name: string;
+  isPage?: boolean;
+  className?: string;
   [key: string]: any;
 }
 
-const Slot: React.FC<SlotProps> = ({ name, ...props }) => {
+const Slot: React.FC<SlotProps> = ({ name, isPage = true, className, ...props }) => {
   const Extensions = ExtensionRegistry.getExtensions(name);
-  console.log('Extensions', Extensions);
   if (!Extensions || Extensions.length === 0) {
     console.warn(`No extension found for slot: ${name}`);
-    return <RedirectNotBuyPage />;
+    return <div className={className}><RedirectNotBuyPage isPage={isPage} /></div>
   }
 
   return (

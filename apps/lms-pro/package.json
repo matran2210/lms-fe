@@ -35,6 +35,7 @@
     "@lms/feature-notifications": "workspace:*",
     "@lms/feature-test": "workspace:*",
     "@lms/feature-user": "workspace:*",
+    "@lms/feature-certificate": "workspace:*",
     "@lms/hooks": "workspace:*",
     "@lms/styles": "workspace:*",
     "@lms/ui": "workspace:*",

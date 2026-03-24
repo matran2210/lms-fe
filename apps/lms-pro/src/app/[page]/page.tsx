@@ -16,7 +16,6 @@ import {
   NOTIFICATION_STATUS,
 } from '@lms/core'
 import {
-  Certificate,
   ChangePassword,
   DeviceList,
   LoginHistoryList,
@@ -26,8 +25,9 @@ import {
   ProfileHeader,
   ProfileList,
   Settings,
-  SubjectList,
+  SubjectList
 } from '@lms/feature-user'
+import { withAuthorization } from '@lms/hoc'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   Footer,
@@ -35,6 +35,7 @@ import {
   HeaderMobile,
   Layout,
   SearchWithMenuToggle,
+  Slot,
   TabHeaderItem,
 } from '@lms/ui'
 import {
@@ -49,7 +50,6 @@ import { StaticImageData } from 'next/image'
 import { useRouter } from 'next/navigation'
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
-import { withAuthorization } from '@lms/hoc'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import UserApi from 'src/redux/services/User/user'
 
@@ -175,7 +175,7 @@ const ProfilePage = () => {
           </>
         )
       case 'certificates':
-        return <Certificate />
+        return <Slot name="CERTIFICATE_PROFILE_TAB" isPage={false} className='md:mt-8 lg:mt-10' />
       case 'setting':
         return <Settings />
       case 'sercurity':
@@ -323,7 +323,7 @@ const ProfilePage = () => {
           title="Certificates"
         />
       ),
-      children: <Certificate />,
+      children: <Slot name="CERTIFICATE_PROFILE_TAB" isPage={false} />,
     },
     {
       key: 'setting',

@@ -132,6 +132,7 @@ export interface ICoursesAPI {
   skipFoundation: (
     class_id: string | undefined,
   ) => Promise<{ success: boolean }>;
+  getCertificate: (id: string | string[] | undefined) => Promise<any>;
 }
 export interface IActivityAPI {
   createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<any>;

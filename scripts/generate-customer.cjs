@@ -197,7 +197,7 @@ if (fs.existsSync(registryPath)) {
   config.features.forEach((feature) => {
     const moduleVar = FEATURE_MODULE_MAP[feature];
     const folderName = FEATURE_FOLDER_MAP[feature];
-    if (folderName !== "calendar") return;
+    if (!["calendar", "test", "certificate"].includes(folderName)) return;
 
     if (fs.existsSync(path.join(featuresDir, folderName))) {
       imports.push(`import { ${moduleVar} } from "@lms/${feature}"`);

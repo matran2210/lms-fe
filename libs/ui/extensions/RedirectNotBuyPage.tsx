@@ -3,10 +3,16 @@ import { LAYOUT } from '@lms/core'
 import Image from 'next/image'
 import { OopsImage } from '@lms/assets'
 import { SappButton } from '../components/base'
+import clsx from 'clsx'
 
-const RedirectNotBuyPage = () => {
+interface IRedirectNotBuyPage {
+  isPage?: boolean
+}
+const RedirectNotBuyPage = ({ isPage = true }: IRedirectNotBuyPage) => {
   return (
-    <div className="flex h-screen flex-col flex-nowrap items-center justify-center gap-6 p-4 text-center">
+    <div className={clsx("flex flex-col flex-nowrap items-center justify-center gap-6 p-4 text-center", {
+      "h-screen": isPage
+    })}>
       <Image
         src={OopsImage}
         alt="SAPP Oops"
@@ -23,7 +29,9 @@ const RedirectNotBuyPage = () => {
       <SappButton
         title="Back to Home Page"
         full={false}
-        className="rounded-2.5 !px-6 py-4 font-inter text-sm !leading-4"
+        className={clsx("rounded-2.5 !px-6 py-4 font-inter text-sm !leading-4", {
+          hidden: !isPage
+        })}
         size="large"
         onClick={() => {
           if (typeof window !== 'undefined') {
