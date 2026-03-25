@@ -15,7 +15,7 @@ import {
   getTopicsCaseStudy,
   loadMoreQuestion,
   saveFileEssayCaseStudy,
-  showPopupCompletedCourse
+  showPopupCompletedCourse,
 } from '@lms/contexts'
 import {
   ESSAY_TYPE,
@@ -48,7 +48,7 @@ import {
   NewDragNDropQuestion,
   OneChoiceQuestion,
   SelectWord,
-  SlotValue
+  SlotValue,
 } from '@lms/ui'
 import { runHighlight } from '@lms/utils'
 import { download } from '@utils/index'
