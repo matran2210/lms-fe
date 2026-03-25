@@ -18,7 +18,7 @@
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.10",
-    "@zoom/meetingsdk": "^3.13.2",
+    "@zoom/meetingsdk": "^5.1.4",
     "axios": "^1.10.0",
     "clsx": "^2.1.1",
     "critters": "^0.0.25",
