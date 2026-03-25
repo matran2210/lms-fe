@@ -1,8 +1,8 @@
 import CalendarPage from "./src/pages";
 
-export const calendarRoutes = [
+export const scheduleRoutes = [
   {
-    path: `/calendar`,
+    path: `/schedule`,
     element: <CalendarPage />
   },
 ]

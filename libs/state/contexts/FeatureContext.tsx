@@ -25,7 +25,7 @@ import {
   AxiosResponse,
 } from 'axios';
 import { createContext, useContext } from "react";
-import { IUserAPI } from "../redux/types/User/urser";
+import { IUserAPI, IUserContextAPI } from "../redux/types/User/urser";
 import { AnyAction, ThunkDispatch, Dispatch } from "@reduxjs/toolkit";
 
 type AppLikeDispatch = ThunkDispatch<any, any, AnyAction>
@@ -34,6 +34,7 @@ interface FeatureContextProps {
   questionApi: IQuestionAPI;
   uploadApi: IUploadAPI;
   userApi: IUserAPI;
+  userContextApi: IUserContextAPI;
   notificationApi: INotificationAPI;
   authApi: IAuthAPI;
   classApi: IClassAPI;

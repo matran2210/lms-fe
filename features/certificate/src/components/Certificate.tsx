@@ -2,7 +2,7 @@
 import React, { useMemo } from 'react';
 import { useLayoutEffect, useState } from 'react'
 import { Divider, Table, TableProps } from 'antd'
-import { CertificateImg, Icon, NoCertificationIcon, LoadingButtonAnimation } from '@lms/assets'
+import { CertificateImg, Icon, NoCertificationIcon, LoadingButtonAnimation, HaveNoItemIcon } from '@lms/assets'
 import { useDownloadImage } from '@lms/hooks'
 
 import { sappFormatDate } from "@lms/utils";
@@ -29,6 +29,9 @@ interface ICertificate {
   user_id: string;
   pass_point: number;
   received_times: string;
+}
+interface IProps {
+  isTeacherCert?: boolean
 }
 
 const Skeleton = ({ className }: { className?: string }) => (
@@ -119,7 +122,7 @@ const CertificatePreview = ({
   return certificateView;
 };
 
-const Certificate = () => {
+const Certificate = ({ isTeacherCert }: IProps) => {
   const { authApi, useAppSelector } = useFeature();
   const { detail } = useAppSelector?.(userReducer).user as IUser;
 
@@ -148,8 +151,9 @@ const Certificate = () => {
     if (listLoadingId.includes(certificate.id)) return;
     setListLoadingId((prev) => [...prev, certificate.id]);
     try {
+      const elementId = isTeacherCert ? "teacher-desktop" : "desktop";
       await downloadCertificate(
-        document.getElementById(`desktop-${certificate?.certificate_id}`) as HTMLElement,
+        document.getElementById(`${elementId}-${certificate?.certificate_id}`) as HTMLElement,
         certificate.certificate.html_template,
         detail?.full_name,
         certificate.certificate.name,
@@ -245,8 +249,11 @@ const Certificate = () => {
     <div className="mb-6 mt-0 md:mb-0 md:mt-8 lg:mt-10">
       {certificateData && !certificateData?.length ? (
         <div className="flex min-h-[calc(100vh-120px)] flex-col items-center justify-center gap-2 md:min-h-[352px] ">
-          <NoCertificationIcon />
-          <div className="text-small text-gray-400">
+          {isTeacherCert ? <HaveNoItemIcon /> : <NoCertificationIcon />}
+          <div className={clsx("text-gray-400", {
+            "text-xl": isTeacherCert,
+            "text-small": !isTeacherCert
+          })}>
             You don&rsquo;t have any certificate!
           </div>
         </div>
@@ -274,6 +281,7 @@ const Certificate = () => {
               isLastItem={index === certificateData.length - 1}
               listLoadingId={listLoadingId}
               setListLoadingId={setListLoadingId}
+              isTeacherCert={isTeacherCert}
             />
           ))
           : null}
@@ -301,11 +309,13 @@ const CertificateItem = ({
   isLastItem,
   listLoadingId,
   setListLoadingId,
+  isTeacherCert
 }: {
   record: ICertificate;
   isLastItem: boolean;
   listLoadingId: string[];
   setListLoadingId: React.Dispatch<React.SetStateAction<string[]>>;
+  isTeacherCert?: boolean
 }) => {
   const { useAppSelector } = useFeature()
   const { detail } = useAppSelector?.(userReducer).user as IUser;
@@ -314,8 +324,9 @@ const CertificateItem = ({
     if (listLoadingId.includes(certificate.id)) return;
     setListLoadingId((prev) => [...prev, certificate.id]);
     try {
+      const elementId = isTeacherCert ? "teacher-mobile" : "mobile";
       await downloadCertificate(
-        document.getElementById(`mobile-${certificate?.certificate_id}`) as HTMLElement,
+        document.getElementById(`${elementId}-${certificate?.certificate_id}`) as HTMLElement,
         certificate.certificate.html_template,
         detail?.full_name,
         certificate.certificate.name,

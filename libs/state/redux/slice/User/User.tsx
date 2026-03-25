@@ -4,6 +4,7 @@ import toast from 'react-hot-toast'
 import {
   ITemplateConfig,
   IUserAPI,
+  IUserContextAPI,
   IUserStatus,
   UserState,
   UserType,
@@ -93,7 +94,7 @@ const initialState: UserState = {
 
 export const getMe = createAsyncThunk(
   'userReducer/getMe',
-  async (api: IUserAPI, thunkAPI) => {
+  async (api: IUserContextAPI, thunkAPI) => {
     try {
       const res = await api.getMe()
       if (!res) {
@@ -109,7 +110,7 @@ export const getMe = createAsyncThunk(
 
 export const getUserInformation = createAsyncThunk(
   'userReducer/getUserInformation',
-  async (api: IUserAPI, thunkAPI) => {
+  async (api: IUserContextAPI, thunkAPI) => {
     try {
       const res = await api.getUserInformation()
       if (!res) {
@@ -130,7 +131,7 @@ export const updateUser = createAsyncThunk(
       api,
       full_name,
       avatar,
-    }: { api: IUserAPI; full_name: string; avatar?: { [key: string]: string } | null },
+    }: { api: IUserContextAPI; full_name: string; avatar?: { [key: string]: string } | null },
     thunkAPI,
   ) => {
     try {
@@ -152,7 +153,7 @@ export const updateUser = createAsyncThunk(
 
 export const updateUserAvatar = createAsyncThunk(
   'userReducer/updateUserAvatar',
-  async ({ api, avatar }: {api: IUserAPI; avatar: File}, thunkAPI) => {
+  async ({ api, avatar }: { api: IUserContextAPI; avatar: File }, thunkAPI) => {
     try {
       const res = await api.updateUserAvatar(avatar)
       if (!res) {
@@ -171,7 +172,7 @@ export const updateUserAvatar = createAsyncThunk(
 
 export const makeContactDefault = createAsyncThunk(
   'userReducer/makeContactDefault',
-  async ({ api, id }: { api: IAuthAPI; id: string}, thunkAPI) => {
+  async ({ api, id }: { api: IAuthAPI; id: string }, thunkAPI) => {
     try {
       const res = await api.makeContactDefault(id)
       if (!res) {
@@ -186,8 +187,8 @@ export const makeContactDefault = createAsyncThunk(
 )
 export const getLoginHistory = createAsyncThunk(
   'userReducer/getListHistory',
-  async ({api, page_index, page_size, type }: {
-    api: IUserAPI;
+  async ({ api, page_index, page_size, type }: {
+    api: IUserContextAPI;
     page_index: number;
     page_size: number;
     type: any
@@ -203,7 +204,7 @@ export const getLoginHistory = createAsyncThunk(
 export const loadMoreLoginHistory = createAsyncThunk(
   'userReducer/loadMoreHistory',
   async ({ api, page_index, page_size, type }: {
-    api: IUserAPI;
+    api: IUserContextAPI;
     page_index: number;
     page_size: number;
     type: any

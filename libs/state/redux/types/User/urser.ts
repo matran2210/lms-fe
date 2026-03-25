@@ -231,7 +231,7 @@ export interface IExaminationList {
   metadata: IMetaData;
 }
 
-export interface IUserAPI {
+export interface IUserContextAPI {
   getMe: () => Promise<IUser>;
   getUserInformation: () => Promise<any>;
   updateUser: (
@@ -248,10 +248,19 @@ export interface IUserAPI {
   getListDevices: () => Promise<IDeviceItem[]>;
   getListHistory: ({ page_index, page_size, type }: any) => Promise<any>;
   getPinnedNotifications: () => Promise<PinnedNotifications>;
-  getUserPrograms?: (course_category_id: string | undefined) => Promise<any>;
   removeDevice: (session_id: string) => Promise<any>;
+}
+
+export interface IUserAPI {
   getExamination: (
     page_index: number,
     page_size: number,
   ) => Promise<UserExamInformation>;
+  getUserPrograms: (course_category_id: string | undefined) => Promise<any>;
+  logout: (
+    session_id: string,
+    keycloak_user_id: string,
+  ) => Promise<{
+    success: boolean;
+  }>;
 }
