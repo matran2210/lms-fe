@@ -75,6 +75,11 @@ import { store } from 'src/redux/store'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { modules } from './module-registry'
 import { UserApi } from 'src/api/user'
+import { SchedulesAPI } from 'src/api/schedules'
+import { ProgressAPI } from 'src/api/progress'
+import { TeacherAPI } from 'src/api/teacher'
+import { MyRequestAPI } from 'src/api/my-request'
+import { RequestAPI } from 'src/api/request'
 dayjs.extend(utc)
 dayjs.extend(weekday)
 const showSupportWidget = [
@@ -317,9 +322,14 @@ function Providers({ children }: { children: ReactNode }) {
             eventTestApi: EventTestAPI,
             calendarApi: CalendarApi,
             myProfileApi: MyProfileAPI,
+            myRequestApi: MyRequestAPI,
+            requestApi: RequestAPI,
             submitQuizTest: TestServiceAPI.submitQuizTest,
             dashboardApi: DashboardAPI,
             storylineApi: StorylineAPI,
+            schedulesApi: SchedulesAPI,
+            progressApi: ProgressAPI,
+            teacherApi: TeacherAPI,
             authManager: new AuthenticationManager(),
             pageLink: PageLink,
             menuItems: MENU_ITEMS,

@@ -1,0 +1,197 @@
+import { Plus } from '@lms/assets'
+import { useRequestContext } from '@lms/contexts'
+import {
+  E_REQUEST_TYPE,
+  IRequest, IRequestFilterForm,
+  OPTIONS_REQUEST_STATUS,
+  OPTIONS_TIME_OFF_REQUEST_TYPE,
+} from '@lms/core'
+import { FilterGrid, SAPPButtonCustom, SAPPInput, SAPPRangePicker, SAPPSelect } from '@lms/ui'
+import { buildQueryString, cleanParams } from '@lms/utils'
+import { TablePaginationConfig } from 'antd'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import FormRequest from '../request-forms/FormRequest'
+import RequestDetail from '../request-forms/RequestDetail'
+import TimeOffTable from '../request-tables/TimeOffTable'
+import { useFeature } from '@lms/contexts'
+
+const TimeOffTab = () => {
+  const { requestApi, router, pathname, query } = useFeature()
+  const [isFirstLoad, setIsFirstLoad] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
+  const [requests, setRequests] = useState<IRequest[]>([])
+  const [pagination, setPagination] = useState<TablePaginationConfig>({
+    defaultCurrent: 1,
+    defaultPageSize: 10,
+    showSizeChanger: true,
+  })
+  const {
+    setOpenAddModal,
+    isOpenAddModal,
+    setIsOpenViewModal,
+    isOpenViewModal,
+  } = useRequestContext()
+
+  const { control, getValues, reset } = useForm<IRequestFilterForm>()
+
+  const getValuesFilter = () => ({
+    request_name: getValues('request_name')?.trim(),
+    type: getValues('type'),
+    status: getValues('status'),
+    from_date: getValues('rangeDate')?.[0]?.startOf('day')?.toISOString(),
+    to_date: getValues('rangeDate')?.[1]
+      ?.add(1, 'day')
+      .startOf('day')
+      ?.toISOString(),
+  })
+
+  const getParams = () => ({
+    request_name: query?.request_name,
+    type: query?.type,
+    status: query?.status,
+    from_date: query?.from_date,
+    to_date: query?.to_date,
+  })
+
+  const fetchRequests = async (
+    page_index: number,
+    page_size: number,
+    otherParams: Record<string, any> = {},
+  ) => {
+    otherParams['type'] = otherParams['type']
+      ? [otherParams['type']]
+      : [E_REQUEST_TYPE.TEACHER_SCHEDULE_TIME_OFF, E_REQUEST_TYPE.TEACHING_MODE]
+
+    setIsLoading(true)
+    try {
+      const res = await requestApi?.getRequests({
+        page_index,
+        page_size,
+        otherParams,
+      })
+
+      if (res?.success) {
+        const data = res.data
+        setRequests(data.results)
+        setPagination({
+          ...pagination,
+          current: data.meta_data.page_index,
+          pageSize: data.meta_data.page_size,
+          total: data.meta_data.total_records,
+        })
+      }
+    } catch (error) {
+      // Handled by axios interceptor
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    const cleanedParams = !isFirstLoad ? cleanParams(getParams()) : {} // Refetch params in first load
+    handleChangeParams(cleanedParams)
+    fetchRequests(
+      pagination?.current || 1,
+      pagination?.pageSize || 10,
+      cleanedParams,
+    )
+
+    isFirstLoad && setIsFirstLoad(false)
+  }, [pagination.current, pagination.pageSize])
+
+  const handleChangeParams = (params: Record<string, any>) => {
+    const queryString = new URLSearchParams(params).toString()
+
+    router.replace(`?tab=timeoff&${queryString}`)
+  }
+
+  const handleFilter = () => {
+    const cleanedParams = cleanParams(getValuesFilter())
+    handleChangeParams(cleanedParams)
+    fetchRequests(1, 10, cleanedParams)
+  }
+
+  const handleResetFilter = () => {
+    reset()
+    const preservedQuery = { tab: query.tab } // ✅ preserve only needed query if needed
+    router.replace(`${pathname}?${buildQueryString(preservedQuery)}`)
+    fetchRequests(1, 10)
+  }
+
+  const handleOpenAddModal = () => {
+    setOpenAddModal(true)
+  }
+
+  return (
+    <div className="flex flex-col gap-6 pt-6">
+      <div className="flex flex-col gap-4">
+        <FilterGrid>
+          <SAPPInput
+            name="request_name"
+            control={control}
+            placeholder="Search name"
+          />
+
+          <SAPPSelect
+            name="type"
+            control={control}
+            placeholder="Request type"
+            options={OPTIONS_TIME_OFF_REQUEST_TYPE}
+          />
+
+          <SAPPSelect
+            name="status"
+            control={control}
+            placeholder="Status"
+            options={OPTIONS_REQUEST_STATUS}
+          />
+
+          <SAPPRangePicker name="rangeDate" control={control} />
+        </FilterGrid>
+        <div className="flex justify-between">
+          <div className="flex gap-3">
+            <SAPPButtonCustom
+              title="Reset"
+              color="secondary"
+              onClick={handleResetFilter}
+            />
+            <SAPPButtonCustom title="Search" onClick={handleFilter} />
+          </div>
+          <div>
+            <SAPPButtonCustom
+              title="Create Request"
+              className="flex"
+              icon={<Plus />}
+              onClick={handleOpenAddModal}
+            />
+          </div>
+        </div>
+      </div>
+
+      <TimeOffTable
+        loading={isLoading}
+        requests={requests}
+        pagination={pagination}
+        setPagination={setPagination}
+        reloadPage={handleFilter}
+      />
+
+      <FormRequest
+        open={isOpenAddModal}
+        setOpen={setOpenAddModal}
+        reloadPage={handleFilter}
+      />
+
+      <RequestDetail
+        open={isOpenViewModal}
+        setOpen={setIsOpenViewModal}
+        setOpenEdit={setOpenAddModal}
+        reloadPage={handleFilter}
+      />
+    </div>
+  )
+}
+
+export default TimeOffTab

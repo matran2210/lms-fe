@@ -1,10 +1,14 @@
+import { AxiosPromise, AxiosResponse } from "axios";
 import {
   ChangePasswordReq,
   ExaminationsResponse,
   ICreateDiscussionRequest,
   ICreateDiscussionResReact,
   ICreateDiscussionUploadRequest,
+  ICreateSchedulePayload,
   IResponse,
+  IResponseSchedule,
+  IWeeklyNorm,
   SendEmailReq,
   VerifyOtpReq,
 } from "../../state";
@@ -18,13 +22,40 @@ import {
   IWeeklyReport,
 } from "./dashboard";
 import { IEntranceTest } from "./entrance-test";
-import { ICertificate } from "./Profile";
 import {
   IAnswerQuizLastestAttempt,
   IQuizResultList,
   IScoreDetails,
 } from "./quiz";
-import { AxiosPromise, AxiosResponse } from "axios";
+import {
+  IClassDetail,
+  IProgressList,
+  IRequestCreateProgress,
+} from "./progress";
+import {
+  IClassResourceList,
+  IClassResourcePreview,
+  IListClassResourceParams,
+  ISubjectList,
+} from "./classes";
+import {
+  APIDetailScheduleRequestResponse,
+  APIListScheduleRequestResponse,
+  RequestScheduleParams,
+  StatusRequestScheduleParams,
+} from "./teachers/request-schedule.interface";
+import {
+  IBusyRequestDetailResponse,
+  ICreateBusyScheduleData,
+  ICreateEditWeeklyNorm,
+  ICreateTimeoffRequestData,
+  ICreateWeeklyNormData,
+  IEditBusyScheduleData,
+  IEditTimeoffRequestData,
+  IEditWeeklyNormData,
+} from "./my-request";
+import { IQueryParams } from "./common";
+import { IRequestList } from "./request";
 
 export interface IAuthManager {
   getToken(): string;
@@ -215,6 +246,10 @@ export interface IUploadAPI {
       sub_url: string | null;
     }>
   >;
+  downloadFileClassResource: (
+    class_id: string,
+    resource_id: string,
+  ) => Promise<void>;
 }
 
 export interface IClassAPI {
@@ -229,6 +264,20 @@ export interface IClassAPI {
     id: string,
     params: { page_index: number; page_size: number },
   ) => Promise<ExaminationsResponse>;
+  previewClassFile: (
+    class_id: string,
+    resource_id: string,
+  ) => Promise<IClassResourcePreview>;
+  getClassResource: (
+    class_id: string,
+    params: IListClassResourceParams,
+  ) => Promise<IResponse<IClassResourceList>>;
+  getClassSchedule: (
+    id: string,
+    page_index: number,
+    page_size: number,
+    search_key?: string,
+  ) => Promise<any>;
 }
 export interface ICalendarAPI {
   getEventSchedule: (params?: object | undefined) => Promise<any>;
@@ -363,4 +412,154 @@ export interface ICourseActivationAPI {
   getSubjectByProgram: (program_name?: string) => Promise<any>;
   activateClass: (class_id: string) => Promise<any>;
   getSubjectClassForActivateSubject: (subject_id: string) => Promise<any>;
+}
+export interface ISchedulesAPI {
+  get: (params: Object) => Promise<IResponse<IResponseSchedule[]>>;
+  create: (
+    data: ICreateSchedulePayload,
+  ) => Promise<IResponse<IResponseSchedule>>;
+
+  getWeeklyNorms: (
+    params: Record<string, any>,
+  ) => Promise<IResponse<IWeeklyNorm[]>>;
+}
+
+export interface IProgressAPI {
+  getProgressList(params: {
+    page_index: number;
+    page_size: number;
+    params?: Record<string, any>;
+  }): Promise<IResponse<IProgressList>>;
+
+  getProgressDetail(id: string): Promise<IResponse<any>>;
+
+  getListLesson(classId: string): Promise<IResponse<any[]>>;
+
+  getListSection(
+    classId: string,
+    scheduleId: string,
+    params?: Record<string, any>,
+  ): Promise<IResponse<any[]>>;
+
+  createProgress(data: IRequestCreateProgress): Promise<IResponse<any>>;
+
+  updateProgress(
+    id: string,
+    data: IRequestCreateProgress,
+  ): Promise<IResponse<any>>;
+}
+
+export interface ITeacherAPI {
+  getListClass(
+    page_index: number,
+    page_size: number,
+    params?: Record<string, any>,
+  ): Promise<any>;
+
+  getClassById(id: string): Promise<any>;
+
+  getStudentById(
+    id: string,
+    page_index: number,
+    page_size: number,
+    params?: Record<string, any>,
+  ): Promise<IResponse<any>>;
+
+  getListTestQuiz(
+    id: string,
+    page_index: number,
+    page_size: number,
+    params?: Record<string, any>,
+  ): Promise<IResponse<any>>;
+
+  getDetailTestQuiz(
+    id: string,
+    chapter_test_id: string,
+    page_index: number,
+    page_size: number,
+    params?: Record<string, any>,
+  ): Promise<IResponse<any>>;
+
+  getSubjects(
+    page_index: number,
+    page_size: number,
+    params?: Record<string, any>,
+  ): Promise<IResponse<ISubjectList>>;
+
+  getCourseCategory(
+    page_index: number,
+    page_size: number,
+    params?: Record<string, any>,
+  ): Promise<IResponse<any>>;
+
+  getListRequestSchedule(
+    payload: RequestScheduleParams,
+  ): Promise<APIListScheduleRequestResponse>;
+
+  getRequestScheduleById(id: string): Promise<APIDetailScheduleRequestResponse>;
+
+  updateStatusRequestSchedule(
+    id: string,
+    payload: StatusRequestScheduleParams,
+  ): Promise<void>;
+}
+
+export interface IMyRequestAPI {
+  createBusySchedule(data: ICreateBusyScheduleData): Promise<IResponse<null>>;
+
+  editBusySchedule(
+    id: string,
+    data: IEditBusyScheduleData,
+  ): Promise<IResponse<null>>;
+
+  createWeeklyNorms(
+    data: ICreateWeeklyNormData,
+  ): Promise<IResponse<ICreateEditWeeklyNorm>>;
+
+  editWeeklyNorm(
+    id: string,
+    data: IEditWeeklyNormData,
+  ): Promise<IResponse<null>>;
+
+  createTimeoffRequest(
+    data: ICreateTimeoffRequestData,
+  ): Promise<IResponse<string>>;
+
+  editTimeoffRequest(
+    id: string,
+    data: IEditTimeoffRequestData,
+  ): Promise<IResponse<string>>;
+
+  createChangeTeachingModeRequest(
+    data: ICreateTimeoffRequestData,
+  ): Promise<IResponse<string>>;
+
+  editTeachingModeRequest(
+    id: string,
+    data: IEditTimeoffRequestData,
+  ): Promise<IResponse<string>>;
+
+  getRequestDetail(id: string): Promise<IResponse<IBusyRequestDetailResponse>>;
+
+  getClass(
+    page_index: number,
+    page_size: number | undefined,
+    teacher_id?: string,
+  ): Promise<IResponse<any>>;
+
+  getLesson(
+    page_index: number,
+    page_size: number | undefined,
+    teacher_id: string,
+    class_id: string,
+  ): Promise<IResponse<any>>;
+}
+export interface IRequestAPI {
+  getRequests: ({
+    page_index,
+    page_size,
+    otherParams,
+  }: IQueryParams) => Promise<IResponse<IRequestList>>;
+
+  deleteRequest: (id: string) => Promise<IResponse<null>>;
 }

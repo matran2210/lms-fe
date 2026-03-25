@@ -1,4 +1,5 @@
 'use client'
+import { FilterCourseIcon } from '@lms/assets'
 import { UserType, useCourseContext } from '@lms/contexts'
 import {
   AppType,
@@ -7,10 +8,10 @@ import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   IClassResource,
-  IClassScheduleForResource,
-  IListClassResourceParams,
+  IListClassResourceParams
 } from '@lms/core'
-import { useSappPaging, useTailwindBreakpoint } from '@lms/hooks'
+import { withAuthorization } from '@lms/hoc'
+import { useSappPaging, useSelectClassSchedule, useTailwindBreakpoint } from '@lms/hooks'
 import {
   CarouselSlideAnimation,
   ClassResourceSkeleton,
@@ -22,22 +23,18 @@ import {
   SappBreadCrumbs,
   SappDrawerV3,
 } from '@lms/ui'
-import { useRouter } from 'next/navigation'
+import { getSelectOptions, normalizeToArray } from '@lms/utils'
+import { pushQueryClassResource } from '@utils/helpers'
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
+import { ClassAPI } from 'src/api/class'
+import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
-import { withAuthorization } from '@lms/hoc'
+import CardFileItem from './CardFileItem'
 import ClassResourceTable from './ClassResourceTable'
 import FilterClassResource from './FilterClassResource'
 import SearchClassResource from './SearchClassResource'
-import { buildQueryString, normalizeToArray } from '@lms/utils'
-import { useParams, usePathname, useSearchParams } from 'next/navigation'
-import { CoursesAPI } from 'src/api/courses'
-import { ClassAPI } from 'src/api/class'
-import { FilterCourseIcon } from '@lms/assets'
-import CardFileItem from './CardFileItem'
-import useSelectClassSchedule from 'src/hooks/useSelectClassSchedule'
-import { getSelectOptions, pushQueryClassResource } from '@utils/helpers'
 interface ISelectItem {
   label: string
   value: string

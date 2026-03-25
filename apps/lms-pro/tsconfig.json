@@ -2,15 +2,33 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@adapters/*": ["src/adapters/*"],
-      "@components/*": ["src/components/*"],
-      "@contexts/*": ["src/contexts/*"],
-      "@services/*": ["src/services/*"],
-      "@styles/*": ["src/styles/*"],
-      "@utils/*": ["src/utils/*"],
-      "@assets/*": ["src/assets/*"],
-      "@i18n/*": ["src/i18n/*"],
-      "@pages/*": ["src/pages/*"]
+      "@adapters/*": [
+        "src/adapters/*"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@contexts/*": [
+        "src/contexts/*"
+      ],
+      "@services/*": [
+        "src/services/*"
+      ],
+      "@styles/*": [
+        "src/styles/*"
+      ],
+      "@utils/*": [
+        "src/utils/*"
+      ],
+      "@assets/*": [
+        "src/assets/*"
+      ],
+      "@i18n/*": [
+        "src/i18n/*"
+      ],
+      "@pages/*": [
+        "src/pages/*"
+      ]
     },
     "target": "ES2022",
     "module": "ESNext",
@@ -22,7 +40,11 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "noEmit": true,
     "incremental": true,
@@ -38,6 +60,19 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts" ],
-  "exclude": ["node_modules"]
+    "../../features/schedule/src/components/teacher/StudentCell.tsx",
+    "../../features/schedule/src/components/teacher/StudentFilter.tsx",
+    "../../features/schedule/src/components/teacher/ItemClassesByStatus.tsx",
+    "../../features/schedule/src/components/teacher/MyClassFilter.tsx",
+    "../../features/schedule/src/components/teacher/ChapterTestFilter.tsx",
+    "../../libs/hooks/useSelectClassCode.tsx",
+    "../../libs/hooks/useSelectLesson.tsx",
+    "../../features/schedule/src/components/teacher/StudentsTestResultFilter.tsx",
+    "../../features/schedule/src/components/teacher/NameActionCell.tsx",
+    "../../features/schedule/src/components/teacher/DateActionCell.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

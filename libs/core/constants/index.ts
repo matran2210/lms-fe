@@ -593,6 +593,22 @@ export const listTab = [
     height: 4707,
   },
 ];
+
+export const listStatusMyClass = [
+  {
+    label: "Chưa học",
+    value: "NOT_STARTED",
+  },
+  {
+    label: "Đang học",
+    value: "IN_PROGRESS",
+  },
+  {
+    label: "Đã học xong",
+    value: "COMPLETED",
+  },
+];
+
 export * from "./localStorageKeys";
 export * from "./upload";
 export * from "./repeat/index";

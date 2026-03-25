@@ -5,7 +5,7 @@ import {
   APIListScheduleRequestResponse,
   RequestScheduleParams,
   StatusRequestScheduleParams,
-} from 'src/type/teachers/request-schedule.interface'
+} from '@lms/core/types/teachers/request-schedule.interface'
 
 export class TeacherAPI {
   static getListClass(

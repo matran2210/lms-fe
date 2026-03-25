@@ -13,9 +13,14 @@ import {
   IDashboardAPI,
   IEntranceTestAPI,
   IEventTestAPI,
+  IMyRequestAPI,
   INotificationAPI,
+  IProgressAPI,
   IQuestionAPI,
+  IRequestAPI,
+  ISchedulesAPI,
   IStorylineAPI,
+  ITeacherAPI,
   ITestServiceAPI,
   IUploadAPI,
   MenuItem
@@ -44,6 +49,11 @@ interface FeatureContextProps {
   eventTestApi?: IEventTestAPI;
   calendarApi?: ICalendarAPI;
   dashboardApi?: IDashboardAPI;
+  schedulesApi?: ISchedulesAPI;
+  progressApi?: IProgressAPI;
+  teacherApi?: ITeacherAPI;
+  myRequestApi?: IMyRequestAPI;
+  requestApi?: IRequestAPI;
   myProfileApi?: {
     getProfile: () => Promise<any>;
     getSubjectOfhubspot: (courseCategoryName: string) => Promise<any>;

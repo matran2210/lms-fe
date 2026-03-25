@@ -1,8 +1,9 @@
 'use client'
-import { CLASS_SUFFIX_TYPE_FILTER, DEFAULT_PAGE_NUMBER } from '@lms/core'
+import { CLASS_SUFFIX_TYPE_FILTER } from '@lms/core'
+import { useSelectClassSchedule } from '@lms/hooks'
 import { SappSelectMultiple, SAPPSelectTooltip } from '@lms/ui'
-import { buildQueryString, normalizeToArray } from '@lms/utils'
-import { getSelectOptions, pushQueryClassResource } from '@utils/helpers'
+import { getSelectOptions } from '@lms/utils'
+import { pushQueryClassResource } from '@utils/helpers'
 import { debounce } from 'lodash'
 import {
   useParams,
@@ -12,7 +13,6 @@ import {
 } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import useSelectClassSchedule from 'src/hooks/useSelectClassSchedule'
 
 type FilterFormValues = {
   suffix_types?: string
@@ -40,15 +40,15 @@ const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
       if (!query.schedule_ids) return []
       return query.schedule_ids.includes(',')
         ? query.schedule_ids
-            .split(',')
-            .map((id) => id.trim())
-            .filter((id) => id)
+          .split(',')
+          .map((id) => id.trim())
+          .filter((id) => id)
         : [query.schedule_ids]
     }
     reset({
       suffix_types:
         typeof query.suffix_types === 'string' &&
-        query.suffix_types.trim() !== ''
+          query.suffix_types.trim() !== ''
           ? query.suffix_types
           : undefined,
 

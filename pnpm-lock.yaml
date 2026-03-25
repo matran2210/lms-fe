@@ -1207,6 +1207,12 @@ importers:
       '@lms/core':
         specifier: workspace:*
         version: link:../../libs/core
+      '@lms/feature-class':
+        specifier: workspace:*
+        version: link:../class
+      '@lms/hoc':
+        specifier: workspace:*
+        version: link:../../libs/HOC
       '@lms/hooks':
         specifier: workspace:*
         version: link:../../libs/hooks
