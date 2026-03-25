@@ -25,12 +25,12 @@ const { Sider } = Layout;
 export default function TeacherMenu({
   isCourseDetail,
   isActivity,
- 
+
 }: {
   isCourseDetail: boolean;
   isActivity: boolean;
 }) {
-  const { authManager, pageLink, router, dispatch, useAppSelector, params, query } = useFeature();
+  const { authManager, pageLink, router, dispatch, useAppSelector, params, query, appModules } = useFeature();
   const { user } = useAppSelector?.(userReducer) || {};
   const courseId = params?.courseId as string || query.courseId as string;
   const id = params?.id as string || query.id as string;
@@ -154,6 +154,7 @@ export default function TeacherMenu({
         icon: <HomeMenuIcon selected={selectedKey === "Home"} />,
         link: pageLink.TEACHERS,
         active: isCurrent(pageLink.TEACHERS),
+        showMenu: true,
       },
       {
         key: "MyCourse",
@@ -161,6 +162,7 @@ export default function TeacherMenu({
         icon: <MyCourseTeacherIcon selected={selectedKey === "MyCourse"} />,
         link: pageLink.TEACHER_MY_COURSE,
         active: isCurrent(pageLink.TEACHER_MY_COURSE),
+        showMenu: true,
       },
       {
         key: "Book",
@@ -172,6 +174,7 @@ export default function TeacherMenu({
           `${pageLink.TEACHER_MY_CLASS}/[id]`,
           pageLink.TEACHER_CHAPTER_TEST,
         ]),
+        showMenu: !!appModules?.find((m) => m.name === 'schedule'),
       },
       {
         key: "MyCalendar",
@@ -179,6 +182,7 @@ export default function TeacherMenu({
         icon: <MyCalendarMenuIcon selected={selectedKey === "MyCalendar"} />,
         link: pageLink.MY_CALENDAR,
         active: isCurrent(pageLink.MY_CALENDAR),
+        showMenu: !!appModules?.find((m) => m.name === 'schedule'),
       },
       {
         key: "File",
@@ -186,6 +190,7 @@ export default function TeacherMenu({
         icon: <FileMenuIcon selected={selectedKey === "File"} />,
         link: pageLink.TEACHER_MY_REQUEST,
         active: isCurrent(pageLink.TEACHER_MY_REQUEST),
+        showMenu: !!appModules?.find((m) => m.name === 'schedule'),
       },
       {
         key: "Bell",
@@ -193,6 +198,7 @@ export default function TeacherMenu({
         icon: <BellIcon selected={selectedKey === "Bell"} />,
         link: pageLink.TEACHERS,
         active: isCurrent(pageLink.TEACHERS),
+        showMenu: true,
       },
     ];
   }, [isCourseDetail, isActivity, selectedKey, query, isCurrent]);
@@ -256,6 +262,7 @@ const SidebarMenu = ({
     icon: React.ReactNode;
     link: string;
     active: boolean;
+    showMenu?: boolean;
   }[];
   selectedKey: string;
   onClick: (key: { key: string }) => void;
@@ -271,7 +278,7 @@ const SidebarMenu = ({
       selectedKeys={[selectedKey]}
       className="flex w-12 flex-col items-center gap-6 [&_.ant-menu-item]:p-3"
     >
-      {items.map((item) => (
+      {items.map((item) => item.showMenu !== false && (
         <Tooltip
           key={item.key}
           title={item.title}
@@ -296,7 +303,8 @@ const BottomActionMenu = ({
 }: {
   user: IUser;
   onLogout: () => void;
-  pageLink: { [key: string]: string;
+  pageLink: {
+    [key: string]: string;
   };
 }) => (
   <div className="mb-6 flex flex-col items-center gap-6">

@@ -52,6 +52,7 @@ import { ReactNode, useEffect, useRef, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import UserApi from 'src/redux/services/User/user'
+import { modules } from '../module-registry'
 
 interface IFullScreenMobile {
   open: boolean
@@ -204,7 +205,7 @@ const ProfilePage = () => {
         <TabHeaderItem icon={<Icon type="my-profile" />} title="My profile" />
       ),
     },
-    {
+    ...(modules.find((m) => m.name === 'certificate') ? [{
       key: 'certificates',
       label: (
         <TabHeaderItem
@@ -212,7 +213,7 @@ const ProfilePage = () => {
           title="Certificates"
         />
       ),
-    },
+    }] : []),
     {
       key: 'setting',
       label: <TabHeaderItem icon={<Icon type="setting" />} title="Setting" />,
@@ -315,7 +316,7 @@ const ProfilePage = () => {
         />
       ),
     },
-    {
+    ...(modules.find((m) => m.name === 'certificate') ? [{
       key: 'certificates',
       label: (
         <TabHeaderItem
@@ -324,7 +325,7 @@ const ProfilePage = () => {
         />
       ),
       children: <Slot name="CERTIFICATE_PROFILE_TAB" isPage={false} />,
-    },
+    }] : []),
     {
       key: 'setting',
       label: <TabHeaderItem icon={<Icon type="setting" />} title="Setting" />,

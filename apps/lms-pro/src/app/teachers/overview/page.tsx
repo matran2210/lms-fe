@@ -16,6 +16,7 @@ import clsx from 'clsx'
 import { StaticImageData } from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { useRef, useState } from 'react'
+import { modules } from 'src/app/module-registry'
 import { PageLink } from 'src/constants/routers'
 
 const breadcrumbs: ITabs[] = [
@@ -121,7 +122,7 @@ const MyProfilePage = () => {
         <TabHeaderItem icon={<Icon type="my-profile" />} title="My profile" />
       ),
     },
-    {
+    ...(modules.find((m) => m.name === 'certificate') ? [{
       key: 'certificates',
       label: (
         <TabHeaderItem
@@ -129,8 +130,7 @@ const MyProfilePage = () => {
           title="Certificates"
         />
       ),
-    },
-
+    }] : []),
     {
       key: 'sercurity',
       label: (

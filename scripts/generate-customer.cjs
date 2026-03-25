@@ -19,7 +19,7 @@ const REQUIRED_FEATURES = [
 const FEATURE_MODULE_MAP = {
   // example: @ops/feature-user => "feature-name": "nameModule"
   // Optional features
-  "feature-calendar": "calendarModule",
+  "feature-schedule": "scheduleModule",
   "feature-test": "testModule",
   "feature-certificate": "certificateModule",
   "feature-exam": "examModule",
@@ -36,7 +36,7 @@ const FEATURE_MODULE_MAP = {
 const FEATURE_FOLDER_MAP = {
   // example: @ops/feature-user => "feature-name": "folder-name"
   // Optional features
-  "feature-calendar": "calendar",
+  "feature-schedule": "schedule",
   "feature-test": "test",
   "feature-certificate": "certificate",
   "feature-exam": "exam",
