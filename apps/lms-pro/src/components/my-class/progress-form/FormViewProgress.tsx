@@ -24,7 +24,7 @@ import {
 } from '@lms/utils'
 import { ProgressAPI } from 'src/api/progress'
 import { Drawer } from 'antd'
-import { round } from 'lodash'
+import { isEmpty, round } from 'lodash'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -237,15 +237,40 @@ function FormViewProgress({
 
     if (currentCourse.length > 0) {
       payload.current_course_sections = currentCourse
+    } else {
+      const currentCourseSections = detailProgress?.content_completed.filter(
+        (item) => item.main,
+      )
+      if (!isEmpty(currentCourseSections)) {
+        const currentCourseSectionsPayload = currentCourseSections?.map(
+          (item) => ({
+            class_schedule_id: item.class_schedule_id,
+            course_section_ids: [],
+          }),
+        )
+        payload.current_course_sections = currentCourseSectionsPayload
+      }
     }
 
     if (compensatedCourse.length > 0) {
       payload.compensated_course_sections = compensatedCourse
+    } else {
+      const compensatedCourseSections =
+        detailProgress?.content_completed.filter((item) => !item.main)
+      if (!isEmpty(compensatedCourseSections)) {
+        const compensatedCourseSectionsPayload = compensatedCourseSections?.map(
+          (item) => ({
+            class_schedule_id: item.class_schedule_id,
+            course_section_ids: [],
+          }),
+        )
+        payload.compensated_course_sections = compensatedCourseSectionsPayload
+      }
     }
-    if (!payload.current_course_sections) {
-      toast.error('Vui lòng chọn main content')
-      return
-    }
+    // if (!payload.current_course_sections) {
+    //   toast.error('Vui lòng chọn main content')
+    //   return
+    // }
     try {
       setLoading(true)
       const data = await ProgressAPI.updateProgress(id as string, payload)
@@ -507,7 +532,9 @@ function FormViewProgress({
             className="mb-4 mr-4"
             color="secondary"
           />
-          {!isView && <SAPPButtonCustom title={'Save'} onClick={handleSubmit} />}
+          {!isView && (
+            <SAPPButtonCustom title={'Save'} onClick={handleSubmit} />
+          )}
         </div>
       </div>
     </Drawer>
