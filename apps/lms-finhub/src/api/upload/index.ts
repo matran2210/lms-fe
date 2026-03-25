@@ -1,5 +1,5 @@
 import { IResponse } from '@lms/core'
-import request, { fetcher, getBaseUrl } from '@services/requestV2'
+import request, { fetcher, getBaseUrl } from '@services/request'
 import axios, { AxiosResponse, CancelTokenSource } from 'axios'
 
 type PartUploadDto = { part_number: number; upload_url: string }

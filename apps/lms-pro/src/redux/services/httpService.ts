@@ -3,7 +3,6 @@ import { AuthenticationManager } from '@utils/helpers/keycloak'
 import toast from 'react-hot-toast'
 import { ExceptionErrorCode } from '@lms/core'
 
-
 let store: any
 export const injectStore = (_store: any) => {
   store = _store

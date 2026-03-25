@@ -25,10 +25,6 @@
   @apply flex h-[68px] w-[68px] cursor-pointer items-center justify-center rounded-xl border-none bg-[#D1D5DB] text-2xl text-gray-800;
 }
 
-.btn--span-2 {
-  grid-column: span 2;
-}
-
 .btn--colored {
   @apply bg-primary text-white;
 }

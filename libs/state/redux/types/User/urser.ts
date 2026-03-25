@@ -239,7 +239,6 @@ export interface IUserAPI {
     >;
     updateUserAvatar: (avatar: File) => Promise<any>;
     getListDevices: () => Promise<IDeviceItem[]>;
-    getListDevicesV2: () => Promise<IDeviceItem[]>;
     getListHistory: ({ page_index, page_size, type }: any) => Promise<any>;
     getPinnedNotifications: () => Promise<PinnedNotifications>;
     getUserPrograms?: (course_category_id: string | undefined) => Promise<any>;

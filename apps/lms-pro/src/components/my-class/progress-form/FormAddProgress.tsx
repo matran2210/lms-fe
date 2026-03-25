@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { confirmDialog, useAppDispatch, useFeature } from '@lms/contexts'
+import { confirmDialog, useFeature } from '@lms/contexts'
 import {
   CONFIRM_CANCEL,
   IContentCompleted,
@@ -9,13 +9,16 @@ import {
 } from '@lms/core'
 import {
   HookformTimePicker,
-  SAPPButtonV2,
+  SAPPButtonCustom,
   SappIcon,
   SAPPInput,
-  SAPPSelect,
+  SAPPSelect
 } from '@lms/ui'
-import { buildQueryString, sortSectionsByPosition } from '@lms/utils'
-import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
+import {
+  buildQueryString,
+  sortSectionsByPosition,
+  VALIDATE_REQUIRED,
+} from '@lms/utils'
 import { Drawer } from 'antd'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useLayoutEffect, useState } from 'react'
@@ -24,6 +27,7 @@ import toast from 'react-hot-toast'
 import { ProgressAPI } from 'src/api/progress'
 import { z } from 'zod'
 import TreeProgress from './TreeProgress'
+import { useAppDispatch } from 'src/redux/hook'
 
 const defaultValues = {
   lesson: undefined,
@@ -174,10 +178,10 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
     if (compensatedCourse.length > 0) {
       payload.compensated_course_sections = compensatedCourse
     }
-    if (!payload.current_course_sections) {
-      toast.error('Vui lòng chọn main content')
-      return
-    }
+    // if (!payload.current_course_sections) {
+    //   toast.error('Vui lòng chọn main content')
+    //   return
+    // }
     setLoading(true)
     try {
       const data = await ProgressAPI.createProgress(payload)
@@ -352,13 +356,13 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
           />
         </div>
         <div className="flex justify-end border-t border-t-[#7E8299] px-8 py-5">
-          <SAPPButtonV2
+          <SAPPButtonCustom
             title={'Cancel'}
             onClick={handleCancel}
             className="mr-4"
             color="secondary"
           />
-          <SAPPButtonV2
+          <SAPPButtonCustom
             loading={loading}
             title={'Save'}
             onClick={handleSubmit}

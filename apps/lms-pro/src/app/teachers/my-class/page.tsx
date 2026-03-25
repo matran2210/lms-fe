@@ -1,9 +1,9 @@
-"use client"
+'use client'
 import ItemClassesByStatus from '@components/teacher/components/ItemClassesByStatus'
 import MyClassFilter from '@components/teacher/components/MyClassFilter'
 import { UserType } from '@lms/contexts'
 import { IMyClass, ITabs } from '@lms/core'
-import { LayoutFilter, LayoutTeacher, PaginationSAPP } from '@lms/ui'
+import { LayoutFilter, LayoutTeacher, OldPaginationSAPP } from '@lms/ui'
 import { TeacherKey } from 'src/api/queryKey'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -100,7 +100,7 @@ const MyClass = () => {
         </div>
         {data?.metadata?.total_records && (
           <div className="mt-auto">
-            <PaginationSAPP
+            <OldPaginationSAPP
               currentPage={data?.metadata?.page_index ?? 1}
               pageSize={data?.metadata?.page_size ?? 10}
               totalItems={data?.metadata?.total_records ?? 0}

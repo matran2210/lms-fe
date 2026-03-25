@@ -98,9 +98,6 @@ jspm_packages/
 # Sentry
 .sentryclirc
 
-# Husky
-.husky
-
 # Lint staged
 .lint-staged.config.js
 

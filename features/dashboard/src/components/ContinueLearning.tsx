@@ -1,5 +1,5 @@
-import { ArrowRightV2Icon, BookContinueLearningImage } from "@lms/assets";
-import { PinnedNotificationsV2 } from "@lms/ui";
+import { ArrowRightIcon, BookContinueLearningImage } from "@lms/assets";
+import { PinnedNotificationWrapper } from "@lms/ui";
 import Image from "next/image";
 import { useFeature } from "@lms/contexts";
 import { InstructionText } from "./InstructionText";
@@ -18,7 +18,7 @@ const ContinueLearning = () => {
   return (
     <div className="z-2 sticky inset-x-0 bottom-4">
       <div className="flex w-full flex-col gap-4">
-        <PinnedNotificationsV2
+        <PinnedNotificationWrapper
           bgColor="bg-primary-200"
           borderColor="border-primary"
           classPinned="bottom-5 flex flex-col gap-0 md:flex-row md:items-center md:justify-between md:gap-4"
@@ -56,9 +56,9 @@ const ContinueLearning = () => {
             <span className="text-red-800 text-sm font-semibold underline md:text-base">
               Course Content
             </span>
-            <ArrowRightV2Icon />
+            <ArrowRightIcon />
           </div>
-        </PinnedNotificationsV2>
+        </PinnedNotificationWrapper>
       </div>
     </div>
   );

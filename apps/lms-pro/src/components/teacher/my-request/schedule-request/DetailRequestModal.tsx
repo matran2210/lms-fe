@@ -1,5 +1,4 @@
 import { InfoIcon } from '@lms/assets'
-import getConfig from 'next/config'
 import React, { Dispatch, SetStateAction } from 'react'
 import {
   IOpenReasonModal,
@@ -39,8 +38,8 @@ const DetailRequestModal = ({
   setOpenReasonModal,
   handleUpdateStatus,
 }: IProps) => {
-    const searchParam = useSearchParams()
-    const query = Object.fromEntries(searchParam.entries())
+  const searchParam = useSearchParams()
+  const query = Object.fromEntries(searchParam.entries())
   const requestId = selectedRequest?.id
   const isPending = selectedRequest?.status === StatusRequestSchedule.PENDING
   const isApproved = selectedRequest?.status === StatusRequestSchedule.APPROVED

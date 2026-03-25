@@ -1,5 +1,5 @@
 "use client";
-import { CheckIconV2 } from "@lms/assets";
+import { CheckedIcon } from "@lms/assets";
 import {
   allTypes,
   DEFAULT_SELECT_SECTION,
@@ -164,7 +164,7 @@ const ListItemFilterMobile = ({
             >
               {item.name}
             </div>
-            <div>{isSelected && <CheckIconV2 />}</div>
+            <div>{isSelected && <CheckedIcon />}</div>
           </div>
         );
       })}

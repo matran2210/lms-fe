@@ -27,7 +27,7 @@ const initialValues: FilterParams = {
 
 export default function StudentsTestResult() {
   const { control, reset, getValues } = useForm()
-  const param = useParams();
+  const param = useParams()
   const { id } = param
   const studentId = id as string
   const [params, setParams] = useState<FilterParams>(initialValues)

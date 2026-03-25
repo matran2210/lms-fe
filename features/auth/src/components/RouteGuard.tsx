@@ -1,4 +1,4 @@
-import { getMe, useAppDispatch, useAppSelector, useFeature, userReducer } from "@lms/contexts";
+import { getMe, useFeature, userReducer } from "@lms/contexts";
 import {
   CERTIFICATE_DETAIL, COOKIE_INFO,
   ENTRANCE_TEST_RESULT,
@@ -12,15 +12,14 @@ interface IProps {
 }
 
 export const RouteGuard = ({ children }: IProps) => {
-  const { userApi, router, pathname } = useFeature();
+  const { userApi, dispatch, useAppSelector, pathname} = useFeature();
 
   const [authorized, setAuthorized] = useState(false);
-  const dispatch = useAppDispatch();
-  const userSlice = useAppSelector(userReducer);
+  const userSlice = useAppSelector?.(userReducer);
   // First useEffect for getMe
   useEffect(() => {
     callGetMe();
-  }, [pathname, userSlice.user.keycloak_user_id]);
+  }, [pathname, userSlice?.user.keycloak_user_id]);
 
   const checkRouteCertificate = useMemo(() => {
     const path = pathname as string
@@ -33,19 +32,19 @@ export const RouteGuard = ({ children }: IProps) => {
   }, [pathname])
   const callGetMe = async () => {
     if (
-      userSlice.user.id ||
-      userSlice.user.keycloak_user_id ||
+      userSlice?.user.id ||
+      userSlice?.user.keycloak_user_id ||
       checkRouteCertificate
     ) {
       setAuthorized(true);
       setCookie(
         COOKIE_INFO.KEYCLOAK_USER_ID,
-        userSlice.user.keycloak_user_id ?? "",
+        userSlice?.user.keycloak_user_id ?? "",
       );
       return;
     }
 
-      await dispatch(getMe(userApi)).unwrap();
+      await dispatch?.(getMe(userApi)).unwrap();
       setAuthorized(true);
 
   };

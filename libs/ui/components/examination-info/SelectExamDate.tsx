@@ -1,5 +1,5 @@
 "use client";
-import { CheckIconV2 } from "@lms/assets";
+import { CheckedIcon } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
 import { useSelectExams } from "@lms/hooks";
 import clsx from "clsx";
@@ -73,7 +73,7 @@ const SelectExamDate = ({
             >
               {item.label}
             </div>
-            <div>{isSelected && <CheckIconV2 />}</div>
+            <div>{isSelected && <CheckedIcon />}</div>
           </div>
         );
       })}

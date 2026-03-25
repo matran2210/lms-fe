@@ -1,10 +1,10 @@
-import { fetcher } from '@services/requestV2'
+import { fetcher } from '@services/request'
 import {
   ChangePasswordReq,
   ResetPassword,
   SendEmailReq,
   VerifyOtpReq,
-} from 'src/redux/types/Login/login'
+} from '@lms/contexts'
 
 const MyProfileAPI = {
   getProfile: async (): Promise<any> => {

@@ -1,4 +1,5 @@
 import { QUESTION_LEVELS, QUESTION_TYPES } from "../../enums"
+import { IDragDropAnswer } from "../case-study"
 
 export interface Thumbnail {
   '311x175': string
@@ -94,35 +95,36 @@ export interface IQuestionTopic {
 }
 
 export interface IQuestion {
-  id?: string
-  qType?: QUESTION_TYPES
-  assignment_type: string
-  response_option?: string | null
-  level: QUESTION_LEVELS
-  display_type: string
-  question_content: string
-  solution: string
-  hint: string
-  tags?: IQuestionTag[]
-  answer?: IQuestionAnswer[]
-  answers?: IQuestionAnswer[]
+  id?: string;
+  qType?: QUESTION_TYPES;
+  assignment_type: string;
+  response_option?: string | null;
+  level: QUESTION_LEVELS;
+  display_type: string;
+  question_content: string;
+  solution: string;
+  hint: string;
+  tags?: IQuestionTag[];
+  answer?: IQuestionAnswer[];
+  answers?: IQuestionAnswer[];
   question_matchings?: {
-    content: string
-    answer: IQuestionAnswer
-  }[]
-  question_filter?: IQuestionFilter
-  question_category_id?: string
-  question_topic_id?: string
-  requirements?: IRequirment[]
-  requirement_answers?: IRequirmentAnswer[]
-  exhibits?: IExhibitQuestion[]
-  files?: IFile[]
-  setting_grade?: string
-  time?: string
-  question_topic?: IQuestionTopic
-  time_spent: number
-  answer_file?: { file_key?: string; file_name?: string } | undefined
-  answer_template?: string
+    content: string;
+    answer: IQuestionAnswer;
+  }[];
+  question_filter?: IQuestionFilter;
+  question_category_id?: string;
+  question_topic_id?: string;
+  requirements?: IRequirment[];
+  requirement_answers?: IRequirmentAnswer[];
+  exhibits?: IExhibitQuestion[];
+  files?: IFile[];
+  setting_grade?: string;
+  time?: string;
+  question_topic?: IQuestionTopic;
+  time_spent: number;
+  answer_file?: { file_key?: string; file_name?: string } | undefined;
+  answer_template?: string;
+  drag_drop_answers?: IDragDropAnswer[];
 }
 
 export enum ANSWER_CORRECT_TYPE {

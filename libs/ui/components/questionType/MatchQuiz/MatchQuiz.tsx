@@ -58,6 +58,8 @@ interface IProps {
   explainClassname?: string;
   onChangeMatchedPairs?: (matchedPairs: any[]) => void;
   storageKey?: string;
+  disabled?: boolean;
+  isAnimationCorrectAnswer?: boolean;
 }
 
 type Role = "question" | "answer";
@@ -105,6 +107,8 @@ const MatchQuiz = forwardRef(
       explainClassname,
       onChangeMatchedPairs,
       storageKey,
+      disabled = false,
+      isAnimationCorrectAnswer = false,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -127,6 +131,7 @@ const MatchQuiz = forwardRef(
     // Hàm xử lý khi click vào node
     const handleNodeClick = useCallback(
       (nodeId: string) => {
+        if (disabled) return;
         const clickedNode = nodes.find((n) => n.id === nodeId);
         if (!clickedNode) return;
 
@@ -166,7 +171,7 @@ const MatchQuiz = forwardRef(
           }
         }
       },
-      [nodes, selectedNodes],
+      [nodes, selectedNodes, disabled],
     );
 
     const getMatchedPairs = (edges: Edge[], nodes: MatchNode[]) => {
@@ -196,6 +201,13 @@ const MatchQuiz = forwardRef(
           const newKey = prev + 1;
           return newKey;
         });
+      },
+      handleResetEdges() {
+        setKey((prev) => {
+          const newKey = prev + 1;
+          return newKey;
+        });
+        setEdges([]);
       },
       getMatchedPairs: () => getMatchedPairs(edges, nodes),
     }));
@@ -235,7 +247,7 @@ const MatchQuiz = forwardRef(
     useEffect(() => {
       // Transform question_matchings into questions and answers
       const questions: RawItem[] =
-        data?.question_matchings.map((item: any) => ({
+        data?.question_matchings?.map((item: any) => ({
           id: item.id,
           label: item.content,
           role: "question" as Role,
@@ -278,14 +290,14 @@ const MatchQuiz = forwardRef(
                 isConnected,
                 onClick: (e: React.MouseEvent<HTMLDivElement>) => {
                   e.stopPropagation();
-                  if (!corrects) handleNodeClick(id);
+                  if (!corrects && !disabled) handleNodeClick(id);
                 },
               }}
             />
           );
         },
       }),
-      [selectedNodes, handleNodeClick, corrects, edges],
+      [selectedNodes, handleNodeClick, corrects, edges, disabled],
     );
 
     const edgeTypes = {
@@ -293,6 +305,7 @@ const MatchQuiz = forwardRef(
     };
 
     const onConnect = useCallback((connection: Connection) => {
+      if (disabled) return;
       setEdges((prev) => {
         // Xoá edge cũ có cùng target
         const filtered = prev.filter(
@@ -303,7 +316,7 @@ const MatchQuiz = forwardRef(
         // Thêm edge mới
         return addEdge({ ...connection, type: "custom" }, filtered);
       });
-    }, []);
+    }, [disabled]);
 
     useEffect(() => {
       if (!defaultAnswer || defaultAnswer.length === 0) return;
@@ -516,10 +529,11 @@ const MatchQuiz = forwardRef(
 
     // Thông báo matchedPairs lên parent mỗi khi edges hoặc nodes thay đổi
     useEffect(() => {
+      if (disabled) return;
       if (onChangeMatchedPairs) {
         onChangeMatchedPairs(getMatchedPairs(edges, nodes));
       }
-    }, [edges, nodes]);
+    }, [edges, nodes, disabled]);
 
     const correctNodeTypes = useMemo(
       () => ({
@@ -552,6 +566,7 @@ const MatchQuiz = forwardRef(
             "whitespace-normal break-words",
           )}
           onMouseUp={(e: any) => {
+            if (disabled) return;
             if (
               e?.target?.tagName?.charAt(0) !== "m" &&
               e?.target?.firstChild?.tagName !== "math"
@@ -635,7 +650,9 @@ const MatchQuiz = forwardRef(
             highlighted={highlighted}
           /> */}
         </div>
-        <div className="flex h-full w-full flex-col">
+        <div className="flex h-full w-full flex-col" data-aos={isAnimationCorrectAnswer ? "fade-left" : ""}
+          data-aos-delay={200}
+          data-aos-once="true">
           <div
             className={`relative w-full min-w-[${CONTAINER_WIDTH}]`}
             ref={flowRef}
@@ -656,7 +673,7 @@ const MatchQuiz = forwardRef(
             </ReactFlowProvider>
           </div>
           {!!corrects && !!correctNodes?.length && (
-            <>
+            <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
               <SappDivider />
               <div className={clsx(correctAnswerClass)}>
                 <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
@@ -680,18 +697,18 @@ const MatchQuiz = forwardRef(
                   </ReactFlowProvider>
                 </div>
               </div>
-            </>
+            </div>
           )}
         </div>
 
         {solution && (
-          <>
+          <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
             <SappDivider />
             <div className={explainClassname}>
               <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
               <EditorReader className="mt-4" text_editor_content={solution} />
             </div>
-          </>
+          </div>
         )}
       </div>
     );

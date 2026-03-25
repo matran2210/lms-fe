@@ -8,7 +8,7 @@ import {
   SendEmailReq,
   VerifyOtpReq,
 } from "../../state";
-import { ExamInformation, IQuestion } from "./course";
+import { DocumentItem, ExamInformation, IQuestion, IStoryline } from "./course";
 import { IExamPrediction, ILearningResult, IMockTestResult, IOverProgress, ITopicProgress, IWeeklyReport } from "./dashboard";
 import { ICertificate } from "./Profile";
 import {
@@ -321,4 +321,37 @@ export interface IDashboardAPI {
   getMockTestResults:(id: string)=> Promise<IResponse<IMockTestResult>>
 
   getExamPrediction:(id: string)=> Promise<IResponse<IExamPrediction>> 
+}
+
+export interface IStorylineAPI {
+  getListStoryline: ({
+    class_id,
+    section_storyline_id,
+  }: {
+    class_id: string;
+    section_storyline_id: string;
+  }) => Promise<IResponse<IStoryline>>;
+  getStorylineDocument: ({
+    class_id,
+    item_id,
+  }: {
+    class_id: string;
+    item_id: string;
+  }) => Promise<IResponse<DocumentItem[]>>;
+  retakeStoryline: ({ class_id, course_section_id, storyline_item_id, }: {
+    class_id: string;
+    course_section_id: string;
+    storyline_item_id?: string | undefined;
+}) => Promise<IResponse<IStoryline>>
+}
+
+export interface ICourseActivationAPI {
+  get: (
+    params: Object,
+    page_index?: number,
+    page_size?: number,
+  ) => Promise<any>;
+  getSubjectByProgram: (program_name?: string) => Promise<any>;
+  activateClass: (class_id: string) => Promise<any>;
+  getSubjectClassForActivateSubject: (subject_id: string) => Promise<any>;
 }

@@ -54,7 +54,11 @@ const PopUpCertificate = ({
         </div>
         {/* <div>{data?.certificate_url}</div> */}
         <div className="flex justify-center pt-6">
-          <img src={data?.certificate_url} className="h-auto w-full"></img>
+          <img
+            src={data?.certificate_url}
+            alt="certificate"
+            className="h-auto w-full"
+          ></img>
         </div>
       </div>
     </SappModalCerti>

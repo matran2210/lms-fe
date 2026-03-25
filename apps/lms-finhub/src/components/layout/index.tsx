@@ -1,9 +1,6 @@
 'use client'
-import {
-  useAppSelector,
-  useCourseContext,
-  usePinnedNotifyContext,
-} from '@lms/contexts'
+import { useAppSelector } from 'src/redux/hook'
+import { useCourseContext, usePinnedNotifyContext } from '@lms/contexts'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import clsx from 'clsx'
 import { usePathname } from 'next/navigation'
@@ -49,8 +46,6 @@ export default function Layout(props: LayoutProps): ReactElement {
   )
 
   const [openResource, setOpenResource] = useState(false)
-  const [openExaminationInfo, setOpenExaminationInfo] = useState(false)
-
   const isEnablePinnedPages = [
     PageLink.COURSES,
     PageLink.USERPAGE,
@@ -99,8 +94,6 @@ export default function Layout(props: LayoutProps): ReactElement {
         )}
         setOpenResource={setOpenResource}
         openResource={openResource}
-        openExaminationInfo={openExaminationInfo}
-        setOpenExaminationInfo={setOpenExaminationInfo}
       />
 
       <div

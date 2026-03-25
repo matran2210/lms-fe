@@ -1,8 +1,13 @@
 'use client'
 import PopupModalTest from '@components/survey/PopupModalTest'
-import { useCourseContext, UserType } from '@lms/contexts'
+import { useCourseContext, useFeature, UserType } from '@lms/contexts'
+import {
+  selectPopupActivateCourse,
+  showPopupActivatedCourse,
+} from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 import {
   ANIMATION,
+  ApiError,
   AppType,
   CLASS_TYPE,
   defaultStatusDetail,
@@ -26,6 +31,8 @@ import {
   SappBreadCrumbs,
   SearchWithMenuToggle,
 } from '@lms/ui'
+import { extractNotActivatedData } from '@lms/utils'
+
 import clsx from 'clsx'
 import { useParams, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -38,6 +45,8 @@ const DEFAULT_PAGESIZE = 18
 
 const CourseDetail = () => {
   const searchParams = useSearchParams()
+  const { dispatch, useAppSelector } = useFeature()
+  const selector = useAppSelector?.(selectPopupActivateCourse)
   const param = useParams()
   const query = Object.fromEntries(searchParams.entries())
   const observer = useRef<IntersectionObserver>()
@@ -109,6 +118,12 @@ const CourseDetail = () => {
   } = useInfiniteQuery({
     queryKey: ['courseDetail'],
     queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
+    onError: (error: ApiError) => {
+      const data = extractNotActivatedData(error)
+      if (data) {
+        dispatch?.(showPopupActivatedCourse(data))
+      }
+    },
     getNextPageParam: (lastPage, allPages) => {
       if (
         params.user_section_learning_status ||
@@ -247,7 +262,7 @@ const CourseDetail = () => {
       showSidebar={showSidebar || isAlwaysShowSidebar}
       handleToggleSidebar={handleCloseSidebar}
     >
-      {isLoading ? (
+      {isLoading || selector?.openActive ? (
         <CourseDetailSkeleton />
       ) : (
         <>
@@ -256,7 +271,6 @@ const CourseDetail = () => {
             isShowToggle
             isCoursePage
             redirectLink={PageLink.COURSES}
-            appType={AppType.LMS_PRO}
           />
           <SappBreadCrumbs
             isTeacher={false}

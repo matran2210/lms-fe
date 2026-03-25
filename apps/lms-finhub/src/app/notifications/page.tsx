@@ -1,10 +1,5 @@
 'use client'
 import Layout from '@components/layout'
-import { trackGAEvent } from '@lms/utils'
-import Aos from 'aos'
-import { useEffect, useState } from 'react'
-import { ANIMATION, LOCAL_STORAGE_KEYS, MY_COURSES } from '@lms/core'
-import withAuthorization from 'src/HOC/withAuthorization'
 import {
   getCountUnRead,
   getNotification,
@@ -14,19 +9,24 @@ import {
   notificationSlice,
   updateStatus,
   updateStatusAll,
-  useAppDispatch,
-  useAppSelector,
   UserType,
 } from '@lms/contexts'
+import { ANIMATION, LOCAL_STORAGE_KEYS, MY_COURSES } from '@lms/core'
 import { ActionCell, SappDrawerV2 } from '@lms/ui'
-import NotifyActions from '@components/notification/NotifyActions'
-import NotifyTab from '@components/notification/NotifyTab'
-import NotifyList from '@components/notification/NotifyList'
-import NotifyDetail from '@components/notification/NotifyDetail'
+import { trackGAEvent } from '@lms/utils'
+import Aos from 'aos'
+import { useEffect, useState } from 'react'
+import withAuthorization from 'src/HOC/withAuthorization'
 import SearchForm from '@components/courses/shared/SearchForm'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { NotificationAPI } from 'src/api/notification'
-
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import {
+  NotifyActions,
+  NotifyDetail,
+  NotifyList,
+  NotifyTab,
+} from '@lms/feature-notifications'
 const Notifications = () => {
   const [openModel, setOpenModel] = useState<boolean>(false)
   const [openToolTip, setOpenToolTip] = useState<boolean>(false)
@@ -55,7 +55,7 @@ const Notifications = () => {
   const coutNotificationsUnRead = async () => {
     try {
       await dispatch(getCountUnRead(NotificationAPI))
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const getApiNotificationDetail = async (
@@ -75,7 +75,7 @@ const Notifications = () => {
           router.replace(`${content?.replace('class_id', 'classId')}`)
         }
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const markAllRead = async () => {
@@ -84,7 +84,7 @@ const Notifications = () => {
       dispatch(updateStatusAll())
       await coutNotificationsUnRead()
       Aos.refresh()
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const handleMarkAll = () => {
@@ -114,14 +114,12 @@ const Notifications = () => {
       }
     }
 
-
-
     const handleScroll = () => {
       if (
         !isFetching &&
         isEndPage &&
         window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 10
+          document.documentElement.offsetHeight - 10
       ) {
         isFetching = true
         const pageIndex = pagination?.page_index

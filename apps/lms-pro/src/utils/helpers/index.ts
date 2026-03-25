@@ -1,7 +1,5 @@
-import _, { uniqBy } from 'lodash'
 import dayjs from 'dayjs'
-import { round } from 'lodash'
-import { PageLink } from 'src/constants/routers'
+import _, { round } from 'lodash'
 
 export function isMobile() {
   const toMatch = [
@@ -186,53 +184,6 @@ export const calculatePercentage = (num: number, total: number): number => {
   return round((num / total) * 100, 2)
 }
 
-/**
- * @description Return number mm:ss
- * @param {number} num: number
- * @return {*}
- */
-export const convertSecondsToMinutesSeconds = (seconds: number) => {
-  const minutes = Math.floor(seconds / 60)
-  const remainingSeconds = seconds % 60
-  const formattedMinutes = String(minutes).padStart(2, '0')
-  const formattedSeconds = String(remainingSeconds).padStart(2, '0')
-  return `${formattedMinutes}:${formattedSeconds}`
-}
-
-export const convertLocalTimeToUTC = (currentTime: Date) => {
-  const offsetMinutes = currentTime.getTimezoneOffset()
-  const utcTime = new Date(currentTime.getTime() + offsetMinutes * 60 * 1000)
-
-  return utcTime
-}
-
-export const convertUTCToLocalTime = (utc_time: Date | string) => {
-  return new Date(utc_time)
-}
-
-export const convertHourToDayLeft = (hours: number) => {
-  if (hours <= 0) {
-    return 0
-  }
-
-  const days = Math.ceil(hours / 24)
-  return days
-}
-
-export const isAppleDevice = () => {
-  return /Mac|iPod|iPhone|iPad/.test(navigator.platform)
-}
-
-export const isSafari = () => {
-  const userAgent = navigator.userAgent
-  const vendor = navigator.vendor
-  return (
-    /Safari/.test(userAgent) &&
-    /Apple Computer/.test(vendor) &&
-    !/Chrome/.test(userAgent)
-  )
-}
-
 type Option = {
   label?: string
   value?: string
@@ -308,10 +259,7 @@ export const formatTimeOnlyHourMinute = (rawTime: string) => {
    */
   return dayjs(parseTime(rawTime)).format('HH:mm')
 }
-
-export const getUserPrefix = (isTeacher: boolean) =>
-  isTeacher ? PageLink.TEACHERS : ''
-
-export * from './quiz-test/helper'
-export * from './editor-helper'
 export * from './class-resource/helper'
+export * from './editor-helper'
+export * from './quiz-test/helper'
+
