@@ -1,16 +1,16 @@
 "use client";
-import React from "react";
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PencilIcon } from "@lms/assets";
 import { ExaminationForm, useFeature } from "@lms/contexts";
-import { ClassKey, COURSE_TYPE, Data, TitleSidebar, zodMsg } from "@lms/core";
+import { ClassKey, COURSE_TYPE, Data, InfoItemProps, TitleSidebar, zodMsg } from "@lms/core";
 import { useSelectExams, useTailwindBreakpoint } from "@lms/hooks";
+import { CarouselSlideAnimation, NoData, SappDrawerV3, Tooltip } from "@lms/ui";
 import { getDuration } from "@lms/utils";
 import { Avatar, GetProp, List, Skeleton, UploadFile, UploadProps } from "antd";
 import clsx from "clsx";
 import { isEmpty, isUndefined } from "lodash";
-import {
+import React, {
   Dispatch,
   ReactNode,
   SetStateAction,
@@ -24,9 +24,6 @@ import { z } from "zod";
 import ChangExamDate from "./ChangExamDate";
 import ChangeAnywayModal from "./ChangeAnywayModal";
 import SelectExamDate from "./SelectExamDate";
-import { SappDrawerV3 } from "../base";
-import { CarouselSlideAnimation } from "../animations";
-import { NoData, Tooltip } from "../common";
 
 type Props = {
   open: boolean;
@@ -38,10 +35,7 @@ type Props = {
   onSuccess?: () => void;
 };
 
-export interface InfoItemProps {
-  label: string;
-  value: ReactNode;
-}
+
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 const InfoItem = ({ label, value }: InfoItemProps) => {
@@ -196,7 +190,7 @@ const ExaminationInfo = ({
       getExams: classApi.getExams,
     },
     courseId: classId,
-  }); 
+  });
 
   const handleChangeExamDate = async () => {
     if (isOpenSelectExam) {

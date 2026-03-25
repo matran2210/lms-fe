@@ -102,9 +102,9 @@
       "eslint --fix",
       "pnpm --filter @lms/feature-auth tsc --noEmit"
     ],
-    "features/calendar/**/*.{ts,tsx}": [
+    "features/schedule/**/*.{ts,tsx}": [
       "eslint --fix",
-      "pnpm --filter @lms/feature-calendar tsc --noEmit"
+      "pnpm --filter @lms/feature-schedule tsc --noEmit"
     ],
     "features/class/**/*.{ts,tsx}": [
       "eslint --fix",

@@ -159,9 +159,6 @@ importers:
       '@lms/feature-auth':
         specifier: workspace:*
         version: link:../../features/auth
-      '@lms/feature-calendar':
-        specifier: workspace:*
-        version: link:../../features/calendar
       '@lms/feature-class':
         specifier: workspace:*
         version: link:../../features/class
@@ -174,6 +171,9 @@ importers:
       '@lms/feature-notifications':
         specifier: workspace:*
         version: link:../../features/notifications
+      '@lms/feature-schedule':
+        specifier: workspace:*
+        version: link:../../features/schedule
       '@lms/feature-test':
         specifier: workspace:*
         version: link:../../features/test
@@ -472,9 +472,6 @@ importers:
       '@lms/feature-auth':
         specifier: workspace:*
         version: link:../../features/auth
-      '@lms/feature-calendar':
-        specifier: workspace:*
-        version: link:../../features/calendar
       '@lms/feature-certificate':
         specifier: workspace:*
         version: link:../../features/certificate
@@ -487,9 +484,15 @@ importers:
       '@lms/feature-dashboard':
         specifier: workspace:*
         version: link:../../features/dashboard
+      '@lms/feature-exam':
+        specifier: workspace:*
+        version: link:../../features/exam
       '@lms/feature-notifications':
         specifier: workspace:*
         version: link:../../features/notifications
+      '@lms/feature-schedule':
+        specifier: workspace:*
+        version: link:../../features/schedule
       '@lms/feature-test':
         specifier: workspace:*
         version: link:../../features/test
@@ -946,39 +949,6 @@ importers:
         specifier: ^2.4.1
         version: 2.4.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
 
-  features/calendar:
-    dependencies:
-      '@lms/assets':
-        specifier: workspace:*
-        version: link:../../libs/assets
-      '@lms/contexts':
-        specifier: workspace:*
-        version: link:../../libs/state
-      '@lms/core':
-        specifier: workspace:*
-        version: link:../../libs/core
-      '@lms/hooks':
-        specifier: workspace:*
-        version: link:../../libs/hooks
-      '@lms/ui':
-        specifier: workspace:*
-        version: link:../../libs/ui
-      '@lms/utils':
-        specifier: workspace:*
-        version: link:../../libs/utils
-      '@sapp-fe/sapp-common-package':
-        specifier: ^1.8.0
-        version: 1.8.0(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.1(@types/node@24.12.0)(typescript@5.1.6))(webpack@5.105.4)
-      antd:
-        specifier: ^5.25.0
-        version: 5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      clsx:
-        specifier: ^2.1.1
-        version: 2.1.1
-      dayjs:
-        specifier: ^1.11.12
-        version: 1.11.20
-
   features/certificate:
     dependencies:
       '@hookform/resolvers':
@@ -1150,6 +1120,54 @@ importers:
         specifier: ^3.2.1
         version: 3.8.0(@types/react-dom@18.2.18)(@types/react@18.2.46)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react-native@0.84.1(@babel/core@7.29.0)(@types/react@18.2.46)(react@18.2.0))(react@18.2.0)(redux@4.2.1)
 
+  features/exam:
+    dependencies:
+      '@hookform/resolvers':
+        specifier: ^3.10.0
+        version: 3.10.0(react-hook-form@7.48.2(react@18.2.0))
+      '@lms/assets':
+        specifier: workspace:*
+        version: link:../../libs/assets
+      '@lms/contexts':
+        specifier: workspace:*
+        version: link:../../libs/state
+      '@lms/core':
+        specifier: workspace:*
+        version: link:../../libs/core
+      '@lms/hoc':
+        specifier: workspace:*
+        version: link:../../libs/HOC
+      '@lms/hooks':
+        specifier: workspace:*
+        version: link:../../libs/hooks
+      '@lms/ui':
+        specifier: workspace:*
+        version: link:../../libs/ui
+      '@lms/utils':
+        specifier: workspace:*
+        version: link:../../libs/utils
+      antd:
+        specifier: ^5.25.0
+        version: 5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      date-fns:
+        specifier: ^3.0.6
+        version: 3.6.0
+      dayjs:
+        specifier: ^1.11.12
+        version: 1.11.20
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.23
+      react-hook-form:
+        specifier: 7.48.2
+        version: 7.48.2(react@18.2.0)
+      zod:
+        specifier: ^3.22.4
+        version: 3.25.76
+
   features/notifications:
     dependencies:
       '@lms/assets':
@@ -1177,6 +1195,39 @@ importers:
       '@types/aos':
         specifier: ^3.0.7
         version: 3.0.7
+
+  features/schedule:
+    dependencies:
+      '@lms/assets':
+        specifier: workspace:*
+        version: link:../../libs/assets
+      '@lms/contexts':
+        specifier: workspace:*
+        version: link:../../libs/state
+      '@lms/core':
+        specifier: workspace:*
+        version: link:../../libs/core
+      '@lms/hooks':
+        specifier: workspace:*
+        version: link:../../libs/hooks
+      '@lms/ui':
+        specifier: workspace:*
+        version: link:../../libs/ui
+      '@lms/utils':
+        specifier: workspace:*
+        version: link:../../libs/utils
+      '@sapp-fe/sapp-common-package':
+        specifier: ^1.8.0
+        version: 1.8.0(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.1(@types/node@24.12.0)(typescript@5.1.6))(webpack@5.105.4)
+      antd:
+        specifier: ^5.25.0
+        version: 5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      dayjs:
+        specifier: ^1.11.12
+        version: 1.11.20
 
   features/test:
     dependencies:

@@ -1,11 +1,4 @@
 {
   "name": "customer-b",
-  "features": [
-    "feature-auth",
-    "feature-class",
-    "feature-courses",
-    "feature-dashboard",
-    "feature-notifications",
-    "feature-user"
-  ]
+  "features": []
 }

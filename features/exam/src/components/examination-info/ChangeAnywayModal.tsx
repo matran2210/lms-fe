@@ -1,7 +1,7 @@
 import { AlertTriagle } from '@lms/assets'
 import { ExaminationForm, ExaminationsResponse } from '@lms/contexts'
 import { UseFormReturn } from 'react-hook-form'
-import { SappModalV3 } from '../base'
+import { SappModalV3 } from '@lms/ui'
 
 interface IProps {
   openConfirmModal: boolean

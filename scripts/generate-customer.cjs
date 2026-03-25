@@ -8,12 +8,21 @@ const fse = require("fs-extra");
 // =======================
 // FEATURE MAP
 // =======================
-
+const REQUIRED_FEATURES = [
+  "feature-auth",
+  "feature-class",
+  "feature-courses",
+  "feature-dashboard",
+  "feature-notifications",
+  "feature-user",
+];
 const FEATURE_MODULE_MAP = {
   // example: @ops/feature-user => "feature-name": "nameModule"
   // Optional features
   "feature-calendar": "calendarModule",
   "feature-test": "testModule",
+  "feature-certificate": "certificateModule",
+  "feature-exam": "examModule",
 
   // Core features
   "feature-auth": "authModule",
@@ -29,6 +38,8 @@ const FEATURE_FOLDER_MAP = {
   // Optional features
   "feature-calendar": "calendar",
   "feature-test": "test",
+  "feature-certificate": "certificate",
+  "feature-exam": "exam",
 
   // Core features
   "feature-auth": "auth",
@@ -66,7 +77,10 @@ if (!Array.isArray(config.features)) {
 }
 
 // validate mapping
-config.features.forEach((f) => {
+const finalFeatures = [
+  ...new Set([...REQUIRED_FEATURES, ...(config.features || [])]),
+];
+finalFeatures.forEach((f) => {
   if (!FEATURE_MODULE_MAP[f]) {
     console.error(`Missing module mapping: ${f}`);
     process.exit(1);
@@ -135,7 +149,7 @@ console.log("Project copied");
 const featuresDir = path.join(outputDir, "features");
 
 if (fs.existsSync(featuresDir)) {
-  const enabledFolders = config.features.map((f) => FEATURE_FOLDER_MAP[f]);
+  const enabledFolders = finalFeatures.map((f) => FEATURE_FOLDER_MAP[f]);
 
   fs.readdirSync(featuresDir).forEach((folderName) => {
     if (!enabledFolders.includes(folderName)) {
@@ -174,7 +188,7 @@ if (fs.existsSync(appPackagePath)) {
     if (dep.startsWith("@lms/feature-")) {
       const featureName = dep.replace("@lms/", "");
 
-      if (!config.features.includes(featureName)) {
+      if (!finalFeatures.includes(featureName)) {
         delete appPkg.dependencies[dep];
         console.log(`Removed dependency: ${dep}`);
       }
@@ -197,7 +211,8 @@ if (fs.existsSync(registryPath)) {
   config.features.forEach((feature) => {
     const moduleVar = FEATURE_MODULE_MAP[feature];
     const folderName = FEATURE_FOLDER_MAP[feature];
-    if (!["calendar", "test", "certificate"].includes(folderName)) return;
+    if (!["schedule", "test", "certificate", "exam"].includes(folderName))
+      return;
 
     if (fs.existsSync(path.join(featuresDir, folderName))) {
       imports.push(`import { ${moduleVar} } from "@lms/${feature}"`);

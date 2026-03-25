@@ -234,7 +234,7 @@ lms-fe/
 5. **@lms/feature-tests** - Tests & Quizzes (LMS only)
 6. **@lms/feature-entrance-test** - Entrance Test (LMS only)
 7. **@lms/feature-event-test** - Event Test (LMS only)
-8. **@lms/feature-calendar** - Calendar (LMS only)
+8. **@lms/feature-schedule** - Calendar (LMS only)
 9. **@lms/feature-profile** - Profile
 10. **@lms/feature-teacher** - Teacher management (LMS only)
 11. **@lms/feature-calculator** - Calculator (independent, LMS only)
@@ -286,7 +286,7 @@ apps/lms (Full Features)
   ├── @lms/feature-tests
   ├── @lms/feature-entrance-test
   ├── @lms/feature-event-test
-  ├── @lms/feature-calendar
+  ├── @lms/feature-schedule
   ├── @lms/feature-notifications
   ├── @lms/feature-profile
   ├── @lms/feature-teacher

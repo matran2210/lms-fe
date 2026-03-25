@@ -29,7 +29,7 @@
     "@lms/contexts": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/feature-auth": "workspace:*",
-    "@lms/feature-calendar": "workspace:*",
+    "@lms/feature-schedule": "workspace:*",
     "@lms/feature-class": "workspace:*",
     "@lms/feature-courses": "workspace:*",
     "@lms/feature-dashboard": "workspace:*",

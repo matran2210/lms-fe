@@ -7,8 +7,8 @@ import { RcFile } from "antd/es/upload";
 import { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useFeature } from "@lms/contexts";
-import { SAPPSelectTooltip, UploadSingleFile } from "../base";
-import { ErrorMessage } from "../common";
+import { SAPPSelectTooltip, UploadSingleFile, ErrorMessage } from "@lms/ui";
+
 interface IProps {
   classId: string;
   remainingChanges?: number;
