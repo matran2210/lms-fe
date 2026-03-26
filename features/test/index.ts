@@ -2,7 +2,7 @@ import { AppModule } from "@lms/core";
 import { ExtensionRegistry } from "@lms/ui";
 import { testRoutes } from "./routes";
 import EntranceTestPage from "./src/pages/entrance-test/page";
-import EntranceTestResultPage from "./src/pages/entrance-test/page";
+import EntranceTestResultPage from "./src/pages/entrance-test/test-result/[id]/page";
 import TableEntranceResult from "./src/pages/entrance-test/table-result/[id]/page";
 import EventTestPage from "./src/pages/event-test/page";
 
