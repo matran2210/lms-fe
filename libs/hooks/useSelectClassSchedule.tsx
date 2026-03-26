@@ -1,12 +1,15 @@
 import { useFeature } from '@lms/contexts'
-import { ClassKey } from '@lms/core'
-import { useInfiniteQuery } from 'react-query' // Import useInfiniteQuery
+import { showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
+import { ApiError, ClassKey } from '@lms/core'
+import { extractNotActivatedData } from '@lms/utils'
+import { useInfiniteQuery } from 'react-query'; // Import useInfiniteQuery
 
 const useSelectClassSchedule = (
   id?: string,
   search_key?: string,
   enabled = false,
 ) => {
+  const { dispatch } = useFeature()
   const { classApi } = useFeature()
   const fetchClasses = async (
     page_index: number,
@@ -33,6 +36,12 @@ const useSelectClassSchedule = (
     queryKey: [ClassKey.ClassSchedule, id, search_key],
     queryFn: ({ pageParam = 1 }) => {
       return fetchClasses(pageParam, 10, id) // Fetch with pageParam and a fixed page size
+    },
+    onError: (error: ApiError) => {
+      const data = extractNotActivatedData(error)
+      if (data) {
+        dispatch?.(showPopupActivatedCourse(data))
+      }
     },
     getNextPageParam: (lastPage) => {
       const { page_index, total_pages } = lastPage.metadata

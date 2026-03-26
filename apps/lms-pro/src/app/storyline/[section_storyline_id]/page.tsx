@@ -2,14 +2,18 @@
 import Player from '@components/storyline/Player'
 import { StorylineProvider } from '@contexts/StorylineContext'
 import { StorylineSidebarProvider } from '@contexts/StorylineSidebarContext'
-import { LAYOUT } from '@lms/core'
+import { showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
+import { ApiError, LAYOUT } from '@lms/core'
+import { extractNotActivatedData } from '@lms/utils'
 import { useParams, useSearchParams } from 'next/navigation'
 import { useQuery } from 'react-query'
 import { StorylineAPI } from 'src/api/storyline'
+import { useAppDispatch } from 'src/redux/hook'
 
 function StoryLinePage() {
   const searchParams = useSearchParams()
   const params = useParams()
+  const dispatch = useAppDispatch()
   const { section_storyline_id } = params
   const class_id = searchParams.get('class_id')
   const useGetData = (queryKey: string) => {
@@ -25,6 +29,12 @@ function StoryLinePage() {
       enabled:
         class_id !== undefined && params.section_storyline_id !== undefined,
       retry: false,
+      onError: (error: ApiError) => {
+        const data = extractNotActivatedData(error)
+        if (data) {
+          dispatch?.(showPopupActivatedCourse(data))
+        }
+      },
     })
   }
 

@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useFeature } from '@lms/contexts'
 import {
   DATE_TIME_FORMAT_DMY,
   IContentCompleted,
@@ -23,13 +24,12 @@ import {
   VALIDATE_REQUIRED,
 } from '@lms/utils'
 import { Drawer } from 'antd'
-import { round } from 'lodash'
+import { isEmpty, round } from 'lodash'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
 import TreeProgress from './TreeProgress'
-import { useFeature } from '@lms/contexts'
 
 export interface IProps {
   id: string | null
@@ -232,15 +232,40 @@ function FormViewProgress({
 
     if (currentCourse.length > 0) {
       payload.current_course_sections = currentCourse
+    } else {
+      const currentCourseSections = detailProgress?.content_completed.filter(
+        (item) => item.main,
+      )
+      if (!isEmpty(currentCourseSections)) {
+        const currentCourseSectionsPayload = currentCourseSections?.map(
+          (item) => ({
+            class_schedule_id: item.class_schedule_id,
+            course_section_ids: [],
+          }),
+        )
+        payload.current_course_sections = currentCourseSectionsPayload
+      }
     }
 
     if (compensatedCourse.length > 0) {
       payload.compensated_course_sections = compensatedCourse
+    } else {
+      const compensatedCourseSections =
+        detailProgress?.content_completed.filter((item) => !item.main)
+      if (!isEmpty(compensatedCourseSections)) {
+        const compensatedCourseSectionsPayload = compensatedCourseSections?.map(
+          (item) => ({
+            class_schedule_id: item.class_schedule_id,
+            course_section_ids: [],
+          }),
+        )
+        payload.compensated_course_sections = compensatedCourseSectionsPayload
+      }
     }
-    if (!payload.current_course_sections) {
-      toast.error('Vui lòng chọn main content')
-      return
-    }
+    // if (!payload.current_course_sections) {
+    //   toast.error('Vui lòng chọn main content')
+    //   return
+    // }
     try {
       setLoading(true)
       const data = await progressApi?.updateProgress(id as string, payload)
@@ -502,7 +527,9 @@ function FormViewProgress({
             className="mb-4 mr-4"
             color="secondary"
           />
-          {!isView && <SAPPButtonCustom title={'Save'} onClick={handleSubmit} />}
+          {!isView && (
+            <SAPPButtonCustom title={'Save'} onClick={handleSubmit} />
+          )}
         </div>
       </div>
     </Drawer>

@@ -140,6 +140,21 @@ export interface UserHubspotExaminationSubjectItem {
   is_final_examination_subject: boolean;
 }
 
+export interface ApiError {
+  response?: {
+    data?: {
+      error?: {
+        code?: string;
+        replacements: {
+          FLEXIBLE_DAYS: number;
+          CLASS_ID: string;
+          COURSE_TYPE: string;
+        };
+      };
+    };
+  };
+}
+
 export interface AppModule {
   name: string;
   routes: {

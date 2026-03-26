@@ -20,6 +20,7 @@ import { useInfiniteQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { hidePopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -211,6 +212,10 @@ const MyCourse = () => {
       options: defaultStatusCourse,
     },
   ]
+
+  useEffect(() => {
+    dispatch(hidePopupActivatedCourse())
+  }, [])
 
   return (
     <SappLoadingGlobal loading={isLoading}>

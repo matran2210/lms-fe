@@ -1,9 +1,9 @@
-import DOMPurify from "dompurify";
 import { isEmpty, isNull, isUndefined } from "lodash";
 import { useQuery } from "react-query";
 import dayjs, { Dayjs } from "dayjs";
 import {
   AnswerItem,
+  ApiError,
   DATE_FORMAT,
   DAYS_IN_WEEK,
   GRADE_STATUS,
@@ -19,6 +19,7 @@ import {
   serializeHighlights,
 } from "@funktechno/texthighlighter/lib";
 import { Correct } from "./answer";
+import { PageLink } from "../../apps/lms-pro/src/constants/routers";
 
 declare global {
   interface Window {
@@ -588,4 +589,33 @@ export const handleMultipleCorrectAnswer = (
   });
 
   return answersMapped;
+};
+
+export const handleCheckIsNotActivated = (errorCode?: string) => {
+  return errorCode === "400|100016";
+};
+
+export const handleCheckRedirectPage = (
+  isPassFoundation: boolean,
+  isACCACourse: boolean,
+) => {
+  if (!isPassFoundation) {
+    return PageLink.COURSES;
+  }
+  if (isACCACourse) {
+    return;
+  }
+  return null;
+};
+
+export const extractNotActivatedData = (error: ApiError) => {
+  const errResponse = error?.response?.data?.error;
+
+  if (!handleCheckIsNotActivated(errResponse?.code)) return null;
+
+  return {
+    timeActive: errResponse?.replacements?.FLEXIBLE_DAYS,
+    classId: errResponse?.replacements?.CLASS_ID,
+    courseType: errResponse?.replacements?.COURSE_TYPE,
+  };
 };

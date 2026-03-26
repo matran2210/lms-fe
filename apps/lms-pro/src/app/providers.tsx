@@ -18,7 +18,11 @@ import {
   SOCKET_EVENTS,
 } from '@lms/core'
 import { RouteGuard } from '@lms/feature-auth'
-import { LearningNotesList, PopupCompletedCourse } from '@lms/feature-courses'
+import {
+  LearningNotesList,
+  PopupActivated,
+  PopupCompletedCourse,
+} from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   AntConfigProvider,
@@ -346,6 +350,21 @@ function Providers({ children }: { children: ReactNode }) {
               uploadImageToLinkedIn,
             },
             uploadImageToLinkedIn: uploadImageToLinkedIn,
+            pageLink: PageLink,
+            menuItems: MENU_ITEMS,
+            menuItemsEvent: MENU_ITEMS_EVENT,
+            menuBottom: MENU_BOTTOM,
+            router: router,
+            pathname,
+            params,
+            query: Object.fromEntries(query.entries()),
+            fetcher: fetcher,
+            videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
+            testServiceApi: TestServiceAPI,
+            certificateApi: {
+              uploadImageToLinkedIn,
+            },
+            uploadImageToLinkedIn: uploadImageToLinkedIn,
             courseActivationAPI: CoursesActivationAPI,
             dispatch: dispatch,
             useAppSelector: useAppSelector,
@@ -381,6 +400,7 @@ function Providers({ children }: { children: ReactNode }) {
                           <Help showHelp={showHelp} />
                           <LearningNotesList appType={AppType.LMS_PRO} />
                           <PopupCompletedCourse />
+                          <PopupActivated />
                         </>
                       </ConfigProvider>
                     </RouteGuard>
