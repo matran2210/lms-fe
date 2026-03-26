@@ -4,7 +4,6 @@ import {
   confirmDialog,
   ICreateScheduleForm,
   ICreateSchedulePayload,
-  useAppDispatch,
 } from '@lms/contexts'
 import {
   ANT_THEME_CONFIG,
@@ -17,17 +16,25 @@ import {
   EVENT_TYPES,
   REPEAT_TYPE,
 } from '@lms/core'
-import { HookFormDateRangeV2, SAPPButtonV2, SappIcon } from '@lms/ui'
-import HookFormEventRepeat from '@lms/ui/components/event-repeat/HookFormEventRepeatField'
-import { handleDisableDate, handleDisableTime } from '@lms/utils'
+import {
+  HookFormDateRange,
+  SAPPButtonCustom,
+  SappIcon,
+  HookFormEventRepeat,
+} from '@lms/ui'
+import {
+  handleDisableDate,
+  handleDisableTime,
+  VALIDATE_REQUIRED,
+} from '@lms/utils'
 import { SchedulesAPI } from 'src/api/schedules'
-import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { ConfigProvider, Drawer } from 'antd'
 import { Dayjs } from 'dayjs'
 import { isInteger } from 'lodash'
 import { memo, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { useAppDispatch } from 'src/redux/hook'
 import { z } from 'zod'
 
 interface IProps {
@@ -200,7 +207,7 @@ const NewEventSidebar = ({
 
                 {/* Start Time - end time */}
                 <div className="mb-6">
-                  <HookFormDateRangeV2
+                  <HookFormDateRange
                     name="range"
                     label="Start Time - End Time"
                     control={control}
@@ -240,13 +247,13 @@ const NewEventSidebar = ({
             )}
           </div>
           <div className="flex justify-end border-t border-t-[#7E8299] px-8 py-5">
-            <SAPPButtonV2
+            <SAPPButtonCustom
               title={CALENDAR_SIDEBAR_CANCEL_BUTTON}
               onClick={handleCancel}
               className="mr-4"
               color="secondary"
             />
-            <SAPPButtonV2
+            <SAPPButtonCustom
               title={CALENDAR_SIDEBAR_SAVE_BUTTON}
               onClick={handleSubmit(onSubmit)}
               loading={isLoading}

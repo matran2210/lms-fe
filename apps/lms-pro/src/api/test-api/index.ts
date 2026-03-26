@@ -1,5 +1,5 @@
 import { IQuestion, IResponse } from '@lms/core'
-import request, { fetcher, getBaseUrl } from '@services/requestV2'
+import request, { fetcher, getBaseUrl } from '@services/request'
 import axios, { AxiosResponse, CancelTokenSource } from 'axios'
 
 type QuestionDetailQueryDTO = {
@@ -78,12 +78,14 @@ export class TestServiceAPI {
   static createQuizAttempt(
     id: string | string[] | undefined,
     class_user_id: string | undefined,
+    storyline_section_id?: string | undefined,
   ): Promise<any> {
     return fetcher(`${BASE_TEST_URL_API}/quiz/quiz-attempt`, {
       method: 'POST',
       data: {
         quiz_id: id,
         class_user_id: class_user_id || undefined,
+        storyline_section_id,
       },
     })
   }
@@ -143,10 +145,12 @@ export class TestServiceAPI {
     id: string,
     data: any,
     class_user_id?: string,
+    storyline_section_id?: string
   ): Promise<any> {
     const quizAttemptResponse = await TestServiceAPI.createQuizAttempt(
       id,
       class_user_id,
+      storyline_section_id,
     )
     const quizAttemptId = quizAttemptResponse.data?.id
     if (quizAttemptId) {

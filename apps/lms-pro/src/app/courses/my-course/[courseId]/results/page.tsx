@@ -1,6 +1,6 @@
 'use client'
-import { UserType } from '@lms/contexts'
-import { DEFAULT_PAGE_SIZE, TEST_AND_QUIZ_TITLE } from '@lms/core'
+import { useFeature, UserType } from '@lms/contexts'
+import { ApiError, DEFAULT_PAGE_SIZE, TEST_AND_QUIZ_TITLE } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   HeaderMobile,
@@ -17,11 +17,18 @@ import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import ResultsTable from './ResultsTable'
 import { CoursesAPI } from 'src/api/courses'
+import { extractNotActivatedData } from '@lms/utils'
+import {
+  selectPopupActivateCourse,
+  showPopupActivatedCourse,
+} from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 const Results = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const param = useParams()
+  const { dispatch, useAppSelector } = useFeature()
+  const selector = useAppSelector?.(selectPopupActivateCourse)
   const query = Object.fromEntries(searchParams.entries())
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =
     useTailwindBreakpoint()
@@ -60,6 +67,12 @@ const Results = () => {
   const { data: courseData } = useQuery({
     queryKey: ['courseDetail'],
     queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
+    onError: (error: ApiError) => {
+      const data = extractNotActivatedData(error)
+      if (data) {
+        dispatch?.(showPopupActivatedCourse(data))
+      }
+    },
     refetchOnWindowFocus: true,
     retry: false,
   })
@@ -71,7 +84,7 @@ const Results = () => {
 
   return (
     <Layout title={TEST_AND_QUIZ_TITLE} showSidebar={isAlwaysShowSidebar}>
-      {!courseData ? (
+      {!courseData || selector?.openActive ? (
         <TestQuizResultSkeleton />
       ) : (
         <>

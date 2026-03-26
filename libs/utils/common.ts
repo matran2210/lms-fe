@@ -1,9 +1,9 @@
-import DOMPurify from "dompurify";
 import { isEmpty, isNull, isUndefined } from "lodash";
 import { useQuery } from "react-query";
 import dayjs, { Dayjs } from "dayjs";
 import {
   AnswerItem,
+  ApiError,
   DATE_FORMAT,
   DAYS_IN_WEEK,
   GRADE_STATUS,
@@ -19,6 +19,7 @@ import {
   serializeHighlights,
 } from "@funktechno/texthighlighter/lib";
 import { Correct } from "./answer";
+import { PageLink } from "../../apps/lms-pro/src/constants/routers";
 
 declare global {
   interface Window {
@@ -149,13 +150,6 @@ export function convertSlugToTitle(slug: string): string {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // viết hoa chữ cái đầu
     .join(" "); // ghép lại
 }
-export const getLocalStorgeActToken = (): string => {
-  return "";
-};
-
-export const getLocalStorgeRefreshToken = (): string => {
-  return localStorage.getItem("refreshToken") || "";
-};
 
 export function truncateString(str: string, maxLength: number) {
   if (str?.length <= maxLength) {
@@ -231,11 +225,6 @@ export const getTimeFromInput = (
   return "-";
 };
 
-export const countWords = (text: string) => {
-  const words = text.trim().split(/\s+/);
-  return words.length;
-};
-
 export const convertSnakeCaseToHumanReadable = (str: string) => {
   if (!str || str.trim() === "") return "-";
 
@@ -279,24 +268,6 @@ export const cleanParamsAPI = (params: Object) => {
   );
 };
 
-export const buildOneChoiceQueryString = (params: Object) => {
-  const queryParams = Object.entries(params)
-    .filter(([_, value]) => value !== "" && value !== undefined) // Exclude empty parameters
-    .map(
-      ([key, value]) =>
-        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
-    )
-    .join("&");
-
-  return queryParams ? `${queryParams}` : "";
-};
-
-export const parseHTMLToString = (htmlContent: string) => {
-  const tempElement = document.createElement("div");
-  tempElement.innerHTML = DOMPurify.sanitize(htmlContent);
-  return tempElement.textContent || tempElement.innerText;
-};
-
 // Hàm thay thế style text-align: center thành style text-align: -webkit-center trong chuỗi HTML
 export const replaceTextAlignCenterToWebKitCenter = (htmlString: string) => {
   // Sử dụng biểu thức chính quy để thay thế
@@ -337,13 +308,6 @@ export const useGetDataQuery = (
     onError: onError,
     retry: false,
   });
-};
-
-export const convertFractionToPercentage = (fraction: string) => {
-  const [numerator, denominator] = fraction.split("/").map(Number);
-  if (denominator === 0) return 0; // Tránh chia cho 0
-  const percentage = (numerator / denominator) * 100;
-  return percentage;
 };
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
@@ -391,17 +355,6 @@ export const setLocalStorageItem = (name: string, value: string) => {
   localStorage.setItem(name, value);
 };
 
-export const removeStyleAttributes = (htmlString?: string) => {
-  if (!htmlString) return;
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(htmlString, "text/html");
-  const elementsWithStyle = doc.querySelectorAll("[style]");
-  elementsWithStyle.forEach((element) => {
-    element.removeAttribute("style");
-  });
-  return doc.body.innerHTML;
-};
-
 export const capitalizeFirstLetter = (str?: string) => {
   if (!str) return;
   str = str?.toLocaleLowerCase();
@@ -422,102 +375,6 @@ export const truncateBySpace = (
     return text + (isSlash ? " /" : "");
   }
   return words?.slice(0, maxWords).join(" ") + `...${isSlash ? "/" : ""}`;
-};
-
-export const truncateTextOnly = (htmlString: string, limit: number) => {
-  if (isEmpty(htmlString) || isUndefined(htmlString) || isNull(htmlString))
-    return;
-  const div = document.createElement("div");
-  div.innerHTML = htmlString;
-
-  let totalTextLength = 0;
-  let truncatedText = "";
-  let lastSpacePosition = -1;
-  function walkNodes(node: any) {
-    if (totalTextLength >= limit) return;
-
-    if (node.nodeType === Node.TEXT_NODE) {
-      const text = node.nodeValue;
-      for (let i = 0; i < text.length; i++) {
-        if (totalTextLength >= limit) break;
-        truncatedText += text[i];
-        totalTextLength++;
-        if (text[i] === " ") {
-          lastSpacePosition = truncatedText.length;
-        }
-      }
-    } else if (node.nodeType === Node.ELEMENT_NODE) {
-      truncatedText += `<${node.nodeName.toLowerCase()}>`;
-      for (let i = 0; i < node.childNodes.length; i++) {
-        walkNodes(node.childNodes[i]);
-        if (totalTextLength >= limit) break;
-      }
-      truncatedText += `</${node.nodeName.toLowerCase()}>`;
-    }
-  }
-  walkNodes(div);
-  if (lastSpacePosition !== -1) {
-    truncatedText = truncatedText.substring(0, lastSpacePosition) + "...";
-  }
-  return truncatedText;
-};
-
-export const truncateHTML = (limit: number, html?: string) => {
-  if (!html) return "";
-  const div = document.createElement("div");
-  div.innerHTML = html;
-  let wordCount = 0;
-  function traverse(node: any): string {
-    const nodeType = node.nodeType;
-
-    if (wordCount >= limit) {
-      return "";
-    }
-
-    if (nodeType === Node.TEXT_NODE) {
-      const text = node.textContent || "";
-      const words = text.split(/(\s+)/);
-      let truncatedText = "";
-      for (let i = 0; i < words.length && wordCount < limit; i++) {
-        if (/\S/.test(words[i])) {
-          truncatedText += words[i];
-          wordCount++;
-        } else {
-          truncatedText += words[i];
-        }
-      }
-
-      return truncatedText + (wordCount >= limit ? "..." : "");
-    } else if (nodeType === Node.ELEMENT_NODE) {
-      const tagName = node.tagName.toLowerCase();
-      const attributes = Array.from(node.attributes)
-        .map((attr: any) => `${attr.name}="${attr.value}"`)
-        .join(" ");
-
-      const openTag = `<${tagName}${attributes ? " " + attributes : ""}>`;
-      const closeTag = `</${tagName}>`;
-
-      const childNodes = Array.from(node.childNodes);
-      let innerHTML = "";
-      childNodes.forEach((child: any) => {
-        if (wordCount < limit) {
-          const childContent = traverse(child);
-          if (
-            child?.nodeType === Node.ELEMENT_NODE &&
-            innerHTML &&
-            !/\s$/.test(innerHTML)
-          ) {
-            innerHTML += " " + childContent;
-          } else {
-            innerHTML += childContent;
-          }
-        }
-      });
-      return `${openTag}${innerHTML}${closeTag}`;
-    }
-    return "";
-  }
-  return traverse(div);
 };
 
 export const removeHtmlTags = (htmlString?: string) => {
@@ -732,4 +589,33 @@ export const handleMultipleCorrectAnswer = (
   });
 
   return answersMapped;
+};
+
+export const handleCheckIsNotActivated = (errorCode?: string) => {
+  return errorCode === "400|100016";
+};
+
+export const handleCheckRedirectPage = (
+  isPassFoundation: boolean,
+  isACCACourse: boolean,
+) => {
+  if (!isPassFoundation) {
+    return PageLink.COURSES;
+  }
+  if (isACCACourse) {
+    return;
+  }
+  return null;
+};
+
+export const extractNotActivatedData = (error: ApiError) => {
+  const errResponse = error?.response?.data?.error;
+
+  if (!handleCheckIsNotActivated(errResponse?.code)) return null;
+
+  return {
+    timeActive: errResponse?.replacements?.FLEXIBLE_DAYS,
+    classId: errResponse?.replacements?.CLASS_ID,
+    courseType: errResponse?.replacements?.COURSE_TYPE,
+  };
 };

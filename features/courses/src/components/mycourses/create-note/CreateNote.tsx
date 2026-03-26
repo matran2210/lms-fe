@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CloseIconNote, SaveIcon } from "@lms/assets";
-import { closeNote, useAppDispatch, useFeature } from "@lms/contexts";
+import { closeNote, useFeature } from "@lms/contexts";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import { ButtonSecondary, HookFormTextArea, ModalResizeable } from "@lms/ui";
 import { VALIDATE_REQUIRED } from "@lms/utils";
@@ -17,13 +17,13 @@ interface IProps {
 }
 
 const CreateNote = ({ id, content, uuid, count }: IProps) => {
-  const { courseApi, params } = useFeature();
+  const { courseApi, router, dispatch, params } = useFeature();
+
+  const [activeSectionId, setActiveSectionId] = useState<string>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const { isMobileView } = useTailwindBreakpoint();
 
   const activityId = params?.activityId
-  const [activeSectionId, setActiveSectionId] = useState<string>()
-  const dispatch = useAppDispatch()
-  const [loading, setLoading] = useState<boolean>(false)
-  const { isMobileView } = useTailwindBreakpoint()
   const validationSchema = z.object({
     [`description_${id ? id : uuid}`]: z
       .string()
@@ -98,7 +98,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
   };
 
   const removeNote = () => {
-    dispatch(closeNote(uuid));
+    dispatch?.(closeNote(uuid));
   };
 
   return (

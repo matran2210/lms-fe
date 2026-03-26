@@ -64,7 +64,7 @@ const SAPPSelectMultiple = ({
               value={field.value ?? []}
               options={options}
               className={clsx(
-                "custom-select-v2 w-full",
+                "custom-select w-full",
                 heightCustom,
                 className,
               )}

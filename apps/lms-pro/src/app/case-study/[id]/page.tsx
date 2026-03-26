@@ -1,11 +1,12 @@
 /* eslint-disable prefer-const */
 'use client'
 import {
-  CalculatorIconV2,
+  CalculatorIcon,
+  CloseIconNote,
   DownloadIcon,
   FileTextIcon,
   ResizeIcon,
-  ScratchPadIconV2,
+  NewScratchPadIcon,
 } from '@lms/assets'
 
 import {
@@ -20,8 +21,6 @@ import {
   loadMoreQuestion,
   saveFileEssay,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
 } from '@lms/contexts'
 import {
   defaultSheetData,
@@ -39,39 +38,46 @@ import {
   ResetToAnswerTemplateModal,
   ShowAnswerTemplate,
 } from '@lms/feature-courses'
-import QuitTestModal from '@lms/feature-test/src/components/test/modal/quit-test-modal'
-import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
+import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
 import { useSmartModalSize, useTailwindBreakpoint } from '@lms/hooks'
 import {
-  ButtonTextV2,
+  AddWordPreview,
+  ButtonText,
+  CaseStudyWrapper,
   EditorReader,
+  EssayQuestionPreview,
   FileViewer,
   HookFormTextArea,
+  MatchQuizComponent,
   ModalResizeable,
+  ModalUploadFile,
+  MultiChoiceQuestion,
+  NewDragNDropQuestion,
+  OneChoiceQuestion,
   Popover,
-  SappLoadingGlobal,
-} from '@lms/ui'
-import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
-import AddWordPreview from '@lms/ui/components/questionType/FillText'
-import MatchQuizComponent from '@lms/ui/components/questionType/MatchQuiz/MatchQuiz'
-import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
-import DragDropQuestion, {
+  SelectWord,
   SlotValue,
-} from '@lms/ui/components/questionType/NewDragNDropQuestion/NewDragNDrop'
-import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
-import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
-import CaseStudyWrapper from '@lms/ui/layout/CaseStudyLayout/CaseStudyWrapper'
-import { runHighlight } from '@lms/utils'
+} from '@lms/ui'
+import {
+  extractNotActivatedData,
+  runHighlight,
+} from '@lms/utils'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { TestServiceAPI } from 'src/api/test-api'
 import LimitQuizModal from 'src/app/test/limitQuizModal'
+import ScratchPatch from 'src/app/test/scratchPatch'
+import {
+  selectPopupActivateCourse,
+  showPopupActivatedCourse,
+} from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
@@ -197,7 +203,7 @@ const CaseStudyDetail = () => {
           //   defaultAnswer={defaultValue}
           //   extenalRef={(el: any) => (valueRef.current[index || 0] = el)}
           // />
-          <DragDropQuestion
+          <NewDragNDropQuestion
             data={data}
             defaultValue={defaultValue}
             onChange={(data: SlotValue[]) => {
@@ -329,7 +335,7 @@ const CaseStudyDetail = () => {
     question: undefined,
     index: 0,
   })
-
+  const selector = useAppSelector?.(selectPopupActivateCourse)
   const onOpenResetToTemplateModal = ({
     question,
     index,
@@ -489,7 +495,12 @@ const CaseStudyDetail = () => {
       } else {
         setQuizAttempId(res.data.id)
       }
-    } catch (err) {}
+    } catch (err: any) {
+      const data = extractNotActivatedData(err)
+      if (data) {
+        dispatch?.(showPopupActivatedCourse(data))
+      }
+    }
   }
   useEffect(() => {
     if (quizId && id && classUserId) {
@@ -1057,7 +1068,7 @@ const CaseStudyDetail = () => {
   const { isDesktopView } = useTailwindBreakpoint()
 
   return (
-    <SappLoadingGlobal loading={loading}>
+    <SappLoadingGlobal loading={loading || selector?.openActive}>
       <CaseStudyWrapper
         title={`${topics?.case_study_name} - ${topics?.name}`}
         setOpenSubmit={setOpenSubmit}
@@ -1299,7 +1310,7 @@ const CaseStudyDetail = () => {
                             question.qType === QUESTION_TYPES.ESSAY &&
                             isShowTemplate && (
                               <div className="mt-8 flex items-center justify-end gap-3">
-                                <ButtonTextV2
+                                <ButtonText
                                   title="Reset to Answer Template"
                                   onClick={() =>
                                     onOpenResetToTemplateModal({
@@ -1345,32 +1356,34 @@ const CaseStudyDetail = () => {
                     position="center"
                     width={412}
                     height={350}
-                  >
-                    {({ requestClose }) => (
-                      <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl">
-                        <div className="flex w-full items-center justify-between bg-gray-100 px-4 py-3">
-                          <div className="text-sm font-bold">Scratch Pad</div>
-                          {/* <CloseIcon */}
-                          <button
-                            onClick={() => {
-                              requestClose()
-                              setTimeout(() => handleCloseScratchPad(e), 300)
-                            }}
-                          >
-                            <CloseModalIcon />
-                          </button>
+                    header={({ requestClose }) => (
+                      <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
+                        <div className="text-sm font-semibold text-gray-800">
+                          Scratch Pad
                         </div>
-                        <HookFormTextArea
-                          defaultValue={scratchPadValues?.value}
-                          placeholder="Take a note..."
-                          control={controlScratch}
-                          name={e?.id}
-                          onChange={(event) => handleChangeScratchPad(event)}
-                          className="sapp-text-area not-resizer h-full w-full rounded-b-xl rounded-t-none px-5 py-3 placeholder:text-sm placeholder:font-normal"
-                        />
-                        {/* </div> */}
+                        <button
+                          className="text-icon"
+                          onClick={() => {
+                            requestClose()
+                            setTimeout(() => handleCloseScratchPad(e), 300)
+                          }}
+                        >
+                          <CloseIconNote />
+                        </button>
                       </div>
                     )}
+                  >
+                    <ScratchPatch
+                      scratchPads={scratchPadValues?.value}
+                      scratchPadValues={e}
+                      control={controlScratch}
+                      handleChangeScratchPad={(
+                        event: ChangeEvent<HTMLInputElement>,
+                      ) => {
+                        handleChangeScratchPad(event)
+                      }}
+                      className="!h-fit"
+                    />
                   </ModalResizeable>
                 )
               } else if (e.type === 'exhibits') {
@@ -1682,7 +1695,7 @@ const CaseStudyDetail = () => {
                     handleOpenScratchPad('scratch_pad')
                   }}
                 >
-                  <ScratchPadIconV2 isActive className="h-6 w-6" />
+                  <NewScratchPadIcon isActive className="h-6 w-6" />
                 </div>
               </Popover>
               <Popover
@@ -1704,7 +1717,7 @@ const CaseStudyDetail = () => {
                   }}
                   disabled={checkCalExist > -1}
                 >
-                  <CalculatorIconV2 isActive className="h-6 w-6" />
+                  <CalculatorIcon className="h-6 w-6 text-white" />
                 </button>
               </Popover>
             </div>

@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { UserType } from '@lms/contexts'
 import { GRADE_STATUS, ITabs, TEST_TYPE_LABELS, TitleSidebar } from '@lms/core'
 import { FullScreenLayout, SappBreadCrumbs } from '@lms/ui'
@@ -11,7 +11,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 
 const TestResultDetailTeacher = () => {
   const router = useRouter()
-  const params = useParams();
+  const params = useParams()
   const { id } = params
 
   const useGetQuizAttempts = (queryKey: string, params: Object) => {

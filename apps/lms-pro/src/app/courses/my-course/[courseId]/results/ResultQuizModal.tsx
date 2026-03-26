@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { QuizActivity, TEST_TYPE_LABELS } from '@lms/core'
 import { SappBaseTable } from '@lms/ui'
 import { getTimeFromInput } from '@lms/utils'
@@ -79,7 +79,11 @@ const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {
                 'font-medium text-gray-800',
               )}
             >
-              {TEST_TYPE_LABELS[row?.quiz_type as keyof typeof TEST_TYPE_LABELS]}
+              {
+                TEST_TYPE_LABELS[
+                  row?.quiz_type as keyof typeof TEST_TYPE_LABELS
+                ]
+              }
             </td>
 
             {/* Graded Activity */}

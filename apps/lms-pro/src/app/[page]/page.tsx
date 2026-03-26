@@ -4,8 +4,6 @@ import {
   UserType,
   getLoginHistory,
   getLogoutUser,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
   userReducer,
 } from '@lms/contexts'
@@ -52,6 +50,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import UserApi from 'src/redux/services/User/user'
 
 interface IFullScreenMobile {
@@ -366,7 +365,6 @@ const ProfilePage = () => {
           isShowToggle
           className={'mb-4 hidden md:flex'}
           redirectLink={PageLink.COURSES}
-          appType={AppType.LMS_PRO}
         />
         <div className="mx-auto my-0 flex w-full grow flex-col">
           <div className="main hidden md:mb-6 md:mt-2 md:block lg:mx-0">
@@ -459,7 +457,7 @@ const ProfilePage = () => {
       </div>
       {isMobileView && openFullScreenMobile.open && (
         <FullScreenMobile
-          className="h-full bg-gray-100 px-4 pb-4"
+          className="min-h-full bg-gray-100 px-4 pb-4"
           title={openFullScreenMobile.title}
           open={openFullScreenMobile.open}
           onClose={onCloseFullScreenMobile}

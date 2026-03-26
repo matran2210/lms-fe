@@ -7,7 +7,7 @@ import {
   setCookie,
 } from '@lms/utils'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { fetcher } from '@services/requestV2'
+import { fetcher } from '@services/request'
 import Keycloak from 'keycloak-js'
 import { UserApi } from 'src/api/user'
 

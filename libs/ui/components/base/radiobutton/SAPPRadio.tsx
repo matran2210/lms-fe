@@ -7,6 +7,7 @@ interface IProps {
   checked: boolean
   onChange: React.ChangeEventHandler<HTMLInputElement>
   disabled?: boolean
+  readOnly?: boolean
   state?: 'default' | 'error' | 'success' | 'primary'
   size?: 'small' | 'medium' | 'lager'
   className?: string
@@ -18,6 +19,7 @@ const SAPPRadio = ({
   checked,
   onChange,
   disabled = false,
+  readOnly = false,
   className = '',
   state,
 }: IProps) => {
@@ -28,8 +30,12 @@ const SAPPRadio = ({
         name={name}
         value={value?.toString()}
         checked={checked}
-        onChange={onChange}
+        onChange={(e) => {
+          if (readOnly) return;
+          onChange(e);
+        }}
         disabled={disabled}
+        readOnly={readOnly}
         className="peer sr-only"
       />
       <div

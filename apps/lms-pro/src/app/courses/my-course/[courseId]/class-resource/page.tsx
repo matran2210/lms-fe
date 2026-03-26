@@ -1,5 +1,5 @@
 'use client'
-import { UserType, useCourseContext } from '@lms/contexts'
+import { UserType, useCourseContext, useFeature } from '@lms/contexts'
 import {
   AppType,
   CLASS_SUFFIX_TYPE_FILTER,
@@ -38,6 +38,7 @@ import { FilterCourseIcon } from '@lms/assets'
 import CardFileItem from './CardFileItem'
 import useSelectClassSchedule from 'src/hooks/useSelectClassSchedule'
 import { getSelectOptions, pushQueryClassResource } from '@utils/helpers'
+import { selectPopupActivateCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 interface ISelectItem {
   label: string
   value: string
@@ -74,6 +75,8 @@ const ClassResource = () => {
   const [direction, setDirection] = useState<1 | -1>(1)
   const observer = useRef<IntersectionObserver>()
   const { setOpenSidebar } = useCourseContext()
+  const { useAppSelector } = useFeature()
+  const selector = useAppSelector?.(selectPopupActivateCourse)
   const pathname = usePathname()
   const [params, setParams] = useState<IListClassResourceParams>({
     page_size: DEFAULT_PAGE_SIZE,
@@ -174,7 +177,7 @@ const ClassResource = () => {
       page_index: query.page_index
         ? Number(query.page_index)
         : DEFAULT_PAGE_NUMBER,
-
+      page_size: query.page_size ? Number(query.page_size) : DEFAULT_PAGE_SIZE,
       suffix_types: normalizeToArray(query.suffix_types),
       schedule_ids: normalizeToArray(query.schedule_ids),
 
@@ -186,6 +189,7 @@ const ClassResource = () => {
     query.suffix_types,
     query.schedule_ids,
     query.search_key,
+    query.page_size,
   ])
 
   const handleOpenSidebar = () => {
@@ -357,7 +361,7 @@ const ClassResource = () => {
       showSidebar={showSidebar || isAlwaysShowSidebar}
       handleToggleSidebar={handleCloseSidebar}
     >
-      {isLoading && isFirstLoadingMobile ? (
+      {(isLoading && isFirstLoadingMobile) || selector?.openActive ? (
         <ClassResourceSkeleton />
       ) : (
         <>

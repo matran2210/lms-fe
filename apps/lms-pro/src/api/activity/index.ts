@@ -3,7 +3,7 @@ import {
   ICreateDiscussionResReact,
   ICreateDiscussionUploadRequest,
 } from '@lms/contexts'
-import { fetcher } from '@services/requestV2'
+import { fetcher } from '@services/request'
 
 export class ActivityAPI {
   /**

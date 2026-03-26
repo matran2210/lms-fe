@@ -12,7 +12,7 @@ import '@xyflow/react/dist/style.css'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import 'aos/dist/aos.css'
-import { Providers } from './provider'
+import { ProvidersWrapper } from './provider'
 import Script from 'next/script'
 import { Roboto } from 'next/font/google'
 import type { Metadata } from 'next'
@@ -105,7 +105,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
       <body className={roboto.className}>
-        <Providers>{children}</Providers>
+        <ProvidersWrapper>{children}</ProvidersWrapper>
       </body>
     </html>
   )

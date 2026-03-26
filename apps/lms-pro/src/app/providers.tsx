@@ -10,7 +10,6 @@ import {
   PinnedNotifyProvider,
   PreviousSectionRouteProvider,
   SocketContext,
-  store,
 } from '@lms/contexts'
 import {
   ANIMATION,
@@ -19,7 +18,11 @@ import {
   SOCKET_EVENTS,
 } from '@lms/core'
 import { RouteGuard } from '@lms/feature-auth'
-import { LearningNotesList, PopupCompletedCourse } from '@lms/feature-courses'
+import {
+  LearningNotesList,
+  PopupActivated,
+  PopupCompletedCourse,
+} from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   AntConfigProvider,
@@ -29,7 +32,7 @@ import {
   SappConfirmDialogContainer,
 } from '@lms/ui'
 import { initializeGA, pageview } from '@lms/utils'
-import { fetcher } from '@services/requestV2'
+import { fetcher } from '@services/request'
 import { App as AntdApp, ConfigProvider } from 'antd'
 import Aos from 'aos'
 import dayjs from 'dayjs'
@@ -51,6 +54,7 @@ import { ActivityAPI } from 'src/api/activity'
 import CalendarApi from 'src/api/calendar'
 import { uploadImageToLinkedIn } from 'src/api/certificate'
 import { ClassAPI } from 'src/api/class'
+import { CoursesActivationAPI } from 'src/api/course-activation'
 import { CoursesAPI } from 'src/api/courses'
 import { DashboardAPI } from 'src/api/dashboard'
 import { EntranceTestAPI } from 'src/api/entrance-test'
@@ -58,6 +62,7 @@ import { EventTestAPI } from 'src/api/event-test'
 import { NotificationAPI } from 'src/api/notification'
 import MyProfileAPI, { AuthAPI } from 'src/api/profile'
 import { QuestionAPI } from 'src/api/question'
+import { StorylineAPI } from 'src/api/storyline'
 import { TestServiceAPI } from 'src/api/test-api'
 import { UploadAPI } from 'src/api/upload'
 import {
@@ -70,7 +75,8 @@ import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
 import UserApi from 'src/redux/services/User/user'
 import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
-
+import { store } from 'src/redux/store'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 dayjs.extend(utc)
 dayjs.extend(weekday)
 const showSupportWidget = [
@@ -82,12 +88,12 @@ const showSupportWidget = [
 ]
 
 const activityPath = ['/courses/[id]/activity/[activityId]']
-export function Providers({ children }: { children: ReactNode }) {
+function Providers({ children }: { children: ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
   const params = useParams()
   const query = useSearchParams()
-
+  const dispatch = useAppDispatch()
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -290,7 +296,13 @@ export function Providers({ children }: { children: ReactNode }) {
 
   return (
     <AntConfigProvider>
-      <Provider store={store}>
+      {/* <Provider store={store}> */}
+      <PinnedNotifyProvider
+        router={router}
+        api={{
+          getPinnedNotifications: UserApi.getPinnedNotifications,
+        }}
+      >
         <FeatureProvider
           value={{
             courseApi: CoursesAPI,
@@ -308,6 +320,7 @@ export function Providers({ children }: { children: ReactNode }) {
             myProfileApi: MyProfileAPI,
             submitQuizTest: TestServiceAPI.submitQuizTest,
             dashboardApi: DashboardAPI,
+            storylineApi: StorylineAPI,
             authManager: new AuthenticationManager(),
             pageLink: PageLink,
             menuItems: MENU_ITEMS,
@@ -324,54 +337,60 @@ export function Providers({ children }: { children: ReactNode }) {
               uploadImageToLinkedIn,
             },
             uploadImageToLinkedIn: uploadImageToLinkedIn,
+            courseActivationAPI: CoursesActivationAPI,
+            dispatch: dispatch,
+            useAppSelector: useAppSelector,
           }}
         >
-          <PinnedNotifyProvider
+          <CourseProvider
             router={router}
             api={{
-              getPinnedNotifications: UserApi.getPinnedNotifications,
+              get: EventTestAPI.get,
             }}
           >
-            <CourseProvider
-              router={router}
-              api={{
-                get: EventTestAPI.get,
-              }}
-            >
-              <CourseNoteProvider router={router} api={CoursesAPI}>
-                <QueryClientProvider client={queryClient}>
-                  <SocketContext.Provider value={socket}>
-                    <PreviousSectionRouteProvider pathname={pathname}>
-                      <Toaster
-                        toastOptions={{
-                          style: {
-                            maxWidth: '400px', // Tăng chiều rộng của toast
-                          },
-                        }}
-                      />
-                      <SappConfirmDialogContainer />
-                      <RouteGuard>
-                        <ConfigProvider>
-                          <PinnedNotifications />
-                          <AntdApp>{children}</AntdApp>
-                          <>
-                            {showBackToTop && <BackToTop />}
-                            <MKTInApp showMKTInApp={showMKTInApp} />
-                            {showHelp && <div id="floating-btn-divider" />}
-                            <Help showHelp={showHelp} />
-                            <LearningNotesList appType={AppType.LMS_PRO} />
-                            <PopupCompletedCourse />
-                          </>
-                        </ConfigProvider>
-                      </RouteGuard>
-                    </PreviousSectionRouteProvider>
-                  </SocketContext.Provider>
-                </QueryClientProvider>
-              </CourseNoteProvider>
-            </CourseProvider>
-          </PinnedNotifyProvider>
+            <CourseNoteProvider router={router} api={CoursesAPI}>
+              <QueryClientProvider client={queryClient}>
+                <SocketContext.Provider value={socket}>
+                  <PreviousSectionRouteProvider pathname={pathname}>
+                    <Toaster
+                      toastOptions={{
+                        style: {
+                          maxWidth: '400px', // Tăng chiều rộng của toast
+                        },
+                      }}
+                    />
+                    <SappConfirmDialogContainer />
+                    <RouteGuard>
+                      <ConfigProvider>
+                        <PinnedNotifications />
+                        <AntdApp>{children}</AntdApp>
+                        <>
+                          {showBackToTop && <BackToTop />}
+                          <MKTInApp showMKTInApp={showMKTInApp} />
+                          {showHelp && <div id="floating-btn-divider" />}
+                          <Help showHelp={showHelp} />
+                          <LearningNotesList appType={AppType.LMS_PRO} />
+                          <PopupCompletedCourse />
+                          <PopupActivated />
+                        </>
+                      </ConfigProvider>
+                    </RouteGuard>
+                  </PreviousSectionRouteProvider>
+                </SocketContext.Provider>
+              </QueryClientProvider>
+            </CourseNoteProvider>
+          </CourseProvider>
         </FeatureProvider>
-      </Provider>
+      </PinnedNotifyProvider>
+      {/* </Provider> */}
     </AntConfigProvider>
+  )
+}
+
+export function ProvidersWrapper({ children }: { children: ReactNode }) {
+  return (
+    <Provider store={store}>
+      <Providers>{children}</Providers>
+    </Provider>
   )
 }

@@ -7,11 +7,10 @@ import {
   FullScreenLayout,
   SappBaseTable,
 } from '@lms/ui'
-import { roundNumber } from '@utils/helpers'
 import { useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { CoursesAPI } from 'src/api/courses'
-import { useFeature } from '@lms/contexts'
+import { roundNumber } from '@lms/utils'
 
 const headers = [
   {
@@ -45,7 +44,8 @@ const TableCaseStudyResult = () => {
   const [topicAttemptDetail, setTopicAttemptDetail] = useState<any>()
   const router = useRouter()
   const params = useParams()
-  const { query } = useFeature()
+  const searchParams = useSearchParams()
+  const query = Object.fromEntries(searchParams.entries())
 
   const fetchScoreDetail = async (page_index: number, page_size: number) => {
     try {

@@ -16,7 +16,7 @@ interface IProps {
 }
 
 const ClassResourceTeacherFilter: React.FC<IProps> = ({ control }) => {
-  const params = useParams();
+  const params = useParams()
   const { id } = params
   const [search, setSearch] = useState('')
   const [isOpen, setIsOpen] = useState(false)

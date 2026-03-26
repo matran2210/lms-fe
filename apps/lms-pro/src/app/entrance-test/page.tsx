@@ -1,18 +1,30 @@
-"use client"
+'use client'
 import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
-import { UserType, getEntranceCount, useAppDispatch, useCourseContext } from '@lms/contexts'
+import {
+  UserType,
+  getEntranceCount,
+ 
+  useCourseContext,
+} from '@lms/contexts'
 import { ANIMATION, AppType } from '@lms/core'
 import { Heading } from '@lms/feature-courses'
-import EntranceTestFilter from '@lms/feature-test/src/components/entrance-test/EntranceTestFilter'
-import EntranceTestList from '@lms/feature-test/src/components/entrance-test/EntranceTestList'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { CourseSkeleton, Footer, Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
+import {
+  CourseSkeleton,
+  Footer,
+  Layout,
+ 
+  SearchWithMenuToggle,
+} from '@lms/ui'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import withAuthorization from 'src/HOC/withAuthorization'
 import { EntranceTestAPI } from 'src/api/entrance-test'
 import { PageLink } from 'src/constants/routers'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { useAppDispatch } from 'src/redux/hook'
+import { EntranceTestFilter, EntranceTestList } from '@lms/feature-test'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 
 const EntranceTest = () => {
   const searchParams = useSearchParams()
@@ -38,7 +50,8 @@ const EntranceTest = () => {
     { retry: false },
   )
 
-  const getEntranceTestCount = async () => await dispatch(getEntranceCount(EntranceTestAPI))
+  const getEntranceTestCount = async () =>
+    await dispatch(getEntranceCount(EntranceTestAPI))
   /**
    * @description handle open and close sidebar
    */
@@ -77,7 +90,6 @@ const EntranceTest = () => {
           isShowToggle
           className="mb-6 mt-4"
           redirectLink={PageLink.COURSES}
-          appType={AppType.LMS_PRO}
         />
         <div className="my-0">
           {isLoading ? (

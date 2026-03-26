@@ -11,21 +11,24 @@ import {
   CollapseBox,
   CollapseItem,
   HookformTimePicker,
-  SAPPButtonV2,
+  SAPPButtonCustom,
+  SappIcon,
   SAPPInput,
   SAPPSelect,
 } from '@lms/ui'
-import { buildQueryString, formatDate, sortSectionsByPosition } from '@lms/utils'
+import {
+  buildQueryString,
+  formatDate,
+  sortSectionsByPosition,
+  VALIDATE_REQUIRED,
+} from '@lms/utils'
 import { ProgressAPI } from 'src/api/progress'
-import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { Drawer } from 'antd'
-import { round } from 'lodash'
+import { isEmpty, round } from 'lodash'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import {SappIcon} from '@lms/ui'
-import { useAppDispatch } from '@lms/contexts'
 import { z } from 'zod'
 import TreeProgress from './TreeProgress'
 
@@ -234,15 +237,40 @@ function FormViewProgress({
 
     if (currentCourse.length > 0) {
       payload.current_course_sections = currentCourse
+    } else {
+      const currentCourseSections = detailProgress?.content_completed.filter(
+        (item) => item.main,
+      )
+      if (!isEmpty(currentCourseSections)) {
+        const currentCourseSectionsPayload = currentCourseSections?.map(
+          (item) => ({
+            class_schedule_id: item.class_schedule_id,
+            course_section_ids: [],
+          }),
+        )
+        payload.current_course_sections = currentCourseSectionsPayload
+      }
     }
 
     if (compensatedCourse.length > 0) {
       payload.compensated_course_sections = compensatedCourse
+    } else {
+      const compensatedCourseSections =
+        detailProgress?.content_completed.filter((item) => !item.main)
+      if (!isEmpty(compensatedCourseSections)) {
+        const compensatedCourseSectionsPayload = compensatedCourseSections?.map(
+          (item) => ({
+            class_schedule_id: item.class_schedule_id,
+            course_section_ids: [],
+          }),
+        )
+        payload.compensated_course_sections = compensatedCourseSectionsPayload
+      }
     }
-    if (!payload.current_course_sections) {
-      toast.error('Vui lòng chọn main content')
-      return
-    }
+    // if (!payload.current_course_sections) {
+    //   toast.error('Vui lòng chọn main content')
+    //   return
+    // }
     try {
       setLoading(true)
       const data = await ProgressAPI.updateProgress(id as string, payload)
@@ -498,13 +526,15 @@ function FormViewProgress({
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 flex w-full justify-end border-t border-t-[#7E8299] bg-white px-8 py-5">
-          <SAPPButtonV2
+          <SAPPButtonCustom
             title={'Cancel'}
             onClick={handleClose}
             className="mb-4 mr-4"
             color="secondary"
           />
-          {!isView && <SAPPButtonV2 title={'Save'} onClick={handleSubmit} />}
+          {!isView && (
+            <SAPPButtonCustom title={'Save'} onClick={handleSubmit} />
+          )}
         </div>
       </div>
     </Drawer>

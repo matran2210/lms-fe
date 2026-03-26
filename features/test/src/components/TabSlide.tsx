@@ -1,8 +1,7 @@
 import clsx from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { QUESTION_TYPES } from "@lms/core";
-import { ArrowIconV2 } from "@lms/ui/components/base/pagination/ArrowIconV2";
-import { PageLinkPagination } from "@lms/ui";
+import { ArrowIcon, PageLinkPagination } from "@lms/ui";
 import { useTailwindBreakpoint } from "@lms/hooks";
 
 interface IProps {
@@ -241,7 +240,7 @@ const TabSlide = ({
                 "cursor-pointer",
               )}
             >
-              <ArrowIconV2 />
+              <ArrowIcon />
             </PageLinkPagination>
           </div>
         )}
@@ -373,7 +372,7 @@ const TabSlide = ({
                 "cursor-pointer",
               )}
             >
-              <ArrowIconV2 right={true} />
+              <ArrowIcon right={true} />
             </PageLinkPagination>
           </div>
         )}

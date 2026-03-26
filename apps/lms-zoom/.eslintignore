@@ -44,9 +44,6 @@ package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
-# Git hooks
-.husky/
-
 # Styles (nếu không cần lint CSS)
 src/styles/global.css
 
