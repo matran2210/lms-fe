@@ -5,8 +5,8 @@ import { certificateModule } from '@lms/feature-certificate'
 import { examModule } from '@lms/feature-exam'
 
 export const modules: AppModule[] = [
-  // scheduleModule,
+  scheduleModule,
   testModule,
-  // certificateModule,
+  certificateModule,
   examModule,
 ]
