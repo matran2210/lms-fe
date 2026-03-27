@@ -94,14 +94,14 @@ const MENU_OPTIONS: MenuOption[] = [
     icon: 'exam_list',
     url: `/${ProfilePages.ExamList}`,
     type: 'level-1',
-    showMenu: !!modules.find((m) => m.name === 'exam'),
+    showMenu: !!modules.find((m) => m.name === 'examination'),
   },
   {
     name: TitleSidebar.EXAM,
     icon: 'exam-information',
     url: '#',
     type: 'level-1',
-    showMenu: !!modules.find((m) => m.name === 'exam'),
+    showMenu: !!modules.find((m) => m.name === 'examination'),
   },
 ]
 

@@ -1,15 +1,15 @@
 'use client'
 import { UserType, getEventCount, useCourseContext } from '@lms/contexts'
-import { ANIMATION, AppType, LANG_SIGNIN } from '@lms/core'
+import { ANIMATION, LANG_SIGNIN } from '@lms/core'
 import { Heading } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 
+import { useFeature } from '@lms/contexts'
+import { withAuthorization } from '@lms/hoc'
 import { CourseSkeleton, Footer, Layout, SappLoadingGlobal, SearchWithMenuToggle } from '@lms/ui'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { useFeature } from '@lms/contexts'
 import { EventTestFilter, EventTestList } from '../../components'
-import { withAuthorization } from '@lms/hoc'
 
 const EventTestPage = () => {
   const { query, dispatch, pageLink, eventTestApi } = useFeature()

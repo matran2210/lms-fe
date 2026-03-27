@@ -164,6 +164,9 @@ export interface ICoursesAPI {
     class_id: string | undefined,
   ) => Promise<{ success: boolean }>;
   getCertificate: (id: string | string[] | undefined) => Promise<any>;
+  getQuizAttemptsEntranceTestChartData: (
+    id: string | string[] | undefined,
+  ) => Promise<any>;
 }
 export interface IActivityAPI {
   createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<any>;

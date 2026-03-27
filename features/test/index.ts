@@ -1,10 +1,10 @@
 import { AppModule } from "@lms/core";
 import { ExtensionRegistry } from "@lms/ui";
 import { testRoutes } from "./routes";
-import EntranceTestPage from "./src/pages/entrance-test/page";
-import EntranceTestResultPage from "./src/pages/entrance-test/test-result/[id]/page";
-import TableEntranceResult from "./src/pages/entrance-test/table-result/[id]/page";
-import EventTestPage from "./src/pages/event-test/page";
+import EntranceTestPage from "./src/pages/entrance-test";
+import EntranceTestResultPage from "./src/pages/entrance-test/test-result/[id]";
+import TableEntranceResult from "./src/pages/entrance-test/table-result/[id]";
+import EventTestPage from "./src/pages/event-test";
 
 ExtensionRegistry.register("ENTRANCE_TEST_PAGE", EntranceTestPage);
 ExtensionRegistry.register("ENTRANCE_TEST_RESULT_PAGE", EntranceTestResultPage);

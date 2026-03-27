@@ -1,18 +1,17 @@
 'use client'
-import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { CloseIcon } from '@lms/assets'
-import { UserType } from '@lms/contexts'
+import { useFeature, UserType } from '@lms/contexts'
 import { ANIMATION } from '@lms/core'
-import { Layout, PinnedNotificationWrapper } from '@lms/ui'
+import { withAuthorization } from '@lms/hoc'
+import { Layout, PinnedNotificationWrapper, SappLoadingGlobal } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import QuizResult from '@sapp-fe/entrance-test-result-package'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
-import { PageLink } from 'src/constants/routers'
-import { withAuthorization } from '@lms/hoc'
-import { CoursesAPI } from 'src/api/courses'
 
 const TestEntranceResult = () => {
+  const { courseApi, pageLink, } = useFeature()
+
   const router = useRouter()
   const searchParam = useSearchParams()
   const params = useParams()
@@ -24,7 +23,7 @@ const TestEntranceResult = () => {
   const { data: chartData, isLoading } = useGetDataQuery(
     'QuizAttemptsChart',
     {},
-    () => CoursesAPI.getQuizAttemptsEntranceTestChartData(id),
+    () => courseApi.getQuizAttemptsEntranceTestChartData(id),
     id !== undefined,
   )
 
@@ -43,7 +42,7 @@ const TestEntranceResult = () => {
         <div
           className="absolute right-4 top-4 z-10 ml-auto cursor-pointer rounded-md bg-gray-200 p-1 md:right-10 md:top-12 md:p-2"
           onClick={
-            () => router.push(PageLink.ENTRANCE_TEST)
+            () => router.push(pageLink.ENTRANCE_TEST)
             // .then(() => window.location.reload())
           }
         >
@@ -63,7 +62,7 @@ const TestEntranceResult = () => {
                 onPublish={() => { }}
                 id={undefined}
                 is_ops={false}
-                handleClose={() => router.push(PageLink.ENTRANCE_TEST)}
+                handleClose={() => router.push(pageLink.ENTRANCE_TEST)}
               />
             )}
             {showPinnedNotification && (

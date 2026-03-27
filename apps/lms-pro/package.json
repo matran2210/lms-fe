@@ -36,7 +36,7 @@
     "@lms/feature-test": "workspace:*",
     "@lms/feature-user": "workspace:*",
     "@lms/feature-certificate": "workspace:*",
-    "@lms/feature-exam": "workspace:*",
+    "@lms/feature-examination": "workspace:*",
     "@lms/hooks": "workspace:*",
     "@lms/styles": "workspace:*",
     "@lms/ui": "workspace:*",

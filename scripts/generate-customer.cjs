@@ -22,7 +22,7 @@ const FEATURE_MODULE_MAP = {
   "feature-schedule": "scheduleModule",
   "feature-test": "testModule",
   "feature-certificate": "certificateModule",
-  "feature-exam": "examModule",
+  "feature-examination": "examinationModule",
 
   // Core features
   "feature-auth": "authModule",
@@ -39,7 +39,7 @@ const FEATURE_FOLDER_MAP = {
   "feature-schedule": "schedule",
   "feature-test": "test",
   "feature-certificate": "certificate",
-  "feature-exam": "exam",
+  "feature-examination": "examination",
 
   // Core features
   "feature-auth": "auth",
@@ -211,7 +211,9 @@ if (fs.existsSync(registryPath)) {
   config.features.forEach((feature) => {
     const moduleVar = FEATURE_MODULE_MAP[feature];
     const folderName = FEATURE_FOLDER_MAP[feature];
-    if (!["schedule", "test", "certificate", "exam"].includes(folderName))
+    if (
+      !["schedule", "test", "certificate", "examination"].includes(folderName)
+    )
       return;
 
     if (fs.existsSync(path.join(featuresDir, folderName))) {

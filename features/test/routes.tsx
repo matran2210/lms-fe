@@ -1,8 +1,8 @@
 import { TEST_ROUTES } from "./src/constants/routes";
-import EntranceTestPage from "./src/pages/entrance-test/page";
-import EntranceTestResultPage from "./src/pages/entrance-test/page";
-import TableEntranceResult from "./src/pages/entrance-test/table-result/[id]/page";
-import EventTestPage from "./src/pages/event-test/page";
+import EntranceTestPage from "./src/pages/entrance-test";
+import EntranceTestResultPage from "./src/pages/entrance-test/test-result/[id]";
+import TableEntranceResult from "./src/pages/entrance-test/table-result/[id]";
+import EventTestPage from "./src/pages/event-test";
 
 export const testRoutes = [
   {

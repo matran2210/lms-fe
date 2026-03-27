@@ -25,7 +25,7 @@
       "@lms/feature-test": ["features/test/index.ts"],
       "@lms/feature-schedule": ["features/schedule/index.ts"],
       "@lms/feature-certificate": ["features/certificate/index.ts"],
-      "@lms/feature-exam": ["features/exam/index.ts"],
+      "@lms/feature-examination": ["features/examination/index.ts"],
       "@lms/contexts": ["libs/contexts/index.ts"],
       "@lms/assets": ["libs/assets/index.ts"],
       "@lms/ui": ["libs/ui/index.ts"],
