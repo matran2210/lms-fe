@@ -16,6 +16,7 @@ interface SurveyState {
   middtermCourse: boolean
   finalCourse: boolean
   completeCourse: boolean
+  ldCourse?: boolean
 }
 
 const SURVEY_URLS = {
@@ -36,12 +37,14 @@ const SURVEY_ICONS = {
   middtermCourse: <IconBuildingModify />,
   finalCourse: <IconBuildingModify />,
   completeCourse: <IconBuildingModify />,
+  ldCourse: <IconBuildingModify />,
 }
 
 const SURVEY_TITLES = {
   middtermCourse: 'Khảo sát phản hồi giữa khóa',
   finalCourse: 'Khảo sát phản hồi cuối khóa',
   completeCourse: 'Hoàn thành khảo sát để khép lại hành trình!',
+  ldCourse: 'Bạn đã tham gia khóa học',
 }
 
 type CourseProgram =
@@ -49,6 +52,7 @@ type CourseProgram =
   | ECourseProgram.CERT_DIP
   | ECourseProgram.CFA
   | ECourseProgram.CMA
+  | ECourseProgram.LD
 
 const PopupModalTest: React.FC<SurveyModalProps> = ({
   class_code,
@@ -64,8 +68,9 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     middtermCourse: false,
     finalCourse: false,
     completeCourse: false,
+    ldCourse: false,
   })
-
+  const isLDProgram = program === ECourseProgram.LD
   const progress = data?.survey_attributes?.progress_percent
 
   const completeMiddterm = progress >= 0.5 && progress < 0.6
@@ -78,6 +83,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
    * Xác định loại khảo sát hiện tại dựa trên trạng thái
    */
   const getSurveyType = () => {
+    if (isLDProgram) return 'ldCourse'
     if (open.middtermCourse) return 'middtermCourse'
     if (open.finalCourse) return 'finalCourse'
     return 'completeCourse'
@@ -88,7 +94,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
    * Chuyển hướng đến form khảo sát tương ứng với chương trình
    */
   const handleSubmit = () => {
-    const surveyUrl = completeMiddterm
+    let surveyUrl = completeMiddterm
       ? SURVEY_URLS[
           convertCertDip(program) as
             | ECourseProgram.ACCA
@@ -103,13 +109,10 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
             | ECourseProgram.CFA
             | ECourseProgram.CMA
         ]
+    if (isLDProgram) {
+      surveyUrl = 'https://survey.hsforms.com/1n9Xo8sKjQ9u2a7h0r3z8CQ120xb'
+    }
     onLinkSocial(surveyUrl)
-
-    setOpen({
-      middtermCourse: false,
-      finalCourse: false,
-      completeCourse: true,
-    })
   }
 
   /**
@@ -135,11 +138,6 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
    */
   const handleClose = () => {
     handleRemindSurvey()
-    setOpen({
-      middtermCourse: false,
-      finalCourse: false,
-      completeCourse: false,
-    })
   }
 
   const handleTest = () => {
@@ -147,6 +145,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
       middtermCourse: false,
       finalCourse: false,
       completeCourse: false,
+      ldCourse: false,
     })
   }
 
@@ -154,11 +153,6 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
    * Xử lý khi người dùng xác nhận đã hoàn thành khảo sát
    */
   const handleConfirmComplete = () => {
-    setOpen({
-      middtermCourse: false,
-      finalCourse: false,
-      completeCourse: false,
-    })
     handleCompleteSurvey()
   }
 
@@ -170,23 +164,23 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
       <span>
         Chúc mừng bạn đã hoàn thành{' '}
         <span className="text-sm font-medium text-gray-800">50%</span> lớp học{' '}
-        <span className="text-sm font-medium text-gray-800">{class_code}</span>
-        . Tại SAPP Academy, chúng tôi luôn nỗ lực mang đến trải nghiệm học tập
-        tốt nhất. Hãy dành 2 phút để chia sẻ cảm nhận của bạn – những đóng góp
-        quý giá này sẽ giúp chúng tôi nâng cao chất lượng khóa học và dịch vụ
-        học tập. Cảm ơn bạn đã đồng hành cùng chúng tôi!
+        <span className="text-sm font-medium text-gray-800">{class_code}</span>.
+        Tại SAPP Academy, chúng tôi luôn nỗ lực mang đến trải nghiệm học tập tốt
+        nhất. Hãy dành 2 phút để chia sẻ cảm nhận của bạn – những đóng góp quý
+        giá này sẽ giúp chúng tôi nâng cao chất lượng khóa học và dịch vụ học
+        tập. Cảm ơn bạn đã đồng hành cùng chúng tôi!
       </span>
     ),
     finalCourse: (
       <span>
         Bạn đã đi đến chặng đường cuối cùng của lớp học{' '}
-        <span className="text-sm font-medium text-gray-800">{class_code}</span>
-        ! Trong suốt hành trình vừa qua, chắc hẳn bạn đã có những trải nghiệm
-        đáng nhớ về nội dung khóa học cũng như dịch vụ hỗ trợ. Để SAPP Academy
-        thấu hiểu và không ngừng nâng cao chất lượng đào tạo, chúng tôi rất mong
-        nhận được phản hồi từ bạn. Chỉ với 2 phút, đóng góp của bạn sẽ giúp
-        chúng tôi cải thiện chất lượng khóa học và mang đến trải nghiệm học tập
-        tốt hơn cho các học viên sau. Cảm ơn bạn đã đồng hành cùng chúng tôi!
+        <span className="text-sm font-medium text-gray-800">{class_code}</span>!
+        Trong suốt hành trình vừa qua, chắc hẳn bạn đã có những trải nghiệm đáng
+        nhớ về nội dung khóa học cũng như dịch vụ hỗ trợ. Để SAPP Academy thấu
+        hiểu và không ngừng nâng cao chất lượng đào tạo, chúng tôi rất mong nhận
+        được phản hồi từ bạn. Chỉ với 2 phút, đóng góp của bạn sẽ giúp chúng tôi
+        cải thiện chất lượng khóa học và mang đến trải nghiệm học tập tốt hơn
+        cho các học viên sau. Cảm ơn bạn đã đồng hành cùng chúng tôi!
       </span>
     ),
     completeCourse: (
@@ -197,25 +191,40 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
         giá trị lâu dài! Cảm ơn bạn đã đồng hành cùng SAPP Academy!
       </span>
     ),
+    ldCourse: (
+      <span>
+        Trong quá trình học, bộ phận L&D mong muốn lắng nghe kỳ vọng và nhu cầu
+        của bạn để có thể đồng hành và hỗ trợ tốt hơn trong suốt khóa học. Chỉ
+        với vài phút, phản hồi của bạn sẽ giúp chúng tôi nâng cao chất lượng đào
+        tạo và mang đến trải nghiệm học tập phù hợp hơn. Cảm ơn bạn đã đồng hành
+        cùng chúng tôi!
+      </span>
+    ),
   }
 
   /**
    * Xử lý hiển thị modal dựa trên tiến độ học tập
    */
   useEffect(() => {
-    if (
-      data?.class_type !== 'LESSON' ||
-      !data?.survey_attributes?.is_survey_popup ||
-      ![
-        ECourseProgram.ACCA,
-        ECourseProgram.CERT_DIP,
-        ECourseProgram.CFA,
-        ECourseProgram.CMA,
-      ].includes(convertCertDip(program) as ECourseProgram)
-    )
-      return
-
-    if (completeFinal) {
+    // if (
+    //   data?.class_type !== 'LESSON' ||
+    //   !data?.survey_attributes?.is_survey_popup ||
+    //   ![
+    //     ECourseProgram.ACCA,
+    //     ECourseProgram.CERT_DIP,
+    //     ECourseProgram.CFA,
+    //     ECourseProgram.CMA,
+    //   ].includes(convertCertDip(program) as ECourseProgram)
+    // )
+    //   return
+    if (isLDProgram) {
+      setOpen({
+        middtermCourse: false,
+        finalCourse: false,
+        completeCourse: false,
+        ldCourse: true,
+      })
+    } else if (completeFinal) {
       setOpen({
         middtermCourse: false,
         finalCourse: true,
@@ -233,7 +242,10 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
   const surveyType = getSurveyType()
 
   const isSurveyActive =
-    open.middtermCourse || open.finalCourse || open.completeCourse
+    open.middtermCourse ||
+    open.finalCourse ||
+    open.completeCourse ||
+    open.ldCourse
 
   const ContentModalTest = () => {
     return (
@@ -247,12 +259,12 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
 
   return (
     <SappModalV3
-      open={isSurveyActive}
       handleClose={handleTest}
+      open={isSurveyActive}
       handleCancel={handleClose}
       onOk={open.completeCourse ? handleConfirmComplete : handleSubmit}
       icon={SURVEY_ICONS[surveyType]}
-      header={SURVEY_TITLES[surveyType]}
+      header={`${SURVEY_TITLES[surveyType]} ${isLDProgram ? data?.data?.name : ''}`}
       content={<ContentModalTest />}
       showFooter
       okButtonCaption={
@@ -265,6 +277,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
       }
       headerClassName="text-center"
       isUnderLine
+      isOnCancel={false}
     />
   )
 }

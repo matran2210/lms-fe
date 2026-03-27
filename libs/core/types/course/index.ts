@@ -15,6 +15,7 @@ export enum ECourseProgram {
   CFA = 'CFA',
   ACCA = 'ACCA',
   CERT_DIP = 'CERT_DIP',
+  LD = 'L&D Courses',
 }
 
 export interface ISubjectWaitingActivation {

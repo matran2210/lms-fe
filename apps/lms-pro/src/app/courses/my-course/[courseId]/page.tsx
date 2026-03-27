@@ -256,6 +256,8 @@ const CourseDetail = () => {
   const hasCertificate =
     !!data?.pages?.[0]?.courseDetail?.user_certificate_id ||
     !!data?.pages?.[0]?.courseDetail?.user_certificate_url
+
+   console.log('course detail', data?.pages?.[0]?.courseDetail) 
   return (
     <Layout
       title="Course Detail"
