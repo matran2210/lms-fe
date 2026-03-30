@@ -12,13 +12,15 @@
   "devDependencies": {
     "@types/aos": "^3.0.7"
   },
+  "peerDependencies": {
+    "aos": "^2.3.4",
+    "lodash": "^4.17.21"
+  },
   "dependencies": {
     "@lms/assets": "workspace:*",
     "@lms/contexts": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/ui": "workspace:*",
-    "@lms/utils": "workspace:*",
-    "aos": "^2.3.4",
-    "lodash": "^4.17.21"
+    "@lms/utils": "workspace:*"
   }
 }

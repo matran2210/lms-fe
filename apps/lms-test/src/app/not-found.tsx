@@ -2,19 +2,20 @@
 import { SappButton } from "@lms/ui";
 import { LAYOUT } from "@lms/core";
 import Link from "next/link";
-import { useAppSelector } from "@lms/contexts";
+import { useFeature } from "@lms/contexts";
 import { userReducer } from "@lms/contexts";
 import { PageLink } from "src/constants/routers";
 import Image from "next/image";
 
 const ErrorPage = () => {
-  const userSlice = useAppSelector(userReducer);
+  const { useAppSelector } = useFeature();
+  const userSlice = useAppSelector?.(userReducer);
 
   const getRedirectPath = () => {
-    if (userSlice.user.type === "STUDENT") {
+    if (userSlice?.user.type === "STUDENT") {
       return PageLink.COURSES;
     }
-    if (userSlice.user.type === "TEACHER") {
+    if (userSlice?.user.type === "TEACHER") {
       return PageLink.TEACHERS;
     }
     return "/";

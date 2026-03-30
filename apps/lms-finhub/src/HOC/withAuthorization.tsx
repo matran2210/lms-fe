@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useAppSelector, UserType } from '@lms/contexts'
+import { useAppSelector } from 'src/redux/hook'
+import { UserType } from '@lms/contexts'
 import { userReducer } from '@lms/contexts'
 import { usePathname, useRouter } from 'next/navigation'
 

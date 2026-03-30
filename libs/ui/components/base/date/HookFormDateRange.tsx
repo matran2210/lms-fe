@@ -1,20 +1,27 @@
 import type { GetProps } from "antd";
 import { DatePicker, Skeleton } from "antd";
+import clsx from "clsx";
 import dayjs, { Dayjs } from "dayjs";
 import { Control, Controller } from "react-hook-form";
-import SAPPLabel from "../Label/SAPPLabel";
-import { IBaseFormFieldProps } from "@lms/core";
 import { ErrorMessage, SappIcon } from "../../common";
 
 type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
 
-interface IProps extends IBaseFormFieldProps {
+interface IProps {
+  name: string;
+  control: Control<any>;
   defaultValue?: [Date, Date] | null;
   onChange?: RangePickerProps["onChange"];
   placeholder?: [string, string];
+  className?: string;
+  disabled?: boolean;
+  label?: string;
+  labelClass?: string;
   guideline?: Array<string> | undefined;
+  skeleton?: boolean;
   showTime?: RangePickerProps["showTime"];
   format?: string;
+  required?: boolean;
   inputClassName?: string | undefined;
   suffixIcon?: React.ReactNode;
   allowClear?: boolean;
@@ -36,7 +43,7 @@ const HookFormDateRange = ({
   showTime = { format: "HH:mm" },
   format = "DD/MM/YYYY | HH:mm",
   required,
-  inputClassName = "h-[50px] w-full rounded-none",
+  inputClassName = "",
   suffixIcon = <SappIcon icon="input_calendar" />,
   disabledDate,
   disabledTime,
@@ -51,19 +58,12 @@ const HookFormDateRange = ({
       name={name}
       defaultValue={formattedDefaultValue}
       render={({ field, fieldState: { error } }) => (
-        <div className="h-full w-full">
+        <>
           {!skeleton ? (
-            <div className={className}>
-              {label && (
-                <SAPPLabel
-                  title={label}
-                  required={required}
-                  className={labelClass}
-                />
-              )}
+            <div className="float-label">
               <DatePicker.RangePicker
                 {...field}
-                className={inputClassName}
+                className={clsx("h-12 w-full font-normal", inputClassName)}
                 showTime={showTime}
                 format={format}
                 value={
@@ -84,7 +84,11 @@ const HookFormDateRange = ({
                 disabledDate={disabledDate}
                 disabledTime={disabledTime}
               />
-
+              {label && (
+                <label className="textfield-label as-label">
+                  <span className={clsx({ required }, "")}>{label}</span>
+                </label>
+              )}
               <>
                 {error?.message && (
                   <div>
@@ -96,7 +100,7 @@ const HookFormDateRange = ({
           ) : (
             <Skeleton.Input active className={inputClassName} />
           )}
-        </div>
+        </>
       )}
     />
   );

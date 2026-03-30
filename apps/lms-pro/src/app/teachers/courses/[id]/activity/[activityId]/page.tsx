@@ -1,4 +1,5 @@
 'use client'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { CloseIcon, DownloadIcon, LinkIcon } from '@lms/assets'
 import {
   clearNote,
@@ -9,8 +10,6 @@ import {
   getDiscussion,
   resetQuizActivity,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
   UserType,
 } from '@lms/contexts'
@@ -32,16 +31,13 @@ import {
 } from '@lms/feature-courses'
 import {
   ActivitySkeleton,
-  Calculator,
   EditorReader,
   FileViewer,
   LayoutTeacher,
   ModalResizeable,
-  MovableWindow,
   SAPPBorder,
   SappButton,
   SappIcon,
-  SappLoadingGlobal,
   Tooltip,
 } from '@lms/ui'
 import { trackGAEvent, truncateBySpace, truncateString } from '@lms/utils'
@@ -61,7 +57,8 @@ import React, {
 } from 'react'
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { CoursesAPI, getActivityById } from 'src/api/courses'
 import { UploadAPI } from 'src/api/upload'
 
@@ -203,7 +200,7 @@ const ActivityTeacherPage = () => {
             sectionId: sectionId,
           }),
         )
-      } catch (error) {}
+      } catch (error) { }
     }
 
     return () => {
@@ -233,7 +230,7 @@ const ActivityTeacherPage = () => {
     isFinishRef.current = false
   }, [pathname])
 
-  useEffect(() => {}, [
+  useEffect(() => { }, [
     endActivityRef.current,
     quizDocumentRef.current,
     observerRef.current,
@@ -314,7 +311,7 @@ const ActivityTeacherPage = () => {
         }),
       )
       setActiveButtonId(selector?.currentTabId)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -325,7 +322,7 @@ const ActivityTeacherPage = () => {
     try {
       dispatch(getCourseActivityTapById({ api: CoursesAPI, courseId, id }))
       setActiveButtonId(id)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   /**
@@ -467,27 +464,27 @@ const ActivityTeacherPage = () => {
 
   const breadcrumbsData: ITabs[] = breadcrumbsMenu?.data
     ? breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
-        const urlCourseDetail = `${PageLink.TEACHER_MY_COURSE}/${id}/section/${partId}`
-        switch (e.course_section_type) {
-          case 'PART':
-          case 'CHAPTER':
-          case 'UNIT':
-            return {
-              title: e?.name,
-              link: urlCourseDetail,
-            }
-          case 'ACTIVITY':
-            return {
-              title: e?.name,
-              link: '#',
-            }
-          default:
-            return {
-              title: e?.name,
-              link: `${PageLink.TEACHER_MY_COURSE}/my-course/${id}`,
-            }
-        }
-      })
+      const urlCourseDetail = `${PageLink.TEACHER_MY_COURSE}/${id}/section/${partId}`
+      switch (e.course_section_type) {
+        case 'PART':
+        case 'CHAPTER':
+        case 'UNIT':
+          return {
+            title: e?.name,
+            link: urlCourseDetail,
+          }
+        case 'ACTIVITY':
+          return {
+            title: e?.name,
+            link: '#',
+          }
+        default:
+          return {
+            title: e?.name,
+            link: `${PageLink.TEACHER_MY_COURSE}/my-course/${id}`,
+          }
+      }
+    })
     : []
 
   // const [sessionData, setSessionData] = useState<Array<any>>([])
@@ -557,11 +554,10 @@ const ActivityTeacherPage = () => {
             {/* Header */}
             <div className="bg-gray-100px-6 ">
               <div
-                className={`flex w-full select-none items-center justify-between gap-4 py-6 ${
-                  activity?.course_outcomes?.length > 0
+                className={`flex w-full select-none items-center justify-between gap-4 py-6 ${activity?.course_outcomes?.length > 0
                     ? 'borderColor-default border-b'
                     : ''
-                }`}
+                  }`}
               >
                 <div className="text-2xl font-medium ">
                   <Tooltip
@@ -665,7 +661,7 @@ const ActivityTeacherPage = () => {
                               exhibitText={exhibitText}
                               attemptId={e?.quiz?.attempt?.id}
                               focusOnlyQuiz={{ id: '', open: false }}
-                              setFocusOnlyQuiz={() => {}}
+                              setFocusOnlyQuiz={() => { }}
                               isTeacher
                               number_of_attempts={0}
                             />
@@ -717,23 +713,21 @@ const ActivityTeacherPage = () => {
                     <>
                       <SAPPBorder />
                       <div
-                        className={`pt-8 ${
-                          getPreviousTabId() ? 'pb-4' : 'pb-0'
-                        } `}
+                        className={`pt-8 ${getPreviousTabId() ? 'pb-4' : 'pb-0'
+                          } `}
                       >
                         <div className="text-base font-semibold">Resource:</div>
                         <ul className="list-disc text-base">
                           {activity?.files.map((e: any, index: number) => {
                             const isPreviewFile =
                               e.resource.suffix_type !==
-                                SUFFIX_TYPE.GENERAL_FILE &&
+                              SUFFIX_TYPE.GENERAL_FILE &&
                               e.resource.name.slice(-4) !== '.csv'
 
                             return (
                               <div
-                                className={`flex justify-between ${
-                                  index === 0 ? 'mt-4' : 'mt-5'
-                                }`}
+                                className={`flex justify-between ${index === 0 ? 'mt-4' : 'mt-5'
+                                  }`}
                                 key={index}
                               >
                                 <div className="flex">
@@ -754,16 +748,16 @@ const ActivityTeacherPage = () => {
                                       onClick={() => {
                                         isPreviewFile
                                           ? handleOpenScratchPad(
-                                              {
-                                                type: 'file',
-                                              },
-                                              e?.resource?.url,
-                                              e?.resource?.name,
-                                            )
+                                            {
+                                              type: 'file',
+                                            },
+                                            e?.resource?.url,
+                                            e?.resource?.name,
+                                          )
                                           : download(
-                                              e?.resource?.name,
-                                              e?.resource?.file_key,
-                                            )
+                                            e?.resource?.name,
+                                            e?.resource?.file_key,
+                                          )
 
                                         trackGAEvent('Click Open File Resource')
                                       }}
@@ -984,9 +978,8 @@ const ActivityTeacherPage = () => {
                     <div className="relative">
                       <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                         <div className="truncate">
-                          <span className="text-base font-semibold text-gray-800">{`${exhibitText} ${
-                            e?.index + 1
-                          }: `}</span>
+                          <span className="text-base font-semibold text-gray-800">{`${exhibitText} ${e?.index + 1
+                            }: `}</span>
                           {e?.name}
                         </div>
                       </div>

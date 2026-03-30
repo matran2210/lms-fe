@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { useFeature } from '@lms/contexts'
 import { useEffect, useState } from 'react'
 

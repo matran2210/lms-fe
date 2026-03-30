@@ -1,5 +1,5 @@
 import { ICreateDiscussionUploadRequest } from '@lms/contexts'
-import { fetchFormData } from '@services/requestV2'
+import { fetchFormData } from '@services/request'
 
 /**
  * @description CourseActivityApi cung cấp các phương thức để tương tác với các hoạt động khóa học.

@@ -1,4 +1,4 @@
-import { fetcher } from '@services/requestV2'
+import { fetcher } from '@services/request'
 
 export default class CalendarApi {
   static getEventSchedule = (params?: object) => {

@@ -9,7 +9,7 @@ import {
   IEditWeeklyNormData,
   IResponse,
 } from '@lms/core'
-import { fetcher } from '@services/requestV2'
+import { fetcher } from '@services/request'
 
 export class MyRequestAPI {
   static createBusySchedule(

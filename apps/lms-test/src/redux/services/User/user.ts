@@ -5,7 +5,7 @@ import { IUser } from '@lms/contexts'
 import url from './url'
 import { apiURL } from 'src/constants'
 
-const UserApi = {
+const UserContextApi = {
   /**
    * Một hàm để lấy thông tin của người dùng hiện tại
    * @returns {Promise<IUser>} Một promise chứa đối tượng IUser
@@ -83,4 +83,4 @@ const UserApi = {
   },
 }
 
-export default UserApi
+export default UserContextApi

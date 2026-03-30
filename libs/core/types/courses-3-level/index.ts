@@ -1,23 +1,23 @@
+import { DrawerProps } from "antd";
 import { TooltipPlacement } from "antd/es/tooltip";
 import { Dispatch, ForwardedRef, ReactNode, SetStateAction } from "react";
 import { FieldValues, UseFormSetValue } from "react-hook-form";
+import { IBreadcrumb, IButtonProps, IExhibit, ITabs } from "..";
+import { IMetaData } from "../api-response";
 import {
   CourseSectionLinkParent,
-  IActivity,
-  ITab,
-  RemindChoosingExam,
+  LearningProgress,
+  RemindChoosingExam
 } from "../course/my-course";
-import { CourseProgram, IQuestion, IVideo } from "../course";
-import { DrawerProps } from "antd";
+import { CourseProgram, IQuestion, IStorylineDetail, IVideo } from "../course";
 import {
   ICourseAll,
   ICourseSection,
   ILearningOutcome,
   IQuizSetting,
 } from "../courses";
-import { IMetaData } from "../api-response";
 import { ExaminationSubject } from "../exam-infomation";
-import { IBreadcrumb, IButtonProps, IExhibit } from "..";
+import { QueryObserverResult, RefetchOptions, RefetchQueryFilters } from "react-query";
 
 export interface ICourseOutcomes {
   id: string;
@@ -32,6 +32,9 @@ export interface INeighborActivity {
   display_icon: string;
   name: string;
   is_preview_locked: boolean;
+  course_section_type?: string;
+  storyline?: IStorylineDetail;
+  learning_progress?: LearningProgress;
 }
 
 export interface ICourseTabDocument {
@@ -181,7 +184,7 @@ export interface IActivityResourceProps {
 }
 
 export interface BreadcrumbProps {
-  tabs?: ITab[];
+  tabs?: ITabs[];
   currentPage: string;
   className?: string;
 }
@@ -245,14 +248,14 @@ export interface CourseInfo {
   category: string;
 }
 
-// export type SectionContentProps = {
-//   title?: string
-//   sections: ISubSection[]
-//   class_user_id: string
-//   refetch?: <TPageData>(
-//     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
-//   ) => Promise<QueryObserverResult<IActivity, unknown>>
-// }
+export type SectionContentProps = {
+  title?: string;
+  sections: ISubSection[];
+  class_user_id: string;
+  refetch?: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
+  ) => Promise<QueryObserverResult<IActivity3Level, unknown>>;
+};
 
 export type SectionContentModalProp = {
   sections: ISubSection[];
@@ -530,6 +533,13 @@ export interface IHeaderTestProps {
     quiz_type: string;
     is_limited: boolean;
   };
+  quizAttempt: {
+    id: string;
+    number_of_attempts: number;
+    is_limited: boolean;
+    created_at?: string;
+    quiz_timed?: number;
+  };
   openLimit: boolean;
   handleSubmitQuestion: (type_submit: "timeout" | "submit") => Promise<void>;
   timeRef: ForwardedRef<unknown>;
@@ -697,3 +707,6 @@ export interface IActivity3Level {
     name: string;
   };
 }
+
+export * from "./course"
+export * from "./button"

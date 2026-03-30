@@ -10,11 +10,10 @@ import {
 import {
   activeNotesList,
   resetNotesList,
-  useAppDispatch,
   useCourseContext,
   UserType,
 } from '@lms/contexts'
-import { ANIMATION, ILearningOutcome, TEST_TYPE } from '@lms/core'
+import { ANIMATION, ApiError, ILearningOutcome, TEST_TYPE } from '@lms/core'
 import { CardMenuItem, PopupLockContent, TestModal } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
@@ -25,7 +24,11 @@ import {
   SappBreadCrumbs,
   SappDrawerV3,
 } from '@lms/ui'
-import { buildQueryString, formatDate } from '@lms/utils'
+import {
+  buildQueryString,
+  extractNotActivatedData,
+  formatDate,
+} from '@lms/utils'
 import { Alert, Divider, Skeleton } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
@@ -36,12 +39,16 @@ import {
   useSearchParams,
 } from 'next/navigation'
 import PreviewPartDetail from '@sapp-fe/preview-part'
-import { use, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import { TreeHelper } from 'src/helper/tree'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { CoursesAPI } from 'src/api/courses/index'
+import StoryOverview from '@components/storyline/modal/StoryOverview'
+import { IStoryline } from '@lms/core'
+import { selectPopupActivateCourse, showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 interface IProps {
   course_section_type: string
@@ -77,6 +84,7 @@ interface IProps {
 
 const CoursePartDetail = () => {
   const dispatch = useAppDispatch()
+
   const { isAlwaysShowSidebar, isMobileView, isTabletView } =
     useTailwindBreakpoint()
   const [chapterDetail, setChapterDetail] = useState<any>(null)
@@ -97,6 +105,11 @@ const CoursePartDetail = () => {
   const [isOpenChapter, setIsOpenChapter] = useState<boolean>(false)
   const [loadingScreen, setLoadingScreen] = useState<boolean>(true)
   const [openResource, setOpenResource] = useState<boolean>(false)
+  const selectorActivated = useAppSelector?.(selectPopupActivateCourse)
+  const [openStory, setOpenStory] = useState<{
+    isOpen: boolean
+    storyline?: IStoryline
+  }>({ isOpen: false, storyline: undefined })
   const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
 
   const useGetData = (queryKey: string) => {
@@ -114,6 +127,12 @@ const CoursePartDetail = () => {
       enabled:
         params.id !== undefined && params.course_section_id !== undefined,
       retry: false,
+      onError: (error: ApiError) => {
+        const data = extractNotActivatedData(error)
+        if (data) {
+          dispatch?.(showPopupActivatedCourse(data))
+        }
+      },
     })
   }
 
@@ -129,6 +148,18 @@ const CoursePartDetail = () => {
   const partDetail = tree[0] as any
   const [activeItem, setActiveItem] = useState<any>()
 
+  const handleRouterStoryline = (status: boolean, storyline: IStoryline) => {
+    setOpenStory({
+      isOpen: !!status,
+      storyline,
+    })
+  }
+  const closeStoryline = () => {
+    setOpenStory({
+      isOpen: false,
+      storyline: undefined,
+    })
+  }
   const handleActive = (item: any) => {
     setActiveItem(item)
     if (item?.id && item?.course_section_link_parents?.[0]?.is_preview_locked) {
@@ -180,7 +211,11 @@ const CoursePartDetail = () => {
         const detail = tree[0]
         setChapterDetail(detail)
         localStorage.removeItem('course_chapter_id')
-      } catch (error) {
+      } catch (error: any) {
+        const data = extractNotActivatedData(error)
+        if (data) {
+          dispatch?.(showPopupActivatedCourse(data))
+        }
       } finally {
         setLoadingChapter(false)
       }
@@ -199,7 +234,7 @@ const CoursePartDetail = () => {
         params?.id || undefined,
       )
       setLearningOutcome(res?.data)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const handleOpenNotesList = () => {
@@ -281,7 +316,11 @@ const CoursePartDetail = () => {
         )
       }
     } else {
-      if (sectionId && caseStudyId) {
+      if (
+        sectionId &&
+        caseStudyId &&
+        !chapter?.course_section_link_parents?.[0]?.is_preview_locked
+      ) {
         await handleCaseStudyProcess(sectionId, caseStudyId)
       }
       if (chapter?.course_section_link_parents?.[0]?.is_preview_locked) {
@@ -375,8 +414,8 @@ const CoursePartDetail = () => {
       lockSection
         ? handleLockedSection()
         : handleUnlockedSection(() =>
-            handleRouterChapter(course_section?.quiz?.id),
-          )
+          handleRouterChapter(course_section?.quiz?.id),
+        )
     } else if (
       course_section?.course_section_type === 'ACTIVITY' ||
       course_section?.course_section_type === 'UNIT'
@@ -384,21 +423,27 @@ const CoursePartDetail = () => {
       // Handle activity or unit section
       lockSection || learningOutcome?.next_section?.is_preview_locked
         ? handleLockedSection()
-        : handleUnlockedSection(() =>
-            handleRouterActivity(course_section?.children?.[0]?.id, undefined),
-          )
+        : handleUnlockedSection(() => {
+          const firstChild = course_section?.children?.[0]
+          if (firstChild?.course_section_type === 'STORY_LINE') {
+            handleCancel()
+            handleRouterStoryline(true, firstChild)
+          } else {
+            handleRouterActivity(course_section?.children?.[0]?.id, undefined)
+          }
+        })
     } else if (course_section?.course_section_type === 'STORY') {
       // Handle story section
       lockSection
         ? handleLockedSection()
         : handleUnlockedSection(() =>
-            handleRouterCaseStudy(
-              quiz?.id,
-              quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
-              course_section?.id,
-              quiz?.case_study_story?.instances?.[0]?.id,
-            ),
-          )
+          handleRouterCaseStudy(
+            quiz?.id,
+            quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
+            course_section?.id,
+            quiz?.case_study_story?.instances?.[0]?.id,
+          ),
+        )
     }
   }
 
@@ -494,10 +539,13 @@ const CoursePartDetail = () => {
       setLoadingScreen(false)
     }
   }, [isLoading, loadingChapter])
+
+  const isLoadingActivity = selectorActivated?.openActive
+
   return (
     <Layout title="Course Part Detail" showSidebar={isAlwaysShowSidebar}>
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
-        <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
+        <div className="relative flex h-16 w-full items-center justify-center border-b-[0.57px] border-zinc-100 bg-white">
           <Alert
             message={
               <div className="flex items-center gap-2">
@@ -532,7 +580,7 @@ const CoursePartDetail = () => {
         </div>
       ) : null}
       <div className="mb-24 mt-4 min-h-[calc(100vh-3rem)] md:min-h-[calc(100vh-5rem)]">
-        {loadingScreen ? (
+        {loadingScreen || isLoadingActivity ? (
           <Skeleton.Input size="default" active className="!w-1/2" block />
         ) : (
           <SappBreadCrumbs
@@ -562,8 +610,8 @@ const CoursePartDetail = () => {
             chapterMenu={partDetail}
             fetchChapterDetail={fetchChapterDetail}
             chapterDetail={chapterDetail}
-            loading={loadingScreen}
-            loadingChapter={loadingScreen}
+            loading={loadingScreen || isLoadingActivity}
+            loadingChapter={loadingScreen || loadingChapter}
             setLoadingChapter={setLoadingChapter}
             setOpenLearningOutcome={setOpenLearningOutcome}
             course_id={params.id as string}
@@ -587,6 +635,7 @@ const CoursePartDetail = () => {
             isLMSV2
             isMobileView={isMobileView}
             isTabletView={isTabletView}
+            handleRouterStoryline={handleRouterStoryline}
           />
         </div>
         <BottomMenu>
@@ -673,7 +722,7 @@ const CoursePartDetail = () => {
           setOpen={setOpen}
           data={chapterData}
           class_user_id={previewPart?.class_user_id}
-          activeCourse={() => {}}
+          activeCourse={() => { }}
           is_passed_course={isPassedCourse}
         />
         <LearningResource
@@ -687,6 +736,11 @@ const CoursePartDetail = () => {
         </div>
       </div>
       <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />
+      <StoryOverview
+        open={openStory.isOpen}
+        setOpen={closeStoryline}
+        storylineData={openStory.storyline}
+      />
     </Layout>
   )
 }

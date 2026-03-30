@@ -1,5 +1,4 @@
-import { RemainingTimeIcon } from "@lms/assets";
-import { TimeOutIcon } from "@lms/assets/icons";
+import { RemainingTimeIcon, TimeOutIcon} from "@lms/assets";
 import { SappModalV3 } from "@lms/ui";
 import { formatTime } from "@lms/utils";
 import clsx from "clsx";

@@ -1,7 +1,7 @@
 import { Icon } from "@lms/assets"
 import { QUESTION_TYPES } from "@lms/core"
 import { ShowAnswerTemplate } from "@lms/feature-courses"
-import { ButtonPrimary, ButtonSecondary, ButtonText, ButtonTextV2 } from "@lms/ui"
+import { ButtonPrimary, ButtonSecondary, ButtonText } from "@lms/ui"
 import { Tooltip } from "antd"
 
 interface TestGroupActionProps {
@@ -36,7 +36,7 @@ function TestGroupAction({
       {currentTabContent?.qType === QUESTION_TYPES.ESSAY &&
         isShowTemplate && (
           <div className="flex items-center gap-3">
-            <ButtonTextV2
+            <ButtonText
               title="Reset to Answer Template"
               onClick={onResetTemplate}
               className="bg-transparent hover:!bg-transparent"

@@ -1,7 +1,5 @@
-import _, { uniqBy } from 'lodash'
 import dayjs from 'dayjs'
-import { round } from 'lodash'
-import { PageLink } from 'src/constants/routers'
+import _, { round } from 'lodash'
 
 export function isMobile() {
   const toMatch = [
@@ -314,3 +312,4 @@ export const getUserPrefix = (isTeacher: boolean) =>
 
 export * from './editor-helper'
 export * from './class-resource/helper'
+export * from './quiz-test/helper'

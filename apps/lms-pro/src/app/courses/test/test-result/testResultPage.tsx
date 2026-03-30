@@ -1,12 +1,14 @@
-"use client"
+'use client'
 import {
-  F_LOW_CODES, GRADE_STATUS, IQuizAttempt,
+  F_LOW_CODES,
+  GRADE_STATUS,
+  IQuizAttempt,
   IQuizAttemptChartType,
   QuizAttemptChart,
-  QuizAttemptChartType
+  QuizAttemptChartType,
 } from '@lms/core'
-import Recommendation from '@lms/feature-test/src/components/test/Recommendation'
-import { roundNumber } from '@utils/helpers'
+import { Recommendation } from '@lms/feature-courses'
+import { roundNumber } from '@lms/utils'
 import { useMemo, useRef } from 'react'
 import ChartACCAScore from './acca/chartACCAScore'
 import ChartCFAScore from './cfa/chartCFAScore'
@@ -123,7 +125,7 @@ const TestResultPage = ({
                   score={score}
                   isGraded={
                     questions?.quizAttempt?.grading_status ===
-                      GRADE_STATUS.FINISHED_GRADING ||
+                    GRADE_STATUS.FINISHED_GRADING ||
                     !!questions?.quizAttempt?.is_graded
                   }
                   passingScore={chartData?.quiz?.required_percent_score}
@@ -192,7 +194,7 @@ const TestResultPage = ({
                 score={score}
                 isGraded={
                   questions?.quizAttempt?.grading_status ===
-                    GRADE_STATUS.FINISHED_GRADING ||
+                  GRADE_STATUS.FINISHED_GRADING ||
                   !!questions?.quizAttempt?.is_graded
                 }
                 passingScore={chartData?.quiz?.required_percent_score}

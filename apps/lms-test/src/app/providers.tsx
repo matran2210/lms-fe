@@ -7,7 +7,7 @@ import {
   FeatureProvider,
   PreviousSectionRouteProvider,
   SocketContext,
-  store,
+  useFeature,
 } from "@lms/contexts";
 import {
   ANIMATION,
@@ -53,6 +53,7 @@ import MyProfileAPI, { AuthAPI } from "src/api/profile";
 import { QuestionAPI } from "src/api/question";
 import { TestServiceAPI } from "src/api/test-api";
 import { UploadAPI } from "src/api/upload";
+import { UserApi } from "src/api/user";
 import {
   MENU_BOTTOM,
   MENU_ITEMS,
@@ -60,7 +61,7 @@ import {
 } from "src/constants/menu-items";
 import { PageLink } from "src/constants/routers";
 import CourseActivityApi from "src/redux/services/Course/MyCourse/Activity";
-import UserApi from "src/redux/services/User/user";
+import UserContextApi from "src/redux/services/User/user";
 import { AuthenticationManager } from "src/utils/helpers/keycloak";
 
 dayjs.extend(utc);
@@ -282,13 +283,14 @@ export function Providers({ children }: { children: ReactNode }) {
 
   return (
     <AntConfigProvider>
-      <Provider store={store}>
+      {/* <Provider store={store}> */}
         <FeatureProvider
           value={{
+            userApi: UserApi,
             courseApi: CoursesAPI,
             questionApi: QuestionAPI,
             uploadApi: UploadAPI,
-            userApi: UserApi,
+            userContextApi: UserContextApi,
             notificationApi: NotificationAPI,
             authApi: AuthAPI,
             classApi: ClassAPI,
@@ -344,7 +346,7 @@ export function Providers({ children }: { children: ReactNode }) {
             </QueryClientProvider>
           </CourseNoteProvider>
         </FeatureProvider>
-      </Provider>
+      {/* </Provider> */}
     </AntConfigProvider>
   );
 }

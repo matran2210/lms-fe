@@ -7,8 +7,7 @@ import React, {
 import { Layout } from "antd";
 import clsx from "clsx";
 import { Icon } from "@lms/assets";
-import { useAppDispatch } from "@lms/contexts";
-import { disableUnsavedChange } from "@lms/contexts";
+import { disableUnsavedChange, useFeature } from "@lms/contexts";
 import dayjs from "dayjs";
 import { ButtonSecondary } from "../../components";
 import CountDown from "../../components/count-down";
@@ -62,7 +61,7 @@ const TestWrapper = ({
   onSubmitAnswer,
   resetWordBeforeAction,
 }: PropsWithChildren<IProps>) => {
-  const dispatch = useAppDispatch();
+  const {dispatch} = useFeature();
   const startTime = dayjs(quizAttempt?.created_at);
   const isValidStart = startTime.isValid();
   const duration = quizDetail?.quiz_timed;
@@ -91,7 +90,7 @@ const TestWrapper = ({
               onClick={async () => {
                 await resetWordBeforeAction?.();
                 setOpenQuit(true);
-                dispatch(disableUnsavedChange());
+                dispatch?.(disableUnsavedChange());
               }}
             >
               <Icon type="close" />
@@ -125,7 +124,7 @@ const TestWrapper = ({
                 } else {
                   setOpenSubmit(true);
                 }
-                dispatch(disableUnsavedChange());
+                dispatch?.(disableUnsavedChange());
               }}
             />
           </div>

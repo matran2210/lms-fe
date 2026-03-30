@@ -1,4 +1,5 @@
 'use client'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import {
   CloseIcon,
   CloseIconNote,
@@ -15,9 +16,6 @@ import {
   loadMoreQuestion,
   saveFileEssayCaseStudy,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
-  useFeature,
 } from '@lms/contexts'
 import {
   ESSAY_TYPE,
@@ -29,7 +27,7 @@ import {
   RESPONSE_OPTION,
   ROUTES,
 } from '@lms/core'
-import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
+import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-courses'
 import {
   useMousePosition,
   useSmartModalSize,
@@ -42,30 +40,29 @@ import {
   EditorReader,
   EssayQuestionPreview,
   FileViewer,
-  HookFormTextArea,
   MatchQuizComponent,
   ModalResizeable,
+  ModalUploadFile,
   MovableWindow,
   MultiChoiceQuestion,
   NewDragNDropQuestion,
   OneChoiceQuestion,
-  SappLoadingGlobal,
   SelectWord,
   SlotValue,
 } from '@lms/ui'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight } from '@lms/utils'
 import { download } from '@utils/index'
 import { Popover } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
-import { useParams, useRouter } from 'next/navigation'
-import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { ChangeEvent, createRef, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { TestServiceAPI } from 'src/api/test-api'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import ConFirmSubmit from '../../short-course/test/conFirmSubmit'
 import LimitQuizModal from '../../short-course/test/limitQuizModal'
-import { TestServiceAPI } from 'src/api/test-api'
 import ScratchPatch from 'src/app/short-course/test/scratchPatch'
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
@@ -207,7 +204,7 @@ const CaseStudyDetail = () => {
         )
       case QUESTION_TYPES.ESSAY:
         if (!editorRefs.current[index]) {
-          editorRefs.current[index] = React.createRef()
+          editorRefs.current[index] = createRef()
         }
         return (
           <EssayQuestionPreview
@@ -291,7 +288,8 @@ const CaseStudyDetail = () => {
   const [showWarning, setShowWarning] = useState(true)
   const MatchQuizRef = useRef(null) as any
   const params = useParams()
-  const { query } = useFeature()
+  const searchParams = useSearchParams()
+  const query = Object.fromEntries(searchParams.entries())
 
   const handleResetEssay = async (
     index: number,
@@ -1184,40 +1182,40 @@ const CaseStudyDetail = () => {
             } else if (e.type === 'scratch_pad') {
               return (
                 <ModalResizeable
-                    key={e.id}
-                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
-                    position="center"
-                    width={412}
-                    height={350}
-                    header={({ requestClose }) => (
-                      <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
-                        <div className="text-sm font-semibold text-gray-800">
-                          Scratch Pad
-                        </div>
-                        <button
-                          className="text-icon"
-                          onClick={() => {
-                            requestClose()
-                            setTimeout(() => handleCloseScratchPad(e), 300)
-                          }}
-                        >
-                          <CloseIconNote />
-                        </button>
+                  key={e.id}
+                  handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                  position="center"
+                  width={412}
+                  height={350}
+                  header={({ requestClose }) => (
+                    <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
+                      <div className="text-sm font-semibold text-gray-800">
+                        Scratch Pad
                       </div>
-                    )}
-                  >
-                    <ScratchPatch
-                      scratchPads={scratchPadValues?.value}
-                      scratchPadValues={e}
-                      control={controlScratch}
-                      handleChangeScratchPad={(
-                        event: ChangeEvent<HTMLInputElement>,
-                      ) => {
-                        handleChangeScratchPad(event, e?.id)
-                      }}
-                      className="!h-fit"
-                    />
-                  </ModalResizeable>
+                      <button
+                        className="text-icon"
+                        onClick={() => {
+                          requestClose()
+                          setTimeout(() => handleCloseScratchPad(e), 300)
+                        }}
+                      >
+                        <CloseIconNote />
+                      </button>
+                    </div>
+                  )}
+                >
+                  <ScratchPatch
+                    scratchPads={scratchPadValues?.value}
+                    scratchPadValues={e}
+                    control={controlScratch}
+                    handleChangeScratchPad={(
+                      event: ChangeEvent<HTMLInputElement>,
+                    ) => {
+                      handleChangeScratchPad(event, e?.id)
+                    }}
+                    className="!h-fit"
+                  />
+                </ModalResizeable>
               )
             } else if (e.type === 'exhibits') {
               const i = exhibitData?.findIndex(

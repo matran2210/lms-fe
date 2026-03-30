@@ -8,6 +8,7 @@ import {
   Requirement,
   RESPONSE_OPTION,
 } from "@lms/core";
+import { RequirementsTab } from "@lms/feature-courses";
 import { EssayQuestionPreview, HighlightableHTML } from "@lms/ui";
 import {
   checkSheetAnswered,
@@ -17,7 +18,6 @@ import {
 import { TabsProps } from "antd";
 import { debounce } from "lodash";
 import React, { useEffect, useRef } from "react";
-import { RequirementsTab } from "../test";
 
 export interface EssayQuestionBlockProps extends CommonQuestionBlockProps {
   essayData: {

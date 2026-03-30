@@ -4,9 +4,9 @@ import {
   EAttemptStatus,
   EDateTime,
   GRADE_STATUS,
-  GRADING_METHOD
+  GRADING_METHOD,
+  StatusQuizTag
 } from "@lms/core";
-import { StatusQuizTag } from "@lms/core/types/quiz/StatusActionCell";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import { Tooltip } from "@lms/ui";
 import { getTimeFromInput, isQuizExpired } from "@lms/utils";

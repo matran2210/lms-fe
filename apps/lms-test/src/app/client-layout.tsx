@@ -1,11 +1,9 @@
 'use client'
-import { getCountUnRead, showNotification, useAppDispatch } from '@lms/contexts'
-import { usePathname } from 'next/navigation'
+import { getCountUnRead, showNotification, useFeature } from '@lms/contexts'
 import { onMessageListener } from '@lms/utils'
 import { useEffect, useMemo } from 'react'
 export default function ClientLayout() {
-  const dispatch = useAppDispatch()
-  const pathname = usePathname()
+  const {dispatch, pathname} = useFeature()
   const checkRouteCertificate = useMemo(() => {
     const path = pathname as string
 
@@ -17,7 +15,7 @@ export default function ClientLayout() {
   }, [pathname])
   useEffect(() => {
     onMessageListener().then((data: any) => {
-      dispatch(showNotification())
+      dispatch?.(showNotification())
     })
   })
   getCountUnRead

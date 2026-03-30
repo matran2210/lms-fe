@@ -1,6 +1,5 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../../store";
 import { IEntranceTestAPI } from "@lms/core";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // Tạo một đối tượng Notification với giá trị mặc định
 export interface Iprops {
@@ -55,6 +54,12 @@ export const entranceTestSlice = createSlice({
 
 export const { activeEntrance, closeShowRemindEntrance } =
   entranceTestSlice.actions;
-export const entranceTestReducer = (state: RootState) =>
+export const entranceTestReducer = <
+  T extends {
+    entranceTestReducer: Iprops;
+  },
+>(
+  state: T,
+) =>
   state.entranceTestReducer;
 export default entranceTestSlice.reducer;

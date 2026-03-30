@@ -1,0 +1,33 @@
+{
+  "name": "@lms/feature-certificate",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . --ext .ts,.tsx",
+    "type-check": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "antd": "^5.25.0",
+    "clsx": "^2.1.1",
+    "lodash": "^4.17.21",
+    "date-fns": "^3.0.6",
+    "dayjs": "^1.11.12",
+    "react-hook-form": "7.48.2",
+    "@hookform/resolvers": "^3.10.0",
+    "zod": "^3.22.4",
+    "react-hot-toast": "^2.4.1",
+    "react-query": "3.39.3"
+  },
+  "dependencies": {
+    "@lms/assets": "workspace:*",
+    "@lms/contexts": "workspace:*",
+    "@lms/core": "workspace:*",
+    "@lms/hoc": "workspace:*",
+    "@lms/hooks": "workspace:*",
+    "@lms/ui": "workspace:*",
+    "@lms/utils": "workspace:*"
+  }
+}

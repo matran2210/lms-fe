@@ -1,20 +1,20 @@
 "use client";
 import {
-  CalculatorIconV2,
+  CalculatorIcon,
   DownloadIcon,
   FileTextIcon,
   FlagIcon,
+  NewScratchPadIcon,
+  NotesOutline,
+  PulsingExclamation,
   ResizeIcon,
-  ScratchPadIconV2,
   ShowLessIcon,
-  ShowMoreIcon,
+  ShowMoreIcon
 } from "@lms/assets";
 import {
   CourseProvider,
   disableUnsavedChange,
   loginSlice,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
   useFeature,
 } from "@lms/contexts";
@@ -26,20 +26,14 @@ import {
   IExhibit,
   PROGRAM,
   QUESTION_TYPES,
-  RESPONSE_OPTION,
-  TEST_TYPE,
+  RESPONSE_OPTION
 } from "@lms/core";
 import {
   checkAnsweredPure,
   formatSubmitAnswer,
-  LimitQuizModal,
   QuestionRenderer,
-  QuitTestModal,
-  SuccessSubmittedConstructorModal,
   TestGroupAction,
   TestScratchPads,
-  TestTimeOutModal,
-  UnSubmitAnswerModal,
   useResizeMouse,
   useWindowWidth,
   validateAnswer,
@@ -53,7 +47,7 @@ import {
   SappLoading,
   useClickOutside,
 } from "@lms/ui";
-import { cloneDeep, isEmpty, isUndefined, set, uniqueId } from "lodash";
+import { cloneDeep, isEmpty, isUndefined, uniqueId } from "lodash";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -63,7 +57,6 @@ import {
   removeHighlights,
   serializeHighlights,
 } from "@funktechno/texthighlighter/lib";
-import { FlagIconV2, NotesOutline, PulsingExclamation } from "@lms/assets";
 import { showPopupCompletedCourse } from "@lms/contexts";
 import {
   Answer,
@@ -82,9 +75,14 @@ import {
 import {
   ButtonContent,
   ConFirmSubmit,
+  LimitQuizModal,
+  QuitTestModal,
   ResetToAnswerTemplateModal,
+  SuccessSubmittedConstructorModal,
+  TabSlide,
+  TestTimeOutModal,
+  UnSubmitAnswerModal
 } from "@lms/feature-courses";
-import { TabSlide } from "@lms/feature-test";
 import { HighlightableHTML, ModalUploadFile, TestWrapper } from "@lms/ui";
 import {
   checkTypeAndRenderTitle,
@@ -117,8 +115,7 @@ interface Tab {
 const warningText = "Are you sure you want to leave this page?";
 
 const TestDetail = () => {
-  const { eventTestApi: EventTestAPI, testServiceApi: TestServiceAPI } =
-    useFeature();
+  const { eventTestApi: EventTestAPI, testServiceApi: TestServiceAPI, useAppSelector } = useFeature();
   const [, setHasScrollBar] = useState(undefined) as any;
   const [editorReady, setEditorReady] = useState(true);
   const [tooltipOpen, setTooltipOpen] = useState(false);
@@ -152,7 +149,7 @@ const TestDetail = () => {
   const ref = useRef(null) as any;
   const refEditor = useRef(null) as any;
   const currentTabIdRef = useRef(null);
-  const dispatch = useAppDispatch();
+  const {dispatch} = useFeature();
   const [essayData, setEssayData] = useState<any>();
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([]);
   const [onFocusingPad, setOnFocusingPad] = useState("");
@@ -177,7 +174,7 @@ const TestDetail = () => {
   const [currentMousePos, setCurrentMousePos] = useState(0);
   const [leftWidth, setLeftWidth] = useState(0);
   const [currentLeftWidth, setCurrentLeftWidth] = useState(0);
-  const { unsavedChange } = useAppSelector((state) => state.loginReducer);
+  const { unsavedChange } = useAppSelector?.((state) => state.loginReducer);
   const rightSideRef = useRef<any>(null);
   const [mousePosition, setMousePosition] = useState<{
     x: number | null;
@@ -519,12 +516,12 @@ const TestDetail = () => {
                               : requirementData?.answer_file,
                           short_answer:
                             req?.short_answer !== undefined &&
-                            req?.short_answer !== null
+                              req?.short_answer !== null
                               ? req?.short_answer
                               : requirementData?.short_answer,
                           answer_text:
                             req?.answer_text !== undefined &&
-                            req?.answer_text !== null
+                              req?.answer_text !== null
                               ? req?.answer_text
                               : requirementData?.short_answer,
                         };
@@ -544,7 +541,7 @@ const TestDetail = () => {
                 // done: true,
                 answer:
                   updatedObjTab?.answer !== undefined &&
-                  updatedObjTab?.answer !== null
+                    updatedObjTab?.answer !== null
                     ? updatedObjTab?.answer
                     : answerSubmitted?.short_answer,
 
@@ -653,8 +650,8 @@ const TestDetail = () => {
               savedData =
                 answersSubmitted.answer && answersSubmitted?.answer.length > 0
                   ? answersSubmitted.answer.find(
-                      (item: AnswerItem) => item.question_id === objTab.id,
-                    )
+                    (item: AnswerItem) => item.question_id === objTab.id,
+                  )
                   : undefined;
 
               currentAnswer = answer;
@@ -663,9 +660,9 @@ const TestDetail = () => {
               savedData =
                 answersSubmitted.answer && answersSubmitted?.answer.length > 0
                   ? answersSubmitted.answer.find(
-                      (item: AnswerItem) =>
-                        item.question_id === answer.question_id,
-                    )
+                    (item: AnswerItem) =>
+                      item.question_id === answer.question_id,
+                  )
                   : undefined;
 
               currentAnswer = answer.answer_id ?? savedData?.answer_id;
@@ -769,9 +766,9 @@ const TestDetail = () => {
               corrects: {
                 answers: handleMultipleCorrectAnswer(
                   objTab?.data?.drag_drop_answers ||
-                    currentDragDrop?.find(
-                      (item) => item?.currentTabId === objTab?.id,
-                    )?.drag_drop_answers,
+                  currentDragDrop?.find(
+                    (item) => item?.currentTabId === objTab?.id,
+                  )?.drag_drop_answers,
                   objTab?.answer,
                 ),
                 corrects: objTab?.corrects?.corrects,
@@ -787,11 +784,11 @@ const TestDetail = () => {
 
   const remainingTimeinSeconds = quizDetail?.quiz_timed
     ? (dayjs(
-        dayjs(new Date(quizAttempt?.created_at ?? "")).add(
-          quizDetail?.quiz_timed,
-          "minutes",
-        ),
-      ).diff(dayjs(), "seconds") ?? 0)
+      dayjs(new Date(quizAttempt?.created_at ?? "")).add(
+        quizDetail?.quiz_timed,
+        "minutes",
+      ),
+    ).diff(dayjs(), "seconds") ?? 0)
     : null;
 
   useEffect(() => {
@@ -1370,7 +1367,7 @@ const TestDetail = () => {
     };
 
     // Disable unsaved changes tracking
-    dispatch(disableUnsavedChange());
+     dispatch?.(disableUnsavedChange());
 
     try {
       const res = await TestServiceAPI.submitAnswer(
@@ -1408,7 +1405,7 @@ const TestDetail = () => {
           tab.id === question_id ? { ...tab, flag: !tab.flag } : tab,
         ),
       );
-    } catch (error) {}
+    } catch (error) { }
   };
   // Helper function to format answer based on question type
   const formatAnswerItem = (question: any) => {
@@ -1456,7 +1453,7 @@ const TestDetail = () => {
           answers: e.data?.answers,
         });
       }
-      dispatch(disableUnsavedChange());
+       dispatch?.(disableUnsavedChange());
 
       const res = await TestServiceAPI.submitAllQuestion(
         quizAttempt?.id as string,
@@ -1482,7 +1479,7 @@ const TestDetail = () => {
         if (typeSubmit === "submit") {
           if (!!isCompletedCourse?.is_completed) {
             setTimeout(() => {
-              dispatch(
+               dispatch?.(
                 showPopupCompletedCourse(isCompletedCourse?.content || ""),
               );
             }, 2000);
@@ -1532,7 +1529,7 @@ const TestDetail = () => {
         } else {
           if (!!isCompletedCourse?.is_completed) {
             setTimeout(() => {
-              dispatch(
+               dispatch?.(
                 showPopupCompletedCourse(isCompletedCourse?.content || ""),
               );
             }, 2000);
@@ -1768,7 +1765,7 @@ const TestDetail = () => {
   }, [watchFilter("filter")]);
 
   useEffect(() => {
-    dispatch(loginSlice.actions.enableUnsavedChange());
+     dispatch?.(loginSlice.actions.enableUnsavedChange());
   }, [dispatch]);
 
   useEffect(() => {
@@ -1843,15 +1840,15 @@ const TestDetail = () => {
       //       setIsQuizAttemptCreated(true); // Mark the attempt as created
       //     } catch (err: any) {
       //       if (err.response?.data?.error.code === "400|060710") {
-      //         dispatch(disableUnsavedChange());
+      //          dispatch?.(disableUnsavedChange());
       //         setOpenLimit(true);
       //       }
       //       if (err.response?.data?.success === false) {
       //         setRouteBack(true);
       //         setIsQuizAttemptCreated(true); // Mark the attempt as created even on error
       //         switch (
-      //           quizDetail?.quiz_type ||
-      //           quizDetail?.quiz_type === undefined
+    //           quizDetail?.quiz_type ||
+    //           quizDetail?.quiz_type === undefined
       //         ) {
       //           case TEST_TYPE.MID_TERM_TEST:
       //           case TEST_TYPE.FINAL_TEST:
@@ -2020,7 +2017,7 @@ const TestDetail = () => {
                 } else {
                   setOpenSubmit(true);
                 }
-                dispatch(disableUnsavedChange());
+                 dispatch?.(disableUnsavedChange());
               }
             } else {
               const data = await getResult(currentTabContent);
@@ -2043,7 +2040,7 @@ const TestDetail = () => {
               } else {
                 setOpenSubmit(true);
               }
-              dispatch(disableUnsavedChange());
+               dispatch?.(disableUnsavedChange());
             }
           }
 
@@ -2233,11 +2230,11 @@ const TestDetail = () => {
               if (!submited && !quizAttempt?.is_submitted) {
                 const remainingTimeinSeconds = quizDetail?.quiz?.quiz_timed
                   ? dayjs(
-                      dayjs(new Date(quizAttempt?.created_at ?? "")).add(
-                        quizDetail?.quiz?.quiz_timed,
-                        "minutes",
-                      ),
-                    ).diff(dayjs(), "seconds")
+                    dayjs(new Date(quizAttempt?.created_at ?? "")).add(
+                      quizDetail?.quiz?.quiz_timed,
+                      "minutes",
+                    ),
+                  ).diff(dayjs(), "seconds")
                   : null;
 
                 // No call when time out > 60s
@@ -2250,7 +2247,7 @@ const TestDetail = () => {
                   await handleSubmitAnswer("timeout");
                 }
                 handleSubmitQuestions("timeout");
-                dispatch(disableUnsavedChange())
+                 dispatch?.(disableUnsavedChange())
                   .unwrap()
                   .then(() => {
                     trackGAEvent("Click Button Submit Time Out Test");
@@ -2284,16 +2281,15 @@ const TestDetail = () => {
                   placement="top"
                 >
                   <button
-                    className={`h-fit rounded-lg ${
-                      isScatchPadEnabled && "bg-primary"
-                    }`}
+                    className={`h-fit rounded-lg ${isScatchPadEnabled && "bg-primary"
+                      }`}
                     onClick={() => {
                       handleOpenScratchPad("scratch_pad");
                       trackGAEvent("Click Button ScratchPad Test");
                     }}
                   >
                     <ButtonContent
-                      icon={<ScratchPadIconV2 isActive={isScatchPadEnabled} />}
+                      icon={<NewScratchPadIcon isActive={isScatchPadEnabled} />}
                       content=""
                     />
                   </button>
@@ -2308,9 +2304,8 @@ const TestDetail = () => {
                   placement="top"
                 >
                   <button
-                    className={`h-fit rounded-lg ${
-                      checkCalExist > -1 && "bg-primary"
-                    }`}
+                    className={`h-fit rounded-lg ${checkCalExist > -1 && "bg-primary"
+                      }`}
                     onClick={() => {
                       handleOpenScratchPad("calculator");
                       trackGAEvent("Click Button Calculator Test");
@@ -2318,7 +2313,7 @@ const TestDetail = () => {
                     disabled={checkCalExist > -1}
                   >
                     <ButtonContent
-                      icon={<CalculatorIconV2 isActive={checkCalExist > -1} />}
+                      icon={<CalculatorIcon className={checkCalExist > -1 ? "text-white" : "text-primary"} />}
                       content=""
                     />
                   </button>
@@ -2377,7 +2372,7 @@ const TestDetail = () => {
                           setActiveShowAll(!activeShowAll);
                           setTooltipOpen(false);
                         }}
-                        // onMouseUp={() => setTooltipOpen(true)}
+                      // onMouseUp={() => setTooltipOpen(true)}
                       >
                         {!activeShowAll ? (
                           <ShowLessIcon size={24} />
@@ -2419,7 +2414,7 @@ const TestDetail = () => {
             {!isUndefined(currentTabContent) && (
               <>
                 {currentTabContent?.data?.display_type ===
-                DISPLAY_TYPE.VERTICAL ? (
+                  DISPLAY_TYPE.VERTICAL ? (
                   <div
                     className={`flex flex-1 overflow-auto bg-[#F1F1F1]`}
                     id={"preview-question"}
@@ -2674,13 +2669,13 @@ const TestDetail = () => {
               open={openTimeOut}
               setOpen={setOpenTimeOut}
               handleSubmit={() => {
-                dispatch(disableUnsavedChange())
+                dispatch?.(disableUnsavedChange())
                   .unwrap()
                   .then(() => {
                     if (type === "entrance") {
                       const searchParams =
                         quizAttempt?.number_of_attempts &&
-                        quizDetail?.limit_count
+                          quizDetail?.limit_count
                           ? `attempt=${quizAttempt?.number_of_attempts}/${quizDetail?.limit_count}`
                           : ``;
                       router.replace(
@@ -2738,7 +2733,7 @@ const TestDetail = () => {
                 }
               }}
               handleCancel={() =>
-                dispatch(loginSlice.actions.enableUnsavedChange())
+                dispatch?.(loginSlice.actions.enableUnsavedChange())
               }
               content="If you quit now, your answers will be saved and the timer will continue running. You can come back later to resume the test."
             />
@@ -2759,7 +2754,7 @@ const TestDetail = () => {
                 }
               }}
               handleCancel={() =>
-                dispatch(loginSlice.actions.enableUnsavedChange())
+                dispatch?.(loginSlice.actions.enableUnsavedChange())
               }
             />
 
@@ -2944,7 +2939,7 @@ const TestDetail = () => {
                     !isShowIconButtonInBottom,
                   "top-[214px]":
                     currentTabContent?.topicDescription?.qType ===
-                      QUESTION_TYPES.ESSAY &&
+                    QUESTION_TYPES.ESSAY &&
                     !!currentTabContent?.topicDescription?.requirements?.length,
                   "bottom-0": isShowIconButtonInBottom,
                 },
@@ -2966,7 +2961,7 @@ const TestDetail = () => {
           { "!bg-primary": isScatchPadEnabled },
         )}
       >
-        <ScratchPadIconV2 isActive={isScatchPadEnabled} className="size-8" />
+        <NewScratchPadIcon isActive={isScatchPadEnabled} className="size-8" />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <div
@@ -2979,7 +2974,7 @@ const TestDetail = () => {
           { "!bg-primary": checkCalExist > -1 },
         )}
       >
-        <CalculatorIconV2 isActive={checkCalExist > -1} className="size-8" />
+        <CalculatorIcon className={`size-8 ${checkCalExist > -1 ? 'text-white' : 'text-primary'}`} />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <div
@@ -2989,7 +2984,7 @@ const TestDetail = () => {
         }}
         className="group fixed bottom-[422px] right-8 grid cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden"
       >
-        <FlagIconV2 isActive={currentTabContent?.flag} />
+        <FlagIcon />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <BackToTop

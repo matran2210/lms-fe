@@ -1,5 +1,4 @@
-
-"use client"
+'use client'
 import { CloseIcon } from '@lms/assets'
 import { UserType } from '@lms/contexts'
 import { ANIMATION, LAYOUT, QUESTION_TYPES } from '@lms/core'
@@ -9,13 +8,12 @@ import {
   FullScreenLayout,
   SappBaseTable,
 } from '@lms/ui'
-import { roundNumber } from '@utils/helpers'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 import { CoursesAPI } from 'src/api/courses'
-import { buildQueryString } from '@lms/utils'
+import { buildQueryString, roundNumber } from '@lms/utils'
 
 const headers = [
   {
@@ -49,7 +47,7 @@ const TableCaseStudyResultTeacher = () => {
   const [topicAttemptDetail, setTopicAttemptDetail] = useState<any>()
   const router = useRouter()
   const searchParam = useSearchParams()
-  const params = useParams();
+  const params = useParams()
   const { id } = params
   const query = Object.fromEntries(searchParam.entries())
 
@@ -61,13 +59,13 @@ const TableCaseStudyResultTeacher = () => {
         page_size,
       )
       return res
-    } catch (error) {}
+    } catch (error) { }
   }
   const fetchTopicAttemptDetail = async (id: string) => {
     try {
       const res = await CoursesAPI.getTopicAttemptsDetail(id)
       return res
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const handleScroll = () => {
@@ -111,12 +109,14 @@ const TableCaseStudyResultTeacher = () => {
     class_id?: string,
     course_section_id?: string,
   ) => {
-    router.replace(`/case-study/${topicId}?${buildQueryString({
+    router.replace(
+      `/case-study/${topicId}?${buildQueryString({
         quiz_id: quizId,
         class_user_id: class_user_id,
         class_id: class_id,
         course_section_id: course_section_id,
-      })}`)
+      })}`,
+    )
   }
   // Hàm ánh xạ giá trị enum với tên tương ứng
   const getTypeName = (type: QUESTION_TYPES): string => {
@@ -175,13 +175,12 @@ const TableCaseStudyResultTeacher = () => {
             {topicAttemptDetail?.quiz?.is_limited ? (
               topicAttemptDetail?.quiz?.limit_count > 1 ? (
                 topicAttemptDetail?.quiz?.limit_count >
-                topicAttemptDetail?.retake_times ? (
+                  topicAttemptDetail?.retake_times ? (
                   <ButtonPrimary
-                    title={`Retake ${topicAttemptDetail?.retake_times}${
-                      topicAttemptDetail?.quiz?.is_limited
+                    title={`Retake ${topicAttemptDetail?.retake_times}${topicAttemptDetail?.quiz?.is_limited
                         ? `/${topicAttemptDetail?.quiz?.limit_count}`
                         : '/Unlimited'
-                    }`}
+                      }`}
                     size="medium"
                     className={'shrink-0 !font-medium'}
                     onClick={() =>
@@ -197,11 +196,10 @@ const TableCaseStudyResultTeacher = () => {
                 ) : (
                   <ButtonSecondary
                     disabled={true}
-                    title={`Retake ${topicAttemptDetail?.retake_times}${
-                      topicAttemptDetail?.quiz?.is_limited
+                    title={`Retake ${topicAttemptDetail?.retake_times}${topicAttemptDetail?.quiz?.is_limited
                         ? `/${topicAttemptDetail?.quiz?.limit_count}`
                         : '/Unlimited'
-                    }`}
+                      }`}
                     size="medium"
                     className={'shrink-0 !font-medium'}
                   />
@@ -211,11 +209,10 @@ const TableCaseStudyResultTeacher = () => {
               )
             ) : (
               <ButtonPrimary
-                title={`Retake ${topicAttemptDetail?.retake_times}${
-                  topicAttemptDetail?.quiz?.is_limited
+                title={`Retake ${topicAttemptDetail?.retake_times}${topicAttemptDetail?.quiz?.is_limited
                     ? `/${topicAttemptDetail?.quiz?.limit_count}`
                     : '/Unlimited'
-                }`}
+                  }`}
                 size="medium"
                 onClick={() =>
                   handleRetake(
@@ -236,9 +233,9 @@ const TableCaseStudyResultTeacher = () => {
               headers={headers}
               loading={true}
               isCheckedAll={true}
-              onChange={() => {}}
+              onChange={() => { }}
               hasCheck={false}
-              // data={scoreDetail?.answers}
+            // data={scoreDetail?.answers}
             >
               <>
                 {scoreDetail?.answers?.map((e: any, index: number) => {
@@ -270,11 +267,10 @@ const TableCaseStudyResultTeacher = () => {
                       </td>
                       <td
                         className={`m-6 pr-1 text-start
-                      ${
-                        e?.is_correct || e?.active === 'SUBMITED'
-                          ? ' text-state-success'
-                          : ' text-state-error'
-                      }
+                      ${e?.is_correct || e?.active === 'SUBMITED'
+                            ? ' text-state-success'
+                            : ' text-state-error'
+                          }
                     `}
                       >
                         {e?.question?.qType !== 'ESSAY' ? (

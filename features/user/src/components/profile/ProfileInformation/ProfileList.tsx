@@ -1,14 +1,13 @@
 "use client"
 import { CollapseArrowIcon, Icon } from '@lms/assets'
-import { getMe, IUserAPI, IUserContact, makeContactDefault, useAppDispatch, useAppSelector, useFeature, userReducer } from '@lms/contexts'
+import { getMe, IUserContact, makeContactDefault, useFeature, userReducer } from '@lms/contexts'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { SappDrawerV2 } from '@lms/ui'
 import { Divider, Select, Switch } from 'antd'
 import clsx from 'clsx'
 import { useState } from 'react'
-import ProfileItem from './ProfileItem'
 import ProfileCard from '../ProfileCard'
-import { IAuthAPI } from '@lms/core'
+import ProfileItem from './ProfileItem'
 interface ProfileOptionItem {
   label: string
   value: string
@@ -22,11 +21,10 @@ interface ProfileOptionItem {
 interface IProps {
   isEdit: boolean
 }
-const ProfileList = ({ isEdit}: IProps) => {
-  const { user } = useAppSelector(userReducer)
-  const { userApi, authApi } = useFeature();
-  
-  const dispatch = useAppDispatch()
+const ProfileList = ({ isEdit }: IProps) => {
+  const { userContextApi, authApi, dispatch, useAppSelector } = useFeature();
+  const { user } = useAppSelector?.(userReducer) || {};
+
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [makeDefaultDrawer, setMakeDefaultDrawer] = useState<{
     status: boolean
@@ -43,14 +41,14 @@ const ProfileList = ({ isEdit}: IProps) => {
   const submitMakeDefault = async () => {
     try {
       if (makeDefaultDrawer?.id) {
-        await dispatch(makeContactDefault({ id: makeDefaultDrawer.id, api: authApi }))
+        await dispatch?.(makeContactDefault({ id: makeDefaultDrawer.id, api: authApi }))
           .unwrap()
-          .then(async (e) => {
+          .then(async () => {
             setMakeDefaultDrawer(undefined)
-            await dispatch(getMe(userApi))
+            await dispatch?.(getMe(userContextApi))
           })
       }
-    } catch (error) {}
+    } catch (error) { }
   }
   const handleSetDefault = (checked: boolean) => {
     if (checked) {

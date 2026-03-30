@@ -1,8 +1,19 @@
-@import 'src/components/marketing-in-app/_modal-marketing-in-app.scss';
+@import './_modal-marketing-in-app.scss';
 
 .word-document-preview {
   @apply select-none;
   .docx table {
     @apply p-0;
+  }
+}
+
+.storyline-overview {
+  .ant-modal-content {
+    .ant-modal-header {
+      .ant-modal-title {
+        @apply text-2xl font-bold text-gray-800;
+        font-size: 32px !important;
+      }
+    }
   }
 }
