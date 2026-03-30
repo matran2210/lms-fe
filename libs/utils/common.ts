@@ -19,8 +19,6 @@ import {
   serializeHighlights,
 } from "@funktechno/texthighlighter/lib";
 import { Correct } from "./answer";
-import { PageLink } from "../../apps/lms-pro/src/constants/routers";
-
 declare global {
   interface Window {
     gtag: (command: string, targetId: string, config?: any) => void;
@@ -593,19 +591,6 @@ export const handleMultipleCorrectAnswer = (
 
 export const handleCheckIsNotActivated = (errorCode?: string) => {
   return errorCode === "400|100016";
-};
-
-export const handleCheckRedirectPage = (
-  isPassFoundation: boolean,
-  isACCACourse: boolean,
-) => {
-  if (!isPassFoundation) {
-    return PageLink.COURSES;
-  }
-  if (isACCACourse) {
-    return;
-  }
-  return null;
 };
 
 export const extractNotActivatedData = (error: ApiError) => {

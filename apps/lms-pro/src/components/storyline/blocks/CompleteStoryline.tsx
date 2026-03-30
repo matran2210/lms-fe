@@ -39,7 +39,7 @@ export default function CompleteStoryline({ listStorylineData }: IProps) {
     }
   }
   const continueStudy = () => {
-    if (!nextActivity) {
+    if (!nextActivity?.id) {
       backToCourse()
       return
     }

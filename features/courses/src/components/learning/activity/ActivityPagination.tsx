@@ -6,10 +6,10 @@ import {
 } from '@lms/assets'
 import { ButtonText } from '@lms/ui'
 import { useCourseContext, useFeature } from '@lms/contexts'
-import { trackGAEvent, truncateString} from '@lms/utils'
+import { trackGAEvent, truncateString } from '@lms/utils'
 import clsx from 'clsx'
 import React, { useRef, useState } from 'react'
-import {SappIcon} from '@lms/ui'
+import { SappIcon } from '@lms/ui'
 import { Tooltip } from "@lms/ui";
 import { ANIMATION, INeighborActivity } from '@lms/core'
 import { IActivity } from '@lms/core'
@@ -19,7 +19,7 @@ interface IProps {
   focusOnly: boolean
 }
 const ActivityPagination = ({ activity, focusOnly }: IProps) => {
-  const {router, params, query} = useFeature()
+  const { router, params, query } = useFeature()
   const endActivityRef = useRef<HTMLDivElement>(null)
   const [open, setOpen] = useState<{
     open: boolean
@@ -61,7 +61,7 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
       })
     } else {
       // Nếu hoạt động không bị khóa, điều hướng đến hoạt động và ghi nhận sự kiện
-      router.push(`/courses/${params?.id || query.id}/activity/${activityId}`)
+      router.push(`/courses/${params?.id || query.id}/activity/${activityId}?course_section_id=${query?.course_section_id}`)
       trackGAEvent(eventLabel) // Ghi nhận sự kiện Google Analytics
     }
   }
@@ -110,7 +110,7 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
                   title={activity?.previous_activity?.course_section_type === "STORY_LINE" ? "Previous Storyline" : "Previous Activity"}
                   className="mb-3"
                   startIcon={<ArrowLeft />}
-                  onClick={() => 
+                  onClick={() =>
                     handleActivityNavigation(
                       activity?.previous_activity?.is_preview_locked || false,
                       activity?.previous_activity?.id || '',
@@ -195,11 +195,11 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
         </div>
       )}
       {
-        open.open && open.neighborActivity && <NextStorylineModal 
-        open={open.open} 
-        setOpen={(status: boolean) => setOpen({ open: status, neighborActivity: open.neighborActivity })} 
-        next_activity={open.neighborActivity} 
-        course_section_id={query?.course_section_id} />
+        open.open && open.neighborActivity && <NextStorylineModal
+          open={open.open}
+          setOpen={(status: boolean) => setOpen({ open: status, neighborActivity: open.neighborActivity })}
+          next_activity={open.neighborActivity}
+          course_section_id={query?.course_section_id} />
       }
     </div>
   )
