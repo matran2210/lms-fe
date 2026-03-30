@@ -2,7 +2,6 @@
 import { useFeature, UserType } from '@lms/contexts'
 import { IMyClass, ITabs, TeacherKey } from '@lms/core'
 import { LayoutFilter, LayoutTeacher, OldPaginationSAPP } from '@lms/ui'
-import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useQuery } from 'react-query'
@@ -27,8 +26,7 @@ const initialValues: FilterParams = {
 }
 
 const MyClassPage = () => {
-  const { router, pageLink, teacherApi } = useFeature()
-  const pathname = usePathname()
+  const { router, pageLink, teacherApi, pathname } = useFeature()
   const breadcrumbs: ITabs[] = [
     { link: pageLink.TEACHERS, title: 'LMS' },
     { link: pageLink.TEACHER_MY_CLASS, title: 'My Class' },

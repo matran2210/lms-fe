@@ -19,8 +19,7 @@ import {
   REQUEST_STATUS,
   REQUEST_TYPE,
 } from '@lms/core'
-import { useSelectClassCode } from '@lms/hooks'
-import useLesson from '@lms/hooks/useSelectLesson'
+import { useSelectClassCode, useLesson } from '@lms/hooks'
 import {
   HookFormDateRange,
   HookFormEventRepeat,

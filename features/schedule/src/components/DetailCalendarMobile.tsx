@@ -20,7 +20,7 @@ import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { IEvent } from "@sapp-fe/sapp-common-package";
 import CourseTree from "./CourseTree";
 import { buildQueryString } from "@lms/utils";
-import { useFeature } from "../../../../libs/state";
+import { useFeature } from "@lms/contexts";
 
 interface IProps {
   open: { isOpen: boolean; data: IEvent | null };

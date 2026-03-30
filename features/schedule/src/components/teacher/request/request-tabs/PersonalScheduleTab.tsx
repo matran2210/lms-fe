@@ -16,7 +16,6 @@ import {
 } from '@lms/ui'
 import { cleanParams } from '@lms/utils'
 import { TablePaginationConfig } from 'antd'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import FormRequest from '../request-forms/FormRequest'
@@ -24,7 +23,7 @@ import RequestDetail from '../request-forms/RequestDetail'
 import PersonalScheduleTable from '../request-tables/PersonalScheduleTable'
 
 const PersonalScheduleTab = () => {
-  const { requestApi } = useFeature()
+  const { requestApi, router, query } = useFeature()
   const [isFirstLoad, setIsFirstLoad] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [requests, setRequests] = useState<IRequest[]>([])
@@ -41,9 +40,6 @@ const PersonalScheduleTab = () => {
     isReFetch,
     setIsReFetch,
   } = useRequestContext()
-  const router = useRouter()
-  const searchParam = useSearchParams()
-  const query = Object.fromEntries(searchParam.entries())
 
   const { control, getValues, reset } = useForm<IRequestFilterForm>()
 

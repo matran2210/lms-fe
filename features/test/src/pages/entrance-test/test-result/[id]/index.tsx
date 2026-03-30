@@ -6,17 +6,11 @@ import { withAuthorization } from '@lms/hoc'
 import { Layout, PinnedNotificationWrapper, SappLoadingGlobal } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import QuizResult from '@sapp-fe/entrance-test-result-package'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 
 const TestEntranceResult = () => {
-  const { courseApi, pageLink, } = useFeature()
-
-  const router = useRouter()
-  const searchParam = useSearchParams()
-  const params = useParams()
+  const { courseApi, pageLink, router, query, params } = useFeature()
   const { id } = params
-  const query = Object.fromEntries(searchParam.entries())
   const { attempt } = query
   const [showPinnedNotification, setShowPinnedNotification] = useState(true)
   const [isFading, setIsFading] = useState(false)

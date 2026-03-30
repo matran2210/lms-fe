@@ -9,12 +9,13 @@
     "lint": "eslint . --ext .ts,.tsx",
     "type-check": "tsc --noEmit"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "antd": "^5.25.0"
+  },
   "dependencies": {
     "@lms/assets": "workspace:*",
     "@lms/utils": "workspace:*",
     "@lms/core": "workspace:*",
-    "@lms/ui": "workspace:*",
-    "antd": "^5.25.0"
+    "@lms/ui": "workspace:*"
   }
 }

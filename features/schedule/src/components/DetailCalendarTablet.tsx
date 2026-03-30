@@ -16,8 +16,8 @@ import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { IEvent } from "@sapp-fe/sapp-common-package";
 import CourseTree from "./CourseTree";
 import FloatingCloseIcon from "./FloatingCloseIcon";
-import { useTailwindBreakpoint } from "../../../../libs/hooks";
-import { useFeature } from "../../../../libs/state";
+import { useTailwindBreakpoint } from "@lms/hooks";
+import { useFeature } from "@lms/contexts";
 interface IProps {
   open: { isOpen: boolean; data: IEvent | null };
   setOpen: Dispatch<SetStateAction<{ isOpen: boolean; data: IEvent | null }>>;
@@ -380,7 +380,7 @@ const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
             </div>
           )}
         </div>
-        
+
         {/* Fixed Start button at bottom */}
         {(isOfflineOrLiveOnlineWithReview || isOnlineAndOpen) && (
           <div className="absolute -bottom-[2px] left-0 right-0  bg-white">

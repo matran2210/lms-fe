@@ -15,7 +15,6 @@ import {
 import { CollapseBox, CollapseItem } from '@lms/ui'
 import { capitalizeFirstLetter, formatDateTimeWithTimeZone, formatRecurringSchedule } from '@lms/utils'
 import dayjs from 'dayjs'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { confirmDialog, useFeature } from '@lms/contexts'
 import { REQUEST_TYPE } from '@lms/core'

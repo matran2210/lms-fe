@@ -1,4 +1,4 @@
-import { IUser, useRequestContext } from '@lms/contexts'
+import { IUser, useFeature, useRequestContext } from '@lms/contexts'
 import {
   DATE_TIME_FORMAT,
   E_REQUEST_STATUS,
@@ -18,7 +18,6 @@ import { Table, TablePaginationConfig } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 import RequestActionCell from '../RequestActionCell'
 
@@ -181,9 +180,8 @@ const PersonalScheduleTable = ({
       fixed: 'right',
     },
   ]
-
+  const { pathname } = useFeature()
   const { current, pageSize } = pagination
-  const pathname = usePathname()
   const { setIsOpenViewModal } = useRequestContext()
   const tableColumns = columnsTitles.map((item, index) => {
     return {

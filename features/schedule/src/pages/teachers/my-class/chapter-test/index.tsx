@@ -9,7 +9,6 @@ import {
 } from '@lms/core'
 import { useSappPaging } from '@lms/hooks'
 import { LayoutFilter, LayoutTeacher, NameNoActionCell, SappTable } from '@lms/ui'
-import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { withAuthorization } from '@lms/hoc'

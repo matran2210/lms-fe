@@ -12,7 +12,7 @@ import {
   FilterRequestScheduleParams,
   IScheduleRequestItem,
   StatusRequestScheduleParams,
-} from '@lms/core/types/teachers/request-schedule.interface'
+} from '@lms/core'
 import { useSappPaging } from '@lms/hooks'
 import {
   buildQueryString,

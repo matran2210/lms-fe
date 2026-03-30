@@ -21,4 +21,4 @@ export * from "./course/useSectionData";
 export { default as useSelectSubject } from "./useSelectSubject";
 export { default as useSelectClassSchedule } from "./useSelectClassSchedule";
 export { default as useSelectClassCode } from "./useSelectClassCode";
-export { default as useSelectLesson } from "./useSelectLesson";
+export { default as useLesson } from "./useSelectLesson";

@@ -8,15 +8,15 @@ import {
 } from '@lms/ui'
 import { getSelectOptions } from '@lms/utils'
 import { debounce } from 'lodash'
-import { useParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Control } from 'react-hook-form'
+import { useFeature } from '@lms/contexts'
 interface IProps {
   control: Control<any>
 }
 
 const ClassResourceTeacherFilter: React.FC<IProps> = ({ control }) => {
-  const params = useParams()
+  const { params } = useFeature()
   const { id } = params
   const [search, setSearch] = useState('')
   const [isOpen, setIsOpen] = useState(false)

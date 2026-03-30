@@ -7,7 +7,7 @@ import {
 import {
   IScheduleRequestItem,
   ScheduleRequestDetail,
-} from '@lms/core/types/teachers/request-schedule.interface'
+} from '@lms/core'
 import { ScheduleSkeleton, TooltipParagraph } from '@lms/ui'
 import {
   capitalizeFirstLetter,
