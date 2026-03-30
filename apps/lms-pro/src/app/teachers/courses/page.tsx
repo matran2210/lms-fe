@@ -13,7 +13,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useInfiniteQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 
 const DEFAULT_PAGESIZE = 9
 const breadcrumbs: ITabs[] = [
@@ -101,10 +101,9 @@ const MyCourseTeacher = () => {
   const handleSubmit = () => {
     // Redirect to the search results page with the query as a query parameter
     router.push(
-      `${PageLink.TEACHER_MY_COURSE}${
-        methods.watch('name')?.trim()?.length
-          ? `?name=${methods.watch('name')}`
-          : ''
+      `${PageLink.TEACHER_MY_COURSE}${methods.watch('name')?.trim()?.length
+        ? `?name=${methods.watch('name')}`
+        : ''
       }${queryString}`,
     )
   }
@@ -163,11 +162,10 @@ const MyCourseTeacher = () => {
           </div>
           <div
             // data-aos={ANIMATION.DATA_AOS}
-            className={`relative my-0 pt-6 ${
-              isEmpty(courses)
+            className={`relative my-0 pt-6 ${isEmpty(courses)
                 ? 'flex min-h-[calc(100vh-13rem)] items-center justify-center'
                 : ''
-            }`}
+              }`}
           >
             <CoursesList
               courses={courses}

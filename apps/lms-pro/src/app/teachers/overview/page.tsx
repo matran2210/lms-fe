@@ -1,5 +1,4 @@
 'use client'
-import Certificate from '@components/teacher/my-profile/Certificate'
 import ChangePassword from '@components/teacher/my-profile/ChangePassword'
 import DeviceList from '@components/teacher/my-profile/DeviceInformation/DeviceList'
 import LoginHistoryList from '@components/teacher/my-profile/LoginHistory/LoginHistoryList'
@@ -10,14 +9,15 @@ import Settings from '@components/teacher/my-profile/Settings'
 import { Icon } from '@lms/assets'
 import { RequestProvider, UserType } from '@lms/contexts'
 import { ITabs } from '@lms/core'
-import { LayoutTeacher, TabHeaderItem } from '@lms/ui'
+import { withAuthorization } from '@lms/hoc'
+import { LayoutTeacher, Slot, TabHeaderItem } from '@lms/ui'
 import { Tabs } from 'antd'
+import clsx from 'clsx'
 import { StaticImageData } from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { useRef, useState } from 'react'
+import { modules } from 'src/app/module-registry'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
-import clsx from 'clsx'
 
 const breadcrumbs: ITabs[] = [
   {
@@ -93,7 +93,7 @@ const MyProfilePage = () => {
           />
         )
       case 'certificates':
-        return <Certificate />
+        return <Slot name="CERTIFICATE_PROFILE_TAB" isPage={false} className='md:mt-8 lg:mt-10' isTeacherCert={true} />
       case 'setting':
         return <Settings />
       case 'sercurity':
@@ -122,7 +122,7 @@ const MyProfilePage = () => {
         <TabHeaderItem icon={<Icon type="my-profile" />} title="My profile" />
       ),
     },
-    {
+    ...(modules.find((m) => m.name === 'certificate') ? [{
       key: 'certificates',
       label: (
         <TabHeaderItem
@@ -130,8 +130,7 @@ const MyProfilePage = () => {
           title="Certificates"
         />
       ),
-    },
-
+    }] : []),
     {
       key: 'sercurity',
       label: (

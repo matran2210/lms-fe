@@ -15,7 +15,7 @@ import {
   SheetViewer,
   TextPreview,
 } from '@lms/ui'
-import { handleDocUploadFromBlob } from '@utils/helpers'
+import { handleDocUploadFromBlob } from '@lms/utils'
 import { Modal } from 'antd/es'
 import clsx from 'clsx'
 import CryptoJS from 'crypto-js'
@@ -96,7 +96,7 @@ const CardFileItem = ({ data, name }: IProps) => {
           setLoadingEditor(false)
         }
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const loadDocFile = async (url: string) => {

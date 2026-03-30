@@ -171,6 +171,7 @@ export type MenuItem = {
   id: string;
   depth: number;
   subItems?: MenuItem[];
+  showMenu?: boolean;
 };
 
 export type MenuOption = {
@@ -179,6 +180,7 @@ export type MenuOption = {
   url: string;
   type: string;
   subItems?: MenuOption[];
+  showMenu?: boolean;
 };
 
 export type GuideOffset = {
@@ -239,3 +241,4 @@ export * from "./file/index";
 export * from "./courses-3-level";
 export * from "./my-calendar";
 export * from "./my-request";
+export * from "./teachers/request-schedule.interface";

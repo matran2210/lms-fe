@@ -1,0 +1,13 @@
+import { AppModule } from "@lms/core";
+import { ExtensionRegistry } from "@lms/ui";
+import { ExaminationInfo } from "./src/components";
+import { examinationRoutes } from "./routes";
+import ExamList from "./src/pages/exam_list";
+
+ExtensionRegistry.register("EXAM_INFORMATION_MODAL", ExaminationInfo);
+ExtensionRegistry.register("EXAM_LIST_PAGE", ExamList);
+
+export const examinationModule: AppModule = {
+  name: "examination",
+  routes: examinationRoutes,
+};

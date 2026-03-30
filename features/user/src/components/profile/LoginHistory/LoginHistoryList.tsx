@@ -10,7 +10,7 @@ import ProfileCard from '../ProfileCard'
 import HistoryItem from './HistoryItem'
 
 const LoginHistoryList = () => {
-  const { userApi, dispatch, useAppSelector } = useFeature();
+  const { userContextApi, dispatch, useAppSelector } = useFeature();
 
   const { loginHistory, loadHistory } = useAppSelector?.(userReducer) || {};
   const [pageIndex, setPageIndex] = useState(1)
@@ -18,7 +18,7 @@ const LoginHistoryList = () => {
   useEffect(() => {
     dispatch?.(
       getLoginHistory({
-        api: userApi,
+        api: userContextApi,
         page_index: pageIndex,
         page_size: pageSize,
         type: 'login',
@@ -32,7 +32,7 @@ const LoginHistoryList = () => {
         setPageIndex((prev) => {
           dispatch?.(
             loadMoreLoginHistory({
-              api: userApi,
+              api: userContextApi,
               page_index: prev + 1,
               page_size: pageSize,
               type: undefined

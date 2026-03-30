@@ -5,8 +5,9 @@ import { trackGAEvent } from "@lms/utils";
 import { Divider } from "antd";
 import clsx from "clsx";
 import { Dispatch, SetStateAction } from "react";
-import { ExaminationInfo, LearningResource } from "../../components";
+import { LearningResource } from "../../components";
 import MenuItemsList from "../MenuItemsList";
+import { Slot } from "../../extensions";
 type SidebarProps = {
   isOpened: boolean;
   className: string;
@@ -64,11 +65,10 @@ export default function Sidebar({
         )}
       >
         <div
-          className={`max-h-[calc(100vh-145px)] relative rounded-xl pb-6 pt-[25px] ${
-            guideStatus && guideStep === 2
-              ? "z-50 bg-white"
+          className={`max-h-[calc(100vh-145px)] relative rounded-xl pb-6 pt-[25px] ${guideStatus && guideStep === 2
+            ? "z-50 bg-white"
             : "overflow-y-auto overflow-x-hidden no-scrollbar"
-          }`}
+            }`}
         >
           <div
             className="group-logos mx-auto px-5"
@@ -86,7 +86,7 @@ export default function Sidebar({
                   "lg:group-hover:left-0 lg:group-hover:translate-x-0",
                   // Active when guideStep is 2 or 3
                   (guideStep === 2 || guideStep === 3) &&
-                    "lg:!left-0 lg:!translate-x-0",
+                  "lg:!left-0 lg:!translate-x-0",
                 )}
               />
               <ExpandIcon type="logo-full" />
@@ -130,10 +130,9 @@ export default function Sidebar({
       <div
         onClick={toggleDrawer}
         className={clsx(
-          `sidebar-overlay ${
-            isOpened
-              ? "pointer-events-auto opacity-100 peer-hover:pointer-events-auto peer-hover:opacity-100 lg:pointer-events-none lg:opacity-0"
-              : "pointer-events-none opacity-0 peer-hover:pointer-events-auto peer-hover:opacity-100"
+          `sidebar-overlay ${isOpened
+            ? "pointer-events-auto opacity-100 peer-hover:pointer-events-auto peer-hover:opacity-100 lg:pointer-events-none lg:opacity-0"
+            : "pointer-events-none opacity-0 peer-hover:pointer-events-auto peer-hover:opacity-100"
           } fixed inset-0 z-20 cursor-pointer bg-[#00000080] transition-opacity`,
           {
             "!pointer-events-none !opacity-0":
@@ -149,7 +148,9 @@ export default function Sidebar({
         />
       )}
       <LearningResource open={openResource} setOpenResource={setOpenResource} />
-      <ExaminationInfo
+      <Slot
+        name="EXAM_INFORMATION_MODAL"
+        className="hidden"
         open={openExaminationInfo}
         setOpen={setOpenExaminationInfo}
       />

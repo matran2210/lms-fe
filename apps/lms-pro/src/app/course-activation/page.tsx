@@ -13,7 +13,7 @@ import { isEmpty } from 'lodash'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { CoursesActivationAPI } from 'src/api/course-activation'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 
 const CourseActivation = () => {
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
@@ -96,11 +96,10 @@ const CourseActivation = () => {
           </div>
         </div>
         <div
-          className={`relative mx-auto my-0 ${
-            isEmpty(data)
+          className={`relative mx-auto my-0 ${isEmpty(data)
               ? 'flex min-h-[calc(100vh-21rem)] items-center justify-center'
               : ''
-          }`}
+            }`}
         >
           <CourseActivationList
             courses={data}

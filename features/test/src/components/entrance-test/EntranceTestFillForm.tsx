@@ -18,7 +18,7 @@ const EntranceTestFillForm = ({
   setOpen,
   setOpenTestInfo,
 }: IProps) => {
-  const { entranceTestApi, userApi, dispatch, useAppSelector } = useFeature();
+  const { entranceTestApi, userContextApi, dispatch, useAppSelector } = useFeature();
   const [listUnivers, setListUnivers] = useState<any>();
   const [listUniverPrograms, setListUniverPrograms] = useState<any>();
   const [listMajors, setListMajors] = useState<any>();
@@ -146,7 +146,7 @@ const EntranceTestFillForm = ({
     }) as any
 
     if (res?.success) {
-      await dispatch?.(getMe(userApi)).unwrap();
+      await dispatch?.(getMe(userContextApi)).unwrap();
     }
 
     if (count > 1) {
