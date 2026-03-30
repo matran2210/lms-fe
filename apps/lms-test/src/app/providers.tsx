@@ -62,6 +62,7 @@ import {
 import { PageLink } from "src/constants/routers";
 import CourseActivityApi from "src/redux/services/Course/MyCourse/Activity";
 import UserContextApi from "src/redux/services/User/user";
+import { store } from "src/redux/store";
 import { AuthenticationManager } from "src/utils/helpers/keycloak";
 
 dayjs.extend(utc);
@@ -75,7 +76,7 @@ const showSupportWidget = [
 ];
 
 const activityPath = ["/courses/[id]/activity/[activityId]"];
-export function Providers({ children }: { children: ReactNode }) {
+function Providers({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams();
@@ -349,4 +350,12 @@ export function Providers({ children }: { children: ReactNode }) {
       {/* </Provider> */}
     </AntConfigProvider>
   );
+}
+
+export function ProvidersWrapper({ children }: { children: ReactNode }) {
+  return (
+    <Provider store={store}>
+      <Providers>{children}</Providers>
+    </Provider>
+  )
 }

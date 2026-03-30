@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import {
   CalculatorIcon,
   DownloadIcon,
@@ -174,7 +174,7 @@ const TestDetail = () => {
   const [currentMousePos, setCurrentMousePos] = useState(0);
   const [leftWidth, setLeftWidth] = useState(0);
   const [currentLeftWidth, setCurrentLeftWidth] = useState(0);
-  const { unsavedChange } = useAppSelector?.((state) => state.loginReducer);
+  const { unsavedChange } = useAppSelector?.((state) => state.loginReducer) || {};
   const rightSideRef = useRef<any>(null);
   const [mousePosition, setMousePosition] = useState<{
     x: number | null;

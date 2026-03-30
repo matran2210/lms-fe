@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import _, { round } from 'lodash'
+import { PageLink } from 'src/constants/routers'
 
 export function isMobile() {
   const toMatch = [
@@ -310,6 +311,7 @@ export const formatTimeOnlyHourMinute = (rawTime: string) => {
 export const getUserPrefix = (isTeacher: boolean) =>
   isTeacher ? PageLink.TEACHERS : ''
 
-export * from './editor-helper'
 export * from './class-resource/helper'
-export * from './quiz-test/helper'
+export * from './keycloak'
+export * from './storyline/engine'
+export * from './storyline/scrollManager'

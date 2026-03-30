@@ -25,8 +25,8 @@ import {
   PROGRAM,
   QUESTION_TYPES,
 } from '@lms/core'
-import { CalculatorModal, ConFirmSubmit, QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-courses'
-import { LimitQuizModal, withAuthorization } from '@lms/hoc'
+import { CalculatorModal, ConFirmSubmit, LimitQuizModal, QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-courses'
+import {  withAuthorization } from '@lms/hoc'
 import { useMousePosition, useSmartModalSize } from '@lms/hooks'
 import {
   AddWordPreview,
