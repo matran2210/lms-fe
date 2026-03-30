@@ -1,10 +1,10 @@
-import CalendarPage from "./src/pages";
-import { SCHEDULE_ROUTES } from "./src/constants/routes";
-import MyClassPage from "./src/pages/teachers/my-class";
-import MyRequestPage from "./src/pages/teachers/my-request";
-import MyCalendarPage from "./src/pages/teachers/my-calendar";
-import ClassDetailPage from "./src/pages/teachers/my-class/[id]";
-import ChapterTestPage from "./src/pages/teachers/my-class/chapter-test";
+import CalendarPage from "./pages";
+import { SCHEDULE_ROUTES } from "./constants/routes";
+import MyClassPage from "./pages/teachers/my-class";
+import MyRequestPage from "./pages/teachers/my-request";
+import MyCalendarPage from "./pages/teachers/my-calendar";
+import ClassDetailPage from "./pages/teachers/my-class/[id]";
+import ChapterTestPage from "./pages/teachers/my-class/chapter-test";
 
 export const scheduleRoutes = [
   {

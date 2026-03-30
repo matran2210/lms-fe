@@ -16,7 +16,6 @@ import {
   NOTIFICATION_STATUS,
 } from '@lms/core'
 import {
-  Certificate,
   ChangePassword,
   DeviceList,
   LoginHistoryList,
@@ -33,6 +32,7 @@ import {
   FullScreenMobile,
   HeaderMobile,
   SearchWithMenuToggle,
+  Slot,
   TabHeaderItem,
 } from '@lms/ui'
 import {
@@ -43,15 +43,15 @@ import {
 import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { Collapse, CollapseProps, Divider, Tabs } from 'antd'
 import clsx from 'clsx'
-import { useRouter } from 'next/navigation'
 import { StaticImageData } from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { PageLink } from 'src/constants/routes'
 
-import withAuthorization from 'src/HOC/withAuthorization'
-import UserApi from 'src/redux/services/User/user'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import Layout from '@components/layout'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import UserApi from 'src/redux/services/User/user'
 
 interface IFullScreenMobile {
   open: boolean
@@ -174,7 +174,13 @@ const ProfilePage = () => {
           </>
         )
       case 'certificates':
-        return <Certificate />
+        return (
+          <Slot
+            name="CERTIFICATE_PROFILE_TAB"
+            isPage={false}
+            className="md:mt-8 lg:mt-10"
+          />
+        )
       case 'setting':
         return <Settings />
       case 'security':
@@ -315,7 +321,7 @@ const ProfilePage = () => {
           title="Certificates"
         />
       ),
-      children: <Certificate />,
+      children: <Slot name="CERTIFICATE_PROFILE_TAB" isPage={false} />,
     },
     {
       key: 'setting',

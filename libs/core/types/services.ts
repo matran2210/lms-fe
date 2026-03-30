@@ -267,15 +267,15 @@ export interface IClassAPI {
     id: string,
     params: { page_index: number; page_size: number },
   ) => Promise<ExaminationsResponse>;
-  previewClassFile: (
+  previewClassFile?: (
     class_id: string,
     resource_id: string,
   ) => Promise<IClassResourcePreview>;
-  getClassResource: (
+  getClassResource?: (
     class_id: string,
     params: IListClassResourceParams,
   ) => Promise<IResponse<IClassResourceList>>;
-  getClassSchedule: (
+  getClassSchedule?: (
     id: string,
     page_index: number,
     page_size: number,
