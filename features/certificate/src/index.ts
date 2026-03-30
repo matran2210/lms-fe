@@ -1,7 +1,7 @@
 import { AppModule } from "@lms/core";
 import { ExtensionRegistry } from "@lms/ui";
-import CertificateDetail from "./src/pages/detail";
-import { Certificate } from "./src/components";
+import CertificateDetail from "./pages/detail";
+import { Certificate } from "./components";
 import { certificateRoutes } from "./routes";
 
 ExtensionRegistry.register("CERTIFICATE_DETAIL_PAGE", CertificateDetail);
