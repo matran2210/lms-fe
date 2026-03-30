@@ -55,7 +55,7 @@ export default function ClassResourceTeacher() {
 
   const handleOpenPreview = async (resource: IClassResource) => {
     try {
-      const res = await classApi.previewClassFile(
+      const res = await classApi.previewClassFile?.(
         param.id as string,
         resource.id,
       )
@@ -88,7 +88,7 @@ export default function ClassResourceTeacher() {
     useSappPaging({
       uniqueKey: ClassKey.ClassResource,
       queryFn: () =>
-        classApi.getClassResource(id as string, {
+        classApi.getClassResource!(id as string, {
           ...params,
           page_index: pagination.current as number,
           page_size: pagination.pageSize as number,

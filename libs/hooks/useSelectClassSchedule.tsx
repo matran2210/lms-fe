@@ -16,7 +16,7 @@ const useSelectClassSchedule = (
     page_size: number,
     id?: string,
   ) => {
-    const res = await classApi.getClassSchedule(
+    const res = await classApi.getClassSchedule?.(
       id as string,
       page_index,
       page_size,
