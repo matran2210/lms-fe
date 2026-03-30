@@ -1,12 +1,12 @@
 import { AppModule } from "@lms/core";
 import { scheduleRoutes } from "./routes";
 import { ExtensionRegistry } from "@lms/ui";
-import CalendarPage from "./src/pages";
-import MyClassPage from "./src/pages/teachers/my-class";
-import MyRequestPage from "./src/pages/teachers/my-request";
-import MyCalendarPage from "./src/pages/teachers/my-calendar";
-import ClassDetailPage from "./src/pages/teachers/my-class/[id]";
-import ChapterTestPage from "./src/pages/teachers/my-class/chapter-test";
+import CalendarPage from "./pages";
+import MyClassPage from "./pages/teachers/my-class";
+import MyRequestPage from "./pages/teachers/my-request";
+import MyCalendarPage from "./pages/teachers/my-calendar";
+import ClassDetailPage from "./pages/teachers/my-class/[id]";
+import ChapterTestPage from "./pages/teachers/my-class/chapter-test";
 
 ExtensionRegistry.register("CALENDAR_PAGE", CalendarPage);
 ExtensionRegistry.register("TEACHER_MY_CLASS_PAGE", MyClassPage);

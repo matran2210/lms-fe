@@ -1,5 +1,5 @@
-import { CERTIFICATE_ROUTES } from "./src/constants/routes";
-import CertificateDetail from "./src/pages/detail";
+import { CERTIFICATE_ROUTES } from "./constants/routes";
+import CertificateDetail from "./pages/detail";
 
 export const certificateRoutes = [
   {
