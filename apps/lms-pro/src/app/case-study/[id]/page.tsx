@@ -2,6 +2,7 @@
 'use client'
 import {
   CalculatorIcon,
+  CloseIconNote,
   DownloadIcon,
   FileTextIcon,
   ResizeIcon,
@@ -57,18 +58,26 @@ import {
   SelectWord,
   SlotValue,
 } from '@lms/ui'
-import { runHighlight } from '@lms/utils'
+import {
+  extractNotActivatedData,
+  runHighlight,
+} from '@lms/utils'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { TestServiceAPI } from 'src/api/test-api'
 import LimitQuizModal from 'src/app/test/limitQuizModal'
+import ScratchPatch from 'src/app/test/scratchPatch'
+import {
+  selectPopupActivateCourse,
+  showPopupActivatedCourse,
+} from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
@@ -326,7 +335,7 @@ const CaseStudyDetail = () => {
     question: undefined,
     index: 0,
   })
-
+  const selector = useAppSelector?.(selectPopupActivateCourse)
   const onOpenResetToTemplateModal = ({
     question,
     index,
@@ -486,7 +495,12 @@ const CaseStudyDetail = () => {
       } else {
         setQuizAttempId(res.data.id)
       }
-    } catch (err) {}
+    } catch (err: any) {
+      const data = extractNotActivatedData(err)
+      if (data) {
+        dispatch?.(showPopupActivatedCourse(data))
+      }
+    }
   }
   useEffect(() => {
     if (quizId && id && classUserId) {
@@ -1054,7 +1068,7 @@ const CaseStudyDetail = () => {
   const { isDesktopView } = useTailwindBreakpoint()
 
   return (
-    <SappLoadingGlobal loading={loading}>
+    <SappLoadingGlobal loading={loading || selector?.openActive}>
       <CaseStudyWrapper
         title={`${topics?.case_study_name} - ${topics?.name}`}
         setOpenSubmit={setOpenSubmit}
@@ -1342,32 +1356,34 @@ const CaseStudyDetail = () => {
                     position="center"
                     width={412}
                     height={350}
-                  >
-                    {({ requestClose }) => (
-                      <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl">
-                        <div className="flex w-full items-center justify-between bg-gray-100 px-4 py-3">
-                          <div className="text-sm font-bold">Scratch Pad</div>
-                          {/* <CloseIcon */}
-                          <button
-                            onClick={() => {
-                              requestClose()
-                              setTimeout(() => handleCloseScratchPad(e), 300)
-                            }}
-                          >
-                            <CloseModalIcon />
-                          </button>
+                    header={({ requestClose }) => (
+                      <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
+                        <div className="text-sm font-semibold text-gray-800">
+                          Scratch Pad
                         </div>
-                        <HookFormTextArea
-                          defaultValue={scratchPadValues?.value}
-                          placeholder="Take a note..."
-                          control={controlScratch}
-                          name={e?.id}
-                          onChange={(event) => handleChangeScratchPad(event)}
-                          className="sapp-text-area not-resizer h-full w-full rounded-b-xl rounded-t-none px-5 py-3 placeholder:text-sm placeholder:font-normal"
-                        />
-                        {/* </div> */}
+                        <button
+                          className="text-icon"
+                          onClick={() => {
+                            requestClose()
+                            setTimeout(() => handleCloseScratchPad(e), 300)
+                          }}
+                        >
+                          <CloseIconNote />
+                        </button>
                       </div>
                     )}
+                  >
+                    <ScratchPatch
+                      scratchPads={scratchPadValues?.value}
+                      scratchPadValues={e}
+                      control={controlScratch}
+                      handleChangeScratchPad={(
+                        event: ChangeEvent<HTMLInputElement>,
+                      ) => {
+                        handleChangeScratchPad(event)
+                      }}
+                      className="!h-fit"
+                    />
                   </ModalResizeable>
                 )
               } else if (e.type === 'exhibits') {
