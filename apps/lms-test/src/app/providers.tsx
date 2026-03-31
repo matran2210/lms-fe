@@ -285,68 +285,69 @@ function Providers({ children }: { children: ReactNode }) {
   return (
     <AntConfigProvider>
       {/* <Provider store={store}> */}
-        <FeatureProvider
-          value={{
-            userApi: UserApi,
-            courseApi: CoursesAPI,
-            questionApi: QuestionAPI,
-            uploadApi: UploadAPI,
-            userContextApi: UserContextApi,
-            notificationApi: NotificationAPI,
-            authApi: AuthAPI,
-            classApi: ClassAPI,
-            activityApi: ActivityAPI,
-            courseActivityApi: CourseActivityApi,
-            myProfileApi: MyProfileAPI,
-            submitQuizTest: TestServiceAPI.submitQuizTest,
-            authManager: new AuthenticationManager(),
-            pageLink: PageLink,
-            menuItems: MENU_ITEMS,
-            menuItemsEvent: MENU_ITEMS_EVENT,
-            menuBottom: MENU_BOTTOM,
-            router: router,
-            fetcher: fetcher,
-            videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
-            testServiceApi: TestServiceAPI,
-            certificateApi: {
-              uploadImageToLinkedIn,
-            },
-            pathname: pathname,
-            params,
-            query: Object.fromEntries(query.entries()),
-            uploadImageToLinkedIn: uploadImageToLinkedIn,
-          }}
-        >
-          <CourseNoteProvider router={router} api={CoursesAPI}>
-            <QueryClientProvider client={queryClient}>
-              <SocketContext.Provider value={socket}>
-                <PreviousSectionRouteProvider pathname={pathname}>
-                  <Toaster
-                    toastOptions={{
-                      style: {
-                        maxWidth: "400px", // Tăng chiều rộng của toast
-                      },
-                    }}
-                  />
-                  <SappConfirmDialogContainer />
-                  <RouteGuard>
-                    <ConfigProvider>
-                      <PinnedNotifications />
-                      <AntdApp>{children}</AntdApp>
-                      <>
-                        {showBackToTop && <BackToTop />}
-                        {showHelp && <div id="floating-btn-divider" />}
-                        <Help showHelp={showHelp} />
-                        <LearningNotesList appType={AppType.LMS_PRO} />
-                        <PopupCompletedCourse />
-                      </>
-                    </ConfigProvider>
-                  </RouteGuard>
-                </PreviousSectionRouteProvider>
-              </SocketContext.Provider>
-            </QueryClientProvider>
-          </CourseNoteProvider>
-        </FeatureProvider>
+      <FeatureProvider
+        value={{
+          userApi: UserApi,
+          courseApi: CoursesAPI,
+          questionApi: QuestionAPI,
+          uploadApi: UploadAPI,
+          userContextApi: UserContextApi,
+          notificationApi: NotificationAPI,
+          authApi: AuthAPI,
+          classApi: ClassAPI,
+          activityApi: ActivityAPI,
+          courseActivityApi: CourseActivityApi,
+          myProfileApi: MyProfileAPI,
+          submitQuizTest: TestServiceAPI.submitQuizTest,
+          authManager: new AuthenticationManager(),
+          pageLink: PageLink,
+          menuItems: MENU_ITEMS,
+          menuItemsEvent: MENU_ITEMS_EVENT,
+          menuBottom: MENU_BOTTOM,
+          router: router,
+          fetcher: fetcher,
+          videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
+          testServiceApi: TestServiceAPI,
+          certificateApi: {
+            uploadImageToLinkedIn,
+          },
+          pathname: pathname,
+          params,
+          query: Object.fromEntries(query.entries()),
+          uploadImageToLinkedIn: uploadImageToLinkedIn,
+          domainTest: process.env.NEXT_PUBLIC_SUB_DOMAIN_TEST as string,
+        }}
+      >
+        <CourseNoteProvider router={router} api={CoursesAPI}>
+          <QueryClientProvider client={queryClient}>
+            <SocketContext.Provider value={socket}>
+              <PreviousSectionRouteProvider pathname={pathname}>
+                <Toaster
+                  toastOptions={{
+                    style: {
+                      maxWidth: "400px", // Tăng chiều rộng của toast
+                    },
+                  }}
+                />
+                <SappConfirmDialogContainer />
+                <RouteGuard>
+                  <ConfigProvider>
+                    <PinnedNotifications />
+                    <AntdApp>{children}</AntdApp>
+                    <>
+                      {showBackToTop && <BackToTop />}
+                      {showHelp && <div id="floating-btn-divider" />}
+                      <Help showHelp={showHelp} />
+                      <LearningNotesList appType={AppType.LMS_PRO} />
+                      <PopupCompletedCourse />
+                    </>
+                  </ConfigProvider>
+                </RouteGuard>
+              </PreviousSectionRouteProvider>
+            </SocketContext.Provider>
+          </QueryClientProvider>
+        </CourseNoteProvider>
+      </FeatureProvider>
       {/* </Provider> */}
     </AntConfigProvider>
   );
@@ -357,5 +358,5 @@ export function ProvidersWrapper({ children }: { children: ReactNode }) {
     <Provider store={store}>
       <Providers>{children}</Providers>
     </Provider>
-  )
+  );
 }

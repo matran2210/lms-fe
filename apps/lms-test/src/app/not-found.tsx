@@ -13,12 +13,12 @@ const ErrorPage = () => {
 
   const getRedirectPath = () => {
     if (userSlice?.user.type === "STUDENT") {
-      return PageLink.COURSES;
+      return `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.COURSES}`;
     }
     if (userSlice?.user.type === "TEACHER") {
-      return PageLink.TEACHERS;
+      return `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.TEACHERS}`;
     }
-    return "/";
+    return `${process.env.NEXT_PUBLIC_WEB_LMS_URL}`;
   };
 
   return (
