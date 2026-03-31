@@ -319,12 +319,12 @@ const TestModal = ({
     }
   }, [selectedResult?.value, data?.quiz?.attempt]);
 
+  const quizAttempt = JSON.parse(localStorage.getItem("quizAttempt") || "{}");
   const handleStartANewAttempt = async () => {
     const SUB_DOMAIN_TEST = process.env.NEXT_PUBLIC_SUB_DOMAIN_TEST;
     //to do: start test
     try {
       activeCourse && (await activeCourse());
-      const quizAttempt = JSON.parse(localStorage.getItem("quizAttempt") || "{}");
       if (!quizAttempt || !quizAttempt?.id) {
          router.push(`${SUB_DOMAIN_TEST}/test/${data.quiz.id}?class_user_id=${class_user_id}&class_id=${params?.courseId}`);
           return;

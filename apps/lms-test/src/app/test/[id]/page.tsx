@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {
   CalculatorIcon,
   DownloadIcon,
@@ -9,7 +9,7 @@ import {
   PulsingExclamation,
   ResizeIcon,
   ShowLessIcon,
-  ShowMoreIcon
+  ShowMoreIcon,
 } from "@lms/assets";
 import {
   CourseProvider,
@@ -26,7 +26,7 @@ import {
   IExhibit,
   PROGRAM,
   QUESTION_TYPES,
-  RESPONSE_OPTION
+  RESPONSE_OPTION,
 } from "@lms/core";
 import {
   checkAnsweredPure,
@@ -81,7 +81,7 @@ import {
   SuccessSubmittedConstructorModal,
   TabSlide,
   TestTimeOutModal,
-  UnSubmitAnswerModal
+  UnSubmitAnswerModal,
 } from "@lms/feature-courses";
 import { HighlightableHTML, ModalUploadFile, TestWrapper } from "@lms/ui";
 import {
@@ -115,7 +115,11 @@ interface Tab {
 const warningText = "Are you sure you want to leave this page?";
 
 const TestDetail = () => {
-  const { eventTestApi: EventTestAPI, testServiceApi: TestServiceAPI, useAppSelector } = useFeature();
+  const {
+    eventTestApi: EventTestAPI,
+    testServiceApi: TestServiceAPI,
+    useAppSelector,
+  } = useFeature();
   const [, setHasScrollBar] = useState(undefined) as any;
   const [editorReady, setEditorReady] = useState(true);
   const [tooltipOpen, setTooltipOpen] = useState(false);
@@ -131,6 +135,15 @@ const TestDetail = () => {
   const { questions } = useGetQuestionTabs(id as string);
   const type = query.type;
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id);
+  const [isQuizAttemptIdReady, setisQuizAttemptIdReady] = useState(false);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams) {
+      setisQuizAttemptIdReady(true);
+    }
+  }, [searchParams]);
+
   const [currentDragDrop, setCurrentDragDrop] = useState<
     {
       currentTabId: string;
@@ -149,7 +162,7 @@ const TestDetail = () => {
   const ref = useRef(null) as any;
   const refEditor = useRef(null) as any;
   const currentTabIdRef = useRef(null);
-  const {dispatch} = useFeature();
+  const { dispatch } = useFeature();
   const [essayData, setEssayData] = useState<any>();
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([]);
   const [onFocusingPad, setOnFocusingPad] = useState("");
@@ -174,7 +187,8 @@ const TestDetail = () => {
   const [currentMousePos, setCurrentMousePos] = useState(0);
   const [leftWidth, setLeftWidth] = useState(0);
   const [currentLeftWidth, setCurrentLeftWidth] = useState(0);
-  const { unsavedChange } = useAppSelector?.((state) => state.loginReducer) || {};
+  const { unsavedChange } =
+    useAppSelector?.((state) => state.loginReducer) || {};
   const rightSideRef = useRef<any>(null);
   const [mousePosition, setMousePosition] = useState<{
     x: number | null;
@@ -210,13 +224,10 @@ const TestDetail = () => {
   const [openResetToTemplateModal, setOpenResetToTemplateModal] =
     useState(false);
 
-  const searchParams = useSearchParams();
   const [quizAttempt, setQuizAttempt] = useState<any>(null);
   const quizAttemptId = searchParams.get("quizAttemptId");
 
-  const {
-    data: quizAttemptData,
-  } = useQuery({
+  const { data: quizAttemptData } = useQuery({
     queryKey: ["quizAttempt", quizAttemptId],
     queryFn: () => CoursesAPI.getQuizAttempts(quizAttemptId as string),
     enabled: Boolean(quizAttemptId),
@@ -516,12 +527,12 @@ const TestDetail = () => {
                               : requirementData?.answer_file,
                           short_answer:
                             req?.short_answer !== undefined &&
-                              req?.short_answer !== null
+                            req?.short_answer !== null
                               ? req?.short_answer
                               : requirementData?.short_answer,
                           answer_text:
                             req?.answer_text !== undefined &&
-                              req?.answer_text !== null
+                            req?.answer_text !== null
                               ? req?.answer_text
                               : requirementData?.short_answer,
                         };
@@ -541,7 +552,7 @@ const TestDetail = () => {
                 // done: true,
                 answer:
                   updatedObjTab?.answer !== undefined &&
-                    updatedObjTab?.answer !== null
+                  updatedObjTab?.answer !== null
                     ? updatedObjTab?.answer
                     : answerSubmitted?.short_answer,
 
@@ -650,8 +661,8 @@ const TestDetail = () => {
               savedData =
                 answersSubmitted.answer && answersSubmitted?.answer.length > 0
                   ? answersSubmitted.answer.find(
-                    (item: AnswerItem) => item.question_id === objTab.id,
-                  )
+                      (item: AnswerItem) => item.question_id === objTab.id,
+                    )
                   : undefined;
 
               currentAnswer = answer;
@@ -660,9 +671,9 @@ const TestDetail = () => {
               savedData =
                 answersSubmitted.answer && answersSubmitted?.answer.length > 0
                   ? answersSubmitted.answer.find(
-                    (item: AnswerItem) =>
-                      item.question_id === answer.question_id,
-                  )
+                      (item: AnswerItem) =>
+                        item.question_id === answer.question_id,
+                    )
                   : undefined;
 
               currentAnswer = answer.answer_id ?? savedData?.answer_id;
@@ -766,9 +777,9 @@ const TestDetail = () => {
               corrects: {
                 answers: handleMultipleCorrectAnswer(
                   objTab?.data?.drag_drop_answers ||
-                  currentDragDrop?.find(
-                    (item) => item?.currentTabId === objTab?.id,
-                  )?.drag_drop_answers,
+                    currentDragDrop?.find(
+                      (item) => item?.currentTabId === objTab?.id,
+                    )?.drag_drop_answers,
                   objTab?.answer,
                 ),
                 corrects: objTab?.corrects?.corrects,
@@ -784,11 +795,11 @@ const TestDetail = () => {
 
   const remainingTimeinSeconds = quizDetail?.quiz_timed
     ? (dayjs(
-      dayjs(new Date(quizAttempt?.created_at ?? "")).add(
-        quizDetail?.quiz_timed,
-        "minutes",
-      ),
-    ).diff(dayjs(), "seconds") ?? 0)
+        dayjs(new Date(quizAttempt?.created_at ?? "")).add(
+          quizDetail?.quiz_timed,
+          "minutes",
+        ),
+      ).diff(dayjs(), "seconds") ?? 0)
     : null;
 
   useEffect(() => {
@@ -1367,7 +1378,7 @@ const TestDetail = () => {
     };
 
     // Disable unsaved changes tracking
-     dispatch?.(disableUnsavedChange());
+    dispatch?.(disableUnsavedChange());
 
     try {
       const res = await TestServiceAPI.submitAnswer(
@@ -1405,7 +1416,7 @@ const TestDetail = () => {
           tab.id === question_id ? { ...tab, flag: !tab.flag } : tab,
         ),
       );
-    } catch (error) { }
+    } catch (error) {}
   };
   // Helper function to format answer based on question type
   const formatAnswerItem = (question: any) => {
@@ -1453,7 +1464,7 @@ const TestDetail = () => {
           answers: e.data?.answers,
         });
       }
-       dispatch?.(disableUnsavedChange());
+      dispatch?.(disableUnsavedChange());
 
       const res = await TestServiceAPI.submitAllQuestion(
         quizAttempt?.id as string,
@@ -1479,7 +1490,7 @@ const TestDetail = () => {
         if (typeSubmit === "submit") {
           if (!!isCompletedCourse?.is_completed) {
             setTimeout(() => {
-               dispatch?.(
+              dispatch?.(
                 showPopupCompletedCourse(isCompletedCourse?.content || ""),
               );
             }, 2000);
@@ -1515,10 +1526,8 @@ const TestDetail = () => {
                 courseType === "FOUNDATION_COURSE" &&
                 quizDetail?.quiz_type == "FINAL_TEST"
               ) {
-                router.push(
-                  `${WEB_LMS_URL}/courses/my-course/${class_id}`,
-                );
-                return
+                router.push(`${WEB_LMS_URL}/courses/my-course/${class_id}`);
+                return;
               } else {
                 router.push(
                   `${WEB_LMS_URL}/courses/test/test-result/${res?.data?.id}`,
@@ -1529,7 +1538,7 @@ const TestDetail = () => {
         } else {
           if (!!isCompletedCourse?.is_completed) {
             setTimeout(() => {
-               dispatch?.(
+              dispatch?.(
                 showPopupCompletedCourse(isCompletedCourse?.content || ""),
               );
             }, 2000);
@@ -1765,7 +1774,7 @@ const TestDetail = () => {
   }, [watchFilter("filter")]);
 
   useEffect(() => {
-     dispatch?.(loginSlice.actions.enableUnsavedChange());
+    dispatch?.(loginSlice.actions.enableUnsavedChange());
   }, [dispatch]);
 
   useEffect(() => {
@@ -1792,23 +1801,33 @@ const TestDetail = () => {
   }, [watchExhibits("exhibits")]);
 
   useEffect(() => {
-    if (quizAttemptId || !id) return;
+    if (!isQuizAttemptIdReady || !id) return;
 
-    const createQuizAttempt = async () => {
+    const handleQuizAttempt = async () => {
       try {
-        const res = await TestServiceAPI.createQuizAttempt(
-          id as string,
-          query.class_user_id as string,
-        );
-        setQuizAttempt(res.data);
-        setCourseType(res?.data?.course?.course_type || null);
-      } catch (err) {}
+        if (quizAttemptId) {
+          const res = await CoursesAPI.getQuizAttempts(quizAttemptId);
+          setQuizAttempt(res.data?.quizAttempt);
+          setCourseType(res?.data?.course?.course_type || null);
+          return;
+        }
+        if (isQuizAttemptCreated && !quizAttemptId) {
+          const res = await TestServiceAPI.createQuizAttempt(
+            id as string,
+            query.class_user_id as string,
+          );
+          setQuizAttempt(res.data);
+          setCourseType(res?.data?.course?.course_type || null);
+        }
+      } catch (err) {
+        // console.error("QuizAttempt error:", err);
+      }
     };
 
-    createQuizAttempt();
-  }, [quizAttemptId, id]);
+    handleQuizAttempt();
+  }, [quizAttemptId, id, isQuizAttemptIdReady]);
 
-   const class_id = query.class_id;
+  const class_id = query.class_id;
 
   useEffect(() => {
     if (quizAttempt?.id) {
@@ -1847,8 +1866,8 @@ const TestDetail = () => {
       //         setRouteBack(true);
       //         setIsQuizAttemptCreated(true); // Mark the attempt as created even on error
       //         switch (
-    //           quizDetail?.quiz_type ||
-    //           quizDetail?.quiz_type === undefined
+      //           quizDetail?.quiz_type ||
+      //           quizDetail?.quiz_type === undefined
       //         ) {
       //           case TEST_TYPE.MID_TERM_TEST:
       //           case TEST_TYPE.FINAL_TEST:
@@ -2017,7 +2036,7 @@ const TestDetail = () => {
                 } else {
                   setOpenSubmit(true);
                 }
-                 dispatch?.(disableUnsavedChange());
+                dispatch?.(disableUnsavedChange());
               }
             } else {
               const data = await getResult(currentTabContent);
@@ -2040,7 +2059,7 @@ const TestDetail = () => {
               } else {
                 setOpenSubmit(true);
               }
-               dispatch?.(disableUnsavedChange());
+              dispatch?.(disableUnsavedChange());
             }
           }
 
@@ -2204,229 +2223,361 @@ const TestDetail = () => {
         <SappLoading
           className={loading || !currentTabContent?.id ? "block" : "hidden"}
         />
-        <TestWrapper
-          quizDetail={quizDetail}
-          quizAttempt={quizAttempt}
-          setOpenSubmit={setOpenSubmit}
-          timeRef={timeRef}
-          setUnSubmitAnswer={setUnSubmitAnswer}
-          checkUnSubmitAnswer={checkUnSubmitAnswer}
-          setOpenQuit={setOpenQuit}
-          setSubmitEventTest={setSubmitEventTest}
-          type={type}
-          onSubmitAnswer={async (mode) => {
-            const savedAnswer = await handleSaveCurrentAnswer(
-              tabs,
-              currentTabContent,
-            );
-            setTabs(savedAnswer);
-            setTimeout(() => {
-              handleSubmitAnswer(mode);
-            }, 100);
-          }}
-          handleTimeoutSubmit={async () => {
-            if (!openLimit) {
-              await resetWordBeforeAction();
-              if (!submited && !quizAttempt?.is_submitted) {
-                const remainingTimeinSeconds = quizDetail?.quiz?.quiz_timed
-                  ? dayjs(
-                    dayjs(new Date(quizAttempt?.created_at ?? "")).add(
-                      quizDetail?.quiz?.quiz_timed,
-                      "minutes",
-                    ),
-                  ).diff(dayjs(), "seconds")
-                  : null;
+        {isQuizAttemptIdReady && quizAttempt && (
+          <TestWrapper
+            quizDetail={quizDetail}
+            quizAttempt={quizAttempt}
+            setOpenSubmit={setOpenSubmit}
+            timeRef={timeRef}
+            setUnSubmitAnswer={setUnSubmitAnswer}
+            checkUnSubmitAnswer={checkUnSubmitAnswer}
+            setOpenQuit={setOpenQuit}
+            setSubmitEventTest={setSubmitEventTest}
+            type={type}
+            onSubmitAnswer={async (mode) => {
+              const savedAnswer = await handleSaveCurrentAnswer(
+                tabs,
+                currentTabContent,
+              );
+              setTabs(savedAnswer);
+              setTimeout(() => {
+                handleSubmitAnswer(mode);
+              }, 100);
+            }}
+            handleTimeoutSubmit={async () => {
+              if (!openLimit) {
+                await resetWordBeforeAction();
+                if (!submited && !quizAttempt?.is_submitted) {
+                  const remainingTimeinSeconds = quizDetail?.quiz?.quiz_timed
+                    ? dayjs(
+                        dayjs(new Date(quizAttempt?.created_at ?? "")).add(
+                          quizDetail?.quiz?.quiz_timed,
+                          "minutes",
+                        ),
+                      ).diff(dayjs(), "seconds")
+                    : null;
 
-                // No call when time out > 60s
-                if ((remainingTimeinSeconds ?? 0) > -60) {
-                  if (listSubmitError.length > 0) {
-                    for (const el of listSubmitError) {
-                      await handleSubmitAnswerError(el);
-                    }
-                  }
-                  await handleSubmitAnswer("timeout");
-                }
-                handleSubmitQuestions("timeout");
-                 dispatch?.(disableUnsavedChange())
-                  .unwrap()
-                  .then(() => {
-                    trackGAEvent("Click Button Submit Time Out Test");
-                  });
-              } else {
-                setOpenTimeOut(true);
-                setQuizResultId(quizAttempt?.id);
-              }
-            }
-          }}
-          resetWordBeforeAction={resetWordBeforeAction}
-          footer={
-            <div
-              className={clsx(
-                "flex items-center justify-center overflow-hidden px-8 py-4 transition-[height] duration-300 ease-in-out will-change-contents lg:h-[var(--footer-h)] lg:justify-between",
-              )}
-              style={{
-                ["--footer-h" as any]: activeShowAll
-                  ? `${80 + Math.max(1, Math.ceil((filteredTabs?.length || 0) / numberDisplayData) - 1) * 44}px`
-                  : "80px",
-              }}
-            >
-              <div className="hidden h-full w-[150px] items-center gap-1 lg:flex">
-                <Popover
-                  content={
-                    <div className="flex items-center gap-2 px-2 ">
-                      Scratch Pad
-                    </div>
-                  }
-                  trigger="hover"
-                  placement="top"
-                >
-                  <button
-                    className={`h-fit rounded-lg ${isScatchPadEnabled && "bg-primary"
-                      }`}
-                    onClick={() => {
-                      handleOpenScratchPad("scratch_pad");
-                      trackGAEvent("Click Button ScratchPad Test");
-                    }}
-                  >
-                    <ButtonContent
-                      icon={<NewScratchPadIcon isActive={isScatchPadEnabled} />}
-                      content=""
-                    />
-                  </button>
-                </Popover>
-                <Popover
-                  content={
-                    <div className="flex items-center gap-2 px-2 ">
-                      Calculator
-                    </div>
-                  }
-                  trigger="hover"
-                  placement="top"
-                >
-                  <button
-                    className={`h-fit rounded-lg ${checkCalExist > -1 && "bg-primary"
-                      }`}
-                    onClick={() => {
-                      handleOpenScratchPad("calculator");
-                      trackGAEvent("Click Button Calculator Test");
-                    }}
-                    disabled={checkCalExist > -1}
-                  >
-                    <ButtonContent
-                      icon={<CalculatorIcon className={checkCalExist > -1 ? "text-white" : "text-primary"} />}
-                      content=""
-                    />
-                  </button>
-                </Popover>
-              </div>
-              {/** Tabs */}
-              {tabs?.length > 0 && (
-                <div
-                  className={`flex w-fit min-w-0 max-w-[100%] flex-1 flex-col justify-center gap-3 lg:max-w-[68%] lg:flex-row`}
-                >
-                  <TabSlide
-                    data={filteredTabs}
-                    currentTab={currentPage}
-                    setCurrentTab={setCurrentPage}
-                    handleChangeTab={async (id?: string) => {
-                      setScratchPads("");
-                      handleSubmitAnswer("change-tab");
-                      setEssayData(undefined);
-                      handleChangeTab(id);
-                    }}
-                    setHasScrollBar={setHasScrollBar}
-                    activeShowAll={activeShowAll}
-                    isScrollCenter={false}
-                  />
-                  <div
-                    className={clsx(
-                      `flex items-center justify-center lg:justify-start`,
-                      activeShowAll ? "lg:ml-8" : "lg:ml-0",
-                    )}
-                  >
-                    {activeShowAll && <OptionShowAll />}
-                    <Tooltip
-                      className="tooltip-show-all"
-                      open={tooltipOpen}
-                      onOpenChange={(visible) => setTooltipOpen(visible)}
-                      title={
-                        <div className="flex items-center gap-2">
-                          {activeShowAll ? (
-                            <div className="rounded-full bg-white">
-                              <ShowMoreIcon size={16} color="#404041" />
-                            </div>
-                          ) : (
-                            <div className="rounded-full bg-white">
-                              <ShowLessIcon size={16} color="#404041" />
-                            </div>
-                          )}
-                          <span>
-                            {activeShowAll ? "Show Less" : "Show All"}
-                          </span>
-                        </div>
+                  // No call when time out > 60s
+                  if ((remainingTimeinSeconds ?? 0) > -60) {
+                    if (listSubmitError.length > 0) {
+                      for (const el of listSubmitError) {
+                        await handleSubmitAnswerError(el);
                       }
-                    >
-                      <div
-                        className="absolute -top-3 left-[50%] z-[99] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline"
-                        onClick={() => {
-                          setActiveShowAll(!activeShowAll);
-                          setTooltipOpen(false);
-                        }}
-                      // onMouseUp={() => setTooltipOpen(true)}
-                      >
-                        {!activeShowAll ? (
-                          <ShowLessIcon size={24} />
-                        ) : (
-                          <ShowMoreIcon size={24} />
-                        )}
-                      </div>
-                    </Tooltip>
-                  </div>
-                </div>
-              )}
-
-              {/** End Tabs */}
+                    }
+                    await handleSubmitAnswer("timeout");
+                  }
+                  handleSubmitQuestions("timeout");
+                  dispatch?.(disableUnsavedChange())
+                    .unwrap()
+                    .then(() => {
+                      trackGAEvent("Click Button Submit Time Out Test");
+                    });
+                } else {
+                  setOpenTimeOut(true);
+                  setQuizResultId(quizAttempt?.id);
+                }
+              }
+            }}
+            resetWordBeforeAction={resetWordBeforeAction}
+            footer={
               <div
-                className="hidden w-[150px] min-w-[150px] cursor-pointer items-center gap-2 whitespace-nowrap text-base font-semibold text-gray-800 underline hover:text-primary lg:flex"
-                onClick={() => {
-                  handleFlagQuestion(currentPage);
-                  trackGAEvent("Click Button Flag To Review Test");
+                className={clsx(
+                  "flex items-center justify-center overflow-hidden px-8 py-4 transition-[height] duration-300 ease-in-out will-change-contents lg:h-[var(--footer-h)] lg:justify-between",
+                )}
+                style={{
+                  ["--footer-h" as any]: activeShowAll
+                    ? `${80 + Math.max(1, Math.ceil((filteredTabs?.length || 0) / numberDisplayData) - 1) * 44}px`
+                    : "80px",
                 }}
               >
-                <FlagIcon />
-                {currentTabContent?.flag ? (
-                  <div>Unflag to Review</div>
-                ) : (
-                  <div>Flag to Review</div>
-                )}
-              </div>
-            </div>
-          }
-        >
-          <div
-            className="relative flex h-full flex-col overflow-hidden bg-white"
-            onMouseUp={() => {
-              setStartResize(false);
-              setCurrentLeftWidth(leftWidth);
-            }}
-          >
-            {/** Question Content */}
-            {!isUndefined(currentTabContent) && (
-              <>
-                {currentTabContent?.data?.display_type ===
-                  DISPLAY_TYPE.VERTICAL ? (
-                  <div
-                    className={`flex flex-1 overflow-auto bg-[#F1F1F1]`}
-                    id={"preview-question"}
+                <div className="hidden h-full w-[150px] items-center gap-1 lg:flex">
+                  <Popover
+                    content={
+                      <div className="flex items-center gap-2 px-2 ">
+                        Scratch Pad
+                      </div>
+                    }
+                    trigger="hover"
+                    placement="top"
                   >
+                    <button
+                      className={`h-fit rounded-lg ${
+                        isScatchPadEnabled && "bg-primary"
+                      }`}
+                      onClick={() => {
+                        handleOpenScratchPad("scratch_pad");
+                        trackGAEvent("Click Button ScratchPad Test");
+                      }}
+                    >
+                      <ButtonContent
+                        icon={
+                          <NewScratchPadIcon isActive={isScatchPadEnabled} />
+                        }
+                        content=""
+                      />
+                    </button>
+                  </Popover>
+                  <Popover
+                    content={
+                      <div className="flex items-center gap-2 px-2 ">
+                        Calculator
+                      </div>
+                    }
+                    trigger="hover"
+                    placement="top"
+                  >
+                    <button
+                      className={`h-fit rounded-lg ${
+                        checkCalExist > -1 && "bg-primary"
+                      }`}
+                      onClick={() => {
+                        handleOpenScratchPad("calculator");
+                        trackGAEvent("Click Button Calculator Test");
+                      }}
+                      disabled={checkCalExist > -1}
+                    >
+                      <ButtonContent
+                        icon={
+                          <CalculatorIcon
+                            className={
+                              checkCalExist > -1 ? "text-white" : "text-primary"
+                            }
+                          />
+                        }
+                        content=""
+                      />
+                    </button>
+                  </Popover>
+                </div>
+                {/** Tabs */}
+                {tabs?.length > 0 && (
+                  <div
+                    className={`flex w-fit min-w-0 max-w-[100%] flex-1 flex-col justify-center gap-3 lg:max-w-[68%] lg:flex-row`}
+                  >
+                    <TabSlide
+                      data={filteredTabs}
+                      currentTab={currentPage}
+                      setCurrentTab={setCurrentPage}
+                      handleChangeTab={async (id?: string) => {
+                        setScratchPads("");
+                        handleSubmitAnswer("change-tab");
+                        setEssayData(undefined);
+                        handleChangeTab(id);
+                      }}
+                      setHasScrollBar={setHasScrollBar}
+                      activeShowAll={activeShowAll}
+                      isScrollCenter={false}
+                    />
                     <div
                       className={clsx(
-                        "h-full min-w-[20%] overflow-auto bg-white p-8",
-                        styles.scrollYOnly,
+                        `flex items-center justify-center lg:justify-start`,
+                        activeShowAll ? "lg:ml-8" : "lg:ml-0",
                       )}
-                      style={{
-                        width: `calc(50% - ${leftWidth}px)`,
-                      }}
+                    >
+                      {activeShowAll && <OptionShowAll />}
+                      <Tooltip
+                        className="tooltip-show-all"
+                        open={tooltipOpen}
+                        onOpenChange={(visible) => setTooltipOpen(visible)}
+                        title={
+                          <div className="flex items-center gap-2">
+                            {activeShowAll ? (
+                              <div className="rounded-full bg-white">
+                                <ShowMoreIcon size={16} color="#404041" />
+                              </div>
+                            ) : (
+                              <div className="rounded-full bg-white">
+                                <ShowLessIcon size={16} color="#404041" />
+                              </div>
+                            )}
+                            <span>
+                              {activeShowAll ? "Show Less" : "Show All"}
+                            </span>
+                          </div>
+                        }
+                      >
+                        <div
+                          className="absolute -top-3 left-[50%] z-[99] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline"
+                          onClick={() => {
+                            setActiveShowAll(!activeShowAll);
+                            setTooltipOpen(false);
+                          }}
+                          // onMouseUp={() => setTooltipOpen(true)}
+                        >
+                          {!activeShowAll ? (
+                            <ShowLessIcon size={24} />
+                          ) : (
+                            <ShowMoreIcon size={24} />
+                          )}
+                        </div>
+                      </Tooltip>
+                    </div>
+                  </div>
+                )}
+
+                {/** End Tabs */}
+                <div
+                  className="hidden w-[150px] min-w-[150px] cursor-pointer items-center gap-2 whitespace-nowrap text-base font-semibold text-gray-800 underline hover:text-primary lg:flex"
+                  onClick={() => {
+                    handleFlagQuestion(currentPage);
+                    trackGAEvent("Click Button Flag To Review Test");
+                  }}
+                >
+                  <FlagIcon />
+                  {currentTabContent?.flag ? (
+                    <div>Unflag to Review</div>
+                  ) : (
+                    <div>Flag to Review</div>
+                  )}
+                </div>
+              </div>
+            }
+          >
+            <div
+              className="relative flex h-full flex-col overflow-hidden bg-white"
+              onMouseUp={() => {
+                setStartResize(false);
+                setCurrentLeftWidth(leftWidth);
+              }}
+            >
+              {/** Question Content */}
+              {!isUndefined(currentTabContent) && (
+                <>
+                  {currentTabContent?.data?.display_type ===
+                  DISPLAY_TYPE.VERTICAL ? (
+                    <div
+                      className={`flex flex-1 overflow-auto bg-[#F1F1F1]`}
+                      id={"preview-question"}
+                    >
+                      <div
+                        className={clsx(
+                          "h-full min-w-[20%] overflow-auto bg-white p-8",
+                          styles.scrollYOnly,
+                        )}
+                        style={{
+                          width: `calc(50% - ${leftWidth}px)`,
+                        }}
+                      >
+                        <div
+                          id="hightlight_area_topic"
+                          onMouseUp={(e: any) => {
+                            if (
+                              e.target.tagName.charAt(0) !== "m" &&
+                              e.target.firstChild?.tagName !== "math"
+                            ) {
+                              if (e) {
+                                if (allowHighLight) {
+                                  runHighlight(
+                                    handleSaveHighLightTopic,
+                                    allowHighLight || false,
+                                    "hightlight_area_topic",
+                                  );
+                                } else if (allowUnHighLight) {
+                                  runHighlight(
+                                    handleSaveHighLightTopic,
+                                    allowUnHighLight || false,
+                                    "hightlight_area_topic",
+                                    { color: "white" },
+                                  );
+                                }
+                              }
+                            }
+                          }}
+                        >
+                          {currentTabContent?.topicDescription?.description && (
+                            <HighlightableHTML
+                              initialHTML={
+                                currentTabContent?.topicDescription
+                                  ?.description || ""
+                              }
+                              storageKey={`${id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
+                              className="sapp-questions mb-6"
+                            />
+                          )}
+                        </div>
+                      </div>
+                      <div
+                        className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-accent"
+                        onMouseDown={() => setStartResize(true)}
+                        onTouchStart={(e) => {
+                          e.preventDefault();
+                          setStartResize(true);
+                        }}
+                        onTouchMove={() => setStartResize(true)}
+                        onMouseUp={() => setStartResize(false)}
+                        onTouchEnd={() => setStartResize(false)}
+                      >
+                        <div className="h-8 w-8 rounded-full bg-white">
+                          <ResizeIcon />
+                        </div>
+                      </div>
+                      <div
+                        className={clsx(
+                          "h-full overflow-auto bg-white p-8",
+                          styles.scrollYOnly,
+                          "has-horizontal",
+                        )}
+                        style={{ width: `calc(50% + ${leftWidth}px)` }}
+                        ref={rightSideRef}
+                      >
+                        <div
+                          className={clsx(
+                            "flex w-full flex-col gap-8 rounded-xl bg-gray-100 p-8",
+                            {
+                              "min-w-[350px] bg-white px-0 py-8":
+                                currentTabContent?.data?.qType ===
+                                QUESTION_TYPES.ESSAY,
+                              "!w-fit":
+                                currentTabContent?.data?.qType ===
+                                QUESTION_TYPES.MATCHING,
+                            },
+                          )}
+                        >
+                          <QuestionRenderer
+                            currentTabContent={currentTabContent}
+                            type={currentTabContent?.data?.qType}
+                            data={currentTabContent?.data}
+                            currentTabID={currentTabContent?.id}
+                            defaultValue={currentTabContent?.answer}
+                            corrects={currentTabContent?.corrects}
+                            highlighted={currentTabContent?.hightlight}
+                            solution={currentTabContent?.solution}
+                            done={currentTabContent?.done}
+                            control={control}
+                            setValue={setValue}
+                            getValues={getValues}
+                            watch={watch}
+                            tabs={tabs}
+                            currentPage={currentPage}
+                            ref={ref}
+                            handleSaveHighLight={handleSaveHighLight}
+                            removeHighlight={removeHighlight}
+                            allowHighLight={allowHighLight}
+                            allowUnHighLight={allowUnHighLight}
+                            storageKey={`${id}-${currentTabContent?.data?.qType}-question-${currentTabContent?.id}`}
+                            // Essay-only props
+                            essayData={essayData}
+                            refEditor={refEditor}
+                            setEssayData={setEssayData}
+                            setOpenUpload={setOpenUpload}
+                            handleClearFile={handleClearFile}
+                            handleOpenScratchPad={handleOpenScratchPad}
+                            handleSaveHighLightRequirement={
+                              handleSaveHighLightRequirement
+                            }
+                            showListRequirement={showListRequirement}
+                            editorReady={editorReady}
+                          />
+
+                          {groupAction()}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      className={`flex-1 overflow-auto p-8`}
+                      id={"preview-question"}
+                      ref={scrollRef}
                     >
                       <div
                         id="hightlight_area_topic"
@@ -2453,6 +2604,7 @@ const TestDetail = () => {
                             }
                           }
                         }}
+                        className="m-auto mb-3 w-full max-w-[950px]"
                       >
                         {currentTabContent?.topicDescription?.description && (
                           <HighlightableHTML
@@ -2461,38 +2613,14 @@ const TestDetail = () => {
                                 ?.description || ""
                             }
                             storageKey={`${id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
-                            className="sapp-questions mb-6"
+                            className="mb-4"
                           />
                         )}
                       </div>
-                    </div>
-                    <div
-                      className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-accent"
-                      onMouseDown={() => setStartResize(true)}
-                      onTouchStart={(e) => {
-                        e.preventDefault();
-                        setStartResize(true);
-                      }}
-                      onTouchMove={() => setStartResize(true)}
-                      onMouseUp={() => setStartResize(false)}
-                      onTouchEnd={() => setStartResize(false)}
-                    >
-                      <div className="h-8 w-8 rounded-full bg-white">
-                        <ResizeIcon />
-                      </div>
-                    </div>
-                    <div
-                      className={clsx(
-                        "h-full overflow-auto bg-white p-8",
-                        styles.scrollYOnly,
-                        "has-horizontal",
-                      )}
-                      style={{ width: `calc(50% + ${leftWidth}px)` }}
-                      ref={rightSideRef}
-                    >
+
                       <div
                         className={clsx(
-                          "flex w-full flex-col gap-8 rounded-xl bg-gray-100 p-8",
+                          "mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-gray-100 p-8",
                           {
                             "min-w-[350px] bg-white px-0 py-8":
                               currentTabContent?.data?.qType ===
@@ -2538,284 +2666,187 @@ const TestDetail = () => {
                           showListRequirement={showListRequirement}
                           editorReady={editorReady}
                         />
-
                         {groupAction()}
                       </div>
                     </div>
-                  </div>
-                ) : (
-                  <div
-                    className={`flex-1 overflow-auto p-8`}
-                    id={"preview-question"}
-                    ref={scrollRef}
-                  >
-                    <div
-                      id="hightlight_area_topic"
-                      onMouseUp={(e: any) => {
-                        if (
-                          e.target.tagName.charAt(0) !== "m" &&
-                          e.target.firstChild?.tagName !== "math"
-                        ) {
-                          if (e) {
-                            if (allowHighLight) {
-                              runHighlight(
-                                handleSaveHighLightTopic,
-                                allowHighLight || false,
-                                "hightlight_area_topic",
-                              );
-                            } else if (allowUnHighLight) {
-                              runHighlight(
-                                handleSaveHighLightTopic,
-                                allowUnHighLight || false,
-                                "hightlight_area_topic",
-                                { color: "white" },
-                              );
-                            }
-                          }
-                        }
-                      }}
-                      className="m-auto mb-3 w-full max-w-[950px]"
-                    >
-                      {currentTabContent?.topicDescription?.description && (
-                        <HighlightableHTML
-                          initialHTML={
-                            currentTabContent?.topicDescription?.description ||
-                            ""
-                          }
-                          storageKey={`${id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
-                          className="mb-4"
-                        />
-                      )}
-                    </div>
+                  )}
+                </>
+              )}
+              {/** End Question Content */}
 
-                    <div
-                      className={clsx(
-                        "mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-gray-100 p-8",
-                        {
-                          "min-w-[350px] bg-white px-0 py-8":
-                            currentTabContent?.data?.qType ===
-                            QUESTION_TYPES.ESSAY,
-                          "!w-fit":
-                            currentTabContent?.data?.qType ===
-                            QUESTION_TYPES.MATCHING,
-                        },
-                      )}
-                    >
-                      <QuestionRenderer
-                        currentTabContent={currentTabContent}
-                        type={currentTabContent?.data?.qType}
-                        data={currentTabContent?.data}
-                        currentTabID={currentTabContent?.id}
-                        defaultValue={currentTabContent?.answer}
-                        corrects={currentTabContent?.corrects}
-                        highlighted={currentTabContent?.hightlight}
-                        solution={currentTabContent?.solution}
-                        done={currentTabContent?.done}
-                        control={control}
-                        setValue={setValue}
-                        getValues={getValues}
-                        watch={watch}
-                        tabs={tabs}
-                        currentPage={currentPage}
-                        ref={ref}
-                        handleSaveHighLight={handleSaveHighLight}
-                        removeHighlight={removeHighlight}
-                        allowHighLight={allowHighLight}
-                        allowUnHighLight={allowUnHighLight}
-                        storageKey={`${id}-${currentTabContent?.data?.qType}-question-${currentTabContent?.id}`}
-                        // Essay-only props
-                        essayData={essayData}
-                        refEditor={refEditor}
-                        setEssayData={setEssayData}
-                        setOpenUpload={setOpenUpload}
-                        handleClearFile={handleClearFile}
-                        handleOpenScratchPad={handleOpenScratchPad}
-                        handleSaveHighLightRequirement={
-                          handleSaveHighLightRequirement
-                        }
-                        showListRequirement={showListRequirement}
-                        editorReady={editorReady}
-                      />
-                      {groupAction()}
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-            {/** End Question Content */}
+              <TestScratchPads
+                currentPage={currentPage}
+                exhibitData={exhibitData}
+                scratchPadValues={scratchPadValues}
+                setScratchPadValues={setScratchPadValues}
+                scratchPads={scratchPads}
+                setScratchPads={setScratchPads}
+                onFocusingPad={onFocusingPad}
+                setOnFocusingPad={setOnFocusingPad}
+                handleCloseScratchPad={handleCloseScratchPad}
+                openScratchPad={openScratchPad}
+                exhibitText={exhibitText}
+              />
+              {/** End Scratchpads */}
 
-            <TestScratchPads
-              currentPage={currentPage}
-              exhibitData={exhibitData}
-              scratchPadValues={scratchPadValues}
-              setScratchPadValues={setScratchPadValues}
-              scratchPads={scratchPads}
-              setScratchPads={setScratchPads}
-              onFocusingPad={onFocusingPad}
-              setOnFocusingPad={setOnFocusingPad}
-              handleCloseScratchPad={handleCloseScratchPad}
-              openScratchPad={openScratchPad}
-              exhibitText={exhibitText}
-            />
-            {/** End Scratchpads */}
-
-            <TestTimeOutModal
-              type={type}
-              okButtonCaption={
-                quizDetail?.grading_method === GRADING_METHOD.MANUAL
-                  ? "Review Answers"
-                  : "View Results"
-              }
-              open={openTimeOut}
-              setOpen={setOpenTimeOut}
-              handleSubmit={() => {
-                dispatch?.(disableUnsavedChange())
-                  .unwrap()
-                  .then(() => {
-                    if (type === "entrance") {
-                      const searchParams =
-                        quizAttempt?.number_of_attempts &&
+              <TestTimeOutModal
+                type={type}
+                okButtonCaption={
+                  quizDetail?.grading_method === GRADING_METHOD.MANUAL
+                    ? "Review Answers"
+                    : "View Results"
+                }
+                open={openTimeOut}
+                setOpen={setOpenTimeOut}
+                handleSubmit={() => {
+                  dispatch?.(disableUnsavedChange())
+                    .unwrap()
+                    .then(() => {
+                      if (type === "entrance") {
+                        const searchParams =
+                          quizAttempt?.number_of_attempts &&
                           quizDetail?.limit_count
-                          ? `attempt=${quizAttempt?.number_of_attempts}/${quizDetail?.limit_count}`
-                          : ``;
-                      router.replace(
-                        `/entrance-test/test-result/${QuizResultId}?${searchParams}`,
-                      );
-                    } else if (type === "event-test") {
-                      router.replace(`/event-test`);
-                      // setSubmitEventTest(true)
-                    } else {
-                      // if (type !== 'entrance') {
-                      if (
-                        quizDetail?.grading_method === GRADING_METHOD.MANUAL
-                      ) {
+                            ? `attempt=${quizAttempt?.number_of_attempts}/${quizDetail?.limit_count}`
+                            : ``;
                         router.replace(
-                          `/courses/test/your-answers-detail/${QuizResultId}`,
+                          `/entrance-test/test-result/${QuizResultId}?${searchParams}`,
                         );
+                      } else if (type === "event-test") {
+                        router.replace(`/event-test`);
+                        // setSubmitEventTest(true)
                       } else {
-                        router.replace(
-                          `/courses/test/test-result/${QuizResultId}`,
-                        );
+                        // if (type !== 'entrance') {
+                        if (
+                          quizDetail?.grading_method === GRADING_METHOD.MANUAL
+                        ) {
+                          router.replace(
+                            `/courses/test/your-answers-detail/${QuizResultId}`,
+                          );
+                        } else {
+                          router.replace(
+                            `/courses/test/test-result/${QuizResultId}`,
+                          );
+                        }
                       }
-                    }
-                    trackGAEvent("Click Button Submit Time Out Test");
-                  });
-              }}
-              handleQuit={() => {
-                trackGAEvent("Click Button Quit Time Out Test");
-                router.back();
-              }}
-            />
-
-            <QuitTestModal
-              open={openQuit}
-              setOpen={setOpenQuit}
-              handleQuit={() => {
-                const WEB_LMS_URL = process.env.NEXT_PUBLIC_WEB_LMS_URL;
-                switch (type) {
-                  case "event-test":
-                    router.replace(`${WEB_LMS_URL}/event-test`);
-                    break;
-                  case "entrance":
-                    router.replace(`${WEB_LMS_URL}/entrance-test`);
-                    break;
-                  default: {
-                    const class_id = query.class_id;
-                    if (class_id) {
-                      router.push(
-                        `${WEB_LMS_URL}/courses/my-course/${class_id}`,
-                      );
-                    } else {
-                      router.back();
-                    }
-                    break;
-                  }
-                }
-              }}
-              handleCancel={() =>
-                dispatch?.(loginSlice.actions.enableUnsavedChange())
-              }
-              content="If you quit now, your answers will be saved and the timer will continue running. You can come back later to resume the test."
-            />
-
-            <LimitQuizModal
-              open={openLimit}
-              setOpen={setOpenLimit}
-              handleQuit={() => router.back()}
-            />
-
-            <ConFirmSubmit
-              open={openSubmit}
-              setOpen={setOpenSubmit}
-              handleSubmit={() => {
-                handleSubmitQuestions("submit");
-                if (type !== "event-test") {
-                  setOpenSubmit(false);
-                }
-              }}
-              handleCancel={() =>
-                dispatch?.(loginSlice.actions.enableUnsavedChange())
-              }
-            />
-
-            <UnSubmitAnswerModal
-              open={openUnSubmitAnswer}
-              setOpen={setUnSubmitAnswer}
-              data={unSubmitAnswerData}
-              handleSubmit={() => {
-                if (type !== "event-test") {
-                  setUnSubmitAnswer(false);
-                }
-                handleSubmitQuestions("submit");
-              }}
-              handleCancel={() => setUnSubmitAnswer(false)}
-            />
-
-            <ModalUploadFile
-              open={openUpload?.status}
-              isMultiple={false}
-              handleClose={() => {
-                setOpenUpload({
-                  status: false,
-                  question_id: undefined,
-                  requirementIndex: undefined,
-                });
-              }}
-              fileType={"ESSAY"}
-              location={`question-answer/${openUpload?.question_id}`}
-              setSelectedFile={(e: any) =>
-                handleSaveFileEssay(e[0], openUpload?.requirementIndex)
-              }
-            />
-            {openReportModal && openReportModal.open && (
-              <SuccessSubmittedConstructorModal
-                open={openReportModal.open}
-                setOpen={setOpenReportModal}
-                quizName={quizDetail?.name}
-                handleCancel={() => {
-                  setOpenReportModal({
-                    open: false,
-                    resultId: "",
-                  });
+                      trackGAEvent("Click Button Submit Time Out Test");
+                    });
+                }}
+                handleQuit={() => {
+                  trackGAEvent("Click Button Quit Time Out Test");
                   router.back();
                 }}
-                handleOk={() => {
-                  router.replace(
-                    `/courses/test/your-answers-detail/${openReportModal.resultId}`,
-                  );
+              />
+
+              <QuitTestModal
+                open={openQuit}
+                setOpen={setOpenQuit}
+                handleQuit={() => {
+                  const WEB_LMS_URL = process.env.NEXT_PUBLIC_WEB_LMS_URL;
+                  switch (type) {
+                    case "event-test":
+                      router.replace(`${WEB_LMS_URL}/event-test`);
+                      break;
+                    case "entrance":
+                      router.replace(`${WEB_LMS_URL}/entrance-test`);
+                      break;
+                    default: {
+                      const class_id = query.class_id;
+                      if (class_id) {
+                        router.push(
+                          `${WEB_LMS_URL}/courses/my-course/${class_id}`,
+                        );
+                      } else {
+                        router.back();
+                      }
+                      break;
+                    }
+                  }
                 }}
+                handleCancel={() =>
+                  dispatch?.(loginSlice.actions.enableUnsavedChange())
+                }
+                content="If you quit now, your answers will be saved and the timer will continue running. You can come back later to resume the test."
+              />
+
+              <LimitQuizModal
+                open={openLimit}
+                setOpen={setOpenLimit}
+                handleQuit={() => router.back()}
+              />
+
+              <ConFirmSubmit
+                open={openSubmit}
+                setOpen={setOpenSubmit}
+                handleSubmit={() => {
+                  handleSubmitQuestions("submit");
+                  if (type !== "event-test") {
+                    setOpenSubmit(false);
+                  }
+                }}
+                handleCancel={() =>
+                  dispatch?.(loginSlice.actions.enableUnsavedChange())
+                }
+              />
+
+              <UnSubmitAnswerModal
+                open={openUnSubmitAnswer}
+                setOpen={setUnSubmitAnswer}
+                data={unSubmitAnswerData}
+                handleSubmit={() => {
+                  if (type !== "event-test") {
+                    setUnSubmitAnswer(false);
+                  }
+                  handleSubmitQuestions("submit");
+                }}
+                handleCancel={() => setUnSubmitAnswer(false)}
+              />
+
+              <ModalUploadFile
+                open={openUpload?.status}
+                isMultiple={false}
+                handleClose={() => {
+                  setOpenUpload({
+                    status: false,
+                    question_id: undefined,
+                    requirementIndex: undefined,
+                  });
+                }}
+                fileType={"ESSAY"}
+                location={`question-answer/${openUpload?.question_id}`}
+                setSelectedFile={(e: any) =>
+                  handleSaveFileEssay(e[0], openUpload?.requirementIndex)
+                }
+              />
+              {openReportModal && openReportModal.open && (
+                <SuccessSubmittedConstructorModal
+                  open={openReportModal.open}
+                  setOpen={setOpenReportModal}
+                  quizName={quizDetail?.name}
+                  handleCancel={() => {
+                    setOpenReportModal({
+                      open: false,
+                      resultId: "",
+                    });
+                    router.back();
+                  }}
+                  handleOk={() => {
+                    router.replace(
+                      `/courses/test/your-answers-detail/${openReportModal.resultId}`,
+                    );
+                  }}
+                />
+              )}
+            </div>
+
+            {openResetToTemplateModal && (
+              <ResetToAnswerTemplateModal
+                open={openResetToTemplateModal}
+                handleReset={onResetAnswerEssayToTemplate}
+                handleClose={onCloseResetToTemplateModal}
               />
             )}
-          </div>
-
-          {openResetToTemplateModal && (
-            <ResetToAnswerTemplateModal
-              open={openResetToTemplateModal}
-              handleReset={onResetAnswerEssayToTemplate}
-              handleClose={onCloseResetToTemplateModal}
-            />
-          )}
-        </TestWrapper>
+          </TestWrapper>
+        )}
       </CourseProvider>
       {exhibitData && exhibitData?.length > 0 && (
         <Popover
@@ -2939,7 +2970,7 @@ const TestDetail = () => {
                     !isShowIconButtonInBottom,
                   "top-[214px]":
                     currentTabContent?.topicDescription?.qType ===
-                    QUESTION_TYPES.ESSAY &&
+                      QUESTION_TYPES.ESSAY &&
                     !!currentTabContent?.topicDescription?.requirements?.length,
                   "bottom-0": isShowIconButtonInBottom,
                 },
@@ -2974,7 +3005,9 @@ const TestDetail = () => {
           { "!bg-primary": checkCalExist > -1 },
         )}
       >
-        <CalculatorIcon className={`size-8 ${checkCalExist > -1 ? 'text-white' : 'text-primary'}`} />
+        <CalculatorIcon
+          className={`size-8 ${checkCalExist > -1 ? "text-white" : "text-primary"}`}
+        />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <div
