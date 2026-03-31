@@ -45,7 +45,7 @@
     "@sapp-fe/entrance-test-result-package": "^1.5.0",
     "@sapp-fe/explanation-package": "^1.5.6",
     "@sapp-fe/quiz-result-package": "^1.5.1",
-    "@sentry/nextjs": "8",
+    "@sentry/nextjs": "^10.46.0",
     "@tiptap/core": "^2.12.0",
     "@tiptap/react": "^2.12.0",
     "@tiptap/starter-kit": "^2.12.0",
