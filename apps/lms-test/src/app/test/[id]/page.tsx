@@ -27,6 +27,7 @@ import {
   PROGRAM,
   QUESTION_TYPES,
   RESPONSE_OPTION,
+  TEST_TYPE_ENUM,
 } from "@lms/core";
 import {
   checkAnsweredPure,
@@ -2750,15 +2751,23 @@ const TestDetail = () => {
                       router.replace(`${WEB_LMS_URL}/entrance-test`);
                       break;
                     default: {
-                      const class_id = query.class_id;
-                      if (class_id) {
+                      if (
+                        [TEST_TYPE_ENUM.CHAPTER_TEST , TEST_TYPE_ENUM.TOPIC_TEST].includes(quizDetail?.quiz_type as TEST_TYPE_ENUM)
+                      ) {
                         router.push(
-                          `${WEB_LMS_URL}/courses/my-course/${class_id}`,
+                          `${WEB_LMS_URL}/courses/${quizDetail?.course_section?.id}/section/${quizDetail?.course_section?.section_id}`,
                         );
                       } else {
-                        router.back();
+                        const class_id = query.class_id;
+                        if (class_id) {
+                          router.push(
+                            `${WEB_LMS_URL}/courses/my-course/${class_id}`,
+                          );
+                        } else {
+                          router.back();
+                        }
+                        break;
                       }
-                      break;
                     }
                   }
                 }}
