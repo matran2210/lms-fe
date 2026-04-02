@@ -10,7 +10,7 @@ import {
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
 import { FullScreenLayout, PDFViewer, Tooltip } from '@lms/ui'
-import { handleMultipleCorrectAnswer } from '@lms/utils'
+import { handleMultipleCorrectAnswer, useGetDataQuery } from '@lms/utils'
 import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -18,6 +18,8 @@ import { CoursesAPI } from 'src/api/courses'
 import { TestServiceAPI } from 'src/api/test-api'
 import { PageLink } from 'src/constants/routers'
 import { withAuthorization } from '@lms/hoc'
+import MultipleQuestion from 'src/app/courses/test/test-result/multipleQuestion'
+import { useQuery } from 'react-query'
 
 const Explanation = () => {
   const router = useRouter()
@@ -91,10 +93,10 @@ const Explanation = () => {
         answers:
           questionType === QUESTION_TYPES.DRAG_DROP
             ? handleMultipleCorrectAnswer(
-              resultResponse?.data?.answer?.question?.drag_drop_answers,
-              resultResponse?.data?.answer?.answer,
-              answerTemp,
-            )
+                resultResponse?.data?.answer?.question?.drag_drop_answers,
+                resultResponse?.data?.answer?.answer,
+                answerTemp,
+              )
             : answerTemp,
         myAnswers: [
           {
@@ -120,7 +122,14 @@ const Explanation = () => {
       setLoading(false)
     }
   }
-
+  const quizId = attempt?.id
+  const { data: questions, isLoading: loadingAttempt } = useQuery({
+    queryKey: ['list-question', quizId],
+    queryFn: () => CoursesAPI.getQuizAttempts(quizId!),
+    select: (data) => data.data,
+    enabled: !!quizId,
+    retry: false,
+  })
   useEffect(() => {
     if (id) {
       getActiveQuestion(id as string)
@@ -132,7 +141,7 @@ const Explanation = () => {
   }) => {
     try {
       await TestServiceAPI.downloadFile(data)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const isUserViewAnswers = query?.title === 'Your Answers Detail'
@@ -188,7 +197,7 @@ const Explanation = () => {
           <Tooltip
             placement="left"
             title={
-              <span className="text-sm" onClick={() => { }}>
+              <span className="text-sm" onClick={() => {}}>
                 Show comment
               </span>
             }
@@ -202,6 +211,7 @@ const Explanation = () => {
         {!loading && activeQuestion && (
           <ExplanationPackageV2
             getActiveQuestion={getActiveQuestion}
+            RenderAllQuestions={<MultipleQuestion questions={questions} />}
             activeQuestion={{
               ...activeQuestion,
               solution: activeQuestion?.solution,
