@@ -6,7 +6,7 @@ const withAuthorization =
   <P extends object>(allowedRoles: string[]) =>
     (WrappedComponent: React.ComponentType<P>) => {
       const Wrapper = (props: P) => {
-        const { pathname, router, useAppSelector } = useFeature()
+        const { pathname, router, useAppSelector, pageLink } = useFeature()
         const userType = useAppSelector?.(userReducer).user.type
         const [isLoading, setIsLoading] = useState(true)
 
@@ -23,10 +23,10 @@ const withAuthorization =
           if (!userType) return // Chưa có userType, không làm gì
 
           if (pathname === '/') {
-            if (userType === UserType.TEACHER) router.push('/teachers')
-            else if (userType === UserType.STUDENT) router.push('/courses')
+            if (userType === UserType.TEACHER) router.push(pageLink.MY_CALENDAR)
+            else if (userType === UserType.STUDENT) router.push(pageLink.COURSES)
           } else if (!allowedRoles.includes(userType)) {
-            router.replace('/courses')
+            router.replace(pageLink.COURSES)
           }
         }, [pathname, userType, isLoading])
 

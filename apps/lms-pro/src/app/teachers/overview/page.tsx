@@ -21,8 +21,8 @@ import { PageLink } from 'src/constants/routers'
 
 const breadcrumbs: ITabs[] = [
   {
-    link: PageLink.TEACHERS,
-    title: 'LMS',
+    link: PageLink.MY_CALENDAR,
+    title: 'Home',
   },
   {
     link: PageLink.TEACHER_MY_PROFILE,
