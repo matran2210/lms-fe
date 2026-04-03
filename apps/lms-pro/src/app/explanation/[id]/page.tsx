@@ -18,7 +18,7 @@ import { CoursesAPI } from 'src/api/courses'
 import { TestServiceAPI } from 'src/api/test-api'
 import { PageLink } from 'src/constants/routers'
 import { withAuthorization } from '@lms/hoc'
-import MultipleQuestion from 'src/app/courses/test/test-result/multipleQuestion'
+import { ListQuestion } from '@lms/feature-courses'
 import { useQuery } from 'react-query'
 
 const Explanation = () => {
@@ -211,7 +211,7 @@ const Explanation = () => {
         {!loading && activeQuestion && (
           <ExplanationPackageV2
             getActiveQuestion={getActiveQuestion}
-            RenderAllQuestions={<MultipleQuestion questions={questions} />}
+            RenderAllQuestions={<ListQuestion questions={questions} getActiveQuestion={getActiveQuestion}/>}
             activeQuestion={{
               ...activeQuestion,
               solution: activeQuestion?.solution,
