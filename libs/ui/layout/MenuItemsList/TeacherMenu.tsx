@@ -148,14 +148,14 @@ export default function TeacherMenu({
     }
 
     return [
-      {
-        key: "Home",
-        title: TitleTeacherSidebar.DASHBOARD,
-        icon: <HomeMenuIcon selected={selectedKey === "Home"} />,
-        link: pageLink.TEACHERS,
-        active: isCurrent(pageLink.TEACHERS),
-        showMenu: true,
-      },
+      // {
+      //   key: "Home",
+      //   title: TitleTeacherSidebar.DASHBOARD,
+      //   icon: <HomeMenuIcon selected={selectedKey === "Home"} />,
+      //   link: pageLink.TEACHERS,
+      //   active: isCurrent(pageLink.TEACHERS),
+      //   showMenu: true,
+      // },
       {
         key: "MyCourse",
         title: TitleSidebar.COURSES,
@@ -192,14 +192,14 @@ export default function TeacherMenu({
         active: isCurrent(pageLink.TEACHER_MY_REQUEST),
         showMenu: !!appModules?.find((m) => m.name === 'schedule'),
       },
-      {
-        key: "Bell",
-        title: TitleTeacherSidebar.NOTIFICATIONS,
-        icon: <BellIcon selected={selectedKey === "Bell"} />,
-        link: pageLink.TEACHERS,
-        active: isCurrent(pageLink.TEACHERS),
-        showMenu: true,
-      },
+      // {
+      //   key: "Bell",
+      //   title: TitleTeacherSidebar.NOTIFICATIONS,
+      //   icon: <BellIcon selected={selectedKey === "Bell"} />,
+      //   link: pageLink.TEACHERS,
+      //   active: isCurrent(pageLink.TEACHERS),
+      //   showMenu: true,
+      // },
     ];
   }, [isCourseDetail, isActivity, selectedKey, query, isCurrent]);
 

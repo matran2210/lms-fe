@@ -13,10 +13,6 @@ import NewEventSidebar from '../../../components/teacher/my-calendar/NewEventSid
 
 const breadcrumbs = [
   {
-    title: 'Home',
-    link: '#',
-  },
-  {
     title: TitleSidebar.MY_CALENDAR,
     link: '#',
   },
