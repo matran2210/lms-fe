@@ -136,7 +136,7 @@ const QuestionGrid = ({
               }}
               key={q?.id}
               className={clsx(
-                "h-[38px] w-[38px] text-sm",
+                "h-[38px] w-[38px] text-sm border",
                 renderBoxesAndLineClass(
                   isMultipleChoice
                     ? "Multiple Choice Questions"
@@ -145,8 +145,6 @@ const QuestionGrid = ({
                 ),
               )}
               style={{
-                // border: `1px solid ${isWrong ? "#ef4444" : "#22c55e"}`,
-                // color: isWrong ? "#ef4444" : "#22c55e",
                 padding: "8px",
                 textAlign: "center",
                 borderRadius: 4,
