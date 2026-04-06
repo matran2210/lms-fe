@@ -1,4 +1,4 @@
-import { GRADE_STATUS } from "@lms/core";
+import { IAnswer } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import clsx from "clsx";
 import { useState } from "react";
@@ -11,7 +11,7 @@ const QuestionGrid = ({
 }: {
   isMultipleChoice?: boolean;
   isShowDivider?: boolean;
-  listQuestions: any;
+  listQuestions: IAnswer[];
   getActiveQuestion: (id: string) => void;
 }) => {
   const [showAll, setShowAll] = useState(false);
@@ -38,14 +38,11 @@ const QuestionGrid = ({
     },
   ];
 
-  const renderBoxesAndLineClass = (type: string, data: any) => {
+  const renderBoxesAndLineClass = (type: string, data: IAnswer) => {
     if (type === "Constructed Questions") {
-      return listQuestions?.quizAttempt?.grading_status ===
-        GRADE_STATUS.FINISHED_GRADING
-        ? "text-state-info border-info hover:bg-info-50"
-        : data?.question?.qType === "ESSAY" && data?.active === "SUBMITED"
-          ? " text-state-info border-info hover:bg-info-50"
-          : " text-warning border-warning hover:bg-warning-50";
+      return data?.question?.qType === "ESSAY" && data?.active === "SUBMITED"
+        ? " text-state-info border-info hover:bg-info-50"
+        : " text-warning border-warning hover:bg-warning-50";
     }
     return data?.is_correct
       ? "text-success border-success hover:bg-success-50"
@@ -79,6 +76,7 @@ const QuestionGrid = ({
     );
   };
 
+  const visibleQuestions = showAll ? listQuestions : listQuestions?.slice(0, 7);
   return (
     <>
       {isShowDivider && (
@@ -125,12 +123,10 @@ const QuestionGrid = ({
           marginBottom: 32,
         }}
       >
-        {listQuestions?.map((q: any, index: number) => {
+        {visibleQuestions?.map((q: IAnswer, index: number) => {
           return (
             <button
-              disabled={
-                listQuestions?.quizAttempt?.status === "UN_SUBMITTED" || !q?.id
-              }
+              disabled={q?.active === "UN_SUBMITTED" || !q?.id}
               onClick={() => {
                 getActiveQuestion(q?.id);
               }}

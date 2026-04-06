@@ -10,7 +10,7 @@ import {
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
 import { FullScreenLayout, PDFViewer, Tooltip } from '@lms/ui'
-import { handleMultipleCorrectAnswer, useGetDataQuery } from '@lms/utils'
+import { handleMultipleCorrectAnswer } from '@lms/utils'
 import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'

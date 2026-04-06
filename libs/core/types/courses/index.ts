@@ -1,3 +1,5 @@
+import { IAnswer } from '../quiz'
+
 export interface ICourseOutcome {
   created_at: Date
   deleted_at: Date
@@ -314,5 +316,12 @@ export interface ISelectOption {
   value: string
   name?: string
 }
-
+export interface MultipleQuestionsData {
+  quizAttempt?: {
+    grading_status?: string
+    status?: string
+  }
+  selectedResponseAnswers?: IAnswer[]
+  constructedResponseAnswers?: IAnswer[]
+}
 export * from './test'
