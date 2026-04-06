@@ -16,7 +16,6 @@ import {
   NOTIFICATION_STATUS,
 } from '@lms/core'
 import {
-  Certificate,
   ChangePassword,
   DeviceList,
   LoginHistoryList,
@@ -26,8 +25,9 @@ import {
   ProfileHeader,
   ProfileList,
   Settings,
-  SubjectList,
+  SubjectList
 } from '@lms/feature-user'
+import { withAuthorization } from '@lms/hoc'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   Footer,
@@ -35,6 +35,7 @@ import {
   HeaderMobile,
   Layout,
   SearchWithMenuToggle,
+  Slot,
   TabHeaderItem,
 } from '@lms/ui'
 import {
@@ -47,16 +48,16 @@ import { Collapse, CollapseProps, Divider, Tabs } from 'antd'
 import clsx from 'clsx'
 import { StaticImageData } from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import UserApi from 'src/redux/services/User/user'
+import { modules } from '../module-registry'
 
 interface IFullScreenMobile {
   open: boolean
   title: string
-  children: React.ReactNode
+  children: ReactNode
 }
 
 const ProfilePage = () => {
@@ -85,7 +86,7 @@ const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState('my-profile')
   const [tabAnimating, setTabAnimating] = useState(false)
 
-  const onOpenFullScreenMobile = (title: string, children: React.ReactNode) => {
+  const onOpenFullScreenMobile = (title: string, children: ReactNode) => {
     setOpenFullScreenMobile({
       open: true,
       title,
@@ -175,7 +176,7 @@ const ProfilePage = () => {
           </>
         )
       case 'certificates':
-        return <Certificate />
+        return <Slot name="CERTIFICATE_PROFILE_TAB" isPage={false} className='md:mt-8 lg:mt-10' />
       case 'setting':
         return <Settings />
       case 'sercurity':
@@ -204,7 +205,7 @@ const ProfilePage = () => {
         <TabHeaderItem icon={<Icon type="my-profile" />} title="My profile" />
       ),
     },
-    {
+    ...(modules.find((m) => m.name === 'certificate') ? [{
       key: 'certificates',
       label: (
         <TabHeaderItem
@@ -212,7 +213,7 @@ const ProfilePage = () => {
           title="Certificates"
         />
       ),
-    },
+    }] : []),
     {
       key: 'setting',
       label: <TabHeaderItem icon={<Icon type="setting" />} title="Setting" />,
@@ -315,7 +316,7 @@ const ProfilePage = () => {
         />
       ),
     },
-    {
+    ...(modules.find((m) => m.name === 'certificate') ? [{
       key: 'certificates',
       label: (
         <TabHeaderItem
@@ -323,8 +324,8 @@ const ProfilePage = () => {
           title="Certificates"
         />
       ),
-      children: <Certificate />,
-    },
+      children: <Slot name="CERTIFICATE_PROFILE_TAB" isPage={false} />,
+    }] : []),
     {
       key: 'setting',
       label: <TabHeaderItem icon={<Icon type="setting" />} title="Setting" />,

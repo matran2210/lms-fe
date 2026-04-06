@@ -15,7 +15,7 @@ const ErrorPage = () => {
       return PageLink.COURSES
     }
     if (userSlice.user.type === 'TEACHER') {
-      return PageLink.TEACHERS
+      return PageLink.MY_CALENDAR
     }
     return '/'
   }

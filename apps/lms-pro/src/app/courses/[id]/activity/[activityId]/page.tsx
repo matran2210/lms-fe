@@ -82,7 +82,7 @@ import {
 } from 'next/navigation'
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 import { CoursesAPI, getActivityById } from 'src/api/courses'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { v4 as uuidv4 } from 'uuid'
@@ -273,7 +273,7 @@ const ActivityPage = () => {
             sectionId: sectionId,
           }),
         )
-      } catch (error) {}
+      } catch (error) { }
     }
 
     return () => {
@@ -431,27 +431,27 @@ const ActivityPage = () => {
 
   const breadcrumbsData: ITabs[] = breadcrumbsMenu?.data
     ? breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
-        const urlCourseDetail = `/courses/${params?.id}/section/${partId}`
-        switch (e.course_section_type) {
-          case 'PART':
-          case 'CHAPTER':
-          case 'UNIT':
-            return {
-              title: e?.name,
-              link: urlCourseDetail,
-            }
-          case 'ACTIVITY':
-            return {
-              title: e?.name,
-              link: '#',
-            }
-          default:
-            return {
-              title: e?.name,
-              link: urlCourseDetail,
-            }
-        }
-      })
+      const urlCourseDetail = `/courses/${params?.id}/section/${partId}`
+      switch (e.course_section_type) {
+        case 'PART':
+        case 'CHAPTER':
+        case 'UNIT':
+          return {
+            title: e?.name,
+            link: urlCourseDetail,
+          }
+        case 'ACTIVITY':
+          return {
+            title: e?.name,
+            link: '#',
+          }
+        default:
+          return {
+            title: e?.name,
+            link: urlCourseDetail,
+          }
+      }
+    })
     : []
 
   const assistiveItemClass =
@@ -498,16 +498,16 @@ const ActivityPage = () => {
     },
     ...((currentVideo?.file?.resource?.time_line?.length as number) > 0
       ? [
-          {
-            label: (
-              <div className={assistiveItemClass}>
-                <TimeLineIcon />
-                <span className="text-xs">Timeline</span>
-              </div>
-            ),
-            onClick: onOpenVideoTimeline,
-          },
-        ]
+        {
+          label: (
+            <div className={assistiveItemClass}>
+              <TimeLineIcon />
+              <span className="text-xs">Timeline</span>
+            </div>
+          ),
+          onClick: onOpenVideoTimeline,
+        },
+      ]
       : []),
     {
       label: (
@@ -743,12 +743,12 @@ const ActivityPage = () => {
                 <div className="flex items-center justify-center gap-5 md:hidden">
                   {(currentVideo?.file?.resource?.time_line?.length as number) >
                     0 && (
-                    <CardMenuItem
-                      title="Timeline"
-                      icon={<TimeLineIcon />}
-                      onClick={onOpenVideoTimeline}
-                    />
-                  )}
+                      <CardMenuItem
+                        title="Timeline"
+                        icon={<TimeLineIcon />}
+                        onClick={onOpenVideoTimeline}
+                      />
+                    )}
                   <CardMenuItem
                     title="Discussion"
                     icon={<DiscussionIcon className="h-6 w-6" />}
@@ -800,7 +800,7 @@ const ActivityPage = () => {
                       <div
                         className="overflow-auto bg-white p-4"
                         style={{ height: 'calc(100% - 40px' }}
-                        // className="h-full cursor-pointer p-4"
+                      // className="h-full cursor-pointer p-4"
                       >
                         {/* <div className='flex flex-'> */}
                         <FileViewer fileName={e?.fileName} fileUrl={e?.file} />

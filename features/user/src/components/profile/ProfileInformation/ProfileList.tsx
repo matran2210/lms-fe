@@ -21,10 +21,10 @@ interface ProfileOptionItem {
 interface IProps {
   isEdit: boolean
 }
-const ProfileList = ({ isEdit}: IProps) => {
-  const { userApi, authApi, dispatch, useAppSelector } = useFeature();
+const ProfileList = ({ isEdit }: IProps) => {
+  const { userContextApi, authApi, dispatch, useAppSelector } = useFeature();
   const { user } = useAppSelector?.(userReducer) || {};
-  
+
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [makeDefaultDrawer, setMakeDefaultDrawer] = useState<{
     status: boolean
@@ -45,10 +45,10 @@ const ProfileList = ({ isEdit}: IProps) => {
           .unwrap()
           .then(async () => {
             setMakeDefaultDrawer(undefined)
-            await dispatch?.(getMe(userApi))
+            await dispatch?.(getMe(userContextApi))
           })
       }
-    } catch (error) {}
+    } catch (error) { }
   }
   const handleSetDefault = (checked: boolean) => {
     if (checked) {

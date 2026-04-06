@@ -1,3 +1,4 @@
+import _ from "lodash";
 import toast from "react-hot-toast";
 
 export const validateFile = (
@@ -55,4 +56,23 @@ export const downloadFileByURL = async (url: string, fileName?: string) => {
   a.click();
 
   URL.revokeObjectURL(fileURL);
+};
+
+type Option = {
+  label?: string;
+  value?: string;
+  [key: string]: any;
+};
+
+export const getSelectOptions = (
+  options?: Option[],
+  existedOption?: Option,
+  key: string = "value",
+): Option[] => {
+  return _.chain([existedOption])
+    .compact() // loại bỏ undefined/null
+    .concat(options ?? []) // gộp với options
+    .filter((item) => item[key]) // lọc item có key
+    .uniqBy(key) // loại trùng theo key
+    .value();
 };

@@ -9,7 +9,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -135,7 +135,7 @@ const CourseDetailTeacher = () => {
   })
 
   const breadcrumbs: ITabs[] = [
-    { link: PageLink.TEACHERS, title: 'LMS' },
+    { link: PageLink.MY_CALENDAR, title: 'Home' },
     { link: PageLink.TEACHER_MY_COURSE, title: 'My Course' },
     {
       link: `${PageLink.TEACHER_MY_COURSE}/my-course/${courseId}`,
