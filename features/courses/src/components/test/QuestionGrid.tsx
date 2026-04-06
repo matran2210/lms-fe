@@ -46,7 +46,7 @@ const QuestionGrid = ({
     }
     return data?.is_correct
       ? "text-success border-success hover:bg-success-50"
-      : "text-state-error border-error hover:bg-error-50";
+      : "text-state-error-v2 border-error hover:bg-error-50";
   };
   const renderAnnotations = (
     annotationsList: {
@@ -81,9 +81,9 @@ const QuestionGrid = ({
     <>
       {isShowDivider && (
         <div
+          className="bg-gray-3"
           style={{
             height: 1,
-            backgroundColor: "#D1D5DB",
             margin: "32px 0",
           }}
         />
@@ -103,10 +103,7 @@ const QuestionGrid = ({
         </span>
         {listQuestions?.length > 7 && (
           <span
-            className="cursor-pointer text-base"
-            style={{
-              color: "#FFB700",
-            }}
+            className="cursor-pointer text-base text-primary"
             onClick={() => setShowAll(!showAll)}
           >
             {showAll ? "See less" : "Show more"}
