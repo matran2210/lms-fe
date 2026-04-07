@@ -1,18 +1,10 @@
-import {
-  ArrowLeft,
-  ArrowRightIcon,
-  IconBuildingModify,
-  PaginationDotIcon,
-} from '@lms/assets'
+import { IconBuildingModify } from '@lms/assets'
 import { ECourseProgram, ISurveyCustom } from '@lms/core'
 import { SappModalV3 } from '@lms/ui'
 import { onLinkSocial } from '@lms/utils'
-import clsx from 'clsx'
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { CoursesAPI } from 'src/api/courses'
-import { Tabs, Tooltip } from 'antd'
-import { isEmpty } from 'lodash'
 import ListSurveyLD from './ListSurveyLD'
 
 interface SurveyModalProps {
@@ -261,13 +253,18 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
   const ContentModalTest = () => {
     return (
       <div className="justify-center self-stretch text-center">
-        <div className="text-base font-semibold text-gray-800">
-          Bạn đã tham gia khóa học {data?.data?.name}!
-        </div>
+        {isLDProgram && (
+          <div>
+            Bạn đã tham gia khóa học{' '}
+            <span className="text-base font-semibold text-gray-800">
+              {data?.data?.name}!
+            </span>
+          </div>
+        )}
         <span className="text-base font-normal leading-normal text-gray-800">
           {SURVEY_CONTENTS[surveyType]}
         </span>
-        <ListSurveyLD listSurvey={listSurvey} />
+        {isLDProgram && <ListSurveyLD listSurvey={listSurvey} />}
       </div>
     )
   }

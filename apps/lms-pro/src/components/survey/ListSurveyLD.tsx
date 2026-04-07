@@ -1,23 +1,15 @@
-import {
-  ArrowLeft,
-  ArrowRightIcon,
-  IconBuildingModify,
-  PaginationDotIcon,
-} from '@lms/assets'
-import { ECourseProgram, ISurveyCustom } from '@lms/core'
-import { SappModalV3 } from '@lms/ui'
-import { onLinkSocial } from '@lms/utils'
+import { ArrowLeft, ArrowRightIcon, PaginationDotIcon } from '@lms/assets'
+import { ISurveyCustom } from '@lms/core'
 import clsx from 'clsx'
-import { useParams } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
-import { CoursesAPI } from 'src/api/courses'
-import { Tabs, Tooltip } from 'antd'
-import { isEmpty } from 'lodash'
+import React, { useState } from 'react'
+import { Tooltip } from 'antd'
 
 const ListSurveyLD = ({ listSurvey }: { listSurvey?: ISurveyCustom[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
-//   const [currentSurvey, setCurrentSurvey] = useState<ISurveyCustom>()
   const currentSurvey = listSurvey?.[currentIndex]
+  const isDisabledNext = currentIndex === (listSurvey?.length || 0) - 1
+  const isDisabledPrev = currentIndex === 0
+
   const handleNext = () => {
     if (listSurvey && currentIndex < listSurvey.length - 1) {
       setCurrentIndex((prev) => prev + 1)
@@ -28,33 +20,17 @@ const ListSurveyLD = ({ listSurvey }: { listSurvey?: ISurveyCustom[] }) => {
       setCurrentIndex((prev) => prev - 1)
     }
   }
-  useEffect(() => {
-    if (!isEmpty(listSurvey)) {
-    //   setCurrentSurvey(listSurvey?.[0])
-    }
-  }, [listSurvey])
+
   return (
     <>
-      {' '}
       {listSurvey && listSurvey?.length > 0 && (
-        <div
-          className={clsx(
-            'learning-act-tab-pagination mb-6 mt-8 flex items-center justify-center gap-4 md:gap-8',
-            // {
-            //   hidden: focusOnlyQuiz.open || focusOnlyDiscussion,
-            // },
-          )}
-        >
+        <div className="learning-act-tab-pagination mb-6 mt-8 flex items-center justify-center gap-4 md:gap-8">
           <Tooltip title="Previous Survey" trigger={['hover']}>
             <button
               className={clsx('tab-pagination', {
-                // disabled: !getPreviousTabId(),
+                disabled: isDisabledPrev,
               })}
-              // disabled={!getPreviousTabId()}
-              // onClick={() => {
-              //   handleChangeTab(courseId as string, getPreviousTabId() || '')
-              //   trackGAEvent('Click Button Previous Tab Activity')
-              // }}
+              disabled={isDisabledPrev}
               onClick={handlePrev}
             >
               <ArrowLeft />
@@ -64,7 +40,7 @@ const ListSurveyLD = ({ listSurvey }: { listSurvey?: ISurveyCustom[] }) => {
             {listSurvey.map((tab, index) => (
               <span
                 key={tab.id}
-                className={clsx('cursor-pointer text-[#D9D9D9]', {
+                className={clsx('cursor-pointer text-gray-300', {
                   '!text-primary': tab.id == currentSurvey?.id,
                 })}
                 onClick={() => setCurrentIndex(index)}
@@ -76,9 +52,9 @@ const ListSurveyLD = ({ listSurvey }: { listSurvey?: ISurveyCustom[] }) => {
           <Tooltip title="Next Survey" trigger={['hover']}>
             <button
               className={clsx('tab-pagination', {
-                // disabled: !getNextTabId(),
+                disabled: isDisabledNext,
               })}
-              // disabled={!getNextTabId()}
+              disabled={isDisabledNext}
               onClick={handleNext}
             >
               <ArrowRightIcon />
