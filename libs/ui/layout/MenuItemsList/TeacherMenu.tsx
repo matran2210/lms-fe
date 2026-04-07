@@ -321,9 +321,9 @@ const BottomActionMenu = ({
         className="cursor-pointer rounded-full object-cover"
       />
     </Link>
-    <div className="cursor-pointer p-2">
+    {/* <div className="cursor-pointer p-2">
       <HelpMenuIcon />
-    </div>
+    </div> */}
     <div className="cursor-pointer p-2" onClick={onLogout}>
       <LogOutMenuIcon />
     </div>
