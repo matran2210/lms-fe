@@ -222,6 +222,7 @@ const TestDetail = () => {
     }>
   >([]);
   const [answersSubmitted, setAnswersSubmitted] = useState<any>([]);
+  const [classInfo, setClassInfo] = useState<any>(null);
   const [openResetToTemplateModal, setOpenResetToTemplateModal] =
     useState(false);
 
@@ -243,7 +244,11 @@ const TestDetail = () => {
         const response = await TestServiceAPI.getAnswersSubmitted(
           quizAttempt.id,
         );
-        setAnswersSubmitted(response.data);
+        setAnswersSubmitted(response?.data?.answers);
+        setClassInfo({
+          class_id: response?.data?.class_id,
+          part_id: response?.data?.part_id,
+        });
       } finally {
         setLoading(false);
       }
@@ -316,13 +321,17 @@ const TestDetail = () => {
       currentTabContent.qType === QUESTION_TYPES.FILL_WORD ||
       currentTabContent.qType === QUESTION_TYPES.SELECT_WORD
     ) {
-      corrects = { corrects: [...res?.data?.[0]?.answers] };
+      corrects = {
+        corrects: [...(res?.data?.[0]?.answers ?? [])],
+      };
     } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
-      corrects = { corrects: [...res?.data?.[0]?.question_matchings] };
-    } else if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
+      corrects = {
+        corrects: [...(res?.data?.[0]?.question_matchings ?? [])],
+      };
+    } else if (currentTabContent?.qType === QUESTION_TYPES.DRAG_DROP) {
       corrects = {
         corrects: [
-          ...res?.data?.[0]?.answers?.sort(
+          ...(res?.data?.[0]?.answers ?? []).sort(
             (a: any, b: any) => a?.answer_position - b?.answer_position,
           ),
         ],
@@ -400,7 +409,7 @@ const TestDetail = () => {
             is_self_reflection,
             requirements,
             drag_drop_answers,
-          } = answerSubmitted?.[0];
+          } = answerSubmitted?.[0] || {};
           // Handle different question types
           if (
             [
@@ -1728,8 +1737,8 @@ const TestDetail = () => {
       exhibitsOptions.push(...exhibitTopic);
     }
 
-    if (topics?.question?.length) {
-      for (const question of topics?.questions) {
+    if (topics?.questions?.length) {
+      for (const question of topics.questions) {
         if (question.exhibits?.length) {
           exhibitsOptions.push(...question.exhibits);
         }
@@ -1812,13 +1821,17 @@ const TestDetail = () => {
           setCourseType(res?.data?.course?.course_type || null);
           return;
         }
-        if (isQuizAttemptCreated && !quizAttemptId) {
+        if (!quizAttemptId) {
           const res = await TestServiceAPI.createQuizAttempt(
             id as string,
             query.class_user_id as string,
           );
           setQuizAttempt(res.data);
           setCourseType(res?.data?.course?.course_type || null);
+          const newParams = new URLSearchParams(searchParam.toString());
+          newParams.set("quizAttemptId", res.data.id);
+
+          router.replace(`?${newParams.toString()}`);
         }
       } catch (err) {
         // console.error("QuizAttempt error:", err);
@@ -1840,7 +1853,11 @@ const TestDetail = () => {
           );
           setExhibitText(EXHIBIT_TEXT_REPLACE.EXHIBIT);
           setIsQuizAttemptCreated(true); // Mark the attempt as created
-          setAnswersSubmitted(response.data);
+          setAnswersSubmitted(response?.data?.answers);
+          setClassInfo({
+            class_id: response?.data?.class_id,
+            part_id: response?.data?.part_id,
+          });
         } catch (err) {
         } finally {
           setLoading(false);
@@ -2752,16 +2769,18 @@ const TestDetail = () => {
                       break;
                     default: {
                       if (
-                        [TEST_TYPE_ENUM.CHAPTER_TEST , TEST_TYPE_ENUM.TOPIC_TEST].includes(quizDetail?.quiz_type as TEST_TYPE_ENUM)
+                        [
+                          TEST_TYPE_ENUM.CHAPTER_TEST,
+                          TEST_TYPE_ENUM.TOPIC_TEST,
+                        ].includes(quizDetail?.quiz_type as TEST_TYPE_ENUM)
                       ) {
                         router.push(
-                          `${WEB_LMS_URL}/courses/${quizDetail?.course_section?.id}/section/${quizDetail?.course_section?.section_id}`,
+                          `${WEB_LMS_URL}/courses/${classInfo?.class_id}/section/${classInfo?.part_id}`,
                         );
                       } else {
-                        const class_id = query.class_id;
-                        if (class_id) {
+                        if (classInfo?.class_id) {
                           router.push(
-                            `${WEB_LMS_URL}/courses/my-course/${class_id}`,
+                            `${WEB_LMS_URL}/courses/my-course/${classInfo?.class_id}`,
                           );
                         } else {
                           router.back();

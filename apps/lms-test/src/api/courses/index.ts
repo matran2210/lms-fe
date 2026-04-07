@@ -202,9 +202,7 @@ export class CoursesAPI {
   }
 
   static getQuizAttempts(id: string | string[] | undefined): Promise<any> {
-    console.log("fetch quiz attempt with id", id);
     const res = fetcher(`${url.getQuizAttempts}/${id}`);
-    console.log("response quiz attempt", res);
     return res;
   }
 
