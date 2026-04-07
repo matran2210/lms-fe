@@ -424,6 +424,10 @@ export class CoursesAPI {
       method: 'PUT',
     })
   }
+
+  static getSurveyCustom(class_id: string): Promise<any> {
+    return fetcher(`courses/${class_id}/survey-custom`)
+  }
 }
 
 /**

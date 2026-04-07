@@ -1,15 +1,25 @@
-import { IconBuildingModify } from '@lms/assets'
-import { ECourseProgram } from '@lms/core'
+import {
+  ArrowLeft,
+  ArrowRightIcon,
+  IconBuildingModify,
+  PaginationDotIcon,
+} from '@lms/assets'
+import { ECourseProgram, ISurveyCustom } from '@lms/core'
 import { SappModalV3 } from '@lms/ui'
 import { onLinkSocial } from '@lms/utils'
+import clsx from 'clsx'
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { CoursesAPI } from 'src/api/courses'
+import { Tabs, Tooltip } from 'antd'
+import { isEmpty } from 'lodash'
+import ListSurveyLD from './ListSurveyLD'
 
 interface SurveyModalProps {
   class_code?: string
   program: CourseProgram
   data: Record<string, any>
+  listSurvey?: ISurveyCustom[]
 }
 
 interface SurveyState {
@@ -44,7 +54,7 @@ const SURVEY_TITLES = {
   middtermCourse: 'Khảo sát phản hồi giữa khóa',
   finalCourse: 'Khảo sát phản hồi cuối khóa',
   completeCourse: 'Hoàn thành khảo sát để khép lại hành trình!',
-  ldCourse: 'Bạn đã tham gia khóa học',
+  ldCourse: 'Khảo sát phản hồi khóa học',
 }
 
 type CourseProgram =
@@ -58,6 +68,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
   class_code,
   program,
   data,
+  listSurvey,
 }) => {
   const convertCertDip = (input: string) => {
     if (!input) return ''
@@ -193,11 +204,11 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     ),
     ldCourse: (
       <span>
-        Trong quá trình học, bộ phận L&D mong muốn lắng nghe kỳ vọng và nhu cầu
-        của bạn để có thể đồng hành và hỗ trợ tốt hơn trong suốt khóa học. Chỉ
-        với vài phút, phản hồi của bạn sẽ giúp chúng tôi nâng cao chất lượng đào
-        tạo và mang đến trải nghiệm học tập phù hợp hơn. Cảm ơn bạn đã đồng hành
-        cùng chúng tôi!
+        Trong quá trình học, bộ phận L&amp;D mong muốn lắng nghe kỳ vọng và nhu
+        cầu của bạn để có thể đồng hành và hỗ trợ tốt hơn trong suốt khóa học.
+        Chỉ với vài phút, phản hồi của bạn sẽ giúp chúng tôi nâng cao chất lượng
+        đào tạo và mang đến trải nghiệm học tập phù hợp hơn. Cảm ơn bạn đã đồng
+        hành cùng chúng tôi!
       </span>
     ),
   }
@@ -250,9 +261,13 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
   const ContentModalTest = () => {
     return (
       <div className="justify-center self-stretch text-center">
+        <div className="text-base font-semibold text-gray-800">
+          Bạn đã tham gia khóa học {data?.data?.name}!
+        </div>
         <span className="text-base font-normal leading-normal text-gray-800">
           {SURVEY_CONTENTS[surveyType]}
         </span>
+        <ListSurveyLD listSurvey={listSurvey} />
       </div>
     )
   }
@@ -264,7 +279,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
       handleCancel={handleClose}
       onOk={open.completeCourse ? handleConfirmComplete : handleSubmit}
       icon={SURVEY_ICONS[surveyType]}
-      header={`${SURVEY_TITLES[surveyType]} ${isLDProgram ? data?.data?.name : ''}`}
+      header={SURVEY_TITLES[surveyType]}
       content={<ContentModalTest />}
       showFooter
       okButtonCaption={
