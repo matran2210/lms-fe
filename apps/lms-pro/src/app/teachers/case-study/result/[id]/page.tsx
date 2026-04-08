@@ -124,7 +124,7 @@ const CaseStudyResultTeacher = () => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             highlighted={highlighted}
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
@@ -140,7 +140,7 @@ const CaseStudyResultTeacher = () => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             solution={solution}
@@ -154,7 +154,7 @@ const CaseStudyResultTeacher = () => {
             name={`${index}_answer`}
             defaultValues={defaultValue}
             setValue={setValue}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             allowUnHighLight={allowUnHighLight}
             corrects={corrects}
             solution={solution}
@@ -178,7 +178,7 @@ const CaseStudyResultTeacher = () => {
         return (
           <AddWordPreview
             data={data}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
@@ -201,7 +201,7 @@ const CaseStudyResultTeacher = () => {
         return (
           <SelectWord
             data={data}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
@@ -217,7 +217,7 @@ const CaseStudyResultTeacher = () => {
             index={requirementIndex === -1 ? 0 : requirementIndex}
             question_data={data}
             control={control}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             forCaseStudy={true}
@@ -627,13 +627,13 @@ const CaseStudyResultTeacher = () => {
                       if (e) {
                         if (allowHighLight) {
                           runHighlight(
-                            () => {},
+                            () => { },
                             allowHighLight || false,
                             'hightlight_area_topic',
                           )
                         } else if (allowUnHighLight) {
                           runHighlight(
-                            () => {},
+                            () => { },
                             allowUnHighLight || false,
                             'hightlight_area_topic',
                             { color: 'white' },
@@ -682,7 +682,7 @@ const CaseStudyResultTeacher = () => {
                   const { target } = e
                   if (
                     (target as HTMLDivElement).scrollTop +
-                      (target as HTMLDivElement).offsetHeight >=
+                    (target as HTMLDivElement).offsetHeight >=
                     (target as HTMLDivElement).scrollHeight
                   ) {
                     dispatch(loadMoreQuestion(''))
@@ -705,13 +705,13 @@ const CaseStudyResultTeacher = () => {
                         if (e) {
                           if (allowHighLight) {
                             runHighlight(
-                              () => {},
+                              () => { },
                               allowHighLight || false,
                               'hightlight_area_topic',
                             )
                           } else if (allowUnHighLight) {
                             runHighlight(
-                              () => {},
+                              () => { },
                               allowUnHighLight || false,
                               'hightlight_area_topic',
                               { color: 'white' },
@@ -785,15 +785,14 @@ const CaseStudyResultTeacher = () => {
                 return (
                   <ModalResizeable
                     key={e.id}
-                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                    onClose={() => handleCloseScratchPad(e)}
                     position="center"
                     header={({ requestClose }) => (
                       <div className="relative">
                         <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                           <div className="truncate">
-                            <span className="text-base font-semibold ">{`${exhibitText} ${
-                              (i ?? 0) + 1
-                            }: `}</span>
+                            <span className="text-base font-semibold ">{`${exhibitText} ${(i ?? 0) + 1
+                              }: `}</span>
                             {exhibitsDes?.name}
                           </div>
                         </div>
@@ -810,6 +809,7 @@ const CaseStudyResultTeacher = () => {
                         </button>
                       </div>
                     )}
+                    isInBody
                   >
                     <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                       <EditorReader
@@ -841,7 +841,7 @@ const CaseStudyResultTeacher = () => {
                     minHeight={200}
                     key={e.id}
                     dragHandleClassName="modal-header"
-                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                    onClose={() => handleCloseScratchPad(e)}
                     position="center"
                   >
                     <div
@@ -899,9 +899,8 @@ const CaseStudyResultTeacher = () => {
                   </div>
                 </button>
                 <button
-                  className={`h-full ${
-                    checkCalExist > -1 && 'sapp-disable-button'
-                  }`}
+                  className={`h-full ${checkCalExist > -1 && 'sapp-disable-button'
+                    }`}
                   onClick={() => handleOpenScratchPad('calculator')}
                   disabled={checkCalExist > -1}
                 >
@@ -939,10 +938,9 @@ const CaseStudyResultTeacher = () => {
                             return (
                               <button
                                 key={e?.value}
-                                className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px] ' : 'min-w-[100px] '} ${
-                                  !watch('exhibits')?.includes(e?.value) &&
+                                className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px] ' : 'min-w-[100px] '} ${!watch('exhibits')?.includes(e?.value) &&
                                   'text-gray '
-                                }`}
+                                  }`}
                                 onClick={() => handleOpenExhibit(e?.value)}
                               >{`${exhibitText} ${index + 1}`}</button>
                             )

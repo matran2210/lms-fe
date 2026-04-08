@@ -84,7 +84,7 @@ export default function ClassResourceTeacher() {
           setLoadingEditor(false)
         }
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const { data, pagination, isLoading, handleChangeParams, setPagination } =
@@ -279,8 +279,8 @@ export default function ClassResourceTeacher() {
             options={{
               src: resource.url
                 ? resource.url
-                    .replace(videoUrl || '', '')
-                    .replace('/manifest/video.m3u8', '')
+                  .replace(videoUrl || '', '')
+                  .replace('/manifest/video.m3u8', '')
                 : resource.sub_url,
             }}
           ></SAPPVideo>
@@ -292,8 +292,8 @@ export default function ClassResourceTeacher() {
             options={{
               src: resource.url
                 ? resource.url
-                    .replace(videoUrl || '', '')
-                    .replace('/manifest/video.m3u8', '')
+                  .replace(videoUrl || '', '')
+                  .replace('/manifest/video.m3u8', '')
                 : resource.sub_url,
             }}
           ></SAPPAudio>
@@ -412,7 +412,7 @@ export default function ClassResourceTeacher() {
               '!overflow-visible': previewResource.suffix_type === 'AUDIO',
             })}
             position="center"
-            handleCloseScratchPad={() => {
+            onClose={() => {
               setOpenPreview(false)
               setPreviewResource(null)
             }}

@@ -98,7 +98,7 @@ const ClassResourceTable = ({
           setLoadingEditor(false)
         }
       }
-    } catch (error) {}
+    } catch (error) { }
   }
   const canDownload = (record: IClassResource, isTeacher: boolean) => {
     const perms = record?.class_resource_permissions
@@ -422,7 +422,7 @@ const ClassResourceTable = ({
               '!overflow-visible': previewResource.suffix_type === 'AUDIO',
             })}
             position="center"
-            handleCloseScratchPad={() => {
+            onClose={() => {
               setOpenPreview(false)
               setPreviewResource(null)
             }}
@@ -448,6 +448,7 @@ const ClassResourceTable = ({
             onResizeStopDone={() => {
               setSheetResizeVersion((v) => v + 1)
             }}
+            isInBody
           >
             <div className="h-full bg-white">
               {renderPreviewContent(previewResource)}

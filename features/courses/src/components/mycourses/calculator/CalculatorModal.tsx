@@ -19,7 +19,7 @@ const CalculatorModal = ({
     <>
       <ModalResizeable
         bodyClassName="h-[calc(100%-6px)]"
-        handleCloseScratchPad={onClose}
+        onClose={onClose}
         position="center"
         isInBody
         // draggableFull
@@ -29,7 +29,7 @@ const CalculatorModal = ({
           "!max-h-[634px] !w-[344px]": !isMobileCalc && !isShortScreen,
           "!max-h-[518px] !w-64": isMobileCalc || isShortScreen,
         })}
-        onClick={onClick}
+        onModalFocus={onClick}
       >
         {(
           { requestClose }, // Dùng requestClose để close modal đúng cách để giữ animation khi đóng

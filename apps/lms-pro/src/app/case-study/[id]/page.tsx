@@ -114,12 +114,12 @@ const CaseStudyDetail = () => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
-            // solution={solution}
+          // solution={solution}
           />
         )
       case QUESTION_TYPES.ONE_CHOICE:
@@ -131,7 +131,7 @@ const CaseStudyDetail = () => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -146,7 +146,7 @@ const CaseStudyDetail = () => {
             name={`${index}_answer`}
             defaultValues={defaultValue}
             setValue={setValue}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -160,7 +160,7 @@ const CaseStudyDetail = () => {
             data={data}
             // action={getAnswerMatching}
             ref={MatchQuizRef}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -177,7 +177,7 @@ const CaseStudyDetail = () => {
           <AddWordPreview
             data={data}
             // action={getValueFillText}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -225,7 +225,7 @@ const CaseStudyDetail = () => {
             ) => setValue?.(`${index}_answer`, value)}
             data={data}
             // action={getValueSelectText}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -248,7 +248,7 @@ const CaseStudyDetail = () => {
             index={undefined}
             question_data={data}
             control={control}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -1093,10 +1093,10 @@ const CaseStudyDetail = () => {
       >
         <div
           className="relative flex h-full flex-col overflow-hidden bg-white"
-          // onMouseUp={() => {
-          //   setStartResize(false)
-          //   setCurrentLeftWidth(leftWidth)
-          // }}
+        // onMouseUp={() => {
+        //   setStartResize(false)
+        //   setCurrentLeftWidth(leftWidth)
+        // }}
         >
           <div className="h-full" ref={containerRef}>
             <div className="flex h-full bg-[#F1F1F1]" id={'preview-question'}>
@@ -1115,13 +1115,13 @@ const CaseStudyDetail = () => {
                       if (e) {
                         if (allowHighLight) {
                           runHighlight(
-                            () => {},
+                            () => { },
                             allowHighLight || false,
                             'hightlight_area_topic',
                           )
                         } else if (allowUnHighLight) {
                           runHighlight(
-                            () => {},
+                            () => { },
                             allowUnHighLight || false,
                             'hightlight_area_topic',
                             { color: 'white' },
@@ -1224,13 +1224,13 @@ const CaseStudyDetail = () => {
                         if (e) {
                           if (allowHighLight) {
                             runHighlight(
-                              () => {},
+                              () => { },
                               allowHighLight || false,
                               'hightlight_area_topic',
                             )
                           } else if (allowUnHighLight) {
                             runHighlight(
-                              () => {},
+                              () => { },
                               allowUnHighLight || false,
                               'hightlight_area_topic',
                               { color: 'white' },
@@ -1352,7 +1352,7 @@ const CaseStudyDetail = () => {
                 return (
                   <ModalResizeable
                     key={e.id}
-                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                    onClose={() => handleCloseScratchPad(e)}
                     position="center"
                     width={412}
                     height={350}
@@ -1372,6 +1372,7 @@ const CaseStudyDetail = () => {
                         </button>
                       </div>
                     )}
+                    isInBody
                   >
                     <ScratchPatch
                       scratchPads={scratchPadValues?.value}
@@ -1398,7 +1399,7 @@ const CaseStudyDetail = () => {
                     key={e.id}
                     width={412}
                     height={350}
-                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                    onClose={() => handleCloseScratchPad(e)}
                     position="center"
                     header={({ requestClose }) => (
                       <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
@@ -1418,6 +1419,7 @@ const CaseStudyDetail = () => {
                     )}
                     modalIndex={i}
                     draggableFull
+                    isInBody
                   >
                     <div className="h-full bg-white px-4 py-3">
                       <EditorReader
@@ -1450,7 +1452,7 @@ const CaseStudyDetail = () => {
                     width={widthFileViewer}
                     height={heightFileViewer}
                     key={e.id}
-                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                    onClose={() => handleCloseScratchPad(e)}
                     position="center"
                     draggableFull
                   >

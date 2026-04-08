@@ -26,7 +26,7 @@ export default function PdfModal({
       minHeight={minHeight}
       header={header}
       dragHandleClassName={dragHandleClassName}
-      handleCloseScratchPad={onClose}
+      onClose={onClose}
       position={position}
     >
       <div className="h-full cursor-pointer select-none text-right text-base font-semibold text-gray-800 hover:text-primary">

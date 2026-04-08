@@ -1,31 +1,56 @@
 import { CloseIcon } from "@lms/assets";
 import clsx from "clsx";
 import { ResizeDirection } from "re-resizable";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { createPortal } from "react-dom";
 import { DraggableData, Rnd, RndDragEvent } from "react-rnd";
 
+// ── Constants ──────────────────────────────────────────────────────────
+const EXIT_DURATION = 300;
+const MODAL_OFFSET_PX = 20;
+
+const RND_BASE_STYLE: React.CSSProperties = {
+  background: "white",
+  boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+  border: "1px solid #DCDDDD",
+  position: "fixed",
+  pointerEvents: "auto",
+};
+
+// ── Types ──────────────────────────────────────────────────────────────
+type ModalPosition =
+  | "top left"
+  | "top middle"
+  | "top right"
+  | "bottom left"
+  | "bottom middle"
+  | "bottom right"
+  | "center left"
+  | "center right"
+  | "center";
+
 interface ModalResizeableProps {
   title?: string | ReactNode;
-  children: ReactNode | ((helpers: { requestClose: () => void }) => ReactNode); // requestClose dùng để close modal mà vẫn giữ được animation khi đóng modal
+  children:
+    | ReactNode
+    | ((helpers: { requestClose: () => void }) => ReactNode);
   width?: number;
   height?: number;
   minWidth?: number;
   minHeight?: number;
   maxHeight?: number;
   dragHandleClassName?: string;
-  header?: ReactNode | ((actions: { requestClose: () => void }) => ReactNode); // requestClose dùng để close modal mà vẫn giữ được animation khi đóng modal
-  handleCloseScratchPad?: (pad: any) => void;
-  position?:
-    | "top left"
-    | "top middle"
-    | "top right"
-    | "bottom left"
-    | "bottom middle"
-    | "bottom right"
-    | "center left"
-    | "center right"
-    | "center";
+  header?:
+    | ReactNode
+    | ((actions: { requestClose: () => void }) => ReactNode);
+  onClose?: () => void;
+  position?: ModalPosition;
   className?: string;
   draggableFull?: boolean;
   modalIndex?: number;
@@ -33,9 +58,65 @@ interface ModalResizeableProps {
   bodyClassName?: string;
   contentClassName?: string;
   isInBody?: boolean;
-  onClick?: () => void;
+  onModalFocus?: () => void;
   onResizeStopDone?: (size: { width: number; height: number }) => void;
 }
+
+// ── Helpers ────────────────────────────────────────────────────────────
+
+/** Ensure a value is >= 0 to prevent invalid positions */
+const clampPositive = (value: number): number => Math.max(0, value);
+
+const calculatePosition = (
+  pos: ModalPosition,
+  modalWidth: number,
+  modalHeight: number,
+  offset = 0,
+): { x: number; y: number } => {
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const shift = offset * MODAL_OFFSET_PX;
+
+  const positions: Record<ModalPosition, { x: number; y: number }> = {
+    "top left": { x: clampPositive(shift), y: clampPositive(shift) },
+    "top middle": {
+      x: clampPositive((vw - modalWidth) / 2 + shift),
+      y: clampPositive(shift),
+    },
+    "top right": {
+      x: clampPositive(vw - modalWidth - shift),
+      y: clampPositive(shift),
+    },
+    "center left": {
+      x: clampPositive(shift),
+      y: clampPositive((vh - modalHeight) / 2 + shift),
+    },
+    center: {
+      x: clampPositive((vw - modalWidth) / 2 + shift),
+      y: clampPositive((vh - modalHeight) / 2 + shift),
+    },
+    "center right": {
+      x: clampPositive(vw - modalWidth - shift),
+      y: clampPositive((vh - modalHeight) / 2 + shift),
+    },
+    "bottom left": {
+      x: clampPositive(shift),
+      y: clampPositive(vh - modalHeight - shift),
+    },
+    "bottom middle": {
+      x: clampPositive((vw - modalWidth) / 2 + shift),
+      y: clampPositive(vh - modalHeight - shift),
+    },
+    "bottom right": {
+      x: clampPositive(vw - modalWidth - shift),
+      y: clampPositive(vh - modalHeight - shift),
+    },
+  };
+
+  return positions[pos] || positions.center;
+};
+
+// ── Component ──────────────────────────────────────────────────────────
 
 const ModalResizeable: React.FC<ModalResizeableProps> = ({
   title = "Title",
@@ -46,8 +127,8 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   minHeight = 200,
   maxHeight,
   header,
-  dragHandleClassName, //Determine the drag handle class name
-  handleCloseScratchPad,
+  dragHandleClassName,
+  onClose,
   position = "center",
   className,
   draggableFull = false,
@@ -56,120 +137,100 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   bodyClassName,
   contentClassName,
   isInBody = false,
-  onClick = () => {},
+  onModalFocus,
   onResizeStopDone,
 }) => {
   const [size, setSize] = useState({ width, height });
-  const clamp = (value: number) => Math.abs(value); // Đảm bảo giá trị luôn dương để tránh lỗi khi tính toán vị trí modal
   const [closing, setClosing] = useState(false);
-  const EXIT_DURATION = 300;
-
-  const requestClose = () => {
-    // Khi người dùng yêu cầu đóng modal, chúng ta sẽ kích hoạt animation đóng modal trước khi thực sự gỡ bỏ modal khỏi DOM
-    if (closing) return;
-
-    setClosing(true);
-
-    setTimeout(() => {
-      handleCloseScratchPad?.(null);
-    }, EXIT_DURATION);
-  };
-  //Hàm tính vị trí của Modal
-  const calculatePosition = (
-    pos: string,
-    modalWidth: number,
-    modalHeight: number,
-    offset = 0,
-  ) => {
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
-    const shift = offset * 20; // mỗi modal lệch 20px
-    const positions = {
-      "top left": { x: clamp(shift), y: clamp(shift) },
-      "top middle": {
-        x: clamp((windowWidth - modalWidth) / 2 + shift),
-        y: clamp(shift),
-      },
-      "top right": {
-        x: clamp(windowWidth - modalWidth - shift),
-        y: clamp(shift),
-      },
-
-      "center left": {
-        x: clamp(shift),
-        y: clamp((windowHeight - modalHeight) / 2 + shift),
-      },
-      center: {
-        x: clamp((windowWidth - modalWidth) / 2 + shift),
-        y: clamp((windowHeight - modalHeight) / 2 + shift),
-      },
-      "center right": {
-        x: clamp(windowWidth - modalWidth - shift),
-        y: clamp((windowHeight - modalHeight) / 2 + shift),
-      },
-
-      "bottom left": {
-        x: clamp(shift),
-        y: clamp(windowHeight - modalHeight - shift),
-      },
-      "bottom middle": {
-        x: clamp((windowWidth - modalWidth) / 2 + shift),
-        y: clamp(windowHeight - modalHeight - shift),
-      },
-      "bottom right": {
-        x: clamp(windowWidth - modalWidth - shift),
-        y: clamp(windowHeight - modalHeight - shift),
-      },
-    };
-
-    return positions[pos as keyof typeof positions] || positions.center;
-  };
-
   const [modalPosition, setModalPosition] = useState(() =>
     calculatePosition(position, width, height, modalIndex),
   );
 
+  const closeTimeoutRef = useRef<number | null>(null);
+
+  // ── requestClose with exit animation ──
+  const requestClose = useCallback(() => {
+    if (closing) return;
+    setClosing(true);
+
+    closeTimeoutRef.current = window.setTimeout(() => {
+      onClose?.();
+    }, EXIT_DURATION);
+  }, [closing, onClose]);
+
+  // Cleanup timeout on unmount to prevent memory leaks
   useEffect(() => {
-    setModalPosition(
-      calculatePosition(position, size.width, size.height, modalIndex),
-    );
+    return () => {
+      if (closeTimeoutRef.current !== null) {
+        clearTimeout(closeTimeoutRef.current);
+      }
+    };
   }, []);
 
+  // Recalculate position when position prop or modalIndex changes + window resize
+  useEffect(() => {
+    const updatePosition = () => {
+      setModalPosition(
+        calculatePosition(position, size.width, size.height, modalIndex),
+      );
+    };
+
+    updatePosition();
+
+    window.addEventListener("resize", updatePosition);
+    return () => window.removeEventListener("resize", updatePosition);
+  }, [position, modalIndex]);
+
+  // Reset closing state when dimensions change
   useEffect(() => {
     setClosing(false);
   }, [width, height]);
 
-  const renderContent = () => {
-    // ===== handlers =====
-    const handleDragStop = (e: RndDragEvent, d: DraggableData) => {
-      const maxX = clamp(window.innerWidth - size.width);
-      const maxY = clamp(window.innerHeight - size.height);
+  // ── ESC key handler ──
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        requestClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [requestClose]);
+
+  // ── Drag / Resize handlers ──
+
+  const handleDragStop = useCallback(
+    (_e: RndDragEvent, d: DraggableData) => {
+      const maxX = clampPositive(window.innerWidth - size.width);
+      const maxY = clampPositive(window.innerHeight - size.height);
 
       setModalPosition({
         x: Math.min(Math.max(0, d.x), maxX),
         y: Math.min(Math.max(0, d.y), maxY),
       });
-    };
+    },
+    [size.width, size.height],
+  );
 
-    const handleResizeStop = (
-      e: MouseEvent | TouchEvent,
-      direction: ResizeDirection,
+  const handleResizeStop = useCallback(
+    (
+      _e: MouseEvent | TouchEvent,
+      _direction: ResizeDirection,
       ref: HTMLElement,
-      delta: {
-        height: number;
-        width: number;
-      },
+      _delta: { height: number; width: number },
       newPos: { x: number; y: number },
     ) => {
-      const newWidth = parseInt(ref.style.width);
-      const newHeight = parseInt(ref.style.height);
+      const rect = ref.getBoundingClientRect();
+      const newWidth = rect.width;
+      const newHeight = rect.height;
 
       const maxX = window.innerWidth - newWidth;
       const maxY = window.innerHeight - newHeight;
 
       setSize({
-        width: clamp(newWidth),
-        height: clamp(newHeight),
+        width: clampPositive(newWidth),
+        height: clampPositive(newHeight),
       });
 
       setModalPosition({
@@ -177,98 +238,94 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
         y: Math.min(Math.max(0, newPos.y), maxY),
       });
 
-      onResizeStopDone?.({
-        width: newWidth,
-        height: newHeight,
-      });
-    };
+      onResizeStopDone?.({ width: newWidth, height: newHeight });
+    },
+    [onResizeStopDone],
+  );
 
-    // ===== computed values =====
-    const overlayClass = clsx(
-      "pointer-events-none fixed inset-0 z-[1000] overflow-hidden modal-overlay",
-      closing ? "modal-zoom-out" : "modal-zoom-in",
-    );
+  // ── Computed values ──
 
-    const dragHandleClass = draggableFull
-      ? undefined
-      : dragHandleClassName || "modal-dragger";
+  const overlayClass = clsx(
+    "pointer-events-none fixed inset-0 z-[1000] overflow-hidden modal-overlay",
+    closing ? "modal-zoom-out" : "modal-zoom-in",
+  );
 
-    const rndClass = clsx(
-      "modalResizeable",
-      "overflow-hidden rounded-xl",
-      className,
-      rootClassName,
-    );
+  const dragHandleClass = draggableFull
+    ? undefined
+    : dragHandleClassName || "modal-dragger";
 
-    // ===== render header =====
-    const renderHeader = () => {
-      if (!header) {
-        return (
-          <div className="modalHeader">
-            <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between px-5">
-              <div className="truncate">{title}</div>
-            </div>
-            <button className="absolute right-3 top-2" onClick={requestClose}>
-              <CloseIcon />
-            </button>
+  const rndClass = clsx(
+    "modalResizeable",
+    "overflow-hidden rounded-xl",
+    className,
+    rootClassName,
+  );
+
+  // ── Render helpers ──
+
+  const renderHeader = () => {
+    if (!header) {
+      return (
+        <div className="modalHeader">
+          <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between px-5">
+            <div className="truncate">{title}</div>
           </div>
-        );
-      }
-
-      return typeof header === "function" ? header({ requestClose }) : header;
-    };
-
-    // ===== render content =====
-    const renderChildren = () => {
-      return typeof children === "function"
-        ? children({ requestClose })
-        : children;
-    };
-    const styleRnd: React.CSSProperties = {
-      background: "white",
-      boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-      border: "1px solid #DCDDDD",
-      position: "fixed",
-      pointerEvents: "auto",
-    };
-    // ===== JSX (clean) =====
-    return (
-      <div className={overlayClass}>
-        <Rnd
-          size={size}
-          position={modalPosition}
-          onDragStop={handleDragStop}
-          onResizeStop={handleResizeStop}
-          minWidth={minWidth}
-          minHeight={minHeight}
-          maxHeight={maxHeight}
-          bounds="window"
-          dragHandleClassName={dragHandleClass}
-          className={rndClass}
-          style={styleRnd}
-          onMouseDown={onClick}
-          onTouchStart={onClick}
-        >
-          <div
-            className={clsx(
-              "absolute left-0 top-0 h-full w-full",
-              bodyClassName,
-            )}
+          <button
+            className="absolute right-3 top-2"
+            onClick={requestClose}
+            aria-label="Close"
           >
-            {renderHeader()}
+            <CloseIcon />
+          </button>
+        </div>
+      );
+    }
 
-            <div className={clsx("modalContent", contentClassName)}>
-              {renderChildren()}
-            </div>
-          </div>
-        </Rnd>
-      </div>
-    );
+    return typeof header === "function" ? header({ requestClose }) : header;
   };
 
-  return isInBody
-    ? createPortal(renderContent(), document.body)
-    : renderContent();
+  const renderChildren = () => {
+    return typeof children === "function"
+      ? children({ requestClose })
+      : children;
+  };
+
+  // ── Main render ──
+
+  const content = (
+    <div className={overlayClass} role="dialog" aria-modal="true" aria-label={typeof title === "string" ? title : undefined}>
+      <Rnd
+        size={size}
+        position={modalPosition}
+        onDragStop={handleDragStop}
+        onResizeStop={handleResizeStop}
+        minWidth={minWidth}
+        minHeight={minHeight}
+        maxHeight={maxHeight}
+        bounds="window"
+        dragHandleClassName={dragHandleClass}
+        className={rndClass}
+        style={RND_BASE_STYLE}
+        onMouseDown={onModalFocus}
+        onTouchStart={onModalFocus}
+      >
+        <div
+          className={clsx(
+            "absolute left-0 top-0 h-full w-full",
+            bodyClassName,
+          )}
+        >
+          {renderHeader()}
+
+          <div className={clsx("modalContent", contentClassName)}>
+            {renderChildren()}
+          </div>
+        </div>
+      </Rnd>
+    </div>
+  );
+
+  return isInBody ? createPortal(content, document.body) : content;
 };
 
 export default ModalResizeable;

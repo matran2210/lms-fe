@@ -1183,7 +1183,7 @@ const CaseStudyDetail = () => {
               return (
                 <ModalResizeable
                   key={e.id}
-                  handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                  onClose={() => handleCloseScratchPad(e)}
                   position="center"
                   width={412}
                   height={350}
@@ -1227,7 +1227,7 @@ const CaseStudyDetail = () => {
               return (
                 <ModalResizeable
                   key={e.id}
-                  handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                  onClose={() => handleCloseScratchPad(e)}
                   position="center"
                   header={({ requestClose }) => (
                     <div className="relative">
@@ -1278,7 +1278,7 @@ const CaseStudyDetail = () => {
                   width={widthFileViewer}
                   height={heightFileViewer}
                   key={e.id}
-                  handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                  onClose={() => handleCloseScratchPad(e)}
                   position="center"
                 >
                   <div

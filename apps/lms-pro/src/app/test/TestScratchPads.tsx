@@ -95,10 +95,10 @@ const TestScratchPads = ({
               </button>
             </div>
           )}
-          handleCloseScratchPad={() => {
+          onClose={() => {
             handleCloseScratchPad(e)
           }}
-          onClick={() => {
+          onModalFocus={() => {
             setOnFocusingPad(e?.id)
           }}
           width={412}
@@ -125,15 +125,14 @@ const TestScratchPads = ({
       return (
         <ModalResizeable
           key={e.id}
-          handleCloseScratchPad={() => handleCloseScratchPad(e)}
+          onClose={() => handleCloseScratchPad(e)}
           position="center"
           header={({ requestClose }) => (
             <div className="relative">
               <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                 <div className="truncate">
-                  <span className="text-base font-semibold">{`${exhibitText} ${
-                    (i ?? 0) + 1
-                  }: `}</span>
+                  <span className="text-base font-semibold">{`${exhibitText} ${(i ?? 0) + 1
+                    }: `}</span>
                   {exhibitsDes?.name}
                 </div>
               </div>
@@ -180,7 +179,7 @@ const TestScratchPads = ({
           width={widthFileViewer}
           height={heightFileViewer}
           key={e.id}
-          handleCloseScratchPad={() => handleCloseScratchPad(e)}
+          onClose={() => handleCloseScratchPad(e)}
           position="center"
         >
           <div

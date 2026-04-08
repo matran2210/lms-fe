@@ -132,7 +132,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
             </button>
           </div>
         )}
-        handleCloseScratchPad={() => {
+        onClose={() => {
           removeNote();
         }}
         position="center"

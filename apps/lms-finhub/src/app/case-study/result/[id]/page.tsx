@@ -914,7 +914,7 @@ const CaseStudyResult = () => {
                 return (
                   <ModalResizeable
                     key={e.id}
-                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                    onClose={() => handleCloseScratchPad(e)}
                     position="center"
                     header={({ requestClose }) => (
                       <div className="relative">
@@ -968,7 +968,7 @@ const CaseStudyResult = () => {
                     minHeight={200}
                     key={e.id}
                     dragHandleClassName="modal-header"
-                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                    onClose={() => handleCloseScratchPad(e)}
                     position="center"
                   >
                     <div
