@@ -94,8 +94,25 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
   const isLDProgram = program === ECourseProgram.LD
   const listSurveySatisfy = useMemo(() => {
     return (listSurvey || []).filter((item) => {
-      const progress = Number(item.setting.show_by_progress)
-      return progress && percentComplete >= progress
+      if (item.setting.show_by_progress) {
+        // nếu là show_by_progress thì so sánh với phần trăm hoàn thành
+        const progress = Number(item.setting.show_by_progress)
+        return progress && percentComplete >= progress
+      } else if (item.setting.show_after_start_date) {
+        // nếu là show_after_start_date thì so sánh với số ngày sau khi bắt đầu
+        const afterStartDate = Number(item.setting.show_after_start_date)
+        const startDate = data?.class?.started_at
+        if (startDate) {
+          const startedAt = new Date(startDate)
+          const now = new Date()
+          // lấy số mili giây chênh lệch
+          const diffTime = now.getTime() - startedAt.getTime()
+          // đổi sang số ngày
+          const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
+          return diffDays >= afterStartDate
+        }
+        return false
+      }
     })
   }, [listSurvey, percentComplete])
 
@@ -147,7 +164,16 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
             | ECourseProgram.CMA
         ]
     if (isLDProgram) {
+      surveyUrl =
+        listSurveySatisfy?.find((item) => item.id === surveyId.current)?.url ||
+        ''
       handleConfirmSurvey()
+    } else {
+      setOpen({
+        middtermCourse: false,
+        finalCourse: false,
+        completeCourse: true,
+      })
     }
     onLinkSocial(surveyUrl)
   }
@@ -188,6 +214,11 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
       }
     } else {
       handleRemindSurvey()
+      setOpen({
+        middtermCourse: false,
+        finalCourse: false,
+        completeCourse: false,
+      })
     }
   }
 
@@ -204,6 +235,11 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
    * Xử lý khi người dùng xác nhận đã hoàn thành khảo sát
    */
   const handleConfirmComplete = () => {
+    setOpen({
+      middtermCourse: false,
+      finalCourse: false,
+      completeCourse: false,
+    })
     handleCompleteSurvey()
   }
 
@@ -257,6 +293,18 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
    * Xử lý hiển thị modal dựa trên tiến độ học tập
    */
   useEffect(() => {
+    if (
+      data?.class_type !== 'LESSON' ||
+      !data?.survey_attributes?.is_survey_popup ||
+      ![
+        ECourseProgram.ACCA,
+        ECourseProgram.CERT_DIP,
+        ECourseProgram.CFA,
+        ECourseProgram.CMA,
+      ].includes(convertCertDip(program) as ECourseProgram)
+    )
+      return
+
     if (completeFinal) {
       setOpen({
         middtermCourse: false,
