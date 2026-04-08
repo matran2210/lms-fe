@@ -1,3 +1,4 @@
+'use client'
 import { IconBuildingModify } from '@lms/assets'
 import { ECourseProgram, ISurveyCustom } from '@lms/core'
 import { SappModalV3 } from '@lms/ui'
@@ -79,18 +80,15 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     ).toFixed(1),
   )
   const keyLS = 'remind-survey-ld'
-  const isRemindSurveyLD =
-    localStorage
-      .getItem(keyLS)
-      ?.split(',')
-      .includes(courseId as string) ?? false
+  const [isRemindSurveyLD, setIsRemindSurveyLD] = useState(false)
+
   const [open, setOpen] = useState<SurveyState>({
     middtermCourse: false,
     finalCourse: false,
     completeCourse: false,
     ldCourse: false,
   })
-  const surveyId = useRef<string>()
+  const [surveyId, setSurveyId] = useState<string>()
   const isLDProgram = program === ECourseProgram.LD
   const listSurveySatisfy = useMemo(() => {
     return (listSurvey || []).filter((item) => {
@@ -113,8 +111,9 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
         }
         return false
       }
+      return false
     })
-  }, [listSurvey, percentComplete])
+  }, [listSurvey, percentComplete, data?.class?.started_at])
 
   const progress = data?.survey_attributes?.progress_percent
 
@@ -134,9 +133,9 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
 
   const handleConfirmSurvey = async () => {
     try {
-      if (!courseId || !surveyId.current) return
+      if (!courseId || !surveyId) return
       const res = await CoursesAPI.confirmSurvey(courseId as string, {
-        survey_id: surveyId.current,
+        survey_id: surveyId,
       })
       if (res?.success) refetchSurvey()
     } catch (error) {
@@ -165,8 +164,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
         ]
     if (isLDProgram) {
       surveyUrl =
-        listSurveySatisfy?.find((item) => item.id === surveyId.current)?.url ||
-        ''
+        listSurveySatisfy?.find((item) => item.id === surveyId)?.url || ''
       handleConfirmSurvey()
     } else {
       setOpen({
@@ -321,22 +319,16 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
   }, [data])
 
   useEffect(() => {
-    if (
-      isLDProgram &&
-      listSurveySatisfy &&
-      listSurveySatisfy.length > 0 &&
-      !isRemindSurveyLD
-    ) {
-      setOpen({
-        middtermCourse: false,
-        finalCourse: false,
-        completeCourse: false,
-        ldCourse: true,
-      })
-    } else {
-      handleTest()
-    }
-  }, [listSurveySatisfy, isLDProgram])
+    const shouldOpenLD =
+      isLDProgram && listSurveySatisfy?.length > 0 && !isRemindSurveyLD
+
+    setOpen({
+      middtermCourse: false,
+      finalCourse: false,
+      completeCourse: false,
+      ldCourse: shouldOpenLD,
+    })
+  }, [listSurveySatisfy, isLDProgram, isRemindSurveyLD])
 
   const surveyType = getSurveyType()
 
@@ -345,6 +337,17 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     open.finalCourse ||
     open.completeCourse ||
     open.ldCourse
+
+  useEffect(() => {
+    if (!courseId) return
+    const value =
+      localStorage
+        .getItem(keyLS)
+        ?.split(',')
+        .includes(courseId as string) ?? false
+
+    setIsRemindSurveyLD(value)
+  }, [courseId])
 
   const ContentModalTest = () => {
     return (
@@ -361,7 +364,10 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
           {SURVEY_CONTENTS[surveyType]}
         </span>
         {isLDProgram && (
-          <ListSurveyLD listSurvey={listSurveySatisfy} ref={surveyId} />
+          <ListSurveyLD
+            listSurvey={listSurveySatisfy}
+            onSurveyChange={setSurveyId}
+          />
         )}
       </div>
     )
