@@ -140,7 +140,7 @@ const CourseDetail = () => {
 
   const programCourse = data?.pages?.[0]?.courseDetail?.data?.program
 
-  const { data: listSurvey } = useQuery({
+  const { data: listSurvey, refetch: refetchSurvey } = useQuery({
     queryKey: ['surveyCustom', param?.courseId],
     queryFn: () => CoursesAPI.getSurveyCustom(param?.courseId as string),
     enabled:
@@ -270,8 +270,7 @@ const CourseDetail = () => {
   const hasCertificate =
     !!data?.pages?.[0]?.courseDetail?.user_certificate_id ||
     !!data?.pages?.[0]?.courseDetail?.user_certificate_url
-  
-  console.log('course detail', data?.pages?.[0]?.courseDetail)
+
   return (
     <Layout
       title="Course Detail"
@@ -349,6 +348,7 @@ const CourseDetail = () => {
           program={programCourse}
           data={data?.pages?.[0]?.courseDetail || {}}
           listSurvey={listSurvey}
+          refetchSurvey={refetchSurvey}
         />
       )}
 

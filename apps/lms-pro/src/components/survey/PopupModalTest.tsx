@@ -3,7 +3,7 @@ import { ECourseProgram, ISurveyCustom } from '@lms/core'
 import { SappModalV3 } from '@lms/ui'
 import { onLinkSocial } from '@lms/utils'
 import { useParams } from 'next/navigation'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { CoursesAPI } from 'src/api/courses'
 import ListSurveyLD from './ListSurveyLD'
 
@@ -12,6 +12,7 @@ interface SurveyModalProps {
   program: CourseProgram
   data: Record<string, any>
   listSurvey?: ISurveyCustom[]
+  refetchSurvey: () => void
 }
 
 interface SurveyState {
@@ -61,7 +62,10 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
   program,
   data,
   listSurvey,
+  refetchSurvey,
 }) => {
+  const params = useParams()
+  const { courseId } = params
   const convertCertDip = (input: string) => {
     if (!input) return ''
     return input.replace(/\//g, '_').toUpperCase()
@@ -74,13 +78,19 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
       100
     ).toFixed(1),
   )
-
+  const keyLS = 'remind-survey-ld'
+  const isRemindSurveyLD =
+    localStorage
+      .getItem(keyLS)
+      ?.split(',')
+      .includes(courseId as string) ?? false
   const [open, setOpen] = useState<SurveyState>({
     middtermCourse: false,
     finalCourse: false,
     completeCourse: false,
     ldCourse: false,
   })
+  const surveyId = useRef<string>()
   const isLDProgram = program === ECourseProgram.LD
   const listSurveySatisfy = useMemo(() => {
     return (listSurvey || []).filter((item) => {
@@ -88,15 +98,13 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
       return progress && percentComplete >= progress
     })
   }, [listSurvey, percentComplete])
-  console.log('listSurveySatisfy', listSurveySatisfy)
+
   const progress = data?.survey_attributes?.progress_percent
 
   const completeMiddterm = progress >= 0.5 && progress < 0.6
 
   const completeFinal = progress >= 0.6 && progress <= 1
 
-  const params = useParams()
-  const { courseId } = params
   /**
    * Xác định loại khảo sát hiện tại dựa trên trạng thái
    */
@@ -107,6 +115,17 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     return 'completeCourse'
   }
 
+  const handleConfirmSurvey = async () => {
+    try {
+      if (!courseId || !surveyId.current) return
+      const res = await CoursesAPI.confirmSurvey(courseId as string, {
+        survey_id: surveyId.current,
+      })
+      if (res?.success) refetchSurvey()
+    } catch (error) {
+      // handle error
+    }
+  }
   /**
    * Xử lý khi người dùng submit khảo sát
    * Chuyển hướng đến form khảo sát tương ứng với chương trình
@@ -128,7 +147,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
             | ECourseProgram.CMA
         ]
     if (isLDProgram) {
-      surveyUrl = 'https://survey.hsforms.com/1n9Xo8sKjQ9u2a7h0r3z8CQ120xb'
+      handleConfirmSurvey()
     }
     onLinkSocial(surveyUrl)
   }
@@ -155,7 +174,21 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
    * Xử lý đóng modal
    */
   const handleClose = () => {
-    handleRemindSurvey()
+    if (isLDProgram) {
+      if (!courseId) return
+      const current = localStorage.getItem(keyLS)
+
+      const list = current ? current.split(',') : []
+
+      // tránh bị duplicate
+      if (!list.includes(courseId as string)) {
+        list.push(courseId as string)
+        localStorage.setItem(keyLS, list.join(','))
+        handleTest()
+      }
+    } else {
+      handleRemindSurvey()
+    }
   }
 
   const handleTest = () => {
@@ -224,17 +257,6 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
    * Xử lý hiển thị modal dựa trên tiến độ học tập
    */
   useEffect(() => {
-    // if (
-    //   data?.class_type !== 'LESSON' ||
-    //   !data?.survey_attributes?.is_survey_popup ||
-    //   ![
-    //     ECourseProgram.ACCA,
-    //     ECourseProgram.CERT_DIP,
-    //     ECourseProgram.CFA,
-    //     ECourseProgram.CMA,
-    //   ].includes(convertCertDip(program) as ECourseProgram)
-    // )
-    //   return
     if (completeFinal) {
       setOpen({
         middtermCourse: false,
@@ -251,13 +273,20 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
   }, [data])
 
   useEffect(() => {
-    if (isLDProgram && listSurveySatisfy && listSurveySatisfy.length > 0) {
+    if (
+      isLDProgram &&
+      listSurveySatisfy &&
+      listSurveySatisfy.length > 0 &&
+      !isRemindSurveyLD
+    ) {
       setOpen({
         middtermCourse: false,
         finalCourse: false,
         completeCourse: false,
         ldCourse: true,
       })
+    } else {
+      handleTest()
     }
   }, [listSurveySatisfy, isLDProgram])
 
@@ -283,7 +312,9 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
         <span className="text-base font-normal leading-normal text-gray-800">
           {SURVEY_CONTENTS[surveyType]}
         </span>
-        {isLDProgram && <ListSurveyLD listSurvey={listSurveySatisfy} />}
+        {isLDProgram && (
+          <ListSurveyLD listSurvey={listSurveySatisfy} ref={surveyId} />
+        )}
       </div>
     )
   }
@@ -309,6 +340,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
       headerClassName="text-center"
       isUnderLine
       isOnCancel={false}
+      isValidated={listSurveySatisfy && listSurveySatisfy?.length > 0}
     />
   )
 }
