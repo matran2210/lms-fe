@@ -4,6 +4,7 @@ import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import {
   CalculatorIcon,
   CloseIcon,
+  CloseIconNote,
   ExhibitsIcon,
   HighlightIcon,
   ScratchPadIcon,
@@ -21,6 +22,7 @@ import {
   ITopic,
   PROGRAM,
   QUESTION_TYPES,
+  ScratchPadValue,
 } from '@lms/core'
 import { CalculatorModal } from '@lms/feature-courses'
 import { useMousePosition, useSmartModalSize } from '@lms/hooks'
@@ -31,26 +33,25 @@ import {
   EssayQuestionPreview,
   FileViewer,
   FullScreenLayout,
-  HookFormTextArea,
   MatchingQuestion,
   ModalResizeable,
-  MovableWindow,
   MultiChoiceQuestion,
   OneChoiceQuestion,
   SappButton,
-  SelectWord,
+  SelectWord
 } from '@lms/ui'
 import { runHighlight } from '@lms/utils'
 import { IFile } from '@sapp-fe/preview-activity/dist/shared/interfaces'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { CoursesAPI } from 'src/api/courses'
+import ScratchPatch from 'src/app/test/scratchPatch'
 import { PageLink } from 'src/constants/routers'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch } from 'src/redux/hook'
-import { CoursesAPI } from 'src/api/courses'
 
 const CaseStudyResultTeacher = () => {
   const router = useRouter()
@@ -737,43 +738,42 @@ const CaseStudyResultTeacher = () => {
                 )
               } else if (e.type === 'scratch_pad') {
                 return (
-                  <MovableWindow
-                    position={{
-                      width: '400px',
-                      height: '300px',
-                      top: 'calc(50% - 150px)',
-                      left: 'calc(50% - 200px)',
-                    }}
-                    key={e?.id}
-                    onClick={() => setOnFocusingPad(e?.id ?? '')}
-                    zIndex={
-                      onFocusingPad === e?.id
-                        ? openScratchPad?.length + 500
-                        : index + 500
-                    }
-                  >
-                    <div className="absolute left-0 top-0  h-full w-full border">
-                      <div className="flex h-10 w-full items-center justify-between bg-secondary-100 px-5">
-                        <div>Scratch Pad</div>
-                        <button onClick={() => handleCloseScratchPad(e)}>
-                          <CloseIcon />
+                  <ModalResizeable
+                    key={e.id}
+                    onClose={() => handleCloseScratchPad(e)}
+                    position="center"
+                    width={412}
+                    height={350}
+                    header={({ requestClose }) => (
+                      <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
+                        <div className="text-sm font-semibold text-gray-800">
+                          Scratch Pad
+                        </div>
+                        <button
+                          className="text-icon"
+                          onClick={() => {
+                            requestClose()
+                            setTimeout(() => handleCloseScratchPad(e), 300)
+                          }}
+                        >
+                          <CloseIconNote />
                         </button>
                       </div>
-                      <HookFormTextArea
-                        defaultValue={scratchPadValues?.value}
-                        placeholder="Take a note..."
-                        control={controlScratch}
-                        name={e?.id ?? ''}
-                        onChange={(
-                          event: React.ChangeEvent<
-                            HTMLTextAreaElement | HTMLInputElement
-                          >,
-                        ) => handleChangeScratchPad(event, e?.id)}
-                        className="sapp-text-area h-[calc(100%-40px)] w-full p-5"
-                      />
-                      {/* </div> */}
-                    </div>
-                  </MovableWindow>
+                    )}
+                    isInBody
+                  >
+                    <ScratchPatch
+                      scratchPads={scratchPadValues?.value}
+                      scratchPadValues={e as ScratchPadValue}
+                      control={controlScratch}
+                      handleChangeScratchPad={(
+                        event: ChangeEvent<HTMLInputElement>,
+                      ) => {
+                        handleChangeScratchPad(event, e?.id)
+                      }}
+                      className="!h-fit"
+                    />
+                  </ModalResizeable>
                 )
               } else if (e.type === 'exhibits') {
                 const i = exhibitData?.findIndex(

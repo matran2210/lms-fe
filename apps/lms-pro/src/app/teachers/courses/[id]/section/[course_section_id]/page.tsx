@@ -344,8 +344,8 @@ const CoursePartDetailTeacher = () => {
       lockSection
         ? handleLockedSection()
         : handleUnlockedSection(() =>
-            handleRouterChapter(course_section?.quiz?.id),
-          )
+          handleRouterChapter(course_section?.quiz?.id),
+        )
     } else if (
       course_section?.course_section_type === 'ACTIVITY' ||
       course_section?.course_section_type === 'UNIT'
@@ -354,20 +354,20 @@ const CoursePartDetailTeacher = () => {
       lockSection || learningOutcome?.next_section?.is_preview_locked
         ? handleLockedSection()
         : handleUnlockedSection(() =>
-            handleRouterActivity(course_section?.children?.[0]?.id, undefined),
-          )
+          handleRouterActivity(course_section?.children?.[0]?.id, undefined),
+        )
     } else if (course_section?.course_section_type === 'STORY') {
       // Handle story section
       lockSection
         ? handleLockedSection()
         : handleUnlockedSection(() =>
-            handleRouterCaseStudy(
-              quiz?.id,
-              quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
-              course_section?.id,
-              quiz?.case_study_story?.instances?.[0]?.id,
-            ),
-          )
+          handleRouterCaseStudy(
+            quiz?.id,
+            quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
+            course_section?.id,
+            quiz?.case_study_story?.instances?.[0]?.id,
+          ),
+        )
     }
   }
 
@@ -375,14 +375,20 @@ const CoursePartDetailTeacher = () => {
     id: string | string[] | undefined,
     course_section_id: string | string[] | undefined,
   ) => {
-    const res = await CoursesAPI.learningOutcomeProgress(id, chapterDetail?.id)
+    const res = await CoursesAPI.learningOutcomeProgress(
+      params.id,
+      chapterDetail?.id,
+    )
+    if (res?.success) {
+      fetchChapterDetail(id, course_section_id)
+    }
   }
 
   const handleCaseStudyProcess = async (
     courseId: string,
     caseStudyId: string,
   ) => {
-    const res = await CoursesAPI.caseStudyProgress(id, courseId, caseStudyId)
+    await CoursesAPI.caseStudyProgress(params.id, courseId, caseStudyId)
   }
 
   useEffect(() => {
@@ -517,7 +523,7 @@ const CoursePartDetailTeacher = () => {
           listFocusSubSectionIds={listFocusSubSectionIds}
           listFocusUnitIds={listFocusUnitIds}
           deadline={deadline}
-          // isTeacher
+        // isTeacher
         />
         <SappDrawer
           isOpen={openLearningOutcome}
@@ -572,7 +578,7 @@ const CoursePartDetailTeacher = () => {
             setOpen={setOpen}
             data={chapterData}
             class_user_id={previewPart?.class_user_id}
-            activeCourse={() => {}}
+            activeCourse={() => { }}
             is_passed_course={isPassedCourse}
           />
         )}
