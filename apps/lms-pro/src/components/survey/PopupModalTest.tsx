@@ -3,7 +3,7 @@ import { ECourseProgram, ISurveyCustom } from '@lms/core'
 import { SappModalV3 } from '@lms/ui'
 import { onLinkSocial } from '@lms/utils'
 import { useParams } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { CoursesAPI } from 'src/api/courses'
 import ListSurveyLD from './ListSurveyLD'
 
@@ -66,6 +66,14 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     if (!input) return ''
     return input.replace(/\//g, '_').toUpperCase()
   }
+  const percentComplete = Number(
+    // Học viên đã hoàn thành được bao nhiêu % làm tròn 1 số thập phân
+    (
+      (data?.learning_progress?.total_course_sections_completed /
+        (data?.learning_progress?.total_course_sections || 1)) *
+      100
+    ).toFixed(1),
+  )
 
   const [open, setOpen] = useState<SurveyState>({
     middtermCourse: false,
@@ -74,6 +82,13 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     ldCourse: false,
   })
   const isLDProgram = program === ECourseProgram.LD
+  const listSurveySatisfy = useMemo(() => {
+    return (listSurvey || []).filter((item) => {
+      const progress = Number(item.setting.show_by_progress)
+      return progress && percentComplete >= progress
+    })
+  }, [listSurvey, percentComplete])
+  console.log('listSurveySatisfy', listSurveySatisfy)
   const progress = data?.survey_attributes?.progress_percent
 
   const completeMiddterm = progress >= 0.5 && progress < 0.6
@@ -220,14 +235,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     //   ].includes(convertCertDip(program) as ECourseProgram)
     // )
     //   return
-    if (isLDProgram) {
-      setOpen({
-        middtermCourse: false,
-        finalCourse: false,
-        completeCourse: false,
-        ldCourse: true,
-      })
-    } else if (completeFinal) {
+    if (completeFinal) {
       setOpen({
         middtermCourse: false,
         finalCourse: true,
@@ -241,6 +249,17 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
       })
     }
   }, [data])
+
+  useEffect(() => {
+    if (isLDProgram && listSurveySatisfy && listSurveySatisfy.length > 0) {
+      setOpen({
+        middtermCourse: false,
+        finalCourse: false,
+        completeCourse: false,
+        ldCourse: true,
+      })
+    }
+  }, [listSurveySatisfy, isLDProgram])
 
   const surveyType = getSurveyType()
 
@@ -264,7 +283,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
         <span className="text-base font-normal leading-normal text-gray-800">
           {SURVEY_CONTENTS[surveyType]}
         </span>
-        {isLDProgram && <ListSurveyLD listSurvey={listSurvey} />}
+        {isLDProgram && <ListSurveyLD listSurvey={listSurveySatisfy} />}
       </div>
     )
   }
