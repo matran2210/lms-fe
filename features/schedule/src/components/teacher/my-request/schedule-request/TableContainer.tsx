@@ -3,73 +3,80 @@ import {
   DEFAULT_PAGE_SIZE,
   StatusRequestSchedule,
   TeacherKey,
-} from '@lms/core'
-import { SappActionCell, SappTable, TooltipParagraph } from '@lms/ui'
-import { ColumnsType } from 'antd/es/table'
-import { useEffect, useState } from 'react'
+} from "@lms/core";
+import { SappActionCell, SappTable, TooltipParagraph } from "@lms/ui";
+import { ColumnsType } from "antd/es/table";
+import { useEffect, useState } from "react";
 
 import {
   FilterRequestScheduleParams,
   IScheduleRequestItem,
   StatusRequestScheduleParams,
-} from '@lms/core'
-import { useSappPaging } from '@lms/hooks'
+} from "@lms/core";
+import { useSappPaging } from "@lms/hooks";
 import {
   buildQueryString,
   convertSlugToTitle,
   convertSnakeCaseToHumanReadable,
   formatDateFromUTC,
-} from '@lms/utils'
-import DetailRequestModal from './DetailRequestModal'
-import ReasonModal from './ReasonModal'
-import StatusItem from './StatusItem'
-import SuccessModal from './SuccessModal'
-import TableCell from './TableCell'
-import { useFeature } from '@lms/contexts'
+} from "@lms/utils";
+import DetailRequestModal from "./DetailRequestModal";
+import ReasonModal from "./ReasonModal";
+import StatusItem from "./StatusItem";
+import SuccessModal from "./SuccessModal";
+import TableCell from "./TableCell";
+import { useFeature } from "@lms/contexts";
+import { Checkbox } from "antd";
 
 export const statusColor = (data: IScheduleRequestItem) => {
   switch (data?.status) {
     case StatusRequestSchedule.PENDING:
-      return 'bg-[#F897070D] text-warning'
+      return "bg-[#F897070D] text-warning";
     case StatusRequestSchedule.APPROVED:
-      return 'bg-[#07AF170D] text-[#07af17]'
+      return "bg-[#07AF170D] text-[#07af17]";
     case StatusRequestSchedule.REJECT:
     case StatusRequestSchedule.CANCEL:
-      return 'bg-[#F019190D] text-[#f01919]'
+      return "bg-[#F019190D] text-[#f01919]";
     default:
-      return ''
+      return "";
   }
-}
+};
 export const defaultOpenReasonModal: IOpenReasonModal = {
   type: undefined,
   open: false,
-  requestId: '',
-}
+  requestId: "",
+};
 export interface UpdateStatusParams {
-  requestId: string
-  type: StatusRequestSchedule
-  reason?: string
-  callback?: () => void
+  requestId: string;
+  type: StatusRequestSchedule;
+  reason?: string;
+  callback?: () => void;
 }
 export interface IOpenReasonModal {
-  requestId: string | undefined
-  type: StatusRequestSchedule | undefined
-  open: boolean
+  requestId: string | undefined;
+  type: StatusRequestSchedule | undefined;
+  open: boolean;
 }
 interface IProps {
-  params: FilterRequestScheduleParams
+  params: FilterRequestScheduleParams;
+  onSelectedActionChange?: (
+    data: Record<string, StatusRequestSchedule>,
+  ) => void;
 }
-export default function TableContainer({ params }: IProps) {
-  const { teacherApi, router, pathname, query } = useFeature()
-  const [openDetail, setOpenDetail] = useState(false)
+export default function TableContainer({
+  params,
+  onSelectedActionChange,
+}: IProps) {
+  const { teacherApi, router, pathname, query } = useFeature();
+  const [openDetail, setOpenDetail] = useState(false);
   const [openReasonModal, setOpenReasonModal] = useState<IOpenReasonModal>(
     defaultOpenReasonModal,
-  )
-  const [openSuccessModal, setOpenSuccessModal] = useState(false)
+  );
+  const [openSuccessModal, setOpenSuccessModal] = useState(false);
 
   const [selectedRequest, setSelectedRequest] = useState<
     IScheduleRequestItem | undefined
-  >()
+  >();
   const {
     data,
     pagination,
@@ -86,7 +93,7 @@ export default function TableContainer({ params }: IProps) {
         ...params,
       }),
     params,
-  })
+  });
 
   useEffect(() => {
     router.replace(
@@ -96,36 +103,65 @@ export default function TableContainer({ params }: IProps) {
         page_size: pagination.pageSize,
         ...params,
       })}`,
-    )
-  }, [pagination, params])
+    );
+  }, [pagination, params]);
 
   const Action = (data: IScheduleRequestItem) => {
-    setOpenDetail(true)
-    setSelectedRequest(data)
-  }
+    setOpenDetail(true);
+    setSelectedRequest(data);
+  };
+  const [selectedAction, setSelectedAction] = useState<
+    Record<string, StatusRequestSchedule>
+  >({});
+  const handleSelectAction = (
+    record: IScheduleRequestItem,
+    type: StatusRequestSchedule,
+  ) => {
+    setSelectedAction((prev) => {
+      const current = prev[record.id];
+
+      // 👇 nếu click lại cùng value → xóa key
+      if (current === type) {
+        const newState = { ...prev };
+        delete newState[record.id];
+        return newState;
+      }
+
+      // 👇 nếu chọn mới → set lại
+      return {
+        ...prev,
+        [record.id]: type,
+      };
+    });
+  };
+
+  useEffect(() => {
+    onSelectedActionChange?.(selectedAction);
+  }, [selectedAction]);
+  console.log("selectedAction", selectedAction);
   const columnsValue: ColumnsType<IScheduleRequestItem> = [
     {
-      title: '#',
+      title: "#",
       render: (_, record: IScheduleRequestItem, index: number) => (
         <TableCell
           data={
             index +
             1 +
             ((pagination?.current || 1) - DEFAULT_PAGE_NUMBER) *
-            (pagination?.pageSize || DEFAULT_PAGE_SIZE)
+              (pagination?.pageSize || DEFAULT_PAGE_SIZE)
           }
           className="!text-zinc-400"
         />
       ),
     },
     {
-      title: 'Class code',
+      title: "Class code",
       render: (_, record: IScheduleRequestItem) => (
         <TableCell data={record?.class?.code} className="!text-zinc-400" />
       ),
     },
     {
-      title: 'Program',
+      title: "Program",
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={record?.subject?.course_category?.name}
@@ -135,7 +171,7 @@ export default function TableContainer({ params }: IProps) {
       ),
     },
     {
-      title: 'Subject',
+      title: "Subject",
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
           className="max-w-36 overflow-hidden text-ellipsis whitespace-nowrap"
@@ -148,24 +184,25 @@ export default function TableContainer({ params }: IProps) {
       ),
     },
     {
-      title: 'Construction mode',
+      title: "Construction mode",
       render: (_, record: IScheduleRequestItem) => (
         <TableCell data={convertSnakeCaseToHumanReadable(record?.mode)} />
       ),
     },
     {
-      title: 'Start Date - End Date',
+      title: "Start Date - End Date",
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
-          data={`${record?.schedule_time.start_date ? formatDateFromUTC(record?.schedule_time.start_date) : '-'} - ${record?.schedule_time.end_date
-            ? formatDateFromUTC(record?.schedule_time.end_date)
-            : '-'
-            }`}
+          data={`${record?.schedule_time.start_date ? formatDateFromUTC(record?.schedule_time.start_date) : "-"} - ${
+            record?.schedule_time.end_date
+              ? formatDateFromUTC(record?.schedule_time.end_date)
+              : "-"
+          }`}
         />
       ),
     },
     {
-      title: 'Sent Date',
+      title: "Sent Date",
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={formatDateFromUTC(record?.created_at)}
@@ -174,7 +211,7 @@ export default function TableContainer({ params }: IProps) {
       ),
     },
     {
-      title: 'CX Admin',
+      title: "CX Admin",
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={record?.staff_detail?.full_name}
@@ -183,7 +220,7 @@ export default function TableContainer({ params }: IProps) {
       ),
     },
     {
-      title: 'Update Date',
+      title: "Update Date",
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={formatDateFromUTC(record?.updated_at)}
@@ -192,7 +229,7 @@ export default function TableContainer({ params }: IProps) {
       ),
     },
     {
-      title: 'Status',
+      title: "Status",
       render: (_, record: IScheduleRequestItem) => {
         return (
           <TableCell
@@ -203,17 +240,71 @@ export default function TableContainer({ params }: IProps) {
               />
             }
           />
-        )
+        );
       },
     },
     {
-      title: '',
-      fixed: 'right',
+      title: "Accept",
+      render: (_, record: IScheduleRequestItem) => {
+        if (record?.status === StatusRequestSchedule.PENDING) {
+          return (
+            <Checkbox
+              checked={
+                selectedAction[record.id] === StatusRequestSchedule.APPROVED
+              }
+              onChange={(e) => {
+                handleSelectAction(record, StatusRequestSchedule.APPROVED);
+              }}
+            />
+          );
+        }
+        return "-";
+      },
+    },
+    {
+      title: "Reject",
+      render: (_, record: IScheduleRequestItem) => {
+        if (record?.status === StatusRequestSchedule.PENDING) {
+          return (
+            <Checkbox
+              checked={
+                selectedAction[record.id] === StatusRequestSchedule.REJECT
+              }
+              onChange={(e) => {
+                handleSelectAction(record, StatusRequestSchedule.REJECT);
+              }}
+            />
+          );
+        }
+        return "-";
+      },
+    },
+    {
+      title: "Cancel",
+      render: (_, record: IScheduleRequestItem) => {
+        if (record?.status === StatusRequestSchedule.APPROVED) {
+          return (
+            <Checkbox
+              checked={
+                selectedAction[record.id] === StatusRequestSchedule.CANCEL
+              }
+              onChange={(e) => {
+                handleSelectAction(record, StatusRequestSchedule.CANCEL);
+              }}
+            />
+          );
+        }
+        return "-";
+      },
+    },
+    {
+      title: "",
+      fixed: "right",
       render: (_, record: IScheduleRequestItem) => (
         <SappActionCell handleClickView={() => Action(record)} />
       ),
     },
-  ]
+  ];
   /**
    * Hàm cập nhật trạng thái yêu cầu lịch trình.
    * Gửi yêu cầu lên server để cập nhật trạng thái yêu cầu lịch trình.
@@ -227,8 +318,8 @@ export default function TableContainer({ params }: IProps) {
   const handleUpdateStatus = async ({
     requestId,
     type,
-    reason = '',
-    callback = () => { },
+    reason = "",
+    callback = () => {},
   }: UpdateStatusParams) => {
     try {
       /**
@@ -241,35 +332,35 @@ export default function TableContainer({ params }: IProps) {
       const payload: StatusRequestScheduleParams = {
         reason: reason,
         status: type,
-      }
+      };
       /**
        * Gửi yêu cầu lên server để cập nhật trạng thái yêu cầu lịch trình.
        *
        * @param {string} requestId - ID của yêu cầu lịch trình cần cập nhật trạng thái.
        * @param {object} payload - Thông tin cập nhật trạng thái yêu cầu lịch trình.
        */
-      await teacherApi!.updateStatusRequestSchedule(requestId, payload)
+      await teacherApi!.updateStatusRequestSchedule(requestId, payload);
       /**
        * Gọi hàm callback sau khi cập nhật trạng thái thành công.
        */
-      callback()
+      callback();
       /**
        * Mở modal thành công sau khi cập nhật trạng thái thành công.
        */
-      setOpenSuccessModal(true)
+      setOpenSuccessModal(true);
       /**
        * Refetch dữ liệu sau khi cập nhật trạng thái thành công.
        */
-      refetch()
+      refetch();
     } finally {
     }
-  }
+  };
 
   useEffect(() => {
-    if (query.showRequestDetail === 'true') {
-      setOpenDetail(true)
+    if (query.showRequestDetail === "true") {
+      setOpenDetail(true);
     }
-  }, [])
+  }, []);
 
   return (
     <>
@@ -306,5 +397,5 @@ export default function TableContainer({ params }: IProps) {
         <SuccessModal open={openSuccessModal} setOpen={setOpenSuccessModal} />
       )}
     </>
-  )
+  );
 }

@@ -1,25 +1,26 @@
-import { FilterRequestScheduleParams } from '@lms/core'
-import { LayoutFilter } from '@lms/ui'
-import { sappFormatDate } from '@lms/utils'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import ScheduleRequestFilter from './ScheduleRequestFilter'
-import TableContainer from './TableContainer'
+import { FilterRequestScheduleParams, StatusRequestSchedule } from "@lms/core";
+import { ButtonPrimary, LayoutFilter } from "@lms/ui";
+import { sappFormatDate } from "@lms/utils";
+import { useState, useRef } from "react";
+import { useForm } from "react-hook-form";
+import ScheduleRequestFilter from "./ScheduleRequestFilter";
+import TableContainer from "./TableContainer";
 
 const ScheduleRequestTable = () => {
   const initialValues: FilterRequestScheduleParams = {
-    search: '',
-    course_category_id: '',
-    status: '',
-    fromDate: '',
-    toDate: '',
-    dateField: '',
-    tab: 'schedulerequest',
-  }
-  const { control, getValues, reset } = useForm()
+    search: "",
+    course_category_id: "",
+    status: "",
+    fromDate: "",
+    toDate: "",
+    dateField: "",
+    tab: "schedulerequest",
+  };
+  const { control, getValues, reset } = useForm();
   const [params, setParams] =
-    useState<FilterRequestScheduleParams>(initialValues)
-
+    useState<FilterRequestScheduleParams>(initialValues);
+  const selectedActionRef = useRef<Record<string, StatusRequestSchedule>>({});
+  const [hasAction, setHasAction] = useState(false);
   /**
    * Hàm reset bộ lọc.
    * Reset giá trị của bộ lọc về giá trị ban đầu.
@@ -30,15 +31,15 @@ const ScheduleRequestTable = () => {
      *
      * @param {object} initialValues - Giá trị ban đầu của bộ lọc.
      */
-    reset(initialValues)
+    reset(initialValues);
 
     /**
      * Cập nhật tham số của bộ lọc về giá trị ban đầu.
      *
      * @param {object} initialValues - Giá trị ban đầu của bộ lọc.
      */
-    setParams(initialValues)
-  }
+    setParams(initialValues);
+  };
   /**
    * Hàm xử lý khi người dùng submit bộ lọc.
    * Lấy giá trị của các trường bộ lọc và tạo tham số tìm kiếm.
@@ -49,8 +50,8 @@ const ScheduleRequestTable = () => {
      *
      * @param {array} date_range - Mảng chứa giá trị của trường date_range.
      */
-    const fromDate = getValues('date_range')?.[0] || undefined
-    const toDate = getValues('date_range')?.[1] || undefined
+    const fromDate = getValues("date_range")?.[0] || undefined;
+    const toDate = getValues("date_range")?.[1] || undefined;
     /**
      * Tạo tham số tìm kiếm.
      *
@@ -62,19 +63,29 @@ const ScheduleRequestTable = () => {
      * @param {string} searchParams.toDate - Ngày kết thúc của khoảng thời gian.
      */
     const searchParams: FilterRequestScheduleParams = {
-      search: getValues('search') || undefined,
-      course_category_id: getValues('course_category_id')?.value || undefined,
-      status: getValues('status')?.value || undefined,
-      fromDate: sappFormatDate(fromDate, 'YYYY-MM-DDTHH:mm:ssZ'),
-      toDate: sappFormatDate(toDate, 'YYYY-MM-DDTHH:mm:ssZ'),
-    }
+      search: getValues("search") || undefined,
+      course_category_id: getValues("course_category_id")?.value || undefined,
+      status: getValues("status")?.value || undefined,
+      fromDate: sappFormatDate(fromDate, "YYYY-MM-DDTHH:mm:ssZ"),
+      toDate: sappFormatDate(toDate, "YYYY-MM-DDTHH:mm:ssZ"),
+    };
     /**
      * Cập nhật tham số tìm kiếm.
      *
      * @param {object} searchParams - Tham số tìm kiếm.
      */
-    setParams(searchParams)
-  }
+    setParams(searchParams);
+  };
+
+  const handleSelectedActionChange = (
+    data: Record<string, StatusRequestSchedule>,
+  ) => {
+    selectedActionRef.current = data;
+
+    // chỉ update boolean → tránh re-render nặng
+    setHasAction(Object.keys(data).length > 0);
+  };
+  console.log("selectedActionRef.current");
   return (
     <div>
       <LayoutFilter
@@ -82,10 +93,23 @@ const ScheduleRequestTable = () => {
         listFilter={<ScheduleRequestFilter control={control} />}
         onReset={handleResetFilter}
         onSubmit={onSubmit}
+        layoutAction={
+          hasAction ? (
+            <ButtonPrimary
+              title="Save"
+              className="font-semibold"
+              // onClick={handleSubmit(onSubmit)}
+              // loading={loading}
+            />
+          ) : undefined
+        }
       />
-      <TableContainer params={params} />
+      <TableContainer
+        params={params}
+        onSelectedActionChange={handleSelectedActionChange}
+      />
     </div>
-  )
-}
+  );
+};
 
-export default ScheduleRequestTable
+export default ScheduleRequestTable;
