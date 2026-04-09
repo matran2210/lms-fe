@@ -133,6 +133,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
 
   const handleConfirmSurvey = async () => {
     try {
+      handleClose
       if (!courseId || !surveyId) return
       const res = await CoursesAPI.confirmSurvey(courseId as string, {
         survey_id: surveyId,
@@ -319,6 +320,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
   }, [data])
 
   useEffect(() => {
+    if (!isLDProgram) return
     const shouldOpenLD =
       isLDProgram && listSurveySatisfy?.length > 0 && !isRemindSurveyLD
 
