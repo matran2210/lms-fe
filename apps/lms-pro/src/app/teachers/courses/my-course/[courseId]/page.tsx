@@ -175,13 +175,14 @@ const CourseDetailTeacher = () => {
         )}
       </div>
       {isSuccess && (
-        <>
-          <PopupModalTest
-            class_code={data?.pages?.[0]?.courseDetail?.code}
-            program={data?.pages?.[0]?.courseDetail?.data?.program}
-            data={data?.pages?.[0]?.courseDetail}
-          />
-        </>
+        <PopupModalTest
+          class_code={data?.pages?.[0]?.courseDetail?.code}
+          program={data?.pages?.[0]?.courseDetail?.data?.program}
+          data={data?.pages?.[0]?.courseDetail}
+          refetchSurvey={function (): void {
+            throw new Error('Function not implemented.')
+          }}
+        />
       )}
     </LayoutTeacher>
   )
