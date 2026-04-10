@@ -44,7 +44,9 @@ const ScheduleRequestTable = () => {
 
   const handleRefresh = () => {
     queryClient.invalidateQueries({
-      queryKey: [TeacherKey.ScheduleRequest],
+      predicate: (query) => 
+        Array.isArray(query.queryKey) && 
+        query.queryKey[0] === TeacherKey.ScheduleRequest,
     });
   };
 
