@@ -1,23 +1,21 @@
+import { useFeature } from "@lms/contexts";
 import {
   FilterRequestScheduleParams,
   StatusMultipleRequestScheduleParams,
-  StatusRequestSchedule,
-  TeacherKey,
+  StatusRequestSchedule
 } from "@lms/core";
 import { ButtonPrimary, LayoutFilter } from "@lms/ui";
 import { sappFormatDate } from "@lms/utils";
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import ReasonModal from "./ReasonModal";
 import ScheduleRequestFilter from "./ScheduleRequestFilter";
+import SuccessModal from "./SuccessModal";
 import TableContainer, {
   defaultOpenReasonModal,
   IOpenReasonModal,
   UpdateStatusParams,
 } from "./TableContainer";
-import ReasonModal from "./ReasonModal";
-import SuccessModal from "./SuccessModal";
-import { useFeature } from "@lms/contexts";
-import { useQueryClient } from "react-query";
 
 const ScheduleRequestTable = () => {
   const initialValues: FilterRequestScheduleParams = {
@@ -34,20 +32,32 @@ const ScheduleRequestTable = () => {
   const [params, setParams] =
     useState<FilterRequestScheduleParams>(initialValues);
   const selectedActionRef = useRef<Record<string, StatusRequestSchedule>>({});
+  /**
+   * Ref để lưu function refetch từ TableContainer.
+   * Dùng useRef thay vì state để tránh re-render không cần thiết.
+   * Function này sẽ được gán giá trị thông qua callback onRefetchReady.
+   */
+  const refetchRef = useRef<(() => void) | null>(null);
   const [hasAction, setHasAction] = useState(false);
   const [openReasonModal, setOpenReasonModal] = useState<IOpenReasonModal>(
     defaultOpenReasonModal,
   );
   const [loading, setLoading] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
-  const queryClient = useQueryClient();
 
+  /**
+   * Hàm refresh lại data từ API.
+   * Gọi trực tiếp function refetch từ useSappPaging thông qua ref.
+   * 
+   * Lý do không dùng queryClient.invalidateQueries:
+   * - Query key trong useSappPaging là: [uniqueKey, pagination.current, pagination.pageSize, params]
+   * - Nếu dùng invalidateQueries với key không đầy đủ sẽ không match được query
+   * - Function refetch từ useQuery đã biết chính xác query key nên luôn hoạt động đúng
+   */
   const handleRefresh = () => {
-    queryClient.invalidateQueries({
-      predicate: (query) => 
-        Array.isArray(query.queryKey) && 
-        query.queryKey[0] === TeacherKey.ScheduleRequest,
-    });
+    if (refetchRef.current) {
+      refetchRef.current();
+    }
   };
 
   /**
@@ -190,6 +200,15 @@ const ScheduleRequestTable = () => {
       <TableContainer
         params={params}
         onSelectedActionChange={handleSelectedActionChange}
+        /**
+         * Callback để nhận function refetch từ TableContainer.
+         * Khi TableContainer mount và có refetch function từ useSappPaging,
+         * nó sẽ gọi callback này để truyền refetch function lên parent component.
+         * Parent component lưu function này vào refetchRef để dùng khi cần refresh data.
+         */
+        onRefetchReady={(refetch) => {
+          refetchRef.current = refetch;
+        }}
       />
       {openReasonModal.open && (
         <ReasonModal

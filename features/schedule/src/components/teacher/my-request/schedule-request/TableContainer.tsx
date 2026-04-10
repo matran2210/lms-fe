@@ -62,10 +62,19 @@ interface IProps {
   onSelectedActionChange?: (
     data: Record<string, StatusRequestSchedule>,
   ) => void;
+  /**
+   * Callback để expose function refetch ra ngoài parent component.
+   * Parent component có thể dùng function này để refresh data khi cần thiết
+   * (ví dụ: sau khi update status thành công).
+   * 
+   * @param refetch - Function refetch từ useSappPaging hook
+   */
+  onRefetchReady?: (refetch: () => void) => void;
 }
 export default function TableContainer({
   params,
   onSelectedActionChange,
+  onRefetchReady,
 }: IProps) {
   const { teacherApi, router, pathname, query } = useFeature();
   const [openDetail, setOpenDetail] = useState(false);
@@ -139,6 +148,22 @@ export default function TableContainer({
   useEffect(() => {
     onSelectedActionChange?.(selectedAction);
   }, [selectedAction]);
+
+  /**
+   * Effect để truyền refetch function lên parent component.
+   * Chạy khi refetch function từ useSappPaging có sẵn.
+   * 
+   * Flow:
+   * 1. useSappPaging hook trả về refetch function
+   * 2. Effect này bắt được refetch function
+   * 3. Gọi callback onRefetchReady để truyền refetch lên parent (ScheduleRequestTable)
+   * 4. Parent lưu refetch vào ref để dùng khi cần
+   */
+  useEffect(() => {
+    if (refetch) {
+      onRefetchReady?.(refetch);
+    }
+  }, [refetch, onRefetchReady]);
   console.log("selectedAction", selectedAction);
   const columnsValue: ColumnsType<IScheduleRequestItem> = [
     {
