@@ -117,8 +117,8 @@ const ClassDetailPage = () => {
   const { pageLink, params, query, teacherApi } = useFeature()
   const breadcrumbs: ITabs[] = [
     {
-      link: `${pageLink.TEACHERS}`,
-      title: 'LMS',
+      link: `${pageLink.MY_CALENDAR}`,
+      title: 'Home',
     },
     {
       link: `${pageLink.TEACHER_MY_CLASS}`,

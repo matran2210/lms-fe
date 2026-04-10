@@ -2166,5 +2166,21 @@
   {
     "code": "400|420016",
     "message": "Please Activate Course Before Choosing Examination"
+  },
+  {
+    "code": "400|072405",
+    "message": "This value already exists in another survey"
+  },
+  {
+    "code": "400|072406",
+    "message": "The course survey was not found"
+  },
+  {
+    "code": "400|072407",
+    "message": "The course survey has reached the maximum limit"
+  },
+  {
+    "code": "400|072408",
+    "message": "The course survey is not applicable"
   }
 ]
