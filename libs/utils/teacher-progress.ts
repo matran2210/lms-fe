@@ -38,7 +38,7 @@ export function groupACCABySubjectAndClass(
   acca.forEach((item) => {
     if (item.subject.course_category.name !== "ACCA") return;
 
-    const key = `${item.subject.id}_${item.class.id}`;
+    const key = `${item.subject.id}_${item.class.id}}_${item.status}`;
 
     const start = dayjs(item.schedule_time.start_date);
     const end = dayjs(item.schedule_time.end_date);
