@@ -6,9 +6,7 @@ import {
   UpdateStatusParams,
 } from 'src/components/teacher/my-request/schedule-request/TableContainer'
 import dayjs from 'dayjs'
-import PrimaryInformation from 'src/components/teacher/my-request/schedule-request/PrimaryInformation'
-import { IScheduleRequestItem } from 'src/type/teachers/request-schedule.interface'
-import { StatusRequestSchedule } from '@lms/core'
+import { IScheduleRequestItem, PROGRAM, StatusRequestSchedule } from '@lms/core'
 import { useQuery } from 'react-query'
 import { TeacherAPI } from 'src/api/teacher'
 import clsx from 'clsx'
@@ -17,6 +15,7 @@ import StatusItem from './StatusItem'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SappDrawer } from '@lms/ui'
 import { sappFormatDate } from '@lms/utils'
+import PrimaryInformation from './PrimaryInformation'
 
 interface IProps {
   open: boolean
@@ -24,6 +23,7 @@ interface IProps {
   selectedRequest: IScheduleRequestItem | undefined
   setOpenReasonModal: React.Dispatch<React.SetStateAction<IOpenReasonModal>>
   handleUpdateStatus: ({
+    request_ids,
     requestId,
     type,
     reason,
@@ -131,7 +131,10 @@ const DetailRequestModal = ({
      * @param {function} options.callback - Hàm callback sẽ được gọi sau khi cập nhật trạng thái thành công.
      */
     if (!requestId) return
+    const isACCAProgram = selectedRequest?.subject?.course_category?.name === PROGRAM.ACCA
+
     handleUpdateStatus({
+      ...(isACCAProgram && { request_ids: selectedRequest?.request_ids || [] }),
       requestId,
       type: StatusRequestSchedule.APPROVED,
       reason: StatusRequestSchedule.APPROVED,
@@ -202,7 +205,7 @@ const DetailRequestModal = ({
                 ).toLowerCase()}
                 className={statusColor(
                   (selectedRequest as IScheduleRequestItem) ||
-                    (data?.data as unknown as IScheduleRequestItem),
+                  (data?.data as unknown as IScheduleRequestItem),
                 )}
               />
             }
