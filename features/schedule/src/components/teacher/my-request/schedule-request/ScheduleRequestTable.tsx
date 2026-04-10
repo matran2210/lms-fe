@@ -1,10 +1,23 @@
-import { FilterRequestScheduleParams, StatusRequestSchedule } from "@lms/core";
+import {
+  FilterRequestScheduleParams,
+  StatusMultipleRequestScheduleParams,
+  StatusRequestSchedule,
+  TeacherKey,
+} from "@lms/core";
 import { ButtonPrimary, LayoutFilter } from "@lms/ui";
 import { sappFormatDate } from "@lms/utils";
 import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import ScheduleRequestFilter from "./ScheduleRequestFilter";
-import TableContainer from "./TableContainer";
+import TableContainer, {
+  defaultOpenReasonModal,
+  IOpenReasonModal,
+  UpdateStatusParams,
+} from "./TableContainer";
+import ReasonModal from "./ReasonModal";
+import SuccessModal from "./SuccessModal";
+import { useFeature } from "@lms/contexts";
+import { useQueryClient } from "react-query";
 
 const ScheduleRequestTable = () => {
   const initialValues: FilterRequestScheduleParams = {
@@ -16,11 +29,25 @@ const ScheduleRequestTable = () => {
     dateField: "",
     tab: "schedulerequest",
   };
+  const { teacherApi } = useFeature();
   const { control, getValues, reset } = useForm();
   const [params, setParams] =
     useState<FilterRequestScheduleParams>(initialValues);
   const selectedActionRef = useRef<Record<string, StatusRequestSchedule>>({});
   const [hasAction, setHasAction] = useState(false);
+  const [openReasonModal, setOpenReasonModal] = useState<IOpenReasonModal>(
+    defaultOpenReasonModal,
+  );
+  const [loading, setLoading] = useState(false);
+  const [openSuccessModal, setOpenSuccessModal] = useState(false);
+  const queryClient = useQueryClient();
+
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({
+      queryKey: [TeacherKey.ScheduleRequest],
+    });
+  };
+
   /**
    * Hàm reset bộ lọc.
    * Reset giá trị của bộ lọc về giá trị ban đầu.
@@ -85,7 +112,61 @@ const ScheduleRequestTable = () => {
     // chỉ update boolean → tránh re-render nặng
     setHasAction(Object.keys(data).length > 0);
   };
-  console.log("selectedActionRef.current");
+  const handleSubmit = () => {
+    const hasRejectOrCancel = Object.values(selectedActionRef.current).some(
+      (v) =>
+        v === StatusRequestSchedule.REJECT ||
+        v === StatusRequestSchedule.CANCEL,
+    );
+    if (hasRejectOrCancel) {
+      setOpenReasonModal({
+        open: true,
+        requestId: "",
+        type: StatusRequestSchedule.PENDING,
+      });
+    } else {
+      handleUpdateStatus({
+        requestId: "",
+        type: StatusRequestSchedule.PENDING,
+      });
+    }
+  };
+  const handleUpdateStatus = async ({
+    requestId,
+    type,
+    reason = "",
+    callback = () => {},
+  }: UpdateStatusParams) => {
+    setLoading(true);
+    try {
+      const payload: StatusMultipleRequestScheduleParams = {
+        requests: Object.entries(selectedActionRef.current).map(
+          ([requestId, status]) => ({
+            request_id: requestId,
+            status,
+            ...(status === StatusRequestSchedule.REJECT ||
+            status === StatusRequestSchedule.CANCEL
+              ? { reason }
+              : {}),
+          }),
+        ),
+      };
+      console.log("payload", payload);
+      await teacherApi!.updateMultipleStatusRequestSchedules(payload);
+      console.log("updateMultipleStatusRequestSchedules success");
+      callback();
+      setOpenSuccessModal(true);
+      selectedActionRef.current = {};
+      setHasAction(false);
+      setLoading(false);
+      handleRefresh();
+    } catch (error) {
+      // handle error
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
       <LayoutFilter
@@ -98,8 +179,8 @@ const ScheduleRequestTable = () => {
             <ButtonPrimary
               title="Save"
               className="font-semibold"
-              // onClick={handleSubmit(onSubmit)}
-              // loading={loading}
+              onClick={handleSubmit}
+              loading={loading}
             />
           ) : undefined
         }
@@ -108,6 +189,17 @@ const ScheduleRequestTable = () => {
         params={params}
         onSelectedActionChange={handleSelectedActionChange}
       />
+      {openReasonModal.open && (
+        <ReasonModal
+          open={openReasonModal}
+          setOpen={setOpenReasonModal}
+          setOpenSuccessModal={setOpenSuccessModal}
+          handleUpdateStatus={handleUpdateStatus}
+        />
+      )}
+      {openSuccessModal && (
+        <SuccessModal open={openSuccessModal} setOpen={setOpenSuccessModal} />
+      )}
     </div>
   );
 };

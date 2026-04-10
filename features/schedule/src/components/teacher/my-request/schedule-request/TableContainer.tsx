@@ -84,6 +84,7 @@ export default function TableContainer({
     handleChangeParams,
     setPagination,
     refetch,
+    isFetching,
   } = useSappPaging({
     uniqueKey: TeacherKey.ScheduleRequest,
     queryFn: () =>
@@ -94,7 +95,7 @@ export default function TableContainer({
       }),
     params,
   });
-
+  console.log("isFetching", isFetching);
   useEffect(() => {
     router.replace(
       `${pathname}?${buildQueryString({
