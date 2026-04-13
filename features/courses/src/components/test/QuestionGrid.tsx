@@ -100,11 +100,17 @@ const QuestionGrid = ({
           overflowX: "auto" as const,
           maxWidth: "100%",
         }
-      : {
-          gridTemplateColumns: isTabletView
-            ? "repeat(10, 1fr)"
-            : "repeat(7, 1fr)",
-        }),
+      : !isLargeDesktopView
+        ? {
+            gridTemplateColumns: "repeat(10, 1fr)",
+            gridTemplateRows: "repeat(5, auto)", // tối đa 5 hàng
+            overflowY: "auto" as const, // scroll dọc
+            maxHeight: 5 * 38 + 4 * 12, // 👈 chiều cao tối đa
+            overflowX: "hidden" as const,
+          }
+        : {
+            gridTemplateColumns: "repeat(7, 1fr)",
+          }),
   };
 
   return (
@@ -134,7 +140,10 @@ const QuestionGrid = ({
         </span>
         {listQuestions?.length > 7 && (
           <span
-            className="cursor-pointer text-base text-primary hidden xl:block"
+            className={clsx("cursor-pointer text-base text-primary", {
+              hidden: !isLargeDesktopView,
+              block: isLargeDesktopView,
+            })}
             onClick={() => setShowAll(!showAll)}
           >
             {showAll ? "See less" : "Show more"}
