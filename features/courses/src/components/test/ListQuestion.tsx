@@ -12,7 +12,7 @@ const ListQuestion = ({
   const listMultipleChoiceQuestions = questions?.selectedResponseAnswers || [];
   const listConstructedQuestions = questions?.constructedResponseAnswers || [];
   return (
-    <div className="p-6 shadow-small rounded-2xl">
+    <div className="xl:p-6 xl:shadow-small xl:rounded-2xl">
       {!isEmpty(listMultipleChoiceQuestions) && (
         <QuestionGrid
           isMultipleChoice

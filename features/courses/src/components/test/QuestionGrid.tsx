@@ -15,7 +15,7 @@ const QuestionGrid = ({
   getActiveQuestion: (id: string) => void;
 }) => {
   const [showAll, setShowAll] = useState(false);
-  const { isLargeDesktopView } = useTailwindBreakpoint();
+  const { isLargeDesktopView, isAlwaysShowSidebar } = useTailwindBreakpoint();
   const annotationsMultipleChoiceQuestions = [
     {
       text: "Correct",
@@ -60,7 +60,7 @@ const QuestionGrid = ({
           "grid w-full grid-cols-2 gap-y-3": isLargeDesktopView,
           "mx-auto flex items-center justify-center gap-8 md:gap-12":
             showAll && !isLargeDesktopView,
-          "grid grid-cols-4 gap-x-12 gap-y-3": !showAll && !isLargeDesktopView,
+          "grid grid-cols-4 gap-y-3": !showAll && !isLargeDesktopView,
         })}
       >
         {annotationsList?.map((annotation) => (
@@ -76,15 +76,19 @@ const QuestionGrid = ({
     );
   };
 
-  const visibleQuestions = showAll ? listQuestions : listQuestions?.slice(0, 7);
+  const visibleQuestions =
+    showAll || isAlwaysShowSidebar ? listQuestions : listQuestions?.slice(0, 7);
+  console.log("isAlwaysShowSidebar", isAlwaysShowSidebar);
+  console.log("isLargeDesktopView", isLargeDesktopView);
   return (
     <>
       {isShowDivider && (
         <div
-          className="bg-gray-3"
+          // className="bg-gray-3"
           style={{
             height: 1,
-            margin: "32px 0",
+            margin: isAlwaysShowSidebar ? "24px 0" : "32px 0",
+            backgroundColor: "#D1D5DB",
           }}
         />
       )}
@@ -103,7 +107,7 @@ const QuestionGrid = ({
         </span>
         {listQuestions?.length > 7 && (
           <span
-            className="cursor-pointer text-base text-primary"
+            className="cursor-pointer text-base text-primary hidden xl:block"
             onClick={() => setShowAll(!showAll)}
           >
             {showAll ? "See less" : "Show more"}
@@ -115,8 +119,10 @@ const QuestionGrid = ({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(7, 1fr)",
-          gap: 16,
+          gridTemplateColumns: isAlwaysShowSidebar
+            ? "repeat(10, 1fr)"
+            : "repeat(7, 1fr)",
+          gap: isAlwaysShowSidebar ? 12 : 16,
           marginBottom: 32,
         }}
       >
