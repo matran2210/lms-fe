@@ -7,14 +7,14 @@ import {
   QuizAttemptChart,
   QuizAttemptChartType,
 } from '@lms/core'
+import { Recommendation } from '@lms/feature-courses'
+import { roundNumber } from '@lms/utils'
 import { useMemo, useRef } from 'react'
 import ChartACCAScore from './acca/chartACCAScore'
 import ChartCFAScore from './cfa/chartCFAScore'
 import ChartCMAScore from './cma/chartCMAScore'
 import MultipleChoiceScore from './MultipleChoiceScore'
 import ScoreDetail from './ScoreDetail'
-import { Recommendation } from '@lms/feature-test'
-import { roundNumber } from '@lms/utils'
 
 interface IProps {
   questions: {
@@ -125,7 +125,7 @@ const TestResultPage = ({
                   score={score}
                   isGraded={
                     questions?.quizAttempt?.grading_status ===
-                      GRADE_STATUS.FINISHED_GRADING ||
+                    GRADE_STATUS.FINISHED_GRADING ||
                     !!questions?.quizAttempt?.is_graded
                   }
                   passingScore={chartData?.quiz?.required_percent_score}
@@ -194,7 +194,7 @@ const TestResultPage = ({
                 score={score}
                 isGraded={
                   questions?.quizAttempt?.grading_status ===
-                    GRADE_STATUS.FINISHED_GRADING ||
+                  GRADE_STATUS.FINISHED_GRADING ||
                   !!questions?.quizAttempt?.is_graded
                 }
                 passingScore={chartData?.quiz?.required_percent_score}

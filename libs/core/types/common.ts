@@ -2,6 +2,7 @@ import { ButtonProps } from "antd";
 import { FixedType } from "rc-table/lib/interface";
 import { FieldValues } from "react-hook-form";
 import { IMetaData } from "./api-response";
+import { ReactNode } from "react";
 
 export interface ITabs {
   link: string;
@@ -152,4 +153,16 @@ export interface ApiError {
       };
     };
   };
+}
+
+export interface AppModule {
+  name: string;
+  routes: {
+    path: string;
+    element: React.ReactNode;
+  }[];
+}
+export interface InfoItemProps {
+  label: string;
+  value: ReactNode;
 }

@@ -1,5 +1,7 @@
 'use client'
+import { FilterCourseIcon } from '@lms/assets'
 import { UserType, useCourseContext, useFeature } from '@lms/contexts'
+import { selectPopupActivateCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 import {
   AppType,
   CLASS_SUFFIX_TYPE_FILTER,
@@ -7,10 +9,10 @@ import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   IClassResource,
-  IClassScheduleForResource,
-  IListClassResourceParams,
+  IListClassResourceParams
 } from '@lms/core'
-import { useSappPaging, useTailwindBreakpoint } from '@lms/hooks'
+import { withAuthorization } from '@lms/hoc'
+import { useSappPaging, useSelectClassSchedule, useTailwindBreakpoint } from '@lms/hooks'
 import {
   CarouselSlideAnimation,
   ClassResourceSkeleton,
@@ -22,23 +24,18 @@ import {
   SappBreadCrumbs,
   SappDrawerV3,
 } from '@lms/ui'
-import { useRouter } from 'next/navigation'
+import { getSelectOptions, normalizeToArray } from '@lms/utils'
+import { pushQueryClassResource } from '@utils/helpers'
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
+import { ClassAPI } from 'src/api/class'
+import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import CardFileItem from './CardFileItem'
 import ClassResourceTable from './ClassResourceTable'
 import FilterClassResource from './FilterClassResource'
 import SearchClassResource from './SearchClassResource'
-import { buildQueryString, normalizeToArray } from '@lms/utils'
-import { useParams, usePathname, useSearchParams } from 'next/navigation'
-import { CoursesAPI } from 'src/api/courses'
-import { ClassAPI } from 'src/api/class'
-import { FilterCourseIcon } from '@lms/assets'
-import CardFileItem from './CardFileItem'
-import useSelectClassSchedule from 'src/hooks/useSelectClassSchedule'
-import { getSelectOptions, pushQueryClassResource } from '@utils/helpers'
-import { selectPopupActivateCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 interface ISelectItem {
   label: string
   value: string
@@ -119,9 +116,9 @@ const ClassResource = () => {
     if (query.schedule_ids) {
       scheduleIds = query.schedule_ids.includes(',')
         ? query.schedule_ids
-            .split(',')
-            .map((id) => id.trim())
-            .filter((id) => id)
+          .split(',')
+          .map((id) => id.trim())
+          .filter((id) => id)
         : [query.schedule_ids]
     }
     return {
@@ -296,14 +293,14 @@ const ClassResource = () => {
   const handleSubmitFilterMobile = () => {
     const lessonValue = Array.isArray(selectedFilters.Lesson)
       ? selectedFilters.Lesson.map((item) => item.value)
-          .filter((v) => v)
-          .join(',')
+        .filter((v) => v)
+        .join(',')
       : selectedFilters.Lesson.value
 
     pushQuery({
       suffix_types:
         typeof selectedFilters.Type === 'object' &&
-        !Array.isArray(selectedFilters.Type)
+          !Array.isArray(selectedFilters.Type)
           ? selectedFilters.Type.value
           : undefined,
       schedule_ids: lessonValue || undefined,
@@ -322,9 +319,9 @@ const ClassResource = () => {
       if (!query.schedule_ids) return []
       return query.schedule_ids.includes(',')
         ? query.schedule_ids
-            .split(',')
-            .map((id) => id.trim())
-            .filter((id) => id)
+          .split(',')
+          .map((id) => id.trim())
+          .filter((id) => id)
         : [query.schedule_ids]
     }
 
@@ -344,8 +341,8 @@ const ClassResource = () => {
           Type: {
             label: query.suffix_types
               ? CLASS_SUFFIX_TYPE_FILTER.find(
-                  (option) => option.value === query.suffix_types,
-                )?.label
+                (option) => option.value === query.suffix_types,
+              )?.label
               : '',
             value: query.suffix_types || '',
           },
