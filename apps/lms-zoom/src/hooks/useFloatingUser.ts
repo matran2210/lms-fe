@@ -1,5 +1,5 @@
-import { FLOATING_USER_POSITION_INTERVAL } from '@/constants'
-import { ZOOM_CONFIG } from '@/constants/zoom'
+import { FLOATING_USER_POSITION_INTERVAL } from '../constants/index'
+import { ZOOM_CONFIG } from '../constants/zoom'
 import { RefObject, useEffect, useRef, useState } from 'react'
 
 interface UseFloatingUserProps {
@@ -36,26 +36,47 @@ export const useFloatingUser = ({ floatingRef }: UseFloatingUserProps) => {
       const oldMap = parseStyleStringToMap(oldStyle || '')
       const newMap = parseStyleStringToMap(newStyle || '')
 
-      // Only ignore top/left when the new style matches the last code-driven position
       const allowed = allowedTopLeftRef.current
+      if (!allowed) return false
+
       const newTop = newMap['top']
       const newLeft = newMap['left']
-      const matchesAllowed = Boolean(allowed && newTop === allowed.top && newLeft === allowed.left)
-      if (!matchesAllowed) return false
+      if (newTop !== allowed.top || newLeft !== allowed.left) return false
 
-      // Remove position keys we allow to change for deep equality check
       delete oldMap['top']
       delete oldMap['left']
       delete newMap['top']
       delete newMap['left']
 
-      const oldKeys = Object.keys(oldMap)
-      const newKeys = Object.keys(newMap)
-      if (oldKeys.length !== newKeys.length) return false
-      for (const key of oldKeys) {
-        if (!(key in newMap)) return false
+      // Check if existing styles were modified or removed
+      for (const key in oldMap) {
         if (oldMap[key] !== newMap[key]) return false
       }
+
+      const criticalStyles = [
+        'position',
+        'width',
+        'height',
+        'transform',
+        'filter',
+        'backdrop-filter',
+        'overflow',
+        'clip-path',
+      ]
+      for (const key of criticalStyles) {
+        if (newMap[key]) {
+          return false
+        }
+      }
+      // Display, visibility, opacity thì vẫn check giá trị vì extension có thể thêm vào giá trị an toàn
+      const visibilityStyles = ['display', 'visibility', 'opacity']
+      for (const key of visibilityStyles) {
+        const val = newMap[key]
+        if (val && (val === 'none' || val === 'hidden' || parseFloat(val) === 0)) {
+          return false
+        }
+      }
+
       return true
     }
 
@@ -111,6 +132,7 @@ export const useFloatingUser = ({ floatingRef }: UseFloatingUserProps) => {
           for (const mutation of mutationList) {
             if (mutation.type === 'attributes') {
               const attributeName = mutation.attributeName
+
               if (attributeName === 'style') {
                 const oldValue = (mutation as MutationRecord & { oldValue?: string }).oldValue || ''
                 const newValue = (mutation.target as HTMLElement).getAttribute('style') || ''
@@ -118,9 +140,17 @@ export const useFloatingUser = ({ floatingRef }: UseFloatingUserProps) => {
                   continue
                 }
               }
+
+              // If we reach here for any observed attribute (style, class, hidden), it's a suspicious change.
               removeMeetingContainer()
               break
-            } else {
+            } else if (mutation.type === 'childList') {
+              // Only trigger if components are removed. Extensions often add nodes.
+              if (mutation.removedNodes.length > 0) {
+                removeMeetingContainer()
+                break
+              }
+            } else if (mutation.type === 'characterData') {
               removeMeetingContainer()
               break
             }
@@ -129,11 +159,11 @@ export const useFloatingUser = ({ floatingRef }: UseFloatingUserProps) => {
 
         observer.observe(node, {
           attributes: true,
+          attributeFilter: ['style', 'class', 'hidden'],
           attributeOldValue: true,
           childList: true,
           subtree: true,
           characterData: true,
-          characterDataOldValue: true,
         })
       }
       return observer
