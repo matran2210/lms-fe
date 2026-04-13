@@ -104,7 +104,7 @@ export default function TableContainer({
       }),
     params,
   });
-  console.log("isFetching", isFetching);
+
   useEffect(() => {
     router.replace(
       `${pathname}?${buildQueryString({
@@ -164,7 +164,7 @@ export default function TableContainer({
       onRefetchReady?.(refetch);
     }
   }, [refetch, onRefetchReady]);
-  console.log("selectedAction", selectedAction);
+
   const columnsValue: ColumnsType<IScheduleRequestItem> = [
     {
       title: "#",

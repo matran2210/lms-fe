@@ -163,9 +163,7 @@ const ScheduleRequestTable = () => {
           }),
         ),
       };
-      console.log("payload", payload);
       await teacherApi!.updateMultipleStatusRequestSchedules(payload);
-      console.log("updateMultipleStatusRequestSchedules success");
       callback();
       setOpenSuccessModal(true);
       selectedActionRef.current = {};
