@@ -19,8 +19,13 @@ import { CoursesAPI } from 'src/api/courses'
 import { TestServiceAPI } from 'src/api/test-api'
 import { PageLink } from 'src/constants/routers'
 import { withAuthorization } from '@lms/hoc'
-import { ListQuestion, ModalListQuestion } from '@lms/feature-courses'
+import {
+  DrawerListQuestion,
+  ListQuestion,
+  ModalListQuestion,
+} from '@lms/feature-courses'
 import { useQuery } from 'react-query'
+import { useTailwindBreakpoint } from '@lms/hooks'
 
 const Explanation = () => {
   const router = useRouter()
@@ -33,8 +38,11 @@ const Explanation = () => {
   const [activeQuestion, setActiveQuestion] = useState<any>()
   const [attempt, setAttempt] = useState<IAtempt>()
   const [loading, setLoading] = useState<boolean>(false)
+  const { isMobileView } = useTailwindBreakpoint()
   const [openTooltip, setOpenTooltip] = useState<boolean>(false)
   const [isOpenModalListQuestion, setIsOpenModalListQuestion] =
+    useState<boolean>(false)
+  const [isOpenDrawerListQuestion, setIsOpenDrawerListQuestion] =
     useState<boolean>(false)
   const previousUrl = queryParams?.tabId
     ? localStorage.getItem('previousUrl') + `?tabId=${queryParams?.tabId}`
@@ -124,6 +132,7 @@ const Explanation = () => {
     } catch (error) {
     } finally {
       setLoading(false)
+      setIsOpenModalListQuestion(false)
     }
   }
   const quizId = attempt?.id
@@ -200,8 +209,9 @@ const Explanation = () => {
         <div className="absolute right-8 top-6 z-10 flex cursor-pointer items-center justify-center">
           <Tooltip
             placement="left"
+            trigger="click"
             open={openTooltip}
-            onOpenChange={(visible) => setOpenTooltip(visible)}
+            onOpenChange={setOpenTooltip}
             title={
               <div className="flex flex-col gap-2">
                 <span
@@ -216,14 +226,18 @@ const Explanation = () => {
                   className="text-sm"
                   onClick={() => {
                     setOpenTooltip(false)
-                    setIsOpenModalListQuestion(true)
+                    if (isMobileView) {
+                      setIsOpenDrawerListQuestion(true)
+                    } else {
+                      setIsOpenModalListQuestion(true)
+                    }
                   }}
                 >
                   Show list questions
                 </span>
               </div>
             }
-            className="block"
+            className="block xl:hidden"
           >
             <button className="text-icon">
               <MenuDotsIcon />
@@ -270,6 +284,12 @@ const Explanation = () => {
           getActiveQuestion={getActiveQuestion}
           isOpen={isOpenModalListQuestion}
           setIsOpen={setIsOpenModalListQuestion}
+        />
+        <DrawerListQuestion
+          questions={questions}
+          getActiveQuestion={getActiveQuestion}
+          isOpen={isOpenDrawerListQuestion}
+          setIsOpen={setIsOpenDrawerListQuestion}
         />
       </FullScreenLayout>
     </SappLoadingGlobal>

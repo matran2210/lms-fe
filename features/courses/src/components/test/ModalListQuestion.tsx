@@ -19,7 +19,7 @@ const ModalListQuestion = ({
   getActiveQuestion,
   setIsOpen,
 }: IProps) => {
-  const { isMobileView } = useTailwindBreakpoint();
+  if (!isOpen) return null;
   return (
     <SappModal
       open={isOpen}
@@ -29,6 +29,7 @@ const ModalListQuestion = ({
       refClass="w-[554px] md:p-6 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all z-[100000]"
       showHeader={false}
       size=""
+      isContentFull={false}
     >
       <ListQuestion
         questions={questions}

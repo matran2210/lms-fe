@@ -15,7 +15,12 @@ const QuestionGrid = ({
   getActiveQuestion: (id: string) => void;
 }) => {
   const [showAll, setShowAll] = useState(false);
-  const { isLargeDesktopView, isAlwaysShowSidebar } = useTailwindBreakpoint();
+  const {
+    isMobileView,
+    isTabletView,
+    isLargeDesktopView,
+    isAlwaysShowSidebar,
+  } = useTailwindBreakpoint();
   const annotationsMultipleChoiceQuestions = [
     {
       text: "Correct",
@@ -60,7 +65,7 @@ const QuestionGrid = ({
           "grid w-full grid-cols-2 gap-y-3": isLargeDesktopView,
           "mx-auto flex items-center justify-center gap-8 md:gap-12":
             showAll && !isLargeDesktopView,
-          "grid grid-cols-4 gap-y-3": !showAll && !isLargeDesktopView,
+          "grid grid-cols-2 gap-y-3": !showAll && !isLargeDesktopView,
         })}
       >
         {annotationsList?.map((annotation) => (
@@ -77,9 +82,31 @@ const QuestionGrid = ({
   };
 
   const visibleQuestions =
-    showAll || isAlwaysShowSidebar ? listQuestions : listQuestions?.slice(0, 7);
-  console.log("isAlwaysShowSidebar", isAlwaysShowSidebar);
-  console.log("isLargeDesktopView", isLargeDesktopView);
+    showAll || !isLargeDesktopView ? listQuestions : listQuestions?.slice(0, 7);
+
+  const baseStyle = {
+    display: "grid",
+    marginBottom: 32,
+  };
+
+  const style = {
+    ...baseStyle,
+    gap: isTabletView ? 12 : 16,
+
+    ...(isMobileView
+      ? {
+          gridAutoFlow: "column" as const,
+          gridTemplateRows: "repeat(2, auto)",
+          overflowX: "auto" as const,
+          maxWidth: "100%",
+        }
+      : {
+          gridTemplateColumns: isTabletView
+            ? "repeat(10, 1fr)"
+            : "repeat(7, 1fr)",
+        }),
+  };
+
   return (
     <>
       {isShowDivider && (
@@ -87,7 +114,7 @@ const QuestionGrid = ({
           // className="bg-gray-3"
           style={{
             height: 1,
-            margin: isAlwaysShowSidebar ? "24px 0" : "32px 0",
+            margin: !isLargeDesktopView ? "24px 0" : "32px 0",
             backgroundColor: "#D1D5DB",
           }}
         />
@@ -116,16 +143,7 @@ const QuestionGrid = ({
       </div>
 
       {/* Grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: isAlwaysShowSidebar
-            ? "repeat(10, 1fr)"
-            : "repeat(7, 1fr)",
-          gap: isAlwaysShowSidebar ? 12 : 16,
-          marginBottom: 32,
-        }}
-      >
+      <div style={style}>
         {visibleQuestions?.map((q: IAnswer, index: number) => {
           return (
             <button
