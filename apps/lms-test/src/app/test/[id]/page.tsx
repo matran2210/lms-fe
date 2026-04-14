@@ -138,6 +138,7 @@ const TestDetail = () => {
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id);
   const [isQuizAttemptIdReady, setisQuizAttemptIdReady] = useState(false);
   const searchParams = useSearchParams();
+  const WEB_LMS_URL = process.env.NEXT_PUBLIC_WEB_LMS_URL;
 
   useEffect(() => {
     if (searchParams) {
@@ -2727,10 +2728,10 @@ const TestDetail = () => {
                             ? `attempt=${quizAttempt?.number_of_attempts}/${quizDetail?.limit_count}`
                             : ``;
                         router.replace(
-                          `/entrance-test/test-result/${QuizResultId}?${searchParams}`,
+                          `${WEB_LMS_URL}/entrance-test/test-result/${QuizResultId}?${searchParams}`,
                         );
                       } else if (type === "event-test") {
-                        router.replace(`/event-test`);
+                        router.replace(`${WEB_LMS_URL}/event-test`);
                         // setSubmitEventTest(true)
                       } else {
                         // if (type !== 'entrance') {
@@ -2738,11 +2739,11 @@ const TestDetail = () => {
                           quizDetail?.grading_method === GRADING_METHOD.MANUAL
                         ) {
                           router.replace(
-                            `/courses/test/your-answers-detail/${QuizResultId}`,
+                            `${WEB_LMS_URL}/courses/test/your-answers-detail/${QuizResultId}`,
                           );
                         } else {
                           router.replace(
-                            `/courses/test/test-result/${QuizResultId}`,
+                            `${WEB_LMS_URL}/courses/test/test-result/${QuizResultId}`,
                           );
                         }
                       }
@@ -2759,7 +2760,6 @@ const TestDetail = () => {
                 open={openQuit}
                 setOpen={setOpenQuit}
                 handleQuit={() => {
-                  const WEB_LMS_URL = process.env.NEXT_PUBLIC_WEB_LMS_URL;
                   switch (type) {
                     case "event-test":
                       router.replace(`${WEB_LMS_URL}/event-test`);
