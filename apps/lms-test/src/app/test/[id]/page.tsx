@@ -2859,7 +2859,7 @@ const TestDetail = () => {
                   }}
                   handleOk={() => {
                     router.replace(
-                      `/courses/test/your-answers-detail/${openReportModal.resultId}`,
+                      `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/courses/test/your-answers-detail/${openReportModal.resultId}`,
                     );
                   }}
                 />
