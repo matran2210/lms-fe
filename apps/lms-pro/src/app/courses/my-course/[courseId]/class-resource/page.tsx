@@ -25,8 +25,7 @@ import {
   SappDrawerV3,
 } from '@lms/ui'
 import { getSelectOptions, normalizeToArray } from '@lms/utils'
-import { pushQueryClassResource } from '@utils/helpers'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import { ClassAPI } from 'src/api/class'
@@ -34,12 +33,13 @@ import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
 import CardFileItem from './CardFileItem'
 import ClassResourceTable from './ClassResourceTable'
-import FilterClassResource from './FilterClassResource'
+import FilterClassResource, {FilterFormValues} from './FilterClassResource'
 import SearchClassResource from './SearchClassResource'
 interface ISelectItem {
   label: string
   value: string
 }
+
 const ClassResource = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -74,10 +74,13 @@ const ClassResource = () => {
   const { setOpenSidebar } = useCourseContext()
   const { useAppSelector } = useFeature()
   const selector = useAppSelector?.(selectPopupActivateCourse)
-  const pathname = usePathname()
   const [params, setParams] = useState<IListClassResourceParams>({
     page_size: DEFAULT_PAGE_SIZE,
     page_index: DEFAULT_PAGE_NUMBER,
+  })
+  const [queryParams, setQueryParams] = useState<FilterFormValues>({
+    suffix_types: undefined,
+    schedule_ids: [],
   })
   const LIST_TAB_FILTER = [
     {
@@ -110,27 +113,11 @@ const ClassResource = () => {
       courseDetail: data,
     }
   }
-  // Để map schedule_ids từ string các id thành mảng các id
-  const mapParams = useMemo(() => {
-    let scheduleIds: string[] = []
-    if (query.schedule_ids) {
-      scheduleIds = query.schedule_ids.includes(',')
-        ? query.schedule_ids
-          .split(',')
-          .map((id) => id.trim())
-          .filter((id) => id)
-        : [query.schedule_ids]
-    }
-    return {
-      ...params,
-      schedule_ids: scheduleIds,
-    }
-  }, [params, query.schedule_ids])
-
+ 
   const { data, pagination, setPagination, isLoading } = useSappPaging({
     uniqueKey: ClassKey.ClassResource,
     queryFn: () =>
-      ClassAPI.getClassResource(param.courseId as string, mapParams),
+      ClassAPI.getClassResource(param.courseId as string, params),
     params,
   })
 
@@ -175,16 +162,16 @@ const ClassResource = () => {
         ? Number(query.page_index)
         : DEFAULT_PAGE_NUMBER,
       page_size: query.page_size ? Number(query.page_size) : DEFAULT_PAGE_SIZE,
-      suffix_types: normalizeToArray(query.suffix_types),
-      schedule_ids: normalizeToArray(query.schedule_ids),
+      suffix_types: normalizeToArray(queryParams.suffix_types),
+      schedule_ids: normalizeToArray(queryParams.schedule_ids),
 
       search_key:
         typeof query.search_key === 'string' ? query.search_key : undefined,
     }))
   }, [
     query.page_index,
-    query.suffix_types,
-    query.schedule_ids,
+    queryParams.suffix_types,
+    queryParams.schedule_ids,
     query.search_key,
     query.page_size,
   ])
@@ -283,11 +270,13 @@ const ClassResource = () => {
       } else {
         setListClassResourceMobile((prev) => [...prev, ...data.data])
       }
+    } else if (!isLoading && data?.data) {
+      setIsFirstLoadingMobile(false)
     }
   }, [data?.data, isLoading, params.page_index])
 
   const pushQuery = (next: Record<string, any>) => {
-    pushQueryClassResource(router, pathname, query, next)
+    
   }
 
   const handleSubmitFilterMobile = () => {
@@ -358,7 +347,7 @@ const ClassResource = () => {
       showSidebar={showSidebar || isAlwaysShowSidebar}
       handleToggleSidebar={handleCloseSidebar}
     >
-      {(isLoading && isFirstLoadingMobile) || selector?.openActive ? (
+      {isFirstLoadingMobile || selector?.openActive ? (
         <ClassResourceSkeleton />
       ) : (
         <>
@@ -410,7 +399,7 @@ const ClassResource = () => {
               <div className="text-2xl font-semibold text-gray-800">
                 Class Resource
               </div>
-              <FilterClassResource totalResult={pagination?.total || 0} />
+              <FilterClassResource totalResult={pagination?.total || 0} setQueryParams={setQueryParams} queryParams={queryParams}/>
             </div>
           )}
           {isMobileView && (
