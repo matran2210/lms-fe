@@ -12,11 +12,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { VALIDATE_REQUIRED } from '@lms/utils'
 import { isEmpty } from 'lodash'
+import { IScheduleRequestItem, PROGRAM } from '@lms/core'
 interface IProps {
   open: IOpenReasonModal
   setOpen: React.Dispatch<React.SetStateAction<IOpenReasonModal>>
   setOpenSuccessModal: Dispatch<SetStateAction<boolean>>
+  selectedRequest: IScheduleRequestItem | undefined
   handleUpdateStatus: ({
+    request_ids,
     requestId,
     type,
     reason,
@@ -27,6 +30,7 @@ const ReasonModal = ({
   open,
   setOpen,
   setOpenSuccessModal,
+  selectedRequest,
   handleUpdateStatus,
 }: IProps) => {
   const schema = z.object({
@@ -88,8 +92,10 @@ const ReasonModal = ({
      */
 
     if (isEmpty(data.request_reject_reason)) return
-    
+    const isACCAProgram = selectedRequest?.subject?.course_category?.name === PROGRAM.ACCA
+
     handleUpdateStatus({
+      ...(isACCAProgram && { request_ids: selectedRequest?.request_ids || [] }),
       requestId: open.requestId,
       type: open.type,
       reason: data.request_reject_reason,

@@ -2,6 +2,7 @@ import { CollapseArrowIcon } from '@lms/assets'
 import {
   ClassStandardScheduleItem,
   CONSTRUCTION_MODE,
+  PROGRAM,
   TYPE_TEACHING_REQUEST,
 } from '@lms/core'
 import { ScheduleSkeleton, TooltipParagraph } from '@lms/ui'
@@ -54,7 +55,8 @@ const PrimaryInformation = ({
 
   const isOffline = dataDetail?.mode === CONSTRUCTION_MODE.OFFLINE
   const isOnline = dataDetail?.mode === CONSTRUCTION_MODE.ONLINE
-
+  const isACCAProgram = selectedRequest?.subject?.course_category?.name === PROGRAM.ACCA
+  const courseName = selectedRequest?.subject.name
   const renderStartEndDate = (data: ScheduleRequestDetail | undefined) => {
     // case schedules.length === 0
     if (data?.schedules?.length === 0 || !data?.schedules) {
@@ -66,6 +68,14 @@ const PrimaryInformation = ({
     }
     // case schedules.length > 1
     return `${sappFormatDate(data?.schedules[0]?.start_date ?? '') ?? '--'} - ${sappFormatDate(data?.schedules[data?.schedules.length - 1]?.end_date ?? '') ?? '--'}`
+  }
+  const renderACCAStartEndDate = (data: IScheduleRequestItem | undefined) => {
+    // case schedules.length === 0
+    if (!data?.schedule_time) {
+      return '-- - --'
+    }
+    // case schedules.length > 1
+    return `${sappFormatDate(data?.schedule_time?.start_date ?? '') ?? '--'} - ${sappFormatDate(data?.schedule_time?.end_date ?? '') ?? '--'}`
   }
 
   const items: CollapseProps['items'] = [
@@ -95,7 +105,7 @@ const PrimaryInformation = ({
               title="Subject"
               value={
                 <TooltipParagraph className="inline-block w-full overflow-hidden text-ellipsis whitespace-nowrap">
-                  {`${convertSlugToTitle(selectedRequest?.subject?.code)}_${selectedRequest?.course_section?.name}`}
+                  {isACCAProgram ? courseName : `${convertSlugToTitle(selectedRequest?.subject?.code)}_${selectedRequest?.course_section?.name}`}
                 </TooltipParagraph>
                 // <span className="flex w-full cursor-pointer overflow-hidden whitespace-nowrap">
                 //   <Tooltip
@@ -163,7 +173,7 @@ const PrimaryInformation = ({
             {/* Start and end date */}
             <PrimaryInfoItem
               title="Start Date - End Date"
-              value={renderStartEndDate(dataDetail)}
+              value={isACCAProgram ? renderACCAStartEndDate(selectedRequest) : renderStartEndDate(dataDetail)}
               isLoading={isLoading}
             />
             {/* Sent Date */}
