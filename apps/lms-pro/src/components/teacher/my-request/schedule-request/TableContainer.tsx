@@ -15,6 +15,7 @@ import {
   convertSlugToTitle,
   convertSnakeCaseToHumanReadable,
   formatDateFromUTC,
+  groupACCABySubjectAndClass,
 } from '@lms/utils'
 import { TeacherAPI } from 'src/api/teacher'
 import {
@@ -27,7 +28,6 @@ import ReasonModal from './ReasonModal'
 import StatusItem from './StatusItem'
 import SuccessModal from './SuccessModal'
 import TableCell from './TableCell'
-
 export const statusColor = (data: IScheduleRequestItem) => {
   switch (data?.status) {
     case StatusRequestSchedule.PENDING:
@@ -50,6 +50,7 @@ export interface UpdateStatusParams {
   requestId: string
   type: StatusRequestSchedule
   reason?: string
+  request_ids?: string[]
   callback?: () => void
 }
 export interface IOpenReasonModal {
@@ -116,7 +117,7 @@ export default function TableContainer({ params }: IProps) {
             index +
             1 +
             ((pagination?.current || 1) - DEFAULT_PAGE_NUMBER) *
-              (pagination?.pageSize || DEFAULT_PAGE_SIZE)
+            (pagination?.pageSize || DEFAULT_PAGE_SIZE)
           }
           className="!text-zinc-400"
         />
@@ -140,16 +141,20 @@ export default function TableContainer({ params }: IProps) {
     },
     {
       title: 'Subject',
-      render: (_, record: IScheduleRequestItem) => (
-        <TableCell
-          className="max-w-36 overflow-hidden text-ellipsis whitespace-nowrap"
-          data={
-            <TooltipParagraph className="inline-block w-full overflow-hidden text-ellipsis whitespace-nowrap">
-              {`${convertSlugToTitle(record?.subject?.code)}_${record?.course_section?.name}`}
-            </TooltipParagraph>
-          }
-        />
-      ),
+      render: (_, record: IScheduleRequestItem) => {
+        const isACCAProgram = record?.subject?.course_category?.name === 'ACCA'
+        const subjectName = record?.subject?.name
+        return (
+          <TableCell
+            className="max-w-36 overflow-hidden text-ellipsis whitespace-nowrap"
+            data={
+              <TooltipParagraph className="inline-block w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                {isACCAProgram ? subjectName : `${convertSlugToTitle(record?.subject?.code)}_${record?.course_section?.name}`}
+              </TooltipParagraph>
+            }
+          />
+        )
+      }
     },
     {
       title: 'Construction mode',
@@ -161,11 +166,10 @@ export default function TableContainer({ params }: IProps) {
       title: 'Start Date - End Date',
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
-          data={`${record?.schedule_time.start_date ? formatDateFromUTC(record?.schedule_time.start_date) : '-'} - ${
-            record?.schedule_time.end_date
+          data={`${record?.schedule_time.start_date ? formatDateFromUTC(record?.schedule_time.start_date) : '-'} - ${record?.schedule_time.end_date
               ? formatDateFromUTC(record?.schedule_time.end_date)
               : '-'
-          }`}
+            }`}
         />
       ),
     },
@@ -230,10 +234,11 @@ export default function TableContainer({ params }: IProps) {
    * @param {function} [params.callback] - Hàm callback sẽ được gọi sau khi cập nhật trạng thái thành công (không bắt buộc).
    */
   const handleUpdateStatus = async ({
+    request_ids,
     requestId,
     type,
     reason = '',
-    callback = () => {},
+    callback = () => { },
   }: UpdateStatusParams) => {
     try {
       /**
@@ -246,6 +251,7 @@ export default function TableContainer({ params }: IProps) {
       const payload: StatusRequestScheduleParams = {
         reason: reason,
         status: type,
+        ...(request_ids && { request_ids: request_ids }),
       }
       /**
        * Gửi yêu cầu lên server để cập nhật trạng thái yêu cầu lịch trình.
@@ -281,7 +287,7 @@ export default function TableContainer({ params }: IProps) {
       <SappTable
         handleChangeParams={handleChangeParams}
         columns={columnsValue}
-        data={data?.data?.data ?? []}
+        data={groupACCABySubjectAndClass(data?.data?.data ?? [])}
         pagination={pagination}
         setPagination={setPagination}
         loading={isLoading}
@@ -302,6 +308,7 @@ export default function TableContainer({ params }: IProps) {
         <ReasonModal
           open={openReasonModal}
           setOpen={setOpenReasonModal}
+          selectedRequest={selectedRequest}
           setOpenSuccessModal={setOpenSuccessModal}
           handleUpdateStatus={handleUpdateStatus}
         />
