@@ -9,10 +9,14 @@ import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   IClassResource,
-  IListClassResourceParams
+  IListClassResourceParams,
 } from '@lms/core'
 import { withAuthorization } from '@lms/hoc'
-import { useSappPaging, useSelectClassSchedule, useTailwindBreakpoint } from '@lms/hooks'
+import {
+  useSappPaging,
+  useSelectClassSchedule,
+  useTailwindBreakpoint,
+} from '@lms/hooks'
 import {
   CarouselSlideAnimation,
   ClassResourceSkeleton,
@@ -33,7 +37,7 @@ import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
 import CardFileItem from './CardFileItem'
 import ClassResourceTable from './ClassResourceTable'
-import FilterClassResource, {FilterFormValues} from './FilterClassResource'
+import FilterClassResource, { FilterFormValues } from './FilterClassResource'
 import SearchClassResource from './SearchClassResource'
 interface ISelectItem {
   label: string
@@ -113,11 +117,10 @@ const ClassResource = () => {
       courseDetail: data,
     }
   }
- 
+
   const { data, pagination, setPagination, isLoading } = useSappPaging({
     uniqueKey: ClassKey.ClassResource,
-    queryFn: () =>
-      ClassAPI.getClassResource(param.courseId as string, params),
+    queryFn: () => ClassAPI.getClassResource(param.courseId as string, params),
     params,
   })
 
@@ -275,21 +278,18 @@ const ClassResource = () => {
     }
   }, [data?.data, isLoading, params.page_index])
 
-  const pushQuery = (next: Record<string, any>) => {
-    
-  }
-
   const handleSubmitFilterMobile = () => {
-    const lessonValue = Array.isArray(selectedFilters.Lesson)
-      ? selectedFilters.Lesson.map((item) => item.value)
-        .filter((v) => v)
-        .join(',')
-      : selectedFilters.Lesson.value
-
-    pushQuery({
+    const lessonValue: string[] = Array.isArray(selectedFilters.Lesson)
+      ? selectedFilters.Lesson.map((item) => item.value).filter(
+          (v): v is string => Boolean(v),
+        )
+      : selectedFilters.Lesson?.value
+        ? [selectedFilters.Lesson.value]
+        : []
+    setQueryParams({
       suffix_types:
         typeof selectedFilters.Type === 'object' &&
-          !Array.isArray(selectedFilters.Type)
+        !Array.isArray(selectedFilters.Type)
           ? selectedFilters.Type.value
           : undefined,
       schedule_ids: lessonValue || undefined,
@@ -308,9 +308,9 @@ const ClassResource = () => {
       if (!query.schedule_ids) return []
       return query.schedule_ids.includes(',')
         ? query.schedule_ids
-          .split(',')
-          .map((id) => id.trim())
-          .filter((id) => id)
+            .split(',')
+            .map((id) => id.trim())
+            .filter((id) => id)
         : [query.schedule_ids]
     }
 
@@ -330,8 +330,8 @@ const ClassResource = () => {
           Type: {
             label: query.suffix_types
               ? CLASS_SUFFIX_TYPE_FILTER.find(
-                (option) => option.value === query.suffix_types,
-              )?.label
+                  (option) => option.value === query.suffix_types,
+                )?.label
               : '',
             value: query.suffix_types || '',
           },
@@ -399,7 +399,11 @@ const ClassResource = () => {
               <div className="text-2xl font-semibold text-gray-800">
                 Class Resource
               </div>
-              <FilterClassResource totalResult={pagination?.total || 0} setQueryParams={setQueryParams} queryParams={queryParams}/>
+              <FilterClassResource
+                totalResult={pagination?.total || 0}
+                setQueryParams={setQueryParams}
+                queryParams={queryParams}
+              />
             </div>
           )}
           {isMobileView && (
