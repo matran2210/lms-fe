@@ -57,7 +57,7 @@ import React, {
 } from 'react'
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { CoursesAPI, getActivityById } from 'src/api/courses'
 import { UploadAPI } from 'src/api/upload'

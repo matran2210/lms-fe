@@ -413,7 +413,7 @@ export const HighlightableHTML: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutsideHighlight = (event: MouseEvent) => {
       const target = event.target as any;
 
       if (!selectedHighlightId || isProtectingSelection) return;
@@ -462,7 +462,7 @@ export const HighlightableHTML: React.FC<Props> = ({
         highlightElement &&
         (highlightElement.getAttribute("data-id") === selectedHighlightId ||
           highlightElement.getAttribute("data-timestamp") ===
-            selectedHighlightId)
+          selectedHighlightId)
       )
         return;
 
@@ -473,15 +473,15 @@ export const HighlightableHTML: React.FC<Props> = ({
       // }
     };
 
-    document.addEventListener("mousedown", handleClickOutside, true);
+    document.addEventListener("mousedown", handleClickOutsideHighlight, true);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside, true);
+      document.removeEventListener("mousedown", handleClickOutsideHighlight, true);
     };
   }, [selectedHighlightId, openNote, isProtectingSelection]);
 
   // Handle click outside for text selection
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutsideSelection = (event: MouseEvent) => {
       const target = event.target as any;
 
       if (!selection) return;
@@ -495,13 +495,24 @@ export const HighlightableHTML: React.FC<Props> = ({
       // Check if clicked inside the container
       const container = containerRef.current;
       if (container && container.contains(target)) {
-        // If clicking inside container, let the normal mouseUp handler deal with it
+        // Nếu click vào vùng highlighted, để handleHighlightClick xử lý
+        const clickedHighlight = (target as HTMLElement).closest?.("span.highlighted");
+        if (clickedHighlight) return;
+        // Click vào vùng text bình thường trong container → clear selection
+        setSelection(null);
+        setSelectionRect(null);
+        setLastRect(null);
+        const browserSelection = window.getSelection();
+        if (browserSelection) {
+          browserSelection.removeAllRanges();
+        }
         return;
       }
 
       // Clicked outside container, clear selection
       setSelection(null);
       setSelectionRect(null);
+      setLastRect(null);
 
       // Clear browser selection as well
       const browserSelection = window.getSelection();
@@ -510,9 +521,9 @@ export const HighlightableHTML: React.FC<Props> = ({
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutsideSelection);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutsideSelection);
     };
   }, [selection]);
 
@@ -655,6 +666,8 @@ export const HighlightableHTML: React.FC<Props> = ({
       cursor: pointer !important;
       pointer-events: auto !important;
       background-color: yellow !important;
+      font-size: inherit !important;
+      font-family: inherit !important;
     }
     span.highlighted:hover {
       opacity: 0.8;
@@ -733,10 +746,10 @@ export const HighlightableHTML: React.FC<Props> = ({
         prev.map((h) =>
           h.id === currentHighlightId
             ? {
-                ...h,
-                note: noteInput,
-                noteTime: dayjs().format("YYYY-MM-DDTHH:mm:ssZ"),
-              }
+              ...h,
+              note: noteInput,
+              noteTime: dayjs().format("YYYY-MM-DDTHH:mm:ssZ"),
+            }
             : h,
         ),
       );
@@ -854,8 +867,8 @@ export const HighlightableHTML: React.FC<Props> = ({
 
     if (element && viewer) {
       try {
-        await viewer.parseElement(element, true, function () {});
-      } catch (error) {}
+        await viewer.parseElement(element, true, function () { });
+      } catch (error) { }
     }
   };
 
@@ -896,7 +909,7 @@ export const HighlightableHTML: React.FC<Props> = ({
         }
       }
     }, 100);
-  });
+  }, [initialHTML, storageKey]);
 
   const handleOnclick = async (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e?.target as HTMLElement;
@@ -1107,7 +1120,7 @@ export const HighlightableHTML: React.FC<Props> = ({
                     <SAPPVideo
                       key={videoToken}
                       options={{
-                        onTimeUpdate: () => {},
+                        onTimeUpdate: () => { },
                         src: videoToken,
                       }}
                       streamRef={videoRefs.current[videoToken]}

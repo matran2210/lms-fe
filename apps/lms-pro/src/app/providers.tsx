@@ -72,11 +72,18 @@ import {
 } from 'src/constants/menu-items'
 import { PageLink } from 'src/constants/routers'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
-import UserApi from 'src/redux/services/User/user'
+import UserContextApi from 'src/redux/services/User/user'
 import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { store } from 'src/redux/store'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { modules } from './module-registry'
+import { UserApi } from 'src/api/user'
+import { SchedulesAPI } from 'src/api/schedules'
+import { ProgressAPI } from 'src/api/progress'
+import { TeacherAPI } from 'src/api/teacher'
+import { MyRequestAPI } from 'src/api/my-request'
+import { RequestAPI } from 'src/api/request'
 dayjs.extend(utc)
 dayjs.extend(weekday)
 const showSupportWidget = [
@@ -135,8 +142,8 @@ function Providers({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (socket) {
-      socket.on('connect', () => {})
-      socket.on('disconnect', () => {})
+      socket.on('connect', () => { })
+      socket.on('disconnect', () => { })
       socket?.on(SOCKET_EVENTS.NOTIFICATION_UNREAD, (data: any) => {
         localStorage.setItem(
           LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
@@ -300,7 +307,7 @@ function Providers({ children }: { children: ReactNode }) {
       <PinnedNotifyProvider
         router={router}
         api={{
-          getPinnedNotifications: UserApi.getPinnedNotifications,
+          getPinnedNotifications: UserContextApi.getPinnedNotifications,
         }}
       >
         <FeatureProvider
@@ -309,6 +316,7 @@ function Providers({ children }: { children: ReactNode }) {
             questionApi: QuestionAPI,
             uploadApi: UploadAPI,
             userApi: UserApi,
+            userContextApi: UserContextApi,
             notificationApi: NotificationAPI,
             authApi: AuthAPI,
             classApi: ClassAPI,
@@ -318,9 +326,14 @@ function Providers({ children }: { children: ReactNode }) {
             eventTestApi: EventTestAPI,
             calendarApi: CalendarApi,
             myProfileApi: MyProfileAPI,
+            myRequestApi: MyRequestAPI,
+            requestApi: RequestAPI,
             submitQuizTest: TestServiceAPI.submitQuizTest,
             dashboardApi: DashboardAPI,
             storylineApi: StorylineAPI,
+            schedulesApi: SchedulesAPI,
+            progressApi: ProgressAPI,
+            teacherApi: TeacherAPI,
             authManager: new AuthenticationManager(),
             pageLink: PageLink,
             menuItems: MENU_ITEMS,
@@ -340,6 +353,7 @@ function Providers({ children }: { children: ReactNode }) {
             courseActivationAPI: CoursesActivationAPI,
             dispatch: dispatch,
             useAppSelector: useAppSelector,
+            appModules: modules
           }}
         >
           <CourseProvider

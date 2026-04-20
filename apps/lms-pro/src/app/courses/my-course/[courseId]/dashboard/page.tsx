@@ -24,7 +24,7 @@ import { DashboardAPI } from 'src/api/dashboard'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 import { extractNotActivatedData } from '@lms/utils'
 import {
   selectPopupActivateCourse,
@@ -214,18 +214,18 @@ const Dashboard = () => {
           <div className="text-ink-700 mx-auto flex min-h-[calc(100vh-5rem)] font-sans">
             {infoCourse?.course_type == COURSE_TYPE.NORMAL_COURSE
               ? infoCourse && (
-                  <CourseDashboard
-                    topicProgressData={topicProgressData}
-                    overallProgressData={overallProgressData}
-                    weeklyReportData={weeklyReportData}
-                  />
-                )
+                <CourseDashboard
+                  topicProgressData={topicProgressData}
+                  overallProgressData={overallProgressData}
+                  weeklyReportData={weeklyReportData}
+                />
+              )
               : infoCourse && (
-                  <ExamDashboard
-                    topicProgressData={topicProgressData}
-                    mockTestResultsData={mockTestResultsData}
-                  />
-                )}
+                <ExamDashboard
+                  topicProgressData={topicProgressData}
+                  mockTestResultsData={mockTestResultsData}
+                />
+              )}
           </div>
           <ContinueLearning />
         </div>

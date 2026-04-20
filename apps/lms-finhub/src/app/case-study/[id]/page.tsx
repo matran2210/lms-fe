@@ -27,7 +27,7 @@ import {
   RESPONSE_OPTION,
   ROUTES,
 } from '@lms/core'
-import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
+import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-courses'
 import {
   useMousePosition,
   useSmartModalSize,

@@ -26,8 +26,8 @@ import {
   PROGRAM,
   QUESTION_TYPES,
 } from '@lms/core'
-import { CalculatorModal, ConFirmSubmit } from '@lms/feature-courses'
-import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
+import { CalculatorModal, ConFirmSubmit, QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-courses'
+import { withAuthorization } from '@lms/hoc'
 import { useMousePosition, useSmartModalSize } from '@lms/hooks'
 import {
   AddWordPreview,
@@ -55,7 +55,6 @@ import { TestServiceAPI } from 'src/api/test-api'
 import LimitQuizModal from 'src/app/test/limitQuizModal'
 import ScratchPatch from 'src/app/test/scratchPatch'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 const CaseStudyDetailTeacher = () => {

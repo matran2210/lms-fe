@@ -44,7 +44,7 @@ const ProfileHeader = ({
   setIsEdit,
   appType
 }: IProps) => {
-  const { userApi, authManager, dispatch, useAppSelector } = useFeature();
+  const { userContextApi, authManager, dispatch, useAppSelector } = useFeature();
 
   // Sử dụng hook useAppSelector để lấy dữ liệu từ state redux
   const { user, loading, loadingEditName, loadingEditAvatar } =
@@ -140,9 +140,9 @@ const ProfileHeader = ({
       // Nếu không có avatar và người dùng có avatar hiện tại
       if (!avatar && user?.detail?.avatar) {
         // Gọi hành động thunk updateUser để cập nhật tên và avatar của người dùng
-        await dispatch?.(updateUser({ full_name, avatar: null, api: userApi })).unwrap()
+        await dispatch?.(updateUser({ full_name, avatar: null, api: userContextApi })).unwrap()
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
-        dispatch?.(getMe(userApi))
+        dispatch?.(getMe(userContextApi))
         // Đặt trạng thái isEdit thành false
         setIsEdit(false)
         setIsEditAvatar(false)
@@ -152,12 +152,12 @@ const ProfileHeader = ({
       // Nếu có avatar
       if (avatar) {
         // Gọi hành động thunk updateUserAvatar để cập nhật avatar của người dùng
-        await dispatch?.(updateUserAvatar({api: userApi, avatar})).unwrap()
+        await dispatch?.(updateUserAvatar({ api: userContextApi, avatar })).unwrap()
         // Đặt lại giá trị của avatar
         setAvatar(undefined)
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
       }
-      dispatch?.(getMe(userApi))
+      dispatch?.(getMe(userContextApi))
       // Đặt trạng thái isEdit thành false
       setIsEdit(false)
       setIsEditAvatar(false)
@@ -171,7 +171,7 @@ const ProfileHeader = ({
     }
   }
   useEffect(() => {
-    dispatch?.(getUserInformation(userApi))
+    dispatch?.(getUserInformation(userContextApi))
   }, [])
 
   return (
@@ -179,9 +179,8 @@ const ProfileHeader = ({
       <div className="relative pb-3 md:pb-0">
         <div className="relative h-[100px] w-[100px] shrink rounded-full">
           <div
-            className={`${
-              loading ? 'animate-pulse' : ''
-            } w-full h-100 absolute bottom-0 left-0 right-0 top-0 overflow-hidden rounded-full lg:block`}
+            className={`${loading ? 'animate-pulse' : ''
+              } w-full h-100 absolute bottom-0 left-0 right-0 top-0 overflow-hidden rounded-full lg:block`}
           >
             <div className="group absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transform overflow-hidden rounded-full leading-[0]">
               {/* {isEdit && ( */}

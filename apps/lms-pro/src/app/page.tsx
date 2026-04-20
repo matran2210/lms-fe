@@ -1,5 +1,5 @@
 'use client'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 import { UserType } from '@lms/contexts'
 
 const IndexPage = () => {

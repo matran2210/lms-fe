@@ -38,7 +38,7 @@ import {
   ResetToAnswerTemplateModal,
   ShowAnswerTemplate,
 } from '@lms/feature-courses'
-import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-test'
+import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-courses'
 import { useSmartModalSize, useTailwindBreakpoint } from '@lms/hooks'
 import {
   AddWordPreview,

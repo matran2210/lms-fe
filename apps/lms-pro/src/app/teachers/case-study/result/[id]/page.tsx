@@ -50,7 +50,7 @@ import { useForm } from 'react-hook-form'
 import { CoursesAPI } from 'src/api/courses'
 import ScratchPatch from 'src/app/test/scratchPatch'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 import { useAppDispatch } from 'src/redux/hook'
 
 const CaseStudyResultTeacher = () => {

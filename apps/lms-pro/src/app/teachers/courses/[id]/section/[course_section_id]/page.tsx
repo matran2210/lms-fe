@@ -20,7 +20,7 @@ import { useQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
 import { TreeHelper } from 'src/helper/tree'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 interface IProps {
   course_section_type: string
   description: string

@@ -58,12 +58,13 @@ import {
 } from 'src/constants/menu-items'
 import { PageLink } from 'src/constants/routes'
 import CourseActivityApi from 'src/redux/services/Course/MyCourse/Activity'
-import UserApi from 'src/redux/services/User/user'
+import UserContextApi from 'src/redux/services/User/user'
 import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { uploadImageToLinkedIn } from '../api/certificate'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { store } from 'src/redux/store'
+import { UserApi } from 'src/api/user'
 
 dayjs.extend(utc)
 dayjs.extend(weekday)
@@ -134,7 +135,7 @@ function Providers({ children }: { children: ReactNode }) {
       <PinnedNotifyProvider
         router={router}
         api={{
-          getPinnedNotifications: UserApi.getPinnedNotifications,
+          getPinnedNotifications: UserContextApi.getPinnedNotifications,
         }}
       >
         <FeatureProvider
@@ -143,6 +144,7 @@ function Providers({ children }: { children: ReactNode }) {
             questionApi: QuestionAPI,
             uploadApi: UploadAPI,
             userApi: UserApi,
+            userContextApi: UserContextApi,
             notificationApi: NotificationAPI,
             authApi: AuthAPI,
             classApi: ClassAPI,

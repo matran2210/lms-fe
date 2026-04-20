@@ -7,7 +7,7 @@ import { useParams, useSearchParams } from 'next/navigation'
 import { useQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 
 const DEFAULT_PAGESIZE = 10
 

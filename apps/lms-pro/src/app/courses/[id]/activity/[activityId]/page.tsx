@@ -82,7 +82,7 @@ import {
 } from 'next/navigation'
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 import { CoursesAPI, getActivityById } from 'src/api/courses'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { v4 as uuidv4 } from 'uuid'
