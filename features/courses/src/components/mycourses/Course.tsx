@@ -382,7 +382,7 @@ const Course = ({
     }
 
     // Handle default case
-    if (!isCanceled) {
+    if (!isCanceled && determineButtonToShow !== "Disabled") {
       handleCourseDetail();
     }
   };

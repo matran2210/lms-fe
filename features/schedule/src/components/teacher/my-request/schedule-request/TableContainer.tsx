@@ -19,6 +19,7 @@ import {
   convertSlugToTitle,
   convertSnakeCaseToHumanReadable,
   formatDateFromUTC,
+  groupACCABySubjectAndClass,
 } from '@lms/utils'
 import DetailRequestModal from './DetailRequestModal'
 import ReasonModal from './ReasonModal'
@@ -26,7 +27,6 @@ import StatusItem from './StatusItem'
 import SuccessModal from './SuccessModal'
 import TableCell from './TableCell'
 import { useFeature } from '@lms/contexts'
-
 export const statusColor = (data: IScheduleRequestItem) => {
   switch (data?.status) {
     case StatusRequestSchedule.PENDING:
@@ -49,6 +49,7 @@ export interface UpdateStatusParams {
   requestId: string
   type: StatusRequestSchedule
   reason?: string
+  request_ids?: string[]
   callback?: () => void
 }
 export interface IOpenReasonModal {
@@ -136,16 +137,20 @@ export default function TableContainer({ params }: IProps) {
     },
     {
       title: 'Subject',
-      render: (_, record: IScheduleRequestItem) => (
-        <TableCell
-          className="max-w-36 overflow-hidden text-ellipsis whitespace-nowrap"
-          data={
-            <TooltipParagraph className="inline-block w-full overflow-hidden text-ellipsis whitespace-nowrap">
-              {`${convertSlugToTitle(record?.subject?.code)}_${record?.course_section?.name}`}
-            </TooltipParagraph>
-          }
-        />
-      ),
+      render: (_, record: IScheduleRequestItem) => {
+        const isACCAProgram = record?.subject?.course_category?.name === 'ACCA'
+        const subjectName = record?.subject?.name
+        return (
+          <TableCell
+            className="max-w-36 overflow-hidden text-ellipsis whitespace-nowrap"
+            data={
+              <TooltipParagraph className="inline-block w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                {isACCAProgram ? subjectName : `${convertSlugToTitle(record?.subject?.code)}_${record?.course_section?.name}`}
+              </TooltipParagraph>
+            }
+          />
+        )
+      }
     },
     {
       title: 'Construction mode',
@@ -225,6 +230,7 @@ export default function TableContainer({ params }: IProps) {
    * @param {function} [params.callback] - Hàm callback sẽ được gọi sau khi cập nhật trạng thái thành công (không bắt buộc).
    */
   const handleUpdateStatus = async ({
+    request_ids,
     requestId,
     type,
     reason = '',
@@ -241,6 +247,7 @@ export default function TableContainer({ params }: IProps) {
       const payload: StatusRequestScheduleParams = {
         reason: reason,
         status: type,
+        ...(request_ids && { request_ids: request_ids }),
       }
       /**
        * Gửi yêu cầu lên server để cập nhật trạng thái yêu cầu lịch trình.
@@ -276,7 +283,7 @@ export default function TableContainer({ params }: IProps) {
       <SappTable
         handleChangeParams={handleChangeParams}
         columns={columnsValue}
-        data={data?.data?.data ?? []}
+        data={groupACCABySubjectAndClass(data?.data?.data ?? [])}
         pagination={pagination}
         setPagination={setPagination}
         loading={isLoading}
@@ -297,6 +304,7 @@ export default function TableContainer({ params }: IProps) {
         <ReasonModal
           open={openReasonModal}
           setOpen={setOpenReasonModal}
+          selectedRequest={selectedRequest}
           setOpenSuccessModal={setOpenSuccessModal}
           handleUpdateStatus={handleUpdateStatus}
         />

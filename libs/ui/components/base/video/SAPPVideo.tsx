@@ -425,13 +425,11 @@ const SAPPVideo = ({
     progressBarRef?.current?.setAttribute("max", String(videoDuration));
     const time = formatTimeToHourMinuteSecond(videoDuration);
     if (durationRef?.current) {
-      durationRef.current.innerText = `${
-        time.hours !== "00" ? time.hours + ":" : ""
-      }${time.minutes}:${time.seconds}`;
+      durationRef.current.innerText = `${time.hours !== "00" ? time.hours + ":" : ""
+        }${time.minutes}:${time.seconds}`;
       durationRef.current.setAttribute(
         "datetime",
-        `${time.hours !== "00" ? time.hours + "h " : ""}${time.minutes}m ${
-          time.seconds
+        `${time.hours !== "00" ? time.hours + "h " : ""}${time.minutes}m ${time.seconds
         }s`,
       );
     }
@@ -458,13 +456,11 @@ const SAPPVideo = ({
         Math.round(streamRef.current?.currentTime || 0),
       );
       if (timeElapsedRef.current) {
-        timeElapsedRef.current.innerText = `${
-          time.hours !== "00" ? time.hours + ":" : ""
-        }${time.minutes}:${time.seconds}`;
+        timeElapsedRef.current.innerText = `${time.hours !== "00" ? time.hours + ":" : ""
+          }${time.minutes}:${time.seconds}`;
         timeElapsedRef.current.setAttribute(
           "datetime",
-          `${time.hours !== "00" ? time.hours + "h " : ""}${time.minutes}m ${
-            time.seconds
+          `${time.hours !== "00" ? time.hours + "h " : ""}${time.minutes}m ${time.seconds
           }s`,
         );
       }
@@ -511,8 +507,9 @@ const SAPPVideo = ({
   function updateSeekTooltip(event: MouseEvent) {
     const skipTo = Math.round(
       (event.offsetX / (event.target as HTMLElement).clientWidth) *
-        parseInt((event.target as HTMLElement).getAttribute("max") || "0", 10),
+      parseInt((event.target as HTMLElement).getAttribute("max") || "0", 10),
     );
+
     const t = formatTimeToHourMinuteSecond(skipTo);
     if (
       progressBarRef?.current &&
@@ -521,24 +518,26 @@ const SAPPVideo = ({
     ) {
       const rect = progressBarRef.current.getBoundingClientRect();
       seekRef.current.setAttribute("data-seek", String(skipTo));
-      seekTooltipRef.current.textContent = `${
-        t.hours !== "00" ? t.hours + ":" : ""
-      }${t.minutes}:${t.seconds}`;
+      seekTooltipRef.current.textContent = `${t.hours !== "00" ? t.hours + ":" : ""
+        }${t.minutes}:${t.seconds}`;
       seekTooltipRef.current.style.left = `${event.pageX - rect.left}px`;
     }
   }
 
   // skipAhead jumps to a different point in the video when the progress bar
   // is clicked
-  function skipAhead(event: Event) {
-    const skipTo =
-      event.target instanceof HTMLInputElement ? event.target.value : "0";
-    streamRef.current.currentTime = parseFloat(skipTo);
-    if (progressBarRef?.current) {
-      progressBarRef.current.value = Number(skipTo);
+  function skipAhead() {
+    if (!streamRef.current || !seekRef.current) return;
+
+    const skipTo = Number(seekRef.current.getAttribute("data-seek") || "0");
+
+    streamRef.current.currentTime = skipTo;
+
+    if (progressBarRef.current) {
+      progressBarRef.current.value = skipTo;
     }
     if (seekRef?.current) {
-      seekRef.current.value = skipTo;
+      seekRef.current.value = String(skipTo);
     }
   }
 
@@ -635,7 +634,7 @@ const SAPPVideo = ({
       video.webkitEnterFullscreen();
       return;
     }
-    
+
     // Check case fullscreen for normal 
     if (document?.fullscreenElement) {
       document.exitFullscreen();
@@ -807,15 +806,15 @@ const SAPPVideo = ({
   //   };
   // }, [router.events]);
 
-  const {pathname} = useFeature()
+  const { pathname } = useFeature()
   useEffect(() => {
-  // cleanup của route trước (tương đương routeChangeStart)
-  return () => {
-    if (document.pictureInPictureElement) {
-      document.exitPictureInPicture().catch(() => {})
+    // cleanup của route trước (tương đương routeChangeStart)
+    return () => {
+      if (document.pictureInPictureElement) {
+        document.exitPictureInPicture().catch(() => { })
+      }
     }
-  }
-}, [pathname])
+  }, [pathname])
 
   const { isDesktopView, isXLMiddleView, isMobileView } =
     useTailwindBreakpoint();
@@ -898,9 +897,8 @@ const SAPPVideo = ({
         <>
           {cloudflarePlayer ? (
             <div
-              className={`group ${
-                !hideVideo ? "sapp-wrapper" : "sapp-hideWrapper"
-              } ${loading ? "hidden" : ""}`}
+              className={`group ${!hideVideo ? "sapp-wrapper" : "sapp-hideWrapper"
+                } ${loading ? "hidden" : ""}`}
             >
               <div className={`popup-question`}>{children}</div>
               <Stream
@@ -924,14 +922,13 @@ const SAPPVideo = ({
               style={
                 videoAttribs
                   ? {
-                      height: `${videoAttribs?.height}px`,
-                      width: `${videoAttribs?.width}px`,
-                    }
+                    height: `${videoAttribs?.height}px`,
+                    width: `${videoAttribs?.width}px`,
+                  }
                   : {}
               }
               className={clsx(
-                `sapp-video-custom video-container group ${
-                  !hideVideo ? "sapp-wrapper" : "sapp-hideWrapper"
+                `sapp-video-custom video-container group ${!hideVideo ? "sapp-wrapper" : "sapp-hideWrapper"
                 }  ${loading ? "hidden" : ""}`,
                 {
                   "inline-block pt-0": videoAttribs,
@@ -1222,8 +1219,7 @@ const SAPPVideo = ({
                     </div>
                     <div
                       className={clsx(
-                        `settings-control icon-svg relative text-white ${
-                          activeSettings ? "active" : ""
+                        `settings-control icon-svg relative text-white ${activeSettings ? "active" : ""
                         }`,
                         {
                           hidden: isSmallVideo && !isFullscreen,
@@ -1325,11 +1321,10 @@ const SAPPVideo = ({
                                 <li
                                   key={"auto-switch"}
                                   onClick={() => changeQuality("auto", "Auto")}
-                                  className={`text-sm hover:bg-white hover:text-black ${
-                                    "Auto" === playbackQuality
-                                      ? "bg-white text-black"
-                                      : ""
-                                  }`}
+                                  className={`text-sm hover:bg-white hover:text-black ${"Auto" === playbackQuality
+                                    ? "bg-white text-black"
+                                    : ""
+                                    }`}
                                 >
                                   Auto
                                 </li>
@@ -1343,11 +1338,10 @@ const SAPPVideo = ({
                                           quality?.bitrate,
                                         )
                                       }
-                                      className={`text-sm hover:bg-white hover:text-black ${
-                                        quality?.bitrate === playbackQuality
-                                          ? "bg-white text-black"
-                                          : ""
-                                      }`}
+                                      className={`text-sm hover:bg-white hover:text-black ${quality?.bitrate === playbackQuality
+                                        ? "bg-white text-black"
+                                        : ""
+                                        }`}
                                     >
                                       {getResolution(quality?.bitrate || 0)}
                                     </li>
@@ -1377,11 +1371,10 @@ const SAPPVideo = ({
                                     key={speed.value}
                                     onClick={handlePlaybackRateChange}
                                     data-speed={speed.value}
-                                    className={`text-sm hover:bg-white hover:text-black ${
-                                      parseFloat(speed.value) === playbackRate
-                                        ? "bg-white text-black"
-                                        : ""
-                                    }`}
+                                    className={`text-sm hover:bg-white hover:text-black ${parseFloat(speed.value) === playbackRate
+                                      ? "bg-white text-black"
+                                      : ""
+                                      }`}
                                   >
                                     {speed.label}
                                   </li>
@@ -1409,11 +1402,10 @@ const SAPPVideo = ({
                                   key={-1}
                                   onClick={handleLanguageChange}
                                   data-cc={-1}
-                                  className={`text-sm hover:bg-white hover:text-black ${
-                                    -1 === playbackCC
-                                      ? "bg-white text-black"
-                                      : ""
-                                  }`}
+                                  className={`text-sm hover:bg-white hover:text-black ${-1 === playbackCC
+                                    ? "bg-white text-black"
+                                    : ""
+                                    }`}
                                 >
                                   Off
                                 </li>
@@ -1422,11 +1414,10 @@ const SAPPVideo = ({
                                     key={cc.index}
                                     onClick={handleLanguageChange}
                                     data-cc={cc.index}
-                                    className={`text-sm hover:bg-white hover:text-black ${
-                                      cc.index === playbackCC
-                                        ? "bg-white text-black"
-                                        : ""
-                                    }`}
+                                    className={`text-sm hover:bg-white hover:text-black ${cc.index === playbackCC
+                                      ? "bg-white text-black"
+                                      : ""
+                                      }`}
                                   >
                                     {cc.lang}
                                   </li>

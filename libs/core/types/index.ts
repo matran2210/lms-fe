@@ -241,4 +241,4 @@ export * from "./file/index";
 export * from "./courses-3-level";
 export * from "./my-calendar";
 export * from "./my-request";
-export * from "./teachers/request-schedule.interface";
+export * from "./teachers";

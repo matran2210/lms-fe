@@ -63,13 +63,6 @@ const EntranceTestResultPage = () => {
     refetch()
   }, [refetch, query.attempt_status])
 
-  useEffect(() => {
-    const hasOpened = localStorage.getItem('openModalMarketingInApp')
-    if (!hasOpened) {
-      setOpenModalMarketingInApp(true)
-    }
-  }, [])
-
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout

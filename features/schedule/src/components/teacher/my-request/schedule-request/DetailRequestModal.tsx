@@ -1,7 +1,7 @@
 import { InfoIcon } from '@lms/assets'
 import React, { Dispatch, SetStateAction } from 'react'
 import dayjs from 'dayjs'
-import { IScheduleRequestItem, StatusRequestSchedule } from '@lms/core'
+import { IScheduleRequestItem, PROGRAM, StatusRequestSchedule } from '@lms/core'
 import { useQuery } from 'react-query'
 import clsx from 'clsx'
 import InfoItem from './InfoItem'
@@ -18,6 +18,7 @@ interface IProps {
   selectedRequest: IScheduleRequestItem | undefined
   setOpenReasonModal: React.Dispatch<React.SetStateAction<IOpenReasonModal>>
   handleUpdateStatus: ({
+    request_ids,
     requestId,
     type,
     reason,
@@ -124,7 +125,10 @@ const DetailRequestModal = ({
      * @param {function} options.callback - Hàm callback sẽ được gọi sau khi cập nhật trạng thái thành công.
      */
     if (!requestId) return
+    const isACCAProgram = selectedRequest?.subject?.course_category?.name === PROGRAM.ACCA
+
     handleUpdateStatus({
+      ...(isACCAProgram && { request_ids: selectedRequest?.request_ids || [] }),
       requestId,
       type: StatusRequestSchedule.APPROVED,
       reason: StatusRequestSchedule.APPROVED,
