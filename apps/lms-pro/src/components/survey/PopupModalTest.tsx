@@ -79,8 +79,6 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
       100
     ).toFixed(1),
   )
-  const keyLS = 'remind-survey-ld'
-  const [isRemindSurveyLD, setIsRemindSurveyLD] = useState(false)
 
   const [open, setOpen] = useState<SurveyState>({
     middtermCourse: false,
@@ -201,16 +199,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
   const handleClose = () => {
     if (isLDProgram) {
       if (!courseId) return
-      const current = localStorage.getItem(keyLS)
-
-      const list = current ? current.split(',') : []
-
-      // tránh bị duplicate
-      if (!list.includes(courseId as string)) {
-        list.push(courseId as string)
-        localStorage.setItem(keyLS, list.join(','))
-        handleTest()
-      }
+      handleTest()
     } else {
       handleRemindSurvey()
       setOpen({
@@ -321,8 +310,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
 
   useEffect(() => {
     if (!isLDProgram) return
-    const shouldOpenLD =
-      isLDProgram && listSurveySatisfy?.length > 0 && !isRemindSurveyLD
+    const shouldOpenLD = isLDProgram && listSurveySatisfy?.length > 0
 
     setOpen({
       middtermCourse: false,
@@ -330,7 +318,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
       completeCourse: false,
       ldCourse: shouldOpenLD,
     })
-  }, [listSurveySatisfy, isLDProgram, isRemindSurveyLD])
+  }, [listSurveySatisfy, isLDProgram])
 
   const surveyType = getSurveyType()
 
@@ -339,17 +327,6 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     open.finalCourse ||
     open.completeCourse ||
     open.ldCourse
-
-  useEffect(() => {
-    if (!courseId) return
-    const value =
-      localStorage
-        .getItem(keyLS)
-        ?.split(',')
-        .includes(courseId as string) ?? false
-
-    setIsRemindSurveyLD(value)
-  }, [courseId])
 
   const ContentModalTest = () => {
     return (
