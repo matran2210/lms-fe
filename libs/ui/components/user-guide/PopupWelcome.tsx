@@ -2,7 +2,7 @@
 import { RefObject } from 'react'
 import { HandShake } from '@lms/assets'
 import { UserGuide } from '@lms/core'
-import { clearGuideState, increment, useAppDispatch, useFeature } from '@lms/contexts'
+import { clearGuideState, increment, useFeature } from '@lms/contexts'
 import { ButtonPrimary, ButtonText, SappModal } from '../base'
 
 type Props = {
@@ -10,10 +10,9 @@ type Props = {
 }
 
 const PopupWelcome = ({ confirmDialogOverLayRef }: Props) => {
-  const {courseApi} = useFeature()
-  const dispatch = useAppDispatch()
+  const {courseApi, dispatch} = useFeature()
   const handleNextStep = async () => {
-    dispatch(increment())
+    dispatch?.(increment())
     await activeUserGuide()
   }
 
@@ -33,7 +32,7 @@ const PopupWelcome = ({ confirmDialogOverLayRef }: Props) => {
     document.body.style.removeProperty('padding-right')
     document.body.classList.remove('overflow-hidden')
     setTimeout(() => {
-      dispatch(clearGuideState())
+      dispatch?.(clearGuideState())
     }, 50)
   }
 

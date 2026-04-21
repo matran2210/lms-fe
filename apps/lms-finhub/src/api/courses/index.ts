@@ -1,11 +1,11 @@
-import { fetcher } from '@services/requestV2'
-import url from 'src/redux/services/Course/MyCourse/Test/url'
 import {
-  CourseDetail,
+  CourseDetail3Level,
   IAnswerQuizLastestAttempt,
   IResponse,
   IScoreDetails,
 } from '@lms/core'
+import { fetcher } from '@services/request'
+import url from 'src/redux/services/Course/MyCourse/Test/url'
 export class CoursesAPI {
   static getNoteDetail(
     course_section_id: string | number,
@@ -74,7 +74,7 @@ export class CoursesAPI {
     page_index: number,
     page_size: number,
     params: Object,
-  ): Promise<IResponse<CourseDetail>> {
+  ): Promise<IResponse<CourseDetail3Level>> {
     return fetcher(
       `courses/${id}?page_index=${page_index}&page_size=${page_size}`,
       {

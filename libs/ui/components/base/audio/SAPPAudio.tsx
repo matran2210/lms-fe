@@ -8,7 +8,7 @@ import {
 import clsx from "clsx";
 import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import useClickOutside from "../clickoutside/HookClick";
-import { ArrowIcon } from "../pagination";
+import { ComboArrowIcon } from "../pagination";
 
 interface IProp {
   options: any;
@@ -855,11 +855,11 @@ const SAPPAudio = ({
                                 </span>
                                 <span className="flex items-center justify-between gap-1 text-xsm font-medium">
                                   {playbackRate === 1 ? "Normal" : playbackRate}
-                                  <ArrowIcon
+                                  <ComboArrowIcon
                                     className={"h-4 w-3"}
                                     right={true}
                                     iconType={"chervon"}
-                                  ></ArrowIcon>
+                                  ></ComboArrowIcon>
                                 </span>
                               </div>
                             </div>
@@ -871,10 +871,10 @@ const SAPPAudio = ({
                                 className="relative px-1.5 text-base font-semibold"
                                 onClick={() => setActiveSpeed(false)}
                               >
-                                <ArrowIcon
+                                <ComboArrowIcon
                                   className={"absolute left-1 top-1 h-4 w-4"}
                                   iconType={"chervon"}
-                                ></ArrowIcon>
+                                ></ComboArrowIcon>
                                 Speed
                               </h4>
                               <ul

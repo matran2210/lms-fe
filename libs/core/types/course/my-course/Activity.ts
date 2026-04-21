@@ -1,4 +1,5 @@
 import { IQuizSetting } from '../../courses'
+import { INeighborActivity } from '../../courses-3-level';
 import { IFile, IQuestion, IVideo } from '../Question'
 
 export interface IActivity {
@@ -44,18 +45,8 @@ export interface IActivity {
   tabs?: ITab[];
   class_id?: string;
   class_user_id?: string;
-  next_activity: {
-    id: string;
-    display_icon: string;
-    name: string;
-    is_preview_locked: boolean;
-  };
-  previous_activity: {
-    id: string;
-    display_icon: string;
-    name: string;
-    is_preview_locked: boolean;
-  };
+  next_activity: INeighborActivity;
+  previous_activity: INeighborActivity;
   breadcumb?: IActivityBreadcrumb[];
   user_course_section_progress: {
     id: string;

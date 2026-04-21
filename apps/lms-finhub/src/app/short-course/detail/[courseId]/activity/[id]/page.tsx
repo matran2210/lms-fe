@@ -11,7 +11,6 @@ import CreateNote from '@components/courses/activity/create-note/CreateNote'
 import ButtonIcon from '@components/courses/buttons/ButtonIcon'
 import NextPrevActivityButton from '@components/courses/buttons/ButtonNextPrevActivity'
 import { Arrows } from '@components/courses/icons'
-import { AltArrowLeft } from '@components/courses/icons/AltArrowLeft'
 import PdfModal from '@components/courses/popup/PdfModal'
 import Layout from '@components/layout'
 import {
@@ -20,17 +19,14 @@ import {
 } from '@components/mycourses/activity/documents/LoadingActivity'
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
-import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
-import { CloseIcon } from '@lms/assets'
+import { AltArrowLeft, CloseIcon } from '@lms/assets'
 import {
   clearNote3Level,
   closeCalculator3Level,
   courseActivityAction3Level,
   shortCourseActivityReducer,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
-  useCourseContext
+  useCourseContext,
 } from '@lms/contexts'
 import {
   ACTIVE_TABS,
@@ -40,16 +36,22 @@ import {
   IActivityResource,
   ISubSection,
 } from '@lms/core'
-import { CalculatorModal } from '@lms/feature-courses'
+import { CalculatorModal, PopupLockContent } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { trackGAEvent } from '@lms/utils'
 import Link from 'next/link'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import { CoursesAPI, getActivityById } from 'src/api/courses'
 import { UploadAPI } from 'src/api/upload'
 import { PageLink } from 'src/constants/routes'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 interface VideoStateClicked {
   course_tab_document_id: string
@@ -185,7 +187,7 @@ export default function ActivityDetail() {
       CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION = {}
       try {
         dispatch(courseActivityAction3Level.setActivityState3Level(activity))
-      } catch (error) { }
+      } catch (error) {}
     }
 
     return () => {
@@ -212,12 +214,11 @@ export default function ActivityDetail() {
     }
   }
 
-const searchParams = useSearchParams()
-  const  pathname  = usePathname()
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
 
-const asPath =
-  pathname + (searchParams.toString() ? `?${searchParams}` : '')
-  
+  const asPath = pathname + (searchParams.toString() ? `?${searchParams}` : '')
+
   // Clear notes & calculator
   useEffect(() => {
     dispatch(clearNote3Level())
@@ -301,7 +302,7 @@ const asPath =
       settingDoneProcessActivity(activity)
     }
   }, [activity])
-  
+
   useEffect(() => {
     // tương đương routeChangeComplete
     isFinishRef.current = false

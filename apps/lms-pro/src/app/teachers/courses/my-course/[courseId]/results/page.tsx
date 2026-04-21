@@ -1,18 +1,19 @@
-"use client"
+'use client'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
+import { CourseSkeleton, LayoutTeacher } from '@lms/ui'
 import { UserType } from '@lms/contexts'
 import { ITabs, TitleSidebar } from '@lms/core'
-import { CourseSkeleton, LayoutTeacher, SappLoadingGlobal } from '@lms/ui'
 import { useParams, useSearchParams } from 'next/navigation'
 import { useQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 
 const DEFAULT_PAGESIZE = 10
 
 const ResultsTeacher = () => {
   const searchParam = useSearchParams()
-  const param = useParams();
+  const param = useParams()
   const { courseId } = param
   const query = Object.fromEntries(searchParam.entries())
 

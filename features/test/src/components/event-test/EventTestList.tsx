@@ -40,11 +40,16 @@ const EventTestList = ({
         );
       case "CFA":
         return (
-          <ContentTestCongratution
-            text1="Your results will"
-            text2="be emailed to you on January 26, 2026"
-            text3="Please remember to check your inbox to ensure you don’t miss the update."
-          />
+          <div className="px-1 text-sm">
+            <span className="text-[#A1A1A1]">Congratulations on completing your</span>{' '}
+            <span className="font-medium text-gray-800">Pathway to Global Certifications in Finance</span>{' '}
+            <span className="text-[#A1A1A1]">test!</span> <br />
+            <div className="text-center">
+              <span className="text-[#A1A1A1]">Your results will</span>{' '}
+              <span className="font-medium text-gray-800">be emailed to you from April 19 to April 20, 2026</span>.
+              <div className="mt-0.5 text-[#A1A1A1]">Please remember to check your inbox to ensure you don’t miss the update.</div>
+            </div>
+          </div>
         );
       default:
         return (
@@ -60,12 +65,11 @@ const EventTestList = ({
   return (
     <>
       <div
-        className={`${
-          !isEmpty(eventTestLists)
-            ? "grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3"
-            : "flex min-h-[calc(100vh-15rem)] items-center justify-center"
-        }`}
-        // data-aos={ANIMATION.DATA_AOS}
+        className={`${!isEmpty(eventTestLists)
+          ? "grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3"
+          : "flex min-h-[calc(100vh-15rem)] items-center justify-center"
+          }`}
+      // data-aos={ANIMATION.DATA_AOS}
       >
         {!isEmpty(eventTestLists) ? (
           eventTestLists?.map((e: IEventTest, index) => (

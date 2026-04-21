@@ -25,7 +25,7 @@ import { REPEAT_TYPE } from "@lms/core";
 import clsx from "clsx";
 import utc from "dayjs/plugin/utc";
 import { SappIcon } from "../common";
-import { SAPPSelectV2 } from "../base";
+import { SAPPSelectTooltip } from "../base";
 
 const DEFAULT_END_DATE_HOUR_OFFSET = 1;
 const MAX_END_DATE_YEAR_RANGE = 2;
@@ -317,7 +317,7 @@ const EventRepeatField = ({
   return (
     <>
       <div className={`event-repeat ${className}`}>
-        <SAPPSelectV2
+        <SAPPSelectTooltip
           name="repeat_type"
           label="Repeat"
           control={control}

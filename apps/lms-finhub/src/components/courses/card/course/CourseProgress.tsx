@@ -1,5 +1,5 @@
 import { Icon } from '@lms/assets'
-import { ICourseProgress } from 'src/type/courses-3-level/course'
+import { ICourseProgress } from '@lms/core'
 
 export default function CourseProgress({
   enableCourse,

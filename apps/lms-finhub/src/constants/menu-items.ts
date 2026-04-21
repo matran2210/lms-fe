@@ -1,6 +1,6 @@
 import { LANG_SIGNIN, MenuItem, MenuOption, TitleSidebar } from '@lms/core'
 import { PageLink } from './routes'
-import { makeMenuLevel } from '@utils/helpers'
+import { makeMenuLevel } from '@lms/utils'
 
 const MENU_OPTIONS: MenuOption[] = [
   {
@@ -29,7 +29,7 @@ const MENU_OPTIONS: MenuOption[] = [
   },
   {
     name: TitleSidebar.CALCULATOR,
-    icon: 'caculator',
+    icon: 'calculator',
     url: '#',
     type: 'level-1',
   },

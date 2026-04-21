@@ -17,14 +17,13 @@ import {
   OpenBookAnimation,
   ResourceAnimation,
   TestQuizListAnimation,
+  CourseActivationAnimation
 } from "@lms/assets";
 import {
   activeNotesList,
   clearNotifications,
   openCalculator,
   pushNotes,
-  useAppDispatch,
-  useAppSelector,
   useFeature,
   userReducer,
 } from "@lms/contexts";
@@ -50,12 +49,12 @@ type MenuItemProps = {
 };
 
 export default function MenuItem({
-  menuItem: { name, icon: Icon, url, type, subItems },
+  menuItem: { name, icon: Icon, url, type, subItems, showMenu },
   setOpenResource,
   closeSideBar,
   setOpenExaminationInfo,
 }: MenuItemProps) {
-  const { notificationApi, pageLink, router, pathname, query, params } = useFeature();
+  const { notificationApi, pageLink, dispatch, useAppSelector, router, pathname, query, params } = useFeature();
   const id = params?.id || query.id
   const courseId = params?.courseId || query.courseId
   const activityId = params?.activityId || query.activityId
@@ -79,7 +78,7 @@ export default function MenuItem({
     notificationUnread,
   } = useNotification(notificationApi);
 
-  const isLoading = useAppSelector(
+  const isLoading = useAppSelector?.(
     (state) => state.notificationReducer.loading,
   );
   const tabs = [
@@ -95,13 +94,12 @@ export default function MenuItem({
 
   useEffect(() => {
     if (selectedTab) {
-      dispatch(clearNotifications());
+      dispatch?.(clearNotifications());
     }
   }, [selectedTab]);
 
   const [isExpanded, toggleExpanded] = useState(false);
-  const dispatch = useAppDispatch();
-  const { user } = useAppSelector(userReducer);
+  const { user } = useAppSelector?.(userReducer) || {};
   const isNested = subItems && subItems?.length > 0;
   const courseContext = getCourseContentSubContext(pathname as string);
   const learningContext = getLearningSubContext(pathname as string);
@@ -156,7 +154,7 @@ export default function MenuItem({
   };
 
   const handleOpenNotesList = () => {
-    dispatch(activeNotesList());
+    dispatch?.(activeNotesList());
     document.body.style.overflow = "hidden";
   };
 
@@ -167,11 +165,11 @@ export default function MenuItem({
       name: "Note",
       description: "",
     };
-    dispatch(pushNotes(note));
+    dispatch?.(pushNotes(note));
   };
 
   const handleOpenCalculator = () => {
-    dispatch(openCalculator());
+    dispatch?.(openCalculator());
   };
 
   const handleOpenCourseContentPage = () => {
@@ -264,6 +262,7 @@ export default function MenuItem({
     courseId ||
     (activityId && name !== TitleSidebar.EXAM) ||
     (course_section_id && name !== TitleSidebar.EXAM);
+
   const isInMyProfile = pathname === pageLink.MYPROFILE;
 
   const checkIsHiddenDashboard = (info: any) => {
@@ -313,7 +312,7 @@ export default function MenuItem({
             className={animationClass}
           />
         );
-      case "caculator":
+      case "calculator":
         return (
           <Lottie
             animationData={CalculatorAnimation}
@@ -425,6 +424,15 @@ export default function MenuItem({
             className={animationClass}
           />
         );
+      case "course-activation":
+        return (
+          <Lottie
+            animationData={CourseActivationAnimation}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        );
 
       default:
         return (
@@ -454,11 +462,11 @@ export default function MenuItem({
             })}
           >
             {user?.detail?.avatar?.["40x40"] ||
-              user.detail.avatar?.["ORIGIN"] ? (
+              user?.detail.avatar?.["ORIGIN"] ? (
               <Image
                 src={
-                  user.detail.avatar?.["40x40"] ||
-                  user.detail.avatar?.["ORIGIN"]
+                  user?.detail.avatar?.["40x40"] ||
+                  user?.detail.avatar?.["ORIGIN"]
                 }
                 alt="avatar"
                 className="h-9 w-9 rounded-full object-cover"
@@ -482,8 +490,8 @@ export default function MenuItem({
               <div className="h-10 w-10 shrink-0">
                 <Image
                   src={
-                    user.detail.avatar?.["40x40"] ||
-                    user.detail.avatar?.["ORIGIN"] ||
+                    user?.detail.avatar?.["40x40"] ||
+                    user?.detail.avatar?.["ORIGIN"] ||
                     BlankAvatarImage
                   }
                   alt="avatar"
@@ -575,7 +583,7 @@ export default function MenuItem({
             ) : (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-3 text-base font-normal opacity-0 transition-all duration-200 ease-in-out md:pl-4 ${selected ? "bg-primary text-white" : "text-gray-800"
+                  `label invisible line-clamp-1 pl-3 text-base font-normal opacity-0 transition-all duration-200 ease-in-out md:pl-4 whitespace-nowrap ${selected ? "bg-primary text-white" : "text-gray-800"
                   }`,
                   {
                     "group-hover:text-gray-800": !selected,
@@ -592,7 +600,7 @@ export default function MenuItem({
     );
   };
 
-
+  if (showMenu === false) return null;
   return (
     <>
       {isActivity && name === TitleSidebar.NEW_NOTE && (
@@ -632,6 +640,7 @@ export default function MenuItem({
             (name === TitleSidebar.COURSES ||
               name === TitleSidebar.EXAM_LIST ||
               name === TitleSidebar.ENTRANCE_TEST ||
+              name === TitleSidebar.COURSE_ACTIVATION ||
               // hidden when in course
               name === TitleSidebar.CALENDAR ||
               // hidden when in course

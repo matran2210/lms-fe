@@ -1,11 +1,10 @@
+import { IAuthAPI, IAuthManager } from '@lms/core'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { RootState } from '../../store'
 import {
   ChangePasswordReq,
   ChangePasswordRes,
   LoginState,
 } from '../../types/Login/login'
-import { IAuthAPI, IAuthManager } from '@lms/core'
 
 const initialState: LoginState = {
   accessToken: '',
@@ -106,6 +105,12 @@ export const loginSlice = createSlice({
   },
 })
 // export const selectAuthUser = (state: RootState) => state.loginReducer.authUser;
-export const loginReducer = (state: RootState) => state.loginReducer
+export const loginReducer = <
+  T extends {
+    loginReducer: LoginState;
+  },
+>(
+  state: T,
+) => state.loginReducer
 
 export default loginSlice.reducer

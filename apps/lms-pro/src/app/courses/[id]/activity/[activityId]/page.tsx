@@ -1,17 +1,18 @@
 'use client'
 import {
-  CalculatorIconV2,
+  CalculatorIcon,
   CloseIcon,
   CloseIconNote,
   DiscussionIcon,
   DocumentTextIcon,
   ExpandIcon,
   HourglassIcon,
+  NewScratchPadIcon,
   ResourceIcon,
-  ScratchPadIconV2,
   TimeLineIcon,
 } from '@lms/assets'
 import {
+  ActivityResource,
   CalculatorModal,
   CreateNote,
   Discussion,
@@ -25,7 +26,7 @@ import {
   LearningResource,
   ModalResizeable,
 } from '@lms/ui'
-import { convertMinutesToHourFormat } from '@lms/utils'
+import { convertMinutesToHourFormat, extractNotActivatedData } from '@lms/utils'
 
 import { Triangle } from '@lms/assets'
 import {
@@ -38,14 +39,13 @@ import {
   pushNotes,
   resetQuizActivity,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
   usePreviousSectionRoute,
   UserType,
 } from '@lms/contexts'
 import {
   ANIMATION,
+  ApiError,
   CourseSectionType,
   EXHIBIT_TEXT_REPLACE,
   IActivity,
@@ -63,11 +63,9 @@ import {
   LearningOutcome,
   VideoTimelineMobile,
 } from '@lms/feature-courses'
-import ActivityResource from '@lms/feature-courses/src/components/learning/activity/ActivityResource'
 import { useSmartModalSize, useTailwindBreakpoint } from '@lms/hooks'
 import {
   AssistiveTouch,
-  BackToTop,
   BottomMenu,
   CtaTrial,
   HeaderMobile,
@@ -83,12 +81,12 @@ import {
   useSearchParams,
 } from 'next/navigation'
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
 import { useQuery } from 'react-query'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 import { CoursesAPI, getActivityById } from 'src/api/courses'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { v4 as uuidv4 } from 'uuid'
-
+import { selectPopupActivateCourse, showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string
@@ -103,6 +101,7 @@ const ActivityPage = () => {
   const query = Object.fromEntries(searchParams.entries())
   const { previousSection } = usePreviousSectionRoute()
   const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
+
   const scrollRef = useRef<HTMLDivElement>(null)
   const useGetActivityById = (
     id: string | string[] | undefined,
@@ -112,6 +111,12 @@ const ActivityPage = () => {
       ['activity', id, course_id],
       () => getActivityById(id, course_id),
       {
+        onError: (error: ApiError) => {
+          const data = extractNotActivatedData(error)
+          if (data) {
+            dispatch?.(showPopupActivatedCourse(data))
+          }
+        },
         enabled: id !== undefined && course_id !== undefined,
         retry: false,
       },
@@ -129,6 +134,7 @@ const ActivityPage = () => {
     useSmartModalSize()
 
   const dispatch = useAppDispatch()
+  const selectorActivated = useAppSelector?.(selectPopupActivateCourse)
   const selector = useAppSelector(courseActivityReducer)
   const getNotesData = useAppSelector(
     (state) => state.notesListReducer?.note_data,
@@ -267,7 +273,7 @@ const ActivityPage = () => {
             sectionId: sectionId,
           }),
         )
-      } catch (error) {}
+      } catch (error) { }
     }
 
     return () => {
@@ -425,27 +431,27 @@ const ActivityPage = () => {
 
   const breadcrumbsData: ITabs[] = breadcrumbsMenu?.data
     ? breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
-        const urlCourseDetail = `/courses/${params?.id}/section/${partId}`
-        switch (e.course_section_type) {
-          case 'PART':
-          case 'CHAPTER':
-          case 'UNIT':
-            return {
-              title: e?.name,
-              link: urlCourseDetail,
-            }
-          case 'ACTIVITY':
-            return {
-              title: e?.name,
-              link: '#',
-            }
-          default:
-            return {
-              title: e?.name,
-              link: urlCourseDetail,
-            }
-        }
-      })
+      const urlCourseDetail = `/courses/${params?.id}/section/${partId}`
+      switch (e.course_section_type) {
+        case 'PART':
+        case 'CHAPTER':
+        case 'UNIT':
+          return {
+            title: e?.name,
+            link: urlCourseDetail,
+          }
+        case 'ACTIVITY':
+          return {
+            title: e?.name,
+            link: '#',
+          }
+        default:
+          return {
+            title: e?.name,
+            link: urlCourseDetail,
+          }
+      }
+    })
     : []
 
   const assistiveItemClass =
@@ -454,7 +460,7 @@ const ActivityPage = () => {
     {
       label: (
         <div className={assistiveItemClass}>
-          <ExpandIcon type="caculator" className="h-6 w-6" />
+          <ExpandIcon type="calculator" className="h-6 w-6" />
           <span className="text-xs">Calculator</span>
         </div>
       ),
@@ -492,16 +498,16 @@ const ActivityPage = () => {
     },
     ...((currentVideo?.file?.resource?.time_line?.length as number) > 0
       ? [
-          {
-            label: (
-              <div className={assistiveItemClass}>
-                <TimeLineIcon />
-                <span className="text-xs">Timeline</span>
-              </div>
-            ),
-            onClick: onOpenVideoTimeline,
-          },
-        ]
+        {
+          label: (
+            <div className={assistiveItemClass}>
+              <TimeLineIcon />
+              <span className="text-xs">Timeline</span>
+            </div>
+          ),
+          onClick: onOpenVideoTimeline,
+        },
+      ]
       : []),
     {
       label: (
@@ -543,7 +549,7 @@ const ActivityPage = () => {
         className={focusOnlyDiscussion ? 'h-full !bg-white' : ''}
         childClassName={focusOnlyDiscussion ? 'h-full' : ''}
       >
-        {isLoading ? (
+        {isLoading || selectorActivated?.openActive ? (
           <ActivitySkeleton></ActivitySkeleton>
         ) : (
           <div data-aos={ANIMATION.DATA_AOS}>
@@ -721,7 +727,7 @@ const ActivityPage = () => {
                 <div className="hidden items-center justify-center gap-5 md:flex">
                   <CardMenuItem
                     title="Calculator"
-                    icon={<CalculatorIconV2 isActive className="h-6 w-6" />}
+                    icon={<CalculatorIcon className="h-6 w-6" />}
                     onClick={() => {
                       handleOpenScratchPad({
                         type: 'calculator',
@@ -730,19 +736,19 @@ const ActivityPage = () => {
                   />
                   <CardMenuItem
                     title="New Note"
-                    icon={<ScratchPadIconV2 isActive className="h-6 w-6" />}
+                    icon={<NewScratchPadIcon isActive className="h-6 w-6" />}
                     onClick={handleAddNote}
                   />
                 </div>
                 <div className="flex items-center justify-center gap-5 md:hidden">
                   {(currentVideo?.file?.resource?.time_line?.length as number) >
                     0 && (
-                    <CardMenuItem
-                      title="Timeline"
-                      icon={<TimeLineIcon />}
-                      onClick={onOpenVideoTimeline}
-                    />
-                  )}
+                      <CardMenuItem
+                        title="Timeline"
+                        icon={<TimeLineIcon />}
+                        onClick={onOpenVideoTimeline}
+                      />
+                    )}
                   <CardMenuItem
                     title="Discussion"
                     icon={<DiscussionIcon className="h-6 w-6" />}
@@ -794,7 +800,7 @@ const ActivityPage = () => {
                       <div
                         className="overflow-auto bg-white p-4"
                         style={{ height: 'calc(100% - 40px' }}
-                        // className="h-full cursor-pointer p-4"
+                      // className="h-full cursor-pointer p-4"
                       >
                         {/* <div className='flex flex-'> */}
                         <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
@@ -858,13 +864,13 @@ const ActivityPage = () => {
                 <CtaTrial />
               </div>
             </div>
-            {createPortal(
+            {/* {createPortal(
               <BackToTop
                 scrollContainerRef={scrollRef}
                 className={clsx('!bottom-[230px] !right-4 md:hidden')}
               />,
               document.body,
-            )}
+            )} */}
             <PopupLockContent
               showForm={openPopupCTA}
               setShowForm={setOpenPopupCTA}

@@ -1,11 +1,11 @@
-import { fetcher } from '@services/requestV2'
+import { fetcher } from '@services/request'
 import { buildQueryString } from '@lms/utils'
 import {
   APIDetailScheduleRequestResponse,
   APIListScheduleRequestResponse,
   RequestScheduleParams,
   StatusRequestScheduleParams,
-} from 'src/type/teachers/request-schedule.interface'
+} from '@lms/core/types/teachers/request-schedule.interface'
 
 export class TeacherAPI {
   static getListClass(

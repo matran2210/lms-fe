@@ -6,21 +6,28 @@ import {
 } from '@lms/assets'
 import { ButtonText } from '@lms/ui'
 import { useCourseContext, useFeature } from '@lms/contexts'
-import { trackGAEvent, truncateString} from '@lms/utils'
+import { trackGAEvent, truncateString } from '@lms/utils'
 import clsx from 'clsx'
-import React, { useRef } from 'react'
-import {SappIcon} from '@lms/ui'
+import React, { useRef, useState } from 'react'
+import { SappIcon } from '@lms/ui'
 import { Tooltip } from "@lms/ui";
-import { ANIMATION } from '@lms/core'
+import { ANIMATION, INeighborActivity } from '@lms/core'
 import { IActivity } from '@lms/core'
+import { NextStorylineModal } from '../storyline'
 interface IProps {
   activity: IActivity
   focusOnly: boolean
 }
 const ActivityPagination = ({ activity, focusOnly }: IProps) => {
-  const {router, params, query} = useFeature()
+  const { router, params, query } = useFeature()
   const endActivityRef = useRef<HTMLDivElement>(null)
-
+  const [open, setOpen] = useState<{
+    open: boolean
+    neighborActivity: INeighborActivity | null
+  }>({
+    open: false,
+    neighborActivity: null,
+  })
   const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
   /**
    * Hàm xử lý điều hướng hoạt động.
@@ -32,7 +39,18 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
     isLocked: boolean,
     activityId: string,
     eventLabel: string,
+    isStorylineSection: boolean,
+    neighborActivity: INeighborActivity | null
   ) => {
+    if (isStorylineSection) {
+      setOpen(
+        {
+          open: true,
+          neighborActivity,
+        },
+      )
+      return
+    }
     if (isLocked) {
       // Nếu hoạt động bị khóa, hiển thị popup thông báo
       setOpenPopupCTA({
@@ -43,7 +61,7 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
       })
     } else {
       // Nếu hoạt động không bị khóa, điều hướng đến hoạt động và ghi nhận sự kiện
-      router.push(`/courses/${params?.id || query.id}/activity/${activityId}`)
+      router.push(`/courses/${params?.id || query.id}/activity/${activityId}?course_section_id=${query?.course_section_id}`)
       trackGAEvent(eventLabel) // Ghi nhận sự kiện Google Analytics
     }
   }
@@ -89,7 +107,7 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
             {activity?.previous_activity?.id && (
               <div className="flex w-1/2 flex-col items-start">
                 <ButtonText
-                  title="Previous Activity"
+                  title={activity?.previous_activity?.course_section_type === "STORY_LINE" ? "Previous Storyline" : "Previous Activity"}
                   className="mb-3"
                   startIcon={<ArrowLeft />}
                   onClick={() =>
@@ -97,6 +115,8 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
                       activity?.previous_activity?.is_preview_locked || false,
                       activity?.previous_activity?.id || '',
                       'Click Button Previous Activity',
+                      activity?.previous_activity?.course_section_type === "STORY_LINE",
+                      activity?.previous_activity || null
                     )
                   }
                 />
@@ -134,7 +154,7 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
             {activity?.next_activity?.id && (
               <div className="flex w-1/2 flex-col items-end">
                 <ButtonText
-                  title="Next Activity"
+                  title={activity?.next_activity?.course_section_type === "STORY_LINE" ? "Next Storyline" : "Next Activity"}
                   className="mb-3"
                   endIcon={<ArrowRight />}
                   onClick={() =>
@@ -142,6 +162,8 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
                       activity?.next_activity?.is_preview_locked,
                       activity?.next_activity?.id,
                       'Click Button Next Activity',
+                      activity?.next_activity?.course_section_type === "STORY_LINE",
+                      activity?.next_activity || null
                     )
                   }
                 />
@@ -172,6 +194,13 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
           </div>
         </div>
       )}
+      {
+        open.open && open.neighborActivity && <NextStorylineModal
+          open={open.open}
+          setOpen={(status: boolean) => setOpen({ open: status, neighborActivity: open.neighborActivity })}
+          next_activity={open.neighborActivity}
+          course_section_id={query?.course_section_id} />
+      }
     </div>
   )
 }

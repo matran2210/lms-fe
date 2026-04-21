@@ -1,7 +1,7 @@
 import React from 'react'
-import { SectionContentModalProp } from 'src/type/courses-3-level'
 import SectionContentAccoridior from './SectionContentAccoridior'
 import BaseModal from '@components/courses/popup/BaseModal'
+import { SectionContentModalProp } from '@lms/core'
 
 export default function SectionContentModal({
   sections,

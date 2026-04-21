@@ -65,6 +65,7 @@ const ButtonPrimary = ({
             {endIcon && <div className="w-full">{endIcon}</div>}
           </>
         )}
+
       </div>
     </BaseButton>
   );

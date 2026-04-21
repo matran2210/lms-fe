@@ -1,4 +1,5 @@
 'use client'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { CloseIcon } from '@lms/assets'
 import { UserType } from '@lms/contexts'
 import {
@@ -9,14 +10,14 @@ import {
   QUESTION_TYPES,
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
-import { FullScreenLayout, PDFViewer, SappLoadingGlobal } from '@lms/ui'
+import { FullScreenLayout, PDFViewer } from '@lms/ui'
 import { ExplanationPackage } from '@sapp-fe/explanation-package'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { CoursesAPI } from 'src/api/courses'
 import { TestServiceAPI } from 'src/api/test-api'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 
 const Explanation = () => {
   const router = useRouter()
@@ -118,7 +119,7 @@ const Explanation = () => {
   }) => {
     try {
       await TestServiceAPI.downloadFile(data)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const isUserViewAnswers = query?.title === 'Your Answers Detail'
@@ -153,7 +154,7 @@ const Explanation = () => {
                   default:
                     router.push(
                       localStorage.getItem('previousUrl') ??
-                        PageLink.ENTRANCE_TEST,
+                      PageLink.ENTRANCE_TEST,
                     )
                 }
               } else {

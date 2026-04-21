@@ -1,14 +1,12 @@
 'use client'
-import { getCountUnRead, showNotification, useAppDispatch } from '@lms/contexts'
-import {
-  CERTIFICATE_DETAIL,
-  ENTRANCE_TEST_RESULT,
-  ENTRANCE_TEST_TABLE_RESULT,
-} from '@lms/core'
-import { usePathname } from 'next/navigation'
-import { NotificationAPI } from 'src/api/notification'
+import { getCountUnRead, showNotification } from '@lms/contexts'
 import { onMessageListener } from '@lms/utils'
+import { usePathname } from 'next/navigation'
 import { useEffect, useMemo } from 'react'
+import { NotificationAPI } from 'src/api/notification'
+import { useAppDispatch } from 'src/redux/hook'
+import { modules } from './module-registry'
+
 export default function ClientLayout() {
   const dispatch = useAppDispatch()
   const pathname = usePathname()
@@ -26,13 +24,13 @@ export default function ClientLayout() {
       dispatch(showNotification())
     })
   })
-  getCountUnRead
   useEffect(() => {
     if (!checkRouteCertificate) {
       try {
         dispatch(getCountUnRead(NotificationAPI))
-      } catch (error) {}
+      } catch (error) { }
     }
   }, [])
   return null
 }
+

@@ -1,12 +1,11 @@
 "use client"
-import { BlankAvatarImage, CheckCircleOutlineYellow, CloseIconV2, PencilFillV2Icon, PencilV2Icon } from '@lms/assets'
+import { BlankAvatarImage, CheckCircleOutlineYellow, CloseIcon, PencilFillIcon, PencilIcon } from '@lms/assets'
 import {
   getLogoutUser,
   getMe,
   getUserInformation,
   updateUser,
   updateUserAvatar,
-  useAppDispatch, useAppSelector,
   useFeature,
   userReducer
 } from '@lms/contexts'
@@ -45,12 +44,11 @@ const ProfileHeader = ({
   setIsEdit,
   appType
 }: IProps) => {
-  const dispatch = useAppDispatch()
-  const { userApi, authManager } = useFeature();
+  const { userContextApi, authManager, dispatch, useAppSelector } = useFeature();
 
   // Sử dụng hook useAppSelector để lấy dữ liệu từ state redux
   const { user, loading, loadingEditName, loadingEditAvatar } =
-    useAppSelector(userReducer)
+    useAppSelector?.(userReducer) || {};
 
   const [isEditAvatar, setIsEditAvatar] = useState(false)
 
@@ -142,9 +140,9 @@ const ProfileHeader = ({
       // Nếu không có avatar và người dùng có avatar hiện tại
       if (!avatar && user?.detail?.avatar) {
         // Gọi hành động thunk updateUser để cập nhật tên và avatar của người dùng
-        await dispatch(updateUser({ full_name, avatar: null, api: userApi })).unwrap()
+        await dispatch?.(updateUser({ full_name, avatar: null, api: userContextApi })).unwrap()
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
-        dispatch(getMe(userApi))
+        dispatch?.(getMe(userContextApi))
         // Đặt trạng thái isEdit thành false
         setIsEdit(false)
         setIsEditAvatar(false)
@@ -154,12 +152,12 @@ const ProfileHeader = ({
       // Nếu có avatar
       if (avatar) {
         // Gọi hành động thunk updateUserAvatar để cập nhật avatar của người dùng
-        await dispatch(updateUserAvatar({api: userApi, avatar})).unwrap()
+        await dispatch?.(updateUserAvatar({ api: userContextApi, avatar })).unwrap()
         // Đặt lại giá trị của avatar
         setAvatar(undefined)
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
       }
-      dispatch(getMe(userApi))
+      dispatch?.(getMe(userContextApi))
       // Đặt trạng thái isEdit thành false
       setIsEdit(false)
       setIsEditAvatar(false)
@@ -168,12 +166,12 @@ const ProfileHeader = ({
       setIsEditAvatar(false)
       setReViewImageSrc(undefined)
       if (error?.response?.data?.error?.code === '403|1002') {
-        await dispatch(getLogoutUser({ authManager }))
+        await dispatch?.(getLogoutUser({ authManager }))
       }
     }
   }
   useEffect(() => {
-    dispatch(getUserInformation(userApi))
+    dispatch?.(getUserInformation(userContextApi))
   }, [])
 
   return (
@@ -181,9 +179,8 @@ const ProfileHeader = ({
       <div className="relative pb-3 md:pb-0">
         <div className="relative h-[100px] w-[100px] shrink rounded-full">
           <div
-            className={`${
-              loading ? 'animate-pulse' : ''
-            } w-full h-100 absolute bottom-0 left-0 right-0 top-0 overflow-hidden rounded-full lg:block`}
+            className={`${loading ? 'animate-pulse' : ''
+              } w-full h-100 absolute bottom-0 left-0 right-0 top-0 overflow-hidden rounded-full lg:block`}
           >
             <div className="group absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transform overflow-hidden rounded-full leading-[0]">
               {/* {isEdit && ( */}
@@ -205,7 +202,7 @@ const ProfileHeader = ({
                 <div className="flex h-full w-full items-center justify-center bg-black bg-opacity-40">
                   {!loadingEditAvatar ? (
                     <div className="flex flex-col items-center justify-center gap-1">
-                      <PencilFillV2Icon className="h-6 w-6 text-white" />
+                      <PencilFillIcon className="h-6 w-6 text-white" />
                       <span className="text-xs font-medium text-white">
                         Edit
                       </span>
@@ -237,8 +234,8 @@ const ProfileHeader = ({
               <Image
                 src={
                   reViewImageSrc ||
-                  user.detail.avatar['150x150'] ||
-                  user.detail.avatar?.['ORIGIN'] ||
+                  user?.detail.avatar['150x150'] ||
+                  user?.detail.avatar?.['ORIGIN'] ||
                   BlankAvatarImage
                 }
                 alt="avatar"
@@ -262,7 +259,7 @@ const ProfileHeader = ({
               )}
               onClick={() =>
                 avatar
-                  ? onSubmit({ full_name: user.detail.full_name })
+                  ? onSubmit({ full_name: user?.detail.full_name || "" })
                   : onCancelUploadAvatar()
               }
             >
@@ -273,7 +270,7 @@ const ProfileHeader = ({
                   })}
                 />
               ) : (
-                <CloseIconV2 className="h-5 w-5" />
+                <CloseIcon className="h-5 w-5" />
               )}
             </div>
           ) : (
@@ -281,7 +278,7 @@ const ProfileHeader = ({
               className="absolute -right-[0.5px] bottom-0 z-[1] cursor-pointer rounded-full bg-white p-1 shadow-small hover:text-primary md:hidden"
               onClick={() => setIsEdit(true)}
             >
-              <PencilV2Icon className="h-5 w-5" />
+              <PencilIcon className="h-5 w-5" />
             </div>
           )}
         </div>
@@ -297,7 +294,7 @@ const ProfileHeader = ({
             )}
             onClick={() =>
               avatar
-                ? onSubmit({ full_name: user.detail.full_name })
+                ? onSubmit({ full_name: user?.detail.full_name || "" })
                 : handlerCancelUploadAvatar()
             }
           >
@@ -312,7 +309,7 @@ const ProfileHeader = ({
                   })}
                 />
               ) : (
-                <CloseIconV2 className="h-5 w-5" />
+                <CloseIcon className="h-5 w-5" />
               )}
               {/* <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -341,7 +338,7 @@ const ProfileHeader = ({
         >
           <div className="flex w-full items-center justify-center gap-3 md:justify-start">
             <ProfileSkeleton loading={loading || loadingEditName}>
-              {user.detail.full_name}
+              {user?.detail.full_name}
             </ProfileSkeleton>
             <div>
               <Tag
@@ -369,7 +366,7 @@ const ProfileHeader = ({
                 fill="currentColor"
               />
             </svg>
-            {(appType === AppType.LMS_PRO ? user.courses?.template_full : user?.courses?.template_short_course) ?? 0} Enrolled Courses
+            {(appType === AppType.LMS_PRO ? user?.courses?.template_full : user?.courses?.template_short_course) ?? 0} Enrolled Courses
           </div>
           <Divider type="vertical" className="m-0 bg-gray-300" />
           <div className="flex items-center justify-start gap-1">
@@ -387,7 +384,7 @@ const ProfileHeader = ({
                 fill="currentColor"
               />
             </svg>
-            {(appType === AppType.LMS_PRO ? user.certificates?.template_full : user?.certificates?.template_short_course) ?? 0} Certificates
+            {(appType === AppType.LMS_PRO ? user?.certificates?.template_full : user?.certificates?.template_short_course) ?? 0} Certificates
           </div>
         </div>
       </div>

@@ -4,8 +4,6 @@ import {
   UserType,
   getLoginHistory,
   getLogoutUser,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
   userReducer,
 } from '@lms/contexts'
@@ -18,7 +16,6 @@ import {
   NOTIFICATION_STATUS,
 } from '@lms/core'
 import {
-  Certificate,
   ChangePassword,
   DeviceList,
   LoginHistoryList,
@@ -34,8 +31,8 @@ import {
   Footer,
   FullScreenMobile,
   HeaderMobile,
-  Layout,
   SearchWithMenuToggle,
+  Slot,
   TabHeaderItem,
 } from '@lms/ui'
 import {
@@ -46,12 +43,14 @@ import {
 import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { Collapse, CollapseProps, Divider, Tabs } from 'antd'
 import clsx from 'clsx'
-import { useRouter } from 'next/navigation'
 import { StaticImageData } from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { PageLink } from 'src/constants/routes'
 
+import Layout from '@components/layout'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import UserApi from 'src/redux/services/User/user'
 
 interface IFullScreenMobile {
@@ -175,7 +174,13 @@ const ProfilePage = () => {
           </>
         )
       case 'certificates':
-        return <Certificate />
+        return (
+          <Slot
+            name="CERTIFICATE_PROFILE_TAB"
+            isPage={false}
+            className="md:mt-8 lg:mt-10"
+          />
+        )
       case 'setting':
         return <Settings />
       case 'security':
@@ -316,7 +321,7 @@ const ProfilePage = () => {
           title="Certificates"
         />
       ),
-      children: <Certificate />,
+      children: <Slot name="CERTIFICATE_PROFILE_TAB" isPage={false} />,
     },
     {
       key: 'setting',
@@ -356,7 +361,6 @@ const ProfilePage = () => {
           isShowToggle
           className={'mb-4 hidden md:flex'}
           redirectLink={PageLink.SHORT_COURSE}
-          appType={AppType.LMS_FINHUB}
         />
         <div className="mx-auto my-0 flex w-full grow flex-col">
           <div className="main hidden sm:mx-4 md:mb-6 md:block lg:mx-0 lg:mb-4">
@@ -454,7 +458,7 @@ const ProfilePage = () => {
       </div>
       {isMobileView && openFullScreenMobile.open && (
         <FullScreenMobile
-          className="h-full bg-gray-100 px-4 pb-4"
+          className="min-h-full bg-gray-100 px-4 pb-4"
           title={openFullScreenMobile.title}
           open={openFullScreenMobile.open}
           onClose={onCloseFullScreenMobile}

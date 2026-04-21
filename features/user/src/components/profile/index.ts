@@ -1,6 +1,4 @@
 export { default as BreadcrumbProfile } from "./BreadCrumbMyprofile";
-export { default as Certificate } from "./Certificate";
-export * from "./CertificateDetail/index";
 export { default as ChangePassword } from "./ChangePassword";
 export * from "./DeviceInformation";
 export { default as ExamInfoActionCell } from "./ExamInformation/ExamInfoActionCell";
@@ -8,7 +6,6 @@ export * from "./LoginHistory/index";
 export { default as MyProfile } from "./MyProfile";
 export { default as OverviewItemCard } from "./Overview/OverviewItemCard";
 export { default as PasswordProfile } from "./PasswordProfile";
-export * from "./popupCertificate/index";
 export { default as ProfileHeader } from "./ProfileHeader";
 export * from "./ProfileInformation";
 export { default as ProfileSideBar } from "./ProfileSideBar";

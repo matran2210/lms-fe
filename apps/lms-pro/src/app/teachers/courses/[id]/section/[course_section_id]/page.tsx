@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { AlertInfoIcon, CloseIconPreview } from '@lms/assets'
 import { useCourseContext, UserType } from '@lms/contexts'
 import { ILearningOutcome, ITabs, TEST_TYPE } from '@lms/core'
@@ -9,13 +9,18 @@ import PreviewPartDetail from '@sapp-fe/preview-part'
 import { Alert } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
 import { TreeHelper } from 'src/helper/tree'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 interface IProps {
   course_section_type: string
   description: string
@@ -56,7 +61,7 @@ const CoursePartDetailTeacher = () => {
   const router = useRouter()
   const searchParam = useSearchParams()
   const pathname = usePathname()
-  const params = useParams();
+  const params = useParams()
   const { id, course_section_id } = params
   const query = Object.fromEntries(searchParam.entries())
   const [readMore, setReadMore] = useState<boolean>(false)
@@ -73,24 +78,17 @@ const CoursePartDetailTeacher = () => {
 
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
-      const { data } = await CoursesAPI.getPartDetail(
-        id,
-        course_section_id,
-      )
+      const { data } = await CoursesAPI.getPartDetail(id, course_section_id)
       return data
     }
 
     return useQuery([queryKey, params], fetchData, {
-      enabled:
-        id !== undefined &&
-        course_section_id !== undefined,
+      enabled: id !== undefined && course_section_id !== undefined,
       retry: false,
     })
   }
 
-  const focusSubSectionIds = query?.focusSubSectionIds as
-    | string
-    | undefined
+  const focusSubSectionIds = query?.focusSubSectionIds as string | undefined
   const focusUnitIds = query?.focusUnitIds as string | undefined
   const deadline = query?.deadline as string | undefined
   const isOverdue = dayjs(deadline).isBefore(new Date())
@@ -195,7 +193,7 @@ const CoursePartDetailTeacher = () => {
         thankYouLater: false,
       })
     } else {
-      router.push(`${PageLink.TEACHER_MY_COURSE}/${id}/activity/${id}`)
+      router.push(`${PageLink.TEACHER_MY_COURSE}/${params.id}/activity/${id}`)
     }
   }
 
@@ -230,11 +228,15 @@ const CoursePartDetailTeacher = () => {
           thankYouLater: false,
         })
       } else {
-        router.push(`${PageLink.TEACHER_CASE_STUDY}/result/${getCaseStudy?.attempt?.id}?${buildQueryString({
-            class_user_id: previewPart.class_user_id,
-            class_id: id,
-            course_section_id: course_section_id,
-          })}`)
+        router.push(
+          `${PageLink.TEACHER_CASE_STUDY}/result/${getCaseStudy?.attempt?.id}?${buildQueryString(
+            {
+              class_user_id: previewPart.class_user_id,
+              class_id: id,
+              course_section_id: course_section_id,
+            },
+          )}`,
+        )
       }
     } else {
       if (
@@ -252,13 +254,15 @@ const CoursePartDetailTeacher = () => {
           thankYouLater: false,
         })
       } else {
-        router.push(`${PageLink.TEACHER_CASE_STUDY}/${topicId}?${buildQueryString({
+        router.push(
+          `${PageLink.TEACHER_CASE_STUDY}/${topicId}?${buildQueryString({
             quiz_id: quizId,
             class_user_id: previewPart.class_user_id,
             caseStudyId: caseStudyId,
             class_id: id,
             course_section_id: course_section_id,
-          })}`)
+          })}`,
+        )
       }
     }
   }
@@ -340,8 +344,8 @@ const CoursePartDetailTeacher = () => {
       lockSection
         ? handleLockedSection()
         : handleUnlockedSection(() =>
-            handleRouterChapter(course_section?.quiz?.id),
-          )
+          handleRouterChapter(course_section?.quiz?.id),
+        )
     } else if (
       course_section?.course_section_type === 'ACTIVITY' ||
       course_section?.course_section_type === 'UNIT'
@@ -350,20 +354,20 @@ const CoursePartDetailTeacher = () => {
       lockSection || learningOutcome?.next_section?.is_preview_locked
         ? handleLockedSection()
         : handleUnlockedSection(() =>
-            handleRouterActivity(course_section?.children?.[0]?.id, undefined),
-          )
+          handleRouterActivity(course_section?.children?.[0]?.id, undefined),
+        )
     } else if (course_section?.course_section_type === 'STORY') {
       // Handle story section
       lockSection
         ? handleLockedSection()
         : handleUnlockedSection(() =>
-            handleRouterCaseStudy(
-              quiz?.id,
-              quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
-              course_section?.id,
-              quiz?.case_study_story?.instances?.[0]?.id,
-            ),
-          )
+          handleRouterCaseStudy(
+            quiz?.id,
+            quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
+            course_section?.id,
+            quiz?.case_study_story?.instances?.[0]?.id,
+          ),
+        )
     }
   }
 
@@ -371,21 +375,14 @@ const CoursePartDetailTeacher = () => {
     id: string | string[] | undefined,
     course_section_id: string | string[] | undefined,
   ) => {
-    const res = await CoursesAPI.learningOutcomeProgress(
-      id,
-      chapterDetail?.id,
-    )
+    const res = await CoursesAPI.learningOutcomeProgress(id, chapterDetail?.id)
   }
 
   const handleCaseStudyProcess = async (
     courseId: string,
     caseStudyId: string,
   ) => {
-    const res = await CoursesAPI.caseStudyProgress(
-      id,
-      courseId,
-      caseStudyId,
-    )
+    const res = await CoursesAPI.caseStudyProgress(id, courseId, caseStudyId)
   }
 
   useEffect(() => {
@@ -462,7 +459,7 @@ const CoursePartDetailTeacher = () => {
       isCourseDetail
     >
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
-        <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
+        <div className="relative flex h-16 w-full items-center justify-center border-b-[0.57px] border-zinc-100 bg-white">
           <Alert
             message={
               <div className="flex items-center gap-2">
@@ -520,7 +517,7 @@ const CoursePartDetailTeacher = () => {
           listFocusSubSectionIds={listFocusSubSectionIds}
           listFocusUnitIds={listFocusUnitIds}
           deadline={deadline}
-          // isTeacher
+        // isTeacher
         />
         <SappDrawer
           isOpen={openLearningOutcome}
@@ -575,7 +572,7 @@ const CoursePartDetailTeacher = () => {
             setOpen={setOpen}
             data={chapterData}
             class_user_id={previewPart?.class_user_id}
-            activeCourse={() => {}}
+            activeCourse={() => { }}
             is_passed_course={isPassedCourse}
           />
         )}

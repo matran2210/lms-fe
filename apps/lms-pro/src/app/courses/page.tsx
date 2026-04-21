@@ -1,31 +1,26 @@
 'use client'
-import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import {
   active,
   clearGuideState,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
   UserType,
 } from '@lms/contexts'
-import { ANIMATION, AppType, defaultStatusCourse } from '@lms/core'
+import { ANIMATION, defaultStatusCourse } from '@lms/core'
 import { CoursesList, FilterCourse, Heading } from '@lms/feature-courses'
+import { withAuthorization } from '@lms/hoc'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import {
-  Layout,
-  PopupWelcome,
-  SappLoadingGlobal,
-  SearchWithMenuToggle,
-} from '@lms/ui'
+import { Layout, ModalMarketingInApp, PopupWelcome, SearchWithMenuToggle } from '@lms/ui'
 import Aos from 'aos'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
 import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from 'src/api/courses'
+import { PageLink } from 'src/constants/routers'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { hidePopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -210,6 +205,10 @@ const MyCourse = () => {
     },
   ]
 
+  useEffect(() => {
+    dispatch(hidePopupActivatedCourse())
+  }, [])
+
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout
@@ -232,7 +231,6 @@ const MyCourse = () => {
           isShowUserGuide
           disabledSearch={guideIsActive}
           redirectLink={PageLink.COURSES}
-          appType={AppType.LMS_PRO}
         />
 
         <div
@@ -277,11 +275,10 @@ const MyCourse = () => {
           </div>
         </div>
         <div
-          className={`relative mx-auto my-0 ${
-            isEmpty(courses)
-              ? 'flex min-h-[calc(100vh-21rem)] items-center justify-center'
-              : ''
-          } ${guideStatus && guideStep === 5 && !isMobileView && 'tour-guide-course-active z-50'}`}
+          className={`relative mx-auto my-0 ${isEmpty(courses)
+            ? 'flex min-h-[calc(100vh-21rem)] items-center justify-center'
+            : ''
+            } ${guideStatus && guideStep === 5 && !isMobileView && 'tour-guide-course-active z-50'}`}
         >
           <CoursesList
             courses={courses}

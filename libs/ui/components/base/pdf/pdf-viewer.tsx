@@ -45,7 +45,7 @@ const PDFViewer = ({ file }: { file: string }) => {
             header: {
               disableHeader: true,
             },
-            pdfVerticalScrollByDefault: true,
+            // pdfVerticalScrollByDefault: true,
           }}
           className="pdf-viewer-container"
         />

@@ -1,23 +1,28 @@
-"use client"
-import { useQuery, UseQueryResult } from 'react-query'
-import { TablePaginationConfig } from 'antd'
-import { Dispatch, SetStateAction, useState, useEffect } from 'react'
-import { useFeature } from '@lms/contexts'
+"use client";
+import { useQuery, UseQueryResult } from "react-query";
+import { TablePaginationConfig } from "antd";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
+import { useFeature } from "@lms/contexts";
+import { ApiError } from "@lms/core";
+import { extractNotActivatedData } from "@lms/utils";
+import { showPopupActivatedCourse } from "@lms/contexts/redux/slice/Popup/ActivatedCourse";
 
 interface UsePagingProps {
-  uniqueKey: string
-  queryFn: (...args: any[]) => Promise<any>
-  params: Record<string, any>
-  enabled?: boolean
+  uniqueKey: string;
+  queryFn: (...args: any[]) => Promise<any>;
+  params: Record<string, any>;
+  enabled?: boolean;
 }
 
-interface UsePagingResultSapp<TData = any, TError = unknown>
-  extends Omit<UseQueryResult<TData, TError>, 'data' | 'isLoading'> {
-  data: TData
-  pagination: TablePaginationConfig
-  setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
-  isLoading: boolean
-  handleChangeParams: (currentPage: number, pageSize: number) => void
+interface UsePagingResultSapp<TData = any, TError = unknown> extends Omit<
+  UseQueryResult<TData, TError>,
+  "data" | "isLoading"
+> {
+  data: TData;
+  pagination: TablePaginationConfig;
+  setPagination: Dispatch<SetStateAction<TablePaginationConfig>>;
+  isLoading: boolean;
+  handleChangeParams: (currentPage: number, pageSize: number) => void;
 }
 
 const useSappPaging = ({
@@ -26,44 +31,50 @@ const useSappPaging = ({
   params,
   enabled = true,
 }: UsePagingProps): UsePagingResultSapp => {
-  const { query } = useFeature()
+  const { query, dispatch } = useFeature();
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: Number(query.page_index) || 1,
     pageSize: Number(query.page_size) || 10,
     total: 10,
     showSizeChanger: true, // Hiển thị lựa chọn số lượng trang
     showQuickJumper: true, // Hiển thị tùy chọn chuyển nhanh trang
-  })
+  });
 
   const { data, isLoading, ...other } = useQuery({
     queryKey: [uniqueKey, pagination.current, pagination.pageSize, params],
     queryFn,
     enabled: !!uniqueKey && enabled, // Chỉ chạy khi uniqueKey có giá trị hợp lệ và enabled = true
+    onError: (error: ApiError) => {
+      const data = extractNotActivatedData(error);
+      if (data) {
+        dispatch?.(showPopupActivatedCourse(data));
+      }
+    },
     retry: false, // Không thử lại nếu request bị lỗi
-  })
+  });
 
   const handleChangeParams = (currentPage: number, pageSize: number) => {
     setPagination((prev) => ({
       ...prev,
       current: currentPage,
       pageSize: pageSize,
-    }))
-  }
+    }));
+  };
 
   useEffect(() => {
-  const total =
-    data?.meta?.total_records ??
-    data?.metadata?.total_records ??
-    data?.data?.metadata?.total_records ??
-    data?.data?.meta?.total_records
+    const total =
+      data?.meta?.total_records ??
+      data?.metadata?.total_records ??
+      data?.data?.metadata?.total_records ??
+      data?.data?.meta?.total_records;
 
-  if (total !== undefined && total !== null) {
-    setPagination((prev) => ({
-      ...prev,
-      total,
-    }))
-  }
-}, [data])
+    if (total !== undefined && total !== null) {
+      setPagination((prev) => ({
+        ...prev,
+        total,
+      }));
+    }
+  }, [data]);
 
   return {
     data, // Dữ liệu trả về từ queryFn, thường là danh sách hoặc object chứa dữ liệu phân trang
@@ -72,7 +83,7 @@ const useSappPaging = ({
     isLoading, // Trạng thái loading từ react-query (đang fetch dữ liệu hay không)
     handleChangeParams, // Hàm dùng để cập nhật current page và page size khi user thao tác với bảng
     ...other, // Các thuộc tính khác còn lại từ useQuery như error, refetch, isError, isSuccess, etc.
-  }
-}
+  };
+};
 
-export default useSappPaging
+export default useSappPaging;

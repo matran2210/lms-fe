@@ -163,7 +163,7 @@ const ResultCourse = ({
                       value: item.id,
                       label: item.name,
                     }))}
-                    className="custom-select-v2 h-8 pr-2"
+                    className="custom-select h-8 pr-2"
                     popupClassName="select-card-course"
                     onPopupScroll={(e) => {
                       const target = e.target as HTMLDivElement;

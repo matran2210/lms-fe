@@ -1,6 +1,8 @@
 import { MenuItem, MenuOption, ProfilePages, TitleSidebar } from '@lms/core'
 import { PageLink } from './routers'
 import { LANG_SIGNIN } from '@lms/core'
+import { makeMenuLevel } from '@lms/utils'
+import { modules } from 'src/app/module-registry'
 
 const MENU_OPTIONS: MenuOption[] = [
   {
@@ -8,78 +10,98 @@ const MENU_OPTIONS: MenuOption[] = [
     icon: 'grid',
     url: PageLink.DASHBOARD,
     type: 'level-1',
+    showMenu: true,
   },
   {
     name: `${TitleSidebar.COURSES}`,
     icon: 'course',
     url: `${PageLink.COURSES}`,
     type: 'level-1',
+    showMenu: true,
+  },
+  {
+    name: TitleSidebar.COURSE_ACTIVATION,
+    icon: 'course-activation',
+    url: PageLink.COURSE_ACTIVATION,
+    type: 'level-1',
+    showMenu: true,
   },
   {
     name: `${TitleSidebar.COURSE_CONTENT}`,
     icon: 'bookmark',
     url: `${PageLink.COURSE_CONTENT}`,
     type: 'level-2',
+    showMenu: true,
   },
   {
     name: `${TitleSidebar.NOTES_LIST}`,
     icon: 'notes-list',
     url: '#',
     type: 'level-1',
+    showMenu: true,
   },
   {
     name: `${TitleSidebar.RESOURCES}`,
     icon: 'learning-resource',
     url: '#',
     type: 'level-1',
+    showMenu: true,
   },
   {
     name: `${TitleSidebar.CLASS_RESOURCE}`,
     icon: 'class-resource',
     url: `${PageLink.CLASS_RESOURCE}`,
     type: 'level-1',
+    showMenu: true,
   },
   {
     name: `${TitleSidebar.ENTRANCE_TEST}`,
     icon: 'entrance-test',
     url: `${PageLink.ENTRANCE_TEST}`,
     type: 'level-1',
+    showMenu: !!modules.find((m) => m.name === 'test'),
   },
   {
     name: `${TitleSidebar.RESULTS}`,
     icon: 'result',
     url: PageLink.RESULTS,
     type: 'level-2',
+    showMenu: true,
   },
   {
     name: `${TitleSidebar.NEW_NOTE}`,
     icon: 'create-note',
     url: '#',
     type: 'level-1',
+    showMenu: true,
   },
   {
     name: `${TitleSidebar.CALCULATOR}`,
-    icon: 'caculator',
+    icon: 'calculator',
     url: '#',
     type: 'level-1',
+    showMenu: true,
   },
   {
     name: TitleSidebar.CALENDAR,
     icon: 'calendar',
     url: PageLink.CALENDAR,
     type: 'level-1',
+    showMenu: !!modules.find((m) => m.name === 'schedule'),
   },
   {
     name: TitleSidebar.EXAM_LIST,
     icon: 'exam_list',
     url: `/${ProfilePages.ExamList}`,
     type: 'level-1',
+    showMenu: !!modules.find((m) => m.name === 'examination'),
   },
   {
     name: TitleSidebar.EXAM,
     icon: 'exam-information',
     url: '#',
     type: 'level-1',
+    showMenu: !!modules.find((m) => m.name === 'examination'),
   },
 ]
 
@@ -89,6 +111,7 @@ const MENU_OPTIONS_EVENTTEST: MenuOption[] = [
     icon: 'event-test',
     url: PageLink.EVENT_TEST,
     type: 'level-1',
+    showMenu: !!modules.find((m) => m.name === 'test'),
   },
 ]
 
@@ -112,18 +135,6 @@ const MENU_OPTIONS_BOTTOM: MenuOption[] = [
     type: 'level-1',
   },
 ]
-
-function makeMenuLevel(options: MenuOption[], depth = 0): MenuItem[] {
-  return options.map((option, idx) => ({
-    ...option,
-    id: depth === 0 ? idx.toString() : `${depth}.${idx}`,
-    depth,
-    subItems:
-      option.subItems && option.subItems.length > 0
-        ? makeMenuLevel(option.subItems, depth + 1)
-        : undefined,
-  }))
-}
 
 export const MENU_ITEMS: MenuItem[] = makeMenuLevel(MENU_OPTIONS)
 export const MENU_ITEMS_EVENT: MenuItem[] = makeMenuLevel(

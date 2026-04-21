@@ -1,9 +1,8 @@
-import { Icon } from "@lms/assets";
-import clsx from "clsx";
-import React from "react";
-import { SubjectOptionItem } from "./SubjectList";
-import { useAppSelector } from "@lms/contexts";
-import { userReducer } from "@lms/contexts";
+import { Icon } from '@lms/assets'
+import clsx from 'clsx'
+import React from 'react'
+import { SubjectOptionItem } from './SubjectList'
+import { useFeature, userReducer } from '@lms/contexts'
 
 interface IProps {
   data: SubjectOptionItem;
@@ -26,7 +25,8 @@ const SubjectItem = ({
   isEdit,
   setMakeDefaultDrawer,
 }: IProps) => {
-  const { user } = useAppSelector(userReducer);
+  const { useAppSelector } = useFeature()
+  const { user } = useAppSelector?.(userReducer) || {};
   return (
     <div className={className}>
       <div
@@ -50,7 +50,7 @@ const SubjectItem = ({
                 <div className="flex items-center gap-2">
                   <Icon type="contact" />
                   <span>Account ID Number:</span>
-                  <span className="font-bold">{user.hubspot_contact_id}</span>
+                  <span className="font-bold">{user?.hubspot_contact_id}</span>
                 </div>
               </div>
             </div>

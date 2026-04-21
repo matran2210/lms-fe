@@ -1,12 +1,18 @@
 'use client'
 import PopupModalTest from '@components/survey/PopupModalTest'
-import { useCourseContext, UserType } from '@lms/contexts'
+import { useCourseContext, useFeature, UserType } from '@lms/contexts'
+import {
+  selectPopupActivateCourse,
+  showPopupActivatedCourse,
+} from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 import {
   ANIMATION,
+  ApiError,
   AppType,
   CLASS_TYPE,
   defaultStatusDetail,
   DELAY_TIME_DISPLAY_POPUP,
+  ECourseProgram,
   RemindChoosingExam,
 } from '@lms/core'
 import {
@@ -26,18 +32,22 @@ import {
   SappBreadCrumbs,
   SearchWithMenuToggle,
 } from '@lms/ui'
+import { extractNotActivatedData } from '@lms/utils'
+
 import clsx from 'clsx'
 import { useParams, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useInfiniteQuery } from 'react-query'
+import { useInfiniteQuery, useQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 
 const DEFAULT_PAGESIZE = 18
 
 const CourseDetail = () => {
   const searchParams = useSearchParams()
+  const { dispatch, useAppSelector } = useFeature()
+  const selector = useAppSelector?.(selectPopupActivateCourse)
   const param = useParams()
   const query = Object.fromEntries(searchParams.entries())
   const observer = useRef<IntersectionObserver>()
@@ -109,6 +119,12 @@ const CourseDetail = () => {
   } = useInfiniteQuery({
     queryKey: ['courseDetail'],
     queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
+    onError: (error: ApiError) => {
+      const data = extractNotActivatedData(error)
+      if (data) {
+        dispatch?.(showPopupActivatedCourse(data))
+      }
+    },
     getNextPageParam: (lastPage, allPages) => {
       if (
         params.user_section_learning_status ||
@@ -119,6 +135,19 @@ const CourseDetail = () => {
       return lastPage?.data?.length ? allPages.length + 1 : undefined
     },
     enabled: param.courseId !== undefined,
+    retry: false,
+  })
+
+  const programCourse = data?.pages?.[0]?.courseDetail?.data?.program
+
+  const { data: listSurvey, refetch: refetchSurvey } = useQuery({
+    queryKey: ['surveyCustom', param?.courseId],
+    queryFn: () => CoursesAPI.getSurveyCustom(param?.courseId as string),
+    enabled:
+      param.courseId !== undefined &&
+      programCourse &&
+      programCourse === ECourseProgram.LD,
+    select: (data) => data?.data || [],
     retry: false,
   })
 
@@ -241,13 +270,14 @@ const CourseDetail = () => {
   const hasCertificate =
     !!data?.pages?.[0]?.courseDetail?.user_certificate_id ||
     !!data?.pages?.[0]?.courseDetail?.user_certificate_url
+
   return (
     <Layout
       title="Course Detail"
       showSidebar={showSidebar || isAlwaysShowSidebar}
       handleToggleSidebar={handleCloseSidebar}
     >
-      {isLoading ? (
+      {isLoading || selector?.openActive ? (
         <CourseDetailSkeleton />
       ) : (
         <>
@@ -256,7 +286,6 @@ const CourseDetail = () => {
             isShowToggle
             isCoursePage
             redirectLink={PageLink.COURSES}
-            appType={AppType.LMS_PRO}
           />
           <SappBreadCrumbs
             isTeacher={false}
@@ -313,11 +342,13 @@ const CourseDetail = () => {
         <SelectExamPopup courseData={data} />
       )}
 
-      {data?.pages?.[0]?.courseDetail?.data?.program && (
+      {programCourse && (
         <PopupModalTest
           class_code={data?.pages?.[0]?.courseDetail?.code}
-          program={data?.pages?.[0]?.courseDetail?.data?.program}
+          program={programCourse}
           data={data?.pages?.[0]?.courseDetail || {}}
+          listSurvey={listSurvey}
+          refetchSurvey={refetchSurvey}
         />
       )}
 

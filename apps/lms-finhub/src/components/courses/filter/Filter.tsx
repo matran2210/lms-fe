@@ -1,13 +1,12 @@
 'use client'
 import DesktopFilter3Level from '@components/courses/filter/FilterDesktop'
 import MobileFilter3Level from '@components/courses/filter/FilterMobile'
-import { defaultStatusCourse } from '@lms/core'
+import { defaultStatusCourse, IFilterProps } from '@lms/core'
 import { formatPathWithQueryParams } from '@lms/utils'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { PageLink } from 'src/constants/routes'
-import { IFilterProps } from 'src/type/courses-3-level'
 
 export default function Filter3Level({ courses, setPage }: IFilterProps) {
   const router = useRouter()
@@ -23,8 +22,6 @@ export default function Filter3Level({ courses, setPage }: IFilterProps) {
     label: string
     value: string
   }>({ label: 'All', value: '' })
-  const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
-
   const [openDrawer, setOpenDrawer] = useState<boolean>(false)
   const [tempType, setTempType] = useState<{ label: string; value: string }>({
     label: 'All',
@@ -38,35 +35,13 @@ export default function Filter3Level({ courses, setPage }: IFilterProps) {
   const totalResults = courses?.metadata?.total_records || 0
 
   useEffect(() => {
-    const queryStatus = params.status || ''
-    const queryType = params.type || ''
-
-    const foundStatus = defaultStatusCourse.find(
-      (item) => item.value === queryStatus,
-    )
-    const courseCategories =
-      courses?.total?.map((cat) => ({
-        label: cat.categoryName,
-        value: cat.categoryName,
-      })) || []
-
-    const foundType = courseCategories.find((item) => item.value === queryType)
-
-    setFilterStatus(foundStatus || { label: 'All', value: '' })
-    setFilterType(foundType || { label: 'All', value: '' })
-    setIsFirstRender(false)
-  }, [courses])
-
-  useEffect(() => {
-    if (!isFirstRender) {
-      const filterUrl = formatPathWithQueryParams(PageLink.SHORT_COURSE, {
-        name: params.name as string,
-        status: filterStatus.value,
-        type: filterType.value,
-      })
-      router.push(filterUrl)
-      setPage?.(9)
-    }
+    const filterUrl = formatPathWithQueryParams(PageLink.SHORT_COURSE, {
+      name: params.name as string,
+      status: filterStatus.value,
+      type: filterType.value,
+    })
+    router.push(filterUrl)
+    setPage?.(9)
   }, [filterType, filterStatus])
 
   useEffect(() => {
