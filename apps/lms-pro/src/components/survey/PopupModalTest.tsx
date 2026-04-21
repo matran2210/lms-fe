@@ -92,11 +92,11 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
   const isLDProgram = program === ECourseProgram.LD
   const listSurveySatisfy = useMemo(() => {
     return (listSurvey || []).filter((item) => {
-      if (item.setting.show_by_progress) {
+      if (item.setting.show_by_progress !== null) {
         // nếu là show_by_progress thì so sánh với phần trăm hoàn thành
         const progress = Number(item.setting.show_by_progress)
-        return progress && percentComplete >= progress
-      } else if (item.setting.show_after_start_date) {
+        return percentComplete >= progress
+      } else if (item.setting.show_after_start_date !== null) {
         // nếu là show_after_start_date thì so sánh với số ngày sau khi bắt đầu
         const afterStartDate = Number(item.setting.show_after_start_date)
         const startDate = data?.class?.started_at
