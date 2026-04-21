@@ -20,6 +20,7 @@ interface IMultipleChoiceScore {
   loadingAttempt?: boolean
   className?: string
   isTeacher?: boolean
+  scorePercentage?: number
 }
 const MultipleChoiceScore = ({
   questions,
@@ -29,6 +30,7 @@ const MultipleChoiceScore = ({
   loadingAttempt,
   className,
   isTeacher,
+  scorePercentage,
 }: IMultipleChoiceScore) => {
   return (
     <>
@@ -51,15 +53,18 @@ const MultipleChoiceScore = ({
                   ? 'Overall Score'
                   : 'Multiple Choice Score'}
               </div>
-              <div className="flex items-center justify-between lg:block">
+              <div className="items-center justify-between block">
                 <div
                   className={`mb-1 font-inter text-6xl font-bold text-primary md:text-7xl`}
                 >
                   {isNull(score) || isUndefined(score)
                     ? '--'
-                    : `${Math.round(score)}%`}
+                    : `${Math.round(score)}`}
                 </div>
-                <GlobalAverage globalAverage={globalAverage} />
+                <div className='flex items-center gap-2 justify-between'>
+                  <div className='text-gray-400 font-medium leading-6'>({scorePercentage}% of total score)</div>
+                  <GlobalAverage globalAverage={globalAverage} />
+                </div>
               </div>
             </div>
             <MultipleQuestion

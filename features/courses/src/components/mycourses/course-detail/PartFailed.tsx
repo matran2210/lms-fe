@@ -58,6 +58,9 @@ const PartFailed = ({
     status: string;
     score: number;
     total_attempt_time: number;
+    score_percentage: {
+      total_score: number;
+    };
   }>();
   const userPrefix = getUserPrefix(isTeacher, pageLink);
   const isManualGradingAndAwaitGrading =
@@ -278,15 +281,14 @@ const PartFailed = ({
                 <PartInfoItem
                   label="Latest Results:"
                   value={
-                    isManualGradingAndAwaitGrading
-                      ? "--"
-                      : selectedResult?.score !== undefined &&
-                          selectedResult?.score !== null
-                        ? //  || (coursePart?.quiz?.attempt?.score !== undefined &&
-                          //   coursePart?.quiz?.attempt?.score !== null)
-                          `${selectedResult?.score}%`
-                        : // ? `${coursePart?.quiz?.attempt?.score}%`
-                          "--"
+                    isManualGradingAndAwaitGrading ? (
+                      "--"
+                    ) : selectedResult?.score !== undefined &&
+                      selectedResult?.score !== null ? (
+                      `${selectedResult?.score} (${selectedResult?.score_percentage?.total_score}%)`
+                    ) : (
+                      "--"
+                    )
                   }
                 />
               </>

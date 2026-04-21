@@ -125,6 +125,11 @@ const TestResultDetail = () => {
               }
               loadingChart={loadingChart}
               loadingAttempt={loadingAttempt}
+              scorePercentage={questions?.quizAttempt?.grading_status ===
+                GRADE_STATUS.FINISHED_GRADING
+                ? questions?.quizAttempt?.score_percentage?.total_score
+                : chartData?.score_percentage?.total_score
+              }
             />
           </div>
           {/* {isMobileView && (

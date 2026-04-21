@@ -31,6 +31,7 @@ interface IProps {
   isTeacher?: boolean
   loadingChart?: boolean
   loadingAttempt?: boolean
+  scorePercentage?: number
 }
 
 const TestResultPage = ({
@@ -41,6 +42,7 @@ const TestResultPage = ({
   score,
   isTeacher,
   loadingChart,
+  scorePercentage,
 }: IProps) => {
   const multipleQuestionRef = useRef<HTMLDivElement>(null)
   const yourScoreDetailRef = useRef<HTMLDivElement>(null)
@@ -114,6 +116,7 @@ const TestResultPage = ({
                 globalAverage={globalAverageNumber}
                 multipleQuestionRef={multipleQuestionRef}
                 isTeacher={isTeacher}
+                scorePercentage={scorePercentage}
               />
             </div>
           )
@@ -155,6 +158,7 @@ const TestResultPage = ({
                 globalAverage={globalAverageNumber}
                 multipleQuestionRef={multipleQuestionRef}
                 isTeacher={isTeacher}
+                scorePercentage={scorePercentage}
               />
             </div>
           )
@@ -186,6 +190,7 @@ const TestResultPage = ({
               globalAverage={globalAverageNumber}
               multipleQuestionRef={multipleQuestionRef}
               isTeacher={isTeacher}
+              scorePercentage={scorePercentage}
             />
           </div>
         )
@@ -251,6 +256,7 @@ const TestResultPage = ({
               multipleQuestionRef={multipleQuestionRef}
               className="xl:!top-[124px]"
               isTeacher={isTeacher}
+              scorePercentage={scorePercentage}
             />
           </div>
         )
