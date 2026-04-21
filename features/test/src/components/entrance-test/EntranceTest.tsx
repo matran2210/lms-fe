@@ -255,7 +255,6 @@ const EntranceTest = ({
       {renderButton()}
     </div>
   );
-  const hasOpened = localStorage.getItem("openModalMarketingInApp");
 
   return (
     <>
@@ -347,7 +346,7 @@ const EntranceTest = ({
           </div>
         </div>
       </CardCourse>
-      {isShowEntranceTestPopup && hasOpened && (
+      {isShowEntranceTestPopup && (
         <PopUpRemindEntrance
           setOpenFillForm={setOpenFillForm}
           setOpenTest={

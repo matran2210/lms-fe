@@ -14,7 +14,7 @@ import { Layout, ModalMarketingInApp, PopupWelcome, SearchWithMenuToggle } from 
 import Aos from 'aos'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
@@ -43,7 +43,6 @@ const MyCourse = () => {
     useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
-  const router = useRouter()
   const searchParams = useSearchParams()
 
   const query = Object.fromEntries(searchParams.entries())
@@ -185,13 +184,6 @@ const MyCourse = () => {
       window.sessionStorage.setItem('totalCourse', courses?.length)
     }
   }, [courses])
-
-  useEffect(() => {
-    const hasOpened = localStorage.getItem('openModalMarketingInApp')
-    if (!hasOpened) {
-      setOpenModalMarketingInApp(true)
-    }
-  }, [])
 
   const firstPage = data?.pages?.[0]
   const totalRecords = firstPage?.category?.metadata?.total_records || 0
