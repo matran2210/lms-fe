@@ -1431,3 +1431,10 @@ mark {
     @apply p-0 rounded-lg overflow-hidden;
   }
 }
+
+.hidden-scrollbar {
+  scrollbar-width: none !important;
+  &::-webkit-scrollbar {
+    display: none !important;
+  }
+}
