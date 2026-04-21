@@ -1,3 +1,0 @@
-// shared components
-
-export {}

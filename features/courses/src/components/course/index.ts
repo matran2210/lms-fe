@@ -1,1 +1,2 @@
-export * from "./CardCourse/index";
+export * from "./card-course";
+export * from "./course-activation";

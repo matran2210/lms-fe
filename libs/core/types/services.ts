@@ -1,22 +1,61 @@
+import { AxiosPromise, AxiosResponse } from "axios";
 import {
   ChangePasswordReq,
   ExaminationsResponse,
   ICreateDiscussionRequest,
   ICreateDiscussionResReact,
   ICreateDiscussionUploadRequest,
+  ICreateSchedulePayload,
   IResponse,
+  IResponseSchedule,
+  IWeeklyNorm,
   SendEmailReq,
   VerifyOtpReq,
 } from "../../state";
-import { ExamInformation, IQuestion } from "./course";
-import { IExamPrediction, ILearningResult, IMockTestResult, IOverProgress, ITopicProgress, IWeeklyReport } from "./dashboard";
-import { ICertificate } from "./Profile";
+import { DocumentItem, ExamInformation, IQuestion, IStoryline } from "./course";
+import {
+  IExamPrediction,
+  ILearningResult,
+  IMockTestResult,
+  IOverProgress,
+  ITopicProgress,
+  IWeeklyReport,
+} from "./dashboard";
+import { IEntranceTest } from "./entrance-test";
 import {
   IAnswerQuizLastestAttempt,
   IQuizResultList,
   IScoreDetails,
 } from "./quiz";
-import { AxiosPromise, AxiosResponse } from "axios";
+import {
+  IClassDetail,
+  IProgressList,
+  IRequestCreateProgress,
+} from "./progress";
+import {
+  IClassResourceList,
+  IClassResourcePreview,
+  IListClassResourceParams,
+  ISubjectList,
+} from "./classes";
+import {
+  APIDetailScheduleRequestResponse,
+  APIListScheduleRequestResponse,
+  RequestScheduleParams,
+  StatusRequestScheduleParams,
+} from "./teachers/request-schedule.interface";
+import {
+  IBusyRequestDetailResponse,
+  ICreateBusyScheduleData,
+  ICreateEditWeeklyNorm,
+  ICreateTimeoffRequestData,
+  ICreateWeeklyNormData,
+  IEditBusyScheduleData,
+  IEditTimeoffRequestData,
+  IEditWeeklyNormData,
+} from "./my-request";
+import { IQueryParams } from "./common";
+import { IRequestList } from "./request";
 
 export interface IAuthManager {
   getToken(): string;
@@ -28,6 +67,7 @@ export interface IEventTestAPI {
   getCount: () => Promise<any>;
 }
 export interface IEntranceTestAPI {
+  get: (params: Object) => Promise<IResponse<IEntranceTest[]>>;
   getEntranceCount: () => Promise<any>;
   getListUnivers: () => Promise<any>;
   getListUniversProgram: () => Promise<any>;
@@ -44,10 +84,7 @@ export interface ICaseStudyAPI {
 }
 export interface ICoursesAPI {
   getCourseActivityTapById: (courseId: string, id: string) => Promise<any>;
-  getDiscussion: (
-    class_id: string,
-    course_section_id: string,
-  ) => Promise<any>;
+  getDiscussion: (class_id: string, course_section_id: string) => Promise<any>;
   getQuizAttemptsAnswer: ({
     attempt_id,
     question_id,
@@ -57,6 +94,13 @@ export interface ICoursesAPI {
   }) => Promise<{
     success: boolean;
     data: IAnswerQuizLastestAttempt;
+  }>;
+  getQuizAttemptsTableEntranceTest(
+    id: string,
+    { page_index, page_size }: { page_index: number; page_size: number },
+  ): Promise<{
+    success: boolean;
+    data: IScoreDetails;
   }>;
   getCourseSubsectionList: (
     page_size: number,
@@ -106,10 +150,7 @@ export interface ICoursesAPI {
     id: string | string[] | undefined,
     params?: object,
   ) => Promise<any>;
-  getCourseResults?: (
-    id: string | string[],
-    params: object,
-  ) => Promise<any>;
+  getCourseResults?: (id: string | string[], params: object) => Promise<any>;
   getCourseResults3Level?: (
     id: string | string[],
     page_index: number,
@@ -122,11 +163,13 @@ export interface ICoursesAPI {
   skipFoundation: (
     class_id: string | undefined,
   ) => Promise<{ success: boolean }>;
+  getCertificate: (id: string | string[] | undefined) => Promise<any>;
+  getQuizAttemptsEntranceTestChartData: (
+    id: string | string[] | undefined,
+  ) => Promise<any>;
 }
 export interface IActivityAPI {
-  createDiscussionComment: (
-    request: ICreateDiscussionRequest,
-  ) => Promise<any>;
+  createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<any>;
   reactDiscussion: (data: ICreateDiscussionResReact) => Promise<any>;
   getQuizAttemptsAnswer: (id: string) => Promise<any>;
   updateDiscussionComment: (
@@ -146,8 +189,7 @@ export interface ICourseActivityAPI {
 type QuestionDetailQueryDTO = {
   after_test: boolean;
 };
-export interface IQuestionAPI {
-}
+export interface IQuestionAPI {}
 
 export interface INotificationAPI {
   getCountUnRead: () => Promise<any>;
@@ -207,6 +249,10 @@ export interface IUploadAPI {
       sub_url: string | null;
     }>
   >;
+  downloadFileClassResource: (
+    class_id: string,
+    resource_id: string,
+  ) => Promise<void>;
 }
 
 export interface IClassAPI {
@@ -216,14 +262,25 @@ export interface IClassAPI {
     params?: { page_index: number; page_size: number },
   ) => Promise<IResponse<IQuizResultList>>;
   getExamInfo: (id: string) => Promise<ExamInformation>;
-  changeExamDate: (
-    id: string,
-    data: FormData,
-  ) => AxiosPromise<IResponse<any>>;
+  changeExamDate: (id: string, data: FormData) => AxiosPromise<IResponse<any>>;
   getExams: (
     id: string,
     params: { page_index: number; page_size: number },
   ) => Promise<ExaminationsResponse>;
+  previewClassFile?: (
+    class_id: string,
+    resource_id: string,
+  ) => Promise<IClassResourcePreview>;
+  getClassResource?: (
+    class_id: string,
+    params: IListClassResourceParams,
+  ) => Promise<IResponse<IClassResourceList>>;
+  getClassSchedule?: (
+    id: string,
+    page_index: number,
+    page_size: number,
+    search_key?: string,
+  ) => Promise<any>;
 }
 export interface ICalendarAPI {
   getEventSchedule: (params?: object | undefined) => Promise<any>;
@@ -297,7 +354,7 @@ export interface ITestServiceAPI {
       upload_url: string;
       name: string;
     }>
-  >
+  >;
 }
 
 export interface ICertificateAPI {
@@ -310,15 +367,202 @@ export interface ICertificateAPI {
   ) => Promise<AxiosResponse<any, any, {}>>;
 }
 export interface IDashboardAPI {
-  getOverProgress: (id: string) => Promise<IResponse<IOverProgress>>
+  getOverProgress: (id: string) => Promise<IResponse<IOverProgress>>;
 
-  getTopicProgress:(id: string)=> Promise<IResponse<ITopicProgress[]>>
+  getTopicProgress: (id: string) => Promise<IResponse<ITopicProgress[]>>;
 
-  getWeeklyReport:(id: string)=>Promise<IResponse<IWeeklyReport>>
+  getWeeklyReport: (id: string) => Promise<IResponse<IWeeklyReport>>;
 
-  getLearningResults:(id: string)=> Promise<IResponse<ILearningResult[]>> 
+  getLearningResults: (id: string) => Promise<IResponse<ILearningResult[]>>;
 
-  getMockTestResults:(id: string)=> Promise<IResponse<IMockTestResult>>
+  getMockTestResults: (id: string) => Promise<IResponse<IMockTestResult>>;
 
-  getExamPrediction:(id: string)=> Promise<IResponse<IExamPrediction>> 
+  getExamPrediction: (id: string) => Promise<IResponse<IExamPrediction>>;
+}
+
+export interface IStorylineAPI {
+  getListStoryline: ({
+    class_id,
+    section_storyline_id,
+  }: {
+    class_id: string;
+    section_storyline_id: string;
+  }) => Promise<IResponse<IStoryline>>;
+  getStorylineDocument: ({
+    class_id,
+    item_id,
+  }: {
+    class_id: string;
+    item_id: string;
+  }) => Promise<IResponse<DocumentItem[]>>;
+  retakeStoryline: ({
+    class_id,
+    course_section_id,
+    storyline_item_id,
+  }: {
+    class_id: string;
+    course_section_id: string;
+    storyline_item_id?: string | undefined;
+  }) => Promise<IResponse<IStoryline>>;
+}
+
+export interface ICourseActivationAPI {
+  get: (
+    params: Object,
+    page_index?: number,
+    page_size?: number,
+  ) => Promise<any>;
+  getSubjectByProgram: (program_name?: string) => Promise<any>;
+  activateClass: (class_id: string) => Promise<any>;
+  getSubjectClassForActivateSubject: (subject_id: string) => Promise<any>;
+}
+export interface ISchedulesAPI {
+  get: (params: Object) => Promise<IResponse<IResponseSchedule[]>>;
+  create: (
+    data: ICreateSchedulePayload,
+  ) => Promise<IResponse<IResponseSchedule>>;
+
+  getWeeklyNorms: (
+    params: Record<string, any>,
+  ) => Promise<IResponse<IWeeklyNorm[]>>;
+}
+
+export interface IProgressAPI {
+  getProgressList(params: {
+    page_index: number;
+    page_size: number;
+    params?: Record<string, any>;
+  }): Promise<IResponse<IProgressList>>;
+
+  getProgressDetail(id: string): Promise<IResponse<any>>;
+
+  getListLesson(classId: string): Promise<IResponse<any[]>>;
+
+  getListSection(
+    classId: string,
+    scheduleId: string,
+    params?: Record<string, any>,
+  ): Promise<IResponse<any[]>>;
+
+  createProgress(data: IRequestCreateProgress): Promise<IResponse<any>>;
+
+  updateProgress(
+    id: string,
+    data: IRequestCreateProgress,
+  ): Promise<IResponse<any>>;
+}
+
+export interface ITeacherAPI {
+  getListClass(
+    page_index: number,
+    page_size: number,
+    params?: Record<string, any>,
+  ): Promise<any>;
+
+  getClassById(id: string): Promise<any>;
+
+  getStudentById(
+    id: string,
+    page_index: number,
+    page_size: number,
+    params?: Record<string, any>,
+  ): Promise<IResponse<any>>;
+
+  getListTestQuiz(
+    id: string,
+    page_index: number,
+    page_size: number,
+    params?: Record<string, any>,
+  ): Promise<IResponse<any>>;
+
+  getDetailTestQuiz(
+    id: string,
+    chapter_test_id: string,
+    page_index: number,
+    page_size: number,
+    params?: Record<string, any>,
+  ): Promise<IResponse<any>>;
+
+  getSubjects(
+    page_index: number,
+    page_size: number,
+    params?: Record<string, any>,
+  ): Promise<IResponse<ISubjectList>>;
+
+  getCourseCategory(
+    page_index: number,
+    page_size: number,
+    params?: Record<string, any>,
+  ): Promise<IResponse<any>>;
+
+  getListRequestSchedule(
+    payload: RequestScheduleParams,
+  ): Promise<APIListScheduleRequestResponse>;
+
+  getRequestScheduleById(id: string): Promise<APIDetailScheduleRequestResponse>;
+
+  updateStatusRequestSchedule(
+    id: string,
+    payload: StatusRequestScheduleParams,
+  ): Promise<void>;
+}
+
+export interface IMyRequestAPI {
+  createBusySchedule(data: ICreateBusyScheduleData): Promise<IResponse<null>>;
+
+  editBusySchedule(
+    id: string,
+    data: IEditBusyScheduleData,
+  ): Promise<IResponse<null>>;
+
+  createWeeklyNorms(
+    data: ICreateWeeklyNormData,
+  ): Promise<IResponse<ICreateEditWeeklyNorm>>;
+
+  editWeeklyNorm(
+    id: string,
+    data: IEditWeeklyNormData,
+  ): Promise<IResponse<null>>;
+
+  createTimeoffRequest(
+    data: ICreateTimeoffRequestData,
+  ): Promise<IResponse<string>>;
+
+  editTimeoffRequest(
+    id: string,
+    data: IEditTimeoffRequestData,
+  ): Promise<IResponse<string>>;
+
+  createChangeTeachingModeRequest(
+    data: ICreateTimeoffRequestData,
+  ): Promise<IResponse<string>>;
+
+  editTeachingModeRequest(
+    id: string,
+    data: IEditTimeoffRequestData,
+  ): Promise<IResponse<string>>;
+
+  getRequestDetail(id: string): Promise<IResponse<IBusyRequestDetailResponse>>;
+
+  getClass(
+    page_index: number,
+    page_size: number | undefined,
+    teacher_id?: string,
+  ): Promise<IResponse<any>>;
+
+  getLesson(
+    page_index: number,
+    page_size: number | undefined,
+    teacher_id: string,
+    class_id: string,
+  ): Promise<IResponse<any>>;
+}
+export interface IRequestAPI {
+  getRequests: ({
+    page_index,
+    page_size,
+    otherParams,
+  }: IQueryParams) => Promise<IResponse<IRequestList>>;
+
+  deleteRequest: (id: string) => Promise<IResponse<null>>;
 }

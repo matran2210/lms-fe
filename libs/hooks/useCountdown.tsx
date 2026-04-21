@@ -6,32 +6,6 @@ interface ICountdown {
   delay: number
 }
 
-/**
- * @description render ra coutdown
- */
-export const renderer = ({
-  hours,
-  minutes,
-  seconds,
-}: {
-  hours: number
-  minutes: number
-  seconds: number
-}) => {
-  /**
-   * @description function này để check nếu time < 10 thì add thêm '0'
-   */
-  const formatNumber = (num: number) => {
-    return num < 10 ? '0' + num : num.toString()
-  }
-
-  return (
-    <div className="flex w-2/6 justify-center font-tech text-[21px] font-bold tracking-[2px] text-gray-800">
-      {formatNumber(hours)}:{formatNumber(minutes)}:{formatNumber(seconds)}
-    </div>
-  )
-}
-
 export const useCountdown = (time_ended: number) => {
   /**
    * @description state này lưu data của time hiện tại và time hết hạn

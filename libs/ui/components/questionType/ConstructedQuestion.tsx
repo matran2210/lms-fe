@@ -3,7 +3,7 @@ import { CloseIcon, UploadIcon } from "@lms/assets";
 import {
   disableUnsavedChange,
   loginSlice,
-  useAppDispatch,
+ 
   useFeature,
 } from "@lms/contexts";
 import {
@@ -65,6 +65,8 @@ export type IPreviewProp = {
   uniqueKey?: string;
   isInTest?: boolean;
   storageKey?: string;
+  disable?: boolean
+  isAnimationCorrectAnswer?: boolean
 };
 type SAPPEditorHandle = {
   moveSelectionOutOfTable: () => void;
@@ -101,10 +103,11 @@ const EssayQuestionPreview = ({
   uniqueKey,
   isInTest = false,
   storageKey,
+  disable = false,
+  isAnimationCorrectAnswer = false
 }: IPreviewProp) => {
-  const { testServiceApi, router } = useFeature();
+  const { testServiceApi, router, dispatch} = useFeature();
 
-  const dispatch = useAppDispatch();
   const refSheet = useRef(null) as any;
   const [key, setKey] = useState("1");
   const {query} = useFeature()
@@ -366,13 +369,13 @@ const EssayQuestionPreview = ({
   }) => {
     try {
       setUnsavedChanges && setUnsavedChanges(false);
-      dispatch(disableUnsavedChange());
+      dispatch?.(disableUnsavedChange());
       await testServiceApi.downloadFile(data);
     } catch (error) {
       // do nothing
     } finally {
       setUnsavedChanges && setUnsavedChanges(true);
-      dispatch(loginSlice.actions.enableUnsavedChange());
+      dispatch?.(loginSlice.actions.enableUnsavedChange());
     }
   };
 
@@ -431,7 +434,7 @@ const EssayQuestionPreview = ({
         disabled={
           fullData?.confirmed ||
           fullData?.data?.confirmed ||
-          fullData?.is_viewed_answer
+          fullData?.is_viewed_answer || disable
         }
         handleChange={() => handleChange && handleChange(data?.id)}
         // externalRef={externalRef}
@@ -723,7 +726,7 @@ const EssayQuestionPreview = ({
             fullData?.done ||
             fullData?.data?.confirmed) &&
             (fullData?.solution || data?.explanation?.trim()) && (
-              <div className={explainClassname}>
+            <div className={explainClassname} data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
                 <SappDivider />
                 <SappTitleSolution title={`${MY_COURSES.solution}:`} />
                 <EditorReader

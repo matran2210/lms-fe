@@ -4,7 +4,7 @@ import SAPPLoading from '@/components/loading/SAPPLoading'
 import '@/styles/global.css'
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
   title: 'Zoom Meeting',

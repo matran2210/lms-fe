@@ -5,7 +5,7 @@ const TeacherLogoFull = () => {
   const { pageLink } = useFeature();
 
   return (
-    <Link href={pageLink.TEACHERS}>
+    <Link href={pageLink.MY_CALENDAR}>
       <LogoSappIcon />
     </Link>
   );

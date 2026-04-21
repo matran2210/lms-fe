@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import PopupModalTest from '@components/survey/PopupModalTest'
 import { useCourseContext, UserType } from '@lms/contexts'
 import { ANIMATION, ITabs } from '@lms/core'
@@ -9,13 +9,13 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 
 const DEFAULT_PAGESIZE = 18
 
 const CourseDetailTeacher = () => {
   const searchParam = useSearchParams()
-  const param = useParams();
+  const param = useParams()
   const { courseId } = param
   const query = Object.fromEntries(searchParam.entries())
   const observer = useRef<IntersectionObserver>()
@@ -135,7 +135,7 @@ const CourseDetailTeacher = () => {
   })
 
   const breadcrumbs: ITabs[] = [
-    { link: PageLink.TEACHERS, title: 'LMS' },
+    { link: PageLink.MY_CALENDAR, title: 'Home' },
     { link: PageLink.TEACHER_MY_COURSE, title: 'My Course' },
     {
       link: `${PageLink.TEACHER_MY_COURSE}/my-course/${courseId}`,
@@ -175,13 +175,14 @@ const CourseDetailTeacher = () => {
         )}
       </div>
       {isSuccess && (
-        <>
-          <PopupModalTest
-            class_code={data?.pages?.[0]?.courseDetail?.code}
-            program={data?.pages?.[0]?.courseDetail?.data?.program}
-            data={data?.pages?.[0]?.courseDetail}
-          />
-        </>
+        <PopupModalTest
+          class_code={data?.pages?.[0]?.courseDetail?.code}
+          program={data?.pages?.[0]?.courseDetail?.data?.program}
+          data={data?.pages?.[0]?.courseDetail}
+          refetchSurvey={function (): void {
+            throw new Error('Function not implemented.')
+          }}
+        />
       )}
     </LayoutTeacher>
   )

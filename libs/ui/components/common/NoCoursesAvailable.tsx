@@ -2,7 +2,7 @@ import React from "react";
 import { ANIMATION } from "@lms/core";
 import { NoCoursesAvailableIcon } from "@lms/assets";
 
-const NoCoursesAvailable = () => {
+const NoCoursesAvailable = ({ title = "No Data Found :(" }) => {
   return (
     <div
       data-aos={ANIMATION.DATA_AOS}
@@ -10,7 +10,7 @@ const NoCoursesAvailable = () => {
     >
       <NoCoursesAvailableIcon />
       <div className="text-center text-base font-normal leading-6 text-gray">
-        No Data Found :(
+        {title}
       </div>
     </div>
   );

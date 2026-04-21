@@ -1,5 +1,6 @@
 /* eslint-disable prefer-const */
 'use client'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import {
   CalculatorIcon,
   CloseIcon,
@@ -14,8 +15,6 @@ import {
   loadMoreQuestion,
   saveFileEssay,
   showPopupCompletedCourse,
-  useAppDispatch,
-  useAppSelector,
   UserType,
 } from '@lms/contexts'
 import {
@@ -26,39 +25,37 @@ import {
   PROGRAM,
   QUESTION_TYPES,
 } from '@lms/core'
-import { CalculatorModal, ConFirmSubmit } from '@lms/feature-courses'
-import { QuitTestModal } from '@lms/feature-test'
-import UnSubmitAnswerModal from '@lms/feature-test/src/components/UnSubmitAnswerModal'
+import { CalculatorModal, ConFirmSubmit, QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-courses'
+import { withAuthorization } from '@lms/hoc'
 import { useMousePosition, useSmartModalSize } from '@lms/hooks'
 import {
+  AddWordPreview,
+  DragNDropPreivew,
   EditorReader,
+  EssayQuestionPreview,
   FileViewer,
   FullScreenLayout,
   HookFormTextArea,
+  MatchingQuestion,
   ModalResizeable,
+  ModalUploadFile,
   MovableWindow,
+  MultiChoiceQuestion,
+  OneChoiceQuestion,
   SappButton,
-  SappLoadingGlobal,
+  SelectWord,
 } from '@lms/ui'
-import EssayQuestionPreview from '@lms/ui/components/questionType/ConstructedQuestion'
-import DragNDropPreivew from '@lms/ui/components/questionType/DragNDrop'
-import AddWordPreview from '@lms/ui/components/questionType/FillText'
-import MatchingQuestion from '@lms/ui/components/questionType/MatchingQuestion'
-import MultiChoiceQuestion from '@lms/ui/components/questionType/MultipleChoiceQuestion'
-import OneChoiceQuestion from '@lms/ui/components/questionType/OneChoiceQuestion'
-import SelectWord from '@lms/ui/components/questionType/SelectQuestion'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { runHighlight } from '@lms/utils'
-import { TestServiceAPI } from 'src/api/test-api'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { TestServiceAPI } from 'src/api/test-api'
 import LimitQuizModal from 'src/app/test/limitQuizModal'
+import { PageLink } from 'src/constants/routers'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 const CaseStudyDetailTeacher = () => {
   const checkType = (
@@ -86,12 +83,12 @@ const CaseStudyDetailTeacher = () => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
-            // solution={solution}
+          // solution={solution}
           />
         )
       case QUESTION_TYPES.ONE_CHOICE:
@@ -103,7 +100,7 @@ const CaseStudyDetailTeacher = () => {
             defaultValues={defaultValue}
             setValue={setValue}
             corrects={corrects}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -118,7 +115,7 @@ const CaseStudyDetailTeacher = () => {
             name={`${index}_answer`}
             defaultValues={defaultValue}
             setValue={setValue}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -132,7 +129,7 @@ const CaseStudyDetailTeacher = () => {
             data={data}
             // action={getAnswerMatching}
             // ref={ref}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -149,7 +146,7 @@ const CaseStudyDetailTeacher = () => {
           <AddWordPreview
             data={data}
             // action={getValueFillText}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -167,7 +164,7 @@ const CaseStudyDetailTeacher = () => {
             data={data}
             // action={getAnswerDragNDrop}
             // ref={ref}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -187,7 +184,7 @@ const CaseStudyDetailTeacher = () => {
             ) => setValue?.(`${index}_answer`, value)}
             data={data}
             // action={getValueSelectText}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -205,7 +202,7 @@ const CaseStudyDetailTeacher = () => {
             index={undefined}
             question_data={data}
             control={control}
-            handleSaveHighLight={() => {}}
+            handleSaveHighLight={() => { }}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
@@ -408,7 +405,7 @@ const CaseStudyDetailTeacher = () => {
         setClassId(res?.data?.class_id)
         setQuizAttempId(res.data.id)
       }
-    } catch (err) {}
+    } catch (err) { }
   }
   useEffect(() => {
     if (query.quiz_id && id && query.class_user_id) {
@@ -970,13 +967,13 @@ const CaseStudyDetailTeacher = () => {
                       if (e) {
                         if (allowHighLight) {
                           runHighlight(
-                            () => {},
+                            () => { },
                             allowHighLight || false,
                             'hightlight_area_topic',
                           )
                         } else if (allowUnHighLight) {
                           runHighlight(
-                            () => {},
+                            () => { },
                             allowUnHighLight || false,
                             'hightlight_area_topic',
                             { color: 'white' },
@@ -1051,13 +1048,13 @@ const CaseStudyDetailTeacher = () => {
                         if (e) {
                           if (allowHighLight) {
                             runHighlight(
-                              () => {},
+                              () => { },
                               allowHighLight || false,
                               'hightlight_area_topic',
                             )
                           } else if (allowUnHighLight) {
                             runHighlight(
-                              () => {},
+                              () => { },
                               allowUnHighLight || false,
                               'hightlight_area_topic',
                               { color: 'white' },
@@ -1173,9 +1170,8 @@ const CaseStudyDetailTeacher = () => {
                       <div className="relative">
                         <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                           <div className="truncate">
-                            <span className="text-base font-semibold">{`${exhibitText} ${
-                              (i ?? 0) + 1
-                            }: `}</span>
+                            <span className="text-base font-semibold">{`${exhibitText} ${(i ?? 0) + 1
+                              }: `}</span>
                             {exhibitsDes?.name}
                           </div>
                         </div>
@@ -1281,9 +1277,8 @@ const CaseStudyDetailTeacher = () => {
                   </div>
                 </button>
                 <button
-                  className={`h-full ${
-                    checkCalExist > -1 && 'sapp-disable-button'
-                  }`}
+                  className={`h-full ${checkCalExist > -1 && 'sapp-disable-button'
+                    }`}
                   onClick={() => handleOpenScratchPad('calculator')}
                   disabled={checkCalExist > -1}
                 >
@@ -1321,10 +1316,9 @@ const CaseStudyDetailTeacher = () => {
                             return (
                               <button
                                 key={e?.value}
-                                className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px]' : 'min-w-[100px]'} ${
-                                  !watch('exhibits')?.includes(e?.value) &&
+                                className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px]' : 'min-w-[100px]'} ${!watch('exhibits')?.includes(e?.value) &&
                                   'text-gray'
-                                }`}
+                                  }`}
                                 onClick={() => handleOpenExhibit(e?.value)}
                               >{`${exhibitText} ${index + 1}`}</button>
                             )

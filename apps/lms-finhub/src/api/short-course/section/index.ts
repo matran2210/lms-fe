@@ -1,9 +1,9 @@
-import { fetcher } from '@services/requestV2'
 import {
   BreadcrumbResponse,
+  CourseDetail3Level,
   CourseDetailActivity,
-} from 'src/type/courses-3-level'
-import { CourseDetail } from 'src/type/courses-3-level/course'
+} from '@lms/core'
+import { fetcher } from '@services/request'
 
 export class CoursesAPI {
   /**
@@ -30,7 +30,7 @@ export class CoursesAPI {
     page_index: number,
     page_size: number,
     params: Object,
-  ): Promise<CourseDetail> {
+  ): Promise<CourseDetail3Level> {
     return fetcher(
       `courses/${id}?page_index=${page_index}&page_size=${page_size}`,
       {

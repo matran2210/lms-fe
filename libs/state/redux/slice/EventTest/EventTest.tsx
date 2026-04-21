@@ -1,6 +1,5 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../../store";
 import { IEventTestAPI } from "@lms/core";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // Tạo một đối tượng Notification với giá trị mặc định
 interface Iprops {
@@ -54,5 +53,11 @@ export const eventTestSlice = createSlice({
 });
 
 export const { activeEvent, closeShowRemindEvent } = eventTestSlice.actions;
-export const eventTestReducer = (state: RootState) => state.eventTestReducer;
+export const eventTestReducer = <
+  T extends {
+    eventTestReducer: Iprops;
+  },
+>(
+  state: T,
+) => state.eventTestReducer;
 export default eventTestSlice.reducer;

@@ -1,6 +1,6 @@
 import TooltipCourses from '@components/courses/shared/Tooltip'
 import CourseDescriptionText from './CourseDescriptionText'
-import { ICourseDescription } from 'src/type/courses-3-level/course'
+import { ICourseDescription } from '@lms/core'
 
 export default function CourseDescription({
   course,

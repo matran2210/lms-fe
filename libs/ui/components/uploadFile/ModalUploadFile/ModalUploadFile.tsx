@@ -5,12 +5,9 @@ import { capitalize } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import UploadFileHandle from "./UploadFileHandle";
-import {
-  IResourceFile,
-  UPLOAD_TYPE,
-} from "@lms/core/types/file/UploadFileInterface";
 import { SappModalV3 } from "../../base";
 import { useFeature } from "@lms/contexts";
+import { IResourceFile, UPLOAD_TYPE } from "@lms/core";
 
 interface IModalUploadProps {
   open: boolean;

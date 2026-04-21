@@ -1,8 +1,9 @@
-"use client"
+'use client'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { UserType } from '@lms/contexts'
 import { ANIMATION, ITabs, MY_COURSES } from '@lms/core'
 import { CoursesList, Filter } from '@lms/feature-courses'
-import { LayoutTeacher, SappLoadingGlobal, SearchForm } from '@lms/ui'
+import { LayoutTeacher, SearchForm } from '@lms/ui'
 import { buildQueryString } from '@lms/utils'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
@@ -12,11 +13,11 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useInfiniteQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 
 const DEFAULT_PAGESIZE = 9
 const breadcrumbs: ITabs[] = [
-  { link: PageLink.TEACHERS, title: 'LMS' },
+  { link: PageLink.MY_CALENDAR, title: 'Home' },
   { link: PageLink.TEACHER_MY_COURSE, title: 'My Course' },
 ]
 const MyCourseTeacher = () => {
@@ -100,10 +101,9 @@ const MyCourseTeacher = () => {
   const handleSubmit = () => {
     // Redirect to the search results page with the query as a query parameter
     router.push(
-      `${PageLink.TEACHER_MY_COURSE}${
-        methods.watch('name')?.trim()?.length
-          ? `?name=${methods.watch('name')}`
-          : ''
+      `${PageLink.TEACHER_MY_COURSE}${methods.watch('name')?.trim()?.length
+        ? `?name=${methods.watch('name')}`
+        : ''
       }${queryString}`,
     )
   }
@@ -162,11 +162,10 @@ const MyCourseTeacher = () => {
           </div>
           <div
             // data-aos={ANIMATION.DATA_AOS}
-            className={`relative my-0 pt-6 ${
-              isEmpty(courses)
-                ? 'flex min-h-[calc(100vh-13rem)] items-center justify-center'
-                : ''
-            }`}
+            className={`relative my-0 pt-6 ${isEmpty(courses)
+              ? 'flex min-h-[calc(100vh-13rem)] items-center justify-center'
+              : ''
+              }`}
           >
             <CoursesList
               courses={courses}

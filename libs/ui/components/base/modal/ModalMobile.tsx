@@ -1,10 +1,10 @@
 "use client"
 import { SadIcon } from '@lms/assets'
-import { isMobileExtensive } from '@utils/helpers'
 import { Modal } from 'antd'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import ButtonPrimary from '../button/ButtonPrimary'
+import { isMobileExtensive } from '@lms/utils'
 
 const ModalMobile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)

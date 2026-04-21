@@ -1,18 +1,26 @@
 "use client";
 import {
+  AppModule,
   IActivityAPI,
   IAuthAPI,
   IAuthManager,
   ICalendarAPI,
   ICertificateAPI,
   IClassAPI,
+  ICourseActivationAPI,
   ICourseActivityAPI,
   ICoursesAPI,
   IDashboardAPI,
   IEntranceTestAPI,
   IEventTestAPI,
+  IMyRequestAPI,
   INotificationAPI,
+  IProgressAPI,
   IQuestionAPI,
+  IRequestAPI,
+  ISchedulesAPI,
+  IStorylineAPI,
+  ITeacherAPI,
   ITestServiceAPI,
   IUploadAPI,
   MenuItem
@@ -22,12 +30,16 @@ import {
   AxiosResponse,
 } from 'axios';
 import { createContext, useContext } from "react";
-import { IUserAPI } from "../redux/types/User/urser";
+import { IUserAPI, IUserContextAPI } from "../redux/types/User/urser";
+import { AnyAction, ThunkDispatch, Dispatch } from "@reduxjs/toolkit";
+
+type AppLikeDispatch = ThunkDispatch<any, any, AnyAction>
 interface FeatureContextProps {
   courseApi: ICoursesAPI;
   questionApi: IQuestionAPI;
   uploadApi: IUploadAPI;
   userApi: IUserAPI;
+  userContextApi: IUserContextAPI;
   notificationApi: INotificationAPI;
   authApi: IAuthAPI;
   classApi: IClassAPI;
@@ -37,6 +49,11 @@ interface FeatureContextProps {
   eventTestApi?: IEventTestAPI;
   calendarApi?: ICalendarAPI;
   dashboardApi?: IDashboardAPI;
+  schedulesApi?: ISchedulesAPI;
+  progressApi?: IProgressAPI;
+  teacherApi?: ITeacherAPI;
+  myRequestApi?: IMyRequestAPI;
+  requestApi?: IRequestAPI;
   myProfileApi?: {
     getProfile: () => Promise<any>;
     getSubjectOfhubspot: (courseCategoryName: string) => Promise<any>;
@@ -52,12 +69,13 @@ interface FeatureContextProps {
     updateProgram: (data: {
       course_category_id?: string | undefined;
       user_hubspot_examination_subjects?:
-        | {
-            examination_subject_id?: string | undefined;
-          }[]
-        | undefined;
+      | {
+        examination_subject_id?: string | undefined;
+      }[]
+      | undefined;
     }) => Promise<any>;
   };
+  storylineApi?: IStorylineAPI
   submitQuizTest: (
     id: string,
     data: any,
@@ -70,7 +88,7 @@ interface FeatureContextProps {
   menuBottom: MenuItem[];
   router: any;
   pathname: string | null
-  params: Record<string, string | string[]> | null
+  params: any
   query: any
   certificateApi: ICertificateAPI
   fetcher: (url: string, config?: AxiosRequestConfig<any>) => Promise<any>;
@@ -83,6 +101,10 @@ interface FeatureContextProps {
     text: string,
     imageBuffer: string
   ) => Promise<AxiosResponse<any, any, {}>>;
+  dispatch?: AppLikeDispatch
+  useAppSelector?: <T>(fn: (state: any) => T) => T
+  courseActivationAPI?: ICourseActivationAPI;
+  appModules?: AppModule[]
 }
 
 const FeatureContext = createContext<FeatureContextProps>(

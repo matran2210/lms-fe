@@ -1,5 +1,5 @@
 import { IResponse } from '@lms/core'
-import request, { fetcher, getBaseUrl } from '@services/requestV2'
+import request, { fetcher, getBaseUrl } from '@services/request'
 import axios, { AxiosResponse, CancelTokenSource } from 'axios'
 
 type PartUploadDto = { part_number: number; upload_url: string }
@@ -86,6 +86,25 @@ export class UploadAPI {
         file_key,
       },
     })
+  }
+  static downloadFileClassResource = async (
+    class_id: string,
+    resource_id: string,
+  ) => {
+    try {
+      const response = await request.get(
+        `/class-resource/${class_id}/download/${resource_id}`,
+      )
+      if (response.status === 200) {
+        const link = document.createElement('a')
+        link.href = `${getBaseUrl()}/resource/download?token=${response.data}`
+        link.download = ''
+        link.style.display = 'none'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      }
+    } catch (error) {}
   }
 }
 

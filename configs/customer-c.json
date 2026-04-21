@@ -1,0 +1,9 @@
+{
+  "name": "customer-a",
+  "features": [
+    "feature-schedule",
+    "feature-test",
+    "feature-certificate",
+    "feature-examination"
+  ]
+}

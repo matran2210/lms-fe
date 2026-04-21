@@ -1,6 +1,5 @@
 'use client'
-import { AltArrowLeft } from '@components/courses/icons/AltArrowLeft'
-import { CloseIconV2, MenuDotsIcon } from '@lms/assets'
+import { AltArrowLeft, CloseIcon, MenuDotsIcon } from '@lms/assets'
 import {
   EYourAnswerType,
   GRADING_METHOD,
@@ -10,21 +9,17 @@ import {
   QUESTION_TYPES,
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
-import {
-  FullScreenLayout,
-  PDFViewer,
-  SappLoadingGlobal,
-  Tooltip,
-} from '@lms/ui'
+import { FullScreenLayout, PDFViewer, Tooltip } from '@lms/ui'
 import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routes'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
 import { useParams, useRouter } from 'next/navigation'
 import { CoursesAPI } from 'src/api/courses'
 import { TestServiceAPI } from 'src/api/test-api'
 import { handleMultipleCorrectAnswer } from '@lms/utils'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
+import { UserType } from '@lms/contexts'
 
 const Explanation = () => {
   const router = useRouter()
@@ -188,7 +183,7 @@ const Explanation = () => {
             <AltArrowLeft />
           </div>
           <div className="rounded-md bg-gray-200 p-2 transition-all duration-300 ease-in-out hover:bg-gray-300 md:!hidden">
-            <CloseIconV2 className="h-[18px] w-[18px]" />
+            <CloseIcon className="h-[18px] w-[18px]" />
           </div>
         </div>
         <div className="absolute right-8 top-6 z-10 flex cursor-pointer items-center justify-center">
@@ -206,7 +201,7 @@ const Explanation = () => {
             </button>
           </Tooltip>
           <div className="rounded-md bg-gray-200 p-2 transition-all duration-300 ease-in-out hover:bg-gray-300 md:hidden">
-            <CloseIconV2 className="h-[18px] w-[18px]" />
+            <CloseIcon className="h-[18px] w-[18px]" />
           </div>
         </div>
         <div className="absolute right-8 top-6 z-10 flex cursor-pointer items-center justify-center">
