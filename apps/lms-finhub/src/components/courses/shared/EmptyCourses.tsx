@@ -1,5 +1,5 @@
-"use client"
-import { EmptyCourseProps } from 'src/type/courses-3-level'
+'use client'
+import { EmptyCourseProps } from '@lms/core'
 import { EmptyCoursesIcon } from '../icons'
 
 export default function EmptyCourses({

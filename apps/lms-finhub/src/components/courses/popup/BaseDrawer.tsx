@@ -1,6 +1,6 @@
 import React from 'react'
 import { Drawer } from 'antd'
-import { BaseDrawerProps } from 'src/type/courses-3-level'
+import { BaseDrawerProps } from '@lms/core'
 
 export default function BaseDrawer({
   title = '',

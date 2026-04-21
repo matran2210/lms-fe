@@ -1,8 +1,8 @@
 import { ITopicProgress } from "@lms/core";
+import { useReponsive } from "@lms/hooks";
 import { EChart } from "@lms/ui";
 import { EChartsOption } from "echarts";
 import { useEffect, useState } from "react";
-import useReponsive from "src/hooks/useReponsive";
 
 const TopicProgress = ({
   topicProgressData,

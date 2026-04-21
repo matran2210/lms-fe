@@ -1,9 +1,10 @@
 "use client"
-import { useAppSelector, userReducer, UserType } from "@lms/contexts";
+import { useFeature, userReducer, UserType } from "@lms/contexts";
 import { useMemo } from "react";
 
 export const useUserRole = () => {
-  const userType = useAppSelector(userReducer).user?.type;
+  const { useAppSelector } = useFeature();
+  const userType = useAppSelector?.(userReducer).user?.type;
 
   const role = useMemo(() => {
     return {

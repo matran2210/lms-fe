@@ -1,6 +1,5 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { LOCAL_STORAGE_KEYS } from '@lms/core'
-import { RootState } from '../../store'
 import { INotificationAPI } from '@lms/core'
 
 // Tạo một đối tượng Notification với giá trị mặc định
@@ -335,7 +334,12 @@ export const {
   deleteNotificationById,
   deleteAllNotifications,
 } = notificationSlice.actions
-export const notificationReducer = (state: RootState) =>
-  state.notificationReducer
+export const notificationReducer = <
+  T extends {
+    notificationReducer: NotificationState;
+  },
+>(
+  state: T,
+) => state.notificationReducer;
 
 export default notificationSlice.reducer

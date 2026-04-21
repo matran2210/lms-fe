@@ -8,7 +8,7 @@ import {
 import clsx from "clsx";
 import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import useClickOutside from "../clickoutside/HookClick";
-import { ArrowIcon } from "../pagination";
+import { ComboArrowIcon } from "../pagination";
 
 interface IProp {
   options: any;
@@ -113,7 +113,7 @@ const SAPPAudio = ({
                   true,
                 );
 
-              
+
               }, 1000);
             });
 
@@ -216,7 +216,7 @@ const SAPPAudio = ({
         if (volumeRef.current) {
           volumeRef.current.removeEventListener("input", updateVolume);
         }
-       
+
       }
     };
   }, [options?.src, streamRef?.current, playbackAnimationRef?.current]);
@@ -310,13 +310,11 @@ const SAPPAudio = ({
     progressBarRef?.current?.setAttribute("max", String(videoDuration));
     const time = formatTimeToHourMinuteSecond(videoDuration);
     if (durationRef?.current) {
-      durationRef.current.innerText = `${
-        time.hours !== "00" ? time.hours + ":" : ""
-      }${time.minutes}:${time.seconds}`;
+      durationRef.current.innerText = `${time.hours !== "00" ? time.hours + ":" : ""
+        }${time.minutes}:${time.seconds}`;
       durationRef.current.setAttribute(
         "datetime",
-        `${time.hours !== "00" ? time.hours + "h " : ""}${time.minutes}m ${
-          time.seconds
+        `${time.hours !== "00" ? time.hours + "h " : ""}${time.minutes}m ${time.seconds
         }s`,
       );
     }
@@ -330,13 +328,11 @@ const SAPPAudio = ({
         Math.round(streamRef.current?.currentTime || 0),
       );
       if (timeElapsedRef.current) {
-        timeElapsedRef.current.innerText = `${
-          time.hours !== "00" ? time.hours + ":" : ""
-        }${time.minutes}:${time.seconds}`;
+        timeElapsedRef.current.innerText = `${time.hours !== "00" ? time.hours + ":" : ""
+          }${time.minutes}:${time.seconds}`;
         timeElapsedRef.current.setAttribute(
           "datetime",
-          `${time.hours !== "00" ? time.hours + "h " : ""}${time.minutes}m ${
-            time.seconds
+          `${time.hours !== "00" ? time.hours + "h " : ""}${time.minutes}m ${time.seconds
           }s`,
         );
       }
@@ -383,7 +379,7 @@ const SAPPAudio = ({
   function updateSeekTooltip(event: MouseEvent) {
     const skipTo = Math.round(
       (event.offsetX / (event.target as HTMLElement).clientWidth) *
-        parseInt((event.target as HTMLElement).getAttribute("max") || "0", 10),
+      parseInt((event.target as HTMLElement).getAttribute("max") || "0", 10),
     );
     const t = formatTimeToHourMinuteSecond(skipTo);
     if (
@@ -393,24 +389,26 @@ const SAPPAudio = ({
     ) {
       const rect = progressBarRef.current.getBoundingClientRect();
       seekRef.current.setAttribute("data-seek", String(skipTo));
-      seekTooltipRef.current.textContent = `${
-        t.hours !== "00" ? t.hours + ":" : ""
-      }${t.minutes}:${t.seconds}`;
+      seekTooltipRef.current.textContent = `${t.hours !== "00" ? t.hours + ":" : ""
+        }${t.minutes}:${t.seconds}`;
       seekTooltipRef.current.style.left = `${event.pageX - rect.left}px`;
     }
   }
 
   // skipAhead jumps to a different point in the video when the progress bar
   // is clicked
-  function skipAhead(event: Event) {
-    const skipTo =
-      event.target instanceof HTMLInputElement ? event.target.value : "0";
-    streamRef.current.currentTime = parseFloat(skipTo);
-    if (progressBarRef?.current) {
-      progressBarRef.current.value = Number(skipTo);
+  function skipAhead() {
+    if (!streamRef.current || !seekRef.current) return;
+
+    const skipTo = Number(seekRef.current.getAttribute("data-seek") || "0");
+
+    streamRef.current.currentTime = skipTo;
+
+    if (progressBarRef.current) {
+      progressBarRef.current.value = skipTo;
     }
     if (seekRef?.current) {
-      seekRef.current.value = skipTo;
+      seekRef.current.value = String(skipTo);
     }
   }
 
@@ -525,7 +523,7 @@ const SAPPAudio = ({
     videoAttribs &&
     Number(videoAttribs.width) >= 346 &&
     Number(videoAttribs.width) < 480;
-  
+
   return (
     <>
       <div
@@ -564,7 +562,7 @@ const SAPPAudio = ({
             </div>
           ) : (
             <div
-            
+
               className={clsx(
                 `sapp-video-custom video-container group ${loading ? "hidden" : ""}`
               )}
@@ -815,11 +813,10 @@ const SAPPAudio = ({
                         />
                       </div>
                     </div>
-                    
+
                     <div
                       className={clsx(
-                        `settings-control icon-svg relative text-white ${
-                          activeSettings ? "active" : ""
+                        `settings-control icon-svg relative text-white ${activeSettings ? "active" : ""
                         }`,
                         {
                           hidden: isSmallVideo,
@@ -855,26 +852,26 @@ const SAPPAudio = ({
                                 </span>
                                 <span className="flex items-center justify-between gap-1 text-xsm font-medium">
                                   {playbackRate === 1 ? "Normal" : playbackRate}
-                                  <ArrowIcon
+                                  <ComboArrowIcon
                                     className={"h-4 w-3"}
                                     right={true}
                                     iconType={"chervon"}
-                                  ></ArrowIcon>
+                                  ></ComboArrowIcon>
                                 </span>
                               </div>
                             </div>
                           )}
-                        
+
                           {activeSpeed && (
                             <>
                               <h4
                                 className="relative px-1.5 text-base font-semibold"
                                 onClick={() => setActiveSpeed(false)}
                               >
-                                <ArrowIcon
+                                <ComboArrowIcon
                                   className={"absolute left-1 top-1 h-4 w-4"}
                                   iconType={"chervon"}
-                                ></ArrowIcon>
+                                ></ComboArrowIcon>
                                 Speed
                               </h4>
                               <ul
@@ -886,11 +883,10 @@ const SAPPAudio = ({
                                     key={speed.value}
                                     onClick={handlePlaybackRateChange}
                                     data-speed={speed.value}
-                                    className={`text-xsm hover:bg-white hover:text-black ${
-                                      parseFloat(speed.value) === playbackRate
+                                    className={`text-xsm hover:bg-white hover:text-black ${parseFloat(speed.value) === playbackRate
                                         ? "bg-white text-black"
                                         : ""
-                                    }`}
+                                      }`}
                                   >
                                     {speed.label}
                                   </li>
@@ -898,11 +894,11 @@ const SAPPAudio = ({
                               </ul>
                             </>
                           )}
-                         
+
                         </div>
                       </>
                     </div>
-                 
+
                   </div>
                 </div>
               </div>

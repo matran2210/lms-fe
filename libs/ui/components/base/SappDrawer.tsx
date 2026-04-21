@@ -1,5 +1,5 @@
 "use client"
-import { useAppDispatch, confirmDialog } from '@lms/contexts'
+import { confirmDialog, useFeature } from '@lms/contexts'
 import ButtonPrimary from './button/ButtonPrimary'
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
@@ -31,6 +31,7 @@ interface IProps {
   cancelButtonClassName?: string
   submitButtonClassName?: string
   handleClickCancelButton?: () => void
+  isTextWhite?: boolean
 }
 
 const SappDrawer = ({
@@ -56,12 +57,13 @@ const SappDrawer = ({
   cancelButtonClassName,
   submitButtonClassName,
   handleClickCancelButton = () => undefined,
+  isTextWhite = true,
 }: IProps) => {
-  const dispatch = useAppDispatch()
+  const {dispatch} = useFeature()
 
   const handleOnClose = () => {
     if (confirmOnClose) {
-      dispatch(confirmDialog.open({ message: message, onConfirm: onClose }))
+      dispatch?.(confirmDialog.open({ message: message, onConfirm: onClose }))
     } else {
       onClose()
     }
@@ -111,7 +113,8 @@ const SappDrawer = ({
         <div className="flex flex-col justify-between">
           <div
             className={clsx(
-              'w-full relative flex min-h-[80px] items-center justify-between border-b bg-transparent px-8 py-2 text-2xl font-medium text-white',
+              'w-full relative flex min-h-[80px] items-center justify-between border-b bg-transparent px-8 py-2 text-2xl font-medium',
+              isTextWhite && 'text-white',
               headerClassName,
             )}
           >

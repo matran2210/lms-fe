@@ -1,5 +1,5 @@
 import { IEntranceTest, IResponse } from '@lms/core'
-import { fetcher } from '@services/requestV2'
+import { fetcher } from '@services/request'
 
 export class EntranceTestAPI {
   static get(params: Object): Promise<IResponse<IEntranceTest[]>> {

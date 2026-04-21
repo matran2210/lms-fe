@@ -1,14 +1,15 @@
 import { ActiveIcon } from "@lms/assets";
 import { SappModalV3 } from "@lms/ui";
-import { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
 interface IProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   activeCourse: () => void;
   time?: number;
+  activeContent?: React.ReactNode;
 }
-const PopupActive = ({ open, setOpen, activeCourse, time = 60 }: IProps) => {
+const PopupActive = ({ open, setOpen, activeCourse, time = 60, activeContent }: IProps) => {
   const handleCancel = () => {
     setOpen(false);
   };
@@ -18,6 +19,7 @@ const PopupActive = ({ open, setOpen, activeCourse, time = 60 }: IProps) => {
   };
 
   const ContentActiveCourse = () => {
+    if (activeContent) return activeContent
     return (
       <div className="justify-center self-stretch text-center">
         <span className="text-base font-normal leading-normal text-gray-800">

@@ -236,7 +236,7 @@ packages/features/
 | `src/components/courses/*`       | `@lms/feature-courses`       | `packages/features/courses/src/components/courses/*`     |
 | `src/components/test/*`          | `@lms/feature-tests`         | `packages/features/tests/src/components/test/*`          |
 | `src/components/quiz/*`          | `@lms/feature-tests`         | `packages/features/tests/src/components/quiz/*`          |
-| `src/components/calendar/*`      | `@lms/feature-calendar`      | `packages/features/calendar/src/components/calendar/*`   |
+| `src/components/calendar/*`      | `@lms/feature-schedule`      | `packages/features/schedule/src/components/calendar/*`   |
 | `src/components/notification/*`  | `@lms/feature-notifications` | `packages/features/notifications/src/components/*`       |
 | `src/components/profile/*`       | `@lms/feature-profile`       | `packages/features/profile/src/components/*`             |
 | `src/components/teacher/*`       | `@lms/feature-teacher`       | `packages/features/teacher/src/components/*`             |
@@ -280,7 +280,7 @@ import { PageLink } from "@lms/shared-constants";
 import { TestComponent } from "@lms/feature-tests";
 import { EntranceTestComponent } from "@lms/feature-entrance-test";
 import { EventTestComponent } from "@lms/feature-event-test";
-import { CalendarComponent } from "@lms/feature-calendar";
+import { CalendarComponent } from "@lms/feature-schedule";
 ```
 
 ### Short Course App (Simplified)

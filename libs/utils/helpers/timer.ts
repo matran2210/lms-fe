@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 /**
  * Format a duration in seconds to HH:mm:ss format.
  * If hours are zero, they are omitted.
@@ -81,11 +83,11 @@ const decodeHtml = (html: string) => {
  */
 export const calculateTimeAgo = (date: string): string => {
   if (!date) {
-    return ''
+    return "";
   }
 
-  const currentDateTime: Date = new Date()
-  const updatedDateTime: Date = new Date(date)
+  const currentDateTime: Date = new Date();
+  const updatedDateTime: Date = new Date(date);
 
   const currentUtcTime: number = Date.UTC(
     currentDateTime.getUTCFullYear(),
@@ -95,62 +97,119 @@ export const calculateTimeAgo = (date: string): string => {
     currentDateTime.getUTCMinutes(),
     currentDateTime.getUTCSeconds(),
     currentDateTime.getUTCMilliseconds(),
-  )
+  );
 
-  const timeDifference: number = currentUtcTime - updatedDateTime.getTime()
+  const timeDifference: number = currentUtcTime - updatedDateTime.getTime();
 
-  const secondsAgo = Math.floor(timeDifference / 1000)
+  const secondsAgo = Math.floor(timeDifference / 1000);
   if (secondsAgo < 60) {
-    return secondsAgo <= 0 ? 'just now' : `${secondsAgo} seconds ago`
+    return secondsAgo <= 0 ? "just now" : `${secondsAgo} seconds ago`;
   }
 
-  const minutesAgo = Math.floor(secondsAgo / 60)
+  const minutesAgo = Math.floor(secondsAgo / 60);
   if (minutesAgo < 60) {
-    return minutesAgo === 1 ? '1 min ago' : `${minutesAgo} mins ago`
+    return minutesAgo === 1 ? "1 min ago" : `${minutesAgo} mins ago`;
   }
 
-  const hoursAgo = Math.floor(minutesAgo / 60)
+  const hoursAgo = Math.floor(minutesAgo / 60);
   if (hoursAgo < 24) {
-    return hoursAgo === 1 ? '1 hour ago' : `${hoursAgo} hours ago`
+    return hoursAgo === 1 ? "1 hour ago" : `${hoursAgo} hours ago`;
   }
 
-  const daysAgo = Math.floor(hoursAgo / 24)
+  const daysAgo = Math.floor(hoursAgo / 24);
   if (daysAgo >= 1) {
-    const formatter = new Intl.DateTimeFormat('en-GB', {
-      day: 'numeric',
-      month: 'numeric',
-      year: 'numeric',
-    })
-    return `${formatter.format(updatedDateTime)}`
+    const formatter = new Intl.DateTimeFormat("en-GB", {
+      day: "numeric",
+      month: "numeric",
+      year: "numeric",
+    });
+    return `${formatter.format(updatedDateTime)}`;
   }
-  return ''
-}
+  return "";
+};
 /**
  * @description Return number mm:ss
  * @param {number} num: number
  * @return {*}
  */
 export const convertSecondsToMinutesSeconds = (seconds: number) => {
-  const minutes = Math.floor(seconds / 60)
-  const remainingSeconds = seconds % 60
-  const formattedMinutes = String(minutes).padStart(2, '0')
-  const formattedSeconds = String(remainingSeconds).padStart(2, '0')
-  return `${formattedMinutes}:${formattedSeconds}`
-}
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  const formattedMinutes = String(minutes).padStart(2, "0");
+  const formattedSeconds = String(remainingSeconds).padStart(2, "0");
+  return `${formattedMinutes}:${formattedSeconds}`;
+};
 // formatTime takes a time length in seconds and returns the time in
 // minutes and seconds
 export const formatTimeToHourMinuteSecond = (timeInSeconds: number) => {
-  const hours = Math.floor(timeInSeconds / 3600)
-  const minutes = Math.floor((timeInSeconds % 3600) / 60)
-  const seconds = Math.floor(timeInSeconds % 60)
+  const hours = Math.floor(timeInSeconds / 3600);
+  const minutes = Math.floor((timeInSeconds % 3600) / 60);
+  const seconds = Math.floor(timeInSeconds % 60);
 
-  const formattedHours = String(hours).padStart(2, '0')
-  const formattedMinutes = String(minutes).padStart(2, '0')
-  const formattedSeconds = String(seconds).padStart(2, '0')
+  const formattedHours = String(hours).padStart(2, "0");
+  const formattedMinutes = String(minutes).padStart(2, "0");
+  const formattedSeconds = String(seconds).padStart(2, "0");
 
   return {
     hours: formattedHours,
     minutes: formattedMinutes,
     seconds: formattedSeconds,
+  };
+};
+
+/**
+ * Hàm phân tích chuỗi thời gian thành đối tượng thời gian.
+ *
+ * @param {string} timeStr - Chuỗi thời gian cần phân tích.
+ * @returns {dayjs} - Đối tượng thời gian sau khi phân tích.
+ */
+const parseTime = (timeStr: string) => {
+  /**
+   * Kiểm tra định dạng chuỗi thời gian.
+   *
+   * @param {string} timeStr - Chuỗi thời gian cần kiểm tra.
+   * @returns {boolean} - True nếu chuỗi thời gian hợp lệ, false ngược lại.
+   */
+  if (/^\d{2}:\d{2}$/.test(timeStr)) {
+    /**
+     * Chuỗi thời gian có định dạng HH:mm.
+     *
+     * @param {string} timeStr - Chuỗi thời gian cần phân tích.
+     * @param {string} format - Định dạng chuỗi thời gian.
+     * @returns {dayjs} - Đối tượng thời gian sau khi phân tích.
+     */
+    return dayjs(timeStr, "HH:mm");
+  } else if (/^\d{2}:\d{2}:\d{2}$/.test(timeStr)) {
+    /**
+     * Chuỗi thời gian có định dạng HH:mm:ss.
+     *
+     * @param {string} timeStr - Chuỗi thời gian cần phân tích.
+     * @param {string} format - Định dạng chuỗi thời gian.
+     * @returns {dayjs} - Đối tượng thời gian sau khi phân tích.
+     */
+    return dayjs(timeStr, "HH:mm:ss");
   }
-}
+  /**
+   * Chuỗi thời gian không hợp lệ.
+   *
+   * @returns {dayjs} - Đối tượng thời gian không hợp lệ.
+   */
+  return dayjs(NaN);
+};
+
+/**
+ * Hàm định dạng thời gian chỉ gồm giờ và phút.
+ *
+ * @param {string} rawTime - Thời gian nguyên thủy dưới dạng chuỗi.
+ * @returns {string} - Thời gian định dạng chỉ gồm giờ và phút.
+ */
+export const formatTimeOnlyHourMinute = (rawTime: string) => {
+  /**
+   * Sử dụng thư viện dayjs để định dạng thời gian.
+   *
+   * @param {string} rawTime - Thời gian nguyên thủy dưới dạng chuỗi.
+   * @param {string} format - Định dạng thời gian.
+   * @returns {string} - Thời gian định dạng.
+   */
+  return dayjs(parseTime(rawTime)).format("HH:mm");
+};

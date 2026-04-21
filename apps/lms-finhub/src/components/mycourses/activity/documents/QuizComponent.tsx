@@ -1,10 +1,8 @@
-import SappIcon from '@components/common/SappIcon'
 import {
   clearFileEssay,
   confirmQuestion,
   IActivityStateQuestion,
   saveFileEssay,
-  useAppDispatch,
 } from '@lms/contexts'
 
 import {
@@ -22,14 +20,15 @@ import {
   EditorReader,
   EssayQuestionPreview,
   MatchQuizComponent,
+  ModalUploadFile,
   MultiChoiceQuestion,
   NewDragNDropQuestion,
   OneChoiceQuestion,
+  SappIcon,
   SelectWord,
   SlotValue,
   useClickOutside,
 } from '@lms/ui'
-import ModalUploadFile from '@lms/ui/components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { isEmpty, isUndefined } from 'lodash'
 import React, {
   forwardRef,
@@ -49,6 +48,7 @@ import {
 import toast from 'react-hot-toast'
 import { CoursesAPI } from 'src/api/courses'
 import { TestServiceAPI } from 'src/api/test-api'
+import { useAppDispatch } from 'src/redux/hook'
 
 import { v4 as uuidv4 } from 'uuid'
 
@@ -121,10 +121,6 @@ type Props = {
   exhibitText?: string
   modalOpen?: boolean
 }
-
-// type RefEditor = {
-//   reset: () => void
-// }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
   (
@@ -520,12 +516,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }
 
     const renderQuestion = () => {
-       const correctsDragDrop = activeQuestion?.corrects
+      const correctsDragDrop = activeQuestion?.corrects
         ? {
             corrects: activeQuestion?.corrects,
             answers: activeQuestion?.answer,
           }
-        : undefined;
+        : undefined
       switch (activeQuestion?.qType) {
         case QUESTION_TYPES.ONE_CHOICE:
         case QUESTION_TYPES.TRUE_FALSE:

@@ -25,7 +25,7 @@ const ErrorMessage = ({ className = '', children }: IProps) => {
               fill="#D35563"
             />
           </svg>
-          <span className="flex-auto first-letter:uppercase">{children}</span>
+          <span className="flex-auto first-letter:uppercase text-start">{children}</span>
         </div>
       )}
     </>

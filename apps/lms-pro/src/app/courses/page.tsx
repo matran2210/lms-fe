@@ -1,36 +1,26 @@
-"use client"
-import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
+'use client'
+import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import {
   active,
   clearGuideState,
-  useAppDispatch,
-  useAppSelector,
   useCourseContext,
   UserType,
 } from '@lms/contexts'
-import { ANIMATION, AppType, defaultStatusCourse, ICoursesAPI } from '@lms/core'
+import { ANIMATION, defaultStatusCourse } from '@lms/core'
 import { CoursesList, FilterCourse, Heading } from '@lms/feature-courses'
+import { withAuthorization } from '@lms/hoc'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import {
-  Layout,
-  PopupWelcome,
-  SappLoadingGlobal,
-  SearchWithMenuToggle,
-} from '@lms/ui'
+import { Layout, ModalMarketingInApp, PopupWelcome, SearchWithMenuToggle } from '@lms/ui'
 import Aos from 'aos'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
-import {
-  TourGuideCoursesAnimation,
-  TourGuideCourseTabAnimation,
-  TourGuideFilterAnimation,
-} from '@lms/assets'
 import { CoursesAPI } from 'src/api/courses'
+import { PageLink } from 'src/constants/routers'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { hidePopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -53,10 +43,9 @@ const MyCourse = () => {
     useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
-  const router = useRouter()
   const searchParams = useSearchParams()
-      
-        const query = Object.fromEntries(searchParams.entries())
+
+  const query = Object.fromEntries(searchParams.entries())
   const userGuideLine = useAppSelector(
     (state) => state.userReducer.user.detail.settings?.course_guide,
   )
@@ -196,13 +185,6 @@ const MyCourse = () => {
     }
   }, [courses])
 
-  useEffect(() => {
-    const hasOpened = localStorage.getItem('openModalMarketingInApp')
-    if (!hasOpened) {
-      setOpenModalMarketingInApp(true)
-    }
-  }, [])
-
   const firstPage = data?.pages?.[0]
   const totalRecords = firstPage?.category?.metadata?.total_records || 0
   const dynamicCategoryOptions =
@@ -222,6 +204,10 @@ const MyCourse = () => {
       options: defaultStatusCourse,
     },
   ]
+
+  useEffect(() => {
+    dispatch(hidePopupActivatedCourse())
+  }, [])
 
   return (
     <SappLoadingGlobal loading={isLoading}>
@@ -245,7 +231,6 @@ const MyCourse = () => {
           isShowUserGuide
           disabledSearch={guideIsActive}
           redirectLink={PageLink.COURSES}
-          appType={AppType.LMS_PRO}
         />
 
         <div
@@ -290,11 +275,10 @@ const MyCourse = () => {
           </div>
         </div>
         <div
-          className={`relative mx-auto my-0 ${
-            isEmpty(courses)
-              ? 'flex min-h-[calc(100vh-21rem)] items-center justify-center'
-              : ''
-          } ${guideStatus && guideStep === 5 && !isMobileView && 'tour-guide-course-active z-50'}`}
+          className={`relative mx-auto my-0 ${isEmpty(courses)
+            ? 'flex min-h-[calc(100vh-21rem)] items-center justify-center'
+            : ''
+            } ${guideStatus && guideStep === 5 && !isMobileView && 'tour-guide-course-active z-50'}`}
         >
           <CoursesList
             courses={courses}

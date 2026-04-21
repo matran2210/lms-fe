@@ -1,8 +1,8 @@
-"use client"
+'use client'
 import { UserType } from '@lms/contexts'
 import { QuizResults } from '@lms/feature-courses'
 import { FullScreenLayout } from '@lms/ui'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 
 const QuizResultPage = () => {
   return (

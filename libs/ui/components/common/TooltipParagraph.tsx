@@ -19,7 +19,7 @@ const TooltipParagraph: React.FC<ParagraphProps> = ({
       : { onEllipsis: setTruncated }
 
   const paragraph = (
-    <Paragraph {...props} ellipsis={effectiveEllipsis} className="!mb-0">
+    <Paragraph {...props} ellipsis={effectiveEllipsis} className="!mb-0 text-zinc-800">
       <>{children}</>
     </Paragraph>
   )

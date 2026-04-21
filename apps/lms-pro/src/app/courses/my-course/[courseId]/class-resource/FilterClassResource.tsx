@@ -1,25 +1,22 @@
-"use client"
-import { CLASS_SUFFIX_TYPE_FILTER, DEFAULT_PAGE_NUMBER } from '@lms/core'
-import { SappSelectMultiple, SAPPSelectV2 } from '@lms/ui'
-import { buildQueryString, normalizeToArray } from '@lms/utils'
-import { getSelectOptions } from '@utils/helpers'
+'use client'
+import { CLASS_SUFFIX_TYPE_FILTER } from '@lms/core'
+import { useSelectClassSchedule } from '@lms/hooks'
+import { SappSelectMultiple, SAPPSelectTooltip } from '@lms/ui'
+import { getSelectOptions } from '@lms/utils'
 import { debounce } from 'lodash'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import {
+  useParams,
+} from 'next/navigation'
+import { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import useSelectClassSchedule from 'src/hooks/useSelectClassSchedule'
 
-type FilterFormValues = {
+export type FilterFormValues = {
   suffix_types?: string
   schedule_ids?: string[]
 }
 
-const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
-  const router = useRouter()
-  const pathname = usePathname()
-    const searchParams = useSearchParams()
+const FilterClassResource = ({ totalResult, setQueryParams, queryParams }: { totalResult: number, setQueryParams: Dispatch<SetStateAction<FilterFormValues>>, queryParams :  FilterFormValues}) => {
   const params = useParams()
-    const query = Object.fromEntries(searchParams.entries())
   const { courseId } = params
   const [search, setSearch] = useState('')
 
@@ -33,17 +30,17 @@ const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
   useEffect(() => {
     reset({
       suffix_types:
-        typeof query.suffix_types === 'string' &&
-        query.suffix_types.trim() !== ''
-          ? query.suffix_types
+        typeof queryParams.suffix_types === 'string' &&
+          queryParams.suffix_types.trim() !== ''
+          ? queryParams.suffix_types
           : undefined,
 
-      schedule_ids: normalizeToArray(query.schedule_ids),
+      schedule_ids: queryParams.schedule_ids,
     })
-  }, [query.suffix_types, query.schedule_ids, reset])
+  }, [queryParams.suffix_types, queryParams.schedule_ids, reset])
 
   const { classSchedule, hasNextPage, fetchNextPage, isLoading, refetch } =
-    useSelectClassSchedule(courseId as string, search)
+    useSelectClassSchedule(courseId as string, search, true)
 
   const debouncedSearch = useRef(
     debounce((value: string) => {
@@ -68,30 +65,6 @@ const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
     )
   }, [classSchedule])
 
-  const pushQuery = (next: Record<string, any>) => {
-    router.push(`${pathname}?${buildQueryString(cleanQuery({
-          ...query,
-          ...next,
-          page_index: DEFAULT_PAGE_NUMBER,
-        }))}`)
-  }
-
-  const cleanQuery = (query: Record<string, any>) => {
-    const result: Record<string, any> = {}
-
-    Object.entries(query).forEach(([key, value]) => {
-      if (
-        value !== undefined &&
-        value !== null &&
-        !(typeof value === 'string' && value.trim() === '')
-      ) {
-        result[key] = value
-      }
-    })
-
-    return result
-  }
-
   return (
     <div className="flex shrink-0 items-center gap-4">
       <div className="shrink-0 text-sm font-normal text-gray-800">
@@ -101,7 +74,7 @@ const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
       <div className="flex justify-end gap-4">
         <div className="flex gap-2">
           {/* ===== Suffix type ===== */}
-          <SAPPSelectV2
+          <SAPPSelectTooltip
             control={control}
             name="suffix_types"
             placeholder="Type"
@@ -110,12 +83,13 @@ const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
             heightCustom="h-10"
             allowClear
             onChange={(value) => {
-              pushQuery({
+              setQueryParams((prev) => ({
+                ...prev,
                 suffix_types:
                   value === undefined || value === null || value === ''
                     ? undefined
                     : value,
-              })
+              }))
             }}
           />
 
@@ -135,9 +109,10 @@ const FilterClassResource = ({ totalResult }: { totalResult: number }) => {
               open && refetch()
             }}
             onChange={(values) => {
-              pushQuery({
-                schedule_ids: values?.length ? values : undefined,
-              })
+              setQueryParams((prev) => ({
+                ...prev,
+               schedule_ids: values?.length ? values : undefined,
+              }))
             }}
           />
         </div>

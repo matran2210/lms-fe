@@ -1,5 +1,4 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { RootState } from '../../../../store'
 import {
   ICreateDiscussionRequest,
   ICreateDiscussionResReact,
@@ -7,7 +6,7 @@ import {
   IDiscussion,
   IUserInDiscussion,
 } from '../../../../types/Course/MyCourse/Activity/activity'
-import { ICourseActivityAPI, IActivity, IActivityAPI, IActivityBreadcrumb, IBreadcrumb, ICoursesAPI } from '@lms/core'
+import { ICourseActivityAPI, IActivity, IActivityAPI, IActivityBreadcrumb, IBreadcrumb, ICoursesAPI, Course } from '@lms/core'
 
 // Tạo một đối tượng activity với giá trị mặc định
 export interface ICourseActivityState extends IActivity {
@@ -243,7 +242,13 @@ export const courseActivitySlice = createSlice({
 })
 
 // export const selectAuthUser = (state: RootState) => state.loginReducer.authUser;
-export const courseActivityReducer = (state: RootState) =>
+export const courseActivityReducer = <
+  T extends {
+    courseActivityReducer: ICourseActivityState;
+  },
+>(
+  state: T,
+) =>
   state.courseActivityReducer
 
 export const courseActivityAction = courseActivitySlice.actions

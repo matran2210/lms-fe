@@ -2,8 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Spin } from "antd";
 import { VALID_UPLOAD_EDITOR } from "@lms/core";
-// import { useSappEditorImageUpload } from 'src/hooks/useSappEditorImageUpload' comment monorepo
-import { SAPPEditorV2 } from "@sapp-fe/sapp-common-package";
+import { SAPPEditor } from "@sapp-fe/sapp-common-package";
 import { SAPPEditorHandle } from "@lms/core";
 import { useSappEditorImageUpload } from "@lms/hooks";
 import { convertMathHtmlToImage } from "@lms/utils";
@@ -61,18 +60,18 @@ const Editor = ({
   }, [valueText]);
 
   if (editorContent === undefined) return null;
-  // const { handleImageUpload } = useSappEditorImageUpload()
+  const { handleImageUpload } = useSappEditorImageUpload()
   return (
     <div key={key}>
       <Spin spinning={loading}>
-        <SAPPEditorV2
+        <SAPPEditor
           ref={editorRef}
           {...(key && { key: key })}
           content={editorContent}
           onChange={onChange}
-          // handleImageUpload={(file) =>
-          //   handleImageUpload(file, 'lms/library-editor')
-          // }
+          handleImageUpload={(file) =>
+            handleImageUpload(file, 'lms/library-editor')
+          }
           placeholder={placeholder}
           disabled={disabled}
         />

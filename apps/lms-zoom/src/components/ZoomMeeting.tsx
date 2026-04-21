@@ -6,7 +6,7 @@ import { useZoomElementAdjustment } from '@/hooks/useZoomElementAdjustment'
 import { useZoomSDK } from '@/hooks/useZoomSDK'
 import { ZoomMeetingConfig } from '@/types/zoom'
 import { toggleMeetingContainer } from '@/utils'
-import { notFound, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import FloatingUser from './FloatingUser'
 import SAPPLoading from './loading/SAPPLoading'
@@ -39,7 +39,8 @@ export const ZoomMeeting = () => {
 
     const processMeetingToken = async () => {
       if (!meetingToken) {
-        notFound()
+        router.replace('/not-found')
+        return
       }
 
       try {
@@ -49,7 +50,8 @@ export const ZoomMeeting = () => {
         const meetingData = await getZoomMeeting(decodedToken, query?.schedule_id)
 
         if (!meetingData.userInfo || !meetingData.signature) {
-          notFound()
+          router.replace('/not-found')
+          return
         }
 
         const config: ZoomMeetingConfig = {
@@ -86,7 +88,7 @@ export const ZoomMeeting = () => {
   }, [isSDKLoaded, meetingConfig, isJoining, error, meetingToken, router, pathname])
 
   const handleJoinMeeting = async () => {
-    if (!meetingConfig) return
+    if (!meetingConfig || isJoining) return
 
     await joinMeeting(meetingConfig)
   }

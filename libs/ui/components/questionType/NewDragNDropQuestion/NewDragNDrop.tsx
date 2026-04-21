@@ -40,6 +40,8 @@ interface DragDropQuestionProps {
   };
   solution?: string;
   explainClassname?: string;
+  disabled?: boolean; 
+  isAnimationCorrectAnswer?: boolean
 }
 
 // Component cho bank area
@@ -105,6 +107,8 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
   corrects,
   solution,
   explainClassname,
+  disabled,
+  isAnimationCorrectAnswer = false
 }) => {
   const correctCurrent = corrects?.corrects;
   const contentRef = React.useRef<HTMLSpanElement | null>(null);
@@ -144,7 +148,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
     setItems(remaining);
   }, [parsedSlots, data.answers]);
 
-  const isDisabled = !isEmpty(correctCurrent);
+  const isDisabled = !isEmpty(correctCurrent) || disabled;
 
   const handleOnclick = async (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e?.target as HTMLElement;
@@ -215,7 +219,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
         })}
       </div>
     );
-  }, [data.question_content, slots, corrects]);
+  }, [data.question_content, slots, corrects, isDisabled]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { over, active } = event;
@@ -433,22 +437,22 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
         </span>
         {!isDisabled && <BankArea items={items} />}
         {!isEmpty(correctCurrent) && (
-          <>
+          <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
             <SappDivider />
             <CorrectAnswer
               questionContent={data.question_content}
               corrects={correctCurrent}
             />
-          </>
+          </div>
         )}
         {solution && (
-          <>
+          <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
             <SappDivider />
             <div className={explainClassname}>
               <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
               <EditorReader className="mt-4" text_editor_content={solution} />
             </div>
-          </>
+          </div>
         )}
         {type === "IMG" && (
           <SappModalImage src={src} setSrc={setSrc}></SappModalImage>

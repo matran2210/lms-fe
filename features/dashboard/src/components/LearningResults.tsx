@@ -25,7 +25,6 @@ interface TooltipParams {
 
 const LearningResults = ({ mockTestResultsData }: LearningResultsProps) => {
   const [results, setResults] = useState<ILearningResult[]>([]);
-  const [hasLearning, setHasLearning] = useState<boolean>(false);
   const [mockTestId, setMockTestId] = useState<string>("");
   const courseInfo = useMemo(
     () => JSON.parse(localStorage.getItem("courseInfo") as string),
@@ -45,7 +44,6 @@ const LearningResults = ({ mockTestResultsData }: LearningResultsProps) => {
     if (mockTestResultsData) {
       const data = mockTestResultsData.reports || [];
       setResults(data);
-      setHasLearning(data.some((e: ILearningResult) => e.score));
       if (!isNormal && mockTestResultsData.mock_tests?.length === 1) {
         setMockTestId(mockTestResultsData.mock_tests[0].id);
       }

@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { GRADE_STATUS, IQuizAttempt } from '@lms/core'
 import clsx from 'clsx'
 import { isNull, isUndefined } from 'lodash'
@@ -19,6 +19,7 @@ interface IMultipleChoiceScore {
   multipleQuestionRef: RefObject<HTMLDivElement>
   loadingAttempt?: boolean
   className?: string
+  isTeacher?: boolean
 }
 const MultipleChoiceScore = ({
   questions,
@@ -27,6 +28,7 @@ const MultipleChoiceScore = ({
   multipleQuestionRef,
   loadingAttempt,
   className,
+  isTeacher,
 }: IMultipleChoiceScore) => {
   return (
     <>
@@ -45,7 +47,7 @@ const MultipleChoiceScore = ({
             >
               <div className="mb-4 text-lg font-semibold text-gray-800 md:text-xl">
                 {questions?.quizAttempt?.grading_status ===
-                GRADE_STATUS.FINISHED_GRADING
+                  GRADE_STATUS.FINISHED_GRADING
                   ? 'Overall Score'
                   : 'Multiple Choice Score'}
               </div>
@@ -64,6 +66,7 @@ const MultipleChoiceScore = ({
               questions={questions}
               className={'xl:w-full'}
               multipleQuestionRef={multipleQuestionRef}
+              isTeacher={isTeacher}
             />
           </div>
         </div>

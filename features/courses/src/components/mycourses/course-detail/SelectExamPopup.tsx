@@ -1,20 +1,27 @@
 import { useEffect, useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useMutation } from "react-query";
-
 import { useFeature } from "@lms/contexts";
-import { ClassKey, RemindChoosingExam } from "@lms/core";
+import { RemindChoosingExam } from "@lms/core";
 import { useSelectExams } from "@lms/hooks";
-import { SappModalV3, SAPPSelectV2 } from "@lms/ui";
+import { ErrorMessage, SappModalV3, SAPPSelectTooltip, UploadSingleFile } from "@lms/ui";
+import { GetProp, message } from "antd";
+import Upload, { RcFile, UploadProps } from "antd/es/upload";
 
 interface ISelectExamPopup {
   courseData: any;
 }
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+
+const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+
 
 const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
-  const {router, classApi, query, params} = useFeature()
-  const { control, watch } = useForm({ defaultValues: { exam_date: null } })
+  const { router, classApi, query, params } = useFeature()
+  const { control, watch, clearErrors, setValue, getValues } = useForm(
+    { defaultValues: { exam_date: null, note: [] } }
+  )
   const selectedExam = watch('exam_date')
   const [examModal, setExamModal] = useState(false)
 
@@ -27,7 +34,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
     },
     courseId: params?.courseId as string || query.courseId as string
   }
-    
+
   )
 
   const { mutate: updateExamDate, isLoading } = useMutation({
@@ -62,7 +69,24 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
     ],
     [exams?.data],
   );
+  const getUploadProps = (onChange: (file: RcFile[]) => void) => ({
+    beforeUpload: (file: RcFile) => {
+      clearErrors("note");
+      const isValidType = allowedTypes.includes(file.type);
 
+      if (!isValidType) {
+        message.error(
+          `${file.name} is not a valid image file (only PNG, JPG, and JPEG allowed).`,
+        );
+        return Upload.LIST_IGNORE;
+      }
+      onChange([file]); // Manually update form state
+      return false; // Prevent default upload behavior
+    },
+    onRemove: () => {
+      setValue("note", []);
+    },
+  });
   const getTitleMessage = (remind: RemindChoosingExam) => {
     if (remind.remind_by_progress)
       return "Please select your scheduled exam date to get timely revision support.";
@@ -75,6 +99,8 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
   const handleConfirmExamDate = () => {
     if (!selectedExam) return;
     const formData = new FormData();
+    const note = getValues('note')
+    note && formData.append("note", note[0] as FileType);
 
     if (selectedExam === "NOT_DECIDED") {
       formData.append("not_decided", "true");
@@ -113,13 +139,35 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
         <p className="mb-2 text-sm text-gray">
           {getTitleMessage(remindChoosingExam)}
         </p>
-        <SAPPSelectV2
+        <SAPPSelectTooltip
           placeholder="Exam Date"
           options={examOptions}
           control={control}
           name="exam_date"
           onMenuScrollToBottom={hasNextPage && fetchNextPage}
         />
+        <div className="mt-6 flex flex-col gap-2 md:flex-row md:items-center md:gap-6 ">
+          <div className="text-sm font-semibold leading-normal text-gray-800 md:text-base">
+            Registration Evidence:
+          </div>
+          <Controller
+            name="note"
+            control={control}
+            render={({ field, fieldState }) => (
+              <div className="relative">
+                <UploadSingleFile
+                  fileList={(field.value || []) as RcFile[]}
+                  {...getUploadProps(field.onChange)}
+                />
+                {fieldState.error && (
+                  <ErrorMessage className="absolute -bottom-5">
+                    {fieldState.error.message}
+                  </ErrorMessage>
+                )}
+              </div>
+            )}
+          />
+        </div>
       </>
     );
   };

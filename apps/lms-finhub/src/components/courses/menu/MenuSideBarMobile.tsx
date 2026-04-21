@@ -28,11 +28,8 @@ export default function SidebarMobile() {
         className={clsx(
           'h-12 w-12 items-center justify-center rounded-lg bg-white p-2 shadow-small md:h-14 md:w-14 lg:hidden',
           {
-            hidden:
-              listPathHiddenSidebar.includes(pathname) && !isInMyProfile,
-            flex:
-              !listPathHiddenSidebar.includes(pathname) &&
-              !isInMyProfile,
+            hidden: listPathHiddenSidebar.includes(pathname) && !isInMyProfile,
+            flex: !listPathHiddenSidebar.includes(pathname) && !isInMyProfile,
             'hidden md:flex': isInMyProfile,
           },
         )}

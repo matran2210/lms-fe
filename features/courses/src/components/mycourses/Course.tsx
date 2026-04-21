@@ -28,12 +28,12 @@ import {
 import { useTailwindBreakpoint } from "@lms/hooks";
 import clsx from "clsx";
 import dayjs from "dayjs";
-import { CardCourse } from "../course";
 import ModalFoundationCompleted from "./ModalFoundationCompleted";
 import PopupActive from "./PopupActive";
 import PopupExtend from "./PopupExtend";
 import PopupLesson from "./PopupLesson";
 import PopupOpenClass from "./PopupOpenClass";
+import { CardCourse } from "../course/card-course";
 
 const Course = ({
   course,
@@ -48,7 +48,7 @@ const Course = ({
   refetch: () => void;
   isTeacher?: boolean;
 }) => {
-  const { courseApi, pageLink, router } = useFeature();
+  const {  courseApi, pageLink, router  } = useFeature();
   const [openExtend, setOpenExtend] = useState<boolean>(false);
   const [openActive, setOpenActive] = useState<boolean>(false);
   const [timeActive, setTimeActive] = useState<number>();
@@ -289,6 +289,7 @@ const Course = ({
       localStorage.removeItem("courseInfo");
     }
     if (
+      !isTeacher &&
       isRedirectDashboard &&
       (determineButtonToShow == BUTTON_STATUS.Review ||
         determineButtonToShow == BUTTON_STATUS.Resume)
@@ -381,7 +382,7 @@ const Course = ({
     }
 
     // Handle default case
-    if (!isCanceled) {
+    if (!isCanceled && determineButtonToShow !== "Disabled") {
       handleCourseDetail();
     }
   };
