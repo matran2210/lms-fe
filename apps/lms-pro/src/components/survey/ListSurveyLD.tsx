@@ -9,7 +9,7 @@ const ListSurveyLD = ({
   onSurveyChange,
 }: {
   listSurvey?: ISurveyCustom[]
-  onSurveyChange: React.Dispatch<React.SetStateAction<string | undefined>>
+  onSurveyChange: (id?: string) => void
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const currentSurvey = listSurvey?.[currentIndex]

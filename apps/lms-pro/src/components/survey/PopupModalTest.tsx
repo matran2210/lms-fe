@@ -86,7 +86,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     completeCourse: false,
     ldCourse: false,
   })
-  const [surveyId, setSurveyId] = useState<string>()
+  const surveyId = useRef<string>()
   const isLDProgram = program === ECourseProgram.LD
   const listSurveySatisfy = useMemo(() => {
     return (listSurvey || []).filter((item) => {
@@ -132,9 +132,9 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
   const handleConfirmSurvey = async () => {
     try {
       handleClose
-      if (!courseId || !surveyId) return
+      if (!courseId || !surveyId.current) return
       const res = await CoursesAPI.confirmSurvey(courseId as string, {
-        survey_id: surveyId,
+        survey_id: surveyId.current,
       })
       if (res?.success) refetchSurvey()
     } catch (error) {
@@ -163,7 +163,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
         ]
     if (isLDProgram) {
       surveyUrl =
-        listSurveySatisfy?.find((item) => item.id === surveyId)?.url || ''
+        listSurveySatisfy?.find((item) => item.id === surveyId.current)?.url || ''
       handleConfirmSurvey()
     } else {
       setOpen({
@@ -345,7 +345,9 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
         {isLDProgram && (
           <ListSurveyLD
             listSurvey={listSurveySatisfy}
-            onSurveyChange={setSurveyId}
+            onSurveyChange={(id) => {
+              surveyId.current = id
+            }}
           />
         )}
       </div>
