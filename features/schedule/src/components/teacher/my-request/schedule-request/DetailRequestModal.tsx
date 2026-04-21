@@ -150,7 +150,7 @@ const DetailRequestModal = ({
       footerClassName={clsx('flex !justify-end gap-4', {
         'px-0': isApproved,
       })}
-      headerClassName="!bg-white !text-black border border-b-solid border-gray px-8 py-5 text-xl"
+      headerClassName="!bg-white !text-black border-b border-b-gray px-8 py-5 text-xl"
       sizeTextBtn="medium"
       cancelButtonClassName={clsx('font-medium rounded-md no-underline', {
         '!bg-gray-100 hover:!bg-gray-200 !text-[#78829D] !me-0': isPending,

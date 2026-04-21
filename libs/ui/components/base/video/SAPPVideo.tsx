@@ -1,19 +1,19 @@
 "use client";
 import { Stream } from "@cloudflare/stream-react";
-import { LoadingIcon, PiPIcon, Icon} from "@lms/assets";
+import { Icon, LoadingIcon, PiPIcon } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
 import { Thumbnail } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
-import Image from "next/image";
-import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import useClickOutside from "../clickoutside/HookClick";
-import { ComboArrowIcon } from "../pagination";
 import {
   formatTimeToHourMinuteSecond,
   getResolution,
   isMobileOrTablet,
 } from "@lms/utils";
-import { useFeature } from "@lms/contexts";
 import clsx from "clsx";
+import Image from "next/image";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import useClickOutside from "../clickoutside/HookClick";
+import { ComboArrowIcon } from "../pagination";
 
 interface IProp {
   options: any;
@@ -26,7 +26,7 @@ interface IProp {
   children?: ReactNode;
   videoAttribs?: { [key: string]: string };
   isFetchCaptions?: boolean;
-  handlePlayVideo?:() => void
+  handlePlayVideo?: () => void;
 }
 
 type ResolutionTypes =
@@ -67,7 +67,7 @@ const SAPPVideo = ({
   children,
   videoAttribs,
   isFetchCaptions = true,
-  handlePlayVideo
+  handlePlayVideo,
 }: IProp) => {
   const { fetcher, videoUrl, router } = useFeature();
   const [playerFunction, setPlayerFunction] = useState<any>();
@@ -101,6 +101,52 @@ const SAPPVideo = ({
   const durationRef = useRef<HTMLTimeElement>(null);
   const listSettingsRef = useRef<HTMLDivElement>(null);
   const hideTimerRef = useRef<any>(null);
+  const [isActive, setIsActive] = useState(false);
+  const SEEK_FORWARD_TIME = 10;
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (!streamRef.current) return;
+
+    const tag = (e.target as HTMLElement)?.tagName;
+    if (["INPUT", "TEXTAREA"].includes(tag)) return;
+    switch (e.code) {
+      case "Space":
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (streamRef.current.paused) {
+          streamRef.current.play();
+        } else {
+          streamRef.current.pause();
+        }
+        animatePlayback();
+        break;
+
+      case "ArrowRight":
+        e.preventDefault();
+        streamRef.current.currentTime = Math.min(
+          streamRef.current.currentTime + SEEK_FORWARD_TIME,
+          streamRef.current.duration,
+        );
+        break;
+
+      case "ArrowLeft":
+        e.preventDefault();
+        streamRef.current.currentTime = Math.max(
+          streamRef.current.currentTime - SEEK_FORWARD_TIME,
+          0,
+        );
+        break;
+
+      case "KeyF":
+        e.preventDefault();
+        toggleFullScreen();
+        break;
+
+      default:
+        break;
+    }
+  };
 
   const playbackSpeeds = [
     { value: "0.25", label: "0.25" },
@@ -425,11 +471,13 @@ const SAPPVideo = ({
     progressBarRef?.current?.setAttribute("max", String(videoDuration));
     const time = formatTimeToHourMinuteSecond(videoDuration);
     if (durationRef?.current) {
-      durationRef.current.innerText = `${time.hours !== "00" ? time.hours + ":" : ""
-        }${time.minutes}:${time.seconds}`;
+      durationRef.current.innerText = `${
+        time.hours !== "00" ? time.hours + ":" : ""
+      }${time.minutes}:${time.seconds}`;
       durationRef.current.setAttribute(
         "datetime",
-        `${time.hours !== "00" ? time.hours + "h " : ""}${time.minutes}m ${time.seconds
+        `${time.hours !== "00" ? time.hours + "h " : ""}${time.minutes}m ${
+          time.seconds
         }s`,
       );
     }
@@ -456,11 +504,13 @@ const SAPPVideo = ({
         Math.round(streamRef.current?.currentTime || 0),
       );
       if (timeElapsedRef.current) {
-        timeElapsedRef.current.innerText = `${time.hours !== "00" ? time.hours + ":" : ""
-          }${time.minutes}:${time.seconds}`;
+        timeElapsedRef.current.innerText = `${
+          time.hours !== "00" ? time.hours + ":" : ""
+        }${time.minutes}:${time.seconds}`;
         timeElapsedRef.current.setAttribute(
           "datetime",
-          `${time.hours !== "00" ? time.hours + "h " : ""}${time.minutes}m ${time.seconds
+          `${time.hours !== "00" ? time.hours + "h " : ""}${time.minutes}m ${
+            time.seconds
           }s`,
         );
       }
@@ -507,7 +557,7 @@ const SAPPVideo = ({
   function updateSeekTooltip(event: MouseEvent) {
     const skipTo = Math.round(
       (event.offsetX / (event.target as HTMLElement).clientWidth) *
-      parseInt((event.target as HTMLElement).getAttribute("max") || "0", 10),
+        parseInt((event.target as HTMLElement).getAttribute("max") || "0", 10),
     );
 
     const t = formatTimeToHourMinuteSecond(skipTo);
@@ -518,8 +568,9 @@ const SAPPVideo = ({
     ) {
       const rect = progressBarRef.current.getBoundingClientRect();
       seekRef.current.setAttribute("data-seek", String(skipTo));
-      seekTooltipRef.current.textContent = `${t.hours !== "00" ? t.hours + ":" : ""
-        }${t.minutes}:${t.seconds}`;
+      seekTooltipRef.current.textContent = `${
+        t.hours !== "00" ? t.hours + ":" : ""
+      }${t.minutes}:${t.seconds}`;
       seekTooltipRef.current.style.left = `${event.pageX - rect.left}px`;
     }
   }
@@ -635,7 +686,7 @@ const SAPPVideo = ({
       return;
     }
 
-    // Check case fullscreen for normal 
+    // Check case fullscreen for normal
     if (document?.fullscreenElement) {
       document.exitFullscreen();
       return;
@@ -806,15 +857,15 @@ const SAPPVideo = ({
   //   };
   // }, [router.events]);
 
-  const { pathname } = useFeature()
+  const { pathname } = useFeature();
   useEffect(() => {
     // cleanup của route trước (tương đương routeChangeStart)
     return () => {
       if (document.pictureInPictureElement) {
-        document.exitPictureInPicture().catch(() => { })
+        document.exitPictureInPicture().catch(() => {});
       }
-    }
-  }, [pathname])
+    };
+  }, [pathname]);
 
   const { isDesktopView, isXLMiddleView, isMobileView } =
     useTailwindBreakpoint();
@@ -868,6 +919,16 @@ const SAPPVideo = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (!isActive) return;
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isActive]);
+
   return (
     <>
       <div
@@ -897,8 +958,9 @@ const SAPPVideo = ({
         <>
           {cloudflarePlayer ? (
             <div
-              className={`group ${!hideVideo ? "sapp-wrapper" : "sapp-hideWrapper"
-                } ${loading ? "hidden" : ""}`}
+              className={`group ${
+                !hideVideo ? "sapp-wrapper" : "sapp-hideWrapper"
+              } ${loading ? "hidden" : ""}`}
             >
               <div className={`popup-question`}>{children}</div>
               <Stream
@@ -922,18 +984,21 @@ const SAPPVideo = ({
               style={
                 videoAttribs
                   ? {
-                    height: `${videoAttribs?.height}px`,
-                    width: `${videoAttribs?.width}px`,
-                  }
+                      height: `${videoAttribs?.height}px`,
+                      width: `${videoAttribs?.width}px`,
+                    }
                   : {}
               }
               className={clsx(
-                `sapp-video-custom video-container group ${!hideVideo ? "sapp-wrapper" : "sapp-hideWrapper"
+                `sapp-video-custom video-container group ${
+                  !hideVideo ? "sapp-wrapper" : "sapp-hideWrapper"
                 }  ${loading ? "hidden" : ""}`,
                 {
                   "inline-block pt-0": videoAttribs,
                 },
               )}
+              onMouseEnter={() => setIsActive(true)}
+              onMouseLeave={() => setIsActive(false)}
               ref={videoContainerRef}
             >
               <div className={`popup-question`}>{children}</div>
@@ -1219,7 +1284,8 @@ const SAPPVideo = ({
                     </div>
                     <div
                       className={clsx(
-                        `settings-control icon-svg relative text-white ${activeSettings ? "active" : ""
+                        `settings-control icon-svg relative text-white ${
+                          activeSettings ? "active" : ""
                         }`,
                         {
                           hidden: isSmallVideo && !isFullscreen,
@@ -1321,10 +1387,11 @@ const SAPPVideo = ({
                                 <li
                                   key={"auto-switch"}
                                   onClick={() => changeQuality("auto", "Auto")}
-                                  className={`text-sm hover:bg-white hover:text-black ${"Auto" === playbackQuality
-                                    ? "bg-white text-black"
-                                    : ""
-                                    }`}
+                                  className={`text-sm hover:bg-white hover:text-black ${
+                                    "Auto" === playbackQuality
+                                      ? "bg-white text-black"
+                                      : ""
+                                  }`}
                                 >
                                   Auto
                                 </li>
@@ -1338,10 +1405,11 @@ const SAPPVideo = ({
                                           quality?.bitrate,
                                         )
                                       }
-                                      className={`text-sm hover:bg-white hover:text-black ${quality?.bitrate === playbackQuality
-                                        ? "bg-white text-black"
-                                        : ""
-                                        }`}
+                                      className={`text-sm hover:bg-white hover:text-black ${
+                                        quality?.bitrate === playbackQuality
+                                          ? "bg-white text-black"
+                                          : ""
+                                      }`}
                                     >
                                       {getResolution(quality?.bitrate || 0)}
                                     </li>
@@ -1371,10 +1439,11 @@ const SAPPVideo = ({
                                     key={speed.value}
                                     onClick={handlePlaybackRateChange}
                                     data-speed={speed.value}
-                                    className={`text-sm hover:bg-white hover:text-black ${parseFloat(speed.value) === playbackRate
-                                      ? "bg-white text-black"
-                                      : ""
-                                      }`}
+                                    className={`text-sm hover:bg-white hover:text-black ${
+                                      parseFloat(speed.value) === playbackRate
+                                        ? "bg-white text-black"
+                                        : ""
+                                    }`}
                                   >
                                     {speed.label}
                                   </li>
@@ -1402,10 +1471,11 @@ const SAPPVideo = ({
                                   key={-1}
                                   onClick={handleLanguageChange}
                                   data-cc={-1}
-                                  className={`text-sm hover:bg-white hover:text-black ${-1 === playbackCC
-                                    ? "bg-white text-black"
-                                    : ""
-                                    }`}
+                                  className={`text-sm hover:bg-white hover:text-black ${
+                                    -1 === playbackCC
+                                      ? "bg-white text-black"
+                                      : ""
+                                  }`}
                                 >
                                   Off
                                 </li>
@@ -1414,10 +1484,11 @@ const SAPPVideo = ({
                                     key={cc.index}
                                     onClick={handleLanguageChange}
                                     data-cc={cc.index}
-                                    className={`text-sm hover:bg-white hover:text-black ${cc.index === playbackCC
-                                      ? "bg-white text-black"
-                                      : ""
-                                      }`}
+                                    className={`text-sm hover:bg-white hover:text-black ${
+                                      cc.index === playbackCC
+                                        ? "bg-white text-black"
+                                        : ""
+                                    }`}
                                   >
                                     {cc.lang}
                                   </li>
