@@ -6,7 +6,7 @@ import {
   E_REQUEST_TYPE,
   IRequest,
 } from "@lms/core";
-import { SAPPDropdown } from "@lms/ui";
+import { SAPPDropdownV2 } from "@lms/ui";
 import toast from "react-hot-toast";
 
 interface Iprops {
@@ -94,18 +94,26 @@ const RequestActionCell = ({ item, reloadPage }: Iprops) => {
   };
 
   return (
-    <SAPPDropdown>
-      <div onClick={hanldeView}>View</div>
-      {item.status === E_REQUEST_STATUS.PENDING && (
-        <div onClick={handleEdit}>Edit</div>
-      )}
-      {item.status === E_REQUEST_STATUS.APPROVED && (
-        <div onClick={handleCancel}>Cancel</div>
-      )}
-      {item.status === E_REQUEST_STATUS.PENDING && (
-        <div onClick={handleDelete}>Delete</div>
-      )}
-    </SAPPDropdown>
+    <SAPPDropdownV2
+      actions={[
+        { label: "View", onClick: hanldeView, show: true },
+        {
+          label: "Edit",
+          onClick: handleEdit,
+          show: item.status === E_REQUEST_STATUS.PENDING,
+        },
+        {
+          label: "Cancel",
+          onClick: handleCancel,
+          show: item.status === E_REQUEST_STATUS.APPROVED,
+        },
+        {
+          label: "Delete",
+          onClick: handleDelete,
+          show: item.status === E_REQUEST_STATUS.PENDING,
+        },
+      ]}
+    />
   );
 };
 
