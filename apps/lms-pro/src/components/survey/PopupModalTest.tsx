@@ -113,6 +113,39 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     })
   }, [listSurvey, percentComplete, data?.class?.started_at])
 
+  const isSameSettingType = (arr: ISurveyCustom[]) => { // Kiểm tra xem các survey có cùng loại điều kiện hiển thị (chỉ cùng dùng “Show by progress (%)” hoặc chỉ cùng dùng “Show after start date (days)”)
+    const types = arr.map((i) =>
+      i.setting.show_by_progress != null
+        ? 'progress'
+        : i.setting.show_after_start_date != null
+          ? 'date'
+          : 'none',
+    )
+
+    return new Set(types).size === 1
+  }
+
+  const getSortKey = (arr: ISurveyCustom[]) => {
+    if (!arr.length) return null
+
+    if (arr[0].setting.show_by_progress != null) return 'show_by_progress'
+    if (arr[0].setting.show_after_start_date != null)
+      return 'show_after_start_date'
+
+    return null
+  }
+
+  const sortKey = isSameSettingType(listSurveySatisfy)
+    ? getSortKey(listSurveySatisfy)
+    : null
+
+  const listSurveySort = sortKey  // Sắp xếp các survey theo thứ tự hiển thị tăng dần
+    ? [...listSurveySatisfy].sort(
+        (a, b) =>
+          (a.setting[sortKey] ?? Infinity) - (b.setting[sortKey] ?? Infinity),
+      )
+    : listSurveySatisfy
+
   const progress = data?.survey_attributes?.progress_percent
 
   const completeMiddterm = progress >= 0.5 && progress < 0.6
@@ -163,7 +196,8 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
         ]
     if (isLDProgram) {
       surveyUrl =
-        listSurveySatisfy?.find((item) => item.id === surveyId.current)?.url || ''
+        listSurveySatisfy?.find((item) => item.id === surveyId.current)?.url ||
+        ''
       handleConfirmSurvey()
     } else {
       setOpen({
@@ -344,7 +378,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
         </span>
         {isLDProgram && (
           <ListSurveyLD
-            listSurvey={listSurveySatisfy}
+            listSurvey={listSurveySort}
             onSurveyChange={(id) => {
               surveyId.current = id
             }}
