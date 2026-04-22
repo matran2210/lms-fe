@@ -229,7 +229,7 @@ const ResultCourse = ({
       <p
         className={` text-sm font-medium md:text-base ${isAttempt ? "text-info" : "text-gray-800"}`}
       >
-        {isAttempt ? `${selectedResult?.score || 0} (${selectedResult?.score_percentage?.total_score || 0}%)` : "--"}
+        {isAttempt ? `${selectedResult?.score_percentage?.total_score || 0}%` : "--"}
       </p>
     </div>
   );

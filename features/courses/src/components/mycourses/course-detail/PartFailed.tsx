@@ -285,7 +285,7 @@ const PartFailed = ({
                       "--"
                     ) : selectedResult?.score !== undefined &&
                       selectedResult?.score !== null ? (
-                      `${selectedResult?.score} (${selectedResult?.score_percentage?.total_score}%)`
+                      `${selectedResult?.score_percentage?.total_score}%`
                     ) : (
                       "--"
                     )

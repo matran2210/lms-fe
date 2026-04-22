@@ -53,18 +53,15 @@ const MultipleChoiceScore = ({
                   ? 'Overall Score'
                   : 'Multiple Choice Score'}
               </div>
-              <div className="items-center justify-between block">
+              <div className="flex items-center justify-between lg:block">
                 <div
                   className={`mb-1 font-inter text-6xl font-bold text-primary md:text-7xl`}
                 >
                   {isNull(score) || isUndefined(score)
                     ? '--'
-                    : `${Math.round(score)}`}
+                    : `${scorePercentage}%`}
                 </div>
-                <div className='flex items-center gap-2 justify-between'>
-                  <div className='text-gray-400 font-medium leading-6'>({scorePercentage}% of total score)</div>
                   <GlobalAverage globalAverage={globalAverage} />
-                </div>
               </div>
             </div>
             <MultipleQuestion
