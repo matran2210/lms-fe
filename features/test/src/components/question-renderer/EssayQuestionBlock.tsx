@@ -65,7 +65,7 @@ export default function EssayQuestionBlock({
 
   const setAnswerListValue = debounce((requirementId: number) => {
     answerListRef.current[requirementId] =
-      getValues(`${currentPage}_${essayData?.index}_answer`) || "";
+      getValues(`${currentTabID}_${essayData?.index}_answer`) || "";
   }, 200);
 
   // Initialize answerListRef values once when component mounts
@@ -211,7 +211,7 @@ export default function EssayQuestionBlock({
                     openChooseFile={() =>
                       setOpenUpload({
                         status: true,
-                        question_id: currentPage,
+                        question_id: currentTabID,
                         requirementIndex: index,
                       })
                     }
@@ -346,7 +346,7 @@ export default function EssayQuestionBlock({
           openChooseFile={() =>
             setOpenUpload({
               status: true,
-              question_id: currentPage,
+              question_id: currentTabID,
               requirementIndex: essayData?.index,
             })
           }

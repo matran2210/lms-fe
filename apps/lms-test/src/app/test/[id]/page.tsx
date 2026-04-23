@@ -965,7 +965,7 @@ const TestDetail = () => {
       answer: essayAnswer,
       dragDropAnswer: getValues(`${currentContent?.id}_drag_drop_answer`),
       fillWordAnswer: getValues(`${currentContent?.id}_fillword`),
-      selectWordAnswer: getValueSelectText(),
+      selectWordAnswer: getValueSelectText(currentContent),
       essay: {
         requirements: currentContent.data?.requirements,
         answer_file: currentContent.answer_file,
@@ -975,17 +975,17 @@ const TestDetail = () => {
           currentContent.data?.requirements?.length > 0
             ? currentContent.data?.requirements?.map(
                 (_: unknown, idx: number) =>
-                  getValues(`${currentPage}_${idx}_answer`),
+                  getValues(`${currentContent?.id}_${idx}_answer`),
               )
-            : [getValues(`${currentPage}_0_answer`)],
+            : [getValues(`${currentContent?.id}_0_answer`)],
       },
       isSubmit,
     });
   };
 
   // TODO: Implement this
-  const getValueSelectText = () => {
-    const value = getValues(`${currentPage}_answer`) || [];
+  const getValueSelectText = (currentContent: any) => {
+    const value = getValues(`${currentContent?.id}_answer`) || [];
     return value;
   };
 
@@ -1053,7 +1053,7 @@ const TestDetail = () => {
       return answers;
     } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
       const answers = handleSaveAnswer(
-        getValueSelectText(),
+        getValueSelectText(currentContent),
         currentContent,
         tabs,
       );
