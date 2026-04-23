@@ -32,8 +32,7 @@ const LearningResults = ({ mockTestResultsData }: LearningResultsProps) => {
   );
   const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE;
   const resultFormula =
-    courseInfo?.category === PROGRAM.LD ||
-    courseInfo?.category === PROGRAM.B2B_EMOTIONAL_INTELLIGENCE
+    courseInfo?.category === PROGRAM.LD
       ? "% Results = Topic test (30%) + Final test (70%)"
       : courseInfo?.category === "ACCA"
         ? "%Results = Graded activities (70%) + Final test (30%)"

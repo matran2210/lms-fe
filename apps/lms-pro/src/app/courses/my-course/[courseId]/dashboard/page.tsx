@@ -214,18 +214,18 @@ const Dashboard = () => {
           <div className="text-ink-700 mx-auto flex min-h-[calc(100vh-5rem)] font-sans">
             {infoCourse?.course_type == COURSE_TYPE.NORMAL_COURSE
               ? infoCourse && (
-                  <CourseDashboard
-                    topicProgressData={topicProgressData}
-                    overallProgressData={overallProgressData}
-                    weeklyReportData={weeklyReportData}
-                  />
-                )
+                <CourseDashboard
+                  topicProgressData={topicProgressData}
+                  overallProgressData={overallProgressData}
+                  weeklyReportData={weeklyReportData}
+                />
+              )
               : infoCourse && (
-                  <ExamDashboard
-                    topicProgressData={topicProgressData}
-                    mockTestResultsData={mockTestResultsData}
-                  />
-                )}
+                <ExamDashboard
+                  topicProgressData={topicProgressData}
+                  mockTestResultsData={mockTestResultsData}
+                />
+              )}
           </div>
           <ContinueLearning />
         </div>

@@ -37,8 +37,8 @@ const LearningResults = () => {
   const [results, setResults] = useState<ILearningResult[] | IMockTestResult[]>(
     [],
   );
-  const {query, params, dashboardApi} = useFeature()
-  const {courseId } = params || query
+  const { query, params, dashboardApi } = useFeature()
+  const { courseId } = params || query
   const [isLoading, setIsLoading] = useState<boolean>(true);
   // const [hasLearning, setHasLearning] = useState<boolean>(false);
   const [mockTestId, setMockTestId] = useState<string>("");
@@ -49,8 +49,7 @@ const LearningResults = () => {
   );
   const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE;
   const resultFormula =
-    courseInfo?.category === PROGRAM.LD ||
-    courseInfo?.category === PROGRAM.B2B_EMOTIONAL_INTELLIGENCE
+    courseInfo?.category === PROGRAM.LD
       ? "% Results = Topic test (30%) + Final test (70%)"
       : courseInfo?.category === "ACCA"
         ? "%Results = Graded activities (70%) + Final test (30%)"
