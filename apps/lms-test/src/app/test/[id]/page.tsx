@@ -952,9 +952,17 @@ const TestDetail = () => {
 
   // Check answered question
   const checkAnswered = (currentContent: any, isSubmit = false) => {
+    // For Essay without requirements, need to check with _0 suffix
+    const essayAnswer =
+      currentContent.qType === QUESTION_TYPES.ESSAY &&
+      (!currentContent.data?.requirements ||
+        currentContent.data?.requirements.length === 0)
+        ? getValues(`${currentContent?.id}_0_answer`)
+        : getValues(`${currentContent?.id}_answer`);
+
     return checkAnsweredPure({
       qType: currentContent.qType,
-      answer: getValues(`${currentContent?.id}_answer`),
+      answer: essayAnswer,
       dragDropAnswer: getValues(`${currentContent?.id}_drag_drop_answer`),
       fillWordAnswer: getValues(`${currentContent?.id}_fillword`),
       selectWordAnswer: getValueSelectText(),
@@ -963,10 +971,13 @@ const TestDetail = () => {
         answer_file: currentContent.answer_file,
         response_option: currentContent.data?.response_option,
         response_type: currentContent.response_type,
-        editorValues: currentContent.data?.requirements?.map(
-          (_: unknown, idx: number) =>
-            getValues(`${currentPage}_${idx}_answer`),
-        ),
+        editorValues:
+          currentContent.data?.requirements?.length > 0
+            ? currentContent.data?.requirements?.map(
+                (_: unknown, idx: number) =>
+                  getValues(`${currentPage}_${idx}_answer`),
+              )
+            : [getValues(`${currentPage}_0_answer`)],
       },
       isSubmit,
     });
@@ -1285,7 +1296,7 @@ const TestDetail = () => {
           };
         } else {
           const answer = getValues(
-            `${currentTabContent?.id}_${essayData?.index}_answer`,
+            `${currentTabContent?.id}_${essayData?.index ?? 0}_answer`,
           );
           return {
             ...item,
@@ -1350,9 +1361,15 @@ const TestDetail = () => {
     if (!currentTabContent) return;
     if (currentTabContent?.is_viewed_answer) return;
 
+    // Get current answers and prepare submission data FIRST
+    const allQuest = handleSaveCurrentAnswer(tabs, currentTabContent);
+    const currentQuestion = allQuest.find(
+      (e: any) => e.id === currentTabContent?.id,
+    );
+
     // Early return for tab changes if question not answered
     if (["change-tab", "timeout", "finish"].includes(action ?? "")) {
-      if (!checkAnswered(currentTabContent)) return;
+      if (!checkAnswered(currentQuestion)) return;
       if (action === "change-tab" || action === "finish") {
         if (currentTabContent?.qType !== QUESTION_TYPES.ESSAY) {
           const isEqualValue = await isValuesEqual(
@@ -1365,12 +1382,6 @@ const TestDetail = () => {
         }
       }
     }
-
-    // Get current answers and prepare submission data
-    const allQuest = handleSaveCurrentAnswer(tabs, currentTabContent);
-    const currentQuestion = allQuest.find(
-      (e: any) => e.id === currentTabContent?.id,
-    );
 
     // if (!currentQuestion?.answer) return
     // Format answer based on question type
