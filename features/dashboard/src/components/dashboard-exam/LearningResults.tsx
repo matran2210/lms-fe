@@ -37,8 +37,8 @@ const LearningResults = () => {
   const [results, setResults] = useState<ILearningResult[] | IMockTestResult[]>(
     [],
   );
-  const {query, params, dashboardApi} = useFeature()
-  const {courseId } = params || query
+  const { query, params, dashboardApi } = useFeature()
+  const { courseId } = params || query
   const [isLoading, setIsLoading] = useState<boolean>(true);
   // const [hasLearning, setHasLearning] = useState<boolean>(false);
   const [mockTestId, setMockTestId] = useState<string>("");

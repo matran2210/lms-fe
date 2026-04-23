@@ -262,7 +262,8 @@ const Course = ({
       (category == PROGRAM.ACCA ||
         category == PROGRAM.CFA ||
         category == PROGRAM.CMA ||
-        category == PROGRAM.LD);
+        category == PROGRAM.LD ||
+        category == PROGRAM.B2B_EMOTIONAL_INTELLIGENCE);
 
     // Redirect to dashboard if the course type is practice, normal
     const basePath = `${userPrefix}/courses/my-course/${classInstance?.id}`;

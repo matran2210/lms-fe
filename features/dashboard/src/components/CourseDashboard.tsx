@@ -1,5 +1,5 @@
 import { Icon } from "@lms/assets";
-import { ANIMATION, ITopicProgress, IWeeklyReport } from "@lms/core";
+import { ANIMATION, ITopicProgress, IWeeklyReport, PROGRAM } from "@lms/core";
 import { isUndefined } from "lodash";
 import { memo, useState } from "react";
 import { TopicProgress } from "./dashboard-exam";
@@ -7,6 +7,7 @@ import { WeeklyReport } from "./dashboard-normal";
 import LearningResult from "./dashboard-normal/LearningResult";
 import OverallProgress from "./dashboard-normal/OverallProgress";
 import { useFeature } from "@lms/contexts";
+import clsx from "clsx";
 export interface IActivityProgress {
   completed: number;
   total: number;
@@ -32,7 +33,7 @@ const CourseDashboard = ({
   const [activities, setActivities] = useState<IActivities | undefined>(
     undefined,
   );
-
+  const courseInfo = JSON.parse(localStorage.getItem("courseInfo") as any);
   const onSeeCertificate = (id: string) => {
     router.push(`/certificates/${id}`);
   };
@@ -209,10 +210,15 @@ const CourseDashboard = ({
           })}
         </div>
         <div className="grid lg:flex lg:gap-6 xl:gap-8 2xl:mb-8">
-          <div className="order-2 lg:order-1 lg:w-[60%]">
+          <div className={clsx("order-2 lg:order-1 lg:w-[60%]", {
+            "!w-full": courseInfo?.category === PROGRAM.B2B_EMOTIONAL_INTELLIGENCE
+          })}>
             <TopicProgress topicProgressData={topicProgressData} />
           </div>
-          <div className="order-1 mb-4 flex h-auto rounded-2xl bg-white shadow-small md:mb-6 lg:order-2 lg:my-0 lg:w-[40%]">
+
+          <div className={clsx("order-1 mb-4 flex h-auto rounded-2xl bg-white shadow-small md:mb-6 lg:order-2 lg:my-0 lg:w-[40%]", {
+            "!hidden": courseInfo?.category === PROGRAM.B2B_EMOTIONAL_INTELLIGENCE
+          })}>
             <LearningResult />
           </div>
         </div>

@@ -68,7 +68,7 @@ export const useFloatingUser = ({ floatingRef }: UseFloatingUserProps) => {
           return false
         }
       }
-      // Display, visibility, opacity thì vẫn check giá trị vì extension có thể thêm vào giá trị an toàn
+      //Check giá trị của Display, visibility, opacity để tránh trường hợp extension set giá trị an toàn
       const visibilityStyles = ['display', 'visibility', 'opacity']
       for (const key of visibilityStyles) {
         const val = newMap[key]
@@ -141,11 +141,9 @@ export const useFloatingUser = ({ floatingRef }: UseFloatingUserProps) => {
                 }
               }
 
-              // If we reach here for any observed attribute (style, class, hidden), it's a suspicious change.
               removeMeetingContainer()
               break
             } else if (mutation.type === 'childList') {
-              // Only trigger if components are removed. Extensions often add nodes.
               if (mutation.removedNodes.length > 0) {
                 removeMeetingContainer()
                 break
