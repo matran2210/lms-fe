@@ -55,7 +55,7 @@ const PrimaryInformation = ({
 
   const isOffline = dataDetail?.mode === CONSTRUCTION_MODE.OFFLINE
   const isOnline = dataDetail?.mode === CONSTRUCTION_MODE.ONLINE
-  const isACCAProgram = selectedRequest?.subject?.course_category?.name === PROGRAM.ACCA
+  const isACCAProgram = [PROGRAM.ACCA, PROGRAM.CD].includes(selectedRequest?.subject?.course_category?.name as PROGRAM)
   const courseName = selectedRequest?.subject.name
   const renderStartEndDate = (data: ScheduleRequestDetail | undefined) => {
     // case schedules.length === 0
@@ -125,27 +125,27 @@ const PrimaryInformation = ({
             {/* Schedule */}
             {selectedRequest?.type ===
               TYPE_TEACHING_REQUEST.TEACHER_SECTION && (
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <span className="text-sm text-accent">Schedule</span>
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <span className="text-sm text-accent">Schedule</span>
+                  </div>
+                  <div className="col-span-2">
+                    {isLoading ? (
+                      <ScheduleSkeleton />
+                    ) : (
+                      <div className="flex items-center gap-8">
+                        {(dataDetail?.class?.class_standard_schedules ?? []).map(
+                          (item: ClassStandardScheduleItem, index: number) => (
+                            <div
+                              key={index}
+                            >{`${capitalizeFirstLetter(renderDayOfWeek(item.day_of_week))} | ${formatTimeOnlyHourMinute(item.start_time)} - ${formatTimeOnlyHourMinute(item.end_time)}`}</div>
+                          ),
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className="col-span-2">
-                  {isLoading ? (
-                    <ScheduleSkeleton />
-                  ) : (
-                    <div className="flex items-center gap-8">
-                      {(dataDetail?.class?.class_standard_schedules ?? []).map(
-                        (item: ClassStandardScheduleItem, index: number) => (
-                          <div
-                            key={index}
-                          >{`${capitalizeFirstLetter(renderDayOfWeek(item.day_of_week))} | ${formatTimeOnlyHourMinute(item.start_time)} - ${formatTimeOnlyHourMinute(item.end_time)}`}</div>
-                        ),
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
+              )}
             {/* Address */}
             {isOffline && (
               <PrimaryInfoItem

@@ -92,7 +92,7 @@ const ReasonModal = ({
      */
 
     if (isEmpty(data.request_reject_reason)) return
-    const isACCAProgram = selectedRequest?.subject?.course_category?.name === PROGRAM.ACCA
+    const isACCAProgram = [PROGRAM.ACCA, PROGRAM.CD].includes(selectedRequest?.subject?.course_category?.name as PROGRAM)
 
     handleUpdateStatus({
       ...(isACCAProgram && { request_ids: selectedRequest?.request_ids || [] }),

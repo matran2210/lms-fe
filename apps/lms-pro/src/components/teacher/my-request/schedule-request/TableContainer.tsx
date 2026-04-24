@@ -1,6 +1,7 @@
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
+  PROGRAM,
   StatusRequestSchedule,
   TeacherKey,
 } from '@lms/core'
@@ -142,7 +143,7 @@ export default function TableContainer({ params }: IProps) {
     {
       title: 'Subject',
       render: (_, record: IScheduleRequestItem) => {
-        const isACCAProgram = record?.subject?.course_category?.name === 'ACCA'
+        const isACCAProgram = [PROGRAM.ACCA, PROGRAM.CD].includes(record?.subject?.course_category?.name as PROGRAM)
         const subjectName = record?.subject?.name
         return (
           <TableCell
@@ -167,8 +168,8 @@ export default function TableContainer({ params }: IProps) {
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={`${record?.schedule_time.start_date ? formatDateFromUTC(record?.schedule_time.start_date) : '-'} - ${record?.schedule_time.end_date
-              ? formatDateFromUTC(record?.schedule_time.end_date)
-              : '-'
+            ? formatDateFromUTC(record?.schedule_time.end_date)
+            : '-'
             }`}
         />
       ),
