@@ -95,18 +95,50 @@ export interface ItemProgress {
   total_document_completed: number;
 }
 
+export interface ILabeledGraphicBackground {
+  resource_id: string;
+  url?: string;
+  alt?: string;
+}
+
+export interface ILabeledGraphicMarker {
+  id: string;
+  x_percent: number;
+  y_percent: number;
+  title: string;
+  content: string;
+  style?:
+    | 'PLUS'
+    | 'INFO'
+    | 'QUESTION'
+    | 'CHECK'
+    | 'EXCLAMATION'
+    | 'ARROW_RIGHT'
+    | 'ARROW_UP'
+    | 'DOT'
+    | 'ONE'
+    | 'TWO';
+}
+
+export interface ILabeledGraphicPayload {
+  background: ILabeledGraphicBackground;
+  markers: ILabeledGraphicMarker[];
+}
+
 export interface DocumentItem {
   id: string;
   created_at: string;
   updated_at: string;
   deleted_at: any;
   name: string;
-  type: "TEXT" | "VIDEO" | "QUIZ";
+  type: "TEXT" | "VIDEO" | "QUIZ" | "LABELED_GRAPHIC";
   content: string;
   storyline_item_id: string;
   position: number;
+  title?: string;
   videos?: VideoItem[];
   quiz?: IStorylineQuiz;
+  labeled_graphic_payload?: ILabeledGraphicPayload;
 }
 
 export interface VideoItem {

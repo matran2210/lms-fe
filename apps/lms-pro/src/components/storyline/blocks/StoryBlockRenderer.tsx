@@ -2,6 +2,7 @@ import { useFeature } from '@lms/contexts'
 import QuizBlock from './QuizBlock'
 import TextBlock from './TextBlock'
 import VideoBlock from './VideoBlock'
+import LabeledGraphicBlock from './LabeledGraphicBlock'
 import { DocumentItem, IMultiChoiceQuestion } from '@lms/core'
 
 export function StoryBlockRenderer({
@@ -42,6 +43,13 @@ export function StoryBlockRenderer({
         />
       )
 
+    case 'LABELED_GRAPHIC':
+      return (
+        <LabeledGraphicBlock
+          payload={doc.labeled_graphic_payload}
+          documentTitle={doc.title}
+        />
+      )
 
     default:
       return null
