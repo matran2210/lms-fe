@@ -527,8 +527,15 @@ const ModalResizeableNew: React.FC<ModalResizeableNewProps> = ({
   }, []);
 
   // ── Main render ──
+  // Calculate z-index: base 1000 + modalIndex * 10 + (isTopModal ? 100 : 0)
+  // This ensures the focused modal is always on top
+  const zIndex = 1000 + (modalIndex || 0) * 10 + (isTopModal ? 100 : 0);
+  
   const content = (
-    <div className="pointer-events-none fixed inset-0 z-[1000] overflow-hidden modal-overlay">
+    <div 
+      className="pointer-events-none fixed inset-0 overflow-hidden modal-overlay"
+      style={{ zIndex }}
+    >
       {/*
        * AnimatePresence manages the mount/unmount lifecycle of the modal.
        * `onExitComplete` fires after the exit animation finishes — this is
@@ -547,7 +554,11 @@ const ModalResizeableNew: React.FC<ModalResizeableNewProps> = ({
               ease: "easeInOut",
             }}
             aria-hidden={closing || undefined}
-            style={{ pointerEvents: "auto", position: "absolute", inset: 0 }}
+            style={{ 
+              pointerEvents: "none", // Changed from "auto" to "none"
+              position: "absolute", 
+              inset: 0 
+            }}
           >
             <Rnd
               size={size}

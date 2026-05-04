@@ -24,7 +24,7 @@ import {
   FileViewer,
   Layout,
   LearningResource,
-  ModalResizeable,
+  ModalResizeableNew,
 } from '@lms/ui'
 import { convertMinutesToHourFormat, extractNotActivatedData } from '@lms/utils'
 
@@ -157,6 +157,7 @@ const ActivityPage = () => {
   const [fetch_progress, setFetch_progress] = useState<string[]>([])
   const [exhibitText, setExhibitText] = useState<string>('')
   const [openResource, setOpenResource] = useState(false)
+  const [onFocusingPad, setOnFocusingPad] = useState('')
 
   const onFocusDiscussion = () => {
     setFocusOnlyDiscussion(true)
@@ -587,6 +588,8 @@ const ActivityPage = () => {
                       uuid={e?.uuid}
                       count={index}
                       key={e?.uuid}
+                      setOnFocusingPad={setOnFocusingPad}
+                      onFocusingPad={onFocusingPad}
                     />
                   )
                 })}
@@ -594,6 +597,10 @@ const ActivityPage = () => {
                   {selector?.calculator_status && (
                     <CalculatorModal
                       onClose={() => dispatch(closeCalculator())}
+                      key={"sidebar-calculator"}
+                      onClick={() => setOnFocusingPad("sidebar-calculator")}
+                      isInBody
+                      isTopModal={onFocusingPad === "sidebar-calculator"}
                     />
                   )}
                 </>
@@ -763,13 +770,16 @@ const ActivityPage = () => {
                   return (
                     <CalculatorModal
                       key={e.id}
-                      isMobileCalc
+                      onClick={() => setOnFocusingPad(e.id)}
                       onClose={() => handleCloseScratchPad(e)}
+                      isInBody
+                      modalIndex={index}
+                      isTopModal={onFocusingPad === e.id}
                     />
                   )
                 } else if (e.type === 'file') {
                   return (
-                    <ModalResizeable
+                    <ModalResizeableNew
                       modalIndex={index}
                       // bodyClassName="h-[100%]"
                       title={e.fileName}
@@ -796,6 +806,8 @@ const ActivityPage = () => {
                         </div>
                       )}
                       isInBody
+                      isTopModal={onFocusingPad === e.id}
+                      onModalFocus={() => setOnFocusingPad(e?.id as string)}
                     >
                       <div
                         className="overflow-auto bg-white p-4"
@@ -805,11 +817,11 @@ const ActivityPage = () => {
                         {/* <div className='flex flex-'> */}
                         <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
                       </div>
-                    </ModalResizeable>
+                    </ModalResizeableNew>
                   )
                 } else if (e.type === 'exhibits') {
                   return (
-                    <ModalResizeable
+                    <ModalResizeableNew
                       key={e.id}
                       className="!z-40"
                       onClose={() => handleCloseScratchPad(e)}
@@ -830,8 +842,10 @@ const ActivityPage = () => {
                           </button>
                         </div>
                       )}
-                      draggableFull
                       modalIndex={e.index}
+                      isTopModal={onFocusingPad === e.id}
+                      onModalFocus={() => setOnFocusingPad(e?.id as string)}
+                      bodyClassName="h-[90%] overflow-auto"   
                       isInBody
                     >
                       <div className="h-full bg-white px-4 py-3">
@@ -855,7 +869,7 @@ const ActivityPage = () => {
                           })}
                       </div>
                       <Triangle className="absolute bottom-2 right-2" />
-                    </ModalResizeable>
+                    </ModalResizeableNew>
                   )
                 }
               })}

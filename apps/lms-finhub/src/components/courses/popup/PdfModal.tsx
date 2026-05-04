@@ -1,5 +1,5 @@
 import { IPdfModal } from '@lms/core'
-import { FileViewer, ModalResizeable } from '@lms/ui'
+import { FileViewer, ModalResizeableNew } from '@lms/ui'
 
 export default function PdfModal({
   open,
@@ -17,7 +17,7 @@ export default function PdfModal({
   if (!open) return null
 
   return (
-    <ModalResizeable
+    <ModalResizeableNew
       className="!rounded-lg"
       title={title}
       width={width}
@@ -32,6 +32,6 @@ export default function PdfModal({
       <div className="h-full cursor-pointer select-none text-right text-base font-semibold text-gray-800 hover:text-primary">
         <FileViewer fileName={title} fileUrl={fileUrl} />
       </div>
-    </ModalResizeable>
+    </ModalResizeableNew>
   )
 }

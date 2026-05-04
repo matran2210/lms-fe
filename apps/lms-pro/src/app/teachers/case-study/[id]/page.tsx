@@ -37,7 +37,7 @@ import {
   FileViewer,
   FullScreenLayout,
   MatchingQuestion,
-  ModalResizeable,
+  ModalResizeableNew,
   ModalUploadFile,
   MultiChoiceQuestion,
   OneChoiceQuestion,
@@ -1112,16 +1112,21 @@ const CaseStudyDetailTeacher = () => {
                     key={e.id}
                     onClick={() => setOnFocusingPad(e?.id)}
                     onClose={() => handleCloseScratchPad(e)}
+                    modalIndex={index}
+                    isTopModal={onFocusingPad === e.id}
                   />
                 )
               } else if (e.type === 'scratch_pad') {
                 return (
-                  <ModalResizeable
+                  <ModalResizeableNew
                     key={e.id}
                     onClose={() => handleCloseScratchPad(e)}
                     position="center"
                     width={412}
                     height={350}
+                    modalIndex={index}
+                    isTopModal={onFocusingPad === e.id}
+                    onModalFocus={() => setOnFocusingPad(e?.id as string)}
                     header={({ requestClose }) => (
                       <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
                         <div className="text-sm font-semibold text-gray-800">
@@ -1138,7 +1143,7 @@ const CaseStudyDetailTeacher = () => {
                         </button>
                       </div>
                     )}
-                    isInBody
+                    // isInBody
                   >
                     <ScratchPatch
                       scratchPads={scratchPadValues?.value}
@@ -1151,7 +1156,7 @@ const CaseStudyDetailTeacher = () => {
                       }}
                       className="!h-fit"
                     />
-                  </ModalResizeable>
+                  </ModalResizeableNew>
                 )
               } else if (e.type === 'exhibits') {
                 const i = exhibitData?.findIndex(
@@ -1161,10 +1166,13 @@ const CaseStudyDetailTeacher = () => {
                   (exhibit) => exhibit?.id === e?.id,
                 )
                 return (
-                  <ModalResizeable
+                  <ModalResizeableNew
                     key={e.id}
                     onClose={() => handleCloseScratchPad(e)}
                     position="center"
+                    modalIndex={index}
+                    isTopModal={onFocusingPad === e.id}
+                    onModalFocus={() => setOnFocusingPad(e?.id as string)}
                     header={({ requestClose }) => (
                       <div className="relative">
                         <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
@@ -1185,6 +1193,7 @@ const CaseStudyDetailTeacher = () => {
                         </button>
                       </div>
                     )}
+                    draggableFull
                   >
                     <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                       <EditorReader
@@ -1204,17 +1213,21 @@ const CaseStudyDetailTeacher = () => {
                           )
                         })}
                     </div>
-                  </ModalResizeable>
+                  </ModalResizeableNew>
                 )
               } else if (e.type === 'file') {
                 return (
-                  <ModalResizeable
+                  <ModalResizeableNew
                     title={e?.fileName}
                     width={widthFileViewer}
                     height={heightFileViewer}
                     key={e.id}
                     onClose={() => handleCloseScratchPad(e)}
                     position="center"
+                    draggableFull
+                    modalIndex={index}
+                    isTopModal={onFocusingPad === e.id}
+                    onModalFocus={() => setOnFocusingPad(e?.id as string)}
                   >
                     <div
                       className="overflow-auto bg-white p-4"
@@ -1222,7 +1235,7 @@ const CaseStudyDetailTeacher = () => {
                     >
                       <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
                     </div>
-                  </ModalResizeable>
+                  </ModalResizeableNew>
                 )
               }
             })}

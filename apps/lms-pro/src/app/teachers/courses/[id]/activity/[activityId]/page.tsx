@@ -34,7 +34,7 @@ import {
   EditorReader,
   FileViewer,
   LayoutTeacher,
-  ModalResizeable,
+  ModalResizeableNew,
   SAPPBorder,
   SappButton,
   SappIcon,
@@ -124,6 +124,7 @@ const ActivityTeacherPage = () => {
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [fetch_progress, setFetch_progress] = useState<string[]>([])
   const [exhibitText, setExhibitText] = useState<string>('')
+  const [onFocusingPad, setOnFocusingPad] = useState('')
 
   const settingDoneProcessActivity = (activity: IActivity) => {
     setIsHasQuizGrading(false)
@@ -540,12 +541,20 @@ const ActivityTeacherPage = () => {
                   uuid={e?.uuid}
                   count={index}
                   key={e?.uuid}
+                  setOnFocusingPad={setOnFocusingPad}
+                  onFocusingPad={onFocusingPad}
                 />
               )
             })}
             <>
               {selector?.calculator_status && (
-                <CalculatorModal onClose={() => dispatch(closeCalculator())} />
+                <CalculatorModal 
+                  onClose={() => dispatch(closeCalculator())}
+                  key={"sidebar-calculator"}
+                  onClick={() => setOnFocusingPad("sidebar-calculator")}
+                  isInBody
+                  isTopModal={onFocusingPad === "sidebar-calculator"}
+                />
               )}
             </>
           </>
@@ -948,7 +957,7 @@ const ActivityTeacherPage = () => {
           {openScratchPad.map((e, index: number) => {
             if (e.type === 'file') {
               return (
-                <ModalResizeable
+                <ModalResizeableNew
                   title={e.fileName}
                   width={650}
                   height={850}
@@ -957,6 +966,9 @@ const ActivityTeacherPage = () => {
                   onClose={() => handleCloseScratchPad(e)}
                   position="center"
                   isInBody
+                  modalIndex={index}
+                  isTopModal={onFocusingPad === e.id}
+                  onModalFocus={() => setOnFocusingPad(e?.id as string)}
                 >
                   <div
                     // className="overflow-auto p-4 bg-white"
@@ -966,11 +978,11 @@ const ActivityTeacherPage = () => {
                     {/* <div className='flex flex-'> */}
                     <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
                   </div>
-                </ModalResizeable>
+                </ModalResizeableNew>
               )
             } else if (e.type === 'exhibits') {
               return (
-                <ModalResizeable
+                <ModalResizeableNew
                   key={e.id}
                   dragHandleClassName="modal-header"
                   onClose={() => handleCloseScratchPad(e)}
@@ -996,6 +1008,9 @@ const ActivityTeacherPage = () => {
                     </div>
                   )}
                   isInBody
+                  modalIndex={e.index}
+                  isTopModal={onFocusingPad === e.id}
+                  onModalFocus={() => setOnFocusingPad(e?.id as string)}
                 >
                   <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                     <EditorReader
@@ -1014,7 +1029,7 @@ const ActivityTeacherPage = () => {
                         )
                       })}
                   </div>
-                </ModalResizeable>
+                </ModalResizeableNew>
               )
             }
           })}

@@ -14,7 +14,7 @@ import {
   EditorReader,
   FileViewer,
   LayoutFilter,
-  ModalResizeable,
+  ModalResizeableNew,
   NameNoActionCell,
   PdfViewer,
   Popover,
@@ -384,13 +384,12 @@ export default function ClassResourceTeacher() {
       {openPreview &&
         previewResource &&
         previewResource.suffix_type !== 'IMAGE' && (
-          <ModalResizeable
+          <ModalResizeableNew
             isInBody={true}
             bodyClassName={clsx('px-5', {
               'pb-5': previewResource.suffix_type === 'WORD_DOCUMENT',
             })}
             key={previewResource.url}
-            modalIndex={1}
             title={previewResource.name}
             width={900}
             height={previewResource.suffix_type === 'AUDIO' ? 100 : 548}
@@ -439,7 +438,7 @@ export default function ClassResourceTeacher() {
             <div className="h-full bg-white">
               {renderPreviewContent(previewResource)}
             </div>
-          </ModalResizeable>
+          </ModalResizeableNew>
         )}
       {openPreview &&
         previewResource &&

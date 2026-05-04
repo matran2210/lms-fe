@@ -3,7 +3,7 @@ import { CloseIconNote, Triangle } from '@lms/assets'
 import { IExhibit, ScratchPadValue } from '@lms/core'
 import { CalculatorModal } from '@lms/feature-courses'
 import { useSmartModalSize } from '@lms/hooks'
-import { EditorReader, FileViewer, ModalResizeable } from '@lms/ui'
+import { EditorReader, FileViewer, ModalResizeableNew } from '@lms/ui'
 import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
 import ScratchPatch from './scratchPatch'
@@ -67,11 +67,13 @@ const TestScratchPads = ({
           key={e.id}
           onClick={() => setOnFocusingPad(e.id)}
           onClose={() => handleCloseScratchPad(e)}
+          modalIndex={index}
+          isTopModal={onFocusingPad === e.id}
         />
       )
     } else if (e.type === 'scratch_pad') {
       return (
-        <ModalResizeable
+        <ModalResizeableNew
           position="center"
           key={currentPage}
           header={({ requestClose }) => (
@@ -104,6 +106,7 @@ const TestScratchPads = ({
           width={412}
           height={350}
           modalIndex={index}
+          isTopModal={onFocusingPad === e.id}
         >
           <ScratchPatch
             scratchPadValues={scratchPadValues.find(
@@ -117,16 +120,19 @@ const TestScratchPads = ({
             }}
             className="!h-fit"
           />
-        </ModalResizeable>
+        </ModalResizeableNew>
       )
     } else if (e.type === 'exhibits') {
       const i = exhibitData?.findIndex((el: any) => el?.id === e?.id)
       const exhibitsDes = exhibitData?.find((exhibit) => exhibit?.id === e?.id)
       return (
-        <ModalResizeable
+        <ModalResizeableNew
           key={e.id}
           onClose={() => handleCloseScratchPad(e)}
           position="center"
+          modalIndex={i}
+          isTopModal={onFocusingPad === e.id}
+          onModalFocus={() => setOnFocusingPad(e?.id as string)}
           header={({ requestClose }) => (
             <div className="relative">
               <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
@@ -147,6 +153,7 @@ const TestScratchPads = ({
               </button>
             </div>
           )}
+          draggableFull
         >
           <div className="h-full bg-white px-4 py-3">
             <EditorReader
@@ -170,17 +177,21 @@ const TestScratchPads = ({
               })}
           </div>
           <Triangle className="absolute bottom-2 right-2" />
-        </ModalResizeable>
+        </ModalResizeableNew>
       )
     } else if (e.type === 'file') {
       return (
-        <ModalResizeable
+        <ModalResizeableNew
           title={e.fileName}
           width={widthFileViewer}
           height={heightFileViewer}
           key={e.id}
           onClose={() => handleCloseScratchPad(e)}
           position="center"
+          draggableFull
+          modalIndex={index}
+          isTopModal={onFocusingPad === e.id}
+          onModalFocus={() => setOnFocusingPad(e?.id as string)}
         >
           <div
             className="overflow-auto bg-white p-4"
@@ -190,7 +201,7 @@ const TestScratchPads = ({
             <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
           </div>
           {/* </div> */}
-        </ModalResizeable>
+        </ModalResizeableNew>
       )
     }
   })

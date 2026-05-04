@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CloseIconNote, SaveIcon } from "@lms/assets";
 import { closeNote, useFeature } from "@lms/contexts";
 import { useTailwindBreakpoint } from "@lms/hooks";
-import { ButtonSecondary, HookFormTextArea, ModalResizeable } from "@lms/ui";
+import { ButtonSecondary, HookFormTextArea, ModalResizeableNew } from "@lms/ui";
 import { VALIDATE_REQUIRED } from "@lms/utils";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -14,9 +14,11 @@ interface IProps {
   content: string;
   uuid: string | number;
   count: number;
+  onFocusingPad: string;
+  setOnFocusingPad: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const CreateNote = ({ id, content, uuid, count }: IProps) => {
+const CreateNote = ({ id, content, uuid, count, onFocusingPad, setOnFocusingPad}: IProps) => {
   const { courseApi, router, dispatch, params } = useFeature();
 
   const [activeSectionId, setActiveSectionId] = useState<string>();
@@ -103,7 +105,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
 
   return (
     <>
-      <ModalResizeable
+      <ModalResizeableNew
         bodyClassName="h-[calc(100%-6px)]"
         modalIndex={count}
         header={({ requestClose }) => (
@@ -139,6 +141,8 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
         width={isMobileView ? 340 : 412}
         height={350}
         isInBody
+        isTopModal={onFocusingPad === (id ? id : uuid)}
+        onModalFocus={() => setOnFocusingPad((id ? id : uuid) as string)}
       >
         <div className="flex h-full flex-col p-4">
           <HookFormTextArea
@@ -165,7 +169,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
             </div>
           )}
         </div>
-      </ModalResizeable>
+      </ModalResizeableNew>
     </>
   );
 };

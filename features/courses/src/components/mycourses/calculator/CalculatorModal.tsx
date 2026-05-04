@@ -7,12 +7,18 @@ interface IProps {
   onClose: () => void;
   isMobileCalc?: boolean;
   onClick?: () => void;
+  modalIndex?: number;
+  isTopModal?: boolean;
+  isInBody?: boolean;
 }
 
 const CalculatorModal = ({
   onClose,
   isMobileCalc = false,
   onClick,
+  modalIndex = 0,
+  isTopModal,
+  isInBody = false,
 }: IProps) => {
   const { isShortScreen } = useTailwindBreakpoint();
   const [modalSize, setModalSize] = useState({
@@ -30,13 +36,15 @@ const CalculatorModal = ({
       contentClassName="!overflow-hidden"
       onClose={onClose}
       position="center"
-      isInBody
       height={modalSize.height}
       width={modalSize.width}
       minWidth={256}
       minHeight={450}
       maxWidth={330}
       maxHeight={580}
+      modalIndex={modalIndex}
+      isTopModal={isTopModal}
+      isInBody={isInBody}
       onModalFocus={onClick}
       onResizeStopDone={handleResizeStop}
       header={({ requestClose }) => (
