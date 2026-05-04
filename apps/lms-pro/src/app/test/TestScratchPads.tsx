@@ -106,6 +106,7 @@ const TestScratchPads = ({
           width={412}
           height={350}
           modalIndex={index}
+          contentClassName="!overflow-hidden"
           isTopModal={onFocusingPad === e.id}
         >
           <ScratchPatch
@@ -118,7 +119,7 @@ const TestScratchPads = ({
               setScratchPads(event.target.value)
               handleChangeScratchPad(event)
             }}
-            className="!h-fit"
+            className="!h-full"
           />
         </ModalResizeableNew>
       )

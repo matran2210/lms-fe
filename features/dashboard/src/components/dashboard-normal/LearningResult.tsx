@@ -2,7 +2,7 @@
 import {
   RadarChart,
   PolarGrid,
-  PolarAngleAxis,  
+  PolarAngleAxis,
   PolarRadiusAxis,
   Radar,
   ResponsiveContainer,

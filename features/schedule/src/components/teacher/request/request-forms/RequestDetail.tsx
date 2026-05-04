@@ -204,6 +204,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
       <div>
         <SappDrawer
           isOpen={open}
+          isTextWhite={false}
           title={`View Request`}
           onClose={() => {
             router.back()

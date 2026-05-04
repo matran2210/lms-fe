@@ -2,6 +2,8 @@ import { CollapseArrowIcon } from '@lms/assets'
 import {
   ClassStandardScheduleItem,
   CONSTRUCTION_MODE,
+  DATE_FORMAT_YMD,
+  EDateTime,
   PROGRAM,
   TYPE_TEACHING_REQUEST,
 } from '@lms/core'
@@ -20,6 +22,7 @@ import {
 import { Collapse, CollapseProps } from 'antd'
 import Link from 'next/link'
 import PrimaryInfoItem from './PrimaryInfoItem'
+import dayjs from 'dayjs'
 
 interface IProps {
   dataDetail: ScheduleRequestDetail | undefined
@@ -77,6 +80,15 @@ const PrimaryInformation = ({
     // case schedules.length > 1
     return `${sappFormatDate(data?.schedule_time?.start_date ?? '') ?? '--'} - ${sappFormatDate(data?.schedule_time?.end_date ?? '') ?? '--'}`
   }
+
+  const formatTimeRange = (startTime: string, endTime: string) => {
+    const today = dayjs().format(DATE_FORMAT_YMD);
+
+    const formatTime = (time: string) =>
+      dayjs.utc(`${today}T${time}`).local().format(EDateTime.timepicker);
+
+    return `${formatTime(startTime)} - ${formatTime(endTime)}`;
+  };
 
   const items: CollapseProps['items'] = [
     {
@@ -138,7 +150,7 @@ const PrimaryInformation = ({
                           (item: ClassStandardScheduleItem, index: number) => (
                             <div
                               key={index}
-                            >{`${capitalizeFirstLetter(renderDayOfWeek(item.day_of_week))} | ${formatTimeOnlyHourMinute(item.start_time)} - ${formatTimeOnlyHourMinute(item.end_time)}`}</div>
+                            >{`${capitalizeFirstLetter(renderDayOfWeek(item.day_of_week))} | ${formatTimeRange(item.start_time, item.end_time)}`}</div>
                           ),
                         )}
                       </div>

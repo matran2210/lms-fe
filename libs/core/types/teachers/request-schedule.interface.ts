@@ -16,6 +16,13 @@ export interface StatusRequestScheduleParams {
   status: StatusRequestSchedule;
   request_ids?: string[];
 }
+export interface StatusMultipleRequestScheduleParams {
+  requests: {
+    request_id: string;
+    reason?: string;
+    status: StatusRequestSchedule;
+  }[];
+}
 
 export interface FilterRequestScheduleParams {
   fromDate?: string;
