@@ -1,7 +1,7 @@
 import { CloseIcon } from "@lms/assets";
 import { useTailwindBreakpoint } from "@lms/hooks";
-import { Calculator, ModalResizeableV2 } from "@lms/ui";
-import { useState } from "react";
+import { Calculator, ModalResizeableNew } from "@lms/ui";
+import { useState, useCallback } from "react";
 
 interface IProps {
   onClose: () => void;
@@ -20,8 +20,12 @@ const CalculatorModal = ({
     height: isShortScreen || isMobileCalc ? 500 : 600,
   });
 
+  const handleResizeStop = useCallback((size: { width: number; height: number }) => {
+    setModalSize(size);
+  }, []);
+
   return (
-    <ModalResizeableV2
+    <ModalResizeableNew
       bodyClassName="h-[calc(100%-6px)]"
       contentClassName="!overflow-hidden"
       onClose={onClose}
@@ -31,12 +35,10 @@ const CalculatorModal = ({
       width={modalSize.width}
       minWidth={256}
       minHeight={450}
-      maxWidth={500}
-      maxHeight={800}
+      maxWidth={330}
+      maxHeight={580}
       onModalFocus={onClick}
-      onResizeStopDone={(size) => {
-        setModalSize(size);
-      }}
+      onResizeStopDone={handleResizeStop}
       header={({ requestClose }) => (
         <div
           className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between rounded-t-md bg-divider px-5"
@@ -61,7 +63,7 @@ const CalculatorModal = ({
       )}
     >
       <Calculator isMobileCalc={isMobileCalc} isShortScreen={isShortScreen} />
-    </ModalResizeableV2>
+    </ModalResizeableNew>
   );
 };
 

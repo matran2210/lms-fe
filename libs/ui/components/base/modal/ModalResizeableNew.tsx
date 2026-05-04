@@ -1,3 +1,4 @@
+"use client"
 import { CloseIcon } from "@lms/assets";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
@@ -15,7 +16,7 @@ import useFocusTrap from "./useFocusTrap";
 
 // ── Constants ──────────────────────────────────────────────────────────
 const MODAL_OFFSET_PX = 20;
-const EDGE_SNAP_PX = 16;
+const EDGE_SNAP_PX = 0; // Disable edge snapping
 
 const RND_BASE_STYLE: React.CSSProperties = {
   background: "white",
@@ -49,7 +50,7 @@ export type ModalPosition =
   | "center right"
   | "center";
 
-export interface ModalResizeableV2Props {
+export interface ModalResizeableNewProps {
   // ── Content ──
   title?: string | ReactNode;
   children:
@@ -219,39 +220,28 @@ function useModalPosition({
     React.SetStateAction<{ x: number; y: number }>
   >;
 } {
-  const [modalPosition, setModalPosition] = useState(() =>
-    calculatePosition(position, width, height, modalIndex),
-  );
+  // Use ref to store initial position calculation
+  const initialPositionRef = useRef<{ x: number; y: number } | null>(null);
+  
+  if (initialPositionRef.current === null) {
+    initialPositionRef.current = calculatePosition(position, width, height, modalIndex);
+  }
 
-  // Store initial size to detect if we should recalculate position
-  const initialSizeRef = useRef({ width, height });
-  const hasUserMovedRef = useRef(false);
+  // Use the ref value as initial state
+  const [modalPosition, setModalPosition] = useState(initialPositionRef.current);
 
-  useEffect(() => {
-    const updatePosition = () => {
-      // Only recalculate if user hasn't manually moved/resized the modal
-      if (!hasUserMovedRef.current) {
-        setModalPosition(calculatePosition(position, width, height, modalIndex));
-      }
-    };
+  // No useEffect - position never auto-updates after initial render
+  // This prevents the modal from jumping to center on any interaction
 
-    updatePosition();
-    window.addEventListener("resize", updatePosition);
-    return () => window.removeEventListener("resize", updatePosition);
-  }, [position, modalIndex]); // Remove width and height from dependencies
-
-  // Mark that user has interacted with modal position/size
-  const setModalPositionWithFlag = useCallback((value: React.SetStateAction<{ x: number; y: number }>) => {
-    hasUserMovedRef.current = true;
-    setModalPosition(value);
-  }, []);
-
-  return { modalPosition, setModalPosition: setModalPositionWithFlag };
+  return { modalPosition, setModalPosition };
 }
+
+//   return { modalPosition, setModalPosition: setModalPositionWithFlag };
+// }
 
 // ── Component ──────────────────────────────────────────────────────────
 
-const ModalResizeableV2: React.FC<ModalResizeableV2Props> = ({
+const ModalResizeableNew: React.FC<ModalResizeableNewProps> = ({
   title = "Title",
   children,
   width = 600,
@@ -293,6 +283,7 @@ const ModalResizeableV2: React.FC<ModalResizeableV2Props> = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const getRenderedModalRect = useCallback(() => {
+    if (isDragging) return null;
     const rect = containerRef.current?.parentElement?.getBoundingClientRect();
 
     if (!rect) {
@@ -300,9 +291,10 @@ const ModalResizeableV2: React.FC<ModalResizeableV2Props> = ({
     }
 
     return rect;
-  }, []);
+  }, [isDragging]);
 
   const getRenderedModalSize = useCallback(() => {
+    if (isDragging) return null;
     const rect = getRenderedModalRect();
 
     if (!rect) {
@@ -313,7 +305,7 @@ const ModalResizeableV2: React.FC<ModalResizeableV2Props> = ({
       width: clampPositive(rect.width),
       height: clampPositive(rect.height),
     };
-  }, [getRenderedModalRect]);
+  }, [getRenderedModalRect, isDragging]);
 
   // Unique id for aria-labelledby — stable across renders
   const titleId = useRef(
@@ -328,11 +320,12 @@ const ModalResizeableV2: React.FC<ModalResizeableV2Props> = ({
   });
 
   useEffect(() => {
+    if (closing) return; // Don't update size when closing
     setSize({ width, height });
-  }, [width, height]);
+  }, [width, height, closing]);
 
   useEffect(() => {
-    if (!visible) {
+    if (!visible || isDragging || closing) {
       return;
     }
 
@@ -356,7 +349,7 @@ const ModalResizeableV2: React.FC<ModalResizeableV2Props> = ({
     });
 
     return () => window.cancelAnimationFrame(frameId);
-  }, [getRenderedModalSize, visible, width, height]);
+  }, [getRenderedModalSize, visible, width, height, isDragging, closing]);
 
   // ── Focus Trap ──
   // Disabled while closing so focus is released before the modal unmounts.
@@ -394,6 +387,8 @@ const ModalResizeableV2: React.FC<ModalResizeableV2Props> = ({
 
   const handleDragStop = useCallback(
     (_e: RndDragEvent, d: DraggableData) => {
+      if (closing) return; // Don't update position when closing
+      
       const renderedRect = getRenderedModalRect();
       const renderedSize = getRenderedModalSize();
       const modalWidth = renderedRect?.width ?? renderedSize?.width ?? size.width;
@@ -415,7 +410,7 @@ const ModalResizeableV2: React.FC<ModalResizeableV2Props> = ({
         });
       }
 
-      setModalPosition(clampPosition(modalX, modalY, modalWidth, modalHeight));
+      setModalPosition({ x: modalX, y: modalY }); // Don't clamp, allow modal at edges
       document.body.style.cursor = "";
       setIsDragging(false);
     },
@@ -425,6 +420,7 @@ const ModalResizeableV2: React.FC<ModalResizeableV2Props> = ({
       size.width,
       size.height,
       setModalPosition,
+      closing,
     ],
   );
 
@@ -442,6 +438,8 @@ const ModalResizeableV2: React.FC<ModalResizeableV2Props> = ({
       _delta: { height: number; width: number },
       _newPos: { x: number; y: number },
     ) => {
+      if (closing) return; // Don't update size/position when closing
+      
       const rect = ref.getBoundingClientRect();
       const newWidth = rect.width;
       const newHeight = rect.height;
@@ -453,12 +451,12 @@ const ModalResizeableV2: React.FC<ModalResizeableV2Props> = ({
         height: clampPositive(newHeight),
       });
 
-      setModalPosition(clampPosition(nextX, nextY, newWidth, newHeight));
+      setModalPosition({ x: nextX, y: nextY }); // Don't clamp, allow modal at edges
       onResizeStopDone?.({ width: newWidth, height: newHeight });
       document.body.style.cursor = "";
       setIsDragging(false);
     },
-    [onResizeStopDone, setModalPosition],
+    [onResizeStopDone, setModalPosition, closing],
   );
 
   // ── Exit animation complete → call onClose exactly once ──
@@ -521,6 +519,13 @@ const ModalResizeableV2: React.FC<ModalResizeableV2Props> = ({
       : children;
   };
 
+  // Track if this is the first render to control animations
+  const isInitialRenderRef = useRef(true);
+  
+  useEffect(() => {
+    isInitialRenderRef.current = false;
+  }, []);
+
   // ── Main render ──
   const content = (
     <div className="pointer-events-none fixed inset-0 z-[1000] overflow-hidden modal-overlay">
@@ -534,7 +539,7 @@ const ModalResizeableV2: React.FC<ModalResizeableV2Props> = ({
           <motion.div
             key="modal"
             variants={modalVariants}
-            initial="initial"
+            initial={isInitialRenderRef.current ? "initial" : false}
             animate="animate"
             exit="exit"
             transition={{
@@ -555,10 +560,12 @@ const ModalResizeableV2: React.FC<ModalResizeableV2Props> = ({
               minHeight={minHeight}
               maxWidth={maxWidth}
               maxHeight={maxHeight}
-              bounds="parent"
+              bounds="window"
               dragHandleClassName={dragHandleClass}
               className={rndClass}
               style={RND_BASE_STYLE}
+              disableDragging={false}
+              enableResizing={true}
               onMouseDown={onModalFocus}
               onTouchStart={onModalFocus}
             >
@@ -608,4 +615,4 @@ const ModalResizeableV2: React.FC<ModalResizeableV2Props> = ({
   return portalTarget ? createPortal(content, portalTarget) : content;
 };
 
-export default ModalResizeableV2;
+export default ModalResizeableNew;
