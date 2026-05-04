@@ -1,6 +1,7 @@
 import { useFeature } from "@lms/contexts";
 import {
   FilterRequestScheduleParams,
+  IScheduleRequestItem,
   StatusMultipleRequestScheduleParams,
   StatusRequestSchedule
 } from "@lms/core";
@@ -214,6 +215,7 @@ const ScheduleRequestTable = () => {
           setOpen={setOpenReasonModal}
           setOpenSuccessModal={setOpenSuccessModal}
           handleUpdateStatus={handleUpdateStatus}
+          selectedRequest={undefined}
         />
       )}
       {openSuccessModal && (
