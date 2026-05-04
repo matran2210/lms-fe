@@ -30,6 +30,7 @@ import React from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
+import { PageLink } from 'src/constants/routers'
 
 const commonHeaderClass = 'font-medium leading-6 text-gray py-2 pb-4 md:pb-6'
 
@@ -51,6 +52,7 @@ const ScoreDetail = ({
   yourScoreDetailRef,
   quizAttempt,
   numberSelectedResponse,
+  isTeacher
 }: ScoreDetailProps) => {
   const router = useRouter()
   const params = useParams()
@@ -71,22 +73,22 @@ const ScoreDetail = ({
     ...(isMobileView
       ? []
       : [
-          {
-            label: 'Type',
-            className: clsx(commonHeaderClass, 'min-w-[120px] text-center'),
-          },
-          {
-            label: 'Result',
-            className: clsx(commonHeaderClass, 'min-w-[200px] text-center'),
-          },
-          {
-            label: 'Time Spent',
-            className: clsx(
-              commonHeaderClass,
-              ' min-w-[100px] !pr-0 text-center',
-            ),
-          },
-        ]),
+        {
+          label: 'Type',
+          className: clsx(commonHeaderClass, 'min-w-[120px] text-center'),
+        },
+        {
+          label: 'Result',
+          className: clsx(commonHeaderClass, 'min-w-[200px] text-center'),
+        },
+        {
+          label: 'Time Spent',
+          className: clsx(
+            commonHeaderClass,
+            ' min-w-[100px] !pr-0 text-center',
+          ),
+        },
+      ]),
   ]
 
   const {
@@ -153,7 +155,7 @@ const ScoreDetail = ({
       return gradingStatus === GRADE_STATUS.FINISHED_GRADING
         ? ' text-info bg-info-50'
         : data?.question?.qType === QUESTION_TYPES.ESSAY &&
-            data?.active === COMMON_TEXT_ENUM.SUBMITED
+          data?.active === COMMON_TEXT_ENUM.SUBMITED
           ? ' text-info bg-info-50'
           : ' text-gray-400 bg-gray-100'
     }
@@ -175,7 +177,7 @@ const ScoreDetail = ({
   // const isACCAHighCodes =
   //   !F_LOW_CODES.includes(subjectCode as string) &&
   //   QuizAttemptChartType.ACCA === type
-
+  const explanationUrl = (id: string) => isTeacher ? `${PageLink.TEACHER_EXPLANATION}/${id}?title=My Course` : `/explanation/${id}?title=My Course`
   return (
     <div
       id="sapp-drawer-test-result-list"
@@ -235,7 +237,7 @@ const ScoreDetail = ({
                           headers={headers}
                           loading={isLoading}
                           isCheckedAll={true}
-                          onChange={() => {}}
+                          onChange={() => { }}
                           hasCheck={false}
                           classTable="w-full"
                         >
@@ -271,7 +273,7 @@ const ScoreDetail = ({
                                           onClick={() => {
                                             if (answer?.id) {
                                               router.push(
-                                                `/explanation/${answer?.id}?title=My Course`,
+                                                explanationUrl(answer?.id)
                                               )
                                             }
                                           }}
@@ -279,13 +281,13 @@ const ScoreDetail = ({
                                           {
                                             answer?.question
                                               ?.question_content &&
-                                              // truncateString(
-                                              DOMPurify.sanitize(
-                                                htmlToRaw(
-                                                  answer?.question
-                                                    ?.question_content,
-                                                ) ?? '--',
-                                              )
+                                            // truncateString(
+                                            DOMPurify.sanitize(
+                                              htmlToRaw(
+                                                answer?.question
+                                                  ?.question_content,
+                                              ) ?? '--',
+                                            )
                                             //   isMobileView ? 60 : 40,
                                             // )
                                           }
@@ -340,7 +342,7 @@ const ScoreDetail = ({
                                         ) : (
                                           <>
                                             {gradingStatus ===
-                                            GRADE_STATUS.FINISHED_GRADING
+                                              GRADE_STATUS.FINISHED_GRADING
                                               ? 'Graded'
                                               : answer?.active === 'SUBMITED'
                                                 ? 'Completed'

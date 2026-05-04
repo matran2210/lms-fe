@@ -31,6 +31,7 @@ interface IProps {
   cancelButtonClassName?: string
   submitButtonClassName?: string
   handleClickCancelButton?: () => void
+  isTextWhite?: boolean
 }
 
 const SappDrawer = ({
@@ -56,6 +57,7 @@ const SappDrawer = ({
   cancelButtonClassName,
   submitButtonClassName,
   handleClickCancelButton = () => undefined,
+  isTextWhite = true,
 }: IProps) => {
   const {dispatch} = useFeature()
 
@@ -111,7 +113,8 @@ const SappDrawer = ({
         <div className="flex flex-col justify-between">
           <div
             className={clsx(
-              'w-full relative flex min-h-[80px] items-center justify-between border-b bg-transparent px-8 py-2 text-2xl font-medium text-white',
+              'w-full relative flex min-h-[80px] items-center justify-between border-b bg-transparent px-8 py-2 text-2xl font-medium',
+              isTextWhite && 'text-white',
               headerClassName,
             )}
           >
