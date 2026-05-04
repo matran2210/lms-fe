@@ -10,10 +10,14 @@ import clsx from "clsx";
 interface IProps {
   isMobileCalc?: boolean;
   isShortScreen?: boolean;
+  width?: number;
+  height?: number;
 }
 const Calculator = ({
   isMobileCalc = false,
   isShortScreen = false,
+  width,
+  height,
 }: IProps) => {
   const [lastExpression, setLastExpression] = useState("");
   const [calc, setCalc] = useState({
@@ -72,14 +76,7 @@ const Calculator = ({
   const { total, next, operation } = calc;
 
   return (
-    <div
-      className={clsx("calc", {
-        "!w-64": isMobileCalc || isShortScreen,
-      })}
-      style={{
-        boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-      }}
-    >
+    <div className="calc">
       <Display
         total={total ?? ""}
         next={next ?? ""}

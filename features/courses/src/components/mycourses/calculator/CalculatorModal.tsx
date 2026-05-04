@@ -1,7 +1,7 @@
 import { CloseIcon } from "@lms/assets";
 import { useTailwindBreakpoint } from "@lms/hooks";
-import { Calculator, ModalResizeable } from "@lms/ui";
-import clsx from "clsx";
+import { Calculator, ModalResizeableV2 } from "@lms/ui";
+import { useState } from "react";
 
 interface IProps {
   onClose: () => void;
@@ -15,57 +15,53 @@ const CalculatorModal = ({
   onClick,
 }: IProps) => {
   const { isShortScreen } = useTailwindBreakpoint();
-  return (
-    <>
-      <ModalResizeable
-        bodyClassName="h-[calc(100%-6px)]"
-        onClose={onClose}
-        position="center"
-        isInBody
-        // draggableFull
-        height={isShortScreen || isMobileCalc ? 518 : 634}
-        width={isMobileCalc || isShortScreen ? 256 : 344}
-        className={clsx({
-          "!max-h-[634px] !w-[344px]": !isMobileCalc && !isShortScreen,
-          "!max-h-[518px] !w-64": isMobileCalc || isShortScreen,
-        })}
-        onModalFocus={onClick}
-      >
-        {(
-          { requestClose }, // Dùng requestClose để close modal đúng cách để giữ animation khi đóng
-        ) => (
-          <div className="flex h-full flex-col p-4">
-            <div className="absolute inset-0 flex h-full flex-col">
-              <div
-                className="modal-header modal-dragger cursor-move flex h-10 w-full items-center justify-between rounded-t-md bg-divider px-5 sticky top-0 z-10"
-                style={{
-                  boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-                }}
-              >
-                <div className="text-sm font-bold">Calculator</div>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    requestClose();
-                  }}
-                  onTouchEnd={(e) => {
-                    e.stopPropagation();
-                    requestClose();
-                  }}
-                >
-                  <CloseIcon />
-                </button>
-              </div>
+  const [modalSize, setModalSize] = useState({
+    width: isMobileCalc || isShortScreen ? 256 : 344,
+    height: isShortScreen || isMobileCalc ? 500 : 600,
+  });
 
-              <Calculator
-                isMobileCalc={isMobileCalc}
-                isShortScreen={isShortScreen}
-              />
-            </div>
-          </div>
-        )}
-      </ModalResizeable>
-    </>
+  return (
+    <ModalResizeableV2
+      bodyClassName="h-[calc(100%-6px)]"
+      contentClassName="!overflow-hidden"
+      onClose={onClose}
+      position="center"
+      isInBody
+      height={modalSize.height}
+      width={modalSize.width}
+      minWidth={256}
+      minHeight={450}
+      maxWidth={500}
+      maxHeight={800}
+      onModalFocus={onClick}
+      onResizeStopDone={(size) => {
+        setModalSize(size);
+      }}
+      header={({ requestClose }) => (
+        <div
+          className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between rounded-t-md bg-divider px-5"
+          style={{
+            boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+          }}
+        >
+          <div className="text-sm font-bold">Calculator</div>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              requestClose();
+            }}
+            onTouchEnd={(e) => {
+              e.stopPropagation();
+              requestClose();
+            }}
+          >
+            <CloseIcon />
+          </button>
+        </div>
+      )}
+    >
+      <Calculator isMobileCalc={isMobileCalc} isShortScreen={isShortScreen} />
+    </ModalResizeableV2>
   );
 };
 
