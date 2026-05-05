@@ -1,29 +1,34 @@
 'use client'
 import { useCourseContext, useFeature, UserType } from '@lms/contexts'
-import { ANIMATION } from '@lms/core'
+import { ANIMATION, TitleSidebar } from '@lms/core'
 import {
   CourseActivationList,
   FilterCourseActivation,
 } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { Layout, SappLoadingGlobal } from '@lms/ui'
+import { HeaderMobile, Layout, SappLoadingGlobal } from '@lms/ui'
 import Aos from 'aos'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { CoursesActivationAPI } from 'src/api/course-activation'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 
 const CourseActivation = () => {
-  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const { isAlwaysShowSidebar, isTabletView, isMobileView } =
+    useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
-  const { query } = useFeature()
+  const { query, router, pageLink } = useFeature()
 
   /**
    * @description handle open and close sidebar
    */
+
+  const handleBack = () => {
+    router.push(pageLink.COURSES)
+  }
 
   const handleCloseSidebar = () => {
     setShowSidebar(false)
@@ -88,9 +93,11 @@ const CourseActivation = () => {
           )}
           data-aos={ANIMATION.DATA_AOS}
         >
-          <h1 className="text-lg font-semibold text-gray-800 md:text-xl lg:text-2xl">
-            Course Activation
-          </h1>
+          <HeaderMobile
+            title={TitleSidebar.COURSE_ACTIVATION}
+            showIcon={isTabletView || isMobileView}
+            onBack={handleBack}
+          />
           <div className="relative">
             <FilterCourseActivation totalResult={totalRecords} />
           </div>

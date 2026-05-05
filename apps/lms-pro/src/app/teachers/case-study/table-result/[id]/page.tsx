@@ -11,7 +11,7 @@ import {
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 import { CoursesAPI } from 'src/api/courses'
 import { buildQueryString, roundNumber } from '@lms/utils'
 
@@ -59,13 +59,13 @@ const TableCaseStudyResultTeacher = () => {
         page_size,
       )
       return res
-    } catch (error) {}
+    } catch (error) { }
   }
   const fetchTopicAttemptDetail = async (id: string) => {
     try {
       const res = await CoursesAPI.getTopicAttemptsDetail(id)
       return res
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const handleScroll = () => {
@@ -175,13 +175,12 @@ const TableCaseStudyResultTeacher = () => {
             {topicAttemptDetail?.quiz?.is_limited ? (
               topicAttemptDetail?.quiz?.limit_count > 1 ? (
                 topicAttemptDetail?.quiz?.limit_count >
-                topicAttemptDetail?.retake_times ? (
+                  topicAttemptDetail?.retake_times ? (
                   <ButtonPrimary
-                    title={`Retake ${topicAttemptDetail?.retake_times}${
-                      topicAttemptDetail?.quiz?.is_limited
+                    title={`Retake ${topicAttemptDetail?.retake_times}${topicAttemptDetail?.quiz?.is_limited
                         ? `/${topicAttemptDetail?.quiz?.limit_count}`
                         : '/Unlimited'
-                    }`}
+                      }`}
                     size="medium"
                     className={'shrink-0 !font-medium'}
                     onClick={() =>
@@ -197,11 +196,10 @@ const TableCaseStudyResultTeacher = () => {
                 ) : (
                   <ButtonSecondary
                     disabled={true}
-                    title={`Retake ${topicAttemptDetail?.retake_times}${
-                      topicAttemptDetail?.quiz?.is_limited
+                    title={`Retake ${topicAttemptDetail?.retake_times}${topicAttemptDetail?.quiz?.is_limited
                         ? `/${topicAttemptDetail?.quiz?.limit_count}`
                         : '/Unlimited'
-                    }`}
+                      }`}
                     size="medium"
                     className={'shrink-0 !font-medium'}
                   />
@@ -211,11 +209,10 @@ const TableCaseStudyResultTeacher = () => {
               )
             ) : (
               <ButtonPrimary
-                title={`Retake ${topicAttemptDetail?.retake_times}${
-                  topicAttemptDetail?.quiz?.is_limited
+                title={`Retake ${topicAttemptDetail?.retake_times}${topicAttemptDetail?.quiz?.is_limited
                     ? `/${topicAttemptDetail?.quiz?.limit_count}`
                     : '/Unlimited'
-                }`}
+                  }`}
                 size="medium"
                 onClick={() =>
                   handleRetake(
@@ -236,9 +233,9 @@ const TableCaseStudyResultTeacher = () => {
               headers={headers}
               loading={true}
               isCheckedAll={true}
-              onChange={() => {}}
+              onChange={() => { }}
               hasCheck={false}
-              // data={scoreDetail?.answers}
+            // data={scoreDetail?.answers}
             >
               <>
                 {scoreDetail?.answers?.map((e: any, index: number) => {
@@ -270,11 +267,10 @@ const TableCaseStudyResultTeacher = () => {
                       </td>
                       <td
                         className={`m-6 pr-1 text-start
-                      ${
-                        e?.is_correct || e?.active === 'SUBMITED'
-                          ? ' text-state-success'
-                          : ' text-state-error'
-                      }
+                      ${e?.is_correct || e?.active === 'SUBMITED'
+                            ? ' text-state-success'
+                            : ' text-state-error'
+                          }
                     `}
                       >
                         {e?.question?.qType !== 'ESSAY' ? (

@@ -9,7 +9,8 @@ import {
   QUESTION_TYPES,
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
-import { FullScreenLayout, PDFViewer, Tooltip } from '@lms/ui'
+import { FullScreenLayout, PDFViewer } from '@lms/ui'
+import { Tooltip } from 'antd'
 import { handleMultipleCorrectAnswer } from '@lms/utils'
 import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
@@ -17,7 +18,14 @@ import { useEffect, useState } from 'react'
 import { CoursesAPI } from 'src/api/courses'
 import { TestServiceAPI } from 'src/api/test-api'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
+import {
+  DrawerListQuestion,
+  ListQuestion,
+  ModalListQuestion,
+} from '@lms/feature-courses'
+import { useQuery } from 'react-query'
+import { useTailwindBreakpoint } from '@lms/hooks'
 
 const Explanation = () => {
   const router = useRouter()
@@ -30,6 +38,12 @@ const Explanation = () => {
   const [activeQuestion, setActiveQuestion] = useState<any>()
   const [attempt, setAttempt] = useState<IAtempt>()
   const [loading, setLoading] = useState<boolean>(false)
+  const { isMobileView } = useTailwindBreakpoint()
+  const [openTooltip, setOpenTooltip] = useState<boolean>(false)
+  const [isOpenModalListQuestion, setIsOpenModalListQuestion] =
+    useState<boolean>(false)
+  const [isOpenDrawerListQuestion, setIsOpenDrawerListQuestion] =
+    useState<boolean>(false)
   const previousUrl = queryParams?.tabId
     ? localStorage.getItem('previousUrl') + `?tabId=${queryParams?.tabId}`
     : localStorage.getItem('previousUrl')
@@ -118,9 +132,17 @@ const Explanation = () => {
     } catch (error) {
     } finally {
       setLoading(false)
+      setIsOpenModalListQuestion(false)
     }
   }
-
+  const quizId = attempt?.id
+  const { data: questions, isLoading: loadingAttempt } = useQuery({
+    queryKey: ['list-question', quizId],
+    queryFn: () => CoursesAPI.getQuizAttempts(quizId!),
+    select: (data) => data.data,
+    enabled: !!quizId,
+    retry: false,
+  })
   useEffect(() => {
     if (id) {
       getActiveQuestion(id as string)
@@ -187,12 +209,35 @@ const Explanation = () => {
         <div className="absolute right-8 top-6 z-10 flex cursor-pointer items-center justify-center">
           <Tooltip
             placement="left"
+            trigger="click"
+            open={openTooltip}
+            onOpenChange={setOpenTooltip}
             title={
-              <span className="text-sm" onClick={() => {}}>
-                Show comment
-              </span>
+              <div className="flex flex-col gap-2">
+                <span
+                  className="text-sm md:!hidden"
+                  onClick={() => {
+                    setOpenTooltip(false)
+                  }}
+                >
+                  Show comment
+                </span>
+                <span
+                  className="text-sm"
+                  onClick={() => {
+                    setOpenTooltip(false)
+                    if (isMobileView) {
+                      setIsOpenDrawerListQuestion(true)
+                    } else {
+                      setIsOpenModalListQuestion(true)
+                    }
+                  }}
+                >
+                  Show list questions
+                </span>
+              </div>
             }
-            className="block md:!hidden"
+            className="block xl:hidden"
           >
             <button className="text-icon">
               <MenuDotsIcon />
@@ -202,6 +247,12 @@ const Explanation = () => {
         {!loading && activeQuestion && (
           <ExplanationPackageV2
             getActiveQuestion={getActiveQuestion}
+            RenderAllQuestions={
+              <ListQuestion
+                questions={questions}
+                getActiveQuestion={getActiveQuestion}
+              />
+            }
             activeQuestion={{
               ...activeQuestion,
               solution: activeQuestion?.solution,
@@ -228,6 +279,18 @@ const Explanation = () => {
             }}
           />
         )}
+        <ModalListQuestion
+          questions={questions}
+          getActiveQuestion={getActiveQuestion}
+          isOpen={isOpenModalListQuestion}
+          setIsOpen={setIsOpenModalListQuestion}
+        />
+        <DrawerListQuestion
+          questions={questions}
+          getActiveQuestion={getActiveQuestion}
+          isOpen={isOpenDrawerListQuestion}
+          setIsOpen={setIsOpenDrawerListQuestion}
+        />
       </FullScreenLayout>
     </SappLoadingGlobal>
   )

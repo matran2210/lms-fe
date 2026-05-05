@@ -181,5 +181,12 @@ export interface VideoStateClicked {
     is_click: boolean;
   }[];
 }
-
+export interface MultipleQuestionsData {
+  quizAttempt?: {
+    grading_status?: string
+    status?: string
+  }
+  selectedResponseAnswers?: IAnswer[]
+  constructedResponseAnswers?: IAnswer[]
+}
 export * from "./StatusActionCell";

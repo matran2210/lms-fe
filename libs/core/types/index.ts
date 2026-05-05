@@ -171,6 +171,7 @@ export type MenuItem = {
   id: string;
   depth: number;
   subItems?: MenuItem[];
+  showMenu?: boolean;
 };
 
 export type MenuOption = {
@@ -179,6 +180,7 @@ export type MenuOption = {
   url: string;
   type: string;
   subItems?: MenuOption[];
+  showMenu?: boolean;
 };
 
 export type GuideOffset = {

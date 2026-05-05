@@ -152,21 +152,21 @@ const MultipleQuestion = ({
   const annotationsConstructedQuestions =
     questions?.quizAttempt?.grading_status === GRADE_STATUS.FINISHED_GRADING
       ? [
-          {
-            text: 'Graded',
-            color: 'bg-info',
-          },
-        ]
+        {
+          text: 'Graded',
+          color: 'bg-info',
+        },
+      ]
       : [
-          {
-            text: 'Completed',
-            color: 'bg-info',
-          },
-          {
-            text: 'Not Completed',
-            color: 'bg-warning',
-          },
-        ]
+        {
+          text: 'Completed',
+          color: 'bg-info',
+        },
+        {
+          text: 'Not Completed',
+          color: 'bg-warning',
+        },
+      ]
 
   const renderAnnotations = (
     annotationsList: {
@@ -197,18 +197,24 @@ const MultipleQuestion = ({
 
   return (
     <div className="relative">
-      <div
-        className={`${className} fixed bottom-0 right-0 flex h-fit w-full flex-col items-start gap-y-5 overflow-auto rounded-xl rounded-t-[20px] bg-white p-4 shadow-sidebar-tablet md:px-8 
-        lg:rounded-2xl xl:sticky xl:top-[104px] xl:!h-fit xl:p-6 xl:pl-7 xl:shadow-small`}
-        ref={multipleQuestionRef}
-      >
+      <div className="fixed bottom-0 right-0 w-full xl:sticky xl:top-[104px]">
         <div
-          className={`${
-            showMore
+          className={clsx(
+            `${className} flex w-full flex-col items-start gap-y-5 rounded-xl rounded-t-[20px] bg-white p-4 shadow-sidebar-tablet md:px-8 lg:rounded-2xl xl:p-6 xl:pl-7 xl:shadow-small`,
+          )}
+        >
+          <div
+            ref={multipleQuestionRef}
+            className={clsx('w-full overflow-auto', {
+              'hidden-scrollbar max-h-[calc(100vh-384px)]': isLargeDesktopView,
+            })}
+          >
+        <div
+          className={`${showMore
               ? 'visible overflow-y-auto opacity-100 xl:mb-0'
               : 'invisible hidden h-0 opacity-0 xl:visible xl:block xl:h-auto xl:opacity-100'
-          }
-        xl:max-h-auto flex w-full flex-col items-start gap-10 duration-300 xl:overflow-visible`}
+            }
+        xl:max-h-auto flex w-full flex-col items-start gap-10 duration-300`}
         >
           <div className="flex w-full flex-col items-start gap-8">
             {renderBoxes(
@@ -218,18 +224,18 @@ const MultipleQuestion = ({
               <>
                 {Number(questions?.constructedResponseAnswers?.length || 0) >
                   0 && (
-                  <div
-                    className=" cursor-pointer text-sm font-medium underline xl:hidden"
-                    onClick={() => {
-                      setShowMore(!showMore)
-                      if (multipleQuestionRef?.current) {
-                        multipleQuestionRef.current.style.height = 'fit-content'
-                      }
-                    }}
-                  >
-                    {showMore ? 'Show less' : 'Show more'}
-                  </div>
-                )}
+                    <div
+                      className=" cursor-pointer text-sm font-medium underline xl:hidden"
+                      onClick={() => {
+                        setShowMore(!showMore)
+                        if (multipleQuestionRef?.current) {
+                          multipleQuestionRef.current.style.height = 'fit-content'
+                        }
+                      }}
+                    >
+                      {showMore ? 'Show less' : 'Show more'}
+                    </div>
+                  )}
               </>,
               showMore,
             )}
@@ -264,9 +270,8 @@ const MultipleQuestion = ({
         </div>
         <div className="bottom-0 mt-auto w-full bg-white xl:hidden">
           <div
-            className={`flex ${showMore ? 'flex-row' : 'flex-col'} items-end justify-between gap-2 md:flex-row xl:items-center ${
-              showMore ? 'items-center' : 'pt-0'
-            }`}
+            className={`flex ${showMore ? 'flex-row' : 'flex-col'} items-end justify-between gap-2 md:flex-row xl:items-center ${showMore ? 'items-center' : 'pt-0'
+              }`}
           >
             <div className="flex w-full flex-grow flex-col gap-3 md:w-9/12 lg:w-11/12 xl:flex-row">
               <div
@@ -275,9 +280,8 @@ const MultipleQuestion = ({
                 onMouseMove={handleMouseMove}
                 onMouseUp={() => setIsDragging(false)}
                 onMouseLeave={() => setIsDragging(false)}
-                className={`${
-                  !showMore ? 'block' : 'hidden'
-                } !max-h-[1040px] w-full duration-300 xl:hidden`}
+                className={`${!showMore ? 'block' : 'hidden'
+                  } !max-h-[1040px] w-full duration-300 xl:hidden`}
               >
                 {renderBoxes(
                   'Multiple Choice Questions',
@@ -287,19 +291,19 @@ const MultipleQuestion = ({
                     {Number(
                       questions?.constructedResponseAnswers?.length || 0,
                     ) > 0 && (
-                      <div
-                        className="block cursor-pointer text-sm font-medium underline xl:hidden"
-                        onClick={() => {
-                          setShowMore(!showMore)
-                          if (multipleQuestionRef?.current) {
-                            multipleQuestionRef.current.style.height =
-                              'fit-content'
-                          }
-                        }}
-                      >
-                        Show more
-                      </div>
-                    )}
+                        <div
+                          className="block cursor-pointer text-sm font-medium underline xl:hidden"
+                          onClick={() => {
+                            setShowMore(!showMore)
+                            if (multipleQuestionRef?.current) {
+                              multipleQuestionRef.current.style.height =
+                                'fit-content'
+                            }
+                          }}
+                        >
+                          Show more
+                        </div>
+                      )}
                   </div>,
                   showMore,
                 )}
@@ -323,7 +327,9 @@ const MultipleQuestion = ({
               </div>
             </div>
           </div>
+          </div>
         </div>
+      </div>
       </div>
       <Recommendation
         classId={questions?.class_id ?? ''}

@@ -25,8 +25,7 @@ import {
   TextPreview,
   Tooltip
 } from '@lms/ui'
-import { buildQueryString } from '@lms/utils'
-import { handleDocUploadFromBlob } from '@utils/helpers'
+import { buildQueryString, handleDocUploadFromBlob } from '@lms/utils'
 import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import clsx from 'clsx'
 import CryptoJS from 'crypto-js'
@@ -98,7 +97,7 @@ const ClassResourceTable = ({
           setLoadingEditor(false)
         }
       }
-    } catch (error) {}
+    } catch (error) { }
   }
   const canDownload = (record: IClassResource, isTeacher: boolean) => {
     const perms = record?.class_resource_permissions

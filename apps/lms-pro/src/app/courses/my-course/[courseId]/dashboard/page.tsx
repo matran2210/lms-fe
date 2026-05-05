@@ -24,7 +24,7 @@ import { DashboardAPI } from 'src/api/dashboard'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
+import { withAuthorization } from '@lms/hoc'
 import { extractNotActivatedData } from '@lms/utils'
 import {
   selectPopupActivateCourse,

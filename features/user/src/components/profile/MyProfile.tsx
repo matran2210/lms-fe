@@ -64,7 +64,7 @@ const MyProfile = ({
   appType,
 }: IProps) => {
   const { isMobileView } = useTailwindBreakpoint();
-  const { userApi, authManager, dispatch, useAppSelector } = useFeature();
+  const { userContextApi, authManager, dispatch, useAppSelector } = useFeature();
   const isLMSPRO = appType === AppType.LMS_PRO;
   const [openEditProfile, setOpenEditProfile] = useState(false);
   const { user, loading, loadingEditName } = useAppSelector?.(userReducer) || {};
@@ -124,26 +124,26 @@ const MyProfile = ({
       if (!avatar && user?.detail?.avatar) {
         // Gọi hành động thunk updateUser để cập nhật tên và avatar của người dùng
         await dispatch?.(
-          updateUser({ full_name, avatar: null, api: userApi }),
+          updateUser({ full_name, avatar: null, api: userContextApi }),
         ).unwrap();
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
-        dispatch?.(getMe(userApi));
+        dispatch?.(getMe(userContextApi));
         // Đặt trạng thái isEdit thành false
         setIsEdit(false);
         setOpenEditProfile(false);
         return;
       }
       // Gọi hành động thunk updateUser để cập nhật tên của người dùng
-      await dispatch?.(updateUser({ api: userApi, full_name })).unwrap();
+      await dispatch?.(updateUser({ api: userContextApi, full_name })).unwrap();
       // Nếu có avatar
       if (avatar) {
         // Gọi hành động thunk updateUserAvatar để cập nhật avatar của người dùng
-        await dispatch?.(updateUserAvatar({ api: userApi, avatar })).unwrap();
+        await dispatch?.(updateUserAvatar({ api: userContextApi, avatar })).unwrap();
         // Đặt lại giá trị của avatar
         handleSetAvatar(undefined);
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
       }
-      dispatch?.(getMe(userApi));
+      dispatch?.(getMe(userContextApi));
       // Đặt trạng thái isEdit thành false
       setIsEdit(false);
       setOpenEditProfile(false);

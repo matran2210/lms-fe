@@ -12,7 +12,7 @@ interface IProps {
 }
 
 export const RouteGuard = ({ children }: IProps) => {
-  const { userApi, dispatch, useAppSelector, pathname} = useFeature();
+  const { userContextApi, dispatch, useAppSelector, pathname } = useFeature();
 
   const [authorized, setAuthorized] = useState(false);
   const userSlice = useAppSelector?.(userReducer);
@@ -44,8 +44,8 @@ export const RouteGuard = ({ children }: IProps) => {
       return;
     }
 
-      await dispatch?.(getMe(userApi)).unwrap();
-      setAuthorized(true);
+    await dispatch?.(getMe(userContextApi)).unwrap();
+    setAuthorized(true);
 
   };
 
