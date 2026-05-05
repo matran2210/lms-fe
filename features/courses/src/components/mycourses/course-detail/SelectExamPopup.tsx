@@ -183,7 +183,7 @@ const onSubmit: SubmitHandler<SelectExamFormData> = (data) => {
               <div className="relative flex-1 flex justify-start">
                 <UploadSingleFile
                   accept=".png, .jpg, .jpeg"
-                  fileClassName="line-clamp-1 text-sm md:text-base"
+                  fileClassName="line-clamp-1 break-all text-sm md:text-base"
                   fileList={(field.value || []) as RcFile[]}
                   {...getUploadProps(field.onChange)}
                 />
