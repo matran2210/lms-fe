@@ -4,3 +4,6 @@ export { default as ModalRecomment } from "./ModalRecomment";
 export { default as Recommendation } from "./Recommendation";
 export { default as TabSlide } from "./TabSlide";
 export * from "./modal/index";
+export { default as ListQuestion } from "./ListQuestion";
+export { default as ModalListQuestion } from "./ModalListQuestion";
+export { default as DrawerListQuestion } from "./DrawerListQuestion";
