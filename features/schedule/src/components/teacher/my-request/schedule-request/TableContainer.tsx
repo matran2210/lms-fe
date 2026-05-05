@@ -1,6 +1,7 @@
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
+  PROGRAM,
   StatusRequestSchedule,
   TeacherKey,
 } from "@lms/core";
@@ -201,7 +202,7 @@ export default function TableContainer({
     {
       title: 'Subject',
       render: (_, record: IScheduleRequestItem) => {
-        const isACCAProgram = record?.subject?.course_category?.name === 'ACCA'
+        const isACCAProgram = [PROGRAM.ACCA, PROGRAM.CD].includes(record?.subject?.course_category?.name as PROGRAM)
         const subjectName = record?.subject?.name
         return (
           <TableCell
