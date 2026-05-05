@@ -10,6 +10,7 @@ import { GetProp, message } from "antd";
 import Upload, { RcFile, UploadProps } from "antd/es/upload";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import clsx from "clsx";
 
 interface ISelectExamPopup {
   courseData: any;
@@ -169,7 +170,9 @@ const onSubmit: SubmitHandler<SelectExamFormData> = (data) => {
           name="examination_subject_id"
           onMenuScrollToBottom={hasNextPage && fetchNextPage}
         />
-        <div className="mt-6 flex flex-col gap-2 md:flex-row md:items-center md:gap-6">
+        <div className={clsx("mt-6 flex flex-col gap-2 md:flex-row md:items-center md:gap-6", {
+          hidden: selectedExam === "NOT_DECIDED" || !selectedExam
+        })}>
           <div className="shrink-0 whitespace-nowrap text-sm font-semibold leading-normal text-gray-800 md:text-base">
             Registration Evidence:
           </div>
