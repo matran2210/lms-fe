@@ -180,7 +180,7 @@ const Explanation = () => {
                 explanation: isUserViewAnswersDetailAndEssay
                   ? null
                   : req.explanation,
-              }),
+              })
             ),
             ...(isUserViewAnswersDetailAndEssay && {
               grading_method: GRADING_METHOD.MANUAL,
@@ -189,15 +189,13 @@ const Explanation = () => {
           document_id={''}
           handleDownload={handleDownload}
           renderPdf={({
-            url,
-            fileName,
+            url, fileName,
           }: {
             url: string
             fileName?: string | undefined
           }) => {
             return <PDFViewer file={url} />
-          }}
-        />
+          }} RenderAllQuestions={undefined} />
       </FullScreenLayout>
     </SappLoadingGlobal>
   )
