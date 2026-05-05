@@ -8,11 +8,13 @@ import { RcFile } from "antd/es/upload";
 interface IProps extends UploadProps {
   title?: string;
   fileList?: RcFile[];
+  fileClassName?: string
 }
 
 const UploadSingleFile = ({
   title = "Choose file upload",
   fileList = [],
+  fileClassName,
   ...props
 }: IProps) => {
   const uploadRef = useRef<HTMLDivElement>(null);
@@ -55,7 +57,8 @@ const UploadSingleFile = ({
             }
           }}
         >
-          {fileList?.[0]?.name}
+          <span className={fileClassName}>{fileList?.[0]?.name}</span>
+         
           <div className="ml-2 opacity-0 transition-opacity duration-100 group-hover:opacity-100">
             <UploadIcon />
           </div>
