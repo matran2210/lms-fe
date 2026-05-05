@@ -97,6 +97,7 @@ const TestResultPage = ({
                   ),
                 )}
                 <ScoreDetail
+                  isTeacher={isTeacher}
                   className={'relative'}
                   yourScoreDetailRef={yourScoreDetailRef}
                   type={type}
@@ -112,6 +113,7 @@ const TestResultPage = ({
                 score={score}
                 globalAverage={globalAverageNumber}
                 multipleQuestionRef={multipleQuestionRef}
+                isTeacher={isTeacher}
               />
             </div>
           )
@@ -137,6 +139,7 @@ const TestResultPage = ({
                   ),
                 )}
                 <ScoreDetail
+                  isTeacher={isTeacher}
                   className={''}
                   yourScoreDetailRef={yourScoreDetailRef}
                   type={type}
@@ -151,6 +154,7 @@ const TestResultPage = ({
                 score={score}
                 globalAverage={globalAverageNumber}
                 multipleQuestionRef={multipleQuestionRef}
+                isTeacher={isTeacher}
               />
             </div>
           )
@@ -167,6 +171,7 @@ const TestResultPage = ({
                 <Recommendation data={item} key={index} />
               ))}
               <ScoreDetail
+                isTeacher={isTeacher}
                 yourScoreDetailRef={yourScoreDetailRef}
                 type={type}
                 gradingStatus={questions?.quizAttempt?.grading_status}
@@ -180,6 +185,7 @@ const TestResultPage = ({
               score={score}
               globalAverage={globalAverageNumber}
               multipleQuestionRef={multipleQuestionRef}
+              isTeacher={isTeacher}
             />
           </div>
         )
@@ -219,6 +225,7 @@ const TestResultPage = ({
               score={score}
               globalAverage={globalAverageNumber}
               multipleQuestionRef={multipleQuestionRef}
+              isTeacher={isTeacher}
             />
           </div>
         )
@@ -243,6 +250,7 @@ const TestResultPage = ({
               globalAverage={globalAverageNumber}
               multipleQuestionRef={multipleQuestionRef}
               className="xl:!top-[124px]"
+              isTeacher={isTeacher}
             />
           </div>
         )

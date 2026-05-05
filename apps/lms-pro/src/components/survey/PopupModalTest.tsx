@@ -79,8 +79,6 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
       100
     ).toFixed(1),
   )
-  const keyLS = 'remind-survey-ld'
-  const [isRemindSurveyLD, setIsRemindSurveyLD] = useState(false)
 
   const [open, setOpen] = useState<SurveyState>({
     middtermCourse: false,
@@ -88,15 +86,15 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     completeCourse: false,
     ldCourse: false,
   })
-  const [surveyId, setSurveyId] = useState<string>()
+  const surveyId = useRef<string>()
   const isLDProgram = program === ECourseProgram.LD
   const listSurveySatisfy = useMemo(() => {
     return (listSurvey || []).filter((item) => {
-      if (item.setting.show_by_progress) {
+      if (item.setting.show_by_progress !== null) {
         // nếu là show_by_progress thì so sánh với phần trăm hoàn thành
         const progress = Number(item.setting.show_by_progress)
-        return progress && percentComplete >= progress
-      } else if (item.setting.show_after_start_date) {
+        return percentComplete >= progress
+      } else if (item.setting.show_after_start_date !== null) {
         // nếu là show_after_start_date thì so sánh với số ngày sau khi bắt đầu
         const afterStartDate = Number(item.setting.show_after_start_date)
         const startDate = data?.class?.started_at
@@ -114,6 +112,39 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
       return false
     })
   }, [listSurvey, percentComplete, data?.class?.started_at])
+
+  const isSameSettingType = (arr: ISurveyCustom[]) => { // Kiểm tra xem các survey có cùng loại điều kiện hiển thị (chỉ cùng dùng “Show by progress (%)” hoặc chỉ cùng dùng “Show after start date (days)”)
+    const types = arr.map((i) =>
+      i.setting.show_by_progress != null
+        ? 'progress'
+        : i.setting.show_after_start_date != null
+          ? 'date'
+          : 'none',
+    )
+
+    return new Set(types).size === 1
+  }
+
+  const getSortKey = (arr: ISurveyCustom[]) => {
+    if (!arr.length) return null
+
+    if (arr[0].setting.show_by_progress != null) return 'show_by_progress'
+    if (arr[0].setting.show_after_start_date != null)
+      return 'show_after_start_date'
+
+    return null
+  }
+
+  const sortKey = isSameSettingType(listSurveySatisfy)
+    ? getSortKey(listSurveySatisfy)
+    : null
+
+  const listSurveySort = sortKey  // Sắp xếp các survey theo thứ tự hiển thị tăng dần
+    ? [...listSurveySatisfy].sort(
+        (a, b) =>
+          (a.setting[sortKey] ?? Infinity) - (b.setting[sortKey] ?? Infinity),
+      )
+    : listSurveySatisfy
 
   const progress = data?.survey_attributes?.progress_percent
 
@@ -134,9 +165,9 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
   const handleConfirmSurvey = async () => {
     try {
       handleClose
-      if (!courseId || !surveyId) return
+      if (!courseId || !surveyId.current) return
       const res = await CoursesAPI.confirmSurvey(courseId as string, {
-        survey_id: surveyId,
+        survey_id: surveyId.current,
       })
       if (res?.success) refetchSurvey()
     } catch (error) {
@@ -165,7 +196,8 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
         ]
     if (isLDProgram) {
       surveyUrl =
-        listSurveySatisfy?.find((item) => item.id === surveyId)?.url || ''
+        listSurveySatisfy?.find((item) => item.id === surveyId.current)?.url ||
+        ''
       handleConfirmSurvey()
     } else {
       setOpen({
@@ -201,16 +233,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
   const handleClose = () => {
     if (isLDProgram) {
       if (!courseId) return
-      const current = localStorage.getItem(keyLS)
-
-      const list = current ? current.split(',') : []
-
-      // tránh bị duplicate
-      if (!list.includes(courseId as string)) {
-        list.push(courseId as string)
-        localStorage.setItem(keyLS, list.join(','))
-        handleTest()
-      }
+      handleTest()
     } else {
       handleRemindSurvey()
       setOpen({
@@ -321,8 +344,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
 
   useEffect(() => {
     if (!isLDProgram) return
-    const shouldOpenLD =
-      isLDProgram && listSurveySatisfy?.length > 0 && !isRemindSurveyLD
+    const shouldOpenLD = isLDProgram && listSurveySatisfy?.length > 0
 
     setOpen({
       middtermCourse: false,
@@ -330,7 +352,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
       completeCourse: false,
       ldCourse: shouldOpenLD,
     })
-  }, [listSurveySatisfy, isLDProgram, isRemindSurveyLD])
+  }, [listSurveySatisfy, isLDProgram])
 
   const surveyType = getSurveyType()
 
@@ -339,17 +361,6 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     open.finalCourse ||
     open.completeCourse ||
     open.ldCourse
-
-  useEffect(() => {
-    if (!courseId) return
-    const value =
-      localStorage
-        .getItem(keyLS)
-        ?.split(',')
-        .includes(courseId as string) ?? false
-
-    setIsRemindSurveyLD(value)
-  }, [courseId])
 
   const ContentModalTest = () => {
     return (
@@ -367,8 +378,10 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
         </span>
         {isLDProgram && (
           <ListSurveyLD
-            listSurvey={listSurveySatisfy}
-            onSurveyChange={setSurveyId}
+            listSurvey={listSurveySort}
+            onSurveyChange={(id) => {
+              surveyId.current = id
+            }}
           />
         )}
       </div>

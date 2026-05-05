@@ -37,9 +37,8 @@ const ModalActiveCourseActivationFailed = ({
       handleClose={onCancel}
       width={560}
       open={open}
-      cancelButtonCaption="Quit"
-      okButtonCaption="Service Request Form"
-      showCancelButton={false}
+      cancelButtonCaption="Cancel"
+      showOkButton={false}
       handleCancel={onCancel}
       onOk={() => window.location.href = REDIRECT_URL}
       fullWidthBtn

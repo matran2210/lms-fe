@@ -42,6 +42,7 @@ import {
   APIDetailScheduleRequestResponse,
   APIListScheduleRequestResponse,
   RequestScheduleParams,
+  StatusMultipleRequestScheduleParams,
   StatusRequestScheduleParams,
 } from "./teachers/request-schedule.interface";
 import {
@@ -504,6 +505,10 @@ export interface ITeacherAPI {
   updateStatusRequestSchedule(
     id: string,
     payload: StatusRequestScheduleParams,
+  ): Promise<void>;
+
+  updateMultipleStatusRequestSchedules(
+    payload: StatusMultipleRequestScheduleParams,
   ): Promise<void>;
 }
 

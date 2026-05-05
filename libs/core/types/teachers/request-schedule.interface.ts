@@ -14,6 +14,14 @@ export interface RequestScheduleParams {
 export interface StatusRequestScheduleParams {
   reason?: string;
   status: StatusRequestSchedule;
+  request_ids?: string[];
+}
+export interface StatusMultipleRequestScheduleParams {
+  requests: {
+    request_id: string;
+    reason?: string;
+    status: StatusRequestSchedule;
+  }[];
 }
 
 export interface FilterRequestScheduleParams {
@@ -47,6 +55,7 @@ export interface IScheduleRequestItem {
   schedule_time: ScheduleTime;
   staff_detail: StaffDetail;
   course_section: IScheduleCourseSection;
+  request_ids?: string[];
 }
 
 export interface ClassInfo {
