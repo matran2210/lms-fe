@@ -105,10 +105,10 @@ const Explanation = () => {
         answers:
           questionType === QUESTION_TYPES.DRAG_DROP
             ? handleMultipleCorrectAnswer(
-                resultResponse?.data?.answer?.question?.drag_drop_answers,
-                resultResponse?.data?.answer?.answer,
-                answerTemp,
-              )
+              resultResponse?.data?.answer?.question?.drag_drop_answers,
+              resultResponse?.data?.answer?.answer,
+              answerTemp,
+            )
             : answerTemp,
         myAnswers: [
           {
@@ -154,7 +154,7 @@ const Explanation = () => {
   }) => {
     try {
       await TestServiceAPI.downloadFile(data)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const isUserViewAnswers = query?.title === 'Your Answers Detail'

@@ -174,6 +174,7 @@ const ModalExplanationPackage = ({
                   }) => {
                     return <PDFViewer file={url} />
                   }}
+                  RenderAllQuestions={undefined}
                 />
               ) : (
                 <SappLoading />
