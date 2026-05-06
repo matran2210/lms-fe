@@ -195,7 +195,9 @@ const Explanation = () => {
             fileName?: string | undefined
           }) => {
             return <PDFViewer file={url} />
-          }} RenderAllQuestions={undefined} />
+          }}
+          renderAllQuestions={undefined}
+        />
       </FullScreenLayout>
     </SappLoadingGlobal>
   )

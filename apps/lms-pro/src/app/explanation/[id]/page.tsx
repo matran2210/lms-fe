@@ -247,7 +247,7 @@ const Explanation = () => {
         {!loading && activeQuestion && (
           <ExplanationPackageV2
             getActiveQuestion={getActiveQuestion}
-            RenderAllQuestions={
+            renderAllQuestions={
               <ListQuestion
                 questions={questions}
                 getActiveQuestion={getActiveQuestion}
