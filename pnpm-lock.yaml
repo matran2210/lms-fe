@@ -18,8 +18,8 @@ importers:
         specifier: ^3.10.0
         version: 3.10.0(react-hook-form@7.48.2(react@18.2.0))
       '@sapp-fe/explanation-package':
-        specifier: ^1.7.4
-        version: 1.7.4(@babel/core@7.29.0)(@types/react@18.2.46)(date-fns@3.6.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@24.12.2)(typescript@5.1.6))(webpack@5.106.2)
+        specifier: ^1.7.5
+        version: 1.7.5(@babel/core@7.29.0)(@types/react@18.2.46)(date-fns@3.6.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@24.12.2)(typescript@5.1.6))(webpack@5.106.2)
       '@sapp-fe/preview-part':
         specifier: ^1.9.0
         version: 1.9.0(@babel/core@7.29.0)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -211,8 +211,8 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0(@babel/core@7.29.0)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@sapp-fe/explanation-package':
-        specifier: ^1.7.4
-        version: 1.7.4(@babel/core@7.29.0)(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@types/react@18.2.46)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.106.2)
+        specifier: ^1.7.5
+        version: 1.7.5(@babel/core@7.29.0)(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@types/react@18.2.46)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.106.2)
       '@sapp-fe/preview-activity':
         specifier: ^1.1.43
         version: 1.1.43(@babel/core@7.29.0)(@types/react@18.2.46)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.106.2)
@@ -530,8 +530,8 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0(@babel/core@7.29.0)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@sapp-fe/explanation-package':
-        specifier: ^1.7.4
-        version: 1.7.4(@babel/core@7.29.0)(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@types/react@18.2.46)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.106.2)
+        specifier: ^1.7.5
+        version: 1.7.5(@babel/core@7.29.0)(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@types/react@18.2.46)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.106.2)
       '@sapp-fe/preview-activity':
         specifier: ^1.1.43
         version: 1.1.43(@babel/core@7.29.0)(@types/react@18.2.46)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.106.2)
@@ -1048,8 +1048,8 @@ importers:
         specifier: workspace:*
         version: link:../../libs/utils
       '@sapp-fe/explanation-package':
-        specifier: ^1.7.4
-        version: 1.7.4(@babel/core@7.29.0)(@types/react@18.2.46)(date-fns@3.6.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@24.12.2)(typescript@5.1.6))(webpack@5.106.2)
+        specifier: ^1.7.5
+        version: 1.7.5(@babel/core@7.29.0)(@types/react@18.2.46)(date-fns@3.6.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@24.12.2)(typescript@5.1.6))(webpack@5.106.2)
       '@sapp-fe/quiz-result-package':
         specifier: ^1.6.0
         version: 1.6.0(@babel/core@7.29.0)(antd@5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
@@ -4362,8 +4362,8 @@ packages:
     peerDependencies:
       react: ^16.0.0
 
-  '@sapp-fe/explanation-package@1.7.4':
-    resolution: {integrity: sha1-uQi14J2LQ99Zm4ZVqizZ/GCNiyk=, tarball: https://gitlab.sapp.edu.vn/api/v4/projects/2/packages/npm/@sapp-fe/explanation-package/-/@sapp-fe/explanation-package-1.7.4.tgz}
+  '@sapp-fe/explanation-package@1.7.5':
+    resolution: {integrity: sha1-etWIDZQTpkcch0Y6p4ORkXzPVUg=, tarball: https://gitlab.sapp.edu.vn/api/v4/projects/2/packages/npm/@sapp-fe/explanation-package/-/@sapp-fe/explanation-package-1.7.5.tgz}
     engines: {node: '>=10'}
     peerDependencies:
       react: ^16.13.1
@@ -5442,8 +5442,8 @@ packages:
     resolution: {integrity: sha512-NwjLUnGy8/Zfx23fl50tRC8rYaYnM52xNRYFAXvmiil9yh1+K6aRVQMnzW6gQB/1DLgWt977lYQn7C+wtgXZiA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@ungap/structured-clone@1.3.0':
-    resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
+  '@ungap/structured-clone@1.3.1':
+    resolution: {integrity: sha512-mUFwbeTqrVgDQxFveS+df2yfap6iuP20NAKAsBt5jDEoOTDew+zwLAOilHCeQJOVSvmgCX4ogqIrA0mnyr08yQ==}
 
   '@vercel/build-utils@10.6.0':
     resolution: {integrity: sha512-ek8gagVbecvIX+RJyOnT9LSKVdKCT9JQZMI4LaEJeM1nPL2M10iByHw5+/MqXgTVlociwOWGJmXKJDC2pKe18Q==}
@@ -6914,8 +6914,8 @@ packages:
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
-  electron-to-chromium@1.5.350:
-    resolution: {integrity: sha512-/KWD4qK8nMqIoJh35Rpc37fiVyOe80mcUQKpfje0Dp9uot2ROuipsh+EriCdfInxjleD5v1S4OlIn41I0LXP0g==}
+  electron-to-chromium@1.5.351:
+    resolution: {integrity: sha512-9D7Iqx8RImSvCnOsj86rCH6eQjZFQoM04Jn6HnZVM0Nu/G58/gmKYQ1d12MZTbjQbQSTGI8nwEy07ErsA2slLA==}
 
   emoji-regex@10.6.0:
     resolution: {integrity: sha512-toUI84YS5YmxW219erniWD0CIVOo46xGKColeNQRgOzDorgBi1v4D71/OFzgD9GO2UGKIv1C3Sp8DAn0+j5w7A==}
@@ -15846,7 +15846,7 @@ snapshots:
       - moment
       - react-dom
 
-  '@sapp-fe/explanation-package@1.7.4(@babel/core@7.29.0)(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@types/react@18.2.46)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.106.2)':
+  '@sapp-fe/explanation-package@1.7.5(@babel/core@7.29.0)(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@types/react@18.2.46)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.106.2)':
     dependencies:
       '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.29.0)
       '@cloudflare/stream-react': 1.9.3(react@18.2.0)
@@ -15891,7 +15891,7 @@ snapshots:
       - webpack
       - worker-loader
 
-  '@sapp-fe/explanation-package@1.7.4(@babel/core@7.29.0)(@types/react@18.2.46)(date-fns@3.6.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@24.12.2)(typescript@5.1.6))(webpack@5.106.2)':
+  '@sapp-fe/explanation-package@1.7.5(@babel/core@7.29.0)(@types/react@18.2.46)(date-fns@3.6.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@24.12.2)(typescript@5.1.6))(webpack@5.106.2)':
     dependencies:
       '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.29.0)
       '@cloudflare/stream-react': 1.9.3(react@18.2.0)
@@ -17432,7 +17432,7 @@ snapshots:
       '@typescript-eslint/types': 8.59.2
       eslint-visitor-keys: 5.0.1
 
-  '@ungap/structured-clone@1.3.0': {}
+  '@ungap/structured-clone@1.3.1': {}
 
   '@vercel/build-utils@10.6.0': {}
 
@@ -18378,7 +18378,7 @@ snapshots:
     dependencies:
       baseline-browser-mapping: 2.10.27
       caniuse-lite: 1.0.30001791
-      electron-to-chromium: 1.5.350
+      electron-to-chromium: 1.5.351
       node-releases: 2.0.38
       update-browserslist-db: 1.2.3(browserslist@4.28.2)
 
@@ -19237,7 +19237,7 @@ snapshots:
 
   ee-first@1.1.1: {}
 
-  electron-to-chromium@1.5.350: {}
+  electron-to-chromium@1.5.351: {}
 
   emoji-regex@10.6.0: {}
 
@@ -20020,7 +20020,7 @@ snapshots:
       '@humanwhocodes/config-array': 0.13.0
       '@humanwhocodes/module-importer': 1.0.1
       '@nodelib/fs.walk': 1.2.8
-      '@ungap/structured-clone': 1.3.0
+      '@ungap/structured-clone': 1.3.1
       ajv: 6.15.0
       chalk: 4.1.2
       cross-spawn: 7.0.6
