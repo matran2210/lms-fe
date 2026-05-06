@@ -786,21 +786,14 @@ const TestDetail = () => {
       return (
         currentTabContent?.data?.requirements?.map(
           (requirement: any, index: number) => {
-            const hasAnswer =
-              currentTabContent?.data?.response_option === RESPONSE_OPTION.SHEET
-                ? checkSheetAnswered(
-                  getValues(`${currentTabID}_${index}_answer`),
-                )
-                : hasEditorValueFromHtml(
-                  getValues(`${currentTabID}_${index}_answer`),
-                )
+            
             const key = `${currentTabID}_${index}_answer`
             const getDefaultValueEssay = () => {
               const valueFromForm = getValues(key)
               const response_option = currentTabContent?.data?.response_option
               switch (response_option) {
                 case RESPONSE_OPTION.WORD:
-                  if (valueFromForm !== undefined && valueFromForm !== null) {
+                  if (valueFromForm !== undefined && valueFromForm !== null && valueFromForm !== '') {
                     return valueFromForm
                   }
 
@@ -863,6 +856,15 @@ const TestDetail = () => {
                 // return getCurrentDefaultSheetValue
               }
             }
+              const hasAnswer =
+              currentTabContent?.data?.response_option === RESPONSE_OPTION.SHEET
+                ? checkSheetAnswered(
+                  getValues(`${currentTabID}_${index}_answer`),
+                )
+                : hasEditorValueFromHtml(
+                  getDefaultValueEssay()
+                )
+
             return {
               label: (
                 <span className="flex items-center gap-1 text-base font-normal">
