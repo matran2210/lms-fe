@@ -90,6 +90,8 @@ export const HighlightableHTML: React.FC<Props> = ({
   const [highlightRect, setHighlightRect] = useState<DOMRect | null>(null);
   const [lastRect, setLastRect] = useState<DOMRect | null>(null);
   const [isProtectingSelection, setIsProtectingSelection] = useState(false);
+  const isStorageReadyRef = useRef(false);
+  const restoreTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Debounce setSelectionRect để tránh scroll nháy
   const updateSelectionRect = (rect: DOMRect | null) => {
@@ -287,6 +289,12 @@ export const HighlightableHTML: React.FC<Props> = ({
   // Load highlights from sessionStorage - chỉ lưu positions
   useEffect(() => {
     isRestoringRef.current = true;
+    isStorageReadyRef.current = false;
+
+    if (restoreTimeoutRef.current) {
+      clearTimeout(restoreTimeoutRef.current);
+      restoreTimeoutRef.current = null;
+    }
 
     // Clear old highlights trước khi load mới
 
@@ -302,22 +310,27 @@ export const HighlightableHTML: React.FC<Props> = ({
         setHighlights(loadedHighlights);
         // Chỉ restore khi có highlights được load từ storage
         if (loadedHighlights.length > 0 && containerRef.current) {
-          setTimeout(() => {
+          restoreTimeoutRef.current = setTimeout(() => {
             if (containerRef.current) {
               restoreHighlightsToDOM(containerRef.current!, loadedHighlights);
-              isRestoringRef.current = false;
             }
+            isRestoringRef.current = false;
+            isStorageReadyRef.current = true;
+            restoreTimeoutRef.current = null;
           }, 200);
         } else {
           isRestoringRef.current = false;
+          isStorageReadyRef.current = true;
         }
       } catch (err) {
         setHighlights([]);
         isRestoringRef.current = false;
+        isStorageReadyRef.current = true;
       }
     } else {
       setHighlights([]);
       isRestoringRef.current = false;
+      isStorageReadyRef.current = true;
     }
 
     // Reset các state khi chuyển câu hỏi
@@ -333,6 +346,10 @@ export const HighlightableHTML: React.FC<Props> = ({
   // Cleanup effect riêng biệt
   useEffect(() => {
     return () => {
+      if (restoreTimeoutRef.current) {
+        clearTimeout(restoreTimeoutRef.current);
+        restoreTimeoutRef.current = null;
+      }
       if (containerRef.current && !isRestoringRef.current) {
         clearHighlightsFromDOM(containerRef.current);
       }
@@ -353,6 +370,7 @@ export const HighlightableHTML: React.FC<Props> = ({
   // Save highlights to sessionStorage - CHỈ LƯU POSITIONS
   useEffect(() => {
     if (highlights.length >= 0) {
+      if (!isStorageReadyRef.current) return;
       sessionStorage.setItem(
         storageKey,
         JSON.stringify({
@@ -672,6 +690,12 @@ export const HighlightableHTML: React.FC<Props> = ({
     span.highlighted:hover {
       opacity: 0.8;
     }
+    
+    /* Fix arrow position for highlight popover */
+    .highlight-popover .ant-popover-arrow {
+      left: 50% !important;
+      transform: translateX(-50%) translateY(-100%);
+    }
   `;
     document.head.appendChild(style);
 
@@ -952,14 +976,14 @@ export const HighlightableHTML: React.FC<Props> = ({
             root: "highlight-popover",
           }}
           content={
-            <Button
+            <button
               onClick={handleConfirmHighlight}
-              type="text"
-              className="!px-2 py-1 text-white hover:!text-white"
-              icon={<PointerIcon />}
+              // type="text"
+              className="flex gap-2 items-center !px-2 py-1 text-white hover:!text-white"
+              // icon={}
             >
-              Highlight this
-            </Button>
+              <PointerIcon /> <span>Highlight this</span>
+            </button>
           }
           open={true}
           trigger={[]}
@@ -987,28 +1011,28 @@ export const HighlightableHTML: React.FC<Props> = ({
                   className="flex items-center justify-end gap-2"
                   onMouseDown={(e) => e.stopPropagation()}
                 >
-                  <Button
-                    className=" !px-2 py-1 text-white hover:!text-white"
+                  <button
+                    className="flex gap-2 items-center !px-2 py-1 text-white hover:!text-white"
                     onClick={openNoteEditor}
                     onMouseDown={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                     }}
-                    type="text"
+                    // type="text"
                   >
-                    <ShowCommentIcon /> Comment
-                  </Button>
+                    <ShowCommentIcon /> <span>Comment</span>
+                  </button>
                   <div>
                     <Divider type="vertical" className="bg-white" />
                   </div>
-                  <Button
+                  <button
                     onClick={handleRemoveHighlight}
-                    type="text"
-                    className=" !px-2 py-1 text-white hover:!text-white"
-                    icon={<PointerIcon />}
+                    // type="text"
+                    className="flex gap-2 items-center !px-2 py-1 text-white hover:!text-white"
+                    // icon={<PointerIcon />}
                   >
-                    Unhighlight this
-                  </Button>
+                    <PointerIcon /> <span>Unhighlight this</span>
+                  </button>
                 </div>
               ) : (
                 <Button
