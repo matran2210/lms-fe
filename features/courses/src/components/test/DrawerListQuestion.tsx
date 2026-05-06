@@ -14,6 +14,9 @@ const DrawerListQuestion = ({
   getActiveQuestion: (id: string) => void;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
+
+  const handleCloseModal = () => setIsOpen(false)
+
   return (
     <SappDrawerV3
       open={isOpen}
@@ -30,6 +33,7 @@ const DrawerListQuestion = ({
       <ListQuestion
         questions={questions}
         getActiveQuestion={getActiveQuestion}
+        handleCloseModal={handleCloseModal}
       />
     </SappDrawerV3>
   );

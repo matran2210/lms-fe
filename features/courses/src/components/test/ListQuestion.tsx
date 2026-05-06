@@ -5,9 +5,11 @@ import { isEmpty } from "lodash";
 const ListQuestion = ({
   questions,
   getActiveQuestion,
+  handleCloseModal
 }: {
   questions: MultipleQuestionsData;
   getActiveQuestion: (id: string) => void;
+  handleCloseModal?: () => void
 }) => {
   const listMultipleChoiceQuestions = questions?.selectedResponseAnswers || [];
   const listConstructedQuestions = questions?.constructedResponseAnswers || [];
@@ -18,6 +20,7 @@ const ListQuestion = ({
           isMultipleChoice
           listQuestions={listMultipleChoiceQuestions}
           getActiveQuestion={getActiveQuestion}
+          handleCloseModal={handleCloseModal}
         />
       )}
       {!isEmpty(listConstructedQuestions) && (
@@ -25,6 +28,7 @@ const ListQuestion = ({
           isShowDivider={!isEmpty(listMultipleChoiceQuestions)}
           listQuestions={listConstructedQuestions}
           getActiveQuestion={getActiveQuestion}
+          handleCloseModal={handleCloseModal}
         />
       )}
     </div>

@@ -8,11 +8,13 @@ const QuestionGrid = ({
   isShowDivider = false,
   listQuestions = [],
   getActiveQuestion,
+  handleCloseModal
 }: {
   isMultipleChoice?: boolean;
   isShowDivider?: boolean;
   listQuestions: IAnswer[];
   getActiveQuestion: (id: string) => void;
+  handleCloseModal?: () => void;
 }) => {
   const [showAll, setShowAll] = useState(false);
   const {
@@ -95,22 +97,22 @@ const QuestionGrid = ({
 
     ...(isMobileView
       ? {
-          gridAutoFlow: "column" as const,
-          gridTemplateRows: "repeat(2, auto)",
-          overflowX: "auto" as const,
-          maxWidth: "100%",
-        }
+        gridAutoFlow: "column" as const,
+        gridTemplateRows: "repeat(2, auto)",
+        overflowX: "auto" as const,
+        maxWidth: "100%",
+      }
       : !isLargeDesktopView
         ? {
-            gridTemplateColumns: "repeat(10, 1fr)",
-            gridTemplateRows: "repeat(5, auto)", // tối đa 5 hàng
-            overflowY: "auto" as const, // scroll dọc
-            maxHeight: 5 * 38 + 4 * 12, // 👈 chiều cao tối đa
-            overflowX: "hidden" as const,
-          }
+          gridTemplateColumns: "repeat(10, 1fr)",
+          gridTemplateRows: "repeat(5, auto)", // tối đa 5 hàng
+          overflowY: "auto" as const, // scroll dọc
+          maxHeight: 5 * 38 + 4 * 12, // 👈 chiều cao tối đa
+          overflowX: "hidden" as const,
+        }
         : {
-            gridTemplateColumns: "repeat(7, 1fr)",
-          }),
+          gridTemplateColumns: "repeat(7, 1fr)",
+        }),
   };
 
   return (
@@ -159,6 +161,7 @@ const QuestionGrid = ({
               disabled={q?.active === "UN_SUBMITTED" || !q?.id}
               onClick={() => {
                 getActiveQuestion(q?.id);
+                handleCloseModal?.()
               }}
               key={q?.id}
               className={clsx(

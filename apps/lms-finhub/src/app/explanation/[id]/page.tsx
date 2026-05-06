@@ -250,7 +250,7 @@ const Explanation = () => {
             }) => {
               return <PDFViewer file={url} />
             }}
-            RenderAllQuestions={undefined}
+            renderAllQuestions={undefined}
           />
         )}
       </FullScreenLayout>
