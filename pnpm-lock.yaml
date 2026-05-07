@@ -1588,6 +1588,12 @@ importers:
       react-select:
         specifier: ^5.8.0
         version: 5.10.2(@types/react@18.2.46)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      react-slick:
+        specifier: ^0.31.0
+        version: 0.31.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      slick-carousel:
+        specifier: ^1.8.1
+        version: 1.8.1(jquery@4.0.0)
       uuid:
         specifier: 13.0.0
         version: 13.0.0
@@ -1601,6 +1607,9 @@ importers:
       '@types/big.js':
         specifier: ^6.2.2
         version: 6.2.2
+      '@types/react-slick':
+        specifier: ^0.23.13
+        version: 0.23.13
 
   libs/utils:
     dependencies:
@@ -1613,6 +1622,9 @@ importers:
       dayjs:
         specifier: ^1.11.12
         version: 1.11.20
+      docx-preview:
+        specifier: ^0.3.7
+        version: 0.3.7
       dompurify:
         specifier: ^3.1.6
         version: 3.4.2
