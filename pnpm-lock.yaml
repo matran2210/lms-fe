@@ -18,8 +18,8 @@ importers:
         specifier: ^3.10.0
         version: 3.10.0(react-hook-form@7.48.2(react@18.2.0))
       '@sapp-fe/explanation-package':
-        specifier: ^1.7.7
-        version: 1.7.7(@babel/core@7.29.0)(@types/react@18.2.46)(date-fns@3.6.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@24.12.2)(typescript@5.1.6))(webpack@5.106.2)
+        specifier: ^1.8.0
+        version: 1.8.0(@babel/core@7.29.0)(@types/react@18.2.46)(date-fns@3.6.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@24.12.2)(typescript@5.1.6))(webpack@5.106.2)
       '@sapp-fe/preview-part':
         specifier: ^1.9.0
         version: 1.9.0(@babel/core@7.29.0)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -211,8 +211,8 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0(@babel/core@7.29.0)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@sapp-fe/explanation-package':
-        specifier: ^1.7.7
-        version: 1.7.7(@babel/core@7.29.0)(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@types/react@18.2.46)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.106.2)
+        specifier: ^1.8.0
+        version: 1.8.0(@babel/core@7.29.0)(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@types/react@18.2.46)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.106.2)
       '@sapp-fe/preview-activity':
         specifier: ^1.1.43
         version: 1.1.43(@babel/core@7.29.0)(@types/react@18.2.46)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.106.2)
@@ -530,8 +530,8 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0(@babel/core@7.29.0)(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@sapp-fe/explanation-package':
-        specifier: ^1.7.7
-        version: 1.7.7(@babel/core@7.29.0)(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@types/react@18.2.46)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.106.2)
+        specifier: ^1.8.0
+        version: 1.8.0(@babel/core@7.29.0)(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@types/react@18.2.46)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.106.2)
       '@sapp-fe/preview-activity':
         specifier: ^1.1.43
         version: 1.1.43(@babel/core@7.29.0)(@types/react@18.2.46)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(webpack@5.106.2)
@@ -1048,8 +1048,8 @@ importers:
         specifier: workspace:*
         version: link:../../libs/utils
       '@sapp-fe/explanation-package':
-        specifier: ^1.7.7
-        version: 1.7.7(@babel/core@7.29.0)(@types/react@18.2.46)(date-fns@3.6.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@24.12.2)(typescript@5.1.6))(webpack@5.106.2)
+        specifier: ^1.8.0
+        version: 1.8.0(@babel/core@7.29.0)(@types/react@18.2.46)(date-fns@3.6.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@24.12.2)(typescript@5.1.6))(webpack@5.106.2)
       '@sapp-fe/quiz-result-package':
         specifier: ^1.6.0
         version: 1.6.0(@babel/core@7.29.0)(antd@5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
@@ -4374,8 +4374,8 @@ packages:
     peerDependencies:
       react: ^16.0.0
 
-  '@sapp-fe/explanation-package@1.7.7':
-    resolution: {integrity: sha1-PViIM23GFEhkSFJxJnMJe7od9+Y=, tarball: https://gitlab.sapp.edu.vn/api/v4/projects/2/packages/npm/@sapp-fe/explanation-package/-/@sapp-fe/explanation-package-1.7.7.tgz}
+  '@sapp-fe/explanation-package@1.8.0':
+    resolution: {integrity: sha1-V20FDLLWRkxbo+ROjgq3QrjSUyw=, tarball: https://gitlab.sapp.edu.vn/api/v4/projects/2/packages/npm/@sapp-fe/explanation-package/-/@sapp-fe/explanation-package-1.8.0.tgz}
     engines: {node: '>=10'}
     peerDependencies:
       react: ^16.13.1
@@ -5144,6 +5144,9 @@ packages:
 
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
+
+  '@types/estree@1.0.9':
+    resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
 
   '@types/hoist-non-react-statics@3.3.7':
     resolution: {integrity: sha512-PQTyIulDkIDro8P+IHbKCsw7U2xxBYflVzW/FgWdCAePD9xGSidgA76/GeJ6lBKoblyhf9pBY763gbrN+1dI8g==}
@@ -15858,7 +15861,7 @@ snapshots:
       - moment
       - react-dom
 
-  '@sapp-fe/explanation-package@1.7.7(@babel/core@7.29.0)(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@types/react@18.2.46)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.106.2)':
+  '@sapp-fe/explanation-package@1.8.0(@babel/core@7.29.0)(@tiptap/core@2.27.2(@tiptap/pm@2.27.2))(@types/react@18.2.46)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@18.19.130)(typescript@5.9.3))(webpack@5.106.2)':
     dependencies:
       '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.29.0)
       '@cloudflare/stream-react': 1.9.3(react@18.2.0)
@@ -15903,7 +15906,7 @@ snapshots:
       - webpack
       - worker-loader
 
-  '@sapp-fe/explanation-package@1.7.7(@babel/core@7.29.0)(@types/react@18.2.46)(date-fns@3.6.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@24.12.2)(typescript@5.1.6))(webpack@5.106.2)':
+  '@sapp-fe/explanation-package@1.8.0(@babel/core@7.29.0)(@types/react@18.2.46)(date-fns@3.6.0)(postcss@8.5.14)(prop-types@15.8.1)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react@18.2.0)(ts-node@10.9.1(@types/node@24.12.2)(typescript@5.1.6))(webpack@5.106.2)':
     dependencies:
       '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.29.0)
       '@cloudflare/stream-react': 1.9.3(react@18.2.0)
@@ -17048,16 +17051,18 @@ snapshots:
   '@types/eslint-scope@3.7.7':
     dependencies:
       '@types/eslint': 9.6.1
-      '@types/estree': 1.0.8
+      '@types/estree': 1.0.9
 
   '@types/eslint@9.6.1':
     dependencies:
-      '@types/estree': 1.0.8
+      '@types/estree': 1.0.9
       '@types/json-schema': 7.0.15
 
   '@types/esrecurse@4.3.1': {}
 
   '@types/estree@1.0.8': {}
+
+  '@types/estree@1.0.9': {}
 
   '@types/hoist-non-react-statics@3.3.7(@types/react@18.2.46)':
     dependencies:
@@ -25689,7 +25694,7 @@ snapshots:
   webpack@5.106.2:
     dependencies:
       '@types/eslint-scope': 3.7.7
-      '@types/estree': 1.0.8
+      '@types/estree': 1.0.9
       '@types/json-schema': 7.0.15
       '@webassemblyjs/ast': 1.14.1
       '@webassemblyjs/wasm-edit': 1.14.1
