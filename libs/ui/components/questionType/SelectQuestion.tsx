@@ -321,9 +321,11 @@ const SelectWord = forwardRef(
           }
         });
         setAnswerContent(doc2);
+      }else{
+        setAnswerContent(null)
       }
       setQuestionContent(doc);
-    }, [defaultAnswer, data, disabled]);
+    }, [defaultAnswer, data, disabled, corrects]);
     useEffect(() => {
       if (!answerContent) return;
 

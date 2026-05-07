@@ -1,19 +1,19 @@
 "use client";
 import { Stream } from "@cloudflare/stream-react";
-import { LoadingIcon, PiPIcon, Icon} from "@lms/assets";
+import { Icon, LoadingIcon, PiPIcon } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
 import { Thumbnail } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
-import Image from "next/image";
-import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import useClickOutside from "../clickoutside/HookClick";
-import { ComboArrowIcon } from "../pagination";
 import {
   formatTimeToHourMinuteSecond,
   getResolution,
   isMobileOrTablet,
 } from "@lms/utils";
-import { useFeature } from "@lms/contexts";
 import clsx from "clsx";
+import Image from "next/image";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import useClickOutside from "../clickoutside/HookClick";
+import { ComboArrowIcon } from "../pagination";
 
 interface IProp {
   options: any;
@@ -26,7 +26,7 @@ interface IProp {
   children?: ReactNode;
   videoAttribs?: { [key: string]: string };
   isFetchCaptions?: boolean;
-  handlePlayVideo?:() => void
+  handlePlayVideo?: () => void;
 }
 
 type ResolutionTypes =
@@ -67,7 +67,7 @@ const SAPPVideo = ({
   children,
   videoAttribs,
   isFetchCaptions = true,
-  handlePlayVideo
+  handlePlayVideo,
 }: IProp) => {
   const { fetcher, videoUrl, router } = useFeature();
   const [playerFunction, setPlayerFunction] = useState<any>();
@@ -101,6 +101,52 @@ const SAPPVideo = ({
   const durationRef = useRef<HTMLTimeElement>(null);
   const listSettingsRef = useRef<HTMLDivElement>(null);
   const hideTimerRef = useRef<any>(null);
+  const [isActive, setIsActive] = useState(false);
+  const SEEK_FORWARD_TIME = 10;
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (!streamRef.current) return;
+
+    const tag = (e.target as HTMLElement)?.tagName;
+    if (["INPUT", "TEXTAREA"].includes(tag)) return;
+    switch (e.code) {
+      case "Space":
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (streamRef.current.paused) {
+          streamRef.current.play();
+        } else {
+          streamRef.current.pause();
+        }
+        animatePlayback();
+        break;
+
+      case "ArrowRight":
+        e.preventDefault();
+        streamRef.current.currentTime = Math.min(
+          streamRef.current.currentTime + SEEK_FORWARD_TIME,
+          streamRef.current.duration,
+        );
+        break;
+
+      case "ArrowLeft":
+        e.preventDefault();
+        streamRef.current.currentTime = Math.max(
+          streamRef.current.currentTime - SEEK_FORWARD_TIME,
+          0,
+        );
+        break;
+
+      case "KeyF":
+        e.preventDefault();
+        toggleFullScreen();
+        break;
+
+      default:
+        break;
+    }
+  };
 
   const playbackSpeeds = [
     { value: "0.25", label: "0.25" },
@@ -513,6 +559,7 @@ const SAPPVideo = ({
       (event.offsetX / (event.target as HTMLElement).clientWidth) *
         parseInt((event.target as HTMLElement).getAttribute("max") || "0", 10),
     );
+
     const t = formatTimeToHourMinuteSecond(skipTo);
     if (
       progressBarRef?.current &&
@@ -530,15 +577,18 @@ const SAPPVideo = ({
 
   // skipAhead jumps to a different point in the video when the progress bar
   // is clicked
-  function skipAhead(event: Event) {
-    const skipTo =
-      event.target instanceof HTMLInputElement ? event.target.value : "0";
-    streamRef.current.currentTime = parseFloat(skipTo);
-    if (progressBarRef?.current) {
-      progressBarRef.current.value = Number(skipTo);
+  function skipAhead() {
+    if (!streamRef.current || !seekRef.current) return;
+
+    const skipTo = Number(seekRef.current.getAttribute("data-seek") || "0");
+
+    streamRef.current.currentTime = skipTo;
+
+    if (progressBarRef.current) {
+      progressBarRef.current.value = skipTo;
     }
     if (seekRef?.current) {
-      seekRef.current.value = skipTo;
+      seekRef.current.value = String(skipTo);
     }
   }
 
@@ -635,8 +685,8 @@ const SAPPVideo = ({
       video.webkitEnterFullscreen();
       return;
     }
-    
-    // Check case fullscreen for normal 
+
+    // Check case fullscreen for normal
     if (document?.fullscreenElement) {
       document.exitFullscreen();
       return;
@@ -807,15 +857,15 @@ const SAPPVideo = ({
   //   };
   // }, [router.events]);
 
-  const {pathname} = useFeature()
+  const { pathname } = useFeature();
   useEffect(() => {
-  // cleanup của route trước (tương đương routeChangeStart)
-  return () => {
-    if (document.pictureInPictureElement) {
-      document.exitPictureInPicture().catch(() => {})
-    }
-  }
-}, [pathname])
+    // cleanup của route trước (tương đương routeChangeStart)
+    return () => {
+      if (document.pictureInPictureElement) {
+        document.exitPictureInPicture().catch(() => {});
+      }
+    };
+  }, [pathname]);
 
   const { isDesktopView, isXLMiddleView, isMobileView } =
     useTailwindBreakpoint();
@@ -868,6 +918,16 @@ const SAPPVideo = ({
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
     };
   }, []);
+
+  useEffect(() => {
+    if (!isActive) return;
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isActive]);
 
   return (
     <>
@@ -937,6 +997,8 @@ const SAPPVideo = ({
                   "inline-block pt-0": videoAttribs,
                 },
               )}
+              onMouseEnter={() => setIsActive(true)}
+              onMouseLeave={() => setIsActive(false)}
               ref={videoContainerRef}
             >
               <div className={`popup-question`}>{children}</div>

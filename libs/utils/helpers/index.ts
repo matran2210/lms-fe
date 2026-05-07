@@ -74,7 +74,7 @@ export const isMobileExtensive = () => {
       check = true;
   })(navigator.userAgent);
   return check;
-}
+};
 export const isMobileOrTablet = () => {
   return /Mobi|Tablet|iPad|iPhone/.test(navigator.userAgent);
 };
@@ -124,7 +124,7 @@ export function makeMenuLevel(options: MenuOption[], depth = 0): MenuItem[] {
       option.subItems && option.subItems.length > 0
         ? makeMenuLevel(option.subItems, depth + 1)
         : undefined,
-  }))
+  }));
 }
 export function getRouteContext(pathname: string): RouteContext {
   // Learning flow
@@ -173,9 +173,9 @@ export function getCourseContentSubContext(pathname: string) {
 }
 
 export const isMatchedPathPinNoti = (path: string) =>
-    /^\/courses$|^\/[^/]+$|^\/courses\/[^/]+\/section\/[^/]+$|^\/courses\/[^/]+\/activity\/[^/]+$|^\/courses\/my-course\/[^/]+$/.test(
-      path,
-)
+  /^\/courses$|^\/[^/]+$|^\/courses\/[^/]+\/section\/[^/]+$|^\/courses\/[^/]+\/activity\/[^/]+$|^\/courses\/my-course\/[^/]+$/.test(
+    path,
+  );
 
 export * from "./timer";
 export * from "./date";
@@ -184,3 +184,4 @@ export * from "./ValidateMessage";
 export * from "./tiptap";
 export * from "./upload";
 export * from "./button";
+export * from "./editor-helper";

@@ -7,14 +7,14 @@ import {
   QuizAttemptChart,
   QuizAttemptChartType,
 } from '@lms/core'
+import { Recommendation } from '@lms/feature-courses'
+import { roundNumber } from '@lms/utils'
 import { useMemo, useRef } from 'react'
 import ChartACCAScore from './acca/chartACCAScore'
 import ChartCFAScore from './cfa/chartCFAScore'
 import ChartCMAScore from './cma/chartCMAScore'
 import MultipleChoiceScore from './MultipleChoiceScore'
 import ScoreDetail from './ScoreDetail'
-import { Recommendation } from '@lms/feature-test'
-import { roundNumber } from '@lms/utils'
 
 interface IProps {
   questions: {
@@ -97,6 +97,7 @@ const TestResultPage = ({
                   ),
                 )}
                 <ScoreDetail
+                  isTeacher={isTeacher}
                   className={'relative'}
                   yourScoreDetailRef={yourScoreDetailRef}
                   type={type}
@@ -112,6 +113,7 @@ const TestResultPage = ({
                 score={score}
                 globalAverage={globalAverageNumber}
                 multipleQuestionRef={multipleQuestionRef}
+                isTeacher={isTeacher}
               />
             </div>
           )
@@ -125,7 +127,7 @@ const TestResultPage = ({
                   score={score}
                   isGraded={
                     questions?.quizAttempt?.grading_status ===
-                      GRADE_STATUS.FINISHED_GRADING ||
+                    GRADE_STATUS.FINISHED_GRADING ||
                     !!questions?.quizAttempt?.is_graded
                   }
                   passingScore={chartData?.quiz?.required_percent_score}
@@ -137,6 +139,7 @@ const TestResultPage = ({
                   ),
                 )}
                 <ScoreDetail
+                  isTeacher={isTeacher}
                   className={''}
                   yourScoreDetailRef={yourScoreDetailRef}
                   type={type}
@@ -151,6 +154,7 @@ const TestResultPage = ({
                 score={score}
                 globalAverage={globalAverageNumber}
                 multipleQuestionRef={multipleQuestionRef}
+                isTeacher={isTeacher}
               />
             </div>
           )
@@ -167,6 +171,7 @@ const TestResultPage = ({
                 <Recommendation data={item} key={index} />
               ))}
               <ScoreDetail
+                isTeacher={isTeacher}
                 yourScoreDetailRef={yourScoreDetailRef}
                 type={type}
                 gradingStatus={questions?.quizAttempt?.grading_status}
@@ -180,6 +185,7 @@ const TestResultPage = ({
               score={score}
               globalAverage={globalAverageNumber}
               multipleQuestionRef={multipleQuestionRef}
+              isTeacher={isTeacher}
             />
           </div>
         )
@@ -194,7 +200,7 @@ const TestResultPage = ({
                 score={score}
                 isGraded={
                   questions?.quizAttempt?.grading_status ===
-                    GRADE_STATUS.FINISHED_GRADING ||
+                  GRADE_STATUS.FINISHED_GRADING ||
                   !!questions?.quizAttempt?.is_graded
                 }
                 passingScore={chartData?.quiz?.required_percent_score}
@@ -219,6 +225,7 @@ const TestResultPage = ({
               score={score}
               globalAverage={globalAverageNumber}
               multipleQuestionRef={multipleQuestionRef}
+              isTeacher={isTeacher}
             />
           </div>
         )
@@ -243,6 +250,7 @@ const TestResultPage = ({
               globalAverage={globalAverageNumber}
               multipleQuestionRef={multipleQuestionRef}
               className="xl:!top-[124px]"
+              isTeacher={isTeacher}
             />
           </div>
         )

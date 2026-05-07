@@ -1,5 +1,9 @@
 'use client'
 import {
+  removeHighlights,
+  serializeHighlights,
+} from '@funktechno/texthighlighter/lib'
+import {
   ArrowUpIcon,
   CalculatorIcon,
   ExcelIcon,
@@ -16,19 +20,43 @@ import {
   CourseProvider,
   disableUnsavedChange,
   loginSlice,
+  showPopupCompletedCourse,
   useCourseContext,
 } from '@lms/contexts'
 import {
+  Answer,
+  AnswerItem,
+  AnswerList,
+  DEFAULT_EDITOR_VALUE,
+  defaultSheetData,
   DISPLAY_TYPE,
+  DragDropAnswerItem,
   EXHIBIT_TEXT_REPLACE,
   GRADING_METHOD,
+  IDataQuestion,
   IExhibit,
+  IRequirement,
   PROGRAM,
   QUESTION_TYPES,
+  Requirement,
+  RequirementItem,
   RESPONSE_OPTION,
+  ScratchPadValue,
   TEST_TYPE,
 } from '@lms/core'
 import {
+  ButtonContent,
+  ConFirmSubmit,
+  HeaderTest,
+  QuitTestModal,
+  ResetToAnswerTemplateModal,
+  ShowAnswerTemplate,
+  TabSlide,
+  TestTimeOutModal,
+  UnSubmitAnswerModal,
+} from '@lms/feature-courses'
+import {
+  ButtonPrimary, ButtonText,
   DragNDropPreivew,
   EditorReader,
   EssayQuestionPreview,
@@ -46,57 +74,24 @@ import {
   checkSheetAnswered,
   checkTypeAndRenderTitle,
   runHighlight,
+  trackGAEvent,
 } from '@lms/utils'
 import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import LimitQuizModal from 'src/app/test/limitQuizModal'
-import {
-  removeHighlights,
-  serializeHighlights,
-} from '@funktechno/texthighlighter/lib'
-import { showPopupCompletedCourse } from '@lms/contexts'
-import {
-  Answer,
-  AnswerItem,
-  AnswerList,
-  DEFAULT_EDITOR_VALUE,
-  defaultSheetData,
-  DragDropAnswerItem,
-  IDataQuestion,
-  IRequirement,
-  Requirement,
-  RequirementItem,
-  ScratchPadValue,
-} from '@lms/core'
-import {
-  ButtonContent,
-  ConFirmSubmit,
-  ResetToAnswerTemplateModal,
-  ShowAnswerTemplate,
-} from '@lms/feature-courses'
-import {
-  HeaderTest,
-  QuitTestModal,
-  TabSlide,
-  TestTimeOutModal,
-  UnSubmitAnswerModal,
-} from '@lms/feature-test'
-import { ButtonPrimary, ButtonText } from '@lms/ui'
-import { trackGAEvent } from '@lms/utils'
-
+import SappLoading from '@components/common/SappLoading'
+import { isValuesEqual, isWorkbookEmpty } from '@utils/helpers'
+import dayjs from 'dayjs'
 import { EventTestAPI } from 'src/api/event-test'
 import { TestServiceAPI } from 'src/api/test-api'
-import dayjs from 'dayjs'
-import { PageLink } from 'src/constants/routers'
 import SuccessSubmittedConstructorModal from 'src/app/test/SuccessSubmittedConstructorModal'
 import TestScratchPads from 'src/app/test/TestScratchPads'
 import useGetQuestionTabs from 'src/app/test/custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from 'src/app/test/custom-hook/useGetQuizDetail'
+import { PageLink } from 'src/constants/routers'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import SappLoading from '@components/common/SappLoading'
-import { isValuesEqual, isWorkbookEmpty } from '@utils/helpers'
 declare global {
   interface Window {
     userAgreed: any
@@ -705,12 +700,12 @@ const TestDetail = () => {
                               : requirementData?.answer_file,
                           short_answer:
                             req?.short_answer !== undefined &&
-                            req?.short_answer !== null
+                              req?.short_answer !== null
                               ? req?.short_answer
                               : requirementData?.short_answer,
                           answer_text:
                             req?.answer_text !== undefined &&
-                            req?.answer_text !== null
+                              req?.answer_text !== null
                               ? req?.answer_text
                               : requirementData?.short_answer,
                         }
@@ -730,13 +725,13 @@ const TestDetail = () => {
                 // done: true,
                 answer:
                   updatedObjTab?.answer !== undefined &&
-                  updatedObjTab?.answer !== null
+                    updatedObjTab?.answer !== null
                     ? updatedObjTab?.answer
                     : answerSubmitted?.short_answer,
 
                 answer_file:
                   updatedObjTab?.answer_file !== undefined &&
-                  updatedObjTab?.answer_file !== null
+                    updatedObjTab?.answer_file !== null
                     ? updatedObjTab?.answer_file
                     : answerSubmitted?.answer_file,
 
@@ -840,8 +835,8 @@ const TestDetail = () => {
               savedData =
                 answersSubmitted.answer && answersSubmitted?.answer.length > 0
                   ? answersSubmitted.answer.find(
-                      (item: AnswerItem) => item.question_id === objTab.id,
-                    )
+                    (item: AnswerItem) => item.question_id === objTab.id,
+                  )
                   : undefined
 
               currentAnswer = answer
@@ -850,9 +845,9 @@ const TestDetail = () => {
               savedData =
                 answersSubmitted.answer && answersSubmitted?.answer.length > 0
                   ? answersSubmitted.answer.find(
-                      (item: AnswerItem) =>
-                        item.question_id === answer.question_id,
-                    )
+                    (item: AnswerItem) =>
+                      item.question_id === answer.question_id,
+                  )
                   : undefined
 
               currentAnswer = answer.answer_id ?? savedData?.answer_id
@@ -1183,7 +1178,7 @@ const TestDetail = () => {
   }, [currentTabContent?.data?.response_option, currentTabContent?.qType])
 
   // TODO: Implement this
-  const getValueFillText = () => {}
+  const getValueFillText = () => { }
 
   const getValueSelectText = () => {
     const value = getValues(`${currentPage}_answer`) || []
@@ -1748,7 +1743,7 @@ const TestDetail = () => {
           tab.id === question_id ? { ...tab, flag: !tab.flag } : tab,
         ),
       )
-    } catch (error) {}
+    } catch (error) { }
   }
 
   // Helper function to format answer based on question type
@@ -2310,8 +2305,8 @@ const TestDetail = () => {
               setRouteBack(true)
               setIsQuizAttemptCreated(true) // Mark the attempt as created even on error
               switch (
-                quizDetail?.quiz_type ||
-                quizDetail?.quiz_type === undefined
+              quizDetail?.quiz_type ||
+              quizDetail?.quiz_type === undefined
               ) {
                 case TEST_TYPE.MID_TERM_TEST:
                 case TEST_TYPE.FINAL_TEST:
@@ -2565,11 +2560,11 @@ const TestDetail = () => {
                     if (!submited && !quizAttempt?.is_submitted) {
                       const remainingTimeinSeconds = quizDetail?.quiz_timed
                         ? dayjs(
-                            dayjs(new Date(quizAttempt.created_at ?? '')).add(
-                              quizDetail?.quiz_timed,
-                              'minutes',
-                            ),
-                          ).diff(dayjs(), 'seconds')
+                          dayjs(new Date(quizAttempt.created_at ?? '')).add(
+                            quizDetail?.quiz_timed,
+                            'minutes',
+                          ),
+                        ).diff(dayjs(), 'seconds')
                         : null
 
                       // No call when time out > 60s
@@ -2625,7 +2620,7 @@ const TestDetail = () => {
           {!isUndefined(currentTabContent) && (
             <>
               {currentTabContent?.data?.display_type ===
-              DISPLAY_TYPE.VERTICAL ? (
+                DISPLAY_TYPE.VERTICAL ? (
                 <div
                   className={`flex flex-1 overflow-auto bg-gray-200`}
                   id={'preview-question'}
@@ -2862,9 +2857,8 @@ const TestDetail = () => {
                 <ButtonContent icon={<ScratchPadIcon />} content="ScratchPad" />
               </button>
               <button
-                className={`h-full ${
-                  checkCalExist > -1 && 'sapp-disable-button'
-                }`}
+                className={`h-full ${checkCalExist > -1 && 'sapp-disable-button'
+                  }`}
                 onClick={() => {
                   handleOpenScratchPad('calculator')
                   trackGAEvent('Click Button Calculator Test')
@@ -2901,10 +2895,9 @@ const TestDetail = () => {
                           return (
                             <button
                               key={e?.value}
-                              className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px]' : 'min-w-[100px]'} ${
-                                !watch('exhibits')?.includes(e?.value) &&
+                              className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px]' : 'min-w-[100px]'} ${!watch('exhibits')?.includes(e?.value) &&
                                 'text-gray'
-                              }`}
+                                }`}
                               onClick={() => handleOpenExhibit(e?.value)}
                             >{`${exhibitText} ${index + 1}`}</button>
                           )
@@ -2940,9 +2933,8 @@ const TestDetail = () => {
                           return (
                             <button
                               key={e.id}
-                              className={`p-3 ${
-                                essayData?.index !== indexReq && 'text-gray'
-                              }`}
+                              className={`p-3 ${essayData?.index !== indexReq && 'text-gray'
+                                }`}
                               onClick={() => {
                                 if (e?.id !== essayData?.req?.id) {
                                   //chọn requirement khác thì mới set lại state
@@ -2958,7 +2950,7 @@ const TestDetail = () => {
                                       }
                                       const requirement =
                                         currentTabContent?.data?.requirements?.[
-                                          indexReq
+                                        indexReq
                                         ]
 
                                       if (
@@ -3043,9 +3035,8 @@ const TestDetail = () => {
                           }),
                         )
                       }}
-                      className={`${
-                        currentTabContent?.response_type === 0 && 'active'
-                      }`}
+                      className={`${currentTabContent?.response_type === 0 && 'active'
+                        }`}
                     >
                       <WordIcon />
                     </button>
@@ -3064,9 +3055,8 @@ const TestDetail = () => {
                           }),
                         )
                       }}
-                      className={`${
-                        currentTabContent.response_type === 1 && 'active'
-                      }`}
+                      className={`${currentTabContent.response_type === 1 && 'active'
+                        }`}
                     >
                       <ExcelIcon />
                     </button>
@@ -3086,11 +3076,10 @@ const TestDetail = () => {
               </button>
               <button
                 disabled={currentTabContent?.is_viewed_answer}
-                className={`flex items-center gap-3 border border-solid ${
-                  !currentTabContent?.is_viewed_answer
+                className={`flex items-center gap-3 border border-solid ${!currentTabContent?.is_viewed_answer
                     ? 'border-gray text-gray-800'
                     : 'border-default text-secondary-100'
-                } w-[150px] justify-center p-1 py-2`}
+                  } w-[150px] justify-center p-1 py-2`}
                 onClick={() => {
                   handleClearSelection(currentTabContent)
                   trackGAEvent('Click Button Clear Selection Test')
@@ -3100,8 +3089,8 @@ const TestDetail = () => {
               </button>
               {/* )} */}
               {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
-              !currentTabContent?.is_viewed_answer &&
-              quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
+                !currentTabContent?.is_viewed_answer &&
+                quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                 <button
                   className="w-45 flex items-center justify-center gap-3 border border-gray px-3 py-2"
                   onClick={async () => {
@@ -3123,7 +3112,7 @@ const TestDetail = () => {
                 </button>
               ) : (
                 filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                  filteredTabs.length - 1 && (
+                filteredTabs.length - 1 && (
                   <button
                     className="flex w-[150px] items-center justify-center gap-3 border border-gray px-3 py-2"
                     onClick={async () => {

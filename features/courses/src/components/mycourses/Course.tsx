@@ -325,6 +325,7 @@ const Course = ({
   const isPendingLesson =
     classInstance?.type === "LESSON" && !student?.is_passed;
   const isAccaCourse = category === "ACCA";
+  const isCertDipCourse = category === "Cert/Dip";
   // const isFixedDuration =
   //   classInstance?.duration_type === "FIXED" ||
   //   classInstance?.duration_type === "FLEXIBLE";
@@ -340,7 +341,7 @@ const Course = ({
   const courseAction = () => {
     // Handle pending lesson cases
     if (isPendingLesson) {
-      if (isAccaCourse) {
+      if (isAccaCourse || isCertDipCourse) {
         if (hasNotStarted) {
           setOpenClass(true);
           return;
@@ -383,7 +384,7 @@ const Course = ({
     }
 
     // Handle default case
-    if (!isCanceled) {
+    if (!isCanceled && determineButtonToShow !== "Disabled") {
       handleCourseDetail();
     }
   };

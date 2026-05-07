@@ -49,12 +49,12 @@ type MenuItemProps = {
 };
 
 export default function MenuItem({
-  menuItem: { name, icon: Icon, url, type, subItems },
+  menuItem: { name, icon: Icon, url, type, subItems, showMenu },
   setOpenResource,
   closeSideBar,
   setOpenExaminationInfo,
 }: MenuItemProps) {
-  const { notificationApi, pageLink, dispatch, useAppSelector, router, pathname, query, params  } = useFeature();
+  const { notificationApi, pageLink, dispatch, useAppSelector, router, pathname, query, params } = useFeature();
   const id = params?.id || query.id
   const courseId = params?.courseId || query.courseId
   const activityId = params?.activityId || query.activityId
@@ -462,7 +462,7 @@ export default function MenuItem({
             })}
           >
             {user?.detail?.avatar?.["40x40"] ||
-            user?.detail.avatar?.["ORIGIN"] ? (
+              user?.detail.avatar?.["ORIGIN"] ? (
               <Image
                 src={
                   user?.detail.avatar?.["40x40"] ||
@@ -600,7 +600,7 @@ export default function MenuItem({
     );
   };
 
-
+  if (showMenu === false) return null;
   return (
     <>
       {isActivity && name === TitleSidebar.NEW_NOTE && (
@@ -630,7 +630,7 @@ export default function MenuItem({
               name === TitleSidebar.RESULTS ||
               name === TitleSidebar.EXAM ||
               name === TitleSidebar.DASHBOARD ||
-              name === TitleSidebar.CLASS_RESOURCE ||  
+              name === TitleSidebar.CLASS_RESOURCE ||
               Icon === "stats-chart-sharp" ||
               Icon === "profile-detail")
             ? "hidden"
@@ -641,7 +641,7 @@ export default function MenuItem({
               name === TitleSidebar.EXAM_LIST ||
               name === TitleSidebar.ENTRANCE_TEST ||
               name === TitleSidebar.COURSE_ACTIVATION ||
-            // hidden when in course
+              // hidden when in course
               name === TitleSidebar.CALENDAR ||
               // hidden when in course
               name === LANG_SIGNIN.eventTest ||

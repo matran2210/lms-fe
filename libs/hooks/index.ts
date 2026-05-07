@@ -19,3 +19,6 @@ export * from "./useSmartModalSize";
 export * from "./course/useInitialSections";
 export * from "./course/useSectionData";
 export { default as useSelectSubject } from "./useSelectSubject";
+export { default as useSelectClassSchedule } from "./useSelectClassSchedule";
+export { default as useSelectClassCode } from "./useSelectClassCode";
+export { default as useLesson } from "./useSelectLesson";

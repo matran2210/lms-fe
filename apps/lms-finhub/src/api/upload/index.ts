@@ -87,6 +87,25 @@ export class UploadAPI {
       },
     })
   }
+  static downloadFileClassResource = async (
+    class_id: string,
+    resource_id: string,
+  ) => {
+    try {
+      const response = await request.get(
+        `/class-resource/${class_id}/download/${resource_id}`,
+      )
+      if (response.status === 200) {
+        const link = document.createElement('a')
+        link.href = `${getBaseUrl()}/resource/download?token=${response.data}`
+        link.download = ''
+        link.style.display = 'none'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      }
+    } catch (error) {}
+  }
 }
 
 const preUpload = async ({

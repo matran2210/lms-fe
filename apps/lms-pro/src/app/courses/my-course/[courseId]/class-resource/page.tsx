@@ -1,5 +1,7 @@
 'use client'
+import { FilterCourseIcon } from '@lms/assets'
 import { UserType, useCourseContext, useFeature } from '@lms/contexts'
+import { selectPopupActivateCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 import {
   AppType,
   CLASS_SUFFIX_TYPE_FILTER,
@@ -7,10 +9,14 @@ import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
   IClassResource,
-  IClassScheduleForResource,
   IListClassResourceParams,
 } from '@lms/core'
-import { useSappPaging, useTailwindBreakpoint } from '@lms/hooks'
+import { withAuthorization } from '@lms/hoc'
+import {
+  useSappPaging,
+  useSelectClassSchedule,
+  useTailwindBreakpoint,
+} from '@lms/hooks'
 import {
   CarouselSlideAnimation,
   ClassResourceSkeleton,
@@ -22,27 +28,22 @@ import {
   SappBreadCrumbs,
   SappDrawerV3,
 } from '@lms/ui'
-import { useRouter } from 'next/navigation'
+import { getSelectOptions, normalizeToArray } from '@lms/utils'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
-import { PageLink } from 'src/constants/routers'
-import withAuthorization from 'src/HOC/withAuthorization'
-import ClassResourceTable from './ClassResourceTable'
-import FilterClassResource from './FilterClassResource'
-import SearchClassResource from './SearchClassResource'
-import { buildQueryString, normalizeToArray } from '@lms/utils'
-import { useParams, usePathname, useSearchParams } from 'next/navigation'
-import { CoursesAPI } from 'src/api/courses'
 import { ClassAPI } from 'src/api/class'
-import { FilterCourseIcon } from '@lms/assets'
+import { CoursesAPI } from 'src/api/courses'
+import { PageLink } from 'src/constants/routers'
 import CardFileItem from './CardFileItem'
-import useSelectClassSchedule from 'src/hooks/useSelectClassSchedule'
-import { getSelectOptions, pushQueryClassResource } from '@utils/helpers'
-import { selectPopupActivateCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
+import ClassResourceTable from './ClassResourceTable'
+import FilterClassResource, { FilterFormValues } from './FilterClassResource'
+import SearchClassResource from './SearchClassResource'
 interface ISelectItem {
   label: string
   value: string
 }
+
 const ClassResource = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -77,10 +78,13 @@ const ClassResource = () => {
   const { setOpenSidebar } = useCourseContext()
   const { useAppSelector } = useFeature()
   const selector = useAppSelector?.(selectPopupActivateCourse)
-  const pathname = usePathname()
   const [params, setParams] = useState<IListClassResourceParams>({
     page_size: DEFAULT_PAGE_SIZE,
     page_index: DEFAULT_PAGE_NUMBER,
+  })
+  const [queryParams, setQueryParams] = useState<FilterFormValues>({
+    suffix_types: undefined,
+    schedule_ids: [],
   })
   const LIST_TAB_FILTER = [
     {
@@ -113,27 +117,10 @@ const ClassResource = () => {
       courseDetail: data,
     }
   }
-  // Để map schedule_ids từ string các id thành mảng các id
-  const mapParams = useMemo(() => {
-    let scheduleIds: string[] = []
-    if (query.schedule_ids) {
-      scheduleIds = query.schedule_ids.includes(',')
-        ? query.schedule_ids
-            .split(',')
-            .map((id) => id.trim())
-            .filter((id) => id)
-        : [query.schedule_ids]
-    }
-    return {
-      ...params,
-      schedule_ids: scheduleIds,
-    }
-  }, [params, query.schedule_ids])
 
   const { data, pagination, setPagination, isLoading } = useSappPaging({
     uniqueKey: ClassKey.ClassResource,
-    queryFn: () =>
-      ClassAPI.getClassResource(param.courseId as string, mapParams),
+    queryFn: () => ClassAPI.getClassResource(param.courseId as string, params),
     params,
   })
 
@@ -178,16 +165,16 @@ const ClassResource = () => {
         ? Number(query.page_index)
         : DEFAULT_PAGE_NUMBER,
       page_size: query.page_size ? Number(query.page_size) : DEFAULT_PAGE_SIZE,
-      suffix_types: normalizeToArray(query.suffix_types),
-      schedule_ids: normalizeToArray(query.schedule_ids),
+      suffix_types: normalizeToArray(queryParams.suffix_types),
+      schedule_ids: normalizeToArray(queryParams.schedule_ids),
 
       search_key:
         typeof query.search_key === 'string' ? query.search_key : undefined,
     }))
   }, [
     query.page_index,
-    query.suffix_types,
-    query.schedule_ids,
+    queryParams.suffix_types,
+    queryParams.schedule_ids,
     query.search_key,
     query.page_size,
   ])
@@ -286,21 +273,20 @@ const ClassResource = () => {
       } else {
         setListClassResourceMobile((prev) => [...prev, ...data.data])
       }
+    } else if (!isLoading && data?.data) {
+      setIsFirstLoadingMobile(false)
     }
   }, [data?.data, isLoading, params.page_index])
 
-  const pushQuery = (next: Record<string, any>) => {
-    pushQueryClassResource(router, pathname, query, next)
-  }
-
   const handleSubmitFilterMobile = () => {
-    const lessonValue = Array.isArray(selectedFilters.Lesson)
-      ? selectedFilters.Lesson.map((item) => item.value)
-          .filter((v) => v)
-          .join(',')
-      : selectedFilters.Lesson.value
-
-    pushQuery({
+    const lessonValue: string[] = Array.isArray(selectedFilters.Lesson)
+      ? selectedFilters.Lesson.map((item) => item.value).filter(
+          (v): v is string => Boolean(v),
+        )
+      : selectedFilters.Lesson?.value
+        ? [selectedFilters.Lesson.value]
+        : []
+    setQueryParams({
       suffix_types:
         typeof selectedFilters.Type === 'object' &&
         !Array.isArray(selectedFilters.Type)
@@ -361,7 +347,7 @@ const ClassResource = () => {
       showSidebar={showSidebar || isAlwaysShowSidebar}
       handleToggleSidebar={handleCloseSidebar}
     >
-      {(isLoading && isFirstLoadingMobile) || selector?.openActive ? (
+      {isFirstLoadingMobile || selector?.openActive ? (
         <ClassResourceSkeleton />
       ) : (
         <>
@@ -413,7 +399,11 @@ const ClassResource = () => {
               <div className="text-2xl font-semibold text-gray-800">
                 Class Resource
               </div>
-              <FilterClassResource totalResult={pagination?.total || 0} />
+              <FilterClassResource
+                totalResult={pagination?.total || 0}
+                setQueryParams={setQueryParams}
+                queryParams={queryParams}
+              />
             </div>
           )}
           {isMobileView && (
