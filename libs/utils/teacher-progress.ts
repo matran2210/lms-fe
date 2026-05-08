@@ -2,6 +2,7 @@ import {
   IContentCompleted,
   ICourseSections,
   IScheduleRequestItem,
+  PROGRAM,
 } from "@lms/core";
 import dayjs from "dayjs";
 
@@ -28,15 +29,20 @@ export const sortChildrenRecursive = (section: ICourseSections) => {
 export function groupACCABySubjectAndClass(
   items: IScheduleRequestItem[],
 ): IScheduleRequestItem[] {
-  const acca = items.filter((i) => i.subject?.course_category?.name === "ACCA");
-  const nonAcca = items.filter(
-    (i) => i.subject?.course_category?.name !== "ACCA",
+  const groupedPrograms = [PROGRAM.ACCA, PROGRAM.CD];
+  const groupedItems = items.filter((item) =>
+    groupedPrograms.includes(item.subject?.course_category?.name as PROGRAM),
+  );
+  const nonGroupedItems = items.filter(
+    (item) =>
+      !groupedPrograms.includes(item.subject?.course_category?.name as PROGRAM),
   );
 
   const map = new Map<string, IScheduleRequestItem>();
 
-  acca.forEach((item) => {
-    if (item.subject.course_category.name !== "ACCA") return;
+  groupedItems.forEach((item) => {
+    if (!groupedPrograms.includes(item.subject?.course_category?.name as PROGRAM))
+      return;
 
     const key = `${item.subject.id}_${item.class.id}}_${item.status}`;
 
@@ -68,5 +74,5 @@ export function groupACCABySubjectAndClass(
     }
   });
 
-  return [...Array.from(map.values()), ...nonAcca];
+  return [...Array.from(map.values()), ...nonGroupedItems];
 }

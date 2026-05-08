@@ -1,29 +1,53 @@
 import { useEffect, useMemo, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useMutation } from "react-query";
 import { useFeature } from "@lms/contexts";
-import { RemindChoosingExam } from "@lms/core";
+import { RemindChoosingExam, zodMsg } from "@lms/core";
 import { useSelectExams } from "@lms/hooks";
 import { ErrorMessage, SappModalV3, SAPPSelectTooltip, UploadSingleFile } from "@lms/ui";
 import { GetProp, message } from "antd";
 import Upload, { RcFile, UploadProps } from "antd/es/upload";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import clsx from "clsx";
 
 interface ISelectExamPopup {
   courseData: any;
 }
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
+  const validationSchema = z.object({
+    note: z
+      .array(z.instanceof(File), { message: zodMsg.required })
+      .optional(),
+    examination_subject_id: z
+      .string({ required_error: zodMsg.required }).nullable().optional(),
+  }).refine((data) => {
+    // If examination_subject_id is not "NOT_DECIDED" and not empty, note is required
+    if (data.examination_subject_id && data.examination_subject_id !== "NOT_DECIDED") {
+      return data.note && data.note.length > 0;
+    }
+    return true;
+  }, {
+    message: zodMsg.required,
+    path: ["note"], // This will attach the error to the note field
+  });
+
 const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
 
 
 const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
   const { router, classApi, query, params } = useFeature()
-  const { control, watch, clearErrors, setValue, getValues } = useForm(
-    { defaultValues: { exam_date: null, note: [] } }
+  type SelectExamFormData = z.infer<typeof validationSchema>;
+
+  const { control, clearErrors, setValue, watch, handleSubmit } = useForm<SelectExamFormData>(
+    { resolver: zodResolver(validationSchema),
+      defaultValues: { note: [] } 
+    }
   )
-  const selectedExam = watch('exam_date')
   const [examModal, setExamModal] = useState(false)
+  const selectedExam = watch('examination_subject_id')
 
   const remindChoosingExam: RemindChoosingExam =
     courseData?.pages?.[0]?.courseDetail?.remind_choosing_exam;
@@ -94,13 +118,13 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
       return "If you changed your exam date, please update your info to get timely revision support.";
     return "";
   };
+const onSubmit: SubmitHandler<SelectExamFormData> = (data) => {
 
-  // --- Handlers
-  const handleConfirmExamDate = () => {
-    if (!selectedExam) return;
+    const selectedExam = data.examination_subject_id
+    if(!selectedExam) return
     const formData = new FormData();
-    const note = getValues('note')
-    note && formData.append("note", note[0] as FileType);
+    const note = data.note || []
+    note && note.length > 0 && formData.append("note", note[0] as FileType);
 
     if (selectedExam === "NOT_DECIDED") {
       formData.append("not_decided", "true");
@@ -108,7 +132,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
       formData.append("examination_subject_id", selectedExam);
       formData.append("not_decided", "false");
     }
-
+    
     updateExamDate(formData);
   };
 
@@ -143,19 +167,23 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
           placeholder="Exam Date"
           options={examOptions}
           control={control}
-          name="exam_date"
+          name="examination_subject_id"
           onMenuScrollToBottom={hasNextPage && fetchNextPage}
         />
-        <div className="mt-6 flex flex-col gap-2 md:flex-row md:items-center md:gap-6 ">
-          <div className="text-sm font-semibold leading-normal text-gray-800 md:text-base">
+        <div className={clsx("mt-6 flex flex-col gap-2 md:flex-row md:items-center md:gap-6", {
+          hidden: selectedExam === "NOT_DECIDED" || !selectedExam
+        })}>
+          <div className="shrink-0 whitespace-nowrap text-sm font-semibold leading-normal text-gray-800 md:text-base">
             Registration Evidence:
           </div>
           <Controller
             name="note"
             control={control}
             render={({ field, fieldState }) => (
-              <div className="relative">
+              <div className="relative flex-1 flex justify-start">
                 <UploadSingleFile
+                  accept=".png, .jpg, .jpeg"
+                  fileClassName="line-clamp-1 break-all text-sm md:text-base"
                   fileList={(field.value || []) as RcFile[]}
                   {...getUploadProps(field.onChange)}
                 />
@@ -180,7 +208,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
       onOk={
         remainingChanges === 0
           ? () => setExamModal(false)
-          : handleConfirmExamDate
+          : handleSubmit(onSubmit)
       }
       header={remainingChanges > 0 ? "Choosing Exam" : "Exam Reminder"}
       content={renderExamContent()}
@@ -192,6 +220,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
       showCancelButton={remainingChanges > 0}
       isUnderLine
       loadingBtnSubmit={isLoading}
+      isValidated={!!selectedExam}
     />
   );
 };

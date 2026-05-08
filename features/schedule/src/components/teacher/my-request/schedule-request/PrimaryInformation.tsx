@@ -58,7 +58,7 @@ const PrimaryInformation = ({
 
   const isOffline = dataDetail?.mode === CONSTRUCTION_MODE.OFFLINE
   const isOnline = dataDetail?.mode === CONSTRUCTION_MODE.ONLINE
-  const isACCAProgram = selectedRequest?.subject?.course_category?.name === PROGRAM.ACCA
+  const isACCAProgram = [PROGRAM.ACCA, PROGRAM.CD].includes(selectedRequest?.subject?.course_category?.name as PROGRAM)
   const courseName = selectedRequest?.subject.name
   const renderStartEndDate = (data: ScheduleRequestDetail | undefined) => {
     // case schedules.length === 0

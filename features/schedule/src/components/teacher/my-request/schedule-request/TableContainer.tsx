@@ -1,6 +1,7 @@
 import {
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
+  PROGRAM,
   StatusRequestSchedule,
   TeacherKey,
 } from "@lms/core";
@@ -176,7 +177,7 @@ export default function TableContainer({
             index +
             1 +
             ((pagination?.current || 1) - DEFAULT_PAGE_NUMBER) *
-              (pagination?.pageSize || DEFAULT_PAGE_SIZE)
+            (pagination?.pageSize || DEFAULT_PAGE_SIZE)
           }
           className="!text-zinc-400"
         />
@@ -201,7 +202,7 @@ export default function TableContainer({
     {
       title: 'Subject',
       render: (_, record: IScheduleRequestItem) => {
-        const isACCAProgram = record?.subject?.course_category?.name === 'ACCA'
+        const isACCAProgram = [PROGRAM.ACCA, PROGRAM.CD].includes(record?.subject?.course_category?.name as PROGRAM)
         const subjectName = record?.subject?.name
         return (
           <TableCell
@@ -225,21 +226,28 @@ export default function TableContainer({
       title: "Start Date - End Date",
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
-          data={`${record?.schedule_time.start_date ? formatDateFromUTC(record?.schedule_time.start_date) : "-"} - ${
-            record?.schedule_time.end_date
-              ? formatDateFromUTC(record?.schedule_time.end_date)
-              : "-"
-          }`}
+          data={`${record?.schedule_time.start_date ? formatDateFromUTC(record?.schedule_time.start_date) : "-"} - ${record?.schedule_time.end_date
+            ? formatDateFromUTC(record?.schedule_time.end_date)
+            : "-"
+            }`}
         />
       ),
     },
     {
-      title: "Sent Date",
+      title: "Date",
       render: (_, record: IScheduleRequestItem) => (
-        <TableCell
-          data={formatDateFromUTC(record?.created_at)}
-          className="!text-zinc-400"
-        />
+        <>
+          {record?.created_at && (
+            <div>
+              Send Date: {formatDateFromUTC(record?.created_at)}
+            </div>
+          )}
+          {record?.updated_at && (
+            <div>
+              Updated Date: {formatDateFromUTC(record?.updated_at)}
+            </div>
+          )}
+        </>
       ),
     },
     {
@@ -247,15 +255,6 @@ export default function TableContainer({
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={record?.staff_detail?.full_name}
-          className="!text-zinc-400"
-        />
-      ),
-    },
-    {
-      title: "Update Date",
-      render: (_, record: IScheduleRequestItem) => (
-        <TableCell
-          data={formatDateFromUTC(record?.updated_at)}
           className="!text-zinc-400"
         />
       ),
@@ -352,7 +351,7 @@ export default function TableContainer({
     requestId,
     type,
     reason = "",
-    callback = () => {},
+    callback = () => { },
   }: UpdateStatusParams) => {
     try {
       /**
