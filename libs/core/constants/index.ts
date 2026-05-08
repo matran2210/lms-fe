@@ -60,6 +60,7 @@ export const TitleTeacherSidebar = {
   MYCALENDAR: "My Calendar",
   MYREQUEST: "My Request",
   NOTIFICATIONS: "Notifications",
+  ATTENDANCE: "Attendance"
 };
 
 export const GUIDELINE_PASSWORD = [

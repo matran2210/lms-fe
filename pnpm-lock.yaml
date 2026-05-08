@@ -469,6 +469,9 @@ importers:
       '@lms/core':
         specifier: workspace:*
         version: link:../../libs/core
+      '@lms/feature-attendance':
+        specifier: workspace:*
+        version: link:../../features/attendance
       '@lms/feature-auth':
         specifier: workspace:*
         version: link:../../features/auth
@@ -924,6 +927,63 @@ importers:
       yarn:
         specifier: ^1.22.22
         version: 1.22.22
+
+  features/attendance:
+    dependencies:
+      '@hookform/resolvers':
+        specifier: ^3.10.0
+        version: 3.10.0(react-hook-form@7.48.2(react@18.2.0))
+      '@lms/assets':
+        specifier: workspace:*
+        version: link:../../libs/assets
+      '@lms/contexts':
+        specifier: workspace:*
+        version: link:../../libs/state
+      '@lms/core':
+        specifier: workspace:*
+        version: link:../../libs/core
+      '@lms/hoc':
+        specifier: workspace:*
+        version: link:../../libs/HOC
+      '@lms/hooks':
+        specifier: workspace:*
+        version: link:../../libs/hooks
+      '@lms/ui':
+        specifier: workspace:*
+        version: link:../../libs/ui
+      '@lms/utils':
+        specifier: workspace:*
+        version: link:../../libs/utils
+      '@sapp-fe/sapp-common-package':
+        specifier: ^1.8.0
+        version: 1.8.0(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.1(@types/node@24.12.2)(typescript@5.1.6))(webpack@5.106.2)
+      antd:
+        specifier: ^5.25.0
+        version: 5.29.3(date-fns@3.6.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      dayjs:
+        specifier: ^1.11.12
+        version: 1.11.20
+      lodash:
+        specifier: ^4.17.21
+        version: 4.18.1
+      react-hook-form:
+        specifier: 7.48.2
+        version: 7.48.2(react@18.2.0)
+      react-hot-toast:
+        specifier: ^2.4.1
+        version: 2.6.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      react-query:
+        specifier: 3.39.3
+        version: 3.39.3(react-dom@18.2.0(react@18.2.0))(react-native@0.85.3(@babel/core@7.29.0)(@types/react@18.2.46)(react@18.2.0))(react@18.2.0)
+      recharts:
+        specifier: ^2.5.0
+        version: 2.15.4(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      zod:
+        specifier: ^3.22.4
+        version: 3.25.76
 
   features/auth:
     dependencies:
@@ -7576,6 +7636,9 @@ packages:
     resolution: {integrity: sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==}
     engines: {node: '>=6'}
 
+  eventemitter3@4.0.7:
+    resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}
+
   eventemitter3@5.0.4:
     resolution: {integrity: sha512-mlsTRyGaPBjPedk6Bvw+aqbsXDtoAyAzm5MO7JgU+yVRyMQ5O8bD4Kcci7BS85f93veegeCPkL8R4GLClnjLFw==}
 
@@ -7624,6 +7687,10 @@ packages:
 
   fast-diff@1.3.0:
     resolution: {integrity: sha512-VxPP4NqbUjj6MaAOafWeUn2cXWLcCtljklUtZf0Ind4XQ+QPtmA0b18zZy0jIQx+ExRVCR/ZQpBmik5lXshNsw==}
+
+  fast-equals@5.4.0:
+    resolution: {integrity: sha512-jt2DW/aNFNwke7AUd+Z+e6pz39KO5rzdbbFCg2sGafS4mk13MI7Z8O5z9cADNn5lhGODIgLwug6TZO2ctf7kcw==}
+    engines: {node: '>=6.0.0'}
 
   fast-glob@3.3.3:
     resolution: {integrity: sha512-7MptL8U0cqcFdzIzwOTHoilX9x5BrNqye7Z/LuC7kCMRio1EMSyqRK3BEAUD7sXRq4iT4AzTVuZdhgQ2TCvYLg==}
@@ -10970,6 +11037,12 @@ packages:
       react: ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
+  react-smooth@4.0.4:
+    resolution: {integrity: sha512-gnGKTpYwqL0Iii09gHobNolvX4Kiq4PKx6eWBCYYix+8cdw+cGo3do906l1NBPKkSWx1DghC1dlWG9L2uGd61Q==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
   react-stately@3.46.0:
     resolution: {integrity: sha512-OdxhWvHgs2L4OJGIs7hnuTr5WjjMM6enhNEAMRqiekhF8+ITvA2LRwNftOZwcogaoCslGYq5S2VQTQwnm0GbCA==}
     peerDependencies:
@@ -11011,6 +11084,16 @@ packages:
   readdirp@4.1.2:
     resolution: {integrity: sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg==}
     engines: {node: '>= 14.18.0'}
+
+  recharts-scale@0.4.5:
+    resolution: {integrity: sha512-kivNFO+0OcUNu7jQquLXAxz1FIwZj8nrj+YkOKc5694NbjCvcT6aSZiIzNzd2Kul4o4rTto8QVR9lMNtxD4G1w==}
+
+  recharts@2.15.4:
+    resolution: {integrity: sha512-UT/q6fwS3c1dHbXv2uFgYJ9BMFHu3fwnd7AYZaEQhXuYQ4hgsxLvsUXzGdKeZrW5xopzDCvuA2N41WJ88I7zIw==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   recharts@3.8.1:
     resolution: {integrity: sha512-mwzmO1s9sFL0TduUpwndxCUNoXsBw3u3E/0+A+cLcrSfQitSG62L32N69GhqUrrT5qKcAE3pCGVINC6pqkBBQg==}
@@ -12151,6 +12234,9 @@ packages:
     resolution: {integrity: sha512-hLiqfcvsjI7IRm5gYIAE7d7wIAqnn797oyDdMkaw76pAQh6aFqvrw4EYcByuxuCSe/5bwck5LNcJ3neXeceGbQ==}
     engines: {node: '>= 18'}
     hasBin: true
+
+  victory-vendor@36.9.2:
+    resolution: {integrity: sha512-PnpQQMuxlwYdocC8fIJqVXvkeViHYzotI+NJrCuav0ZYFoq912ZHBk3mCeuj+5/VpodOjPe1z0Fk2ihgzlXqjQ==}
 
   victory-vendor@37.3.6:
     resolution: {integrity: sha512-SbPDPdDBYp+5MJHhBCAyI7wKM3d5ivekigc2Dk2s7pgbZ9wIgIBYGVw4zGHBml/qTFbexrofXW6Gu4noGxrOwQ==}
@@ -20117,6 +20203,8 @@ snapshots:
 
   event-target-shim@5.0.1: {}
 
+  eventemitter3@4.0.7: {}
+
   eventemitter3@5.0.4: {}
 
   events-intercept@2.0.0: {}
@@ -20173,6 +20261,8 @@ snapshots:
   fast-deep-equal@3.1.3: {}
 
   fast-diff@1.3.0: {}
+
+  fast-equals@5.4.0: {}
 
   fast-glob@3.3.3:
     dependencies:
@@ -24039,6 +24129,14 @@ snapshots:
       react-dom: 18.2.0(react@18.2.0)
       resize-observer-polyfill: 1.5.1
 
+  react-smooth@4.0.4(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+    dependencies:
+      fast-equals: 5.4.0
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-transition-group: 4.4.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+
   react-stately@3.46.0(react@18.2.0):
     dependencies:
       '@internationalized/date': 3.12.1
@@ -24095,6 +24193,23 @@ snapshots:
       picomatch: 2.3.2
 
   readdirp@4.1.2: {}
+
+  recharts-scale@0.4.5:
+    dependencies:
+      decimal.js-light: 2.5.1
+
+  recharts@2.15.4(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+    dependencies:
+      clsx: 2.1.1
+      eventemitter3: 4.0.7
+      lodash: 4.18.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-is: 18.3.1
+      react-smooth: 4.0.4(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      recharts-scale: 0.4.5
+      tiny-invariant: 1.3.3
+      victory-vendor: 36.9.2
 
   recharts@3.8.1(@types/react-dom@18.2.18)(@types/react@18.2.46)(react-dom@18.2.0(react@18.2.0))(react-is@18.3.1)(react-native@0.85.3(@babel/core@7.29.0)(@types/react@18.2.46)(react@18.2.0))(react@18.2.0)(redux@4.2.1):
     dependencies:
@@ -25568,6 +25683,23 @@ snapshots:
       - encoding
       - rollup
       - supports-color
+
+  victory-vendor@36.9.2:
+    dependencies:
+      '@types/d3-array': 3.2.2
+      '@types/d3-ease': 3.0.2
+      '@types/d3-interpolate': 3.0.4
+      '@types/d3-scale': 4.0.9
+      '@types/d3-shape': 3.1.8
+      '@types/d3-time': 3.0.4
+      '@types/d3-timer': 3.0.2
+      d3-array: 3.2.4
+      d3-ease: 3.0.1
+      d3-interpolate: 3.0.1
+      d3-scale: 4.0.2
+      d3-shape: 3.2.0
+      d3-time: 3.1.0
+      d3-timer: 3.0.1
 
   victory-vendor@37.3.6:
     dependencies:

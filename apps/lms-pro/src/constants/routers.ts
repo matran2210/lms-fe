@@ -14,6 +14,7 @@ export const PageLink = {
   TEACHER_TEST: '/teachers/test',
   TEACHER_EXPLANATION: '/teachers/explanation',
   TEACHER_MY_PROFILE: '/teachers/overview',
+  TEACHER_ATTENDANCE: '/teachers/attendance',
   AUTH_LOGIN: '/auth/login',
   AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
   AUTH_FORGOT_PASSWORD_RECOVER: '/auth/forgot-password/recover',

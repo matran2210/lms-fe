@@ -1,5 +1,6 @@
 "use client";
 import {
+  AttendanceMenuIcon,
   BellIcon,
   BlankAvatarImage,
   BookMenuIcon,
@@ -191,6 +192,14 @@ export default function TeacherMenu({
         link: pageLink.TEACHER_MY_REQUEST,
         active: isCurrent(pageLink.TEACHER_MY_REQUEST),
         showMenu: !!appModules?.find((m) => m.name === 'schedule'),
+      },
+      {
+        key: "Attendance",
+        title: TitleTeacherSidebar.ATTENDANCE,
+        icon: <AttendanceMenuIcon selected={selectedKey === "Attendance"} />,
+        link: pageLink.TEACHER_ATTENDANCE,
+        active: isCurrent(pageLink.TEACHER_ATTENDANCE),
+        showMenu: !!appModules?.find((m) => m.name === 'attendance'),
       },
       // {
       //   key: "Bell",
