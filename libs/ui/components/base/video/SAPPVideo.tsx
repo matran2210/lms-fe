@@ -26,7 +26,9 @@ interface IProp {
   children?: ReactNode;
   videoAttribs?: { [key: string]: string };
   isFetchCaptions?: boolean;
-  handlePlayVideo?: () => void;
+  handlePlayVideo?:() => void
+  className?: string;
+  controlClassName?: string;
 }
 
 type ResolutionTypes =
@@ -68,6 +70,8 @@ const SAPPVideo = ({
   videoAttribs,
   isFetchCaptions = true,
   handlePlayVideo,
+  className,
+  controlClassName
 }: IProp) => {
   const { fetcher, videoUrl, router } = useFeature();
   const [playerFunction, setPlayerFunction] = useState<any>();
@@ -970,7 +974,7 @@ const SAPPVideo = ({
                 controls
                 responsive={false}
                 // className={`${styles.content}`} comment monorepo
-                className="sapp-content"
+                className={clsx("sapp-content", className)}
                 onSeeking={() => {
                   if (streamRef.current && pauseOnSeek) {
                     streamRef.current.pause();
@@ -1029,7 +1033,7 @@ const SAPPVideo = ({
                 ref={streamRef}
                 controls={false}
                 // className={`${styles.content}`} comment monorepo
-                className="sapp-content"
+                className={clsx("sapp-content", className)}
                 poster={src}
                 onSeeking={() => {
                   if (streamRef?.current && pauseOnSeek && openQuestion) {
@@ -1044,7 +1048,7 @@ const SAPPVideo = ({
                 onPlay={handlePlayVideo}
               />
               <div
-                className="video-controls flex-center absolute bottom-0 left-0 right-0 h-14 w-full rounded-b-lg px-4 py-3"
+                className={clsx("video-controls flex-center absolute bottom-0 left-0 right-0 h-14 w-full rounded-b-lg px-4 py-3", controlClassName)}
                 ref={videoControlsRef}
               >
                 <div
