@@ -157,7 +157,7 @@ const ActivityPage = () => {
   const [fetch_progress, setFetch_progress] = useState<string[]>([])
   const [exhibitText, setExhibitText] = useState<string>('')
   const [openResource, setOpenResource] = useState(false)
-  const [onFocusingPad, setOnFocusingPad] = useState('')
+  const [focusingPadId, setFocusingPadId] = useState('')
 
   const onFocusDiscussion = () => {
     setFocusOnlyDiscussion(true)
@@ -588,8 +588,8 @@ const ActivityPage = () => {
                       uuid={e?.uuid}
                       count={index}
                       key={e?.uuid}
-                      setOnFocusingPad={setOnFocusingPad}
-                      onFocusingPad={onFocusingPad}
+                      setFocusingPadId={setFocusingPadId}
+                      focusingPadId={focusingPadId}
                     />
                   )
                 })}
@@ -598,9 +598,9 @@ const ActivityPage = () => {
                     <CalculatorModal
                       onClose={() => dispatch(closeCalculator())}
                       key={"sidebar-calculator"}
-                      onClick={() => setOnFocusingPad("sidebar-calculator")}
+                      onClick={() => setFocusingPadId("sidebar-calculator")}
                       isInBody
-                      isTopModal={onFocusingPad === "sidebar-calculator"}
+                      isTopModal={focusingPadId === "sidebar-calculator"}
                     />
                   )}
                 </>
@@ -770,11 +770,11 @@ const ActivityPage = () => {
                   return (
                     <CalculatorModal
                       key={e.id}
-                      onClick={() => setOnFocusingPad(e.id)}
+                      onClick={() => setFocusingPadId(e.id)}
                       onClose={() => handleCloseScratchPad(e)}
                       isInBody
                       modalIndex={index}
-                      isTopModal={onFocusingPad === e.id}
+                      isTopModal={focusingPadId === e.id}
                     />
                   )
                 } else if (e.type === 'file') {
@@ -806,8 +806,8 @@ const ActivityPage = () => {
                         </div>
                       )}
                       isInBody
-                      isTopModal={onFocusingPad === e.id}
-                      onModalFocus={() => setOnFocusingPad(e?.id as string)}
+                      isTopModal={focusingPadId === e.id}
+                      onModalFocus={() => setFocusingPadId(e?.id as string)}
                     >
                       <div
                         className="overflow-auto bg-white p-4"
@@ -843,8 +843,8 @@ const ActivityPage = () => {
                         </div>
                       )}
                       modalIndex={e.index}
-                      isTopModal={onFocusingPad === e.id}
-                      onModalFocus={() => setOnFocusingPad(e?.id as string)}
+                      isTopModal={focusingPadId === e.id}
+                      onModalFocus={() => setFocusingPadId(e?.id as string)}
                       bodyClassName="h-[90%] overflow-auto"   
                       isInBody
                     >

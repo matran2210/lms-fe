@@ -9,8 +9,8 @@ import { useForm } from 'react-hook-form'
 import ScratchPatch from './scratchPatch'
 interface IProps {
   openScratchPad: any[]
-  onFocusingPad: string
-  setOnFocusingPad: Dispatch<SetStateAction<string>>
+  focusingPadId: string
+  setFocusingPadId: Dispatch<SetStateAction<string>>
   handleCloseScratchPad: (pad: any) => void
   currentPage: any
   scratchPads: string
@@ -23,8 +23,8 @@ interface IProps {
 
 const TestScratchPads = ({
   openScratchPad,
-  onFocusingPad,
-  setOnFocusingPad,
+  focusingPadId,
+  setFocusingPadId,
   handleCloseScratchPad,
   currentPage,
   scratchPads,
@@ -65,10 +65,10 @@ const TestScratchPads = ({
       return (
         <CalculatorModal
           key={e.id}
-          onClick={() => setOnFocusingPad(e.id)}
+          onClick={() => setFocusingPadId(e.id)}
           onClose={() => handleCloseScratchPad(e)}
           modalIndex={index}
-          isTopModal={onFocusingPad === e.id}
+          isTopModal={focusingPadId === e.id}
         />
       )
     } else if (e.type === 'scratch_pad') {
@@ -101,13 +101,13 @@ const TestScratchPads = ({
             handleCloseScratchPad(e)
           }}
           onModalFocus={() => {
-            setOnFocusingPad(e?.id)
+            setFocusingPadId(e?.id)
           }}
           width={412}
           height={350}
           modalIndex={index}
           contentClassName="!overflow-hidden"
-          isTopModal={onFocusingPad === e.id}
+          isTopModal={focusingPadId === e.id}
         >
           <ScratchPatch
             scratchPadValues={scratchPadValues.find(
@@ -132,8 +132,8 @@ const TestScratchPads = ({
           onClose={() => handleCloseScratchPad(e)}
           position="center"
           modalIndex={i}
-          isTopModal={onFocusingPad === e.id}
-          onModalFocus={() => setOnFocusingPad(e?.id as string)}
+          isTopModal={focusingPadId === e.id}
+          onModalFocus={() => setFocusingPadId(e?.id as string)}
           header={({ requestClose }) => (
             <div className="relative">
               <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
@@ -191,8 +191,8 @@ const TestScratchPads = ({
           position="center"
           draggableFull
           modalIndex={index}
-          isTopModal={onFocusingPad === e.id}
-          onModalFocus={() => setOnFocusingPad(e?.id as string)}
+          isTopModal={focusingPadId === e.id}
+          onModalFocus={() => setFocusingPadId(e?.id as string)}
         >
           <div
             className="overflow-auto bg-white p-4"

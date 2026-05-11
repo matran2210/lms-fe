@@ -265,7 +265,7 @@ const CaseStudyDetail = () => {
   // handle show exhibit list
   const [exhibitData, setExhibitData] = useState<IExhibit[]>()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
-  const [onFocusingPad, setOnFocusingPad] = useState('')
+  const [focusingPadId, setFocusingPadId] = useState('')
   const [openSubmit, setOpenSubmit] = useState(false)
   const [openQuit, setOpenQuit] = useState(false)
   const dispatch = useAppDispatch()
@@ -504,7 +504,7 @@ const CaseStudyDetail = () => {
           return e.type !== 'exhibits'
         })
         for (let e of watch('exhibits')) {
-          setOnFocusingPad(e)
+          setFocusingPadId(e)
           newArr.push({ id: e, type: 'exhibits' })
         }
         return newArr
@@ -1154,10 +1154,10 @@ const CaseStudyDetail = () => {
               return (
                 <CalculatorModal
                   key={e.id}
-                  onClick={() => setOnFocusingPad(e?.id as string)}
+                  onClick={() => setFocusingPadId(e?.id as string)}
                   onClose={() => handleCloseScratchPad(e)}
                   modalIndex={index}
-                  isTopModal={onFocusingPad === e.id}
+                  isTopModal={focusingPadId === e.id}
                 />
               )
             } else if (e.type === 'scratch_pad') {
@@ -1169,8 +1169,8 @@ const CaseStudyDetail = () => {
                   width={412}
                   height={350}
                   modalIndex={index}
-                  isTopModal={onFocusingPad === e.id}
-                  onModalFocus={() => setOnFocusingPad(e?.id as string)}
+                  isTopModal={focusingPadId === e.id}
+                  onModalFocus={() => setFocusingPadId(e?.id as string)}
                   header={({ requestClose }) => (
                     <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
                       <div className="text-sm font-semibold text-gray-800">
@@ -1214,8 +1214,8 @@ const CaseStudyDetail = () => {
                   onClose={() => handleCloseScratchPad(e)}
                   position="center"
                   modalIndex={index}
-                  isTopModal={onFocusingPad === e.id}
-                  onModalFocus={() => setOnFocusingPad(e?.id as string)}
+                  isTopModal={focusingPadId === e.id}
+                  onModalFocus={() => setFocusingPadId(e?.id as string)}
                   header={({ requestClose }) => (
                     <div className="relative">
                       <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
@@ -1270,8 +1270,8 @@ const CaseStudyDetail = () => {
                   position="center"
                   draggableFull
                   modalIndex={index}
-                  isTopModal={onFocusingPad === e.id}
-                  onModalFocus={() => setOnFocusingPad(e?.id as string)}
+                  isTopModal={focusingPadId === e.id}
+                  onModalFocus={() => setFocusingPadId(e?.id as string)}
                 >
                   <div
                     className="overflow-auto bg-white p-4"

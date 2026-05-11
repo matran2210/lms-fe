@@ -124,7 +124,7 @@ const ActivityTeacherPage = () => {
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [fetch_progress, setFetch_progress] = useState<string[]>([])
   const [exhibitText, setExhibitText] = useState<string>('')
-  const [onFocusingPad, setOnFocusingPad] = useState('')
+  const [focusingPadId, setFocusingPadId] = useState('')
 
   const settingDoneProcessActivity = (activity: IActivity) => {
     setIsHasQuizGrading(false)
@@ -541,8 +541,8 @@ const ActivityTeacherPage = () => {
                   uuid={e?.uuid}
                   count={index}
                   key={e?.uuid}
-                  setOnFocusingPad={setOnFocusingPad}
-                  onFocusingPad={onFocusingPad}
+                  setFocusingPadId={setFocusingPadId}
+                  focusingPadId={focusingPadId}
                 />
               )
             })}
@@ -551,9 +551,9 @@ const ActivityTeacherPage = () => {
                 <CalculatorModal 
                   onClose={() => dispatch(closeCalculator())}
                   key={"sidebar-calculator"}
-                  onClick={() => setOnFocusingPad("sidebar-calculator")}
+                  onClick={() => setFocusingPadId("sidebar-calculator")}
                   isInBody
-                  isTopModal={onFocusingPad === "sidebar-calculator"}
+                  isTopModal={focusingPadId === "sidebar-calculator"}
                 />
               )}
             </>
@@ -967,8 +967,8 @@ const ActivityTeacherPage = () => {
                   position="center"
                   isInBody
                   modalIndex={index}
-                  isTopModal={onFocusingPad === e.id}
-                  onModalFocus={() => setOnFocusingPad(e?.id as string)}
+                  isTopModal={focusingPadId === e.id}
+                  onModalFocus={() => setFocusingPadId(e?.id as string)}
                 >
                   <div
                     // className="overflow-auto p-4 bg-white"
@@ -1009,8 +1009,8 @@ const ActivityTeacherPage = () => {
                   )}
                   isInBody
                   modalIndex={e.index}
-                  isTopModal={onFocusingPad === e.id}
-                  onModalFocus={() => setOnFocusingPad(e?.id as string)}
+                  isTopModal={focusingPadId === e.id}
+                  onModalFocus={() => setFocusingPadId(e?.id as string)}
                 >
                   <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                     <EditorReader

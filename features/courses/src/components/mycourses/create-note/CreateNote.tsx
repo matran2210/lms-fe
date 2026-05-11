@@ -14,11 +14,11 @@ interface IProps {
   content: string;
   uuid: string | number;
   count: number;
-  onFocusingPad: string;
-  setOnFocusingPad: React.Dispatch<React.SetStateAction<string>>;
+  focusingPadId: string;
+  setFocusingPadId: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const CreateNote = ({ id, content, uuid, count, onFocusingPad, setOnFocusingPad}: IProps) => {
+const CreateNote = ({ id, content, uuid, count, focusingPadId, setFocusingPadId}: IProps) => {
   const { courseApi, router, dispatch, params } = useFeature();
 
   const [activeSectionId, setActiveSectionId] = useState<string>();
@@ -141,8 +141,8 @@ const CreateNote = ({ id, content, uuid, count, onFocusingPad, setOnFocusingPad}
         width={isMobileView ? 340 : 412}
         height={350}
         isInBody
-        isTopModal={onFocusingPad === (id ? id : uuid)}
-        onModalFocus={() => setOnFocusingPad((id ? id : uuid) as string)}
+        isTopModal={focusingPadId === (id ? id : uuid)}
+        onModalFocus={() => setFocusingPadId((id ? id : uuid) as string)}
       >
         <div className="flex h-full flex-col p-4">
           <HookFormTextArea

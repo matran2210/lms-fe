@@ -9,8 +9,8 @@ import ScratchPatch from './scratchPatch'
 import { useSmartModalSize } from '@lms/hooks'
 interface IProps {
   openScratchPad: any[]
-  onFocusingPad: string
-  setOnFocusingPad: Dispatch<SetStateAction<string>>
+  focusingPadId: string
+  setFocusingPadId: Dispatch<SetStateAction<string>>
   handleCloseScratchPad: (pad: any) => void
   currentPage: any
   scratchPads: string
@@ -23,8 +23,8 @@ interface IProps {
 
 const TestScratchPads = ({
   openScratchPad,
-  onFocusingPad,
-  setOnFocusingPad,
+  focusingPadId,
+  setFocusingPadId,
   handleCloseScratchPad,
   currentPage,
   scratchPads,
@@ -67,10 +67,10 @@ const TestScratchPads = ({
       return (
         <CalculatorModal
           key={e.id}
-          onClick={() => setOnFocusingPad(e?.id)}
+          onClick={() => setFocusingPadId(e?.id)}
           onClose={() => handleCloseScratchPad(e)}
           modalIndex={index}
-          isTopModal={onFocusingPad === e.id}
+          isTopModal={focusingPadId === e.id}
         />
       )
     } else if (e.type === 'scratch_pad') {
@@ -102,12 +102,12 @@ const TestScratchPads = ({
             handleCloseScratchPad(e)
           }}
           onModalFocus={() => {
-            setOnFocusingPad(e?.id)
+            setFocusingPadId(e?.id)
           }}
           width={412}
           height={350}
           modalIndex={index}
-          isTopModal={onFocusingPad === e.id}
+          isTopModal={focusingPadId === e.id}
         >
           <ScratchPatch
             scratchPadValues={scratchPadValues.find(
@@ -131,8 +131,8 @@ const TestScratchPads = ({
           key={e.id}
           onClose={() => handleCloseScratchPad(e)}
           position="center"
-          isTopModal={onFocusingPad === e.id}
-          onModalFocus={() => setOnFocusingPad(e?.id as string)}
+          isTopModal={focusingPadId === e.id}
+          onModalFocus={() => setFocusingPadId(e?.id as string)}
           header={({ requestClose }) => (
             <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
               <div className="text-sm font-semibold text-gray-800">
@@ -183,8 +183,8 @@ const TestScratchPads = ({
           position="center"
           draggableFull
           modalIndex={index}
-          isTopModal={onFocusingPad === e.id}
-          onModalFocus={() => setOnFocusingPad(e?.id as string)}
+          isTopModal={focusingPadId === e.id}
+          onModalFocus={() => setFocusingPadId(e?.id as string)}
         >
           <div
             className="overflow-auto bg-white p-4"
