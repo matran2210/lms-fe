@@ -52,6 +52,11 @@ const SearchClassResource = ({
 
   const inputRef = useRef<HTMLInputElement>(null)
 
+  useEffect(() => {
+    const sk = query.search_key
+    methods.setValue('name', typeof sk === 'string' ? sk : '')
+  }, [query.search_key, methods])
+
   const queryString = buildQueryString({
     status: query.status || '',
     type: query.type ?? '',
@@ -64,6 +69,7 @@ const SearchClassResource = ({
 
     push(
       `/courses/my-course/${params.courseId}/class-resource?${buildQueryString(restQuery)}`,
+      { scroll: false },
     )
   }
 
@@ -79,6 +85,7 @@ const SearchClassResource = ({
         page_size: DEFAULT_PAGE_SIZE,
         search_key: methods.watch('name')?.trim() || undefined,
       })}`,
+      { scroll: false },
     )
   }
 

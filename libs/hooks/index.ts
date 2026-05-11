@@ -15,6 +15,7 @@ export { default as useSelectExams } from "./useSelectExams";
 export * from "./useNotification";
 export * from "./useSappEditorImageUpload";
 export * from "./useUserRole";
+export * from "./useClassResourceRouteId";
 export * from "./useSmartModalSize";
 export * from "./course/useInitialSections";
 export * from "./course/useSectionData";

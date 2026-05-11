@@ -1,7 +1,8 @@
 import { CloseIcon, DownloadIcon, LoadingIcon } from '@lms/assets'
 import {
   CLASS_SUFFIX_TYPE,
-  IClassResource
+  IClassResource,
+  RESOURCE_TYPE,
 } from '@lms/core'
 import { useUserRole } from '@lms/hooks'
 import {
@@ -27,9 +28,10 @@ import { UploadAPI } from 'src/api/upload'
 interface IProps {
   data: IClassResource
   name: string
+  onFolderClick?: (folderId: string) => void
 }
 
-const CardFileItem = ({ data, name }: IProps) => {
+const CardFileItem = ({ data, name, onFolderClick }: IProps) => {
   const listSchedulePreview =
     data?.class_resource_permissions?.schedules?.slice(0, 2)
   const [openListLesson, setOpenListLesson] = useState(false)
@@ -64,9 +66,13 @@ const CardFileItem = ({ data, name }: IProps) => {
   }
   const allowDownload = canDownload(data, isTeacher)
 
-  const type = CLASS_SUFFIX_TYPE.find(
-    (item) => item.value === data?.suffix_type,
-  )?.label
+  const isFolder = data?.resource_type === RESOURCE_TYPE.FOLDER
+
+  const type = isFolder
+    ? 'Folder'
+    : CLASS_SUFFIX_TYPE.find(
+        (item) => item.value === data?.suffix_type,
+      )?.label
 
   const handleOpenPreview = async (resource: IClassResource) => {
     try {
@@ -97,6 +103,14 @@ const CardFileItem = ({ data, name }: IProps) => {
         }
       }
     } catch (error) { }
+  }
+
+  const handleTitleClick = () => {
+    if (isFolder) {
+      if (data?.id) onFolderClick?.(data.id)
+      return
+    }
+    void handleOpenPreview(data)
   }
 
   const loadDocFile = async (url: string) => {
@@ -223,27 +237,29 @@ const CardFileItem = ({ data, name }: IProps) => {
     <div className="space-y-4 rounded-xl bg-white p-4 shadow-small">
       <div className="flex items-center justify-between">
         <div
-          onClick={() => handleOpenPreview(data)}
+          onClick={handleTitleClick}
           className="cursor-pointer font-semibold leading-6 text-info-600"
         >
           {name}
         </div>
-        <div
-          className={clsx('flex justify-end', {
-            'pointer-events-none opacity-40': !allowDownload,
-          })}
-        >
-          <ActionCellWithPopover
-            className=""
-            listAction={[
-              {
-                icon: <DownloadIcon className="h-5 w-5" />,
-                nameAction: 'Download',
-                action: () => download(params.courseId as string, data.id),
-              },
-            ]}
-          />
-        </div>
+        {!isFolder && (
+          <div
+            className={clsx('flex justify-end', {
+              'pointer-events-none opacity-40': !allowDownload,
+            })}
+          >
+            <ActionCellWithPopover
+              className=""
+              listAction={[
+                {
+                  icon: <DownloadIcon className="h-5 w-5" />,
+                  nameAction: 'Download',
+                  action: () => download(params.courseId as string, data.id),
+                },
+              ]}
+            />
+          </div>
+        )}
       </div>
       <div className="space-y-2">
         <div className="flex text-sm leading-5.5">
