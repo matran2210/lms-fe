@@ -43,5 +43,6 @@ export const PageLink = {
   CALENDAR: '/calendar',
   EXAM_LIST: '/exam_list',
   CLASS_RESOURCE: '/courses/my-course/[courseId]/class-resource',
+  STUDENT_ATTENDANCE: '/courses/my-course/[courseId]/attendance',
   COURSE_ACTIVATION: '/course-activation',
 }

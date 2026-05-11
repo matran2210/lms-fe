@@ -36,6 +36,21 @@ export interface LearningAttendance extends AttendanceRecord {
 }
 
 /**
+ * Student attendance record for student view
+ */
+export interface StudentAttendanceRecord {
+  id: string
+  lessonTitle: string
+  eventName: string
+  className: string
+  date: string
+  checkIn: string
+  checkOut: string
+  device: string
+  status: 'Attended' | 'Absent'
+}
+
+/**
  * Filter criteria for attendance data
  */
 export interface AttendanceFilters {
@@ -82,6 +97,16 @@ export interface AttendanceStatistics {
   actualWorkload: number
   plannedWorkload: number
   workloadCompletionRate: number
+}
+
+/**
+ * Student attendance statistics
+ */
+export interface StudentAttendanceStatistics {
+  totalSessions: number
+  attendedSessions: number
+  absentSessions: number
+  attendanceRate: number
 }
 
 /**

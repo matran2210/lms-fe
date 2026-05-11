@@ -40,6 +40,7 @@ export const TitleSidebar = {
   ACTIVITY: "Activity",
   CLASS_RESOURCE: "Class Resource",
   COURSE_ACTIVATION: "Course Activation",
+  STUDENT_ATTENDANCE: "Attendance",
 };
 
 export const ValueSidebar = {

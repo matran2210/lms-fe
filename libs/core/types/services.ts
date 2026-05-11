@@ -12,7 +12,7 @@ import {
   SendEmailReq,
   VerifyOtpReq,
 } from "../../state";
-import { DocumentItem, ExamInformation, IQuestion, IStoryline } from "./course";
+import { CourseDetail, DocumentItem, ExamInformation, IQuestion, IStoryline } from "./course";
 import {
   IExamPrediction,
   ILearningResult,
@@ -168,6 +168,7 @@ export interface ICoursesAPI {
   getQuizAttemptsEntranceTestChartData: (
     id: string | string[] | undefined,
   ) => Promise<any>;
+  getCourseDetail(id: string | string[] | undefined, page_index: number, page_size: number, params: Object): Promise<IResponse<CourseDetail>>
 }
 export interface IActivityAPI {
   createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<any>;
