@@ -1,6 +1,6 @@
 import { CloseIcon } from "@lms/assets";
 import { useTailwindBreakpoint } from "@lms/hooks";
-import { Calculator, ModalResizeableNew } from "@lms/ui";
+import { Calculator, ModalResizeable } from "@lms/ui";
 import { useState, useCallback } from "react";
 
 interface IProps {
@@ -31,7 +31,7 @@ const CalculatorModal = ({
   }, []);
 
   return (
-    <ModalResizeableNew
+    <ModalResizeable
       bodyClassName="h-[calc(100%-6px)]"
       contentClassName="!overflow-hidden"
       onClose={onClose}
@@ -71,7 +71,7 @@ const CalculatorModal = ({
       )}
     >
       <Calculator isMobileCalc={isMobileCalc} isShortScreen={isShortScreen} />
-    </ModalResizeableNew>
+    </ModalResizeable>
   );
 };
 

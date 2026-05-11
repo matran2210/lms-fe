@@ -1,6 +1,6 @@
 import { CircleCloseIcon, Triangle } from "@lms/assets";
 import { defaultSheetData, RESPONSE_OPTION } from "@lms/core";
-import { ButtonSecondary, EssayQuestionPreview, ModalResizeableNew } from "@lms/ui";
+import { ButtonSecondary, EssayQuestionPreview, ModalResizeable } from "@lms/ui";
 import clsx from "clsx";
 import { useFeature } from "@lms/contexts";
 import { useLayoutEffect, useState } from "react";
@@ -82,7 +82,7 @@ const ShowAnswerTemplate = ({
         </ButtonSecondary>
       </div>
       {showModalTemplate && (
-        <ModalResizeableNew
+        <ModalResizeable
           onClose={handleCloseModal}
           rootClassName="rounded-xl"
           bodyClassName="p-6"
@@ -138,7 +138,7 @@ const ShowAnswerTemplate = ({
             />
           </div>
           <Triangle className="absolute bottom-2 right-2" />
-        </ModalResizeableNew>
+        </ModalResizeable>
       )}
     </>
   );

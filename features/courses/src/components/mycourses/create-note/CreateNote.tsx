@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CloseIconNote, SaveIcon } from "@lms/assets";
 import { closeNote, useFeature } from "@lms/contexts";
 import { useTailwindBreakpoint } from "@lms/hooks";
-import { ButtonSecondary, HookFormTextArea, ModalResizeableNew } from "@lms/ui";
+import { ButtonSecondary, HookFormTextArea, ModalResizeable } from "@lms/ui";
 import { VALIDATE_REQUIRED } from "@lms/utils";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -105,7 +105,7 @@ const CreateNote = ({ id, content, uuid, count, onFocusingPad, setOnFocusingPad}
 
   return (
     <>
-      <ModalResizeableNew
+      <ModalResizeable
         bodyClassName="h-[calc(100%-6px)]"
         modalIndex={count}
         header={({ requestClose }) => (
@@ -169,7 +169,7 @@ const CreateNote = ({ id, content, uuid, count, onFocusingPad, setOnFocusingPad}
             </div>
           )}
         </div>
-      </ModalResizeableNew>
+      </ModalResizeable>
     </>
   );
 };

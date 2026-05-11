@@ -24,7 +24,7 @@ import {
   FileViewer,
   Layout,
   LearningResource,
-  ModalResizeableNew,
+  ModalResizeable,
 } from '@lms/ui'
 import { convertMinutesToHourFormat, extractNotActivatedData } from '@lms/utils'
 
@@ -779,7 +779,7 @@ const ActivityPage = () => {
                   )
                 } else if (e.type === 'file') {
                   return (
-                    <ModalResizeableNew
+                    <ModalResizeable
                       modalIndex={index}
                       // bodyClassName="h-[100%]"
                       title={e.fileName}
@@ -817,11 +817,11 @@ const ActivityPage = () => {
                         {/* <div className='flex flex-'> */}
                         <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
                       </div>
-                    </ModalResizeableNew>
+                    </ModalResizeable>
                   )
                 } else if (e.type === 'exhibits') {
                   return (
-                    <ModalResizeableNew
+                    <ModalResizeable
                       key={e.id}
                       className="!z-40"
                       onClose={() => handleCloseScratchPad(e)}
@@ -869,7 +869,7 @@ const ActivityPage = () => {
                           })}
                       </div>
                       <Triangle className="absolute bottom-2 right-2" />
-                    </ModalResizeableNew>
+                    </ModalResizeable>
                   )
                 }
               })}

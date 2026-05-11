@@ -34,7 +34,7 @@ import {
   FileViewer,
   FullScreenLayout,
   MatchingQuestion,
-  ModalResizeableNew,
+  ModalResizeable,
   MultiChoiceQuestion,
   OneChoiceQuestion,
   SappButton,
@@ -740,7 +740,7 @@ const CaseStudyResultTeacher = () => {
                 )
               } else if (e.type === 'scratch_pad') {
                 return (
-                  <ModalResizeableNew
+                  <ModalResizeable
                     key={e.id}
                     onClose={() => handleCloseScratchPad(e)}
                     position="center"
@@ -778,7 +778,7 @@ const CaseStudyResultTeacher = () => {
                       }}
                       className="!h-fit"
                     />
-                  </ModalResizeableNew>
+                  </ModalResizeable>
                 )
               } else if (e.type === 'exhibits') {
                 const i = exhibitData?.findIndex(
@@ -788,7 +788,7 @@ const CaseStudyResultTeacher = () => {
                   (exhibit) => exhibit?.id === e?.id,
                 )
                 return (
-                  <ModalResizeableNew
+                  <ModalResizeable
                     key={e.id}
                     onClose={() => handleCloseScratchPad(e)}
                     position="center"
@@ -837,11 +837,11 @@ const CaseStudyResultTeacher = () => {
                           )
                         })}
                     </div>
-                  </ModalResizeableNew>
+                  </ModalResizeable>
                 )
               } else if (e.type === 'file') {
                 return (
-                  <ModalResizeableNew
+                  <ModalResizeable
                     title={e?.fileName}
                     width={widthFileViewer}
                     height={heightFileViewer}
@@ -865,7 +865,7 @@ const CaseStudyResultTeacher = () => {
                         fileUrl={e?.file ?? ''}
                       />
                     </div>
-                  </ModalResizeableNew>
+                  </ModalResizeable>
                 )
               }
             })}

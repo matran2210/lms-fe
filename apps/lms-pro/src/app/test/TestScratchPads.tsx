@@ -3,7 +3,7 @@ import { CloseIconNote, Triangle } from '@lms/assets'
 import { IExhibit, ScratchPadValue } from '@lms/core'
 import { CalculatorModal } from '@lms/feature-courses'
 import { useSmartModalSize } from '@lms/hooks'
-import { EditorReader, FileViewer, ModalResizeableNew } from '@lms/ui'
+import { EditorReader, FileViewer, ModalResizeable } from '@lms/ui'
 import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
 import ScratchPatch from './scratchPatch'
@@ -73,7 +73,7 @@ const TestScratchPads = ({
       )
     } else if (e.type === 'scratch_pad') {
       return (
-        <ModalResizeableNew
+        <ModalResizeable
           position="center"
           key={currentPage}
           header={({ requestClose }) => (
@@ -121,13 +121,13 @@ const TestScratchPads = ({
             }}
             className="!h-full"
           />
-        </ModalResizeableNew>
+        </ModalResizeable>
       )
     } else if (e.type === 'exhibits') {
       const i = exhibitData?.findIndex((el: any) => el?.id === e?.id)
       const exhibitsDes = exhibitData?.find((exhibit) => exhibit?.id === e?.id)
       return (
-        <ModalResizeableNew
+        <ModalResizeable
           key={e.id}
           onClose={() => handleCloseScratchPad(e)}
           position="center"
@@ -178,11 +178,11 @@ const TestScratchPads = ({
               })}
           </div>
           <Triangle className="absolute bottom-2 right-2" />
-        </ModalResizeableNew>
+        </ModalResizeable>
       )
     } else if (e.type === 'file') {
       return (
-        <ModalResizeableNew
+        <ModalResizeable
           title={e.fileName}
           width={widthFileViewer}
           height={heightFileViewer}
@@ -202,7 +202,7 @@ const TestScratchPads = ({
             <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
           </div>
           {/* </div> */}
-        </ModalResizeableNew>
+        </ModalResizeable>
       )
     }
   })

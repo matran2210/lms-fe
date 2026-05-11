@@ -14,7 +14,7 @@ import {
   EditorReader,
   FileViewer,
   LayoutFilter,
-  ModalResizeableNew,
+  ModalResizeable,
   NameNoActionCell,
   PdfViewer,
   Popover,
@@ -384,7 +384,7 @@ export default function ClassResourceTeacher() {
       {openPreview &&
         previewResource &&
         previewResource.suffix_type !== 'IMAGE' && (
-          <ModalResizeableNew
+          <ModalResizeable
             isInBody={true}
             bodyClassName={clsx('px-5', {
               'pb-5': previewResource.suffix_type === 'WORD_DOCUMENT',
@@ -438,7 +438,7 @@ export default function ClassResourceTeacher() {
             <div className="h-full bg-white">
               {renderPreviewContent(previewResource)}
             </div>
-          </ModalResizeableNew>
+          </ModalResizeable>
         )}
       {openPreview &&
         previewResource &&

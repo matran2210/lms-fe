@@ -1,6 +1,6 @@
 import { CloseNone, SaveIcon } from '@lms/assets'
 import { NoteFormData } from '@lms/core'
-import { ButtonPrimary, HookFormTextArea, ModalResizeableNew } from '@lms/ui'
+import { ButtonPrimary, HookFormTextArea, ModalResizeable } from '@lms/ui'
 import { Control, UseFormHandleSubmit } from 'react-hook-form'
 
 interface IProps {
@@ -27,7 +27,7 @@ const CreateNoteDesktop = ({
   isChanged,
 }: IProps) => {
   return (
-    <ModalResizeableNew
+    <ModalResizeable
       position="center"
       width={412}
       height={350}
@@ -65,7 +65,7 @@ const CreateNoteDesktop = ({
           </div>
         )}
       </div>
-    </ModalResizeableNew>
+    </ModalResizeable>
   )
 }
 

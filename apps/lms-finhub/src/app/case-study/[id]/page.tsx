@@ -45,7 +45,7 @@ import {
   EssayQuestionPreview,
   FileViewer,
   MatchQuizComponent,
-  ModalResizeableNew,
+  ModalResizeable,
   ModalUploadFile,
   MovableWindow,
   MultiChoiceQuestion,
@@ -1162,7 +1162,7 @@ const CaseStudyDetail = () => {
               )
             } else if (e.type === 'scratch_pad') {
               return (
-                <ModalResizeableNew
+                <ModalResizeable
                   key={e.id}
                   onClose={() => handleCloseScratchPad(e)}
                   position="center"
@@ -1199,7 +1199,7 @@ const CaseStudyDetail = () => {
                     }}
                     className="!h-fit"
                   />
-                </ModalResizeableNew>
+                </ModalResizeable>
               )
             } else if (e.type === 'exhibits') {
               const i = exhibitData?.findIndex(
@@ -1209,7 +1209,7 @@ const CaseStudyDetail = () => {
                 (exhibit) => exhibit?.id === e?.id,
               )
               return (
-                <ModalResizeableNew
+                <ModalResizeable
                   key={e.id}
                   onClose={() => handleCloseScratchPad(e)}
                   position="center"
@@ -1257,11 +1257,11 @@ const CaseStudyDetail = () => {
                         )
                       })}
                   </div>
-                </ModalResizeableNew>
+                </ModalResizeable>
               )
             } else if (e.type === 'file') {
               return (
-                <ModalResizeableNew
+                <ModalResizeable
                   title={e?.fileName}
                   width={widthFileViewer}
                   height={heightFileViewer}
@@ -1279,7 +1279,7 @@ const CaseStudyDetail = () => {
                   >
                     <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
                   </div>
-                </ModalResizeableNew>
+                </ModalResizeable>
               )
             }
           })}

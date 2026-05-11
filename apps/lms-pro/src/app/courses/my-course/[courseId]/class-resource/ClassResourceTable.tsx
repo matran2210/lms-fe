@@ -13,7 +13,7 @@ import {
   ActionCellWithPopover,
   EditorReader,
   FileViewer,
-  ModalResizeableNew,
+  ModalResizeable,
   PaginationSapp,
   PdfViewer,
   Popover,
@@ -405,7 +405,7 @@ const ClassResourceTable = ({
       {openPreview &&
         previewResource &&
         previewResource.suffix_type !== 'IMAGE' && (
-          <ModalResizeableNew
+          <ModalResizeable
             bodyClassName={clsx('px-5', {
               'pb-5': previewResource.suffix_type === 'WORD_DOCUMENT',
             })}
@@ -464,7 +464,7 @@ const ClassResourceTable = ({
             >
               {renderPreviewContent(previewResource)}
             </div>
-          </ModalResizeableNew>
+          </ModalResizeable>
         )}
       {openPreview &&
         previewResource &&

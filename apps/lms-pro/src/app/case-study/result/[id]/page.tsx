@@ -42,7 +42,7 @@ import {
   FileViewer,
   HookFormTextArea,
   MatchQuizComponent,
-  ModalResizeableNew,
+  ModalResizeable,
   MovableWindow,
   MultiChoiceQuestion,
   NewDragNDropQuestion,
@@ -783,7 +783,7 @@ const CaseStudyResult = () => {
               )
             } else if (e.type === 'scratch_pad') {
               return (
-                <ModalResizeableNew
+                <ModalResizeable
                   key={e.id}
                   onClose={() => handleCloseScratchPad(e)}
                   position="center"
@@ -821,7 +821,7 @@ const CaseStudyResult = () => {
                     }}
                     className="!h-fit"
                   />
-                </ModalResizeableNew>
+                </ModalResizeable>
               )
             } else if (e.type === 'exhibits') {
               const i = exhibitData?.findIndex(
@@ -831,7 +831,7 @@ const CaseStudyResult = () => {
                 (exhibit) => exhibit?.id === e?.id,
               )
               return (
-                <ModalResizeableNew
+                <ModalResizeable
                   key={e.id}
                   onClose={() => handleCloseScratchPad(e)}
                   position="center"
@@ -875,11 +875,11 @@ const CaseStudyResult = () => {
                       })}
                   </div>
                   <Triangle className="absolute bottom-2 right-2" />
-                </ModalResizeableNew>
+                </ModalResizeable>
               )
             } else if (e.type === 'file') {
               return (
-                <ModalResizeableNew
+                <ModalResizeable
                   title={e?.fileName}
                   width={widthFileViewer}
                   height={heightFileViewer}
@@ -900,7 +900,7 @@ const CaseStudyResult = () => {
                       fileUrl={e?.file as string}
                     />
                   </div>
-                </ModalResizeableNew>
+                </ModalResizeable>
               )
             }
           })}

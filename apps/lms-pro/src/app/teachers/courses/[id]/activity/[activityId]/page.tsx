@@ -34,7 +34,7 @@ import {
   EditorReader,
   FileViewer,
   LayoutTeacher,
-  ModalResizeableNew,
+  ModalResizeable,
   SAPPBorder,
   SappButton,
   SappIcon,
@@ -957,7 +957,7 @@ const ActivityTeacherPage = () => {
           {openScratchPad.map((e, index: number) => {
             if (e.type === 'file') {
               return (
-                <ModalResizeableNew
+                <ModalResizeable
                   title={e.fileName}
                   width={650}
                   height={850}
@@ -978,11 +978,11 @@ const ActivityTeacherPage = () => {
                     {/* <div className='flex flex-'> */}
                     <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
                   </div>
-                </ModalResizeableNew>
+                </ModalResizeable>
               )
             } else if (e.type === 'exhibits') {
               return (
-                <ModalResizeableNew
+                <ModalResizeable
                   key={e.id}
                   dragHandleClassName="modal-header"
                   onClose={() => handleCloseScratchPad(e)}
@@ -1029,7 +1029,7 @@ const ActivityTeacherPage = () => {
                         )
                       })}
                   </div>
-                </ModalResizeableNew>
+                </ModalResizeable>
               )
             }
           })}

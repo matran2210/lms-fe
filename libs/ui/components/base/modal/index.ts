@@ -11,4 +11,3 @@ export { default as SappModalImage } from "./SappModalImage";
 export { default as FullScreenMobile } from "./FullScreenMobile";
 export { default as SappModalImageOriginalRatio } from "./SappModalImageOriginalRatio";
 export { default as PreviewImageModal } from "./PreviewImageModal";
-export { default as ModalResizeableNew } from "./ModalResizeableNew";
