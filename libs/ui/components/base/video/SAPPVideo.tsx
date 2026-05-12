@@ -288,6 +288,12 @@ const SAPPVideo = ({
     }
   };
 
+  // Event handler for video click
+  const handleVideoClick = () => {
+    togglePlay();
+    showControls();
+  };
+
   useEffect(() => {
     // Add eventlisteners
     if (options?.src) {
@@ -301,13 +307,15 @@ const SAPPVideo = ({
         streamRef.current.addEventListener("timeupdate", updateTimeElapsed);
         streamRef.current.addEventListener("timeupdate", updateProgress);
         streamRef.current.addEventListener("volumechange", updateVolumeIcon);
-        streamRef.current.addEventListener("click", togglePlay);
+        streamRef.current.addEventListener("click", handleVideoClick);
         streamRef.current.addEventListener("click", animatePlayback);
         streamRef.current.addEventListener("mousemove", showControls);
+        streamRef.current.addEventListener("touchstart", showControls);
         streamRef.current.addEventListener("mouseleave", hideControls);
       }
       if (videoControlsRef.current) {
         videoControlsRef.current.addEventListener("mousemove", showControls);
+        videoControlsRef.current.addEventListener("touchstart", showControls);
         videoControlsRef.current.addEventListener("mouseleave", hideControls);
       }
       if (seekRef.current) {
@@ -320,6 +328,18 @@ const SAPPVideo = ({
       if (videoContainerRef.current) {
         videoContainerRef.current.addEventListener(
           "fullscreenchange",
+          updateFullscreenButton,
+        );
+        videoContainerRef.current.addEventListener(
+          "webkitfullscreenchange",
+          updateFullscreenButton,
+        );
+        videoContainerRef.current.addEventListener(
+          "mozfullscreenchange",
+          updateFullscreenButton,
+        );
+        videoContainerRef.current.addEventListener(
+          "MSFullscreenChange",
           updateFullscreenButton,
         );
       }
@@ -350,14 +370,19 @@ const SAPPVideo = ({
             "volumechange",
             updateVolumeIcon,
           );
-          streamRef.current.removeEventListener("click", togglePlay);
+          streamRef.current.removeEventListener("click", handleVideoClick);
           streamRef.current.removeEventListener("click", animatePlayback);
           streamRef.current.removeEventListener("mousemove", showControls);
+          streamRef.current.removeEventListener("touchstart", showControls);
           streamRef.current.removeEventListener("mouseleave", hideControls);
         }
         if (videoControlsRef.current) {
           videoControlsRef.current.removeEventListener(
             "mousemove",
+            showControls,
+          );
+          videoControlsRef.current.removeEventListener(
+            "touchstart",
             showControls,
           );
           videoControlsRef.current.removeEventListener(
@@ -375,6 +400,18 @@ const SAPPVideo = ({
         if (videoContainerRef.current) {
           videoContainerRef.current.removeEventListener(
             "fullscreenchange",
+            updateFullscreenButton,
+          );
+          videoContainerRef.current.removeEventListener(
+            "webkitfullscreenchange",
+            updateFullscreenButton,
+          );
+          videoContainerRef.current.removeEventListener(
+            "mozfullscreenchange",
+            updateFullscreenButton,
+          );
+          videoContainerRef.current.removeEventListener(
+            "MSFullscreenChange",
             updateFullscreenButton,
           );
         }
@@ -567,7 +604,7 @@ const SAPPVideo = ({
       seekTooltipRef?.current
     ) {
       const rect = progressBarRef.current.getBoundingClientRect();
-      seekRef.current.setAttribute("data-seek", String(skipTo));
+      seekRef.current.value = String(skipTo);
       seekTooltipRef.current.textContent = `${
         t.hours !== "00" ? t.hours + ":" : ""
       }${t.minutes}:${t.seconds}`;
@@ -580,15 +617,12 @@ const SAPPVideo = ({
   function skipAhead() {
     if (!streamRef.current || !seekRef.current) return;
 
-    const skipTo = Number(seekRef.current.getAttribute("data-seek") || "0");
+    const skipTo = Number(seekRef.current.value);
 
     streamRef.current.currentTime = skipTo;
 
     if (progressBarRef.current) {
       progressBarRef.current.value = skipTo;
-    }
-    if (seekRef?.current) {
-      seekRef.current.value = String(skipTo);
     }
   }
 
@@ -909,13 +943,35 @@ const SAPPVideo = ({
     if (typeof document === "undefined") return;
 
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      setIsFullscreen(
+        !!(
+          document.fullscreenElement ||
+          (document as any).webkitFullscreenElement ||
+          (document as any).mozFullScreenElement ||
+          (document as any).msFullscreenElement
+        ),
+      );
     };
 
     document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+    document.addEventListener("MSFullscreenChange", handleFullscreenChange);
 
     return () => {
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener(
+        "webkitfullscreenchange",
+        handleFullscreenChange,
+      );
+      document.removeEventListener(
+        "mozfullscreenchange",
+        handleFullscreenChange,
+      );
+      document.removeEventListener(
+        "MSFullscreenChange",
+        handleFullscreenChange,
+      );
     };
   }, []);
 
@@ -999,6 +1055,7 @@ const SAPPVideo = ({
               )}
               onMouseEnter={() => setIsActive(true)}
               onMouseLeave={() => setIsActive(false)}
+              onTouchStart={showControls}
               ref={videoContainerRef}
             >
               <div className={`popup-question`}>{children}</div>
@@ -1042,9 +1099,11 @@ const SAPPVideo = ({
                 // disablePictureInPicture
                 controlsList="nodownload"
                 onPlay={handlePlayVideo}
+                onClick={showControls}
+                onTouchStart={showControls}
               />
               <div
-                className="video-controls flex-center absolute bottom-0 left-0 right-0 h-14 w-full rounded-b-lg px-4 py-3"
+                className="video-controls flex-center absolute bottom-0 left-0 right-0 z-20 h-14 w-full rounded-b-lg px-4 py-3"
                 ref={videoControlsRef}
               >
                 <div
