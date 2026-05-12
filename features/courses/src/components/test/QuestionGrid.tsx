@@ -179,7 +179,7 @@ const QuestionGrid = ({
                 borderRadius: 4,
               }}
             >
-              {index + 1}
+              {q?.position}
             </button>
           );
         })}
