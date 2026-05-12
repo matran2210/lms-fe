@@ -13,7 +13,6 @@ import {
 } from '@lms/assets'
 import {
   ActivityResource,
-  CalculatorModal,
   CreateNote,
   Discussion,
   PopupLockContent,
@@ -24,6 +23,7 @@ import {
   FileViewer,
   Layout,
   LearningResource,
+  CalculatorModal,
   ModalResizeable,
 } from '@lms/ui'
 import { convertMinutesToHourFormat, extractNotActivatedData } from '@lms/utils'
@@ -157,6 +157,7 @@ const ActivityPage = () => {
   const [fetch_progress, setFetch_progress] = useState<string[]>([])
   const [exhibitText, setExhibitText] = useState<string>('')
   const [openResource, setOpenResource] = useState(false)
+  const [focusingPadId, setFocusingPadId] = useState('')
 
   const onFocusDiscussion = () => {
     setFocusOnlyDiscussion(true)
@@ -587,6 +588,8 @@ const ActivityPage = () => {
                       uuid={e?.uuid}
                       count={index}
                       key={e?.uuid}
+                      setFocusingPadId={setFocusingPadId}
+                      focusingPadId={focusingPadId}
                     />
                   )
                 })}
@@ -594,6 +597,10 @@ const ActivityPage = () => {
                   {selector?.calculator_status && (
                     <CalculatorModal
                       onClose={() => dispatch(closeCalculator())}
+                      key={"sidebar-calculator"}
+                      onClick={() => setFocusingPadId("sidebar-calculator")}
+                      isInBody
+                      isTopModal={focusingPadId === "sidebar-calculator"}
                     />
                   )}
                 </>
@@ -763,8 +770,11 @@ const ActivityPage = () => {
                   return (
                     <CalculatorModal
                       key={e.id}
-                      isMobileCalc
+                      onClick={() => setFocusingPadId(e.id)}
                       onClose={() => handleCloseScratchPad(e)}
+                      isInBody
+                      modalIndex={index}
+                      isTopModal={focusingPadId === e.id}
                     />
                   )
                 } else if (e.type === 'file') {
@@ -777,7 +787,7 @@ const ActivityPage = () => {
                       height={heightFileViewer}
                       key={e.id}
                       className="!z-40 !rounded-lg"
-                      handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                      onClose={() => handleCloseScratchPad(e)}
                       position="center"
                       header={({ requestClose }) => (
                         <div className="">
@@ -796,6 +806,8 @@ const ActivityPage = () => {
                         </div>
                       )}
                       isInBody
+                      isTopModal={focusingPadId === e.id}
+                      onModalFocus={() => setFocusingPadId(e?.id as string)}
                     >
                       <div
                         className="overflow-auto bg-white p-4"
@@ -812,7 +824,7 @@ const ActivityPage = () => {
                     <ModalResizeable
                       key={e.id}
                       className="!z-40"
-                      handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                      onClose={() => handleCloseScratchPad(e)}
                       position="center"
                       header={({ requestClose }) => (
                         <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
@@ -830,8 +842,11 @@ const ActivityPage = () => {
                           </button>
                         </div>
                       )}
-                      draggableFull
                       modalIndex={e.index}
+                      isTopModal={focusingPadId === e.id}
+                      onModalFocus={() => setFocusingPadId(e?.id as string)}
+                      bodyClassName="h-[90%] overflow-auto"   
+                      isInBody
                     >
                       <div className="h-full bg-white px-4 py-3">
                         <EditorReader

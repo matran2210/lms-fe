@@ -148,14 +148,14 @@ export default function TeacherMenu({
     }
 
     return [
-      {
-        key: "Home",
-        title: TitleTeacherSidebar.DASHBOARD,
-        icon: <HomeMenuIcon selected={selectedKey === "Home"} />,
-        link: pageLink.TEACHERS,
-        active: isCurrent(pageLink.TEACHERS),
-        showMenu: true,
-      },
+      // {
+      //   key: "Home",
+      //   title: TitleTeacherSidebar.DASHBOARD,
+      //   icon: <HomeMenuIcon selected={selectedKey === "Home"} />,
+      //   link: pageLink.TEACHERS,
+      //   active: isCurrent(pageLink.TEACHERS),
+      //   showMenu: true,
+      // },
       {
         key: "MyCourse",
         title: TitleSidebar.COURSES,
@@ -192,14 +192,14 @@ export default function TeacherMenu({
         active: isCurrent(pageLink.TEACHER_MY_REQUEST),
         showMenu: !!appModules?.find((m) => m.name === 'schedule'),
       },
-      {
-        key: "Bell",
-        title: TitleTeacherSidebar.NOTIFICATIONS,
-        icon: <BellIcon selected={selectedKey === "Bell"} />,
-        link: pageLink.TEACHERS,
-        active: isCurrent(pageLink.TEACHERS),
-        showMenu: true,
-      },
+      // {
+      //   key: "Bell",
+      //   title: TitleTeacherSidebar.NOTIFICATIONS,
+      //   icon: <BellIcon selected={selectedKey === "Bell"} />,
+      //   link: pageLink.TEACHERS,
+      //   active: isCurrent(pageLink.TEACHERS),
+      //   showMenu: true,
+      // },
     ];
   }, [isCourseDetail, isActivity, selectedKey, query, isCurrent]);
 
@@ -321,9 +321,9 @@ const BottomActionMenu = ({
         className="cursor-pointer rounded-full object-cover"
       />
     </Link>
-    <div className="cursor-pointer p-2">
+    {/* <div className="cursor-pointer p-2">
       <HelpMenuIcon />
-    </div>
+    </div> */}
     <div className="cursor-pointer p-2" onClick={onLogout}>
       <LogOutMenuIcon />
     </div>

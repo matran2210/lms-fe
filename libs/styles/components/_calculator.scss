@@ -1,28 +1,64 @@
 .calc {
-  @apply relative mx-auto w-[344px] max-w-[50rem] rounded-b-xl border border-gray-300;
+  @apply relative mx-auto rounded-b-xl;
   color: $color-btns-container;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .calc__display {
-  @apply flex flex-col gap-4 border-x border-gray-300 bg-[#1C274C] px-6 py-8 text-right text-4xl;
+  @apply flex flex-col gap-2 bg-[#1C274C] px-4 text-right;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  min-height: 80px;
+  max-height: 120px;
+  height: auto;
 }
 
 .display_expression {
   opacity: 0.4;
-  @apply min-h-[25px] text-xl font-normal;
+  @apply font-normal;
+  font-size: clamp(0.875rem, 2vw, 1.25rem);
+  line-height: 1.2;
+  min-height: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .display__next {
   grid-area: 2/2;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .calc__btns-container {
-  @apply grid gap-x-2 gap-y-3 rounded-b-xl bg-gray-100 p-6;
+  @apply grid rounded-b-xl bg-gray-100 p-4;
   grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .calc__btn {
-  @apply flex h-[68px] w-[68px] cursor-pointer items-center justify-center rounded-xl border-none bg-[#D1D5DB] text-2xl text-gray-800;
+  @apply flex cursor-pointer items-center justify-center rounded-xl border-none bg-[#D1D5DB] text-gray-800;
+  width: 100%;
+  height: 100%;
+  min-width: 40px;
+  min-height: 40px;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  box-sizing: border-box;
 }
 
 .btn--colored {

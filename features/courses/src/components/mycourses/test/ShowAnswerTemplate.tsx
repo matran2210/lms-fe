@@ -83,7 +83,7 @@ const ShowAnswerTemplate = ({
       </div>
       {showModalTemplate && (
         <ModalResizeable
-          handleCloseScratchPad={handleCloseModal}
+          onClose={handleCloseModal}
           rootClassName="rounded-xl"
           bodyClassName="p-6"
           contentClassName={clsx("!p-0", {

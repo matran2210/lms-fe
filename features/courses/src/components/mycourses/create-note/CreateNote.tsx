@@ -14,9 +14,11 @@ interface IProps {
   content: string;
   uuid: string | number;
   count: number;
+  focusingPadId: string;
+  setFocusingPadId: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const CreateNote = ({ id, content, uuid, count }: IProps) => {
+const CreateNote = ({ id, content, uuid, count, focusingPadId, setFocusingPadId}: IProps) => {
   const { courseApi, router, dispatch, params } = useFeature();
 
   const [activeSectionId, setActiveSectionId] = useState<string>();
@@ -132,13 +134,15 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
             </button>
           </div>
         )}
-        handleCloseScratchPad={() => {
+        onClose={() => {
           removeNote();
         }}
         position="center"
         width={isMobileView ? 340 : 412}
         height={350}
         isInBody
+        isTopModal={focusingPadId === (id ? id : uuid)}
+        onModalFocus={() => setFocusingPadId((id ? id : uuid) as string)}
       >
         <div className="flex h-full flex-col p-4">
           <HookFormTextArea

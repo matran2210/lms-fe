@@ -51,7 +51,7 @@ const ChapterTestPage = () => {
     })
 
   const breadcrumbs: ITabs[] = [
-    { link: pageLink.TEACHERS, title: 'LMS' },
+    { link: pageLink.MY_CALENDAR, title: 'Home' },
     { link: pageLink.TEACHER_MY_CLASS, title: 'My Class' },
     {
       link: `${pageLink.TEACHER_MY_CLASS}/${studentId}`,

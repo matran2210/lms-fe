@@ -39,6 +39,7 @@ export enum PROGRAM {
   "CFA" = "CFA",
   "CD" = "Cert/Dip",
   "LD" = "L&D Courses",
+  "B2B_EMOTIONAL_INTELLIGENCE" = "B2B Emotional Intelligence"
 }
 export enum CONSTRUCTION {
   "OFFLINE" = "OFFLINE",
