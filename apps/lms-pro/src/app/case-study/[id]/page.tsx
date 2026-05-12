@@ -33,7 +33,6 @@ import {
   RESPONSE_OPTION,
 } from '@lms/core'
 import {
-  CalculatorModal,
   ConFirmSubmit,
   ResetToAnswerTemplateModal,
   ShowAnswerTemplate,
@@ -48,7 +47,7 @@ import {
   EditorReader,
   EssayQuestionPreview,
   FileViewer,
-  HookFormTextArea,
+  CalculatorModal,
   MatchQuizComponent,
   ModalResizeable,
   ModalUploadFile,
@@ -77,7 +76,7 @@ import {
   selectPopupActivateCourse,
   showPopupActivatedCourse,
 } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
-import ScratchPatch from '@lms/feature-test/src/components/scratchpad/scratchPatch'
+import { ScratchPatch } from '@lms/ui'
 
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])

@@ -28,7 +28,7 @@ import {
   RESPONSE_OPTION,
   ScratchPadValue,
 } from '@lms/core'
-import { CalculatorModal } from '@lms/feature-courses'
+import { CalculatorModal } from '@lms/ui'
 import {
   useMousePosition,
   useSmartModalSize,
@@ -61,7 +61,7 @@ import { useForm } from 'react-hook-form'
 import { useAppDispatch } from 'src/redux/hook'
 import { CoursesAPI } from 'src/api/courses'
 import { TestServiceAPI } from 'src/api/test-api'
-import ScratchPatch from 'src/app/test/scratchPatch'
+import { ScratchPatch } from '@lms/ui'
 
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])

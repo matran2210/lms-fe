@@ -27,11 +27,7 @@ import {
   RESPONSE_OPTION,
   ROUTES,
 } from '@lms/core'
-import {
-  CalculatorModal,
-  QuitTestModal,
-  UnSubmitAnswerModal,
-} from '@lms/feature-courses'
+import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-courses'
 import {
   useMousePosition,
   useSmartModalSize,
@@ -40,6 +36,7 @@ import {
 import {
   AddWordPreview,
   Calculator,
+  CalculatorModal,
   CaseStudyWrapper,
   EditorReader,
   EssayQuestionPreview,

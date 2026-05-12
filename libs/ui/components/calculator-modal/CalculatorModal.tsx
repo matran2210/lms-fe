@@ -1,7 +1,8 @@
 import { CloseIcon } from "@lms/assets";
 import { useTailwindBreakpoint } from "@lms/hooks";
-import { Calculator, ModalResizeable } from "@lms/ui";
 import { useState, useCallback } from "react";
+import { ModalResizeable } from "../base";
+import Calculator from "../calculator";
 
 interface IProps {
   onClose: () => void;

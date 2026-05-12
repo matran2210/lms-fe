@@ -22,7 +22,6 @@ import {
   SUFFIX_TYPE,
 } from '@lms/core'
 import {
-  CalculatorModal,
   CreateNote,
   Discussion,
   QuizDocument,
@@ -39,6 +38,7 @@ import {
   SappButton,
   SappIcon,
   Tooltip,
+  CalculatorModal,
 } from '@lms/ui'
 import { trackGAEvent, truncateBySpace, truncateString } from '@lms/utils'
 import { uniqueId } from 'lodash'

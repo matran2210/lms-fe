@@ -94,7 +94,7 @@ import dayjs from 'dayjs'
 import { EventTestAPI } from 'src/api/event-test'
 import { TestServiceAPI } from 'src/api/test-api'
 import { PageLink } from 'src/constants/routers'
-import { TestScratchPads } from '@lms/feature-test'
+import { TestScratchPads } from '@lms/ui'
 
 declare global {
   interface Window {
