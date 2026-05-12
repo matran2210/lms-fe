@@ -88,6 +88,7 @@ export interface ActivityInfo {
 
 export interface IAnswer {
   id: string;
+  position: number;
   quiz_attempt_id: string;
   question_id: string;
   answer_file: any;
@@ -162,6 +163,9 @@ export interface IQuizResult {
     is_limited: boolean;
     limit_count?: number;
     grading_method?: string;
+  };
+  score_percentage: {
+    total_score: number;
   };
 }
 
