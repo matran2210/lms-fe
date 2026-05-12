@@ -1,6 +1,7 @@
 export * from "./action/index";
 export { default as SAPPBadge } from "./Badge/SAPPBadge";
 export { default as SAPPDropdown } from "./Dropdown/SAPPDropdown";
+export { default as SAPPDropdownV2 } from "./Dropdown/SAPPDropdownV2";
 export { default as SAPPInput } from "./Input/SAPPInput";
 export { default as SAPPLabel } from "./Label/SAPPLabel";
 export { default as AntConfigProvider } from "./Provider/AntConfigProvider";

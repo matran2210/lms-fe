@@ -1,6 +1,11 @@
 import { fetcher } from '@services/request'
 import url from 'src/redux/services/Course/MyCourse/Test/url'
-import { IAnswerQuizLastestAttempt, IResponse, IScoreDetails } from '@lms/core'
+import {
+  IAnswerQuizLastestAttempt,
+  IResponse,
+  IScoreDetails,
+  ISurveyCustom,
+} from '@lms/core'
 import { CourseDetail } from '@lms/core'
 import { apiURL } from 'src/constants'
 
@@ -423,6 +428,22 @@ export class CoursesAPI {
   ): Promise<{ success: boolean }> {
     return fetcher(`courses/${class_id}/skip-foundation`, {
       method: 'PUT',
+    })
+  }
+
+  static getSurveyCustom(
+    class_id: string,
+  ): Promise<IResponse<ISurveyCustom[]>> {
+    return fetcher(`courses/${class_id}/survey-custom`)
+  }
+
+  static confirmSurvey(
+    class_id: string,
+    params: { survey_id: string },
+  ): Promise<{ success: boolean }> {
+    return fetcher(`courses/${class_id}/confirm-survey`, {
+      method: 'POST',
+      data: params,
     })
   }
 }

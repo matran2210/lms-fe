@@ -4,6 +4,7 @@ import {
   APIDetailScheduleRequestResponse,
   APIListScheduleRequestResponse,
   RequestScheduleParams,
+  StatusMultipleRequestScheduleParams,
   StatusRequestScheduleParams,
 } from '@lms/core/types/teachers/request-schedule.interface'
 
@@ -131,6 +132,15 @@ export class TeacherAPI {
     payload: StatusRequestScheduleParams,
   ): Promise<void> {
     return fetcher(`/request-schedules/teaching/${id}`, {
+      data: payload,
+      method: 'PUT',
+    })
+  }
+
+  static updateMultipleStatusRequestSchedules(
+    payload: StatusMultipleRequestScheduleParams,
+  ): Promise<void> {
+    return fetcher(`/request-schedules/teachings`, {
       data: payload,
       method: 'PUT',
     })

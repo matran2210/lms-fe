@@ -8,7 +8,7 @@ import {
   DEFAULT_PAGE_NUMBER,
   IClassResource,
 } from '@lms/core'
-import { useUserRole } from '@lms/hooks'
+import { useUserRole, useWindowWidth } from '@lms/hooks'
 import {
   ActionCellWithPopover,
   EditorReader,
@@ -60,6 +60,8 @@ const ClassResourceTable = ({
   const className = 'custom-column-table'
   const textTruncateStyle = `${textStyle} overflow-hidden text-ellipsis whitespace-nowrap max-w-[300px]`
   const { isTeacher } = useUserRole()
+  const windowWidth = useWindowWidth()
+  const previewModalWidth = Math.max(320, Math.min(900, windowWidth - 32))
   const internalRef = useRef<HTMLVideoElement>(null)
   const [previewResource, setPreviewResource] = useState<IClassResource | null>(
     null,
@@ -261,15 +263,21 @@ const ClassResourceTable = ({
     switch (resource.suffix_type) {
       case 'VIDEO':
         return resource.url ? (
-          <SAPPVideo
-            isFetchCaptions={false}
-            streamRef={internalRef}
-            options={{
-              src: resource.url
-                .replace(videoUrl || '', '')
-                .replace('/manifest/video.m3u8', ''),
-            }}
-          ></SAPPVideo>
+          <div
+            className="flex h-full min-h-0 w-full items-center justify-center overflow-hidden bg-black"
+          >
+            <SAPPVideo
+              isFetchCaptions={false}
+              streamRef={internalRef}
+              options={{
+                src: resource.url
+                  .replace(videoUrl || '', '')
+                  .replace('/manifest/video.m3u8', ''),
+              }}
+              className='rounded-none'
+              controlClassName='rounded-b-none'
+            ></SAPPVideo>
+          </div>
         ) : (
           <div className="flex h-full items-center justify-center text-base text-gray-400">
             File đang trong quá trình xử lý
@@ -363,7 +371,7 @@ const ClassResourceTable = ({
         loading={isLoading}
         rowKey="id"
         pagination={pagination}
-        className="style-table rounded-xl bg-white"
+        className="style-table rounded-xl bg-white "
         isShowPagination={false}
       />
       <PaginationSapp
@@ -402,31 +410,30 @@ const ClassResourceTable = ({
               'pb-5': previewResource.suffix_type === 'WORD_DOCUMENT',
             })}
             key={previewResource.url}
-            modalIndex={1}
             title={previewResource.name}
-            width={900}
+            width={previewModalWidth}
             height={previewResource.suffix_type === 'AUDIO' ? 100 : 548}
             minHeight={
-              previewResource.suffix_type === 'AUDIO' ? 100 : undefined
+              previewResource.suffix_type === 'AUDIO' ? 100 : previewResource.suffix_type === 'VIDEO' ? 350 : undefined
             }
             maxHeight={
               previewResource.suffix_type === 'AUDIO' ? 100 : undefined
             }
             minWidth={
               ['AUDIO', 'VIDEO'].includes(previewResource.suffix_type)
-                ? 430
+                ? Math.min(430, previewModalWidth)
                 : undefined
             }
             className={clsx('!z-40 !rounded-lg', {
               '!overflow-visible': previewResource.suffix_type === 'AUDIO',
             })}
             position="center"
-            handleCloseScratchPad={() => {
+            onClose={() => {
               setOpenPreview(false)
               setPreviewResource(null)
             }}
             header={({ requestClose }) => (
-              <div className="modal-header modal-dragger flex h-10 w-full items-center justify-between">
+              <div className="modal-header modal-dragger cursor-move flex h-10 w-full items-center justify-between">
                 <div className="truncate font-semibold">
                   {previewResource.name}
                 </div>
@@ -447,8 +454,14 @@ const ClassResourceTable = ({
             onResizeStopDone={() => {
               setSheetResizeVersion((v) => v + 1)
             }}
+            isInBody
           >
-            <div className="h-full bg-white">
+            <div
+              className={clsx('flex h-full min-h-0 w-full flex-col', {
+                'bg-black': previewResource.suffix_type === 'VIDEO',
+                'bg-white': previewResource.suffix_type !== 'VIDEO',
+              })}
+            >
               {renderPreviewContent(previewResource)}
             </div>
           </ModalResizeable>

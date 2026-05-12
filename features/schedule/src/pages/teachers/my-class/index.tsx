@@ -28,7 +28,7 @@ const initialValues: FilterParams = {
 const MyClassPage = () => {
   const { router, pageLink, teacherApi, pathname } = useFeature()
   const breadcrumbs: ITabs[] = [
-    { link: pageLink.TEACHERS, title: 'LMS' },
+    { link: pageLink.MY_CALENDAR, title: 'Home' },
     { link: pageLink.TEACHER_MY_CLASS, title: 'My Class' },
   ]
   const [pageIndex, setPageIndex] = useState<number>(1)

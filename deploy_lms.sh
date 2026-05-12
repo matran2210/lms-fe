@@ -1,6 +1,6 @@
 #!/bin/bash
 rm -rf .vercel
-
+rm -rf .turbo
 # Dừng nếu có lỗi (tạm thời tắt khi deploy để bắt lỗi thủ công)
 set -e
 

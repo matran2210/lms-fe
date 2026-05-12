@@ -17,7 +17,7 @@ import { withAuthorization } from '@lms/hoc'
 
 const DEFAULT_PAGESIZE = 9
 const breadcrumbs: ITabs[] = [
-  { link: PageLink.TEACHERS, title: 'LMS' },
+  { link: PageLink.MY_CALENDAR, title: 'Home' },
   { link: PageLink.TEACHER_MY_COURSE, title: 'My Course' },
 ]
 const MyCourseTeacher = () => {
@@ -163,8 +163,8 @@ const MyCourseTeacher = () => {
           <div
             // data-aos={ANIMATION.DATA_AOS}
             className={`relative my-0 pt-6 ${isEmpty(courses)
-                ? 'flex min-h-[calc(100vh-13rem)] items-center justify-center'
-                : ''
+              ? 'flex min-h-[calc(100vh-13rem)] items-center justify-center'
+              : ''
               }`}
           >
             <CoursesList

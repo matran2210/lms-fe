@@ -62,6 +62,9 @@ export interface IQuizAttempt {
   quiz_position_mapping: Array<object>
   ratio_score: string
   score: number
+  score_percentage?: {
+    total_score?: number
+  }
   status: string
   total_attempt_time: number
 }

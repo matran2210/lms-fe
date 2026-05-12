@@ -189,51 +189,12 @@ const MyProfile = ({
               />
               <TextWrapper
                 title="Full Name"
-                showEditIcon
+                value={user?.detail?.full_name}
                 isEdit={isEdit}
+                disabled
                 loading={!!loading}
-                handleClickEdit={handleChangeToEditForm}
                 control={control}
-                isInForm
               >
-                {isEdit ? (
-                  <div className="flex w-full items-center gap-2">
-                    <HookFormTextField
-                      placeholder="Enter Text..."
-                      control={control}
-                      name="full_name"
-                      skeleton={loadingEditName}
-                      className="h-full w-full flex-1 !p-4"
-                      inputClassName="rounded-lg h-full px-4 py-3"
-                      textSize="sm"
-                    ></HookFormTextField>
-                    <ButtonCancelSubmit
-                      className="flex flex-row-reverse gap-2"
-                      cancel={{
-                        title: "Cancel",
-                        onClick: handleChangeToPreview,
-                        size: "medium",
-                        disabled: loading || loadingEditName,
-                        className:
-                          "min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4",
-                      }}
-                      submit={{
-                        title: "Confirm",
-                        size: "medium",
-                        className:
-                          "min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4 !no-underline",
-                        htmlType: "submit",
-                        loading: loading || loadingEditName,
-                      }}
-                    ></ButtonCancelSubmit>
-                  </div>
-                ) : (
-                  <div className="flex flex-auto justify-end break-all text-end font-medium text-gray-800 lg:max-w-[300px] lg:justify-start">
-                    <ProfileSkeleton loading={loading && !isEdit}>
-                      {user?.detail.full_name}
-                    </ProfileSkeleton>
-                  </div>
-                )}
               </TextWrapper>
               <TextWrapper
                 title="Username"
@@ -241,6 +202,7 @@ const MyProfile = ({
                 loading={!!loading}
                 control={control}
                 isEdit={isEdit}
+                disabled
               />
               <TextWrapper
                 title="Role"
@@ -249,6 +211,7 @@ const MyProfile = ({
                 control={control}
                 isEdit={isEdit}
                 className="hidden xl:block"
+                disabled
               />
               <TextWrapper
                 title="D.O.B"
@@ -262,6 +225,7 @@ const MyProfile = ({
                 isEdit={isEdit}
                 type="date"
                 className="hide-date-icon !p-[9.5px]"
+                disabled
               />
               <TextWrapper
                 title="Email"
@@ -272,6 +236,7 @@ const MyProfile = ({
                 loading={!!loading}
                 control={control}
                 isEdit={isEdit}
+                disabled
               />
               <TextWrapper
                 title="Phone"
@@ -387,6 +352,7 @@ const MyProfile = ({
                     loading={!!loading}
                     control={control}
                     isEdit
+                    disabled
                   />
                   <TextWrapper
                     title="Username"
@@ -394,6 +360,7 @@ const MyProfile = ({
                     loading={!!loading}
                     control={control}
                     isEdit
+                    disabled
                   />
                   {/* <TextWrapper
                     title="Role"
@@ -414,6 +381,7 @@ const MyProfile = ({
                     isEdit
                     type="date"
                     className="hide-date-icon !p-[9.5px]"
+                    disabled
                   />
                   <TextWrapper
                     title="Email"
@@ -421,6 +389,7 @@ const MyProfile = ({
                     loading={!!loading}
                     control={control}
                     isEdit
+                    disabled
                   />
                   <TextWrapper
                     title="Phone"
@@ -501,6 +470,7 @@ const TextWrapper = ({
   type,
   hiddenOnEdit = false,
   className,
+  disabled = false,
 }: {
   title: string;
   children?: React.ReactNode;
@@ -519,6 +489,7 @@ const TextWrapper = ({
   type?: "number" | "email" | "password" | "text" | "date";
   hiddenOnEdit?: boolean;
   className?: string;
+  disabled?: boolean;
 }) => {
   return (
     <li
@@ -550,6 +521,7 @@ const TextWrapper = ({
           textSize="sm"
           defaultValue={value}
           type={type}
+          disabled={disabled}
         ></HookFormTextFieldSmartRounded>
       </div>
 

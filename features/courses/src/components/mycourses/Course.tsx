@@ -262,7 +262,8 @@ const Course = ({
       (category == PROGRAM.ACCA ||
         category == PROGRAM.CFA ||
         category == PROGRAM.CMA ||
-        category == PROGRAM.LD);
+        category == PROGRAM.LD ||
+        category == PROGRAM.B2B_EMOTIONAL_INTELLIGENCE);
 
     // Redirect to dashboard if the course type is practice, normal
     const basePath = `${userPrefix}/courses/my-course/${classInstance?.id}`;
@@ -324,6 +325,7 @@ const Course = ({
   const isPendingLesson =
     classInstance?.type === "LESSON" && !student?.is_passed;
   const isAccaCourse = category === "ACCA";
+  const isCertDipCourse = category === "Cert/Dip";
   // const isFixedDuration =
   //   classInstance?.duration_type === "FIXED" ||
   //   classInstance?.duration_type === "FLEXIBLE";
@@ -339,7 +341,7 @@ const Course = ({
   const courseAction = () => {
     // Handle pending lesson cases
     if (isPendingLesson) {
-      if (isAccaCourse) {
+      if (isAccaCourse || isCertDipCourse) {
         if (hasNotStarted) {
           setOpenClass(true);
           return;
@@ -382,7 +384,7 @@ const Course = ({
     }
 
     // Handle default case
-    if (!isCanceled) {
+    if (!isCanceled && determineButtonToShow !== "Disabled") {
       handleCourseDetail();
     }
   };

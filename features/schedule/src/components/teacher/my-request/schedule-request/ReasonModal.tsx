@@ -8,11 +8,14 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { defaultOpenReasonModal, IOpenReasonModal, UpdateStatusParams } from './TableContainer'
 import SappTeacherTextField from '../../sapp-textfield/SappTeacherTextField'
+import { IScheduleRequestItem, PROGRAM } from '@lms/core'
 interface IProps {
   open: IOpenReasonModal
   setOpen: React.Dispatch<React.SetStateAction<IOpenReasonModal>>
   setOpenSuccessModal: Dispatch<SetStateAction<boolean>>
+  selectedRequest: IScheduleRequestItem | undefined
   handleUpdateStatus: ({
+    request_ids,
     requestId,
     type,
     reason,
@@ -23,6 +26,7 @@ const ReasonModal = ({
   open,
   setOpen,
   setOpenSuccessModal,
+  selectedRequest,
   handleUpdateStatus,
 }: IProps) => {
   const schema = z.object({
@@ -84,8 +88,10 @@ const ReasonModal = ({
      */
 
     if (isEmpty(data.request_reject_reason)) return
+    const isACCAProgram = [PROGRAM.ACCA, PROGRAM.CD].includes(selectedRequest?.subject?.course_category?.name as PROGRAM)
 
     handleUpdateStatus({
+      ...(isACCAProgram && { request_ids: selectedRequest?.request_ids || [] }),
       requestId: open.requestId,
       type: open.type,
       reason: data.request_reject_reason,

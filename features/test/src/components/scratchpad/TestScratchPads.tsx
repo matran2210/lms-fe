@@ -9,8 +9,8 @@ import { useForm } from 'react-hook-form'
 import ScratchPatch from './scratchPatch' 
 interface IProps {
   openScratchPad: any[]
-  onFocusingPad: string
-  setOnFocusingPad: Dispatch<SetStateAction<string>>
+  focusingPadId: string
+  setFocusingPadId: Dispatch<SetStateAction<string>>
   handleCloseScratchPad: (pad: any) => void
   currentPage: any
   scratchPads: string
@@ -23,8 +23,8 @@ interface IProps {
 
 const TestScratchPads = ({
   openScratchPad,
-  onFocusingPad,
-  setOnFocusingPad,
+  focusingPadId,
+  setFocusingPadId,
   handleCloseScratchPad,
   currentPage,
   scratchPads,
@@ -65,8 +65,10 @@ const TestScratchPads = ({
       return (
         <CalculatorModal
           key={e.id}
-          onClick={() => setOnFocusingPad(e.id)}
+          onClick={() => setFocusingPadId(e.id)}
           onClose={() => handleCloseScratchPad(e)}
+          modalIndex={index}
+          isTopModal={focusingPadId === e.id}
         />
       )
     } else if (e.type === 'scratch_pad') {
@@ -81,24 +83,31 @@ const TestScratchPads = ({
               </div>
               <button
                 className="text-icon"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation()
                   requestClose()
                   setTimeout(() => handleCloseScratchPad(e), 300)
+                }}
+                onTouchEnd={(e) => {
+                  e.stopPropagation()
+                  requestClose()
                 }}
               >
                 <CloseIconNote />
               </button>
             </div>
           )}
-          handleCloseScratchPad={() => {
+          onClose={() => {
             handleCloseScratchPad(e)
           }}
-          onClick={() => {
-            setOnFocusingPad(e?.id)
+          onModalFocus={() => {
+            setFocusingPadId(e?.id)
           }}
           width={412}
           height={350}
           modalIndex={index}
+          contentClassName="!overflow-hidden"
+          isTopModal={focusingPadId === e.id}
         >
           <ScratchPatch
             scratchPadValues={scratchPadValues.find(
@@ -110,7 +119,7 @@ const TestScratchPads = ({
               setScratchPads(event.target.value)
               handleChangeScratchPad(event)
             }}
-            className="!h-fit"
+            className="!h-full"
           />
         </ModalResizeable>
       )
@@ -120,15 +129,17 @@ const TestScratchPads = ({
       return (
         <ModalResizeable
           key={e.id}
-          handleCloseScratchPad={() => handleCloseScratchPad(e)}
+          onClose={() => handleCloseScratchPad(e)}
           position="center"
+          modalIndex={i}
+          isTopModal={focusingPadId === e.id}
+          onModalFocus={() => setFocusingPadId(e?.id as string)}
           header={({ requestClose }) => (
             <div className="relative">
               <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                 <div className="truncate">
-                  <span className="text-base font-semibold">{`${exhibitText} ${
-                    (i ?? 0) + 1
-                  }: `}</span>
+                  <span className="text-base font-semibold">{`${exhibitText} ${(i ?? 0) + 1
+                    }: `}</span>
                   {exhibitsDes?.name}
                 </div>
               </div>
@@ -143,6 +154,7 @@ const TestScratchPads = ({
               </button>
             </div>
           )}
+          draggableFull
         >
           <div className="h-full bg-white px-4 py-3">
             <EditorReader
@@ -175,8 +187,12 @@ const TestScratchPads = ({
           width={widthFileViewer}
           height={heightFileViewer}
           key={e.id}
-          handleCloseScratchPad={() => handleCloseScratchPad(e)}
+          onClose={() => handleCloseScratchPad(e)}
           position="center"
+          draggableFull
+          modalIndex={index}
+          isTopModal={focusingPadId === e.id}
+          onModalFocus={() => setFocusingPadId(e?.id as string)}
         >
           <div
             className="overflow-auto bg-white p-4"

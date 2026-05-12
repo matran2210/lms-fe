@@ -18,7 +18,7 @@ import { ActivitySkeleton, HighlightableHTML } from '@lms/ui'
 import { buildQueryString, trackGAEvent, truncateBySpace } from '@lms/utils'
 import { Tabs, Tooltip } from 'antd'
 import clsx from 'clsx'
-import React, { useMemo, useRef } from 'react'
+import React, { useRef } from 'react'
 import { Discussion, QuizDocument, VideoDocument } from '../../mycourses'
 
 interface IProps {
@@ -67,11 +67,6 @@ const CourseTabDocument = ({
   /**
    * Giá trị được memoized cho course_tab_documents.
    */
-  const course_tab_documents = useMemo(() => {
-    return selector?.tabs?.find((e) => e?.id === selector?.currentTabId)
-      ?.course_tab_documents
-  }, [selector?.tabs])
-
   const currentIndex = selector?.tabs?.findIndex(
     (tab) => tab?.id === selector?.currentTabId,
   )
@@ -163,6 +158,8 @@ const CourseTabDocument = ({
 
   const items =
     selector?.tabs?.map((tab) => {
+      const tabCourseDocuments = tab?.course_tab_documents || []
+
       return {
         key: tab?.id,
         label: (
@@ -187,7 +184,7 @@ const CourseTabDocument = ({
                       { '!mt-0': focusOnlyQuiz.open },
                     )}
                   >
-                    {course_tab_documents?.map((e, i) => {
+                    {tabCourseDocuments?.map((e, i) => {
                       const gradeStatus = e?.quiz?.attempt?.grading_status
                       const questions = [
                         ...(e?.quiz?.multiple_choice_questions || []),
@@ -201,7 +198,7 @@ const CourseTabDocument = ({
                           e?.quiz?.attempt?.status === EAttemptStatus.SUBMITTED
                         return (
                           <div
-                            key={e?.id + '_' + i + '_' + selector?.currentTabId}
+                            key={e?.id + '_' + i + '_' + tab?.id}
                             ref={quizDocumentRef}
                             className={clsx({
                               hidden:
@@ -213,7 +210,7 @@ const CourseTabDocument = ({
                             <QuizDocument
                               questions={questions}
                               activityId={activity?.id as string}
-                              tabId={selector?.currentTabId || ''}
+                              tabId={tab?.id || ''}
                               quizId={e?.quiz?.id || ''}
                               grading_preference={
                                 e.quiz?.grading_preference ||
@@ -234,14 +231,13 @@ const CourseTabDocument = ({
                               focusOnlyQuiz={focusOnlyQuiz}
                               setFocusOnlyQuiz={setFocusOnlyQuiz}
                               is_limited={
-                                course_tab_documents[i]?.quiz?.is_limited ||
-                                false
+                                tabCourseDocuments[i]?.quiz?.is_limited || false
                               }
                               limit_count={
-                                course_tab_documents[i]?.quiz?.limit_count || 0
+                                tabCourseDocuments[i]?.quiz?.limit_count || 0
                               }
                               number_of_attempts={
-                                course_tab_documents[i]?.quiz?.attempt
+                                tabCourseDocuments[i]?.quiz?.attempt
                                   ?.number_of_attempts || 0
                               }
                               isQuizFinished={isQuizFinished}
@@ -255,13 +251,13 @@ const CourseTabDocument = ({
                             className={clsx(``, {
                               hidden: focusOnlyQuiz.open,
                             })}
-                            key={i + '_' + selector?.currentTabId}
+                            key={i + '_' + tab?.id}
                             data-aos={ANIMATION.DATA_AOS}
                           >
                             {e?.text_editor_content && (
                               <HighlightableHTML
                                 initialHTML={e?.text_editor_content || ''}
-                                storageKey={`${activityId}-${selector?.currentTabId}-${e?.id}-text-editor`}
+                                storageKey={`${activityId}-${tab?.id}-${e?.id}-text-editor`}
                                 className="course-tab-text"
                               />
                             )}
@@ -275,13 +271,13 @@ const CourseTabDocument = ({
                       if (e.type === 'VIDEO') {
                         return (
                           <div
-                            key={i + '_' + selector?.currentTabId}
+                            key={i + '_' + tab?.id}
                             className={clsx({ hidden: focusOnlyQuiz.open })}
                           >
                             <VideoDocument
                               videos={e?.videos}
                               activityId={activity?.id as string}
-                              tabId={selector?.currentTabId || ''}
+                              tabId={tab?.id || ''}
                               streamRefProp={(el: any) =>
                                 (videoRef.current[i || 0] = el)
                               }

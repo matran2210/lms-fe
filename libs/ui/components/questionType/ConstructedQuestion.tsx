@@ -420,11 +420,10 @@ const EssayQuestionPreview = ({
     },
     [key, stableDataId, requirementKey],
   );
-  const renderWordEditor = useMemo(() => {
-    editorRef.current?.resetContentSafe(defaultValue);
-
-    return (
+  const renderWordEditor = useMemo(
+    () => (
       <HookFormEditor
+        key={name}
         control={control}
         name={name}
         math={true}
@@ -440,8 +439,9 @@ const EssayQuestionPreview = ({
         // externalRef={externalRef}
         editorRef={editorRef}
       />
-    );
-  }, [name, defaultValue]);
+    ),
+    [data?.id, defaultValue, disable, fullData, name],
+  );
   return (
     <div
       className={clsx(

@@ -299,7 +299,7 @@ const CaseStudyDetail = () => {
   // handle show exhibit list
   const [exhibitData, setExhibitData] = useState<IExhibit[]>()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
-  const [onFocusingPad, setOnFocusingPad] = useState('')
+  const [focusingPadId, setFocusingPadId] = useState('')
   const [openSubmit, setOpenSubmit] = useState(false)
   const [openQuit, setOpenQuit] = useState(false)
   const dispatch = useAppDispatch()
@@ -554,7 +554,7 @@ const CaseStudyDetail = () => {
           return e.type !== 'exhibits'
         })
         for (const e of watch('exhibits')) {
-          setOnFocusingPad(e)
+          setFocusingPadId(e)
           newArr.push({ id: e, type: 'exhibits' })
         }
         return newArr
@@ -1344,18 +1344,23 @@ const CaseStudyDetail = () => {
                 return (
                   <CalculatorModal
                     key={e.id}
-                    onClick={() => setOnFocusingPad(e?.id)}
+                    onClick={() => setFocusingPadId(e?.id)}
                     onClose={() => handleCloseScratchPad(e)}
+                    modalIndex={index}
+                    isTopModal={focusingPadId === e.id}
                   />
                 )
               } else if (e.type === 'scratch_pad') {
                 return (
                   <ModalResizeable
                     key={e.id}
-                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                    onClose={() => handleCloseScratchPad(e)}
                     position="center"
                     width={412}
                     height={350}
+                    modalIndex={index}
+                    isTopModal={focusingPadId === e.id}
+                    onModalFocus={() => setFocusingPadId(e?.id as string)}
                     header={({ requestClose }) => (
                       <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
                         <div className="text-sm font-semibold text-gray-800">
@@ -1372,6 +1377,7 @@ const CaseStudyDetail = () => {
                         </button>
                       </div>
                     )}
+                    // isInBody
                   >
                     <ScratchPatch
                       scratchPads={scratchPadValues?.value}
@@ -1398,8 +1404,11 @@ const CaseStudyDetail = () => {
                     key={e.id}
                     width={412}
                     height={350}
-                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                    onClose={() => handleCloseScratchPad(e)}
                     position="center"
+                    modalIndex={index}
+                    isTopModal={focusingPadId === e.id}
+                    onModalFocus={() => setFocusingPadId(e?.id as string)}
                     header={({ requestClose }) => (
                       <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
                         <div className="text-sm font-semibold text-gray-800">
@@ -1416,7 +1425,6 @@ const CaseStudyDetail = () => {
                         </button>
                       </div>
                     )}
-                    modalIndex={i}
                     draggableFull
                   >
                     <div className="h-full bg-white px-4 py-3">
@@ -1450,9 +1458,12 @@ const CaseStudyDetail = () => {
                     width={widthFileViewer}
                     height={heightFileViewer}
                     key={e.id}
-                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                    onClose={() => handleCloseScratchPad(e)}
                     position="center"
                     draggableFull
+                    modalIndex={index}
+                    isTopModal={focusingPadId === e.id}
+                    onModalFocus={() => setFocusingPadId(e?.id as string)}
                   >
                     <div
                       className="overflow-auto bg-white p-4"
