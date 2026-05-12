@@ -400,7 +400,7 @@ const SAPPAudio = ({
   function skipAhead() {
     if (!streamRef.current || !seekRef.current) return;
 
-    const skipTo = Number(seekRef.current.getAttribute("data-seek") || "0");
+    const skipTo = Number(seekRef.current.value || "0");
 
     streamRef.current.currentTime = skipTo;
 
