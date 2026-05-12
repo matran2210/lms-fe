@@ -325,15 +325,16 @@ const TestModal = ({
     //to do: start test
     try {
       activeCourse && (await activeCourse());
+      
+      status
+        ? trackGAEvent("Click Button Retake Modal Test")
+        : trackGAEvent("Click Button Start Modal Test");
+      
       if (!quizAttempt || !quizAttempt?.id) {
-         router.push(`${SUB_DOMAIN_TEST}/test/${data.quiz.id}?class_user_id=${class_user_id}`);
-          return;
+        router.push(`${SUB_DOMAIN_TEST}/test/${data.quiz.id}?class_user_id=${class_user_id}`);
       } else {
         router.push(`${SUB_DOMAIN_TEST}/test/${data.quiz.id}?class_user_id=${class_user_id}&quizAttemptId=${quizAttempt?.id}`);
       }
-      status
-        ? () => trackGAEvent("Click Button Retake Modal Test")
-        : () => trackGAEvent("Click Button Start Modal Test");
     } catch (err) {}
   };
 
