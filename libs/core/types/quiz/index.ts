@@ -88,6 +88,7 @@ export interface ActivityInfo {
 
 export interface IAnswer {
   id: string;
+  position: number;
   quiz_attempt_id: string;
   question_id: string;
   answer_file: any;
