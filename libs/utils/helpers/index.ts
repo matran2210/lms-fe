@@ -1,4 +1,6 @@
-import { MenuItem, MenuOption, RouteContext } from "@lms/core";
+import { MenuItem, MenuOption, QUESTION_TYPES, RouteContext, Sheet } from "@lms/core";
+import { FieldValues, UseFormGetValues } from "react-hook-form";
+import { compareValues } from "./quiz-test";
 
 export const convertLocalTimeToUTC = (currentTime: Date) => {
   const offsetMinutes = currentTime.getTimezoneOffset();
@@ -177,6 +179,97 @@ export const isMatchedPathPinNoti = (path: string) =>
     path,
   );
 
+export const isWorkbookEmpty = (sheets: Sheet[] | undefined): boolean => {
+  if (!sheets || sheets.length === 0) return true
+  return sheets?.every((s) => !s.celldata || s.celldata.length === 0)
+}
+
+export function hasEditorValueFromHtml(
+  html: string | null | undefined,
+): boolean {
+  if (!html) return false
+
+  // Xoá hết thẻ HTML và khoảng trắng
+  const text = html.replace(/<[^>]*>/g, '').trim()
+
+  return text.length > 0
+}
+
+
+/**
+ * @description Compare current and previous values based on question type
+ * @param {Object} currentTabContent Current question content
+ * @param {Object} oldCurrentTabData Previous question data
+ * @param {UseFormGetValues<FieldValues>} getValues Function to get form values
+ * @return {Promise<boolean>} True if values are equal, false otherwise
+ */
+export const isValuesEqual = async (
+  currentTabContent: any,
+  oldCurrentTabData: any,
+  getValues: UseFormGetValues<FieldValues>,
+) => {
+  const { qType } = currentTabContent
+
+  if ([QUESTION_TYPES.TRUE_FALSE, QUESTION_TYPES.ONE_CHOICE].includes(qType)) {
+    const oldValue = oldCurrentTabData?.answer
+    const newValue = getValues(`${currentTabContent?.id}_answer`)
+    return oldValue === newValue
+  }
+
+  if (
+    [
+      QUESTION_TYPES.MATCHING,
+      QUESTION_TYPES.DRAG_DROP,
+      QUESTION_TYPES.SELECT_WORD,
+      QUESTION_TYPES.FILL_WORD,
+      QUESTION_TYPES.MULTIPLE_CHOICE,
+    ].includes(qType)
+  ) {
+    const oldValue = oldCurrentTabData?.answer
+    let newValue: any
+
+    switch (qType) {
+      case QUESTION_TYPES.MULTIPLE_CHOICE:
+        newValue = getValues(`${currentTabContent?.id}_answer`)
+        break
+      case QUESTION_TYPES.MATCHING:
+        newValue = getValues(`${currentTabContent?.id}_answer`)
+        break
+      case QUESTION_TYPES.DRAG_DROP:
+        newValue = getValues(`${currentTabContent?.id}_drag_drop_answer`)
+        break
+      case QUESTION_TYPES.SELECT_WORD:
+        newValue = getValues(`${currentTabContent?.id}_answer`)
+        break
+      case QUESTION_TYPES.FILL_WORD:
+        newValue = getValues(`${currentTabContent?.id}_fillword`)
+        break
+      default:
+        return false
+    }
+    return await compareValues(oldValue, newValue)
+  }
+
+  // if (qType === QUESTION_TYPES.ESSAY) {
+  //   if (oldCurrentTabData?.data?.requirements?.length) {
+  //     return false
+  //   } else {
+  //     const oldValue =
+  //       (oldCurrentTabData?.answer_file?.file_key || '') +
+  //       (oldCurrentTabData?.answer || '')
+  //     const newValue =
+  //       (currentTabContent?.answer_file?.file_key || '') +
+  //       (getValues(`${currentTabContent?.id}_0_answer`) ||
+  //         currentTabContent?.answer ||
+  //         '')
+  //     return await compareValues(oldValue, newValue)
+  //   }
+  // }
+
+  return false
+}
+
+
 export * from "./timer";
 export * from "./date";
 export * from "./quiz-test";
@@ -185,3 +278,4 @@ export * from "./tiptap";
 export * from "./upload";
 export * from "./button";
 export * from "./editor-helper";
+

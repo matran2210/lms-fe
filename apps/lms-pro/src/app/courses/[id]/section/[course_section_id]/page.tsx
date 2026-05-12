@@ -118,8 +118,10 @@ const CoursePartDetail = () => {
         params.id,
         params.course_section_id,
       )
+      console.log('res1', data)
       return data
     }
+
 
     return useQuery([queryKey, params], fetchData, {
       enabled:
@@ -193,6 +195,7 @@ const CoursePartDetail = () => {
           router.push(`${location.pathname}?${searchParams}`)
         }
         const res = await CoursesAPI.getPartDetail(id, course_section_id)
+        console.log('res', res)
 
         const nodeList = res?.data?.course_section_tree
         setIsPassedCourse(res?.data?.is_passed_course)

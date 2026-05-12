@@ -26,8 +26,8 @@ import {
   PROGRAM,
   QUESTION_TYPES,
 } from '@lms/core'
-import { CalculatorModal, ConFirmSubmit, QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-courses'
-import { withAuthorization } from '@lms/hoc'
+import { CalculatorModal, ConFirmSubmit, LimitQuizModal, QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-courses'
+import {  withAuthorization } from '@lms/hoc'
 import { useMousePosition, useSmartModalSize } from '@lms/hooks'
 import {
   AddWordPreview,
@@ -52,7 +52,6 @@ import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { TestServiceAPI } from 'src/api/test-api'
-import LimitQuizModal from 'src/app/test/limitQuizModal'
 import ScratchPatch from 'src/app/test/scratchPatch'
 import { PageLink } from 'src/constants/routers'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'

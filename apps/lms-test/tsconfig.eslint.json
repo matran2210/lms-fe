@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src",
+    "next-env.d.ts",
+    "pages",
+    "components",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx"
+  ],
+  "ignorePatterns": ["tailwind.config.js", "postcss.config.js"]
+}

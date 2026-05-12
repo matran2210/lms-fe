@@ -1,0 +1,3072 @@
+"use client";
+import {
+  CalculatorIcon,
+  DownloadIcon,
+  FileTextIcon,
+  FlagIcon,
+  NewScratchPadIcon,
+  NotesOutline,
+  PulsingExclamation,
+  ResizeIcon,
+  ShowLessIcon,
+  ShowMoreIcon,
+} from "@lms/assets";
+import {
+  CourseProvider,
+  disableUnsavedChange,
+  loginSlice,
+  useCourseContext,
+  useFeature,
+} from "@lms/contexts";
+import {
+  DISPLAY_TYPE,
+  EXHIBIT_TEXT_REPLACE,
+  GRADING_METHOD,
+  IDragDropAnswer,
+  IExhibit,
+  PROGRAM,
+  QUESTION_TYPES,
+  RESPONSE_OPTION,
+  TEST_TYPE_ENUM,
+} from "@lms/core";
+import {
+  checkAnsweredPure,
+  formatSubmitAnswer,
+  QuestionRenderer,
+  TestGroupAction,
+  TestScratchPads,
+  useResizeMouse,
+  useWindowWidth,
+  validateAnswer,
+  validateEssayAnswerWithRequirement,
+} from "@lms/feature-test";
+import {
+  BackToTop,
+  FilterRadioGroup,
+  Layout,
+  Popover,
+  SappLoading,
+  useClickOutside,
+} from "@lms/ui";
+import { cloneDeep, isEmpty, isUndefined, uniqueId } from "lodash";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import styles from "../test.module.scss";
+
+import {
+  removeHighlights,
+  serializeHighlights,
+} from "@funktechno/texthighlighter/lib";
+import { showPopupCompletedCourse } from "@lms/contexts";
+import {
+  Answer,
+  AnswerItem,
+  DEFAULT_EDITOR_VALUE,
+  defaultSheetData,
+  DragDropAnswerItem,
+  GradingPreference,
+  IQuestion,
+  IRequirement,
+  Requirement,
+  RequirementItem,
+  ScratchPad,
+  ScratchPadValue,
+} from "@lms/core";
+import {
+  ButtonContent,
+  ConFirmSubmit,
+  LimitQuizModal,
+  QuitTestModal,
+  ResetToAnswerTemplateModal,
+  SuccessSubmittedConstructorModal,
+  TabSlide,
+  TestTimeOutModal,
+  UnSubmitAnswerModal,
+} from "@lms/feature-courses";
+import { HighlightableHTML, ModalUploadFile, TestWrapper } from "@lms/ui";
+import {
+  checkTypeAndRenderTitle,
+  handleMultipleCorrectAnswer,
+  isValuesEqual,
+  isWorkbookEmpty,
+  runHighlight,
+  trackGAEvent,
+} from "@lms/utils";
+import { Tooltip } from "antd";
+import clsx from "clsx";
+import dayjs from "dayjs";
+
+import { useGetQuestionTabs, useGetQuizDetail } from "@lms/hooks";
+import { useQuery } from "react-query";
+import { CoursesAPI } from "src/api/courses";
+import { PageLink } from "src/constants/routers";
+
+declare global {
+  interface Window {
+    userAgreed: any;
+  }
+}
+interface Tab {
+  id: string;
+  flag?: boolean;
+  is_viewed_answer?: boolean;
+  [key: string]: any;
+}
+const warningText = "Are you sure you want to leave this page?";
+
+const TestDetail = () => {
+  const {
+    eventTestApi: EventTestAPI,
+    testServiceApi: TestServiceAPI,
+    useAppSelector,
+  } = useFeature();
+  const [, setHasScrollBar] = useState(undefined) as any;
+  const [editorReady, setEditorReady] = useState(true);
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const { setSubmitEventTest } = useCourseContext();
+  const [courseType, setCourseType] = useState<string>("");
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const searchParam = useSearchParams();
+  const params = useParams();
+  const { id } = params;
+  const query = Object.fromEntries(searchParam.entries());
+  const { quizDetail } = useGetQuizDetail(id as string);
+  const { questions } = useGetQuestionTabs(id as string);
+  const type = query.type;
+  const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id);
+  const [isQuizAttemptIdReady, setisQuizAttemptIdReady] = useState(false);
+  const searchParams = useSearchParams();
+  const WEB_LMS_URL = process.env.NEXT_PUBLIC_WEB_LMS_URL;
+
+  useEffect(() => {
+    if (searchParams) {
+      setisQuizAttemptIdReady(true);
+    }
+  }, [searchParams]);
+
+  const [currentDragDrop, setCurrentDragDrop] = useState<
+    {
+      currentTabId: string;
+      drag_drop_answers: IDragDropAnswer[];
+    }[]
+  >([]);
+  const { control, watch, getValues, setValue, resetField } = useForm();
+  const { control: controlFilter, watch: watchFilter } = useForm();
+  const {
+    getValues: getValuesExhibits,
+    setValue: setValueExhibits,
+    watch: watchExhibits,
+  } = useForm();
+
+  const timeRef = useRef(null) as any;
+  const ref = useRef(null) as any;
+  const refEditor = useRef(null) as any;
+  const currentTabIdRef = useRef(null);
+  const { dispatch } = useFeature();
+  const [essayData, setEssayData] = useState<any>();
+  const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([]);
+  const [onFocusingPad, setOnFocusingPad] = useState("");
+  const [tabs, setTabs] = useState<any>([]);
+  const [showListRequirement, setShowLisRequirement] = useState(false);
+  const [allowHighLight, setAllowHighLight] = useState(false);
+  const [allowUnHighLight, setAllowUnHighLight] = useState(false);
+  const [exhibitData, setExhibitData] = useState<IExhibit[]>();
+  const [isQuizAttemptCreated, setIsQuizAttemptCreated] = useState(false);
+  const dropUpRequire = useRef(null);
+  const [startTime, setStartTime] = useState(Date.now());
+  const [activeShowAll, setActiveShowAll] = useState<boolean>(false);
+  const [submited, setSubmited] = useState(false);
+  const [openTimeOut, setOpenTimeOut] = useState(false);
+  const [QuizResultId, setQuizResultId] = useState("");
+  const [openSubmit, setOpenSubmit] = useState(false);
+  const [openQuit, setOpenQuit] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [openLimit, setOpenLimit] = useState(false);
+  const [openUpload, setOpenUpload] = useState<any>({});
+  const [startResize, setStartResize] = useState(false);
+  const [currentMousePos, setCurrentMousePos] = useState(0);
+  const [leftWidth, setLeftWidth] = useState(0);
+  const [currentLeftWidth, setCurrentLeftWidth] = useState(0);
+  const { unsavedChange } =
+    useAppSelector?.((state) => state.loginReducer) || {};
+  const rightSideRef = useRef<any>(null);
+  const [mousePosition, setMousePosition] = useState<{
+    x: number | null;
+    y: number | null;
+  }>({ x: null, y: null });
+  const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false);
+  const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<Array<number>>(
+    [],
+  );
+  const [exhibitText, setExhibitText] = useState<string>("");
+  const [isClickExhibitOpen, setIsClickExhibitOpen] = useState(false);
+
+  const [openReportModal, setOpenReportModal] = useState({
+    open: false,
+    resultId: "",
+  });
+  const [oldCurrentTabData, setOldCurrentTabData] = useState<any>();
+  const [scratchPadValues, setScratchPadValues] = useState<ScratchPadValue[]>(
+    [],
+  );
+  // const [, setScoreFinalTest] = useState(0)
+  const [scratchPads, setScratchPads] = useState<string>("");
+  // const [listQuestionDone, setListQuestionDone] = useState<string[]>([])
+  const [listSubmitError, setListSubmitError] = useState<
+    Array<{
+      question_id: string;
+      total_attempt_time: number;
+      scratch_pads: ScratchPad[];
+      [key: string]: any;
+    }>
+  >([]);
+  const [answersSubmitted, setAnswersSubmitted] = useState<any>([]);
+  const [classInfo, setClassInfo] = useState<any>(null);
+  const [openResetToTemplateModal, setOpenResetToTemplateModal] =
+    useState(false);
+
+  const [quizAttempt, setQuizAttempt] = useState<any>(null);
+  const quizAttemptId = searchParams.get("quizAttemptId");
+
+  const { data: quizAttemptData } = useQuery({
+    queryKey: ["quizAttempt", quizAttemptId],
+    queryFn: () => CoursesAPI.getQuizAttempts(quizAttemptId as string),
+    enabled: Boolean(quizAttemptId),
+  });
+
+  useEffect(() => {
+    if (!quizAttempt?.id) return;
+
+    const fetchAnswersSubmitted = async () => {
+      try {
+        setLoading(true);
+        const response = await TestServiceAPI.getAnswersSubmitted(
+          quizAttempt.id,
+        );
+        setAnswersSubmitted(response?.data?.answers);
+        setClassInfo({
+          class_id: response?.data?.class_id,
+          part_id: response?.data?.part_id,
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAnswersSubmitted();
+  }, [quizAttempt?.id]);
+
+  useEffect(() => {
+    if (quizAttemptData?.data) {
+      setQuizAttempt(quizAttemptData?.data?.quizAttempt);
+      setCourseType(quizAttemptData?.data?.course?.course_type || null);
+    }
+  }, [quizAttemptData]);
+  const onOpenResetToTemplateModal = () => {
+    setOpenResetToTemplateModal(true);
+  };
+  const onCloseResetToTemplateModal = () => {
+    setOpenResetToTemplateModal(false);
+  };
+  const [showWarning, setShowWarning] = useState(true);
+  const [filteredTabs, setFilterTabs] = useState<any[]>([]);
+  const [trigger, setTrigger] = useState(false);
+
+  // Tính toán số câu trên mỗi dòng dựa trên chiều rộng màn hình (responsive)
+  const windowWidth = useWindowWidth();
+  const MAX_ITEMS_PER_ROW = 25;
+  const MIN_ITEMS_PER_ROW = 14;
+  const ITEM_WIDTH = 38; // Ước tính chiều rộng mỗi item (bao gồm gap)
+  const GAP_WIDTH = 8; // Gap giữa các item
+
+  const numberDisplayData = useMemo(() => {
+    if (windowWidth === 0) return MAX_ITEMS_PER_ROW;
+
+    // Tính toán số câu có thể hiển thị trên 1 dòng
+    const extraWidth = 430; // Chiều rộng của các btn 2 bên
+    const availableWidth = windowWidth - 200 - extraWidth;
+    const itemsPerRow = Math.floor(availableWidth / (ITEM_WIDTH + GAP_WIDTH));
+
+    // Giới hạn trong khoảng MIN_ITEMS_PER_ROW đến MAX_ITEMS_PER_ROW
+    return Math.max(
+      MIN_ITEMS_PER_ROW,
+      Math.min(MAX_ITEMS_PER_ROW, itemsPerRow),
+    );
+  }, [windowWidth]);
+
+  useClickOutside({
+    ref: dropUpRequire,
+    callback: () => setShowLisRequirement(false),
+  });
+
+  const getResult = async (currentTabContent: any) => {
+    const res = await TestServiceAPI.getQuestionAnswer(currentTabContent.id);
+    let corrects = {} as any;
+    if (
+      currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
+      currentTabContent.qType === QUESTION_TYPES.TRUE_FALSE ||
+      currentTabContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+    ) {
+      corrects = res?.data?.[0].answers?.reduce(
+        (previousValue: any, currentValue: any) => {
+          return {
+            ...previousValue,
+            [currentValue.id]: currentValue.is_correct,
+          };
+        },
+        {} as { [key: string]: boolean },
+      );
+    } else if (
+      currentTabContent.qType === QUESTION_TYPES.FILL_WORD ||
+      currentTabContent.qType === QUESTION_TYPES.SELECT_WORD
+    ) {
+      corrects = {
+        corrects: [...(res?.data?.[0]?.answers ?? [])],
+      };
+    } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
+      corrects = {
+        corrects: [...(res?.data?.[0]?.question_matchings ?? [])],
+      };
+    } else if (currentTabContent?.qType === QUESTION_TYPES.DRAG_DROP) {
+      corrects = {
+        corrects: [
+          ...(res?.data?.[0]?.answers ?? []).sort(
+            (a: any, b: any) => a?.answer_position - b?.answer_position,
+          ),
+        ],
+      };
+      const dragDropCurrentTemp = {
+        currentTabId: currentTabContent?.id,
+        drag_drop_answers: res?.data?.[0]?.drag_drop_answers,
+      };
+
+      setCurrentDragDrop((prev) => {
+        const exists = prev.some(
+          (item) => item.currentTabId === dragDropCurrentTemp.currentTabId,
+        );
+
+        if (!exists) {
+          return [...prev, dragDropCurrentTemp];
+        }
+
+        return prev;
+      });
+    }
+    return {
+      corrects: corrects,
+      solution: res?.data?.[0]?.solution,
+      isSelfReflection: res?.data?.[0]?.is_self_reflection,
+      requirements: res?.data?.[0]?.requirements,
+    };
+  };
+
+  const currentTabContent = useMemo(() => {
+    if (tabs && tabs.length > 0) {
+      const answerSubmitted = answersSubmitted.find(
+        (e: any) => e.questionId === currentPage,
+      );
+      const objTab = tabs.find((e: any) => e.id === currentPage);
+      const index = scratchPadValues?.findIndex(
+        (item: ScratchPadValue) => item.id === currentPage,
+      );
+
+      if (!index || index === -1) {
+        setScratchPadValues((prevScratchPads: ScratchPadValue[]) => [
+          ...prevScratchPads,
+          {
+            id: currentPage,
+            value: "",
+          },
+        ]);
+      }
+
+      setScratchPads(answerSubmitted?.scratch_pad || "");
+
+      if (answerSubmitted) {
+        const getCorrectAndSolution = (
+          currentTabContent: any,
+          answerSubmitted: any,
+        ): {
+          corrects: any;
+          solution: any;
+          isSelfReflection: boolean;
+          requirements: any[];
+        } => {
+          if (!answerSubmitted?.[0]) {
+            return {
+              corrects: {},
+              solution: "",
+              isSelfReflection: false,
+              requirements: [],
+            };
+          }
+
+          const {
+            answers,
+            question_matchings,
+            solution,
+            is_self_reflection,
+            requirements,
+            drag_drop_answers,
+          } = answerSubmitted?.[0] || {};
+          // Handle different question types
+          if (
+            [
+              QUESTION_TYPES.ONE_CHOICE,
+              QUESTION_TYPES.TRUE_FALSE,
+              QUESTION_TYPES.MULTIPLE_CHOICE,
+            ].includes(currentTabContent.qType)
+          ) {
+            return {
+              corrects:
+                answers?.reduce(
+                  (acc: { [key: string]: boolean }, curr: any) => ({
+                    ...acc,
+                    [curr.id]: curr.is_correct,
+                  }),
+                  {},
+                ) || {},
+              solution,
+              isSelfReflection: is_self_reflection || false,
+              requirements: requirements || [],
+            };
+          }
+
+          if (
+            [QUESTION_TYPES.FILL_WORD, QUESTION_TYPES.SELECT_WORD].includes(
+              currentTabContent.qType,
+            )
+          ) {
+            return {
+              corrects: { corrects: answers || [] },
+              solution,
+              isSelfReflection: is_self_reflection || false,
+              requirements: requirements || [],
+            };
+          }
+
+          if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
+            return {
+              corrects: { corrects: question_matchings || [] },
+              solution,
+              isSelfReflection: is_self_reflection || false,
+              requirements: requirements || [],
+            };
+          }
+
+          if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
+            const answersTemp = (answersSubmitted?.[0]?.answer || [])?.sort(
+              (
+                a: { answer_position: number },
+                b: { answer_position: number },
+              ) => a?.answer_position - b?.answer_position,
+            );
+            const correctsTemp = (answers || [])?.sort(
+              (
+                a: { answer_position: number },
+                b: { answer_position: number },
+              ) => a?.answer_position - b?.answer_position,
+            );
+            return {
+              corrects: {
+                answers: handleMultipleCorrectAnswer(
+                  drag_drop_answers,
+                  answersTemp,
+                ),
+                corrects: correctsTemp,
+              },
+              solution,
+              isSelfReflection: is_self_reflection || false,
+              requirements: requirements || [],
+            };
+          }
+
+          return {
+            corrects: {},
+            solution: solution,
+            isSelfReflection: is_self_reflection,
+            requirements: requirements,
+          };
+        };
+
+        const dataCorrectAndSolution = getCorrectAndSolution(
+          objTab,
+          answerSubmitted?.results,
+        );
+        const updatedObjTab = answerSubmitted?.results
+          ? { ...objTab, ...dataCorrectAndSolution }
+          : { ...objTab };
+
+        if (objTab?.data?.qType === QUESTION_TYPES.ESSAY) {
+          // Case: if objTab has data
+          if (essayData) {
+            if ((objTab?.data?.requirements ?? []).length > 0) {
+              const requirementAmswer = (objTab?.data?.requirements ?? []).find(
+                (req: Requirement) => req?.id === essayData?.req?.id,
+              );
+              if (
+                requirementAmswer &&
+                requirementAmswer?.answer_text &&
+                requirementAmswer?.answer_file
+              ) {
+                return {
+                  ...objTab,
+                  // ...requirementAmswer,
+                  // done: true,
+                  attempted: true,
+                };
+              } else {
+                return {
+                  ...objTab,
+                  data: {
+                    ...objTab?.data,
+                    requirements: (objTab?.data?.requirements ?? []).map(
+                      (req: any) => {
+                        const requirementData = (
+                          answerSubmitted?.answers ?? []
+                        ).find(
+                          (r: RequirementItem) => r.requirement_id === req?.id,
+                        );
+
+                        return {
+                          ...req,
+                          answer_file:
+                            req?.answer_file !== undefined
+                              ? req?.answer_file
+                              : requirementData?.answer_file,
+                          short_answer:
+                            req?.short_answer !== undefined &&
+                            req?.short_answer !== null
+                              ? req?.short_answer
+                              : requirementData?.short_answer,
+                          answer_text:
+                            req?.answer_text !== undefined &&
+                            req?.answer_text !== null
+                              ? req?.answer_text
+                              : requirementData?.short_answer,
+                        };
+                      },
+                    ),
+                  },
+                  // done: true,
+                  attempted: true,
+                  answer: null,
+                };
+              }
+            } else {
+              // No requirement
+              return {
+                ...updatedObjTab,
+                // ...requirementAmswer,
+                // done: true,
+                answer:
+                  updatedObjTab?.answer !== undefined &&
+                  updatedObjTab?.answer !== null
+                    ? updatedObjTab?.answer
+                    : answerSubmitted?.short_answer,
+
+                answer_file:
+                  updatedObjTab?.answer_file !== undefined
+                    ? updatedObjTab?.answer_file
+                    : answerSubmitted?.answer_file,
+
+                attempted: true,
+              };
+            }
+          }
+          // Case: objTab no data
+          else {
+            if ((updatedObjTab?.data?.requirements ?? []).length > 0) {
+              // & answerSubmitted has data
+              if (answerSubmitted?.answer) {
+                return {
+                  ...updatedObjTab,
+                  data: {
+                    ...updatedObjTab?.data,
+                    requirements: (updatedObjTab?.data?.requirements ?? []).map(
+                      (req: Requirement) => {
+                        const requirementAmswer = (
+                          answerSubmitted?.answers ?? []
+                        ).find(
+                          (r: RequirementItem) => r.requirement_id === req?.id,
+                        );
+                        return {
+                          ...req,
+                          answer_file: requirementAmswer?.answer_file,
+                          short_answer: requirementAmswer?.short_answer,
+                          answer_text: requirementAmswer?.short_answer,
+                        };
+                      },
+                    ),
+                  },
+                  // done: true,
+
+                  attempted: true,
+                  answer: null,
+                };
+              }
+
+              // & answerSubmitted no data
+              else {
+                return {
+                  ...objTab,
+                  // done: true,
+                  attempted: true,
+                  answer: null,
+                };
+              }
+            } else {
+              return {
+                ...updatedObjTab,
+                // done: true,
+                attempted: true,
+                answer: answerSubmitted?.short_answer,
+                answer_file: answerSubmitted?.answer_file,
+              };
+            }
+          }
+        }
+
+        if (
+          objTab?.data?.qType === QUESTION_TYPES.ONE_CHOICE ||
+          objTab?.data?.qType === QUESTION_TYPES.TRUE_FALSE
+        ) {
+          // Case: if objTab has data
+          if (updatedObjTab?.question_answer_id) {
+            return {
+              ...updatedObjTab,
+              // done: true,
+              attempted: true,
+              answer: objTab?.question_answer_id,
+            };
+          } else if (objTab?.answer) {
+            return updatedObjTab;
+          }
+          // Case: objTab no data and answerSubmitted has data
+          else if (answerSubmitted?.question_answer_id) {
+            return {
+              ...updatedObjTab,
+              // done: true,
+              attempted: true,
+              answer: answerSubmitted?.question_answer_id,
+            };
+          } else {
+            return updatedObjTab;
+          }
+        }
+
+        const listAnswers =
+          objTab?.answer && objTab?.answer.length > 0
+            ? objTab?.answer
+            : answerSubmitted?.answer && answerSubmitted?.answer.length > 0
+              ? answerSubmitted?.answer
+              : [];
+        const transformAnswerData = listAnswers.map(
+          (answer: AnswerItem | string, index: number) => {
+            let savedData: AnswerItem | undefined;
+            let currentAnswer: string | undefined;
+            let currentQuestion: string | undefined;
+            if (typeof answer === "string") {
+              savedData =
+                answersSubmitted.answer && answersSubmitted?.answer.length > 0
+                  ? answersSubmitted.answer.find(
+                      (item: AnswerItem) => item.question_id === objTab.id,
+                    )
+                  : undefined;
+
+              currentAnswer = answer;
+              currentQuestion = objTab.id;
+            } else {
+              savedData =
+                answersSubmitted.answer && answersSubmitted?.answer.length > 0
+                  ? answersSubmitted.answer.find(
+                      (item: AnswerItem) =>
+                        item.question_id === answer.question_id,
+                    )
+                  : undefined;
+
+              currentAnswer = answer.answer_id ?? savedData?.answer_id;
+              currentQuestion = answer.question_id ?? savedData?.question_id;
+            }
+
+            if (objTab?.data?.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
+              return currentAnswer;
+            } else if (objTab?.data?.qType === QUESTION_TYPES.MATCHING) {
+              return {
+                answer_id: currentAnswer,
+                question_id: currentQuestion,
+              };
+            } else if (
+              objTab?.data?.qType === QUESTION_TYPES.DRAG_DROP &&
+              typeof answer !== "string"
+            ) {
+              let objAnswer: DragDropAnswerItem | undefined;
+              const savedData = answer;
+              // Case: Tab has answer
+              if (
+                objTab?.data?.answers &&
+                objTab?.data?.answers.length > 0 &&
+                objTab?.answer &&
+                objTab?.answer.length > 0
+              ) {
+                const hasCurrentAnswer = objTab?.data?.answers.some(
+                  (it: any) => it.id === answer.idAnswer,
+                );
+                if (hasCurrentAnswer) {
+                  objAnswer = answer;
+                } else {
+                  objAnswer = {
+                    id: answer?.id ?? "",
+                    idAnswer: undefined,
+                    value: "",
+                    position: savedData?.answer_position,
+                  };
+                }
+              }
+
+              // Case: Tab no answer
+              // & has savedData answer
+              else if (savedData) {
+                const currentAnswer = (objTab?.data?.answers ?? []).find(
+                  (el: any) => el.id === savedData?.answer_id,
+                );
+                objAnswer = {
+                  idAnswer: savedData?.answer_id,
+                  value: currentAnswer?.answer,
+                  position: savedData?.answer_position,
+                };
+              }
+
+              // Case: Tab no answer
+              // & no savedData answer
+              else {
+                const currentAnswer = (objTab?.data?.answers ?? []).find(
+                  (el: any) => el.id === objTab?.data?.answers[0].id,
+                );
+
+                objAnswer = {
+                  id: currentAnswer?.dropId,
+                  idAnswer: undefined,
+                  value: "",
+                  position: 0,
+                };
+              }
+              return objAnswer;
+            } else if (objTab?.data?.qType === QUESTION_TYPES.SELECT_WORD) {
+              return answer;
+            } else if (objTab?.data?.qType === QUESTION_TYPES.FILL_WORD) {
+              const savedData: AnswerItem =
+                answersSubmitted.answer && answersSubmitted?.answer.length > 0
+                  ? answersSubmitted.answer.at(index)
+                  : undefined;
+
+              currentAnswer =
+                typeof answer !== "string"
+                  ? (answer.answer_text ?? savedData?.answer_text)
+                  : answer;
+              return currentAnswer;
+            }
+          },
+        );
+
+        if (transformAnswerData?.length > 0) {
+          return {
+            ...updatedObjTab,
+            answer: transformAnswerData,
+            // done: true,
+          };
+        } else {
+          return updatedObjTab;
+        }
+      } else {
+        if (objTab?.data?.qType === QUESTION_TYPES.DRAG_DROP) {
+          if (!isEmpty(objTab?.corrects?.corrects)) {
+            return {
+              ...objTab,
+              corrects: {
+                answers: handleMultipleCorrectAnswer(
+                  objTab?.data?.drag_drop_answers ||
+                    currentDragDrop?.find(
+                      (item) => item?.currentTabId === objTab?.id,
+                    )?.drag_drop_answers,
+                  objTab?.answer,
+                ),
+                corrects: objTab?.corrects?.corrects,
+              },
+            };
+          }
+        }
+
+        return objTab;
+      }
+    } else return undefined;
+  }, [currentPage, tabs, answersSubmitted, essayData, currentDragDrop]);
+
+  const remainingTimeinSeconds = quizDetail?.quiz_timed
+    ? (dayjs(
+        dayjs(new Date(quizAttempt?.created_at ?? "")).add(
+          quizDetail?.quiz_timed,
+          "minutes",
+        ),
+      ).diff(dayjs(), "seconds") ?? 0)
+    : null;
+
+  useEffect(() => {
+    if (!openTimeOut && remainingTimeinSeconds && remainingTimeinSeconds <= 0) {
+      setOpenTimeOut(true);
+    }
+  }, [openTimeOut, remainingTimeinSeconds]);
+
+  const isShowIconButtonInBottom = [
+    QUESTION_TYPES.FILL_WORD,
+    QUESTION_TYPES.TRUE_FALSE,
+    QUESTION_TYPES.ONE_CHOICE,
+    QUESTION_TYPES.SELECT_WORD,
+  ].includes(currentTabContent?.topicDescription?.qType as QUESTION_TYPES);
+
+  useEffect(() => {
+    if (currentTabContent?.id) {
+      const oldCurrentTabData = cloneDeep(currentTabContent);
+      setOldCurrentTabData(oldCurrentTabData);
+      setExhibitText(
+        currentTabContent?.topicDescription?.course_category?.name ===
+          PROGRAM.CMA
+          ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
+          : EXHIBIT_TEXT_REPLACE.EXHIBIT,
+      );
+    }
+  }, [currentTabContent?.id]);
+
+  const checkCalExist = useMemo(() => {
+    for (let i in openScratchPad) {
+      if (openScratchPad[i].type === "calculator") {
+        return +i;
+      }
+    }
+    return -1;
+  }, [openScratchPad]);
+
+  const isScatchPadEnabled = useMemo(() => {
+    return openScratchPad.some((item) => item.type === "scratch_pad") || false;
+  }, [openScratchPad]);
+
+  /**
+   * DES: confirm unfinished questions before submitting
+   */
+  const checkUnSubmitAnswer = (): number[] => {
+    const answers = handleSaveCurrentAnswer(tabs, currentTabContent);
+    const result: number[] = [];
+    answers?.map((item: Answer, index: number) => {
+      if (!item.attempted) {
+        result.push(index + 1);
+      } else {
+        if (item.data && (item?.data?.requirements ?? [])?.length > 0) {
+          if (!item.done && !validateEssayAnswerWithRequirement(item.data)) {
+            result.push(index + 1);
+          }
+        } else {
+          if (
+            !item.done &&
+            !validateAnswer({
+              answer: item.answer as any,
+              answer_file: item?.answer_file,
+            })
+          ) {
+            result.push(index + 1);
+          }
+        }
+      }
+    });
+    setUnSubmitAnswerData(result);
+    return result;
+  };
+
+  const handleOpenScratchPad = (
+    type: string,
+    file?: string,
+    fileName?: string,
+  ) => {
+    setOnFocusingPad("");
+    setOpenScratchPad((prev) => {
+      const arr = [...prev];
+      if (type === "scratch_pad") {
+        if (isScatchPadEnabled) {
+          return arr;
+        } else {
+          arr.push({ id: currentPage, type: type });
+        }
+      } else if (type === "calculator") {
+        if (checkCalExist > -1) {
+          const cal = { ...arr[checkCalExist] };
+          arr.splice(checkCalExist, 1);
+          arr.push(cal);
+          return arr;
+        }
+        arr.push({ id: "calculator", type: "calculator" });
+      } else if (type === "file") {
+        arr.push({
+          type: type,
+          file: file,
+          id: uniqueId("file"),
+          fileName: fileName,
+        });
+      }
+      return arr;
+    });
+  };
+  const handleCloseScratchPad = (pad: any) => {
+    setOpenScratchPad((prev) => {
+      const arr = [...prev];
+      const newArr = arr.filter((e) => e.id !== pad.id);
+      if (pad.type === "exhibits") {
+        setValueExhibits(
+          "exhibits",
+          getValuesExhibits("exhibits").filter((e: string) => e !== pad.id),
+        );
+      }
+      return newArr;
+    });
+  };
+  function removeHighlight() {
+    const domEle = document.getElementById("hightlight_area");
+    removeHighlights(domEle as any);
+    handleSaveHighLight(serializeHighlights(domEle));
+  }
+  const OptionShowAll = () => {
+    return (
+      <div className="w-max">
+        <FilterRadioGroup
+          control={controlFilter}
+          name={"filter"}
+          options={[
+            { label: "Unattempted", value: "unattempted" },
+            { label: "Attempted", value: "attempted" },
+            { label: "Flag to Review", value: "flag" },
+          ]}
+        />
+      </div>
+    );
+  };
+
+  // Check answered question
+  const checkAnswered = (currentContent: any, isSubmit = false) => {
+    // For Essay without requirements, need to check with _0 suffix
+    const essayAnswer =
+      currentContent.qType === QUESTION_TYPES.ESSAY &&
+      (!currentContent.data?.requirements ||
+        currentContent.data?.requirements.length === 0)
+        ? getValues(`${currentContent?.id}_0_answer`)
+        : getValues(`${currentContent?.id}_answer`);
+
+    return checkAnsweredPure({
+      qType: currentContent.qType,
+      answer: essayAnswer,
+      dragDropAnswer: getValues(`${currentContent?.id}_drag_drop_answer`),
+      fillWordAnswer: getValues(`${currentContent?.id}_fillword`),
+      selectWordAnswer: getValueSelectText(currentContent),
+      essay: {
+        requirements: currentContent.data?.requirements,
+        answer_file: currentContent.answer_file,
+        response_option: currentContent.data?.response_option,
+        response_type: currentContent.response_type,
+        editorValues:
+          currentContent.data?.requirements?.length > 0
+            ? currentContent.data?.requirements?.map(
+                (_: unknown, idx: number) =>
+                  getValues(`${currentContent?.id}_${idx}_answer`),
+              )
+            : [getValues(`${currentContent?.id}_0_answer`)],
+      },
+      isSubmit,
+    });
+  };
+
+  // TODO: Implement this
+  const getValueSelectText = (currentContent: any) => {
+    const value = getValues(`${currentContent?.id}_answer`) || [];
+    return value;
+  };
+
+  const confirmAnswer = async (
+    corrects: any,
+    solution: any,
+    currentTabContent: any,
+    requirements?: IRequirement[],
+  ) => {
+    setLoading(true);
+    const newData = tabs?.map((item: any) => {
+      if (currentTabContent?.id === item?.id) {
+        if (
+          currentTabContent.qType !== QUESTION_TYPES.FILL_WORD &&
+          currentTabContent.qType !== QUESTION_TYPES.SELECT_WORD
+        ) {
+          ref.current?.handleReset();
+        }
+        if (item?.data?.requirements?.length) {
+          item.data.requirements = item.data.requirements.map(
+            (req: IRequirement, index: number) => ({
+              ...requirements?.[index],
+              ...req,
+            }),
+          );
+        }
+        return {
+          ...item,
+          done: true,
+          attempted: true,
+          corrects: corrects,
+          solution: solution,
+          is_viewed_answer: true,
+          timeSpent: item?.timeSpent
+            ? Date.now() - startTime + item?.timeSpent
+            : Date.now() - startTime,
+        };
+      }
+      return item;
+    });
+    const newTabs = handleSaveCurrentAnswer(newData, currentTabContent);
+    setTabs(newTabs);
+    setLoading(false);
+  };
+  const handleSaveCurrentAnswer = (tabs: any, currentContent: any) => {
+    if (
+      currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
+      currentContent.qType === QUESTION_TYPES.TRUE_FALSE ||
+      currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE ||
+      currentContent.qType === QUESTION_TYPES.MATCHING
+    ) {
+      const answers = handleSaveAnswer(
+        getValues(`${currentPage}_answer`),
+        currentContent,
+        tabs,
+      );
+      return answers;
+    } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
+      const answers = handleSaveAnswer(
+        getValues(`${currentPage}_drag_drop_answer`),
+        currentContent,
+        tabs,
+      );
+
+      return answers;
+    } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
+      const answers = handleSaveAnswer(
+        getValueSelectText(currentContent),
+        currentContent,
+        tabs,
+      );
+      return answers;
+    } else if (currentContent.qType === QUESTION_TYPES.FILL_WORD) {
+      const answers = handleSaveAnswer(
+        getValues(`${currentPage}_fillword`),
+        currentContent,
+        tabs,
+      );
+      return answers;
+    } else if (currentContent.qType === QUESTION_TYPES.ESSAY) {
+      const answers = handleSaveAnswerEssay(currentContent, tabs);
+      return answers;
+    } else return tabs;
+  };
+  async function getDetail(currentPage: string) {
+    let topicDescription;
+    let question;
+    try {
+      if (!isUndefined(quizDetail) && !isUndefined(questions)) {
+        topicDescription = await TestServiceAPI.getTopicDescription(
+          questions[questions.findIndex((e: any) => e.id === currentPage)]
+            ?.question_topic_id,
+          quizDetail?.id,
+          query?.class_user_id as string,
+        );
+        question = await TestServiceAPI.getQuestionDetail(currentPage);
+      }
+      return { topicDescription, question: question?.data };
+    } catch (err) {
+      return {
+        topicDescription: { data: {} },
+        question: null,
+      };
+    }
+  }
+  const handleChangeTab = async (currentTab: any) => {
+    setLoading(true);
+    // setEssayData(undefined)
+    const currentContent = tabs?.find((e: any) => e.id === currentTab);
+    setStartTime(Date.now());
+    const resetCurrentQuestionAndNextQuestion = async (
+      question: IQuestion | null | undefined,
+    ) => {
+      const requirementLength = question?.requirements?.length;
+      const name = `${currentTab}_${requirementLength ? 0 : undefined}_answer`;
+      const valueFromFormReq = getValues(name);
+      const savedAnswer = answersSubmitted?.find(
+        (e: any) => e.questionId === currentTab,
+      );
+      const isWordDataDefault =
+        question?.response_option === RESPONSE_OPTION.WORD
+          ? DEFAULT_EDITOR_VALUE
+          : defaultSheetData;
+      const getDefaultWordValue = () => {
+        if (valueFromFormReq !== undefined) {
+          return valueFromFormReq;
+        }
+        const requirementId = question?.requirements?.[0]?.id;
+        const savedRequirement = savedAnswer?.requirements?.find(
+          (e: any) => e.requirement_id === requirementId,
+        );
+        const requirement = question?.requirements?.[0];
+
+        if (savedRequirement?.short_answer !== undefined) {
+          return savedRequirement.short_answer ?? isWordDataDefault;
+        }
+        if (savedRequirement?.answer_text !== undefined) {
+          return savedRequirement.answer_text ?? isWordDataDefault;
+        }
+        if (requirement?.answer_template !== undefined) {
+          return requirement.answer_template ?? isWordDataDefault;
+        }
+        if (savedAnswer?.short_answer !== undefined) {
+          return savedAnswer?.short_answer ?? isWordDataDefault;
+        }
+        // return savedAnswer?.short_answer ?? isWordDataDefault
+        return question?.answer_template ?? isWordDataDefault;
+      };
+
+      onResetFormatEssay(name, getDefaultWordValue());
+      await refEditor?.current?.reset();
+      await new Promise((resolve) => setTimeout(resolve, 10)); // hoặc setTimeout với delay nhỏ như 10ms
+
+      if (
+        refEditor?.current?.resetSheet &&
+        question?.response_option === RESPONSE_OPTION.SHEET
+      ) {
+        refEditor?.current?.resetSheet();
+      }
+    };
+    const doAfterSetState = () => {
+      setEditorReady(false); // Ẩn trước
+      setTimeout(() => {
+        try {
+          if (refEditor?.current?.editor?.layout) {
+            refEditor.current.editor.layout();
+          } else if (refEditor?.current?.getEditor) {
+            refEditor.current.getEditor().root?.focus();
+          }
+          window.dispatchEvent(new Event("resize"));
+        } catch (e) {
+        } finally {
+          setEditorReady(true);
+        }
+      }, 100);
+    };
+
+    if (!currentContent?.viewed) {
+      const { question, topicDescription } = await getDetail(currentTab);
+      await resetCurrentQuestionAndNextQuestion(question);
+      if (question) {
+        const newData = tabs?.map((item: any) => {
+          if (currentTab === item.id) {
+            if (item.viewed) {
+              return { ...item };
+            } else {
+              return {
+                ...item,
+                viewed: true,
+                data: question,
+                topicDescription: topicDescription.data,
+              };
+            }
+          }
+          return item;
+        });
+        if (
+          currentTabContent.qType !== QUESTION_TYPES.FILL_WORD &&
+          currentTabContent.qType !== QUESTION_TYPES.SELECT_WORD
+        ) {
+          ref.current?.handleReset();
+        }
+        const savedAnswer = handleSaveCurrentAnswer(newData, currentTabContent);
+        setCurrentPage(currentTab);
+        setOpenScratchPad([]);
+        setAllowHighLight(false);
+        setAllowUnHighLight(false);
+        setTabs(savedAnswer);
+        doAfterSetState();
+      } else {
+        setLoading(false);
+      }
+    } else {
+      await resetCurrentQuestionAndNextQuestion(currentContent?.data);
+      if (
+        currentTabContent.qType !== QUESTION_TYPES.FILL_WORD &&
+        currentTabContent.qType !== QUESTION_TYPES.SELECT_WORD
+      ) {
+        ref.current?.handleReset();
+      }
+      const savedAnswer = handleSaveCurrentAnswer(tabs, currentTabContent);
+      setCurrentPage(currentTab);
+      setOpenScratchPad([]);
+      setAllowHighLight(false);
+      setAllowUnHighLight(false);
+      setTabs(savedAnswer);
+      doAfterSetState(); // <== gọi ở đây nếu không load lại dữ liệu
+    }
+
+    setLoading(false);
+    // handleResetRequirementIndex()
+    setScratchPadValues([]);
+  };
+  const handleSaveAnswer = (data: any, tabContent: any, tabs: any) => {
+    const newData = (tabs ?? []).map((item: any) => {
+      if (tabContent.id === item?.id) {
+        return {
+          ...item,
+          data: {
+            ...item?.data,
+            answers: (item?.data?.answers ?? []).map((answer: Answer) => {
+              if (typeof data === "string") {
+                return {
+                  ...answer,
+                  dropId: data,
+                };
+              } else {
+                const existAnswer = (data ?? []).find(
+                  (e: any) => e.idAnswer === answer.id,
+                );
+                return {
+                  ...answer,
+                  dropId: existAnswer?.id,
+                };
+              }
+            }),
+          },
+          answer: data,
+          attempted: item?.attempted || checkAnswered(item),
+          timeSpent: !item?.done
+            ? item?.timeSpent
+              ? Date.now() - startTime + item?.timeSpent
+              : Date.now() - startTime <= 0
+                ? 0
+                : Date.now() - startTime
+            : item?.timeSpent,
+        };
+      }
+      return item;
+    });
+    return newData;
+  };
+  const handleSaveAnswerEssay = (tabContent: any, tabs: any) => {
+    const newData = tabs.map((item: any) => {
+      if (tabContent?.id === item?.id) {
+        if (
+          (tabContent?.data?.requirements ?? item?.data?.requirements ?? [])
+            .length > 0
+        ) {
+          return {
+            ...item,
+            data: {
+              ...item?.data,
+              requirements: (
+                tabContent?.data?.requirements ??
+                item?.data?.requirements ??
+                []
+              ).map((requirement: Requirement, reqIndex: number) => {
+                const editorContent = getValues(
+                  `${currentPage}_${reqIndex}_answer`,
+                );
+
+                return {
+                  ...requirement,
+                  answer_text: editorContent ?? requirement?.answer_text,
+                };
+              }),
+            },
+
+            attempted: item?.attempted || checkAnswered(item),
+            timeSpent: !item?.done
+              ? item?.timeSpent
+                ? Date.now() - startTime + item?.timeSpent
+                : Date.now() - startTime <= 0
+                  ? 0
+                  : Date.now() - startTime
+              : item?.timeSpent,
+          };
+        } else {
+          const answer = getValues(
+            `${currentTabContent?.id}_${essayData?.index ?? 0}_answer`,
+          );
+          return {
+            ...item,
+            answer: answer,
+            attempted: item?.attempted || checkAnswered(item),
+            timeSpent: !item?.done
+              ? item?.timeSpent
+                ? Date.now() - startTime + item?.timeSpent
+                : Date.now() - startTime <= 0
+                  ? 0
+                  : Date.now() - startTime
+              : item?.timeSpent,
+          };
+        }
+      } else {
+        return item;
+      }
+    });
+    return newData;
+  };
+  const handleSaveFileEssay = (file: any, requirementIndex: number | null) => {
+    const newTabs = tabs.map((tab: any) => {
+      if (tab.id === currentPage) {
+        // Case Essay has requirement
+        if (currentTabContent?.data?.requirements?.length > 0) {
+          return {
+            ...tab,
+            data: {
+              ...tab?.data,
+              requirements: currentTabContent?.data?.requirements?.map(
+                (req: any, idx: number) => {
+                  if (idx === requirementIndex) {
+                    return {
+                      ...req,
+                      answer_file: {
+                        file_key: file?.file_key,
+                        file_name: file?.name,
+                      },
+                    };
+                  }
+                  return req;
+                },
+              ),
+            },
+          };
+        }
+        // Case Essay has no requirement
+        return {
+          ...tab,
+          answer_file: {
+            file_key: file?.file_key,
+            file_name: file?.name,
+          },
+        };
+      }
+      return tab;
+    });
+    setTabs(newTabs);
+  };
+
+  const handleSubmitAnswer = async (action?: string) => {
+    if (!currentTabContent) return;
+    if (currentTabContent?.is_viewed_answer) return;
+
+    // Get current answers and prepare submission data FIRST
+    const allQuest = handleSaveCurrentAnswer(tabs, currentTabContent);
+    const currentQuestion = allQuest.find(
+      (e: any) => e.id === currentTabContent?.id,
+    );
+
+    // Early return for tab changes if question not answered
+    if (["change-tab", "timeout", "finish"].includes(action ?? "")) {
+      if (!checkAnswered(currentQuestion)) return;
+      if (action === "change-tab" || action === "finish") {
+        if (currentTabContent?.qType !== QUESTION_TYPES.ESSAY) {
+          const isEqualValue = await isValuesEqual(
+            currentTabContent,
+            oldCurrentTabData,
+            getValues,
+          );
+          // Check if the current tab content is the same as the old tab content
+          if (isEqualValue) return;
+        }
+      }
+    }
+
+    // if (!currentQuestion?.answer) return
+    // Format answer based on question type
+    const answerItem = formatAnswerItem(currentQuestion);
+    // Prepare submission payload
+    const payload = {
+      question_id: currentTabContent?.id,
+      total_attempt_time:
+        quizDetail?.quiz_timed * 60 -
+        (quizDetail?.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
+      scratch_pads: scratchPads || [],
+      flag: currentTabContent?.flag,
+      is_viewed_answer:
+        action === "view-answer" ? true : currentTabContent?.is_viewed_answer,
+      ...answerItem,
+    };
+
+    // Disable unsaved changes tracking
+    dispatch?.(disableUnsavedChange());
+
+    try {
+      const res = await TestServiceAPI.submitAnswer(
+        quizAttempt?.id as string,
+        payload,
+      );
+
+      if (res?.success) {
+        // Remove from error list on success
+        setListSubmitError((prev) =>
+          prev.filter((item) => item.question_id !== currentTabContent?.id),
+        );
+      } else {
+        // Add to error list on failure
+        handleSubmissionError(payload);
+      }
+    } catch (err) {
+      // Handle API errors
+      handleSubmissionError(payload);
+      return false;
+    }
+  };
+  const handleFlagQuestion = async (question_id: string) => {
+    try {
+      const payload = {
+        question_id,
+        flag: !currentTabContent?.flag,
+      };
+      await TestServiceAPI.updateFlagInQuestion(
+        quizAttempt?.id as string,
+        payload,
+      );
+      setTabs((prevTabs: Tab[]) =>
+        prevTabs.map((tab) =>
+          tab.id === question_id ? { ...tab, flag: !tab.flag } : tab,
+        ),
+      );
+    } catch (error) {}
+  };
+  // Helper function to format answer based on question type
+  const formatAnswerItem = (question: any) => {
+    const isAnswered = checkAnswered(question, true);
+
+    const timeSpent = Math.ceil(question.timeSpent / 1000);
+
+    const totalAttemptTime = quizDetail?.quiz_timed
+      ? quizDetail.quiz_timed * 60 - (timeRef?.current?.handleGetTime() || 0)
+      : undefined;
+
+    return formatSubmitAnswer({
+      question,
+      isAnswered,
+      timeSpent,
+      totalAttemptTime,
+      scratchPads,
+    });
+  };
+  // Helper function to handle submission errors
+  const handleSubmissionError = (payload: any) => {
+    setListSubmitError((prev) => {
+      const index = prev.findIndex(
+        (item) => item.question_id === payload.question_id,
+      );
+      if (index !== -1) {
+        const newList = [...prev];
+        newList[index] = payload;
+        return newList;
+      }
+      return [...prev, payload];
+    });
+  };
+
+  const handleSubmitQuestions = async (typeSubmit: "timeout" | "submit") => {
+    if (currentTabContent) {
+      const allQuest = handleSaveCurrentAnswer(tabs, currentTabContent);
+      const quiz_position_mapping = [];
+      // let reformTabs: any[] = []
+      setLoading(true);
+      for (const e of allQuest) {
+        // reformTabs.push({ ...e, done: true })
+        quiz_position_mapping.push({
+          question_id: e.id,
+          answers: e.data?.answers,
+        });
+      }
+      dispatch?.(disableUnsavedChange());
+
+      const res = await TestServiceAPI.submitAllQuestion(
+        quizAttempt?.id as string,
+        {
+          quiz_position_mapping: quiz_position_mapping,
+          scratch_pads: scratchPads || [],
+          total_attempt_time:
+            quizDetail.quiz_timed * 60 -
+            (quizDetail.quiz_timed
+              ? timeRef?.current?.handleGetTime() || 0
+              : 0),
+        },
+      );
+      if (res?.success) {
+        setSubmited(true);
+        setQuizAttempt((prev: any) => ({
+          ...prev,
+          is_submitted: true,
+        }));
+        const WEB_LMS_URL = process.env.NEXT_PUBLIC_WEB_LMS_URL;
+
+        const isCompletedCourse = res?.data?.progress;
+        if (typeSubmit === "submit") {
+          if (!!isCompletedCourse?.is_completed) {
+            setTimeout(() => {
+              dispatch?.(
+                showPopupCompletedCourse(isCompletedCourse?.content || ""),
+              );
+            }, 2000);
+          }
+
+          if (quizDetail?.grading_method === GRADING_METHOD.MANUAL) {
+            setOpenReportModal({
+              open: true,
+              resultId: res?.data?.id,
+            });
+            setLoading(false);
+            return;
+          }
+          if (type === "entrance") {
+            const searchParams =
+              quizAttempt?.number_of_attempts && quizDetail?.limit_count
+                ? `attempt=${quizAttempt?.number_of_attempts}/${quizDetail?.limit_count}`
+                : ``;
+            router.push(
+              `${WEB_LMS_URL}/entrance-test/test-result/${res?.data?.id}?${searchParams}`,
+            );
+          } else if (type === "event-test") {
+            router.push(
+              `${WEB_LMS_URL}/event-test?category=${res?.data?.course_category?.name}&submitted=true`,
+            );
+          } else {
+            if (type !== "entrance" && quizDetail?.quiz_type !== "FINAL_TEST") {
+              router.push(
+                `${WEB_LMS_URL}/courses/test/test-result/${res?.data?.id}`,
+              );
+            } else {
+              if (
+                courseType === "FOUNDATION_COURSE" &&
+                quizDetail?.quiz_type == "FINAL_TEST"
+              ) {
+                router.push(`${WEB_LMS_URL}/courses/my-course/${class_id}`);
+                return;
+              } else {
+                router.push(
+                  `${WEB_LMS_URL}/courses/test/test-result/${res?.data?.id}`,
+                );
+              }
+            }
+          }
+        } else {
+          if (!!isCompletedCourse?.is_completed) {
+            setTimeout(() => {
+              dispatch?.(
+                showPopupCompletedCourse(isCompletedCourse?.content || ""),
+              );
+            }, 2000);
+          }
+          // setScoreFinalTest(res?.data?.score)
+          setQuizResultId(() => {
+            setOpenTimeOut(true);
+            return res?.data?.id;
+          });
+        }
+      }
+      setLoading(false);
+    }
+  };
+
+  const handleClearSelection = async (currentTabContent: any) => {
+    const data = currentTabContent.data;
+
+    if (data && !currentTabContent.is_viewed_answer) {
+      setTabs((prev: any) => {
+        const arr = [...prev];
+        const currentIndex = arr.findIndex((e) => e.id === data.id);
+        arr[currentIndex] = {
+          ...arr[currentIndex],
+          answer: undefined,
+          attempted: false,
+        };
+        if (
+          data.qType === QUESTION_TYPES.DRAG_DROP ||
+          data.qType === QUESTION_TYPES.MATCHING ||
+          data.qType === QUESTION_TYPES.FILL_WORD ||
+          data.qType === QUESTION_TYPES.SELECT_WORD
+        ) {
+          ref.current?.handleReset();
+        }
+        return arr;
+      });
+      if (data.qType === QUESTION_TYPES.ESSAY) {
+        await resetWordBeforeAction();
+        setValue(`${currentTabContent?.id}_answer`, undefined);
+      } else {
+        setValue(`${currentTabContent?.id}_answer`, "");
+      }
+      setValue(`${currentTabContent?.id}_fillword`, "");
+      if (data.qType === QUESTION_TYPES.ESSAY) {
+        // refEditor?.current?.reset()
+        setTabs((prev: any) => {
+          const newData = prev.map((item: any) => {
+            if (currentTabContent?.id === item.id) {
+              const updatedRequirements = item?.data?.requirements?.map(
+                (req: Requirement) => ({
+                  ...req,
+                  answer_file: undefined,
+                }),
+              );
+
+              return {
+                ...item,
+                answer_file: undefined,
+                data: {
+                  ...item.data,
+                  requirements: updatedRequirements,
+                },
+              };
+            }
+            return item;
+          });
+          return newData;
+        });
+      }
+    }
+  };
+
+  const handleClearFile = (requirementIndex: number) => {
+    const newTabs = tabs.map((tab: any) => {
+      if (tab.id === currentPage) {
+        // Case Essay has requirement
+        if (currentTabContent?.data?.requirements?.length > 0) {
+          return {
+            ...tab,
+            data: {
+              ...tab?.data,
+              requirements: currentTabContent?.data?.requirements?.map(
+                (req: any, idx: number) => {
+                  if (idx === requirementIndex) {
+                    const editorContent = getValues(
+                      `${currentPage}_${idx}_answer`,
+                    );
+                    return {
+                      ...req,
+                      answer_text:
+                        editorContent !== undefined
+                          ? editorContent
+                          : req?.answer_text,
+                      short_answer:
+                        editorContent !== undefined
+                          ? editorContent
+                          : req?.short_answer,
+                      answer_file: null,
+                    };
+                  }
+                  return req;
+                },
+              ),
+            },
+          };
+        }
+        // Case Essay has no requirement
+        return {
+          ...tab,
+          answer_file: null,
+        };
+      }
+      return tab;
+    });
+    setTabs(newTabs);
+  };
+  const handleSaveHighLight = (e: any) => {
+    setTabs((prev: any) => {
+      const newData = prev.map((item: any) => {
+        if (currentPage === item.id) {
+          return { ...item, hightlight: e };
+        }
+        return item;
+      });
+      return newData;
+    });
+  };
+  const handleSaveHighLightTopic = (e: any) => {
+    setTabs((prev: any) => {
+      const newData = prev?.map((item: any) => {
+        if (currentPage === item.id) {
+          // setCurrentTabContent({ ...item, hightlightTopic: e })
+
+          return { ...item, hightlightTopic: e };
+        }
+        return item;
+      });
+      return newData;
+    });
+  };
+
+  const handleSaveHighLightRequirement = (e: any) => {
+    setTabs((prev: any) => {
+      const newData = prev.map((item: any) => {
+        if (currentPage === item.id) {
+          // setCurrentTabContent({ ...item, hightlightTopic: e })
+          item.data.requirements[essayData.index] = {
+            ...item.data.requirements[essayData.index],
+            highlighted: e,
+          };
+          return { ...item };
+        }
+        return item;
+      });
+      return newData;
+    });
+  };
+
+  const handleOpenExhibit = (exhibitId?: string) => {
+    if (!exhibitId) return;
+    const exhibitIds = getValuesExhibits("exhibits") ?? [];
+    if (exhibitIds.includes(exhibitId)) {
+      setValueExhibits(
+        "exhibits",
+        exhibitIds.filter((id: string) => id !== exhibitId),
+      );
+    } else {
+      exhibitIds.push(exhibitId);
+      setValueExhibits("exhibits", exhibitIds);
+    }
+    rightSideRef?.current &&
+      rightSideRef.current.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+  };
+
+  const exhibits = useMemo(() => {
+    const exhibitsOptions = [];
+    const topics = currentTabContent?.topicDescription;
+
+    const exhibitTopic = topics?.exhibits?.map((exhibit: IExhibit) => exhibit);
+
+    if (exhibitTopic?.length) {
+      exhibitsOptions.push(...exhibitTopic);
+    }
+
+    if (topics?.questions?.length) {
+      for (const question of topics.questions) {
+        if (question.exhibits?.length) {
+          exhibitsOptions.push(...question.exhibits);
+        }
+      }
+    }
+
+    setExhibitData(exhibitsOptions);
+    return exhibitsOptions?.map((exhibit, index: number) => ({
+      label: `${exhibitText} ${+index + 1}`,
+      value: exhibit.id,
+    }));
+  }, [currentTabContent]);
+
+  useEffect(() => {
+    if (tabs.length > 0) {
+      const filter = watchFilter("filter");
+      if (filter === "attempted") {
+        setFilterTabs(
+          tabs.filter((e: any) => e?.attempted === true || e?.done === true),
+        );
+        return;
+      } else if (filter === "unattempted") {
+        setFilterTabs(tabs.filter((e: any) => !e?.attempted && !e?.done));
+        return;
+      } else if (filter === "flag") {
+        setFilterTabs(tabs.filter((e: any) => e?.flag === true));
+        return;
+      } else setFilterTabs(tabs);
+    }
+  }, [tabs, trigger]);
+
+  useEffect(() => {
+    if (tabs?.length > 0) {
+      if (currentTabContent?.done) {
+        setTrigger(!trigger);
+      } else {
+        const savedAnswer = handleSaveCurrentAnswer(tabs, currentTabContent);
+        setTabs(() => {
+          return savedAnswer;
+        });
+      }
+    }
+  }, [watchFilter("filter")]);
+
+  useEffect(() => {
+    dispatch?.(loginSlice.actions.enableUnsavedChange());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (startResize) {
+      const temp = currentLeftWidth;
+      setLeftWidth(temp + (currentMousePos - (mousePosition.x || 0)));
+    }
+  }, [mousePosition.x, startResize, currentLeftWidth, currentMousePos]);
+
+  useEffect(() => {
+    if (watchExhibits("exhibits")) {
+      setOpenScratchPad((prev) => {
+        const arr = [...prev];
+        const newArr = arr.filter((e) => {
+          return e.type !== "exhibits";
+        });
+        for (const e of watchExhibits("exhibits")) {
+          setOnFocusingPad(e);
+          newArr.push({ id: e, type: "exhibits" });
+        }
+        return newArr;
+      });
+    }
+  }, [watchExhibits("exhibits")]);
+
+  useEffect(() => {
+    if (!isQuizAttemptIdReady || !id) return;
+
+    const handleQuizAttempt = async () => {
+      try {
+        if (quizAttemptId) {
+          const res = await CoursesAPI.getQuizAttempts(quizAttemptId);
+          setQuizAttempt(res.data?.quizAttempt);
+          setCourseType(res?.data?.course?.course_type || null);
+          return;
+        }
+        if (!quizAttemptId) {
+          const res = await TestServiceAPI.createQuizAttempt(
+            id as string,
+            query.class_user_id as string,
+          );
+          setQuizAttempt(res.data);
+          setCourseType(res?.data?.course?.course_type || null);
+          const newParams = new URLSearchParams(searchParam.toString());
+          newParams.set("quizAttemptId", res.data.id);
+
+          router.replace(`?${newParams.toString()}`);
+        }
+      } catch (err) {
+        // console.error("QuizAttempt error:", err);
+      }
+    };
+
+    handleQuizAttempt();
+  }, [quizAttemptId, id, isQuizAttemptIdReady]);
+
+  const class_id = query.class_id;
+
+  useEffect(() => {
+    if (quizAttempt?.id) {
+      const fetchAnswersSubmitted = async () => {
+        try {
+          setLoading(true);
+          const response = await TestServiceAPI.getAnswersSubmitted(
+            quizAttempt.id,
+          );
+          setExhibitText(EXHIBIT_TEXT_REPLACE.EXHIBIT);
+          setIsQuizAttemptCreated(true); // Mark the attempt as created
+          setAnswersSubmitted(response?.data?.answers);
+          setClassInfo({
+            class_id: response?.data?.class_id,
+            part_id: response?.data?.part_id,
+          });
+        } catch (err) {
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchAnswersSubmitted();
+    } else {
+      // if (id) {
+      //   const createQuizAttempt = async () => {
+      //     try {
+      //       const res = await TestServiceAPI.createQuizAttempt(
+      //         id as string,
+      //         query.class_user_id as string,
+      //       );
+      //       setQuizAttempt(res.data);
+      //       setIsQuizAttemptCreated(true); // Mark the attempt as created
+      //     } catch (err: any) {
+      //       if (err.response?.data?.error.code === "400|060710") {
+      //          dispatch?.(disableUnsavedChange());
+      //         setOpenLimit(true);
+      //       }
+      //       if (err.response?.data?.success === false) {
+      //         setRouteBack(true);
+      //         setIsQuizAttemptCreated(true); // Mark the attempt as created even on error
+      //         switch (
+      //           quizDetail?.quiz_type ||
+      //           quizDetail?.quiz_type === undefined
+      //         ) {
+      //           case TEST_TYPE.MID_TERM_TEST:
+      //           case TEST_TYPE.FINAL_TEST:
+      //           case TEST_TYPE.TOPIC_TEST:
+      //           case TEST_TYPE.CHAPTER_TEST:
+      //           case TEST_TYPE.PART_TEST:
+      //             return router.push(PageLink.COURSES);
+      //           case TEST_TYPE.ENTRANCE_TEST:
+      //             return router.push(PageLink.ENTRANCE_TEST);
+      //           default:
+      //             return router.push(PageLink.COURSES);
+      //         }
+      //       }
+      //     }
+      //   };
+      //   createQuizAttempt();
+      // }
+    }
+  }, [id]);
+
+  useResizeMouse({
+    startResize,
+    setMousePosition,
+    setCurrentMousePos,
+  });
+
+  useEffect(() => {
+    if (!isQuizAttemptCreated) return;
+
+    const handleWindowClose = (e: any) => {
+      if (!unsavedChange) return;
+      e.preventDefault();
+      return (e.returnValue = warningText);
+    };
+
+    window.addEventListener("beforeunload", handleWindowClose);
+    return () => {
+      window.removeEventListener("beforeunload", handleWindowClose);
+    };
+  }, [unsavedChange, isQuizAttemptCreated]);
+
+  useEffect(() => {
+    if (
+      tabs &&
+      tabs.length > 0 &&
+      currentTabContent &&
+      currentTabContent?.data?.requirements &&
+      currentTabIdRef.current !== currentTabContent?.id
+      // && !essayData
+    ) {
+      currentTabIdRef.current = currentTabContent?.id;
+      setEssayData({
+        req: currentTabContent?.data?.requirements?.[0],
+        index: currentTabContent?.data?.requirements?.[0] ? 0 : undefined,
+      });
+    }
+  }, [currentTabContent?.id, tabs]);
+
+  useEffect(() => {
+    async function fetchTabs() {
+      if (questions?.length > 0) {
+        const answerMap = new Map(
+          answersSubmitted.map(
+            (answer: {
+              questionId: string;
+              flag?: boolean;
+              is_viewed_answer?: boolean;
+              has_answer?: boolean;
+            }) => [answer.questionId, answer],
+          ),
+        );
+
+        const arr = await Promise.all(
+          questions.map(async (question: any, index: any) => {
+            const hasAnswer =
+              answerMap.has(question.id) &&
+              !!(answerMap.get(question.id) as any)?.has_answer;
+
+            // const hasAnswer = answerMap.has(question.id)
+
+            let baseData = {
+              ...question,
+              viewed: index === 0,
+              flag:
+                (answerMap.get(question.id) as { flag?: boolean } | undefined)
+                  ?.flag || false,
+              done: hasAnswer,
+              attempted: hasAnswer,
+              index,
+              response_type: 0,
+              is_viewed_answer:
+                (answerMap.get(question.id) as { is_viewed_answer?: boolean })
+                  ?.is_viewed_answer || false,
+            };
+
+            if (index === 0) {
+              const { topicDescription, question: questionDetail } =
+                await getDetail(question.id);
+              baseData = {
+                ...baseData,
+                viewed: !!questionDetail,
+                ...(questionDetail && {
+                  data: questionDetail,
+                  topicDescription: topicDescription?.data,
+                }),
+              };
+            }
+            return baseData;
+          }),
+        );
+        setTabs(arr);
+      } else {
+        router.push(PageLink.PAGE_NOT_FOUND);
+      }
+      setCurrentPage(questions?.[0]?.id);
+    }
+    if (questions) {
+      fetchTabs();
+    }
+  }, [questions, router, quizDetail?.id, answersSubmitted]);
+
+  const handleSubmitAnswerError = async (answerSubmitErr: any) => {
+    const res = await TestServiceAPI.submitAnswer(
+      quizAttempt?.id as string,
+      answerSubmitErr,
+    );
+    if (res?.success) {
+      setListSubmitError((prev) =>
+        prev.filter(
+          (item) => item.question_id !== answerSubmitErr?.question_id,
+        ),
+      );
+    }
+  };
+  const isGradingAfterEachQuestion =
+    quizDetail?.grading_preference === GradingPreference.AFTER_EACH_QUESTION;
+
+  const groupAction = () => {
+    const indexTab = filteredTabs.findIndex((e) => e.id === currentPage);
+    const currentAnswer = watch(`${currentPage}_answer`);
+
+    return (
+      <TestGroupAction
+        currentTabContent={currentTabContent}
+        currentAnswer={currentAnswer}
+        indexTab={indexTab}
+        totalTabs={filteredTabs.length}
+        isShowTemplate={isShowTemplate}
+        isGradingAfterEachQuestion={isGradingAfterEachQuestion}
+        onClearSelection={() => {
+          handleClearSelection(currentTabContent);
+          trackGAEvent("Click Button Clear Selection Test");
+        }}
+        onNextQuestion={() => {
+          handleChangeTab(filteredTabs[indexTab + 1].id);
+          trackGAEvent("Click Button Next Question");
+        }}
+        onResetTemplate={onOpenResetToTemplateModal}
+        onConfirm={async () => {
+          if (isGradingAfterEachQuestion) {
+            if (currentTabContent?.is_viewed_answer) {
+              if (indexTab === filteredTabs.length - 1) {
+                handleSubmitAnswer("finish");
+                if (checkUnSubmitAnswer()?.length > 0) {
+                  setUnSubmitAnswer(true);
+                } else {
+                  setOpenSubmit(true);
+                }
+                dispatch?.(disableUnsavedChange());
+              }
+            } else {
+              const data = await getResult(currentTabContent);
+              handleSubmitAnswer("view-answer");
+              confirmAnswer(
+                data?.corrects,
+                data?.solution,
+                currentTabContent,
+                data?.requirements,
+              );
+            }
+          } else {
+            if (indexTab < filteredTabs.length - 1) {
+              handleChangeTab(filteredTabs[indexTab + 1].id);
+              handleSubmitAnswer("change-tab");
+            } else if (indexTab === filteredTabs.length - 1) {
+              handleSubmitAnswer("finish");
+              if (checkUnSubmitAnswer()?.length > 0) {
+                setUnSubmitAnswer(true);
+              } else {
+                setOpenSubmit(true);
+              }
+              dispatch?.(disableUnsavedChange());
+            }
+          }
+
+          trackGAEvent("Click Button Confirm Answer");
+        }}
+        essayData={essayData}
+      />
+    );
+  };
+  const isShowTemplate =
+    currentTabContent?.data?.answer_template ||
+    currentTabContent?.data?.requirements?.some(
+      (req: Requirement) => req?.answer_template,
+    );
+  const onResetFormatEssay = (key: string, value: string) => {
+    resetField(key, {
+      defaultValue: value,
+      keepDirty: false,
+      keepTouched: false,
+      keepError: false,
+    }); // reset riêng field đó
+    setValue(key, value, {
+      shouldDirty: false,
+      shouldTouch: false,
+      shouldValidate: true,
+    }); // cập nhật lại giá trị
+    // reset()
+  };
+
+  const getTemplateValueForWord = () => {
+    const requirement =
+      currentTabContent?.data?.requirements?.[essayData?.index];
+    if (requirement?.answer_template) {
+      return requirement.answer_template;
+    }
+    return currentTabContent?.data?.answer_template;
+  };
+
+  const getTemplateValueForSheet = () => {
+    const requirementSheet =
+      currentTabContent?.data?.requirements?.[essayData?.index];
+    if (requirementSheet?.answer_template) {
+      return requirementSheet.answer_template || defaultSheetData;
+    }
+    return currentTabContent?.data?.answer_template || defaultSheetData;
+  };
+  const onResetAnswerEssayToTemplate = () => {
+    const key = `${currentTabContent?.id}_${essayData?.index}_answer`;
+    const response_option = currentTabContent?.data?.response_option;
+
+    switch (response_option) {
+      case RESPONSE_OPTION.WORD: {
+        const templateValueWord = getTemplateValueForWord();
+        // Reset form value
+        onResetFormatEssay(key, templateValueWord);
+        // Reset component con
+        if (refEditor?.current?.reset) {
+          refEditor.current.reset(templateValueWord);
+        }
+        break;
+      }
+      case RESPONSE_OPTION.SHEET: {
+        const templateValue = getTemplateValueForSheet();
+        // Reset form value
+        onResetFormatEssay(key, templateValue);
+        // Reset component con
+        if (refEditor?.current?.clear) {
+          refEditor.current.clear(templateValue);
+        }
+        break;
+      }
+    }
+  };
+
+  const resetWordBeforeAction = async () => {
+    if (currentTabContent?.data?.response_option === RESPONSE_OPTION.WORD) {
+      const key = `${currentTabContent?.id}_${essayData?.index}_answer`;
+      const defaultValueEssay = () => {
+        const valueFromForm = getValues(key);
+        const response_option = currentTabContent?.data?.response_option;
+
+        switch (response_option) {
+          case RESPONSE_OPTION.WORD: {
+            if (valueFromForm !== undefined && valueFromForm !== null) {
+              return valueFromForm;
+            }
+            const requirement =
+              currentTabContent?.data?.requirements?.[essayData?.index];
+
+            if (requirement?.short_answer) {
+              return requirement.short_answer;
+            }
+            if (requirement?.answer_text) {
+              return requirement.answer_text;
+            }
+            if (requirement?.answer_template) {
+              return requirement.answer_template;
+            }
+            if (currentTabContent.answer) {
+              return currentTabContent.answer;
+            }
+
+            return currentTabContent?.data?.answer_template;
+          }
+          case RESPONSE_OPTION.SHEET: {
+            const valueFromSheetForm = getValues(key);
+            if (valueFromSheetForm) {
+              const isEmptyWorkbook = isWorkbookEmpty(
+                JSON.parse(valueFromSheetForm),
+              );
+
+              if (isEmptyWorkbook) {
+                const requirement =
+                  currentTabContent?.data?.requirements?.[essayData?.index];
+                if (requirement?.short_answer) {
+                  return requirement.short_answer;
+                }
+                if (requirement?.answer_text) {
+                  return requirement.answer_text;
+                }
+                if (requirement?.answer_template) {
+                  return requirement.answer_template || defaultSheetData;
+                }
+                if (currentTabContent.answer) return currentTabContent.answer;
+                return (
+                  currentTabContent?.data?.answer_template || defaultSheetData
+                );
+              }
+              return valueFromSheetForm;
+            }
+            const requirementSheet =
+              currentTabContent?.data?.requirements?.[essayData?.index];
+            if (requirementSheet?.short_answer) {
+              return requirementSheet.short_answer;
+            }
+            if (requirementSheet?.answer_text) {
+              return requirementSheet.answer_text;
+            }
+            if (requirementSheet?.answer_template) {
+              return requirementSheet.answer_template || defaultSheetData;
+            }
+            if (currentTabContent.answer) return currentTabContent.answer;
+            return currentTabContent?.data?.answer_template || defaultSheetData;
+          }
+        }
+      };
+      const defaultValue = defaultValueEssay();
+      refEditor?.current?.reset(defaultValue);
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    }
+  };
+
+  return (
+    <Layout
+      title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}
+      showSidebar={false}
+      fullWidth
+      hiddenSidebar={true}
+    >
+      <CourseProvider router={router} api={{ get: EventTestAPI?.get }}>
+        <SappLoading
+          className={loading || !currentTabContent?.id ? "block" : "hidden"}
+        />
+        {isQuizAttemptIdReady && quizAttempt && (
+          <TestWrapper
+            quizDetail={quizDetail}
+            quizAttempt={quizAttempt}
+            setOpenSubmit={setOpenSubmit}
+            timeRef={timeRef}
+            setUnSubmitAnswer={setUnSubmitAnswer}
+            checkUnSubmitAnswer={checkUnSubmitAnswer}
+            setOpenQuit={setOpenQuit}
+            setSubmitEventTest={setSubmitEventTest}
+            type={type}
+            onSubmitAnswer={async (mode) => {
+              const savedAnswer = await handleSaveCurrentAnswer(
+                tabs,
+                currentTabContent,
+              );
+              setTabs(savedAnswer);
+              setTimeout(() => {
+                handleSubmitAnswer(mode);
+              }, 100);
+            }}
+            handleTimeoutSubmit={async () => {
+              if (!openLimit) {
+                await resetWordBeforeAction();
+                if (!submited && !quizAttempt?.is_submitted) {
+                  const remainingTimeinSeconds = quizDetail?.quiz?.quiz_timed
+                    ? dayjs(
+                        dayjs(new Date(quizAttempt?.created_at ?? "")).add(
+                          quizDetail?.quiz?.quiz_timed,
+                          "minutes",
+                        ),
+                      ).diff(dayjs(), "seconds")
+                    : null;
+
+                  // No call when time out > 60s
+                  if ((remainingTimeinSeconds ?? 0) > -60) {
+                    if (listSubmitError.length > 0) {
+                      for (const el of listSubmitError) {
+                        await handleSubmitAnswerError(el);
+                      }
+                    }
+                    await handleSubmitAnswer("timeout");
+                  }
+                  handleSubmitQuestions("timeout");
+                  dispatch?.(disableUnsavedChange())
+                    .unwrap()
+                    .then(() => {
+                      trackGAEvent("Click Button Submit Time Out Test");
+                    });
+                } else {
+                  setOpenTimeOut(true);
+                  setQuizResultId(quizAttempt?.id);
+                }
+              }
+            }}
+            resetWordBeforeAction={resetWordBeforeAction}
+            footer={
+              <div
+                className={clsx(
+                  "flex items-center justify-center overflow-hidden px-8 py-4 transition-[height] duration-300 ease-in-out will-change-contents lg:h-[var(--footer-h)] lg:justify-between",
+                )}
+                style={{
+                  ["--footer-h" as any]: activeShowAll
+                    ? `${80 + Math.max(1, Math.ceil((filteredTabs?.length || 0) / numberDisplayData) - 1) * 44}px`
+                    : "80px",
+                }}
+              >
+                <div className="hidden h-full w-[150px] items-center gap-1 lg:flex">
+                  <Popover
+                    content={
+                      <div className="flex items-center gap-2 px-2 ">
+                        Scratch Pad
+                      </div>
+                    }
+                    trigger="hover"
+                    placement="top"
+                  >
+                    <button
+                      className={`h-fit rounded-lg ${
+                        isScatchPadEnabled && "bg-primary"
+                      }`}
+                      onClick={() => {
+                        handleOpenScratchPad("scratch_pad");
+                        trackGAEvent("Click Button ScratchPad Test");
+                      }}
+                    >
+                      <ButtonContent
+                        icon={
+                          <NewScratchPadIcon isActive={isScatchPadEnabled} />
+                        }
+                        content=""
+                      />
+                    </button>
+                  </Popover>
+                  <Popover
+                    content={
+                      <div className="flex items-center gap-2 px-2 ">
+                        Calculator
+                      </div>
+                    }
+                    trigger="hover"
+                    placement="top"
+                  >
+                    <button
+                      className={`h-fit rounded-lg ${
+                        checkCalExist > -1 && "bg-primary"
+                      }`}
+                      onClick={() => {
+                        handleOpenScratchPad("calculator");
+                        trackGAEvent("Click Button Calculator Test");
+                      }}
+                      disabled={checkCalExist > -1}
+                    >
+                      <ButtonContent
+                        icon={
+                          <CalculatorIcon
+                            className={
+                              checkCalExist > -1 ? "text-white" : "text-primary"
+                            }
+                          />
+                        }
+                        content=""
+                      />
+                    </button>
+                  </Popover>
+                </div>
+                {/** Tabs */}
+                {tabs?.length > 0 && (
+                  <div
+                    className={`flex w-fit min-w-0 max-w-[100%] flex-1 flex-col justify-center gap-3 lg:max-w-[68%] lg:flex-row`}
+                  >
+                    <TabSlide
+                      data={filteredTabs}
+                      currentTab={currentPage}
+                      setCurrentTab={setCurrentPage}
+                      handleChangeTab={async (id?: string) => {
+                        setScratchPads("");
+                        handleSubmitAnswer("change-tab");
+                        setEssayData(undefined);
+                        handleChangeTab(id);
+                      }}
+                      setHasScrollBar={setHasScrollBar}
+                      activeShowAll={activeShowAll}
+                      isScrollCenter={false}
+                    />
+                    <div
+                      className={clsx(
+                        `flex items-center justify-center lg:justify-start`,
+                        activeShowAll ? "lg:ml-8" : "lg:ml-0",
+                      )}
+                    >
+                      {activeShowAll && <OptionShowAll />}
+                      <Tooltip
+                        className="tooltip-show-all"
+                        open={tooltipOpen}
+                        onOpenChange={(visible) => setTooltipOpen(visible)}
+                        title={
+                          <div className="flex items-center gap-2">
+                            {activeShowAll ? (
+                              <div className="rounded-full bg-white">
+                                <ShowMoreIcon size={16} color="#404041" />
+                              </div>
+                            ) : (
+                              <div className="rounded-full bg-white">
+                                <ShowLessIcon size={16} color="#404041" />
+                              </div>
+                            )}
+                            <span>
+                              {activeShowAll ? "Show Less" : "Show All"}
+                            </span>
+                          </div>
+                        }
+                      >
+                        <div
+                          className="absolute -top-3 left-[50%] z-[99] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline"
+                          onClick={() => {
+                            setActiveShowAll(!activeShowAll);
+                            setTooltipOpen(false);
+                          }}
+                          // onMouseUp={() => setTooltipOpen(true)}
+                        >
+                          {!activeShowAll ? (
+                            <ShowLessIcon size={24} />
+                          ) : (
+                            <ShowMoreIcon size={24} />
+                          )}
+                        </div>
+                      </Tooltip>
+                    </div>
+                  </div>
+                )}
+
+                {/** End Tabs */}
+                <div
+                  className="hidden w-[150px] min-w-[150px] cursor-pointer items-center gap-2 whitespace-nowrap text-base font-semibold text-gray-800 underline hover:text-primary lg:flex"
+                  onClick={() => {
+                    handleFlagQuestion(currentPage);
+                    trackGAEvent("Click Button Flag To Review Test");
+                  }}
+                >
+                  <FlagIcon />
+                  {currentTabContent?.flag ? (
+                    <div>Unflag to Review</div>
+                  ) : (
+                    <div>Flag to Review</div>
+                  )}
+                </div>
+              </div>
+            }
+          >
+            <div
+              className="relative flex h-full flex-col overflow-hidden bg-white"
+              onMouseUp={() => {
+                setStartResize(false);
+                setCurrentLeftWidth(leftWidth);
+              }}
+            >
+              {/** Question Content */}
+              {!isUndefined(currentTabContent) && (
+                <>
+                  {currentTabContent?.data?.display_type ===
+                  DISPLAY_TYPE.VERTICAL ? (
+                    <div
+                      className={`flex flex-1 overflow-auto bg-[#F1F1F1]`}
+                      id={"preview-question"}
+                    >
+                      <div
+                        className={clsx(
+                          "h-full min-w-[20%] overflow-auto bg-white p-8",
+                          styles.scrollYOnly,
+                        )}
+                        style={{
+                          width: `calc(50% - ${leftWidth}px)`,
+                        }}
+                      >
+                        <div
+                          id="hightlight_area_topic"
+                          onMouseUp={(e: any) => {
+                            if (
+                              e.target.tagName.charAt(0) !== "m" &&
+                              e.target.firstChild?.tagName !== "math"
+                            ) {
+                              if (e) {
+                                if (allowHighLight) {
+                                  runHighlight(
+                                    handleSaveHighLightTopic,
+                                    allowHighLight || false,
+                                    "hightlight_area_topic",
+                                  );
+                                } else if (allowUnHighLight) {
+                                  runHighlight(
+                                    handleSaveHighLightTopic,
+                                    allowUnHighLight || false,
+                                    "hightlight_area_topic",
+                                    { color: "white" },
+                                  );
+                                }
+                              }
+                            }
+                          }}
+                        >
+                          {currentTabContent?.topicDescription?.description && (
+                            <HighlightableHTML
+                              initialHTML={
+                                currentTabContent?.topicDescription
+                                  ?.description || ""
+                              }
+                              storageKey={`${id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
+                              className="sapp-questions mb-6"
+                            />
+                          )}
+                        </div>
+                      </div>
+                      <div
+                        className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-accent"
+                        onMouseDown={() => setStartResize(true)}
+                        onTouchStart={(e) => {
+                          e.preventDefault();
+                          setStartResize(true);
+                        }}
+                        onTouchMove={() => setStartResize(true)}
+                        onMouseUp={() => setStartResize(false)}
+                        onTouchEnd={() => setStartResize(false)}
+                      >
+                        <div className="h-8 w-8 rounded-full bg-white">
+                          <ResizeIcon />
+                        </div>
+                      </div>
+                      <div
+                        className={clsx(
+                          "h-full overflow-auto bg-white p-8",
+                          styles.scrollYOnly,
+                          "has-horizontal",
+                        )}
+                        style={{ width: `calc(50% + ${leftWidth}px)` }}
+                        ref={rightSideRef}
+                      >
+                        <div
+                          className={clsx(
+                            "flex w-full flex-col gap-8 rounded-xl bg-gray-100 p-8",
+                            {
+                              "min-w-[350px] bg-white px-0 py-8":
+                                currentTabContent?.data?.qType ===
+                                QUESTION_TYPES.ESSAY,
+                              "!w-fit":
+                                currentTabContent?.data?.qType ===
+                                QUESTION_TYPES.MATCHING,
+                            },
+                          )}
+                        >
+                          <QuestionRenderer
+                            currentTabContent={currentTabContent}
+                            type={currentTabContent?.data?.qType}
+                            data={currentTabContent?.data}
+                            currentTabID={currentTabContent?.id}
+                            defaultValue={currentTabContent?.answer}
+                            corrects={currentTabContent?.corrects}
+                            highlighted={currentTabContent?.hightlight}
+                            solution={currentTabContent?.solution}
+                            done={currentTabContent?.done}
+                            control={control}
+                            setValue={setValue}
+                            getValues={getValues}
+                            watch={watch}
+                            tabs={tabs}
+                            currentPage={currentPage}
+                            ref={ref}
+                            handleSaveHighLight={handleSaveHighLight}
+                            removeHighlight={removeHighlight}
+                            allowHighLight={allowHighLight}
+                            allowUnHighLight={allowUnHighLight}
+                            storageKey={`${id}-${currentTabContent?.data?.qType}-question-${currentTabContent?.id}`}
+                            // Essay-only props
+                            essayData={essayData}
+                            refEditor={refEditor}
+                            setEssayData={setEssayData}
+                            setOpenUpload={setOpenUpload}
+                            handleClearFile={handleClearFile}
+                            handleOpenScratchPad={handleOpenScratchPad}
+                            handleSaveHighLightRequirement={
+                              handleSaveHighLightRequirement
+                            }
+                            showListRequirement={showListRequirement}
+                            editorReady={editorReady}
+                          />
+
+                          {groupAction()}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      className={`flex-1 overflow-auto p-8`}
+                      id={"preview-question"}
+                      ref={scrollRef}
+                    >
+                      <div
+                        id="hightlight_area_topic"
+                        onMouseUp={(e: any) => {
+                          if (
+                            e.target.tagName.charAt(0) !== "m" &&
+                            e.target.firstChild?.tagName !== "math"
+                          ) {
+                            if (e) {
+                              if (allowHighLight) {
+                                runHighlight(
+                                  handleSaveHighLightTopic,
+                                  allowHighLight || false,
+                                  "hightlight_area_topic",
+                                );
+                              } else if (allowUnHighLight) {
+                                runHighlight(
+                                  handleSaveHighLightTopic,
+                                  allowUnHighLight || false,
+                                  "hightlight_area_topic",
+                                  { color: "white" },
+                                );
+                              }
+                            }
+                          }
+                        }}
+                        className="m-auto mb-3 w-full max-w-[950px]"
+                      >
+                        {currentTabContent?.topicDescription?.description && (
+                          <HighlightableHTML
+                            initialHTML={
+                              currentTabContent?.topicDescription
+                                ?.description || ""
+                            }
+                            storageKey={`${id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
+                            className="mb-4"
+                          />
+                        )}
+                      </div>
+
+                      <div
+                        className={clsx(
+                          "mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-gray-100 p-8",
+                          {
+                            "min-w-[350px] bg-white px-0 py-8":
+                              currentTabContent?.data?.qType ===
+                              QUESTION_TYPES.ESSAY,
+                            "!w-fit":
+                              currentTabContent?.data?.qType ===
+                              QUESTION_TYPES.MATCHING,
+                          },
+                        )}
+                      >
+                        <QuestionRenderer
+                          currentTabContent={currentTabContent}
+                          type={currentTabContent?.data?.qType}
+                          data={currentTabContent?.data}
+                          currentTabID={currentTabContent?.id}
+                          defaultValue={currentTabContent?.answer}
+                          corrects={currentTabContent?.corrects}
+                          highlighted={currentTabContent?.hightlight}
+                          solution={currentTabContent?.solution}
+                          done={currentTabContent?.done}
+                          control={control}
+                          setValue={setValue}
+                          getValues={getValues}
+                          watch={watch}
+                          tabs={tabs}
+                          currentPage={currentPage}
+                          ref={ref}
+                          handleSaveHighLight={handleSaveHighLight}
+                          removeHighlight={removeHighlight}
+                          allowHighLight={allowHighLight}
+                          allowUnHighLight={allowUnHighLight}
+                          storageKey={`${id}-${currentTabContent?.data?.qType}-question-${currentTabContent?.id}`}
+                          // Essay-only props
+                          essayData={essayData}
+                          refEditor={refEditor}
+                          setEssayData={setEssayData}
+                          setOpenUpload={setOpenUpload}
+                          handleClearFile={handleClearFile}
+                          handleOpenScratchPad={handleOpenScratchPad}
+                          handleSaveHighLightRequirement={
+                            handleSaveHighLightRequirement
+                          }
+                          showListRequirement={showListRequirement}
+                          editorReady={editorReady}
+                        />
+                        {groupAction()}
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+              {/** End Question Content */}
+
+              <TestScratchPads
+                currentPage={currentPage}
+                exhibitData={exhibitData}
+                scratchPadValues={scratchPadValues}
+                setScratchPadValues={setScratchPadValues}
+                scratchPads={scratchPads}
+                setScratchPads={setScratchPads}
+                onFocusingPad={onFocusingPad}
+                setOnFocusingPad={setOnFocusingPad}
+                handleCloseScratchPad={handleCloseScratchPad}
+                openScratchPad={openScratchPad}
+                exhibitText={exhibitText}
+              />
+              {/** End Scratchpads */}
+
+              <TestTimeOutModal
+                type={type}
+                okButtonCaption={
+                  quizDetail?.grading_method === GRADING_METHOD.MANUAL
+                    ? "Review Answers"
+                    : "View Results"
+                }
+                open={openTimeOut}
+                setOpen={setOpenTimeOut}
+                handleSubmit={() => {
+                  dispatch?.(disableUnsavedChange())
+                    .unwrap()
+                    .then(() => {
+                      if (type === "entrance") {
+                        const searchParams =
+                          quizAttempt?.number_of_attempts &&
+                          quizDetail?.limit_count
+                            ? `attempt=${quizAttempt?.number_of_attempts}/${quizDetail?.limit_count}`
+                            : ``;
+                        router.replace(
+                          `${WEB_LMS_URL}/entrance-test/test-result/${QuizResultId}?${searchParams}`,
+                        );
+                      } else if (type === "event-test") {
+                        router.replace(`${WEB_LMS_URL}/event-test`);
+                        // setSubmitEventTest(true)
+                      } else {
+                        // if (type !== 'entrance') {
+                        if (
+                          quizDetail?.grading_method === GRADING_METHOD.MANUAL
+                        ) {
+                          router.replace(
+                            `${WEB_LMS_URL}/courses/test/your-answers-detail/${QuizResultId}`,
+                          );
+                        } else {
+                          router.replace(
+                            `${WEB_LMS_URL}/courses/test/test-result/${QuizResultId}`,
+                          );
+                        }
+                      }
+                      trackGAEvent("Click Button Submit Time Out Test");
+                    });
+                }}
+                handleQuit={() => {
+                  trackGAEvent("Click Button Quit Time Out Test");
+                  router.back();
+                }}
+              />
+
+              <QuitTestModal
+                open={openQuit}
+                setOpen={setOpenQuit}
+                handleQuit={() => {
+                  switch (type) {
+                    case "event-test":
+                      router.replace(`${WEB_LMS_URL}/event-test`);
+                      break;
+                    case "entrance":
+                      router.replace(`${WEB_LMS_URL}/entrance-test`);
+                      break;
+                    default: {
+                      if (
+                        [
+                          TEST_TYPE_ENUM.CHAPTER_TEST,
+                          TEST_TYPE_ENUM.TOPIC_TEST,
+                        ].includes(quizDetail?.quiz_type as TEST_TYPE_ENUM)
+                      ) {
+                        router.push(
+                          `${WEB_LMS_URL}/courses/${classInfo?.class_id}/section/${classInfo?.part_id}`,
+                        );
+                      } else {
+                        if (classInfo?.class_id) {
+                          router.push(
+                            `${WEB_LMS_URL}/courses/my-course/${classInfo?.class_id}`,
+                          );
+                        } else {
+                          router.back();
+                        }
+                        break;
+                      }
+                    }
+                  }
+                }}
+                handleCancel={() =>
+                  dispatch?.(loginSlice.actions.enableUnsavedChange())
+                }
+                content="If you quit now, your answers will be saved and the timer will continue running. You can come back later to resume the test."
+              />
+
+              <LimitQuizModal
+                open={openLimit}
+                setOpen={setOpenLimit}
+                handleQuit={() => router.back()}
+              />
+
+              <ConFirmSubmit
+                open={openSubmit}
+                setOpen={setOpenSubmit}
+                handleSubmit={() => {
+                  handleSubmitQuestions("submit");
+                  if (type !== "event-test") {
+                    setOpenSubmit(false);
+                  }
+                }}
+                handleCancel={() =>
+                  dispatch?.(loginSlice.actions.enableUnsavedChange())
+                }
+              />
+
+              <UnSubmitAnswerModal
+                open={openUnSubmitAnswer}
+                setOpen={setUnSubmitAnswer}
+                data={unSubmitAnswerData}
+                handleSubmit={() => {
+                  if (type !== "event-test") {
+                    setUnSubmitAnswer(false);
+                  }
+                  handleSubmitQuestions("submit");
+                }}
+                handleCancel={() => setUnSubmitAnswer(false)}
+              />
+
+              <ModalUploadFile
+                open={openUpload?.status}
+                isMultiple={false}
+                handleClose={() => {
+                  setOpenUpload({
+                    status: false,
+                    question_id: undefined,
+                    requirementIndex: undefined,
+                  });
+                }}
+                fileType={"ESSAY"}
+                location={`question-answer/${openUpload?.question_id}`}
+                setSelectedFile={(e: any) =>
+                  handleSaveFileEssay(e[0], openUpload?.requirementIndex)
+                }
+              />
+              {openReportModal && openReportModal.open && (
+                <SuccessSubmittedConstructorModal
+                  open={openReportModal.open}
+                  setOpen={setOpenReportModal}
+                  quizName={quizDetail?.name}
+                  handleCancel={() => {
+                    setOpenReportModal({
+                      open: false,
+                      resultId: "",
+                    });
+                    router.back();
+                  }}
+                  handleOk={() => {
+                    router.replace(
+                      `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/courses/test/your-answers-detail/${openReportModal.resultId}`,
+                    );
+                  }}
+                />
+              )}
+            </div>
+
+            {openResetToTemplateModal && (
+              <ResetToAnswerTemplateModal
+                open={openResetToTemplateModal}
+                handleReset={onResetAnswerEssayToTemplate}
+                handleClose={onCloseResetToTemplateModal}
+              />
+            )}
+          </TestWrapper>
+        )}
+      </CourseProvider>
+      {exhibitData && exhibitData?.length > 0 && (
+        <Popover
+          placement="leftTop"
+          trigger="click"
+          open={isClickExhibitOpen}
+          onOpenChange={(open) => setIsClickExhibitOpen(open)}
+          content={
+            <div className="flex flex-col gap-2">
+              {exhibits?.map(
+                (e: { label: string; value: string }, index: number) => {
+                  return (
+                    <div
+                      key={e?.value}
+                      className={
+                        "min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-secondary-800"
+                      }
+                      onClick={() => {
+                        handleOpenExhibit(e?.value);
+                        setShowWarning(false);
+                      }}
+                    >{`${exhibitText} ${index + 1}`}</div>
+                  );
+                },
+              )}
+            </div>
+          }
+        >
+          <Popover
+            content={
+              <div className="flex items-center gap-2 px-2 ">
+                <NotesOutline className="h-4 w-4 text-white" />
+                <div className="text-sm">
+                  {`${exhibitText} (${exhibitData?.length > 9 ? exhibitData?.length : `0${exhibitData?.length}`})`}
+                </div>
+              </div>
+            }
+            trigger="hover"
+            open={!isClickExhibitOpen ? undefined : false}
+            placement="left"
+          >
+            <div className="group fixed bottom-[242px] right-8 grid cursor-pointer place-items-center rounded-full bg-primary p-2 hover:bg-blend-overlay">
+              <NotesOutline className="size-8 text-white" />
+              <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+              {showWarning && (
+                <PulsingExclamation
+                  className="absolute -right-3 -top-4"
+                  style={{
+                    animation: "pulseAnim 1.2s infinite ease-in-out",
+                    transformOrigin: "center",
+                  }}
+                />
+              )}
+            </div>
+          </Popover>
+        </Popover>
+      )}
+      {currentTabContent?.topicDescription?.files?.length > 0 && (
+        <div className="absolute bottom-[182px] right-8 z-[1050] flex flex-col gap-2">
+          <Popover
+            className=""
+            placement="leftTop"
+            trigger="click"
+            getPopupContainer={() => document.body}
+            content={
+              <div className="flex flex-col gap-2 py-3">
+                {currentTabContent?.topicDescription?.files?.map((e: any) => {
+                  return (
+                    <div
+                      className={clsx(
+                        `flex items-start justify-between gap-8 px-4 py-2`,
+                      )}
+                      key={e?.value}
+                    >
+                      <div
+                        key={e?.value}
+                        className={clsx(
+                          "min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-state-info underline hover:text-primary",
+                        )}
+                        onClick={() =>
+                          handleOpenScratchPad(
+                            "file",
+                            e?.resource?.url,
+                            e?.resource?.name,
+                          )
+                        }
+                      >
+                        {e?.resource?.name}
+                      </div>
+                      <div
+                        className="cursor-pointer text-white"
+                        onClick={() => {
+                          TestServiceAPI.downloadFile({
+                            files: [
+                              {
+                                name: e?.resource?.name,
+                                file_key: e?.resource?.file_key,
+                              },
+                            ],
+                          });
+                        }}
+                      >
+                        <DownloadIcon color="currentColor" />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            }
+            zIndex={1050}
+          >
+            <div
+              className={clsx(
+                "group grid cursor-pointer place-items-center rounded-full bg-primary p-2 text-white shadow-icon hover:bg-blend-overlay",
+                {
+                  "top-[74px]":
+                    (currentTabContent?.topicDescription?.qType ===
+                      QUESTION_TYPES.ESSAY &&
+                      !currentTabContent?.topicDescription?.requirements
+                        ?.length) ||
+                    !isShowIconButtonInBottom,
+                  "top-[214px]":
+                    currentTabContent?.topicDescription?.qType ===
+                      QUESTION_TYPES.ESSAY &&
+                    !!currentTabContent?.topicDescription?.requirements?.length,
+                  "bottom-0": isShowIconButtonInBottom,
+                },
+              )}
+            >
+              <FileTextIcon className="size-8" />
+              <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+            </div>
+          </Popover>
+        </div>
+      )}
+      <div
+        onClick={() => {
+          handleOpenScratchPad("scratch_pad");
+          trackGAEvent("Click Button ScratchPad Test");
+        }}
+        className={clsx(
+          "group fixed bottom-[302px] right-8 grid cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden",
+          { "!bg-primary": isScatchPadEnabled },
+        )}
+      >
+        <NewScratchPadIcon isActive={isScatchPadEnabled} className="size-8" />
+        <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+      </div>
+      <div
+        onClick={() => {
+          handleOpenScratchPad("calculator");
+          trackGAEvent("Click Button Calculator Test");
+        }}
+        className={clsx(
+          "group fixed bottom-[362px] right-8 grid cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden",
+          { "!bg-primary": checkCalExist > -1 },
+        )}
+      >
+        <CalculatorIcon
+          className={`size-8 ${checkCalExist > -1 ? "text-white" : "text-primary"}`}
+        />
+        <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+      </div>
+      <div
+        onClick={() => {
+          handleFlagQuestion(currentPage);
+          trackGAEvent("Click Button Flag To Review Test");
+        }}
+        className="group fixed bottom-[422px] right-8 grid cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden"
+      >
+        <FlagIcon />
+        <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+      </div>
+      <BackToTop
+        scrollContainerRef={scrollRef}
+        className="!right-8 bottom-[482px] lg:bottom-[302px]"
+        iconWrapperClassName={"size-12"}
+        iconClassName={"size-7"}
+      />
+    </Layout>
+  );
+};
+
+export default TestDetail;

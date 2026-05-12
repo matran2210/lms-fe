@@ -58,7 +58,8 @@ const TestModal = ({
   is_passed_course,
   selectedResultCourse,
 }: IProps) => {
-  const { router, testServiceApi, classApi } = useFeature();
+  const { router, testServiceApi, classApi, params } = useFeature();
+
   const isSubmitted =
     data?.quiz?.attempt && data?.quiz?.attempt?.status === "SUBMITTED";
   const isUnsubmitted =
@@ -317,12 +318,19 @@ const TestModal = ({
       return handleCheckStatus(data?.quiz?.attempt, data?.quiz);
     }
   }, [selectedResult?.value, data?.quiz?.attempt]);
-
+  
   const handleStartANewAttempt = async () => {
+    const quizAttempt = JSON.parse(localStorage.getItem("quizAttempt") || "{}");
+    const SUB_DOMAIN_TEST = process.env.NEXT_PUBLIC_SUB_DOMAIN_TEST;
     //to do: start test
     try {
       activeCourse && (await activeCourse());
-      router.push(`/test/${data.quiz.id}?class_user_id=${class_user_id}`);
+      if (!quizAttempt || !quizAttempt?.id) {
+         router.push(`${SUB_DOMAIN_TEST}/test/${data.quiz.id}?class_user_id=${class_user_id}`);
+          return;
+      } else {
+        router.push(`${SUB_DOMAIN_TEST}/test/${data.quiz.id}?class_user_id=${class_user_id}&quizAttemptId=${quizAttempt?.id}`);
+      }
       status
         ? () => trackGAEvent("Click Button Retake Modal Test")
         : () => trackGAEvent("Click Button Start Modal Test");

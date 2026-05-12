@@ -15,3 +15,6 @@ export const testModule: AppModule = {
   name: "test",
   routes: testRoutes,
 };
+export * from "./utils";
+export * from "./hooks";
+export * from './components'
