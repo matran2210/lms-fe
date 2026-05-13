@@ -192,7 +192,7 @@ export function StorylineProvider({ storylineData, children }: Props) {
     if (isFinish) {
       setIsCompletedProgress(isCompletedProgress + 1)
     } else {
-      if (isUpdateProgress && currentDocument?.type !== 'VIDEO')
+      if (isUpdateProgress)
         await updateProgress(storyline_item_document_id)
     }
     if (visibleDocumentCount < totalDocs) {
@@ -255,9 +255,10 @@ export function StorylineProvider({ storylineData, children }: Props) {
   useEffect(() => {
     if (!currentStep || !storylineDocument) return
     const completed = currentStep.item_progress?.total_document_completed ?? 0
+    const isLastVisibleDocument = completed === storylineDocument.length
     const lastestLearnedDocument = storylineDocument?.[(!completed ? completed + 1 : completed) - 1]
     const lastVisibleDocumentIsInteractive = ['INTERACTION'].includes(lastestLearnedDocument?.type)
-    setVisibleDocumentCount(!completed ? completed + 1 : lastVisibleDocumentIsInteractive ? completed + 1 :  completed)
+    setVisibleDocumentCount(!completed ? completed + 1 : lastVisibleDocumentIsInteractive && !isLastVisibleDocument ? completed + 1 :  completed)
   }, [currentStep?.id, storylineDocument])
 
 

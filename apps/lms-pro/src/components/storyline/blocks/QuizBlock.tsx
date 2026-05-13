@@ -1062,7 +1062,7 @@ const QuizBlock = ({
   }) => {
     setSkipQuestion(true)
     continueAction(
-      currentVisibleDocument && currentVisibleDocument?.type !== 'QUIZ'
+      currentVisibleDocument && !['QUIZ', 'INTERACTION', 'VIDEO'].includes(currentVisibleDocument?.type)
         ? currentVisibleDocument?.id
         : document_id,
       isUpdateProgress,
@@ -1340,8 +1340,7 @@ const QuizBlock = ({
                   openExplain || isCorrectAnswer || attemptId
                     ? handleSkipQuestion({
                       isUpdateProgress:
-                        currentVisibleDocument &&
-                        currentVisibleDocument?.type !== 'QUIZ',
+                        currentVisibleDocument && !["QUIZ", "INTERACTION", "VIDEO"].includes(currentVisibleDocument?.type),
                     })
                     : handleRetakeQuestion()
                 }

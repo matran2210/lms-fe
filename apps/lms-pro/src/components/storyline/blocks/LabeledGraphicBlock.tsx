@@ -12,8 +12,8 @@ interface Props {
   markers: ILabeledGraphicMarker[]
   backgroundResource: IBackgroundResource
   documentTitle?: string
-    document_id: string
-    docIndex: number
+  document_id: string
+  docIndex: number
 }
 
 type PopupPosition = {
@@ -223,8 +223,15 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
     )
   }
 
+  const handleContinue = () => {
+    continueAction(document_id)
+    if (currentVisibleDocument && !["QUIZ", "INTERACTION", "VIDEO"].includes(currentVisibleDocument?.type)) {
+      return updateProgress(currentVisibleDocument.id, true)
+    }
+  }
+
   useEffect(() => {
-    if(isLearnedBlock) {
+    if (isLearnedBlock) {
       const allMarkerIds = markers.map(m => m.id)
       setViewedMarkers(new Set(allMarkerIds))
     } else {
@@ -235,7 +242,6 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
   // Nếu là document cuối cùng thì sau khi xem hết marker thì tự động call api update progress mà không cần bấm continue
   useEffect(() => {
     if (isLastVisibleDocument && isAllMarkersViewed) {
-
       updateProgress(
         document_id,
         true
@@ -455,13 +461,7 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
       </div>
       {
         isShowContinueButton && <ContinueButton
-          onClick={() =>
-            continueAction(
-              currentVisibleDocument && !["QUIZ", "INTERACTION"].includes(currentVisibleDocument?.type)
-        ? currentVisibleDocument?.id
-        : document_id,
-            )
-          }
+          onClick={handleContinue}
         />
       }
 

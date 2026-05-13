@@ -120,12 +120,12 @@ export default function Player({ listStorylineData }: IProps) {
                     !["QUIZ", "INTERACTION"].includes(lastVisibleDocument?.type as string) &&
                     !!currentVisibleDocument && (
                       <ContinueButton
-                        onClick={() =>
+                        onClick={() => {
                           continueAction(
                             currentVisibleDocument?.id as string,
-                            !["QUIZ", "INTERACTION"].includes(currentVisibleDocument?.type as string)
+                            !["QUIZ", "INTERACTION", "VIDEO"].includes(currentVisibleDocument?.type as string)
                           )
-                        }
+                        }}
                       />
                     )}
                 </motion.div>
