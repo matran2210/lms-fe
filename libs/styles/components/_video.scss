@@ -1,6 +1,15 @@
 .sapp-wrapper {
   @apply relative w-full;
   padding-top: calc((9 / 16) * 100%);
+
+  &.is-fullscreen {
+    padding-top: 0 !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    background-color: black !important;
+    overflow: hidden;
+  }
+
   iframe {
     @apply h-full w-full;
   }
@@ -15,4 +24,22 @@
 
 .sapp-content {
   @apply absolute bottom-0 left-0 right-0 top-0 h-full w-full rounded-lg;
+
+  object-fit: contain !important;
+
+  &:-webkit-full-screen {
+    object-fit: contain !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  &:fullscreen {
+    object-fit: contain !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.is-fullscreen .video-controls {
+  z-index: 2147483647 !important;
 }
