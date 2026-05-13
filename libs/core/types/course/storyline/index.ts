@@ -99,25 +99,41 @@ export interface ILabeledGraphicBackground {
   resource_id: string;
   url?: string;
   alt?: string;
+} 
+export interface IBackgroundResource {
+  id: string
+  file_key: string
+  url: string
 }
-
+export type MarkerStyle =
+  | "PLUS"
+  | "MINUS"
+  | "CROSS"
+  | "CHECK"
+  | "ABSTRACT"
+  | "BURGER_MENU"
+  | "CHART_PIE"
+  | "INFOMATION"
+  | "QUESTION"
+  | "ARROW_LEFT"
+  | "ARROW_RIGHT"
+  | "ARROW_UP"
+  | "ARROW_DOWN"
+  | "CHEVRON_LEFT"
+  | "CHEVRON_RIGHT"
+  | "CHEVRON_UP"
+  | "CHEVRON_DOWN";
 export interface ILabeledGraphicMarker {
-  id: string;
-  x_percent: number;
-  y_percent: number;
-  title: string;
-  content: string;
-  style?:
-    | 'PLUS'
-    | 'INFO'
-    | 'QUESTION'
-    | 'CHECK'
-    | 'EXCLAMATION'
-    | 'ARROW_RIGHT'
-    | 'ARROW_UP'
-    | 'DOT'
-    | 'ONE'
-    | 'TWO';
+  id: string
+  created_at: string
+  updated_at: string
+  deleted_at: any
+  storyline_item_document_id: string
+  title: string
+  content: string
+  x_percent: number
+  y_percent: number
+  style?: MarkerStyle;
 }
 
 export interface ILabeledGraphicPayload {
@@ -131,14 +147,16 @@ export interface DocumentItem {
   updated_at: string;
   deleted_at: any;
   name: string;
-  type: "TEXT" | "VIDEO" | "QUIZ" | "LABELED_GRAPHIC";
+  type: "TEXT" | "VIDEO" | "QUIZ" | "INTERACTION";
   content: string;
   storyline_item_id: string;
   position: number;
   title?: string;
   videos?: VideoItem[];
   quiz?: IStorylineQuiz;
-  labeled_graphic_payload?: ILabeledGraphicPayload;
+  background_resource: IBackgroundResource
+  background_resource_id: string
+  markers: ILabeledGraphicMarker[]
 }
 
 export interface VideoItem {
