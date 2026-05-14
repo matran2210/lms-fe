@@ -69,7 +69,7 @@ const StudentAttendancePage = () => {
     enabled: courseData?.courseDetail?.class.id !== undefined
   })  
 
-  const [historyOpen, setHistoryOpen] = useState(true)
+  const [historyOpen, setHistoryOpen] = useState(false)
   const [selectedRecord, setSelectedRecord] = useState<AttendanceRecord | null>(
     null,
   )
