@@ -23,7 +23,7 @@ const mockStatistics = {
 }
 
 const StudentAttendancePage = () => {
-  const { pageLink, courseApi, params, router } = useFeature()
+  const { pageLink, courseApi, params, router, classApi } = useFeature()
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
 
   /**
@@ -52,8 +52,24 @@ const StudentAttendancePage = () => {
     refetchOnWindowFocus: true,
     retry: false,
   })
+    const fetchAttendanceStatistics = async ({
+    class_id,
+  }: {
+    class_id: string
+  }) => {
+    const { data } = await classApi.getStudentAttendanceSummary(
+      class_id,)
+    return data
+  }
+  const { data: statisticsData } = useQuery({
+    queryKey: ['attendanceStatistics', courseData?.courseDetail?.class.id],
+    queryFn: () => fetchAttendanceStatistics({ class_id: courseData?.courseDetail?.class.id as string }),
+    refetchOnWindowFocus: true,
+    retry: false,
+    enabled: courseData?.courseDetail?.class.id !== undefined
+  })  
 
-  const [historyOpen, setHistoryOpen] = useState(false)
+  const [historyOpen, setHistoryOpen] = useState(true)
   const [selectedRecord, setSelectedRecord] = useState<AttendanceRecord | null>(
     null,
   )
@@ -104,10 +120,10 @@ const StudentAttendancePage = () => {
       <div className="mb-6 w-full">
         {/* Statistics Cards */}
           <AttendanceStatistics
-            totalSessions={mockStatistics.totalSessions}
-            attendedSessions={mockStatistics.attendedSessions}
-            absentSessions={mockStatistics.absentSessions}
-            attendanceRate={mockStatistics.attendanceRate}
+            totalSessions={statisticsData?.total || 0}
+            attendedSessions={statisticsData?.attended || 0}
+            absentSessions={statisticsData?.absent || 0}
+            attendanceRate={statisticsData?.attendance_rate || 0}
           />
       </div>
                         
@@ -123,7 +139,7 @@ const StudentAttendancePage = () => {
 
 
           {/* Attendance Table */}
-          <StudentAttendanceTable onOpenHistory={handleViewDetails} />
+          <StudentAttendanceTable onOpenHistory={handleViewDetails} classId={courseData?.courseDetail?.class.id as string} />
         </div>
 
         {/* Attendance History Side Panel */}

@@ -263,4 +263,32 @@ export interface IUserAPI {
   ) => Promise<{
     success: boolean;
   }>;
+
+  // user attendances
+  // teacher:
+  getTeacherTeachingAttendance(params: {
+    page_index: number;
+    page_size: number;
+    fromDate?: string | undefined;
+    toDate?: string | undefined;
+    class_ids?: string[] | undefined;
+    lesson_ids?: string[] | undefined;
+    workload_status?: string[] | undefined;
+  }): Promise<IResponse<any>>;
+  getTeacherTeachingAttendanceHistory(
+    lesson_id: string,
+  ): Promise<IResponse<any>>;
+  getTeacherTeachingAttendanceSummary(params: {
+    fromDate?: string | undefined;
+    toDate?: string | undefined;
+  }): Promise<IResponse<any>>;
+  getTeacherLearningAttendance(params: {
+    page_index: number;
+    page_size: number;
+    fromDate?: string | undefined;
+    toDate?: string | undefined;
+    class_ids?: string[] | undefined;
+    lesson_ids?: string[] | undefined;
+    attendance_status?: string[] | undefined;
+  }): Promise<IResponse<any>>;
 }

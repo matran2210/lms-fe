@@ -1,11 +1,17 @@
 import { ExaminationsResponse } from '@lms/contexts'
 import {
   ExamInformation,
+  IAttendanceStatistics,
+  IClassAttendanceHistoryResponse,
   IClassResourceList,
   IClassResourcePreview,
+  ILessonListParams,
   IListClassResourceParams,
   IQuizResultList,
   IResponse,
+  IStudentAttendanceListParams,
+  IStudentAttendanceListResponse,
+  IStudentLessonListResponse
 } from '@lms/core'
 import { fetcher, fetchFormData } from '@services/request'
 import { AxiosPromise } from 'axios'
@@ -84,5 +90,48 @@ export class ClassAPI {
     resource_id: string,
   ): Promise<IClassResourcePreview> {
     return fetcher(`class-resource/${class_id}/preview/${resource_id}`)
+  }
+
+    // attendance
+  // student attendance: get attendance of a class
+  static getStudentAttendance(
+    class_id: string, 
+    params: IStudentAttendanceListParams,
+  ): Promise<IResponse<IStudentAttendanceListResponse>> {
+    return fetcher(`${apiURL}/classes/${class_id}/student-attendances`, {
+      params: params,
+    })
+  }
+
+  // student attendance summary: get summary of attendance of a class
+  static getStudentAttendanceSummary(
+    class_id: string, 
+  ): Promise<IResponse<IAttendanceStatistics>> {
+    return fetcher(`${apiURL}/classes/${class_id}/student-attendances/summary`)
+  }
+
+  // class attendance history: get attendance history of a class
+  static getClassAttendanceHistory(
+    lesson_id: string
+  ): Promise<IResponse<IClassAttendanceHistoryResponse>> {
+    return fetcher(`${apiURL}/classes/attendances-history/${lesson_id}`)
+  }
+
+  // student learning-schedule: get learning-schedule of a student in a class
+  static getStudentLearningSchedule(
+    params: ILessonListParams,
+  ): Promise<IResponse<IStudentLessonListResponse>> {
+    return fetcher(`${apiURL}/classes/student/learning-schedule`, {
+      params: params,
+    })
+  }
+
+  // teacher learning-schedule: get learning-schedule of a teacher in a class
+  static getTeacherLearningSchedule(
+    params: { page_index: number; page_size: number, fromDate?: string, toDate?: string, class_ids?: string[] },
+  ): Promise<IResponse<any>> {
+    return fetcher(`${apiURL}/classes/teacher/teaching-schedule`, {
+      params: params,
+    })
   }
 }

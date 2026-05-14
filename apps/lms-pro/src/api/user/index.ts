@@ -1,4 +1,4 @@
-import { UserExamInformation } from '@lms/core'
+import { IResponse, UserExamInformation } from '@lms/core'
 import { fetcher } from '@services/request'
 import { apiURL } from 'src/constants'
 
@@ -41,6 +41,53 @@ export class UserApi {
         session_id: session_id,
         keycloak_user_id: keycloak_user_id,
       },
+    })
+  }
+
+  // user attendances
+  // teacher:
+  //  get teaching attendances
+  static getTeacherTeachingAttendance(params: {
+    page_index: number
+    page_size: number
+    fromDate?: string
+    toDate?: string
+    class_ids?: string[]
+    lesson_ids?: string[]
+    workload_status?: string[]
+  }): Promise<IResponse<any>> {
+    return fetcher(`${apiURL}/user-attendances/teacher/teaching-attendance`, {
+      params: params,
+    })
+  }
+  
+  // get teaching attendance history
+  static getTeacherTeachingAttendanceHistory(lesson_id : string): Promise<IResponse<any>> {
+    return fetcher(`${apiURL}/user-attendances/teacher/teaching-attendance/${lesson_id}/history`)
+  }
+
+  // get teaching attendance summary
+  static getTeacherTeachingAttendanceSummary(params: {
+    fromDate?: string
+    toDate?: string
+  }): Promise<IResponse<any>> {
+    return fetcher(`${apiURL}/user-attendances/teacher/teaching-attendance/summary`, {
+      params: params,
+    })
+  }
+
+  // get learning attendance
+  static getTeacherLearningAttendance(params: {
+    page_index: number
+    page_size: number
+    fromDate?: string
+    toDate?: string
+    class_ids?: string[]
+    lesson_ids?: string[]
+    attendance_status?: string[]
+  }): Promise<IResponse<any>> {
+    return fetcher(`${apiURL}/user-attendances/teacher/learning-attendance`, {
+      params: params,
     })
   }
 }
