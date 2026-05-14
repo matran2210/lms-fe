@@ -60,15 +60,15 @@ export default function CompleteStoryline({ listStorylineData }: IProps) {
       <div
         className="absolute inset-0 -z-[1] bg-[url('/assets/images/finish_storyline_bg.png')] bg-gray-300 bg-center bg-cover bg-no-repeat opacity-40"
       ></div>
-      <div className='m-auto w-full max-w-7xl flex flex-col items-center justify-center mt-[90px]'>
-        <div className="inline-flex flex-col items-center justify-start gap-14 mb-20">
+      <div className='m-auto w-full max-w-7xl flex flex-col items-center justify-center mt-[96px] md:mt-[228px] lg:mt-[90px]'>
+        <div className="inline-flex flex-col items-center justify-start gap-14 mb-14 md:mb-20">
           <Lottie
             animationData={BlinkStartAnimation}
             loop
             autoplay
             className='w-[200px] h-[200px]'
           />
-          <div className="justify-start text-center font-['Roboto'] text-4xl font-semibold leading-[50px] text-slate-800">
+          <div className="justify-start text-center font-['Roboto'] text-2xl md:text-4xl font-semibold leading-[50px] text-slate-800">
             Congratulation,
             <br />
             You have finished the Story!

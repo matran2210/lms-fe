@@ -6,6 +6,7 @@ import { IBackgroundResource, ILabeledGraphicMarker } from '@lms/core'
 import clsx from 'clsx'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import ContinueButton from '../ContinueButton'
 
 interface Props {
@@ -38,6 +39,7 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
   const [activeMarkerId, setActiveMarkerId] = useState<string | null>(null)
   const [imageLoaded, setImageLoaded] = useState(false)
   const [popupPosition, setPopupPosition] = useState<PopupPosition | null>(null)
+  const [mounted, setMounted] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
   const activeMarker = markers.find((m) => m.id === activeMarkerId)
@@ -56,6 +58,20 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
       return { left: 0, top: 0, transformOrigin: 'top left' }
     }
 
+    // Check if mobile (screen width < 768px)
+    const isMobile = window.innerWidth < 768
+
+    if (isMobile) {
+      // Mobile: fixed bottom popup
+      return {
+        bottom: 0,
+        left: 0,
+        right: 0,
+        transformOrigin: 'bottom center',
+      }
+    }
+
+    // Desktop: calculate position relative to marker
     const containerRect = containerRef.current.getBoundingClientRect()
     const POPUP_WIDTH = 287
     const POPUP_HEIGHT = 280 // chiều cao ước tính
@@ -119,6 +135,7 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
       return
     }
 
+    // Switch to new marker directly (popup will replace)
     setActiveMarkerId(markerId)
     setViewedMarkers((prev) => new Set([...prev, markerId]))
 
@@ -229,6 +246,10 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
       return updateProgress(currentVisibleDocument.id, true)
     }
   }
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     if (isLearnedBlock) {
@@ -369,32 +390,131 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
               </div>
             )
           })}
+      </div>
 
-        {/* Popup on Image */}
-        <AnimatePresence>
+      {/* Popup - Mobile (Portal) */}
+      {mounted && typeof window !== 'undefined' && window.innerWidth < 768 && (
+        <>
+          {createPortal(
+            <AnimatePresence mode="wait">
+              {activeMarker && popupPosition && (
+                <motion.div
+                  key={`popup-mobile-${document_id}`}
+                  variants={{
+                    open: { opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1] } },
+                    close: { opacity: 0, y: 100, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } },
+                  }}
+                  initial="close"
+                  animate="open"
+                  exit="close"
+                  className="fixed bottom-0 left-0 right-0 z-[9999] flex w-full flex-col gap-3 rounded-t-2xl bg-white p-4"
+                  style={{
+                    maxHeight: '400px',
+                    boxShadow: '0 -5px 24px 0 rgba(0, 0, 0, 0.16)',
+                  }}
+                >
+                  {/* Header */}
+                  <div className="flex items-start justify-between">
+                    <p className="text-base font-semibold text-gray-800">
+                      {activeMarker?.title} #{activeMarkerIndex + 1}
+                    </p>
+                    <div
+                      onClick={handleClosePopup}
+                      className="cursor-pointer text-gray-800"
+                    >
+                      <CloseModalIcon className="w-4 h-4" />
+                    </div>
+                  </div>
+
+                  {/* Body */}
+                  <div className="flex-1 overflow-y-auto">
+                    <div
+                      className="text-sm font-normal text-gray-800"
+                      dangerouslySetInnerHTML={{ __html: activeMarker?.content || '' }}
+                    />
+                  </div>
+
+                  {/* Footer */}
+                  <div className="flex items-center justify-center gap-2">
+                    <button
+                      onClick={handlePrevious}
+                      disabled={activeMarkerIndex === 0}
+                      className={`flex h-5 w-5 items-center justify-center transition-colors ${
+                        activeMarkerIndex === 0
+                          ? 'cursor-not-allowed text-gray-300'
+                          : 'text-gray-800'
+                      }`}
+                    >
+                      <AltArrowLeftIcon className="w-5 h-5"/>
+                    </button>
+
+                    {/* Progress dots */}
+                    <div className="flex items-center gap-1">
+                      {markers.map((marker) => {
+                        const isViewed = viewedMarkers.has(marker.id)
+                        const isActive = activeMarkerId === marker.id
+
+                        return (
+                          <div
+                            key={marker.id}
+                            className={clsx(`h-2 w-2 rounded-full transition-all`, {
+                              'bg-primary': isActive,
+                              'bg-gray-300': !isActive && !isViewed,
+                              'bg-success': isViewed && !isActive,
+                            })}
+                          />
+                        )
+                      })}
+                    </div>
+
+                    <button
+                      onClick={handleNext}
+                      disabled={activeMarkerIndex === markers.length - 1}
+                      className={`flex h-5 w-5 items-center justify-center transition-colors ${
+                        activeMarkerIndex === markers.length - 1
+                          ? 'cursor-not-allowed text-gray-300'
+                          : 'text-gray-800'
+                      }`}
+                    >
+                      <AltArrowRightIcon className='w-5 h-5'/>
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>,
+            document.body
+          )}
+        </>
+      )}
+
+      {/* Popup - Desktop */}
+      {(typeof window === 'undefined' || window.innerWidth >= 768) && (
+        <AnimatePresence mode="wait">
           {activeMarker && popupPosition && (
             <motion.div
+              key="popup-desktop"
               variants={{
-                open: { opacity: 1, scale: 1, scaleX: 1, scaleY: 1, transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1] } },
-                close: { opacity: 0, scale: 0, scaleX: 0, scaleY: 0, transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] } },
+                open: { opacity: 1, scale: 1, transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1] } },
+                close: { opacity: 0, scale: 0, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } },
               }}
               initial="close"
               animate="open"
               exit="close"
-              className="absolute z-50 flex w-[287px] flex-col rounded-xl bg-white shadow-large p-3 gap-3"
+              className="absolute z-[250] flex w-[287px] flex-col gap-3 rounded-xl bg-white p-3"
               style={{
-                top: popupPosition.top,
-                left: popupPosition.left,
-                right: popupPosition.right,
-                bottom: popupPosition.bottom,
+                top: popupPosition?.top,
+                left: popupPosition?.left,
+                right: popupPosition?.right,
+                bottom: popupPosition?.bottom,
                 maxHeight: '400px',
-                transformOrigin: popupPosition.transformOrigin ?? 'top left',
+                transformOrigin: popupPosition?.transformOrigin ?? 'top left',
+                boxShadow: '0 4px 24px 0 rgba(0, 0, 0, 0.12)',
               }}
             >
               {/* Header */}
               <div className="flex items-start justify-between">
                 <p className="text-sm font-semibold text-gray-800">
-                  {activeMarker.title} #{activeMarkerIndex + 1}
+                  {activeMarker?.title} #{activeMarkerIndex + 1}
                 </p>
                 <div
                   onClick={handleClosePopup}
@@ -407,8 +527,8 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
               {/* Body */}
               <div className="flex-1 overflow-y-auto">
                 <div
-                  className="text-sm text-gray-800 font-normal"
-                  dangerouslySetInnerHTML={{ __html: activeMarker.content }}
+                  className="text-sm font-normal text-gray-800"
+                  dangerouslySetInnerHTML={{ __html: activeMarker?.content || '' }}
                 />
               </div>
 
@@ -417,27 +537,28 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
                 <button
                   onClick={handlePrevious}
                   disabled={activeMarkerIndex === 0}
-                  className={`flex h-4 w-4 items-center justify-center transition-colors ${activeMarkerIndex === 0
-                    ? 'cursor-not-allowed text-gray-300'
-                    : 'text-gray-800'
-                    }`}
+                  className={`flex h-4 w-4 items-center justify-center transition-colors ${
+                    activeMarkerIndex === 0
+                      ? 'cursor-not-allowed text-gray-300'
+                      : 'text-gray-800'
+                  }`}
                 >
                   <AltArrowLeftIcon />
                 </button>
 
                 {/* Progress dots */}
                 <div className="flex items-center gap-1">
-                  {markers.map((marker, index) => {
+                  {markers.map((marker) => {
                     const isViewed = viewedMarkers.has(marker.id)
                     const isActive = activeMarkerId === marker.id
 
                     return (
                       <div
                         key={marker.id}
-                        className={clsx(`w-2 h-2 rounded-full transition-all `, {
+                        className={clsx(`h-2 w-2 rounded-full transition-all`, {
                           'bg-primary': isActive,
                           'bg-gray-300': !isActive && !isViewed,
-                          'bg-success': isViewed && !isActive
+                          'bg-success': isViewed && !isActive,
                         })}
                       />
                     )
@@ -447,10 +568,11 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
                 <button
                   onClick={handleNext}
                   disabled={activeMarkerIndex === markers.length - 1}
-                  className={`flex h-4 w-4 items-center justify-center transition-colors ${activeMarkerIndex === markers.length - 1
-                    ? 'cursor-not-allowed text-gray-300'
-                    : 'text-gray-800'
-                    }`}
+                  className={`flex h-4 w-4 items-center justify-center transition-colors ${
+                    activeMarkerIndex === markers.length - 1
+                      ? 'cursor-not-allowed text-gray-300'
+                      : 'text-gray-800'
+                  }`}
                 >
                   <AltArrowRightIcon />
                 </button>
@@ -458,7 +580,8 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
+      )}
+
       {
         isShowContinueButton && <ContinueButton
           onClick={handleContinue}

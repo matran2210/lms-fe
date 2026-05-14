@@ -80,7 +80,7 @@ export default function Player({ listStorylineData }: IProps) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="min-h-screen bg-white">
+            <div className="min-h-screen overflow-x-hidden bg-white">
               <StoryHeader />
 
 
@@ -92,7 +92,7 @@ export default function Player({ listStorylineData }: IProps) {
                   animate={{ x: showSidebar ? 150 : 0 }}
                   transition={{ duration: 0.4, ease: 'easeOut' }}
                   exit={{ x: -240 }}
-                  className="mx-auto flex w-full max-w-5xl flex-1 flex-col"
+                  className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 md:px-8 lg:px-0"
                 >
                   <section
                     ref={(el) =>
