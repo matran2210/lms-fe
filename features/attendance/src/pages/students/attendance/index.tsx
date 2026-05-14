@@ -1,6 +1,6 @@
 'use client'
 import { useFeature, UserType } from '@lms/contexts'
-import { DEFAULT_PAGE_SIZE } from '@lms/core'
+import { DEFAULT_PAGE_SIZE, IStudentAttendanceItem } from '@lms/core'
 import { withAuthorization } from '@lms/hoc'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { HeaderMobile, Layout, SappBreadCrumbs } from '@lms/ui'
@@ -9,18 +9,9 @@ import { useState } from 'react'
 import { useQuery } from 'react-query'
 import {
   AttendanceHistory,
-  AttendanceRecord,
   AttendanceStatistics,
 } from '../../../components/student/attendance'
 import StudentAttendanceTable from '../../../components/student/attendance/StudentAttendanceTable'
-
-// Mock data - replace with actual API calls
-const mockStatistics = {
-  totalSessions: 40,
-  attendedSessions: 35,
-  absentSessions: 2,
-  attendanceRate: 87.5,
-}
 
 const StudentAttendancePage = () => {
   const { pageLink, courseApi, params, router, classApi } = useFeature()
@@ -70,11 +61,11 @@ const StudentAttendancePage = () => {
   })  
 
   const [historyOpen, setHistoryOpen] = useState(false)
-  const [selectedRecord, setSelectedRecord] = useState<AttendanceRecord | null>(
+  const [selectedRecord, setSelectedRecord] = useState<IStudentAttendanceItem | null>(
     null,
   )
 
-  const handleViewDetails = (record: AttendanceRecord) => {
+  const handleViewDetails = (record: IStudentAttendanceItem) => {
     setSelectedRecord(record)
     setHistoryOpen(true)
   }

@@ -6,6 +6,13 @@ export interface IAttendanceStatistics {
   absent: number;
   attendance_rate: number;
 }
+export interface ITeachingStatistics {
+  total_lessons: number
+  total_attended: number
+  total_workload: number
+  total_standard_workload: number
+  workload_ratio: string
+}
 
 export interface IStudentAttendanceListParams {
   page_index: number;
@@ -15,6 +22,7 @@ export interface IStudentAttendanceListParams {
   lesson_ids?: string[];
   status?: string;
 }
+
 export interface ILessonListParams {
   page_index: number;
   page_size: number;
@@ -31,6 +39,14 @@ export interface IStudentAttendanceListResponse {
 export interface IStudentLessonListResponse {
   metadata: IMetaData;
   data: IClassScheduleUserItem[];
+}
+export interface ITeacherTeachingLessonListResponse {
+  metadata: IMetaData;
+  data: ITeacherTeachingScheduleItem[];
+}
+export interface ITeacherTeachingLessonListResponse {
+  metadata: IMetaData;
+  data: ITeacherTeachingScheduleItem[];
 }
 export interface IClassAttendanceHistoryResponse {
   checkin_time: string;
@@ -62,4 +78,40 @@ export interface IClassScheduleUser {
   schedule_id: string;
   schedule_name: string;
   class_schedule_user_id: string;
+}
+export interface ITeacherTeachingScheduleItem {
+  teacher_schedule: ITeacherTeachignSchedule;
+}
+
+export interface ITeacherTeachignSchedule {
+  schedule_name:string
+  schedule_id: string
+  teacher_schedule_id: string
+}
+
+export interface ITeacherTeachingAttendanceListParams {
+    page_index: number
+    page_size: number
+    fromDate?: string
+    toDate?: string
+    class_ids?: string[]
+    lesson_ids?: string[]
+    workload_status?: string[]
+}
+
+export interface ITeacherTeachingAttendanceListResponse {
+  metadata: IMetaData;
+  attendances: ITeacherTeachingAttendanceItem[];
+}
+
+export interface ITeacherTeachingAttendanceItem extends IStudentAttendanceItem {
+  teacher_schedule_id: string
+  class_schedule_id: string
+  class_id: string
+  class: string
+  start_date: string
+  start_time: string
+  end_time: string
+  workload: number
+  device: string
 }

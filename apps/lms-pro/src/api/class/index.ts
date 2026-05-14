@@ -11,7 +11,8 @@ import {
   IResponse,
   IStudentAttendanceListParams,
   IStudentAttendanceListResponse,
-  IStudentLessonListResponse
+  IStudentLessonListResponse,
+  ITeacherTeachingLessonListResponse
 } from '@lms/core'
 import { fetcher, fetchFormData } from '@services/request'
 import { AxiosPromise } from 'axios'
@@ -128,8 +129,16 @@ export class ClassAPI {
 
   // teacher learning-schedule: get learning-schedule of a teacher in a class
   static getTeacherLearningSchedule(
-    params: { page_index: number; page_size: number, fromDate?: string, toDate?: string, class_ids?: string[] },
-  ): Promise<IResponse<any>> {
+    params: ILessonListParams,
+  ): Promise<IResponse<ITeacherTeachingLessonListResponse>> {
+    return fetcher(`${apiURL}/classes/teacher/teaching-schedule`, {
+      params: params,
+    })
+  }
+  // get teacher teaching class
+  static getTeacherTeachingClass(
+    params: Omit<ILessonListParams, "class_ids">,
+  ): Promise<IResponse<ITeacherTeachingLessonListResponse>> {
     return fetcher(`${apiURL}/classes/teacher/teaching-schedule`, {
       params: params,
     })

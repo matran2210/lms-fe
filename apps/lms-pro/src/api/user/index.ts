@@ -1,4 +1,4 @@
-import { IResponse, UserExamInformation } from '@lms/core'
+import { IResponse, ITeacherTeachingAttendanceListParams, ITeacherTeachingAttendanceListResponse, ITeachingStatistics, UserExamInformation } from '@lms/core'
 import { fetcher } from '@services/request'
 import { apiURL } from 'src/constants'
 
@@ -47,15 +47,7 @@ export class UserApi {
   // user attendances
   // teacher:
   //  get teaching attendances
-  static getTeacherTeachingAttendance(params: {
-    page_index: number
-    page_size: number
-    fromDate?: string
-    toDate?: string
-    class_ids?: string[]
-    lesson_ids?: string[]
-    workload_status?: string[]
-  }): Promise<IResponse<any>> {
+  static getTeacherTeachingAttendance(params: ITeacherTeachingAttendanceListParams): Promise<IResponse<ITeacherTeachingAttendanceListResponse>> {
     return fetcher(`${apiURL}/user-attendances/teacher/teaching-attendance`, {
       params: params,
     })
@@ -67,10 +59,10 @@ export class UserApi {
   }
 
   // get teaching attendance summary
-  static getTeacherTeachingAttendanceSummary(params: {
+  static getTeacherTeachingAttendanceSummary(params?: {
     fromDate?: string
     toDate?: string
-  }): Promise<IResponse<any>> {
+  }): Promise<IResponse<ITeachingStatistics>> {
     return fetcher(`${apiURL}/user-attendances/teacher/teaching-attendance/summary`, {
       params: params,
     })
