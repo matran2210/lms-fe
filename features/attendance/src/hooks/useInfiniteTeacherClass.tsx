@@ -17,7 +17,7 @@ const useInfiniteTeacherClass = (enabled = true) => {
   ) => {
     // eslint-disable-next-line no-useless-catch
     try {
-      const res = await classApi.getTeacherLearningSchedule({
+      const res = await classApi.getTeacherTeachingClass({
         page_index: page_index,
         page_size: page_size,
         search,

@@ -12,6 +12,7 @@ import {
   IStudentAttendanceListParams,
   IStudentAttendanceListResponse,
   IStudentLessonListResponse,
+  ITeacherTeachingClassListResponse,
   ITeacherTeachingLessonListResponse
 } from '@lms/core'
 import { fetcher, fetchFormData } from '@services/request'
@@ -138,7 +139,7 @@ export class ClassAPI {
   // get teacher teaching class
   static getTeacherTeachingClass(
     params: Omit<ILessonListParams, "class_ids">,
-  ): Promise<IResponse<ITeacherTeachingLessonListResponse>> {
+  ): Promise<IResponse<ITeacherTeachingClassListResponse>> {
     return fetcher(`${apiURL}/classes/teacher/teaching-schedule`, {
       params: params,
     })

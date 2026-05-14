@@ -12,7 +12,7 @@ import {
   SendEmailReq,
   VerifyOtpReq,
 } from "../../state";
-import { IAttendanceStatistics, IClassAttendanceHistoryResponse, ILessonListParams, IStudentAttendanceListParams, IStudentAttendanceListResponse, IStudentLessonListResponse, ITeacherTeachingLessonListResponse } from "./attendance";
+import { IAttendanceStatistics, IClassAttendanceHistoryResponse, ILessonListParams, IStudentAttendanceListParams, IStudentAttendanceListResponse, IStudentLessonListResponse, ITeacherTeachingClassListResponse, ITeacherTeachingLessonListResponse } from "./attendance";
 import {
   IClassResourceList,
   IClassResourcePreview,
@@ -305,6 +305,7 @@ export interface IClassAPI {
   getClassAttendanceHistory(lesson_id: string): Promise<IResponse<IClassAttendanceHistoryResponse>>;
   getStudentLearningSchedule(params: ILessonListParams): Promise<IResponse<IStudentLessonListResponse>>;
   getTeacherLearningSchedule(params: ILessonListParams): Promise<IResponse<ITeacherTeachingLessonListResponse>>;
+  getTeacherTeachingClass(params: Omit<ILessonListParams, "class_ids">): Promise<IResponse<ITeacherTeachingClassListResponse>>
 }
 export interface ICalendarAPI {
   getEventSchedule: (params?: object | undefined) => Promise<any>;

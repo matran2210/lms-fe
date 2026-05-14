@@ -1,15 +1,13 @@
 'use client'
 import { RequestProvider, useFeature, UserType } from '@lms/contexts'
-import { ITabs } from '@lms/core'
+import { ITabs, ITeacherTeachingAttendanceItem } from '@lms/core'
 import { withAuthorization } from '@lms/hoc'
 import { LayoutTeacher, SappTabs } from '@lms/ui'
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import {
-  TeachingAttendance,
-  LearningAttendance,
   AttendanceHistory,
-  AttendanceHistoryRecord,
+  TeachingAttendance
 } from '../../../components/teacher/attendance'
 
 const tabs = [
@@ -49,7 +47,7 @@ const TeacherAttendancePage = () => {
 
   const [historyOpen, setHistoryOpen] = useState(false)
   const [selectedRecord, setSelectedRecord] =
-    useState<AttendanceHistoryRecord | null>(null)
+    useState<ITeacherTeachingAttendanceItem | null>(null)
 
   // Sync selected tab with URL query parameter
   useEffect(() => {
@@ -63,7 +61,7 @@ const TeacherAttendancePage = () => {
     }
   }, [query.tabId])
 
-  const handleOpenHistory = (record: AttendanceHistoryRecord) => {
+  const handleOpenHistory = (record: ITeacherTeachingAttendanceItem) => {
     setSelectedRecord(record)
     setHistoryOpen(true)
   }
@@ -77,8 +75,8 @@ const TeacherAttendancePage = () => {
     switch (selected) {
       case 1:
         return <TeachingAttendance onOpenHistory={handleOpenHistory} />
-      case 2:
-        return <LearningAttendance onOpenHistory={handleOpenHistory} />
+      // case 2:
+        // return <LearningAttendance onOpenHistory={handleOpenHistory} />
       default:
         return null
     }

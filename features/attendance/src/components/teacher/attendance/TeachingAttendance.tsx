@@ -6,21 +6,20 @@ import {
   FilterGrid,
   NameNoActionCell,
   SAPPButtonCustom,
-  SAPPRangePicker,
-  SAPPSelect,
   SappSelectMultiple,
   SappTable,
   TableActionCell
 } from '@lms/ui'
 import { formatDateFromUTC } from '@lms/utils'
-import { Divider } from 'antd'
+import { Divider, Select } from 'antd'
 import { ColumnsType } from 'antd/es/table'
+import dayjs from 'dayjs'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useQuery } from 'react-query'
+import useInfiniteTeacherClass from '../../../hooks/useInfiniteTeacherClass'
 import useInfiniteTeacherLesson from '../../../hooks/useInfiniteTeacherLesson'
 import TeacherAttendanceStatistics from './TeacherAttendanceStatistics'
-import useInfiniteTeacherClass from '../../../hooks/useInfiniteTeacherClass'
 
 interface FilterForm {
   class_ids?: string[]
@@ -45,7 +44,12 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
       }
     )
 
-  const { control, getValues, reset } = useForm<FilterForm>()
+  const { control, getValues, reset } = useForm<FilterForm>({
+    defaultValues: {
+      fromDate: dayjs().startOf('month').toISOString(),
+      toDate: dayjs().endOf('month').toISOString(),
+    }
+  })
 
   // Mock data - replace with actual API call
   const useGetTeacherTeachingAttendanceList = () => {
@@ -164,7 +168,15 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
   return (
     <div className="w-full">
       {/* Overview Section */}
-
+      <div className="w-fit">
+        {/* select month */}
+        <Select
+          
+          options={Array(12).fill(null).map((_, index) => 
+            ({ label: dayjs.utc().month(index).format('MMM'), value: `${index + 1}` }))}
+           variant="borderless"
+            />
+      </div>
       <TeacherAttendanceStatistics />
       {/* Divider */}
       <Divider className="my-8" />
@@ -175,16 +187,16 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
           <SappSelectMultiple
               name="class_ids"
               control={control}
-              heightCustom="h-10"
+              heightCustom="flex-1 h-10"
               defaultValue={[]}
               size="middle"
               placeholder="Class"
               options={[
                 { label: 'All', value: '' },
-                // ...((teacherClassData || []).map((class) => ({
-                //   label: lesson.class_schedule_user?.schedule_name,
-                //   value: lesson.class_schedule_user?.schedule_id,
-                // })))
+                ...((teacherClassData || []).map((item) => ({
+                  label: item.class.class_name,
+                  value: item.class.class_id,
+                })))
               ]}
               onSearch={(text) => {
                 debounceSearchTeacherClass(text)
@@ -201,7 +213,7 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
           <SappSelectMultiple
               name="lesson_ids"
               control={control}
-              className="min-w-32 font-medium"
+              className="flex-1 min-w-32 font-medium"
               heightCustom="h-10"
               defaultValue={[]}
               size="middle"
@@ -229,13 +241,16 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
           <SappSelectMultiple
             name="workload_status"
             control={control}
+            className="flex-1 font-medium"
             placeholder="Status"
             size="middle"
+            heightCustom="h-10"
             options={[
               { label: 'All', value: '' },
               { label: 'Attended', value: 'PRESENT' },
               { label: 'Absent', value: 'ABSENT' },
             ]}
+            suffixIcon={<ArrowDownIcon className="text-gray-300" />}
           />
         </FilterGrid>
         <div className="flex gap-3">
@@ -257,7 +272,8 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
       <SappTable
         isShowIndex
         columns={columns}
-        data={teacherTeachingAttendanceData?.attendances || []}
+        // data={teacherTeachingAttendanceData?.attendances || []}
+        data={[]}
         loading={isLoading}
         pagination={{
           current: queryParams.page_index,

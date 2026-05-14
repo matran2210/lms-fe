@@ -13,9 +13,9 @@ import {
 } from '@lms/ui'
 import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import { useForm } from 'react-hook-form'
-import { AttendanceHistoryRecord } from './AttendanceHistory'
 import { ChartPieIcon, UserCheckIcon, UserCloseIcon, UsersGroupIcon } from '@lms/assets'
 import { Divider } from 'antd'
+import { ITeacherTeachingAttendanceItem } from '@lms/core'
 
 interface LearningAttendanceRecord {
   id: number
@@ -47,7 +47,7 @@ const statusToBadge = {
 }
 
 interface LearningAttendanceProps {
-  onOpenHistory?: (record: AttendanceHistoryRecord) => void
+  onOpenHistory?: (record: ITeacherTeachingAttendanceItem) => void
 }
 
 const LearningAttendance: React.FC<LearningAttendanceProps> = ({
@@ -78,10 +78,7 @@ const LearningAttendance: React.FC<LearningAttendanceProps> = ({
 
   const handleOpenHistory = (record: LearningAttendanceRecord) => {
     if (onOpenHistory) {
-      onOpenHistory({
-        ...record,
-        device: 'Desktop - Chrome Browser',
-      })
+  //   // Map LearningAttendanceRecord to ITeacherTeachingAttendanceItem if needed
     }
   }
 
@@ -141,8 +138,8 @@ const LearningAttendance: React.FC<LearningAttendanceProps> = ({
       title: 'Status',
       render: (record) => (
         <SAPPBadge
-          label={statusToBadge[record.status].label}
-          type={statusToBadge[record.status].type}
+          label={statusToBadge[record.status as keyof typeof statusToBadge].label}
+          type={statusToBadge[record.status as keyof typeof statusToBadge].type}
         />
       ),
       width: 120,

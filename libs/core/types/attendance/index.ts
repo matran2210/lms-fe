@@ -44,9 +44,9 @@ export interface ITeacherTeachingLessonListResponse {
   metadata: IMetaData;
   data: ITeacherTeachingScheduleItem[];
 }
-export interface ITeacherTeachingLessonListResponse {
+export interface ITeacherTeachingClassListResponse {
   metadata: IMetaData;
-  data: ITeacherTeachingScheduleItem[];
+  data: ITeacherTeachingClassScheduleItem[];
 }
 export interface IClassAttendanceHistoryResponse {
   checkin_time: string;
@@ -82,21 +82,27 @@ export interface IClassScheduleUser {
 export interface ITeacherTeachingScheduleItem {
   teacher_schedule: ITeacherTeachignSchedule;
 }
+export interface ITeacherTeachingClassScheduleItem {
+  class: {
+    class_id: string
+    class_name: string
+  }
+}
 
 export interface ITeacherTeachignSchedule {
-  schedule_name:string
+  schedule_name: string
   schedule_id: string
   teacher_schedule_id: string
 }
 
 export interface ITeacherTeachingAttendanceListParams {
-    page_index: number
-    page_size: number
-    fromDate?: string
-    toDate?: string
-    class_ids?: string[]
-    lesson_ids?: string[]
-    workload_status?: string[]
+  page_index: number
+  page_size: number
+  fromDate?: string
+  toDate?: string
+  class_ids?: string[]
+  lesson_ids?: string[]
+  workload_status?: string[]
 }
 
 export interface ITeacherTeachingAttendanceListResponse {
