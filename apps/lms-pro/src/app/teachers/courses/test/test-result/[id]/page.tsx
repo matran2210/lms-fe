@@ -83,6 +83,11 @@ const TestResultDetailTeacher = () => {
                 : chartData?.multiple_choice_score
             }
             isTeacher
+            scorePercentage={questions?.quizAttempt?.grading_status ===
+              GRADE_STATUS.FINISHED_GRADING
+              ? questions?.quizAttempt?.score_percentage?.total_score
+              : chartData?.score_percentage?.total_score
+            }
           />
         </div>
       </div>
