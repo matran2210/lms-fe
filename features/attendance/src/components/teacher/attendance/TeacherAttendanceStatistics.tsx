@@ -3,17 +3,26 @@ import { useFeature } from '@lms/contexts'
 import { Progress } from 'antd'
 import { useQuery } from 'react-query'
 
-const TeacherAttendanceStatistics = () => {
+type TeacherAttendanceStatisticsProps = {
+  fromDate?: string
+  toDate?: string
+}
+
+const TeacherAttendanceStatistics = ({ fromDate, toDate }: TeacherAttendanceStatisticsProps) => {
     const { userApi } = useFeature()
         const fetchAttendanceStatistics = async () => {
-        const { data } = await userApi.getTeacherTeachingAttendanceSummary()
+        const { data } = await userApi.getTeacherTeachingAttendanceSummary({
+          fromDate,
+          toDate,
+        })
         return data
       }
       const { data: statisticsData } = useQuery({
-        queryKey: ['teaching-attendanceStatistics'],
+        queryKey: ['teaching-attendanceStatistics', fromDate, toDate],
         queryFn: () => fetchAttendanceStatistics(),
         refetchOnWindowFocus: true,
         retry: false,
+        enabled: !!fromDate && !!toDate
       })
   return (
     <div className="w-full flex flex-col justify-between items-center gap-6">

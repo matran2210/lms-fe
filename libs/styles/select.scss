@@ -219,6 +219,18 @@
       @apply text-gray-400;
     }
   }
+
+  &.select-error {
+    &:hover, &:focus-within {
+      .ant-select-selector {
+        @apply border-error;
+        border-color: #F80903 !important;
+      }
+    }
+    .ant-select-selector {
+      @apply border-error;
+    }
+  }
 }
 
 .select-card-course {

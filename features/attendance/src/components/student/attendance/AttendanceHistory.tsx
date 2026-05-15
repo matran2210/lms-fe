@@ -4,8 +4,8 @@ import clsx from 'clsx'
 import { IStudentAttendanceItem } from '@lms/core'
 import { useFeature } from '@lms/contexts'
 import { useQuery } from 'react-query'
-import { CalendarIconOutline, ClockIcon, ClockInClassIcon, CloseModalIcon, DeviceIcon } from '@lms/assets'
-import { formatDateToSlash } from '../../../../../../libs/utils'
+import { CalendarIconOutline, ClockInClassIcon, CloseModalIcon, DeviceIcon } from '@lms/assets'
+import { formatDateToSlash } from '@lms/utils'
 
 interface AttendanceHistoryProps {
   isOpen: boolean

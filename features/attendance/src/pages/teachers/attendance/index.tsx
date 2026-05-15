@@ -2,29 +2,16 @@
 import { RequestProvider, useFeature, UserType } from '@lms/contexts'
 import { ITabs, ITeacherTeachingAttendanceItem } from '@lms/core'
 import { withAuthorization } from '@lms/hoc'
-import { LayoutTeacher, SappTabs } from '@lms/ui'
+import { LayoutTeacher } from '@lms/ui'
 import clsx from 'clsx'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   AttendanceHistory,
   TeachingAttendance
 } from '../../../components/teacher/attendance'
 
-const tabs = [
-  {
-    id: 1,
-    title: 'Teaching Attendance',
-    urlTitle: 'teachingattendance',
-  },
-  {
-    id: 2,
-    title: 'Learning Attendance',
-    urlTitle: 'learningattendance',
-  },
-]
-
 const TeacherAttendancePage = () => {
-  const { pageLink, query } = useFeature()
+  const { pageLink } = useFeature()
   const breadcrumbs: ITabs[] = [
     {
       link: pageLink.MY_CALENDAR,
@@ -36,30 +23,10 @@ const TeacherAttendancePage = () => {
     },
   ]
 
-  const [selected, setSelected] = useState<number>(() => {
-    if (query.tab) {
-      return (
-        tabs.find((item) => item.urlTitle === query.tabId)?.id ?? tabs[0].id
-      )
-    }
-    return tabs[0].id
-  })
-
   const [historyOpen, setHistoryOpen] = useState(false)
   const [selectedRecord, setSelectedRecord] =
     useState<ITeacherTeachingAttendanceItem | null>(null)
 
-  // Sync selected tab with URL query parameter
-  useEffect(() => {
-    console.log(selected, query.tabId, '909090')
-
-    if (query.tabId) {
-      const tabId = tabs.find((item) => item.urlTitle === query.tabId)?.id
-      if (tabId && tabId !== selected) {
-        setSelected(tabId)
-      }
-    }
-  }, [query.tabId])
 
   const handleOpenHistory = (record: ITeacherTeachingAttendanceItem) => {
     setSelectedRecord(record)
@@ -69,17 +36,6 @@ const TeacherAttendancePage = () => {
   const handleCloseHistory = () => {
     setHistoryOpen(false)
     setSelectedRecord(null)
-  }
-
-  const renderAttendanceDetail = (selected: number) => {
-    switch (selected) {
-      case 1:
-        return <TeachingAttendance onOpenHistory={handleOpenHistory} />
-      // case 2:
-        // return <LearningAttendance onOpenHistory={handleOpenHistory} />
-      default:
-        return null
-    }
   }
 
   return (
@@ -97,18 +53,12 @@ const TeacherAttendancePage = () => {
           {/* Main Content - Tabs */}
           <div
             className={clsx(
-              'rounded-xl bg-white px-8 py-5 transition-all duration-300 ease-in-out',
+              'rounded-xl bg-white p-8 transition-all duration-300 ease-in-out',
               historyOpen ? 'flex-1 min-w-0' : 'w-full flex-1 ',
             )}
           >
-            <SappTabs
-              tabs={tabs}
-              setSelected={setSelected}
-              selected={selected}
-              bordered
-            />
-            <div className="w-full rounded-xl bg-white pt-6">
-              {renderAttendanceDetail(selected)}
+            <div className="w-full rounded-xl bg-white">
+              <TeachingAttendance onOpenHistory={handleOpenHistory} />
             </div>
           </div>
 

@@ -188,7 +188,7 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
               size="middle"
               placeholder="Lesson"
               options={[
-                { label: 'All', value: '' },
+                // { label: 'All', value: '' },
                 ...((studentLessonData || []).map((lesson) => ({
                   label: lesson.class_schedule_user?.schedule_name,
                   value: lesson.class_schedule_user?.schedule_id,
@@ -220,7 +220,7 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
               size="middle"
               placeholder="Status"
               options={[
-                { label: 'All', value: '' },
+                // { label: 'All', value: '' },
                 { label: 'Attended', value: 'PRESENT' },
                 { label: 'Absent', value: 'ABSENT' },
               ]}

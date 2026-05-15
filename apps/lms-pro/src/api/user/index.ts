@@ -1,4 +1,4 @@
-import { IResponse, ITeacherTeachingAttendanceListParams, ITeacherTeachingAttendanceListResponse, ITeachingStatistics, UserExamInformation } from '@lms/core'
+import { IClassAttendanceHistoryResponse, IResponse, ITeacherTeachingAttendanceListParams, ITeacherTeachingAttendanceListResponse, ITeachingStatistics, UserExamInformation } from '@lms/core'
 import { fetcher } from '@services/request'
 import { apiURL } from 'src/constants'
 
@@ -54,7 +54,7 @@ export class UserApi {
   }
   
   // get teaching attendance history
-  static getTeacherTeachingAttendanceHistory(lesson_id : string): Promise<IResponse<any>> {
+  static getTeacherTeachingAttendanceHistory(lesson_id : string): Promise<IResponse<IClassAttendanceHistoryResponse[]>> {
     return fetcher(`${apiURL}/user-attendances/teacher/teaching-attendance/${lesson_id}/history`)
   }
 
