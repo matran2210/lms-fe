@@ -119,6 +119,13 @@ export default function TeacherMenu({
             `${pageLink.TEACHER_MY_COURSE}/my-course/${id ? "[id]" : "[courseId]"}/results`,
           ),
         },
+        {
+        key: "Attendance",
+        title: TitleTeacherSidebar.ATTENDANCE,
+        icon: <AttendanceMenuIcon selected={selectedKey === "Attendance"} />,
+        link: `${pageLink.TEACHER_MY_COURSE}/my-course/${id || courseId}/attendance`,
+        active: isCurrent(`${pageLink.TEACHER_MY_COURSE}/my-course/${id ? "[id]" : "[courseId]"}/results`),
+      },
       ];
 
       if (isActivity) {

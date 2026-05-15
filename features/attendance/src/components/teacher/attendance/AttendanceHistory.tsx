@@ -69,44 +69,27 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
         </button>
       </div>
 
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-5">
         {/* Class Information */}
-        <div className="flex flex-col gap-2">
+        <div className="flex justify-between gap-2">
           <div className="text-sm font-medium text-gray-500">Class</div>
           <div className="text-base text-gray-900">{record?.class || '-'}</div>
         </div>
 
         {/* Lesson Information */}
-        <div className="flex flex-col gap-2">
+        {/* <div className="flex flex-col gap-2">
           <div className="text-sm font-medium text-gray-500">Lesson</div>
           <div className="text-base text-gray-900">{record?.lesson || '-'}</div>
-        </div>
+        </div> */}
 
         {/* Date */}
-        <div className="flex flex-col gap-2">
+        <div className="flex justify-between gap-2">
           <div className="text-sm font-medium text-gray-500">Date</div>
           <div className="text-base text-gray-900">{formatDateToSlash(record?.start_date as string, true) || '-'}</div>
         </div>
-
-        {/* Check In */}
-        <div className="flex flex-col gap-2">
-          <div className="text-sm font-medium text-gray-500">Check In</div>
-          <div className="text-base text-gray-900">
-            {record?.checkin_time || '-'}
-          </div>
-        </div>
-
-        {/* Check Out */}
-        <div className="flex flex-col gap-2">
-          <div className="text-sm font-medium text-gray-500">Check Out</div>
-          <div className="text-base text-gray-900">
-            {record?.checkout_time || '-'}
-          </div>
-        </div>
-
         {/* Actual Workload (only for Teaching Attendance) */}
         {record?.workload && (
-          <div className="flex flex-col gap-2">
+          <div className="flex justify-between gap-2">
             <div className="text-sm font-medium text-gray-500">
               Actual Workload
             </div>
@@ -115,11 +98,25 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
             </div>
           </div>
         )}
-
-        {/* Device */}
-        <div className="flex flex-col gap-2">
-          <div className="text-sm font-medium text-gray-500">Device</div>
-          <div className="text-base text-gray-900">{record?.device || '-'}</div>
+        <div className="h-[300px] overflow-y-scroll">
+          {
+            teacherTeachingAttendanceHistoryData?.map((historyRecord, index) => (
+              <div key={index} className="p-3 flex flex-col gap-3 rounded-lg border-t border-gray-[#F1F1F4]">
+                {/* Check In */}
+                <div className="flex jutify-between gap-2">
+                  <div className="text-sm font-medium text-gray-500">Check In - Check Out</div>
+                  <div className="text-base text-gray-900">
+                    {historyRecord?.checkin_time} - {historyRecord?.checkout_time}
+                  </div>
+                </div>
+                {/* Device */}
+                <div className="flex jutify-between gap-2">
+                  <div className="text-sm font-medium text-gray-500">Device</div>
+                  <div className="text-base text-gray-900">{historyRecord?.device || '-'}</div>
+                </div>
+              </div>
+            ))
+          }
         </div>
       </div>
     </div>

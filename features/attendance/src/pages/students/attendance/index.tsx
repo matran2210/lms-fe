@@ -127,8 +127,6 @@ const StudentAttendancePage = () => {
             historyOpen ? 'flex-1 min-w-0' : 'w-full flex-1',
           )}
         >
-
-
           {/* Attendance Table */}
           <StudentAttendanceTable onOpenHistory={handleViewDetails} classId={courseData?.courseDetail?.class.id as string} />
         </div>

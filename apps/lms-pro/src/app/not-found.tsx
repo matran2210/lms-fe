@@ -11,6 +11,8 @@ const ErrorPage = () => {
   const userSlice = useAppSelector(userReducer)
 
   const getRedirectPath = () => {
+
+    console.log('userSlice in 404 page', userSlice)
     if (userSlice.user.type === 'STUDENT') {
       return PageLink.COURSES
     }

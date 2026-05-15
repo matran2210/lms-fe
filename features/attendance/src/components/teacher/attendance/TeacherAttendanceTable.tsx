@@ -5,6 +5,7 @@ import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, IStudentAttendanceItem, IStuden
 import {
   NameNoActionCell,
   SAPPBadge,
+  SAPPButtonCustom,
   SAPPRangePicker,
   SAPPSelect,
   SappSelectMultiple,
@@ -16,11 +17,11 @@ import dayjs from 'dayjs'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useQuery } from 'react-query'
-import { formatDateFromUTC } from '../../../../../../libs/utils'
+import { formatDateFromUTC } from '@lms/utils'
 import useInfiniteStudentLesson from '../../../hooks/useInfiniteStudentLesson'
 
 interface FilterForm {
-  lesson?: string
+  lesson_ids?: string[]
   rangeDate?: any[]
   status?: string
 }
@@ -53,20 +54,25 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
       page_size: DEFAULT_PAGE_SIZE,
     }
   )
-  const { control } = useForm<FilterForm>()
+  const { control, getValues, reset } = useForm<FilterForm>()
 
-  // const handleResetFilter = () => {
-  //   reset({
-  //     lesson: undefined,
-  //     rangeDate: undefined,
-  //     status: undefined,
-  //   })
-  //   setQueryParams({
-  //     page_index: DEFAULT_PAGE_NUMBER,
-  //     page_size: DEFAULT_PAGE_SIZE,
-  //   })
-  // }
-
+  const handleResetFilter = () => {
+    reset()
+    setQueryParams({
+      page_index: DEFAULT_PAGE_NUMBER,
+      page_size: DEFAULT_PAGE_SIZE,
+    })
+  }
+  const handleFilter = () => {
+    const rangeDate = getValues('rangeDate')
+    setQueryParams((prev) => ({
+      ...prev,
+      lesson_ids: getValues('lesson_ids')?.filter((id) => id !== '') || undefined,
+      status: getValues('status') || undefined,
+      fromDate: rangeDate?.[0].toISOString() || undefined,
+      toDate: rangeDate?.[1].toISOString() || undefined,
+    }))
+  }
   const handleOpenHistory = (record: IStudentAttendanceItem) => {
     if (onOpenHistory) {
       onOpenHistory(record)
@@ -92,7 +98,6 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
   const {
     data: studentAttendanceData,
     isLoading,
-    refetch,
   } = useGetStudentAttendanceList()
 
   const {
@@ -105,8 +110,8 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
   const handleDateChange = (dates: [dayjs.Dayjs | null, dayjs.Dayjs | null] | null) => {
     setQueryParams((prev) => ({
       ...prev,
-      fromDate: dates?.[0]?.toISOString(),
-      toDate: dates?.[1]?.toISOString(),
+      start_date: dates?.[0]?.toISOString(),
+      end_date: dates?.[1]?.toISOString(),
     }))
   }
   const columns: ColumnsType<IStudentAttendanceItem> = [
@@ -166,75 +171,65 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
   ]
 
   return (
-    <div className="w-full rounded-xl bg-white p-6">
+    <div className="w-full">
       {/* Filters Section */}
-      <div className="mb-6 flex flex-col gap-4">
-        <div className="flex justify-end">
-          <div className="w-1/2 flex justify-end items-center gap-4">
-            {/* <button
-            type="button"
-            className="shrink-0 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900"
-            onClick={handleResetFilter}
-          >
-            Reset
-          </button> */}
-            <div className="shrink-0 text-right justify-center text-gray-800 text-sm">24 Results</div>
-            <SappSelectMultiple
-              name="lesson"
-              control={control}
-              className="min-w-32 font-medium"
-              heightCustom="h-10"
-              defaultValue={[]}
-              size="middle"
-              placeholder="Lesson"
-              options={[
-                // { label: 'All', value: '' },
-                ...((studentLessonData || []).map((lesson) => ({
-                  label: lesson.class_schedule_user?.schedule_name,
-                  value: lesson.class_schedule_user?.schedule_id,
-                })))
-              ]}
-              onSearch={(text) => {
-                debounceSearch(text)
-              }}
-              onMenuScrollToBottom={hasNextPageStudentLesson ? fetchNextPageStudentLesson : undefined}
-              onDropdownVisibleChange={(open) => {
-                if (open && !studentLessonData) {
-                  refetchStudentLesson()
-                  return
-                }
-              }}
-              onChange={(value) => {
-                const lessonIds = value.filter((v) => v !== '')
-                setQueryParams((prev) => ({
-                  ...prev,
-                  lesson_ids: lessonIds, // lessonIds,
-                }))
-              }}
-              suffixIcon={<ArrowDownIcon className="text-gray-300" />}
-            />
-            <SAPPSelect
-              className="min-w-28"
-              name="status"
-              control={control}
-              size="middle"
-              placeholder="Status"
-              options={[
-                // { label: 'All', value: '' },
-                { label: 'Attended', value: 'PRESENT' },
-                { label: 'Absent', value: 'ABSENT' },
-              ]}
-              onChange={(value) => {
-                setQueryParams((prev) => ({
-                  ...prev,
-                  status: value === '' ? undefined : value,
-                }))
-              }}
-            />
-            <SAPPRangePicker name="rangeDate" control={control} size="small" onChange={handleDateChange} className="!w-1/2 shrink-0" />
-          </div>
+      <div className="mb-6 flex flex-col gap-4 flex-wrap">
+        <div className="flex justify-between gap-6">
+          <SappSelectMultiple
+            name="lesson_ids"
+            control={control}
+            classNameWrapper="flex-1 w-full"
+            className="font-medium"
+            heightCustom="h-10"
+            size="middle"
+            placeholder="Lesson"
+            options={[
+              // { label: 'All', value: '' },
+              ...((studentLessonData || []).map((lesson) => ({
+                label: lesson.class_schedule_user?.schedule_name,
+                value: lesson.class_schedule_user?.schedule_id,
+              })))
+            ]}
+            onSearch={(text) => {
+              debounceSearch(text)
+            }}
+            onMenuScrollToBottom={hasNextPageStudentLesson ? fetchNextPageStudentLesson : undefined}
+            onDropdownVisibleChange={(open) => {
+              if (open && !studentLessonData) {
+                refetchStudentLesson()
+                return
+              }
+            }}
+            suffixIcon={<ArrowDownIcon className="text-gray-300" />}
+          />
+          <SAPPSelect
+            className="flex-1 w-full"
+            name="status"
+            control={control}
+            size="middle"
+            placeholder="Status"
+            options={[
+              // { label: 'All', value: '' },
+              { label: 'Attended', value: 'PRESENT' },
+              { label: 'Absent', value: 'ABSENT' },
+            ]}
+            suffixIcon={<ArrowDownIcon className="text-gray-300" />}
+          />
+          <SAPPRangePicker name="rangeDate" control={control} size="small" onChange={handleDateChange} className="flex-1 w-full" />
         </div>
-
+        <div className="flex gap-3">
+          <SAPPButtonCustom
+            title="Reset"
+            color="secondary"
+            onClick={handleResetFilter}
+            disabled={isLoading}
+          />
+          <SAPPButtonCustom
+            title="Search"
+            onClick={handleFilter}
+            disabled={isLoading}
+          />
+        </div>
       </div>
 
       {/* Table Section */}
