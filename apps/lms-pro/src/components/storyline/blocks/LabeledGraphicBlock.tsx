@@ -219,13 +219,13 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
     isViewed?: boolean,
     isActive?: boolean,
   ) => {
-    const baseClasses = `flex items-center justify-center transition-all duration-300 z-10`
+    const baseClasses = `flex items-center justify-center transition-all duration-300 z-10 rounded-full bg-white/70 hover:bg-white backdrop-blur-sm`
     const sizeClasses = 'w-6 h-6'
 
     if (isViewed || isActive) {
       return (
         <div
-          className={`${baseClasses} ${sizeClasses} rounded-full bg-white/70 backdrop-blur-sm`}
+          className={`${baseClasses} ${sizeClasses}`}
           style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.12)' }}
         >
           <StarMarkerIcon />
@@ -234,7 +234,7 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
     }
 
     return (
-      <div className={`${baseClasses} ${sizeClasses} rounded-full bg-white/70 text-gray-800 backdrop-blur-sm`}>
+      <div className={`${baseClasses} ${sizeClasses} text-gray-800`}>
         {getMarkerText(style)}
       </div>
     )
