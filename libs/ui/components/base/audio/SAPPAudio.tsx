@@ -1,10 +1,7 @@
 import { Stream } from "@cloudflare/stream-react";
 import { LoadingIcon } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
-import {
-  formatTimeToHourMinuteSecond,
-  isMobileOrTablet
-} from "@lms/utils";
+import { formatTimeToHourMinuteSecond, isMobileOrTablet } from "@lms/utils";
 import clsx from "clsx";
 import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import useClickOutside from "../clickoutside/HookClick";
@@ -112,8 +109,6 @@ const SAPPAudio = ({
                   getListBit?.[currentVideoQualityIndex]?.qualityIndex,
                   true,
                 );
-
-
               }, 1000);
             });
 
@@ -174,7 +169,11 @@ const SAPPAudio = ({
       }
       if (seekRef.current) {
         seekRef.current.addEventListener("mousemove", updateSeekTooltip);
+        seekRef.current.addEventListener("mouseleave", hideSeekTooltip);
         seekRef.current.addEventListener("input", skipAhead);
+        seekRef.current.addEventListener("touchmove", updateSeekTooltip);
+        seekRef.current.addEventListener("touchend", hideSeekTooltip);
+        seekRef.current.addEventListener("touchcancel", hideSeekTooltip);
       }
       if (volumeRef.current) {
         volumeRef.current.addEventListener("input", updateVolume);
@@ -211,12 +210,15 @@ const SAPPAudio = ({
         }
         if (seekRef.current) {
           seekRef.current.removeEventListener("mousemove", updateSeekTooltip);
+          seekRef.current.removeEventListener("mouseleave", hideSeekTooltip);
           seekRef.current.removeEventListener("input", skipAhead);
+          seekRef.current.removeEventListener("touchmove", updateSeekTooltip);
+          seekRef.current.removeEventListener("touchend", hideSeekTooltip);
+          seekRef.current.removeEventListener("touchcancel", hideSeekTooltip);
         }
         if (volumeRef.current) {
           volumeRef.current.removeEventListener("input", updateVolume);
         }
-
       }
     };
   }, [options?.src, streamRef?.current, playbackAnimationRef?.current]);
@@ -305,16 +307,19 @@ const SAPPAudio = ({
   // initializeVideo sets the video duration, and maximum value of the
   // progressBar
   function initializeVideo() {
-    const videoDuration = Math.round(streamRef?.current?.duration);
-    seekRef?.current?.setAttribute("max", String(videoDuration));
-    progressBarRef?.current?.setAttribute("max", String(videoDuration));
+    const videoDuration = streamRef?.current?.duration || 0;
+    if (seekRef?.current) seekRef.current.max = String(videoDuration);
+    if (progressBarRef?.current)
+      progressBarRef.current.max = videoDuration;
     const time = formatTimeToHourMinuteSecond(videoDuration);
     if (durationRef?.current) {
-      durationRef.current.innerText = `${time.hours !== "00" ? time.hours + ":" : ""
-        }${time.minutes}:${time.seconds}`;
+      durationRef.current.innerText = `${
+        time.hours !== "00" ? time.hours + ":" : ""
+      }${time.minutes}:${time.seconds}`;
       durationRef.current.setAttribute(
         "datetime",
-        `${time.hours !== "00" ? time.hours + "h " : ""}${time.minutes}m ${time.seconds
+        `${time.hours !== "00" ? time.hours + "h " : ""}${time.minutes}m ${
+          time.seconds
         }s`,
       );
     }
@@ -325,14 +330,16 @@ const SAPPAudio = ({
   function updateTimeElapsed() {
     if (streamRef?.current && streamRef?.current?.readyState) {
       const time = formatTimeToHourMinuteSecond(
-        Math.round(streamRef.current?.currentTime || 0),
+        Math.floor(streamRef.current?.currentTime || 0),
       );
       if (timeElapsedRef.current) {
-        timeElapsedRef.current.innerText = `${time.hours !== "00" ? time.hours + ":" : ""
-          }${time.minutes}:${time.seconds}`;
+        timeElapsedRef.current.innerText = `${
+          time.hours !== "00" ? time.hours + ":" : ""
+        }${time.minutes}:${time.seconds}`;
         timeElapsedRef.current.setAttribute(
           "datetime",
-          `${time.hours !== "00" ? time.hours + "h " : ""}${time.minutes}m ${time.seconds
+          `${time.hours !== "00" ? time.hours + "h " : ""}${time.minutes}m ${
+            time.seconds
           }s`,
         );
       }
@@ -376,40 +383,68 @@ const SAPPAudio = ({
   // updateSeekTooltip uses the position of the mouse on the progress bar to
   // roughly work out what point in the video the user will skip to if
   // the progress bar is clicked at that point
-  function updateSeekTooltip(event: MouseEvent) {
-    const skipTo = Math.round(
-      (event.offsetX / (event.target as HTMLElement).clientWidth) *
-      parseInt((event.target as HTMLElement).getAttribute("max") || "0", 10),
-    );
-    const t = formatTimeToHourMinuteSecond(skipTo);
+  function updateSeekTooltip(event: MouseEvent | TouchEvent) {
+    const seekElement = seekRef.current;
     if (
-      progressBarRef?.current &&
-      seekRef?.current &&
-      seekTooltipRef?.current
-    ) {
-      const rect = progressBarRef.current.getBoundingClientRect();
-      seekRef.current.setAttribute("data-seek", String(skipTo));
-      seekTooltipRef.current.textContent = `${t.hours !== "00" ? t.hours + ":" : ""
-        }${t.minutes}:${t.seconds}`;
-      seekTooltipRef.current.style.left = `${event.pageX - rect.left}px`;
+      !seekElement ||
+      !streamRef.current ||
+      !seekTooltipRef.current ||
+      !progressBarRef.current
+    )
+      return;
+
+    const rect = seekElement.getBoundingClientRect();
+    const duration = streamRef.current.duration || 0;
+
+    // Support both mouse and touch events
+    let clientX: number;
+    if (window.TouchEvent && event instanceof TouchEvent) {
+      if (event.touches.length === 0) return;
+      clientX = event.touches[0].clientX;
+    } else {
+      clientX = (event as MouseEvent).clientX;
     }
+
+    const x = clientX - rect.left;
+    const percentage = Math.min(Math.max(x / rect.width, 0), 1);
+    // Snap to step=0.01 to match the browser's range input value snapping
+    const skipTo = Math.round(percentage * duration * 100) / 100;
+
+    const t = formatTimeToHourMinuteSecond(Math.floor(skipTo));
+
+    seekElement.setAttribute("data-seek", String(skipTo));
+    seekTooltipRef.current.style.display = "block";
+    seekTooltipRef.current.textContent = `${
+      t.hours !== "00" ? t.hours + ":" : ""
+    }${t.minutes}:${t.seconds}`;
+
+    seekTooltipRef.current.style.left = `${percentage * rect.width}px`;
+  }
+
+  function hideSeekTooltip() {
+    if (seekTooltipRef.current) {
+      seekTooltipRef.current.style.display = "";
+    }
+    // Clear data-seek so the next tap uses seekRef.current.value (not stale drag position)
+    seekRef.current?.removeAttribute("data-seek");
   }
 
   // skipAhead jumps to a different point in the video when the progress bar
-  // is clicked
+  // is clicked. Uses data-seek so the seek time always matches what the tooltip showed.
   function skipAhead() {
     if (!streamRef.current || !seekRef.current) return;
 
-    const skipTo = Number(seekRef.current.value || "0");
+    // Prefer data-seek (set by tooltip hover) over slider.value to guarantee sync
+    const dataSeek = seekRef.current.getAttribute("data-seek");
+    const skipTo = dataSeek !== null ? Number(dataSeek) : Number(seekRef.current.value || "0");
 
     streamRef.current.currentTime = skipTo;
 
     if (progressBarRef.current) {
       progressBarRef.current.value = skipTo;
     }
-    if (seekRef?.current) {
-      seekRef.current.value = String(skipTo);
-    }
+    seekRef.current.value = String(skipTo);
+    updateTimeElapsed();
   }
 
   // updateVolume updates the video's volume
@@ -540,9 +575,7 @@ const SAPPAudio = ({
       {options?.src && (
         <>
           {cloudflarePlayer ? (
-            <div
-              className={`group ${loading ? "hidden" : ""}`}
-            >
+            <div className={`group ${loading ? "hidden" : ""}`}>
               <div className={`popup-question`}>{children}</div>
               <Stream
                 {...options}
@@ -562,9 +595,8 @@ const SAPPAudio = ({
             </div>
           ) : (
             <div
-
               className={clsx(
-                `sapp-video-custom video-container group ${loading ? "hidden" : ""}`
+                `sapp-video-custom video-container group ${loading ? "hidden" : ""}`,
               )}
               ref={videoContainerRef}
             >
@@ -649,9 +681,12 @@ const SAPPAudio = ({
                       ref={progressBarRef}
                     />
                     <input
-                      className={clsx("seek absolute top-0 z-10 m-0 w-full cursor-pointer", {
-                        hidden: isMediumVideo,
-                      })}
+                      className={clsx(
+                        "seek absolute top-0 z-10 m-0 w-full cursor-pointer",
+                        {
+                          hidden: isMediumVideo,
+                        },
+                      )}
                       min="0"
                       type="range"
                       step="0.01"
@@ -816,7 +851,8 @@ const SAPPAudio = ({
 
                     <div
                       className={clsx(
-                        `settings-control icon-svg relative text-white ${activeSettings ? "active" : ""
+                        `settings-control icon-svg relative text-white ${
+                          activeSettings ? "active" : ""
                         }`,
                         {
                           hidden: isSmallVideo,
@@ -883,10 +919,11 @@ const SAPPAudio = ({
                                     key={speed.value}
                                     onClick={handlePlaybackRateChange}
                                     data-speed={speed.value}
-                                    className={`text-xsm hover:bg-white hover:text-black ${parseFloat(speed.value) === playbackRate
+                                    className={`text-xsm hover:bg-white hover:text-black ${
+                                      parseFloat(speed.value) === playbackRate
                                         ? "bg-white text-black"
                                         : ""
-                                      }`}
+                                    }`}
                                   >
                                     {speed.label}
                                   </li>
@@ -894,11 +931,9 @@ const SAPPAudio = ({
                               </ul>
                             </>
                           )}
-
                         </div>
                       </>
                     </div>
-
                   </div>
                 </div>
               </div>

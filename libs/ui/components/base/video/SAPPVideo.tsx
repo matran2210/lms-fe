@@ -26,7 +26,7 @@ interface IProp {
   children?: ReactNode;
   videoAttribs?: { [key: string]: string };
   isFetchCaptions?: boolean;
-  handlePlayVideo?:() => void
+  handlePlayVideo?: () => void;
   className?: string;
   controlClassName?: string;
 }
@@ -71,7 +71,7 @@ const SAPPVideo = ({
   isFetchCaptions = true,
   handlePlayVideo,
   className,
-  controlClassName
+  controlClassName,
 }: IProp) => {
   const { fetcher, videoUrl, router } = useFeature();
   const [playerFunction, setPlayerFunction] = useState<any>();
@@ -316,7 +316,11 @@ const SAPPVideo = ({
       }
       if (seekRef.current) {
         seekRef.current.addEventListener("mousemove", updateSeekTooltip);
+        seekRef.current.addEventListener("mouseleave", hideSeekTooltip);
         seekRef.current.addEventListener("input", skipAhead);
+        seekRef.current.addEventListener("touchmove", updateSeekTooltip);
+        seekRef.current.addEventListener("touchend", hideSeekTooltip);
+        seekRef.current.addEventListener("touchcancel", hideSeekTooltip);
       }
       if (volumeRef.current) {
         volumeRef.current.addEventListener("input", updateVolume);
@@ -371,7 +375,11 @@ const SAPPVideo = ({
         }
         if (seekRef.current) {
           seekRef.current.removeEventListener("mousemove", updateSeekTooltip);
+          seekRef.current.removeEventListener("mouseleave", hideSeekTooltip);
           seekRef.current.removeEventListener("input", skipAhead);
+          seekRef.current.removeEventListener("touchmove", updateSeekTooltip);
+          seekRef.current.removeEventListener("touchend", hideSeekTooltip);
+          seekRef.current.removeEventListener("touchcancel", hideSeekTooltip);
         }
         if (volumeRef.current) {
           volumeRef.current.removeEventListener("input", updateVolume);
@@ -470,10 +478,10 @@ const SAPPVideo = ({
   // initializeVideo sets the video duration, and maximum value of the
   // progressBar
   function initializeVideo() {
-    const videoDuration = Math.round(streamRef?.current?.duration);
+    const videoDuration = streamRef?.current?.duration || 0;
     seekRef?.current?.setAttribute("max", String(videoDuration));
     progressBarRef?.current?.setAttribute("max", String(videoDuration));
-    const time = formatTimeToHourMinuteSecond(videoDuration);
+    const time = formatTimeToHourMinuteSecond(Math.floor(videoDuration));
     if (durationRef?.current) {
       durationRef.current.innerText = `${
         time.hours !== "00" ? time.hours + ":" : ""
@@ -503,9 +511,9 @@ const SAPPVideo = ({
   // updateTimeElapsed indicates how far through the video
   // the current playback is by updating the timeElapsed element
   function updateTimeElapsed() {
-    if (streamRef?.current && streamRef?.current?.readyState) {
+    if (streamRef?.current) {
       const time = formatTimeToHourMinuteSecond(
-        Math.round(streamRef.current?.currentTime || 0),
+        Math.floor(streamRef.current?.currentTime || 0),
       );
       if (timeElapsedRef.current) {
         timeElapsedRef.current.innerText = `${
@@ -541,6 +549,7 @@ const SAPPVideo = ({
       const t = streamRef?.current?.currentTime || 0;
       if (seekRef?.current) seekRef.current.value = String(t);
       if (progressBarRef?.current) progressBarRef.current.value = t;
+      updateTimeElapsed();
       animationFrameRef.current = requestAnimationFrame(tick);
     };
     if (!animationFrameRef.current) {
@@ -558,42 +567,68 @@ const SAPPVideo = ({
   // updateSeekTooltip uses the position of the mouse on the progress bar to
   // roughly work out what point in the video the user will skip to if
   // the progress bar is clicked at that point
-  function updateSeekTooltip(event: MouseEvent) {
-    const skipTo = Math.round(
-      (event.offsetX / (event.target as HTMLElement).clientWidth) *
-        parseInt((event.target as HTMLElement).getAttribute("max") || "0", 10),
-    );
-
-    const t = formatTimeToHourMinuteSecond(skipTo);
+  function updateSeekTooltip(event: MouseEvent | TouchEvent) {
+    const seekElement = seekRef.current;
     if (
-      progressBarRef?.current &&
-      seekRef?.current &&
-      seekTooltipRef?.current
-    ) {
-      const rect = progressBarRef.current.getBoundingClientRect();
-      seekRef.current.setAttribute("data-seek", String(skipTo));
-      seekTooltipRef.current.textContent = `${
-        t.hours !== "00" ? t.hours + ":" : ""
-      }${t.minutes}:${t.seconds}`;
-      seekTooltipRef.current.style.left = `${event.pageX - rect.left}px`;
+      !seekElement ||
+      !streamRef.current ||
+      !seekTooltipRef.current ||
+      !progressBarRef.current
+    )
+      return;
+
+    const rect = seekElement.getBoundingClientRect();
+    const duration = streamRef.current.duration || 0;
+
+    // Support both mouse and touch events
+    let clientX: number;
+    if (window.TouchEvent && event instanceof TouchEvent) {
+      if (event.touches.length === 0) return;
+      clientX = event.touches[0].clientX;
+    } else {
+      clientX = (event as MouseEvent).clientX;
     }
+
+    const x = clientX - rect.left;
+    const percentage = Math.min(Math.max(x / rect.width, 0), 1);
+    // Snap to step=0.01 to match the browser's range input value snapping
+    const skipTo = Math.round(percentage * duration * 100) / 100;
+
+    const t = formatTimeToHourMinuteSecond(Math.floor(skipTo));
+
+    seekElement.setAttribute("data-seek", String(skipTo));
+    seekTooltipRef.current.style.display = "block";
+    seekTooltipRef.current.textContent = `${
+      t.hours !== "00" ? t.hours + ":" : ""
+    }${t.minutes}:${t.seconds}`;
+
+    seekTooltipRef.current.style.left = `${percentage * rect.width}px`;
+  }
+
+  function hideSeekTooltip() {
+    if (seekTooltipRef.current) {
+      seekTooltipRef.current.style.display = "";
+    }
+    // Clear data-seek so the next tap uses seekRef.current.value (not stale drag position)
+    seekRef.current?.removeAttribute("data-seek");
   }
 
   // skipAhead jumps to a different point in the video when the progress bar
-  // is clicked
+  // is clicked. Uses data-seek so the seek time always matches what the tooltip showed.
   function skipAhead() {
     if (!streamRef.current || !seekRef.current) return;
 
-    const skipTo = Number(seekRef.current.value || "0");
+    // Prefer data-seek (set by tooltip hover) over slider.value to guarantee sync
+    const dataSeek = seekRef.current.getAttribute("data-seek");
+    const skipTo = dataSeek !== null ? Number(dataSeek) : Number(seekRef.current.value || "0");
 
     streamRef.current.currentTime = skipTo;
 
     if (progressBarRef.current) {
       progressBarRef.current.value = skipTo;
     }
-    if (seekRef?.current) {
-      seekRef.current.value = String(skipTo);
-    }
+    seekRef.current.value = String(skipTo);
+    updateTimeElapsed();
   }
 
   // updateVolume updates the video's volume
@@ -1088,7 +1123,10 @@ const SAPPVideo = ({
                 onTouchStart={showControls}
               />
               <div
-                className={clsx("video-controls flex-center absolute bottom-0 left-0 right-0 h-14 w-full rounded-b-lg px-4 py-3", controlClassName)}
+                className={clsx(
+                  "video-controls flex-center absolute bottom-0 left-0 right-0 h-14 w-full rounded-b-lg px-4 py-3",
+                  controlClassName,
+                )}
                 ref={videoControlsRef}
               >
                 <div
