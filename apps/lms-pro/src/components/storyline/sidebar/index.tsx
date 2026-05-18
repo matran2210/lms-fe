@@ -27,8 +27,8 @@ export default function Sidebar({ listStorylineData }: IProps) {
       },
     )
     
-    // Close sidebar on mobile after selecting an item
-    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+    // Close sidebar on mobile/tablet after selecting an item
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       setShowSidebar(false)
     }
   }
@@ -42,7 +42,11 @@ export default function Sidebar({ listStorylineData }: IProps) {
           animate={{ x: 0 }}
           exit={{ x: '-100%' }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="fixed bottom-0 left-0 top-0 z-[202] h-full w-full bg-white p-6 shadow-md md:w-[326px] lg:w-[278px] "
+          className="fixed bottom-0 top-0 z-[202] h-full w-screen bg-white p-6 shadow-md md:w-[326px] lg:w-[278px]"
+          style={{
+            left: 0,
+            maxWidth: '100vw',
+          }}
         >
         <div className="flex items-center justify-between gap-2">
           <div className="text-lg font-semibold text-gray-800">

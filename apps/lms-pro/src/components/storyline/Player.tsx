@@ -8,6 +8,7 @@ import { SappLoadingGlobal } from '@lms/ui'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
+import clsx from 'clsx'
 import CompleteStoryline from './blocks/CompleteStoryline'
 import { StepRenderer } from './blocks/StepRenderer'
 import ContinueButton from './ContinueButton'
@@ -37,6 +38,22 @@ export default function Player({ listStorylineData }: IProps) {
     storylineDocument,
   } = useStoryline()
   const { showSidebar } = useStorylineSidebar()
+
+  // Prevent body scroll and horizontal overflow when sidebar is open on mobile
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    
+    const isTabletOrMobile = window.innerWidth < 1024
+    if (isTabletOrMobile && showSidebar) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [showSidebar])
 
 
   useEffect(() => {
@@ -80,9 +97,10 @@ export default function Player({ listStorylineData }: IProps) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="min-h-screen overflow-x-hidden bg-white">
+            <div className={clsx("min-h-screen bg-white", {
+              "overflow-x-hidden": showSidebar && typeof window !== 'undefined' && window.innerWidth < 1024
+            })}>
               <StoryHeader />
-
 
               <Sidebar listStorylineData={listStorylineData} />
               <main ref={containerRef} className="flex w-full pb-28">
