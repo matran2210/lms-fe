@@ -1,4 +1,5 @@
 export { default as AttendanceStatistics } from './AttendanceStatistics'
 export { default as AttendanceHistory } from './AttendanceHistory'
 export { default as StudentAttendanceTable } from './StudentAttendanceTable'
+export { default as FilterAttendanceTable } from './FilterAttendanceTable'
 export type { AttendanceStatisticsProps } from './AttendanceStatistics'

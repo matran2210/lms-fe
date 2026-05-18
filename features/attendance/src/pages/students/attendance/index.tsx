@@ -15,7 +15,7 @@ import StudentAttendanceTable from '../../../components/student/attendance/Stude
 
 const StudentAttendancePage = () => {
   const { pageLink, courseApi, params, router, classApi } = useFeature()
-  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const { isAlwaysShowSidebar, isTabletView, isMobileView } = useTailwindBreakpoint()
 
   /**
    * @description config API course detail
@@ -79,6 +79,7 @@ const StudentAttendancePage = () => {
     <Layout
       title="Class Attendance"
       className="pb-4"
+      showSidebar={isAlwaysShowSidebar}
     >
       {isAlwaysShowSidebar && (
         <div className="mb-2 mt-4 flex w-full">
@@ -105,10 +106,10 @@ const StudentAttendancePage = () => {
         onBack={() => {
           router.push(`/courses/my-course/${params?.courseId}`)
         }}
-        className="mb-2 mt-4 flex w-full"
+        className="my-8 flex w-full"
 
       />
-      <div className="mb-6 w-full">
+      <div className="mb-8 lg:mb-6 w-full">
         {/* Statistics Cards */}
           <AttendanceStatistics
             totalSessions={statisticsData?.total || 0}
@@ -118,35 +119,44 @@ const StudentAttendancePage = () => {
           />
       </div>
                         
-      <div className={clsx("flex", { 'gap-6': historyOpen } )}>
+      <div className={clsx("flex", { 'gap-6': historyOpen && isAlwaysShowSidebar } )}>
         {/* Main Content */}
 
         <div
           className={clsx(
             'flex flex-col gap-6 transition-all duration-300 ease-in-out',
-            historyOpen ? 'flex-1 min-w-0' : 'w-full flex-1',
+            historyOpen && isAlwaysShowSidebar ? 'flex-1 min-w-0' : 'w-full flex-1',
           )}
         >
           {/* Attendance Table */}
           <StudentAttendanceTable onOpenHistory={handleViewDetails} classId={courseData?.courseDetail?.class.id as string} />
         </div>
 
-        {/* Attendance History Side Panel */}
-        <div
-          className={clsx(
-            'overflow-hidden transition-all duration-300 ease-in-out',
-            historyOpen ? 'w-[393px]' : 'w-0',
-          )}
-        >
-          <div className="h-full w-[393px]">
-            <AttendanceHistory
-              isOpen={historyOpen}
-              onClose={handleCloseHistory}
-              record={selectedRecord}
-            />
+        {isAlwaysShowSidebar && (
+          <div
+            className={clsx(
+              'overflow-hidden transition-all duration-300 ease-in-out',
+              historyOpen ? 'w-[393px]' : 'w-0',
+            )}
+          >
+            <div className="h-full w-[393px]">
+              <AttendanceHistory
+                isOpen={historyOpen}
+                onClose={handleCloseHistory}
+                record={selectedRecord}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
+
+      {(isTabletView || isMobileView) && (
+        <AttendanceHistory
+          isOpen={historyOpen}
+          onClose={handleCloseHistory}
+          record={selectedRecord}
+        />
+      )}
     </Layout>
   )
 }
