@@ -1,8 +1,8 @@
 export const PlusCircleIcon = ({ className }: { className?: string }) => {
-  return <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 10 10" fill="none" className={className}>
-    <path d="M8.29247 4.52124H0.75" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
-    <path d="M4.52124 8.29248V0.750004" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
-  </svg>
+  return <svg width="24px" height="24px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" className={className}>
+    <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+    <g id="SVGRepo_iconCarrier"> <path fill="currentColor" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g>
+    </svg>
 }
 export const MinusCircleIcon = ({ className }: { className?: string }) => {
   return <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 20 20" fill="none" className={className}>
@@ -118,8 +118,8 @@ export const ChevronRightCircleIcon = ({ className }: { className?: string }) =>
     <path d="M7.42383 9.99974L9.47383 7.94141" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
   </svg>
 }
-export const StarMarkerIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const StarMarkerIcon = ({ className }: { className?: string }) => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     <path d="M6.10471 3.60558C6.94915 2.09075 7.37136 1.33333 8.0026 1.33333C8.63385 1.33333 9.05606 2.09074 9.90049 3.60558L10.119 3.99748C10.3589 4.42795 10.4789 4.64319 10.666 4.7852C10.853 4.92721 11.086 4.97993 11.552 5.08536L11.9762 5.18135C13.616 5.55236 14.4359 5.73787 14.631 6.36515C14.8261 6.99242 14.2671 7.64604 13.1492 8.95328L12.86 9.29148C12.5423 9.66295 12.3835 9.84869 12.312 10.0785C12.2406 10.3083 12.2646 10.5561 12.3126 11.0517L12.3563 11.5029C12.5254 13.2471 12.6099 14.1191 12.0992 14.5068C11.5885 14.8945 10.8208 14.541 9.28549 13.8341L8.88828 13.6512C8.45199 13.4503 8.23384 13.3499 8.0026 13.3499C7.77137 13.3499 7.55322 13.4503 7.11693 13.6512L6.71972 13.8341C5.18439 14.541 4.41672 14.8945 3.90604 14.5068C3.39535 14.1191 3.47986 13.2471 3.64887 11.5029L3.69259 11.0517C3.74062 10.5561 3.76464 10.3083 3.69318 10.0785C3.62172 9.84869 3.46289 9.66295 3.14522 9.29148L2.856 8.95328C1.7381 7.64604 1.17915 6.99242 1.37422 6.36515C1.56928 5.73787 2.38918 5.55236 4.02896 5.18135L4.4532 5.08536C4.91917 4.97993 5.15216 4.92721 5.33923 4.7852C5.52631 4.64319 5.64629 4.42795 5.88625 3.99748L6.10471 3.60558Z" fill="#FFB700" />
   </svg>
 )

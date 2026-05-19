@@ -76,7 +76,7 @@ const QuizBlock = ({
   const { section_storyline_id } = useParams()
 
 
-  const { control, setValue, reset, getValues, watch, resetField } = useForm()
+  const { control, setValue, getValues, watch } = useForm()
   const {
     continueAction,
     visibleDocumentCount,
@@ -1064,7 +1064,7 @@ const QuizBlock = ({
   }) => {
     setSkipQuestion(true)
     continueAction(
-      currentVisibleDocument && !['QUIZ', 'INTERACTION', 'VIDEO'].includes(currentVisibleDocument?.type)
+      currentVisibleDocument && !['QUIZ', 'VIDEO'].includes(currentVisibleDocument?.type)
         ? currentVisibleDocument?.id
         : document_id,
       isUpdateProgress,
@@ -1231,7 +1231,8 @@ const QuizBlock = ({
             <div className="flex w-full items-center justify-between gap-4 md:w-auto md:justify-start">
               {!isShowClearSelection &&
                 !isShowActionBtn &&
-                !isLastVisibleDocument && (
+                !isLastVisibleDocument && 
+                (
                   <ButtonText
                     size="medium"
                     disabled={loading}
@@ -1346,7 +1347,7 @@ const QuizBlock = ({
                   openExplain || isCorrectAnswer || attemptId
                     ? handleSkipQuestion({
                       isUpdateProgress:
-                        currentVisibleDocument && !["QUIZ", "INTERACTION", "VIDEO"].includes(currentVisibleDocument?.type),
+                        currentVisibleDocument && !["QUIZ", "VIDEO"].includes(currentVisibleDocument?.type),
                     })
                     : handleRetakeQuestion()
                 }

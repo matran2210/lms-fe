@@ -135,13 +135,13 @@ export default function Player({ listStorylineData }: IProps) {
                     />
                   </section>
                   {visibleDocumentCount < (storylineDocument?.length ?? 0) &&
-                    !["QUIZ", "INTERACTION"].includes(lastVisibleDocument?.type as string) &&
+                    !["QUIZ"].includes(lastVisibleDocument?.type as string) &&
                     !!currentVisibleDocument && (
                       <ContinueButton
                         onClick={() => {
                           continueAction(
                             currentVisibleDocument?.id as string,
-                            !["QUIZ", "INTERACTION", "VIDEO"].includes(currentVisibleDocument?.type as string)
+                            !["QUIZ", "VIDEO"].includes(currentVisibleDocument?.type as string)
                           )
                         }}
                       />

@@ -1,9 +1,8 @@
-import { ArrowLeft, ExpandIcon, BlinkStartAnimation } from '@lms/assets'
+import { ArrowLeft, BlinkStartAnimation } from '@lms/assets'
 import { useCourseContext } from '@lms/contexts'
 import { IStoryline } from '@lms/core'
 import NextStorylineModal from '@lms/feature-courses/src/components/learning/storyline/modal/NextStorylineModal'
 import { ButtonPrimary, ButtonText } from '@lms/ui'
-import { motion } from 'framer-motion'
 import Lottie from 'lottie-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
@@ -16,7 +15,7 @@ export default function CompleteStoryline({ listStorylineData }: IProps) {
   const class_id = searchParams.get('class_id')
   const course_section_id = searchParams.get('course_section_id')
   const nextActivity = listStorylineData?.next_activity
-  const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
+  const { setOpenPopupCTA } = useCourseContext()
 
   const [open, setOpen] = useState(false)
   const backToCourse = () => {

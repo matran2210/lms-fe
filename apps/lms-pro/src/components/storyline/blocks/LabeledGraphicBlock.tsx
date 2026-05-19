@@ -7,7 +7,6 @@ import clsx from 'clsx'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import ContinueButton from '../ContinueButton'
 
 interface Props {
   markers: ILabeledGraphicMarker[]
@@ -27,14 +26,11 @@ type PopupPosition = {
 
 export default function LabeledGraphicBlock({ markers, backgroundResource, documentTitle, document_id, docIndex }: Props) {
   const {
-    continueAction,
     visibleDocumentCount,
-    updateProgress,
     storylineDocument,
   } = useStoryline()
   const currentVisibleDocument = storylineDocument?.[visibleDocumentCount]
   const isLearnedBlock = docIndex < visibleDocumentCount
-  const isLastVisibleDocument = docIndex === storylineDocument?.length
   const [viewedMarkers, setViewedMarkers] = useState<Set<string>>(new Set())
   const [activeMarkerId, setActiveMarkerId] = useState<string | null>(null)
   const [imageLoaded, setImageLoaded] = useState(false)
@@ -84,9 +80,6 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
     const spaceRight = containerRect.width - (markerX + MARKER_SIZE / 2)
     const spaceLeft = markerX - MARKER_SIZE / 2
     const spaceBottom = containerRect.height - (markerY + MARKER_SIZE / 2)
-
-    // Popup top căn giữa theo marker, clamp trong container
-    const centeredTop = markerY - POPUP_HEIGHT / 2
 
     // Popup left căn giữa theo marker, clamp trong container
     const centeredLeft = markerX - POPUP_WIDTH / 2
@@ -176,41 +169,41 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
   const getMarkerText = (style?: string) => {
     switch (style) {
       case "PLUS":
-        return <PlusCircleIcon />
+        return <PlusCircleIcon className="w-8 h-8" />
       case "MINUS":
-        return <MinusCircleIcon />
+        return <MinusCircleIcon className="w-8 h-8" />
       case "CROSS":
-        return <CrossCircleIcon />
+        return <CrossCircleIcon className="w-8 h-8" />
       case "CHECK":
-        return <CheckCircleIcon />
+        return <CheckCircleIcon className="w-8 h-8" />
       case "ABSTRACT":
-        return <AbstractCircleIcon />
+        return <AbstractCircleIcon className="w-8 h-8" />
       case "BURGER_MENU":
-        return <BurgerMenuCircleIcon />
+        return <BurgerMenuCircleIcon className="w-8 h-8" />
       case "CHART_PIE":
-        return <ChartPieCircleIcon />
+        return <ChartPieCircleIcon className="w-8 h-8" />
       case "INFOMATION":
-        return <InfomationCircleIcon />
+        return <InfomationCircleIcon className="w-8 h-8" />
       case "QUESTION":
-        return <QuestionCircleIcon />
+        return <QuestionCircleIcon className="w-8 h-8" />
       case "ARROW_LEFT":
-        return <ArrowLeftCircleIcon />
+        return <ArrowLeftCircleIcon className="w-8 h-8" />
       case "ARROW_RIGHT":
-        return <ArrowRightCircleIcon />
+        return <ArrowRightCircleIcon className="w-8 h-8" />
       case "ARROW_UP":
-        return <ArrowUpCircleIcon />
+        return <ArrowUpCircleIcon className="w-8 h-8" />
       case "ARROW_DOWN":
-        return <ArrowDownCircleIcon />
+        return <ArrowDownCircleIcon className="w-8 h-8" />
       case "CHEVRON_LEFT":
-        return <ChevronLeftCircleIcon />
+        return <ChevronLeftCircleIcon className="w-8 h-8" />
       case "CHEVRON_RIGHT":
-        return <ChevronRightCircleIcon />
+        return <ChevronRightCircleIcon className="w-8 h-8" />
       case "CHEVRON_UP":
-        return <ChevronUpCircleIcon />
+        return <ChevronUpCircleIcon className="w-8 h-8" />
       case "CHEVRON_DOWN":
-        return <ChevronDownCircleIcon />
+        return <ChevronDownCircleIcon className="w-8 h-8" />
       default:
-        return <PlusCircleIcon />
+        return <PlusCircleIcon className="w-8 h-8" />
     }
   }
 
@@ -219,32 +212,25 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
     isViewed?: boolean,
     isActive?: boolean,
   ) => {
-    const baseClasses = `flex items-center justify-center transition-all duration-300 z-10 rounded-full bg-white/70 hover:bg-white backdrop-blur-sm`
-    const sizeClasses = 'w-6 h-6'
+    const baseClasses = `flex items-center justify-center transition-all duration-300 z-10 rounded-full backdrop-blur-sm`
+    const sizeClasses = 'w-10 h-10'
 
     if (isViewed || isActive) {
       return (
         <div
-          className={`${baseClasses} ${sizeClasses}`}
+          className={`${baseClasses} ${sizeClasses} bg-white`}
           style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.12)' }}
         >
-          <StarMarkerIcon />
+          <StarMarkerIcon className='w-8 h-8' />
         </div>
       )
     }
 
     return (
-      <div className={`${baseClasses} ${sizeClasses} text-gray-800`}>
+      <div className={`${baseClasses} ${sizeClasses} text-gray-800 bg-white/70  hover:bg-white`}>
         {getMarkerText(style)}
       </div>
     )
-  }
-
-  const handleContinue = () => {
-    continueAction(document_id)
-    if (currentVisibleDocument && !["QUIZ", "INTERACTION", "VIDEO"].includes(currentVisibleDocument?.type)) {
-      return updateProgress(currentVisibleDocument.id, true)
-    }
   }
 
   useEffect(() => {
@@ -259,16 +245,6 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
       setViewedMarkers(new Set())
     }
   }, [isLearnedBlock])
-
-  // Nếu là document cuối cùng thì sau khi xem hết marker thì tự động call api update progress mà không cần bấm continue
-  useEffect(() => {
-    if (isLastVisibleDocument && isAllMarkersViewed) {
-      updateProgress(
-        document_id,
-        true
-      )
-    }
-  }, [isLastVisibleDocument, isAllMarkersViewed])
 
   return (
     <div className="w-full">
@@ -581,13 +557,6 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
           )}
         </AnimatePresence>
       )}
-
-      {
-        isShowContinueButton && <ContinueButton
-          onClick={handleContinue}
-        />
-      }
-
     </div>
   )
 }

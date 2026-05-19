@@ -255,10 +255,11 @@ export function StorylineProvider({ storylineData, children }: Props) {
   useEffect(() => {
     if (!currentStep || !storylineDocument) return
     const completed = currentStep.item_progress?.total_document_completed ?? 0
-    const isLastVisibleDocument = completed === storylineDocument.length
-    const lastestLearnedDocument = storylineDocument?.[(!completed ? completed + 1 : completed) - 1]
-    const lastVisibleDocumentIsInteractive = ['INTERACTION'].includes(lastestLearnedDocument?.type)
-    setVisibleDocumentCount(!completed ? completed + 1 : lastVisibleDocumentIsInteractive && !isLastVisibleDocument ? completed + 1 :  completed)
+    // const isLastVisibleDocument = completed === storylineDocument.length
+    // const lastestLearnedDocument = storylineDocument?.[(!completed ? completed + 1 : completed) - 1]
+    // const lastVisibleDocumentIsInteractive = ['INTERACTION'].includes(lastestLearnedDocument?.type)
+    // setVisibleDocumentCount(!completed ? completed + 1 : lastVisibleDocumentIsInteractive && !isLastVisibleDocument ? completed + 1 :  completed)
+    setVisibleDocumentCount(!completed ? completed + 1 : completed)
   }, [currentStep?.id, storylineDocument])
 
 
