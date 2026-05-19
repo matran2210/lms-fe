@@ -1,20 +1,18 @@
 'use client'
 
+import { useFeature } from '@lms/contexts'
 import {
   ClassKey,
   DEFAULT_PAGE_NUMBER,
   IClassResource,
-  IClassResourceList,
   IListClassResourceParams,
   RESOURCE_TYPE,
 } from '@lms/core'
-import { useSappPaging } from '@lms/hooks'
+import { useClassResourceRouteId, useSappPaging } from '@lms/hooks'
 import { ClassResourceMobileListSkeleton, NoCoursesAvailable } from '@lms/ui'
-import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
-import { ClassAPI } from 'src/api/class'
-import CardFileItem from '../CardFileItem'
+import CardFileItem from './CardFileItem'
 
 const FILE_GRID_PAGE_SIZE = 20
 
@@ -27,7 +25,8 @@ const ClassResourceMobileListView = ({
   params,
   onFolderClick,
 }: ClassResourceMobileListViewProps) => {
-  const param = useParams()
+  const { classApi } = useFeature()
+  const classId = useClassResourceRouteId()
 
   const [mobileListFilePageIndex, setMobileListFilePageIndex] = useState(
     DEFAULT_PAGE_NUMBER,
@@ -46,11 +45,12 @@ const ClassResourceMobileListView = ({
   } = useSappPaging({
     uniqueKey: ClassKey.ClassResourceFolder + '_list',
     queryFn: () =>
-      ClassAPI.getClassResource(param.courseId as string, {
+      classApi?.getClassResource!(classId, {
         resource_type: RESOURCE_TYPE.FOLDER,
         ...params,
       }),
     params: { ...params, resource_type: RESOURCE_TYPE.FOLDER },
+    enabled: Boolean(classId && classApi?.getClassResource),
   })
 
   const {
@@ -60,7 +60,7 @@ const ClassResourceMobileListView = ({
   } = useQuery({
     queryKey: [
       ClassKey.ClassResourceFile + '_mobile_list_infinite',
-      param.courseId,
+      classId,
       params.suffix_types,
       params.schedule_ids,
       params.search_key,
@@ -68,14 +68,14 @@ const ClassResourceMobileListView = ({
       mobileListFilePageIndex,
     ],
     queryFn: async () => {
-      return ClassAPI.getClassResource(param.courseId as string, {
+      return classApi?.getClassResource!(classId, {
         resource_type: RESOURCE_TYPE.FILE,
         ...params,
         page_size: FILE_GRID_PAGE_SIZE,
         page_index: mobileListFilePageIndex,
       })
     },
-    enabled: Boolean(param.courseId),
+    enabled: Boolean(classId && classApi?.getClassResource),
     retry: false,
   })
 

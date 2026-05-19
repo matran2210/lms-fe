@@ -17,7 +17,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { FilterFormValues } from '../FilterClassResource'
+import type { FilterFormValues } from './FilterClassResource'
 
 export interface ISelectItem {
   label: string
@@ -100,13 +100,11 @@ const ClassResourceMobileFilterDrawer = ({
     })
   }, [query.schedule_ids, query.suffix_types, scheduleOptions])
 
-  // Dùng ref để luôn gọi version mới nhất của sync mà không làm dep của open effect
   const syncRef = useRef(syncFilterStateFromQuery)
   useEffect(() => {
     syncRef.current = syncFilterStateFromQuery
   }, [syncFilterStateFromQuery])
 
-  // Sync + reset khi drawer mở
   useEffect(() => {
     if (!open) return
     syncRef.current()
@@ -114,7 +112,6 @@ const ClassResourceMobileFilterDrawer = ({
     setTitleFilterMobile('Filter')
   }, [open])
 
-  // Sync một lần khi scheduleOptions load lần đầu (để pre-select đúng option từ URL)
   useEffect(() => {
     if (!isFirstRenderListSchedule.current || scheduleOptions.length === 0)
       return

@@ -25,6 +25,10 @@
   "dependencies": {
     "@lms/assets": "workspace:*",
     "@lms/core": "workspace:*",
+    "@lms/feature-class": "workspace:*",
+    "@lms/feature-courses": "workspace:*",
+    "@lms/hoc": "workspace:*",
+    "@lms/hooks": "workspace:*",
     "@lms/ui": "workspace:*",
     "@lms/utils": "workspace:*",
     "@lms/hooks": "workspace:*",

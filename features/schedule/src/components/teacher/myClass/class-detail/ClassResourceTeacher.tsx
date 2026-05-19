@@ -13,10 +13,12 @@ import { LayoutFilter } from '@lms/ui'
 import { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useQuery } from 'react-query'
-import ClassResourceDesktopListView from '../../../shared/class-resource/ClassResourceDesktopListView'
-import ClassResourceGridView from '../../../shared/class-resource/ClassResourceGridView'
-import ClassResourceBreadcrumb from '../../../shared/class-resource/ClassResourceBreadcrumb'
-import ClassResourceLayoutToggle from '../../../shared/class-resource/ClassResourceLayoutToggle'
+import {
+  ClassResourceBreadcrumb,
+  ClassResourceDesktopListView,
+  ClassResourceGridView,
+  ClassResourceLayoutToggle,
+} from '@lms/feature-courses'
 import ClassResourceTeacherFilter from '../../ClassResourceTeacherFilter'
 
 export default function ClassResourceTeacher() {

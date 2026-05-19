@@ -32,12 +32,16 @@ import {
 import { useQuery } from 'react-query'
 import { ClassAPI } from 'src/api/class'
 import { PageLink } from 'src/constants/routers'
-import { ClassResourceGridView, ClassResourceDesktopListView } from '@lms/feature-schedule'
-import ClassResourceLayoutToggle from './components/ClassResourceLayoutToggle'
-import ClassResourceMobileFilterDrawer from './components/ClassResourceMobileFilterDrawer'
-import ClassResourceMobileListView from './components/ClassResourceMobileListView'
-import FilterClassResource, { FilterFormValues } from './FilterClassResource'
-import SearchClassResource from './SearchClassResource'
+import {
+  ClassResourceDesktopListView,
+  ClassResourceGridView,
+  ClassResourceMobileFilterDrawer,
+  ClassResourceMobileListView,
+  ClassResourceStudentLayoutToggle,
+  FilterClassResource,
+  SearchClassResource,
+  type FilterFormValues,
+} from '@lms/feature-courses'
 
 /** `schedule_ids` trên URL: một id hoặc nhiều id nối bằng dấu phẩy */
 function parseScheduleIdsFromUrl(
@@ -203,7 +207,20 @@ const ClassResource = () => {
     retry: false,
   })
 
+  const { data: dataFile, isLoading: isLoadingFile } = useQuery({
+    queryKey: [ClassKey.ClassResourceFile, param.courseId, params],
+    queryFn: async () =>
+      ClassAPI.getClassResource(param.courseId as string, {
+        resource_type: RESOURCE_TYPE.FILE,
+        ...params,
+      }),
+    enabled: Boolean(param.courseId),
+    retry: false,
+  })
+
   const folderTotal = dataFolder?.metadata?.total_records ?? 0
+  const fileTotal = dataFile?.metadata?.total_records ?? 0
+  const totalResult = folderTotal + fileTotal
 
   const classResourcePageHeading = useMemo(() => {
     const raw = dataFolder?.breadcrumb
@@ -323,8 +340,8 @@ const ClassResource = () => {
 
   const initialLoadBusy = useMemo(() => {
     if (!courseIdStr) return true
-    return isLoadingFolder
-  }, [courseIdStr, isLoadingFolder])
+    return isLoadingFolder || isLoadingFile
+  }, [courseIdStr, isLoadingFolder, isLoadingFile])
 
   useEffect(() => {
     if (initialLoadDone || initialLoadBusy) return
@@ -405,13 +422,13 @@ const ClassResource = () => {
             />
             {!isMobileView && (
               <div className="mb-8 mt-6 flex w-full justify-between">
-                <ClassResourceLayoutToggle
+                <ClassResourceStudentLayoutToggle
                   layout={classResourceLayout}
                   onSelectList={navigateToListLayout}
                   onSelectGrid={navigateToGridLayout}
                 />
                 <FilterClassResource
-                  totalResult={folderTotal}
+                  totalResult={totalResult}
                   setQueryParams={setQueryParams}
                   queryParams={queryParams}
                 />

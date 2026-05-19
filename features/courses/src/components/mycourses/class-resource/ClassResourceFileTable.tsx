@@ -397,7 +397,7 @@ const ClassResourceFileTable = ({
             '!overflow-visible': previewResource.suffix_type === 'AUDIO',
           })}
           position="center"
-          handleCloseScratchPad={() => {
+          onClose={() => {
             setOpenPreview(false)
             setPreviewResource(null)
           }}

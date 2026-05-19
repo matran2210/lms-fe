@@ -6,17 +6,17 @@ import { buildQueryString } from '@lms/utils'
 import clsx from 'clsx'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
-export interface ClassResourceLayoutToggleProps {
+export interface ClassResourceStudentLayoutToggleProps {
   layout: 'list' | 'grid'
   onSelectList: () => void
   onSelectGrid: () => void
 }
 
-const ClassResourceLayoutToggle = ({
+const ClassResourceStudentLayoutToggle = ({
   layout,
   onSelectList,
   onSelectGrid,
-}: ClassResourceLayoutToggleProps) => {
+}: ClassResourceStudentLayoutToggleProps) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -84,4 +84,4 @@ const ClassResourceLayoutToggle = ({
   )
 }
 
-export default ClassResourceLayoutToggle
+export default ClassResourceStudentLayoutToggle

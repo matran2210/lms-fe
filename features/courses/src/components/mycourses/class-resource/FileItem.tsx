@@ -1,7 +1,12 @@
 'use client'
-import { CloseIcon, DownloadIcon, FileIcon, MediaClassResourceIcon, ImageClassResourceIcon, LoadingIcon } from '@lms/assets'
+import { CloseIcon, DownloadIcon, FileIcon, MediaClassResourceIcon, ImageClassResourceIcon, LoadingIcon, FileZipIcon } from '@lms/assets'
+import { useFeature } from '@lms/contexts'
 import { IClassResource } from '@lms/core'
-import { useTailwindBreakpoint, useUserRole } from '@lms/hooks'
+import {
+  useClassResourceRouteId,
+  useTailwindBreakpoint,
+  useUserRole,
+} from '@lms/hooks'
 import {
   ActionCellWithPopover,
   EditorReader,
@@ -19,10 +24,8 @@ import { handleDocUploadFromBlob } from '@lms/utils'
 import { Modal } from 'antd'
 import clsx from 'clsx'
 import CryptoJS from 'crypto-js'
-import { useParams } from 'next/navigation'
 import { useMemo, useRef, useState } from 'react'
-import { ClassAPI } from 'src/api/class'
-import { UploadAPI } from 'src/api/upload'
+import { DefaultThumbnailImage } from '@lms/assets'
 
 interface IFileItemProps {
   file: IClassResource
@@ -41,7 +44,8 @@ function getLastThumbnailUrl(
 }
 
 const FileItem = ({ file }: IFileItemProps) => {
-  const { courseId } = useParams<{ courseId: string }>()
+  const { classApi, uploadApi } = useFeature()
+  const classId = useClassResourceRouteId()
   const { isTeacher } = useUserRole()
   const internalRef = useRef<HTMLVideoElement>(null)
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
@@ -67,7 +71,7 @@ const FileItem = ({ file }: IFileItemProps) => {
   }
 
   const download = async () => {
-    await UploadAPI.downloadFileClassResource(courseId, file.id)
+    await uploadApi?.downloadFileClassResource?.(classId, file.id)
   }
 
   const loadDocFile = async (url: string) => {
@@ -82,7 +86,7 @@ const FileItem = ({ file }: IFileItemProps) => {
 
   const handleOpenPreview = async () => {
     try {
-      const res = await ClassAPI.previewClassFile(courseId, file.id)
+      const res = await classApi?.previewClassFile?.(classId, file.id)
       if (res) {
         let originalUrl = res.url
         if (res.is_encrypted) {
@@ -192,6 +196,8 @@ const FileItem = ({ file }: IFileItemProps) => {
         return <MediaClassResourceIcon />
       case 'IMAGE':
         return <ImageClassResourceIcon />
+      case 'ZIP':
+        return <FileZipIcon />
       default:
         return <FileIcon />
     }
@@ -260,7 +266,7 @@ const FileItem = ({ file }: IFileItemProps) => {
           ) : (
             <div className="flex h-full w-full items-center justify-center">
               <img
-                src="https://learn-attachment.microsoft.com/api/attachments/09c1c12e-835c-4ad8-a8d5-9340493771b8?platform=QnA"
+                src={DefaultThumbnailImage.src}
                 alt="file"
                 className="h-full w-full object-cover"
               />
@@ -289,7 +295,7 @@ const FileItem = ({ file }: IFileItemProps) => {
             '!overflow-visible': previewResource.suffix_type === 'AUDIO',
           })}
           position="center"
-          handleCloseScratchPad={() => {
+          onClose={() => {
             setOpenPreview(false)
             setPreviewResource(null)
           }}
