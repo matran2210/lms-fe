@@ -48,7 +48,10 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { CoursesAPI } from 'src/api/courses/index'
 import StoryOverview from '@components/storyline/modal/StoryOverview'
 import { IStoryline } from '@lms/core'
-import { selectPopupActivateCourse, showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
+import {
+  selectPopupActivateCourse,
+  showPopupActivatedCourse,
+} from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
 
 interface IProps {
   course_section_type: string
@@ -118,10 +121,8 @@ const CoursePartDetail = () => {
         params.id,
         params.course_section_id,
       )
-      console.log('res1', data)
       return data
     }
-
 
     return useQuery([queryKey, params], fetchData, {
       enabled:
@@ -195,7 +196,6 @@ const CoursePartDetail = () => {
           router.push(`${location.pathname}?${searchParams}`)
         }
         const res = await CoursesAPI.getPartDetail(id, course_section_id)
-        console.log('res', res)
 
         const nodeList = res?.data?.course_section_tree
         setIsPassedCourse(res?.data?.is_passed_course)
@@ -234,7 +234,7 @@ const CoursePartDetail = () => {
         params?.id || undefined,
       )
       setLearningOutcome(res?.data)
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const handleOpenNotesList = () => {
@@ -414,8 +414,8 @@ const CoursePartDetail = () => {
       lockSection
         ? handleLockedSection()
         : handleUnlockedSection(() =>
-          handleRouterChapter(course_section?.quiz?.id),
-        )
+            handleRouterChapter(course_section?.quiz?.id),
+          )
     } else if (
       course_section?.course_section_type === 'ACTIVITY' ||
       course_section?.course_section_type === 'UNIT'
@@ -424,26 +424,26 @@ const CoursePartDetail = () => {
       lockSection || learningOutcome?.next_section?.is_preview_locked
         ? handleLockedSection()
         : handleUnlockedSection(() => {
-          const firstChild = course_section?.children?.[0]
-          if (firstChild?.course_section_type === 'STORY_LINE') {
-            handleCancel()
-            handleRouterStoryline(true, firstChild)
-          } else {
-            handleRouterActivity(course_section?.children?.[0]?.id, undefined)
-          }
-        })
+            const firstChild = course_section?.children?.[0]
+            if (firstChild?.course_section_type === 'STORY_LINE') {
+              handleCancel()
+              handleRouterStoryline(true, firstChild)
+            } else {
+              handleRouterActivity(course_section?.children?.[0]?.id, undefined)
+            }
+          })
     } else if (course_section?.course_section_type === 'STORY') {
       // Handle story section
       lockSection
         ? handleLockedSection()
         : handleUnlockedSection(() =>
-          handleRouterCaseStudy(
-            quiz?.id,
-            quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
-            course_section?.id,
-            quiz?.case_study_story?.instances?.[0]?.id,
-          ),
-        )
+            handleRouterCaseStudy(
+              quiz?.id,
+              quiz?.case_study_story?.instances?.[0]?.question_topic?.id,
+              course_section?.id,
+              quiz?.case_study_story?.instances?.[0]?.id,
+            ),
+          )
     }
   }
 
@@ -722,7 +722,7 @@ const CoursePartDetail = () => {
           setOpen={setOpen}
           data={chapterData}
           class_user_id={previewPart?.class_user_id}
-          activeCourse={() => { }}
+          activeCourse={() => {}}
           is_passed_course={isPassedCourse}
         />
         <LearningResource
