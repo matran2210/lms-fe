@@ -20,6 +20,10 @@ export interface UseFocusTrapOptions {
   enabled: boolean;
   /** Ref to the container element that should trap focus. */
   containerRef: RefObject<HTMLElement>;
+  /** When false, do not move focus on mount. */
+  autoFocusOnMount?: boolean;
+  /** When true, focus the container root instead of the first focusable child. */
+  focusContainerOnMount?: boolean;
 }
 
 // ── Hook ───────────────────────────────────────────────────────────────
@@ -36,7 +40,12 @@ export interface UseFocusTrapOptions {
  *
  * When `enabled` is false, the hook is a no-op.
  */
-function useFocusTrap({ enabled, containerRef }: UseFocusTrapOptions): void {
+function useFocusTrap({
+  enabled,
+  containerRef,
+  autoFocusOnMount = true,
+  focusContainerOnMount = false,
+}: UseFocusTrapOptions): void {
   useEffect(() => {
     if (!enabled || !containerRef.current) return;
 
@@ -50,11 +59,15 @@ function useFocusTrap({ enabled, containerRef }: UseFocusTrapOptions): void {
       container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTORS),
     );
 
-    if (focusables.length > 0) {
-      focusables[0].focus();
-    } else {
-      // Fallback: focus the container itself (requires tabIndex={-1} on the element)
-      container.focus();
+    if (autoFocusOnMount) {
+      if (focusContainerOnMount) {
+        container.focus();
+      } else if (focusables.length > 0) {
+        focusables[0].focus();
+      } else {
+        // Fallback: focus the container itself (requires tabIndex={-1} on the element)
+        container.focus();
+      }
     }
 
     // ── Tab / Shift+Tab cycling ──
@@ -75,6 +88,14 @@ function useFocusTrap({ enabled, containerRef }: UseFocusTrapOptions): void {
 
       const first = currentFocusables[0];
       const last = currentFocusables[currentFocusables.length - 1];
+      const activeElement = document.activeElement as HTMLElement | null;
+      const isFocusInside = !!activeElement && container.contains(activeElement);
+
+      if (!isFocusInside) {
+        e.preventDefault();
+        (e.shiftKey ? last : first).focus();
+        return;
+      }
 
       if (e.shiftKey) {
         // Shift+Tab: move backwards — wrap from first to last
@@ -102,7 +123,7 @@ function useFocusTrap({ enabled, containerRef }: UseFocusTrapOptions): void {
       // Restore focus to the element that was focused before the modal opened
       previousFocus?.focus();
     };
-  }, [enabled, containerRef]);
+  }, [enabled, containerRef, autoFocusOnMount, focusContainerOnMount]);
 }
 
 export default useFocusTrap;

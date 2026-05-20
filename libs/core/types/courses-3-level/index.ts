@@ -388,6 +388,7 @@ export interface ModalResizeableProps {
   height?: number;
   minWidth?: number;
   minHeight?: number;
+  lockAspectRatio?: boolean | number;
   dragHandleClassName?: string;
   header?: ReactNode;
   onClose: () => void;
