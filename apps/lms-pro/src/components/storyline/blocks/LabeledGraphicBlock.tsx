@@ -37,6 +37,7 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
   const [popupPosition, setPopupPosition] = useState<PopupPosition | null>(null)
   const [mounted, setMounted] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const markerRefs = useRef<Record<string, HTMLDivElement | null>>({})
 
   const activeMarker = markers.find((m) => m.id === activeMarkerId)
   const activeMarkerIndex = activeMarker
@@ -115,6 +116,19 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
       top: Math.max(GAP, markerY - MARKER_SIZE / 2 - GAP - POPUP_HEIGHT),
       transformOrigin: 'bottom center',
     }
+  }
+
+  const scrollToMarker = (markerId: string) => {
+    const markerElement = markerRefs.current[markerId]
+    if (!markerElement) return
+
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+
+    markerElement.scrollIntoView({
+      behavior: 'smooth',
+      block: isMobile ? 'center' : 'center',
+      inline: 'nearest',
+    })
   }
 
   const handleMarkerClick = (marker: ILabeledGraphicMarker) => {
@@ -246,6 +260,14 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
     }
   }, [isLearnedBlock])
 
+  useEffect(() => {
+    if (!activeMarkerId || !imageLoaded) return
+
+    requestAnimationFrame(() => {
+      scrollToMarker(activeMarkerId)
+    })
+  }, [activeMarkerId, imageLoaded])
+
   return (
     <div className="w-full">
       {/* Document Title */}
@@ -281,6 +303,9 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
               <div
                 key={marker.id}
                 className="absolute"
+                ref={(element) => {
+                  markerRefs.current[marker.id] = element
+                }}
                 style={{
                   left: `${marker.x_percent}%`,
                   top: `${marker.y_percent}%`,
