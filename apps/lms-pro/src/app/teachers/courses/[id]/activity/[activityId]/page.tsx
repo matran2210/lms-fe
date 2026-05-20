@@ -969,6 +969,7 @@ const ActivityTeacherPage = () => {
                   modalIndex={index}
                   isTopModal={focusingPadId === e.id}
                   onModalFocus={() => setFocusingPadId(e?.id as string)}
+                  draggableFull
                 >
                   <div
                     // className="overflow-auto p-4 bg-white"
