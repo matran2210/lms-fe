@@ -414,16 +414,12 @@ const ClassResourceTable = ({
             width={previewModalWidth}
             height={previewResource.suffix_type === 'AUDIO' ? 100 : 548}
             minHeight={
-              previewResource.suffix_type === 'AUDIO' ? 100 : previewResource.suffix_type === 'VIDEO' ? 350 : 350
+              previewResource.suffix_type === 'AUDIO' ? 100 : 350
             }
             maxHeight={
               previewResource.suffix_type === 'AUDIO' ? 100 : undefined
             }
-            minWidth={
-              ['AUDIO', 'VIDEO'].includes(previewResource.suffix_type)
-                ? Math.min(430, previewModalWidth)
-                : Math.min(430, previewModalWidth)
-            }
+            minWidth={Math.min(430, previewModalWidth)}
             lockAspectRatio={previewResource.suffix_type === 'VIDEO'}
             className={clsx('!z-40 !rounded-lg', {
               '!overflow-visible': previewResource.suffix_type === 'AUDIO',
