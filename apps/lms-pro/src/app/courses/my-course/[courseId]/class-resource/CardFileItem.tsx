@@ -166,6 +166,7 @@ const CardFileItem = ({ data, name }: IProps) => {
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
+            onDownload={() => download(params.courseId as string, resource.id)}
           />
         )
 
@@ -181,6 +182,7 @@ const CardFileItem = ({ data, name }: IProps) => {
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
+            onDownload={() => download(params.courseId as string, resource.id)}
           />
         )
       case 'PDF':
@@ -191,6 +193,7 @@ const CardFileItem = ({ data, name }: IProps) => {
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
+            onDownload={() => download(params.courseId as string, resource.id)}
           />
         )
       case 'POWER_POINT':
@@ -199,6 +202,7 @@ const CardFileItem = ({ data, name }: IProps) => {
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
+            onDownload={() => download(params.courseId as string, resource.id)}
           />
         )
       case 'TEXT':

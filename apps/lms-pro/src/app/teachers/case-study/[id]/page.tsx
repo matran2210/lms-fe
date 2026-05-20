@@ -1208,6 +1208,7 @@ const CaseStudyDetailTeacher = () => {
                               <FileViewer
                                 fileName={e?.resource?.name}
                                 fileUrl={e?.resource?.url}
+                                onDownload={() => TestServiceAPI.downloadFile({ files: [{ name: e?.resource?.name, file_key: e?.resource?.file_key }] })}
                               />
                             </div>
                           )
@@ -1233,7 +1234,7 @@ const CaseStudyDetailTeacher = () => {
                       className="overflow-auto bg-white p-4"
                       style={{ height: 'calc(100% - 40px' }}
                     >
-                      <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
+                      <FileViewer fileName={e?.fileName} fileUrl={e?.file} onDownload={() => TestServiceAPI.downloadFile({ files: [{ name: e?.fileName, file_key: e?.fileKey }] })} />
                     </div>
                   </ModalResizeable>
                 )

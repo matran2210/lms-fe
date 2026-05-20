@@ -117,9 +117,10 @@ export interface ITopic {
   requirements: IRequirement[]
 }
 
-export interface ICratchPad {
+export interface IScratchPad {
   file?: string
   fileName?: string
   id?: string
   type?: string
+  fileKey?: string
 }
