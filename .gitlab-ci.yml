@@ -124,11 +124,6 @@ build_lms_pro:
     APP_NAME: lms-pro
     IMAGE_TAG: lms-pro-$CI_PIPELINE_IID
     ENV_FILE: $ENV_PROD_LMS_FILE
-  # only:
-  #   # variables:
-  #   #   - $CI_COMMIT_MESSAGE =~ /build/
-  #   refs:
-  #     - master
 
 # Build lms-finhub
 build_lms_finhub:
@@ -137,11 +132,6 @@ build_lms_finhub:
     APP_NAME: lms-finhub
     IMAGE_TAG: lms-finhub-$CI_PIPELINE_IID
     ENV_FILE: $ENV_PROD_FINHUB_FILE
-  # only:
-  #   # variables:
-  #   #   - $CI_COMMIT_MESSAGE =~ /build/
-  #   refs:
-  #     - master
 
 # Build lms-zoom
 build_lms_zoom:
@@ -150,11 +140,14 @@ build_lms_zoom:
     APP_NAME: lms-zoom
     IMAGE_TAG: lms-zoom-$CI_PIPELINE_IID
     ENV_FILE: $ENV_PROD_ZOOM_FILE
-  # only:
-  #   # variables:
-  #   #   - $CI_COMMIT_MESSAGE =~ /build/
-  #   refs:
-  #     - master
+
+# Build lms-test
+build_lms_test:
+  extends: .build_template
+  variables:
+    APP_NAME: lms-test
+    IMAGE_TAG: lms-test-$CI_PIPELINE_IID
+    ENV_FILE: $ENV_PROD_LMS_TEST_FILE
 
 # Deploy
 .deploy_template:
@@ -222,32 +215,14 @@ deploy_lms_zoom:
     SSH_KEY_FILE: $SSH_KEY_PROD_ZOOM
     RUNTIME_ENV_FILE: $ENV_PROD_ZOOM_FILE
 
-# deploy_lms_zoom:
-#   stage: deploy
-#   # needs:
-#   #   - build_lms_finhub
-#   rules:
-#     - if: '$CI_COMMIT_BRANCH == "master"'
-#   script:
-#     - chmod 600 "$TEST_SSH_KEY_PROD"
-#     - cp "$TEST_SSH_KEY_PROD" key.pem
-#     - cp $TEST_ENV_PRODUCT_FILE .env
-#     - source .env
-
-#     - export IMAGE_TAG="lms-zoom-${CI_PIPELINE_IID}"
-#     - export LMS_ZOOM_IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
-
-#     - |
-#       ssh -o StrictHostKeyChecking=no -i key.pem root@$TEST_PROD_FINHUB_IP "
-#         docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
-#         cd /var/www/lms-fe &&
-#         git fetch origin --prune &&
-#         git reset --hard origin/master &&
-#         export LMS_ZOOM_IMAGE='${LMS_ZOOM_IMAGE}' &&
-#         docker compose -f docker-compose.zoom.yml pull && 
-#         docker compose -f docker-compose.zoom.yml up -d lms-zoom nginx
-#       "
-#   environment: production
-#   tags:
-#   - ec2-runner-shell
-#   resource_group: lms-fe
+# Deploy lms-test
+deploy_lms_test:
+  extends: .deploy_template
+  needs: ["build_lms_test"]
+  variables:
+    APP_NAME: lms-test
+    PROFILE: lms-test
+    IMAGE_ENV: LMS_TEST_IMAGE
+    TARGET_IP_VAR: PROD_TEST_IP
+    SSH_KEY_FILE: $SSH_KEY_PROD_TEST
+    RUNTIME_ENV_FILE: $ENV_PROD_LMS_TEST_FILE

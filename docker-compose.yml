@@ -32,6 +32,14 @@ services:
       - "3000:3000"
     profiles: ["lms-zoom"]
 
+  lms-test:
+    <<: *app-base
+    image: ${LMS_TEST_IMAGE}
+    container_name: lms-test
+    ports:
+      - "3000:3000"
+    profiles: ["lms-test"]
+
   nginx:
     image: nginx:latest
     container_name: nginx

@@ -77,10 +77,6 @@ export function checkAnsweredPure(input: CheckAnsweredInput): boolean {
     case QUESTION_TYPES.TRUE_FALSE:
     case QUESTION_TYPES.MATCHING:
     case QUESTION_TYPES.MULTIPLE_CHOICE:
-      console.log(
-        "answer của one choice",
-        !isEmpty(input.answer) && input.answer.length > 0,
-      );
       return !isEmpty(input.answer) && input.answer.length > 0;
 
     case QUESTION_TYPES.DRAG_DROP:
