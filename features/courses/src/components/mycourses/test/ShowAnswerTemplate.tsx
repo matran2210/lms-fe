@@ -1,8 +1,8 @@
 import { CircleCloseIcon, Triangle } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
 import { defaultSheetData, RESPONSE_OPTION } from "@lms/core";
 import { ButtonSecondary, EssayQuestionPreview, ModalResizeable } from "@lms/ui";
 import clsx from "clsx";
-import { useFeature } from "@lms/contexts";
 import { useLayoutEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -83,7 +83,7 @@ const ShowAnswerTemplate = ({
       </div>
       {showModalTemplate && (
         <ModalResizeable
-          handleCloseScratchPad={handleCloseModal}
+          onClose={handleCloseModal}
           rootClassName="rounded-xl"
           bodyClassName="p-6"
           contentClassName={clsx("!p-0", {
@@ -94,19 +94,23 @@ const ShowAnswerTemplate = ({
           height={response_option === RESPONSE_OPTION.SHEET ? 600 : 530}
           minHeight={response_option === RESPONSE_OPTION.SHEET ? 600 : 530}
           width={800}
+          minWidth={500}
           header={({ requestClose }) => (
-            <div className="relative mb-4">
-              <div className="modal-header modal-dragger flex w-full items-center justify-between rounded-xl bg-white">
-                <div className="truncate">
-                  <span className="text-sm font-semibold text-gray-800">
-                    Show Answer Template
-                  </span>
-                </div>
-              </div>
-              <button className="absolute right-0 top-0" onClick={requestClose}>
-                <CircleCloseIcon />
-              </button>
-            </div>
+            <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl mb-4">
+                      <div className="text-sm font-semibold text-gray-800">
+                        Show Answer Template
+                      </div>
+                      <button
+                        className="text-icon"
+                        onMouseDown={(event) => event.stopPropagation()}
+                        onClick={() => {
+                          requestClose()
+                        }}
+                      >
+                        <CircleCloseIcon />
+                      </button>
+                    </div>
+           
           )}
           isInBody
         >
@@ -135,6 +139,7 @@ const ShowAnswerTemplate = ({
                   response_option === RESPONSE_OPTION.WORD ? true : false,
               }}
               isShowContent={false}
+              className="bg-white !p-0"
             />
           </div>
           <Triangle className="absolute bottom-2 right-2" />

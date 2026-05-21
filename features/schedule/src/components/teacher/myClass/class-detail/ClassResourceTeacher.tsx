@@ -390,7 +390,6 @@ export default function ClassResourceTeacher() {
               'pb-5': previewResource.suffix_type === 'WORD_DOCUMENT',
             })}
             key={previewResource.url}
-            modalIndex={1}
             title={previewResource.name}
             width={900}
             height={previewResource.suffix_type === 'AUDIO' ? 100 : 548}
@@ -409,7 +408,7 @@ export default function ClassResourceTeacher() {
               '!overflow-visible': previewResource.suffix_type === 'AUDIO',
             })}
             position="center"
-            handleCloseScratchPad={() => {
+            onClose={() => {
               setOpenPreview(false)
               setPreviewResource(null)
             }}

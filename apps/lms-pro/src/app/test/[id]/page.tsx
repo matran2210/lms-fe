@@ -167,7 +167,7 @@ const TestDetail = () => {
   const dispatch = useAppDispatch()
   const [essayData, setEssayData] = useState<any>()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
-  const [onFocusingPad, setOnFocusingPad] = useState('')
+  const [focusingPadId, setFocusingPadId] = useState('')
   const [tabs, setTabs] = useState<any>([])
   const [showListRequirement, setShowLisRequirement] = useState(false)
   const [allowHighLight, setAllowHighLight] = useState(false)
@@ -786,21 +786,14 @@ const TestDetail = () => {
       return (
         currentTabContent?.data?.requirements?.map(
           (requirement: any, index: number) => {
-            const hasAnswer =
-              currentTabContent?.data?.response_option === RESPONSE_OPTION.SHEET
-                ? checkSheetAnswered(
-                  getValues(`${currentTabID}_${index}_answer`),
-                )
-                : hasEditorValueFromHtml(
-                  getValues(`${currentTabID}_${index}_answer`),
-                )
+            
             const key = `${currentTabID}_${index}_answer`
             const getDefaultValueEssay = () => {
               const valueFromForm = getValues(key)
               const response_option = currentTabContent?.data?.response_option
               switch (response_option) {
                 case RESPONSE_OPTION.WORD:
-                  if (valueFromForm !== undefined && valueFromForm !== null) {
+                  if (valueFromForm !== undefined && valueFromForm !== null && valueFromForm !== '') {
                     return valueFromForm
                   }
 
@@ -863,6 +856,15 @@ const TestDetail = () => {
                 // return getCurrentDefaultSheetValue
               }
             }
+              const hasAnswer =
+              currentTabContent?.data?.response_option === RESPONSE_OPTION.SHEET
+                ? checkSheetAnswered(
+                  getValues(`${currentTabID}_${index}_answer`),
+                )
+                : hasEditorValueFromHtml(
+                  getDefaultValueEssay()
+                )
+
             return {
               label: (
                 <span className="flex items-center gap-1 text-base font-normal">
@@ -1286,7 +1288,7 @@ const TestDetail = () => {
     file?: string,
     fileName?: string,
   ) => {
-    setOnFocusingPad('')
+    setFocusingPadId('')
     setOpenScratchPad((prev) => {
       const arr = [...prev]
       if (type === 'scratch_pad') {
@@ -2549,7 +2551,7 @@ const TestDetail = () => {
           return e.type !== 'exhibits'
         })
         for (const e of watchExhibits('exhibits')) {
-          setOnFocusingPad(e)
+          setFocusingPadId(e)
           newArr.push({ id: e, type: 'exhibits' })
         }
         return newArr
@@ -3443,8 +3445,8 @@ const TestDetail = () => {
               setScratchPadValues={setScratchPadValues}
               scratchPads={scratchPads}
               setScratchPads={setScratchPads}
-              onFocusingPad={onFocusingPad}
-              setOnFocusingPad={setOnFocusingPad}
+              focusingPadId={focusingPadId}
+              setFocusingPadId={setFocusingPadId}
               handleCloseScratchPad={handleCloseScratchPad}
               openScratchPad={openScratchPad}
               exhibitText={exhibitText}

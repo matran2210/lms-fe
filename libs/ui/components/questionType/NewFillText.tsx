@@ -126,6 +126,8 @@ const NewFilltext = forwardRef(
           }
         });
         setAnswerContent(doc2);
+      }else{
+        setAnswerContent(null)
       }
 
       setQuestionContent(doc);

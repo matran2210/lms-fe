@@ -31,6 +31,7 @@ interface IProps {
   isTeacher?: boolean
   loadingChart?: boolean
   loadingAttempt?: boolean
+  scorePercentage?: number
 }
 
 const TestResultPage = ({
@@ -41,6 +42,7 @@ const TestResultPage = ({
   score,
   isTeacher,
   loadingChart,
+  scorePercentage,
 }: IProps) => {
   const multipleQuestionRef = useRef<HTMLDivElement>(null)
   const yourScoreDetailRef = useRef<HTMLDivElement>(null)
@@ -97,6 +99,7 @@ const TestResultPage = ({
                   ),
                 )}
                 <ScoreDetail
+                  isTeacher={isTeacher}
                   className={'relative'}
                   yourScoreDetailRef={yourScoreDetailRef}
                   type={type}
@@ -112,6 +115,8 @@ const TestResultPage = ({
                 score={score}
                 globalAverage={globalAverageNumber}
                 multipleQuestionRef={multipleQuestionRef}
+                isTeacher={isTeacher}
+                scorePercentage={scorePercentage}
               />
             </div>
           )
@@ -137,6 +142,7 @@ const TestResultPage = ({
                   ),
                 )}
                 <ScoreDetail
+                  isTeacher={isTeacher}
                   className={''}
                   yourScoreDetailRef={yourScoreDetailRef}
                   type={type}
@@ -151,6 +157,8 @@ const TestResultPage = ({
                 score={score}
                 globalAverage={globalAverageNumber}
                 multipleQuestionRef={multipleQuestionRef}
+                isTeacher={isTeacher}
+                scorePercentage={scorePercentage}
               />
             </div>
           )
@@ -167,6 +175,7 @@ const TestResultPage = ({
                 <Recommendation data={item} key={index} />
               ))}
               <ScoreDetail
+                isTeacher={isTeacher}
                 yourScoreDetailRef={yourScoreDetailRef}
                 type={type}
                 gradingStatus={questions?.quizAttempt?.grading_status}
@@ -180,6 +189,8 @@ const TestResultPage = ({
               score={score}
               globalAverage={globalAverageNumber}
               multipleQuestionRef={multipleQuestionRef}
+              isTeacher={isTeacher}
+              scorePercentage={scorePercentage}
             />
           </div>
         )
@@ -219,6 +230,8 @@ const TestResultPage = ({
               score={score}
               globalAverage={globalAverageNumber}
               multipleQuestionRef={multipleQuestionRef}
+              isTeacher={isTeacher}
+              scorePercentage={scorePercentage}
             />
           </div>
         )
@@ -243,6 +256,8 @@ const TestResultPage = ({
               globalAverage={globalAverageNumber}
               multipleQuestionRef={multipleQuestionRef}
               className="xl:!top-[124px]"
+              isTeacher={isTeacher}
+              scorePercentage={scorePercentage}
             />
           </div>
         )

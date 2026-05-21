@@ -1,15 +1,16 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { calculate, isNumber } from "./logic/calculate";
 
 import ButtonsContainer from "./ButtonsContainer";
 import Display from "./display";
 import Warning from "./warning";
-import clsx from "clsx";
 
 interface IProps {
   isMobileCalc?: boolean;
   isShortScreen?: boolean;
+  width?: number;
+  height?: number;
 }
 const Calculator = ({
   isMobileCalc = false,
@@ -34,7 +35,7 @@ const Calculator = ({
 
   const maxLength = 20;
 
-  const updateState = (obj: any, key: any) => {
+  const updateState = useCallback((obj: any, key: any) => {
     if (obj.next !== null && obj.next.length >= maxLength && isNumber(key)) {
       return;
     }
@@ -55,31 +56,24 @@ const Calculator = ({
     } else {
       setCalc((preObj: any) => ({ ...preObj, ...newObj }));
     }
-  };
+  }, []);
 
-  const handleClick = (obj: any, e: React.MouseEvent) => {
+  const handleClick = useCallback((obj: any, e: React.MouseEvent) => {
     const button = (e.target as HTMLElement).closest("button[data-name]");
     if (!button) return;
 
     const value = button.getAttribute("data-name");
     updateState(obj, value);
-  };
+  }, [updateState]);
 
-  const handleKeyDown = (e: any) => {
+  const handleKeyDown = useCallback((e: any) => {
     e.preventDefault();
-  };
+  }, []);
 
   const { total, next, operation } = calc;
 
   return (
-    <div
-      className={clsx("calc", {
-        "!w-64": isMobileCalc || isShortScreen,
-      })}
-      style={{
-        boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-      }}
-    >
+    <div className="calc">
       <Display
         total={total ?? ""}
         next={next ?? ""}

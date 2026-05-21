@@ -88,6 +88,7 @@ export interface ActivityInfo {
 
 export interface IAnswer {
   id: string;
+  position: number;
   quiz_attempt_id: string;
   question_id: string;
   answer_file: any;
@@ -163,6 +164,9 @@ export interface IQuizResult {
     limit_count?: number;
     grading_method?: string;
   };
+  score_percentage: {
+    total_score: number;
+  };
 }
 
 export interface IQuizResultList {
@@ -181,5 +185,12 @@ export interface VideoStateClicked {
     is_click: boolean;
   }[];
 }
-
+export interface MultipleQuestionsData {
+  quizAttempt?: {
+    grading_status?: string
+    status?: string
+  }
+  selectedResponseAnswers?: IAnswer[]
+  constructedResponseAnswers?: IAnswer[]
+}
 export * from "./StatusActionCell";

@@ -1,19 +1,19 @@
 "use client";
 import { Stream } from "@cloudflare/stream-react";
-import { LoadingIcon, PiPIcon, Icon} from "@lms/assets";
+import { Icon, LoadingIcon, PiPIcon } from "@lms/assets";
+import { useFeature } from "@lms/contexts";
 import { Thumbnail } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
-import Image from "next/image";
-import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import useClickOutside from "../clickoutside/HookClick";
-import { ComboArrowIcon } from "../pagination";
 import {
   formatTimeToHourMinuteSecond,
   getResolution,
   isMobileOrTablet,
 } from "@lms/utils";
-import { useFeature } from "@lms/contexts";
 import clsx from "clsx";
+import Image from "next/image";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import useClickOutside from "../clickoutside/HookClick";
+import { ComboArrowIcon } from "../pagination";
 
 interface IProp {
   options: any;
@@ -27,6 +27,8 @@ interface IProp {
   videoAttribs?: { [key: string]: string };
   isFetchCaptions?: boolean;
   handlePlayVideo?:() => void
+  className?: string;
+  controlClassName?: string;
 }
 
 type ResolutionTypes =
@@ -67,7 +69,9 @@ const SAPPVideo = ({
   children,
   videoAttribs,
   isFetchCaptions = true,
-  handlePlayVideo
+  handlePlayVideo,
+  className,
+  controlClassName
 }: IProp) => {
   const { fetcher, videoUrl, router } = useFeature();
   const [playerFunction, setPlayerFunction] = useState<any>();
@@ -101,6 +105,52 @@ const SAPPVideo = ({
   const durationRef = useRef<HTMLTimeElement>(null);
   const listSettingsRef = useRef<HTMLDivElement>(null);
   const hideTimerRef = useRef<any>(null);
+  const [isActive, setIsActive] = useState(false);
+  const SEEK_FORWARD_TIME = 10;
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (!streamRef.current) return;
+
+    const tag = (e.target as HTMLElement)?.tagName;
+    if (["INPUT", "TEXTAREA"].includes(tag)) return;
+    switch (e.code) {
+      case "Space":
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (streamRef.current.paused) {
+          streamRef.current.play();
+        } else {
+          streamRef.current.pause();
+        }
+        animatePlayback();
+        break;
+
+      case "ArrowRight":
+        e.preventDefault();
+        streamRef.current.currentTime = Math.min(
+          streamRef.current.currentTime + SEEK_FORWARD_TIME,
+          streamRef.current.duration,
+        );
+        break;
+
+      case "ArrowLeft":
+        e.preventDefault();
+        streamRef.current.currentTime = Math.max(
+          streamRef.current.currentTime - SEEK_FORWARD_TIME,
+          0,
+        );
+        break;
+
+      case "KeyF":
+        e.preventDefault();
+        toggleFullScreen();
+        break;
+
+      default:
+        break;
+    }
+  };
 
   const playbackSpeeds = [
     { value: "0.25", label: "0.25" },
@@ -513,6 +563,7 @@ const SAPPVideo = ({
       (event.offsetX / (event.target as HTMLElement).clientWidth) *
         parseInt((event.target as HTMLElement).getAttribute("max") || "0", 10),
     );
+
     const t = formatTimeToHourMinuteSecond(skipTo);
     if (
       progressBarRef?.current &&
@@ -530,15 +581,18 @@ const SAPPVideo = ({
 
   // skipAhead jumps to a different point in the video when the progress bar
   // is clicked
-  function skipAhead(event: Event) {
-    const skipTo =
-      event.target instanceof HTMLInputElement ? event.target.value : "0";
-    streamRef.current.currentTime = parseFloat(skipTo);
-    if (progressBarRef?.current) {
-      progressBarRef.current.value = Number(skipTo);
+  function skipAhead() {
+    if (!streamRef.current || !seekRef.current) return;
+
+    const skipTo = Number(seekRef.current.value || "0");
+
+    streamRef.current.currentTime = skipTo;
+
+    if (progressBarRef.current) {
+      progressBarRef.current.value = skipTo;
     }
     if (seekRef?.current) {
-      seekRef.current.value = skipTo;
+      seekRef.current.value = String(skipTo);
     }
   }
 
@@ -625,28 +679,36 @@ const SAPPVideo = ({
     }
   }
 
-  // toggleFullScreen toggles the full screen state of the video
-  // If the browser is currently in fullscreen mode,
-  // then it should exit and vice versa.
   function toggleFullScreen() {
     const video = streamRef.current;
-    // Check case fullscreen for iphone
-    if (typeof video.webkitEnterFullscreen === "function") {
-      video.webkitEnterFullscreen();
-      return;
-    }
-    
-    // Check case fullscreen for normal 
-    if (document?.fullscreenElement) {
-      document.exitFullscreen();
+
+    const fullscreenElement =
+      document.fullscreenElement || (document as any).webkitFullscreenElement;
+    if (fullscreenElement) {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if ((document as any).webkitExitFullscreen) {
+        (document as any).webkitExitFullscreen();
+      }
       return;
     }
 
-    if (
-      videoContainerRef?.current &&
-      videoContainerRef?.current?.requestFullscreen
-    ) {
-      videoContainerRef?.current?.requestFullscreen();
+    if (videoContainerRef?.current) {
+      const container = videoContainerRef.current;
+      const requestFS =
+        container.requestFullscreen ||
+        (container as any).webkitRequestFullscreen ||
+        (container as any).mozRequestFullScreen ||
+        (container as any).msRequestFullscreen;
+
+      if (requestFS) {
+        requestFS.call(container);
+        return;
+      }
+    }
+
+    if (video && typeof video.webkitEnterFullscreen === "function") {
+      video.webkitEnterFullscreen();
       return;
     }
   }
@@ -807,15 +869,15 @@ const SAPPVideo = ({
   //   };
   // }, [router.events]);
 
-  const {pathname} = useFeature()
+  const { pathname } = useFeature();
   useEffect(() => {
-  // cleanup của route trước (tương đương routeChangeStart)
-  return () => {
-    if (document.pictureInPictureElement) {
-      document.exitPictureInPicture().catch(() => {})
-    }
-  }
-}, [pathname])
+    // cleanup của route trước (tương đương routeChangeStart)
+    return () => {
+      if (document.pictureInPictureElement) {
+        document.exitPictureInPicture().catch(() => {});
+      }
+    };
+  }, [pathname]);
 
   const { isDesktopView, isXLMiddleView, isMobileView } =
     useTailwindBreakpoint();
@@ -859,15 +921,47 @@ const SAPPVideo = ({
     if (typeof document === "undefined") return;
 
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      setIsFullscreen(
+        !!(
+          document.fullscreenElement ||
+          (document as any).webkitFullscreenElement ||
+          (document as any).mozFullScreenElement ||
+          (document as any).msFullscreenElement
+        ),
+      );
     };
 
     document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+    document.addEventListener("MSFullscreenChange", handleFullscreenChange);
 
     return () => {
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener(
+        "webkitfullscreenchange",
+        handleFullscreenChange,
+      );
+      document.removeEventListener(
+        "mozfullscreenchange",
+        handleFullscreenChange,
+      );
+      document.removeEventListener(
+        "MSFullscreenChange",
+        handleFullscreenChange,
+      );
     };
   }, []);
+
+  useEffect(() => {
+    if (!isActive) return;
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isActive]);
 
   return (
     <>
@@ -898,9 +992,15 @@ const SAPPVideo = ({
         <>
           {cloudflarePlayer ? (
             <div
-              className={`group ${
-                !hideVideo ? "sapp-wrapper" : "sapp-hideWrapper"
-              } ${loading ? "hidden" : ""}`}
+              className={clsx(
+                `group ${!hideVideo ? "sapp-wrapper" : "sapp-hideWrapper"} ${
+                  loading ? "hidden" : ""
+                }`,
+                {
+                  "is-fullscreen": isFullscreen,
+                },
+              )}
+              onTouchStart={showControls}
             >
               <div className={`popup-question`}>{children}</div>
               <Stream
@@ -910,7 +1010,7 @@ const SAPPVideo = ({
                 controls
                 responsive={false}
                 // className={`${styles.content}`} comment monorepo
-                className="sapp-content"
+                className={clsx("sapp-content", className)}
                 onSeeking={() => {
                   if (streamRef.current && pauseOnSeek) {
                     streamRef.current.pause();
@@ -935,8 +1035,12 @@ const SAPPVideo = ({
                 }  ${loading ? "hidden" : ""}`,
                 {
                   "inline-block pt-0": videoAttribs,
+                  "is-fullscreen": isFullscreen,
                 },
               )}
+              onMouseEnter={() => setIsActive(true)}
+              onMouseLeave={() => setIsActive(false)}
+              onTouchStart={showControls}
               ref={videoContainerRef}
             >
               <div className={`popup-question`}>{children}</div>
@@ -967,7 +1071,7 @@ const SAPPVideo = ({
                 ref={streamRef}
                 controls={false}
                 // className={`${styles.content}`} comment monorepo
-                className="sapp-content"
+                className={clsx("sapp-content", className)}
                 poster={src}
                 onSeeking={() => {
                   if (streamRef?.current && pauseOnSeek && openQuestion) {
@@ -980,9 +1084,11 @@ const SAPPVideo = ({
                 // disablePictureInPicture
                 controlsList="nodownload"
                 onPlay={handlePlayVideo}
+                onClick={showControls}
+                onTouchStart={showControls}
               />
               <div
-                className="video-controls flex-center absolute bottom-0 left-0 right-0 h-14 w-full rounded-b-lg px-4 py-3"
+                className={clsx("video-controls flex-center absolute bottom-0 left-0 right-0 h-14 w-full rounded-b-lg px-4 py-3", controlClassName)}
                 ref={videoControlsRef}
               >
                 <div

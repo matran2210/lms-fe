@@ -375,14 +375,20 @@ const CoursePartDetailTeacher = () => {
     id: string | string[] | undefined,
     course_section_id: string | string[] | undefined,
   ) => {
-    const res = await CoursesAPI.learningOutcomeProgress(id, chapterDetail?.id)
+    const res = await CoursesAPI.learningOutcomeProgress(
+      params.id,
+      chapterDetail?.id,
+    )
+    if (res?.success) {
+      fetchChapterDetail(id, course_section_id)
+    }
   }
 
   const handleCaseStudyProcess = async (
     courseId: string,
     caseStudyId: string,
   ) => {
-    const res = await CoursesAPI.caseStudyProgress(id, courseId, caseStudyId)
+    await CoursesAPI.caseStudyProgress(params.id, courseId, caseStudyId)
   }
 
   useEffect(() => {

@@ -72,11 +72,10 @@ const MultipleQuestion = ({
   const renderBoxes = (
     type: string,
     data: any,
-    totalBefore: number,
     extra?: React.ReactNode,
     showMore?: boolean,
   ) => {
-    const renderBoxItems = (data || [])?.map((item: IAnswer, index: number) => {
+    const renderBoxItems = (data || [])?.map((item: IAnswer) => {
       return (
         <button
           key={item?.id}
@@ -92,7 +91,7 @@ const MultipleQuestion = ({
             ${renderBoxesAndLineClass(type, item)}
           `}
         >
-          {index + totalBefore + 1}
+          {item.position}
         </button>
       )
     })
@@ -152,21 +151,21 @@ const MultipleQuestion = ({
   const annotationsConstructedQuestions =
     questions?.quizAttempt?.grading_status === GRADE_STATUS.FINISHED_GRADING
       ? [
-          {
-            text: 'Graded',
-            color: 'bg-info',
-          },
-        ]
+        {
+          text: 'Graded',
+          color: 'bg-info',
+        },
+      ]
       : [
-          {
-            text: 'Completed',
-            color: 'bg-info',
-          },
-          {
-            text: 'Not Completed',
-            color: 'bg-warning',
-          },
-        ]
+        {
+          text: 'Completed',
+          color: 'bg-info',
+        },
+        {
+          text: 'Not Completed',
+          color: 'bg-warning',
+        },
+      ]
 
   const renderAnnotations = (
     annotationsList: {
@@ -197,128 +196,131 @@ const MultipleQuestion = ({
 
   return (
     <div className="relative">
-      <div
-        className={`${className} fixed bottom-0 right-0 flex h-fit w-full flex-col items-start gap-y-5 overflow-auto rounded-xl rounded-t-[20px] bg-white p-4 shadow-sidebar-tablet md:px-8 
-        lg:rounded-2xl xl:sticky xl:top-[104px] xl:!h-fit xl:p-6 xl:pl-7 xl:shadow-small`}
-        ref={multipleQuestionRef}
-      >
+      <div className="fixed bottom-0 right-0 w-full xl:sticky xl:top-[104px]">
         <div
-          className={`${
-            showMore
-              ? 'visible overflow-y-auto opacity-100 xl:mb-0'
-              : 'invisible hidden h-0 opacity-0 xl:visible xl:block xl:h-auto xl:opacity-100'
-          }
-        xl:max-h-auto flex w-full flex-col items-start gap-10 duration-300 xl:overflow-visible`}
-        >
-          <div className="flex w-full flex-col items-start gap-8">
-            {renderBoxes(
-              'Multiple Choice Questions',
-              questions?.selectedResponseAnswers ?? [],
-              0,
-              <>
-                {Number(questions?.constructedResponseAnswers?.length || 0) >
-                  0 && (
-                  <div
-                    className=" cursor-pointer text-sm font-medium underline xl:hidden"
-                    onClick={() => {
-                      setShowMore(!showMore)
-                      if (multipleQuestionRef?.current) {
-                        multipleQuestionRef.current.style.height = 'fit-content'
-                      }
-                    }}
-                  >
-                    {showMore ? 'Show less' : 'Show more'}
-                  </div>
-                )}
-              </>,
-              showMore,
-            )}
-
-            {questions?.selectedResponseAnswers?.length > 0 &&
-              renderAnnotations(annotationsMultipleChoiceQuestions)}
-
-            {questions?.constructedResponseAnswers?.length > 0 && (
-              <div className="h-[1px] w-full bg-gray-300" />
-            )}
-
-            {renderBoxes(
-              'Constructed Questions',
-              questions?.constructedResponseAnswers ?? [],
-              questions?.selectedResponseAnswers?.length ?? 0,
-              null,
-              showMore,
-            )}
-
-            {questions?.constructedResponseAnswers?.length > 0 &&
-              renderAnnotations(annotationsConstructedQuestions)}
-          </div>
-
-          {isGradeFinish && (
-            <ButtonPrimary
-              size={'medium'}
-              className={'mb-0 mt-6 px-11 text-sm !font-medium'}
-              title={COMMENTS.REQUEST_REGRADING}
-              onClick={() => setOpenRecommendation(true)}
-            />
+          className={clsx(
+            `${className} flex w-full flex-col items-start gap-y-5 rounded-xl rounded-t-[20px] bg-white p-4 shadow-sidebar-tablet md:px-8 lg:rounded-2xl xl:p-6 xl:pl-7 xl:shadow-small`,
           )}
-        </div>
-        <div className="bottom-0 mt-auto w-full bg-white xl:hidden">
+        >
           <div
-            className={`flex ${showMore ? 'flex-row' : 'flex-col'} items-end justify-between gap-2 md:flex-row xl:items-center ${
-              showMore ? 'items-center' : 'pt-0'
-            }`}
+            ref={multipleQuestionRef}
+            className={clsx('w-full overflow-auto', {
+              'hidden-scrollbar max-h-[calc(100vh-384px)]': isLargeDesktopView,
+            })}
           >
-            <div className="flex w-full flex-grow flex-col gap-3 md:w-9/12 lg:w-11/12 xl:flex-row">
-              <div
-                ref={elementRef as React.LegacyRef<HTMLDivElement>}
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={() => setIsDragging(false)}
-                onMouseLeave={() => setIsDragging(false)}
-                className={`${
-                  !showMore ? 'block' : 'hidden'
-                } !max-h-[1040px] w-full duration-300 xl:hidden`}
-              >
+            <div
+              className={`${showMore
+                ? 'visible overflow-y-auto opacity-100 xl:mb-0'
+                : 'invisible hidden h-0 opacity-0 xl:visible xl:block xl:h-auto xl:opacity-100'
+                }
+        xl:max-h-auto flex w-full flex-col items-start gap-10 duration-300`}
+            >
+              <div className="flex w-full flex-col items-start gap-8">
                 {renderBoxes(
                   'Multiple Choice Questions',
                   questions?.selectedResponseAnswers ?? [],
-                  0,
-                  <div className="flex max-h-[40px] grow items-center justify-end">
-                    {Number(
-                      questions?.constructedResponseAnswers?.length || 0,
-                    ) > 0 && (
-                      <div
-                        className="block cursor-pointer text-sm font-medium underline xl:hidden"
-                        onClick={() => {
-                          setShowMore(!showMore)
-                          if (multipleQuestionRef?.current) {
-                            multipleQuestionRef.current.style.height =
-                              'fit-content'
-                          }
-                        }}
-                      >
-                        Show more
-                      </div>
-                    )}
-                  </div>,
+                      <>
+                    {Number(questions?.constructedResponseAnswers?.length || 0) >
+                      0 && (
+                        <div
+                          className=" cursor-pointer text-sm font-medium underline xl:hidden"
+                          onClick={() => {
+                            setShowMore(!showMore)
+                            if (multipleQuestionRef?.current) {
+                              multipleQuestionRef.current.style.height = 'fit-content'
+                            }
+                          }}
+                        >
+                          {showMore ? 'Show less' : 'Show more'}
+                        </div>
+                      )}
+                  </>,
                   showMore,
                 )}
-                <div
-                  className={
-                    'mt-3 flex items-center justify-center gap-8 text-xs md:gap-12 md:text-base'
-                  }
-                >
-                  {annotationsMultipleChoiceQuestions.map((annotation) => (
+
+                {questions?.selectedResponseAnswers?.length > 0 &&
+                  renderAnnotations(annotationsMultipleChoiceQuestions)}
+
+                {questions?.constructedResponseAnswers?.length > 0 && (
+                  <div className="h-[1px] w-full bg-gray-300" />
+                )}
+
+                {renderBoxes(
+                  'Constructed Questions',
+                  questions?.constructedResponseAnswers ?? [],
+                      null,
+                  showMore,
+                )}
+
+                {questions?.constructedResponseAnswers?.length > 0 &&
+                  renderAnnotations(annotationsConstructedQuestions)}
+              </div>
+
+              {isGradeFinish && (
+                <ButtonPrimary
+                  size={'medium'}
+                  className={'mb-0 mt-6 px-11 text-sm !font-medium'}
+                  title={COMMENTS.REQUEST_REGRADING}
+                  onClick={() => setOpenRecommendation(true)}
+                />
+              )}
+            </div>
+            <div className="bottom-0 mt-auto w-full bg-white xl:hidden">
+              <div
+                className={`flex ${showMore ? 'flex-row' : 'flex-col'} items-end justify-between gap-2 md:flex-row xl:items-center ${showMore ? 'items-center' : 'pt-0'
+                  }`}
+              >
+                <div className="flex w-full flex-grow flex-col gap-3 md:w-9/12 lg:w-11/12 xl:flex-row">
+                  <div
+                    ref={elementRef as React.LegacyRef<HTMLDivElement>}
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={() => setIsDragging(false)}
+                    onMouseLeave={() => setIsDragging(false)}
+                    className={`${!showMore ? 'block' : 'hidden'
+                      } !max-h-[1040px] w-full duration-300 xl:hidden`}
+                  >
+                    {renderBoxes(
+                      'Multiple Choice Questions',
+                      questions?.selectedResponseAnswers ?? [],
+                          <div className="flex max-h-[40px] grow items-center justify-end">
+                        {Number(
+                          questions?.constructedResponseAnswers?.length || 0,
+                        ) > 0 && (
+                            <div
+                              className="block cursor-pointer text-sm font-medium underline xl:hidden"
+                              onClick={() => {
+                                setShowMore(!showMore)
+                                if (multipleQuestionRef?.current) {
+                                  multipleQuestionRef.current.style.height =
+                                    'fit-content'
+                                }
+                              }}
+                            >
+                              Show more
+                            </div>
+                          )}
+                      </div>,
+                      showMore,
+                    )}
                     <div
-                      key={annotation.text}
-                      className="flex items-center gap-1 lg:gap-2"
+                      className={
+                        'mt-3 flex items-center justify-center gap-8 text-xs md:gap-12 md:text-base'
+                      }
                     >
-                      <div
-                        className={`aspect-square h-4 w-4 rounded-full md:h-5 md:w-5 ${annotation.color}`}
-                      />
-                      <p>{annotation.text}</p>
+                      {annotationsMultipleChoiceQuestions.map((annotation) => (
+                        <div
+                          key={annotation.text}
+                          className="flex items-center gap-1 lg:gap-2"
+                        >
+                          <div
+                            className={`aspect-square h-4 w-4 rounded-full md:h-5 md:w-5 ${annotation.color}`}
+                          />
+                          <p>{annotation.text}</p>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
                 </div>
               </div>
             </div>

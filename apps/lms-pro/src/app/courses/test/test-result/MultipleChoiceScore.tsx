@@ -19,6 +19,8 @@ interface IMultipleChoiceScore {
   multipleQuestionRef: RefObject<HTMLDivElement>
   loadingAttempt?: boolean
   className?: string
+  isTeacher?: boolean
+  scorePercentage?: number
 }
 const MultipleChoiceScore = ({
   questions,
@@ -27,6 +29,8 @@ const MultipleChoiceScore = ({
   multipleQuestionRef,
   loadingAttempt,
   className,
+  isTeacher,
+  scorePercentage,
 }: IMultipleChoiceScore) => {
   return (
     <>
@@ -45,7 +49,7 @@ const MultipleChoiceScore = ({
             >
               <div className="mb-4 text-lg font-semibold text-gray-800 md:text-xl">
                 {questions?.quizAttempt?.grading_status ===
-                GRADE_STATUS.FINISHED_GRADING
+                  GRADE_STATUS.FINISHED_GRADING
                   ? 'Overall Score'
                   : 'Multiple Choice Score'}
               </div>
@@ -55,15 +59,16 @@ const MultipleChoiceScore = ({
                 >
                   {isNull(score) || isUndefined(score)
                     ? '--'
-                    : `${Math.round(score)}%`}
+                    : `${scorePercentage}%`}
                 </div>
-                <GlobalAverage globalAverage={globalAverage} />
+                  <GlobalAverage globalAverage={globalAverage} />
               </div>
             </div>
             <MultipleQuestion
               questions={questions}
               className={'xl:w-full'}
               multipleQuestionRef={multipleQuestionRef}
+              isTeacher={isTeacher}
             />
           </div>
         </div>

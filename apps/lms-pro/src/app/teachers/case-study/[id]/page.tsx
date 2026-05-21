@@ -4,6 +4,7 @@ import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import {
   CalculatorIcon,
   CloseIcon,
+  CloseIconNote,
   ExhibitsIcon,
   HighlightIcon,
   ScratchPadIcon,
@@ -35,25 +36,24 @@ import {
   EssayQuestionPreview,
   FileViewer,
   FullScreenLayout,
-  HookFormTextArea,
   MatchingQuestion,
   ModalResizeable,
   ModalUploadFile,
-  MovableWindow,
   MultiChoiceQuestion,
   OneChoiceQuestion,
   SappButton,
-  SelectWord,
+  SelectWord
 } from '@lms/ui'
 import { runHighlight } from '@lms/utils'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { TestServiceAPI } from 'src/api/test-api'
 import LimitQuizModal from 'src/app/test/limitQuizModal'
+import ScratchPatch from 'src/app/test/scratchPatch'
 import { PageLink } from 'src/constants/routers'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
@@ -256,7 +256,7 @@ const CaseStudyDetailTeacher = () => {
   const [showListExhibits, setShowListExhibits] = useState(false)
   const [exhibitData, setExhibitData] = useState<IExhibit[]>()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
-  const [onFocusingPad, setOnFocusingPad] = useState('')
+  const [focusingPadId, setFocusingPadId] = useState('')
   const [openSubmit, setOpenSubmit] = useState(false)
   const [openQuit, setOpenQuit] = useState(false)
   const dispatch = useAppDispatch()
@@ -465,7 +465,7 @@ const CaseStudyDetailTeacher = () => {
           return e.type !== 'exhibits'
         })
         for (const e of watch('exhibits')) {
-          setOnFocusingPad(e)
+          setFocusingPadId(e)
           newArr.push({ id: e, type: 'exhibits' })
         }
         return newArr
@@ -1110,49 +1110,53 @@ const CaseStudyDetailTeacher = () => {
                 return (
                   <CalculatorModal
                     key={e.id}
-                    onClick={() => setOnFocusingPad(e?.id)}
+                    onClick={() => setFocusingPadId(e?.id)}
                     onClose={() => handleCloseScratchPad(e)}
+                    modalIndex={index}
+                    isTopModal={focusingPadId === e.id}
                   />
                 )
               } else if (e.type === 'scratch_pad') {
                 return (
-                  <MovableWindow
-                    position={{
-                      width: '400px',
-                      height: '300px',
-                      top: 'calc(50% - 150px)',
-                      left: 'calc(50% - 200px)',
-                    }}
-                    key={e?.id}
-                    onClick={() => setOnFocusingPad(e?.id)}
-                    zIndex={
-                      onFocusingPad === e?.id
-                        ? openScratchPad?.length + 500
-                        : index + 500
-                    }
-                  >
-                    <div className="absolute left-0 top-0 h-full w-full border">
-                      <div className="flex h-10 w-full items-center justify-between bg-secondary-100 px-5">
-                        <div>Scratch Pad</div>
-                        {/* <CloseIcon */}
-                        <button onClick={() => handleCloseScratchPad(e)}>
-                          <CloseIcon />
+                  <ModalResizeable
+                    key={e.id}
+                    onClose={() => handleCloseScratchPad(e)}
+                    position="center"
+                    width={412}
+                    height={350}
+                    modalIndex={index}
+                    isTopModal={focusingPadId === e.id}
+                    onModalFocus={() => setFocusingPadId(e?.id as string)}
+                    header={({ requestClose }) => (
+                      <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
+                        <div className="text-sm font-semibold text-gray-800">
+                          Scratch Pad
+                        </div>
+                        <button
+                          className="text-icon"
+                          onClick={() => {
+                            requestClose()
+                            setTimeout(() => handleCloseScratchPad(e), 300)
+                          }}
+                        >
+                          <CloseIconNote />
                         </button>
                       </div>
-                      {/* <div className='flex flex-'> */}
-                      <HookFormTextArea
-                        defaultValue={scratchPadValues?.value}
-                        placeholder="Take a note..."
-                        control={controlScratch}
-                        name={e?.id}
-                        onChange={(event) =>
-                          handleChangeScratchPad(event, e?.id)
-                        }
-                        className="sapp-text-area h-[calc(100%-40px)] w-full p-5"
-                      />
-                      {/* </div> */}
-                    </div>
-                  </MovableWindow>
+                    )}
+                    // isInBody
+                  >
+                    <ScratchPatch
+                      scratchPads={scratchPadValues?.value}
+                      scratchPadValues={e}
+                      control={controlScratch}
+                      handleChangeScratchPad={(
+                        event: ChangeEvent<HTMLInputElement>,
+                      ) => {
+                        handleChangeScratchPad(event, e?.id)
+                      }}
+                      className="!h-fit"
+                    />
+                  </ModalResizeable>
                 )
               } else if (e.type === 'exhibits') {
                 const i = exhibitData?.findIndex(
@@ -1164,8 +1168,11 @@ const CaseStudyDetailTeacher = () => {
                 return (
                   <ModalResizeable
                     key={e.id}
-                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                    onClose={() => handleCloseScratchPad(e)}
                     position="center"
+                    modalIndex={index}
+                    isTopModal={focusingPadId === e.id}
+                    onModalFocus={() => setFocusingPadId(e?.id as string)}
                     header={({ requestClose }) => (
                       <div className="relative">
                         <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
@@ -1186,6 +1193,7 @@ const CaseStudyDetailTeacher = () => {
                         </button>
                       </div>
                     )}
+                    draggableFull
                   >
                     <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                       <EditorReader
@@ -1214,8 +1222,12 @@ const CaseStudyDetailTeacher = () => {
                     width={widthFileViewer}
                     height={heightFileViewer}
                     key={e.id}
-                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                    onClose={() => handleCloseScratchPad(e)}
                     position="center"
+                    draggableFull
+                    modalIndex={index}
+                    isTopModal={focusingPadId === e.id}
+                    onModalFocus={() => setFocusingPadId(e?.id as string)}
                   >
                     <div
                       className="overflow-auto bg-white p-4"
