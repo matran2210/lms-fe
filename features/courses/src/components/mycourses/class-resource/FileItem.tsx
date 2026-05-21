@@ -1,5 +1,5 @@
 'use client'
-import { CloseIcon, DownloadIcon, FileIcon, MediaClassResourceIcon, ImageClassResourceIcon, LoadingIcon, FileZipIcon } from '@lms/assets'
+import { CloseIcon, DownloadIcon, FileIcon, MediaClassResourceIcon, ImageClassResourceIcon, LoadingIcon, FileZipIcon, Mp3Icon } from '@lms/assets'
 import { useFeature } from '@lms/contexts'
 import { IClassResource } from '@lms/core'
 import {
@@ -25,7 +25,7 @@ import { Modal } from 'antd'
 import clsx from 'clsx'
 import CryptoJS from 'crypto-js'
 import { useMemo, useRef, useState } from 'react'
-import { DefaultThumbnailImage } from '@lms/assets'
+import { DefaultThumbnailImageImage, Mp3ImageImage } from '@lms/assets'
 
 interface IFileItemProps {
   file: IClassResource
@@ -193,7 +193,7 @@ const FileItem = ({ file }: IFileItemProps) => {
       case 'VIDEO':
         return <MediaClassResourceIcon />
       case 'AUDIO':
-        return <MediaClassResourceIcon />
+        return <Mp3Icon />
       case 'IMAGE':
         return <ImageClassResourceIcon />
       case 'ZIP':
@@ -259,14 +259,14 @@ const FileItem = ({ file }: IFileItemProps) => {
         <div className="h-24 w-full overflow-hidden rounded-lg bg-gray-200">
           {isFileHasThumbnail(file.suffix_type) && fileThumbnailUrl ? (
             <img
-              src={fileThumbnailUrl}
+              src={file.suffix_type === 'AUDIO' ? Mp3ImageImage.src : fileThumbnailUrl}
               alt={file.name}
               className="h-full w-full object-cover"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center">
               <img
-                src={DefaultThumbnailImage.src}
+                src={DefaultThumbnailImageImage.src}
                 alt="file"
                 className="h-full w-full object-cover"
               />
