@@ -72,11 +72,10 @@ const MultipleQuestion = ({
   const renderBoxes = (
     type: string,
     data: any,
-    totalBefore: number,
     extra?: React.ReactNode,
     showMore?: boolean,
   ) => {
-    const renderBoxItems = (data || [])?.map((item: IAnswer, index: number) => {
+    const renderBoxItems = (data || [])?.map((item: IAnswer) => {
       return (
         <button
           key={item?.id}
@@ -92,7 +91,7 @@ const MultipleQuestion = ({
             ${renderBoxesAndLineClass(type, item)}
           `}
         >
-          {index + totalBefore + 1}
+          {item.position}
         </button>
       )
     })
@@ -220,8 +219,7 @@ const MultipleQuestion = ({
                 {renderBoxes(
                   'Multiple Choice Questions',
                   questions?.selectedResponseAnswers ?? [],
-                  0,
-                  <>
+                      <>
                     {Number(questions?.constructedResponseAnswers?.length || 0) >
                       0 && (
                         <div
@@ -250,8 +248,7 @@ const MultipleQuestion = ({
                 {renderBoxes(
                   'Constructed Questions',
                   questions?.constructedResponseAnswers ?? [],
-                  questions?.selectedResponseAnswers?.length ?? 0,
-                  null,
+                      null,
                   showMore,
                 )}
 
@@ -286,8 +283,7 @@ const MultipleQuestion = ({
                     {renderBoxes(
                       'Multiple Choice Questions',
                       questions?.selectedResponseAnswers ?? [],
-                      0,
-                      <div className="flex max-h-[40px] grow items-center justify-end">
+                          <div className="flex max-h-[40px] grow items-center justify-end">
                         {Number(
                           questions?.constructedResponseAnswers?.length || 0,
                         ) > 0 && (

@@ -49,6 +49,9 @@ interface IProps {
         status: string;
         score: number;
         total_attempt_time: number;
+        score_percentage: {
+          total_score: number;
+        };
       }
     | undefined;
   setSelectedResult: Dispatch<
@@ -60,6 +63,9 @@ interface IProps {
           status: string;
           score: number;
           total_attempt_time: number;
+          score_percentage: {
+            total_score: number;
+          };
         }
       | undefined
     >
@@ -122,6 +128,9 @@ const ResultCourse = ({
       status: firstResult.status,
       score: firstResult.score,
       total_attempt_time: firstResult.total_attempt_time,
+      score_percentage: {
+        total_score: firstResult.score_percentage.total_score || 0,
+      },
     });
 
     // Nếu nhiều hơn 1 kết quả thì gộp vào result list
@@ -189,6 +198,9 @@ const ResultCourse = ({
                         score: selectedResultFind?.score,
                         total_attempt_time:
                           selectedResultFind?.total_attempt_time,
+                        score_percentage: {
+                          total_score: selectedResultFind?.score_percentage?.total_score || 0,
+                        },
                       };
                       setSelectedResult(
                         selectedResult as {
@@ -198,6 +210,9 @@ const ResultCourse = ({
                           status: string;
                           score: number;
                           total_attempt_time: number;
+                          score_percentage: {
+                            total_score: number;
+                          };
                         },
                       );
                     }}
@@ -212,9 +227,9 @@ const ResultCourse = ({
         </div>
       </p>
       <p
-        className={`text-sm font-medium md:text-base ${isAttempt ? "text-info" : "text-gray-800"}`}
+        className={` text-sm font-medium md:text-base ${isAttempt ? "text-info" : "text-gray-800"}`}
       >
-        {isAttempt ? `${selectedResult?.score || 0}%` : "--"}
+        {isAttempt ? `${selectedResult?.score_percentage?.total_score || 0}%` : "--"}
       </p>
     </div>
   );

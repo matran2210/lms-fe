@@ -1293,9 +1293,7 @@ const QuizDocument = ({
 
           {/* Confirm Button */}
           <div
-            className={clsx("justify-between", {
-              "hidden md:flex": activeQuestion?.qType === QUESTION_TYPES.ESSAY,
-              flex: activeQuestion?.qType !== QUESTION_TYPES.ESSAY,
+            className={clsx("justify-between flex flex-wrap", {
               "gap-4": isShowTemplate,
               "gap-2": !isShowTemplate,
             })}

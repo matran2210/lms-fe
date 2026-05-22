@@ -274,7 +274,6 @@ const TabSlide = ({
                     key={pageNum.id}
                     data-tab-id={pageNum.id}
                   >
-                    {idx !== 0 && <div className="me-2 h-full border"></div>}
                     <PageLinkPagination
                       key={pageNum.id}
                       active={currentTab === pageNum.id}

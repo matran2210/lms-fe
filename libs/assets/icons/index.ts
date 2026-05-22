@@ -15,3 +15,4 @@ export { default as RemainingTimeIcon } from "./RemainingTimeIcon";
 export { default as SadIcon } from "./SadIcon";
 export * from "./teacher";
 export * from "./test";
+export * from "./storyline"
