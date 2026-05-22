@@ -21,7 +21,6 @@ import { PageLink } from 'src/constants/routers'
 import { withAuthorization } from '@lms/hoc'
 import {
   DrawerListQuestion,
-  ListQuestion,
   ModalListQuestion,
 } from '@lms/feature-courses'
 import { useQuery } from 'react-query'
@@ -246,13 +245,8 @@ const Explanation = () => {
         </div>
         {!loading && activeQuestion && (
           <ExplanationPackageV2
+            questions={questions}
             getActiveQuestion={getActiveQuestion}
-            renderAllQuestions={
-              <ListQuestion
-                questions={questions}
-                getActiveQuestion={getActiveQuestion}
-              />
-            }
             activeQuestion={{
               ...activeQuestion,
               solution: activeQuestion?.solution,
