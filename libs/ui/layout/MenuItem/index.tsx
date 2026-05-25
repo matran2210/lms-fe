@@ -33,7 +33,7 @@ import { getCourseContentSubContext, getLearningSubContext, getRouteContext, tra
 import SappNotificationComponent from "@sapp-fe/sapp-notification";
 import { Divider } from "antd";
 import clsx from "clsx";
-import { isEmpty } from "lodash";
+import  isEmpty from "lodash/isEmpty";
 import Lottie from "lottie-react";
 import Image from "next/image";
 import Link from "next/link";

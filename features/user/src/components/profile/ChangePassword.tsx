@@ -1,7 +1,7 @@
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ExceptionErrorCode, VALIDATE_PASSWORD } from "@lms/core";
-import { isEmpty } from "lodash";
+import  isEmpty from "lodash/isEmpty";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";

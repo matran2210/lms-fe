@@ -1,6 +1,6 @@
 import { Icon } from "@lms/assets";
 import { ANIMATION, ITopicProgress, IWeeklyReport, PROGRAM } from "@lms/core";
-import { isUndefined } from "lodash";
+import isUndefined from "lodash/isUndefined";
 import { memo, useState } from "react";
 import { TopicProgress } from "./dashboard-exam";
 import { WeeklyReport } from "./dashboard-normal";

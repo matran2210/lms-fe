@@ -1,7 +1,7 @@
 "use client"
 import { UploadFile } from "antd/es/upload";
 import axios, { CancelTokenSource } from "axios";
-import { capitalize } from "lodash";
+import capitalize from "lodash/capitalize";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import UploadFileHandle from "./UploadFileHandle";

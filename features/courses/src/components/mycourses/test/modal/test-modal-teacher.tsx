@@ -15,7 +15,7 @@ import {
 } from "@lms/utils";
 import clsx from "clsx";
 import dayjs from "dayjs";
-import { isNull } from "lodash";
+import isNull from "lodash/isNull";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { PopupSelectRetakeOrContinueAttempt } from "../..";
 import { TestAnnouncementModal } from "../../course-detail";

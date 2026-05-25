@@ -1,5 +1,6 @@
 import { formatNumber } from "@lms/utils";
-import { isNull, isUndefined } from "lodash";
+import isNull from "lodash/isNull";
+import isUndefined from "lodash/isUndefined";
 import GlobalAverage from "./GlobalAverage";
 interface IProps {
   score?: number;

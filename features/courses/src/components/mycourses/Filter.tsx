@@ -5,7 +5,7 @@ import { defaultStatusCourse, ICourseAll } from "@lms/core";
 import { SappHookFormSelect, TotalResullt } from "@lms/ui";
 import { buildQueryString, getUserPrefix } from "@lms/utils";
 import clsx from "clsx";
-import { isEmpty } from "lodash";
+import isEmpty from "lodash/isEmpty";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 

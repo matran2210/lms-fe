@@ -1,4 +1,4 @@
-import { isEmpty } from "lodash";
+import  isEmpty from "lodash/isEmpty";
 import { NoData, SappModalV3 } from "@lms/ui";
 import EventTest from "./EventTest";
 import { IEventTest } from "@lms/core";

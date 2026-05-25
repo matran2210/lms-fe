@@ -36,7 +36,7 @@ import { CarouselSlideAnimation } from "@lms/ui";
 import { cleanParamsAPI } from "@lms/utils";
 import clsx from "clsx";
 import { format } from "date-fns";
-import { isEmpty } from "lodash";
+import isEmpty from "lodash/isEmpty";
 import { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";

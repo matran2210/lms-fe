@@ -9,7 +9,9 @@ import { CarouselSlideAnimation, NoData, SappDrawerV3, Tooltip } from "@lms/ui";
 import { getDuration } from "@lms/utils";
 import { Avatar, GetProp, List, Skeleton, UploadFile, UploadProps } from "antd";
 import clsx from "clsx";
-import { isEmpty, isUndefined } from "lodash";
+import isEmpty from "lodash/isEmpty";
+import isUndefined from "lodash/isUndefined";
+
 import React, {
   Dispatch,
   ReactNode,

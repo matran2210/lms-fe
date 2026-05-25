@@ -10,7 +10,8 @@ import {
   truncateString,
 } from "@lms/utils";
 import { differenceInDays, parseISO, startOfDay } from "date-fns";
-import { isNull, round } from "lodash";
+import isNull from "lodash/isNull";
+import round from "lodash/round";
 import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 // import {Tooltip} from '@lms/ui' lỗi monorepo

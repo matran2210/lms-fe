@@ -3,7 +3,7 @@ import { useFeature } from "@lms/contexts";
 import { DEFAULT_PAGE_SIZE, SectionField } from "@lms/core";
 import { useDynamicLoading, useInitialSections, useSectionData } from "@lms/hooks";
 import clsx from "clsx";
-import { isEmpty } from "lodash";
+import  isEmpty from "lodash/isEmpty";
 import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { SAPPSelectTooltip } from "../base";

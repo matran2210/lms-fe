@@ -11,7 +11,7 @@ import DroppableSlot from "./DroppableSlot";
 import { SappTitleSolution } from "../../common";
 import { EditorReader, SappModalImage } from "../../base";
 import { Correct } from "@lms/utils";
-import { isEmpty } from "lodash";
+import  isEmpty from "lodash/isEmpty";
 declare var com: any;
 
 interface Answer {

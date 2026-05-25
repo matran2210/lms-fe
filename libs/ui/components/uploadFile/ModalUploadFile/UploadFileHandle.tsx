@@ -6,7 +6,7 @@ import React, { ReactElement } from "react";
 import toast from "react-hot-toast";
 import { ButtonSecondary } from "../../base";
 import { validateFile } from "@lms/utils";
-import { isArray } from "lodash";
+import isArray from "lodash/isArray";
 import { DocumentIconImage, ImageIconImage, VideoIconImage } from "@lms/assets";
 import { UPLOAD_TYPE } from "@lms/core";
 

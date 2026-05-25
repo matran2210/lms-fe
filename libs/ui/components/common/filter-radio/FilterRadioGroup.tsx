@@ -1,5 +1,5 @@
 import { CloseCircleIcon } from "@lms/assets";
-import { uniqueId } from "lodash";
+import uniqueId from "lodash/uniqueId";
 import { Control, Controller } from "react-hook-form";
 import SAPPFilterRadio from "./SappFilterRadio";
 

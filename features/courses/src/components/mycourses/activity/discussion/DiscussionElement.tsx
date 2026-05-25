@@ -26,7 +26,7 @@ import {
 import { calculateTimeAgo, trackGAEvent } from "@lms/utils";
 import { Popover } from "antd";
 import clsx from "clsx";
-import { isEmpty } from "lodash";
+import isEmpty from "lodash/isEmpty";
 import Image from "next/image";
 import React, { SetStateAction, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
