@@ -9,25 +9,23 @@
     "lint": "eslint . --ext .ts,.tsx",
     "type-check": "tsc --noEmit"
   },
-  "peerDependencies": {
-    "antd": "^5.25.0",
-    "clsx": "^2.1.1",
-    "lodash": "^4.17.21",
-    "date-fns": "^3.0.6",
-    "dayjs": "^1.11.12",
-    "react-hook-form": "7.48.2",
-    "@hookform/resolvers": "^3.10.0",
-    "zod": "^3.22.4",
-    "react-hot-toast": "^2.4.1",
-    "react-query": "3.39.3"
-  },
   "dependencies": {
+    "@hookform/resolvers": "^3.10.0",
     "@lms/assets": "workspace:*",
     "@lms/contexts": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/hoc": "workspace:*",
     "@lms/hooks": "workspace:*",
     "@lms/ui": "workspace:*",
-    "@lms/utils": "workspace:*"
+    "@lms/utils": "workspace:*",
+    "antd": "^5.25.0",
+    "clsx": "^2.1.1",
+    "date-fns": "^3.0.6",
+    "dayjs": "^1.11.12",
+    "lodash": "^4.17.21",
+    "react-hook-form": "7.48.2",
+    "react-hot-toast": "^2.4.1",
+    "react-query": "3.39.3",
+    "zod": "^3.22.4"
   }
 }

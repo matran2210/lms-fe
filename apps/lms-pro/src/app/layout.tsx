@@ -96,15 +96,13 @@ const roboto = Roboto({
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="vi">
+      {/* eslint-disable-next-line @next/next/no-head-element -- App Router dùng <head> native là đúng */}
       <head>
         <Script
           src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"
           strategy="afterInteractive"
         />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-          rel="stylesheet"
-        />
+        {/* Roboto đã được load qua next/font — bỏ link thừa này để tránh load font 2 lần */}
         <GoogleAnalytics
           gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID ?? ''}
         />

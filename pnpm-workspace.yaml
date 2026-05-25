@@ -1,5 +1,9 @@
 packages:
-  - apps/*
+  - apps/lms-pro
+  - apps/lms-test
+  - apps/lms-zoom
+  - apps/lms-enrollment
+  # - apps/lms-finhub  # tạm tắt — không dùng
   - features/*
   - libs/*
   - tools/*

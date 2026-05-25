@@ -9,8 +9,17 @@
     "lint": "eslint . --ext .ts,.tsx",
     "type-check": "tsc --noEmit"
   },
-  "peerDependencies": {
+  "dependencies": {
     "@hookform/resolvers": "^3.10.0",
+    "@lms/assets": "workspace:*",
+    "@lms/contexts": "workspace:*",
+    "@lms/core": "workspace:*",
+    "@lms/feature-class": "workspace:*",
+    "@lms/hoc": "workspace:*",
+    "@lms/hooks": "workspace:*",
+    "@lms/ui": "workspace:*",
+    "@lms/utils": "workspace:*",
+    "@sapp-fe/sapp-common-package": "^1.8.4",
     "antd": "^5.25.0",
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
@@ -20,16 +29,5 @@
     "react-hot-toast": "^2.4.1",
     "react-query": "3.39.3",
     "zod": "^3.22.4"
-  },
-  "dependencies": {
-    "@lms/assets": "workspace:*",
-    "@lms/contexts": "workspace:*",
-    "@lms/core": "workspace:*",
-    "@lms/feature-class": "workspace:*",
-    "@lms/hoc": "workspace:*",
-    "@lms/hooks": "workspace:*",
-    "@lms/ui": "workspace:*",
-    "@lms/utils": "workspace:*",
-    "@sapp-fe/sapp-common-package": "^1.8.4"
   }
 }

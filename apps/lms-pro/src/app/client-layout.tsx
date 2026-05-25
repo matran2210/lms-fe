@@ -23,7 +23,8 @@ export default function ClientLayout() {
     onMessageListener().then((data: any) => {
       dispatch(showNotification())
     })
-  })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // chỉ subscribe 1 lần khi mount
   useEffect(() => {
     if (!checkRouteCertificate) {
       try {

@@ -30,11 +30,34 @@ const withAuthorization =
           }
         }, [pathname, userType, isLoading])
 
-        // Chỉ loading khi đang loading
-        if (isLoading) return null
-
-        // Nếu chưa có userType, có thể show loading hoặc null
-        if (!userType) return null
+        // Đang init hoặc chờ userType → show spinner thay vì màn trắng
+        if (isLoading || !userType) {
+          return (
+            <div
+              style={{
+                position: 'fixed',
+                inset: 0,
+                zIndex: 9999,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#fff',
+              }}
+            >
+              <div
+                style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: '50%',
+                  border: '4px solid #FFB700',
+                  borderTopColor: 'transparent',
+                  animation: 'spin 0.8s linear infinite',
+                }}
+              />
+              <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+            </div>
+          )
+        }
 
         // Nếu userType không hợp lệ, không render component
         if (!allowedRoles.includes(userType)) return null

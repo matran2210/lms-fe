@@ -1,7 +1,7 @@
 // app/providers.tsx
 'use client'
 
-import MKTInApp from '@components/MKTInApp'
+import dynamic from 'next/dynamic'
 import '@fortune-sheet/react/dist/index.css'
 import {
   CourseNoteProvider,
@@ -44,7 +44,7 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation'
-import { ReactNode, useEffect, useRef, useState } from 'react'
+import { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import TagManager, { TagManagerArgs } from 'react-gtm-module'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
@@ -84,6 +84,11 @@ import { ProgressAPI } from 'src/api/progress'
 import { TeacherAPI } from 'src/api/teacher'
 import { MyRequestAPI } from 'src/api/my-request'
 import { RequestAPI } from 'src/api/request'
+
+// Lazy load MKTInApp — kéo framer-motion + react-slick + ModalMarketingInApp
+// Không cần SSR, chỉ hiện ở một số route → không nên vào initial bundle
+const MKTInApp = dynamic(() => import('@components/MKTInApp'), { ssr: false })
+
 dayjs.extend(utc)
 dayjs.extend(weekday)
 const showSupportWidget = [
@@ -95,28 +100,90 @@ const showSupportWidget = [
 ]
 
 const activityPath = ['/courses/[id]/activity/[activityId]']
+// Stable QueryClient — khởi tạo 1 lần duy nhất, không re-create mỗi render
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 3000000,
+      refetchOnWindowFocus: false,
+    },
+  },
+})
+
 function Providers({ children }: { children: ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
   const params = useParams()
   const query = useSearchParams()
   const dispatch = useAppDispatch()
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: 3000000,
-        refetchOnWindowFocus: false,
-        // Đặt thời gian stale tại đây, ví dụ: 30 giây (30000 miligiây)
-      },
-    },
-  })
   const [socket, setSocket] = useState<any>(null)
-  const authenticationManager = new AuthenticationManager()
+  // Stable authenticationManager — dùng useRef để không tạo instance mới mỗi render
+  const authManagerRef = useRef<AuthenticationManager | null>(null)
+  if (!authManagerRef.current) {
+    authManagerRef.current = new AuthenticationManager()
+  }
+  const authenticationManager = authManagerRef.current
 
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID || ''
   const tagManagerArgs: TagManagerArgs = { gtmId }
 
   const { isMobileView } = useTailwindBreakpoint()
+
+  // Stable query object — tránh tạo object mới mỗi render
+  const queryObj = useMemo(
+    () => Object.fromEntries(query.entries()),
+    [query],
+  )
+
+  // Stable featureProviderValue — tránh re-render toàn bộ consumer khi Providers re-render
+  const featureProviderValue = useMemo(
+    () => ({
+      courseApi: CoursesAPI,
+      questionApi: QuestionAPI,
+      uploadApi: UploadAPI,
+      userApi: UserApi,
+      userContextApi: UserContextApi,
+      notificationApi: NotificationAPI,
+      authApi: AuthAPI,
+      classApi: ClassAPI,
+      activityApi: ActivityAPI,
+      courseActivityApi: CourseActivityApi,
+      entranceTestApi: EntranceTestAPI,
+      eventTestApi: EventTestAPI,
+      calendarApi: CalendarApi,
+      myProfileApi: MyProfileAPI,
+      myRequestApi: MyRequestAPI,
+      requestApi: RequestAPI,
+      submitQuizTest: TestServiceAPI.submitQuizTest,
+      dashboardApi: DashboardAPI,
+      storylineApi: StorylineAPI,
+      schedulesApi: SchedulesAPI,
+      progressApi: ProgressAPI,
+      teacherApi: TeacherAPI,
+      authManager: authManagerRef.current!,
+      pageLink: PageLink,
+      menuItems: MENU_ITEMS,
+      menuItemsEvent: MENU_ITEMS_EVENT,
+      menuBottom: MENU_BOTTOM,
+      router: router,
+      pathname,
+      params,
+      query: queryObj,
+      fetcher: fetcher,
+      videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
+      testServiceApi: TestServiceAPI,
+      certificateApi: {
+        uploadImageToLinkedIn,
+      },
+      uploadImageToLinkedIn: uploadImageToLinkedIn,
+      courseActivationAPI: CoursesActivationAPI,
+      dispatch: dispatch,
+      useAppSelector: useAppSelector,
+      appModules: modules,
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [router, pathname, params, queryObj, dispatch],
+  )
 
   // Check if URL contains '/teachers'
   const isTeacherPage = pathname?.includes('/teachers')
@@ -124,7 +191,7 @@ function Providers({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     Aos.init({ duration: ANIMATION.DURATION, once: true })
-  })
+  }, []) // chỉ chạy 1 lần khi mount
   useEffect(() => {
     const token = authenticationManager.getToken()
     if (token !== '') {
@@ -138,7 +205,7 @@ function Providers({ children }: { children: ReactNode }) {
         newSocket.disconnect()
       }
     }
-  }, [authenticationManager]) // reconnect khi authToken thay đổi
+  }, []) // chỉ chạy 1 lần khi mount — authenticationManager là stable ref
 
   useEffect(() => {
     if (socket) {
@@ -271,7 +338,7 @@ function Providers({ children }: { children: ReactNode }) {
     // }
 
     return () => observer.disconnect()
-  }, [router, showHelp, hiddenChatbot])
+  }, [showHelp, hiddenChatbot]) // bỏ router — không cần re-subscribe khi navigate
 
   useEffect(() => {
     if (prevPathRef.current) {
@@ -311,50 +378,7 @@ function Providers({ children }: { children: ReactNode }) {
         }}
       >
         <FeatureProvider
-          value={{
-            courseApi: CoursesAPI,
-            questionApi: QuestionAPI,
-            uploadApi: UploadAPI,
-            userApi: UserApi,
-            userContextApi: UserContextApi,
-            notificationApi: NotificationAPI,
-            authApi: AuthAPI,
-            classApi: ClassAPI,
-            activityApi: ActivityAPI,
-            courseActivityApi: CourseActivityApi,
-            entranceTestApi: EntranceTestAPI,
-            eventTestApi: EventTestAPI,
-            calendarApi: CalendarApi,
-            myProfileApi: MyProfileAPI,
-            myRequestApi: MyRequestAPI,
-            requestApi: RequestAPI,
-            submitQuizTest: TestServiceAPI.submitQuizTest,
-            dashboardApi: DashboardAPI,
-            storylineApi: StorylineAPI,
-            schedulesApi: SchedulesAPI,
-            progressApi: ProgressAPI,
-            teacherApi: TeacherAPI,
-            authManager: new AuthenticationManager(),
-            pageLink: PageLink,
-            menuItems: MENU_ITEMS,
-            menuItemsEvent: MENU_ITEMS_EVENT,
-            menuBottom: MENU_BOTTOM,
-            router: router,
-            pathname,
-            params,
-            query: Object.fromEntries(query.entries()),
-            fetcher: fetcher,
-            videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
-            testServiceApi: TestServiceAPI,
-            certificateApi: {
-              uploadImageToLinkedIn,
-            },
-            uploadImageToLinkedIn: uploadImageToLinkedIn,
-            courseActivationAPI: CoursesActivationAPI,
-            dispatch: dispatch,
-            useAppSelector: useAppSelector,
-            appModules: modules
-          }}
+          value={featureProviderValue}
         >
           <CourseProvider
             router={router}

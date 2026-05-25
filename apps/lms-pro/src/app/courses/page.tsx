@@ -10,10 +10,11 @@ import { ANIMATION, defaultStatusCourse } from '@lms/core'
 import { CoursesList, FilterCourse, Heading } from '@lms/feature-courses'
 import { withAuthorization } from '@lms/hoc'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { Layout, ModalMarketingInApp, PopupWelcome, SearchWithMenuToggle } from '@lms/ui'
+import { Layout, PopupWelcome, SearchWithMenuToggle } from '@lms/ui'
 import Aos from 'aos'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
+import dynamic from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
@@ -21,6 +22,12 @@ import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { hidePopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
+
+// Lazy load — chỉ render khi user click, không cần trong initial bundle
+const ModalMarketingInApp = dynamic(
+  () => import('@lms/ui').then((m) => ({ default: m.ModalMarketingInApp })),
+  { ssr: false },
+)
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -174,7 +181,7 @@ const MyCourse = () => {
    */
   useEffect(() => {
     Aos.init({ duration: ANIMATION.DURATION, once: true })
-  })
+  }, [])
 
   /**
    * @description lưu tổng số course vào session mỗi khi course thay đổi

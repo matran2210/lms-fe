@@ -1,10 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 const { slate, gray, red, blue, green, yellow, white, black } = require("tailwindcss/colors"); //Default color tailwind config: https://v3.tailwindcss.com/docs/customizing-colors
 module.exports = {
-  content: [
-    "../../libs/**/*.{js,ts,jsx,tsx}",
-    "../../features/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: [],
+  // Content được define ở từng app config — presets không merge content tự động
 
   theme: {
     screens: {
