@@ -8,29 +8,29 @@ x-app-base: &app-base
     - local
 
 services:
-  lms-pro:
-    <<: *app-base
-    image: ${LMS_PRO_IMAGE}
-    container_name: lms-pro
-    ports:
-      - "3000:3000"
-    profiles: ["lms-pro"]
+  # lms-pro:
+  #   <<: *app-base
+  #   image: ${LMS_PRO_IMAGE}
+  #   container_name: lms-pro
+  #   ports:
+  #     - "3000:3000"
+  #   profiles: ["lms-pro"]
 
-  lms-finhub:
-    <<: *app-base
-    image: ${LMS_FINHUB_IMAGE}
-    container_name: lms-finhub
-    ports:
-      - "3000:3000"
-    profiles: ["lms-finhub"]
+  # lms-finhub:
+  #   <<: *app-base
+  #   image: ${LMS_FINHUB_IMAGE}
+  #   container_name: lms-finhub
+  #   ports:
+  #     - "3000:3000"
+  #   profiles: ["lms-finhub"]
 
-  lms-zoom:
-    <<: *app-base
-    image: ${LMS_ZOOM_IMAGE}
-    container_name: lms-zoom
-    ports:
-      - "3000:3000"
-    profiles: ["lms-zoom"]
+  # lms-zoom:
+  #   <<: *app-base
+  #   image: ${LMS_ZOOM_IMAGE}
+  #   container_name: lms-zoom
+  #   ports:
+  #     - "3000:3000"
+  #   profiles: ["lms-zoom"]
 
   lms-test:
     <<: *app-base
