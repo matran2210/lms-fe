@@ -814,10 +814,15 @@ const TestDetail = () => {
     : null;
 
   useEffect(() => {
-    if (!openTimeOut && remainingTimeinSeconds && remainingTimeinSeconds <= 0) {
+    if (
+      !openTimeOut &&
+      !submited &&
+      remainingTimeinSeconds &&
+      remainingTimeinSeconds <= 0
+    ) {
       setOpenTimeOut(true);
     }
-  }, [openTimeOut, remainingTimeinSeconds]);
+  }, [openTimeOut, remainingTimeinSeconds, submited]);
 
   const isShowIconButtonInBottom = [
     QUESTION_TYPES.FILL_WORD,
@@ -2729,37 +2734,26 @@ const TestDetail = () => {
                 open={openTimeOut}
                 setOpen={setOpenTimeOut}
                 handleSubmit={() => {
-                  dispatch?.(disableUnsavedChange())
-                    .unwrap()
-                    .then(() => {
-                      if (type === "entrance") {
-                        const searchParams =
-                          quizAttempt?.number_of_attempts &&
-                          quizDetail?.limit_count
-                            ? `attempt=${quizAttempt?.number_of_attempts}/${quizDetail?.limit_count}`
-                            : ``;
-                        router.replace(
-                          `${WEB_LMS_URL}/entrance-test/test-result/${QuizResultId}?${searchParams}`,
-                        );
-                      } else if (type === "event-test") {
-                        router.replace(`${WEB_LMS_URL}/event-test`);
-                        // setSubmitEventTest(true)
-                      } else {
-                        // if (type !== 'entrance') {
-                        if (
-                          quizDetail?.grading_method === GRADING_METHOD.MANUAL
-                        ) {
-                          router.replace(
-                            `${WEB_LMS_URL}/courses/test/your-answers-detail/${QuizResultId}`,
-                          );
-                        } else {
-                          router.replace(
-                            `${WEB_LMS_URL}/courses/test/test-result/${QuizResultId}`,
-                          );
-                        }
-                      }
-                      trackGAEvent("Click Button Submit Time Out Test");
-                    });
+                  setOpenTimeOut(false);
+                  setSubmited(true);
+                  dispatch?.(disableUnsavedChange());
+                  const resultId = QuizResultId || quizAttempt?.id;
+                  trackGAEvent("Click Button Submit Time Out Test");
+                  if (type === "entrance") {
+                    const searchParams =
+                      quizAttempt?.number_of_attempts && quizDetail?.limit_count
+                        ? `attempt=${quizAttempt?.number_of_attempts}/${quizDetail?.limit_count}`
+                        : ``;
+                    window.location.href = `${WEB_LMS_URL}/entrance-test/test-result/${resultId}?${searchParams}`;
+                  } else if (type === "event-test") {
+                    window.location.href = `${WEB_LMS_URL}/event-test`;
+                  } else {
+                    if (quizDetail?.grading_method === GRADING_METHOD.MANUAL) {
+                      window.location.href = `${WEB_LMS_URL}/courses/test/your-answers-detail/${resultId}`;
+                    } else {
+                      window.location.href = `${WEB_LMS_URL}/courses/test/test-result/${resultId}`;
+                    }
+                  }
                 }}
                 handleQuit={() => {
                   trackGAEvent("Click Button Quit Time Out Test");
