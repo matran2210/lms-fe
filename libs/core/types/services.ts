@@ -302,7 +302,7 @@ export interface IClassAPI {
   ): Promise<IResponse<IStudentAttendanceListResponse>>;
 
   getStudentAttendanceSummary(class_id: string): Promise<IResponse<IAttendanceStatistics>>;
-  getClassAttendanceHistory(lesson_id: string): Promise<IResponse<IClassAttendanceHistoryResponse>>;
+  getClassAttendanceHistory(lesson_id: string): Promise<IResponse<IClassAttendanceHistoryResponse[]>>;
   getStudentLearningSchedule(params: ILessonListParams): Promise<IResponse<IStudentLessonListResponse>>;
   getTeacherLearningSchedule(params: ILessonListParams): Promise<IResponse<ITeacherTeachingLessonListResponse>>;
   getTeacherTeachingClass(params: Omit<ILessonListParams, "class_ids">): Promise<IResponse<ITeacherTeachingClassListResponse>>

@@ -107,7 +107,7 @@ export interface ITeacherTeachingAttendanceListParams {
 
 export interface ITeacherTeachingAttendanceListResponse {
   metadata: IMetaData;
-  attendances: ITeacherTeachingAttendanceItem[];
+  data: ITeacherTeachingAttendanceItem[];
 }
 
 export interface ITeacherTeachingAttendanceItem extends IStudentAttendanceItem {

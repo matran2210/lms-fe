@@ -403,6 +403,16 @@ export const formatDateFromUTC = (date: string, format = DATE_FORMAT.DATE) => {
 };
 
 /**
+ * @description: Chuyển đổi UTC time sang local time
+ *
+ */
+export const convertUTCToLocal = (utcTime: string) => {
+  const date = new Date(utcTime)
+  const timezoneOffset = date.getTimezoneOffset()
+  return new Date(date.getTime() - timezoneOffset * 60 * 1000)
+}
+
+/**
  * Trả về chuỗi thời gian biểu diễn khoảng thời gian từ lúc bắt đầu đến lúc kết thúc.
  *
  * @param started_at - Thời gian bắt đầu (UTC dạng string, ví dụ: '2025-06-27T03:00:00Z')

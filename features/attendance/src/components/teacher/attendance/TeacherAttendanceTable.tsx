@@ -1,7 +1,7 @@
 'use client'
 import { ArrowDownIcon } from '@lms/assets'
 import { useFeature } from '@lms/contexts'
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, IStudentAttendanceItem, IStudentAttendanceListParams } from '@lms/core'
+import { DATE_FORMAT, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, IStudentAttendanceItem, IStudentAttendanceListParams } from '@lms/core'
 import {
   NameNoActionCell,
   SAPPBadge,
@@ -17,7 +17,7 @@ import dayjs from 'dayjs'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useQuery } from 'react-query'
-import { formatDateFromUTC } from '@lms/utils'
+import { convertUTCToLocal, formatDateFromUTC } from '@lms/utils'
 import useInfiniteStudentLesson from '../../../hooks/useInfiniteStudentLesson'
 
 interface FilterForm {
@@ -88,7 +88,7 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
     }
 
 
-    return useQuery(["student-attendance", queryParams], fetchData, {
+    return useQuery(["teacher-learning-attendance", queryParams], fetchData, {
       enabled: classId !== undefined,
       retry: false,
     })
@@ -125,18 +125,27 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
     },
     {
       title: 'Date',
-      render: (record) => <NameNoActionCell dataColumn={formatDateFromUTC(record.lesson_date.start_date)} />,
-      width: 120,
+      width: 150,
+      render: (record) => {
+        const localStartDate = record.lesson_date.start_date && record.start_time
+          ? dayjs(convertUTCToLocal(`${record.lesson_date.start_date}T${record.start_time}`))
+          : null
+        const localEndDate = record.lesson_date.start_date && record.end_time
+          ? dayjs(convertUTCToLocal(`${record.lesson_date.start_date}T${record.end_time}`))
+          : null
+
+        return <NameNoActionCell dataColumn={`${localStartDate?.isValid() ? localStartDate.format('DD/MM/YYYY') : '-'} ${localStartDate?.isValid() ? localStartDate.format('HH:mm') : '-'} : ${localEndDate?.isValid() ? localEndDate.format('HH:mm') : '-'}`} />
+      },
     },
     {
       title: 'Check In',
-      render: (record) => <NameNoActionCell dataColumn={record.checkin_time} />,
-      width: 100,
+      render: (record) => <NameNoActionCell dataColumn={formatDateFromUTC(record.checkin_time, DATE_FORMAT.DATE_TIME_DATE_FIRST)} />,
+      width: 130,
     },
     {
       title: 'Check Out',
-      render: (record) => <NameNoActionCell dataColumn={record.checkout_time} />,
-      width: 100,
+      render: (record) => <NameNoActionCell dataColumn={formatDateFromUTC(record.checkout_time, DATE_FORMAT.DATE_TIME_DATE_FIRST)} />,
+      width: 135,
     },
     {
       title: 'Status',
@@ -149,7 +158,7 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
       width: 120,
     },
     {
-      title: 'Action',
+      title: '',
       fixed: 'right',
       render: (record) => (
         <TableActionCell>
@@ -166,7 +175,7 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
           )}
         </TableActionCell>
       ),
-      width: 80,
+      width: 50,
     },
   ]
 

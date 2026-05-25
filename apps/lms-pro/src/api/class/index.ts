@@ -115,7 +115,7 @@ export class ClassAPI {
   // class attendance history: get attendance history of a class
   static getClassAttendanceHistory(
     lesson_id: string
-  ): Promise<IResponse<IClassAttendanceHistoryResponse>> {
+  ): Promise<IResponse<IClassAttendanceHistoryResponse[]>> {
     return fetcher(`${apiURL}/classes/attendances-history/${lesson_id}`)
   }
 

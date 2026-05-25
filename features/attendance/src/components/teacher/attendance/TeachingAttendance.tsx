@@ -1,7 +1,7 @@
 'use client'
 import { ArrowDownIcon } from '@lms/assets'
 import { useFeature } from '@lms/contexts'
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, ITeacherTeachingAttendanceItem, ITeacherTeachingAttendanceListParams } from '@lms/core'
+import { DATE_FORMAT, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, ITeacherTeachingAttendanceItem, ITeacherTeachingAttendanceListParams } from '@lms/core'
 import {
   NameNoActionCell,
   SAPPButtonCustom,
@@ -9,7 +9,7 @@ import {
   SappTable,
   TableActionCell
 } from '@lms/ui'
-import { formatDateFromUTC } from '@lms/utils'
+import { convertUTCToLocal, formatDateFromUTC } from '@lms/utils'
 import { Divider, Select } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import clsx from 'clsx'
@@ -124,26 +124,37 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
   const columns: ColumnsType<ITeacherTeachingAttendanceItem> = [
     {
       title: 'Class',
+      width: 200,
       render: (record) => <NameNoActionCell dataColumn={record.class} />,
     },
     {
       title: 'Lesson',
+      width: 200,
       render: (record) => <NameNoActionCell dataColumn={record.lesson} />,
     },
     {
       title: 'Date',
-      render: (record) => <NameNoActionCell dataColumn={formatDateFromUTC(record.start_date)} />,
-      width: 120,
+      render: (record) => {
+        const localStartDate = record.start_date && record.start_time
+              ? dayjs(convertUTCToLocal(`${record.start_date}T${record.start_time}`))
+              : null
+            const localEndDate = record.start_date && record.end_time
+              ? dayjs(convertUTCToLocal(`${record.start_date}T${record.end_time}`))
+              : null
+     
+        return <NameNoActionCell dataColumn={`${localStartDate?.isValid() ? localStartDate.format('DD/MM/YYYY') : '-'} ${localStartDate?.isValid() ? localStartDate.format('HH:mm') : '-'} : ${localEndDate?.isValid() ? localEndDate.format('HH:mm') : '-'}`} />
+      },
+      width: 150,
     },
     {
       title: 'Check In',
-      render: (record) => <NameNoActionCell dataColumn={record.checkin_time} />,
-      width: 100,
+      render: (record) => <NameNoActionCell dataColumn={formatDateFromUTC(record.checkin_time, DATE_FORMAT.DATE_TIME_DATE_FIRST)} />,
+      width: 130,
     },
     {
       title: 'Check Out',
-      render: (record) => <NameNoActionCell dataColumn={record.checkout_time} />,
-      width: 100,
+      render: (record) => <NameNoActionCell dataColumn={formatDateFromUTC(record.checkout_time, DATE_FORMAT.DATE_TIME_DATE_FIRST)} />,
+      width: 135,
     },
     {
       title: 'Act. Workload',
@@ -153,7 +164,7 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
       width: 120,
     },
     {
-      title: 'Action',
+      title: '',
       fixed: 'right',
       render: (record) => (
         <TableActionCell>
@@ -170,7 +181,7 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
           )}
         </TableActionCell>
       ),
-      width: 80,
+      width: 50,
     },
   ]
 
@@ -297,7 +308,7 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
       <SappTable
         isShowIndex
         columns={columns}
-        data={teacherTeachingAttendanceData?.attendances || []}
+        data={teacherTeachingAttendanceData?.data || []}
         loading={isLoading}
         pagination={{
           current: queryParams.page_index,

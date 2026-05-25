@@ -5,7 +5,7 @@ import { withAuthorization } from '@lms/hoc'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { HeaderMobile, Layout, SappBreadCrumbs } from '@lms/ui'
 import clsx from 'clsx'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import {
   AttendanceHistory,
@@ -64,6 +64,30 @@ const StudentAttendancePage = () => {
   const [selectedRecord, setSelectedRecord] = useState<IStudentAttendanceItem | null>(
     null,
   )
+  const mainContentRef = useRef<HTMLDivElement | null>(null)
+  const [panelHeight, setPanelHeight] = useState<number>()
+
+  useEffect(() => {
+    const element = mainContentRef.current
+
+    if (!element) return
+
+    const updateHeight = () => {
+      setPanelHeight(element.getBoundingClientRect().height)
+    }
+
+    updateHeight()
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateHeight()
+    })
+
+    resizeObserver.observe(element)
+
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, [])
 
   const handleViewDetails = (record: IStudentAttendanceItem) => {
     setSelectedRecord(record)
@@ -119,10 +143,11 @@ const StudentAttendancePage = () => {
           />
       </div>
                         
-      <div className={clsx("flex", { 'gap-6': historyOpen && isAlwaysShowSidebar } )}>
+      <div className={clsx("flex items-start", { 'gap-6': historyOpen && isAlwaysShowSidebar } )}>
         {/* Main Content */}
 
         <div
+          ref={mainContentRef}
           className={clsx(
             'flex flex-col gap-6 transition-all duration-300 ease-in-out',
             historyOpen && isAlwaysShowSidebar ? 'flex-1 min-w-0' : 'w-full flex-1',
@@ -139,13 +164,15 @@ const StudentAttendancePage = () => {
               historyOpen ? 'w-[393px]' : 'w-0',
             )}
           >
-            <div className="h-full w-[393px]">
-              <AttendanceHistory
-                isOpen={historyOpen}
-                onClose={handleCloseHistory}
-                record={selectedRecord}
-              />
-            </div>
+            {historyOpen && (
+              <div className="w-[393px]" style={panelHeight ? { height: panelHeight } : undefined}>
+                <AttendanceHistory
+                  isOpen={historyOpen}
+                  onClose={handleCloseHistory}
+                  record={selectedRecord}
+                />
+              </div>
+            )}
           </div>
         )}
       </div>

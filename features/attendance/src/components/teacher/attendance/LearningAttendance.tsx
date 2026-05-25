@@ -5,7 +5,7 @@ import { withAuthorization } from '@lms/hoc'
 import { LayoutTeacher } from '@lms/ui'
 import { Divider } from 'antd'
 import clsx from 'clsx'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import { TeacherAttendanceTable } from '.'
 import {
@@ -64,6 +64,30 @@ const LearningAttendance = () => {
   const [selectedRecord, setSelectedRecord] = useState<IStudentAttendanceItem | null>(
     null,
   )
+  const mainContentRef = useRef<HTMLDivElement | null>(null)
+  const [panelHeight, setPanelHeight] = useState<number>()
+
+  useEffect(() => {
+    const element = mainContentRef.current
+
+    if (!element) return
+
+    const updateHeight = () => {
+      setPanelHeight(element.getBoundingClientRect().height)
+    }
+
+    updateHeight()
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateHeight()
+    })
+
+    resizeObserver.observe(element)
+
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, [])
 
   const handleViewDetails = (record: IStudentAttendanceItem) => {
     setSelectedRecord(record)
@@ -89,10 +113,11 @@ const breadcrumbs: ITabs[] = [
       isCourseDetail
       className={"p-8 bg-white"}
     >
-      <div className={clsx("flex", { 'gap-6': historyOpen })}>
+      <div className={clsx("flex items-start", { 'gap-6': historyOpen })}>
         {/* Main Content */}
 
         <div
+          ref={mainContentRef}
           className={clsx(
             'bg-white transition-all duration-300 ease-in-out',
             historyOpen ? 'flex-1 min-w-0' : 'w-full flex-1',
@@ -120,13 +145,15 @@ const breadcrumbs: ITabs[] = [
             historyOpen ? 'w-[393px]' : 'w-0',
           )}
         >
-          <div className="h-full w-[393px]">
-            <AttendanceHistory
-              isOpen={historyOpen}
-              onClose={handleCloseHistory}
-              record={selectedRecord}
-            />
-          </div>
+          {historyOpen && (
+            <div className="w-[393px]" style={panelHeight ? { height: panelHeight } : undefined}>
+              <AttendanceHistory
+                isOpen={historyOpen}
+                onClose={handleCloseHistory}
+                record={selectedRecord}
+              />
+            </div>
+          )}
         </div>
       </div>
     </LayoutTeacher>

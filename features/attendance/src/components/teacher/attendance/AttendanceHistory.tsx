@@ -2,8 +2,8 @@
 import { CloseModalIcon } from '@lms/assets'
 import { useFeature } from '@lms/contexts'
 import { ITeacherTeachingAttendanceItem } from '@lms/core'
-import { SAPPBadge } from '@lms/ui'
-import { formatDateToSlash } from '@lms/utils'
+import { SappDivider } from '@lms/ui'
+import { formatDateFromUTC } from '@lms/utils'
 import clsx from 'clsx'
 import React from 'react'
 import { useQuery } from 'react-query'
@@ -39,7 +39,7 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
     }
 
 
-    return useQuery(["teahcer-teaching-attendance-history"], fetchData, {
+    return useQuery(["teacher-teaching-attendance-history", record?.class_schedule_id], fetchData, {
       enabled: record?.class_schedule_id !== undefined && isOpen,
       retry: false,
     })
@@ -85,10 +85,10 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
         {/* Date */}
         <div className="flex justify-between gap-2">
           <div className="text-sm font-medium text-gray-500">Date</div>
-          <div className="text-base text-gray-900">{formatDateToSlash(record?.start_date as string, true) || '-'}</div>
+          <div className="text-base text-gray-900">{formatDateFromUTC(record?.start_date as string) || '-'}</div>
         </div>
         {/* Actual Workload (only for Teaching Attendance) */}
-        {record?.workload && (
+        {record?.workload ? (
           <div className="flex justify-between gap-2">
             <div className="text-sm font-medium text-gray-500">
               Actual Workload
@@ -97,7 +97,7 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
               {record.workload}
             </div>
           </div>
-        )}
+        ) : null}
         <div className="h-[300px] overflow-y-scroll">
           {
             teacherTeachingAttendanceHistoryData?.map((historyRecord, index) => (
@@ -106,7 +106,7 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
                 <div className="flex jutify-between gap-2">
                   <div className="text-sm font-medium text-gray-500">Check In - Check Out</div>
                   <div className="text-base text-gray-900">
-                    {historyRecord?.checkin_time} - {historyRecord?.checkout_time}
+                    {formatDateFromUTC(historyRecord?.checkin_time)} - {formatDateFromUTC(historyRecord?.checkout_time)}
                   </div>
                 </div>
                 {/* Device */}
@@ -114,6 +114,9 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
                   <div className="text-sm font-medium text-gray-500">Device</div>
                   <div className="text-base text-gray-900">{historyRecord?.device || '-'}</div>
                 </div>
+                {
+                  index < (teacherTeachingAttendanceHistoryData?.length ? teacherTeachingAttendanceHistoryData?.length - 1 : 0) && <SappDivider className='!my-0' />
+                }
               </div>
             ))
           }
