@@ -26,6 +26,8 @@ import {
 import { useQuery } from 'react-query'
 import { useTailwindBreakpoint } from '@lms/hooks'
 
+type QuestionFilterType = 'all' | 'multiple' | 'constructed'
+
 const Explanation = () => {
   const router = useRouter()
   const searchParam = useSearchParams()
@@ -39,6 +41,7 @@ const Explanation = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const { isMobileView } = useTailwindBreakpoint()
   const [openTooltip, setOpenTooltip] = useState<boolean>(false)
+  const [questionFilter, setQuestionFilter] = useState<QuestionFilterType>('all')
   const [isOpenModalListQuestion, setIsOpenModalListQuestion] =
     useState<boolean>(false)
   const [isOpenDrawerListQuestion, setIsOpenDrawerListQuestion] =
@@ -245,6 +248,8 @@ const Explanation = () => {
         </div>
         {!loading && activeQuestion && (
           <ExplanationPackageV2
+            questionFilter={questionFilter}
+            onQuestionFilterChange={setQuestionFilter}
             questions={questions}
             getActiveQuestion={getActiveQuestion}
             activeQuestion={{
