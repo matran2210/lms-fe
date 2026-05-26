@@ -118,18 +118,23 @@ const ClassResourceDesktopListView = ({
     return <ClassResourceTableListSkeleton />
   }
 
+  const syncTableColumns =
+    Boolean(dataListFolder?.data?.length) || Boolean(dataListFile?.data?.length)
+
   return (
     <div className={clsx("mb-4 flex flex-col rounded-xl bg-white", isNoPadding ? "p-0" : "p-4 md:p-6 xl:p-8")}>
       <ClassResourceFolderTable
         folders={dataListFolder}
         pagination={listPagination}
         onFolderClick={onFolderClick}
+        syncTableColumns={syncTableColumns}
       />
       <ClassResourceFileTable
         files={dataListFile}
         pagination={listPagination}
         setPagination={setListPagination}
         syncPagingToUrl={syncFilterQueryToUrl}
+        syncTableColumns={syncTableColumns}
       />
     </div>
   )

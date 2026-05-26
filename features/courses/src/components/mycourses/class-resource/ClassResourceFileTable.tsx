@@ -40,6 +40,8 @@ interface IProps {
   pagination: TablePaginationConfig
   setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
   syncPagingToUrl?: boolean
+  /** Align column layout with Folders table when either table has rows */
+  syncTableColumns?: boolean
 }
 
 const colClassName = 'custom-column-table'
@@ -62,6 +64,7 @@ const ClassResourceFileTable = ({
   pagination,
   setPagination,
   syncPagingToUrl = true,
+  syncTableColumns = false,
 }: IProps) => {
   const { videoUrl, uploadApi, classApi } = useFeature()
   const router = useRouter()
@@ -77,6 +80,7 @@ const ClassResourceFileTable = ({
   const [defaultEditor, setDefaultEditor] = useState<string>()
   const [loadingEditor, setLoadingEditor] = useState<boolean>(false)
   const [sheetResizeVersion, setSheetResizeVersion] = useState(0)
+  const hasFileData = Boolean(files?.data?.length)
 
   const canDownload = (record: IClassResource) => {
     const perms = record?.class_resource_permissions
@@ -300,32 +304,39 @@ const ClassResourceFileTable = ({
       },
       width: 400,
     },
-    {
-      title: '',
-      key: 'actions',
-      className: colClassName,
-      render: (_, record) => {
-        const allowDownload = canDownload(record)
-        return (
-          <div
-            className={clsx('flex justify-end', {
-              'pointer-events-none opacity-40': !allowDownload,
-            })}
-          >
-            <ActionCellWithPopover
-              className=""
-              listAction={[
-                {
-                  icon: <DownloadIcon className="h-5 w-5" />,
-                  nameAction: 'Download',
-                  action: () => download(record.id),
-                },
-              ]}
-            />
-          </div>
-        )
-      },
-    },
+    ...(syncTableColumns
+      ? [
+          {
+            title: '',
+            key: 'actions',
+            width: 80,
+            align: 'right' as const,
+            ...(hasFileData ? { fixed: 'right' as const } : {}),
+            className: colClassName,
+            render: (_: unknown, record: IClassResource) => {
+              const allowDownload = canDownload(record)
+              return (
+                <div
+                  className={clsx('flex justify-end', {
+                    'pointer-events-none opacity-40': !allowDownload,
+                  })}
+                >
+                  <ActionCellWithPopover
+                    className=""
+                    listAction={[
+                      {
+                        icon: <DownloadIcon className="h-5 w-5" />,
+                        nameAction: 'Download',
+                        action: () => download(record.id),
+                      },
+                    ]}
+                  />
+                </div>
+              )
+            },
+          },
+        ]
+      : []),
   ]
 
   return (
@@ -339,6 +350,8 @@ const ClassResourceFileTable = ({
         pagination={pagination}
         className="style-table-class-resource bg-white"
         isShowPagination={false}
+        tableLayout={syncTableColumns ? 'fixed' : undefined}
+        scroll={syncTableColumns ? { x: 890 } : undefined}
       />
       <div className="p-8 pt-0">
         <PaginationSapp

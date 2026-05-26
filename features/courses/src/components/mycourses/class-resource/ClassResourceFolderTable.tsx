@@ -13,6 +13,8 @@ interface IProps {
   folders: IClassResourceList
   pagination: TablePaginationConfig
   onFolderClick?: (folderId: string) => void
+  /** Align column layout with Files table when either table has rows */
+  syncTableColumns?: boolean
 }
 
 const className = 'custom-column-table'
@@ -124,28 +126,44 @@ const folderColumns = (
       },
       width: 400,
     },
+    {
+      title: '',
+      key: 'action-spacer',
+      width: 80,
+      className,
+      render: () => null,
+    },
   ]
 
 const ClassResourceFolderTable = ({
   folders,
   pagination,
   onFolderClick,
-}: IProps) => (
-  <div className="flex flex-col gap-4">
-    <SectionHeader
-      title="Folders"
-      count={folders?.metadata?.total_records ?? 0}
-    />
-    <SappTable
-      columns={folderColumns(onFolderClick)}
-      data={folders?.data}
-      loading={false}
-      rowKey="id"
-      pagination={pagination}
-      className="style-table-class-resource bg-white"
-      isShowPagination={false}
-    />
-  </div>
-)
+  syncTableColumns = false,
+}: IProps) => {
+  const columns = syncTableColumns
+    ? folderColumns(onFolderClick)
+    : folderColumns(onFolderClick).filter((col) => col.key !== 'action-spacer')
+
+  return (
+    <div className="flex flex-col gap-4">
+      <SectionHeader
+        title="Folders"
+        count={folders?.metadata?.total_records ?? 0}
+      />
+      <SappTable
+        columns={columns}
+        data={folders?.data}
+        loading={false}
+        rowKey="id"
+        pagination={pagination}
+        className="style-table-class-resource bg-white"
+        isShowPagination={false}
+        tableLayout={syncTableColumns ? 'fixed' : undefined}
+        scroll={syncTableColumns ? { x: 890 } : undefined}
+      />
+    </div>
+  )
+}
 
 export default ClassResourceFolderTable
