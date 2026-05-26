@@ -98,6 +98,7 @@ variables:
         - .npmrc
         - .dockerignore
         - prod.Dockerfile
+        - .gitlab-ci.yml
   script:
     - cp $ENV_FILE apps/$APP_NAME/.env
     - cp $ENV_FILE .env
