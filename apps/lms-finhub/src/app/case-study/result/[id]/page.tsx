@@ -17,7 +17,7 @@ import {
   EXHIBIT_TEXT_REPLACE,
   IAnswerResult,
   ICaseStudyResult,
-  ICratchPad,
+  IScratchPad,
   IExhibit,
   IFile,
   IQuestionResult,
@@ -83,7 +83,7 @@ const CaseStudyResult = () => {
   // handle show exhibit list
   const [showListExhibits, setShowListExhibits] = useState(false)
   const [exhibitData, setExhibitData] = useState<IExhibit[]>([])
-  const [openScratchPad, setOpenScratchPad] = useState<Array<ICratchPad>>([])
+  const [openScratchPad, setOpenScratchPad] = useState<Array<IScratchPad>>([])
   const [focusingPadId, setFocusingPadId] = useState('')
   const dispatch = useAppDispatch()
 
@@ -521,7 +521,7 @@ const CaseStudyResult = () => {
     )
   }, [exhibitData])
 
-  const handleCloseScratchPad = (pad: ICratchPad) => {
+  const handleCloseScratchPad = (pad: IScratchPad) => {
     setOpenScratchPad((prev) => {
       let arr = [...prev]
       const newArr = arr.filter((e) => e?.id !== pad.id)

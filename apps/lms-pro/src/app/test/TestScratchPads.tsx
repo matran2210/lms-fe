@@ -7,6 +7,7 @@ import { EditorReader, FileViewer, ModalResizeable } from '@lms/ui'
 import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
 import ScratchPatch from './scratchPatch'
+import { TestServiceAPI } from 'src/api/test-api'
 interface IProps {
   openScratchPad: any[]
   focusingPadId: string
@@ -172,6 +173,7 @@ const TestScratchPads = ({
                     <FileViewer
                       fileName={e?.resource?.name}
                       fileUrl={e?.resource?.url}
+                      onDownload={() => TestServiceAPI.downloadFile({ files: [{ name: e?.resource?.name, file_key: e?.resource?.file_key }] })}
                     />
                   </div>
                 )
@@ -199,7 +201,7 @@ const TestScratchPads = ({
             style={{ height: 'calc(100% - 40px' }}
           >
             {/* <div className='flex flex-'> */}
-            <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
+            <FileViewer fileName={e?.fileName} fileUrl={e?.file} onDownload={() => TestServiceAPI.downloadFile({ files: [{ name: e?.fileName, file_key: e?.fileKey }] })} />
           </div>
           {/* </div> */}
         </ModalResizeable>

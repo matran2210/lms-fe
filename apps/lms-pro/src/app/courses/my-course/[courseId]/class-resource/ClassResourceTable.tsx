@@ -310,6 +310,7 @@ const ClassResourceTable = ({
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
+            onDownload={() => download(params.courseId as string, resource.id)}
           />
         )
 
@@ -325,6 +326,7 @@ const ClassResourceTable = ({
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
+            onDownload={() => download(params.courseId as string, resource.id)}
           />
         )
       case 'PDF':
@@ -335,6 +337,7 @@ const ClassResourceTable = ({
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
+            onDownload={() => download(params.courseId as string, resource.id)}
           />
         )
       case 'POWER_POINT':
@@ -343,6 +346,7 @@ const ClassResourceTable = ({
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
+            onDownload={() => download(params.courseId as string, resource.id)}
           />
         )
       case 'TEXT':

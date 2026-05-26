@@ -58,10 +58,9 @@ import React, {
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import { withAuthorization } from '@lms/hoc'
+import { UploadAPI } from 'src/api/upload'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { CoursesAPI, getActivityById } from 'src/api/courses'
-import { UploadAPI } from 'src/api/upload'
-
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string
@@ -977,7 +976,7 @@ const ActivityTeacherPage = () => {
                     className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-gray-800 hover:text-primary"
                   >
                     {/* <div className='flex flex-'> */}
-                    <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
+                    <FileViewer fileName={e?.fileName} fileUrl={e?.file} onDownload={() => UploadAPI.downloadFile({ files: [{ name: e?.fileName, file_key: e?.fileKey }] })} />
                   </div>
                 </ModalResizeable>
               )
@@ -1025,6 +1024,7 @@ const ActivityTeacherPage = () => {
                             <FileViewer
                               fileName={e?.resource?.name}
                               fileUrl={e?.resource?.url}
+                              onDownload={() => UploadAPI.downloadFile({ files: [{ name: e?.resource?.name, file_key: e?.resource?.file_key }] })}
                             />
                           </div>
                         )

@@ -307,6 +307,7 @@ export default function ClassResourceTeacher() {
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
+            onDownload={() => download(id as string, resource.id)}
           />
         )
 
@@ -322,6 +323,7 @@ export default function ClassResourceTeacher() {
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
+            onDownload={() => download(id as string, resource.id)}
           />
         )
       case 'PDF':
@@ -332,6 +334,7 @@ export default function ClassResourceTeacher() {
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
+            onDownload={() => download(id as string, resource.id)}
           />
         )
       case 'POWER_POINT':
@@ -340,6 +343,7 @@ export default function ClassResourceTeacher() {
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
+            onDownload={() => download(id as string, resource.id)}
           />
         )
       case 'TEXT':
