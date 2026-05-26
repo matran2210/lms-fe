@@ -9,7 +9,7 @@ import {
   SappTable,
   TableActionCell
 } from '@lms/ui'
-import { convertUTCToLocal, formatDateFromUTC } from '@lms/utils'
+import { buildLocalLessonDateTime, convertUTCToLocal, formatDateFromUTC } from '@lms/utils'
 import { Divider, Select } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import clsx from 'clsx'
@@ -133,19 +133,21 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
       render: (record) => <NameNoActionCell dataColumn={record.lesson} />,
     },
     {
-      title: 'Date',
-      render: (record) => {
-        const localStartDate = record.start_date && record.start_time
-              ? dayjs(convertUTCToLocal(`${record.start_date}T${record.start_time}`))
-              : null
-            const localEndDate = record.start_date && record.end_time
-              ? dayjs(convertUTCToLocal(`${record.start_date}T${record.end_time}`))
-              : null
-     
-        return <NameNoActionCell dataColumn={`${localStartDate?.isValid() ? localStartDate.format('DD/MM/YYYY') : '-'} ${localStartDate?.isValid() ? localStartDate.format('HH:mm') : '-'} : ${localEndDate?.isValid() ? localEndDate.format('HH:mm') : '-'}`} />
-      },
-      width: 150,
-    },
+          title: 'Date',
+          width: 150,
+          render: (record) => {
+            const localStartDate = buildLocalLessonDateTime(
+              record.start_date,
+              record.start_time
+            )
+            const localEndDate = buildLocalLessonDateTime(
+              record.start_date,
+              record.end_time
+            )
+    
+            return <NameNoActionCell dataColumn={`${localStartDate?.isValid() ? localStartDate.format('DD/MM/YYYY') : '-'} ${localStartDate?.isValid() ? localStartDate.format('HH:mm') : '-'} : ${localEndDate?.isValid() ? localEndDate.format('HH:mm') : '-'}`} />
+          },
+        },
     {
       title: 'Check In',
       render: (record) => <NameNoActionCell dataColumn={formatDateFromUTC(record.checkin_time, DATE_FORMAT.DATE_TIME_DATE_FIRST)} />,

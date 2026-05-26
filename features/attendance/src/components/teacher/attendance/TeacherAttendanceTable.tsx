@@ -12,12 +12,12 @@ import {
   SappTable,
   TableActionCell
 } from '@lms/ui'
+import { buildLocalLessonDateTime, formatDateFromUTC } from '@lms/utils'
 import { ColumnsType } from 'antd/es/table'
 import dayjs from 'dayjs'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useQuery } from 'react-query'
-import { convertUTCToLocal, formatDateFromUTC } from '@lms/utils'
 import useInfiniteStudentLesson from '../../../hooks/useInfiniteStudentLesson'
 
 interface FilterForm {
@@ -127,12 +127,14 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
       title: 'Date',
       width: 150,
       render: (record) => {
-        const localStartDate = record.lesson_date.start_date && record.start_time
-          ? dayjs(convertUTCToLocal(`${record.lesson_date.start_date}T${record.start_time}`))
-          : null
-        const localEndDate = record.lesson_date.start_date && record.end_time
-          ? dayjs(convertUTCToLocal(`${record.lesson_date.start_date}T${record.end_time}`))
-          : null
+        const localStartDate = buildLocalLessonDateTime(
+          record.lesson_date.start_date,
+          record.lesson_date.start_time
+        )
+        const localEndDate = buildLocalLessonDateTime(
+          record.lesson_date.end_date,
+          record.lesson_date.end_time
+        )
 
         return <NameNoActionCell dataColumn={`${localStartDate?.isValid() ? localStartDate.format('DD/MM/YYYY') : '-'} ${localStartDate?.isValid() ? localStartDate.format('HH:mm') : '-'} : ${localEndDate?.isValid() ? localEndDate.format('HH:mm') : '-'}`} />
       },

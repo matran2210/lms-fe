@@ -9,12 +9,11 @@ import {
   SappTable,
   TableActionCell
 } from '@lms/ui'
+import { buildLocalLessonDateTime, formatDateFromUTC } from '@lms/utils'
 import { ColumnsType } from 'antd/es/table'
 import clsx from 'clsx'
-import dayjs from 'dayjs'
 import React, { useState } from 'react'
 import { useQuery } from 'react-query'
-import { convertUTCToLocal, formatDateFromUTC, formatDateToSlash } from '../../../../../../libs/utils'
 import FilterAttendanceTable from './FilterAttendanceTable'
 
 interface StudentAttendanceTableProps {
@@ -97,17 +96,15 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
       title: 'Date',
       width: 150,
       render: (record) => {
-        const startDateFormat = record.lesson_date.start_date ? formatDateFromUTC(record.lesson_date.start_date, DATE_FORMAT.DATE_DASH) : null
-        const endDateFormat = record.lesson_date.end_date ? formatDateFromUTC(record.lesson_date.end_date, DATE_FORMAT.DATE_DASH) : null
+        const localStartDate = buildLocalLessonDateTime(
+          record.lesson_date.start_date,
+          record.lesson_date.start_time
+        )
+        const localEndDate = buildLocalLessonDateTime(
+          record.lesson_date.end_date,
+          record.lesson_date.end_time
+        )
 
-        const localStartDate = record.lesson_date.start_date && record.lesson_date.start_time
-          ? dayjs(convertUTCToLocal(`${startDateFormat}T${record.lesson_date.start_time}`))
-          : null
-        const localEndDate = record.lesson_date.end_date && record.lesson_date.end_time
-          ? dayjs(convertUTCToLocal(`${endDateFormat}T${record.lesson_date.end_time}Z`))
-          : null
-
-          console.log('localStartDate, localEndDate', `${formatDateFromUTC(record.lesson_date.start_date, DATE_FORMAT.DATE_DASH)}T${record.lesson_date.start_time}`, localEndDate)
         return <NameNoActionCell dataColumn={`${localStartDate?.isValid() ? localStartDate.format('DD/MM/YYYY') : '-'} ${localStartDate?.isValid() ? localStartDate.format('HH:mm') : '-'} : ${localEndDate?.isValid() ? localEndDate.format('HH:mm') : '-'}`} />
       },
     },
@@ -172,12 +169,14 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
             <>
               {attendances.map((record) => {
                 const statusConfig = getStatusConfig(record.status)
-                const localStartDate = record.lesson_date.start_date && record.lesson_date.start_time
-                  ? dayjs(convertUTCToLocal(`${formatDateFromUTC(record.lesson_date.start_date, DATE_FORMAT.DATE_DASH)}T${record.lesson_date.start_time}`))
-                  : null
-                const localEndDate = record.lesson_date.end_date && record.lesson_date.end_time
-                  ? dayjs(convertUTCToLocal(`${formatDateFromUTC(record.lesson_date.end_date, DATE_FORMAT.DATE_DASH)}T${record.lesson_date.end_time}`))
-                  : null
+                const localStartDate = buildLocalLessonDateTime(
+                  record.lesson_date.start_date,
+                  record.lesson_date.start_time
+                )
+                const localEndDate = buildLocalLessonDateTime(
+                  record.lesson_date.end_date,
+                  record.lesson_date.end_time
+                )
                 return (
                   <div
                     key={record.class_schedule_user_id}
