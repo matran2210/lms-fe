@@ -351,7 +351,7 @@ const ClassResourceFileTable = ({
         className="style-table-class-resource bg-white"
         isShowPagination={false}
         tableLayout={syncTableColumns ? 'fixed' : undefined}
-        scroll={syncTableColumns ? { x: 890 } : undefined}
+        scroll={syncTableColumns && hasFileData ? { x: 890 } : undefined}
       />
       <div className="p-8 pt-0">
         <PaginationSapp

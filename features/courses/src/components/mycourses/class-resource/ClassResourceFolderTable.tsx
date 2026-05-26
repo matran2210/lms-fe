@@ -141,6 +141,7 @@ const ClassResourceFolderTable = ({
   onFolderClick,
   syncTableColumns = false,
 }: IProps) => {
+  const hasFolderData = Boolean(folders?.data?.length)
   const columns = syncTableColumns
     ? folderColumns(onFolderClick)
     : folderColumns(onFolderClick).filter((col) => col.key !== 'action-spacer')
@@ -160,7 +161,7 @@ const ClassResourceFolderTable = ({
         className="style-table-class-resource bg-white"
         isShowPagination={false}
         tableLayout={syncTableColumns ? 'fixed' : undefined}
-        scroll={syncTableColumns ? { x: 890 } : undefined}
+        scroll={syncTableColumns && hasFolderData ? { x: 890 } : undefined}
       />
     </div>
   )
