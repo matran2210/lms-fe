@@ -45,6 +45,21 @@ services:
     restart: always
     networks:
       - local
+  
+  lms-test:
+    build:
+      context: .
+      dockerfile: ./prod.Dockerfile
+      args:
+        APP_NAME: "lms-test"
+    container_name: lms-test
+    ports:
+      - "3003:3000"
+    environment:
+      NODE_ENV: production
+    restart: always
+    networks:
+      - local
 networks:
   local:
  
