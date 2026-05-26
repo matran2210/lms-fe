@@ -58,6 +58,7 @@ const nextConfig = {
   experimental: {
     optimizeCss: isProd,
     instrumentationHook: false,
+    optimizePackageImports: ['lodash', 'antd', '@ant-design/icons', 'lucide-react'],
     // Tăng tốc webpack build bằng worker thread riêng
     webpackBuildWorker: true,
     // Tree-shake barrel imports — giảm số module webpack phải parse mỗi route

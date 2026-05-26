@@ -118,7 +118,7 @@
     "@hookform/resolvers": "^3.10.0",
     "@sapp-fe/explanation-package": "^1.8.1",
     "@sapp-fe/preview-part": "^1.9.0",
-    "@sapp-fe/sapp-common-package": "^1.8.4",
+    "@sapp-fe/sapp-common-package": "^1.8.7",
     "antd": "^5.25.0",
     "critters": "^0.0.19",
     "lodash": "^4.17.21",

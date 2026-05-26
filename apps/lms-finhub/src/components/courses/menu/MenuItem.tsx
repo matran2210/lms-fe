@@ -165,6 +165,7 @@ export default function MenuItem({
                 className="h-10 w-10 rounded-full object-cover"
                 width={40}
                 height={40}
+                priority={true}
               />
             ) : (
               <Image

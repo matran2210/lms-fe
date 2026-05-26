@@ -88,11 +88,9 @@ const NotifyList = ({
                   <Image
                     src={BlankAvatarImage}
                     alt="avatar"
-                    className={`rounded-full`}
+                    className="rounded-full object-cover"
                     width={56}
                     height={56}
-                    layout="fixed"
-                    objectFit={'cover'}
                     priority={true}
                   />
                 )}

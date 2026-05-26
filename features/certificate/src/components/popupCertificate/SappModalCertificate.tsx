@@ -30,11 +30,11 @@ function SappModalCertificate({ src, setSrc }: Props) {
           {src && (
             <Image
               src={src}
-              width="500"
-              height="1000"
+              height={1000}
+              width={500}
               className="h-full max-h-[800px] w-full object-contain md:min-h-[500px] md:w-auto"
-              alt={'image'}
-              loading={'eager'}
+              alt="Certificate preview"
+              loading="eager"
               priority={true}
             />
           )}

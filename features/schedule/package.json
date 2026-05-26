@@ -19,7 +19,7 @@
     "@lms/hooks": "workspace:*",
     "@lms/ui": "workspace:*",
     "@lms/utils": "workspace:*",
-    "@sapp-fe/sapp-common-package": "^1.8.4",
+    "@sapp-fe/sapp-common-package": "^1.8.7",
     "antd": "^5.25.0",
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",

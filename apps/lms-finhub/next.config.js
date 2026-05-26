@@ -28,6 +28,7 @@ const nextConfig = {
   experimental: {
     optimizeCss: isProd,
     instrumentationHook: false,
+    optimizePackageImports: ['lodash', 'antd', '@ant-design/icons', 'lucide-react'],
   },
 }
 

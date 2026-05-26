@@ -23,7 +23,7 @@ export default function SingleDialogLayout(props: LayoutProps): ReactElement {
               src={SappLogoImage}
               alt="SAPP Logo"
               priority={true}
-              layout="responsive"
+              style={{ width: '100%', height: 'auto' }}
             />
           </div>
           <div className="content">{children}</div>

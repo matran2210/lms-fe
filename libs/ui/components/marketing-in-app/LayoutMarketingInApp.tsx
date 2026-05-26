@@ -41,24 +41,42 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
         )}
       >
         {!loaded && <SappLoading />}
-        <Image
-          src={dashboardTab.src}
-          alt={dashboardTab.title}
-          priority
-          layout={isHome ? 'fill' : 'responsive'}
-          objectFit={isHome ? 'cover' : undefined}
-          width={!isHome ? 1920 : undefined}
-          height={!isHome ? dashboardTab.height : undefined}
-          className={clsx(
-            'transition-opacity duration-700 ease-in-out',
-            loaded ? 'opacity-100' : 'opacity-0',
-          )}
-          onLoad={() =>
-            setTimeout(() => {
-              setLoaded(true)
-            }, 500)
-          }
-        />
+        {isHome ? (
+          <Image
+            src={dashboardTab.src}
+            alt={dashboardTab.title}
+            priority
+            fill
+            sizes="100vw"
+            className={clsx(
+              'object-cover transition-opacity duration-700 ease-in-out',
+              loaded ? 'opacity-100' : 'opacity-0',
+            )}
+            onLoad={() =>
+              setTimeout(() => {
+                setLoaded(true)
+              }, 500)
+            }
+          />
+        ) : (
+          <Image
+            src={dashboardTab.src}
+            alt={dashboardTab.title}
+            priority
+            width={1920}
+            height={dashboardTab.height}
+            sizes="100vw"
+            className={clsx(
+              'w-full transition-opacity duration-700 ease-in-out',
+              loaded ? 'opacity-100' : 'opacity-0',
+            )}
+            onLoad={() =>
+              setTimeout(() => {
+                setLoaded(true)
+              }, 500)
+            }
+          />
+        )}
         <NavigationBarMKTInApp />
         {isHome ? (
           <div className="absolute bottom-32 left-1/2 w-full -translate-x-1/2 px-25 short:bottom-8">

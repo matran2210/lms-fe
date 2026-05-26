@@ -1,6 +1,5 @@
 import { DocumentItem } from '@lms/core'
 import Aos from 'aos'
-import 'aos/dist/aos.css'
 import { useEffect, useRef } from 'react'
 import { StoryBlockRenderer } from './StoryBlockRenderer'
 import { useStoryline } from '@contexts/StorylineContext'

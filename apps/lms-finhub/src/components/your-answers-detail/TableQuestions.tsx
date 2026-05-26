@@ -18,7 +18,6 @@ import {
   roundNumber,
   truncateString,
 } from '@lms/utils'
-import 'aos/dist/aos.css'
 import clsx from 'clsx'
 import DOMPurify from 'dompurify'
 import { isEmpty } from 'lodash'
@@ -198,10 +197,9 @@ const TableQuestions = ({
               <Image
                 src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
                 alt="Correct"
-                className="mr-1 text-success-600"
+                className="mr-1 shrink-0"
                 width={16}
                 height={16}
-                layout="fixed"
               />
               {roundNumber(answer?.question?.question_report?.ratio || 0)}%
             </div>

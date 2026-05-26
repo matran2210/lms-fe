@@ -94,12 +94,13 @@ const StoryFooter = ({
         )}
       >
         <div className="flex justify-start gap-3">
-          <Image
+        <Image
             src="/assets/images/fire.png"
-            alt="check"
+            alt="You have finished this item"
             width={24}
             height={24}
             className="shrink-0"
+            priority
           />
           <div className="text-xl font-semibold leading-7 text-gray-800">
             You have finished this item!

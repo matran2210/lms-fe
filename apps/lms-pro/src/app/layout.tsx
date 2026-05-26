@@ -91,6 +91,8 @@ export const revalidate = 0
 const roboto = Roboto({
   subsets: ['latin'],
   weight: ['300', '400', '500', '700'],
+  display: 'swap',
+  preload: true,
 })
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -102,7 +104,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"
           strategy="afterInteractive"
         />
-        {/* Roboto đã được load qua next/font — bỏ link thừa này để tránh load font 2 lần */}
         <GoogleAnalytics
           gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID ?? ''}
         />

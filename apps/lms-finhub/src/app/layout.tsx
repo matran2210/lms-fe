@@ -89,6 +89,8 @@ export const metadata: Metadata = {
 const roboto = Roboto({
   subsets: ['latin'],
   weight: ['300', '400', '500', '700'],
+  display: 'swap',
+  preload: true,
 })
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -98,10 +100,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Script
           src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"
           strategy="afterInteractive"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-          rel="stylesheet"
         />
       </head>
       <body className={roboto.className}>

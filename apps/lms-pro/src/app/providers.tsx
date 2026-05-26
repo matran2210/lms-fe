@@ -2,7 +2,6 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import '@fortune-sheet/react/dist/index.css'
 import {
   CourseNoteProvider,
   CourseProvider,

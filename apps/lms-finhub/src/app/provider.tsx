@@ -1,7 +1,6 @@
 // app/providers.tsx
 'use client'
 
-import '@fortune-sheet/react/dist/index.css'
 import {
   CourseProvider,
   FeatureProvider,
@@ -24,9 +23,7 @@ import {
   SappConfirmDialogContainer,
 } from '@lms/ui'
 import { fetcher } from '@services/request'
-import '@xyflow/react/dist/style.css'
 import Aos from 'aos'
-import 'aos/dist/aos.css'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import weekday from 'dayjs/plugin/weekday'
@@ -40,8 +37,6 @@ import { ReactNode, useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { Provider } from 'react-redux'
-import 'slick-carousel/slick/slick-theme.css'
-import 'slick-carousel/slick/slick.css'
 import { io } from 'socket.io-client'
 import { ActivityAPI } from 'src/api/activity'
 import { ClassAPI } from 'src/api/class'

@@ -2,7 +2,6 @@
 import { COMMENTS, GRADE_STATUS, IAnswer } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { ButtonPrimary } from '@lms/ui'
-import 'aos/dist/aos.css'
 import clsx from 'clsx'
 import { useRouter } from 'next/navigation'
 import React, { useRef, useState } from 'react'
