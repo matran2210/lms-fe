@@ -1,6 +1,13 @@
 'use client'
 
 
+import {
+  DocumentItem,
+  IStoryline,
+  IStorylineItem,
+  IStorylineProgressResponse,
+  IStorylineQuestion
+} from '@lms/core'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import React, {
   createContext,
@@ -10,24 +17,15 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { CoursesAPI } from 'src/api/courses'
-import {
-  DocumentItem,
-  IMultiChoiceQuestion,
-  IStoryline,
-  IStorylineItem,
-  IStorylineProgressResponse,
-  IStorylineQuestion,
-} from '@lms/core'
-import { useStorylineSidebar } from './StorylineSidebarContext'
-import { TestServiceAPI } from 'src/api/test-api'
-import { StorylineAPI } from 'src/api/storyline'
 import {
   QueryObserverResult,
   RefetchOptions,
   RefetchQueryFilters,
   useQuery,
 } from 'react-query'
+import { CoursesAPI } from 'src/api/courses'
+import { StorylineAPI } from 'src/api/storyline'
+import { useStorylineSidebar } from './StorylineSidebarContext'
 
 
 interface StorylineContextValue {
@@ -194,7 +192,7 @@ export function StorylineProvider({ storylineData, children }: Props) {
     if (isFinish) {
       setIsCompletedProgress(isCompletedProgress + 1)
     } else {
-      if (isUpdateProgress && currentDocument?.type !== 'VIDEO')
+      if (isUpdateProgress)
         await updateProgress(storyline_item_document_id)
     }
     if (visibleDocumentCount < totalDocs) {
@@ -255,10 +253,14 @@ export function StorylineProvider({ storylineData, children }: Props) {
 
 
   useEffect(() => {
-    if (!currentStep) return
+    if (!currentStep || !storylineDocument) return
     const completed = currentStep.item_progress?.total_document_completed ?? 0
+    // const isLastVisibleDocument = completed === storylineDocument.length
+    // const lastestLearnedDocument = storylineDocument?.[(!completed ? completed + 1 : completed) - 1]
+    // const lastVisibleDocumentIsInteractive = ['INTERACTION'].includes(lastestLearnedDocument?.type)
+    // setVisibleDocumentCount(!completed ? completed + 1 : lastVisibleDocumentIsInteractive && !isLastVisibleDocument ? completed + 1 :  completed)
     setVisibleDocumentCount(!completed ? completed + 1 : completed)
-  }, [currentStep?.id])
+  }, [currentStep?.id, storylineDocument])
 
 
   return (
