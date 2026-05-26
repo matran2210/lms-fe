@@ -30,6 +30,6 @@
     "@lms/hooks": "workspace:*",
     "@lms/ui": "workspace:*",
     "@lms/utils": "workspace:*",
-    "@sapp-fe/sapp-common-package": "^1.8.4"
+    "@sapp-fe/sapp-common-package": "^1.8.7"
   }
 }
