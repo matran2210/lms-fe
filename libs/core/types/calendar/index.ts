@@ -42,6 +42,7 @@ export interface ICalendarDetail {
   is_case_study: boolean
   status: string
   is_review_allowed: boolean
+  schedule_status: string
   class: {
     id: string
     name: string
