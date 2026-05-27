@@ -58,10 +58,9 @@ import React, {
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'
 import { withAuthorization } from '@lms/hoc'
+import { UploadAPI } from 'src/api/upload'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { CoursesAPI, getActivityById } from 'src/api/courses'
-import { UploadAPI } from 'src/api/upload'
-
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string
@@ -124,6 +123,7 @@ const ActivityTeacherPage = () => {
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [fetch_progress, setFetch_progress] = useState<string[]>([])
   const [exhibitText, setExhibitText] = useState<string>('')
+  const [focusingPadId, setFocusingPadId] = useState('')
 
   const settingDoneProcessActivity = (activity: IActivity) => {
     setIsHasQuizGrading(false)
@@ -540,12 +540,20 @@ const ActivityTeacherPage = () => {
                   uuid={e?.uuid}
                   count={index}
                   key={e?.uuid}
+                  setFocusingPadId={setFocusingPadId}
+                  focusingPadId={focusingPadId}
                 />
               )
             })}
             <>
               {selector?.calculator_status && (
-                <CalculatorModal onClose={() => dispatch(closeCalculator())} />
+                <CalculatorModal 
+                  onClose={() => dispatch(closeCalculator())}
+                  key={"sidebar-calculator"}
+                  onClick={() => setFocusingPadId("sidebar-calculator")}
+                  isInBody
+                  isTopModal={focusingPadId === "sidebar-calculator"}
+                />
               )}
             </>
           </>
@@ -555,8 +563,8 @@ const ActivityTeacherPage = () => {
             <div className="bg-gray-100px-6 ">
               <div
                 className={`flex w-full select-none items-center justify-between gap-4 py-6 ${activity?.course_outcomes?.length > 0
-                    ? 'borderColor-default border-b'
-                    : ''
+                  ? 'borderColor-default border-b'
+                  : ''
                   }`}
               >
                 <div className="text-2xl font-medium ">
@@ -954,8 +962,13 @@ const ActivityTeacherPage = () => {
                   height={850}
                   key={e.id}
                   dragHandleClassName="modal-header"
-                  handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                  onClose={() => handleCloseScratchPad(e)}
                   position="center"
+                  isInBody
+                  modalIndex={index}
+                  isTopModal={focusingPadId === e.id}
+                  onModalFocus={() => setFocusingPadId(e?.id as string)}
+                  draggableFull
                 >
                   <div
                     // className="overflow-auto p-4 bg-white"
@@ -963,7 +976,7 @@ const ActivityTeacherPage = () => {
                     className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-gray-800 hover:text-primary"
                   >
                     {/* <div className='flex flex-'> */}
-                    <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
+                    <FileViewer fileName={e?.fileName} fileUrl={e?.file} onDownload={() => UploadAPI.downloadFile({ files: [{ name: e?.fileName, file_key: e?.fileKey }] })} />
                   </div>
                 </ModalResizeable>
               )
@@ -972,7 +985,7 @@ const ActivityTeacherPage = () => {
                 <ModalResizeable
                   key={e.id}
                   dragHandleClassName="modal-header"
-                  handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                  onClose={() => handleCloseScratchPad(e)}
                   position="center"
                   header={({ requestClose }) => (
                     <div className="relative">
@@ -994,6 +1007,10 @@ const ActivityTeacherPage = () => {
                       </button>
                     </div>
                   )}
+                  isInBody
+                  modalIndex={e.index}
+                  isTopModal={focusingPadId === e.id}
+                  onModalFocus={() => setFocusingPadId(e?.id as string)}
                 >
                   <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                     <EditorReader
@@ -1007,6 +1024,7 @@ const ActivityTeacherPage = () => {
                             <FileViewer
                               fileName={e?.resource?.name}
                               fileUrl={e?.resource?.url}
+                              onDownload={() => UploadAPI.downloadFile({ files: [{ name: e?.resource?.name, file_key: e?.resource?.file_key }] })}
                             />
                           </div>
                         )

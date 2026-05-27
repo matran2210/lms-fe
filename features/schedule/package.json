@@ -10,20 +10,20 @@
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@sapp-fe/sapp-common-package": "^1.8.0",
+    "@hookform/resolvers": "^3.10.0",
     "antd": "^5.25.0",
     "clsx": "^2.1.1",
+    "crypto-js": "^4.2.0",
     "dayjs": "^1.11.12",
-    "react-query": "3.39.3",
-    "react-hook-form": "7.48.2",
-    "@hookform/resolvers": "^3.10.0",
-    "zod": "^3.22.4",
-    "react-hot-toast": "^2.4.1",
     "lodash": "^4.17.21",
-    "crypto-js": "^4.2.0"
+    "react-hook-form": "7.48.2",
+    "react-hot-toast": "^2.4.1",
+    "react-query": "3.39.3",
+    "zod": "^3.22.4"
   },
   "dependencies": {
     "@lms/assets": "workspace:*",
+    "@lms/contexts": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/feature-class": "workspace:*",
     "@lms/feature-courses": "workspace:*",
@@ -31,9 +31,6 @@
     "@lms/hooks": "workspace:*",
     "@lms/ui": "workspace:*",
     "@lms/utils": "workspace:*",
-    "@lms/hooks": "workspace:*",
-    "@lms/contexts": "workspace:*",
-    "@lms/hoc": "workspace:*",
-    "@lms/feature-class": "workspace:*"
+    "@sapp-fe/sapp-common-package": "^1.8.7"
   }
 }

@@ -1,13 +1,12 @@
 interface IProps {
-  warning?: boolean
+  warning?: boolean;
 }
-const Warning = (props: IProps) => {
-  const { warning } = props
-  const warningValue = 'DO NOT DIVIDE BY 0! AGAIN, DO NOT DIVIDE BY 0!!!'
+const Warning = ({ warning = false }: IProps) => {
+  const warningValue = "DO NOT DIVIDE BY 0! AGAIN, DO NOT DIVIDE BY 0!!!";
 
-  let classList = 'warning'
+  let classList = "warning";
   if (warning) {
-    classList = 'warning warning--active'
+    classList = "warning warning--active";
   }
 
   return (
@@ -15,11 +14,7 @@ const Warning = (props: IProps) => {
       <i className="fas fa-radiation" />
       <p>{warningValue}</p>
     </div>
-  )
-}
+  );
+};
 
-Warning.defaultProps = {
-  warning: false,
-}
-
-export default Warning
+export default Warning;
