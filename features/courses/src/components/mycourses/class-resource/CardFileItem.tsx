@@ -174,6 +174,7 @@ const CardFileItem = ({ data, name, onFolderClick }: IProps) => {
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
+            onDownload={() => download(resource.id)}
           />
         )
 
@@ -189,6 +190,7 @@ const CardFileItem = ({ data, name, onFolderClick }: IProps) => {
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
+            onDownload={() => download(resource.id)}
           />
         )
       case 'PDF':
@@ -199,6 +201,7 @@ const CardFileItem = ({ data, name, onFolderClick }: IProps) => {
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
+            onDownload={() => download(resource.id)}
           />
         )
       case 'POWER_POINT':
@@ -207,6 +210,7 @@ const CardFileItem = ({ data, name, onFolderClick }: IProps) => {
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
+            onDownload={() => download(resource.id)}
           />
         )
       case 'TEXT':

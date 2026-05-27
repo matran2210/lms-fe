@@ -171,7 +171,7 @@ const ClassResourceFileTable = ({
             <EditorReader text_editor_content={defaultEditor || ''} />
           </div>
         ) : (
-          <FileViewer fileName={resource.name} fileUrl={resource.url} onlyView />
+          <FileViewer fileName={resource.name} fileUrl={resource.url} onlyView onDownload={() => download(resource.id)} />
         )
       case 'SHEET':
         return resource.is_encrypted ? (
@@ -181,16 +181,16 @@ const ClassResourceFileTable = ({
             resizeVersion={sheetResizeVersion}
           />
         ) : (
-          <FileViewer fileName={resource.name} fileUrl={resource.url} onlyView />
+          <FileViewer fileName={resource.name} fileUrl={resource.url} onlyView onDownload={() => download(resource.id)} />
         )
       case 'PDF':
         return resource.is_encrypted ? (
           <PdfViewer url={resource.url} />
         ) : (
-          <FileViewer fileName={resource.name} fileUrl={resource.url} onlyView />
+          <FileViewer fileName={resource.name} fileUrl={resource.url} onlyView onDownload={() => download(resource.id)} />
         )
       case 'POWER_POINT':
-        return <FileViewer fileName={resource.name} fileUrl={resource.url} onlyView />
+        return <FileViewer fileName={resource.name} fileUrl={resource.url} onlyView onDownload={() => download(resource.id)} />
       case 'TEXT':
         return <TextPreview url={resource.url} />
       case 'ZIP':
