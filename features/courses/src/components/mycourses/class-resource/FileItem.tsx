@@ -149,7 +149,7 @@ const FileItem = ({ file }: IFileItemProps) => {
             <EditorReader text_editor_content={defaultEditor || ''} />
           </div>
         ) : (
-          <FileViewer fileName={resource.name} fileUrl={resource.url} onlyView />
+          <FileViewer fileName={resource.name} fileUrl={resource.url} onlyView onDownload={download} />
         )
       case 'SHEET':
         return resource.is_encrypted ? (
@@ -159,16 +159,16 @@ const FileItem = ({ file }: IFileItemProps) => {
             resizeVersion={sheetResizeVersion}
           />
         ) : (
-          <FileViewer fileName={resource.name} fileUrl={resource.url} onlyView />
+          <FileViewer fileName={resource.name} fileUrl={resource.url} onlyView onDownload={download} />
         )
       case 'PDF':
         return resource.is_encrypted ? (
           <PdfViewer url={resource.url} />
         ) : (
-          <FileViewer fileName={resource.name} fileUrl={resource.url} onlyView />
+          <FileViewer fileName={resource.name} fileUrl={resource.url} onlyView onDownload={download} />
         )
       case 'POWER_POINT':
-        return <FileViewer fileName={resource.name} fileUrl={resource.url} onlyView />
+        return <FileViewer fileName={resource.name} fileUrl={resource.url} onlyView onDownload={download} />
       case 'TEXT':
         return <TextPreview url={resource.url} />
       case 'ZIP':
