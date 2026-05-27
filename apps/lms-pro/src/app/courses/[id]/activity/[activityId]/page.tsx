@@ -13,7 +13,6 @@ import {
 } from '@lms/assets'
 import {
   ActivityResource,
-  CalculatorModal,
   CreateNote,
   Discussion,
   PopupLockContent,
@@ -24,6 +23,7 @@ import {
   FileViewer,
   Layout,
   LearningResource,
+  CalculatorModal,
   ModalResizeable,
 } from '@lms/ui'
 import { convertMinutesToHourFormat, extractNotActivatedData } from '@lms/utils'

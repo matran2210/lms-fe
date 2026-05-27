@@ -36,8 +36,9 @@ import {
   IActivityResource,
   ISubSection,
 } from '@lms/core'
-import { CalculatorModal, PopupLockContent } from '@lms/feature-courses'
+import { PopupLockContent } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
+import { CalculatorModal } from '@lms/ui'
 import { trackGAEvent } from '@lms/utils'
 import Link from 'next/link'
 import {

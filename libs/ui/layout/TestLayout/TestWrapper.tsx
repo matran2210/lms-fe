@@ -53,8 +53,6 @@ const TestWrapper = ({
   timeRef,
   setOpenSubmit,
   setOpenQuit,
-  type,
-  setSubmitEventTest,
   setUnSubmitAnswer,
   checkUnSubmitAnswer,
   footer,
@@ -64,7 +62,7 @@ const TestWrapper = ({
   resetWordBeforeAction,
 }: PropsWithChildren<IProps>) => {
   const {dispatch} = useFeature();
-  const startTime = dayjs(quizAttempt.created_at);
+  const startTime = dayjs(quizAttempt?.created_at);
   const isValidStart = startTime.isValid();
   const duration = quizDetail?.quiz_timed;
 

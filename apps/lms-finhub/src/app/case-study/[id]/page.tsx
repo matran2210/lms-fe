@@ -27,11 +27,7 @@ import {
   RESPONSE_OPTION,
   ROUTES,
 } from '@lms/core'
-import {
-  CalculatorModal,
-  QuitTestModal,
-  UnSubmitAnswerModal,
-} from '@lms/feature-courses'
+import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-courses'
 import {
   useMousePosition,
   useSmartModalSize,
@@ -40,6 +36,7 @@ import {
 import {
   AddWordPreview,
   Calculator,
+  CalculatorModal,
   CaseStudyWrapper,
   EditorReader,
   EssayQuestionPreview,
@@ -60,14 +57,21 @@ import { Popover } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  ChangeEvent,
+  createRef,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { TestServiceAPI } from 'src/api/test-api'
-import ScratchPatch from 'src/app/short-course/test/scratchPatch'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import ConFirmSubmit from '../../short-course/test/conFirmSubmit'
 import LimitQuizModal from '../../short-course/test/limitQuizModal'
+import ScratchPatch from 'src/app/short-course/test/scratchPatch'
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])
   const { width: widthFileViewer, height: heightFileViewer } =
@@ -208,7 +212,7 @@ const CaseStudyDetail = () => {
         )
       case QUESTION_TYPES.ESSAY:
         if (!editorRefs.current[index]) {
-          editorRefs.current[index] = React.createRef()
+          editorRefs.current[index] = createRef()
         }
         return (
           <EssayQuestionPreview

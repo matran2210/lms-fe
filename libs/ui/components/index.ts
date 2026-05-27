@@ -22,3 +22,6 @@ export * from "./uploadFile/ModalUploadFile";
 export * from "./tag/StatusTag";
 export { default as PromotionalBanner } from "./banner/PromotionalBanner";
 export * from "./marketing-in-app";
+export { default as CalculatorModal } from "./calculator-modal/CalculatorModal";
+export * from './scratchpad'
+

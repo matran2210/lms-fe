@@ -33,11 +33,11 @@ import {
   RESPONSE_OPTION,
 } from '@lms/core'
 import {
-  CalculatorModal,
   ConFirmSubmit,
   ResetToAnswerTemplateModal,
   ShowAnswerTemplate,
 } from '@lms/feature-courses'
+import { LimitQuizModal } from '@lms/feature-courses'
 import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-courses'
 import { useSmartModalSize, useTailwindBreakpoint } from '@lms/hooks'
 import {
@@ -47,7 +47,7 @@ import {
   EditorReader,
   EssayQuestionPreview,
   FileViewer,
-  HookFormTextArea,
+  CalculatorModal,
   MatchQuizComponent,
   ModalResizeable,
   ModalUploadFile,
@@ -72,12 +72,11 @@ import toast from 'react-hot-toast'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { TestServiceAPI } from 'src/api/test-api'
-import LimitQuizModal from 'src/app/test/limitQuizModal'
-import ScratchPatch from 'src/app/test/scratchPatch'
 import {
   selectPopupActivateCourse,
   showPopupActivatedCourse,
 } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
+import { ScratchPatch } from '@lms/ui'
 
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])

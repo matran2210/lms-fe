@@ -29,7 +29,7 @@ import {
   ROUTES,
   ScratchPadValue,
 } from '@lms/core'
-import { CalculatorModal } from '@lms/feature-courses'
+import { CalculatorModal } from '@lms/ui'
 import {
   useMousePosition,
   useSmartModalSize,

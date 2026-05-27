@@ -266,7 +266,7 @@ const ModalActionTest = ({
   const handleStartANewAttempt = async () => {
     //to do: start test
     try {
-      router.push(`/test/${data.quiz.id}?class_user_id=${class_user_id}`);
+      router.push(`${process.env.NEXT_PUBLIC_SUB_DOMAIN_TEST}/test/${data.quiz.id}?class_user_id=${class_user_id}`);
       status
         ? () => trackGAEvent("Click Button Retake Modal Test")
         : () => trackGAEvent("Click Button Start Modal Test");

@@ -24,7 +24,7 @@ import {
   QUESTION_TYPES,
   ScratchPadValue,
 } from '@lms/core'
-import { CalculatorModal } from '@lms/feature-courses'
+import { CalculatorModal, ScratchPatch } from '@lms/ui'
 import { useMousePosition, useSmartModalSize } from '@lms/hooks'
 import {
   AddWordPreview,
@@ -48,7 +48,6 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { CoursesAPI } from 'src/api/courses'
-import ScratchPatch from 'src/app/test/scratchPatch'
 import { PageLink } from 'src/constants/routers'
 import { withAuthorization } from '@lms/hoc'
 import { useAppDispatch } from 'src/redux/hook'
