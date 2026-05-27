@@ -44,12 +44,9 @@ import {
   useSearchParams,
 } from 'next/navigation'
 import { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
-import TagManager, { TagManagerArgs } from 'react-gtm-module'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { Provider } from 'react-redux'
-import { io } from 'socket.io-client'
-import { ActivityAPI } from 'src/api/activity'
 import CalendarApi from 'src/api/calendar'
 import { uploadImageToLinkedIn } from 'src/api/certificate'
 import { ClassAPI } from 'src/api/class'
@@ -83,6 +80,7 @@ import { ProgressAPI } from 'src/api/progress'
 import { TeacherAPI } from 'src/api/teacher'
 import { MyRequestAPI } from 'src/api/my-request'
 import { RequestAPI } from 'src/api/request'
+import { ActivityAPI } from 'src/api/activity'
 
 // Lazy load MKTInApp — kéo framer-motion + react-slick + ModalMarketingInApp
 // Không cần SSR, chỉ hiện ở một số route → không nên vào initial bundle
@@ -124,7 +122,6 @@ function Providers({ children }: { children: ReactNode }) {
   const authenticationManager = authManagerRef.current
 
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID || ''
-  const tagManagerArgs: TagManagerArgs = { gtmId }
 
   const { isMobileView } = useTailwindBreakpoint()
 
@@ -194,15 +191,17 @@ function Providers({ children }: { children: ReactNode }) {
   useEffect(() => {
     const token = authenticationManager.getToken()
     if (token !== '') {
-      const newSocket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
-        extraHeaders: {
-          authorization: token,
-        },
+      let cleanup: (() => void) | undefined
+      import('socket.io-client').then(({ io }) => {
+        const newSocket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
+          extraHeaders: {
+            authorization: token,
+          },
+        })
+        setSocket(newSocket)
+        cleanup = () => newSocket.disconnect()
       })
-      setSocket(newSocket)
-      return () => {
-        newSocket.disconnect()
-      }
+      return () => cleanup?.()
     }
   }, []) // chỉ chạy 1 lần khi mount — authenticationManager là stable ref
 
@@ -223,7 +222,11 @@ function Providers({ children }: { children: ReactNode }) {
     }
   }, [socket])
   useEffect(() => {
-    TagManager.initialize(tagManagerArgs)
+    if (gtmId) {
+      import('react-gtm-module').then(({ default: TagManager }) => {
+        TagManager.initialize({ gtmId })
+      })
+    }
   }, [])
 
   useEffect(() => {

@@ -5,7 +5,19 @@ import { ILearningOutcome, ITabs, TEST_TYPE } from '@lms/core'
 import { TestModalTeacher } from '@lms/feature-courses'
 import { LayoutTeacher, SappDrawer, TextSkeleton } from '@lms/ui'
 import { buildQueryString, formatDate } from '@lms/utils'
-import PreviewPartDetail from '@sapp-fe/preview-part'
+import dynamic from 'next/dynamic'
+
+const PreviewPartDetail = dynamic(
+  () => import('@sapp-fe/preview-part'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex min-h-[400px] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </div>
+    ),
+  }
+)
 import { Alert } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'

@@ -4,9 +4,14 @@ import { useFeature, UserType } from '@lms/contexts'
 import { LAYOUT } from '@lms/core'
 import { withAuthorization } from '@lms/hoc'
 import { FullScreenLayout, Layout } from '@lms/ui'
-import { QuizResultComponent } from '@sapp-fe/quiz-result-package'
+import dynamic from 'next/dynamic'
 import { IQuestionResultResponse } from '@sapp-fe/quiz-result-package/dist/type'
 import { useEffect, useState } from 'react'
+
+const QuizResultComponent = dynamic(
+  () => import('@sapp-fe/quiz-result-package').then((m) => ({ default: m.QuizResultComponent })),
+  { ssr: false, loading: () => <div className="flex h-40 items-center justify-center"><div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" /></div> }
+)
 
 const TableEntranceResult = () => {
   const { router, query, params, courseApi } = useFeature()

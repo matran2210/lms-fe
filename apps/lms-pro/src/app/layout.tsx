@@ -17,7 +17,7 @@ import Script from 'next/script'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import ClientLayout from './client-layout'
-import { Roboto } from 'next/font/google'
+import { Inter, Roboto } from 'next/font/google'
 import type { Metadata } from 'next'
 import { GoogleAnalytics } from '@next/third-parties/google'
 
@@ -91,8 +91,22 @@ export const revalidate = 0
 const roboto = Roboto({
   subsets: ['latin'],
   weight: ['300', '400', '500', '700'],
-  display: 'swap',
+  // 'optional' — browser không block render để chờ font download.
+  // Nếu font chưa cache, dùng fallback ngay; swap sau khi font sẵn sàng.
+  // Đây là cách duy nhất để loại bỏ render-blocking từ Google Fonts khi dùng next/font.
+  display: 'optional',
   preload: true,
+  adjustFontFallback: true, // tự động tạo fallback metrics khớp với Roboto → tránh layout shift
+})
+
+// Inter — load qua next/font thay vì @import CSS để tránh render-blocking request
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  display: 'optional',
+  preload: false,
+  variable: '--font-inter',
+  adjustFontFallback: true,
 })
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -104,11 +118,17 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"
           strategy="afterInteractive"
         />
+        {/* FontAwesome — load sau khi trang đã interactive để không block FCP/LCP */}
+        <Script
+          src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+        />
         <GoogleAnalytics
           gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID ?? ''}
         />
       </head>
-      <body className={roboto.className}>
+      <body className={`${roboto.className} ${inter.variable}`}>
         <ProvidersWrapper>
           <ClientLayout />
           {children}

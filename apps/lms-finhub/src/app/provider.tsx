@@ -37,7 +37,6 @@ import { ReactNode, useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { Provider } from 'react-redux'
-import { io } from 'socket.io-client'
 import { ActivityAPI } from 'src/api/activity'
 import { ClassAPI } from 'src/api/class'
 import { CoursesAPI } from 'src/api/courses'
@@ -79,15 +78,17 @@ function Providers({ children }: { children: ReactNode }) {
   useEffect(() => {
     const token = authenticationManager.getToken()
     if (token !== '') {
-      const newSocket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
-        extraHeaders: {
-          authorization: token,
-        },
+      let cleanup: (() => void) | undefined
+      import('socket.io-client').then(({ io }) => {
+        const newSocket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
+          extraHeaders: {
+            authorization: token,
+          },
+        })
+        setSocket(newSocket)
+        cleanup = () => newSocket.disconnect()
       })
-      setSocket(newSocket)
-      return () => {
-        newSocket.disconnect()
-      }
+      return () => cleanup?.()
     }
   }, [authenticationManager]) // reconnect khi authToken thay đổi
 

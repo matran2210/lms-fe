@@ -11,8 +11,12 @@ import {
 } from '@lms/core'
 import { FullScreenLayout, PDFViewer } from '@lms/ui'
 import { Tooltip } from 'antd'
-import { handleMultipleCorrectAnswer } from '@lms/utils'
-import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
+import dynamic from 'next/dynamic'
+
+const ExplanationPackageV2 = dynamic(
+  () => import('@sapp-fe/explanation-package').then((m) => ({ default: m.ExplanationPackageV2 })),
+  { ssr: false, loading: () => <div className="flex h-full items-center justify-center"><span className="text-sm text-gray-400">Đang tải...</span></div> }
+)
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { CoursesAPI } from 'src/api/courses'
@@ -25,6 +29,7 @@ import {
 } from '@lms/feature-courses'
 import { useQuery } from 'react-query'
 import { useTailwindBreakpoint } from '@lms/hooks'
+import { handleMultipleCorrectAnswer } from '@lms/utils'
 
 const Explanation = () => {
   const router = useRouter()

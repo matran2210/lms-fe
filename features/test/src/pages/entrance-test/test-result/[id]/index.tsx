@@ -5,8 +5,20 @@ import { ANIMATION } from '@lms/core'
 import { withAuthorization } from '@lms/hoc'
 import { Layout, PinnedNotificationWrapper, SappLoadingGlobal } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
-import QuizResult from '@sapp-fe/entrance-test-result-package'
+import dynamic from 'next/dynamic'
 import { useState } from 'react'
+
+const QuizResult = dynamic(
+  () => import('@sapp-fe/entrance-test-result-package'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex h-[400px] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </div>
+    ),
+  }
+)
 
 const TestEntranceResult = () => {
   const { courseApi, pageLink, router, query, params } = useFeature()

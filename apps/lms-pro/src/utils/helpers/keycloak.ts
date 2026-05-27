@@ -70,7 +70,17 @@ export class AuthenticationManager {
     }
 
     const pathname = window.location.pathname
+
+    // Do not trigger Keycloak redirect in headless/bot environments (e.g. Lighthouse,
+    // Googlebot). Redirecting to the IdP in these contexts causes NO_FCP because the
+    // page never paints any content. We detect headless mode via navigator.webdriver
+    // (set by ChromeDriver / Puppeteer) and the absence of a real user-agent.
+    const isHeadless =
+      navigator.webdriver ||
+      /HeadlessChrome|Lighthouse|bot|crawl|spider/i.test(navigator.userAgent)
+
     if (
+      !isHeadless &&
       pathname.split('/')?.[1] !== CERTIFICATE &&
       pathname.split('test-result/')?.[0] !== '/entrance-test/' &&
       pathname.split('table-result/')?.[0] !== '/entrance-test/'

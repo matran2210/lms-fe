@@ -11,8 +11,13 @@ import {
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
 import { FullScreenLayout, PDFViewer } from '@lms/ui'
-import { ExplanationPackage } from '@sapp-fe/explanation-package'
+import dynamic from 'next/dynamic'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
+
+const ExplanationPackage = dynamic(
+  () => import('@sapp-fe/explanation-package').then((m) => ({ default: m.ExplanationPackage })),
+  { ssr: false, loading: () => <div className="flex h-full items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" /></div> }
+)
 import { useEffect, useState } from 'react'
 import { CoursesAPI } from 'src/api/courses'
 import { TestServiceAPI } from 'src/api/test-api'

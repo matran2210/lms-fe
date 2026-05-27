@@ -10,8 +10,21 @@ import {
 } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { HeaderMobile, Layout } from '@lms/ui'
-import { IEvent, IFilter, SAPPCalendarV2 } from '@sapp-fe/sapp-common-package'
+import { IEvent, IFilter } from '@sapp-fe/sapp-common-package'
+import dynamic from 'next/dynamic'
 import clsx from 'clsx'
+
+const SAPPCalendarV2 = dynamic(
+  () => import('@sapp-fe/sapp-common-package').then((m) => ({ default: m.SAPPCalendarV2 })),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex h-[600px] w-full items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      </div>
+    ),
+  }
+)
 import dayjs from 'dayjs'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'

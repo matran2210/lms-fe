@@ -31,7 +31,7 @@ import React, {
 import { Controller } from "react-hook-form";
 import toast from "react-hot-toast";
 import { SappDivider } from "../../components/base/divider";
-import { EditorReader, HookFormEditor, HookFormExcel } from "../base";
+import { EditorReader, HookFormEditor, HookFormExcelDynamic as HookFormExcel } from "../base";
 import { SappTitleSolution } from "../common";
 import { HighlightableHTML } from "../highlights";
 

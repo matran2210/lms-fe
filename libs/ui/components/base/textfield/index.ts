@@ -1,4 +1,5 @@
 export { default as HookFormExcel } from "./HookFormExcel";
+export { default as HookFormExcelDynamic } from "./HookFormExcelDynamic";
 export { default as HookFormTextArea } from "./HookFormTextArea";
 export { default as HookFormTextAreaWithRow } from "./HookFormTextAreaWithRow";
 export { default as HookFormTextField } from "./HookFormTextField";

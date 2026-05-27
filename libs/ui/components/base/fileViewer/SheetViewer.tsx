@@ -1,10 +1,16 @@
 "use client";
 
-import { Workbook } from "@fortune-sheet/react";
+import dynamic from "next/dynamic";
 import * as ExcelJS from "exceljs";
 import { useEffect, useMemo, useState } from "react";
 import { generateSheetId } from "@lms/core";
 import { LoadingIcon } from "@lms/assets";
+
+// @fortune-sheet/react ~2MB gzipped — lazy load, chỉ dùng khi xem file Excel
+const Workbook = dynamic(
+  () => import("@fortune-sheet/react").then((m) => m.Workbook),
+  { ssr: false },
+)
 
 type IProps = {
   fileUrl: string;

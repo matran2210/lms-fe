@@ -1,8 +1,11 @@
 import { truncateString } from "@lms/utils";
 import clsx from "clsx";
 import React from "react";
-import Lottie from "lottie-react";
+import dynamic from "next/dynamic";
 import { WavingHandAnimation } from "@lms/assets";
+
+// lottie-react ~180KB gzipped — lazy load vì chỉ dùng khi showWavingHand=true
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false })
 interface IProps {
   greeting: string;
   title: string;

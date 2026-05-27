@@ -1,8 +1,14 @@
 "use client"
-import { Workbook } from '@fortune-sheet/react'
+import dynamic from 'next/dynamic'
 import { isEmpty, isNull, isUndefined } from 'lodash'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { generateSheetId } from '@lms/core'
+
+// @fortune-sheet/react ~2MB — lazy load, chỉ dùng trong form editor
+const Workbook = dynamic(
+  () => import('@fortune-sheet/react').then((m) => m.Workbook),
+  { ssr: false },
+)
 
 interface WorkbookFieldProps {
   index?: number

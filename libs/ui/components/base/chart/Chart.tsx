@@ -1,8 +1,13 @@
 "use client"
 import React, { useRef, useEffect } from 'react'
-import { init, getInstanceByDom } from 'echarts'
 import type { CSSProperties } from 'react'
 import type { EChartsOption, ECharts, SetOptionOpts } from 'echarts'
+
+// echarts ~1MB gzipped — lazy load, chỉ init khi component mount
+async function getEcharts() {
+  const { init, getInstanceByDom } = await import('echarts')
+  return { init, getInstanceByDom }
+}
 
 export interface EChartsProps {
   option: EChartsOption
@@ -31,14 +36,16 @@ export default function EChart({
   useEffect(() => {
     let chart: ECharts | undefined
     let resizeObserver: ResizeObserver | undefined
-    if (chartRef.current) {
-      chart = init(chartRef.current, theme)
-      // Resize khi container thay đổi kích thước
-      resizeObserver = new ResizeObserver(() => {
-        chart?.resize()
-      })
-      resizeObserver.observe(chartRef.current)
-    }
+
+    getEcharts().then(({ init }) => {
+      if (chartRef.current) {
+        chart = init(chartRef.current, theme)
+        resizeObserver = new ResizeObserver(() => {
+          chart?.resize()
+        })
+        resizeObserver.observe(chartRef.current)
+      }
+    })
 
     function resizeChart() {
       chart?.resize()
@@ -55,17 +62,21 @@ export default function EChart({
   }, [theme])
 
   useEffect(() => {
-    if (chartRef.current) {
-      const chart = getInstanceByDom(chartRef.current)
-      chart?.setOption(option, settings)
-    }
+    getEcharts().then(({ getInstanceByDom }) => {
+      if (chartRef.current) {
+        const chart = getInstanceByDom(chartRef.current)
+        chart?.setOption(option, settings)
+      }
+    })
   }, [option, settings, theme])
 
   useEffect(() => {
-    if (chartRef.current) {
-      const chart = getInstanceByDom(chartRef.current)
-      loading ? chart?.showLoading() : chart?.hideLoading()
-    }
+    getEcharts().then(({ getInstanceByDom }) => {
+      if (chartRef.current) {
+        const chart = getInstanceByDom(chartRef.current)
+        loading ? chart?.showLoading() : chart?.hideLoading()
+      }
+    })
   }, [loading, theme])
 
   return (

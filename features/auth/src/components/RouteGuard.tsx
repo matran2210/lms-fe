@@ -14,9 +14,13 @@ interface IProps {
 export const RouteGuard = ({ children }: IProps) => {
   const { userContextApi, dispatch, useAppSelector, pathname } = useFeature();
 
-  const [authorized, setAuthorized] = useState(false);
+  // Start as true so the page renders immediately on first paint.
+  // We flip to false only while an async getMe call is in-flight, then back
+  // to true once it resolves. This prevents a blank screen (NO_FCP) while
+  // still protecting authenticated routes.
+  const [authorized, setAuthorized] = useState(true);
   const userSlice = useAppSelector?.(userReducer);
-  // First useEffect for getMe
+
   useEffect(() => {
     callGetMe();
   }, [pathname, userSlice?.user.keycloak_user_id]);
@@ -30,6 +34,7 @@ export const RouteGuard = ({ children }: IProps) => {
       /^\/certificates\/[^/]+$/.test(path)
     )
   }, [pathname])
+
   const callGetMe = async () => {
     if (
       userSlice?.user.id ||
@@ -46,7 +51,6 @@ export const RouteGuard = ({ children }: IProps) => {
 
     await dispatch?.(getMe(userContextApi)).unwrap();
     setAuthorized(true);
-
   };
 
   return authorized ? children : <></>;
