@@ -58,6 +58,16 @@ deploy_staging_zoom:
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_ZOOM
     - vercel deploy --prod --token=$VERCEL_TOKEN
 
+# Job deploy staging cho Lms-mock-test
+deploy_staging_mock_test:
+  extends: .deploy_staging_template
+  variables:
+    APP_NAME: lms-test
+  script:
+    - npm install -g vercel
+    - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_MOCK_TEST
+    - vercel deploy --prod --token=$VERCEL_TOKEN
+
 # =================== PRODUCTION ZONE =========================
 # Prod environment
 stages:
