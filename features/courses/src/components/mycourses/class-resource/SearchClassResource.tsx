@@ -1,18 +1,16 @@
 'use client'
+
 import {
   ArrowActionSearchIcon,
   CloseIcon,
   HamburgerMenuLargeIcon,
 } from '@lms/assets'
 import { AppType, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from '@lms/core'
+import { useClassResourceRouteId } from '@lms/hooks'
 import { SearchForm } from '@lms/ui'
 import { buildQueryString } from '@lms/utils'
 import clsx from 'clsx'
-import {
-  useParams,
-  useRouter,
-  useSearchParams
-} from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
@@ -41,7 +39,7 @@ const SearchClassResource = ({
 }: IProps) => {
   const { push } = useRouter()
   const searchParams = useSearchParams()
-  const params = useParams()
+  const classId = useClassResourceRouteId()
   const query = Object.fromEntries(searchParams.entries())
   const methods = useForm<{ name: string }>({
     defaultValues: {
@@ -52,10 +50,10 @@ const SearchClassResource = ({
 
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const queryString = buildQueryString({
-    status: query.status || '',
-    type: query.type ?? '',
-  })
+  useEffect(() => {
+    const sk = query.search_key
+    methods.setValue('name', typeof sk === 'string' ? sk : '')
+  }, [query.search_key, methods])
 
   const handleClearSearch = () => {
     methods.setValue('name', '')
@@ -63,22 +61,22 @@ const SearchClassResource = ({
     const { search_key, ...restQuery } = query
 
     push(
-      `/courses/my-course/${params.courseId}/class-resource?${buildQueryString(restQuery)}`,
+      `/courses/my-course/${classId}/class-resource?${buildQueryString(restQuery)}`,
+      { scroll: false },
     )
   }
 
   const handleSubmit = () => {
-    const courseId = params.courseId
-
-    if (!courseId) return
+    if (!classId) return
 
     push(
-      `/courses/my-course/${params.courseId}/class-resource?${buildQueryString({
+      `/courses/my-course/${classId}/class-resource?${buildQueryString({
         ...query,
         page_index: DEFAULT_PAGE_NUMBER,
         page_size: DEFAULT_PAGE_SIZE,
         search_key: methods.watch('name')?.trim() || undefined,
       })}`,
+      { scroll: false },
     )
   }
 

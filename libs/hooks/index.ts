@@ -15,6 +15,7 @@ export { default as useSelectExams } from "./useSelectExams";
 export * from "./useNotification";
 export * from "./useSappEditorImageUpload";
 export * from "./useUserRole";
+export * from "./useClassResourceRouteId";
 export { default as useWindowWidth } from "./useWindowWidth";
 export * from "./useSmartModalSize";
 export * from "./course/useInitialSections";

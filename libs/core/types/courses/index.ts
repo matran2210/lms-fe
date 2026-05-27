@@ -178,7 +178,7 @@ export interface IResource {
   size: number
   status: string
   suffix_type: string
-  thumbnail: string
+  thumbnail: Record<string, string>
   updated_at: string
 }
 export interface IResourceDetail {

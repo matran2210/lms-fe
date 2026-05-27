@@ -1,9 +1,13 @@
+'use client'
+
 import { CloseIcon, DownloadIcon, LoadingIcon } from '@lms/assets'
+import { useFeature } from '@lms/contexts'
 import {
   CLASS_SUFFIX_TYPE,
-  IClassResource
+  IClassResource,
+  RESOURCE_TYPE,
 } from '@lms/core'
-import { useUserRole } from '@lms/hooks'
+import { useClassResourceRouteId, useUserRole } from '@lms/hooks'
 import {
   ActionCellWithPopover,
   EditorReader,
@@ -19,17 +23,17 @@ import { handleDocUploadFromBlob } from '@lms/utils'
 import { Modal } from 'antd/es'
 import clsx from 'clsx'
 import CryptoJS from 'crypto-js'
-import { useParams } from 'next/navigation'
 import { useMemo, useRef, useState } from 'react'
-import { ClassAPI } from 'src/api/class'
-import { UploadAPI } from 'src/api/upload'
 
 interface IProps {
   data: IClassResource
   name: string
+  onFolderClick?: (folderId: string) => void
 }
 
-const CardFileItem = ({ data, name }: IProps) => {
+const CardFileItem = ({ data, name, onFolderClick }: IProps) => {
+  const { classApi, uploadApi } = useFeature()
+  const classId = useClassResourceRouteId()
   const listSchedulePreview =
     data?.class_resource_permissions?.schedules?.slice(0, 2)
   const [openListLesson, setOpenListLesson] = useState(false)
@@ -41,7 +45,6 @@ const CardFileItem = ({ data, name }: IProps) => {
   const [defaultEditor, setDefaultEditor] = useState<string>()
   const [sheetResizeVersion, setSheetResizeVersion] = useState(0)
   const { isTeacher } = useUserRole()
-  const params = useParams()
   const internalRef = useRef<HTMLVideoElement>(null)
   const isLandscape = window.matchMedia('(orientation: landscape)').matches
 
@@ -64,16 +67,17 @@ const CardFileItem = ({ data, name }: IProps) => {
   }
   const allowDownload = canDownload(data, isTeacher)
 
-  const type = CLASS_SUFFIX_TYPE.find(
-    (item) => item.value === data?.suffix_type,
-  )?.label
+  const isFolder = data?.resource_type === RESOURCE_TYPE.FOLDER
+
+  const type = isFolder
+    ? 'Folder'
+    : CLASS_SUFFIX_TYPE.find(
+        (item) => item.value === data?.suffix_type,
+      )?.label
 
   const handleOpenPreview = async (resource: IClassResource) => {
     try {
-      const res = await ClassAPI.previewClassFile(
-        params.courseId as string,
-        resource.id,
-      )
+      const res = await classApi?.previewClassFile?.(classId, resource.id)
       if (res) {
         let originalUrl = res.url
         if (res.is_encrypted) {
@@ -91,12 +95,20 @@ const CardFileItem = ({ data, name }: IProps) => {
         setOpenPreview(true)
         if (resource.suffix_type === 'WORD_DOCUMENT') {
           setLoadingEditor(true)
-          const defaultEditor = await getEditorData(originalUrl)
-          setDefaultEditor(defaultEditor)
+          const editorData = await loadDocFile(originalUrl)
+          setDefaultEditor(editorData)
           setLoadingEditor(false)
         }
       }
-    } catch (error) { }
+    } catch {}
+  }
+
+  const handleTitleClick = () => {
+    if (isFolder) {
+      if (data?.id) onFolderClick?.(data.id)
+      return
+    }
+    void handleOpenPreview(data)
   }
 
   const loadDocFile = async (url: string) => {
@@ -104,17 +116,13 @@ const CardFileItem = ({ data, name }: IProps) => {
       const res = await fetch(url)
       const blob = await res.blob()
       return await handleDocUploadFromBlob(blob)
-    } catch (error) {
+    } catch {
       return ''
     }
   }
 
-  async function getEditorData(url: string) {
-    return loadDocFile(url)
-  }
-
-  const download = async (class_id: string, resource_id: string) => {
-    await UploadAPI.downloadFileClassResource(class_id, resource_id)
+  const download = async (resource_id: string) => {
+    await uploadApi?.downloadFileClassResource?.(classId, resource_id)
   }
 
   const renderPreviewContent = (resource: IClassResource) => {
@@ -166,7 +174,6 @@ const CardFileItem = ({ data, name }: IProps) => {
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
-            onDownload={() => download(params.courseId as string, resource.id)}
           />
         )
 
@@ -182,7 +189,6 @@ const CardFileItem = ({ data, name }: IProps) => {
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
-            onDownload={() => download(params.courseId as string, resource.id)}
           />
         )
       case 'PDF':
@@ -193,7 +199,6 @@ const CardFileItem = ({ data, name }: IProps) => {
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
-            onDownload={() => download(params.courseId as string, resource.id)}
           />
         )
       case 'POWER_POINT':
@@ -202,7 +207,6 @@ const CardFileItem = ({ data, name }: IProps) => {
             fileName={resource.name}
             fileUrl={resource.url}
             onlyView
-            onDownload={() => download(params.courseId as string, resource.id)}
           />
         )
       case 'TEXT':
@@ -227,27 +231,29 @@ const CardFileItem = ({ data, name }: IProps) => {
     <div className="space-y-4 rounded-xl bg-white p-4 shadow-small">
       <div className="flex items-center justify-between">
         <div
-          onClick={() => handleOpenPreview(data)}
+          onClick={handleTitleClick}
           className="cursor-pointer font-semibold leading-6 text-info-600"
         >
           {name}
         </div>
-        <div
-          className={clsx('flex justify-end', {
-            'pointer-events-none opacity-40': !allowDownload,
-          })}
-        >
-          <ActionCellWithPopover
-            className=""
-            listAction={[
-              {
-                icon: <DownloadIcon className="h-5 w-5" />,
-                nameAction: 'Download',
-                action: () => download(params.courseId as string, data.id),
-              },
-            ]}
-          />
-        </div>
+        {!isFolder && (
+          <div
+            className={clsx('flex justify-end', {
+              'pointer-events-none opacity-40': !allowDownload,
+            })}
+          >
+            <ActionCellWithPopover
+              className=""
+              listAction={[
+                {
+                  icon: <DownloadIcon className="h-5 w-5" />,
+                  nameAction: 'Download',
+                  action: () => download(data.id),
+                },
+              ]}
+            />
+          </div>
+        )}
       </div>
       <div className="space-y-2">
         <div className="flex text-sm leading-5.5">

@@ -1,6 +1,7 @@
 'use client'
+
 import { CLASS_SUFFIX_TYPE_FILTER } from '@lms/core'
-import { useSelectClassSchedule } from '@lms/hooks'
+import { useClassResourceRouteId, useSelectClassSchedule } from '@lms/hooks'
 import { SappSelectMultiple, SAPPSelectTooltip } from '@lms/ui'
 import { getSelectOptions } from '@lms/utils'
 import { debounce } from 'lodash'
@@ -15,9 +16,16 @@ export type FilterFormValues = {
   schedule_ids?: string[]
 }
 
-const FilterClassResource = ({ totalResult, setQueryParams, queryParams }: { totalResult: number, setQueryParams: Dispatch<SetStateAction<FilterFormValues>>, queryParams :  FilterFormValues}) => {
-  const params = useParams()
-  const { courseId } = params
+const FilterClassResource = ({
+  totalResult,
+  setQueryParams,
+  queryParams,
+}: {
+  totalResult: number
+  setQueryParams: Dispatch<SetStateAction<FilterFormValues>>
+  queryParams: FilterFormValues
+}) => {
+  const classId = useClassResourceRouteId()
   const [search, setSearch] = useState('')
 
   const { control, reset } = useForm<FilterFormValues>({
@@ -40,7 +48,7 @@ const FilterClassResource = ({ totalResult, setQueryParams, queryParams }: { tot
   }, [queryParams.suffix_types, queryParams.schedule_ids, reset])
 
   const { classSchedule, hasNextPage, fetchNextPage, isLoading, refetch } =
-    useSelectClassSchedule(courseId as string, search, true)
+    useSelectClassSchedule(classId, search, true)
 
   const debouncedSearch = useRef(
     debounce((value: string) => {
@@ -73,7 +81,6 @@ const FilterClassResource = ({ totalResult, setQueryParams, queryParams }: { tot
 
       <div className="flex justify-end gap-4">
         <div className="flex gap-2">
-          {/* ===== Suffix type ===== */}
           <SAPPSelectTooltip
             control={control}
             name="suffix_types"
@@ -93,7 +100,6 @@ const FilterClassResource = ({ totalResult, setQueryParams, queryParams }: { tot
             }}
           />
 
-          {/* ===== Schedule multi ===== */}
           <SappSelectMultiple
             control={control}
             name="schedule_ids"
