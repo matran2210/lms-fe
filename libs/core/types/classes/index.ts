@@ -197,14 +197,20 @@ export interface IClassResourceList {
   data: IResource[];
   metadata: IMetaData;
   parent_id?: string;
-  breadcrumb: {
+  root_folder_id?: string;
+  breadcrumb?: {
     id: string;
     name: string;
     parent_id: string;
   }[];
 }
 
+export enum RESOURCE_TYPE {
+  FOLDER = 'FOLDER',
+  FILE = 'FILE',
+}
 export interface IListClassResourceParams {
+  resource_type?: RESOURCE_TYPE;
   parent_id?: string | null;
   page_size: number;
   page_index: number;

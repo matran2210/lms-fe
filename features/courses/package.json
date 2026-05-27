@@ -15,8 +15,10 @@
     "date-fns": "^3.0.6",
     "dayjs": "^1.11.12",
     "lodash": "^4.17.21",
+    "crypto-js": "^4.2.0",
     "react-hook-form": "7.48.2",
     "react-hot-toast": "^2.4.1",
+    "react-query": "3.39.3",
     "zod": "^3.22.4"
   },
   "dependencies": {
@@ -28,7 +30,7 @@
     "@lms/hooks": "workspace:*",
     "@lms/ui": "workspace:*",
     "@lms/utils": "workspace:*",
-    "@sapp-fe/explanation-package": "^1.8.0",
+    "@sapp-fe/explanation-package": "^1.8.3",
     "@sapp-fe/quiz-result-package": "^1.6.0",
     "framer-motion": "^12.23.12",
     "lottie-react": "^2.4.1",

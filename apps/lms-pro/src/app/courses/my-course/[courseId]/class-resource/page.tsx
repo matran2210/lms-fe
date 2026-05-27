@@ -1,345 +1,357 @@
 'use client'
-import { FilterCourseIcon } from '@lms/assets'
-import { UserType, useCourseContext, useFeature } from '@lms/contexts'
-import { selectPopupActivateCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
+
+import { useCourseContext, UserType } from '@lms/contexts'
 import {
+  ANIMATION,
   AppType,
-  CLASS_SUFFIX_TYPE_FILTER,
   ClassKey,
   DEFAULT_PAGE_NUMBER,
   DEFAULT_PAGE_SIZE,
-  IClassResource,
   IListClassResourceParams,
+  ITabs,
+  RESOURCE_TYPE,
 } from '@lms/core'
 import { withAuthorization } from '@lms/hoc'
+import { useTailwindBreakpoint } from '@lms/hooks'
 import {
-  useSappPaging,
-  useSelectClassSchedule,
-  useTailwindBreakpoint,
-} from '@lms/hooks'
-import {
-  CarouselSlideAnimation,
   ClassResourceSkeleton,
   HeaderMobile,
   Layout,
-  ListFilterItemMobileBase,
-  ListFilterMobileBase,
-  NoCoursesAvailable,
   SappBreadCrumbs,
-  SappDrawerV3,
 } from '@lms/ui'
-import { getSelectOptions, normalizeToArray } from '@lms/utils'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { FilterCourseIcon, SortGridIcon, SortListIcon } from '@lms/assets'
+import { buildQueryString, normalizeToArray } from '@lms/utils'
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type SetStateAction,
+} from 'react'
 import { useQuery } from 'react-query'
 import { ClassAPI } from 'src/api/class'
-import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
-import CardFileItem from './CardFileItem'
-import ClassResourceTable from './ClassResourceTable'
-import FilterClassResource, { FilterFormValues } from './FilterClassResource'
-import SearchClassResource from './SearchClassResource'
-interface ISelectItem {
-  label: string
-  value: string
+import {
+  ClassResourceDesktopListView,
+  ClassResourceGridView,
+  ClassResourceMobileFilterDrawer,
+  ClassResourceMobileListView,
+  ClassResourceStudentLayoutToggle,
+  FilterClassResource,
+  SearchClassResource,
+  type FilterFormValues,
+} from '@lms/feature-courses'
+
+/** `schedule_ids` trên URL: một id hoặc nhiều id nối bằng dấu phẩy */
+function parseScheduleIdsFromUrl(
+  raw: string | undefined,
+): string[] | undefined {
+  if (!raw || !String(raw).trim()) return undefined
+  const s = String(raw).trim()
+  return s.includes(',')
+    ? s.split(',').map((id) => id.trim()).filter(Boolean)
+    : [s]
+}
+
+function filterFormValuesFromSearchParams(
+  searchParams: URLSearchParams,
+): FilterFormValues {
+  const q = Object.fromEntries(searchParams.entries())
+  const ids = parseScheduleIdsFromUrl(q.schedule_ids)
+  return {
+    suffix_types:
+      typeof q.suffix_types === 'string' && q.suffix_types.trim() !== ''
+        ? q.suffix_types
+        : undefined,
+    schedule_ids: ids ?? [],
+  }
 }
 
 const ClassResource = () => {
   const router = useRouter()
+  const pathname = usePathname()
   const searchParams = useSearchParams()
   const param = useParams()
   const query = Object.fromEntries(searchParams.entries())
   const { isAlwaysShowSidebar, isMobileView, isTabletView } =
     useTailwindBreakpoint()
-  const [showSidebar, setShowSidebar] = useState(false)
-  const [openFilter, setOpenFilter] = useState(false)
-  const [listClassResourceMobile, setListClassResourceMobile] = useState<
-    IClassResource[]
-  >([])
-  const [openChooseItem, setOpenChooseItem] = useState(false)
-  const isFirstRenderListSchedule = useRef(true)
-  const [listFilterItem, setListFilterItem] = useState<ISelectItem[]>([])
-  const [isFirstLoadingMobile, setIsFirstLoadingMobile] = useState(true)
-  const [selectedFilters, setSelectedFilters] = useState<
-    Record<string, ISelectItem | ISelectItem[]>
-  >({
-    Type: { label: '', value: '' },
-    Lesson: [],
-  })
-  const [paginationMobile, setPaginationMobile] = useState<{
-    current: number
-    total: number
-  }>({
-    current: DEFAULT_PAGE_NUMBER,
-    total: 0,
-  })
-  const [direction, setDirection] = useState<1 | -1>(1)
-  const observer = useRef<IntersectionObserver>()
   const { setOpenSidebar } = useCourseContext()
-  const { useAppSelector } = useFeature()
-  const selector = useAppSelector?.(selectPopupActivateCourse)
+
+  const [showSidebar, setShowSidebar] = useState(false)
+  const handleOpenSidebar = useCallback(() => {
+    setShowSidebar(true)
+    setOpenSidebar(true)
+  }, [setOpenSidebar])
+  const handleCloseSidebar = useCallback(() => {
+    setShowSidebar(false)
+    setOpenSidebar(false)
+  }, [setOpenSidebar])
+
   const [params, setParams] = useState<IListClassResourceParams>({
     page_size: DEFAULT_PAGE_SIZE,
     page_index: DEFAULT_PAGE_NUMBER,
   })
-  const [queryParams, setQueryParams] = useState<FilterFormValues>({
-    suffix_types: undefined,
-    schedule_ids: [],
-  })
-  const LIST_TAB_FILTER = [
-    {
-      label: 'Type',
-      value: 'Type',
-    },
-    {
-      label: 'Lesson',
-      value: 'Lesson',
-    },
-  ]
-  /**
-   * @description config API course detail
-   */
-  const fetchCourseDetail = async ({
-    pageParam,
-    params,
-  }: {
-    pageParam: number
-    params: Object
-  }) => {
-    const { data } = await CoursesAPI.getCourseDetail(
-      param.courseId,
-      pageParam || 1,
-      DEFAULT_PAGE_SIZE,
-      params,
-    )
-    return {
-      data: data?.data?.course_sections_with_progress || [],
-      courseDetail: data,
-    }
-  }
-
-  const { data, pagination, setPagination, isLoading } = useSappPaging({
-    uniqueKey: ClassKey.ClassResource,
-    queryFn: () => ClassAPI.getClassResource(param.courseId as string, params),
-    params,
-  })
-
-  const paramsCourseDetail = {
-    user_section_learning_status:
-      query.user_section_learning_status || undefined,
-  }
-
-  const { data: courseData } = useQuery({
-    queryKey: ['courseDetail'],
-    queryFn: ({ pageParam }) =>
-      fetchCourseDetail({ pageParam, params: paramsCourseDetail }),
-    refetchOnWindowFocus: true,
-    retry: false,
-  })
-
-  const {
-    classSchedule,
-    hasNextPage,
-    fetchNextPage,
-    isLoading: isLoadingClassSchedule,
-  } = useSelectClassSchedule(param.courseId as string, '', true)
-
-  const scheduleOptions = useMemo(() => {
-    return getSelectOptions(
-      classSchedule.map((item) => ({
-        value: item.id,
-        label: item.name,
-      })),
-    )
-  }, [classSchedule])
-
-  /**
-   * @description biến này lấy name của course
-   */
-  const courseNameDetail = courseData?.courseDetail?.data?.name
 
   useEffect(() => {
+    const scheduleIds = parseScheduleIdsFromUrl(query.schedule_ids)
     setParams((prev) => ({
       ...prev,
       page_index: query.page_index
         ? Number(query.page_index)
         : DEFAULT_PAGE_NUMBER,
       page_size: query.page_size ? Number(query.page_size) : DEFAULT_PAGE_SIZE,
-      suffix_types: normalizeToArray(queryParams.suffix_types),
-      schedule_ids: normalizeToArray(queryParams.schedule_ids),
-
+      suffix_types: normalizeToArray(query.suffix_types),
+      schedule_ids: scheduleIds?.length ? scheduleIds : undefined,
       search_key:
         typeof query.search_key === 'string' ? query.search_key : undefined,
+      parent_id:
+        typeof query.parent_id === 'string' && query.parent_id.trim()
+          ? query.parent_id
+          : undefined,
     }))
   }, [
     query.page_index,
-    queryParams.suffix_types,
-    queryParams.schedule_ids,
+    query.suffix_types,
+    query.schedule_ids,
     query.search_key,
     query.page_size,
+    query.parent_id,
   ])
 
-  const handleOpenSidebar = () => {
-    setShowSidebar(true)
-    setOpenSidebar(true)
-  }
-
-  const handleCloseSidebar = () => {
-    setShowSidebar(false)
-    setOpenSidebar(false)
-  }
-  const [titleFilterMobile, setTitleFilterMobile] = useState<string>('Filter')
-
-  const handleSelectItemFilter = (item: object | object[]) => {
-    const isMultiSelect = titleFilterMobile === 'Lesson'
-
-    if (isMultiSelect) {
-      setSelectedFilters(
-        (prev: Record<string, ISelectItem | ISelectItem[]>) => ({
-          ...prev,
-          [titleFilterMobile as string]: item as ISelectItem[],
-        }),
-      )
-    } else {
-      setDirection(-1)
-      setOpenChooseItem(false)
-      setTitleFilterMobile('Filter')
-      setSelectedFilters(
-        (prev: Record<string, ISelectItem | ISelectItem[]>) => ({
-          ...prev,
-          [titleFilterMobile as string]: item as ISelectItem,
-        }),
-      )
-    }
-  }
-
-  const handleSelectFilterTab = (tab: string) => {
-    setDirection(1)
-    setOpenChooseItem(true)
-    setTitleFilterMobile(tab)
-  }
-
-  const handleBackFilter = () => {
-    setDirection(-1)
-    setOpenChooseItem(false)
-    setTitleFilterMobile('Filter')
-  }
-
-  useEffect(() => {
-    if (titleFilterMobile === 'Type') {
-      setListFilterItem([
-        { label: 'All', value: '' },
-        ...CLASS_SUFFIX_TYPE_FILTER,
-      ])
-    } else if (titleFilterMobile === 'Lesson') {
-      setListFilterItem(scheduleOptions as ISelectItem[])
-    }
-  }, [titleFilterMobile])
-
-  const lastElementRef = useCallback(
-    (node: HTMLDivElement | null) => {
-      if (!isMobileView) {
-        return
-      }
-      if (isLoading) return
-      if (observer.current) observer.current.disconnect()
-
-      observer.current = new IntersectionObserver((entries) => {
-        if (
-          entries?.[0]?.isIntersecting &&
-          paginationMobile.current < paginationMobile.total
-        ) {
-          setParams((prev) => ({
-            ...prev,
-            page_index: (prev.page_index || 1) + 1,
-          }))
-        }
-      })
-
-      if (node) observer.current.observe(node)
-    },
-    [isLoading, paginationMobile],
+  const classResourceLayout = useMemo<'list' | 'grid'>(
+    () => (query.layout === 'list' ? 'list' : 'grid'),
+    [query.layout],
   )
 
-  useEffect(() => {
-    if (isMobileView && !isLoading && data?.data) {
-      setPaginationMobile({
-        current: data?.metadata?.page_index,
-        total: data?.metadata?.total_pages,
-      })
-      if (params.page_index === 1) {
-        setIsFirstLoadingMobile(false)
-        setListClassResourceMobile(data.data)
+  const navigateToListLayout = useCallback(() => {
+    router.push(
+      `${pathname}?${buildQueryString({
+        ...query,
+        layout: 'list',
+        page_index: DEFAULT_PAGE_NUMBER,
+        page_size: DEFAULT_PAGE_SIZE,
+      })}`,
+    )
+  }, [pathname, query, router])
+
+  const navigateToGridLayout = useCallback(() => {
+    const {
+      page_index: _pi,
+      page_size: _ps,
+      layout: _layout,
+      ...gridRestQuery
+    } = query
+    router.push(`${pathname}?${buildQueryString(gridRestQuery)}`)
+  }, [pathname, query, router])
+
+  const queryParams = useMemo(
+    () => filterFormValuesFromSearchParams(searchParams),
+    [searchParams],
+  )
+
+  const setQueryParams = useCallback(
+    (updater: SetStateAction<FilterFormValues>) => {
+      const q = Object.fromEntries(searchParams.entries()) as Record<
+        string,
+        string
+      >
+      const current = filterFormValuesFromSearchParams(searchParams)
+      const next = typeof updater === 'function' ? updater(current) : updater
+      const nextUrl: Record<string, string> = { ...q }
+
+      if (
+        next.suffix_types !== undefined &&
+        String(next.suffix_types).trim() !== ''
+      ) {
+        nextUrl.suffix_types = String(next.suffix_types).trim()
       } else {
-        setListClassResourceMobile((prev) => [...prev, ...data.data])
+        delete nextUrl.suffix_types
       }
-    } else if (!isLoading && data?.data) {
-      setIsFirstLoadingMobile(false)
-    }
-  }, [data?.data, isLoading, params.page_index])
 
-  const handleSubmitFilterMobile = () => {
-    const lessonValue: string[] = Array.isArray(selectedFilters.Lesson)
-      ? selectedFilters.Lesson.map((item) => item.value).filter(
-          (v): v is string => Boolean(v),
-        )
-      : selectedFilters.Lesson?.value
-        ? [selectedFilters.Lesson.value]
-        : []
-    setQueryParams({
-      suffix_types:
-        typeof selectedFilters.Type === 'object' &&
-        !Array.isArray(selectedFilters.Type)
-          ? selectedFilters.Type.value
-          : undefined,
-      schedule_ids: lessonValue || undefined,
+      if (next.schedule_ids && next.schedule_ids.length > 0) {
+        nextUrl.schedule_ids = next.schedule_ids.join(',')
+      } else {
+        delete nextUrl.schedule_ids
+      }
+
+      nextUrl.page_index = String(DEFAULT_PAGE_NUMBER)
+      router.push(`${pathname}?${buildQueryString(nextUrl)}`, { scroll: false })
+    },
+    [pathname, router, searchParams],
+  )
+
+  const handleNavigateIntoFolder = useCallback(
+    (folderId: string) => {
+      if (!folderId) return
+      router.push(
+        `${pathname}?${buildQueryString({
+          ...query,
+          parent_id: folderId,
+          page_index: DEFAULT_PAGE_NUMBER,
+        })}`,
+        { scroll: false },
+      )
+    },
+    [pathname, query, router],
+  )
+
+  const { data: dataFolder, isLoading: isLoadingFolder } = useQuery({
+    queryKey: [ClassKey.ClassResourceFolder, param.courseId, params],
+    queryFn: async () =>
+      ClassAPI.getClassResource(param.courseId as string, {
+        resource_type: RESOURCE_TYPE.FOLDER,
+        ...params,
+      }),
+    enabled: Boolean(param.courseId),
+    retry: false,
+  })
+
+  const { data: dataFile, isLoading: isLoadingFile } = useQuery({
+    queryKey: [ClassKey.ClassResourceFile, param.courseId, params],
+    queryFn: async () =>
+      ClassAPI.getClassResource(param.courseId as string, {
+        resource_type: RESOURCE_TYPE.FILE,
+        ...params,
+      }),
+    enabled: Boolean(param.courseId),
+    retry: false,
+  })
+
+  const folderTotal = dataFolder?.metadata?.total_records ?? 0
+  const fileTotal = dataFile?.metadata?.total_records ?? 0
+  const totalResult = folderTotal + fileTotal
+
+  const classResourcePageHeading = useMemo(() => {
+    const raw = dataFolder?.breadcrumb
+    const folderChain =
+      Array.isArray(raw) && raw.length > 0 ? [...raw].reverse() : []
+    const displayFolderChain = folderChain.slice(1)
+    if (displayFolderChain.length === 0) return 'Class Resource'
+    const last = displayFolderChain[displayFolderChain.length - 1]
+    return last?.name?.trim() || 'Class Resource'
+  }, [dataFolder?.breadcrumb])
+
+  const classResourceBreadcrumbs = useMemo((): ITabs[] => {
+    const raw = dataFolder?.breadcrumb
+    const folderChain =
+      Array.isArray(raw) && raw.length > 0 ? [...raw].reverse() : []
+    const displayFolderChain = folderChain.slice(1)
+
+    const queryWithoutParent = Object.fromEntries(
+      Object.entries(query).filter(([k]) => k !== 'parent_id'),
+    ) as Record<string, string>
+
+    const hrefWithParent = (parentId: string) =>
+      `${pathname}?${buildQueryString({
+        ...query,
+        parent_id: parentId,
+        page_index: DEFAULT_PAGE_NUMBER,
+      })}`
+
+    const classResourceRootHref = `${pathname}?${buildQueryString({
+      ...queryWithoutParent,
+      page_index: DEFAULT_PAGE_NUMBER,
+    })}`
+
+    const base: ITabs[] = []
+
+    if (folderChain.length === 0) {
+      base.push({ title: 'Class Resource', link: '' })
+      return base
+    }
+
+    base.push({ title: 'Class Resource', link: classResourceRootHref })
+
+    if (folderChain.length > 0 && displayFolderChain.length === 0) {
+      base.push({ title: '\u200b', link: '' })
+    }
+
+    displayFolderChain.forEach((node, index) => {
+      const isLast = index === displayFolderChain.length - 1
+      base.push({
+        title: node.name || '',
+        link: isLast || !node.id ? '' : hrefWithParent(node.id),
+      })
     })
-    setOpenFilter(false)
-  }
+
+    return base
+  }, [param?.courseId, pathname, query, dataFolder?.breadcrumb])
+
+  const handleClassResourceMobileBack = useCallback(() => {
+    const hasParentInUrl =
+      typeof query.parent_id === 'string' && query.parent_id.trim() !== ''
+
+    if (!hasParentInUrl) {
+      router.push(`/courses/my-course/${param?.courseId}`)
+      return
+    }
+
+    const raw = dataFolder?.breadcrumb
+    const folderChain =
+      Array.isArray(raw) && raw.length > 0 ? [...raw].reverse() : []
+    const displayFolderChain = folderChain.slice(1)
+
+    const queryWithoutParent = Object.fromEntries(
+      Object.entries(query).filter(([k]) => k !== 'parent_id'),
+    ) as Record<string, string>
+
+    if (displayFolderChain.length <= 1) {
+      router.push(
+        `${pathname}?${buildQueryString({
+          ...queryWithoutParent,
+          page_index: DEFAULT_PAGE_NUMBER,
+        })}`,
+        { scroll: false },
+      )
+      return
+    }
+
+    const parentNode = displayFolderChain[displayFolderChain.length - 2]
+    const parentId = parentNode?.id
+    if (!parentId) {
+      router.push(
+        `${pathname}?${buildQueryString({
+          ...queryWithoutParent,
+          page_index: DEFAULT_PAGE_NUMBER,
+        })}`,
+        { scroll: false },
+      )
+      return
+    }
+
+    router.push(
+      `${pathname}?${buildQueryString({
+        ...query,
+        parent_id: parentId,
+        page_index: DEFAULT_PAGE_NUMBER,
+      })}`,
+      { scroll: false },
+    )
+  }, [dataFolder?.breadcrumb, param?.courseId, pathname, query, router])
+
+  // ── Initial page loading ─────────────────────────────────────────────────
+  const courseIdStr = (param.courseId as string) || ''
+  const [initialLoadDone, setInitialLoadDone] = useState(false)
 
   useEffect(() => {
-    if (
-      !isFirstRenderListSchedule.current ||
-      scheduleOptions.length === 0 ||
-      !isMobileView
-    )
-      return
-    const convertScheduleIdsToArray = () => {
-      if (!query.schedule_ids) return []
-      return query.schedule_ids.includes(',')
-        ? query.schedule_ids
-            .split(',')
-            .map((id) => id.trim())
-            .filter((id) => id)
-        : [query.schedule_ids]
-    }
+    setInitialLoadDone(false)
+  }, [courseIdStr])
 
-    const mapScheduleIdsToOptions = () => {
-      if (!convertScheduleIdsToArray()) return []
-      return convertScheduleIdsToArray().map((id) => ({
-        label:
-          scheduleOptions?.find((option) => option?.value === id)?.label || '',
-        value: id,
-      }))
-    }
+  const initialLoadBusy = useMemo(() => {
+    if (!courseIdStr) return true
+    return isLoadingFolder || isLoadingFile
+  }, [courseIdStr, isLoadingFolder, isLoadingFile])
 
-    setSelectedFilters(
-      (prev: Record<string, ISelectItem | ISelectItem[]>) =>
-        ({
-          ...prev,
-          Type: {
-            label: query.suffix_types
-              ? CLASS_SUFFIX_TYPE_FILTER.find(
-                  (option) => option.value === query.suffix_types,
-                )?.label
-              : '',
-            value: query.suffix_types || '',
-          },
-          Lesson: mapScheduleIdsToOptions(),
-        }) as Record<string, ISelectItem | ISelectItem[]>,
-    )
-    isFirstRenderListSchedule.current = false
-  }, [scheduleOptions])
+  useEffect(() => {
+    if (initialLoadDone || initialLoadBusy) return
+    setInitialLoadDone(true)
+  }, [initialLoadDone, initialLoadBusy])
+
+  const isInitialPageLoading = !initialLoadDone && initialLoadBusy
+
+  // ── Mobile filter drawer ─────────────────────────────────────────────────
+  const [openMobileFilter, setOpenMobileFilter] = useState(false)
 
   return (
     <Layout
@@ -347,132 +359,113 @@ const ClassResource = () => {
       showSidebar={showSidebar || isAlwaysShowSidebar}
       handleToggleSidebar={handleCloseSidebar}
     >
-      {isFirstLoadingMobile || selector?.openActive ? (
-        <ClassResourceSkeleton />
-      ) : (
-        <>
-          {isMobileView && (
-            <HeaderMobile
-              title="Class Resource"
-              showIcon={true}
-              onBack={() =>
-                router.push(`/courses/my-course/${param?.courseId}`)
-              }
-              className="mb-2 mt-4 flex w-full"
-              extraActions={
-                <div
-                  className="cursor-pointer"
-                  onClick={() => setOpenFilter(true)}
-                >
-                  <FilterCourseIcon />
-                </div>
-              }
-            />
-          )}
-          {isAlwaysShowSidebar && (
-            <div className="mb-2 mt-4 flex w-full">
-              <SappBreadCrumbs
-                isTeacher={false}
-                breadcrumbs={[
-                  { title: 'My Course', link: PageLink.COURSES },
-                  {
-                    title: courseNameDetail || '',
-                    link: `/courses/my-course/${param?.courseId}`,
-                  },
-                  { title: 'Class Resource', link: '' },
-                ]}
+      <>
+        {isInitialPageLoading ? (
+          <ClassResourceSkeleton className="mt-2 md:mt-0" />
+        ) : (
+          <div data-aos={ANIMATION.DATA_AOS}>
+            {(isMobileView || isTabletView) && (
+              <HeaderMobile
+                title={classResourcePageHeading}
+                showIcon={true}
+                onBack={handleClassResourceMobileBack}
+                className="mb-2 mt-4 flex w-full"
+                extraActions={
+                  isMobileView ? (
+                    <div className="flex items-center gap-4">
+                      <button
+                        type="button"
+                        className="cursor-pointer text-gray-800"
+                        onClick={() =>
+                          classResourceLayout === 'grid'
+                            ? navigateToListLayout()
+                            : navigateToGridLayout()
+                        }
+                      >
+                        {classResourceLayout === 'grid' ? (
+                          <SortGridIcon />
+                        ) : (
+                          <SortListIcon />
+                        )}
+                      </button>
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => setOpenMobileFilter(true)}
+                      >
+                        <FilterCourseIcon />
+                      </div>
+                    </div>
+                  ) : (
+                    <></>
+                  )
+                }
               />
-            </div>
-          )}
-
-          <div className="mb-8">
+            )}
+            {isAlwaysShowSidebar && (
+              <div className="mb-2 mt-4 flex w-full">
+                <SappBreadCrumbs
+                  isTeacher={false}
+                  breadcrumbs={classResourceBreadcrumbs}
+                />
+              </div>
+            )}
+            {!isMobileView && !isTabletView && (
+              <div className="mb-8 mt-4 text-2xl font-semibold text-gray-800">
+                {classResourcePageHeading}
+              </div>
+            )}
             <SearchClassResource
               handleOpenSidebar={handleOpenSidebar}
-              isShowToggle={isTabletView}
+              isShowToggle={!isMobileView && !isTabletView}
               redirectLink={PageLink.COURSES}
               appType={AppType.LMS_PRO}
             />
-          </div>
-
-          {!isMobileView && (
-            <div className="mb-6 flex w-full justify-between">
-              <div className="text-2xl font-semibold text-gray-800">
-                Class Resource
+            {!isMobileView && (
+              <div className="mb-8 mt-6 flex w-full justify-between">
+                <ClassResourceStudentLayoutToggle
+                  layout={classResourceLayout}
+                  onSelectList={navigateToListLayout}
+                  onSelectGrid={navigateToGridLayout}
+                />
+                <FilterClassResource
+                  totalResult={totalResult}
+                  setQueryParams={setQueryParams}
+                  queryParams={queryParams}
+                />
               </div>
-              <FilterClassResource
-                totalResult={pagination?.total || 0}
-                setQueryParams={setQueryParams}
-                queryParams={queryParams}
+            )}
+            {isMobileView && classResourceLayout === 'list' && (
+              <ClassResourceMobileListView
+                params={params}
+                onFolderClick={handleNavigateIntoFolder}
               />
-            </div>
-          )}
-          {isMobileView && (
-            <div className="mb-6 space-y-4">
-              {listClassResourceMobile?.length > 0 ? (
-                listClassResourceMobile?.map((item: IClassResource) => (
-                  <CardFileItem key={item.id} data={item} name={item.name} />
-                ))
-              ) : (
-                <div className="flex h-[calc(100vh-12rem)] items-center justify-center">
-                  <NoCoursesAvailable />
-                </div>
-              )}
-            </div>
-          )}
-
-          <div ref={lastElementRef} />
-
-          {!isMobileView && (
-            <ClassResourceTable
-              data={data}
-              pagination={pagination}
-              setPagination={setPagination}
-              isLoading={false}
-            />
-          )}
-          <SappDrawerV3
-            open={openFilter}
-            handleCancel={() => setOpenFilter(false)}
-            isShowBtnBack={openChooseItem}
-            handleBack={handleBackFilter}
-            title={titleFilterMobile}
-            rootClassName={'responsive-drawer-base drawer-bottom-0'}
-            isShowBtnClose
-            closable
-            classNameHeader="mb-4"
-            placement="bottom"
-            handleSubmit={handleSubmitFilterMobile}
-            submitButtonClassName="w-full"
-            btnSubmitTile="Confirm"
-            isShowFooter
-          >
-            <CarouselSlideAnimation
-              slideKey={titleFilterMobile}
-              direction={direction}
-            >
-              {openChooseItem ? (
-                <ListFilterItemMobileBase
-                  isMultiSelect={titleFilterMobile === 'Lesson'}
-                  handleSelect={handleSelectItemFilter}
-                  selected={
-                    selectedFilters[titleFilterMobile as 'Type' | 'Lesson']
-                  }
-                  data={listFilterItem}
-                  handleNextPage={() =>
-                    !isLoadingClassSchedule && hasNextPage && fetchNextPage()
-                  }
-                />
-              ) : (
-                <ListFilterMobileBase
-                  handleClick={handleSelectFilterTab}
-                  data={LIST_TAB_FILTER}
-                  selected={selectedFilters}
+            )}
+            <div className="mt-4 md:mt-0">
+              {!isMobileView && classResourceLayout === 'list' && (
+                <ClassResourceDesktopListView
+                  params={params}
+                  onFolderClick={handleNavigateIntoFolder}
                 />
               )}
-            </CarouselSlideAnimation>
-          </SappDrawerV3>
-        </>
-      )}
+              {classResourceLayout === 'grid' && (
+                <ClassResourceGridView
+                  params={params}
+                  onFolderClick={handleNavigateIntoFolder}
+                />
+              )}
+            </div>
+          </div>
+        )}
+        {isMobileView && (
+          <ClassResourceMobileFilterDrawer
+            open={openMobileFilter}
+            onOpenChange={setOpenMobileFilter}
+            courseId={param.courseId as string}
+            query={query}
+            setQueryParams={setQueryParams}
+          />
+        )}
+      </>
     </Layout>
   )
 }

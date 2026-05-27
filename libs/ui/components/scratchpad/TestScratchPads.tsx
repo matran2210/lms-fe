@@ -6,6 +6,7 @@ import { useSmartModalSize } from '@lms/hooks'
 import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
 import ScratchPatch from './scratchPatch' 
+import { TestServiceAPI } from 'src/api/test-api'
 import { EditorReader, FileViewer, ModalResizeable } from '../base'
 interface IProps {
   openScratchPad: any[]
@@ -172,6 +173,7 @@ const TestScratchPads = ({
                     <FileViewer
                       fileName={e?.resource?.name}
                       fileUrl={e?.resource?.url}
+                      onDownload={() => TestServiceAPI.downloadFile({ files: [{ name: e?.resource?.name, file_key: e?.resource?.file_key }] })}
                     />
                   </div>
                 )
@@ -199,7 +201,7 @@ const TestScratchPads = ({
             style={{ height: 'calc(100% - 40px' }}
           >
             {/* <div className='flex flex-'> */}
-            <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
+            <FileViewer fileName={e?.fileName} fileUrl={e?.file} onDownload={() => TestServiceAPI.downloadFile({ files: [{ name: e?.fileName, file_key: e?.fileKey }] })} />
           </div>
           {/* </div> */}
         </ModalResizeable>

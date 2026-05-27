@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Spin } from "antd";
 import { VALID_UPLOAD_EDITOR } from "@lms/core";
-import { SAPPEditor } from "@sapp-fe/sapp-common-package";
+import { SAPPEditorV2 } from "@sapp-fe/sapp-common-package";
 import { SAPPEditorHandle } from "@lms/core";
 import { useSappEditorImageUpload } from "@lms/hooks";
 import { convertMathHtmlToImage } from "@lms/utils";
@@ -64,7 +64,7 @@ const Editor = ({
   return (
     <div key={key}>
       <Spin spinning={loading}>
-        <SAPPEditor
+        <SAPPEditorV2
           ref={editorRef}
           {...(key && { key: key })}
           content={editorContent}

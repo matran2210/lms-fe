@@ -584,7 +584,7 @@ const SAPPVideo = ({
   function skipAhead() {
     if (!streamRef.current || !seekRef.current) return;
 
-    const skipTo = Number(seekRef.current.getAttribute("data-seek") || "0");
+    const skipTo = Number(seekRef.current.value || "0");
 
     streamRef.current.currentTime = skipTo;
 
@@ -679,28 +679,36 @@ const SAPPVideo = ({
     }
   }
 
-  // toggleFullScreen toggles the full screen state of the video
-  // If the browser is currently in fullscreen mode,
-  // then it should exit and vice versa.
   function toggleFullScreen() {
     const video = streamRef.current;
-    // Check case fullscreen for iphone
-    if (typeof video.webkitEnterFullscreen === "function") {
+
+    const fullscreenElement =
+      document.fullscreenElement || (document as any).webkitFullscreenElement;
+    if (fullscreenElement) {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if ((document as any).webkitExitFullscreen) {
+        (document as any).webkitExitFullscreen();
+      }
+      return;
+    }
+
+    if (videoContainerRef?.current) {
+      const container = videoContainerRef.current;
+      const requestFS =
+        container.requestFullscreen ||
+        (container as any).webkitRequestFullscreen ||
+        (container as any).mozRequestFullScreen ||
+        (container as any).msRequestFullscreen;
+
+      if (requestFS) {
+        requestFS.call(container);
+        return;
+      }
+    }
+
+    if (video && typeof video.webkitEnterFullscreen === "function") {
       video.webkitEnterFullscreen();
-      return;
-    }
-
-    // Check case fullscreen for normal
-    if (document?.fullscreenElement) {
-      document.exitFullscreen();
-      return;
-    }
-
-    if (
-      videoContainerRef?.current &&
-      videoContainerRef?.current?.requestFullscreen
-    ) {
-      videoContainerRef?.current?.requestFullscreen();
       return;
     }
   }
@@ -913,13 +921,35 @@ const SAPPVideo = ({
     if (typeof document === "undefined") return;
 
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      setIsFullscreen(
+        !!(
+          document.fullscreenElement ||
+          (document as any).webkitFullscreenElement ||
+          (document as any).mozFullScreenElement ||
+          (document as any).msFullscreenElement
+        ),
+      );
     };
 
     document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+    document.addEventListener("MSFullscreenChange", handleFullscreenChange);
 
     return () => {
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener(
+        "webkitfullscreenchange",
+        handleFullscreenChange,
+      );
+      document.removeEventListener(
+        "mozfullscreenchange",
+        handleFullscreenChange,
+      );
+      document.removeEventListener(
+        "MSFullscreenChange",
+        handleFullscreenChange,
+      );
     };
   }, []);
 
@@ -962,9 +992,15 @@ const SAPPVideo = ({
         <>
           {cloudflarePlayer ? (
             <div
-              className={`group ${
-                !hideVideo ? "sapp-wrapper" : "sapp-hideWrapper"
-              } ${loading ? "hidden" : ""}`}
+              className={clsx(
+                `group ${!hideVideo ? "sapp-wrapper" : "sapp-hideWrapper"} ${
+                  loading ? "hidden" : ""
+                }`,
+                {
+                  "is-fullscreen": isFullscreen,
+                },
+              )}
+              onTouchStart={showControls}
             >
               <div className={`popup-question`}>{children}</div>
               <Stream
@@ -999,10 +1035,12 @@ const SAPPVideo = ({
                 }  ${loading ? "hidden" : ""}`,
                 {
                   "inline-block pt-0": videoAttribs,
+                  "is-fullscreen": isFullscreen,
                 },
               )}
               onMouseEnter={() => setIsActive(true)}
               onMouseLeave={() => setIsActive(false)}
+              onTouchStart={showControls}
               ref={videoContainerRef}
             >
               <div className={`popup-question`}>{children}</div>
@@ -1046,6 +1084,8 @@ const SAPPVideo = ({
                 // disablePictureInPicture
                 controlsList="nodownload"
                 onPlay={handlePlayVideo}
+                onClick={showControls}
+                onTouchStart={showControls}
               />
               <div
                 className={clsx("video-controls flex-center absolute bottom-0 left-0 right-0 h-14 w-full rounded-b-lg px-4 py-3", controlClassName)}

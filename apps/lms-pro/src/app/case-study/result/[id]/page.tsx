@@ -18,7 +18,7 @@ import {
   EXHIBIT_TEXT_REPLACE,
   IAnswerResult,
   ICaseStudyResult,
-  ICratchPad,
+  IScratchPad,
   IExhibit,
   IQuestionResult,
   IRequirement,
@@ -81,7 +81,7 @@ const CaseStudyResult = () => {
     useSmartModalSize()
   // handle show exhibit list
   const [exhibitData, setExhibitData] = useState<IExhibit[]>([])
-  const [openScratchPad, setOpenScratchPad] = useState<Array<ICratchPad>>([])
+  const [openScratchPad, setOpenScratchPad] = useState<Array<IScratchPad>>([])
   const [focusingPadId, setFocusingPadId] = useState('')
   const dispatch = useAppDispatch()
 
@@ -481,7 +481,7 @@ const CaseStudyResult = () => {
     )
   }, [exhibitData])
 
-  const handleCloseScratchPad = (pad: ICratchPad) => {
+  const handleCloseScratchPad = (pad: IScratchPad) => {
     setOpenScratchPad((prev) => {
       const arr = [...prev]
       const newArr = arr.filter((e) => e?.id !== pad.id)
@@ -869,6 +869,7 @@ const CaseStudyResult = () => {
                             <FileViewer
                               fileName={e?.resource?.name}
                               fileUrl={e?.resource?.url}
+                              onDownload={() => TestServiceAPI.downloadFile({ files: [{ name: e?.resource?.name, file_key: e?.resource?.file_key }] })}
                             />
                           </div>
                         )
@@ -898,6 +899,7 @@ const CaseStudyResult = () => {
                     <FileViewer
                       fileName={e?.fileName as string}
                       fileUrl={e?.file as string}
+                      onDownload={() => TestServiceAPI.downloadFile({ files: [{ name: e?.fileName as string, file_key: e?.fileKey as string}] })}
                     />
                   </div>
                 </ModalResizeable>

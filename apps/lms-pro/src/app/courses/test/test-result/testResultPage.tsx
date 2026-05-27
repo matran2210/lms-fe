@@ -231,6 +231,7 @@ const TestResultPage = ({
               globalAverage={globalAverageNumber}
               multipleQuestionRef={multipleQuestionRef}
               isTeacher={isTeacher}
+              scorePercentage={scorePercentage}
             />
           </div>
         )

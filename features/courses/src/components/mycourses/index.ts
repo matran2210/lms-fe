@@ -1,3 +1,4 @@
+export * from "./class-resource/index";
 export * from "./activity/index";
 export * from "./test/index";
 export * from "./course-detail/index";

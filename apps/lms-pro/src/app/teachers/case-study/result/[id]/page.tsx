@@ -15,7 +15,7 @@ import {
   EXHIBIT_TEXT_REPLACE,
   IAnswerResult,
   ICaseStudyResult,
-  ICratchPad,
+  IScratchPad,
   IExhibit,
   IQuestionResult,
   IRequirement,
@@ -51,6 +51,7 @@ import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
 import { withAuthorization } from '@lms/hoc'
 import { useAppDispatch } from 'src/redux/hook'
+import { TestServiceAPI } from 'src/api/test-api'
 
 const CaseStudyResultTeacher = () => {
   const router = useRouter()
@@ -67,7 +68,7 @@ const CaseStudyResultTeacher = () => {
   // handle show exhibit list
   const [showListExhibits, setShowListExhibits] = useState(false)
   const [exhibitData, setExhibitData] = useState<IExhibit[]>([])
-  const [openScratchPad, setOpenScratchPad] = useState<Array<ICratchPad>>([])
+  const [openScratchPad, setOpenScratchPad] = useState<Array<IScratchPad>>([])
   const [focusingPadId, setFocusingPadId] = useState('')
   const dispatch = useAppDispatch()
 
@@ -455,7 +456,7 @@ const CaseStudyResultTeacher = () => {
     )
   }, [exhibitData])
 
-  const handleCloseScratchPad = (pad: ICratchPad) => {
+  const handleCloseScratchPad = (pad: IScratchPad) => {
     setOpenScratchPad((prev) => {
       const arr = [...prev]
       const newArr = arr.filter((e) => e?.id !== pad.id)
@@ -831,6 +832,7 @@ const CaseStudyResultTeacher = () => {
                               <FileViewer
                                 fileName={e?.resource?.name ?? ''}
                                 fileUrl={e?.resource?.url ?? ''}
+                                onDownload={() => TestServiceAPI.downloadFile({ files: [{ name: e?.resource?.name, file_key: e?.resource?.file_key }] })}
                               />
                             </div>
                           )
@@ -862,6 +864,7 @@ const CaseStudyResultTeacher = () => {
                       <FileViewer
                         fileName={e?.fileName ?? ''}
                         fileUrl={e?.file ?? ''}
+                        onDownload={() => TestServiceAPI.downloadFile({ files: [{ name: e?.fileName as string, file_key: e?.fileKey as string}] })}
                       />
                     </div>
                   </ModalResizeable>
