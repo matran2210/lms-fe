@@ -4,6 +4,7 @@ import { useFeature } from '@lms/contexts'
 import { DATE_FORMAT, DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, ITeacherTeachingAttendanceItem, ITeacherTeachingAttendanceListParams } from '@lms/core'
 import {
   NameNoActionCell,
+  SappActionCell,
   SAPPButtonCustom,
   SappSelectMultiple,
   SappTable,
@@ -36,15 +37,15 @@ interface TeachingAttendanceProps {
 const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
   onOpenHistory,
 }) => {
-   const { userApi } = useFeature()
-    const [queryParams, setQueryParams] = useState<ITeacherTeachingAttendanceListParams>(
-      {
-        page_index: DEFAULT_PAGE_NUMBER,
-        page_size: DEFAULT_PAGE_SIZE,
-      }
-    )
-    const [monthSelectKey, setMonthSelectKey] = useState(1)
-  const { control, getValues, setValue, reset, watch, setError, clearErrors, formState: { errors }} = useForm<FilterForm>({
+  const { userApi } = useFeature()
+  const [queryParams, setQueryParams] = useState<ITeacherTeachingAttendanceListParams>(
+    {
+      page_index: DEFAULT_PAGE_NUMBER,
+      page_size: DEFAULT_PAGE_SIZE,
+    }
+  )
+  const [monthSelectKey, setMonthSelectKey] = useState(1)
+  const { control, getValues, setValue, reset, watch, setError, clearErrors, formState: { errors } } = useForm<FilterForm>({
     defaultValues: {
       fromDate: dayjs().startOf('month').toISOString(),
       toDate: dayjs().endOf('month').toISOString(),
@@ -84,7 +85,7 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
 
   const class_ids = watch('class_ids')
 
-    const {
+  const {
     data: teacherLessonData,
     refetch: refetchTeacherLesson,
     hasNextPage: hasNextPageTeacherLesson,
@@ -113,11 +114,11 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
     reset()
     setMonthSelectKey((prev) => prev + 1) // Reset month select
     setQueryParams({
-       page_index: DEFAULT_PAGE_NUMBER,
-       page_size: DEFAULT_PAGE_SIZE,
-     })
-     refetch()
-   
+      page_index: DEFAULT_PAGE_NUMBER,
+      page_size: DEFAULT_PAGE_SIZE,
+    })
+    refetch()
+
     // TODO: Reset and refetch data
   }
 
@@ -133,21 +134,21 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
       render: (record) => <NameNoActionCell dataColumn={record.lesson} />,
     },
     {
-          title: 'Date',
-          width: 150,
-          render: (record) => {
-            const localStartDate = buildLocalLessonDateTime(
-              record.start_date,
-              record.start_time
-            )
-            const localEndDate = buildLocalLessonDateTime(
-              record.start_date,
-              record.end_time
-            )
-    
-            return <NameNoActionCell dataColumn={`${localStartDate?.isValid() ? localStartDate.format('DD/MM/YYYY') : '-'} ${localStartDate?.isValid() ? localStartDate.format('HH:mm') : '-'} : ${localEndDate?.isValid() ? localEndDate.format('HH:mm') : '-'}`} />
-          },
-        },
+      title: 'Date',
+      width: 150,
+      render: (record) => {
+        const localStartDate = buildLocalLessonDateTime(
+          record.start_date,
+          record.start_time
+        )
+        const localEndDate = buildLocalLessonDateTime(
+          record.start_date,
+          record.end_time
+        )
+
+        return <NameNoActionCell dataColumn={`${localStartDate?.isValid() ? localStartDate.format('DD/MM/YYYY') : '-'} ${localStartDate?.isValid() ? localStartDate.format('HH:mm') : '-'} : ${localEndDate?.isValid() ? localEndDate.format('HH:mm') : '-'}`} />
+      },
+    },
     {
       title: 'Check In',
       render: (record) => <NameNoActionCell dataColumn={formatDateFromUTC(record.checkin_time, DATE_FORMAT.DATE_TIME_DATE_FIRST)} />,
@@ -161,7 +162,7 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
     {
       title: 'Act. Workload',
       render: (record) => (
-        <NameNoActionCell dataColumn={record.workload} />
+        <NameNoActionCell className="text-[#025EFF]" dataColumn={record.workload} />
       ),
       width: 120,
     },
@@ -169,19 +170,7 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
       title: '',
       fixed: 'right',
       render: (record) => (
-        <TableActionCell>
-          {(closeDropdown) => (
-            <div
-              className="cursor-pointer px-4 py-3 text-gray-700 hover:bg-gray-50"
-              onClick={() => {
-                handleOpenHistory(record)
-                closeDropdown()
-              }}
-            >
-              Attendance History
-            </div>
-          )}
-        </TableActionCell>
+        <SappActionCell isShowViewButton labelButtonView="Attendance History" handleClickView={() => handleOpenHistory(record)} />
       ),
       width: 50,
     },
@@ -196,16 +185,17 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
           key={monthSelectKey}
           className="min-w-24 mb-4 font-semibold text-xl"
           defaultValue={`${dayjs().month() + 1}`}
-          options={Array(12).fill(null).map((_, index) => 
+          options={Array(12).fill(null).map((_, index) =>
             ({ label: dayjs.utc().month(index).format('MMM'), value: `${index + 1}` }))}
-           variant="borderless"
-           suffixIcon={<ArrowDownIcon className="text-gray-300" />}
-           labelRender={(option) => <span className='text-xl'>{option.label}</span>}
-           onChange={(value) => {             const month = value === '' ? undefined : value
-              setValue('fromDate', month ? dayjs().month(Number(month) - 1).startOf('month').toISOString() : undefined)
-              setValue('toDate', month ? dayjs().month(Number(month) - 1).endOf('month').toISOString() : undefined)
-           }}
-            />
+          variant="borderless"
+          suffixIcon={<ArrowDownIcon className="text-gray-300" />}
+          labelRender={(option) => <span className='text-xl'>{option.label}</span>}
+          onChange={(value) => {
+            const month = value === '' ? undefined : value
+            setValue('fromDate', month ? dayjs().month(Number(month) - 1).startOf('month').toISOString() : undefined)
+            setValue('toDate', month ? dayjs().month(Number(month) - 1).endOf('month').toISOString() : undefined)
+          }}
+        />
       </div>
       <TeacherAttendanceStatistics fromDate={watch('fromDate')} toDate={watch('toDate')} />
       {/* Divider */}
@@ -215,66 +205,66 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
       <div className="mb-6 flex flex-col gap-4">
         <div className="flex justify-between gap-6">
           <SappSelectMultiple
-              name="class_ids"
-              control={control}
-               classNameWrapper="w-full"
-              heightCustom="flex-1 w-full h-10"
-              size="middle"
-              placeholder="Class"
-              options={(teacherClassData || []).map((item) => ({
-                  label: item.class.class_name,
-                  value: item.class.class_id,
-                }))}
-              onSearch={(text) => {
-                debounceSearchTeacherClass(text)
-              }}
-              onMenuScrollToBottom={hasNextPageTeacherClass ? fetchNextPageTeacherClass : undefined}
-              onDropdownVisibleChange={(open) => {
-                if (open && !teacherClassData) {
-                  refetchTeacherClass()
-                  return
-                }
-              }}
-              onChange={() => {
-                setValue('lesson_ids', [])
-                clearErrors('lesson_ids')
-              }}
-              suffixIcon={<ArrowDownIcon className="text-gray-300" />}
-            />
-          <SappSelectMultiple
-              name="lesson_ids"
-              control={control}
-              classNameWrapper={'w-full'}
-              className={clsx("flex-1 w-full font-medium", {
-                  "select-error": errors.lesson_ids,
-              })}
-              heightCustom="h-10"
-              size="middle"
-              placeholder="Lesson"
-              open={!getValues('class_ids')?.length ? false : undefined}
-              onFocus={() => {
-                if (!getValues('class_ids')?.length) {
-                  setError('lesson_ids', { message: 'Please select class first' })
-                  return
-                }
-              }   
+            name="class_ids"
+            control={control}
+            classNameWrapper="w-full"
+            heightCustom="flex-1 w-full h-10"
+            size="middle"
+            placeholder="Class"
+            options={(teacherClassData || []).map((item) => ({
+              label: item.class.class_name,
+              value: item.class.class_id,
+            }))}
+            onSearch={(text) => {
+              debounceSearchTeacherClass(text)
+            }}
+            onMenuScrollToBottom={hasNextPageTeacherClass ? fetchNextPageTeacherClass : undefined}
+            onDropdownVisibleChange={(open) => {
+              if (open && !teacherClassData) {
+                refetchTeacherClass()
+                return
               }
-              options={(teacherLessonData || []).map((lesson) => ({
-                  label: lesson.teacher_schedule?.schedule_name,
-                  value: lesson.teacher_schedule?.schedule_id,
-                }))}
-              onSearch={(text) => {
-                debounceSearch(text)
-              }}
-              onMenuScrollToBottom={hasNextPageTeacherLesson ? fetchNextPageTeacherLesson : undefined}
-              onDropdownVisibleChange={(open) => {
-                if (open && !teacherLessonData) {
-                  refetchTeacherLesson()
-                  return
-                } 
-              }}
-              suffixIcon={<ArrowDownIcon className="text-gray-300" />}
-            />
+            }}
+            onChange={() => {
+              setValue('lesson_ids', [])
+              clearErrors('lesson_ids')
+            }}
+            suffixIcon={<ArrowDownIcon className="text-gray-300" />}
+          />
+          <SappSelectMultiple
+            name="lesson_ids"
+            control={control}
+            classNameWrapper={'w-full'}
+            className={clsx("flex-1 w-full font-medium", {
+              "select-error": errors.lesson_ids,
+            })}
+            heightCustom="h-10"
+            size="middle"
+            placeholder="Lesson"
+            open={!getValues('class_ids')?.length ? false : undefined}
+            onFocus={() => {
+              if (!getValues('class_ids')?.length) {
+                setError('lesson_ids', { message: 'Please select class first' })
+                return
+              }
+            }
+            }
+            options={(teacherLessonData || []).map((lesson) => ({
+              label: lesson.teacher_schedule?.schedule_name,
+              value: lesson.teacher_schedule?.schedule_id,
+            }))}
+            onSearch={(text) => {
+              debounceSearch(text)
+            }}
+            onMenuScrollToBottom={hasNextPageTeacherLesson ? fetchNextPageTeacherLesson : undefined}
+            onDropdownVisibleChange={(open) => {
+              if (open && !teacherLessonData) {
+                refetchTeacherLesson()
+                return
+              }
+            }}
+            suffixIcon={<ArrowDownIcon className="text-gray-300" />}
+          />
           <SappSelectMultiple
             name="workload_status"
             control={control}
@@ -284,8 +274,8 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
             size="middle"
             heightCustom="h-10"
             options={[
-              // { label: 'All', value: '' },
-              { label: 'Attended', value: 'PRESENT' },
+              { label: 'Full workload', value: 'FULL' },
+              { label: 'Partial Workload', value: 'PARTIAL' },
               { label: 'Absent', value: 'ABSENT' },
             ]}
             suffixIcon={<ArrowDownIcon className="text-gray-300" />}

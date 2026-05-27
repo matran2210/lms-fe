@@ -4,7 +4,7 @@ import { ITabs, ITeacherTeachingAttendanceItem } from '@lms/core'
 import { withAuthorization } from '@lms/hoc'
 import { LayoutTeacher } from '@lms/ui'
 import clsx from 'clsx'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   AttendanceHistory,
   TeachingAttendance
@@ -26,6 +26,30 @@ const TeacherAttendancePage = () => {
   const [historyOpen, setHistoryOpen] = useState(false)
   const [selectedRecord, setSelectedRecord] =
     useState<ITeacherTeachingAttendanceItem | null>(null)
+  const mainContentRef = useRef<HTMLDivElement | null>(null)
+  const [panelHeight, setPanelHeight] = useState<number>()
+
+  useEffect(() => {
+    const element = mainContentRef.current
+
+    if (!element) return
+
+    const updateHeight = () => {
+      setPanelHeight(element.getBoundingClientRect().height)
+    }
+
+    updateHeight()
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateHeight()
+    })
+
+    resizeObserver.observe(element)
+
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, [])
 
 
   const handleOpenHistory = (record: ITeacherTeachingAttendanceItem) => {
@@ -49,9 +73,10 @@ const TeacherAttendancePage = () => {
           historyOpen ? 'pr-8' : '',
         )}
       >
-        <div className="flex gap-6 items-stretch">
+        <div className="flex items-start gap-6">
           {/* Main Content - Tabs */}
           <div
+            ref={mainContentRef}
             className={clsx(
               'rounded-xl bg-white p-8 transition-all duration-300 ease-in-out',
               historyOpen ? 'flex-1 min-w-0' : 'w-full flex-1 ',
@@ -69,15 +94,18 @@ const TeacherAttendancePage = () => {
               historyOpen ? 'w-[440px]' : 'w-0',
             )}
           >
-            <div
-              className={'h-full w-[440px'}
-            >
-              <AttendanceHistory
-                isOpen={historyOpen}
-                onClose={handleCloseHistory}
-                record={selectedRecord}
-              />
-            </div>
+            {historyOpen && (
+              <div
+                className="w-[440px]"
+                style={panelHeight ? { height: panelHeight } : undefined}
+              >
+                <AttendanceHistory
+                  isOpen={historyOpen}
+                  onClose={handleCloseHistory}
+                  record={selectedRecord}
+                />
+              </div>
+            )}
           </div>
         </div>
       </LayoutTeacher>

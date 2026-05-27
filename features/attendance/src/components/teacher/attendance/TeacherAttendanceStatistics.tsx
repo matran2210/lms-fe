@@ -36,7 +36,7 @@ const TeacherAttendanceStatistics = ({ fromDate, toDate }: TeacherAttendanceStat
                 </div>
                 <div className="w-36 justify-center text-gray-700 text-lg font-semibold">Total Lessons</div>
               </div>
-              <div className="text-dashboard-yellow pl-12"><span className="text-3xl font-semibold">{statisticsData?.total_lessons}</span><span className="text-xl font-semibold"> </span><span className="text-orange-400 text-sm font-medium">Class Sessions</span></div>
+              <div className="text-dashboard-yellow pl-12"><span className="text-2xl font-semibold">{statisticsData?.total_lessons}</span><span className="text-orange-400 text-sm font-medium">Class Sessions</span></div>
             </div>
             <div className="flex-1 self-stretch p-6 bg-white rounded-2xl shadow-small flex flex-col justify-start items-center gap-4">
               <div className="flex justify-start items-center gap-4">
@@ -50,7 +50,7 @@ const TeacherAttendanceStatistics = ({ fromDate, toDate }: TeacherAttendanceStat
               <div className="text-dashboard-lightGreen self-stretch flex-1 pl-12 flex flex-col justify-between items-start">
                 <div className="justify-center"><span className="text-2xl font-semibold leading-9">{statisticsData?.total_attended}/{statisticsData?.total_lessons} </span><span className="text-sm font-medium">Class Sessions</span></div>
                 <div className="w-full">
-                  <Progress size="small" percent={30} showInfo={false} strokeColor="#6FD195" />
+                  <Progress size="small" percent={Math.round(Number((statisticsData?.total_attended || 0)/(statisticsData?.total_lessons || 1)) * 100)} showInfo={false} strokeColor="#6FD195" />
                 </div>
               </div>
             </div>
@@ -80,7 +80,7 @@ const TeacherAttendanceStatistics = ({ fromDate, toDate }: TeacherAttendanceStat
                 <div className="justify-center text-gray-700 text-lg font-semibold">Standard Workload</div>
               </div>
               <div className="text-dashboard-cyan self-stretch pl-12 inline-flex justify-start items-center gap-2.5">
-                <div className="flex-1 justify-center"><span className="text-3xl font-semibold">{statisticsData?.total_standard_workload}</span><span className="text-xl font-semibold"> </span><span className="text-sm font-medium">Class Sessions</span></div>
+                <div className="flex-1 justify-center"><span className="text-2xl font-semibold">{statisticsData?.total_standard_workload}</span><span className="text-sm font-medium">Class Sessions</span></div>
               </div>
             </div>
             <div className="flex-1 p-6 bg-white rounded-2xl shadow-small inline-flex flex-col justify-start gap-4">
@@ -93,7 +93,7 @@ const TeacherAttendanceStatistics = ({ fromDate, toDate }: TeacherAttendanceStat
                 <div className="justify-center text-gray-700 text-lg font-semibold">Workload Ratio</div>
               </div>
               <div className="self-stretch pl-12 inline-flex justify-start items-center gap-2.5">
-                <div className="flex-1 justify-center text-dashboard-blue text-3xl font-semibold">{statisticsData?.workload_ratio}</div>
+                <div className="flex-1 justify-center text-dashboard-blue text-2xl font-semibold">{statisticsData?.workload_ratio}</div>
               </div>
             </div>
           </div>

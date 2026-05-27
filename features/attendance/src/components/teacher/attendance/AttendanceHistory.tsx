@@ -3,27 +3,17 @@ import { CloseModalIcon } from '@lms/assets'
 import { useFeature } from '@lms/contexts'
 import { ITeacherTeachingAttendanceItem } from '@lms/core'
 import { SappDivider } from '@lms/ui'
-import { formatDateFromUTC } from '@lms/utils'
+import { buildLocalLessonDateTime, formatDateFromUTC } from '@lms/utils'
+import { Divider } from 'antd'
 import clsx from 'clsx'
 import React from 'react'
 import { useQuery } from 'react-query'
+import AttendanceInfoRow from './AttendanceInfoRow'
 
 interface AttendanceHistoryProps {
   isOpen: boolean
   onClose: () => void
   record: ITeacherTeachingAttendanceItem | null
-}
-
-// Status badge mapping
-const statusToBadge = {
-  Attended: {
-    label: 'Attended',
-    type: 'success' as const,
-  },
-  Absent: {
-    label: 'Absent',
-    type: 'error' as const,
-  },
 }
 
 const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
@@ -45,81 +35,65 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
     })
   }
 
-
   const {
     data: teacherTeachingAttendanceHistoryData,
   } = useGetTeacherTeachingAttendanceHistory()
 
+  const localStartDate = buildLocalLessonDateTime(
+    record?.start_date,
+    record?.start_time
+  )
+  const localEndDate = buildLocalLessonDateTime(
+    record?.start_date,
+    record?.end_time
+  )
+
   return (
     <div
       className={clsx(
-        'h-full overflow-y-auto rounded-xl border border-gray-200 bg-white p-6 transition-opacity duration-300',
+        'flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white p-6 transition-opacity duration-300',
         isOpen ? 'opacity-100' : 'opacity-0',
       )}
     >
-      <div className="mb-6 flex items-center justify-between">
-        <h3 className="text-xl font-semibold text-gray-900">
-          Attendance History
-        </h3>
-        <button
-          onClick={onClose}
-          className="text-gray-400 transition-colors hover:text-gray-600"
-        >
-          <CloseModalIcon />
-        </button>
+      <div className="flex flex-col gap-8">
+        <div className="flex items-center justify-between">
+          <h3 className="text-2xl font-semibold text-gray-900">
+            Attendance History
+          </h3>
+          <button
+            onClick={onClose}
+            className="text-gray-400 transition-colors hover:text-gray-600"
+          >
+            <CloseModalIcon />
+          </button>
+        </div>
+        <div className="text-gray-800">
+          This Attendance History for <b>{record?.lesson}</b>
+        </div>
       </div>
 
-      <div className="flex flex-col gap-5">
-        {/* Class Information */}
-        <div className="flex justify-between gap-2">
-          <div className="text-sm font-medium text-gray-500">Class</div>
-          <div className="text-base text-gray-900">{record?.class || '-'}</div>
-        </div>
+      <Divider className='my-8 bg-gray-6' />
 
-        {/* Lesson Information */}
-        {/* <div className="flex flex-col gap-2">
-          <div className="text-sm font-medium text-gray-500">Lesson</div>
-          <div className="text-base text-gray-900">{record?.lesson || '-'}</div>
-        </div> */}
-
-        {/* Date */}
-        <div className="flex justify-between gap-2">
-          <div className="text-sm font-medium text-gray-500">Date</div>
-          <div className="text-base text-gray-900">{formatDateFromUTC(record?.start_date as string) || '-'}</div>
-        </div>
-        {/* Actual Workload (only for Teaching Attendance) */}
+      <div className="flex min-h-0 flex-1 flex-col gap-5">
+        <AttendanceInfoRow label="Class" labelClassName='line-clamp-2' value={record?.class || '-'} />
+        <AttendanceInfoRow
+          label="Date"
+          value={`${localStartDate?.isValid() ? localStartDate.format('DD/MM/YYYY') : '-'} ${localStartDate?.isValid() ? localStartDate.format('HH:mm') : '-'} : ${localEndDate?.isValid() ? localEndDate.format('HH:mm') : '-'}`}
+        />
         {record?.workload ? (
-          <div className="flex justify-between gap-2">
-            <div className="text-sm font-medium text-gray-500">
-              Actual Workload
-            </div>
-            <div className="text-base text-gray-900">
-              {record.workload}
-            </div>
-          </div>
+          <AttendanceInfoRow label="Actual Workload" valueClassName='text-[#025EFF]' value={record.workload} />
         ) : null}
-        <div className="h-[300px] overflow-y-scroll">
-          {
-            teacherTeachingAttendanceHistoryData?.map((historyRecord, index) => (
-              <div key={index} className="p-3 flex flex-col gap-3 rounded-lg border-t border-gray-[#F1F1F4]">
-                {/* Check In */}
-                <div className="flex jutify-between gap-2">
-                  <div className="text-sm font-medium text-gray-500">Check In - Check Out</div>
-                  <div className="text-base text-gray-900">
-                    {formatDateFromUTC(historyRecord?.checkin_time)} - {formatDateFromUTC(historyRecord?.checkout_time)}
-                  </div>
-                </div>
-                {/* Device */}
-                <div className="flex jutify-between gap-2">
-                  <div className="text-sm font-medium text-gray-500">Device</div>
-                  <div className="text-base text-gray-900">{historyRecord?.device || '-'}</div>
-                </div>
-                {
-                  index < (teacherTeachingAttendanceHistoryData?.length ? teacherTeachingAttendanceHistoryData?.length - 1 : 0) && <SappDivider className='!my-0' />
-                }
-              </div>
-            ))
-          }
+
+        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto pr-2">
+          {teacherTeachingAttendanceHistoryData?.map((historyRecord, index) => (
+            <div key={index} className="flex flex-col gap-3 border-t border-gray-[#F1F1F4] py-3">
+              <AttendanceInfoRow
+                label="Check In - Check Out"
+                value={`${historyRecord?.checkin_time ? formatDateFromUTC(historyRecord.checkin_time) : '-'} - ${historyRecord?.checkout_time ? formatDateFromUTC(historyRecord.checkout_time) : '-'}`}
+              />
+              <AttendanceInfoRow label="Device" value={historyRecord?.device || '-'} />
+            </div>
+          ))}
         </div>
       </div>
     </div>
