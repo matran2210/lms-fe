@@ -44,7 +44,6 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
       page_size: DEFAULT_PAGE_SIZE,
     }
   )
-  const [monthSelectKey, setMonthSelectKey] = useState(1)
   const { control, getValues, setValue, reset, watch, setError, clearErrors, formState: { errors } } = useForm<FilterForm>({
     defaultValues: {
       fromDate: dayjs().startOf('month').toISOString(),
@@ -105,20 +104,25 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
       class_ids: getValues('class_ids')?.filter((id) => id !== '') || undefined,
       lesson_ids: getValues('lesson_ids')?.filter((id) => id !== '') || undefined,
       workload_status: getValues('workload_status')?.filter((id) => id !== '') || undefined,
-      from_date: getValues('fromDate') || undefined,
-      to_date: getValues('toDate') || undefined,
+      fromDate: getValues('fromDate') || undefined,
+      toDate: getValues('toDate') || undefined,
     }))
   }
 
   const handleResetFilter = () => {
-    reset()
-    setMonthSelectKey((prev) => prev + 1) // Reset month select
+    reset({
+      fromDate: getValues('fromDate') || undefined,
+      toDate: getValues('toDate') || undefined,
+      class_ids: [],
+      lesson_ids: [],
+      workload_status: [],
+    })
     setQueryParams({
       page_index: DEFAULT_PAGE_NUMBER,
       page_size: DEFAULT_PAGE_SIZE,
+      fromDate: getValues('fromDate') || undefined,
+      toDate: getValues('toDate') || undefined,
     })
-    refetch()
-
     // TODO: Reset and refetch data
   }
 
@@ -182,7 +186,6 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
       <div className="w-fit">
         {/* select month */}
         <Select
-          key={monthSelectKey}
           className="min-w-24 mb-4 font-semibold text-xl"
           defaultValue={`${dayjs().month() + 1}`}
           options={Array(12).fill(null).map((_, index) =>
@@ -194,6 +197,11 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
             const month = value === '' ? undefined : value
             setValue('fromDate', month ? dayjs().month(Number(month) - 1).startOf('month').toISOString() : undefined)
             setValue('toDate', month ? dayjs().month(Number(month) - 1).endOf('month').toISOString() : undefined)
+            setQueryParams((prev) => ({
+              ...prev,
+              fromDate: month ? dayjs().month(Number(month) - 1).startOf('month').toISOString() : undefined,
+              toDate: month ? dayjs().month(Number(month) - 1).endOf('month').toISOString() : undefined,
+            }))
           }}
         />
       </div>
@@ -251,7 +259,7 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
             }
             options={(teacherLessonData || []).map((lesson) => ({
               label: lesson.teacher_schedule?.schedule_name,
-              value: lesson.teacher_schedule?.schedule_id,
+              value: lesson.teacher_schedule?.teacher_schedule_id,
             }))}
             onSearch={(text) => {
               debounceSearch(text)

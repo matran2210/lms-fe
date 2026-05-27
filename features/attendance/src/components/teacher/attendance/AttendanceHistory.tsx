@@ -1,12 +1,12 @@
 'use client'
-import { CloseModalIcon } from '@lms/assets'
+import { AlarmClockIcon, AlarmImage, BookInClassIcon, CalendarIconOutline, ClockIcon, ClockInClassIcon, CloseModalIcon, DeviceIcon, DeviceTeacherIcon } from '@lms/assets'
 import { useFeature } from '@lms/contexts'
 import { ITeacherTeachingAttendanceItem } from '@lms/core'
 import { SappDivider } from '@lms/ui'
 import { buildLocalLessonDateTime, formatDateFromUTC } from '@lms/utils'
 import { Divider } from 'antd'
 import clsx from 'clsx'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useQuery } from 'react-query'
 import AttendanceInfoRow from './AttendanceInfoRow'
 
@@ -22,6 +22,20 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
   record,
 }) => {
   const { userApi } = useFeature()
+  const attendanceHistoryRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    if (!isOpen || !attendanceHistoryRef.current) return
+
+    requestAnimationFrame(() => {
+      attendanceHistoryRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest',
+      })
+    })
+  }, [isOpen, record?.class_schedule_id])
+
   const useGetTeacherTeachingAttendanceHistory = () => {
     const fetchData = async () => {
       const { data } = await userApi.getTeacherTeachingAttendanceHistory(record?.class_schedule_id as string)
@@ -50,6 +64,7 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
 
   return (
     <div
+      ref={attendanceHistoryRef}
       className={clsx(
         'flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white p-6 transition-opacity duration-300',
         isOpen ? 'opacity-100' : 'opacity-0',
@@ -75,23 +90,25 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
       <Divider className='my-8 bg-gray-6' />
 
       <div className="flex min-h-0 flex-1 flex-col gap-5">
-        <AttendanceInfoRow label="Class" labelClassName='line-clamp-2' value={record?.class || '-'} />
+        <AttendanceInfoRow icon={<BookInClassIcon className='h-5 w-5 text-gray-400' />} label="Class" labelClassName='line-clamp-2' value={record?.class || '-'} />
         <AttendanceInfoRow
+          icon={<CalendarIconOutline className="h-5 w-5 text-gray-400" />}
           label="Date"
           value={`${localStartDate?.isValid() ? localStartDate.format('DD/MM/YYYY') : '-'} ${localStartDate?.isValid() ? localStartDate.format('HH:mm') : '-'} : ${localEndDate?.isValid() ? localEndDate.format('HH:mm') : '-'}`}
         />
         {record?.workload ? (
-          <AttendanceInfoRow label="Actual Workload" valueClassName='text-[#025EFF]' value={record.workload} />
+          <AttendanceInfoRow icon={<ClockInClassIcon className="h-5 w-5 text-gray-400" />} label="Actual Workload" valueClassName='text-[#025EFF]' value={record.workload} />
         ) : null}
 
         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto pr-2">
           {teacherTeachingAttendanceHistoryData?.map((historyRecord, index) => (
             <div key={index} className="flex flex-col gap-3 border-t border-gray-[#F1F1F4] py-3">
               <AttendanceInfoRow
+              icon={<AlarmClockIcon className='h-5 w-5 text-gray-400' />}
                 label="Check In - Check Out"
                 value={`${historyRecord?.checkin_time ? formatDateFromUTC(historyRecord.checkin_time) : '-'} - ${historyRecord?.checkout_time ? formatDateFromUTC(historyRecord.checkout_time) : '-'}`}
               />
-              <AttendanceInfoRow label="Device" value={historyRecord?.device || '-'} />
+              <AttendanceInfoRow icon={<DeviceTeacherIcon />} label="Device" value={historyRecord?.device || '-'} />
             </div>
           ))}
         </div>
