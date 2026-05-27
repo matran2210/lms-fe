@@ -1,4 +1,4 @@
-import { ExaminationsResponse } from '@lms/contexts'
+import { ExaminationsResponse } from "@lms/contexts";
 import {
   ExamInformation,
   IClassResourceList,
@@ -6,10 +6,10 @@ import {
   IListClassResourceParams,
   IQuizResultList,
   IResponse,
-} from '@lms/core'
-import { fetcher, fetchFormData } from '@services/requestV2'
-import { AxiosPromise } from 'axios'
-import { apiURL } from 'src/constants'
+} from "@lms/core";
+import { fetcher, fetchFormData } from "@services/requestV2";
+import { AxiosPromise } from "axios";
+import { apiURL } from "src/constants";
 
 export class ClassAPI {
   static getAllResultOfQuiz(
@@ -19,7 +19,7 @@ export class ClassAPI {
   ): Promise<IResponse<IQuizResultList>> {
     return fetcher(`${apiURL}/classes/${id}/result/${quiz_id}`, {
       params: params,
-    })
+    });
   }
 
   static getExams(
@@ -27,9 +27,9 @@ export class ClassAPI {
     params: { page_index: number; page_size: number },
   ): Promise<ExaminationsResponse> {
     return fetcher(`${apiURL}/classes/${id}/examination`, {
-      method: 'GET',
+      method: "GET",
       params: params,
-    })
+    });
   }
 
   static changeExamDate(
@@ -38,13 +38,13 @@ export class ClassAPI {
   ): AxiosPromise<IResponse<any>> {
     return fetchFormData({
       url: `${apiURL}/classes/${id}/examination`,
-      method: 'PUT',
+      method: "PUT",
       formData: data,
-    })
+    });
   }
 
   static getExamInfo(id?: string): Promise<ExamInformation> {
-    return fetcher(`${apiURL}/classes/${id}/exam-info`)
+    return fetcher(`${apiURL}/classes/${id}/exam-info`);
   }
 
   static getClassSchedule(
@@ -55,7 +55,7 @@ export class ClassAPI {
   ): Promise<any> {
     return fetcher(`${apiURL}/class-resource/class-schedule`, {
       params: { class_id: id, page_index, page_size, search_key },
-    })
+    });
   }
 
   static sendMailRequestRegrading(
@@ -67,22 +67,22 @@ export class ClassAPI {
       `${apiURL}/classes/${classId}/result/${quizAttemptId}/request-regrading`,
       {
         data: { reason },
-        method: 'POST',
+        method: "POST",
       },
-    )
+    );
   }
 
   static getClassResource(
     class_id: string,
     params: IListClassResourceParams,
-  ): Promise<IResponse<IClassResourceList>> {
-    return fetcher(`class-resource`, { params: { class_id, ...params } })
+  ): Promise<IClassResourceList> {
+    return fetcher(`class-resource`, { params: { class_id, ...params } });
   }
 
   static previewClassFile(
     class_id: string,
     resource_id: string,
   ): Promise<IClassResourcePreview> {
-    return fetcher(`class-resource/${class_id}/preview/${resource_id}`)
+    return fetcher(`class-resource/${class_id}/preview/${resource_id}`);
   }
 }
