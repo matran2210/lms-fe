@@ -26,7 +26,7 @@ interface IProp {
   children?: ReactNode;
   videoAttribs?: { [key: string]: string };
   isFetchCaptions?: boolean;
-  handlePlayVideo?:() => void
+  handlePlayVideo?: () => void;
   className?: string;
   controlClassName?: string;
 }
@@ -71,7 +71,7 @@ const SAPPVideo = ({
   isFetchCaptions = true,
   handlePlayVideo,
   className,
-  controlClassName
+  controlClassName,
 }: IProp) => {
   const { fetcher, videoUrl, router } = useFeature();
   const [playerFunction, setPlayerFunction] = useState<any>();
@@ -1088,7 +1088,10 @@ const SAPPVideo = ({
                 onTouchStart={showControls}
               />
               <div
-                className={clsx("video-controls flex-center absolute bottom-0 left-0 right-0 h-14 w-full rounded-b-lg px-4 py-3", controlClassName)}
+                className={clsx(
+                  "video-controls flex-center absolute bottom-0 left-0 right-0 h-14 w-full rounded-b-lg px-4 py-3",
+                  controlClassName,
+                )}
                 ref={videoControlsRef}
               >
                 <div
