@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import _, { round } from 'lodash'
+import { PageLink } from 'src/constants/routers'
 
 export function isMobile() {
   const toMatch = [
@@ -184,5 +185,133 @@ export const calculatePercentage = (num: number, total: number): number => {
   return round((num / total) * 100, 2)
 }
 
+/**
+ * @description Return number mm:ss
+ * @param {number} num: number
+ * @return {*}
+ */
+export const convertSecondsToMinutesSeconds = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60)
+  const remainingSeconds = seconds % 60
+  const formattedMinutes = String(minutes).padStart(2, '0')
+  const formattedSeconds = String(remainingSeconds).padStart(2, '0')
+  return `${formattedMinutes}:${formattedSeconds}`
+}
+
+export const convertLocalTimeToUTC = (currentTime: Date) => {
+  const offsetMinutes = currentTime.getTimezoneOffset()
+  const utcTime = new Date(currentTime.getTime() + offsetMinutes * 60 * 1000)
+
+  return utcTime
+}
+
+export const convertUTCToLocalTime = (utc_time: Date | string) => {
+  return new Date(utc_time)
+}
+
+export const convertHourToDayLeft = (hours: number) => {
+  if (hours <= 0) {
+    return 0
+  }
+
+  const days = Math.ceil(hours / 24)
+  return days
+}
+
+export const isAppleDevice = () => {
+  return /Mac|iPod|iPhone|iPad/.test(navigator.platform)
+}
+
+export const isSafari = () => {
+  const userAgent = navigator.userAgent
+  const vendor = navigator.vendor
+  return (
+    /Safari/.test(userAgent) &&
+    /Apple Computer/.test(vendor) &&
+    !/Chrome/.test(userAgent)
+  )
+}
+
+type Option = {
+  label?: string
+  value?: string
+  [key: string]: any
+}
+
+export const getSelectOptions = (
+  options?: Option[],
+  existedOption?: Option,
+  key: string = 'value',
+): Option[] => {
+  return _.chain([existedOption])
+    .compact() // loại bỏ undefined/null
+    .concat(options ?? []) // gộp với options
+    .filter((item) => item[key]) // lọc item có key
+    .uniqBy(key) // loại trùng theo key
+    .value()
+}
+
+/**
+ * Hàm phân tích chuỗi thời gian thành đối tượng thời gian.
+ *
+ * @param {string} timeStr - Chuỗi thời gian cần phân tích.
+ * @returns {dayjs} - Đối tượng thời gian sau khi phân tích.
+ */
+const parseTime = (timeStr: string) => {
+  /**
+   * Kiểm tra định dạng chuỗi thời gian.
+   *
+   * @param {string} timeStr - Chuỗi thời gian cần kiểm tra.
+   * @returns {boolean} - True nếu chuỗi thời gian hợp lệ, false ngược lại.
+   */
+  if (/^\d{2}:\d{2}$/.test(timeStr)) {
+    /**
+     * Chuỗi thời gian có định dạng HH:mm.
+     *
+     * @param {string} timeStr - Chuỗi thời gian cần phân tích.
+     * @param {string} format - Định dạng chuỗi thời gian.
+     * @returns {dayjs} - Đối tượng thời gian sau khi phân tích.
+     */
+    return dayjs(timeStr, 'HH:mm')
+  } else if (/^\d{2}:\d{2}:\d{2}$/.test(timeStr)) {
+    /**
+     * Chuỗi thời gian có định dạng HH:mm:ss.
+     *
+     * @param {string} timeStr - Chuỗi thời gian cần phân tích.
+     * @param {string} format - Định dạng chuỗi thời gian.
+     * @returns {dayjs} - Đối tượng thời gian sau khi phân tích.
+     */
+    return dayjs(timeStr, 'HH:mm:ss')
+  }
+  /**
+   * Chuỗi thời gian không hợp lệ.
+   *
+   * @returns {dayjs} - Đối tượng thời gian không hợp lệ.
+   */
+  return dayjs(NaN)
+}
+
+/**
+ * Hàm định dạng thời gian chỉ gồm giờ và phút.
+ *
+ * @param {string} rawTime - Thời gian nguyên thủy dưới dạng chuỗi.
+ * @returns {string} - Thời gian định dạng chỉ gồm giờ và phút.
+ */
+export const formatTimeOnlyHourMinute = (rawTime: string) => {
+  /**
+   * Sử dụng thư viện dayjs để định dạng thời gian.
+   *
+   * @param {string} rawTime - Thời gian nguyên thủy dưới dạng chuỗi.
+   * @param {string} format - Định dạng thời gian.
+   * @returns {string} - Thời gian định dạng.
+   */
+  return dayjs(parseTime(rawTime)).format('HH:mm')
+}
+
+export const getUserPrefix = (isTeacher: boolean) =>
+  isTeacher ? PageLink.TEACHERS : ''
+
 export * from './class-resource/helper'
-export * from './quiz-test/helper'
+export * from './keycloak'
+export * from './storyline/engine'
+export * from './storyline/scrollManager'

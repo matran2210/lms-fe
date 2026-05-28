@@ -12,12 +12,17 @@
   "peerDependencies": {
     "antd": "^5.25.0",
     "clsx": "^2.1.1",
+    "crypto-js": "^4.2.0",
     "date-fns": "^3.0.6",
     "dayjs": "^1.11.12",
     "lodash": "^4.17.21",
     "react-hook-form": "7.48.2",
     "react-hot-toast": "^2.4.1",
+    "react-query": "3.39.3",
     "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.2.2"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
@@ -28,7 +33,7 @@
     "@lms/hooks": "workspace:*",
     "@lms/ui": "workspace:*",
     "@lms/utils": "workspace:*",
-    "@sapp-fe/explanation-package": "^1.8.0",
+    "@sapp-fe/explanation-package": "^1.9.0",
     "@sapp-fe/quiz-result-package": "^1.6.0",
     "framer-motion": "^12.23.12",
     "lottie-react": "^2.4.1",

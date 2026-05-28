@@ -21,11 +21,12 @@ import { PageLink } from 'src/constants/routers'
 import { withAuthorization } from '@lms/hoc'
 import {
   DrawerListQuestion,
-  ListQuestion,
   ModalListQuestion,
 } from '@lms/feature-courses'
 import { useQuery } from 'react-query'
 import { useTailwindBreakpoint } from '@lms/hooks'
+
+type QuestionFilterType = 'all' | 'multiple' | 'constructed'
 
 const Explanation = () => {
   const router = useRouter()
@@ -40,6 +41,7 @@ const Explanation = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const { isMobileView } = useTailwindBreakpoint()
   const [openTooltip, setOpenTooltip] = useState<boolean>(false)
+  const [questionFilter, setQuestionFilter] = useState<QuestionFilterType>('all')
   const [isOpenModalListQuestion, setIsOpenModalListQuestion] =
     useState<boolean>(false)
   const [isOpenDrawerListQuestion, setIsOpenDrawerListQuestion] =
@@ -246,13 +248,10 @@ const Explanation = () => {
         </div>
         {!loading && activeQuestion && (
           <ExplanationPackageV2
+            questionFilter={questionFilter}
+            onQuestionFilterChange={setQuestionFilter}
+            questions={questions}
             getActiveQuestion={getActiveQuestion}
-            renderAllQuestions={
-              <ListQuestion
-                questions={questions}
-                getActiveQuestion={getActiveQuestion}
-              />
-            }
             activeQuestion={{
               ...activeQuestion,
               solution: activeQuestion?.solution,

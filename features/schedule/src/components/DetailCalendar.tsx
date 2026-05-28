@@ -33,6 +33,15 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
   });
 
   const getMode = () => {
+    if (data?.schedule_status === "RESCHEDULING") {
+      return (
+        <div className="flex max-w-fit items-center gap-1 rounded-[100px] bg-[#F6F5FF] px-[12px] py-[2px] text-sm font-normal text-[#2E09FF]">
+          <StatusDotIcon />
+          Reschedule
+        </div>
+      );
+    }
+
     if (data?.schedule.is_holiday) {
       return (
         <div className="flex max-w-fit items-center gap-1 rounded-[100px] bg-warning/5 px-[12px] py-[2px] text-sm font-normal text-warning">
@@ -109,7 +118,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
         <>
           <div className="col-span-1 ">Lesson Date:</div>
           <div className="col-span-1 text-right font-semibold">
-            {start.format("MMM DD, YYYY")}
+            {data?.schedule_status !== "RESCHEDULING" ? start.format("MMM DD, YYYY") : 'Updating...'}
           </div>
         </>
       );
@@ -118,16 +127,16 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
       return (
         <>
           <div className="col-span-1 ">Lesson Date:</div>
-          <div className="col-span-1 text-right font-semibold">{`${start.format("HH:mm")} | ${start.format("MMM DD YYYY")}`}</div>
+          <div className="col-span-1 text-right font-semibold">{data?.schedule_status !== "RESCHEDULING"  ?`${start.format("HH:mm")} | ${start.format("MMM DD YYYY")}` : 'Updating...'}</div>
           <div className="col-span-1 ">Deadline</div>
-          <div className="col-span-1 text-right font-semibold">{`${end.format("HH:mm")} | ${end.format("MMM DD YYYY")}`}</div>
+          <div className="col-span-1 text-right font-semibold">{data?.schedule_status !== "RESCHEDULING"  ?`${end.format("HH:mm")} | ${end.format("MMM DD YYYY")}` : 'Updating...'}</div>
         </>
       );
     }
     return (
       <>
         <div className="col-span-1 ">Lesson Date:</div>
-        <div className="col-span-1 text-right font-semibold">{`${start.format("HH:mm")} - ${end.format("HH:mm")} | ${start.format("MMM DD YYYY")}`}</div>
+        <div className="col-span-1 text-right font-semibold">{data?.schedule_status !== "RESCHEDULING"  ?`${start.format("HH:mm")} - ${end.format("HH:mm")} | ${start.format("MMM DD YYYY")}` : 'Updating...'}</div>
       </>
     );
   }, [data]);

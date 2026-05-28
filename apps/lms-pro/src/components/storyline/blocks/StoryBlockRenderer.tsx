@@ -1,8 +1,9 @@
 import { useFeature } from '@lms/contexts'
+import { DocumentItem, IMultiChoiceQuestion } from '@lms/core'
+import LabeledGraphicBlock from './LabeledGraphicBlock'
 import QuizBlock from './QuizBlock'
 import TextBlock from './TextBlock'
 import VideoBlock from './VideoBlock'
-import { DocumentItem, IMultiChoiceQuestion } from '@lms/core'
 
 export function StoryBlockRenderer({
   doc,
@@ -42,6 +43,16 @@ export function StoryBlockRenderer({
         />
       )
 
+    case 'INTERACTION':
+      return (
+        <LabeledGraphicBlock
+          markers={doc.markers}
+          backgroundResource={doc.background_resource}
+          documentTitle={doc.name}
+          document_id={doc.id}
+          docIndex={docIndex}
+        />
+      )
 
     default:
       return null
