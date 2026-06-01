@@ -409,7 +409,7 @@ const Discussion = ({ class_id, enableReplyScroll = false }: Props) => {
       setHighlightedReplyId((current) =>
         current === targetReplyId ? undefined : current,
       )
-    }, 1200)
+    }, 6200)
 
     const scrollWithRetry = (retry = 0) => {
       const element = discussionRootRef.current?.querySelector<HTMLElement>(

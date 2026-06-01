@@ -310,13 +310,13 @@ function DiscussionElement({
     : undefined;
 
   const highlightTransitionStyle = {
-    transition: "color 2200ms ease-out, text-shadow 2200ms ease-out",
+    transition: "color 3200ms ease-out, text-shadow 2200ms ease-out",
   };
 
   return (
     <div
       id={elementId}
-      className="flex gap-3 rounded-xl px-3 py-2 text-gray-800"
+      className="scroll-mt-32 flex gap-3 rounded-xl px-3 py-2 text-gray-800"
     >
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col">
