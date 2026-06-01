@@ -197,7 +197,6 @@ export default function EssayQuestionBlock({
                   <EssayQuestionPreview
                     data={{
                       ...currentTabContent?.data?.requirements?.[index],
-                      ...essayData?.req,
                     }}
                     question_content={currentTabContent?.data?.question_content}
                     index={index}
@@ -208,7 +207,7 @@ export default function EssayQuestionBlock({
                     setValue={setValue}
                     defaultValue={getDefaultValueEssay()}
                     response_option_custom={currentTabContent.response_type}
-                    externalRef={refEditor}
+                    externalRef={index === essayData?.index ? refEditor : undefined}
                     fullData={currentTabContent}
                     isShowContent={false}
                     openChooseFile={() =>
@@ -319,15 +318,13 @@ export default function EssayQuestionBlock({
 
       {currentTabContent?.data?.requirements?.length > 0 ? (
         <RequirementsTab
-          destroyInactiveTabPane
           items={essayRequirementsItem()}
           defaultActiveKey="0"
           onChange={(key) => {
             setEssayData({
-              req: getValues(`${currentTabID}_${key}_answer`),
+              req: currentTabContent?.data?.requirements?.[Number(key)],
               index: Number(key),
             });
-            refEditor.current?.reset();
           }}
         />
       ) : (

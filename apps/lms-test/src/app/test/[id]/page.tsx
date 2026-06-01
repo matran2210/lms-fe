@@ -1143,13 +1143,6 @@ const TestDetail = () => {
       onResetFormatEssay(name, getDefaultWordValue());
       await refEditor?.current?.reset();
       await new Promise((resolve) => setTimeout(resolve, 10)); // hoặc setTimeout với delay nhỏ như 10ms
-
-      if (
-        refEditor?.current?.resetSheet &&
-        question?.response_option === RESPONSE_OPTION.SHEET
-      ) {
-        refEditor?.current?.resetSheet();
-      }
     };
     const doAfterSetState = () => {
       setEditorReady(false); // Ẩn trước
