@@ -31,6 +31,7 @@ export interface ICalendar {
   is_key_before_content: boolean
   is_key_after_content: boolean
   course_id: string
+  schedule_status: string
 }
 
 export interface ICalendarDetail {
@@ -41,6 +42,7 @@ export interface ICalendarDetail {
   is_case_study: boolean
   status: string
   is_review_allowed: boolean
+  schedule_status: string
   class: {
     id: string
     name: string

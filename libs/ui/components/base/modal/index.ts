@@ -1,5 +1,4 @@
 export { default as BaseStaticModal } from "./BaseStaticModal";
-export { default as ModalMobile } from "./ModalMobile";
 export { default as ModalNotMobileFriendly } from "./ModalNotMobileFriendly";
 export { default as ModalResizeable } from "./ModalResizeable";
 export { default as SappModal } from "./SappModal";

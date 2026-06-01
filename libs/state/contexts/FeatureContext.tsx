@@ -105,6 +105,7 @@ interface FeatureContextProps {
   useAppSelector?: <T>(fn: (state: any) => T) => T
   courseActivationAPI?: ICourseActivationAPI;
   appModules?: AppModule[]
+  domainTest: string
 }
 
 const FeatureContext = createContext<FeatureContextProps>(

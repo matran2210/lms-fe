@@ -353,7 +353,8 @@ function Providers({ children }: { children: ReactNode }) {
             courseActivationAPI: CoursesActivationAPI,
             dispatch: dispatch,
             useAppSelector: useAppSelector,
-            appModules: modules
+            appModules: modules,
+            domainTest: process.env.NEXT_PUBLIC_SUB_DOMAIN_TEST as string,
           }}
         >
           <CourseProvider

@@ -76,7 +76,7 @@ const QuizBlock = ({
   const { section_storyline_id } = useParams()
 
 
-  const { control, setValue, reset, getValues, watch, resetField } = useForm()
+  const { control, setValue, getValues, watch } = useForm()
   const {
     continueAction,
     visibleDocumentCount,
@@ -754,29 +754,31 @@ const QuizBlock = ({
 
       case QUESTION_TYPES.MATCHING:
         return (
-          <MatchQuizComponent
-            data={question}
-            action={getAnswerMatching}
-            defaultAnswer={question?.defaultValue || getAnswerMatching()}
-            corrects={
-              isCorrectAnswer || openExplain || attemptId
-                ? question?.corrects
+          <div className="overflow-x-auto">
+            <MatchQuizComponent
+              data={question}
+              action={getAnswerMatching}
+              defaultAnswer={question?.defaultValue || getAnswerMatching()}
+              corrects={
+                isCorrectAnswer || openExplain || attemptId
                   ? question?.corrects
+                    ? question?.corrects
+                    : undefined
                   : undefined
-                : undefined
-            }
-            uuid={'_' + uuidv4().replaceAll('-', '_')}
-            solution={
-              isCorrectAnswer || openExplain || attemptId
-                ? question?.solution
-                : undefined
-            }
-            ref={MatchQuizRef}
-            explainClassname="!mt-0 !p-0 !bg-transparent"
-            correctAnswerClass="!mt-0 !pt-0"
-            disabled={isQuestionConfirmed}
-            isAnimationCorrectAnswer
-          />
+              }
+              uuid={'_' + uuidv4().replaceAll('-', '_')}
+              solution={
+                isCorrectAnswer || openExplain || attemptId
+                  ? question?.solution
+                  : undefined
+              }
+              ref={MatchQuizRef}
+              explainClassname="!mt-0 !p-0 !bg-transparent"
+              correctAnswerClass="!mt-0 !pt-0"
+              disabled={isQuestionConfirmed}
+              isAnimationCorrectAnswer
+            />
+          </div>
         )
 
 
@@ -1062,7 +1064,7 @@ const QuizBlock = ({
   }) => {
     setSkipQuestion(true)
     continueAction(
-      currentVisibleDocument && currentVisibleDocument?.type !== 'QUIZ'
+      currentVisibleDocument && !['QUIZ', 'VIDEO'].includes(currentVisibleDocument?.type)
         ? currentVisibleDocument?.id
         : document_id,
       isUpdateProgress,
@@ -1194,7 +1196,7 @@ const QuizBlock = ({
       {/* Not Confirm */}
       <div
         className={clsx(
-          'flex items-center justify-end gap-4 rounded-b-2xl px-6 py-4',
+          'flex rounded-b-2xl px-6 py-4',
           'transition-transform duration-200 ease-out will-change-transform',
           {
             'max-h-0 translate-y-full !p-0 opacity-0':
@@ -1204,6 +1206,10 @@ const QuizBlock = ({
             'bg-success-50': isCorrectAnswer,
             'bg-info-50': !isQuestionConfirmed,
             'translate-y-0 opacity-100': isShowActionBtn,
+            // Not confirmed: flex-col mobile, flex-row desktop
+            'flex-col gap-4 md:flex-row md:items-center md:justify-end': !isQuestionConfirmed,
+            // Confirmed: always flex-row
+            'flex-row items-center justify-between gap-4': isQuestionConfirmed,
           },
         )}
       // data-aos={'fade-up'}
@@ -1222,10 +1228,11 @@ const QuizBlock = ({
                 {getHintQuestion()}
               </div>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex w-full items-center justify-between gap-4 md:w-auto md:justify-start">
               {!isShowClearSelection &&
                 !isShowActionBtn &&
-                !isLastVisibleDocument && (
+                !isLastVisibleDocument && 
+                (
                   <ButtonText
                     size="medium"
                     disabled={loading}
@@ -1269,7 +1276,7 @@ const QuizBlock = ({
           </>
         ) : (
           <>
-            <div className="flex-1 text-lg font-semibold text-gray-800">
+            <div className="flex flex-1 items-center gap-2">
               {openExplain ? (
                 <ExplainQuiz
                   text={'This is an explaination'}
@@ -1340,8 +1347,7 @@ const QuizBlock = ({
                   openExplain || isCorrectAnswer || attemptId
                     ? handleSkipQuestion({
                       isUpdateProgress:
-                        currentVisibleDocument &&
-                        currentVisibleDocument?.type !== 'QUIZ',
+                        currentVisibleDocument && !["QUIZ", "VIDEO"].includes(currentVisibleDocument?.type),
                     })
                     : handleRetakeQuestion()
                 }
@@ -1367,9 +1373,9 @@ const ExplainQuiz = ({
   icon: React.ReactNode
 }) => {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-2">
       {icon}
-      <div>{text}</div>
+      <div className="text-lg font-semibold text-gray-800">{text}</div>
     </div>
   )
 }

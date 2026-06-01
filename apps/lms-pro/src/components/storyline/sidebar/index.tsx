@@ -26,18 +26,28 @@ export default function Sidebar({ listStorylineData }: IProps) {
         scroll: false,
       },
     )
+    
+    // Close sidebar on mobile/tablet after selecting an item
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setShowSidebar(false)
+    }
   }
 
   return (
     <AnimatePresence mode="wait">
-      <motion.aside
-        key="sidebar"
-        initial={{ x: -240, opacity: 0 }}
-        animate={{ x: showSidebar ? 0 : -280, opacity: 1 }}
-        exit={{ x: -240, opacity: 0 }}
-        transition={{ duration: 0.2, ease: 'easeOut' }}
-        className="fixed h-full bottom-0 top-0 z-[202] w-[278px] bg-white p-6 shadow-md transition-all duration-300 ease-in-out"
-      >
+      {showSidebar && (
+        <motion.aside
+          key="sidebar"
+          initial={{ x: '-100%' }}
+          animate={{ x: 0 }}
+          exit={{ x: '-100%' }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+          className="fixed bottom-0 top-0 z-[202] h-full w-screen bg-white p-6 shadow-md md:w-[326px] lg:w-[278px]"
+          style={{
+            left: 0,
+            maxWidth: '100vw',
+          }}
+        >
         <div className="flex items-center justify-between gap-2">
           <div className="text-lg font-semibold text-gray-800">
             {listStorylineData?.name}
@@ -71,6 +81,7 @@ export default function Sidebar({ listStorylineData }: IProps) {
           })}
         </div>
       </motion.aside>
+      )}
     </AnimatePresence>
   )
 }

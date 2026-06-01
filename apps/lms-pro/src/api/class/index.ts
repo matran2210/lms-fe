@@ -85,7 +85,7 @@ export class ClassAPI {
   static getClassResource(
     class_id: string,
     params: IListClassResourceParams,
-  ): Promise<IResponse<IClassResourceList>> {
+  ): Promise<IClassResourceList> {
     return fetcher(`class-resource`, { params: { class_id, ...params } })
   }
 

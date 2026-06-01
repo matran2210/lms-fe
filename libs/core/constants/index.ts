@@ -308,6 +308,7 @@ export const EVENT_TYPES = {
   OTHER: "OTHER",
   LIVE_ONLINE: "LIVE_ONLINE",
   INACTIVE: "INACTIVE",
+  RESCHEDULING: "RESCHEDULING",
 } as const;
 
 export const EVENT_TYPES_RESPONSE = {
@@ -328,6 +329,7 @@ export const EVENT_TYPES_LABEL = {
   [EVENT_TYPES.OTHER]: "Other calendar",
   [EVENT_TYPES.LIVE_ONLINE]: "",
   [EVENT_TYPES.INACTIVE]: "Inactive",
+  [EVENT_TYPES.RESCHEDULING]: '',
 };
 
 export const EVENT_TYPE_OPTIONS = Object.entries(EVENT_TYPES_LABEL)

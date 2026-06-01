@@ -287,7 +287,7 @@ export interface IClassAPI {
   getClassResource?: (
     class_id: string,
     params: IListClassResourceParams,
-  ) => Promise<IResponse<IClassResourceList>>;
+  ) => Promise<IClassResourceList>;
   getClassSchedule?: (
     id: string,
     page_index: number,
