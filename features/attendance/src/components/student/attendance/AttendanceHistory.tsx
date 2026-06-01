@@ -13,6 +13,7 @@ interface AttendanceHistoryProps {
   isOpen: boolean
   onClose: () => void
   record: IStudentAttendanceItem | null
+  classId: string
 }
 
 interface AttendanceHistoryContentProps {
@@ -41,7 +42,7 @@ const AttendanceHistoryContent: React.FC<AttendanceHistoryContentProps> = ({
           <span className="text-gray-500">Date:</span>
         </div>
         <div className="text-base text-gray-900">
-          {formatDateFromUTC(record?.lesson_date.start_date as string)}
+          {formatDateFromUTC(record?.start_date as string)}
         </div>
       </div>
       <div
@@ -82,18 +83,19 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
   isOpen,
   onClose,
   record,
+  classId
 }) => {
   const { classApi } = useFeature()
   const { isTabletView, isMobileView } = useTailwindBreakpoint()
   const useGetClassAttendanceHistory = () => {
     const fetchData = async () => {
-      const { data } = await classApi.getClassAttendanceHistory(record?.class_schedule_user_id as string)
+      const { data } = await classApi.getClassAttendanceHistory(classId, record?.id as string)
       return data
     }
 
 
-    return useQuery(["class-attendance-history", record?.class_schedule_user_id], fetchData, {
-      enabled: record?.class_schedule_user_id !== undefined && isOpen,
+    return useQuery(["class-attendance-history", record?.id], fetchData, {
+      enabled: record?.id !== undefined && isOpen,
       retry: false,
     })
   }
@@ -119,13 +121,13 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
       >
         <div className="mb-4 flex flex-col gap-4">
           <p className="text-base text-gray-600">
-            This Attendance History for Lesson: <span className='font-semibold'>{record?.lesson}</span>
+            This Attendance History for Lesson: <span className='font-semibold'>{record?.name}</span>
           </p>
         </div>
      
           <AttendanceHistoryContent
             record={record}
-            listCheckIn={classAttendanceHistoryData}
+            listCheckIn={classAttendanceHistoryData?.classScheduleUserAttendance || []}
             isCompactHeight
           />
       </SappDrawerV3>
@@ -146,7 +148,7 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
             Attendance History
           </h3>
           <p className="text-base text-gray-600">
-            This Attendance History for Lesson <span className='font-semibold'>{record?.lesson}</span>
+            This Attendance History for Lesson <span className='font-semibold'>{record?.name}</span>
           </p>
         </div>
         <button
@@ -162,7 +164,7 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
       <div className="flex min-h-0 flex-1 flex-col gap-10">
           <AttendanceHistoryContent
             record={record}
-            listCheckIn={classAttendanceHistoryData}
+            listCheckIn={classAttendanceHistoryData?.classScheduleUserAttendance || []}
             isPanelScroll
           />
       </div>

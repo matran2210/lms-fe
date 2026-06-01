@@ -29,12 +29,13 @@ interface FilterForm {
 interface StudentAttendanceTableProps {
   onOpenHistory?: (record: IStudentAttendanceItem) => void
   classId: string
+  classUserId: string
 }
 
 // Status badge mapping
 const statusToBadge = {
-  ATTENDED: {
-    label: 'Attended',
+  PRESENT: {
+    label: 'Present',
     type: 'success' as const,
   },
   ABSENT: {
@@ -43,9 +44,10 @@ const statusToBadge = {
   },
 }
 
-const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
+const TeacherAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
   onOpenHistory,
-  classId
+  classId,
+  classUserId,
 }) => {
   const { classApi } = useFeature()
   const [queryParams, setQueryParams] = useState<IStudentAttendanceListParams>(
@@ -81,7 +83,7 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
   const useGetStudentAttendanceList = () => {
     const fetchData = async () => {
       const { data } = await classApi.getStudentAttendance(
-        classId,
+        classUserId,
         queryParams,
       )
       return data
@@ -89,7 +91,7 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
 
 
     return useQuery(["teacher-learning-attendance", queryParams], fetchData, {
-      enabled: classId !== undefined,
+      enabled: classUserId !== undefined,
       retry: false,
     })
   }
@@ -119,7 +121,7 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
     {
       title: 'Lesson',
       render: (record) => (
-        <NameNoActionCell dataColumn={record.lesson} />
+        <NameNoActionCell dataColumn={record.name} />
       ),
       width: 200,
     },
@@ -128,12 +130,12 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
       width: 150,
       render: (record) => {
         const localStartDate = buildLocalLessonDateTime(
-          record.lesson_date.start_date,
-          record.lesson_date.start_time
+          record.start_date,
+          record.start_time
         )
         const localEndDate = buildLocalLessonDateTime(
-          record.lesson_date.end_date,
-          record.lesson_date.end_time
+          record.end_date,
+          record.end_time
         )
 
         return <NameNoActionCell dataColumn={`${localStartDate?.isValid() ? localStartDate.format('DD/MM/YYYY') : '-'} ${localStartDate?.isValid() ? localStartDate.format('HH:mm') : '-'} : ${localEndDate?.isValid() ? localEndDate.format('HH:mm') : '-'}`} />
@@ -141,20 +143,20 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
     },
     {
       title: 'Check In',
-      render: (record) => <NameNoActionCell dataColumn={formatDateFromUTC(record.checkin_time, DATE_FORMAT.DATE_TIME_DATE_FIRST)} />,
+      render: (record) => <NameNoActionCell dataColumn={formatDateFromUTC(record.check_in_time, DATE_FORMAT.DATE_TIME_DATE_FIRST)} />,
       width: 130,
     },
     {
       title: 'Check Out',
-      render: (record) => <NameNoActionCell dataColumn={formatDateFromUTC(record.checkout_time, DATE_FORMAT.DATE_TIME_DATE_FIRST)} />,
+      render: (record) => <NameNoActionCell dataColumn={formatDateFromUTC(record.check_out_time, DATE_FORMAT.DATE_TIME_DATE_FIRST)} />,
       width: 135,
     },
     {
       title: 'Status',
       render: (record) => (
         <SAPPBadge
-          label={statusToBadge[record.status as keyof typeof statusToBadge].label}
-          type={statusToBadge[record.status as keyof typeof statusToBadge].type}
+          label={statusToBadge[record.attendance as keyof typeof statusToBadge].label}
+          type={statusToBadge[record.attendance as keyof typeof statusToBadge].type || 'none'}
         />
       ),
       width: 120,
@@ -198,7 +200,7 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
               // { label: 'All', value: '' },
               ...((studentLessonData || []).map((lesson) => ({
                 label: lesson.class_schedule_user?.schedule_name,
-                value: lesson.class_schedule_user?.schedule_id,
+                value: lesson.class_schedule_user?.class_schedule_user_id,
               })))
             ]}
             onSearch={(text) => {
@@ -221,7 +223,7 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
             placeholder="Status"
             options={[
               // { label: 'All', value: '' },
-              { label: 'Attended', value: 'PRESENT' },
+              { label: 'Present', value: 'PRESENT' },
               { label: 'Absent', value: 'ABSENT' },
             ]}
             suffixIcon={<ArrowDownIcon className="text-gray-300" />}
@@ -247,12 +249,12 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
       <SappTable
         isShowIndex
         columns={columns}
-        data={studentAttendanceData?.attendances || []}
+        data={studentAttendanceData?.enrichedClassSchedules || []}
         loading={isLoading}
         pagination={{
           current: queryParams.page_index,
           pageSize: queryParams.page_size,
-          total: studentAttendanceData?.metadata.total_records || 0,
+          total: studentAttendanceData?.meta.total_records || 0,
         }}
         handleChangeParams={(currentPage, pageSize) => {
           setQueryParams((prev) => ({
@@ -266,4 +268,4 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
   )
 }
 
-export default StudentAttendanceTable
+export default TeacherAttendanceTable

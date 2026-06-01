@@ -154,7 +154,8 @@ const StudentAttendancePage = () => {
           )}
         >
           {/* Attendance Table */}
-          <StudentAttendanceTable onOpenHistory={handleViewDetails} classId={courseData?.courseDetail?.class.id as string} />
+          <StudentAttendanceTable onOpenHistory={handleViewDetails} classId={courseData?.courseDetail?.class.id as string}
+          classUserId={courseData?.courseDetail?.class_user_id as string} />
         </div>
 
         {isAlwaysShowSidebar && (
@@ -170,6 +171,7 @@ const StudentAttendancePage = () => {
                   isOpen={historyOpen}
                   onClose={handleCloseHistory}
                   record={selectedRecord}
+                  classId={courseData?.courseDetail?.class.id as string}
                 />
               </div>
             )}
@@ -182,6 +184,7 @@ const StudentAttendancePage = () => {
           isOpen={historyOpen}
           onClose={handleCloseHistory}
           record={selectedRecord}
+          classId={courseData?.courseDetail?.class.id as string}
         />
       )}
     </Layout>

@@ -1,5 +1,6 @@
 import { ExaminationsResponse } from '@lms/contexts'
 import {
+  DEFAULT_PAGE_NUMBER,
   ExamInformation,
   IAttendanceStatistics,
   IClassAttendanceHistoryResponse,
@@ -9,6 +10,7 @@ import {
   IListClassResourceParams,
   IQuizResultList,
   IResponse,
+  IStudentAttendanceHistoryResponse,
   IStudentAttendanceListParams,
   IStudentAttendanceListResponse,
   IStudentLessonListResponse,
@@ -100,7 +102,7 @@ export class ClassAPI {
     class_id: string, 
     params: IStudentAttendanceListParams,
   ): Promise<IResponse<IStudentAttendanceListResponse>> {
-    return fetcher(`${apiURL}/classes/${class_id}/student-attendances`, {
+    return fetcher(`${apiURL}/classes/students/${class_id}/attendances`, {
       params: params,
     })
   }
@@ -114,9 +116,9 @@ export class ClassAPI {
 
   // class attendance history: get attendance history of a class
   static getClassAttendanceHistory(
-    lesson_id: string
-  ): Promise<IResponse<IClassAttendanceHistoryResponse[]>> {
-    return fetcher(`${apiURL}/classes/attendances-history/${lesson_id}`)
+    class_id: string, lesson_id: string
+  ): Promise<IResponse<IStudentAttendanceHistoryResponse>> {
+    return fetcher(`${apiURL}/classes/${class_id}/students/${lesson_id}/attendance-history?page_index=${DEFAULT_PAGE_NUMBER}&page_size=100`)
   }
 
   // student learning-schedule: get learning-schedule of a student in a class

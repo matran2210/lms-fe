@@ -33,12 +33,16 @@ export interface ILessonListParams {
 }
 
 export interface IStudentAttendanceListResponse {
-  metadata: IMetaData;
-  attendances: IStudentAttendanceItem[];
+  meta: IMetaData;
+  enrichedClassSchedules: IStudentAttendanceItem[];
 }
 export interface IStudentLessonListResponse {
   metadata: IMetaData;
   data: IClassScheduleUserItem[];
+}
+export interface IStudentAttendanceHistoryResponse {
+  meta: IMetaData;
+  classScheduleUserAttendance: IClassAttendanceHistoryResponse[];
 }
 export interface ITeacherTeachingLessonListResponse {
   metadata: IMetaData;
@@ -54,13 +58,19 @@ export interface IClassAttendanceHistoryResponse {
   device: string;
 }
 export interface IStudentAttendanceItem {
-  class_schedule_user_id: string;
-  schedule_id: string;
-  lesson: string;
-  lesson_date: ILessonDate;
-  checkin_time: string;
-  checkout_time: string;
-  status: string;
+  id: string
+  start_date: string
+  end_date: string
+  start_time: string
+  end_time: string
+  name: string
+  check_in_time: string
+  check_out_time: string
+  device: string
+  attendance: string
+  reason: string
+  device_type: string
+  mode: string
 }
 
 export interface ILessonDate {
@@ -111,6 +121,7 @@ export interface ITeacherTeachingAttendanceListResponse {
 }
 
 export interface ITeacherTeachingAttendanceItem extends IStudentAttendanceItem {
+  lesson: string
   teacher_schedule_id: string
   class_schedule_id: string
   class_id: string

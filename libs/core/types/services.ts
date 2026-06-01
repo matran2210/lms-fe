@@ -12,7 +12,7 @@ import {
   SendEmailReq,
   VerifyOtpReq,
 } from "../../state";
-import { IAttendanceStatistics, IClassAttendanceHistoryResponse, ILessonListParams, IStudentAttendanceListParams, IStudentAttendanceListResponse, IStudentLessonListResponse, ITeacherTeachingClassListResponse, ITeacherTeachingLessonListResponse } from "./attendance";
+import { IAttendanceStatistics, IClassAttendanceHistoryResponse, ILessonListParams, IStudentAttendanceHistoryResponse, IStudentAttendanceListParams, IStudentAttendanceListResponse, IStudentLessonListResponse, ITeacherTeachingClassListResponse, ITeacherTeachingLessonListResponse } from "./attendance";
 import {
   IClassResourceList,
   IClassResourcePreview,
@@ -302,7 +302,7 @@ export interface IClassAPI {
   ): Promise<IResponse<IStudentAttendanceListResponse>>;
 
   getStudentAttendanceSummary(class_id: string): Promise<IResponse<IAttendanceStatistics>>;
-  getClassAttendanceHistory(lesson_id: string): Promise<IResponse<IClassAttendanceHistoryResponse[]>>;
+  getClassAttendanceHistory(class_id: string, lesson_id: string): Promise<IResponse<IStudentAttendanceHistoryResponse>>;
   getStudentLearningSchedule(params: ILessonListParams): Promise<IResponse<IStudentLessonListResponse>>;
   getTeacherLearningSchedule(params: ILessonListParams): Promise<IResponse<ITeacherTeachingLessonListResponse>>;
   getTeacherTeachingClass(params: Omit<ILessonListParams, "class_ids">): Promise<IResponse<ITeacherTeachingClassListResponse>>

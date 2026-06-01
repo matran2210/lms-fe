@@ -18,6 +18,7 @@ import FilterAttendanceTable from './FilterAttendanceTable'
 
 interface StudentAttendanceTableProps {
   onOpenHistory?: (record: IStudentAttendanceItem) => void
+  classUserId: string
   classId: string
 }
 
@@ -36,12 +37,13 @@ const statusToBadge = {
 const getStatusConfig = (status: string) =>
   statusToBadge[status as keyof typeof statusToBadge] || {
     label: status || '-',
-    type: 'default' as const,
+    type: 'none' as const,
   }
 
 const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
   onOpenHistory,
-  classId
+  classUserId,
+  classId,
 }) => {
   const { classApi } = useFeature()
   const { isMobileView } = useTailwindBreakpoint()
@@ -60,7 +62,7 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
   const useGetStudentAttendanceList = () => {
     const fetchData = async () => {
       const { data } = await classApi.getStudentAttendance(
-        classId,
+        classUserId,
         queryParams,
       )
       return data
@@ -68,7 +70,7 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
 
 
     return useQuery(["student-attendance", queryParams], fetchData, {
-      enabled: classId !== undefined,
+      enabled: classUserId !== undefined,
       retry: false,
     })
   }
@@ -79,8 +81,8 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
     isLoading,
   } = useGetStudentAttendanceList()
 
-  const attendances = studentAttendanceData?.attendances || []
-  const totalRecords = studentAttendanceData?.metadata.total_records || 0
+  const attendances = studentAttendanceData?.enrichedClassSchedules || []
+  const totalRecords = studentAttendanceData?.meta.total_records || 0
 
 
   const columns: ColumnsType<IStudentAttendanceItem> = [
@@ -88,7 +90,7 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
     {
       title: 'Lesson',
       render: (record) => (
-        <NameNoActionCell dataColumn={record.lesson} />
+        <NameNoActionCell dataColumn={record.name} />
       ),
       width: 200,
     },
@@ -97,12 +99,12 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
       width: 150,
       render: (record) => {
         const localStartDate = buildLocalLessonDateTime(
-          record.lesson_date.start_date,
-          record.lesson_date.start_time
+          record.start_date,
+          record.start_time
         )
         const localEndDate = buildLocalLessonDateTime(
-          record.lesson_date.end_date,
-          record.lesson_date.end_time
+          record.end_date,
+          record.end_time
         )
 
         return <NameNoActionCell dataColumn={`${localStartDate?.isValid() ? localStartDate.format('DD/MM/YYYY') : '-'} ${localStartDate?.isValid() ? localStartDate.format('HH:mm') : '-'} : ${localEndDate?.isValid() ? localEndDate.format('HH:mm') : '-'}`} />
@@ -110,18 +112,18 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
     },
     {
       title: 'Check In',
-      render: (record) => <NameNoActionCell dataColumn={formatDateFromUTC(record.checkin_time, DATE_FORMAT.DATE_TIME_DATE_FIRST)} />,
+      render: (record) => <NameNoActionCell dataColumn={formatDateFromUTC(record.check_in_time, DATE_FORMAT.DATE_TIME_DATE_FIRST)} />,
       width: 130,
     },
     {
       title: 'Check Out',
-      render: (record) => <NameNoActionCell dataColumn={formatDateFromUTC(record.checkout_time, DATE_FORMAT.DATE_TIME_DATE_FIRST)} />,
+      render: (record) => <NameNoActionCell dataColumn={formatDateFromUTC(record.check_out_time, DATE_FORMAT.DATE_TIME_DATE_FIRST)} />,
       width: 135,
     },
     {
       title: 'Status',
       render: (record) => {
-        const statusConfig = getStatusConfig(record.status)
+        const statusConfig = getStatusConfig(record.attendance)
 
         return (
           <SAPPBadge
@@ -168,18 +170,18 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
           ) : attendances.length ? (
             <>
               {attendances.map((record) => {
-                const statusConfig = getStatusConfig(record.status)
+                const statusConfig = getStatusConfig(record.attendance)
                 const localStartDate = buildLocalLessonDateTime(
-                  record.lesson_date.start_date,
-                  record.lesson_date.start_time
+                  record.start_date,
+                  record.start_time
                 )
                 const localEndDate = buildLocalLessonDateTime(
-                  record.lesson_date.end_date,
-                  record.lesson_date.end_time
+                  record.end_date,
+                  record.end_time
                 )
                 return (
                   <div
-                    key={record.class_schedule_user_id}
+                    key={record.id}
                     className={clsx(
                       'rounded-xl bg-gray-50 p-4',
                       onOpenHistory && 'cursor-pointer'
@@ -188,7 +190,7 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
                   >
                     <div className="space-y-4">
                       <div className="truncate text-base font-semibold leading-6 text-gray-800">
-                        {record.lesson}
+                        {record.name}
                       </div>
                       <div className="space-y-3 text-sm leading-[22px]">
                         <div className="flex items-start gap-2">
@@ -201,11 +203,11 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
                         </div>
                         <div className="flex items-start gap-2">
                           <span className="shrink-0 text-gray-400">Check in:</span>
-                          <span className="text-gray-800">{formatDateFromUTC(record.checkin_time, DATE_FORMAT.DATE_TIME_DATE_FIRST) || '-'}</span>
+                          <span className="text-gray-800">{formatDateFromUTC(record.check_in_time, DATE_FORMAT.DATE_TIME_DATE_FIRST) || '-'}</span>
                         </div>
                         <div className="flex items-start gap-2">
                           <span className="shrink-0 text-gray-400">Check out:</span>
-                          <span className="text-gray-800">{formatDateFromUTC(record.checkout_time, DATE_FORMAT.DATE_TIME_DATE_FIRST) || '-'}</span>
+                          <span className="text-gray-800">{formatDateFromUTC(record.check_out_time, DATE_FORMAT.DATE_TIME_DATE_FIRST) || '-'}</span>
                         </div>
                         <div className="flex items-start gap-2">
                           <span className="shrink-0 text-gray-400">Status:</span>

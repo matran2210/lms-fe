@@ -135,7 +135,9 @@ const breadcrumbs: ITabs[] = [
           <Divider className="my-8" />
 
           {/* Attendance Table */}
-          <TeacherAttendanceTable onOpenHistory={handleViewDetails} classId={courseData?.courseDetail?.class.id as string} />
+          <TeacherAttendanceTable onOpenHistory={handleViewDetails} classId={courseData?.courseDetail?.class.id as string} classUserId={
+            courseData?.courseDetail?.class_user_id as string
+          } />
         </div>
 
         {/* Attendance History Side Panel */}
@@ -151,6 +153,7 @@ const breadcrumbs: ITabs[] = [
                 isOpen={historyOpen}
                 onClose={handleCloseHistory}
                 record={selectedRecord}
+                classId={courseData?.courseDetail?.class.id as string}
               />
             </div>
           )}
