@@ -75,7 +75,7 @@ const FilterAttendanceTable = ({ classId, queryParams, setQueryParams }: FilterA
     const listFilter = useMemo(() => {
         const subjectOptions = studentLessonData?.map((lesson) => ({
             label: lesson.class_schedule_user?.schedule_name,
-            value: lesson.class_schedule_user?.schedule_id,
+            value: lesson.class_schedule_user?.class_schedule_user_id,
         }));
 
         return [
@@ -88,7 +88,7 @@ const FilterAttendanceTable = ({ classId, queryParams, setQueryParams }: FilterA
                 name: "status",
                 placeholder: "Status: all",
                 options: [
-                    { label: "Attended", value: "PRESENT" },
+                    { label: "Present", value: "PRESENT" },
                     { label: "Absent", value: "ABSENT" },
                 ],
             },
@@ -190,7 +190,7 @@ const FilterAttendanceTable = ({ classId, queryParams, setQueryParams }: FilterA
                                 // { label: 'All', value: '' },
                                 ...((studentLessonData || []).map((lesson) => ({
                                     label: lesson.class_schedule_user?.schedule_name,
-                                    value: lesson.class_schedule_user?.schedule_id,
+                                    value: lesson.class_schedule_user?.class_schedule_user_id,
                                 })))
                             ]}
                             onSearch={(text) => {
@@ -218,9 +218,10 @@ const FilterAttendanceTable = ({ classId, queryParams, setQueryParams }: FilterA
                             control={control}
                             size="middle"
                             placeholder="Status"
+                            allowClear
                             options={[
                                 // { label: 'All', value: '' },
-                                { label: 'Attended', value: 'PRESENT' },
+                                { label: 'Present', value: 'PRESENT' },
                                 { label: 'Absent', value: 'ABSENT' },
                             ]}
                             onChange={(value) => {

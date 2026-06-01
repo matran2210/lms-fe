@@ -24,7 +24,7 @@ interface StudentAttendanceTableProps {
 // Status badge mapping
 const statusToBadge = {
   PRESENT: {
-    label: 'Attended',
+    label: 'Present',
     type: 'success' as const,
   },
   ABSENT: {
