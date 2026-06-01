@@ -37,6 +37,8 @@ import SendComment from "./SendComment";
 
 type Props = {
   rank?: number;
+  elementId?: string;
+  isHighlighted?: boolean;
   discussion: IDiscussion;
   idReply?: string;
   handleChangeIdReply?: (idReply: string) => void;
@@ -60,6 +62,8 @@ type IEventData = {
 };
 function DiscussionElement({
   rank = 0,
+  elementId,
+  isHighlighted = false,
   discussion,
   idReply,
   handleChangeIdReply,
@@ -297,8 +301,23 @@ function DiscussionElement({
     }
   }, [userInfo]);
 
+  const highlightTextStyle = isHighlighted
+    ? {
+        color: "#FFB700",
+        textShadow:
+          "0 0 10px rgba(255, 183, 0, 0.45), 0 0 18px rgba(255, 183, 0, 0.25)",
+      }
+    : undefined;
+
+  const highlightTransitionStyle = {
+    transition: "color 2200ms ease-out, text-shadow 2200ms ease-out",
+  };
+
   return (
-    <div className="flex gap-3 text-gray-800">
+    <div
+      id={elementId}
+      className="flex gap-3 rounded-xl px-3 py-2 text-gray-800"
+    >
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col">
           <div
@@ -345,7 +364,13 @@ function DiscussionElement({
                   !isEmpty(userInfo) && "cursor-pointer",
                 )}
               >
-                <div className="text-base font-medium">
+                <div
+                  className="text-base font-medium text-gray-800"
+                  style={{
+                    ...highlightTransitionStyle,
+                    ...highlightTextStyle,
+                  }}
+                >
                   {discussion?.is_sapp_supporter
                     ? discussion?.supporter_display_name
                     : discussion?.full_name}
@@ -419,7 +444,13 @@ function DiscussionElement({
             ))}
 
             {!isEdit && discussionContent && (
-              <div className="mb-2">
+              <div
+                className="mb-2 text-gray-800"
+                style={{
+                  ...highlightTransitionStyle,
+                  ...highlightTextStyle,
+                }}
+              >
                 <SappDisplayText text={discussionContent} />
               </div>
             )}

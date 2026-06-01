@@ -337,7 +337,10 @@ const CourseTabDocument = ({
           hidden: !focusOnlyDiscussion,
         })}
       >
-        <Discussion class_id={(params?.id as string || query.id as string) || ''} />
+        <Discussion
+          class_id={(params?.id as string || query.id as string) || ''}
+          enableReplyScroll={focusOnlyDiscussion}
+        />
       </div>
       {selector?.tabs && selector?.tabs?.length > 1 && (
         <div

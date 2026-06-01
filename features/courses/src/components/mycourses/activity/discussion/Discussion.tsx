@@ -15,7 +15,8 @@ import { HookFormTextArea, NoData, SappButton, SappButtonIcon, SappModalImage } 
 import { Skeleton } from 'antd'
 import clsx from 'clsx'
 import Image from 'next/image'
-import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import ActionDiscussion from './ActionDiscussion'
@@ -25,17 +26,23 @@ import SendComment from './SendComment'
 
 type Props = {
   class_id: string
+  enableReplyScroll?: boolean
 }
 
 /**
  * Component chức năng đại diện cho phần discussion.
  * @param {Props} props - Props của component.
  */
-const Discussion = ({ class_id,  }: Props) => {
+const Discussion = ({ class_id, enableReplyScroll = false }: Props) => {
   const { activityApi, courseApi, courseActivityApi, router, dispatch, useAppSelector, params } = useFeature();
+  const searchParams = useSearchParams()
+  const targetReplyId = searchParams?.get('comment_id') || ''
   const selector = useAppSelector?.(courseActivityReducer)
   const [idReply, setIdReply] = useState<string>()
+  const [highlightedReplyId, setHighlightedReplyId] = useState<string>()
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null)
+  const highlightTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const discussionRootRef = useRef<HTMLDivElement | null>(null)
   const { user } = useAppSelector?.(userReducer) || {}
   // const [stream, setStream] = useState<MediaStream | null>(null)
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
@@ -261,6 +268,47 @@ const Discussion = ({ class_id,  }: Props) => {
     return null
   }
 
+  const findReplyById = (
+    idToFind: string,
+    data?: IDiscussion[],
+  ): IDiscussion | null => {
+    if (!data) {
+      return null
+    }
+
+    for (const item of data) {
+      const matchedReply = item?.children?.find((child) => child?.id === idToFind)
+      if (matchedReply) {
+        return matchedReply
+      }
+    }
+
+    return null
+  }
+
+  const scrollToReplyElement = (element: HTMLElement) => {
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+      inline: 'nearest',
+    })
+  }
+
+  const clearReplyIdFromUrl = () => {
+    const params = new URLSearchParams(window.location.search)
+
+    if (!params.has('comment_id')) {
+      return
+    }
+
+    params.delete('comment_id')
+
+    const nextSearch = params.toString()
+    const nextUrl = `${window.location.pathname}${nextSearch ? `?${nextSearch}` : ''}${window.location.hash}`
+
+    window.history.replaceState(window.history.state, '', nextUrl)
+  }
+
   /**
    * Xử lý sự kiện thay đổi file khi người dùng chọn file từ hộp thoại
    *
@@ -341,11 +389,73 @@ const Discussion = ({ class_id,  }: Props) => {
     }
   }
 
+  useEffect(() => {
+    if (!enableReplyScroll || !targetReplyId || !selector?.discussion?.length) {
+      return
+    }
+
+    const reply = findReplyById(targetReplyId, selector?.discussion)
+    if (!reply) {
+      return
+    }
+
+    setHighlightedReplyId(targetReplyId)
+
+    if (highlightTimeoutRef.current) {
+      clearTimeout(highlightTimeoutRef.current)
+    }
+
+    highlightTimeoutRef.current = setTimeout(() => {
+      setHighlightedReplyId((current) =>
+        current === targetReplyId ? undefined : current,
+      )
+    }, 1200)
+
+    const scrollWithRetry = (retry = 0) => {
+      const element = discussionRootRef.current?.querySelector<HTMLElement>(
+        `#discussion-reply-${targetReplyId}`,
+      )
+
+      if (!element) {
+        if (retry < 10) {
+          window.setTimeout(() => scrollWithRetry(retry + 1), 150)
+        }
+        return
+      }
+
+      scrollToReplyElement(element)
+      window.setTimeout(() => {
+        clearReplyIdFromUrl()
+      }, 300)
+    }
+
+    window.setTimeout(() => {
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          scrollWithRetry()
+        })
+      })
+    }, 100)
+  }, [enableReplyScroll, selector?.discussion, targetReplyId])
+
+  useEffect(() => {
+    return () => {
+      if (highlightTimeoutRef.current) {
+        clearTimeout(highlightTimeoutRef.current)
+      }
+    }
+  }, [])
+
   return (
-    <div className="relative flex h-full flex-col justify-between bg-white">
+    <div
+      ref={discussionRootRef}
+      className="relative flex h-full flex-col justify-between bg-white"
+    >
       <div className="mb-6 hidden text-lg font-medium md:block">Discussion</div>
       {!!selector?.discussion?.length ? (
-        <div className="mb-6 min-h-[calc(100vh-12rem)] md:min-h-full">
+        <div
+          className="mb-6 min-h-[calc(100vh-12rem)] md:min-h-full"
+        >
           <Skeleton loading={loading}>
             {selector?.discussion?.map((e, i) => {
               return (
@@ -385,6 +495,8 @@ const Discussion = ({ class_id,  }: Props) => {
                               key={f?.id}
                             >
                               <DiscussionElement
+                                elementId={`discussion-reply-${f.id}`}
+                                isHighlighted={highlightedReplyId === f.id}
                                 rank={2}
                                 discussion={f}
                                 onReact={onReact}
