@@ -1864,8 +1864,8 @@ importers:
         specifier: 14.2.35
         version: 14.2.35(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.100.0)
       react-draggable:
-        specifier: ^4.5.0
-        version: 4.6.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        specifier: 4.5.0
+        version: 4.5.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react-fast-marquee:
         specifier: ^1.6.5
         version: 1.6.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -11226,6 +11226,12 @@ packages:
     resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}
     peerDependencies:
       react: ^18.2.0
+
+  react-draggable@4.5.0:
+    resolution: {integrity: sha512-VC+HBLEZ0XJxnOxVAZsdRi8rD04Iz3SiiKOoYzamjylUcju/hP9np/aZdLHf/7WOD268WMoNJMvYfB5yAK45cw==}
+    peerDependencies:
+      react: '>= 16.3.0'
+      react-dom: '>= 16.3.0'
 
   react-draggable@4.6.0:
     resolution: {integrity: sha512-g4vqY53xhmPrBnZvGP+1YQV0eYnB3o0VLzoi6q2IpwnQrxIZ34tYRKpVtsWIXPg4D/pvLn+oYCW5gOK2cWIrgA==}
@@ -24587,6 +24593,13 @@ snapshots:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.2
+
+  react-draggable@4.5.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+    dependencies:
+      clsx: 2.1.1
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
 
   react-draggable@4.6.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
