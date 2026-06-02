@@ -166,6 +166,7 @@ function Providers({ children }: { children: ReactNode }) {
             uploadImageToLinkedIn: uploadImageToLinkedIn,
             dispatch: dispatch,
             useAppSelector: useAppSelector,
+            domainTest: process.env.NEXT_PUBLIC_SUB_DOMAIN_TEST as string,
           }}
         >
           <CourseProvider router={router}>

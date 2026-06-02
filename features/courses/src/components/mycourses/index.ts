@@ -1,3 +1,4 @@
+export * from "./class-resource/index";
 export * from "./activity/index";
 export * from "./test/index";
 export * from "./course-detail/index";
@@ -20,5 +21,4 @@ export * from "./solution";
 export { default as PopupLockContent } from "./hubspot/PopupLockContent";
 export * from "./solution/index";
 export { default as CreateNote } from "./create-note/CreateNote";
-export { default as CalculatorModal } from "./calculator/CalculatorModal";
 export { default as PopupActivated } from "./PopupActivated";

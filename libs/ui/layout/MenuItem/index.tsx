@@ -17,7 +17,8 @@ import {
   OpenBookAnimation,
   ResourceAnimation,
   TestQuizListAnimation,
-  CourseActivationAnimation
+  CourseActivationAnimation,
+  AttendanceAnimation
 } from "@lms/assets";
 import {
   activeNotesList,
@@ -232,6 +233,8 @@ export default function MenuItem({
                 ? `/courses/my-course/${courseId || id}/results`
                 : url === pageLink.DASHBOARD
                   ? `/courses/my-course/${courseId || id}/dashboard`
+                  : url === pageLink.STUDENT_ATTENDANCE
+                    ? `/courses/my-course/${courseId || id}/attendance`
                   : name === TitleSidebar.COURSE_CONTENT
                     ? `/courses/my-course/${courseId || id}`
                     : name === TitleSidebar.CLASS_RESOURCE
@@ -428,6 +431,15 @@ export default function MenuItem({
         return (
           <Lottie
             animationData={CourseActivationAnimation}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        );
+      case "attendance":
+        return (
+          <Lottie
+            animationData={AttendanceAnimation}
             loop
             autoplay
             className={animationClass}
@@ -631,6 +643,7 @@ export default function MenuItem({
               name === TitleSidebar.EXAM ||
               name === TitleSidebar.DASHBOARD ||
               name === TitleSidebar.CLASS_RESOURCE ||
+              name === TitleSidebar.STUDENT_ATTENDANCE ||
               Icon === "stats-chart-sharp" ||
               Icon === "profile-detail")
             ? "hidden"
@@ -675,6 +688,8 @@ export default function MenuItem({
                     ? `/courses/my-course/${query?.courseId || query?.id}/dashboard`
                     : name === TitleSidebar.CLASS_RESOURCE
                       ? `/courses/my-course/${query?.courseId || query?.id}/class-resource`
+                      : name === TitleSidebar.STUDENT_ATTENDANCE
+                        ? `/courses/my-course/${query?.courseId || query?.id}/attendance`
                       : name === TitleSidebar.COURSE_CONTENT
                         ? `/courses/my-course/${query?.courseId || query?.id}`
                         : url

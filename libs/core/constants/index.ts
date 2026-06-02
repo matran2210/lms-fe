@@ -40,6 +40,7 @@ export const TitleSidebar = {
   ACTIVITY: "Activity",
   CLASS_RESOURCE: "Class Resource",
   COURSE_ACTIVATION: "Course Activation",
+  STUDENT_ATTENDANCE: "Attendance",
 };
 
 export const ValueSidebar = {
@@ -60,6 +61,7 @@ export const TitleTeacherSidebar = {
   MYCALENDAR: "My Calendar",
   MYREQUEST: "My Request",
   NOTIFICATIONS: "Notifications",
+  ATTENDANCE: "Attendance"
 };
 
 export const GUIDELINE_PASSWORD = [
@@ -328,7 +330,7 @@ export const EVENT_TYPES_LABEL = {
   [EVENT_TYPES.OTHER]: "Other calendar",
   [EVENT_TYPES.LIVE_ONLINE]: "",
   [EVENT_TYPES.INACTIVE]: "Inactive",
-  [EVENT_TYPES.RESCHEDULING]: "Rescheduling",
+  [EVENT_TYPES.RESCHEDULING]: '',
 };
 
 export const EVENT_TYPE_OPTIONS = Object.entries(EVENT_TYPES_LABEL)

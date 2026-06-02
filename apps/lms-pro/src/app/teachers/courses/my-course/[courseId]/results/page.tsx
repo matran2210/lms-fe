@@ -49,7 +49,7 @@ const ResultsTeacher = () => {
     isSuccess,
     isLoading,
   } = useQuery({
-    queryKey: ['courseDetail'],
+    queryKey: ['courseDetail', courseId, params],
     queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
     refetchOnWindowFocus: true,
     retry: false,

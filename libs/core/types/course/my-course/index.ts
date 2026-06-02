@@ -17,6 +17,9 @@ export interface CourseDetail {
   exam: ExaminationSubject | null
   data: Data
   class_type: string
+  class: {
+    id: string
+  }
 }
 
 export interface CourseCertificate {

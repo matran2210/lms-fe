@@ -404,6 +404,23 @@ export const formatDateFromUTC = (date: string, format = DATE_FORMAT.DATE) => {
   return "-";
 };
 
+export const buildLocalLessonDateTime = (date?: string, time?: string) => {
+  if (!date || !time) return null
+
+  const isoDate = dayjs(date).format('YYYY-MM-DD')
+  return dayjs(convertUTCToLocal(`${isoDate}T${time}`))
+}
+
+/**
+ * @description: Chuyển đổi UTC time sang local time
+ *
+ */
+export const convertUTCToLocal = (utcTime: string) => {
+  const date = new Date(utcTime)
+  const timezoneOffset = date.getTimezoneOffset()
+  return new Date(date.getTime() - timezoneOffset * 60 * 1000)
+}
+
 /**
  * Trả về chuỗi thời gian biểu diễn khoảng thời gian từ lúc bắt đầu đến lúc kết thúc.
  *

@@ -5,9 +5,9 @@ import { RightOutlined, AntSelectIcon } from '@lms/assets'
 
 interface IProps {
   currentPage: number
-  setCurrentPage?: Dispatch<SetStateAction<number>>
+  setCurrentPage?: (page: number) => void
   pageSize: number
-  setPageSize?: Dispatch<SetStateAction<number>>
+  setPageSize?: (pageSize: number) => void
   totalItems: number
   classname?: string
 }

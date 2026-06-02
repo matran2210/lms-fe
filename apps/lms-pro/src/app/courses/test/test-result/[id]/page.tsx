@@ -54,7 +54,7 @@ const TestResultDetail = () => {
     !quiz?.limit_count ||
     (quiz?.is_limited &&
       questions?.quizAttempt?.number_of_attempts < quiz?.limit_count)
-  let linkTest = `/test/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}&class_id=${questions?.class_id}`
+  let linkTest = `${process.env.NEXT_PUBLIC_SUB_DOMAIN_TEST}/test/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}`
   if (
     quiz?.is_limited &&
     quiz?.limit_count === questions?.quizAttempt?.number_of_attempts
@@ -64,7 +64,7 @@ const TestResultDetail = () => {
   }
 
   const handleRetake = () => {
-    localStorage.removeItem('quizAttempt')
+    // localStorage.removeItem('quizAttempt')
     router.push(linkTest)
   }
 

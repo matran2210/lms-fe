@@ -13,7 +13,6 @@ import {
 } from '@lms/assets'
 import {
   ActivityResource,
-  CalculatorModal,
   CreateNote,
   Discussion,
   PopupLockContent,
@@ -24,6 +23,7 @@ import {
   FileViewer,
   Layout,
   LearningResource,
+  CalculatorModal,
   ModalResizeable,
 } from '@lms/ui'
 import { convertMinutesToHourFormat, extractNotActivatedData } from '@lms/utils'
@@ -84,6 +84,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import { withAuthorization } from '@lms/hoc'
 import { CoursesAPI, getActivityById } from 'src/api/courses'
+import { UploadAPI } from 'src/api/upload'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { v4 as uuidv4 } from 'uuid'
 import { selectPopupActivateCourse, showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
@@ -815,7 +816,7 @@ const ActivityPage = () => {
                       // className="h-full cursor-pointer p-4"
                       >
                         {/* <div className='flex flex-'> */}
-                        <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
+                        <FileViewer fileName={e?.fileName} fileUrl={e?.file} onDownload={() => UploadAPI.downloadFile({ files: [{ name: e?.fileName, file_key: e?.fileKey }] })} />
                       </div>
                     </ModalResizeable>
                   )
@@ -863,6 +864,7 @@ const ActivityPage = () => {
                                 <FileViewer
                                   fileName={e?.resource?.name}
                                   fileUrl={e?.resource?.url}
+                                  onDownload={() => UploadAPI.downloadFile({ files: [{ name: e?.resource?.name, file_key: e?.resource?.file_key }] })}
                                 />
                               </div>
                             )

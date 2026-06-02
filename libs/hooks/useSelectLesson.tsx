@@ -1,3 +1,4 @@
+"use client"
 import { useEffect } from 'react'
 import { useInfiniteQuery } from 'react-query' // Import useInfiniteQuery
 import { useFeature } from '@lms/contexts'

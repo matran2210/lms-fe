@@ -1253,6 +1253,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       <FileViewer
                         fileName={e?.resource?.name}
                         fileUrl={e?.resource?.url}
+                        onDownload={() => testServiceApi.downloadFile({ files: [{ name: e?.resource?.name, file_key: e?.resource?.file_key }] })}
                       />
                     </div>
                   );

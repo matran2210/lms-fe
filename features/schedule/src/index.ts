@@ -19,3 +19,6 @@ export const scheduleModule: AppModule = {
   name: "schedule",
   routes: scheduleRoutes,
 };
+
+
+export * from "./components";

@@ -129,7 +129,6 @@ const CalendarPage = () => {
   const handleBack = () => {
     router.push(pageLink.HOME)
   }
-
   return (
     <Layout
       title="Calendar"
@@ -172,6 +171,7 @@ const CalendarPage = () => {
                       dayjs(`${item.end_date}T${item.end_time}Z`).isBefore(
                         dayjs(),
                       ) && item.mode === CALENDAR_FILTER_TYPE.ONLINE
+                      console.log('item', item)
                     return {
                       id: item.id,
                       title: item.name,
@@ -190,6 +190,7 @@ const CalendarPage = () => {
                       isKeyContentBefore: item?.is_key_before_content,
                       isKeyContentAfter: item?.is_key_after_content,
                       isOverDue: isOverDue,
+                      schedule_status: item.schedule_status,
                     }
                   }) ?? []
                 }

@@ -29,5 +29,17 @@
     "react-hot-toast": "^2.4.1",
     "react-query": "3.39.3",
     "zod": "^3.22.4"
+  },
+  "dependencies": {
+    "@lms/assets": "workspace:*",
+    "@lms/contexts": "workspace:*",
+    "@lms/core": "workspace:*",
+    "@lms/feature-class": "workspace:*",
+    "@lms/feature-courses": "workspace:*",
+    "@lms/hoc": "workspace:*",
+    "@lms/hooks": "workspace:*",
+    "@lms/ui": "workspace:*",
+    "@lms/utils": "workspace:*",
+    "@sapp-fe/sapp-common-package": "^1.9.0"
   }
 }

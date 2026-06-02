@@ -48,9 +48,7 @@ import {
   useClickOutside,
   TestScratchPads,
 } from "@lms/ui";
-import cloneDeep from "lodash/cloneDeep";
-import isEmpty from "lodash/isEmpty";
-import uniqueId from "lodash/uniqueId";
+import { cloneDeep, isEmpty, isUndefined, uniqueId } from "lodash";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -1145,13 +1143,6 @@ const TestDetail = () => {
       onResetFormatEssay(name, getDefaultWordValue());
       await refEditor?.current?.reset();
       await new Promise((resolve) => setTimeout(resolve, 10)); // hoặc setTimeout với delay nhỏ như 10ms
-
-      if (
-        refEditor?.current?.resetSheet &&
-        question?.response_option === RESPONSE_OPTION.SHEET
-      ) {
-        refEditor?.current?.resetSheet();
-      }
     };
     const doAfterSetState = () => {
       setEditorReady(false); // Ẩn trước

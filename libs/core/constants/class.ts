@@ -39,6 +39,10 @@ export const CLASS_SUFFIX_TYPE = [
     label: "Sheet",
     value: "SHEET",
   },
+  {
+    label: "Folder",
+    value: "FOLDER",
+  },
 ];
 
 export const CLASS_SUFFIX_TYPE_FILTER = [
@@ -65,5 +69,9 @@ export const CLASS_SUFFIX_TYPE_FILTER = [
   {
     label: "Sheet",
     value: "SHEET",
+  },
+  {
+    label: "Folder",
+    value: "FOLDER",
   },
 ];
