@@ -3,7 +3,6 @@ import {
   DEFAULT_PAGE_NUMBER,
   ExamInformation,
   IAttendanceStatistics,
-  IClassAttendanceHistoryResponse,
   IClassResourceList,
   IClassResourcePreview,
   ILessonListParams,
@@ -19,7 +18,6 @@ import {
 } from '@lms/core'
 import { fetcher, fetchFormData } from '@services/request'
 import { AxiosPromise } from 'axios'
-import { apiURL } from 'src/constants'
 
 export class ClassAPI {
   static getAllResultOfQuiz(
