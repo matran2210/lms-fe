@@ -1087,6 +1087,35 @@ const TestDetail = () => {
           query?.class_user_id as string,
         );
         question = await TestServiceAPI.getQuestionDetail(currentPage);
+
+        // Merge saved answers into question requirements
+        if (
+          question?.data?.requirements &&
+          question.data.requirements.length > 0
+        ) {
+          const savedAnswer = answersSubmitted?.find(
+            (e: any) => e.questionId === currentPage,
+          );
+
+          if (savedAnswer?.answers) {
+            question.data.requirements = question.data.requirements.map(
+              (req: any) => {
+                const savedReq = savedAnswer.answers.find(
+                  (ans: any) => ans.requirement_id === req.id,
+                );
+
+                if (savedReq) {
+                  return {
+                    ...req,
+                    short_answer: savedReq.short_answer ?? req.short_answer,
+                    answer_file: savedReq.answer_file ?? req.answer_file,
+                  };
+                }
+                return req;
+              },
+            );
+          }
+        }
       }
       return { topicDescription, question: question?.data };
     } catch (err) {
@@ -1260,27 +1289,30 @@ const TestDetail = () => {
     const newData = tabs.map((item: any) => {
       if (tabContent?.id === item?.id) {
         if (
-          (tabContent?.data?.requirements ?? item?.data?.requirements ?? [])
+          (item?.data?.requirements ?? tabContent?.data?.requirements ?? [])
             .length > 0
         ) {
+          const updatedRequirements = (
+            item?.data?.requirements ??
+            tabContent?.data?.requirements ??
+            []
+          ).map((requirement: Requirement, reqIndex: number) => {
+            // IMPORTANT: Use tabContent.id (not currentPage) to match the fieldName
+            const fieldName = `${tabContent.id}_${reqIndex}_answer`;
+            const editorContent = getValues(fieldName);
+
+            // Save to answer_text (local state)
+            return {
+              ...requirement,
+              answer_text: editorContent ?? requirement?.answer_text,
+            };
+          });
+
           return {
             ...item,
             data: {
               ...item?.data,
-              requirements: (
-                tabContent?.data?.requirements ??
-                item?.data?.requirements ??
-                []
-              ).map((requirement: Requirement, reqIndex: number) => {
-                const editorContent = getValues(
-                  `${currentPage}_${reqIndex}_answer`,
-                );
-
-                return {
-                  ...requirement,
-                  answer_text: editorContent ?? requirement?.answer_text,
-                };
-              }),
+              requirements: updatedRequirements,
             },
 
             attempted: item?.attempted || checkAnswered(item),
