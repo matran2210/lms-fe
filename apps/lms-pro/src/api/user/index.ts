@@ -1,6 +1,5 @@
 import { IClassAttendanceHistoryResponse, IResponse, ITeacherTeachingAttendanceListParams, ITeacherTeachingAttendanceListResponse, ITeachingStatistics, UserExamInformation } from '@lms/core'
 import { fetcher } from '@services/request'
-import { apiURL } from 'src/constants'
 
 export class UserApi {
   static getExamination(
@@ -8,7 +7,7 @@ export class UserApi {
     page_size: number,
   ): Promise<UserExamInformation> {
     return fetcher(
-      `${apiURL}/users/examination?page_index=${page_index}&page_size=${page_size}&template=4`,
+      `/users/examination?page_index=${page_index}&page_size=${page_size}&template=4`,
     )
   }
 
@@ -48,14 +47,14 @@ export class UserApi {
   // teacher:
   //  get teaching attendances
   static getTeacherTeachingAttendance(params: ITeacherTeachingAttendanceListParams): Promise<IResponse<ITeacherTeachingAttendanceListResponse>> {
-    return fetcher(`${apiURL}/user-attendances/teacher/teaching-attendance`, {
+    return fetcher(`/user-attendances/teacher/teaching-attendance`, {
       params: params,
     })
   }
   
   // get teaching attendance history
   static getTeacherTeachingAttendanceHistory(lesson_id : string): Promise<IResponse<IClassAttendanceHistoryResponse[]>> {
-    return fetcher(`${apiURL}/user-attendances/teacher/teaching-attendance/${lesson_id}/history`)
+    return fetcher(`/user-attendances/teacher/teaching-attendance/${lesson_id}/history`)
   }
 
   // get teaching attendance summary
@@ -63,7 +62,7 @@ export class UserApi {
     fromDate?: string
     toDate?: string
   }): Promise<IResponse<ITeachingStatistics>> {
-    return fetcher(`${apiURL}/user-attendances/teacher/teaching-attendance/summary`, {
+    return fetcher(`/user-attendances/teacher/teaching-attendance/summary`, {
       params: params,
     })
   }
@@ -78,7 +77,7 @@ export class UserApi {
     lesson_ids?: string[]
     attendance_status?: string[]
   }): Promise<IResponse<any>> {
-    return fetcher(`${apiURL}/user-attendances/teacher/learning-attendance`, {
+    return fetcher(`/user-attendances/teacher/learning-attendance`, {
       params: params,
     })
   }

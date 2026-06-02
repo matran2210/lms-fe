@@ -37,7 +37,7 @@ const StudentAttendancePage = () => {
     }
   }
   const { data: courseData } = useQuery({
-    queryKey: ['courseDetail'],
+    queryKey: ['courseDetail', params.courseId],
     queryFn: ({ pageParam }) =>
       fetchCourseDetail({ pageParam }),
     refetchOnWindowFocus: true,

@@ -94,7 +94,7 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
     }
 
 
-    return useQuery(["class-attendance-history", record?.id], fetchData, {
+    return useQuery(["class-attendance-history", record?.id, classId], fetchData, {
       enabled: record?.id !== undefined && isOpen,
       retry: false,
     })

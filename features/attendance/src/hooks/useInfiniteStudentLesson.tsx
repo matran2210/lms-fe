@@ -16,8 +16,6 @@ const useInfiniteStudentLesson = (enabled = true, queryParams?: { class_ids?: st
     search?: string,
     class_ids?: string[]
   ) => {
-    // eslint-disable-next-line no-useless-catch
-    try {
       const res = await classApi.getStudentLearningSchedule({
         page_index: page_index,
         page_size: page_size,
@@ -25,9 +23,6 @@ const useInfiniteStudentLesson = (enabled = true, queryParams?: { class_ids?: st
         search,
       })
       return res
-    } catch (error) {
-      throw error
-    }
   }
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, isSuccess, refetch } =

@@ -69,7 +69,7 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
     }
 
 
-    return useQuery(["student-attendance", queryParams], fetchData, {
+    return useQuery(["student-attendance", queryParams, classUserId], fetchData, {
       enabled: classUserId !== undefined,
       retry: false,
     })
@@ -159,7 +159,8 @@ const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
   return (
     <div className="w-full rounded-xl bg-white p-4 md:p-6">
       {/* Filters Section */}
-      <FilterAttendanceTable queryParams={queryParams} setQueryParams={setQueryParams} classId={classId} />
+      <FilterAttendanceTable queryParams={queryParams} setQueryParams={setQueryParams} classId={classId}
+      totalRecords={totalRecords} />
       {/* Table Section */}
       {isMobileView ? (
         <div className="space-y-4">

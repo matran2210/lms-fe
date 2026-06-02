@@ -19,8 +19,9 @@ type FilterAttendanceTableProps = {
     classId: string
     queryParams: IStudentAttendanceListParams
     setQueryParams: React.Dispatch<React.SetStateAction<IStudentAttendanceListParams>>
+    totalRecords?: number
 }
-const FilterAttendanceTable = ({ classId, queryParams, setQueryParams }: FilterAttendanceTableProps) => {
+const FilterAttendanceTable = ({ classId, queryParams, setQueryParams, totalRecords }: FilterAttendanceTableProps) => {
     const { control } = useForm<FilterForm>()
     const { isMobileView } = useTailwindBreakpoint()
     const [openMobileFilter, setOpenMobileFilter] = useState(false)
@@ -176,7 +177,7 @@ const FilterAttendanceTable = ({ classId, queryParams, setQueryParams }: FilterA
                     </>
                 ) : (
                     <div className="flex w-full items-center justify-end gap-4 xl:w-2/3">
-                        <div className="shrink-0 text-right justify-center text-gray-800 text-sm">24 Results</div>
+                        <div className="shrink-0 text-right justify-center text-gray-800 text-sm">{totalRecords} Results</div>
                         <SappSelectMultiple
                             name="lesson_ids"
                             control={control}
@@ -323,14 +324,6 @@ const FilterAttendanceTable = ({ classId, queryParams, setQueryParams }: FilterA
                             value={mobileCalendarValue}
                             onSelect={handleMobileCalendarSelect}
                             disabledDate={disabledMobileDate}
-                            // className={[
-                            //     'rounded-xl bg-white shadow-[0px_4px_16px_rgba(0,0,0,0.08)]',
-                            //     '[&_.ant-picker-panel]:border-0 [&_.ant-picker-panel]:bg-transparent',
-                            //     '[&_.ant-picker-body]:p-0 [&_.ant-picker-content]:table-fixed',
-                            //     '[&_.ant-picker-content_th]:pb-4 [&_.ant-picker-content_th]:text-center [&_.ant-picker-content_th]:text-sm [&_.ant-picker-content_th]:font-normal [&_.ant-picker-content_th]:leading-[22px] [&_.ant-picker-content_th]:text-gray-500',
-                            //     '[&_.ant-picker-cell]:py-1 [&_.ant-picker-cell]:text-center',
-                            //     '[&_.ant-picker-cell::before]:hidden [&_.ant-picker-cell-inner::before]:hidden',
-                            // ].join(' ')}
                             headerRender={({ value, onChange }) => {
                                 const year = value.year()
                                 const month = value.month()

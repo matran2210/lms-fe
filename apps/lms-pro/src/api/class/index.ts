@@ -27,7 +27,7 @@ export class ClassAPI {
     quiz_id: string,
     params?: { page_index: number; page_size: number },
   ): Promise<IResponse<IQuizResultList>> {
-    return fetcher(`${apiURL}/classes/${id}/result/${quiz_id}`, {
+    return fetcher(`/classes/${id}/result/${quiz_id}`, {
       params: params,
     })
   }
@@ -36,7 +36,7 @@ export class ClassAPI {
     id: string,
     params: { page_index: number; page_size: number },
   ): Promise<ExaminationsResponse> {
-    return fetcher(`${apiURL}/classes/${id}/examination`, {
+    return fetcher(`/classes/${id}/examination`, {
       method: 'GET',
       params: params,
     })
@@ -47,14 +47,14 @@ export class ClassAPI {
     data: FormData,
   ): AxiosPromise<IResponse<any>> {
     return fetchFormData({
-      url: `${apiURL}/classes/${id}/examination`,
+      url: `/classes/${id}/examination`,
       method: 'PUT',
       formData: data,
     })
   }
 
   static getExamInfo(id?: string): Promise<ExamInformation> {
-    return fetcher(`${apiURL}/classes/${id}/exam-info`)
+    return fetcher(`/classes/${id}/exam-info`)
   }
 
   static getClassSchedule(
@@ -63,7 +63,7 @@ export class ClassAPI {
     page_size: number,
     search_key?: string,
   ): Promise<any> {
-    return fetcher(`${apiURL}/class-resource/class-schedule`, {
+    return fetcher(`/class-resource/class-schedule`, {
       params: { class_id: id, page_index, page_size, search_key },
     })
   }
@@ -74,7 +74,7 @@ export class ClassAPI {
     reason: string,
   ): Promise<IResponse<any>> {
     return fetcher(
-      `${apiURL}/classes/${classId}/result/${quizAttemptId}/request-regrading`,
+      `/classes/${classId}/result/${quizAttemptId}/request-regrading`,
       {
         data: { reason },
         method: 'POST',
@@ -102,7 +102,7 @@ export class ClassAPI {
     class_id: string, 
     params: IStudentAttendanceListParams,
   ): Promise<IResponse<IStudentAttendanceListResponse>> {
-    return fetcher(`${apiURL}/classes/students/${class_id}/attendances`, {
+    return fetcher(`/classes/students/${class_id}/attendances`, {
       params: params,
     })
   }
@@ -111,21 +111,21 @@ export class ClassAPI {
   static getStudentAttendanceSummary(
     class_id: string, 
   ): Promise<IResponse<IAttendanceStatistics>> {
-    return fetcher(`${apiURL}/classes/${class_id}/student-attendances/summary`)
+    return fetcher(`/classes/${class_id}/student-attendances/summary`)
   }
 
   // class attendance history: get attendance history of a class
   static getClassAttendanceHistory(
     class_id: string, lesson_id: string
   ): Promise<IResponse<IStudentAttendanceHistoryResponse>> {
-    return fetcher(`${apiURL}/classes/${class_id}/students/${lesson_id}/attendance-history?page_index=${DEFAULT_PAGE_NUMBER}&page_size=100`)
+    return fetcher(`/classes/${class_id}/students/${lesson_id}/attendance-history?page_index=${DEFAULT_PAGE_NUMBER}&page_size=100`)
   }
 
   // student learning-schedule: get learning-schedule of a student in a class
   static getStudentLearningSchedule(
     params: ILessonListParams,
   ): Promise<IResponse<IStudentLessonListResponse>> {
-    return fetcher(`${apiURL}/classes/student/learning-schedule`, {
+    return fetcher(`/classes/student/learning-schedule`, {
       params: params,
     })
   }
@@ -134,7 +134,7 @@ export class ClassAPI {
   static getTeacherLearningSchedule(
     params: ILessonListParams,
   ): Promise<IResponse<ITeacherTeachingLessonListResponse>> {
-    return fetcher(`${apiURL}/classes/teacher/teaching-schedule`, {
+    return fetcher(`/classes/teacher/teaching-schedule`, {
       params: params,
     })
   }
@@ -142,7 +142,7 @@ export class ClassAPI {
   static getTeacherTeachingClass(
     params: Omit<ILessonListParams, "class_ids">,
   ): Promise<IResponse<ITeacherTeachingClassListResponse>> {
-    return fetcher(`${apiURL}/classes/teacher/teaching-schedule`, {
+    return fetcher(`/classes/teacher/teaching-schedule`, {
       params: params,
     })
   }
