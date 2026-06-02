@@ -3,7 +3,7 @@ import { Select } from "antd";
 import { ButtonSize } from "antd/es/button";
 import { DefaultOptionType } from "antd/es/select";
 import clsx from "clsx";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { FocusEventHandler, useEffect, useMemo, useRef, useState } from "react";
 import { Control, Controller } from "react-hook-form";
 import { ErrorMessage, Tooltip } from "../../common";
 
@@ -12,6 +12,7 @@ interface SAPPSelectMultipleProps {
   name: string;
   defaultValue?: string[] | number[];
   className?: string;
+  classNameWrapper?: string;
   placeholder?: string;
   options: DefaultOptionType[];
   size?: ButtonSize;
@@ -27,6 +28,8 @@ interface SAPPSelectMultipleProps {
   onDropdownVisibleChange?: (open: boolean) => void;
   heightCustom?: string;
   allowClear?: boolean;
+  open?: boolean;
+  onFocus?: FocusEventHandler<HTMLElement> | undefined
 }
 
 const SAPPSelectMultiple = ({
@@ -34,6 +37,7 @@ const SAPPSelectMultiple = ({
   name,
   defaultValue = [],
   className,
+  classNameWrapper,
   placeholder,
   options,
   size,
@@ -49,9 +53,11 @@ const SAPPSelectMultiple = ({
   onDropdownVisibleChange,
   heightCustom = "h-12",
   allowClear = false,
+  open,
+  onFocus,
 }: SAPPSelectMultipleProps) => {
   return (
-    <div className="float-label">
+    <div className={clsx("float-label", classNameWrapper)}>
       <Controller
         name={name}
         control={control}
@@ -93,6 +99,8 @@ const SAPPSelectMultiple = ({
                   onMenuScrollToBottom?.(e);
                 }
               }}
+              open={open}
+              onFocus={onFocus}
             />
 
             {label && (

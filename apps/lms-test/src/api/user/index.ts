@@ -1,6 +1,6 @@
-import { UserExamInformation } from '@lms/core'
-import { fetcher } from '@services/requestV2'
-import { apiURL } from 'src/constants'
+import { UserExamInformation } from "@lms/core";
+import { fetcher } from "@services/requestV2";
+import { apiURL } from "src/constants";
 
 export class UserApi {
   static getExamination(
@@ -9,11 +9,11 @@ export class UserApi {
   ): Promise<UserExamInformation> {
     return fetcher(
       `${apiURL}/users/examination?page_index=${page_index}&page_size=${page_size}&template=4`,
-    )
+    );
   }
 
   static getUserPrograms(course_category_id: string | undefined): Promise<any> {
-    return fetcher(`users/programs?course_category_id=${course_category_id}`)
+    return fetcher(`users/programs?course_category_id=${course_category_id}`);
   }
 
   /**
@@ -35,12 +35,12 @@ export class UserApi {
     session_id: string,
     keycloak_user_id: string,
   ): Promise<{ success: boolean }> {
-    return fetcher('auth/logout', {
-      method: 'POST',
+    return fetcher("auth/logout", {
+      method: "POST",
       data: {
         session_id: session_id,
         keycloak_user_id: keycloak_user_id,
       },
-    })
+    });
   }
 }

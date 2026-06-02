@@ -103,6 +103,13 @@ const MENU_OPTIONS: MenuOption[] = [
     type: 'level-1',
     showMenu: !!modules.find((m) => m.name === 'examination'),
   },
+    {
+    name: TitleSidebar.STUDENT_ATTENDANCE,
+    icon: 'attendance',
+    url: PageLink.STUDENT_ATTENDANCE,
+    type: 'level-1',
+    showMenu: !!modules.find((m) => m.name === 'attendance'),
+  },
 ]
 
 const MENU_OPTIONS_EVENTTEST: MenuOption[] = [

@@ -1,5 +1,5 @@
-import { ICertificate } from '@lms/core'
-import axios from 'axios'
+import { ICertificate } from "@lms/core";
+import axios from "axios";
 
 export const uploadImageToLinkedIn = async (
   token: string,
@@ -9,20 +9,20 @@ export const uploadImageToLinkedIn = async (
   imageBase64: string,
 ) => {
   try {
-    const res = await axios.post('/api/auth/linkedin/post', {
+    const res = await axios.post("/api/auth/linkedin/post", {
       accessToken: token,
       personURN,
       // shareUrl,
       text,
       imageBase64,
-    })
+    });
 
     if (res.data.success) {
-      return res
+      return res;
     } else {
-      throw new Error(res.data.message)
+      throw new Error(res.data.message);
     }
   } catch (err: any) {
-    throw new Error(err.message)
+    throw new Error(err.message);
   }
-}
+};

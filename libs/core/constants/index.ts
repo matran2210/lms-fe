@@ -40,6 +40,7 @@ export const TitleSidebar = {
   ACTIVITY: "Activity",
   CLASS_RESOURCE: "Class Resource",
   COURSE_ACTIVATION: "Course Activation",
+  STUDENT_ATTENDANCE: "Attendance",
 };
 
 export const ValueSidebar = {
@@ -60,6 +61,7 @@ export const TitleTeacherSidebar = {
   MYCALENDAR: "My Calendar",
   MYREQUEST: "My Request",
   NOTIFICATIONS: "Notifications",
+  ATTENDANCE: "Attendance"
 };
 
 export const GUIDELINE_PASSWORD = [

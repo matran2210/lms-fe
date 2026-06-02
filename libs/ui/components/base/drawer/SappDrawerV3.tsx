@@ -26,6 +26,7 @@ interface IProps extends DrawerProps {
   cancelButtonClassName?: string;
   isShowBtnBack?: boolean;
   titleClassName?: string;
+  disabledSubmitButton?: boolean;
 }
 
 const SappDrawerV3: React.FC<IProps> = ({
@@ -51,6 +52,7 @@ const SappDrawerV3: React.FC<IProps> = ({
   closable,
   isShowBtnBack = false,
   titleClassName,
+  disabledSubmitButton = false,
   ...props
 }) => {
   useEffect(() => {
@@ -135,6 +137,7 @@ const SappDrawerV3: React.FC<IProps> = ({
               onClick={handleSubmit}
               size={sizeTextBtn}
               loading={loading}
+              disabled={disabledSubmitButton}
             />
           </div>
         )}
