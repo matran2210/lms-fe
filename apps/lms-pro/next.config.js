@@ -58,7 +58,6 @@ const nextConfig = {
   experimental: {
     optimizeCss: isProd,
     instrumentationHook: false,
-    optimizePackageImports: ['lodash', 'antd', '@ant-design/icons', 'lucide-react'],
     // Tăng tốc webpack build bằng worker thread riêng
     webpackBuildWorker: true,
     // Tree-shake barrel imports — giảm số module webpack phải parse mỗi route
@@ -75,25 +74,26 @@ const nextConfig = {
       'framer-motion',
       '@xyflow/react',
       'lucide-react',
-      // Workspace libs
-      '@lms/ui',
-      '@lms/utils',
-      '@lms/core',
-      '@lms/hooks',
-      '@lms/contexts',
-      '@lms/assets',
-      '@lms/hoc',
-      // Workspace features — mỗi cái là 1 barrel lớn
-      '@lms/feature-auth',
-      '@lms/feature-courses',
-      '@lms/feature-schedule',
-      '@lms/feature-class',
-      '@lms/feature-test',
-      '@lms/feature-user',
-      '@lms/feature-dashboard',
-      '@lms/feature-notifications',
-      '@lms/feature-certificate',
-      '@lms/feature-examination',
+      // // Workspace libs
+      // '@lms/ui',
+      // '@lms/utils',
+      // '@lms/core',
+      // '@lms/hooks',
+      // '@lms/contexts',
+      // '@lms/assets',
+      // '@lms/hoc',
+      // // Workspace features — mỗi cái là 1 barrel lớn
+      // '@lms/feature-auth',
+      // '@lms/feature-courses',
+      // '@lms/feature-schedule',
+      // '@lms/feature-class',
+      // '@lms/feature-test',
+      // '@lms/feature-user',
+      // '@lms/feature-dashboard',
+      // '@lms/feature-notifications',
+      // '@lms/feature-certificate',
+      // '@lms/feature-examination',
+      // '@lms/feature-attendance',
     ],
   },
 }

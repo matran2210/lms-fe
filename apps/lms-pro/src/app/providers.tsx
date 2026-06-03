@@ -32,7 +32,7 @@ import {
 } from '@lms/ui'
 import { initializeGA, pageview } from '@lms/utils'
 import { fetcher } from '@services/request'
-import { App as AntdApp, ConfigProvider } from 'antd'
+import { App as AntdApp } from 'antd'
 import Aos from 'aos'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -176,6 +176,7 @@ function Providers({ children }: { children: ReactNode }) {
       dispatch: dispatch,
       useAppSelector: useAppSelector,
       appModules: modules,
+      domainTest: process.env.NEXT_PUBLIC_DOMAIN_TEST as string,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [router, pathname, params, queryObj, dispatch],
@@ -401,10 +402,9 @@ function Providers({ children }: { children: ReactNode }) {
                     />
                     <SappConfirmDialogContainer />
                     <RouteGuard>
-                      <ConfigProvider>
+                        <>
                         <PinnedNotifications />
                         <AntdApp>{children}</AntdApp>
-                        <>
                           {showBackToTop && <BackToTop />}
                           <MKTInApp showMKTInApp={showMKTInApp} />
                           {showHelp && <div id="floating-btn-divider" />}
@@ -413,7 +413,6 @@ function Providers({ children }: { children: ReactNode }) {
                           <PopupCompletedCourse />
                           <PopupActivated />
                         </>
-                      </ConfigProvider>
                     </RouteGuard>
                   </PreviousSectionRouteProvider>
                 </SocketContext.Provider>
