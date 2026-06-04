@@ -2,8 +2,8 @@ import {
   ICreateDiscussionRequest,
   ICreateDiscussionResReact,
   ICreateDiscussionUploadRequest,
-} from '@lms/contexts'
-import { fetcher } from '@services/requestV2'
+} from "@lms/contexts";
+import { fetcher } from "@services/requestV2";
 
 export class ActivityAPI {
   /**
@@ -17,12 +17,12 @@ export class ActivityAPI {
   ): Promise<any> {
     return fetcher(`course-discussions`, {
       data: request,
-      method: 'POST',
-    })
+      method: "POST",
+    });
   }
 
   static getQuizAttemptsAnswer(id: string): Promise<any> {
-    return fetcher(`quiz-attempts/answers/${id}`)
+    return fetcher(`quiz-attempts/answers/${id}`);
   }
 
   /**
@@ -32,7 +32,7 @@ export class ActivityAPI {
    * @returns {Promise<IResponse<{ questions: IQuestion[] }>>} - Dữ liệu câu hỏi.
    */
   static getQuestions(id: string): Promise<any> {
-    return fetcher(`quiz/${id}/questions?page_index=1&page_size=99999`)
+    return fetcher(`quiz/${id}/questions?page_index=1&page_size=99999`);
   }
 
   /**
@@ -44,7 +44,7 @@ export class ActivityAPI {
   static reactDiscussion(data: ICreateDiscussionResReact): Promise<any> {
     return fetcher(`course-discussions/react`, {
       data: data,
-    })
+    });
   }
 
   /**
@@ -62,10 +62,10 @@ export class ActivityAPI {
       `course-sections/course/${courseId}/section/${sectionId}/progress`,
       {
         params: {
-          status: 'FINISHED',
+          status: "FINISHED",
         },
       },
-    )
+    );
   }
 
   static uploadImageDiscussion = ({
@@ -73,26 +73,26 @@ export class ActivityAPI {
     new_discussion_file,
     discussion_file_ids,
   }: ICreateDiscussionUploadRequest) => {
-    const formData = new FormData()
+    const formData = new FormData();
 
-    formData.append('discussion_id', discussion_id)
+    formData.append("discussion_id", discussion_id);
 
     new_discussion_file?.forEach((file, index) => {
-      formData.append(`discussion_images[${index}]`, file)
-    })
+      formData.append(`discussion_images[${index}]`, file);
+    });
 
     discussion_file_ids?.forEach((discussion_file_id, index) => {
-      formData.append(`discussion_file_ids[${index}]`, discussion_file_id)
-    })
+      formData.append(`discussion_file_ids[${index}]`, discussion_file_id);
+    });
 
     return fetcher(`course-discussions/detail/upload`, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
       data: formData,
-      method: 'POST',
-    })
-  }
+      method: "POST",
+    });
+  };
 
   /**
    * @description Cập nhật một cuộc thảo luận.
@@ -104,8 +104,8 @@ export class ActivityAPI {
   ): Promise<any> {
     return fetcher(`course-discussions/${id}`, {
       data: params,
-      method: 'PUT',
-    })
+      method: "PUT",
+    });
   }
 
   /**
@@ -114,7 +114,7 @@ export class ActivityAPI {
    */
   static deleteDiscussion(id: string): Promise<any> {
     return fetcher(`course-discussions/${id}`, {
-      method: 'DELETE',
-    })
+      method: "DELETE",
+    });
   }
 }

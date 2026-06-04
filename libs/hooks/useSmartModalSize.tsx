@@ -1,3 +1,4 @@
+"use client"
 import { Grid } from "antd";
 import { useEffect, useState } from "react";
 
