@@ -33,17 +33,17 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
         inline: 'nearest',
       })
     })
-  }, [isOpen, record?.class_schedule_id])
+  }, [isOpen, record?.teacher_schedule_id])
 
   const useGetTeacherTeachingAttendanceHistory = () => {
     const fetchData = async () => {
-      const { data } = await userApi.getTeacherTeachingAttendanceHistory(record?.class_schedule_id as string)
+      const { data } = await userApi.getTeacherTeachingAttendanceHistory(record?.teacher_schedule_id as string)
       return data
     }
 
 
-    return useQuery(["teacher-teaching-attendance-history", record?.class_schedule_id], fetchData, {
-      enabled: record?.class_schedule_id !== undefined && isOpen,
+    return useQuery(["teacher-teaching-attendance-history", record?.teacher_schedule_id], fetchData, {
+      enabled: record?.teacher_schedule_id !== undefined && isOpen,
       retry: false,
     })
   }
@@ -95,9 +95,7 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
           label="Date"
           value={`${localStartDate?.isValid() ? localStartDate.format('DD/MM/YYYY') : '-'} ${localStartDate?.isValid() ? localStartDate.format('HH:mm') : '-'} : ${localEndDate?.isValid() ? localEndDate.format('HH:mm') : '-'}`}
         />
-        {record?.workload ? (
-          <AttendanceInfoRow icon={<ClockInClassIcon className="h-5 w-5 text-gray-400" />} label="Actual Workload" valueClassName='text-[#025EFF]' value={record.workload} />
-        ) : null}
+        <AttendanceInfoRow icon={<ClockInClassIcon className="h-5 w-5 text-gray-400" />} label="Actual Workload" valueClassName='text-[#025EFF]' value={record?.workload || '0'} />
 
         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto pr-2">
           {teacherTeachingAttendanceHistoryData?.map((historyRecord, index) => (

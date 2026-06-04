@@ -36,7 +36,7 @@ const TeacherAttendanceStatistics = ({ fromDate, toDate }: TeacherAttendanceStat
                 </div>
                 <div className="w-36 justify-content-center text-gray-700 text-lg font-semibold">Total Lessons</div>
               </div>
-              <div className="text-dashboard-yellow pl-12"><span className="text-2xl font-semibold">{statisticsData?.total_lessons}</span><span className="text-orange-400 text-sm font-medium">Class Sessions</span></div>
+              <div className="text-dashboard-yellow pl-12"><span className="text-2xl font-semibold">{statisticsData?.total_lessons}{" "}</span><span className="text-orange-400 text-sm font-medium">Class Sessions</span></div>
             </div>
             <div className="flex-1 self-stretch p-6 bg-white rounded-2xl shadow-small flex flex-col justify-content-start align-items-center gap-4">
               <div className="flex justify-content-start align-items-center gap-4">

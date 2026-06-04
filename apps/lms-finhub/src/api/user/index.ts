@@ -62,10 +62,10 @@ export class UserApi {
 
   // get teaching attendance history
   static getTeacherTeachingAttendanceHistory(
-    lesson_id: string,
+    teacher_schedule_id: string,
   ): Promise<IResponse<IClassAttendanceHistoryResponse[]>> {
     return fetcher(
-      `/user-attendances/teacher/teaching-attendance/${lesson_id}/history`,
+      `/user-attendances/teacher/teaching-attendance/${teacher_schedule_id}/history`,
     )
   }
 
