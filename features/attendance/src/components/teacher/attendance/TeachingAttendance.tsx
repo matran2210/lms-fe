@@ -10,7 +10,7 @@ import {
   SappTable,
   TableActionCell
 } from '@lms/ui'
-import { buildLocalLessonDateTime, convertUTCToLocal, formatDateFromUTC } from '@lms/utils'
+import { buildLocalLessonDateTime, convertUTCToLocal, formatDate, formatDateFromUTC, formatTimer, sappFormatDate } from '@lms/utils'
 import { Divider, Select } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import clsx from 'clsx'
@@ -42,12 +42,14 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
     {
       page_index: DEFAULT_PAGE_NUMBER,
       page_size: DEFAULT_PAGE_SIZE,
+      fromDate: formatDate(dayjs().startOf('month'), DATE_FORMAT.YEAR_MONTH_DAY),
+      toDate: formatDate(dayjs().endOf('month'), DATE_FORMAT.YEAR_MONTH_DAY),
     }
   )
   const { control, getValues, setValue, reset, watch, setError, clearErrors, formState: { errors } } = useForm<FilterForm>({
     defaultValues: {
-      fromDate: dayjs().startOf('month').toISOString(),
-      toDate: dayjs().endOf('month').toISOString(),
+      fromDate: formatDate(dayjs().startOf('month'), DATE_FORMAT.YEAR_MONTH_DAY),
+      toDate: formatDate(dayjs().endOf('month'), DATE_FORMAT.YEAR_MONTH_DAY),
     }
   })
 
@@ -61,7 +63,7 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
     }
 
 
-    return useQuery(["student-attendance", queryParams], fetchData, {
+    return useQuery(["student-attendance", JSON.stringify(queryParams)], fetchData, {
       retry: false,
     })
   }
@@ -70,7 +72,6 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
   const {
     data: teacherTeachingAttendanceData,
     isLoading,
-    refetch,
   } = useGetTeacherTeachingAttendanceList()
 
 
@@ -80,7 +81,10 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
     hasNextPage: hasNextPageTeacherClass,
     fetchNextPage: fetchNextPageTeacherClass,
     debounceSearch: debounceSearchTeacherClass,
-  } = useInfiniteTeacherClass(true)
+  } = useInfiniteTeacherClass(true, {
+      fromDate: getValues('fromDate'),
+      toDate: getValues('toDate'),
+  })
 
   const class_ids = watch('class_ids')
 
@@ -90,7 +94,8 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
     hasNextPage: hasNextPageTeacherLesson,
     fetchNextPage: fetchNextPageTeacherLesson,
     debounceSearch,
-  } = useInfiniteTeacherLesson(!!class_ids?.length, { class_ids: class_ids })
+  } = useInfiniteTeacherLesson(!!class_ids?.length, { class_ids: class_ids, fromDate: getValues('fromDate'),
+      toDate: getValues('toDate'), })
 
   const handleOpenHistory = (record: ITeacherTeachingAttendanceItem) => {
     if (onOpenHistory) {
@@ -166,7 +171,7 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
     {
       title: 'Act. Workload',
       render: (record) => (
-        <NameNoActionCell className="text-[#025EFF]" dataColumn={record.workload} />
+        <NameNoActionCell className="text-[#025EFF]" dataColumn={record.workload || '0'} />
       ),
       width: 120,
     },
@@ -195,12 +200,19 @@ const TeachingAttendance: React.FC<TeachingAttendanceProps> = ({
           labelRender={(option) => <span className='text-xl'>{option.label}</span>}
           onChange={(value) => {
             const month = value === '' ? undefined : value
-            setValue('fromDate', month ? dayjs().month(Number(month) - 1).startOf('month').toISOString() : undefined)
-            setValue('toDate', month ? dayjs().month(Number(month) - 1).endOf('month').toISOString() : undefined)
+            reset({
+              class_ids: [],
+              lesson_ids: [],
+              workload_status: [],
+              fromDate: month ? formatDate(dayjs().month(Number(month) - 1).startOf('month'), DATE_FORMAT.YEAR_MONTH_DAY) : undefined,
+              toDate: month ? formatDate(dayjs().month(Number(month) - 1).endOf('month'), DATE_FORMAT.YEAR_MONTH_DAY) : undefined,
+            })
+            // setValue('fromDate', month ? formatDate(dayjs().month(Number(month) - 1).startOf('month'), DATE_FORMAT.YEAR_MONTH_DAY) : undefined)
+            // setValue('toDate', month ? formatDate(dayjs().month(Number(month) - 1).endOf('month'), DATE_FORMAT.YEAR_MONTH_DAY) : undefined)
             setQueryParams((prev) => ({
               ...prev,
-              fromDate: month ? dayjs().month(Number(month) - 1).startOf('month').toISOString() : undefined,
-              toDate: month ? dayjs().month(Number(month) - 1).endOf('month').toISOString() : undefined,
+              fromDate: month ? formatDate(dayjs().month(Number(month) - 1).startOf('month'), DATE_FORMAT.YEAR_MONTH_DAY) : undefined,
+              toDate: month ? formatDate(dayjs().month(Number(month) - 1).endOf('month'), DATE_FORMAT.YEAR_MONTH_DAY) : undefined,
             }))
           }}
         />

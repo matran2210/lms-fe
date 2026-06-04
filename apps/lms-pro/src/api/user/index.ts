@@ -1,4 +1,4 @@
-import { IClassAttendanceHistoryResponse, IResponse, ITeacherTeachingAttendanceListParams, ITeacherTeachingAttendanceListResponse, ITeachingStatistics, UserExamInformation } from '@lms/core'
+import { DEFAULT_PAGE_NUMBER, IClassAttendanceHistoryResponse, IResponse, ITeacherTeachingAttendanceListParams, ITeacherTeachingAttendanceListResponse, ITeachingStatistics, UserExamInformation } from '@lms/core'
 import { fetcher } from '@services/request'
 
 export class UserApi {
@@ -53,8 +53,8 @@ export class UserApi {
   }
   
   // get teaching attendance history
-  static getTeacherTeachingAttendanceHistory(lesson_id : string): Promise<IResponse<IClassAttendanceHistoryResponse[]>> {
-    return fetcher(`/user-attendances/teacher/teaching-attendance/${lesson_id}/history`)
+  static getTeacherTeachingAttendanceHistory(teacher_schedule_id : string): Promise<IResponse<IClassAttendanceHistoryResponse[]>> {
+    return fetcher(`/user-attendances/teacher/teaching-attendance/${teacher_schedule_id}/history?page_index=${DEFAULT_PAGE_NUMBER}&page_size=100`)
   }
 
   // get teaching attendance summary

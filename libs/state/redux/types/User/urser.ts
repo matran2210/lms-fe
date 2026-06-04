@@ -269,7 +269,7 @@ export interface IUserAPI {
   // teacher:
   getTeacherTeachingAttendance(params: ITeacherTeachingAttendanceListParams): Promise<IResponse<ITeacherTeachingAttendanceListResponse>>;
   getTeacherTeachingAttendanceHistory(
-    lesson_id: string,
+    teacher_schedule_id: string,
   ): Promise<IResponse<IClassAttendanceHistoryResponse[]>>;
   getTeacherTeachingAttendanceSummary(params?: {
     fromDate?: string | undefined;
