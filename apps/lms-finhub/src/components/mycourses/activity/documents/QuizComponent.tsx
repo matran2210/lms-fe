@@ -622,37 +622,34 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
         case QUESTION_TYPES.ESSAY:
           const getDefaultValue = () => {
+            const currentRequirement =
+              activeQuestion?.requirements?.[essayData?.index ?? 0]
             switch (activeQuestion?.response_option) {
               case RESPONSE_OPTION.WORD:
                 return (
                   watch(
-                    `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`,
+                    `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? currentRequirement?.id : document_id}_essay`,
                   ) ??
                   activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
-                    if (
-                      ans.requirement_id ===
-                      activeQuestion?.requirements?.[essayData?.index ?? 0]?.id
-                    ) {
+                    if (ans.requirement_id === currentRequirement?.id) {
                       return ans
                     }
                   })?.short_answer ??
-                  activeQuestion?.myAnswers?.[0]?.short_answer
+                  activeQuestion?.myAnswers?.[0]?.short_answer ??
+                  currentRequirement?.answer_template ??
+                  activeQuestion?.answer_template
                 )
                 break
               case RESPONSE_OPTION.SHEET:
                 return (
-                  // getValues(
-                  //   `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`,
-                  // ) ??
                   activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
-                    if (
-                      ans.requirement_id ===
-                      activeQuestion?.requirements?.[essayData?.index ?? 0]?.id
-                    ) {
+                    if (ans.requirement_id === currentRequirement?.id) {
                       return ans
                     }
                   })?.short_answer ??
-                  activeQuestion?.myAnswers?.[0]?.short_answer
+                  activeQuestion?.myAnswers?.[0]?.short_answer ??
+                  currentRequirement?.answer_template ??
+                  activeQuestion?.answer_template
                 )
                 break
             }
@@ -770,6 +767,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               </div>
               <div className="my-6"></div>
               <EssayQuestionPreview
+                key={`essay-${activeQuestion?.id}-${activeQuestion?.requirements?.[essayData?.index ?? 0]?.id ?? 'no-req'}-${!!getDefaultValue()}`}
                 defaultValue={getDefaultValue()}
                 data={activeQuestion?.requirements?.[essayData?.index ?? 0]}
                 question_content={activeQuestion?.question_content}
