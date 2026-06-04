@@ -1,11 +1,6 @@
 "use client";
 import { CloseIcon, UploadIcon } from "@lms/assets";
-import {
-  disableUnsavedChange,
-  loginSlice,
- 
-  useFeature,
-} from "@lms/contexts";
+import { disableUnsavedChange, loginSlice, useFeature } from "@lms/contexts";
 import {
   DEFAULT_EDITOR_VALUE,
   DISPLAY_TYPE,
@@ -65,8 +60,9 @@ export type IPreviewProp = {
   uniqueKey?: string;
   isInTest?: boolean;
   storageKey?: string;
-  disable?: boolean
-  isAnimationCorrectAnswer?: boolean
+  disable?: boolean;
+  isAnimationCorrectAnswer?: boolean;
+  isResetValue?: boolean;
 };
 type SAPPEditorHandle = {
   moveSelectionOutOfTable: () => void;
@@ -104,13 +100,14 @@ const EssayQuestionPreview = ({
   isInTest = false,
   storageKey,
   disable = false,
-  isAnimationCorrectAnswer = false
+  isAnimationCorrectAnswer = false,
+  isResetValue = false,
 }: IPreviewProp) => {
-  const { testServiceApi, router, dispatch} = useFeature();
+  const { testServiceApi, dispatch } = useFeature();
 
   const refSheet = useRef(null) as any;
   const [key, setKey] = useState("1");
-  const {query} = useFeature()
+  const { query } = useFeature();
 
   const editorRef = useRef<SAPPEditorHandle>(null);
   // Cờ chặn tạm thời onChange trong lúc đang thực hiện các thao tác cấu trúc
@@ -238,9 +235,11 @@ const EssayQuestionPreview = ({
     externalRef.current = {
       reset: async (templateValue?: string) => {
         // editorRef.current?.moveSelectionOutOfTable()
-        const converted = await convertMathHtmlToImage(templateValue !== undefined
-          ? templateValue
-          : defaultValue || DEFAULT_EDITOR_VALUE);
+        const converted = await convertMathHtmlToImage(
+          templateValue !== undefined
+            ? templateValue
+            : defaultValue || DEFAULT_EDITOR_VALUE,
+        );
         editorRef.current?.resetContentSafe(converted);
       },
       resetSheet: () => {
@@ -420,8 +419,9 @@ const EssayQuestionPreview = ({
     },
     [key, stableDataId, requirementKey],
   );
-  const renderWordEditor = useMemo(
-    () => (
+  const renderWordEditor = useMemo(() => {
+    isResetValue && editorRef.current?.resetContentSafe(defaultValue);
+    return (
       <HookFormEditor
         key={name}
         control={control}
@@ -433,15 +433,24 @@ const EssayQuestionPreview = ({
         disabled={
           fullData?.confirmed ||
           fullData?.data?.confirmed ||
-          fullData?.is_viewed_answer || disable
+          fullData?.is_viewed_answer ||
+          disable
         }
         handleChange={() => handleChange && handleChange(data?.id)}
         // externalRef={externalRef}
         editorRef={editorRef}
+        isResetValue={isResetValue}
       />
-    ),
-    [data?.id, defaultValue, disable, fullData, name],
-  );
+    );
+  }, [
+    name,
+    defaultValue,
+    data?.id,
+    fullData.confirmed,
+    fullData.data?.confirmed,
+    fullData.is_viewed_answer,
+    disable,
+  ]);
   return (
     <div
       className={clsx(
@@ -726,7 +735,11 @@ const EssayQuestionPreview = ({
             fullData?.done ||
             fullData?.data?.confirmed) &&
             (fullData?.solution || data?.explanation?.trim()) && (
-            <div className={explainClassname} data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
+              <div
+                className={explainClassname}
+                data-aos={isAnimationCorrectAnswer ? "fade-down" : ""}
+                data-aos-duration="800"
+              >
                 <SappDivider />
                 <SappTitleSolution title={`${MY_COURSES.solution}:`} />
                 <EditorReader
