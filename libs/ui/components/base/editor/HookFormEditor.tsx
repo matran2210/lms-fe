@@ -22,6 +22,7 @@ interface Props {
   disabled?: boolean;
   key?: number | string;
   editorRef?: React.RefObject<SAPPEditorHandle>;
+  isResetValue?: boolean;
 }
 
 const HookFormEditor = ({
@@ -41,6 +42,7 @@ const HookFormEditor = ({
   disabled,
   key,
   editorRef,
+  isResetValue = false,
 }: Props) => {
   return (
     <Controller
@@ -50,7 +52,7 @@ const HookFormEditor = ({
       defaultValue={defaultValue}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
         // Use value from form if available, otherwise use defaultValue
-        const editorValue = value !== undefined && value !== null ? value : defaultValue;
+        const editorValue = isResetValue ? defaultValue : value !== undefined && value !== null ? value : defaultValue;
         
         return (
           <>
