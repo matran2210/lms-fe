@@ -371,9 +371,20 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     }
                   }
                 } else {
-                  // Logic cho WORD: giữ nguyên như cũ
+                  // Logic cho WORD: ưu tiên short_answer, fallback về answer_template
                   if (ans?.short_answer) {
                     setValue?.(fieldName, ans?.short_answer);
+                  } else {
+                    const requirement = activeQuestion?.requirements?.find(
+                      (req: any) => req?.id === ans?.requirement_id,
+                    );
+                    const templateValue =
+                      requirement?.answer_template ||
+                      activeQuestion?.answer_template;
+
+                    if (templateValue) {
+                      setValue?.(fieldName, templateValue);
+                    }
                   }
                 }
               });
@@ -829,6 +840,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       }
                     /> */}
                     <EssayQuestionPreview
+                      key={`essay-${activeQuestion?.id}-${e?.id}-${!!getDefaultValue()}`}
                       className="!rounded-none !bg-transparent !p-0 md:block"
                       editorClassName="learning-act-editor"
                       explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
@@ -1003,6 +1015,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       }
                     /> */}
                     <EssayQuestionPreview
+                      key={`essay-no-req-${activeQuestion?.id}-${!!getDefaultValue()}`}
                       className="!rounded-none !bg-transparent !p-0 md:block"
                       editorClassName="learning-act-editor"
                       explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
