@@ -1,6 +1,6 @@
 'use client'
 
-import { CloseIconNote } from '@lms/assets'
+import { CloseIconNote } from '@lms/assets/icons'
 import {
   useCourseContext,
   useFeature,

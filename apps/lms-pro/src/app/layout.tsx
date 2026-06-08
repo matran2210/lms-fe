@@ -9,8 +9,8 @@ import '@sapp-fe/preview-part/dist/index.css'
 import '@sapp-fe/quiz-result-package/dist/index.css'
 import '@sapp-fe/sapp-common-package/dist/index.css'
 import '@sapp-fe/sapp-common-package/dist/sapp-editor.css'
-import '@sapp-fe/sapp-notification/dist/index.css'
-import '@styles/index.scss'
+// import '@sapp-fe/sapp-notification/dist/index.css'
+// import '@styles/index.scss'
 import '@xyflow/react/dist/style.css'
 import 'aos/dist/aos.css'
 import Script from 'next/script'
@@ -119,11 +119,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           strategy="afterInteractive"
         />
         {/* FontAwesome — load sau khi trang đã interactive để không block FCP/LCP */}
-        <Script
+        {/* <Script
           src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"
           strategy="afterInteractive"
           crossOrigin="anonymous"
-        />
+        /> */}
         <GoogleAnalytics
           gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID ?? ''}
         />

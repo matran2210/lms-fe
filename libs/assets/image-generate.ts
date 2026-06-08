@@ -30,4 +30,9 @@ export { default as SappPasswordSuccessImage } from "./images/sapp_password_succ
 export { default as SappSearchImage } from "./images/sapp_search.svg";
 export { default as SquareAcademicCapImage } from "./images/square-academic-cap.svg";
 export { default as TimeIconImage } from "./images/time-icon.svg";
+export { default as TourGuideCoursesImage } from "./images/TourGuideCourses.webm";
+export { default as TourGuideFilterImage } from "./images/TourGuideFilter.webm";
+export { default as TourGuideNotiImage } from "./images/TourGuideNoti.webm";
+export { default as TourGuideSidebarImage } from "./images/TourGuideSidebar.webm";
+export { default as TourGuideStartImage } from "./images/TourGuideStart.webm";
 export { default as VideoIconImage } from "./images/video-icon.svg";

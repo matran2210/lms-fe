@@ -17,11 +17,6 @@ import {
   SOCKET_EVENTS,
 } from '@lms/core'
 import { RouteGuard } from '@lms/feature-auth'
-import {
-  LearningNotesList,
-  PopupActivated,
-  PopupCompletedCourse,
-} from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import {
   AntConfigProvider,
@@ -85,6 +80,27 @@ import { ActivityAPI } from 'src/api/activity'
 // Lazy load MKTInApp — kéo framer-motion + react-slick + ModalMarketingInApp
 // Không cần SSR, chỉ hiện ở một số route → không nên vào initial bundle
 const MKTInApp = dynamic(() => import('@components/MKTInApp'), { ssr: false })
+const LearningNotesList = dynamic(
+  () =>
+    import('@lms/feature-courses').then((m) => ({
+      default: m.LearningNotesList,
+    })),
+  { ssr: false },
+)
+const PopupCompletedCourse = dynamic(
+  () =>
+    import('@lms/feature-courses').then((m) => ({
+      default: m.PopupCompletedCourse,
+    })),
+  { ssr: false },
+)
+const PopupActivated = dynamic(
+  () =>
+    import('@lms/feature-courses').then((m) => ({
+      default: m.PopupActivated,
+    })),
+  { ssr: false },
+)
 
 dayjs.extend(utc)
 dayjs.extend(weekday)

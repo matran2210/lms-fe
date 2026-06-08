@@ -16,7 +16,7 @@ import {
 } from "@lms/assets";
 import { onLinkSocial } from "@lms/utils";
 import React, { Dispatch, PropsWithChildren, SetStateAction } from "react";
-import { CloseIcon } from '@lms/assets'
+import { CloseIcon } from '@lms/assets/icons'
 interface IInfomation {
   icon: React.ReactNode;
   onClick?: () => void;

@@ -1,5 +1,4 @@
 'use client'
-import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import {
   active,
   clearGuideState,
@@ -115,12 +114,15 @@ const MyCourse = () => {
   /**
    * @description config params khi filter
    */
-  const params = {
-    name: query?.name || undefined,
-    status: query?.status || undefined,
-    type: query?.type || undefined,
-    template: '4',
-  }
+  const params = useMemo(
+    () => ({
+      name: query?.name || undefined,
+      status: query?.status || undefined,
+      type: query?.type || undefined,
+      template: '4',
+    }),
+    [query?.name, query?.status, query?.type],
+  )
 
   /**
    * @description sử dụng react-query để lấy data sau khi call API
@@ -134,7 +136,13 @@ const MyCourse = () => {
     refetch,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ['myCourse'],
+    queryKey: [
+      'myCourse',
+      params.name,
+      params.status,
+      params.type,
+      params.template,
+    ],
     queryFn: ({ pageParam }) => fetchMyCourse({ pageParam, params }),
     getNextPageParam: (lastPage, allPages) => {
       return lastPage?.data.length ? allPages.length + 1 : undefined
@@ -170,11 +178,6 @@ const MyCourse = () => {
       return [...acc, ...page?.data]
     }, [])
   }, [data])
-
-  // Use useEffect to refetch data when params change
-  useEffect(() => {
-    refetch()
-  }, [params?.name, params?.status, params?.type, refetch])
 
   /**
    * @description gọi lại animation khi reload lại component
@@ -217,8 +220,7 @@ const MyCourse = () => {
   }, [])
 
   return (
-    <SappLoadingGlobal loading={isLoading}>
-      <Layout
+    <Layout
         title="My Course"
         showSidebar={
           showSidebar ||
@@ -310,8 +312,7 @@ const MyCourse = () => {
           open={openModalMarketingInApp}
           setOpen={setOpenModalMarketingInApp}
         />
-      </Layout>
-    </SappLoadingGlobal>
+    </Layout>
   )
 }
 

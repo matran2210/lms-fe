@@ -10,7 +10,7 @@ import React, {
 import { confirmDialog, useFeature } from '@lms/contexts'
 import { IButtonColors } from '@lms/core'
 import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
-import { CloseIcon } from '@lms/assets'
+import { CloseIcon } from '@lms/assets/icons'
 
 interface IProps {
   open?: boolean

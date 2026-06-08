@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import SappModalV2 from "./SappModalV2";
 import Image from "next/image";
 import ModalResizeable from "./ModalResizeable";
-import { CloseIcon } from "@lms/assets";
+import { CloseIcon } from "@lms/assets/icons";
 
 type Props = {
   src?: string;

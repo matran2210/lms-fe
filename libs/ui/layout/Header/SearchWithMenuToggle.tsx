@@ -1,6 +1,6 @@
 
 "use client";
-import { ArrowActionSearchIcon, CloseIcon, HamburgerMenuLargeIcon } from "@lms/assets";
+import { ArrowActionSearchIcon, CloseIcon, HamburgerMenuLargeIcon } from "@lms/assets/icons";
 import { useFeature } from "@lms/contexts";
 import { MY_COURSES } from "@lms/core";
 import { buildQueryString } from "@lms/utils";

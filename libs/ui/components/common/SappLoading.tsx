@@ -1,5 +1,5 @@
+import { AnimationImage } from "@lms/assets/images";
 import dynamic from "next/dynamic";
-import { AnimationImage } from "@lms/assets";
 
 const Player = dynamic(
   () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),

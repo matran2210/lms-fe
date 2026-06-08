@@ -52,6 +52,12 @@ const nextConfig = {
         { module: /@fastify\/otel/ },
       ]
     }
+
+    config.module.rules.push({
+      test: /\.(webm)$/i,
+      type: 'asset/resource',
+    })
+
     return config
   },
 

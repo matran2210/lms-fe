@@ -1,4 +1,4 @@
-import { SadFaceIcon } from "@lms/assets";
+import { SadFaceIcon } from "@lms/assets/icons";
 import { SappModalV3 } from "@lms/ui";
 
 const NoAvailableClasses = ({

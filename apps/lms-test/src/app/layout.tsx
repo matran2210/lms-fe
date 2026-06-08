@@ -101,10 +101,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"
           strategy="afterInteractive"
         />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-          rel="stylesheet"
-        />
         <GoogleAnalytics
           gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID ?? ""}
         />

@@ -2,7 +2,7 @@ import { truncateString } from "@lms/utils";
 import clsx from "clsx";
 import React from "react";
 import dynamic from "next/dynamic";
-import { WavingHandAnimation } from "@lms/assets";
+import { WavingHandAnimation } from "@lms/assets/animations";
 
 // lottie-react ~180KB gzipped — lazy load vì chỉ dùng khi showWavingHand=true
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false })

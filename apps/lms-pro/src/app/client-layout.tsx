@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useMemo } from 'react'
 import { NotificationAPI } from 'src/api/notification'
 import { useAppDispatch } from 'src/redux/hook'
-import { modules } from './module-registry'
 
 export default function ClientLayout() {
   const dispatch = useAppDispatch()

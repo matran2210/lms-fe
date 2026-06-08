@@ -1,5 +1,5 @@
+import { SappLoading } from '@lms/ui'
 import React, { ReactNode, useEffect } from 'react'
-import SappLoading from './SappLoading'
 
 interface IProps {
   loading: boolean

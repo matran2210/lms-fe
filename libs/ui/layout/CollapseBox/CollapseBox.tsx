@@ -1,5 +1,5 @@
 "use client"
-import { CollapseArrowIcon } from '@lms/assets'
+import { CollapseArrowIcon } from '@lms/assets/icons'
 import React, { useState } from 'react'
 
 type IProps = {
