@@ -9,7 +9,8 @@ import { ANIMATION, defaultStatusCourse } from '@lms/core'
 import { CoursesList, FilterCourse, Heading } from '@lms/feature-courses'
 import { withAuthorization } from '@lms/hoc'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { Layout, PopupWelcome, SearchWithMenuToggle } from '@lms/ui'
+import { Layout, SearchWithMenuToggle } from '@lms/ui/layout'
+import { PopupWelcome } from '@lms/ui/user-guide'
 import Aos from 'aos'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
@@ -24,7 +25,10 @@ import { hidePopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/Activa
 
 // Lazy load — chỉ render khi user click, không cần trong initial bundle
 const ModalMarketingInApp = dynamic(
-  () => import('@lms/ui').then((m) => ({ default: m.ModalMarketingInApp })),
+  () =>
+    import('@lms/ui/marketing-in-app').then((m) => ({
+      default: m.ModalMarketingInApp,
+    })),
   { ssr: false },
 )
 

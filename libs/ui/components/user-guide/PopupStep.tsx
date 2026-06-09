@@ -1,11 +1,13 @@
 "use client"
-import Lottie from 'lottie-react'
 import Image, { StaticImageData } from 'next/image'
+import dynamic from 'next/dynamic'
 import { ButtonPrimary, ButtonText } from '../base';
 import { useEffect, useRef, useState } from "react";
 import { decrement, increment, useFeature } from "@lms/contexts";
 import { motion } from "framer-motion";
 import { GuideOffset, GuidePlacement } from "@lms/core";
+
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false })
 
 type Props = {
   content: string;

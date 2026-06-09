@@ -1,6 +1,6 @@
 import { IRibbon } from '@lms/assets'
 import { hidePopup, useFeature } from '@lms/contexts'
-import { EditorReader, SappModalV3 } from '@lms/ui'
+import { EditorReader, SappModalV3 } from '@lms/ui/base'
 
 const PopupCert = () => {
   const { dispatch, useAppSelector } = useFeature()

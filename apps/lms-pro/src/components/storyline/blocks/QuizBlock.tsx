@@ -25,6 +25,8 @@ import {
   ButtonSecondary,
   ButtonText,
   EditorReader,
+} from '@lms/ui/base'
+import {
   EssayQuestionPreview,
   MatchQuizComponent,
   MultiChoiceQuestion,
@@ -33,7 +35,7 @@ import {
   OneChoiceQuestion,
   SelectWord,
   SlotValue,
-} from '@lms/ui'
+} from '@lms/ui/question-type'
 import {
   checkSheetAnswered,
   Correct,

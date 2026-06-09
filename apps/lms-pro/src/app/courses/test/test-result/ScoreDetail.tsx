@@ -1,5 +1,5 @@
 'use client'
-import { SappBaseTable } from '@lms/ui'
+import { SappBaseTable } from '@lms/ui/base'
 import {
   convertSecondsToMinutesSeconds,
   roundNumber,
@@ -17,7 +17,7 @@ import {
   QUESTION_TYPES,
 } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { Tooltip } from '@lms/ui'
+import { Tooltip } from '@lms/ui/common'
 import { htmlToRaw } from '@lms/utils'
 import { Collapse } from 'antd'
 import clsx from 'clsx'

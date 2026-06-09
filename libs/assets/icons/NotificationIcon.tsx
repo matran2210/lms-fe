@@ -1,11 +1,12 @@
 "use client"
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 import { IIcon } from '@lms/core'
 import { useNotification } from '@lms/hooks'
 import { useFeature } from '@lms/contexts'
-import Lottie from 'lottie-react'
 import { NotificationAnimation } from '../animations-generate'
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false })
 
 const NotificationIcon = ({ className, extraClassName }: IIcon) => {
   const { notificationApi } = useFeature();

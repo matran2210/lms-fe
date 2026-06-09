@@ -1,25 +1,6 @@
 "use client";
-import {
-  AddNoteAnimation,
-  BlankAvatarImage,
-  CalculatorAnimation,
-  CalendarAnimation,
-  CourseContentAnimation,
-  DashboardAnimation,
-  EntranceTestAnimation,
-  EventTestAnimation,
-  ExamInfoAnimation,
-  ExamListAnimation,
-  ExpandIcon,
-  MyCourseAnimation,
-  NoteListAnimation,
-  NotificationAnimation,
-  OpenBookAnimation,
-  ResourceAnimation,
-  TestQuizListAnimation,
-  CourseActivationAnimation,
-  AttendanceAnimation
-} from "@lms/assets";
+import { ExpandIcon } from "@lms/assets/icons";
+import { BlankAvatarImage } from "@lms/assets/images";
 import {
   activeNotesList,
   clearNotifications,
@@ -34,13 +15,17 @@ import { getCourseContentSubContext, getLearningSubContext, getRouteContext, tra
 import SappNotificationComponent from "@sapp-fe/sapp-notification";
 import { Divider } from "antd";
 import clsx from "clsx";
-import  isEmpty from "lodash/isEmpty";
-import Lottie from "lottie-react";
+import isEmpty from "lodash/isEmpty";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import MenuItemsList from "../MenuItemsList";
+
+const MenuHoverAnimation = dynamic(() => import("./MenuHoverAnimation"), {
+  ssr: false,
+});
 
 type MenuItemProps = {
   menuItem: MenuItemType;
@@ -79,9 +64,6 @@ export default function MenuItem({
     notificationUnread,
   } = useNotification(notificationApi);
 
-  const isLoading = useAppSelector?.(
-    (state) => state.notificationReducer.loading,
-  );
   const tabs = [
     {
       id: 1,
@@ -136,15 +118,10 @@ export default function MenuItem({
     }
 
   })();
-  const [badgeClass, setBadgeClass] = useState("w-4 h-4 -top-[5px] -right-1.5"); // Default width
-
-  useEffect(() => {
-    if (notificationUnread > 9) {
-      setBadgeClass("w-6 h-6 -top-3.5 -right-3.5");
-    } else {
-      setBadgeClass("w-4 h-4 -top-[5px] -right-1.5"); // Default width for single digits
-    }
-  }, [notificationUnread]);
+  const badgeClass =
+    notificationUnread > 9
+      ? "w-6 h-6 -top-3.5 -right-3.5"
+      : "w-4 h-4 -top-[5px] -right-1.5";
   const onClick = () => {
     toggleExpanded((prev) => !prev);
   };
@@ -271,198 +248,7 @@ export default function MenuItem({
   const checkIsHiddenDashboard = (info: any) => {
     return name == TitleSidebar.DASHBOARD && !info;
   };
-
-  const animationClass = clsx(
-    `before-icon w-6 h-6 hidden group-hover/menuItem:block`,
-  );
-  const renderIcon = () => {
-    switch (Icon) {
-      case "course":
-      case "course-content":
-      case "activity":
-        return (
-          <Lottie
-            animationData={MyCourseAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "notes-list":
-        return (
-          <Lottie
-            animationData={NoteListAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "create-note":
-        return (
-          <Lottie
-            animationData={AddNoteAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "learning-resource":
-        return (
-          <Lottie
-            animationData={ResourceAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "calculator":
-        return (
-          <Lottie
-            animationData={CalculatorAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "calendar":
-        return (
-          <Lottie
-            animationData={CalendarAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "grid":
-        return (
-          <Lottie
-            animationData={DashboardAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "entrance-test":
-        return (
-          <Lottie
-            animationData={EntranceTestAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "exam_list":
-        return (
-          <Lottie
-            animationData={ExamListAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "result":
-        return (
-          <Lottie
-            animationData={TestQuizListAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "bookmark":
-        return (
-          <Lottie
-            animationData={CourseContentAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "event-test":
-        return (
-          <Lottie
-            animationData={EventTestAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "exam-information":
-        return (
-          <Lottie
-            animationData={ExamInfoAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "notification":
-        return (
-          <div className="relative">
-            <Lottie
-              animationData={NotificationAnimation}
-              loop
-              autoplay
-              className={animationClass}
-            />
-            {notificationUnread > 0 && (
-              <span
-                className={clsx(
-                  "absolute aspect-1 items-center justify-center rounded-full bg-[#D35563] text-xs text-white",
-                  "hidden group-hover/menuItem:flex",
-                  badgeClass,
-                )}
-              >
-                {notificationUnread > 99 ? "99+" : notificationUnread}
-              </span>
-            )}
-          </div>
-        );
-      case "class-resource":
-        return (
-          <Lottie
-            animationData={OpenBookAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "course-activation":
-        return (
-          <Lottie
-            animationData={CourseActivationAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "attendance":
-        return (
-          <Lottie
-            animationData={AttendanceAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-
-      default:
-        return (
-          <Lottie
-            animationData={MyCourseAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-        break;
-    }
-  };
-
-  const isShowHoverIcon = () => {
-    return true;
-    // return !['notification'].includes(Icon)
-  };
+  const animationClass = "before-icon h-6 w-6 shrink-0 hidden group-hover/menuItem:block";
 
   const renderMenuContent = () => {
     return (
@@ -515,7 +301,14 @@ export default function MenuItem({
               </div>
             ) : (
               <>
-                {!selected && isShowHoverIcon() && renderIcon()}
+                {!selected ? (
+                  <MenuHoverAnimation
+                    badgeClass={badgeClass}
+                    className={animationClass}
+                    icon={Icon}
+                    notificationUnread={notificationUnread}
+                  />
+                ) : null}
                 <ExpandIcon
                   type={Icon}
                   className={clsx(
@@ -523,27 +316,14 @@ export default function MenuItem({
                     }`,
                     {
                       "group-hover:text-gray-800": !selected,
-                      "group-hover/menuItem:hidden":
-                        !selected && isShowHoverIcon(),
+                      "group-hover/menuItem:hidden": !selected,
                     },
                   )}
                   extraClassName={clsx({
-                    "group-hover/menuItem:hidden":
-                      !selected && isShowHoverIcon(),
+                    "group-hover/menuItem:hidden": !selected,
                   })}
                 />
               </>
-              // <ExpandIcon
-              //   type={Icon}
-              //   className={clsx(
-              //     `before-icon min-h-6 min-w-6 shrink-0 ${
-              //       selected ? 'bg-primary text-white' : 'text-gray-800'
-              //     }`,
-              //     {
-              //       'group-hover:text-gray-800': !selected,
-              //     },
-              //   )}
-              // />
             )}
           </>
         )}

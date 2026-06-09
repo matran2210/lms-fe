@@ -2,7 +2,7 @@ import {
   useStorylineSidebar
 } from '@contexts/StorylineSidebarContext'
 import { CheckCircleOutlineYellow, CloseModalIcon, HamburgerMenuLargeIcon, SelectArrow } from '@lms/assets'
-import { Select } from '@lms/ui'
+import { Select } from '@lms/ui/select'
 import clsx from 'clsx'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'

@@ -10,7 +10,7 @@ import '@sapp-fe/quiz-result-package/dist/index.css'
 import '@sapp-fe/sapp-common-package/dist/index.css'
 import '@sapp-fe/sapp-common-package/dist/sapp-editor.css'
 // import '@sapp-fe/sapp-notification/dist/index.css'
-// import '@styles/index.scss'
+import '@styles/index.scss'
 import '@xyflow/react/dist/style.css'
 import 'aos/dist/aos.css'
 import Script from 'next/script'
@@ -19,7 +19,7 @@ import 'slick-carousel/slick/slick.css'
 import ClientLayout from './client-layout'
 import { Inter, Roboto } from 'next/font/google'
 import type { Metadata } from 'next'
-import { GoogleAnalytics } from '@next/third-parties/google'
+// import { GoogleAnalytics } from '@next/third-parties/google'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://lms-pro.sapp.edu.vn'),
@@ -124,9 +124,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           strategy="afterInteractive"
           crossOrigin="anonymous"
         /> */}
-        <GoogleAnalytics
+        {/* <GoogleAnalytics
           gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID ?? ''}
-        />
+        /> */}
       </head>
       <body className={`${roboto.className} ${inter.variable}`}>
         <ProvidersWrapper>

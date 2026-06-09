@@ -18,14 +18,11 @@ import {
 } from '@lms/core'
 import { RouteGuard } from '@lms/feature-auth'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import {
-  AntConfigProvider,
-  BackToTop,
-  Help,
-  PinnedNotifications,
-  SappConfirmDialogContainer,
-} from '@lms/ui'
-import { initializeGA, pageview } from '@lms/utils'
+import BackToTop from '@lms/ui/back-to-top'
+import { SappConfirmDialogContainer } from '@lms/ui/confirm-dialog'
+import { Help } from '@lms/ui/help'
+import { PinnedNotifications } from '@lms/ui/pinned-notifications'
+import AntConfigProvider from '@lms/ui/provider'
 import { fetcher } from '@services/request'
 import { App as AntdApp } from 'antd'
 import Aos from 'aos'
@@ -76,6 +73,7 @@ import { TeacherAPI } from 'src/api/teacher'
 import { MyRequestAPI } from 'src/api/my-request'
 import { RequestAPI } from 'src/api/request'
 import { ActivityAPI } from 'src/api/activity'
+import DeferredThirdPartyScripts from './deferred-third-party-scripts'
 
 // Lazy load MKTInApp — kéo framer-motion + react-slick + ModalMarketingInApp
 // Không cần SSR, chỉ hiện ở một số route → không nên vào initial bundle
@@ -138,7 +136,7 @@ function Providers({ children }: { children: ReactNode }) {
   const authenticationManager = authManagerRef.current
 
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID || ''
-
+  const gaId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ''
   const { isMobileView } = useTailwindBreakpoint()
 
   // Stable query object — tránh tạo object mới mỗi render
@@ -238,26 +236,6 @@ function Providers({ children }: { children: ReactNode }) {
       }
     }
   }, [socket])
-  useEffect(() => {
-    if (gtmId) {
-      import('react-gtm-module').then(({ default: TagManager }) => {
-        TagManager.initialize({ gtmId })
-      })
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!window.GA_INITIALIZED) {
-      initializeGA()
-      window.GA_INITIALIZED = true
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!pathname) return
-    pageview(pathname as any)
-  }, [pathname])
-
   const isActivityPage = !activityPath.some((path) => pathname?.includes(path))
   const showBackToTop = isMobileView ? isActivityPage : true
 
@@ -374,22 +352,8 @@ function Providers({ children }: { children: ReactNode }) {
     prevPathRef.current = pathname
   }, [pathname])
 
-  const searchParams = useSearchParams()
-
-  useEffect(() => {
-    if (!window.gtag) return
-
-    const url =
-      pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '')
-
-    window.gtag('config', process.env.NEXT_PUBLIC_GA_ID!, {
-      page_path: url,
-    })
-  }, [pathname, searchParams])
-
   return (
     <AntConfigProvider>
-      {/* <Provider store={store}> */}
       <PinnedNotifyProvider
         router={router}
         api={{
@@ -408,6 +372,7 @@ function Providers({ children }: { children: ReactNode }) {
             <CourseNoteProvider router={router} api={CoursesAPI}>
               <QueryClientProvider client={queryClient}>
                 <SocketContext.Provider value={socket}>
+                    <RouteGuard>
                   <PreviousSectionRouteProvider pathname={pathname}>
                     <Toaster
                       toastOptions={{
@@ -417,8 +382,6 @@ function Providers({ children }: { children: ReactNode }) {
                       }}
                     />
                     <SappConfirmDialogContainer />
-                    <RouteGuard>
-                        <>
                         <PinnedNotifications />
                         <AntdApp>{children}</AntdApp>
                           {showBackToTop && <BackToTop />}
@@ -428,16 +391,14 @@ function Providers({ children }: { children: ReactNode }) {
                           <LearningNotesList appType={AppType.LMS_PRO} />
                           <PopupCompletedCourse />
                           <PopupActivated />
-                        </>
-                    </RouteGuard>
                   </PreviousSectionRouteProvider>
+                    </RouteGuard>
                 </SocketContext.Provider>
               </QueryClientProvider>
             </CourseNoteProvider>
           </CourseProvider>
         </FeatureProvider>
       </PinnedNotifyProvider>
-      {/* </Provider> */}
     </AntConfigProvider>
   )
 }

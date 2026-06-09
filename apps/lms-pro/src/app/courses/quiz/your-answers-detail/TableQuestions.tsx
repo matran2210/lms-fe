@@ -1,5 +1,5 @@
 'use client'
-import { SappBaseTable } from '@lms/ui'
+import { SappBaseTable } from '@lms/ui/base'
 import { CloseIcon } from '@lms/assets'
 import {
   ANIMATION,
@@ -9,7 +9,7 @@ import {
   IQuizAttemptChartType,
   QUESTION_TYPES,
 } from '@lms/core'
-import { Tooltip } from '@lms/ui'
+import { Tooltip } from '@lms/ui/common'
 import clsx from 'clsx'
 import DOMPurify from 'dompurify'
 import { isEmpty } from 'lodash'

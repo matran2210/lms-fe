@@ -1,5 +1,5 @@
 import { useStoryline } from '@contexts/StorylineContext';
-import { SAPPVideo } from '@lms/ui'
+import { SAPPVideo } from '@lms/ui/video'
 import { useRef } from 'react'
 
 const VideoBlock = ({ src }: { src: string }) => {

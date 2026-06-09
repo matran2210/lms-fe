@@ -1,7 +1,8 @@
-import React from "react";
-import Lottie from "lottie-react";
 import clsx from "clsx";
 import { LoadingBtnAnimation } from "../animations-generate";
+import dynamic from "next/dynamic";
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false })
+
 interface IProps {
   className?: string;
 }

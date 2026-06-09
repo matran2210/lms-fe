@@ -4,7 +4,7 @@
 import { useStoryline } from '@contexts/StorylineContext'
 import { useStorylineSidebar } from '@contexts/StorylineSidebarContext'
 import { IStoryline } from '@lms/core'
-import { SappLoadingGlobal } from '@lms/ui'
+import { SappLoadingGlobal } from '@lms/ui/common'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'

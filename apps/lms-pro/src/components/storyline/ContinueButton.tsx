@@ -1,5 +1,5 @@
 'use client'
-import { ButtonPrimary } from '@lms/ui'
+import { ButtonPrimary } from '@lms/ui/button'
 import clsx from 'clsx'
 
 export default function ContinueButton({ onClick }: { onClick: () => void }) {

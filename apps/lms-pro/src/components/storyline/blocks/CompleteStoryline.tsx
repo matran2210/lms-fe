@@ -3,9 +3,11 @@ import { useCourseContext } from '@lms/contexts'
 import { IStoryline } from '@lms/core'
 import NextStorylineModal from '@lms/feature-courses/src/components/learning/storyline/modal/NextStorylineModal'
 import { ButtonPrimary, ButtonText } from '@lms/ui'
-import Lottie from 'lottie-react'
+import dynamic from 'next/dynamic'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
+
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false })
 interface IProps {
   listStorylineData: IStoryline | undefined
 }
