@@ -80,23 +80,17 @@ import DeferredThirdPartyScripts from './deferred-third-party-scripts'
 const MKTInApp = dynamic(() => import('@components/MKTInApp'), { ssr: false })
 const LearningNotesList = dynamic(
   () =>
-    import('@lms/feature-courses').then((m) => ({
-      default: m.LearningNotesList,
-    })),
+    import('@lms/feature-courses/src/components/mycourses/LearningNotesList'),
   { ssr: false },
 )
 const PopupCompletedCourse = dynamic(
   () =>
-    import('@lms/feature-courses').then((m) => ({
-      default: m.PopupCompletedCourse,
-    })),
+    import('@lms/feature-courses/src/components/mycourses/PopupCompletedCourse'),
   { ssr: false },
 )
 const PopupActivated = dynamic(
   () =>
-    import('@lms/feature-courses').then((m) => ({
-      default: m.PopupActivated,
-    })),
+    import('@lms/feature-courses/src/components/mycourses/PopupActivated'),
   { ssr: false },
 )
 
@@ -241,101 +235,101 @@ function Providers({ children }: { children: ReactNode }) {
 
   const showHelp = showSupportWidget.includes(pathname || '') && !isTeacherPage // Add condition to hide help on teacher pages
   const showMKTInApp = showHelp && !isMobileView
-  const hiddenChatbot = !showHelp
-  // Handle HubSpot widget visibility based on URL
+  // const hiddenChatbot = !showHelp
+  // // Handle HubSpot widget visibility based on URL
 
-  //TODO: Next14
-  useEffect(() => {
-    const hideHubspotWidget = () => {
-      // Target specific elements from the DOM structure we observed
-      const container = document.getElementById(
-        'hubspot-messages-iframe-container',
-      )
-      const chatFrame = document.getElementById('hubspot-messages-iframe')
-      const widgetContainer = document.querySelector('.hs-shadow-container')
+  // //TODO: Next14
+  // useEffect(() => {
+  //   const hideHubspotWidget = () => {
+  //     // Target specific elements from the DOM structure we observed
+  //     const container = document.getElementById(
+  //       'hubspot-messages-iframe-container',
+  //     )
+  //     const chatFrame = document.getElementById('hubspot-messages-iframe')
+  //     const widgetContainer = document.querySelector('.hs-shadow-container')
 
-      if (hiddenChatbot) {
-        // Hide HubSpot chat widget on teacher pages and other excluded paths
-        if (container) {
-          container.classList.add('visible-icon')
-          // Add additional inline styles for redundancy
-          container.style.display = 'none'
-        }
+  //     if (hiddenChatbot) {
+  //       // Hide HubSpot chat widget on teacher pages and other excluded paths
+  //       if (container) {
+  //         container.classList.add('visible-icon')
+  //         // Add additional inline styles for redundancy
+  //         container.style.display = 'none'
+  //       }
 
-        if (chatFrame) {
-          chatFrame.style.display = 'none'
-        }
+  //       if (chatFrame) {
+  //         chatFrame.style.display = 'none'
+  //       }
 
-        if (widgetContainer) {
-          widgetContainer.classList.add('visible-icon')
-        }
+  //       if (widgetContainer) {
+  //         widgetContainer.classList.add('visible-icon')
+  //       }
 
-        // Add CSS rule to ensure it stays hidden
-        const style = document.createElement('style')
-        style.id = 'hubspot-hide-style'
-        style.innerHTML = `
-          #hubspot-messages-iframe-container, 
-          #hubspot-messages-iframe,
-          .hs-shadow-container { 
-            display: none !important; 
-            visibility: hidden !important; 
-          }
-        `
-        // Only add if it doesn't exist already
-        if (!document.getElementById('hubspot-hide-style')) {
-          document.head.appendChild(style)
-        }
-      } else {
-        // Remove the style tag if path doesn't contain '/teachers'
-        const styleTag = document.getElementById('hubspot-hide-style')
-        if (styleTag) {
-          document.head.removeChild(styleTag)
-        }
+  //       // Add CSS rule to ensure it stays hidden
+  //       const style = document.createElement('style')
+  //       style.id = 'hubspot-hide-style'
+  //       style.innerHTML = `
+  //         #hubspot-messages-iframe-container, 
+  //         #hubspot-messages-iframe,
+  //         .hs-shadow-container { 
+  //           display: none !important; 
+  //           visibility: hidden !important; 
+  //         }
+  //       `
+  //       // Only add if it doesn't exist already
+  //       if (!document.getElementById('hubspot-hide-style')) {
+  //         document.head.appendChild(style)
+  //       }
+  //     } else {
+  //       // Remove the style tag if path doesn't contain '/teachers'
+  //       const styleTag = document.getElementById('hubspot-hide-style')
+  //       if (styleTag) {
+  //         document.head.removeChild(styleTag)
+  //       }
 
-        // Only show if not in excluded paths
-        if (showHelp) {
-          if (container) {
-            container.classList.remove('visible-icon')
-            container.style.display = ''
-          }
+  //       // Only show if not in excluded paths
+  //       if (showHelp) {
+  //         if (container) {
+  //           container.classList.remove('visible-icon')
+  //           container.style.display = ''
+  //         }
 
-          if (chatFrame) {
-            chatFrame.style.display = ''
-          }
+  //         if (chatFrame) {
+  //           chatFrame.style.display = ''
+  //         }
 
-          if (widgetContainer) {
-            widgetContainer.classList.remove('visible-icon')
-          }
-        }
-      }
-    }
+  //         if (widgetContainer) {
+  //           widgetContainer.classList.remove('visible-icon')
+  //         }
+  //       }
+  //     }
+  //   }
 
-    // Initial run
-    hideHubspotWidget()
+  //   // Initial run
+  //   hideHubspotWidget()
 
-    // Set up an observer to handle dynamically loaded HubSpot elements
-    const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        if (mutation.addedNodes.length > 0) {
-          // If HubSpot elements are dynamically added, hide them if needed
-          hideHubspotWidget()
-        }
-      }
-    })
+  //   // Set up an observer to handle dynamically loaded HubSpot elements
+  //   const observer = new MutationObserver((mutations) => {
+  //     for (const mutation of mutations) {
+  //       if (mutation.addedNodes.length > 0) {
+  //         // If HubSpot elements are dynamically added, hide them if needed
+  //         hideHubspotWidget()
+  //       }
+  //     }
+  //   })
 
-    // Start observing the document body for changes
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    })
+  //   // Start observing the document body for changes
+  //   observer.observe(document.body, {
+  //     childList: true,
+  //     subtree: true,
+  //   })
 
-    // Also listen for route changes
-    // const handleRouteChange = () => {
-    //     setTimeout(hideHubspotWidget, 300) // Short delay to ensure DOM is updated
-    // }
+  //   // Also listen for route changes
+  //   // const handleRouteChange = () => {
+  //   //     setTimeout(hideHubspotWidget, 300) // Short delay to ensure DOM is updated
+  //   // }
 
-    return () => observer.disconnect()
-  }, [showHelp, hiddenChatbot]) // bỏ router — không cần re-subscribe khi navigate
+  //   return () => observer.disconnect()
+  // }, [showHelp, hiddenChatbot]) // bỏ router — không cần re-subscribe khi navigate
 
   useEffect(() => {
     if (prevPathRef.current) {
@@ -391,6 +385,7 @@ function Providers({ children }: { children: ReactNode }) {
                           <LearningNotesList appType={AppType.LMS_PRO} />
                           <PopupCompletedCourse />
                           <PopupActivated />
+                          <DeferredThirdPartyScripts gaId={gaId} gtmId={gtmId} />
                   </PreviousSectionRouteProvider>
                     </RouteGuard>
                 </SocketContext.Provider>

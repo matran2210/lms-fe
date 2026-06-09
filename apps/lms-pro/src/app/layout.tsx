@@ -19,6 +19,7 @@ import 'slick-carousel/slick/slick.css'
 import ClientLayout from './client-layout'
 import { Inter, Roboto } from 'next/font/google'
 import type { Metadata } from 'next'
+import { SpeedInsights } from "@vercel/speed-insights/next"
 // import { GoogleAnalytics } from '@next/third-parties/google'
 
 export const metadata: Metadata = {
@@ -132,6 +133,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ProvidersWrapper>
           <ClientLayout />
           {children}
+          <SpeedInsights/>
           {/* </ClientLayout> */}
         </ProvidersWrapper>
       </body>

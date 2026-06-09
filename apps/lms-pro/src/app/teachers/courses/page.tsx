@@ -2,7 +2,6 @@
 import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import { UserType } from '@lms/contexts'
 import { ANIMATION, ITabs, MY_COURSES } from '@lms/core'
-import { CoursesList, Filter } from '@lms/feature-courses'
 import { LayoutTeacher, SearchForm } from '@lms/ui'
 import { buildQueryString } from '@lms/utils'
 import Aos from 'aos'
@@ -14,6 +13,8 @@ import { useInfiniteQuery } from 'react-query'
 import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
 import { withAuthorization } from '@lms/hoc'
+import CoursesList from '@lms/feature-courses/src/components/mycourses/CoursesList'
+import Filter from '@lms/feature-courses/src/components/mycourses/Filter'
 
 const DEFAULT_PAGESIZE = 9
 const breadcrumbs: ITabs[] = [

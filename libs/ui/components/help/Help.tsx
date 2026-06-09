@@ -10,13 +10,11 @@ import { excludedPathsHelp } from "@lms/core";
 const Help = ({ showHelp }: { showHelp: boolean }) => {
   // All hooks need to be at the top level, before any conditional returns
   const [visible, setVisible] = useState(false);
-  const {router, pathname, query} = useFeature()
+  const {pathname} = useFeature()
   const scriptRef = useRef<HTMLScriptElement | null>(null);
   const { openPinned } = usePinnedNotifyContext();
   const { isMobileView } = useTailwindBreakpoint();
   const isChangePosition = openPinned && isMobileView;
-  const asPath =
-  pathname + (query.toString() ? `?${query}` : '')
   const [isTeacherPage, isTestPage, isCaseStudyPage, isActivityPage] = [
     "/teachers",
     "/test",
@@ -67,7 +65,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
       "hs-script-loader",
     ) as HTMLScriptElement;
 
-    if (showHelp && !hiddenChatbot) {
+    if (visible && showHelp && !hiddenChatbot) {
       if (!scriptElement) {
         scriptElement = document.createElement("script");
         scriptElement.type = "text/javascript";
@@ -111,7 +109,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
       );
       if (conversationsContainer) conversationsContainer.style.display = "none";
     }
-  }, [showHelp, hiddenChatbot]);
+  }, [visible, showHelp, hiddenChatbot]);
 
   // Effect for container visibility
   useEffect(() => {
