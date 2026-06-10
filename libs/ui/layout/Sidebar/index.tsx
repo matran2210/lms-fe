@@ -1,7 +1,7 @@
 "use client";
 import { ExpandIcon } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
-import { trackGAEvent } from "@lms/utils";
+import { trackGAEvent } from "@lms/utils/google-analytics";
 import { Divider } from "antd";
 import clsx from "clsx";
 import { Dispatch, SetStateAction } from "react";

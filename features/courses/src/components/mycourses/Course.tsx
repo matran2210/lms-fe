@@ -1,14 +1,13 @@
-import { CourseTimeIcon, GraduationCapIcon, Icon } from "@lms/assets";
+import { CourseTimeIcon, GraduationCapIcon, Icon } from "@lms/assets/icons";
 import { useCourseContext, useFeature } from "@lms/contexts";
 import { ButtonSecondary, Tooltip } from "@lms/ui";
+import { clearStylesHtml, truncateString } from "@lms/utils/common";
+import { trackGAEvent } from "@lms/utils/google-analytics";
 import {
-  clearStylesHtml,
   convertHourToDayLeft,
   convertLocalTimeToUTC,
   getUserPrefix,
-  trackGAEvent,
-  truncateString,
-} from "@lms/utils";
+} from "@lms/utils/helpers";
 import { differenceInDays, parseISO, startOfDay } from "date-fns";
 import isNull from "lodash/isNull";
 import round from "lodash/round";

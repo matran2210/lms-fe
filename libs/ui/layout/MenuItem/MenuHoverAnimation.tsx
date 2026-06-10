@@ -1,54 +1,42 @@
 "use client";
 
-import {
-  AddNoteAnimation,
-  AttendanceAnimation,
-  CalculatorAnimation,
-  CalendarAnimation,
-  CourseActivationAnimation,
-  CourseContentAnimation,
-  DashboardAnimation,
-  EntranceTestAnimation,
-  EventTestAnimation,
-  ExamInfoAnimation,
-  ExamListAnimation,
-  MyCourseAnimation,
-  NoteListAnimation,
-  NotificationAnimation,
-  OpenBookAnimation,
-  ResourceAnimation,
-  TestQuizListAnimation,
-} from "@lms/assets/animations";
+import DeferredLottie from "../../components/common/DeferredLottie";
 import clsx from "clsx";
-import dynamic from "next/dynamic";
-const Lottie = dynamic(() => import("lottie-react"), { ssr: false })
-type MenuHoverAnimationProps = {
+
+export type MenuHoverAnimationProps = {
   badgeClass: string;
   className: string;
   icon?: string;
   notificationUnread: number;
+  active?: boolean;
 };
 
-const animationsByIcon: Record<string, object> = {
-  activity: MyCourseAnimation,
-  attendance: AttendanceAnimation,
-  bookmark: CourseContentAnimation,
-  calculator: CalculatorAnimation,
-  calendar: CalendarAnimation,
-  "class-resource": OpenBookAnimation,
-  course: MyCourseAnimation,
-  "course-activation": CourseActivationAnimation,
-  "course-content": MyCourseAnimation,
-  "create-note": AddNoteAnimation,
-  "entrance-test": EntranceTestAnimation,
-  "event-test": EventTestAnimation,
-  "exam-information": ExamInfoAnimation,
-  exam_list: ExamListAnimation,
-  grid: DashboardAnimation,
-  "learning-resource": ResourceAnimation,
-  "notes-list": NoteListAnimation,
-  notification: NotificationAnimation,
-  result: TestQuizListAnimation,
+const loadMyCourseAnimation = () =>
+  fetch("/api/lottie/MyCourse").then((response) => response.json());
+
+const loadAnimation = (name: string) => () =>
+  fetch(`/api/lottie/${name}`).then((response) => response.json());
+
+const animationsByIcon: Record<string, () => Promise<object>> = {
+  activity: loadMyCourseAnimation,
+  attendance: loadAnimation("Attendance"),
+  bookmark: loadAnimation("CourseContent"),
+  calculator: loadAnimation("Calculator"),
+  calendar: loadAnimation("Calendar"),
+  "class-resource": loadAnimation("OpenBook"),
+  course: loadMyCourseAnimation,
+  "course-activation": loadAnimation("CourseActivation"),
+  "course-content": loadMyCourseAnimation,
+  "create-note": loadAnimation("AddNote"),
+  "entrance-test": loadAnimation("EntranceTest"),
+  "event-test": loadAnimation("EventTest"),
+  "exam-information": loadAnimation("ExamInfo"),
+  exam_list: loadAnimation("ExamList"),
+  grid: loadAnimation("Dashboard"),
+  "learning-resource": loadAnimation("Resource"),
+  "notes-list": loadAnimation("NoteList"),
+  notification: loadAnimation("Notification"),
+  result: loadAnimation("TestQuizList"),
 };
 
 export default function MenuHoverAnimation({
@@ -56,13 +44,20 @@ export default function MenuHoverAnimation({
   className,
   icon,
   notificationUnread,
+  active = true,
 }: MenuHoverAnimationProps) {
-  const animationData = animationsByIcon[icon || ""] || MyCourseAnimation;
+  const loadAnimationData = animationsByIcon[icon || ""] || loadMyCourseAnimation;
 
   if (icon === "notification") {
     return (
       <div className="relative hidden group-hover/menuItem:block">
-        <Lottie animationData={animationData} loop autoplay className={className} />
+        <DeferredLottie
+          active={active}
+          loadAnimationData={loadAnimationData}
+          loop
+          autoplay
+          className={className}
+        />
         {notificationUnread > 0 ? (
           <span
             className={clsx(
@@ -78,5 +73,13 @@ export default function MenuHoverAnimation({
     );
   }
 
-  return <Lottie animationData={animationData} loop autoplay className={className} />;
+  return (
+    <DeferredLottie
+      active={active}
+      loadAnimationData={loadAnimationData}
+      loop
+      autoplay
+      className={className}
+    />
+  );
 }

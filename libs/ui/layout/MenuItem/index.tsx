@@ -3,29 +3,56 @@ import { ExpandIcon } from "@lms/assets/icons";
 import { BlankAvatarImage } from "@lms/assets/images";
 import {
   activeNotesList,
-  clearNotifications,
   openCalculator,
   pushNotes,
   useFeature,
   userReducer,
 } from "@lms/contexts";
 import { LANG_SIGNIN, MenuItem as MenuItemType, RouteContext, TitleSidebar } from "@lms/core";
-import { useNotification } from "@lms/hooks";
-import { getCourseContentSubContext, getLearningSubContext, getRouteContext, trackGAEvent } from "@lms/utils";
-import SappNotificationComponent from "@sapp-fe/sapp-notification";
+import { trackGAEvent } from "@lms/utils/google-analytics";
+import {
+  getCourseContentSubContext,
+  getLearningSubContext,
+  getRouteContext,
+} from "@lms/utils/helpers";
 import { Divider } from "antd";
 import clsx from "clsx";
 import isEmpty from "lodash/isEmpty";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  ComponentType,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { v4 as uuidv4 } from "uuid";
 import MenuItemsList from "../MenuItemsList";
+import type { MenuHoverAnimationProps } from "./MenuHoverAnimation";
 
-const MenuHoverAnimation = dynamic(() => import("./MenuHoverAnimation"), {
-  ssr: false,
-});
+type MenuHoverAnimationComponent = ComponentType<MenuHoverAnimationProps>;
+
+function LazyMenuHoverAnimation(props: MenuHoverAnimationProps) {
+  const [Component, setComponent] =
+    useState<MenuHoverAnimationComponent | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+
+    import("./MenuHoverAnimation").then((mod) => {
+      if (mounted) setComponent(() => mod.default);
+    });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (!Component) return null;
+
+  return <Component {...props} />;
+}
 
 type MenuItemProps = {
   menuItem: MenuItemType;
@@ -40,48 +67,13 @@ export default function MenuItem({
   closeSideBar,
   setOpenExaminationInfo,
 }: MenuItemProps) {
-  const { notificationApi, pageLink, dispatch, useAppSelector, router, pathname, query, params } = useFeature();
+  const { pageLink, dispatch, useAppSelector, router, pathname, query, params } = useFeature();
   const id = params?.id || query.id
   const courseId = params?.courseId || query.courseId
   const activityId = params?.activityId || query.activityId
   const course_section_id = params?.course_section_id || query.course_section_id
-  const {
-    isViewDetail,
-    openNotification,
-    setOpenNotification,
-    selectedTab,
-    setSelectedTab,
-    notifyDetail,
-    notifyLists,
-    scrollRef,
-    handleMarkAll,
-    handleMarkById,
-    handleUnMarkById,
-    handleViewDetail,
-    handleBack,
-    refreshNotification,
-    isDesktopView,
-    notificationUnread,
-  } = useNotification(notificationApi);
-
-  const tabs = [
-    {
-      id: 1,
-      title: "All Notifications",
-    },
-    {
-      id: 2,
-      title: `Unread ${notificationUnread ? `(${notificationUnread})` : ""}`,
-    },
-  ];
-
-  useEffect(() => {
-    if (selectedTab) {
-      dispatch?.(clearNotifications());
-    }
-  }, [selectedTab]);
-
   const [isExpanded, toggleExpanded] = useState(false);
+  const [hasActivatedAnimation, setHasActivatedAnimation] = useState(false);
   const { user } = useAppSelector?.(userReducer) || {};
   const isNested = subItems && subItems?.length > 0;
   const courseContext = getCourseContentSubContext(pathname as string);
@@ -118,10 +110,7 @@ export default function MenuItem({
     }
 
   })();
-  const badgeClass =
-    notificationUnread > 9
-      ? "w-6 h-6 -top-3.5 -right-3.5"
-      : "w-4 h-4 -top-[5px] -right-1.5";
+  const badgeClass = "w-4 h-4 -top-[5px] -right-1.5";
   const onClick = () => {
     toggleExpanded((prev) => !prev);
   };
@@ -157,10 +146,6 @@ export default function MenuItem({
     router.push(`/courses/my-course/${courseId || id}/results`);
   };
 
-  const handleViewNotification = (link: string) => {
-    router.push(link);
-  };
-
   const handleOpenExaminationInfoPage = () => {
     setOpenExaminationInfo && setOpenExaminationInfo(true);
   };
@@ -170,10 +155,6 @@ export default function MenuItem({
 
     // Nếu url trống => là menu Notification
     if (isEmpty(url)) {
-      setOpenNotification(true);
-      if (isEmpty(notifyLists)) {
-        refreshNotification(false);
-      }
       closeSideBar();
       return;
     }
@@ -302,11 +283,12 @@ export default function MenuItem({
             ) : (
               <>
                 {!selected ? (
-                  <MenuHoverAnimation
+                  <LazyMenuHoverAnimation
+                    active={hasActivatedAnimation}
                     badgeClass={badgeClass}
                     className={animationClass}
                     icon={Icon}
-                    notificationUnread={notificationUnread}
+                    notificationUnread={0}
                   />
                 ) : null}
                 <ExpandIcon
@@ -454,6 +436,8 @@ export default function MenuItem({
           },
         )}
         onClick={() => onClickMenuItem()}
+        onMouseEnter={() => setHasActivatedAnimation(true)}
+        onPointerEnter={() => setHasActivatedAnimation(true)}
       >
         <div
           className={`sidebar-item flex items-center ${Icon === "avatar" || Icon === "profile-detail" ? "-ml-2" : ""
@@ -509,28 +493,6 @@ export default function MenuItem({
           </div>
         ) : null}
       </div>
-      <SappNotificationComponent
-        notifyDetail={{
-          ...notifyDetail,
-          send_time: notifyDetail?.send_time || "", // Ensure send_time is always a string
-        }}
-        tabs={tabs}
-        selectedTab={selectedTab}
-        setSelectedTab={setSelectedTab}
-        handleMarkAll={() => handleMarkAll(selectedTab)}
-        handleMarkById={(ids: string[]) => handleMarkById(ids, selectedTab)}
-        handleUnMarkById={(ids: string[]) => handleUnMarkById(ids, selectedTab)}
-        handleBack={handleBack}
-        isViewDetail={isViewDetail}
-        setOpenNotification={setOpenNotification}
-        openNotification={openNotification}
-        handleViewDetail={handleViewDetail}
-        notifyLists={notifyLists}
-        notificationUnread={notificationUnread}
-        scrollRef={scrollRef}
-        handleViewNotification={(link) => handleViewNotification(link)}
-        isDesktopView={isDesktopView}
-      />
     </>
   );
 }

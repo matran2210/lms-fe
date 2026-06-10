@@ -1,11 +1,10 @@
-import { truncateString } from "@lms/utils";
+import { truncateString } from "@lms/utils/common";
+import DeferredLottie from "@lms/ui/deferred-lottie";
 import clsx from "clsx";
 import React from "react";
-import dynamic from "next/dynamic";
-import { WavingHandAnimation } from "@lms/assets/animations";
 
-// lottie-react ~180KB gzipped — lazy load vì chỉ dùng khi showWavingHand=true
-const Lottie = dynamic(() => import("lottie-react"), { ssr: false })
+const loadWavingHandAnimation = () =>
+  fetch("/api/lottie/WavingHand").then((response) => response.json());
 interface IProps {
   greeting: string;
   title: string;
@@ -38,8 +37,8 @@ const Heading = ({
             </span>
           </h1>
           {showWavingHand && (
-            <Lottie
-              animationData={WavingHandAnimation}
+            <DeferredLottie
+              loadAnimationData={loadWavingHandAnimation}
               loop={2}
               autoplay
               className={"before-icon inline-block h-10 w-10"}

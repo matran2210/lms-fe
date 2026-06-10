@@ -1,6 +1,5 @@
 'use client'
 import { getCountUnRead, showNotification } from '@lms/contexts'
-import { onMessageListener } from '@lms/utils'
 import { usePathname } from 'next/navigation'
 import { useEffect, useMemo } from 'react'
 import { NotificationAPI } from 'src/api/notification'
@@ -18,19 +17,44 @@ export default function ClientLayout() {
       /^\/certificates\/[^/]+$/.test(path)
     )
   }, [pathname])
+
   useEffect(() => {
-    onMessageListener().then((data: any) => {
-      dispatch(showNotification())
-    })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) // chỉ subscribe 1 lần khi mount
-  useEffect(() => {
-    if (!checkRouteCertificate) {
+    if (checkRouteCertificate) return
+
+    let isBootstrapped = false
+
+    const bootstrapNotifications = async () => {
+      if (isBootstrapped) return
+      isBootstrapped = true
+
       try {
+        const { onMessageListener } = await import('@lms/utils/firebase')
+
         dispatch(getCountUnRead(NotificationAPI))
-      } catch (error) { }
+        onMessageListener().then(() => {
+          dispatch(showNotification())
+        })
+      } catch {
+        // Ignore notification bootstrap failures on initial page load.
+      }
     }
-  }, [])
+
+    const events = ['pointerdown', 'keydown', 'touchstart', 'scroll'] as const
+
+    for (const eventName of events) {
+      window.addEventListener(eventName, bootstrapNotifications, {
+        once: true,
+        passive: true,
+      })
+    }
+
+    return () => {
+      for (const eventName of events) {
+        window.removeEventListener(eventName, bootstrapNotifications)
+      }
+    }
+  }, [checkRouteCertificate, dispatch])
+
   return null
 }
 

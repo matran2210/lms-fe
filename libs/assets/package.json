@@ -6,7 +6,8 @@
     ".": "./index.ts",
     "./icons": "./icons/index.ts",
     "./images": "./images/index.ts",
-    "./animations": "./animations/index.ts"
+    "./animations": "./animations/index.ts",
+    "./animations/*": "./animations/*"
   },
   "main": "./index.ts",
   "type": "module",

@@ -5,12 +5,12 @@ import dynamic from 'next/dynamic'
 import { IIcon } from '@lms/core'
 import { useNotification } from '@lms/hooks'
 import { useFeature } from '@lms/contexts'
-import { NotificationAnimation } from '../animations-generate'
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false })
 
 const NotificationIcon = ({ className, extraClassName }: IIcon) => {
   const { notificationApi } = useFeature();
   const [badgeClass, setBadgeClass] = useState('w-4 h-4 -top-[5px] -right-1.5') // Default width
+  const [animationData, setAnimationData] = useState<object | null>(null)
   const { notificationUnread, hasNewNotification } = useNotification(notificationApi)
 
   useEffect(() => {
@@ -20,13 +20,30 @@ const NotificationIcon = ({ className, extraClassName }: IIcon) => {
       setBadgeClass('w-4 h-4 -top-[5px] -right-1.5') // Default width for single digits
     }
   }, [notificationUnread])
+
+  useEffect(() => {
+    if (!hasNewNotification || animationData) return
+
+    let mounted = true
+
+    fetch('/api/lottie/Notification')
+      .then((response) => response.json())
+      .then((data) => {
+        if (mounted) setAnimationData(data)
+      })
+
+    return () => {
+      mounted = false
+    }
+  }, [animationData, hasNewNotification])
+
   const animationClass = clsx(`before-icon w-6 h-6`)
 
   return (
     <div className="relative">
-      {hasNewNotification ? (
+      {hasNewNotification && animationData ? (
         <Lottie
-          animationData={NotificationAnimation}
+          animationData={animationData}
           loop
           autoplay
           className={animationClass}

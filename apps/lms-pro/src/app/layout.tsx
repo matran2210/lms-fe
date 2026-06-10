@@ -9,14 +9,13 @@ import '@sapp-fe/preview-part/dist/index.css'
 import '@sapp-fe/quiz-result-package/dist/index.css'
 import '@sapp-fe/sapp-common-package/dist/index.css'
 import '@sapp-fe/sapp-common-package/dist/sapp-editor.css'
-// import '@sapp-fe/sapp-notification/dist/index.css'
 import '@styles/index.scss'
 import '@xyflow/react/dist/style.css'
 import 'aos/dist/aos.css'
-import Script from 'next/script'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 import ClientLayout from './client-layout'
+import WirisScriptLoader from './wiris-script-loader'
 import { Inter, Roboto } from 'next/font/google'
 import type { Metadata } from 'next'
 import { SpeedInsights } from "@vercel/speed-insights/next"
@@ -115,10 +114,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="vi">
       {/* eslint-disable-next-line @next/next/no-head-element -- App Router dùng <head> native là đúng */}
       <head>
-        <Script
-          src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"
-          strategy="afterInteractive"
-        />
         {/* FontAwesome — load sau khi trang đã interactive để không block FCP/LCP */}
         {/* <Script
           src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"
@@ -132,6 +127,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className={`${roboto.className} ${inter.variable}`}>
         <ProvidersWrapper>
           <ClientLayout />
+          <WirisScriptLoader />
           {children}
           <SpeedInsights/>
           {/* </ClientLayout> */}

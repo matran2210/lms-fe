@@ -3,7 +3,7 @@
 import { ArrowActionSearchIcon, CloseIcon, HamburgerMenuLargeIcon } from "@lms/assets/icons";
 import { useFeature } from "@lms/contexts";
 import { MY_COURSES } from "@lms/core";
-import { buildQueryString } from "@lms/utils";
+import { buildQueryString } from "@lms/utils/common";
 import clsx from "clsx";
 import React, { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";

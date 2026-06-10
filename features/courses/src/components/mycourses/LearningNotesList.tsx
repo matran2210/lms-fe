@@ -1,4 +1,4 @@
-import { DeleteIcon, EllipsisIcon, PencilIcon } from "@lms/assets";
+import { DeleteIcon, EllipsisIcon, PencilIcon } from "@lms/assets/icons";
 import {
   AppType,
   backTypeMap,
@@ -33,7 +33,7 @@ import {
   UserType,
 } from "@lms/contexts";
 import { CarouselSlideAnimation } from "@lms/ui";
-import { cleanParamsAPI } from "@lms/utils";
+import { cleanParamsAPI } from "@lms/utils/common";
 import clsx from "clsx";
 import { format } from "date-fns";
 import isEmpty from "lodash/isEmpty";

@@ -65,7 +65,7 @@ const nextConfig = {
     optimizeCss: isProd,
     instrumentationHook: false,
     // Tăng tốc webpack build bằng worker thread riêng
-    webpackBuildWorker: true,
+    webpackBuildWorker: process.env.NEXT_DISABLE_WEBPACK_BUILD_WORKER !== 'true',
     // Tree-shake barrel imports — giảm số module webpack phải parse mỗi route
     // Bao gồm tất cả workspace packages + heavy third-party libs
     optimizePackageImports: [

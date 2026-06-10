@@ -1,13 +1,15 @@
-import { ArrowLeft, BlinkStartAnimation } from '@lms/assets'
+import { ArrowLeft } from '@lms/assets/icons'
 import { useCourseContext } from '@lms/contexts'
 import { IStoryline } from '@lms/core'
 import NextStorylineModal from '@lms/feature-courses/src/components/learning/storyline/modal/NextStorylineModal'
 import { ButtonPrimary, ButtonText } from '@lms/ui'
-import dynamic from 'next/dynamic'
+import DeferredLottie from '@lms/ui/deferred-lottie'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 
-const Lottie = dynamic(() => import('lottie-react'), { ssr: false })
+const loadBlinkStartAnimation = () =>
+  fetch('/api/lottie/BlinkStart').then((response) => response.json())
+
 interface IProps {
   listStorylineData: IStoryline | undefined
 }
@@ -63,8 +65,8 @@ export default function CompleteStoryline({ listStorylineData }: IProps) {
       ></div>
       <div className='m-auto w-full max-w-7xl flex flex-col items-center justify-center mt-[96px] md:mt-[228px] lg:mt-[90px]'>
         <div className="inline-flex flex-col items-center justify-start gap-14 mb-14 md:mb-20">
-          <Lottie
-            animationData={BlinkStartAnimation}
+          <DeferredLottie
+            loadAnimationData={loadBlinkStartAnimation}
             loop
             autoplay
             className='w-[200px] h-[200px]'
