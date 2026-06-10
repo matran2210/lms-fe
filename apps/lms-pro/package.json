@@ -36,6 +36,7 @@
     "@lms/feature-examination": "workspace:*",
     "@lms/feature-notifications": "workspace:*",
     "@lms/feature-schedule": "workspace:*",
+    "@lms/feature-attendance": "workspace:*",
     "@lms/feature-test": "workspace:*",
     "@lms/feature-user": "workspace:*",
     "@lms/hoc": "workspace:*",

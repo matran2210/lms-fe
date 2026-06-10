@@ -9,7 +9,6 @@ import "@sapp-fe/preview-part/dist/index.css";
 import "@sapp-fe/quiz-result-package/dist/index.css";
 import "@sapp-fe/sapp-common-package/dist/index.css";
 import "@sapp-fe/sapp-common-package/dist/sapp-editor.css";
-import "@sapp-fe/sapp-notification/dist/index.css";
 import "@styles/index.scss";
 import "@xyflow/react/dist/style.css";
 import "aos/dist/aos.css";
@@ -19,7 +18,6 @@ import "slick-carousel/slick/slick.css";
 import ClientLayout from "./client-layout";
 import { Roboto } from "next/font/google";
 import type { Metadata } from "next";
-import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://lms-pro.sapp.edu.vn"),
@@ -100,9 +98,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Script
           src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"
           strategy="afterInteractive"
-        />
-        <GoogleAnalytics
-          gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID ?? ""}
         />
       </head>
       <body className={roboto.className}>

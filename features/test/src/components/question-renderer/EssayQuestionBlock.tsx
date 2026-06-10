@@ -4,6 +4,7 @@ import { CheckCircleOutlineYellow } from "@lms/assets";
 import {
   AnswerList,
   CommonQuestionBlockProps,
+  DEFAULT_EDITOR_VALUE,
   defaultSheetData,
   Requirement,
   RESPONSE_OPTION,
@@ -17,7 +18,7 @@ import {
 } from "@lms/utils";
 import { TabsProps } from "antd";
 import { debounce } from "lodash";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 
 export interface EssayQuestionBlockProps extends CommonQuestionBlockProps {
   essayData: {
@@ -94,6 +95,58 @@ export default function EssayQuestionBlock({
     }
   }, [currentTabContent]);
 
+
+  useEffect(() => {
+    if (currentTabContent?.data?.requirements?.length > 0) {
+      const responseOption = currentTabContent?.data?.response_option;
+      
+      currentTabContent.data.requirements.forEach((req: any, index: number) => {
+        const fieldName = `${currentTabID}_${index}_answer`;
+        
+        if (responseOption === RESPONSE_OPTION.SHEET) {
+  
+          if (req?.short_answer) {
+            const currentFormValue = getValues(fieldName);
+            
+            let shouldUpdate = false;
+            
+            if (!currentFormValue) {
+              shouldUpdate = true;
+            } else if (currentFormValue !== req.short_answer) {
+              if (req?.answer_template && currentFormValue === req.answer_template) {
+                shouldUpdate = true;
+              }
+            }
+            
+            if (shouldUpdate) {
+              setValue(fieldName, req.short_answer);
+            }
+          }
+        } 
+        else if (responseOption === RESPONSE_OPTION.WORD) {
+          if (req?.short_answer) {
+            const currentFormValue = getValues(fieldName);
+            
+            const isFormEmpty = !currentFormValue || 
+                               currentFormValue === DEFAULT_EDITOR_VALUE ||
+                               currentFormValue === req?.answer_template;
+            
+            if (isFormEmpty) {
+              setValue(fieldName, req.short_answer);
+            }
+          }
+        }
+      });
+    }
+  }, [
+    currentTabContent?.id, 
+    currentTabContent?.data?.requirements, 
+    currentTabContent?.data?.response_option,
+    currentTabID, 
+    setValue, 
+    getValues
+  ]);
+
   const handleEssayChange = (id: string) => {
     setAnswerListValue(id as unknown as number);
   };
@@ -107,18 +160,26 @@ export default function EssayQuestionBlock({
           const getDefaultValueEssay = () => {
             const valueFromForm = getValues(key);
             const response_option = currentTabContent?.data?.response_option;
+            
             switch (response_option) {
               case RESPONSE_OPTION.WORD:
+                // Priority: answer_text (saved by handleSaveAnswerEssay) > short_answer (from API) > form value > template
+                if (requirement?.answer_text) {
+                  // Check if answer_text is not just the template
+                  const isAnswerSameAsTemplate = requirement.answer_text === requirement?.answer_template;
+                  if (!isAnswerSameAsTemplate) {
+                    return requirement.answer_text;
+                  }
+                }
+                if (requirement?.short_answer) {
+                  return requirement.short_answer;
+                }
+                
+                // Only use form value if no saved answer exists
                 if (valueFromForm !== undefined && valueFromForm !== null && valueFromForm !== '') {
                   return valueFromForm;
                 }
 
-                if (requirement?.short_answer) {
-                  return requirement.short_answer;
-                }
-                if (requirement?.answer_text) {
-                  return requirement.answer_text;
-                }
                 if (requirement?.answer_template) {
                   return requirement.answer_template;
                 }
@@ -130,46 +191,53 @@ export default function EssayQuestionBlock({
 
               case RESPONSE_OPTION.SHEET: {
                 const valueFromSheetForm = getValues(key);
+                
+                if (requirement?.answer_text) {
+                  return requirement.answer_text;
+                }
+                
+                if (requirement?.short_answer) {
+                  return requirement.short_answer;
+                }
+                
                 if (valueFromSheetForm) {
-                  const isEmptyWorkbook = isWorkbookEmpty(
-                    JSON.parse(valueFromSheetForm),
-                  );
-
-                  if (isEmptyWorkbook) {
-                    if (requirement?.short_answer) {
-                      return requirement.short_answer;
+                  try {
+                    const formWorkbook = JSON.parse(valueFromSheetForm);
+                    const isEmptyWorkbook = isWorkbookEmpty(formWorkbook);
+                    
+                    if (!isEmptyWorkbook) {
+                      if (requirement?.answer_template) {
+                        try {
+                          const templateWorkbook = JSON.parse(requirement.answer_template);
+                          const isTemplateMatch = JSON.stringify(formWorkbook) === JSON.stringify(templateWorkbook);
+                          if (!isTemplateMatch) {
+                            return valueFromSheetForm;
+                          }
+                        } catch (e) {
+                          // Template parse failed, use form value
+                          return valueFromSheetForm;
+                        }
+                      } else {
+                        // No template to compare, use form value
+                        return valueFromSheetForm;
+                      }
                     }
-                    if (requirement?.answer_text) {
-                      return requirement.answer_text;
-                    }
-                    if (requirement?.answer_template) {
-                      return requirement.answer_template || defaultSheetData;
-                    }
-                    if (currentTabContent.answer)
-                      return currentTabContent.answer;
-                    return (
-                      currentTabContent?.data?.answer_template ||
-                      defaultSheetData
-                    );
+                  } catch (e) {
+                    // If parse fails, still try to use it
+                    return valueFromSheetForm;
                   }
-                  return valueFromSheetForm;
                 }
-                const requirementSheet =
-                  currentTabContent?.data?.requirements?.[essayData?.index];
-                if (requirementSheet?.short_answer) {
-                  return requirementSheet.short_answer;
+                
+                // FALLBACK: template
+                if (requirement?.answer_template) {
+                  return requirement.answer_template || defaultSheetData;
                 }
-                if (requirementSheet?.answer_text) {
-                  return requirementSheet.answer_text;
-                }
-                if (requirementSheet?.answer_template) {
-                  return requirementSheet.answer_template || defaultSheetData;
-                }
-                if (currentTabContent.answer) return currentTabContent.answer;
+                if (currentTabContent.answer)
+                  return currentTabContent.answer;
                 return (
-                  currentTabContent?.data?.answer_template || defaultSheetData
+                  currentTabContent?.data?.answer_template ||
+                  defaultSheetData
                 );
-                // return getCurrentDefaultSheetValue
               }
             }
           };
@@ -195,6 +263,7 @@ export default function EssayQuestionBlock({
               <>
                 {editorReady && (
                   <EssayQuestionPreview
+                    key={`${currentTabID}_${index}`}
                     data={{
                       ...currentTabContent?.data?.requirements?.[index],
                     }}
@@ -244,17 +313,21 @@ export default function EssayQuestionBlock({
 
     switch (response_option) {
       case RESPONSE_OPTION.WORD: {
-        if (valueFromForm !== undefined && valueFromForm !== null) {
-          return valueFromForm;
-        }
         const requirement =
           currentTabContent?.data?.requirements?.[essayData?.index];
 
+        // Priority: answer_text (saved by handleSaveAnswerEssay) > short_answer (from API) > form value > template
+        if (requirement?.answer_text) {
+          const isAnswerSameAsTemplate = requirement.answer_text === requirement?.answer_template;
+          if (!isAnswerSameAsTemplate) {
+            return requirement.answer_text;
+          }
+        }
         if (requirement?.short_answer) {
           return requirement.short_answer;
         }
-        if (requirement?.answer_text) {
-          return requirement.answer_text;
+        if (valueFromForm !== undefined && valueFromForm !== null) {
+          return valueFromForm;
         }
         if (requirement?.answer_template) {
           return requirement.answer_template;
@@ -267,41 +340,47 @@ export default function EssayQuestionBlock({
       }
 
       case RESPONSE_OPTION.SHEET: {
+        const requirement =
+          currentTabContent?.data?.requirements?.[essayData?.index];
+        
+        if (requirement?.answer_text) {
+          return requirement.answer_text;
+        }
+        
+        if (requirement?.short_answer) {
+          return requirement.short_answer;
+        }
+        
         const valueFromSheetForm = getValues(
           `${currentTabID}_${essayData?.index ?? 0}_answer`,
         );
         if (valueFromSheetForm) {
-          const isEmptyWorkbook = isWorkbookEmpty(
-            JSON.parse(valueFromSheetForm),
-          );
-
-          if (isEmptyWorkbook) {
-            const requirement =
-              currentTabContent?.data?.requirements?.[essayData?.index];
-            if (requirement?.short_answer) {
-              return requirement.short_answer;
+          try {
+            const formWorkbook = JSON.parse(valueFromSheetForm);
+            const isEmptyWorkbook = isWorkbookEmpty(formWorkbook);
+            
+            if (!isEmptyWorkbook) {
+              if (requirement?.answer_template) {
+                try {
+                  const templateWorkbook = JSON.parse(requirement.answer_template);
+                  const isTemplateMatch = JSON.stringify(formWorkbook) === JSON.stringify(templateWorkbook);
+                  if (!isTemplateMatch) {
+                    return valueFromSheetForm;
+                  }
+                } catch (e) {
+                  return valueFromSheetForm;
+                }
+              } else {
+                return valueFromSheetForm;
+              }
             }
-            if (requirement?.answer_text) {
-              return requirement.answer_text;
-            }
-            if (requirement?.answer_template) {
-              return requirement.answer_template || defaultSheetData;
-            }
-            if (currentTabContent.answer) return currentTabContent.answer;
-            return currentTabContent?.data?.answer_template || defaultSheetData;
+          } catch (e) {
+            return valueFromSheetForm;
           }
-          return valueFromSheetForm;
         }
-        const requirementSheet =
-          currentTabContent?.data?.requirements?.[essayData?.index];
-        if (requirementSheet?.short_answer) {
-          return requirementSheet.short_answer;
-        }
-        if (requirementSheet?.answer_text) {
-          return requirementSheet.answer_text;
-        }
-        if (requirementSheet?.answer_template) {
-          return requirementSheet.answer_template || defaultSheetData;
+        
+        if (requirement?.answer_template) {
+          return requirement.answer_template || defaultSheetData;
         }
         if (currentTabContent.answer) return currentTabContent.answer;
         return currentTabContent?.data?.answer_template || defaultSheetData;

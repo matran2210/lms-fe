@@ -183,6 +183,7 @@ export enum DATE_FORMAT {
   DATE = "DD/MM/YYYY",
   DATE_TIME_DATE_FIRST = "DD/MM/YYYY HH:mm",
   DATE_DASH = "DD-MM-YYYY",
+  YEAR_MONTH_DAY = "YYYY-MM-DD",
 }
 export enum TEST_TYPE_ENUM {
   QUIZ = "QUIZ",

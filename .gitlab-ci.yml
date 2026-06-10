@@ -39,14 +39,14 @@ deploy_staging_lms:
     - vercel deploy --prod --token=$VERCEL_TOKEN
 
 # Job deploy staging cho Lms-finhub
-deploy_staging_finhub:
-  extends: .deploy_staging_template
-  variables:
-    APP_NAME: lms-finhub
-  script:
-    - npm install -g vercel
-    - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_FINHUB
-    - vercel deploy --prod --token=$VERCEL_TOKEN
+# deploy_staging_finhub:
+#   extends: .deploy_staging_template
+#   variables:
+#     APP_NAME: lms-finhub
+#   script:
+#     - npm install -g vercel
+#     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_FINHUB
+#     - vercel deploy --prod --token=$VERCEL_TOKEN
 
 # Job deploy staging cho Lms-zoom
 deploy_staging_zoom:

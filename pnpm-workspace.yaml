@@ -3,7 +3,7 @@ packages:
   - apps/lms-test
   - apps/lms-zoom
   - apps/lms-enrollment
-  # - apps/lms-finhub  # tạm tắt — không dùng
+  - apps/lms-finhub
   - features/*
   - libs/*
   - tools/*

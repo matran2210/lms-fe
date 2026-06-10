@@ -155,8 +155,8 @@ const TeacherAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
       title: 'Status',
       render: (record) => (
         <SAPPBadge
-          label={statusToBadge[record.attendance as keyof typeof statusToBadge].label}
-          type={statusToBadge[record.attendance as keyof typeof statusToBadge].type || 'none'}
+          label={statusToBadge[record.attendance as keyof typeof statusToBadge]?.label || "-"}
+          type={statusToBadge[record.attendance as keyof typeof statusToBadge]?.type || 'none'}
         />
       ),
       width: 120,

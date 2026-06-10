@@ -3,7 +3,7 @@ import { debounce } from 'lodash'
 import { useState } from 'react'
 import { useInfiniteQuery } from 'react-query'; // Import useInfiniteQuery
 const PAGE_SIZE = 20
-const useInfiniteTeacherLesson = (enabled = true, queryParams?: { class_ids?: string[] }) => {
+const useInfiniteTeacherLesson = (enabled = true, queryParams?: { class_ids?: string[], fromDate?: string; toDate?: string }) => {
   const [searchText, setSearchText] = useState<string | undefined>(undefined)
   const { classApi } = useFeature()
   const debounceSearch = debounce((e: string) => {
@@ -14,14 +14,14 @@ const useInfiniteTeacherLesson = (enabled = true, queryParams?: { class_ids?: st
     page_index: number,
     page_size: number,
     search?: string,
-    class_ids?: string[]
+    queryParams?: { class_ids?: string[], fromDate?: string; toDate?: string }
   ) => {
     // eslint-disable-next-line no-useless-catch
     try {
       const res = await classApi.getTeacherLearningSchedule({
         page_index: page_index,
         page_size: page_size,
-        class_ids: class_ids,
+        ...queryParams,
         search,
       })
       return res
@@ -34,7 +34,7 @@ const useInfiniteTeacherLesson = (enabled = true, queryParams?: { class_ids?: st
     useInfiniteQuery({
       queryKey: ['getStudentLearningSchedule', searchText, JSON.stringify(queryParams)], // Query key
       queryFn: ({ pageParam = 1 }) => {
-        return fetchTeacherSchedule(pageParam, PAGE_SIZE, searchText, queryParams?.class_ids)
+        return fetchTeacherSchedule(pageParam, PAGE_SIZE, searchText, queryParams)
       },
       getNextPageParam: (lastPage) => {
         if (lastPage.success) {

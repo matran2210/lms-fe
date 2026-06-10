@@ -70,7 +70,7 @@ const AttendanceStatistics: React.FC<AttendanceStatisticsProps> = ({
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
             <StatisticCard title="Total" icon={<UsersGroupIcon />} iconClassName="bg-primary" stretch>
                 <div className="text-center justify-center">
-                    <span className="text-primary text-xl font-semibold">{totalSessions} </span>
+                    <span className="text-primary text-xl font-semibold">{totalSessions}{" "}</span>
                     <span className="text-primary text-sm font-medium">Class Sessions</span>
                 </div>
             </StatisticCard>
