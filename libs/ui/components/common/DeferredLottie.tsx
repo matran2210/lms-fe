@@ -5,6 +5,12 @@ import { useEffect, useState } from "react";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
+// Preload lottie-react chunk ngay khi module này được import lần đầu,
+// không cần đợi hover → chunk đã sẵn sàng khi người dùng hover
+if (typeof window !== "undefined") {
+  import("lottie-react");
+}
+
 type AnimationData = object;
 type AnimationModule = AnimationData | { default: AnimationData };
 
@@ -31,32 +37,17 @@ export default function DeferredLottie({
 
   useEffect(() => {
     if (!active) return;
-
-    const scheduleLoad = () => setShouldLoad(true);
-
-    if (typeof window.requestIdleCallback === "function") {
-      const idleId = window.requestIdleCallback(scheduleLoad, { timeout: 1200 });
-      return () => window.cancelIdleCallback(idleId);
-    }
-
-    const timeoutId = globalThis.setTimeout(scheduleLoad, 0);
-    return () => globalThis.clearTimeout(timeoutId);
-  }, [active]);
-
-  useEffect(() => {
-    if (!shouldLoad || animationData) return;
-
+    // Gộp setShouldLoad + fetch vào 1 effect, bỏ tầng re-render trung gian
     let cancelled = false;
     loadAnimationData().then((module) => {
       if (!cancelled) {
         setAnimationData(getAnimationData(module));
       }
     });
-
     return () => {
       cancelled = true;
     };
-  }, [animationData, loadAnimationData, shouldLoad]);
+  }, [active, loadAnimationData]);
 
   if (!active || !animationData) {
     return <span aria-hidden className={className} />;

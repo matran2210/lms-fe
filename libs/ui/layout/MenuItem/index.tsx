@@ -21,38 +21,15 @@ import isEmpty from "lodash/isEmpty";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  ComponentType,
   Dispatch,
   SetStateAction,
   useEffect,
-  useState,
+  useState
 } from "react";
 import { v4 as uuidv4 } from "uuid";
 import MenuItemsList from "../MenuItemsList";
-import type { MenuHoverAnimationProps } from "./MenuHoverAnimation";
+import MenuHoverAnimation, { preloadAnimation } from "./MenuHoverAnimation";
 
-type MenuHoverAnimationComponent = ComponentType<MenuHoverAnimationProps>;
-
-function LazyMenuHoverAnimation(props: MenuHoverAnimationProps) {
-  const [Component, setComponent] =
-    useState<MenuHoverAnimationComponent | null>(null);
-
-  useEffect(() => {
-    let mounted = true;
-
-    import("./MenuHoverAnimation").then((mod) => {
-      if (mounted) setComponent(() => mod.default);
-    });
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  if (!Component) return null;
-
-  return <Component {...props} />;
-}
 
 type MenuItemProps = {
   menuItem: MenuItemType;
@@ -73,7 +50,6 @@ export default function MenuItem({
   const activityId = params?.activityId || query.activityId
   const course_section_id = params?.course_section_id || query.course_section_id
   const [isExpanded, toggleExpanded] = useState(false);
-  const [hasActivatedAnimation, setHasActivatedAnimation] = useState(false);
   const { user } = useAppSelector?.(userReducer) || {};
   const isNested = subItems && subItems?.length > 0;
   const courseContext = getCourseContentSubContext(pathname as string);
@@ -226,6 +202,22 @@ export default function MenuItem({
 
   const isInMyProfile = pathname === pageLink.MYPROFILE;
 
+  // Preload animation JSON lúc browser rảnh (idle), không block main thread
+  useEffect(() => {
+    if (!Icon || Icon === "avatar" || Icon === "profile-detail") return;
+
+    const iconStr = Icon as string;
+
+    if ("requestIdleCallback" in window) {
+      const id = requestIdleCallback(() => preloadAnimation(iconStr), { timeout: 2000 });
+      return () => cancelIdleCallback(id);
+    } else {
+      // Fallback cho Safari
+      const t = setTimeout(() => preloadAnimation(iconStr), 500);
+      return () => clearTimeout(t);
+    }
+  }, [Icon]);
+
   const checkIsHiddenDashboard = (info: any) => {
     return name == TitleSidebar.DASHBOARD && !info;
   };
@@ -283,8 +275,7 @@ export default function MenuItem({
             ) : (
               <>
                 {!selected ? (
-                  <LazyMenuHoverAnimation
-                    active={hasActivatedAnimation}
+                  <MenuHoverAnimation
                     badgeClass={badgeClass}
                     className={animationClass}
                     icon={Icon}
@@ -436,8 +427,6 @@ export default function MenuItem({
           },
         )}
         onClick={() => onClickMenuItem()}
-        onMouseEnter={() => setHasActivatedAnimation(true)}
-        onPointerEnter={() => setHasActivatedAnimation(true)}
       >
         <div
           className={`sidebar-item flex items-center ${Icon === "avatar" || Icon === "profile-detail" ? "-ml-2" : ""

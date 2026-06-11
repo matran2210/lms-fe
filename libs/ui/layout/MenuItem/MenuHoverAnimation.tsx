@@ -8,16 +8,23 @@ export type MenuHoverAnimationProps = {
   className: string;
   icon?: string;
   notificationUnread: number;
-  active?: boolean;
 };
 
-const loadMyCourseAnimation = () =>
-  fetch("/api/lottie/MyCourse").then((response) => response.json());
+// Cache animation data in memory so subsequent hovers are instant
+const animationCache = new Map<string, Promise<object>>();
 
-const loadAnimation = (name: string) => () =>
-  fetch(`/api/lottie/${name}`).then((response) => response.json());
+const fetchAnimation = (name: string): Promise<object> => {
+  if (!animationCache.has(name)) {
+    animationCache.set(name, fetch(`/api/lottie/${name}`).then((r) => r.json()));
+  }
+  return animationCache.get(name)!;
+};
 
-const animationsByIcon: Record<string, () => Promise<object>> = {
+const loadMyCourseAnimation = () => fetchAnimation("MyCourse");
+
+const loadAnimation = (name: string) => () => fetchAnimation(name);
+
+export const animationsByIcon: Record<string, () => Promise<object>> = {
   activity: loadMyCourseAnimation,
   attendance: loadAnimation("Attendance"),
   bookmark: loadAnimation("CourseContent"),
@@ -39,12 +46,20 @@ const animationsByIcon: Record<string, () => Promise<object>> = {
   result: loadAnimation("TestQuizList"),
 };
 
+/**
+ * Preload animation JSON vào cache trước khi hover.
+ * Gọi lúc mount sidebar để khi hover hiện ngay lập tức.
+ */
+export function preloadAnimation(icon: string): void {
+  const loader = animationsByIcon[icon] ?? loadMyCourseAnimation;
+  loader(); // kick off fetch + cache, không cần await
+}
+
 export default function MenuHoverAnimation({
   badgeClass,
   className,
   icon,
   notificationUnread,
-  active = true,
 }: MenuHoverAnimationProps) {
   const loadAnimationData = animationsByIcon[icon || ""] || loadMyCourseAnimation;
 
@@ -52,7 +67,6 @@ export default function MenuHoverAnimation({
     return (
       <div className="relative hidden group-hover/menuItem:block">
         <DeferredLottie
-          active={active}
           loadAnimationData={loadAnimationData}
           loop
           autoplay
@@ -75,7 +89,6 @@ export default function MenuHoverAnimation({
 
   return (
     <DeferredLottie
-      active={active}
       loadAnimationData={loadAnimationData}
       loop
       autoplay
