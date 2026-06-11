@@ -48,7 +48,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: var(--font-roboto), "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -67,10 +67,12 @@
 
 html {
   font-size: 100%;
+  font-family: var(--font-roboto, "Roboto"), sans-serif !important;
 }
 
 body {
   box-sizing: border-box;
+  font-family: var(--font-roboto, "Roboto"), sans-serif !important;
   -webkit-font-smoothing: antialiased;
   @apply bg-[#F9F9F9] text-gray-800;
 }
@@ -897,7 +899,7 @@ textarea {
 }
 
 :where(.css-dev-only-do-not-override-1xg9z9n).ant-modal {
-  font-family: "Roboto" !important;
+  font-family: var(--font-roboto), "Roboto", sans-serif !important;
 }
 
 p a {
@@ -941,7 +943,7 @@ p a {
 }
 
 .ant-popover {
-  font-family: "Roboto", sans-serif !important;
+  font-family: var(--font-roboto), "Roboto", sans-serif !important;
 }
 
 #lms-pro #hubspot-messages-iframe-container {
@@ -980,7 +982,7 @@ p a {
 }
 
 .ant-modal {
-  font-family: "Roboto", sans-serif !important;
+  font-family: var(--font-roboto), "Roboto", sans-serif !important;
 }
 
 .content-course div strong {

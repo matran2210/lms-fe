@@ -65,7 +65,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
       "hs-script-loader",
     ) as HTMLScriptElement;
 
-    if (visible && showHelp && !hiddenChatbot) {
+    if (showHelp && !hiddenChatbot) {
       if (!scriptElement) {
         scriptElement = document.createElement("script");
         scriptElement.type = "text/javascript";
@@ -109,7 +109,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
       );
       if (conversationsContainer) conversationsContainer.style.display = "none";
     }
-  }, [visible, showHelp, hiddenChatbot]);
+  }, [showHelp, hiddenChatbot]);
 
   // Effect for container visibility
   useEffect(() => {

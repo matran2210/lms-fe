@@ -1,7 +1,7 @@
 export const PlusCircleIcon = ({ className }: { className?: string }) => {
   return <svg width="24px" height="24px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" className={className}>
     <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-    <g id="SVGRepo_iconCarrier"> <path fill="currentColor" fill-rule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g>
+    <g id="SVGRepo_iconCarrier"> <path fill="currentColor" fillRule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"></path> </g>
     </svg>
 }
 export const MinusCircleIcon = ({ className }: { className?: string }) => {
@@ -143,6 +143,6 @@ export const AltArrowLeftIcon = ({ className }: { className?: string }) => (
 );
 export const AltArrowRightIcon = ({ className }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" className={className}>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M5.67461 2.95369C5.88428 2.77398 6.19993 2.79826 6.37964 3.00793L10.3796 7.67459C10.5401 7.86184 10.5401 8.13814 10.3796 8.32538L6.37964 12.9921C6.19993 13.2017 5.88428 13.226 5.67461 13.0463C5.46495 12.8666 5.44067 12.5509 5.62038 12.3413L9.34147 7.99999L5.62038 3.65872C5.44067 3.44905 5.46495 3.1334 5.67461 2.95369Z" fill="currentColor"/>
+  <path fillRule="evenodd" clipRule="evenodd" d="M5.67461 2.95369C5.88428 2.77398 6.19993 2.79826 6.37964 3.00793L10.3796 7.67459C10.5401 7.86184 10.5401 8.13814 10.3796 8.32538L6.37964 12.9921C6.19993 13.2017 5.88428 13.226 5.67461 13.0463C5.46495 12.8666 5.44067 12.5509 5.62038 12.3413L9.34147 7.99999L5.62038 3.65872C5.44067 3.44905 5.46495 3.1334 5.67461 2.95369Z" fill="currentColor"/>
 </svg>
 );

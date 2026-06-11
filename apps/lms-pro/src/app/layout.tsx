@@ -96,6 +96,7 @@ const roboto = Roboto({
   // Đây là cách duy nhất để loại bỏ render-blocking từ Google Fonts khi dùng next/font.
   display: 'optional',
   preload: true,
+  variable: '--font-roboto',
   adjustFontFallback: true, // tự động tạo fallback metrics khớp với Roboto → tránh layout shift
 })
 
@@ -111,7 +112,7 @@ const inter = Inter({
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="vi">
+    <html lang="vi" className={`${roboto.variable} ${inter.variable}`}>
       {/* eslint-disable-next-line @next/next/no-head-element -- App Router dùng <head> native là đúng */}
       <head>
         {/* FontAwesome — load sau khi trang đã interactive để không block FCP/LCP */}
@@ -124,7 +125,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID ?? ''}
         /> */}
       </head>
-      <body className={`${roboto.className} ${inter.variable}`}>
+      <body className={roboto.className}>
         <ProvidersWrapper>
           <ClientLayout />
           <WirisScriptLoader />

@@ -44,6 +44,65 @@ const SappNotificationComponent = dynamic(
   { ssr: false },
 );
 
+const NOTIFICATION_STYLE_ID = "sapp-notification-package-styles";
+
+function sanitizeNotificationPackageStyle(style: HTMLStyleElement) {
+  if (style.dataset.sappFontPatched === "true") return;
+
+  const css = (style.textContent || "")
+    .replace(
+      /@import\s+url\(['"]https:\/\/fonts\.googleapis\.com\/css2\?family=Roboto[^'"]*['"]\);\s*/g,
+      "",
+    )
+    .replace(/'Roboto'(?=\s*,)/g, 'var(--font-roboto, "Roboto")')
+    .replace(/\bRoboto\b(?=\s*,)/g, 'var(--font-roboto, "Roboto")');
+
+  style.textContent = `${css}
+
+html,
+body {
+  font-family: var(--font-roboto, "Roboto"), sans-serif !important;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit !important;
+}
+`;
+  style.dataset.sappFontPatched = "true";
+}
+
+function installNotificationStyleGuard() {
+  if (typeof document === "undefined") return;
+
+  const win = window as typeof window & {
+    __sappNotificationStyleGuardInstalled?: boolean;
+  };
+
+  if (win.__sappNotificationStyleGuardInstalled) return;
+  win.__sappNotificationStyleGuardInstalled = true;
+
+  const currentStyle = document.getElementById(NOTIFICATION_STYLE_ID);
+  if (currentStyle instanceof HTMLStyleElement) {
+    sanitizeNotificationPackageStyle(currentStyle);
+  }
+
+  const appendChild = document.head.appendChild.bind(document.head);
+  document.head.appendChild = ((node: Node) => {
+    if (
+      node instanceof HTMLStyleElement &&
+      node.id === NOTIFICATION_STYLE_ID
+    ) {
+      sanitizeNotificationPackageStyle(node);
+    }
+
+    return appendChild(node);
+  }) as typeof document.head.appendChild;
+}
+
 type NotificationMenuItemProps = {
   menuItem: MenuItemType;
   closeSideBar: () => void;
@@ -107,7 +166,9 @@ export default function NotificationMenuItem({
       : "w-4 h-4 -top-[5px] -right-1.5";
 
   const handleOpenNotification = () => {
+    installNotificationStyleGuard();
     setOpenNotification(true);
+    setHasActivatedAnimation(true)
     if (isEmpty(notifyLists)) {
       refreshNotification(false);
     }
@@ -126,8 +187,6 @@ export default function NotificationMenuItem({
           },
         )}
         onClick={handleOpenNotification}
-        onMouseEnter={() => setHasActivatedAnimation(true)}
-        onPointerEnter={() => setHasActivatedAnimation(true)}
       >
         <div className="sidebar-item flex items-center">
           <div className="flex items-center">
