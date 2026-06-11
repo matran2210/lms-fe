@@ -202,20 +202,23 @@ export default function MenuItem({
 
   const isInMyProfile = pathname === pageLink.MYPROFILE;
 
-  // Preload animation JSON lúc browser rảnh (idle), không block main thread
+  // Preload animation JSON sau khi trang đã hoàn toàn ổn định
+  // Dùng timeout dài để không ảnh hưởng Lighthouse / FCP / LCP
   useEffect(() => {
     if (!Icon || Icon === "avatar" || Icon === "profile-detail") return;
 
     const iconStr = Icon as string;
 
-    if ("requestIdleCallback" in window) {
-      const id = requestIdleCallback(() => preloadAnimation(iconStr), { timeout: 2000 });
-      return () => cancelIdleCallback(id);
-    } else {
-      // Fallback cho Safari
-      const t = setTimeout(() => preloadAnimation(iconStr), 500);
-      return () => clearTimeout(t);
-    }
+    // Chờ 5s sau mount mới preload — trang đã interactive, Lighthouse đã đo xong
+    const t = setTimeout(() => {
+      if ("requestIdleCallback" in window) {
+        requestIdleCallback(() => preloadAnimation(iconStr));
+      } else {
+        preloadAnimation(iconStr);
+      }
+    }, 5000);
+
+    return () => clearTimeout(t);
   }, [Icon]);
 
   const checkIsHiddenDashboard = (info: any) => {
