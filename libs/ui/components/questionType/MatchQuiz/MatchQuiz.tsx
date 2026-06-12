@@ -31,8 +31,7 @@ import { useFeature } from "@lms/contexts";
 
 // Lazy load ReactFlowProvider + CustomFlow — @xyflow/react ~200KB
 const CustomFlow = dynamic(() => import("./CustomFlow"), {
-  ssr: false,
-  loading: () => <div className="h-full w-full" />,
+  ssr: false
 })
 
 const ReactFlowProviderDynamic = dynamic(

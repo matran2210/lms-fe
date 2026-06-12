@@ -1,6 +1,7 @@
 'use client'
 import { useFeature, userReducer, UserType } from '@lms/contexts'
 import { useEffect, useState } from 'react'
+import { SappLoadingGlobal } from '../../ui'
 
 const withAuthorization =
   <P extends object>(allowedRoles: string[]) =>
@@ -33,29 +34,9 @@ const withAuthorization =
         // Đang init hoặc chờ userType → show spinner thay vì màn trắng
         if (isLoading || !userType) {
           return (
-            <div
-              style={{
-                position: 'fixed',
-                inset: 0,
-                zIndex: 9999,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#fff',
-              }}
-            >
-              <div
-                style={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: '50%',
-                  border: '4px solid #FFB700',
-                  borderTopColor: 'transparent',
-                  animation: 'spin 0.8s linear infinite',
-                }}
-              />
-              <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-            </div>
+            <SappLoadingGlobal loading>
+              <></>
+            </SappLoadingGlobal>
           )
         }
 

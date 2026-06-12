@@ -11,12 +11,7 @@ import type { ComponentProps } from 'react'
 import type PdfViewerType from './PdfViewer'
 
 const PdfViewerLazy = dynamic(() => import('./PdfViewer'), {
-  ssr: false,
-  loading: () => (
-    <div className="flex h-full w-full items-center justify-center">
-      <span className="text-sm text-gray-500">Đang tải PDF...</span>
-    </div>
-  ),
+  ssr: false
 })
 
 type PdfViewerProps = ComponentProps<typeof PdfViewerType>

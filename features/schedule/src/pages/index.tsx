@@ -17,12 +17,7 @@ import clsx from 'clsx'
 const SAPPCalendarV2 = dynamic(
   () => import('@sapp-fe/sapp-common-package').then((m) => ({ default: m.SAPPCalendarV2 })),
   {
-    ssr: false,
-    loading: () => (
-      <div className="flex h-[600px] w-full items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-      </div>
-    ),
+    ssr: false
   }
 )
 import dayjs from 'dayjs'

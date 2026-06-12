@@ -21,6 +21,7 @@ import {
   BackToTop,
   PinnedNotifications,
   SappConfirmDialogContainer,
+  SappLoadingGlobal,
 } from "@lms/ui";
 import { pageview } from "@lms/utils";
 import { fetcher } from "@services/requestV2";
@@ -76,13 +77,25 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+const AuthBootstrapFallback = () => (
+  <SappLoadingGlobal loading>
+    <></>
+  </SappLoadingGlobal>
+);
+
 function Providers({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams();
   const query = useSearchParams();
   const [socket, setSocket] = useState<any>(null);
-  const authenticationManager = new AuthenticationManager();
+  const [authReady, setAuthReady] = useState(false);
+  const authManagerRef = useRef<AuthenticationManager | null>(null);
+  if (!authManagerRef.current) {
+    authManagerRef.current = new AuthenticationManager();
+  }
+  const authenticationManager = authManagerRef.current;
 
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID || "";
   const gaId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || "";
@@ -96,8 +109,25 @@ function Providers({ children }: { children: ReactNode }) {
   const queryObj = useMemo(() => Object.fromEntries(query.entries()), [query]);
   useEffect(() => {
     Aos.init({ duration: ANIMATION.DURATION, once: true });
-  });
+  }, []);
+
   useEffect(() => {
+    let mounted = true;
+
+    authenticationManager.waitUntilReady().then(() => {
+      if (mounted) {
+        setAuthReady(true);
+      }
+    });
+
+    return () => {
+      mounted = false;
+    };
+  }, [authenticationManager]);
+
+  useEffect(() => {
+    if (!authReady) return;
+
     const token = authenticationManager.getToken();
     if (token !== "") {
       const newSocket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
@@ -110,7 +140,7 @@ function Providers({ children }: { children: ReactNode }) {
         newSocket.disconnect();
       };
     }
-  }, [authenticationManager]); // reconnect khi authToken thay đổi
+  }, [authReady, authenticationManager]); // reconnect khi authToken thay đổi
 
   useEffect(() => {
     if (socket) {
@@ -164,7 +194,7 @@ function Providers({ children }: { children: ReactNode }) {
           courseActivityApi: CourseActivityApi,
           myProfileApi: MyProfileAPI,
           submitQuizTest: TestServiceAPI.submitQuizTest,
-          authManager: new AuthenticationManager(),
+          authManager: authManagerRef.current!,
           pageLink: PageLink,
           menuItems: MENU_ITEMS,
           menuItemsEvent: MENU_ITEMS_EVENT,
@@ -186,26 +216,30 @@ function Providers({ children }: { children: ReactNode }) {
         <CourseNoteProvider router={router} api={CoursesAPI}>
           <QueryClientProvider client={queryClient}>
             <SocketContext.Provider value={socket}>
-              <RouteGuard>
-                <PreviousSectionRouteProvider pathname={pathname}>
-                  <Toaster
-                    toastOptions={{
-                      style: {
-                        maxWidth: "400px", // Tăng chiều rộng của toast
-                      },
-                    }}
-                  />
-                  <SappConfirmDialogContainer />
-                  <PinnedNotifications />
-                  <AntdApp>{children}</AntdApp>
-                  <>
-                    {showBackToTop && <BackToTop />}
-                    <LearningNotesList appType={AppType.LMS_PRO} />
-                    <PopupCompletedCourse />
-                    <DeferredThirdPartyScripts gaId={gaId} gtmId={gtmId} />
-                  </>
-                </PreviousSectionRouteProvider>
-              </RouteGuard>
+              {!authReady ? (
+                <AuthBootstrapFallback />
+              ) : (
+                <RouteGuard>
+                  <PreviousSectionRouteProvider pathname={pathname}>
+                    <Toaster
+                      toastOptions={{
+                        style: {
+                          maxWidth: "400px", // Tăng chiều rộng của toast
+                        },
+                      }}
+                    />
+                    <SappConfirmDialogContainer />
+                    <PinnedNotifications />
+                    <AntdApp>{children}</AntdApp>
+                    <>
+                      {showBackToTop && <BackToTop />}
+                      <LearningNotesList appType={AppType.LMS_PRO} />
+                      <PopupCompletedCourse />
+                      <DeferredThirdPartyScripts gaId={gaId} gtmId={gtmId} />
+                    </>
+                  </PreviousSectionRouteProvider>
+                </RouteGuard>
+              )}
             </SocketContext.Provider>
           </QueryClientProvider>
         </CourseNoteProvider>

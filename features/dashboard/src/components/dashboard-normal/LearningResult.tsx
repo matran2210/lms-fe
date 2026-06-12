@@ -12,12 +12,7 @@ import { useFeature } from "@lms/contexts";
 const RadarChartLazy = dynamic(
   () => import("./LearningResultChart"),
   {
-    ssr: false,
-    loading: () => (
-      <div className="flex h-[350px] w-full items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-      </div>
-    ),
+    ssr: false
   },
 )
 

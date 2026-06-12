@@ -19,11 +19,6 @@ const ExplanationPackageV2 = dynamic(
     })),
   {
     ssr: false,
-    loading: () => (
-      <div className="flex h-full items-center justify-center">
-        <span className="text-sm text-gray-400">Đang tải...</span>
-      </div>
-    ),
   },
 )
 import { useEffect, useState } from 'react'

@@ -38,13 +38,14 @@ const handleFirebaseToken = async () => {
 };
 export class AuthenticationManager {
   keyCloak: Keycloak = null as any;
+  private readyPromise: Promise<void> = Promise.resolve();
 
   constructor() {
     if (AuthenticationManager.instance) {
       return AuthenticationManager.instance;
     }
 
-    this.initKeyCloakConnect();
+    this.readyPromise = this.initKeyCloakConnect().catch(() => undefined);
     AuthenticationManager.instance = this;
   }
 
@@ -59,8 +60,6 @@ export class AuthenticationManager {
 
     const existingToken = getCookie("keycloakToken");
     const existingRefreshToken = getCookie("keycloakRefreshToken");
-    let isFirstLogin = false;
-
     this.keyCloak = new Keycloak(keycloakConfig);
 
     if (existingToken && existingRefreshToken) {
@@ -86,27 +85,41 @@ export class AuthenticationManager {
         setCookie(COOKIE_INFO.KEYCLOAK_REFRESH_TOKEN, refreshToken ?? "");
         setCookie(COOKIE_INFO.SESSION_ID, this.keyCloak.sessionId ?? "");
 
-        if (!localStorage.getItem("hasLoggedInBefore")) {
-          isFirstLogin = true;
-          localStorage.setItem("hasLoggedInBefore", "true");
-          const res = await EntranceTestAPI.getEntranceCount();
-          if (isFirstLogin) {
-            localStorage.setItem("enstranceTest", "true");
-            if (res?.data?.count > 0) {
-              window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.ENTRANCE_TEST}`;
-            } else {
-              window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}`;
-            }
-          }
-        }
-
-        await handleFirebaseToken();
+        this.handlePostLoginSideEffects();
       }
+    }
+  }
+
+  private async handlePostLoginSideEffects() {
+    try {
+      if (!localStorage.getItem("hasLoggedInBefore")) {
+        localStorage.setItem("hasLoggedInBefore", "true");
+        const res = await EntranceTestAPI.getEntranceCount();
+        localStorage.setItem("enstranceTest", "true");
+
+        if (
+          res?.data?.count > 0 &&
+          window.location.pathname !== PageLink.ENTRANCE_TEST
+        ) {
+          window.location.replace(
+            `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.ENTRANCE_TEST}`,
+          );
+          return;
+        }
+      }
+
+      await handleFirebaseToken();
+    } catch {
+      await handleFirebaseToken();
     }
   }
 
   getToken(): string {
     return this.keyCloak?.token ?? "";
+  }
+
+  waitUntilReady(): Promise<void> {
+    return this.readyPromise;
   }
 
   /**

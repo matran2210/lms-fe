@@ -16,7 +16,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 const ExplanationPackage = dynamic(
   () => import('@sapp-fe/explanation-package').then((m) => ({ default: m.ExplanationPackage })),
-  { ssr: false, loading: () => <div className="flex h-full items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" /></div> }
+  { ssr: false }
 )
 import { useEffect, useState } from 'react'
 import { CoursesAPI } from 'src/api/courses'

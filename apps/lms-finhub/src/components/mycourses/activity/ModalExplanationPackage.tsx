@@ -10,7 +10,7 @@ const ExplanationPackageV2 = dynamic(
     import('@sapp-fe/explanation-package').then((m) => ({
       default: m.ExplanationPackageV2,
     })),
-  { ssr: false, loading: () => <SappLoading /> },
+  { ssr: false },
 )
 import { CloseIcon } from '@lms/assets'
 import { ActivityAPI } from 'src/api/activity'

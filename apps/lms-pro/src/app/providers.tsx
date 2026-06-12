@@ -74,6 +74,7 @@ import { MyRequestAPI } from 'src/api/my-request'
 import { RequestAPI } from 'src/api/request'
 import { ActivityAPI } from 'src/api/activity'
 import DeferredThirdPartyScripts from './deferred-third-party-scripts'
+import { SappLoadingGlobal } from '@lms/ui'
 
 // Lazy load MKTInApp — kéo framer-motion + react-slick + ModalMarketingInApp
 // Không cần SSR, chỉ hiện ở một số route → không nên vào initial bundle
@@ -89,8 +90,7 @@ const PopupCompletedCourse = dynamic(
   { ssr: false },
 )
 const PopupActivated = dynamic(
-  () =>
-    import('@lms/feature-courses/src/components/mycourses/PopupActivated'),
+  () => import('@lms/feature-courses/src/components/mycourses/PopupActivated'),
   { ssr: false },
 )
 
@@ -115,6 +115,12 @@ const queryClient = new QueryClient({
   },
 })
 
+const AuthBootstrapFallback = () => (
+  <SappLoadingGlobal loading>
+    <></>
+  </SappLoadingGlobal>
+)
+
 function Providers({ children }: { children: ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
@@ -122,6 +128,7 @@ function Providers({ children }: { children: ReactNode }) {
   const query = useSearchParams()
   const dispatch = useAppDispatch()
   const [socket, setSocket] = useState<any>(null)
+  const [authReady, setAuthReady] = useState(false)
   // Stable authenticationManager — dùng useRef để không tạo instance mới mỗi render
   const authManagerRef = useRef<AuthenticationManager | null>(null)
   if (!authManagerRef.current) {
@@ -134,10 +141,7 @@ function Providers({ children }: { children: ReactNode }) {
   const { isMobileView } = useTailwindBreakpoint()
 
   // Stable query object — tránh tạo object mới mỗi render
-  const queryObj = useMemo(
-    () => Object.fromEntries(query.entries()),
-    [query],
-  )
+  const queryObj = useMemo(() => Object.fromEntries(query.entries()), [query])
 
   // Stable featureProviderValue — tránh re-render toàn bộ consumer khi Providers re-render
   const featureProviderValue = useMemo(
@@ -198,6 +202,22 @@ function Providers({ children }: { children: ReactNode }) {
     Aos.init({ duration: ANIMATION.DURATION, once: true })
   }, []) // chỉ chạy 1 lần khi mount
   useEffect(() => {
+    let mounted = true
+
+    authenticationManager.waitUntilReady().then(() => {
+      if (mounted) {
+        setAuthReady(true)
+      }
+    })
+
+    return () => {
+      mounted = false
+    }
+  }, [authenticationManager])
+
+  useEffect(() => {
+    if (!authReady) return
+
     const token = authenticationManager.getToken()
     if (token !== '') {
       let cleanup: (() => void) | undefined
@@ -212,12 +232,12 @@ function Providers({ children }: { children: ReactNode }) {
       })
       return () => cleanup?.()
     }
-  }, []) // chỉ chạy 1 lần khi mount — authenticationManager là stable ref
+  }, [authReady, authenticationManager])
 
   useEffect(() => {
     if (socket) {
-      socket.on('connect', () => { })
-      socket.on('disconnect', () => { })
+      socket.on('connect', () => {})
+      socket.on('disconnect', () => {})
       socket?.on(SOCKET_EVENTS.NOTIFICATION_UNREAD, (data: any) => {
         localStorage.setItem(
           LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
@@ -354,9 +374,7 @@ function Providers({ children }: { children: ReactNode }) {
           getPinnedNotifications: UserContextApi.getPinnedNotifications,
         }}
       >
-        <FeatureProvider
-          value={featureProviderValue}
-        >
+        <FeatureProvider value={featureProviderValue}>
           <CourseProvider
             router={router}
             api={{
@@ -366,28 +384,32 @@ function Providers({ children }: { children: ReactNode }) {
             <CourseNoteProvider router={router} api={CoursesAPI}>
               <QueryClientProvider client={queryClient}>
                 <SocketContext.Provider value={socket}>
+                  {!authReady ? (
+                    <AuthBootstrapFallback />
+                  ) : (
                     <RouteGuard>
-                  <PreviousSectionRouteProvider pathname={pathname}>
-                    <Toaster
-                      toastOptions={{
-                        style: {
-                          maxWidth: '400px', // Tăng chiều rộng của toast
-                        },
-                      }}
-                    />
-                    <SappConfirmDialogContainer />
+                      <PreviousSectionRouteProvider pathname={pathname}>
+                        <Toaster
+                          toastOptions={{
+                            style: {
+                              maxWidth: '400px', // Tăng chiều rộng của toast
+                            },
+                          }}
+                        />
+                        <SappConfirmDialogContainer />
                         <PinnedNotifications />
                         <AntdApp>{children}</AntdApp>
-                          {showBackToTop && <BackToTop />}
-                          <MKTInApp showMKTInApp={showMKTInApp} />
-                          {showHelp && <div id="floating-btn-divider" />}
-                          <Help showHelp={showHelp} />
-                          <LearningNotesList appType={AppType.LMS_PRO} />
-                          <PopupCompletedCourse />
-                          <PopupActivated />
-                          <DeferredThirdPartyScripts gaId={gaId} gtmId={gtmId} />
-                  </PreviousSectionRouteProvider>
+                        {showBackToTop && <BackToTop />}
+                        <MKTInApp showMKTInApp={showMKTInApp} />
+                        {showHelp && <div id="floating-btn-divider" />}
+                        <Help showHelp={showHelp} />
+                        <LearningNotesList appType={AppType.LMS_PRO} />
+                        <PopupCompletedCourse />
+                        <PopupActivated />
+                        <DeferredThirdPartyScripts gaId={gaId} gtmId={gtmId} />
+                      </PreviousSectionRouteProvider>
                     </RouteGuard>
+                  )}
                 </SocketContext.Provider>
               </QueryClientProvider>
             </CourseNoteProvider>

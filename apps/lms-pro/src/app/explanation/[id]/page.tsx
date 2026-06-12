@@ -15,7 +15,7 @@ import dynamic from 'next/dynamic'
 
 const ExplanationPackageV2 = dynamic(
   () => import('@sapp-fe/explanation-package').then((m) => ({ default: m.ExplanationPackageV2 })),
-  { ssr: false, loading: () => <div className="flex h-full items-center justify-center"><span className="text-sm text-gray-400">Đang tải...</span></div> }
+  { ssr: false }
 )
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'

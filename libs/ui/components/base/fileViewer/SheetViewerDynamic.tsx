@@ -13,11 +13,11 @@ import { LoadingIcon } from '@lms/assets'
 
 const SheetViewerLazy = dynamic(() => import('./SheetViewer'), {
   ssr: false,
-  loading: () => (
-    <div className="flex h-full w-full items-center justify-center">
-      <LoadingIcon stroke="#404041" />
-    </div>
-  ),
+  // loading: () => (
+  //   <div className="flex h-full w-full items-center justify-center">
+  //     <LoadingIcon stroke="#404041" />
+  //   </div>
+  // ),
 })
 
 type SheetViewerProps = ComponentProps<typeof SheetViewerType>

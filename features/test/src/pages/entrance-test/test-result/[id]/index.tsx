@@ -11,12 +11,7 @@ import { useState } from 'react'
 const QuizResult = dynamic(
   () => import('@sapp-fe/entrance-test-result-package'),
   {
-    ssr: false,
-    loading: () => (
-      <div className="flex h-[400px] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-      </div>
-    ),
+    ssr: false
   }
 )
 
