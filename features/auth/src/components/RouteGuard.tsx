@@ -27,38 +27,64 @@ export const RouteGuard = ({ children }: IProps) => {
   useEffect(() => {
     let cancelled = false;
 
-    callGetMe().finally(() => {
-      if (!cancelled) {
-        setAuthorized(true);
+    const authorize = async () => {
+      const hasUser = userSlice?.user.id || userSlice?.user.keycloak_user_id;
+
+      if (checkRouteCertificate) {
+        if (!cancelled) {
+          setAuthorized(true);
+        }
+        return;
       }
-    });
+
+      if (hasUser) {
+        if (!cancelled) {
+          setCookie(
+            COOKIE_INFO.KEYCLOAK_USER_ID,
+            userSlice?.user.keycloak_user_id ?? "",
+          );
+          setAuthorized(true);
+        }
+        return;
+      }
+
+      if (!dispatch || !userContextApi) {
+        if (!cancelled) {
+          setAuthorized(false);
+        }
+        return;
+      }
+
+      if (!cancelled) {
+        setAuthorized(false);
+      }
+
+      try {
+        await dispatch(getMe(userContextApi)).unwrap();
+
+        if (!cancelled) {
+          setAuthorized(true);
+        }
+      } catch {
+        if (!cancelled) {
+          setAuthorized(false);
+        }
+      }
+    };
+
+    authorize();
 
     return () => {
       cancelled = true;
     };
   }, [
     pathname,
+    dispatch,
+    userContextApi,
     userSlice?.user.id,
     userSlice?.user.keycloak_user_id,
     checkRouteCertificate,
   ]);
-
-  const callGetMe = async () => {
-    if (
-      userSlice?.user.id ||
-      userSlice?.user.keycloak_user_id ||
-      checkRouteCertificate
-    ) {
-      setCookie(
-        COOKIE_INFO.KEYCLOAK_USER_ID,
-        userSlice?.user.keycloak_user_id ?? "",
-      );
-      return;
-    }
-
-    setAuthorized(false);
-    await dispatch?.(getMe(userContextApi)).unwrap();
-  };
 
   return authorized ? (
     children

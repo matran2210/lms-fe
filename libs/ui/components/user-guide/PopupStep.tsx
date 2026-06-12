@@ -181,11 +181,7 @@ const PopupStep = ({
 
   const { dispatch } = useFeature();
   const confirmDialogRef = useRef<HTMLDivElement>(null);
-  const [style, setStyle] = useState<React.CSSProperties | null>({
-       top: "20px",
-    left: "20px",
-    transform: "translate(0, 0)",
-    });
+  const [style, setStyle] = useState<React.CSSProperties | null>(null);
 
   const nextStep = () => dispatch?.(increment());
   const previousStep = () => dispatch?.(decrement());
@@ -202,13 +198,7 @@ const PopupStep = ({
 
   const updatePosition = () => {
     const pos = getPopupPosition(targetId, placement, offset, customOffset);
-
-    console.log("pos:", pos);
-    if (pos) setStyle({
-       top: "20px",
-    left: "20px",
-    transform: "translate(0, 0)",
-    });
+    if (pos) setStyle(pos);
   };
 
   useEffect(() => {
