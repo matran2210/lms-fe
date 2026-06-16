@@ -113,35 +113,115 @@ export default function EssayQuestionBlock({
             if (!currentFormValue) {
               shouldUpdate = true;
             } else if (currentFormValue !== req.short_answer) {
+              // Update if form value is the template
               if (req?.answer_template && currentFormValue === req.answer_template) {
                 shouldUpdate = true;
+              } else {
+                // Also update if form value is an empty workbook (defaultSheetData)
+                try {
+                  const formWorkbook = JSON.parse(currentFormValue);
+                  if (isWorkbookEmpty(formWorkbook)) {
+                    shouldUpdate = true;
+                  }
+                } catch (e) {
+                  // If parse fails, it's likely invalid data, allow update
+                  shouldUpdate = true;
+                }
               }
             }
             
             if (shouldUpdate) {
               setValue(fieldName, req.short_answer);
+              // Because the editor for the active tab is already mounted, it won't react to defaultValue changes.
+              // We must manually push the new value to it via its ref.
+              if (index === essayData?.index && refEditor?.current) {
+                if (refEditor.current.clear) {
+                  refEditor.current.clear(req.short_answer);
+                }
+              }
             }
           }
         } 
         else if (responseOption === RESPONSE_OPTION.WORD) {
-          if (req?.short_answer) {
+          const sourceValue = req?.answer_text ?? req?.short_answer;
+          
+          if (sourceValue) {
             const currentFormValue = getValues(fieldName);
             
-            const isFormEmpty = !currentFormValue || 
-                               currentFormValue === DEFAULT_EDITOR_VALUE ||
-                               currentFormValue === req?.answer_template;
-            
-            if (isFormEmpty) {
-              setValue(fieldName, req.short_answer);
+            if (currentFormValue !== sourceValue) {
+              const isFormEmpty = !currentFormValue || 
+                                 currentFormValue === DEFAULT_EDITOR_VALUE;
+              
+              const isFormTemplate = currentFormValue === req?.answer_template;
+              
+              if (isFormEmpty || (isFormTemplate && sourceValue !== req?.answer_template)) {
+                setValue(fieldName, sourceValue);
+                if (index === essayData?.index && refEditor?.current) {
+                  if (refEditor.current.reset) {
+                    refEditor.current.reset(sourceValue);
+                  }
+                }
+              }
             }
           }
         }
       });
+    } else {
+      // Case: Essay without requirements
+      const responseOption = currentTabContent?.data?.response_option;
+      const fieldName = `${currentTabID}_0_answer`; // 0 is default index for no requirement
+      const shortAnswer = currentTabContent?.answer;
+      
+      if (shortAnswer) {
+        const currentFormValue = getValues(fieldName);
+        let shouldUpdate = false;
+        
+        if (responseOption === RESPONSE_OPTION.SHEET) {
+          if (!currentFormValue) {
+            shouldUpdate = true;
+          } else if (currentFormValue !== shortAnswer) {
+            if (currentTabContent?.data?.answer_template && currentFormValue === currentTabContent.data.answer_template) {
+              shouldUpdate = true;
+            } else {
+              try {
+                const formWorkbook = JSON.parse(currentFormValue);
+                if (isWorkbookEmpty(formWorkbook)) {
+                  shouldUpdate = true;
+                }
+              } catch (e) {
+                shouldUpdate = true;
+              }
+            }
+          }
+          
+          if (shouldUpdate) {
+            setValue(fieldName, shortAnswer);
+            if (refEditor?.current?.clear) {
+              refEditor.current.clear(shortAnswer);
+            }
+          }
+        } else if (responseOption === RESPONSE_OPTION.WORD) {
+          const isFormEmpty = !currentFormValue || 
+                             currentFormValue === DEFAULT_EDITOR_VALUE ||
+                             currentFormValue === currentTabContent?.data?.answer_template;
+          
+          // Also update if form value is different from the answer (e.g., after reset)
+          const isDifferentFromAnswer = currentFormValue !== shortAnswer;
+          
+          if (isFormEmpty || isDifferentFromAnswer) {
+            setValue(fieldName, shortAnswer);
+            if (refEditor?.current?.reset) {
+              refEditor.current.reset(shortAnswer);
+            }
+          }
+        }
+      }
     }
   }, [
     currentTabContent?.id, 
     currentTabContent?.data?.requirements, 
     currentTabContent?.data?.response_option,
+    currentTabContent?.answer, // Add this to trigger re-sync when answer changes (e.g., after reset)
     currentTabID, 
     setValue, 
     getValues
@@ -165,11 +245,7 @@ export default function EssayQuestionBlock({
               case RESPONSE_OPTION.WORD:
                 // Priority: answer_text (saved by handleSaveAnswerEssay) > short_answer (from API) > form value > template
                 if (requirement?.answer_text) {
-                  // Check if answer_text is not just the template
-                  const isAnswerSameAsTemplate = requirement.answer_text === requirement?.answer_template;
-                  if (!isAnswerSameAsTemplate) {
-                    return requirement.answer_text;
-                  }
+                  return requirement.answer_text;
                 }
                 if (requirement?.short_answer) {
                   return requirement.short_answer;
@@ -316,24 +392,30 @@ export default function EssayQuestionBlock({
         const requirement =
           currentTabContent?.data?.requirements?.[essayData?.index];
 
-        // Priority: answer_text (saved by handleSaveAnswerEssay) > short_answer (from API) > form value > template
-        if (requirement?.answer_text) {
-          const isAnswerSameAsTemplate = requirement.answer_text === requirement?.answer_template;
-          if (!isAnswerSameAsTemplate) {
+        // For questions WITH requirements
+        if (requirement) {
+          // Priority: answer_text (saved by handleSaveAnswerEssay) > short_answer (from API) > form value > template
+          if (requirement?.answer_text) {
             return requirement.answer_text;
           }
-        }
-        if (requirement?.short_answer) {
-          return requirement.short_answer;
-        }
-        if (valueFromForm !== undefined && valueFromForm !== null) {
-          return valueFromForm;
-        }
-        if (requirement?.answer_template) {
-          return requirement.answer_template;
-        }
-        if (currentTabContent.answer) {
-          return currentTabContent.answer;
+          if (requirement?.short_answer) {
+            return requirement.short_answer;
+          }
+          if (valueFromForm !== undefined && valueFromForm !== null) {
+            return valueFromForm;
+          }
+          if (requirement?.answer_template) {
+            return requirement.answer_template;
+          }
+        } else {
+          // For questions WITHOUT requirements
+          // Priority: currentTabContent.answer (set by reset/save) > form value > template
+          if (currentTabContent?.answer) {
+            return currentTabContent.answer;
+          }
+          if (valueFromForm !== undefined && valueFromForm !== null) {
+            return valueFromForm;
+          }
         }
 
         return currentTabContent?.data?.answer_template;
@@ -397,6 +479,7 @@ export default function EssayQuestionBlock({
 
       {currentTabContent?.data?.requirements?.length > 0 ? (
         <RequirementsTab
+          key={currentTabID}
           items={essayRequirementsItem()}
           defaultActiveKey="0"
           onChange={(key) => {
@@ -408,6 +491,7 @@ export default function EssayQuestionBlock({
         />
       ) : (
         <EssayQuestionPreview
+          key={currentTabID}
           isShowContent={false}
           data={dataEssay}
           question_content={currentTabContent?.data?.question_content}
