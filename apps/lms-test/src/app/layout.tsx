@@ -16,7 +16,7 @@ import Script from "next/script";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import ClientLayout from "./client-layout";
-import { Roboto } from "next/font/google";
+import { Inter, Roboto } from "next/font/google";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -89,11 +89,28 @@ export const revalidate = 0;
 const roboto = Roboto({
   subsets: ["latin"],
   weight: ["300", "400", "500", "700"],
+  // 'optional' — browser không block render để chờ font download.
+  // Nếu font chưa cache, dùng fallback ngay; swap sau khi font sẵn sàng.
+  // Đây là cách duy nhất để loại bỏ render-blocking từ Google Fonts khi dùng next/font.
+  display: "optional",
+  preload: true,
+  variable: "--font-roboto",
+  adjustFontFallback: true, // tự động tạo fallback metrics khớp với Roboto → tránh layout shift
+});
+
+// Inter — load qua next/font thay vì @import CSS để tránh render-blocking request
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  display: "optional",
+  preload: false,
+  variable: "--font-inter",
+  adjustFontFallback: true,
 });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="vi">
+    <html lang="vi" className={`${roboto.variable} ${inter.variable}`}>
       <head>
         <Script
           src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"

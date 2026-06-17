@@ -1,18 +1,9 @@
 "use client";
 import { getCountUnRead, showNotification, useFeature } from "@lms/contexts";
 import { onMessageListener } from "@lms/utils";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 export default function ClientLayout() {
-  const { dispatch, pathname } = useFeature();
-  const checkRouteCertificate = useMemo(() => {
-    const path = pathname as string;
-
-    return (
-      /^\/entrance-test\/test-result\/[^/]+$/.test(path) ||
-      /^\/entrance-test\/table-result\/[^/]+$/.test(path) ||
-      /^\/certificates\/[^/]+$/.test(path)
-    );
-  }, [pathname]);
+  const { dispatch } = useFeature();
   useEffect(() => {
     onMessageListener().then((data: any) => {
       dispatch?.(showNotification());

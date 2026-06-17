@@ -58,6 +58,7 @@ import {
   MENU_ITEMS_EVENT,
 } from "src/constants/menu-items";
 import { PageLink } from "src/constants/routers";
+import { useAppDispatch, useAppSelector } from "src/redux/hook";
 import CourseActivityApi from "src/redux/services/Course/MyCourse/Activity";
 import UserContextApi from "src/redux/services/User/user";
 import { store } from "src/redux/store";
@@ -89,8 +90,8 @@ function Providers({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const params = useParams();
   const query = useSearchParams();
+  const dispatch = useAppDispatch();
   const [socket, setSocket] = useState<any>(null);
-  const [authReady, setAuthReady] = useState(false);
   const authManagerRef = useRef<AuthenticationManager | null>(null);
   if (!authManagerRef.current) {
     authManagerRef.current = new AuthenticationManager();
@@ -99,8 +100,6 @@ function Providers({ children }: { children: ReactNode }) {
 
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID || "";
   const gaId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || "";
-  const tagManagerArgs: TagManagerArgs = { gtmId };
-
   const { isMobileView } = useTailwindBreakpoint();
 
   // Check if URL contains '/teachers'
@@ -112,22 +111,6 @@ function Providers({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    let mounted = true;
-
-    authenticationManager.waitUntilReady().then(() => {
-      if (mounted) {
-        setAuthReady(true);
-      }
-    });
-
-    return () => {
-      mounted = false;
-    };
-  }, [authenticationManager]);
-
-  useEffect(() => {
-    if (!authReady) return;
-
     const token = authenticationManager.getToken();
     if (token !== "") {
       const newSocket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
@@ -140,7 +123,7 @@ function Providers({ children }: { children: ReactNode }) {
         newSocket.disconnect();
       };
     }
-  }, [authReady, authenticationManager]); // reconnect khi authToken thay đổi
+  }, [authenticationManager]); // reconnect khi authToken thay đổi
 
   useEffect(() => {
     if (socket) {
@@ -211,35 +194,33 @@ function Providers({ children }: { children: ReactNode }) {
           query: queryObj,
           uploadImageToLinkedIn: uploadImageToLinkedIn,
           domainTest: process.env.NEXT_PUBLIC_SUB_DOMAIN_TEST as string,
+          dispatch,
+          useAppSelector,
         }}
       >
         <CourseNoteProvider router={router} api={CoursesAPI}>
           <QueryClientProvider client={queryClient}>
             <SocketContext.Provider value={socket}>
-              {!authReady ? (
-                <AuthBootstrapFallback />
-              ) : (
-                <RouteGuard>
-                  <PreviousSectionRouteProvider pathname={pathname}>
-                    <Toaster
-                      toastOptions={{
-                        style: {
-                          maxWidth: "400px", // Tăng chiều rộng của toast
-                        },
-                      }}
-                    />
-                    <SappConfirmDialogContainer />
-                    <PinnedNotifications />
-                    <AntdApp>{children}</AntdApp>
-                    <>
-                      {showBackToTop && <BackToTop />}
-                      <LearningNotesList appType={AppType.LMS_PRO} />
-                      <PopupCompletedCourse />
-                      <DeferredThirdPartyScripts gaId={gaId} gtmId={gtmId} />
-                    </>
-                  </PreviousSectionRouteProvider>
-                </RouteGuard>
-              )}
+              <RouteGuard>
+                <PreviousSectionRouteProvider pathname={pathname}>
+                  <Toaster
+                    toastOptions={{
+                      style: {
+                        maxWidth: "400px", // Tăng chiều rộng của toast
+                      },
+                    }}
+                  />
+                  <SappConfirmDialogContainer />
+                  <PinnedNotifications />
+                  <AntdApp>{children}</AntdApp>
+                  <>
+                    {showBackToTop && <BackToTop />}
+                    <LearningNotesList appType={AppType.LMS_PRO} />
+                    <PopupCompletedCourse />
+                    <DeferredThirdPartyScripts gaId={gaId} gtmId={gtmId} />
+                  </>
+                </PreviousSectionRouteProvider>
+              </RouteGuard>
             </SocketContext.Provider>
           </QueryClientProvider>
         </CourseNoteProvider>
