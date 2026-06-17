@@ -324,7 +324,8 @@ const Course = ({
   const utcNow = dayjs().utc();
   const isPendingLesson =
     classInstance?.type === "LESSON" && !student?.is_passed;
-  const isAccaCourse = category === "ACCA";
+  const isAccaCourse = category === PROGRAM.ACCA;
+  const isCmaCourse = category === PROGRAM.CMA;
   const isCertDipCourse = category === "Cert/Dip";
   // const isFixedDuration =
   //   classInstance?.duration_type === "FIXED" ||
@@ -341,7 +342,7 @@ const Course = ({
   const courseAction = () => {
     // Handle pending lesson cases
     if (isPendingLesson) {
-      if (isAccaCourse || isCertDipCourse) {
+      if (isAccaCourse || isCmaCourse || isCertDipCourse) {
         if (hasNotStarted) {
           setOpenClass(true);
           return;
