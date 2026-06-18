@@ -5,7 +5,8 @@ import {
   CollapseArrowIcon,
   DownloadIcon,
   FileTextIcon,
-  NotesOutline, PulsingExclamation
+  NotesOutline,
+  PulsingExclamation,
 } from "@lms/assets";
 import {
   IActivityStateQuestion,
@@ -20,7 +21,7 @@ import {
   DEFAULT_EDITOR_VALUE,
   QUESTION_TYPES,
   RESPONSE_OPTION,
-  defaultSheetData
+  defaultSheetData,
 } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import {
@@ -61,7 +62,6 @@ import {
   UseFormWatch,
 } from "react-hook-form";
 import toast from "react-hot-toast";
-
 import { IEssayAnswer, IExhibit, IExhibitData, IFile } from "@lms/core";
 import { v4 as uuidv4 } from "uuid";
 
@@ -78,7 +78,6 @@ interface IRequirement {
   short_answer?: string;
   explanation?: string;
 }
-
 export type QuizComponentRef = {
   onSubmit: ({
     activityId,
@@ -170,10 +169,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }: Props,
     ref,
   ) => {
-    const { dispatch,
-      testServiceApi,
-      courseApi,
-    } = useFeature();
+    const { dispatch, testServiceApi, courseApi } = useFeature();
     const isAFTEREACHQUESTION = grading_preference === "AFTER_EACH_QUESTION";
     const questionRef = useRef<HTMLDivElement>(null);
     const isShowIconButtonInBottom = [
@@ -183,15 +179,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       QUESTION_TYPES.SELECT_WORD,
     ].includes(activeQuestion?.qType as QUESTION_TYPES);
     const { isMobileView } = useTailwindBreakpoint();
-
-    // const DragDropRef = useRef(null) as any;
     const MatchQuizRef = useRef(null) as any;
-
     const [showListRequirement, setShowListRequirement] =
       useState<boolean>(false);
     const listRequirementRef = useRef<HTMLDivElement>(null);
     const [exhibitData, setExhibitData] = useState<IExhibit[]>();
-
     const [isChange, setIsChange] = useState<boolean>(false);
     const [isUploadFile, setIsUploadFile] = useState<boolean>(false);
     const [essayData, setEssayData] = useState<{
@@ -199,12 +191,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       index?: number;
     }>();
     const [showWarning, setShowWarning] = useState(true);
-
     useClickOutside({
       ref: listRequirementRef,
       callback: () => setShowListRequirement(false),
     });
-
     const [showRequirement, setShowRequirement] = useState<{
       id: string;
       description: string;
@@ -212,35 +202,14 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       name: string;
       files: any;
     } | null>();
-
     const [openUpload, setOpenUpload] = useState<{
       requirement_id?: string;
       question_id?: string;
       status: boolean;
     }>({ requirement_id: undefined, question_id: undefined, status: false });
-
     const [openExhibitModal, setOpenExhibitModal] = useState(false);
     const refEditor = useRef(null) as any;
     const essayDataRef = useRef(essayData);
-
-    // const handleResetEssay = async (
-    //   name: string,
-    //   defaultValue?: string | null,
-    // ) => {
-    //   if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
-    //     const content = defaultValue ?? "";
-    //     onResetFormatEssay(name, content);
-    //     refEditor?.current?.reset(content);
-    //     await new Promise((resolve) => setTimeout(resolve, 10));
-    //   } else if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
-    //     onResetFormatEssay(name, defaultValue ?? defaultSheetData);
-    //     // refEditor?.current?.resetSheet()
-    //     if (refEditor?.current?.clear) {
-    //       refEditor.current.clear(defaultValue ?? defaultSheetData);
-    //     }
-    //   }
-    // };
-
     const onResetWord = async (
       name: string,
       response_option: RESPONSE_OPTION,
@@ -312,18 +281,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       return value || [];
     };
 
-    // const getAnswerDragNDrop = () => {
-    //   let value = [] as any
-    //   const inputs = questionRef?.current?.querySelectorAll(
-    //     '.sapp-input-dragNDrop',
-    //   ) as any
-    //   for (let e of inputs) {
-    //     const idAnswer = e?.querySelector('span')
-    //     value.push({ id: e?.id, value: e?.innerText, idAnswer: idAnswer?.id })
-    //   }
-    //   return value
-    // }
-
     const handleResponseResults = () => {
       if (activeQuestion) {
         if (!activeQuestion?.confirmed && !activeQuestion.isDrafAnswer) {
@@ -337,10 +294,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 `${activeQuestion?.id}_${document_id}_answer`,
                 activeQuestion?.defaultValue,
               );
-
               break;
             }
-
             case QUESTION_TYPES.MULTIPLE_CHOICE: {
               setValue?.(
                 `${activeQuestion?.id}_${document_id}_answer`,
@@ -348,11 +303,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               );
               break;
             }
-
             case QUESTION_TYPES.ESSAY: {
               activeQuestion?.myAnswers?.map((ans: IEssayAnswer) => {
                 const fieldName = `${activeQuestion?.id}_${ans.requirement_id ?? document_id}_essay`;
-
                 if (activeQuestion?.response_option === "SHEET") {
                   // Logic cho SHEET: luôn ưu tiên short_answer (user's changes)
                   if (ans?.short_answer) {
@@ -365,7 +318,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     const templateValue =
                       requirement?.answer_template ||
                       activeQuestion?.answer_template;
-
                     if (templateValue) {
                       setValue?.(fieldName, templateValue);
                     }
@@ -386,7 +338,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     // Lift onSubmit using useImperativeHandle
     useImperativeHandle(ref, () => ({
       onSubmit: onSubmit,
-      reset: reset ?? (() => { }),
+      reset: reset ?? (() => {}),
       onSaveAnswer: handleGetAnswer,
       onResetWord: onResetWord,
       onResetSheet: onResetSheet,
@@ -444,9 +396,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               return false;
             }
           })();
-
           let active = "UNFINISHED";
-
           if (isSubmitted || activeQuestion?.answer_file) {
             active = "SUBMITED";
           }
@@ -470,24 +420,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     ? activeQuestion?.response_option
                     : "WORD",
 
+
                   requirement_id: req?.id,
                   active,
                 });
               }
-              // return {
-              //   question_id: activeQuestion?.id,
-              //   answer_file: req?.answer_file,
-              //   short_answer:
-              //     !isUndefined(answer) && !isEmpty(answer)
-              //       ? String(answer).trim()
-              //       : '',
-              //   response_option: activeQuestion?.response_option
-              //     ? activeQuestion?.response_option
-              //     : 'WORD',
-
-              //   requirement_id: req?.id,
-              //   active,
-              // }
             });
             return answers;
           } else {
@@ -511,11 +448,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             ];
           }
 
+
         default:
           break;
       }
     };
-
     const onSubmit = ({
       activityId,
       tabId,
@@ -535,8 +472,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }) => {
       if (activeQuestion) {
         const myAnswers = handleGetAnswer(activeQuestion);
-
-        // DragDropRef?.current?.handleReset()
         try {
           dispatch?.(
             confirmQuestion({
@@ -566,7 +501,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         }
       }
     };
-
     const handleSaveFileEssay = (
       file: any,
       question_id: string,
@@ -602,7 +536,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         toast.error("Có lỗi xảy ra xin vui lòng thử lại!");
       }
     };
-
     const renderQuestion = () => {
       const correctsDragDrop = activeQuestion?.corrects
         ? {
@@ -631,7 +564,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               explainClassname="!mt-8 !p-0 !bg-transparent"
             />
           );
-
         case QUESTION_TYPES.MULTIPLE_CHOICE:
           return (
             <MultiChoiceQuestion
@@ -654,7 +586,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               explainClassname="!mt-8 !p-0 !bg-transparent"
             />
           );
-
         case QUESTION_TYPES.MATCHING:
           return (
             <MatchQuizComponent
@@ -671,7 +602,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               correctAnswerClass="!mt-0 !pt-0"
             />
           );
-
         case QUESTION_TYPES.FILL_WORD:
           return (
             <AddWordPreview
@@ -686,23 +616,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               correctAnswerClass="!mt-8 !pt-0"
             />
           );
-
         case QUESTION_TYPES.DRAG_DROP:
           return (
-            // <DragNDropPreview
-            //   data={activeQuestion}
-            //   action={getAnswerDragNDrop}
-            //   defaultAnswer={activeQuestion?.defaultValue}
-            //   corrects={showCorrect ? activeQuestion?.corrects : undefined}
-            //   resetDefaultAnswer={false}
-            //   setOpenFile={setOpenFile}
-            //   ref={DragDropRef}
-            //   uuid={'_' + uuidv4().replaceAll('-', '_')}
-            //   solution={activeQuestion?.solution}
-            //   exhibitText={exhibitText}
-            //   explainClassname="!mt-8 !p-0 !bg-transparent"
-            //   correctAnswerClass="!mt-8 !pt-0"
-            // />
             <NewDragNDropQuestion
               data={activeQuestion as any}
               defaultValue={activeQuestion?.defaultValue}
@@ -714,7 +629,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               explainClassname="!mt-8 !p-0 !bg-transparent"
             />
           );
-
         case QUESTION_TYPES.SELECT_WORD:
           return (
             <SelectWord
@@ -735,7 +649,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               isShowWarning={isAFTEREACHQUESTION}
             />
           );
-
         case QUESTION_TYPES.ESSAY:
           const items =
             activeQuestion?.requirements?.map((e, i: number) => {
@@ -746,7 +659,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 switch (activeQuestion?.response_option) {
                   case RESPONSE_OPTION.WORD:
                     return (
-                      getValues?.(`${activeQuestion?.id}_${e?.id}_essay`) ||
+                      // getValues?.(`${activeQuestion?.id}_${e?.id}_essay`) ||
                       activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
                         if (ans.requirement_id === e?.id) {
                           return ans;
@@ -767,6 +680,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       return answerSheet?.short_answer || e?.answer_template;
                     }
 
+
                     return (
                       getValues?.(`${activeQuestion?.id}_${e?.id}_essay`) ||
                       answerSheet?.short_answer ||
@@ -775,7 +689,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     break;
                 }
               };
-
               const isMeaningData = (() => {
                 if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
                   const currentValue = getDefaultValue(true);
@@ -790,6 +703,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 ) {
                   const currentValue = getDefaultValue(true);
 
+
                   return !!(
                     currentValue &&
                     currentValue !== defaultSheetData &&
@@ -798,7 +712,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 }
                 return false;
               })();
-
+              const defaultValue = getDefaultValue();
               return {
                 key: e?.id,
                 label: (
@@ -813,33 +727,18 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 ),
                 children: (
                   <div className="mt-6">
-                    {/* <Alert
-                      message={
-                        <div className="text-xs text-gray-800">
-                          This feature is only available on desktop or tablet.
-                        </div>
-                      }
-                      type={'info'}
-                      showIcon
-                      className="w-full rounded-md px-[14px] md:hidden"
-                      icon={
-                        <div className={'!mr-4'}>
-                          <AlertInfoIcon />
-                        </div>
-                      }
-                    /> */}
                     <EssayQuestionPreview
                       className="!rounded-none !bg-transparent !p-0 md:block"
                       editorClassName="learning-act-editor"
                       explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
-                      defaultValue={getDefaultValue()}
+                      defaultValue={defaultValue}
                       data={e}
                       question_content={activeQuestion?.question_content}
                       index={i}
                       question_data={activeQuestion}
                       control={controlAnswer}
                       setValue={setValue}
-                      handleSaveHighLight={() => { }}
+                      handleSaveHighLight={() => {}}
                       forCaseStudy={true}
                       name={`${activeQuestion?.id}_${e?.id}_essay`}
                       fullData={{
@@ -877,19 +776,24 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       }}
                       isShowContent={showQuestionContent}
                       externalRef={refEditor}
-                      setOpenPdf={(type: string, file?: string | undefined, fileName?: string | undefined) => { 
-                        handleOpenFile({resource: {
+                      setOpenPdf={(
+                        type: string,
+                        file?: string | undefined,
+                        fileName?: string | undefined,
+                      ) => {
+                        handleOpenFile({
+                          resource: {
                             name: fileName as string,
                             url: file as string,
-                          }
-                        } as IFile)
+                          },
+                        } as IFile);
                       }}
+                      isResetValue={true}
                     />
                   </div>
                 ),
               };
             }) ?? [];
-
           const getDefaultValue = () => {
             const currentReqId =
               showRequirement?.id ??
@@ -962,7 +866,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     </div>
                   )}
                 </div>
-
                 {!!activeQuestion?.requirements?.length ? (
                   <Tabs
                     className={clsx("learning-activity-tabs requirement-tab")}
@@ -1020,7 +923,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       question_data={activeQuestion}
                       control={controlAnswer}
                       setValue={setValue}
-                      handleSaveHighLight={() => { }}
+                      handleSaveHighLight={() => {}}
                       forCaseStudy={true}
                       name={`${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`}
                       fullData={{
@@ -1058,13 +961,13 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       }}
                       isShowContent={showQuestionContent}
                       externalRef={refEditor}
+                      isResetValue={true}
                     />
                   </div>
                 )}
               </div>
             </>
           );
-
         default:
           return <div></div>;
       }
@@ -1097,18 +1000,15 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         });
       }
       const exhibitOption = [];
-
       if (
         activeQuestion?.exhibits?.length &&
         0 < activeQuestion?.exhibits?.length
       ) {
         exhibitOption.push(...activeQuestion?.exhibits);
       }
-
       if (activeQuestion?.question_topic?.exhibits?.length) {
         exhibitOption?.push(...activeQuestion?.question_topic?.exhibits);
       }
-
       setExhibitData(exhibitOption);
     };
     const onResetFormatEssay = (key: string, value: string) => {
@@ -1212,7 +1112,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       ) {
         handleResponseResults();
       }
-    }, [activeQuestion?.id]);
+    }, [activeQuestion?.id, activeQuestion?.confirmed]);
 
     const exhibitButton = (
       <>
@@ -1252,6 +1152,16 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       <FileViewer
                         fileName={e?.resource?.name}
                         fileUrl={e?.resource?.url}
+                        onDownload={() =>
+                          testServiceApi.downloadFile({
+                            files: [
+                              {
+                                name: e?.resource?.name,
+                                file_key: e?.resource?.file_key,
+                              },
+                            ],
+                          })
+                        }
                       />
                     </div>
                   );
@@ -1273,7 +1183,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 className="sapp-questions"
               />
             )}
-
           {!!activeQuestion?.question_topic?.description &&
             !isEmptyParagraph(activeQuestion?.question_topic?.description) && (
               <Divider className="my-4 bg-gray-300 md:my-8" />
@@ -1325,6 +1234,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     </div>
                   </Popover>
 
+
                   <div
                     className={clsx(
                       "group/exhibit grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary shadow-icon hover:bg-blend-overlay md:hidden",
@@ -1335,7 +1245,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   </div>
                 </div>
               )}
-
               {/* --- File Button --- */}
               {activeQuestion?.question_topic?.files?.length > 0 && (
                 <div className="isolate">
@@ -1403,7 +1312,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             </div>
           </div>
         </div>
-
         {openUpload.status && (
           <ModalUploadFile
             open={openUpload.status}
@@ -1472,3 +1380,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
 QuizComponent.displayName = "QuizComponent";
 export default memo(QuizComponent);
+
+
+

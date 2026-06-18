@@ -19,6 +19,7 @@ const REQUIRED_FEATURES = [
 const FEATURE_MODULE_MAP = {
   // example: @ops/feature-user => "feature-name": "nameModule"
   // Optional features
+  "feature-attendance": "attendanceModule",
   "feature-schedule": "scheduleModule",
   "feature-test": "testModule",
   "feature-certificate": "certificateModule",
@@ -36,6 +37,7 @@ const FEATURE_MODULE_MAP = {
 const FEATURE_FOLDER_MAP = {
   // example: @ops/feature-user => "feature-name": "folder-name"
   // Optional features
+  "feature-attendance": "attendance",
   "feature-schedule": "schedule",
   "feature-test": "test",
   "feature-certificate": "certificate",
@@ -212,7 +214,7 @@ if (fs.existsSync(registryPath)) {
     const moduleVar = FEATURE_MODULE_MAP[feature];
     const folderName = FEATURE_FOLDER_MAP[feature];
     if (
-      !["schedule", "test", "certificate", "examination"].includes(folderName)
+      !["attendance", "schedule", "test", "certificate", "examination"].includes(folderName)
     )
       return;
 

@@ -15,6 +15,8 @@ export const ClassKey = {
   ExamInfo: "examInfo",
   ClassResource: "classResource",
   ClassSchedule: "classSchedule",
+  ClassResourceFolder: "classResourceFolder",
+  ClassResourceFile: "classResourceFile",
 };
 
 export const UserKey = {

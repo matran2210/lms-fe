@@ -26,10 +26,11 @@
     "@lms/contexts": "workspace:*",
     "@lms/core": "workspace:*",
     "@lms/feature-class": "workspace:*",
+    "@lms/feature-courses": "workspace:*",
     "@lms/hoc": "workspace:*",
     "@lms/hooks": "workspace:*",
     "@lms/ui": "workspace:*",
     "@lms/utils": "workspace:*",
-    "@sapp-fe/sapp-common-package": "^1.8.4"
+    "@sapp-fe/sapp-common-package": "^1.9.0"
   }
 }

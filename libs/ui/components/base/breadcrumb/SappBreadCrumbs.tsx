@@ -103,7 +103,7 @@ const SappBreadCrumbs = ({
                     <span className="breadcrumb-last">{breadcrumb.title}</span>
                   )
                 ) : (
-                  <Link href={breadcrumb.link}>
+                  breadcrumb?.disable ? (
                     <div>
                       <Tooltip
                         title={breadcrumb.title}
@@ -111,17 +111,29 @@ const SappBreadCrumbs = ({
                         placement="bottomLeft"
                       >
                         <span
-                          className={clsx(
-                            "transition-all duration-300",
-                            !breadcrumb?.disable &&
-                              "cursor-pointer hover:text-primary",
-                          )}
+                          className="cursor-default opacity-60"
                         >
                           {titleDisplay}
                         </span>
                       </Tooltip>
                     </div>
-                  </Link>
+                  ) : (
+                    <Link href={breadcrumb.link}>
+                      <div>
+                        <Tooltip
+                          title={breadcrumb.title}
+                          showTooltip={isLong}
+                          placement="bottomLeft"
+                        >
+                          <span
+                            className="cursor-pointer transition-all duration-300 hover:text-primary"
+                          >
+                            {titleDisplay}
+                          </span>
+                        </Tooltip>
+                      </div>
+                    </Link>
+                  )
                 )}
 
                 {/* Dấu phân cách — gộp chung trong cùng motion */}

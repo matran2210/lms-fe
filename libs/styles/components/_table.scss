@@ -88,13 +88,11 @@
   }
 }
 
-.style-table {
-  .ant-table {
-    @apply overflow-hidden rounded-2xl shadow-small;
-  }
+@mixin style-table-base {
   .ant-table-wrapper {
     @apply overflow-hidden rounded-2xl;
   }
+
   .ant-table-thead > tr > th {
     @apply bg-white px-0 pb-6 pt-0 text-base font-medium text-gray;
 
@@ -114,6 +112,22 @@
   .ant-table-content {
     @apply p-6 lg:p-8;
   }
+}
+
+.style-table {
+  .ant-table {
+    @apply overflow-hidden rounded-2xl shadow-small;
+  }
+
+  @include style-table-base;
+}
+
+.style-table-class-resource {
+  .ant-table {
+    @apply overflow-hidden;
+  }
+
+  @include style-table-base;
 }
 
 .style-table-quiz {

@@ -162,6 +162,13 @@ module.exports = {
           DEFAULT: "#99A1B7",
         },
         skeleton: "#0000000f",
+        dashboard: {
+          blue: "#7086FD",
+          yellow: "#FFAE4C",
+          lightGreen: "#6FD195",
+          lightRed: "#FC8A8C",
+          cyan: "#07DBFA"
+        }
       },
       borderColor: {
         DEFAULT: "#DCDDDD",

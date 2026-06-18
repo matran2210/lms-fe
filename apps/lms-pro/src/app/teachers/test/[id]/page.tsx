@@ -22,6 +22,7 @@ import {
   loginSlice,
   showPopupCompletedCourse,
   useCourseContext,
+  useFeature,
 } from '@lms/contexts'
 import {
   Answer,
@@ -73,25 +74,28 @@ import {
 import {
   checkSheetAnswered,
   checkTypeAndRenderTitle,
+  isValuesEqual,
+  isWorkbookEmpty,
   runHighlight,
-  trackGAEvent,
 } from '@lms/utils'
 import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import LimitQuizModal from 'src/app/test/limitQuizModal'
-import SappLoading from '@components/common/SappLoading'
-import { isValuesEqual, isWorkbookEmpty } from '@utils/helpers'
+
+import {
+  LimitQuizModal,
+  SuccessSubmittedConstructorModal
+} from '@lms/feature-courses'
+import { useGetQuestionTabs, useGetQuizDetail } from '@lms/hooks'
+import { SappLoading } from '@lms/ui'
+import { trackGAEvent } from '@lms/utils'
 import dayjs from 'dayjs'
 import { EventTestAPI } from 'src/api/event-test'
 import { TestServiceAPI } from 'src/api/test-api'
-import SuccessSubmittedConstructorModal from 'src/app/test/SuccessSubmittedConstructorModal'
-import TestScratchPads from 'src/app/test/TestScratchPads'
-import useGetQuestionTabs from 'src/app/test/custom-hook/useGetQuestionTabs'
-import useGetQuizDetail from 'src/app/test/custom-hook/useGetQuizDetail'
 import { PageLink } from 'src/constants/routers'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { TestScratchPads } from '@lms/ui'
+
 declare global {
   interface Window {
     userAgreed: any
@@ -467,7 +471,7 @@ const TestDetail = () => {
   const [startTime, setStartTime] = useState(Date.now())
   const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
   const timeRef = useRef(null) as any
-  const dispatch = useAppDispatch()
+  const {dispatch, useAppSelector} = useFeature()
 
   const [submited, setSubmited] = useState(false)
   const [openTimeOut, setOpenTimeOut] = useState(false)
@@ -481,7 +485,7 @@ const TestDetail = () => {
   const [currentMousePos, setCurrentMousePos] = useState(0)
   const [leftWidth, setLeftWidth] = useState(0)
   const [currentLeftWidth, setCurrentLeftWidth] = useState(0)
-  const { unsavedChange } = useAppSelector((state) => state.loginReducer) || {}
+  const { unsavedChange } = useAppSelector?.((state) => state.loginReducer) || {}
   const rightSideRef = useRef<any>(null)
   const [mousePosition, setMousePosition] = useState({ x: null, y: null })
   const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
@@ -1697,7 +1701,7 @@ const TestDetail = () => {
     }
 
     // Disable unsaved changes tracking
-    dispatch(disableUnsavedChange())
+    dispatch?.(disableUnsavedChange())
 
     try {
       const res = await TestServiceAPI.submitAnswer(
@@ -1907,7 +1911,7 @@ const TestDetail = () => {
           answers: e.data?.answers,
         })
       }
-      dispatch(disableUnsavedChange())
+      dispatch?.(disableUnsavedChange())
 
       const res = await TestServiceAPI.submitAllQuestion(
         quizAttempt?.id as string,
@@ -1935,7 +1939,7 @@ const TestDetail = () => {
         if (typeSubmit === 'submit') {
           if (!!isCompletedCourse?.is_completed) {
             setTimeout(() => {
-              dispatch(
+              dispatch?.(
                 showPopupCompletedCourse(isCompletedCourse?.content || ''),
               )
             }, 2000)
@@ -1979,7 +1983,7 @@ const TestDetail = () => {
         } else {
           if (!!isCompletedCourse?.is_completed) {
             setTimeout(() => {
-              dispatch(
+              dispatch?.(
                 showPopupCompletedCourse(isCompletedCourse?.content || ''),
               )
             }, 2000)
@@ -2238,7 +2242,7 @@ const TestDetail = () => {
   }, [startResize])
 
   useEffect(() => {
-    dispatch(loginSlice.actions.enableUnsavedChange())
+     dispatch?.(loginSlice.actions.enableUnsavedChange())
   }, [dispatch])
 
   useEffect(() => {
@@ -2298,7 +2302,7 @@ const TestDetail = () => {
             setIsQuizAttemptCreated(true) // Mark the attempt as created
           } catch (err: any) {
             if (err.response?.data?.error.code === '400|060710') {
-              dispatch(disableUnsavedChange())
+              dispatch?.(disableUnsavedChange())
               setOpenLimit(true)
             }
             if (err.response?.data?.success === false) {
@@ -2577,7 +2581,7 @@ const TestDetail = () => {
                         await handleSubmitAnswer('timeout')
                       }
                       handleSubmitQuestions('timeout')
-                      dispatch(disableUnsavedChange())
+                       dispatch?.(disableUnsavedChange())
                         .unwrap()
                         .then(() => {
                           trackGAEvent('Click Button Submit Time Out Test')
@@ -3022,7 +3026,7 @@ const TestDetail = () => {
                     </div>
                     <button
                       onClick={() => {
-                        dispatch(
+                         dispatch?.(
                           confirmDialog.open({
                             // Nội dung của hộp thoại xác nhận
                             message:
@@ -3042,7 +3046,7 @@ const TestDetail = () => {
                     </button>
                     <button
                       onClick={() => {
-                        dispatch(
+                         dispatch?.(
                           confirmDialog.open({
                             // Nội dung của hộp thoại xác nhận
                             message:
@@ -3159,7 +3163,7 @@ const TestDetail = () => {
             open={openTimeOut}
             setOpen={setOpenTimeOut}
             handleSubmit={() => {
-              dispatch(disableUnsavedChange())
+               dispatch?.(disableUnsavedChange())
                 .unwrap()
                 .then(() => {
                   if (type === 'entrance') {
@@ -3210,7 +3214,7 @@ const TestDetail = () => {
               }
             }}
             handleCancel={() =>
-              dispatch(loginSlice.actions.enableUnsavedChange())
+               dispatch?.(loginSlice.actions.enableUnsavedChange())
             }
             content="If you quit now, your answers will be saved and the timer will continue running. You can come back later to resume the test."
           />
@@ -3231,7 +3235,7 @@ const TestDetail = () => {
               }
             }}
             handleCancel={() =>
-              dispatch(loginSlice.actions.enableUnsavedChange())
+               dispatch?.(loginSlice.actions.enableUnsavedChange())
             }
           />
 
