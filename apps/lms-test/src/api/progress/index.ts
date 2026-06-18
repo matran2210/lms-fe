@@ -1,5 +1,5 @@
-import { IProgressList, IRequestCreateProgress, IResponse } from '@lms/core'
-import { fetcher } from '@services/requestV2'
+import { IProgressList, IRequestCreateProgress, IResponse } from "@lms/core";
+import { fetcher } from "@services/requestV2";
 
 export class ProgressAPI {
   static getProgressList({
@@ -7,9 +7,9 @@ export class ProgressAPI {
     page_size,
     params,
   }: {
-    page_index: number
-    page_size: number
-    params?: Object
+    page_index: number;
+    page_size: number;
+    params?: Object;
   }): Promise<IResponse<IProgressList>> {
     return fetcher(`class-teaching-progress`, {
       params: {
@@ -17,15 +17,15 @@ export class ProgressAPI {
         page_size: page_size,
         ...params,
       },
-    })
+    });
   }
 
   static getProgressDetail(id: string) {
-    return fetcher(`class-teaching-progress/${id}`)
+    return fetcher(`class-teaching-progress/${id}`);
   }
 
   static getListLesson(classId: string) {
-    return fetcher(`class-teaching-progress/get-lesson/${classId}`)
+    return fetcher(`class-teaching-progress/get-lesson/${classId}`);
   }
 
   static getListSection(
@@ -38,16 +38,16 @@ export class ProgressAPI {
       {
         params,
       },
-    )
+    );
   }
   static createProgress(data: IRequestCreateProgress) {
-    return fetcher(`class-teaching-progress`, { method: 'POST', data: data })
+    return fetcher(`class-teaching-progress`, { method: "POST", data: data });
   }
 
   static updateProgress(id: string, data: IRequestCreateProgress) {
     return fetcher(`class-teaching-progress/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       data: data,
-    })
+    });
   }
 }

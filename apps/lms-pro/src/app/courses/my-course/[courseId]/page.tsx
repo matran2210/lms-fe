@@ -102,6 +102,7 @@ const CourseDetail = () => {
       is_passed: data?.is_passed,
       data: data?.data?.course_sections_with_progress || [],
       courseDetail: data,
+      metadata: data?.metadata,
     }
   }
 
@@ -126,13 +127,12 @@ const CourseDetail = () => {
       }
     },
     getNextPageParam: (lastPage, allPages) => {
-      if (
-        params.user_section_learning_status ||
-        params.user_section_learning_status === undefined
-      ) {
-        return undefined // Prevent fetching more pages if params change
+      if (params.user_section_learning_status) {
+        return undefined
       }
-      return lastPage?.data?.length ? allPages.length + 1 : undefined
+      const totalPages = lastPage?.metadata?.total_pages ?? 1
+      const currentPage = allPages.length
+      return currentPage < totalPages ? currentPage + 1 : undefined
     },
     enabled: param.courseId !== undefined,
     retry: false,

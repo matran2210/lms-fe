@@ -13,6 +13,7 @@ const badgeTypeToClass = {
   info: 'bg-info/5 text-info',
   success: 'bg-success/5 text-success',
   default: 'bg-accent/5 text-accent',
+  none: '',
 } as const
 
 function SAPPBadge({ className, label, type = 'default' }: SAPPBadgeProps) {

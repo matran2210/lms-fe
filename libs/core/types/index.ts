@@ -242,3 +242,4 @@ export * from "./courses-3-level";
 export * from "./my-calendar";
 export * from "./my-request";
 export * from "./teachers";
+export * from "./attendance";
