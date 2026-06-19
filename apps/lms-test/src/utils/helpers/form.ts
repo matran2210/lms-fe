@@ -1,28 +1,28 @@
-import { UseFormSetError } from 'react-hook-form'
+import { UseFormSetError } from "react-hook-form";
 
 const display422Errors = (error: any, setError: UseFormSetError<any>) => {
   if (error?.response?.status !== 422) {
-    return
+    return;
   }
-  const entitiesErrors = error?.response?.data?.error?.others
+  const entitiesErrors = error?.response?.data?.error?.others;
   if (!entitiesErrors?.[0]) {
-    return
+    return;
   }
   entitiesErrors.forEach(
     ({
       property,
       errors,
     }: {
-      property: string
+      property: string;
       errors: {
-        code: string
-        message: string
-      }[]
+        code: string;
+        message: string;
+      }[];
     }) => {
       if (errors?.[0]?.message) {
-        setError(property, { message: errors?.[0]?.message })
+        setError(property, { message: errors?.[0]?.message });
       }
     },
-  )
-}
-export { display422Errors }
+  );
+};
+export { display422Errors };

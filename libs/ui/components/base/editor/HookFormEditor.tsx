@@ -22,6 +22,7 @@ interface Props {
   disabled?: boolean;
   key?: number | string;
   editorRef?: React.RefObject<SAPPEditorHandle>;
+  isResetValue?: boolean;
 }
 
 const HookFormEditor = ({
@@ -41,6 +42,7 @@ const HookFormEditor = ({
   disabled,
   key,
   editorRef,
+  isResetValue = false,
 }: Props) => {
   return (
     <Controller
@@ -49,6 +51,9 @@ const HookFormEditor = ({
       control={control}
       defaultValue={defaultValue}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
+        // Use value from form if available, otherwise use defaultValue
+        const editorValue = isResetValue ? defaultValue : value !== undefined && value !== null ? value : defaultValue;
+        
         return (
           <>
             {label && (
@@ -64,7 +69,7 @@ const HookFormEditor = ({
                     handleChange && handleChange(e);
                   }}
                   // key={key}
-                  valueText={defaultValue}
+                  valueText={editorValue}
                   className={`${className} ${error ? "tox-tinymce_error" : ""}`}
                   height={height}
                   math={math}

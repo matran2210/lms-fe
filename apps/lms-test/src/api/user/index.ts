@@ -1,6 +1,13 @@
-import { UserExamInformation } from '@lms/core'
-import { fetcher } from '@services/requestV2'
-import { apiURL } from 'src/constants'
+import {
+  IClassAttendanceHistoryResponse,
+  IResponse,
+  ITeacherTeachingAttendanceListParams,
+  ITeacherTeachingAttendanceListResponse,
+  ITeachingStatistics,
+  UserExamInformation,
+} from "@lms/core";
+import { fetcher } from "@services/requestV2";
+import { apiURL } from "src/constants";
 
 export class UserApi {
   static getExamination(
@@ -9,11 +16,11 @@ export class UserApi {
   ): Promise<UserExamInformation> {
     return fetcher(
       `${apiURL}/users/examination?page_index=${page_index}&page_size=${page_size}&template=4`,
-    )
+    );
   }
 
   static getUserPrograms(course_category_id: string | undefined): Promise<any> {
-    return fetcher(`users/programs?course_category_id=${course_category_id}`)
+    return fetcher(`users/programs?course_category_id=${course_category_id}`);
   }
 
   /**
@@ -35,12 +42,57 @@ export class UserApi {
     session_id: string,
     keycloak_user_id: string,
   ): Promise<{ success: boolean }> {
-    return fetcher('auth/logout', {
-      method: 'POST',
+    return fetcher("auth/logout", {
+      method: "POST",
       data: {
         session_id: session_id,
         keycloak_user_id: keycloak_user_id,
       },
-    })
+    });
+  }
+
+  // user attendances
+  // teacher:
+  //  get teaching attendances
+  static getTeacherTeachingAttendance(
+    params: ITeacherTeachingAttendanceListParams,
+  ): Promise<IResponse<ITeacherTeachingAttendanceListResponse>> {
+    return fetcher(`/user-attendances/teacher/teaching-attendance`, {
+      params: params,
+    });
+  }
+
+  // get teaching attendance history
+  static getTeacherTeachingAttendanceHistory(
+    teacher_schedule_id: string,
+  ): Promise<IResponse<IClassAttendanceHistoryResponse[]>> {
+    return fetcher(
+      `/user-attendances/teacher/teaching-attendance/${teacher_schedule_id}/history`,
+    );
+  }
+
+  // get teaching attendance summary
+  static getTeacherTeachingAttendanceSummary(params?: {
+    fromDate?: string;
+    toDate?: string;
+  }): Promise<IResponse<ITeachingStatistics>> {
+    return fetcher(`/user-attendances/teacher/teaching-attendance/summary`, {
+      params: params,
+    });
+  }
+
+  // get learning attendance
+  static getTeacherLearningAttendance(params: {
+    page_index: number;
+    page_size: number;
+    fromDate?: string;
+    toDate?: string;
+    class_ids?: string[];
+    lesson_ids?: string[];
+    attendance_status?: string[];
+  }): Promise<IResponse<any>> {
+    return fetcher(`/user-attendances/teacher/learning-attendance`, {
+      params: params,
+    });
   }
 }

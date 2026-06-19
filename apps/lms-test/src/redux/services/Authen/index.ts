@@ -1,3 +1,3 @@
-const AuthApi = {}
+const AuthApi = {};
 
-export default AuthApi
+export default AuthApi;

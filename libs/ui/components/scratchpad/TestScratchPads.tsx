@@ -2,10 +2,10 @@
 import { CloseIconNote, Triangle } from '@lms/assets'
 import { IExhibit, ScratchPadValue } from '@lms/core'
 import CalculatorModal from '../calculator-modal/CalculatorModal'
-import { useSmartModalSize } from '@lms/hooks'
+import { useSmartModalSize, useTailwindBreakpoint } from '@lms/hooks'
 import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
-import ScratchPatch from './scratchPatch' 
+import ScratchPatch from './scratchPatch'
 import { TestServiceAPI } from 'src/api/test-api'
 import { EditorReader, FileViewer, ModalResizeable } from '../base'
 interface IProps {
@@ -35,9 +35,9 @@ const TestScratchPads = ({
   setScratchPadValues,
   exhibitText = 'Exhibit',
 }: IProps) => {
+  const {isMobileView} = useTailwindBreakpoint()
   const handleChangeScratchPad = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
-
     const index = scratchPadValues?.findIndex(
       (item: ScratchPadValue) => item.id === currentPage,
     )
@@ -110,18 +110,20 @@ const TestScratchPads = ({
           contentClassName="!overflow-hidden"
           isTopModal={focusingPadId === e.id}
         >
-          <ScratchPatch
-            scratchPadValues={scratchPadValues.find(
-              (el) => el.id === currentPage,
-            )}
-            control={controlScratch}
-            scratchPads={scratchPads}
-            handleChangeScratchPad={(event: ChangeEvent<HTMLInputElement>) => {
-              setScratchPads(event.target.value)
-              handleChangeScratchPad(event)
-            }}
-            className="!h-full"
-          />
+          <div className='h-full pb-3 overflow-y-auto'>
+            <ScratchPatch
+              scratchPadValues={scratchPadValues.find(
+                (el) => el.id === currentPage,
+              )}
+              control={controlScratch}
+              scratchPads={scratchPads}
+              handleChangeScratchPad={(event: ChangeEvent<HTMLInputElement>) => {
+                setScratchPads(event.target.value)
+                handleChangeScratchPad(event)
+              }}
+              className="!h-full"
+            />
+          </div>
         </ModalResizeable>
       )
     } else if (e.type === 'exhibits') {
@@ -130,6 +132,8 @@ const TestScratchPads = ({
       return (
         <ModalResizeable
           key={e.id}
+          width={isMobileView ? 412 : undefined}
+          height={isMobileView ? 350 : undefined}
           onClose={() => handleCloseScratchPad(e)}
           position="center"
           modalIndex={i}
@@ -137,7 +141,7 @@ const TestScratchPads = ({
           onModalFocus={() => setFocusingPadId(e?.id as string)}
           header={({ requestClose }) => (
             <div className="relative">
-              <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
+              <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between bg-white pl-5 pr-9">
                 <div className="truncate">
                   <span className="text-base font-semibold">{`${exhibitText} ${(i ?? 0) + 1
                     }: `}</span>
@@ -146,7 +150,8 @@ const TestScratchPads = ({
               </div>
               <button
                 className="absolute right-3 top-2"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation()
                   requestClose()
                   setTimeout(() => handleCloseScratchPad(e), 300)
                 }}
@@ -155,29 +160,31 @@ const TestScratchPads = ({
               </button>
             </div>
           )}
-          draggableFull
+          draggableFull={!isMobileView}
         >
-          <div className="h-full bg-white px-4 py-3">
-            <EditorReader
-              text_editor_content={exhibitsDes?.description}
-              className="w-full"
-            />
-            {exhibitsDes &&
-              exhibitsDes?.files?.length > 0 &&
-              exhibitsDes?.files?.map((e: any, index: number) => {
-                return (
-                  <div
-                    key={index}
-                    className="h-full cursor-pointer overflow-auto bg-white"
-                  >
-                    <FileViewer
-                      fileName={e?.resource?.name}
-                      fileUrl={e?.resource?.url}
-                      onDownload={() => TestServiceAPI.downloadFile({ files: [{ name: e?.resource?.name, file_key: e?.resource?.file_key }] })}
-                    />
-                  </div>
-                )
-              })}
+          <div className="h-full bg-white px-4 pb-3">
+            <div className='h-full overflow-auto'>
+              <EditorReader
+                text_editor_content={exhibitsDes?.description}
+                className="w-full"
+              />
+              {exhibitsDes &&
+                exhibitsDes?.files?.length > 0 &&
+                exhibitsDes?.files?.map((e: any, index: number) => {
+                  return (
+                    <div
+                      key={index}
+                      className="h-full cursor-pointer overflow-auto bg-white"
+                    >
+                      <FileViewer
+                        fileName={e?.resource?.name}
+                        fileUrl={e?.resource?.url}
+                        onDownload={() => TestServiceAPI.downloadFile({ files: [{ name: e?.resource?.name, file_key: e?.resource?.file_key }] })}
+                      />
+                    </div>
+                  )
+                })}
+            </div>
           </div>
           <Triangle className="absolute bottom-2 right-2" />
         </ModalResizeable>
