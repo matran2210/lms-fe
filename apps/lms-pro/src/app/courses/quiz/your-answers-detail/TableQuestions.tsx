@@ -276,6 +276,7 @@ const TableQuestions = ({
                   <td className="p-0 pr-4 text-base text-gray-800">
                     <Tooltip
                       placement="topLeft"
+                      rootClassName="!max-w-[600px]"
                       title={
                         <div
                           dangerouslySetInnerHTML={{
@@ -299,9 +300,6 @@ const TableQuestions = ({
                   {/* Section */}
                   <td
                     className="sapp-border my-5 line-clamp-1 p-0 text-center text-base text-gray-800"
-                    title={
-                      answer?.question?.question_filter?.part?.name ?? '--'
-                    }
                   >
                     <Tooltip
                       placement="topLeft"
