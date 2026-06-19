@@ -46,8 +46,9 @@ console.log("\nCleaning packages...");
 const rootDir = path.join(__dirname, "..");
 const packageDirs = [
   path.join(rootDir, "apps", "lms-pro"),
-  path.join(rootDir, "apps", "lms-finhub"),
+  // path.join(rootDir, "apps", "lms-finhub"), // tạm tắt, không dùng
   path.join(rootDir, "apps", "lms-zoom"),
+  path.join(rootDir, "apps", "lms-test"),
   path.join(rootDir, "libs"),
   path.join(rootDir, "features"),
   path.join(rootDir, "tools"),
