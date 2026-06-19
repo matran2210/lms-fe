@@ -81,7 +81,7 @@ const StoryFooter = ({
   return (
     <div
       className={clsx(
-        'fixed bottom-0 z-[201] flex w-full animate-aos-fade-up justify-center border-t border-t-success bg-success-50 px-8 py-4',
+        'fixed bottom-0 z-[201] flex w-full animate-aos-fade-up justify-center border-t border-t-success bg-success-50 px-4 py-4 md:px-8',
       )}
     >
       <motion.div
@@ -90,7 +90,7 @@ const StoryFooter = ({
         transition={{ duration: 0.4, ease: 'easeOut' }}
         exit={{ x: -240 }}
         className={clsx(
-          'mx-auto flex w-full max-w-5xl items-center justify-between',
+          'mx-auto flex w-full max-w-5xl flex-col gap-4 md:flex-row md:items-center md:justify-between',
         )}
       >
         <div className="flex justify-start gap-3">
@@ -101,11 +101,11 @@ const StoryFooter = ({
             height={24}
             className="shrink-0"
           />
-          <div className=" text-xl font-semibold leading-7 text-gray-800">
+          <div className="text-xl font-semibold leading-7 text-gray-800">
             You have finished this item!
           </div>
         </div>
-        <div className="flex items-center justify-start gap-4">
+        <div className="flex items-center justify-between gap-4 md:justify-start">
           <ButtonText
             isUnderLine={false}
             size="medium"

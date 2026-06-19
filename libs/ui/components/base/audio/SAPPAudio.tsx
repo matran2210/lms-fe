@@ -1,6 +1,8 @@
+"use client"
 import { Stream } from "@cloudflare/stream-react";
 import { LoadingIcon } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
+import { formatTimeToHourMinuteSecond, isMobileOrTablet } from "@lms/utils";
 import { formatTimeToHourMinuteSecond, isMobileOrTablet } from "@lms/utils";
 import clsx from "clsx";
 import { ReactNode, useEffect, useMemo, useRef, useState } from "react";

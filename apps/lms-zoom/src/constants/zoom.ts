@@ -1,4 +1,9 @@
+/** Must match @zoom/meetingsdk version in package.json */
+export const ZOOM_SDK_VERSION = '6.1.0'
+
 export const ZOOM_CONFIG = {
+  SDK_LIB_URL: `https://source.zoom.us/${ZOOM_SDK_VERSION}/lib`,
+
   // SDK Configuration
   SDK_CONFIG: {
     PATCH_JS_MEDIA: true,

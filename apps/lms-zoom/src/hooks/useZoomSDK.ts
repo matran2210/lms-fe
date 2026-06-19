@@ -2,25 +2,27 @@
 
 import { HOME_LMS_URL } from '@/constants'
 import { ZOOM_CONFIG } from '@/constants/zoom'
-import { ZoomMeetingConfig } from '@/types/zoom'
+import { ZoomMeetingConfig, ZoomMeetingSDK } from '@/types/zoom'
 import { toggleMeetingContainer } from '@/utils'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export const useZoomSDK = () => {
+  const zoomMtgRef = useRef<ZoomMeetingSDK | null>(null)
   const [isSDKLoaded, setIsSDKLoaded] = useState(false)
   const [isJoining, setIsJoining] = useState(false)
   const [isJoined, setIsJoined] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Load Zoom SDK
+  // Load Zoom SDK (client-only dynamic import; must match @zoom/meetingsdk version)
   useEffect(() => {
     const loadZoomSDK = async () => {
       try {
-        await import('@zoom/meetingsdk')
+        const { ZoomMtg } = await import('@zoom/meetingsdk')
+        zoomMtgRef.current = ZoomMtg
 
-        window.ZoomMtg.setZoomJSLib('https://source.zoom.us/5.1.4/lib', '/av')
-        window.ZoomMtg.preLoadWasm()
-        window.ZoomMtg.prepareWebSDK()
+        ZoomMtg.setZoomJSLib(ZOOM_CONFIG.SDK_LIB_URL, '/av')
+        ZoomMtg.preLoadWasm()
+        ZoomMtg.prepareWebSDK()
 
         setIsSDKLoaded(true)
       } catch (err) {
@@ -34,23 +36,23 @@ export const useZoomSDK = () => {
   // Join meeting
   const joinMeeting = useCallback(
     async (config: ZoomMeetingConfig) => {
-      if (!isSDKLoaded || !window.ZoomMtg) {
+      const ZoomMtg = zoomMtgRef.current
+      if (!isSDKLoaded || !ZoomMtg) {
         throw new Error(ZOOM_CONFIG.ERROR_MESSAGES.SDK_NOT_LOADED)
       }
 
       toggleMeetingContainer('block')
 
       try {
-        window.ZoomMtg.i18n.load('vi-VN')
-        window.ZoomMtg.init({
+        ZoomMtg.i18n.load('vi-VN')
+        ZoomMtg.init({
           leaveUrl: HOME_LMS_URL,
           patchJsMedia: ZOOM_CONFIG.SDK_CONFIG.PATCH_JS_MEDIA,
           leaveOnPageUnload: ZOOM_CONFIG.SDK_CONFIG.LEAVE_ON_PAGE_UNLOAD,
           meetingInfo: [],
           disableInvite: true,
           success: () => {
-            // Join the meeting
-            window.ZoomMtg.join({
+            ZoomMtg.join({
               signature: config.signature,
               sdkKey: config.sdkKey,
               meetingNumber: config.meetingNumber,

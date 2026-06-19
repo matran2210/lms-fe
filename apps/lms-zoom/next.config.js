@@ -39,6 +39,12 @@ let nextConfig = {
     fetches: { fullUrl: true },
   },
   experimental: { optimizeCss: true, forceSwcTransforms: true },
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals = [...(config.externals || []), '@zoom/meetingsdk']
+    }
+    return config
+  },
 }
 
 nextConfig = bundleAnalyzer(nextConfig)

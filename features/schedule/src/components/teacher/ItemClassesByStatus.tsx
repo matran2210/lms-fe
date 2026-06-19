@@ -205,7 +205,7 @@ const ItemClassesByStatus = ({
           <div className="time-class text-sm text-zinc-400">
             {determineButtonToShow !== 'Active' && (
               <span className="flex items-center">
-                <ClockInClassIcon />
+                <ClockInClassIcon className="text-gray-400" />
                 <span
                   className={`font-medium ${enableCourse ? 'text-gray-800' : 'text-zinc-400'
                     } ml-2`}

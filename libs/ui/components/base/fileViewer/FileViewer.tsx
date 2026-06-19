@@ -9,10 +9,12 @@ const FileViewer = ({
   fileName,
   fileUrl,
   onlyView = false,
+  onDownload,
 }: {
   fileName: string;
   fileUrl: string;
   onlyView?: boolean;
+  onDownload?: () => void;
 }) => {
   const [shouldDownload, setShouldDownload] = useState(false);
 
@@ -37,7 +39,7 @@ const FileViewer = ({
         Dung lượng file &quot;{fileName}&quot; quá lớn,&nbsp;
         <span
           className="font-semibold cursor-pointer text-state-info hover:underline"
-          onClick={() => downloadFileByURL(fileUrl, fileName)}
+          onClick={() => onDownload ? onDownload() : downloadFileByURL(fileUrl, fileName)}
         >
           vui lòng click vào đây để tải xuống và xem
         </span>

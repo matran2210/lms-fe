@@ -73,7 +73,7 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
   const handleOpenTest = (record: QuizActivity) => {
     handleCheckQuizAttempt(record)
     openInNewTab({
-      url: `/test/${record?.id}?class_user_id=${resultData?.class_user_id}`,
+      url: `${process.env.NEXT_PUBLIC_SUB_DOMAIN_TEST}/test/${record?.id}?class_user_id=${resultData?.class_user_id}`,
       isNewTab: false
     });
   }

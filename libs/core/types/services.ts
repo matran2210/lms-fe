@@ -12,7 +12,21 @@ import {
   SendEmailReq,
   VerifyOtpReq,
 } from "../../state";
-import { DocumentItem, ExamInformation, IQuestion, IStoryline } from "./course";
+import { IAttendanceStatistics, IClassAttendanceHistoryResponse, ILessonListParams, IStudentAttendanceHistoryResponse, IStudentAttendanceListParams, IStudentAttendanceListResponse, IStudentLessonListResponse, ITeacherTeachingClassListResponse, ITeacherTeachingLessonListResponse } from "./attendance";
+import {
+  IClassResourceList,
+  IClassResourcePreview,
+  IListClassResourceParams,
+  ISubjectList,
+} from "./classes";
+import { IQueryParams } from "./common";
+import {
+  CourseDetail,
+  DocumentItem,
+  ExamInformation,
+  IQuestion,
+  IStoryline,
+} from "./course";
 import {
   IExamPrediction,
   ILearningResult,
@@ -23,29 +37,6 @@ import {
 } from "./dashboard";
 import { IEntranceTest } from "./entrance-test";
 import {
-  IAnswerQuizLastestAttempt,
-  IQuizResultList,
-  IScoreDetails,
-} from "./quiz";
-import {
-  IClassDetail,
-  IProgressList,
-  IRequestCreateProgress,
-} from "./progress";
-import {
-  IClassResourceList,
-  IClassResourcePreview,
-  IListClassResourceParams,
-  ISubjectList,
-} from "./classes";
-import {
-  APIDetailScheduleRequestResponse,
-  APIListScheduleRequestResponse,
-  RequestScheduleParams,
-  StatusMultipleRequestScheduleParams,
-  StatusRequestScheduleParams,
-} from "./teachers/request-schedule.interface";
-import {
   IBusyRequestDetailResponse,
   ICreateBusyScheduleData,
   ICreateEditWeeklyNorm,
@@ -55,8 +46,23 @@ import {
   IEditTimeoffRequestData,
   IEditWeeklyNormData,
 } from "./my-request";
-import { IQueryParams } from "./common";
+import {
+  IProgressList,
+  IRequestCreateProgress
+} from "./progress";
+import {
+  IAnswerQuizLastestAttempt,
+  IQuizResultList,
+  IScoreDetails,
+} from "./quiz";
 import { IRequestList } from "./request";
+import {
+  APIDetailScheduleRequestResponse,
+  APIListScheduleRequestResponse,
+  RequestScheduleParams,
+  StatusMultipleRequestScheduleParams,
+  StatusRequestScheduleParams,
+} from "./teachers/request-schedule.interface";
 
 export interface IAuthManager {
   getToken(): string;
@@ -168,6 +174,12 @@ export interface ICoursesAPI {
   getQuizAttemptsEntranceTestChartData: (
     id: string | string[] | undefined,
   ) => Promise<any>;
+  getCourseDetail(
+    id: string | string[] | undefined,
+    page_index: number,
+    page_size: number,
+    params: Object,
+  ): Promise<IResponse<CourseDetail>>;
 }
 export interface IActivityAPI {
   createDiscussionComment: (request: ICreateDiscussionRequest) => Promise<any>;
@@ -275,13 +287,25 @@ export interface IClassAPI {
   getClassResource?: (
     class_id: string,
     params: IListClassResourceParams,
-  ) => Promise<IResponse<IClassResourceList>>;
+  ) => Promise<IClassResourceList>;
   getClassSchedule?: (
     id: string,
     page_index: number,
     page_size: number,
     search_key?: string,
   ) => Promise<any>;
+
+  // attendance
+  getStudentAttendance(
+    class_id: string,
+    params: IStudentAttendanceListParams,
+  ): Promise<IResponse<IStudentAttendanceListResponse>>;
+
+  getStudentAttendanceSummary(class_id: string): Promise<IResponse<IAttendanceStatistics>>;
+  getClassAttendanceHistory(class_id: string, lesson_id: string): Promise<IResponse<IStudentAttendanceHistoryResponse>>;
+  getStudentLearningSchedule(params: ILessonListParams): Promise<IResponse<IStudentLessonListResponse>>;
+  getTeacherLearningSchedule(params: ILessonListParams): Promise<IResponse<ITeacherTeachingLessonListResponse>>;
+  getTeacherTeachingClass(params: Omit<ILessonListParams, "class_ids">): Promise<IResponse<ITeacherTeachingClassListResponse>>
 }
 export interface ICalendarAPI {
   getEventSchedule: (params?: object | undefined) => Promise<any>;

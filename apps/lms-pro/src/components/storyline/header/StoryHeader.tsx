@@ -30,7 +30,7 @@ const StoryHeader = () => {
   }
   return (
     <div className="sticky top-0 z-[201] shadow-medium">
-      <div className="relative bg-white px-8 py-4">
+      <div className="relative bg-white px-4 md:px-8 py-4">
         <div className=" flex w-full items-center justify-between">
           <div
             className={clsx(

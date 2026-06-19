@@ -264,12 +264,20 @@ const ModalActionTest = ({
   }, [selectedResult?.value, attempt]);
 
   const handleStartANewAttempt = async () => {
+    const quizAttempt = JSON.parse(localStorage.getItem("quizAttempt") || "{}");
+    const SUB_DOMAIN_TEST = process.env.NEXT_PUBLIC_SUB_DOMAIN_TEST;
+    
     //to do: start test
     try {
-      router.push(`/test/${data.quiz.id}?class_user_id=${class_user_id}`);
       status
-        ? () => trackGAEvent("Click Button Retake Modal Test")
-        : () => trackGAEvent("Click Button Start Modal Test");
+        ? trackGAEvent("Click Button Retake Modal Test")
+        : trackGAEvent("Click Button Start Modal Test");
+      
+      if (quizAttempt?.id) {
+        router.push(`${SUB_DOMAIN_TEST}/test/${data.quiz.id}?class_user_id=${class_user_id}&quizAttemptId=${quizAttempt.id}`);
+      } else {
+        router.push(`${SUB_DOMAIN_TEST}/test/${data.quiz.id}?class_user_id=${class_user_id}`);
+      }
     } catch (err) {}
   };
 
@@ -293,19 +301,19 @@ const ModalActionTest = ({
     attempt &&
     attempt?.status === "SUBMITTED";
 
-  const renderBackButton = () => (
+  const renderBackButton = (requestClose: () => void) => (
     <ButtonText
       title="Cancel"
       // icon={<BackIcon />}
       size="medium"
       onClick={() => {
-        setOpen(false);
+        requestClose();
         trackGAEvent("Click Button Back to My Course");
       }}
     />
   );
 
-  const renderCustomFooter = () => {
+  const renderCustomFooter = (requestClose: () => void) => {
     if (!quiz) return null;
 
     // Trường hợp: có thể hiển thị nút Start hoặc Retake
@@ -339,7 +347,7 @@ const ModalActionTest = ({
                   onClick={handleStartANewAttempt}
                 />
               )}
-              {renderBackButton()}
+              {renderBackButton(requestClose)}
             </>
           );
         }
@@ -360,7 +368,7 @@ const ModalActionTest = ({
                 full
                 onClick={handleStartANewAttempt}
               />
-              {renderBackButton()}
+              {renderBackButton(requestClose)}
             </>
           );
         }
@@ -376,7 +384,7 @@ const ModalActionTest = ({
                 onClick={handleRetakeNewAttempt}
               />
             )}
-            {renderBackButton()}
+            {renderBackButton(requestClose)}
           </>
         );
       } else {
@@ -405,7 +413,7 @@ const ModalActionTest = ({
                   onClick={handleStartANewAttempt}
                 />
               )}
-              {renderBackButton()}
+              {renderBackButton(requestClose)}
             </>
           );
         }
@@ -556,6 +564,7 @@ const ModalActionTest = ({
       router.push(`/courses/test/test-result/${selectedResult?.value ?? attempt?.id}?attempt=${selectedResult?.label}`);
     }
   };
+  const UNLIMITED_ATTEMPT_COUNT = 2 
 
   return (
     <>
@@ -568,12 +577,12 @@ const ModalActionTest = ({
           </div>
         }
         time={displayTime}
-        
-        customFooter={
+        numberOfAttempt={isLimited ? (limitCount - currentAttemptNum + 1) : UNLIMITED_ATTEMPT_COUNT}
+        customFooter={({ requestClose }) => (
           <div className="flex w-full flex-col items-center justify-center gap-3">
-            {renderCustomFooter()}
+            {renderCustomFooter(requestClose)}
           </div>
-        }
+        )}
         isClosable
       />
       {/* )} */}

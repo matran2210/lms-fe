@@ -12,7 +12,6 @@ import React, {
 import { createPortal } from "react-dom";
 import { ResizeDirection } from "re-resizable";
 import { DraggableData, Rnd, RndDragEvent } from "react-rnd";
-import useFocusTrap from "./useFocusTrap";
 
 // ── Constants ──────────────────────────────────────────────────────────
 const MODAL_OFFSET_PX = 20;
@@ -67,6 +66,7 @@ export interface ModalResizeableProps {
   minHeight?: number; // default: 200
   maxWidth?: number;
   maxHeight?: number;
+  lockAspectRatio?: boolean | number;
 
   // ── Position & Drag ──
   position?: ModalPosition; // default: "center"
@@ -87,15 +87,6 @@ export interface ModalResizeableProps {
 
   // ── Portal ──
   isInBody?: boolean; // default: false
-
-  // ── Focus Trap ──
-  /**
-   * When multiple modals are open simultaneously, only the top-most modal
-   * (highest modalIndex) should have the focus trap active.
-   * - `undefined` (default): focus trap is enabled (backward-compatible default).
-   * - `true`: focus trap is explicitly enabled.
-   * - `false`: focus trap is disabled (modal is not the top-most one).
-   */
   isTopModal?: boolean;
 }
 
@@ -250,6 +241,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   minHeight = 200,
   maxWidth,
   maxHeight,
+  lockAspectRatio = false,
   header,
   dragHandleClassName,
   onClose,
@@ -269,7 +261,6 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   const [size, setSize] = useState({ width, height });
 
   // `closing` drives the exit animation and guards against double-trigger.
-  // When true: focus trap is disabled, aria-hidden is set, exit animation plays.
   const [closing, setClosing] = useState(false);
 
   // `visible` controls AnimatePresence mount/unmount.
@@ -306,11 +297,6 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
       height: clampPositive(rect.height),
     };
   }, [getRenderedModalRect, isDragging]);
-
-  // Unique id for aria-labelledby — stable across renders
-  const titleId = useRef(
-    `modal-title-${Math.random().toString(36).slice(2, 9)}`,
-  ).current;
 
   const { modalPosition, setModalPosition } = useModalPosition({
     position,
@@ -351,15 +337,6 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
     return () => window.cancelAnimationFrame(frameId);
   }, [getRenderedModalSize, visible, width, height, isDragging, closing]);
 
-  // ── Focus Trap ──
-  // Disabled while closing so focus is released before the modal unmounts.
-  // When isTopModal is explicitly false, the focus trap is also disabled —
-  // this allows consumers to enable the trap only for the top-most modal
-  // when multiple modals are open simultaneously.
-  // When isTopModal is undefined (default), the trap is enabled for
-  // backward compatibility.
-  useFocusTrap({ enabled: !closing && isTopModal !== false, containerRef });
-
   // ── requestClose — guard against double-trigger ──
   const requestClose = useCallback(() => {
     if (closing) return;
@@ -391,9 +368,6 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
       
       const renderedRect = getRenderedModalRect();
       const renderedSize = getRenderedModalSize();
-      const modalWidth = renderedRect?.width ?? renderedSize?.width ?? size.width;
-      const modalHeight =
-        renderedRect?.height ?? renderedSize?.height ?? size.height;
       const modalX = renderedRect?.left ?? d.x;
       const modalY = renderedRect?.top ?? d.y;
 
@@ -488,10 +462,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
            */}
           <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between px-5">
             {typeof title === "string" ? (
-              // Assign the stable titleId so aria-labelledby can reference it
-              <div id={titleId} className="truncate">
-                {title}
-              </div>
+              <div className="truncate">{title}</div>
             ) : (
               <div className="truncate">{title}</div>
             )}
@@ -553,7 +524,6 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
               duration: 0.2,
               ease: "easeInOut",
             }}
-            aria-hidden={closing || undefined}
             style={{ 
               pointerEvents: "none", // Changed from "auto" to "none"
               position: "absolute", 
@@ -571,6 +541,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
               minHeight={minHeight}
               maxWidth={maxWidth}
               maxHeight={maxHeight}
+              lockAspectRatio={lockAspectRatio}
               bounds="window"
               dragHandleClassName={dragHandleClass}
               className={rndClass}
@@ -580,20 +551,8 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
               onMouseDown={onModalFocus}
               onTouchStart={onModalFocus}
             >
-              {/*
-               * This div is the focus trap container and the ARIA dialog root.
-               * tabIndex={-1} allows it to receive programmatic focus as a
-               * fallback when no focusable children exist.
-               */}
               <div
                 ref={containerRef}
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby={
-                  typeof title === "string" ? titleId : undefined
-                }
-                aria-label={typeof title !== "string" ? "Modal" : undefined}
-                tabIndex={-1}
                 className={clsx(
                   "absolute left-0 top-0 flex h-full min-h-0 w-full flex-col",
                   bodyClassName,

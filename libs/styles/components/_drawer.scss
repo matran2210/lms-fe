@@ -45,6 +45,13 @@
       @apply bottom-0;
     }
   }
+  // Thêm class mới để override height: 400px
+  &.drawer-height-450 {
+    .ant-drawer-content-wrapper {
+      @apply h-[450px];
+      height: 450px !important; /* Đảm bảo override nếu có !important ở nơi khác */
+    }
+  }
 }
 
 .responsive-drawer-center-mobile-lo {
