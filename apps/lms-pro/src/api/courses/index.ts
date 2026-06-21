@@ -190,6 +190,7 @@ export class CoursesAPI {
   }> {
     return fetcher(`/quiz-attempts/${attempt_id}/answer/${question_id}`)
   }
+  
 
   static getQuizAttemptsTableEntranceTest(
     id: string,

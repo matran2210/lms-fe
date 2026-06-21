@@ -99,13 +99,19 @@ const CardResultTest = ({
     }
   }
   const handleOpenTest = () => {
-    handleCheckQuizAttempt(resultData)
+    handleCheckQuizAttempt(resultData);
+    
+    const quizAttempt = JSON.parse(localStorage.getItem("quizAttempt") || "{}");
+    
+    const baseUrl = `${process.env.NEXT_PUBLIC_SUB_DOMAIN_TEST}/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`;
+    const url = quizAttempt?.id 
+      ? `${baseUrl}&quizAttemptId=${quizAttempt.id}`
+      : baseUrl;
+    
     openInNewTab({
-      url: `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
+      url,
       isNewTab: false
-    }
-
-    );
+    });
   }
   const handleViewResult = () => {
     if (resultData?.quiz?.attempts?.length > 0) {
@@ -126,7 +132,7 @@ const CardResultTest = ({
             resultData?.quiz?.attempts?.[0]?.status ===
             EAttemptStatus.IN_PROGRESS
           ) {
-            handleOpenTest()
+            setOpenModal(true);
           } else if (
             resultData?.quiz?.attempts?.[0]?.status ===
             EAttemptStatus.UN_SUBMITTED
@@ -141,7 +147,6 @@ const CardResultTest = ({
           if (
             resultData?.quiz?.attempts?.[0]?.status === EAttemptStatus.IN_PROGRESS
           ) {
-            // handleOpenTest()
             setOpenModal(true);
           } else {
             openInNewTab({ url: `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`, });

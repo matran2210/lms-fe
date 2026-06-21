@@ -13,7 +13,6 @@ import {
 } from '@lms/assets'
 import {
   ActivityResource,
-  CalculatorModal,
   CreateNote,
   Discussion,
   PopupLockContent,
@@ -24,6 +23,7 @@ import {
   FileViewer,
   Layout,
   LearningResource,
+  CalculatorModal,
   ModalResizeable,
 } from '@lms/ui'
 import { convertMinutesToHourFormat, extractNotActivatedData } from '@lms/utils'
@@ -84,6 +84,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import { withAuthorization } from '@lms/hoc'
 import { CoursesAPI, getActivityById } from 'src/api/courses'
+import { UploadAPI } from 'src/api/upload'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { v4 as uuidv4 } from 'uuid'
 import { selectPopupActivateCourse, showPopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
@@ -157,6 +158,7 @@ const ActivityPage = () => {
   const [fetch_progress, setFetch_progress] = useState<string[]>([])
   const [exhibitText, setExhibitText] = useState<string>('')
   const [openResource, setOpenResource] = useState(false)
+  const [focusingPadId, setFocusingPadId] = useState('')
 
   const onFocusDiscussion = () => {
     setFocusOnlyDiscussion(true)
@@ -587,6 +589,8 @@ const ActivityPage = () => {
                       uuid={e?.uuid}
                       count={index}
                       key={e?.uuid}
+                      setFocusingPadId={setFocusingPadId}
+                      focusingPadId={focusingPadId}
                     />
                   )
                 })}
@@ -594,6 +598,10 @@ const ActivityPage = () => {
                   {selector?.calculator_status && (
                     <CalculatorModal
                       onClose={() => dispatch(closeCalculator())}
+                      key={"sidebar-calculator"}
+                      onClick={() => setFocusingPadId("sidebar-calculator")}
+                      isInBody
+                      isTopModal={focusingPadId === "sidebar-calculator"}
                     />
                   )}
                 </>
@@ -763,8 +771,11 @@ const ActivityPage = () => {
                   return (
                     <CalculatorModal
                       key={e.id}
-                      isMobileCalc
+                      onClick={() => setFocusingPadId(e.id)}
                       onClose={() => handleCloseScratchPad(e)}
+                      isInBody
+                      modalIndex={index}
+                      isTopModal={focusingPadId === e.id}
                     />
                   )
                 } else if (e.type === 'file') {
@@ -777,7 +788,7 @@ const ActivityPage = () => {
                       height={heightFileViewer}
                       key={e.id}
                       className="!z-40 !rounded-lg"
-                      handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                      onClose={() => handleCloseScratchPad(e)}
                       position="center"
                       header={({ requestClose }) => (
                         <div className="">
@@ -796,6 +807,8 @@ const ActivityPage = () => {
                         </div>
                       )}
                       isInBody
+                      isTopModal={focusingPadId === e.id}
+                      onModalFocus={() => setFocusingPadId(e?.id as string)}
                     >
                       <div
                         className="overflow-auto bg-white p-4"
@@ -803,7 +816,7 @@ const ActivityPage = () => {
                       // className="h-full cursor-pointer p-4"
                       >
                         {/* <div className='flex flex-'> */}
-                        <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
+                        <FileViewer fileName={e?.fileName} fileUrl={e?.file} onDownload={() => UploadAPI.downloadFile({ files: [{ name: e?.fileName, file_key: e?.fileKey }] })} />
                       </div>
                     </ModalResizeable>
                   )
@@ -812,7 +825,7 @@ const ActivityPage = () => {
                     <ModalResizeable
                       key={e.id}
                       className="!z-40"
-                      handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                      onClose={() => handleCloseScratchPad(e)}
                       position="center"
                       header={({ requestClose }) => (
                         <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
@@ -830,8 +843,11 @@ const ActivityPage = () => {
                           </button>
                         </div>
                       )}
-                      draggableFull
                       modalIndex={e.index}
+                      isTopModal={focusingPadId === e.id}
+                      onModalFocus={() => setFocusingPadId(e?.id as string)}
+                      bodyClassName="h-[90%] overflow-auto"   
+                      isInBody
                     >
                       <div className="h-full bg-white px-4 py-3">
                         <EditorReader
@@ -848,6 +864,7 @@ const ActivityPage = () => {
                                 <FileViewer
                                   fileName={e?.resource?.name}
                                   fileUrl={e?.resource?.url}
+                                  onDownload={() => UploadAPI.downloadFile({ files: [{ name: e?.resource?.name, file_key: e?.resource?.file_key }] })}
                                 />
                               </div>
                             )

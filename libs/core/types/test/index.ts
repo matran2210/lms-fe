@@ -164,3 +164,37 @@ export type Sheet = {
   data: any[][] // 2D array (rows x cols)
   celldata: any[]
 }
+
+export interface BaseQuestionBlockProps {
+  data: any
+  currentTabID: string
+  defaultValue: any
+  corrects?: any
+  highlighted?: any
+  solution?: any
+  done?: boolean
+  control: any
+  setValue: (name: string, value: any) => void
+  getValues: (name: string) => any
+}
+
+export interface CommonQuestionBlockProps {
+  data: any
+  currentTabID: string
+  defaultValue?: any
+  corrects?: any
+  highlighted?: any
+  solution?: any
+  done?: boolean
+
+  control: any
+  setValue: (name: string, value: any) => void
+  getValues: (name: string) => any
+
+  handleSaveHighLight: (...args: any[]) => void
+  removeHighlight: (...args: any[]) => void
+  allowHighLight: boolean
+  allowUnHighLight: boolean
+
+  storageKey: string
+}
