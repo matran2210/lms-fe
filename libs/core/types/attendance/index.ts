@@ -57,6 +57,11 @@ export interface IClassAttendanceHistoryResponse {
   checkout_time: string;
   device: string;
 }
+
+export interface ITeachingAttendanceHistoryResponse {
+  metadata: IMetaData;
+  data: IClassAttendanceHistoryResponse[];
+}
 export interface IStudentAttendanceItem {
   id: string
   start_date: string
