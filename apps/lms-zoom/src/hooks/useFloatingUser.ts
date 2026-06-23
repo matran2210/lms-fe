@@ -4,80 +4,54 @@ import { RefObject, useEffect, useRef, useState } from 'react'
 
 interface UseFloatingUserProps {
   floatingRef: RefObject<HTMLDivElement | null>
+  onTamper?: () => void
 }
 
-export const useFloatingUser = ({ floatingRef }: UseFloatingUserProps) => {
+export const useFloatingUser = ({ floatingRef, onTamper }: UseFloatingUserProps) => {
   const [position, setPosition] = useState({ top: -999, left: -999 })
-  const allowedTopLeftRef = useRef<{ top: string; left: string } | null>(null)
+
+  const onTamperRef = useRef(onTamper)
+  onTamperRef.current = onTamper
 
   useEffect(() => {
+    let tampered = false
+
     const removeMeetingContainer = () => {
       const meetingContainer = document.querySelector(ZOOM_CONFIG.MEETING_CONTAINER_ID) as HTMLElement
       meetingContainer?.remove()
     }
 
-    const parseStyleStringToMap = (styleString: string) => {
-      const styleMap: Record<string, string> = {}
-      styleString
-        .split(';')
-        .map(s => s.trim())
-        .filter(Boolean)
-        .forEach(pair => {
-          const [rawProp, rawVal] = pair.split(':')
-          if (!rawProp || !rawVal) return
-          const prop = rawProp.trim().toLowerCase()
-          const val = rawVal.trim()
-          styleMap[prop] = val
-        })
-      return styleMap
+    /**
+     * Khi phát hiện can thiệp: vừa dừng cuộc họp (gỡ container vì lý do bảo mật)
+     * vừa báo lên UI để hiện trang cảnh báo toàn màn hình — KHÔNG để màn hình trắng.
+     */
+    const handleTamper = () => {
+      if (tampered) return
+      tampered = true
+      removeMeetingContainer()
+      onTamperRef.current?.()
     }
 
-    const isOnlyTopLeftChanged = (oldStyle: string, newStyle: string) => {
-      const oldMap = parseStyleStringToMap(oldStyle || '')
-      const newMap = parseStyleStringToMap(newStyle || '')
+    const isWatermarkHidden = (node: HTMLElement): boolean => {
+      // Bị gỡ khỏi DOM
+      if (!document.body.contains(node)) return true
 
-      const allowed = allowedTopLeftRef.current
-      if (!allowed) return false
+      if (node.hidden) return true
 
-      const newTop = newMap['top']
-      const newLeft = newMap['left']
-      if (newTop !== allowed.top || newLeft !== allowed.left) return false
+      if (node.getClientRects().length === 0) return true
 
-      delete oldMap['top']
-      delete oldMap['left']
-      delete newMap['top']
-      delete newMap['left']
-
-      // Check if existing styles were modified or removed
-      for (const key in oldMap) {
-        if (oldMap[key] !== newMap[key]) return false
+      const style = window.getComputedStyle(node)
+      if (style.display === 'none' || style.visibility === 'hidden' || style.visibility === 'collapse') {
+        return true
       }
+      if (parseFloat(style.opacity || '1') < 0.3) return true
 
-      const criticalStyles = [
-        'position',
-        'width',
-        'height',
-        'transform',
-        'filter',
-        'backdrop-filter',
-        'overflow',
-        'clip-path',
-      ]
-      for (const key of criticalStyles) {
-        if (newMap[key]) {
-          return false
-        }
-      }
-      //Check giá trị của Display, visibility, opacity để tránh trường hợp extension set giá trị an toàn
-      const visibilityStyles = ['display', 'visibility', 'opacity']
-      for (const key of visibilityStyles) {
-        const val = newMap[key]
-        if (val && (val === 'none' || val === 'hidden' || parseFloat(val) === 0)) {
-          return false
-        }
-      }
+      const rect = node.getBoundingClientRect()
+      if (rect.width < 8 || rect.height < 8) return true
 
-      return true
+      if (!node.textContent || node.textContent.trim().length === 0) return true
+
+      return false
     }
 
     const changePosition = () => {
@@ -95,15 +69,24 @@ export const useFloatingUser = ({ floatingRef }: UseFloatingUserProps) => {
       const newTopPercent = Math.round(minPercent + Math.random() * (maxPercent - minPercent))
       const newLeftPercent = Math.round(minPercent + Math.random() * (maxPercent - minPercent))
 
-      allowedTopLeftRef.current = {
-        top: `${newTopPercent}%`,
-        left: `${newLeftPercent}%`,
-      }
-
       setPosition({
         top: newTopPercent,
         left: newLeftPercent,
       })
+    }
+
+    // Gom nhiều mutation liên tiếp (extension có thể bắn rất nhiều) thành 1 lần
+    // kiểm tra để tránh tốn hiệu năng và tránh đánh giá ở trạng thái tạm thời.
+    let checkTimer: ReturnType<typeof setTimeout> | null = null
+    const scheduleTamperCheck = () => {
+      if (checkTimer) return
+      checkTimer = setTimeout(() => {
+        checkTimer = null
+        const node = floatingRef.current
+        if (node && isWatermarkHidden(node)) {
+          handleTamper()
+        }
+      }, 100)
     }
 
     const createElementObserver = () => {
@@ -111,7 +94,7 @@ export const useFloatingUser = ({ floatingRef }: UseFloatingUserProps) => {
       if (floatingRef.current) {
         observer = new MutationObserver(_ => {
           if (!document.body.contains(floatingRef.current as Node)) {
-            removeMeetingContainer()
+            handleTamper()
             observer?.disconnect()
           }
         })
@@ -128,37 +111,13 @@ export const useFloatingUser = ({ floatingRef }: UseFloatingUserProps) => {
       let observer: MutationObserver | null = null
       const node = floatingRef.current
       if (node) {
-        observer = new MutationObserver(mutationList => {
-          for (const mutation of mutationList) {
-            if (mutation.type === 'attributes') {
-              const attributeName = mutation.attributeName
-
-              if (attributeName === 'style') {
-                const oldValue = (mutation as MutationRecord & { oldValue?: string }).oldValue || ''
-                const newValue = (mutation.target as HTMLElement).getAttribute('style') || ''
-                if (isOnlyTopLeftChanged(oldValue, newValue)) {
-                  continue
-                }
-              }
-
-              removeMeetingContainer()
-              break
-            } else if (mutation.type === 'childList') {
-              if (mutation.removedNodes.length > 0) {
-                removeMeetingContainer()
-                break
-              }
-            } else if (mutation.type === 'characterData') {
-              removeMeetingContainer()
-              break
-            }
-          }
+        observer = new MutationObserver(() => {
+          scheduleTamperCheck()
         })
 
         observer.observe(node, {
           attributes: true,
           attributeFilter: ['style', 'class', 'hidden'],
-          attributeOldValue: true,
           childList: true,
           subtree: true,
           characterData: true,
@@ -174,6 +133,9 @@ export const useFloatingUser = ({ floatingRef }: UseFloatingUserProps) => {
 
     return () => {
       clearInterval(intervalId)
+      if (checkTimer) {
+        clearTimeout(checkTimer)
+      }
       if (observer) {
         observer.disconnect()
       }
