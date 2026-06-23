@@ -16,7 +16,12 @@ import { ColumnsType } from 'antd/es/table'
 import { isEmpty } from 'lodash'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery, useQuery } from 'react-query'
-import { ExaminationInfo } from '../../components'
+import dynamic from 'next/dynamic'
+
+const ExaminationInfo = dynamic(
+  () => import('../../components/examination-info/ExaminationInfo'),
+  { ssr: false },
+)
 
 const ExamInformation = () => {
   const { pageLink, userApi, router } = useFeature()

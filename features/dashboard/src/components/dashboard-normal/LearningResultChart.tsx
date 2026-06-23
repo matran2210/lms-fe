@@ -1,18 +1,8 @@
 "use client";
-/**
- * LearningResultChart — chứa toàn bộ recharts components
- * Được lazy load từ LearningResult.tsx để tránh bundle recharts vào initial JS
- */
-import {
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Radar,
-  ResponsiveContainer,
-  Tooltip as RTooltip,
-} from "recharts";
-import { useRef } from "react";
+
+import { useCallback, useMemo, useRef } from "react";
+import type { EChartsOption, ECharts } from "echarts";
+import { EChart } from "@lms/ui";
 import { useReponsive } from "@lms/hooks";
 
 interface IProps {
@@ -21,137 +11,192 @@ interface IProps {
   isNormal: boolean;
 }
 
-const ActiveDot = (props: any) => {
-  const { cx, cy } = props;
-  if (cx == null || cy == null) return null;
-  return (
-    <g>
-      <circle cx={cx} cy={cy} r={5} fill="#6FD3B0" stroke="#FFFFFF" strokeWidth={2} />
-    </g>
-  );
-};
+const MAX_LABEL_LENGTH = 10;
+const truncateLabel = (name: string) =>
+  name.length > MAX_LABEL_LENGTH
+    ? name.slice(0, MAX_LABEL_LENGTH) + "…"
+    : name;
 
-const LearningResultChart = ({ chartData, avgPercent, isNormal }: IProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const tickTooltipRef = useRef<HTMLDivElement>(null);
+// Kiểu tối thiểu cho radar coordinate system của echarts (không có trong type công khai)
+interface RadarCoordSys {
+  cx: number;
+  cy: number;
+  r: number;
+  // angle (radian) của từng trục — dùng để tự tính trục gần con trỏ nhất.
+  // KHÔNG dùng pointToData() của echarts vì nó có bug wraparound góc (chọn nhầm
+  // trục ở các hướng cắt ±π với nhiều N) — đã kiểm chứng bằng mô phỏng.
+  getIndicatorAxes(): { angle: number }[];
+}
+
+interface ZRMouseEvent {
+  offsetX: number;
+  offsetY: number;
+}
+
+const LearningResultChart = ({ chartData, avgPercent }: IProps) => {
   const { isMobile } = useReponsive();
+  const tooltipRef = useRef<HTMLDivElement>(null);
+
+  const labelFont = useMemo(
+    () =>
+      typeof document !== "undefined"
+        ? getComputedStyle(document.body).fontFamily
+        : 'var(--font-roboto), "Roboto", sans-serif',
+    [],
+  );
+
+  const visualData = useMemo(() => {
+    if (chartData.length <= 1) return chartData;
+    return [chartData[0], ...chartData.slice(1).reverse()];
+  }, [chartData]);
+
+  // Đọc dữ liệu mới nhất trong handler (handler chỉ bind 1 lần)
+  const visualDataRef = useRef(visualData);
+  visualDataRef.current = visualData;
+
+  const option = useMemo(() => {
+    const indicator = visualData.map((d) => ({
+      text: d.name,
+      max: Math.max(d.score || 0, 100),
+    }));
+
+    return {
+      radar: [
+        {
+          shape: "circle" as const,
+          radius: "80%",
+          splitNumber: 5,
+          // Kéo nhãn trục gần radar hơn (mặc định 15)
+          axisNameGap: 8,
+          indicator,
+          axisLine: { lineStyle: { color: "#D1D5DB" } },
+          splitLine: { lineStyle: { color: "#D1D5DB" } },
+          splitArea: { show: false },
+          axisName: {
+            color: "#374151",
+            fontSize: 14,
+            fontWeight: 500,
+            fontFamily: labelFont,
+            formatter: (name: string) => truncateLabel(name),
+          },
+        },
+      ],
+      series: [
+        {
+          type: "radar",
+          symbol: "circle",
+          symbolSize: 10,
+          data: [
+            {
+              name: "Learning results",
+              value: visualData.map((d) => d.score),
+              areaStyle: { color: "rgba(111, 211, 176, 0.45)" },
+              lineStyle: { color: "#6FD3B0", width: 1 },
+              itemStyle: {
+                color: "#6FD3B0",
+                borderColor: "#FFFFFF",
+                borderWidth: 2,
+              },
+            },
+          ],
+        },
+      ],
+    };
+  }, [visualData, labelFont]);
+
+  const handleChartReady = useCallback((chart: ECharts) => {
+    const zr = chart.getZr?.();
+    if (!zr) return;
+
+    const hide = () => {
+      const tip = tooltipRef.current;
+      if (tip) tip.style.display = "none";
+    };
+
+    const showAt = (x: number, y: number) => {
+      const tip = tooltipRef.current;
+      if (!tip) return;
+      const radarModel = (
+        chart as unknown as {
+          getModel?: () => {
+            getComponent?: (
+              mainType: string,
+              idx: number,
+            ) => { coordinateSystem?: RadarCoordSys } | undefined;
+          };
+        }
+      ).getModel?.()?.getComponent?.("radar", 0);
+      const radar = radarModel?.coordinateSystem;
+      if (!radar) return hide();
+
+      const dx = x - radar.cx;
+      const dy = y - radar.cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      // Chỉ hiện trong vùng radar + vành nhãn (~1.3 lần bán kính)
+      if (!(dist <= radar.r * 1.3)) return hide();
+
+      // Tự tìm trục gần con trỏ nhất bằng khoảng-cách-góc vòng tròn (đúng wraparound)
+      const axes = radar.getIndicatorAxes?.() ?? [];
+      const cursorAngle = Math.atan2(-dy, dx);
+      let idx = -1;
+      let bestDiff = Infinity;
+      for (let i = 0; i < axes.length; i++) {
+        const delta = cursorAngle - axes[i].angle;
+        const diff = Math.abs(Math.atan2(Math.sin(delta), Math.cos(delta)));
+        if (diff < bestDiff) {
+          bestDiff = diff;
+          idx = i;
+        }
+      }
+      const data = visualDataRef.current[idx];
+      if (idx < 0 || !data) return hide();
+
+      const num = Number(data.score);
+      const display = Number.isFinite(num) ? `${Math.round(num)}%` : "0%";
+      tip.innerHTML =
+        `<div style="margin-bottom:2px;font-weight:600;font-size:16px;line-height:24px;color:#374151;">${data.name}</div>` +
+        `<div style="font-size:14px;line-height:22px;color:#374151;">Progress: ${display}</div>`;
+      tip.style.display = "block";
+
+      const W = chart.getWidth();
+      const H = chart.getHeight();
+      const OFFSET = 12;
+      const boxW = tip.offsetWidth;
+      const boxH = tip.offsetHeight;
+      let left = x + OFFSET;
+      let top = y + OFFSET;
+      if (left + boxW > W) left = x - OFFSET - boxW;
+      if (left < 0) left = 0;
+      if (top + boxH > H) top = y - OFFSET - boxH;
+      if (top < 0) top = 0;
+      tip.style.left = `${left}px`;
+      tip.style.top = `${top}px`;
+    };
+
+    zr.on("mousemove", (e: ZRMouseEvent) => showAt(e.offsetX, e.offsetY));
+    chart.on("globalout", hide);
+  }, []);
 
   return (
-    <div className={`flex grow flex-col`}>
-      <div
-        className="relative grow focus:outline-none [&_*]:outline-none [&_*]:focus:outline-none"
-        ref={containerRef}
-        tabIndex={-1}
-        style={{ outline: "none" }}
-        onMouseDown={() => containerRef.current && containerRef.current.blur()}
-        onFocus={(e) => (e.currentTarget as HTMLDivElement).blur()}
-      >
-        <ResponsiveContainer width="100%" height={isMobile ? 350 : 420}>
-          <RadarChart data={chartData} outerRadius="80%">
-            <PolarGrid stroke="#D1D5DB" gridType="circle" radialLines={true} />
-            <RTooltip
-              cursor={{ stroke: "transparent" }}
-              isAnimationActive={false}
-              allowEscapeViewBox={{ x: false, y: false }}
-              wrapperStyle={{
-                outline: "none",
-                maxWidth: 200,
-                pointerEvents: "none",
-                zIndex: 30,
-              }}
-              contentStyle={{
-                borderRadius: 8,
-                boxShadow: "0px 4px 16px 0px #00000014",
-                whiteSpace: "normal",
-                wordBreak: "break-word",
-                padding: "12px",
-                fontSize: 14,
-                lineHeight: "22px",
-                border: "unset",
-              }}
-              labelStyle={{
-                marginBottom: 2,
-                fontWeight: 600,
-                fontSize: 16,
-                lineHeight: "24px",
-                color: "#374151",
-              }}
-              itemStyle={{
-                padding: 0,
-                margin: 0,
-                fontSize: 14,
-                lineHeight: "22px",
-                color: "#374151",
-              }}
-              separator="Progress: "
-              filterNull={true}
-              offset={6}
-              formatter={(value: any) => {
-                const num = Number(value);
-                const display = Number.isFinite(num) ? `${Math.round(num)}%` : `${value}`;
-                return [display, ""];
-              }}
-              labelFormatter={(label: any) => String(label)}
-            />
-            <PolarAngleAxis
-              dataKey="name"
-              tick={(props: any) => {
-                const { x, y, payload, textAnchor } = props;
-                const full: string = payload?.value || "";
-                const maxLength = 10;
-                const display = full.length > maxLength ? full.slice(0, maxLength) + "…" : full;
-                const adjustedY = y > 300 ? y + 10 : y;
-                return (
-                  <text
-                    x={x}
-                    y={adjustedY}
-                    textAnchor={textAnchor}
-                    fill="#374151"
-                    fontSize={14}
-                    fontWeight={500}
-                    onMouseEnter={(evt) => {
-                      const rect = containerRef.current?.getBoundingClientRect();
-                      const tip = tickTooltipRef.current;
-                      if (!rect || !tip) return;
-                      tip.textContent = full;
-                      tip.style.display = "block";
-                      tip.style.left = `${evt.clientX - rect.left}px`;
-                      tip.style.top = `${evt.clientY - rect.top - 12}px`;
-                    }}
-                    onMouseMove={(evt) => {
-                      const rect = containerRef.current?.getBoundingClientRect();
-                      const tip = tickTooltipRef.current;
-                      if (!rect || !tip) return;
-                      tip.style.left = `${evt.clientX - rect.left}px`;
-                      tip.style.top = `${evt.clientY - rect.top - 12}px`;
-                    }}
-                    onMouseLeave={() => {
-                      const tip = tickTooltipRef.current;
-                      if (tip) tip.style.display = "none";
-                    }}
-                  >
-                    {display}
-                  </text>
-                );
-              }}
-            />
-            <PolarRadiusAxis tick={false} axisLine={false} domain={[0, 100]} tickCount={6} />
-            <Radar
-              name="Learning results"
-              dataKey="score"
-              stroke="#6FD3B0"
-              fill="#6FD3B0"
-              fillOpacity={0.45}
-              strokeWidth={1}
-              dot={<ActiveDot />}
-              activeDot={<ActiveDot />}
-            />
-          </RadarChart>
-        </ResponsiveContainer>
+    <div className="flex grow flex-col">
+      <div className="relative grow">
+        <EChart
+          option={option as EChartsOption}
+          onChartReady={handleChartReady}
+          height={isMobile ? "350px" : "420px"}
+          minHeight={isMobile ? "350px" : "420px"}
+        />
         <div
-          ref={tickTooltipRef}
-          className="pointer-events-none absolute z-20 hidden rounded-md bg-white px-2 py-1 text-xs text-gray-700 shadow ring-1 ring-gray-200"
-          style={{ transform: "translate(-50%, -100%)" }}
+          ref={tooltipRef}
+          className="pointer-events-none absolute z-20 hidden bg-white"
+          style={{
+            borderRadius: 8,
+            boxShadow: "0px 4px 16px 0px #00000014",
+            padding: 12,
+            maxWidth: 200,
+            whiteSpace: "normal",
+            wordBreak: "break-word",
+          }}
         />
         {avgPercent ? (
           <div
@@ -164,14 +209,6 @@ const LearningResultChart = ({ chartData, avgPercent, isNormal }: IProps) => {
           </div>
         ) : null}
       </div>
-      {isNormal && (
-        <div className="flex items-center justify-center gap-2.5">
-          <span className="min-h-3 min-w-3 rounded-full bg-[#6FD3B0]"></span>
-          <span className="min-w-fit text-sm font-medium text-gray-800 xl:text-base">
-            Learning results
-          </span>
-        </div>
-      )}
     </div>
   );
 };

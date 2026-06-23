@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import * as ExcelJS from "exceljs";
+import type * as ExcelJS from "exceljs";
 import { useEffect, useMemo, useState } from "react";
 import { generateSheetId } from "@lms/core";
 import { LoadingIcon } from "@lms/assets";
@@ -107,7 +107,8 @@ const SheetViewer = ({ fileUrl, fileName, resizeVersion }: IProps) => {
         if (!res.ok) throw new Error("Fetch failed");
 
         const buffer = await res.arrayBuffer();
-        const workbook = new ExcelJS.Workbook();
+        const ExcelJSlib = await import("exceljs");
+        const workbook = new ExcelJSlib.Workbook();
         await workbook.xlsx.load(buffer);
 
         const sheets = workbook.worksheets.map((ws) => {

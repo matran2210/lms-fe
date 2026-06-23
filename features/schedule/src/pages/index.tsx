@@ -24,7 +24,16 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { useFeature } from '@lms/contexts'
-import { DetailCalendar, DetailCalendarMobile, DetailCalendarTablet } from '../components'
+import { DetailCalendar } from '../components'
+
+const DetailCalendarMobile = dynamic(
+  () => import('../components/DetailCalendarMobile'),
+  { ssr: false },
+)
+const DetailCalendarTablet = dynamic(
+  () => import('../components/DetailCalendarTablet'),
+  { ssr: false },
+)
 
 const CalendarPage = () => {
   const { pageLink, calendarApi } = useFeature()

@@ -3,6 +3,8 @@ import React, { useRef, useEffect } from 'react'
 import type { CSSProperties } from 'react'
 import type { EChartsOption, ECharts, SetOptionOpts } from 'echarts'
 
+type EChartEventHandlers = Record<string, (params: unknown) => void>
+
 // echarts ~1MB gzipped — lazy load, chỉ init khi component mount
 async function getEcharts() {
   const { init, getInstanceByDom } = await import('echarts')
@@ -18,6 +20,14 @@ export interface EChartsProps {
   width?: string
   height?: string
   minHeight?: string
+  /**
+   * Bind sự kiện echarts vào instance (vd: { mouseover, mousemove, mouseout }).
+   * Handler luôn gọi phiên bản mới nhất nên không cần memo hóa, nhưng tập key
+   * được dùng tại thời điểm chart khởi tạo.
+   */
+  onEvents?: EChartEventHandlers
+  /** Gọi với instance echarts ngay sau khi init — để bind zrender event, đọc coordinateSystem... */
+  onChartReady?: (chart: ECharts) => void
 }
 
 export default function EChart({
@@ -29,8 +39,15 @@ export default function EChart({
   height = '100%',
   width = '100%',
   minHeight = '380px',
+  onEvents,
+  onChartReady,
 }: EChartsProps): JSX.Element {
   const chartRef = useRef<HTMLDivElement>(null)
+  // Giữ handler mới nhất để không phải rebind mỗi lần render
+  const onEventsRef = useRef(onEvents)
+  onEventsRef.current = onEvents
+  const onChartReadyRef = useRef(onChartReady)
+  onChartReadyRef.current = onChartReady
 
   // ResizeObserver để tự động resize chart khi container thay đổi kích thước
   useEffect(() => {
@@ -44,6 +61,19 @@ export default function EChart({
           chart?.resize()
         })
         resizeObserver.observe(chartRef.current)
+
+        // Bind sự kiện echarts (dispatch tới handler mới nhất qua ref)
+        const handlers = onEventsRef.current
+        if (handlers) {
+          Object.keys(handlers).forEach((evt) => {
+            chart?.on(evt, (params: unknown) =>
+              onEventsRef.current?.[evt]?.(params),
+            )
+          })
+        }
+
+        // Trao instance cho consumer (bind zrender event, đọc coordinateSystem...)
+        onChartReadyRef.current?.(chart)
       }
     })
 

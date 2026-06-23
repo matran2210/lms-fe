@@ -76,7 +76,6 @@ const nextConfig = {
       'date-fns',
       'dayjs',
       'echarts',
-      'recharts',
       'framer-motion',
       '@xyflow/react',
       'lucide-react',

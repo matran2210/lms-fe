@@ -6,10 +6,17 @@ import { formatTimer, getNoOfAttemptEntranceTest } from "@lms/utils";
 import { Select } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import PopUpRemindEntrance from "../popUpRemindEntrance";
-import EntrancePopup from "./EntrancePopup";
-import EntrancePopupContinue from "./EntrancePopupContinue";
+import dynamic from "next/dynamic";
 import { useFeature } from "@lms/contexts";
+
+const PopUpRemindEntrance = dynamic(() => import("../popUpRemindEntrance"), {
+  ssr: false,
+});
+const EntrancePopup = dynamic(() => import("./EntrancePopup"), { ssr: false });
+const EntrancePopupContinue = dynamic(
+  () => import("./EntrancePopupContinue"),
+  { ssr: false },
+);
 
 interface EntranceTestProps {
   data: {

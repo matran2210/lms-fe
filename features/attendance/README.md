@@ -35,7 +35,6 @@ Feature này sử dụng:
 - **React Context** cho UI state management (filters, selectedLesson, activeTab)
 - **TypeScript** cho type safety
 - **Tailwind CSS** cho styling
-- **Recharts** cho biểu đồ thống kê
 
 ## Routes
 
