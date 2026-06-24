@@ -71,8 +71,8 @@ const TeacherAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
       ...prev,
       lesson_ids: getValues('lesson_ids')?.filter((id) => id !== '') || undefined,
       status: getValues('status') || undefined,
-      fromDate: rangeDate?.[0].toISOString() || undefined,
-      toDate: rangeDate?.[1].toISOString() || undefined,
+      fromDate: rangeDate?.[0]?.format("YYYY-MM-DD") || undefined,
+      toDate: rangeDate?.[1]?.format("YYYY-MM-DD") || undefined,
     }))
   }
   const handleOpenHistory = (record: IStudentAttendanceItem) => {
@@ -109,13 +109,7 @@ const TeacherAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
     fetchNextPage: fetchNextPageStudentLesson,
     debounceSearch,
   } = useInfiniteStudentLesson(!!classId, { class_ids: [classId] })
-  const handleDateChange = (dates: [dayjs.Dayjs | null, dayjs.Dayjs | null] | null) => {
-    setQueryParams((prev) => ({
-      ...prev,
-      start_date: dates?.[0]?.toISOString(),
-      end_date: dates?.[1]?.toISOString(),
-    }))
-  }
+
   const columns: ColumnsType<IStudentAttendanceItem> = [
 
     {
@@ -228,7 +222,7 @@ const TeacherAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
             ]}
             suffixIcon={<ArrowDownIcon className="text-gray-300" />}
           />
-          <SAPPRangePicker name="rangeDate" control={control} size="small" onChange={handleDateChange} className="flex-1 w-full" />
+          <SAPPRangePicker name="rangeDate" control={control} size="small" className="flex-1 w-full" />
         </div>
         <div className="flex gap-3">
           <SAPPButtonCustom
