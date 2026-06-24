@@ -27,6 +27,7 @@
     "@lms/config-tailwind": "workspace:*",
     "@lms/contexts": "workspace:*",
     "@lms/core": "workspace:*",
+    "@lms/feature-attendance": "workspace:*",
     "@lms/feature-auth": "workspace:*",
     "@lms/feature-certificate": "workspace:*",
     "@lms/feature-class": "workspace:*",
