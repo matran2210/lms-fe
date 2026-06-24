@@ -114,6 +114,8 @@ export interface ILessonSchedule {
   lesson_name: string;
   start_time: string;
   start_date: string;
+  end_time: string;
+  end_date: string;
 }
 
 export interface IRequestCreateProgress {
