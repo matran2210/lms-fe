@@ -16,13 +16,13 @@ services:
       - "3000:3000"
     profiles: ["lms-pro"]
 
-  lms-finhub:
-    <<: *app-base
-    image: ${LMS_FINHUB_IMAGE}
-    container_name: lms-finhub
-    ports:
-      - "3000:3000"
-    profiles: ["lms-finhub"]
+  # lms-finhub:  # tạm tắt, không dùng
+  #   <<: *app-base
+  #   image: ${LMS_FINHUB_IMAGE}
+  #   container_name: lms-finhub
+  #   ports:
+  #     - "3000:3000"
+  #   profiles: ["lms-finhub"]
 
   lms-zoom:
     <<: *app-base

@@ -1,7 +1,6 @@
 import {
   courseActivityQuizReducer,
   fetchQuestionById,
-  removeQuizFinished,
   saveAnswer,
   selectQuestions,
   submitQuiz,
@@ -412,13 +411,10 @@ const QuizDocument = ({
             }, 2000)
           }
           getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
-          dispatch(
-            removeQuizFinished({
-              activityId,
-              tabId,
-              quizId: quizId,
-            }),
-          )
+          // Không dispatch removeQuizFinished ở đây để giữ lại myAnswers
+          // (gồm short_answer) — đảm bảo editor hiển thị câu trả lời user đã
+          // submit khi quay lại câu hỏi. Việc reset state sẽ được xử lý qua
+          // refreshTab() khi user đóng modal kết quả.
           setQuizComponentKey((e) => e + 1)
           setActiveQuestionIndex(0)
           if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
@@ -618,7 +614,7 @@ const QuizDocument = ({
         )
       case GRADE_STATUS.AWAITING_GRADING:
         return (
-          <div className="bg-blur-yellow  rounded px-2 font-medium text-amber-400">
+          <div className="bg-blur-yellow rounded px-2 font-medium text-amber-400">
             Awaiting Grading
           </div>
         )
@@ -714,7 +710,7 @@ const QuizDocument = ({
           <div
             className={`${
               is_graded || 'invisible'
-            } whitespace-nowrap   rounded bg-state-info bg-opacity-10 px-2 text-center  font-medium text-state-info`}
+            } whitespace-nowrap rounded bg-state-info bg-opacity-10 px-2 text-center font-medium text-state-info`}
           >
             Graded Activity
           </div>
@@ -819,7 +815,7 @@ const QuizDocument = ({
       >
         <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
           <div
-            className="absolute right-6 top-5  ml-auto cursor-pointer"
+            className="absolute right-6 top-5 ml-auto cursor-pointer"
             onClick={() => {
               refreshTab()
               setModalResult(undefined)

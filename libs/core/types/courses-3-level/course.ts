@@ -1,3 +1,4 @@
+import { CourseDetail } from '../course/my-course'
 import { ICourse } from '../courses'
 
 export const allTypes3Level = ['section', 'subsection', 'activity'] as const
@@ -44,7 +45,7 @@ export type ICourseTitle = {
   courseAction: () => void
 }
 
-export interface CourseDetail3Level {
+export interface CourseDetail3Level extends CourseDetail {
   id: string
   title: string
   description: string

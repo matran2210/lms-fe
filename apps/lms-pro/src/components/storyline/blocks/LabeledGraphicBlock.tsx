@@ -1,11 +1,13 @@
 'use client'
 
 import { useStoryline } from '@contexts/StorylineContext'
-import { AbstractCircleIcon, AltArrowLeftIcon, AltArrowRightIcon, ArrowDownCircleIcon, ArrowLeftCircleIcon, ArrowRightCircleIcon, ArrowUpCircleIcon, BurgerMenuCircleIcon, ChartPieCircleIcon, CheckCircleIcon, ChevronDownCircleIcon, ChevronLeftCircleIcon, ChevronRightCircleIcon, ChevronUpCircleIcon, CloseModalIcon, CrossCircleIcon, InfomationCircleIcon, MinusCircleIcon, PlusCircleIcon, QuestionCircleIcon, StarMarkerIcon } from '@lms/assets'
+import { AbstractCircleIcon, AltArrowLeftIcon, AltArrowRightIcon, ArrowDownCircleIcon, ArrowLeftCircleIcon, ArrowRightCircleIcon, ArrowUpCircleIcon, BurgerMenuCircleIcon, ChartPieCircleIcon, CheckCircleIcon, ChevronDownCircleIcon, ChevronLeftCircleIcon, ChevronRightCircleIcon, ChevronUpCircleIcon, CloseModalIcon, CrossCircleIcon, InfomationCircleIcon, MinusCircleIcon, PlusCircleIcon, QuestionCircleIcon, StarMarkerIcon, Triangle } from '@lms/assets'
 import { IBackgroundResource, ILabeledGraphicMarker } from '@lms/core'
+import { useTailwindBreakpoint } from '@lms/hooks'
+import { EditorReader } from '@lms/ui'
 import clsx from 'clsx'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { MouseEvent as ReactMouseEvent, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 interface Props {
@@ -24,20 +26,54 @@ type PopupPosition = {
   transformOrigin?: string
 }
 
+type PopupSize = {
+  width: number
+  height: number
+}
+
+const DEFAULT_POPUP_SIZE: PopupSize = {
+  width: 287,
+  height: 280,
+}
+
+const DESKTOP_POPUP_GAP = 12
+const DESKTOP_POPUP_MIN_WIDTH = 240
+const DESKTOP_POPUP_MIN_HEIGHT = 220
+const DESKTOP_POPUP_MAX_WIDTH = 600
+const DESKTOP_POPUP_MAX_HEIGHT = 400
+const MARKER_PULSE_START_SIZE = 40
+const MARKER_PULSE_END_SIZE = 56
+
+const clampValue = (value: number, min: number, max: number) => {
+  return Math.min(Math.max(value, min), max)
+}
+
 export default function LabeledGraphicBlock({ markers, backgroundResource, documentTitle, document_id, docIndex }: Props) {
   const {
     visibleDocumentCount,
     storylineDocument,
   } = useStoryline()
   const currentVisibleDocument = storylineDocument?.[visibleDocumentCount]
+  const { isMobileView } = useTailwindBreakpoint()
   const isLearnedBlock = docIndex < visibleDocumentCount
   const [viewedMarkers, setViewedMarkers] = useState<Set<string>>(new Set())
   const [activeMarkerId, setActiveMarkerId] = useState<string | null>(null)
   const [imageLoaded, setImageLoaded] = useState(false)
   const [popupPosition, setPopupPosition] = useState<PopupPosition | null>(null)
   const [mounted, setMounted] = useState(false)
+  const [popupSize, setPopupSize] = useState<PopupSize>(DEFAULT_POPUP_SIZE)
+  const [isDesktopResizing, setIsDesktopResizing] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const markerRefs = useRef<Record<string, HTMLDivElement | null>>({})
+  const resizeStateRef = useRef<{
+    startX: number
+    startY: number
+    startWidth: number
+    startHeight: number
+    startLeft: number
+    startTop: number
+    transformOrigin?: string
+  } | null>(null)
 
   const activeMarker = markers.find((m) => m.id === activeMarkerId)
   const activeMarkerIndex = activeMarker
@@ -50,16 +86,12 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
 
   const calculatePopupPosition = (
     marker: ILabeledGraphicMarker,
+    size: PopupSize = popupSize,
   ): PopupPosition => {
     if (!containerRef.current) {
       return { left: 0, top: 0, transformOrigin: 'top left' }
     }
-
-    // Check if mobile (screen width < 768px)
-    const isMobile = window.innerWidth < 768
-
-    if (isMobile) {
-      // Mobile: fixed bottom popup
+    if (isMobileView) {
       return {
         bottom: 0,
         left: 0,
@@ -68,12 +100,9 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
       }
     }
 
-    // Desktop: calculate position relative to marker
     const containerRect = containerRef.current.getBoundingClientRect()
-    const POPUP_WIDTH = 287
-    const POPUP_HEIGHT = 280 // chiều cao ước tính
     const MARKER_SIZE = 24
-    const GAP = 12 // khoảng cách giữa marker và popup
+    const GAP = DESKTOP_POPUP_GAP
 
     const markerX = (marker.x_percent / 100) * containerRect.width
     const markerY = (marker.y_percent / 100) * containerRect.height
@@ -82,12 +111,11 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
     const spaceLeft = markerX - MARKER_SIZE / 2
     const spaceBottom = containerRect.height - (markerY + MARKER_SIZE / 2)
 
-    // Popup left căn giữa theo marker, clamp trong container
-    const centeredLeft = markerX - POPUP_WIDTH / 2
-    const clampedLeft = Math.max(GAP, Math.min(centeredLeft, containerRect.width - POPUP_WIDTH - GAP))
+    const centeredLeft = markerX - size.width / 2
+    const maxLeft = Math.max(GAP, containerRect.width - size.width - GAP)
+    const clampedLeft = Math.max(GAP, Math.min(centeredLeft, maxLeft))
 
-    // Ưu tiên: phải → trái → dưới → trên
-    if (spaceRight >= POPUP_WIDTH + GAP) {
+    if (spaceRight >= size.width + GAP) {
       return {
         left: markerX + MARKER_SIZE / 2 + GAP,
         top: markerY - MARKER_SIZE / 2,
@@ -95,15 +123,15 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
       }
     }
 
-    if (spaceLeft >= POPUP_WIDTH + GAP) {
+    if (spaceLeft >= size.width + GAP) {
       return {
-        left: markerX - MARKER_SIZE / 2 - GAP - POPUP_WIDTH,
+        left: markerX - MARKER_SIZE / 2 - GAP - size.width,
         top: markerY - MARKER_SIZE / 2,
         transformOrigin: 'top right',
       }
     }
 
-    if (spaceBottom >= POPUP_HEIGHT + GAP) {
+    if (spaceBottom >= size.height + GAP) {
       return {
         left: clampedLeft,
         top: markerY + MARKER_SIZE / 2 + GAP,
@@ -113,7 +141,7 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
 
     return {
       left: clampedLeft,
-      top: Math.max(GAP, markerY - MARKER_SIZE / 2 - GAP - POPUP_HEIGHT),
+      top: Math.max(GAP, markerY - MARKER_SIZE / 2 - GAP - size.height),
       transformOrigin: 'bottom center',
     }
   }
@@ -122,11 +150,9 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
     const markerElement = markerRefs.current[markerId]
     if (!markerElement) return
 
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
-
     markerElement.scrollIntoView({
       behavior: 'smooth',
-      block: isMobile ? 'center' : 'center',
+      block: isMobileView ? 'center' : 'center',
       inline: 'nearest',
     })
   }
@@ -136,19 +162,17 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
     if (!marker) return
 
     if (activeMarkerId === markerId) {
-      // Close if clicking the same marker
       setActiveMarkerId(null)
       setPopupPosition(null)
       return
     }
 
-    // Switch to new marker directly (popup will replace)
     setActiveMarkerId(markerId)
     setViewedMarkers((prev) => new Set([...prev, markerId]))
+    setPopupSize(DEFAULT_POPUP_SIZE)
 
-    // Calculate position after state update
     setTimeout(() => {
-      const position = calculatePopupPosition(marker)
+      const position = calculatePopupPosition(marker, DEFAULT_POPUP_SIZE)
       setPopupPosition(position)
     }, 0)
   }
@@ -158,8 +182,9 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
       const prevMarker = markers[activeMarkerIndex - 1]
       setActiveMarkerId(prevMarker.id)
       setViewedMarkers((prev) => new Set([...prev, prevMarker.id]))
+      setPopupSize(DEFAULT_POPUP_SIZE)
 
-      const position = calculatePopupPosition(prevMarker)
+      const position = calculatePopupPosition(prevMarker, DEFAULT_POPUP_SIZE)
       setPopupPosition(position)
     }
   }
@@ -169,8 +194,9 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
       const nextMarker = markers[activeMarkerIndex + 1]
       setActiveMarkerId(nextMarker.id)
       setViewedMarkers((prev) => new Set([...prev, nextMarker.id]))
+      setPopupSize(DEFAULT_POPUP_SIZE)
 
-      const position = calculatePopupPosition(nextMarker)
+      const position = calculatePopupPosition(nextMarker, DEFAULT_POPUP_SIZE)
       setPopupPosition(position)
     }
   }
@@ -178,6 +204,26 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
   const handleClosePopup = () => {
     setActiveMarkerId(null)
     setPopupPosition(null)
+  }
+
+  const handleResizeMouseDown = (event: ReactMouseEvent<SVGSVGElement>) => {
+    if (isMobileView || !popupPosition) {
+      return
+    }
+
+    event.preventDefault()
+    event.stopPropagation()
+
+    resizeStateRef.current = {
+      startX: event.clientX,
+      startY: event.clientY,
+      startWidth: popupSize.width,
+      startHeight: popupSize.height,
+      startLeft: popupPosition.left ?? DESKTOP_POPUP_GAP,
+      startTop: popupPosition.top ?? DESKTOP_POPUP_GAP,
+      transformOrigin: popupPosition.transformOrigin,
+    }
+    setIsDesktopResizing(true)
   }
 
   const getMarkerText = (style?: string) => {
@@ -258,7 +304,7 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
     } else {
       setViewedMarkers(new Set())
     }
-  }, [isLearnedBlock])
+  }, [isLearnedBlock, markers])
 
   useEffect(() => {
     if (!activeMarkerId || !imageLoaded) return
@@ -268,23 +314,133 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
     })
   }, [activeMarkerId, imageLoaded])
 
+  useEffect(() => {
+    if (!activeMarker || !mounted || isMobileView) return
+
+    const position = calculatePopupPosition(activeMarker)
+    setPopupPosition((prev) => {
+      if (
+        prev?.top === position.top &&
+        prev?.left === position.left &&
+        prev?.right === position.right &&
+        prev?.bottom === position.bottom &&
+        prev?.transformOrigin === position.transformOrigin
+      ) {
+        return prev
+      }
+
+      return position
+    })
+  }, [activeMarker, mounted])
+
+  useEffect(() => {
+    if (!activeMarker) {
+      setPopupSize(DEFAULT_POPUP_SIZE)
+      setIsDesktopResizing(false)
+      resizeStateRef.current = null
+      return
+    }
+  }, [activeMarker])
+
+  useEffect(() => {
+    if (!isDesktopResizing) return
+
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!containerRef.current || !resizeStateRef.current) return
+
+      const containerRect = containerRef.current.getBoundingClientRect()
+      const {
+        startX,
+        startY,
+        startWidth,
+        startHeight,
+        startLeft,
+        startTop,
+        transformOrigin,
+      } = resizeStateRef.current
+
+      const nextWidth = clampValue(
+        startWidth + (event.clientX - startX),
+        DESKTOP_POPUP_MIN_WIDTH,
+        Math.max(
+          DESKTOP_POPUP_MIN_WIDTH,
+          Math.min(
+            DESKTOP_POPUP_MAX_WIDTH,
+            containerRect.width - DESKTOP_POPUP_GAP * 2,
+          ),
+        ),
+      )
+      const nextHeight = clampValue(
+        startHeight + (event.clientY - startY),
+        DESKTOP_POPUP_MIN_HEIGHT,
+        Math.max(
+          DESKTOP_POPUP_MIN_HEIGHT,
+          Math.min(
+            DESKTOP_POPUP_MAX_HEIGHT,
+            containerRect.height - DESKTOP_POPUP_GAP * 2,
+          ),
+        ),
+      )
+      const nextLeft = clampValue(
+        startLeft,
+        DESKTOP_POPUP_GAP,
+        Math.max(DESKTOP_POPUP_GAP, containerRect.width - nextWidth - DESKTOP_POPUP_GAP),
+      )
+      const nextTop = clampValue(
+        startTop,
+        DESKTOP_POPUP_GAP,
+        Math.max(DESKTOP_POPUP_GAP, containerRect.height - nextHeight - DESKTOP_POPUP_GAP),
+      )
+
+      setPopupSize((prev) => (
+        prev.width === nextWidth && prev.height === nextHeight
+          ? prev
+          : { width: nextWidth, height: nextHeight }
+      ))
+      setPopupPosition((prev) => ({
+        ...prev,
+        left: nextLeft,
+        top: nextTop,
+        right: undefined,
+        bottom: undefined,
+        transformOrigin: transformOrigin ?? prev?.transformOrigin ?? 'top left',
+      }))
+    }
+
+    const handleMouseUp = () => {
+      setIsDesktopResizing(false)
+      resizeStateRef.current = null
+      document.body.style.cursor = ''
+      document.body.style.userSelect = ''
+    }
+
+    document.body.style.cursor = 'nwse-resize'
+    document.body.style.userSelect = 'none'
+    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mouseup', handleMouseUp)
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
+      document.body.style.cursor = ''
+      document.body.style.userSelect = ''
+    }
+  }, [isDesktopResizing])
+
   return (
     <div className="w-full">
-      {/* Document Title */}
       {documentTitle && (
         <h3 className="mb-4 text-xl font-semibold text-gray-800">
           {documentTitle}
         </h3>
       )}
 
-      {/* Image Container with Markers */}
       <div
         ref={containerRef}
         className={clsx("relative w-full overflow-visible rounded-2xl", {
           "mb-12": isShowContinueButton
         })}
       >
-        {/* Background Image */}
         <img
           src={backgroundResource.url}
           alt={'Labeled Graphic'}
@@ -292,7 +448,6 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
           onLoad={() => setImageLoaded(true)}
         />
 
-        {/* Markers */}
         {imageLoaded &&
           markers.map((marker) => {
             const isViewed = viewedMarkers.has(marker.id)
@@ -311,9 +466,7 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
                   top: `${marker.y_percent}%`,
                 }}
               >
-                {/* Container căn giữa cho ripple và marker */}
                 <div className="relative flex items-center justify-center" style={{ width: 0, height: 0 }}>
-                  {/* Ripple effect - sóng lan tỏa với fill trắng */}
                   {shouldPulse && (
                     <>
                       <motion.div
@@ -324,8 +477,8 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
                           transform: 'translate(-50%, -50%)',
                         }}
                         animate={{
-                          width: [24, 44, 44],
-                          height: [24, 44, 44],
+                          width: [MARKER_PULSE_START_SIZE, MARKER_PULSE_END_SIZE, MARKER_PULSE_END_SIZE],
+                          height: [MARKER_PULSE_START_SIZE, MARKER_PULSE_END_SIZE, MARKER_PULSE_END_SIZE],
                           opacity: [0, 0.6, 0],
                         }}
                         transition={{
@@ -343,8 +496,8 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
                           transform: 'translate(-50%, -50%)',
                         }}
                         animate={{
-                          width: [24, 44, 44],
-                          height: [24, 44, 44],
+                          width: [MARKER_PULSE_START_SIZE, MARKER_PULSE_END_SIZE, MARKER_PULSE_END_SIZE],
+                          height: [MARKER_PULSE_START_SIZE, MARKER_PULSE_END_SIZE, MARKER_PULSE_END_SIZE],
                           opacity: [0, 0.5, 0],
                         }}
                         transition={{
@@ -363,8 +516,8 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
                           transform: 'translate(-50%, -50%)',
                         }}
                         animate={{
-                          width: [24, 44, 44],
-                          height: [24, 44, 44],
+                          width: [MARKER_PULSE_START_SIZE, MARKER_PULSE_END_SIZE, MARKER_PULSE_END_SIZE],
+                          height: [MARKER_PULSE_START_SIZE, MARKER_PULSE_END_SIZE, MARKER_PULSE_END_SIZE],
                           opacity: [0, 0.4, 0],
                         }}
                         transition={{
@@ -378,9 +531,8 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
                     </>
                   )}
 
-                  {/* Marker icon - hover scale */}
                   <motion.div
-                    className="cursor-pointer"
+                    className="cursor-pointer shadow-large rounded-full"
                     onClick={() => handleMarkerClick(marker)}
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.2 }}
@@ -393,8 +545,7 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
           })}
       </div>
 
-      {/* Popup - Mobile (Portal) */}
-      {mounted && typeof window !== 'undefined' && window.innerWidth < 768 && (
+      {mounted && isMobileView && (
         <>
           {createPortal(
             <AnimatePresence mode="wait">
@@ -414,10 +565,9 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
                     boxShadow: '0 -5px 24px 0 rgba(0, 0, 0, 0.16)',
                   }}
                 >
-                  {/* Header */}
                   <div className="flex items-start justify-between">
                     <p className="text-base font-semibold text-gray-800">
-                      {activeMarker?.title} #{activeMarkerIndex + 1}
+                      {activeMarker?.title}
                     </p>
                     <div
                       onClick={handleClosePopup}
@@ -427,29 +577,25 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
                     </div>
                   </div>
 
-                  {/* Body */}
                   <div className="flex-1 overflow-y-auto">
-                    <div
-                      className="text-sm font-normal text-gray-800"
-                      dangerouslySetInnerHTML={{ __html: activeMarker?.content || '' }}
+                    <EditorReader
+                      className="text-sm font-normal text-gray-800 [&_img]:h-auto [&_img]:max-w-full [&_img]:w-full"
+                      text_editor_content={activeMarker?.content || ''}
                     />
                   </div>
 
-                  {/* Footer */}
                   <div className="flex items-center justify-center gap-2">
                     <button
                       onClick={handlePrevious}
                       disabled={activeMarkerIndex === 0}
-                      className={`flex h-5 w-5 items-center justify-center transition-colors ${
-                        activeMarkerIndex === 0
+                      className={`flex h-5 w-5 items-center justify-center transition-colors ${activeMarkerIndex === 0
                           ? 'cursor-not-allowed text-gray-300'
                           : 'text-gray-800'
-                      }`}
+                        }`}
                     >
-                      <AltArrowLeftIcon className="w-5 h-5"/>
+                      <AltArrowLeftIcon className="w-5 h-5" />
                     </button>
 
-                    {/* Progress dots */}
                     <div className="flex items-center gap-1">
                       {markers.map((marker) => {
                         const isViewed = viewedMarkers.has(marker.id)
@@ -471,13 +617,12 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
                     <button
                       onClick={handleNext}
                       disabled={activeMarkerIndex === markers.length - 1}
-                      className={`flex h-5 w-5 items-center justify-center transition-colors ${
-                        activeMarkerIndex === markers.length - 1
+                      className={`flex h-5 w-5 items-center justify-center transition-colors ${activeMarkerIndex === markers.length - 1
                           ? 'cursor-not-allowed text-gray-300'
                           : 'text-gray-800'
-                      }`}
+                        }`}
                     >
-                      <AltArrowRightIcon className='w-5 h-5'/>
+                      <AltArrowRightIcon className='w-5 h-5' />
                     </button>
                   </div>
                 </motion.div>
@@ -488,8 +633,7 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
         </>
       )}
 
-      {/* Popup - Desktop */}
-      {(typeof window === 'undefined' || window.innerWidth >= 768) && (
+      {(!isMobileView) && (
         <AnimatePresence mode="wait">
           {activeMarker && popupPosition && (
             <motion.div
@@ -501,21 +645,23 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
               initial="close"
               animate="open"
               exit="close"
-              className="absolute z-[250] flex w-[287px] flex-col gap-3 rounded-xl bg-white p-3"
+              className="absolute z-[250] flex min-h-[220px] min-w-[240px] flex-col gap-3 overflow-hidden rounded-xl bg-white p-3"
               style={{
                 top: popupPosition?.top,
                 left: popupPosition?.left,
                 right: popupPosition?.right,
                 bottom: popupPosition?.bottom,
-                maxHeight: '400px',
+                width: popupSize.width,
+                height: popupSize.height,
+                maxHeight: 'min(400px, calc(100% - 24px))',
+                maxWidth: 'min(600px, calc(100% - 24px))',
                 transformOrigin: popupPosition?.transformOrigin ?? 'top left',
                 boxShadow: '0 4px 24px 0 rgba(0, 0, 0, 0.12)',
               }}
             >
-              {/* Header */}
               <div className="flex items-start justify-between">
                 <p className="text-sm font-semibold text-gray-800">
-                  {activeMarker?.title} #{activeMarkerIndex + 1}
+                  {activeMarker?.title}
                 </p>
                 <div
                   onClick={handleClosePopup}
@@ -525,29 +671,25 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
                 </div>
               </div>
 
-              {/* Body */}
               <div className="flex-1 overflow-y-auto">
-                <div
-                  className="text-sm font-normal text-gray-800"
-                  dangerouslySetInnerHTML={{ __html: activeMarker?.content || '' }}
+                <EditorReader
+                  className="text-sm font-normal text-gray-800 [&_img]:h-auto [&_img]:max-w-full [&_img]:w-full"
+                  text_editor_content={activeMarker?.content || ''}
                 />
               </div>
 
-              {/* Footer */}
               <div className="flex items-center justify-center gap-2">
                 <button
                   onClick={handlePrevious}
                   disabled={activeMarkerIndex === 0}
-                  className={`flex h-4 w-4 items-center justify-center transition-colors ${
-                    activeMarkerIndex === 0
+                  className={`flex h-4 w-4 items-center justify-center transition-colors ${activeMarkerIndex === 0
                       ? 'cursor-not-allowed text-gray-300'
                       : 'text-gray-800'
-                  }`}
+                    }`}
                 >
                   <AltArrowLeftIcon />
                 </button>
 
-                {/* Progress dots */}
                 <div className="flex items-center gap-1">
                   {markers.map((marker) => {
                     const isViewed = viewedMarkers.has(marker.id)
@@ -569,15 +711,20 @@ export default function LabeledGraphicBlock({ markers, backgroundResource, docum
                 <button
                   onClick={handleNext}
                   disabled={activeMarkerIndex === markers.length - 1}
-                  className={`flex h-4 w-4 items-center justify-center transition-colors ${
-                    activeMarkerIndex === markers.length - 1
+                  className={`flex h-4 w-4 items-center justify-center transition-colors ${activeMarkerIndex === markers.length - 1
                       ? 'cursor-not-allowed text-gray-300'
                       : 'text-gray-800'
-                  }`}
+                    }`}
                 >
                   <AltArrowRightIcon />
                 </button>
               </div>
+              <Triangle
+                className={clsx("absolute bottom-2 right-2 text-gray-300", {
+                  "cursor-nwse-resize": !isDesktopResizing,
+                })}
+                onMouseDown={handleResizeMouseDown}
+              />
             </motion.div>
           )}
         </AnimatePresence>

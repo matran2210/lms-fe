@@ -16,20 +16,20 @@ services:
     networks:
       - local
 
-  lms-finhub:
-    build:
-      context: .
-      dockerfile: ./prod.Dockerfile
-      args:
-        APP_NAME: "lms-finhub"
-    container_name: lms-finhub
-    ports:
-      - "3003:3000"
-    environment:
-      NODE_ENV: production
-    restart: always
-    networks:
-      - local
+  # lms-finhub:  # tạm tắt, không dùng
+  #   build:
+  #     context: .
+  #     dockerfile: ./prod.Dockerfile
+  #     args:
+  #       APP_NAME: "lms-finhub"
+  #   container_name: lms-finhub
+  #   ports:
+  #     - "3003:3000"
+  #   environment:
+  #     NODE_ENV: production
+  #   restart: always
+  #   networks:
+  #     - local
 
   lms-zoom:
     build:
