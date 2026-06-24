@@ -71,8 +71,8 @@ const TeacherAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
       ...prev,
       lesson_ids: getValues('lesson_ids')?.filter((id) => id !== '') || undefined,
       status: getValues('status') || undefined,
-      fromDate: rangeDate?.[0].toISOString() || undefined,
-      toDate: rangeDate?.[1].toISOString() || undefined,
+      fromDate: rangeDate?.[0]?.format("YYYY-MM-DD") || undefined,
+      toDate: rangeDate?.[1]?.format("YYYY-MM-DD") || undefined,
     }))
   }
   const handleOpenHistory = (record: IStudentAttendanceItem) => {
@@ -112,8 +112,8 @@ const TeacherAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
   const handleDateChange = (dates: [dayjs.Dayjs | null, dayjs.Dayjs | null] | null) => {
     setQueryParams((prev) => ({
       ...prev,
-      start_date: dates?.[0]?.toISOString(),
-      end_date: dates?.[1]?.toISOString(),
+      start_date: dates?.[0]?.format("YYYY-MM-DD"),
+      end_date: dates?.[1]?.format("YYYY-MM-DD"),
     }))
   }
   const columns: ColumnsType<IStudentAttendanceItem> = [
