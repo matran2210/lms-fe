@@ -1,13 +1,13 @@
 'use client'
-import React from 'react'
-import clsx from 'clsx'
-import { IClassAttendanceHistoryResponse, IStudentAttendanceItem } from '@lms/core'
+import { CalendarIconOutline, ClockInClassIcon, CloseModalIcon, DeviceIcon } from '@lms/assets'
 import { useFeature } from '@lms/contexts'
+import { DATE_FORMAT, IClassAttendanceHistoryResponse, IStudentAttendanceItem } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { SappDivider, SappDrawerV3 } from '@lms/ui'
+import { buildLocalLessonDateTime, formatDateFromUTC } from '@lms/utils'
+import clsx from 'clsx'
+import React from 'react'
 import { useQuery } from 'react-query'
-import { CalendarIconOutline, ClockInClassIcon, CloseModalIcon, DeviceIcon } from '@lms/assets'
-import { formatDateFromUTC } from '@lms/utils'
 
 interface AttendanceHistoryProps {
   isOpen: boolean
@@ -29,6 +29,16 @@ const AttendanceHistoryContent: React.FC<AttendanceHistoryContentProps> = ({
   isCompactHeight = false,
   isPanelScroll = false,
 }) => {
+
+  const localStartDate = buildLocalLessonDateTime(
+    record?.start_date,
+    record?.start_time
+  )
+  const localEndDate = buildLocalLessonDateTime(
+    record?.start_date,
+    record?.end_time
+  )
+
   return (
     <div
       className={clsx(
@@ -42,7 +52,7 @@ const AttendanceHistoryContent: React.FC<AttendanceHistoryContentProps> = ({
           <span className="text-gray-500">Date:</span>
         </div>
         <div className="text-base text-gray-900">
-          {formatDateFromUTC(record?.start_date as string)}
+          {`${localStartDate?.isValid() ? localStartDate.format('DD/MM/YYYY') : '-'} ${localStartDate?.isValid() ? localStartDate.format('HH:mm') : '-'} : ${localEndDate?.isValid() ? localEndDate.format('HH:mm') : '-'}`}
         </div>
       </div>
       <div
@@ -60,7 +70,7 @@ const AttendanceHistoryContent: React.FC<AttendanceHistoryContentProps> = ({
                 <span className="text-gray-500">Check in - Check out:</span>
               </div>
               <div className="text-sm text-gray-900">
-                {item?.checkin_time ? formatDateFromUTC(item?.checkin_time) : '-'} - {item?.checkout_time ? formatDateFromUTC(item?.checkout_time) : '-'}
+                {item?.checkin_time ? formatDateFromUTC(item?.checkin_time, DATE_FORMAT.DATE_TIME_DATE_FIRST) : '-'} - {item?.checkout_time ? formatDateFromUTC(item?.checkout_time, DATE_FORMAT.DATE_TIME_DATE_FIRST) : '-'}
               </div>
             </div>
 
