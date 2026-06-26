@@ -21,7 +21,6 @@ export function formatSubmitAnswer({
   }
 
   if (question.qType === QUESTION_TYPES.ESSAY) {
-    if (!isAnswered) return null
 
     const requirements = question?.data?.requirements ?? []
 

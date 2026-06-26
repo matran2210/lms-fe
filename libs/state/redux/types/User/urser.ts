@@ -6,6 +6,7 @@ import {
   PROGRAM,
   UserExamInformation,
 } from "@lms/core";
+import { IClassAttendanceHistoryResponse, ITeacherTeachingAttendanceListParams, ITeacherTeachingAttendanceListResponse, ITeachingAttendanceHistoryResponse, ITeachingStatistics } from "@lms/core/types/attendance";
 
 export interface ITemplateConfig {
   template_full: number;
@@ -263,4 +264,24 @@ export interface IUserAPI {
   ) => Promise<{
     success: boolean;
   }>;
+
+  // user attendances
+  // teacher:
+  getTeacherTeachingAttendance(params: ITeacherTeachingAttendanceListParams): Promise<IResponse<ITeacherTeachingAttendanceListResponse>>;
+  getTeacherTeachingAttendanceHistory(
+    teacher_schedule_id: string,
+  ): Promise<IResponse<ITeachingAttendanceHistoryResponse>>;
+  getTeacherTeachingAttendanceSummary(params?: {
+    fromDate?: string | undefined;
+    toDate?: string | undefined;
+  }): Promise<IResponse<ITeachingStatistics>>;
+  getTeacherLearningAttendance(params: {
+    page_index: number;
+    page_size: number;
+    fromDate?: string | undefined;
+    toDate?: string | undefined;
+    class_ids?: string[] | undefined;
+    lesson_ids?: string[] | undefined;
+    attendance_status?: string[] | undefined;
+  }): Promise<IResponse<any>>;
 }

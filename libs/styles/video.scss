@@ -34,11 +34,14 @@
     @apply border border-gray-100 bg-[#FFFFFF66];
   }
 
-  .seek:hover + .seek-tooltip {
-    @apply block;
+  .seek:hover + .seek-tooltip,
+  .seek:active + .seek-tooltip,
+  .seek:focus + .seek-tooltip {
+    @apply block !important;
   }
 
   .seek-tooltip {
+    display: none;
     content: attr(data-title);
   }
 
@@ -112,7 +115,6 @@
     @apply w-full cursor-pointer;
     border-radius: 1.3px;
     -webkit-appearance: none;
-    transition: all 0.4s ease;
   }
 
   input[type="range"]::-webkit-slider-thumb {

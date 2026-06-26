@@ -28,6 +28,11 @@
   @apply hidden;
 }
 
+#zmmtg-root .footer-participants-button__toggle-button,
+#zmmtg-root .footer-participants-button__popup-menu {
+  @apply !hidden;
+}
+
 #meeting-app .zoom-workplace-logo {
   @apply hidden umd:block;
 }

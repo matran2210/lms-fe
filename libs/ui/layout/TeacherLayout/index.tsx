@@ -15,6 +15,7 @@ type LayoutTeacherProps = {
   className?: string;
   isCourseDetail?: boolean;
   isActivity?: boolean;
+  layoutClassname?: string
 };
 
 const LayoutTeacher: React.FC<LayoutTeacherProps> = ({
@@ -24,6 +25,7 @@ const LayoutTeacher: React.FC<LayoutTeacherProps> = ({
   className = "",
   isCourseDetail = false,
   isActivity = false,
+  layoutClassname
 }: LayoutTeacherProps) => {
   const { showPinnedTrial } = useCourseContext();
 
@@ -40,7 +42,7 @@ const LayoutTeacher: React.FC<LayoutTeacherProps> = ({
             showPinnedTrial && "mt-[54px]",
           )}
         >
-          <div className="px-56 py-6">
+          <div className={clsx("px-56 py-6", layoutClassname)}>
             <SappBreadCrumbs breadcrumbs={breadcrumbs} />
             <Title level={3} className="mt-1 pb-2 text-gray-700">
               {title}
