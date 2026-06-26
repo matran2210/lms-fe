@@ -1,9 +1,9 @@
-import { IDeviceItem, IResponse, PinnedNotifications } from '@lms/core'
-import { fetchFormData } from '@services/requestV2'
-import { AuthAPI } from 'src/api/profile'
-import { IUser } from '@lms/contexts'
-import url from './url'
-import { apiURL } from 'src/constants'
+import { IDeviceItem, IResponse, PinnedNotifications } from "@lms/core";
+import { fetchFormData } from "@services/requestV2";
+import { AuthAPI } from "src/api/profile";
+import { IUser } from "@lms/contexts";
+import url from "./url";
+import { apiURL } from "src/constants";
 
 const UserContextApi = {
   /**
@@ -13,16 +13,16 @@ const UserContextApi = {
   getMe: (): Promise<IUser> => {
     // Đường dẫn api để lấy thông tin người dùng
     // Sử dụng httpService để gửi yêu cầu GET
-    return AuthAPI.me()
+    return AuthAPI.me();
   },
   /**
    * Một hàm để lấy khóa học và certificate của người dùng hiện tại
    */
   getUserInformation: (): Promise<any> => {
     // Đường dẫn api để lấy khóa học và certificate của người dùng người dùng
-    const uri = url.coursesAndCertificates
+    const uri = url.coursesAndCertificates;
     // Sử dụng httpService để gửi yêu cầu GET
-    return AuthAPI.getUserInformation()
+    return AuthAPI.getUserInformation();
   },
   /**
    * Một hàm để cập nhật thông tin của người dùng
@@ -35,7 +35,7 @@ const UserContextApi = {
     avatar?: { [key: string]: string } | null,
   ): Promise<IResponse<{ message: string }>> => {
     // Sử dụng httpService để gửi yêu cầu PUT
-    return AuthAPI.updateUser(full_name, avatar)
+    return AuthAPI.updateUser(full_name, avatar);
   },
 
   /**
@@ -45,23 +45,23 @@ const UserContextApi = {
    */
   updateUserAvatar: (avatar: File): Promise<any> => {
     // Tạo một đối tượng formData để chứa file ảnh
-    const formData = new FormData()
-    formData.append('avatar', avatar)
+    const formData = new FormData();
+    formData.append("avatar", avatar);
     // Sử dụng httpService để gửi yêu cầu POST_FORM_DATA
-    return fetchFormData({ url: `${apiURL}/users/avatar`, formData })
+    return fetchFormData({ url: `${apiURL}/users/avatar`, formData });
   },
   getListDevices: async (): Promise<IDeviceItem[]> => {
-    return AuthAPI.getListDevices()
+    return AuthAPI.getListDevices();
   },
   getListDevicesV2: async (): Promise<IDeviceItem[]> => {
-    return AuthAPI.getListDevices()
+    return AuthAPI.getListDevices();
   },
   getListHistory: async ({
     page_index,
     page_size,
     type,
   }: any): Promise<any> => {
-    return AuthAPI.getListHistory({ page_index, page_size, type })
+    return AuthAPI.getListHistory({ page_index, page_size, type });
   },
 
   /**
@@ -71,7 +71,7 @@ const UserContextApi = {
   getPinnedNotifications: (): Promise<PinnedNotifications> => {
     // Đường dẫn api Pinned Notification
     // Sử dụng httpService để gửi yêu cầu GET
-    return AuthAPI.getPinnedNotifications()
+    return AuthAPI.getPinnedNotifications();
   },
 
   /**
@@ -79,8 +79,8 @@ const UserContextApi = {
    * @async
    */
   removeDevice: (session_id: string): Promise<any> => {
-    return AuthAPI.removeDevice(session_id)
+    return AuthAPI.removeDevice(session_id);
   },
-}
+};
 
-export default UserContextApi
+export default UserContextApi;

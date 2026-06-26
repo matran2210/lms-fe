@@ -14,6 +14,7 @@ export interface SAPPRangePickerProps extends IBaseFormFieldProps {
   suffixIcon?: React.ReactNode;
   needConfirm?: boolean;
   size?: ButtonSize;
+  onChange?: (dates: [dayjs.Dayjs | null, dayjs.Dayjs | null] | null) => void;
 }
 
 const { RangePicker } = DatePicker;
@@ -30,6 +31,7 @@ const SAPPRangePicker = ({
   suffixIcon,
   needConfirm = false,
   size,
+  onChange,
 }: SAPPRangePickerProps) => {
   return (
     <Controller
@@ -47,7 +49,10 @@ const SAPPRangePicker = ({
               name={field.name}
               format={formatDate}
               onBlur={field.onBlur}
-              onChange={field.onChange}
+              onChange={(dates, datesString) => {
+                field.onChange(dates ? [dates[0], dates[1]] : null);
+                onChange?.(dates ? [dates[0], dates[1]] : null);
+              }}
               value={[
                 field.value?.[0] ? dayjs(field.value?.[0]) : null,
                 field.value?.[1] ? dayjs(field.value?.[1]) : null,

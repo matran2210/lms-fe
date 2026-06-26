@@ -1087,6 +1087,35 @@ const TestDetail = () => {
           query?.class_user_id as string,
         );
         question = await TestServiceAPI.getQuestionDetail(currentPage);
+
+        // Merge saved answers into question requirements
+        if (
+          question?.data?.requirements &&
+          question.data.requirements.length > 0
+        ) {
+          const savedAnswer = answersSubmitted?.find(
+            (e: any) => e.questionId === currentPage,
+          );
+
+          if (savedAnswer?.answers) {
+            question.data.requirements = question.data.requirements.map(
+              (req: any) => {
+                const savedReq = savedAnswer.answers.find(
+                  (ans: any) => ans.requirement_id === req.id,
+                );
+
+                if (savedReq) {
+                  return {
+                    ...req,
+                    short_answer: savedReq.short_answer ?? req.short_answer,
+                    answer_file: savedReq.answer_file ?? req.answer_file,
+                  };
+                }
+                return req;
+              },
+            );
+          }
+        }
       }
       return { topicDescription, question: question?.data };
     } catch (err) {
@@ -1115,11 +1144,26 @@ const TestDetail = () => {
           ? DEFAULT_EDITOR_VALUE
           : defaultSheetData;
       const getDefaultWordValue = () => {
+        // For SHEET type, prioritize saved answer from API over form value
+        // to avoid race condition where form gets initialized with template before answersSubmitted loads
+        if (question?.response_option === RESPONSE_OPTION.SHEET) {
+          const requirementId = question?.requirements?.[0]?.id;
+          const savedRequirement = savedAnswer?.answers?.find(
+            (e: any) => e.requirement_id === requirementId,
+          );
+          if (savedRequirement?.short_answer !== undefined) {
+            return savedRequirement.short_answer ?? isWordDataDefault;
+          }
+          if (savedAnswer?.short_answer !== undefined) {
+            return savedAnswer?.short_answer ?? isWordDataDefault;
+          }
+        }
+
         if (valueFromFormReq !== undefined) {
           return valueFromFormReq;
         }
         const requirementId = question?.requirements?.[0]?.id;
-        const savedRequirement = savedAnswer?.requirements?.find(
+        const savedRequirement = savedAnswer?.answers?.find(
           (e: any) => e.requirement_id === requirementId,
         );
         const requirement = question?.requirements?.[0];
@@ -1140,16 +1184,10 @@ const TestDetail = () => {
         return question?.answer_template ?? isWordDataDefault;
       };
 
-      onResetFormatEssay(name, getDefaultWordValue());
-      await refEditor?.current?.reset();
-      await new Promise((resolve) => setTimeout(resolve, 10)); // hoặc setTimeout với delay nhỏ như 10ms
+      const defaultWordValue = getDefaultWordValue();
+      onResetFormatEssay(name, defaultWordValue);
 
-      if (
-        refEditor?.current?.resetSheet &&
-        question?.response_option === RESPONSE_OPTION.SHEET
-      ) {
-        refEditor?.current?.resetSheet();
-      }
+      await new Promise((resolve) => setTimeout(resolve, 10)); // hoặc setTimeout với delay nhỏ như 10ms
     };
     const doAfterSetState = () => {
       setEditorReady(false); // Ẩn trước
@@ -1267,27 +1305,31 @@ const TestDetail = () => {
     const newData = tabs.map((item: any) => {
       if (tabContent?.id === item?.id) {
         if (
-          (tabContent?.data?.requirements ?? item?.data?.requirements ?? [])
+          (item?.data?.requirements ?? tabContent?.data?.requirements ?? [])
             .length > 0
         ) {
+          const updatedRequirements = (
+            item?.data?.requirements ??
+            tabContent?.data?.requirements ??
+            []
+          ).map((requirement: Requirement, reqIndex: number) => {
+            // IMPORTANT: Use tabContent.id (not currentPage) to match the fieldName
+            const fieldName = `${tabContent.id}_${reqIndex}_answer`;
+            const editorContent = getValues(fieldName);
+
+            // Priority: Use answer_text from tabs state if it exists (might be template from reset)
+            // Otherwise use editor content from form
+            return {
+              ...requirement,
+              answer_text: requirement?.answer_text ?? editorContent,
+            };
+          });
+
           return {
             ...item,
             data: {
               ...item?.data,
-              requirements: (
-                tabContent?.data?.requirements ??
-                item?.data?.requirements ??
-                []
-              ).map((requirement: Requirement, reqIndex: number) => {
-                const editorContent = getValues(
-                  `${currentPage}_${reqIndex}_answer`,
-                );
-
-                return {
-                  ...requirement,
-                  answer_text: editorContent ?? requirement?.answer_text,
-                };
-              }),
+              requirements: updatedRequirements,
             },
 
             attempted: item?.attempted || checkAnswered(item),
@@ -1300,12 +1342,13 @@ const TestDetail = () => {
               : item?.timeSpent,
           };
         } else {
-          const answer = getValues(
-            `${currentTabContent?.id}_${essayData?.index ?? 0}_answer`,
-          );
+          // No requirements - essay without requirements
+          const fieldName = `${tabContent.id}_${essayData?.index ?? 0}_answer`;
+          const editorContent = getValues(fieldName);
+
           return {
             ...item,
-            answer: answer,
+            answer: editorContent ?? item?.answer, // Priority: form → tabs state
             attempted: item?.attempted || checkAnswered(item),
             timeSpent: !item?.done
               ? item?.timeSpent
@@ -1374,7 +1417,6 @@ const TestDetail = () => {
 
     // Early return for tab changes if question not answered
     if (["change-tab", "timeout", "finish"].includes(action ?? "")) {
-      if (!checkAnswered(currentQuestion)) return;
       if (action === "change-tab" || action === "finish") {
         if (currentTabContent?.qType !== QUESTION_TYPES.ESSAY) {
           const isEqualValue = await isValuesEqual(
@@ -2145,10 +2187,13 @@ const TestDetail = () => {
     const key = `${currentTabContent?.id}_${essayData?.index}_answer`;
     const response_option = currentTabContent?.data?.response_option;
 
+    let templateValue: string;
+
     switch (response_option) {
       case RESPONSE_OPTION.WORD: {
         const templateValueWord = getTemplateValueForWord();
-        // Reset form value
+        templateValue = templateValueWord;
+        // Reset form value FIRST
         onResetFormatEssay(key, templateValueWord);
         // Reset component con
         if (refEditor?.current?.reset) {
@@ -2157,16 +2202,63 @@ const TestDetail = () => {
         break;
       }
       case RESPONSE_OPTION.SHEET: {
-        const templateValue = getTemplateValueForSheet();
-        // Reset form value
-        onResetFormatEssay(key, templateValue);
+        const templateValueSheet = getTemplateValueForSheet();
+        templateValue = templateValueSheet;
+        // Reset form value FIRST
+        onResetFormatEssay(key, templateValueSheet);
         // Reset component con
         if (refEditor?.current?.clear) {
-          refEditor.current.clear(templateValue);
+          refEditor.current.clear(templateValueSheet);
         }
         break;
       }
+      default:
+        return;
     }
+
+    // Immediately save template value to answer_text in tabs state
+    setTabs((prevTabs: any) => {
+      return prevTabs.map((tab: any) => {
+        if (tab.id === currentTabContent?.id) {
+          if (tab.data?.requirements && tab.data.requirements.length > 0) {
+            // Has requirements
+            const updatedRequirements = tab.data.requirements.map(
+              (req: any, idx: number) => {
+                if (idx === essayData?.index) {
+                  return {
+                    ...req,
+                    answer_text: templateValue, // Set to template immediately
+                  };
+                }
+                return req;
+              },
+            );
+            return {
+              ...tab,
+              data: {
+                ...tab.data,
+                requirements: updatedRequirements,
+              },
+              attempted: true, // Mark as attempted after reset
+            };
+          } else {
+            // No requirements - essay without requirements
+            return {
+              ...tab,
+              answer: templateValue,
+              attempted: true, // Mark as attempted after reset
+            };
+          }
+        }
+        return tab;
+      });
+    });
+
+    // Force setValue again to ensure form is synced with template value
+    // This is needed because editor might not trigger onChange immediately
+    setTimeout(() => {
+      setValue(key, templateValue, { shouldDirty: true, shouldTouch: true });
+    }, 100);
   };
 
   const resetWordBeforeAction = async () => {

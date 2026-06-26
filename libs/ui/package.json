@@ -37,7 +37,7 @@
     "lodash": "^4.17.21",
     "lottie-react": "^2.4.1",
     "next": "14.2.35",
-    "react-draggable": "^4.5.0",
+    "react-draggable": "4.5.0",
     "react-fast-marquee": "^1.6.5",
     "react-hot-toast": "^2.4.1",
     "react-pdf": "9.1.0",

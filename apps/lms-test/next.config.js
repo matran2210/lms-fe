@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-console */
 /** @type {import('next').NextConfig} */
-const { withSentryConfig } = require('@sentry/nextjs')
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-})
+const { withSentryConfig } = require("@sentry/nextjs");
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
 
-const isProd = process.env.NODE_ENV === 'production'
+const isProd = process.env.NODE_ENV === "production";
 // =========================
 // Base Next.js config
 // =========================
@@ -14,10 +16,10 @@ const nextConfig = {
   productionBrowserSourceMaps: false,
   poweredByHeader: false,
 
-  output: 'standalone',
+  output: "standalone",
 
   images: {
-    remotePatterns: [{ protocol: 'https', hostname: '**' }],
+    remotePatterns: [{ protocol: "https", hostname: "**" }],
   },
 
   compiler: {
@@ -29,25 +31,23 @@ const nextConfig = {
     optimizeCss: isProd,
     instrumentationHook: false,
   },
-}
+};
 
 // =========================
 // Plugins
 // =========================
-const configWithPlugins = withBundleAnalyzer(nextConfig)
+const configWithPlugins = withBundleAnalyzer(nextConfig);
 
 // =========================
 // Sentry config
 // =========================
-module.exports = process.env.NEXT_PUBLIC_ENABLE_SENTRY === 'true'
-  ? withSentryConfig(
-    configWithPlugins,
-    {
-      org: process.env.NEXT_PUBLIC_SENTRY_NAME,
-      project: process.env.NEXT_PUBLIC_SENTRY_PROJECT,
-      silent: !process.env.CI,
-      widenClientFileUpload: true,
-      tunnelRoute: '/monitoring',
-    }
-  )
-  : configWithPlugins
+module.exports =
+  process.env.NEXT_PUBLIC_ENABLE_SENTRY === "true"
+    ? withSentryConfig(configWithPlugins, {
+        org: process.env.NEXT_PUBLIC_SENTRY_NAME,
+        project: process.env.NEXT_PUBLIC_SENTRY_PROJECT,
+        silent: !process.env.CI,
+        widenClientFileUpload: true,
+        tunnelRoute: "/monitoring",
+      })
+    : configWithPlugins;
