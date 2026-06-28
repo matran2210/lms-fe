@@ -2,7 +2,7 @@ name: Build apps
 
 on:
   push:
-    branches: [master]
+    branches: [test-lms]
   workflow_dispatch:
 
 env:
