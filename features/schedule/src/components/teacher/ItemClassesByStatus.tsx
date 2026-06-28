@@ -268,7 +268,7 @@ const ItemClassesByStatus = ({
               variant="secondary"
               full
               position="end"
-              iconColorProps={isProgress ? '#ffb800' : '#374151'}
+              iconColorProps={isProgress ? '#EF5941' : '#374151'}
               className={
                 isProgress
                   ? 'text- border border-primary text-primary'

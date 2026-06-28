@@ -226,7 +226,7 @@ const TableQuestions = ({
               'ml-5 rounded-sm px-1 py-1.5 text-sm md:text-base',
               gradingStatus === GRADE_STATUS.FINISHED_GRADING
                 ? 'text-acent-info bg-[#176CDD0D]'
-                : 'bg-[#FFB8001A] text-primary',
+                : 'bg-[#EF59411a] text-primary',
             )}
           >
             {getGradingStatusLabel(gradingStatus || '')}

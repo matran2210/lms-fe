@@ -25,7 +25,7 @@ export { default as Mp3ImageImage } from "./images/mp3-image.png";
 export { default as NextImage } from "./images/next.svg";
 export { default as OopsImage } from "./images/Oops.svg";
 export { default as PrevImage } from "./images/prev.svg";
-export { default as SappLogoImage } from "./images/sapp_logo.svg";
+export { default as SappLogoImage } from "./images/sapp_logo_new.svg";
 export { default as SappPasswordSuccessImage } from "./images/sapp_password_success.svg";
 export { default as SappSearchImage } from "./images/sapp_search.svg";
 export { default as SquareAcademicCapImage } from "./images/square-academic-cap.svg";
