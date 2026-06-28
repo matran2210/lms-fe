@@ -8,84 +8,84 @@ import {
   IEditTimeoffRequestData,
   IEditWeeklyNormData,
   IResponse,
-} from '@lms/core'
-import { fetcher } from '@services/requestV2'
+} from "@lms/core";
+import { fetcher } from "@services/requestV2";
 
 export class MyRequestAPI {
   static createBusySchedule(
     data: ICreateBusyScheduleData,
   ): Promise<IResponse<null>> {
-    return fetcher('/schedules/busy-schedule', {
-      method: 'POST',
+    return fetcher("/schedules/busy-schedule", {
+      method: "POST",
       data,
-    })
+    });
   }
   static editBusySchedule(
     id: string,
     data: IEditBusyScheduleData,
   ): Promise<IResponse<null>> {
     return fetcher(`/request-schedules/busy-schedules/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       data,
-    })
+    });
   }
   static createWeeklyNorms(
     data: ICreateWeeklyNormData,
   ): Promise<IResponse<ICreateEditWeeklyNorm>> {
-    return fetcher('/request-schedules/weekly-norm', {
-      method: 'POST',
+    return fetcher("/request-schedules/weekly-norm", {
+      method: "POST",
       data,
-    })
+    });
   }
   static editWeeklyNorm(
     id: string,
     data: IEditWeeklyNormData,
   ): Promise<IResponse<null>> {
     return fetcher(`/request-schedules/weekly-norm/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       data,
-    })
+    });
   }
   static createTimeoffRequest(
     data: ICreateTimeoffRequestData,
   ): Promise<IResponse<string>> {
-    return fetcher('/request-schedules/time-off', {
-      method: 'POST',
+    return fetcher("/request-schedules/time-off", {
+      method: "POST",
       data,
-    })
+    });
   }
   static editTimeoffRequest(
     id: string,
     data: IEditTimeoffRequestData,
   ): Promise<IResponse<string>> {
     return fetcher(`/request-schedules/time-off/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       data,
-    })
+    });
   }
 
   static createChangeTeachingModeRequest(
     data: ICreateTimeoffRequestData,
   ): Promise<IResponse<string>> {
-    return fetcher('/request-schedules/teaching-mode', {
-      method: 'POST',
+    return fetcher("/request-schedules/teaching-mode", {
+      method: "POST",
       data,
-    })
+    });
   }
   static editTeachingModeRequest(
     id: string,
     data: IEditTimeoffRequestData,
   ): Promise<IResponse<string>> {
     return fetcher(`/request-schedules/teaching-mode/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       data,
-    })
+    });
   }
 
   static getRequestDetail(
     id: string,
   ): Promise<IResponse<IBusyRequestDetailResponse>> {
-    return fetcher(`/request-schedules/${id}`)
+    return fetcher(`/request-schedules/${id}`);
   }
 
   static getClass(
@@ -99,7 +99,7 @@ export class MyRequestAPI {
         page_size: page_size,
         ...(teacher_id ? { teacher_id } : {}),
       },
-    })
+    });
   }
 
   static getLesson(
@@ -115,6 +115,6 @@ export class MyRequestAPI {
         ...(teacher_id ? { teacher_id } : {}),
         ...(class_id ? { class_id } : {}),
       },
-    })
+    });
   }
 }

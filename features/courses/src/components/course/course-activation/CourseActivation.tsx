@@ -55,7 +55,7 @@ const CourseActivation = ({
                 <div
                   className={`text-xs font-semibold flex gap-2 items-center md:text-sm`}
                 >
-                  <CalendarIconOutline />
+                  <CalendarIconOutline className="text-icon" />
                   Activation Expiry Date
                 </div>
               </div>

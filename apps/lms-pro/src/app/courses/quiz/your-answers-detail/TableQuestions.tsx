@@ -146,7 +146,7 @@ const TableQuestions = ({
       return gradingStatus === GRADE_STATUS.FINISHED_GRADING
         ? ' text-[#4077E0] border-[#18355D]'
         : data?.question?.qType === QUESTION_TYPES.ESSAY &&
-            data?.active === COMMON_TEXT_ENUM.SUBMITED
+          data?.active === COMMON_TEXT_ENUM.SUBMITED
           ? ' text-[#18355D] border-[#18355D]'
           : ' text-[#A1A1A1] border-[#A1A1A1]'
     }
@@ -245,7 +245,7 @@ const TableQuestions = ({
           router.push(
             isTeacher
               ? (localStorage.getItem('previousCourseUrl') ??
-                  PageLink.TEACHER_MY_COURSE)
+                PageLink.TEACHER_MY_COURSE)
               : (localStorage.getItem('previousCourseUrl') ?? PageLink.COURSES),
           )
         }}
@@ -257,15 +257,14 @@ const TableQuestions = ({
           headers={headers}
           loading={isLoading}
           isCheckedAll={true}
-          onChange={() => {}}
+          onChange={() => { }}
           hasCheck={false}
           classTable="w-full"
         >
           {allData?.map((answer, index) => {
-            const description = handleReplaceText(
-              answer?.question?.question_content ?? '--',
+            const questionContent = DOMPurify.sanitize(
+              removeHtmlTags(answer?.question?.question_content) ?? '--',
             )
-            const content = convertSlugToTitle(description)
             return (
               <React.Fragment key={answer?.id}>
                 <tr key={answer?.id}>
@@ -277,10 +276,11 @@ const TableQuestions = ({
                   <td className="p-0 pr-4 text-base text-gray-800">
                     <Tooltip
                       placement="topLeft"
+                      rootClassName="!max-w-[600px]"
                       title={
                         <div
                           dangerouslySetInnerHTML={{
-                            __html: content,
+                            __html: questionContent,
                           }}
                         />
                       }
@@ -288,11 +288,7 @@ const TableQuestions = ({
                       <div
                         className={`line-clamp-1 cursor-pointer text-base text-gray-800 hover:font-semibold`}
                         dangerouslySetInnerHTML={{
-                          __html: DOMPurify.sanitize(
-                            removeHtmlTags(
-                              answer?.question?.question_content,
-                            ) ?? '--',
-                          ),
+                          __html: questionContent,
                         }}
                         onClick={() => {
                           if (answer?.id) onShowDetail(answer?.id)
@@ -304,12 +300,8 @@ const TableQuestions = ({
                   {/* Section */}
                   <td
                     className="sapp-border my-5 line-clamp-1 p-0 text-center text-base text-gray-800"
-                    title={
-                      answer?.question?.question_filter?.part?.name ?? '--'
-                    }
                   >
                     <Tooltip
-                      color="white"
                       placement="topLeft"
                       title={answer?.question?.question_filter?.part?.name}
                     >

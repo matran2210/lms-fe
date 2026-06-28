@@ -14,5 +14,5 @@ const EntranceApi = {
   //   )
   //   return response?.data?.data
   // },
-}
-export default EntranceApi
+};
+export default EntranceApi;

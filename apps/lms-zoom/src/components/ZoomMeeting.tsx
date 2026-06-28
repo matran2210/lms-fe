@@ -10,12 +10,14 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import FloatingUser from './FloatingUser'
 import SAPPLoading from './loading/SAPPLoading'
+import TamperWarning from './TamperWarning'
 
 export const ZoomMeeting = () => {
   const { meetingToken, loadingMeetingToken } = useAuthContext()
   const { isSDKLoaded, isJoining, isJoined, error, joinMeeting } = useZoomSDK()
   const [meetingConfig, setMeetingConfig] = useState<ZoomMeetingConfig | null>(null)
   const [isLoadingMeetingData, setIsLoadingMeetingData] = useState(true)
+  const [isTampered, setIsTampered] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
 
@@ -93,6 +95,11 @@ export const ZoomMeeting = () => {
     await joinMeeting(meetingConfig)
   }
 
+  // Watermark bị can thiệp -> hiện cảnh báo toàn màn hình (ưu tiên trên mọi trạng thái khác)
+  if (isTampered) {
+    return <TamperWarning />
+  }
+
   if (isLoadingMeetingData) {
     return <SAPPLoading />
   }
@@ -133,7 +140,9 @@ export const ZoomMeeting = () => {
         </div>
       )}
 
-      {isJoined && meetingConfig && <FloatingUser hubspotContactId={meetingConfig.hubspotContactId} />}
+      {isJoined && meetingConfig && (
+        <FloatingUser hubspotContactId={meetingConfig.hubspotContactId} onTamper={() => setIsTampered(true)} />
+      )}
     </div>
   )
 }

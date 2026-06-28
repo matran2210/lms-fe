@@ -1,9 +1,9 @@
-import { TitleSidebar, ValueSidebar } from '@lms/core'
+import { TitleSidebar, ValueSidebar } from "@lms/core";
 
-const apiURL = process.env.NEXT_PUBLIC_BASE_API_URL!
+const apiURL = process.env.NEXT_PUBLIC_BASE_API_URL!;
 
-export { apiURL }
-export const linkCdnMktInApp = 'https://cdn.sapp.edu.vn/images/fe'
+export { apiURL };
+export const linkCdnMktInApp = "https://cdn.sapp.edu.vn/images/fe";
 
 export const listTab = [
   {
@@ -60,18 +60,18 @@ export const listTab = [
     src: `${linkCdnMktInApp}/bg_exam_list_mkt-min.png`,
     height: 4707,
   },
-]
+];
 export const listStatusMyClass = [
   {
-    label: 'Chưa học',
-    value: 'NOT_STARTED',
+    label: "Chưa học",
+    value: "NOT_STARTED",
   },
   {
-    label: 'Đang học',
-    value: 'IN_PROGRESS',
+    label: "Đang học",
+    value: "IN_PROGRESS",
   },
   {
-    label: 'Đã học xong',
-    value: 'COMPLETED',
+    label: "Đã học xong",
+    value: "COMPLETED",
   },
-]
+];

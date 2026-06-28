@@ -38,15 +38,15 @@ deploy_staging_lms:
     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID
     - vercel deploy --prod --token=$VERCEL_TOKEN
 
-# Job deploy staging cho Lms-finhub
-deploy_staging_finhub:
-  extends: .deploy_staging_template
-  variables:
-    APP_NAME: lms-finhub
-  script:
-    - npm install -g vercel
-    - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_FINHUB
-    - vercel deploy --prod --token=$VERCEL_TOKEN
+# Job deploy staging cho Lms-finhub (tạm tắt, không dùng)
+# deploy_staging_finhub:
+#   extends: .deploy_staging_template
+#   variables:
+#     APP_NAME: lms-finhub
+#   script:
+#     - npm install -g vercel
+#     - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_FINHUB
+#     - vercel deploy --prod --token=$VERCEL_TOKEN
 
 # Job deploy staging cho Lms-zoom
 deploy_staging_zoom:
@@ -141,13 +141,13 @@ build_lms_pro:
   #   refs:
   #     - master
 
-# Build lms-finhub
-build_lms_finhub:
-  extends: .build_template
-  variables:
-    APP_NAME: lms-finhub
-    IMAGE_TAG: lms-finhub-$CI_PIPELINE_IID
-    ENV_FILE: $ENV_PROD_FINHUB_FILE
+# Build lms-finhub (tạm tắt, không dùng)
+# build_lms_finhub:
+#   extends: .build_template
+#   variables:
+#     APP_NAME: lms-finhub
+#     IMAGE_TAG: lms-finhub-$CI_PIPELINE_IID
+#     ENV_FILE: $ENV_PROD_FINHUB_FILE
 
 # Build lms-zoom
 build_lms_zoom:
@@ -208,17 +208,17 @@ deploy_lms_pro:
     SSH_KEY_FILE: $SSH_KEY_PROD_LMS
     RUNTIME_ENV_FILE: $ENV_PROD_LMS_FILE
 
-# Deploy lms-finhub
-deploy_lms_finhub:
-  extends: .deploy_template
-  needs: ["build_lms_finhub"]
-  variables:
-    APP_NAME: lms-finhub
-    PROFILE: lms-finhub
-    IMAGE_ENV: LMS_FINHUB_IMAGE
-    TARGET_IP_VAR: PROD_FINHUB_IP
-    SSH_KEY_FILE: $SSH_KEY_PROD_FINHUB
-    RUNTIME_ENV_FILE: $ENV_PROD_FINHUB_FILE
+# Deploy lms-finhub (tạm tắt, không dùng)
+# deploy_lms_finhub:
+#   extends: .deploy_template
+#   needs: ["build_lms_finhub"]
+#   variables:
+#     APP_NAME: lms-finhub
+#     PROFILE: lms-finhub
+#     IMAGE_ENV: LMS_FINHUB_IMAGE
+#     TARGET_IP_VAR: PROD_FINHUB_IP
+#     SSH_KEY_FILE: $SSH_KEY_PROD_FINHUB
+#     RUNTIME_ENV_FILE: $ENV_PROD_FINHUB_FILE
 
 # Deploy lms-zoom
 deploy_lms_zoom:

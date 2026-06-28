@@ -17,6 +17,7 @@ interface IProps {
   otherContent?: ReactNode;
   gapContent?: string;
   isClosable?: boolean;
+  handleCancel?: () => void;
 }
 
 const TestPopup = ({
@@ -29,18 +30,25 @@ const TestPopup = ({
   setOpen,
   gapContent = "gap-4 md:gap-10",
   isClosable = true,
+  handleCancel,
 }: IProps) => {
   const timeFormated = formatTime(time, "HH:mm:ss");
   const isTimeOut = timeFormated === "00:00:00";
   const isFinalAttempt = numberOfAttempt <= 1; // Số lần làm bài test còn lại là 1
   const isFinalAttemptTimeout = isTimeOut && isFinalAttempt; // Hết thời gian làm bài test và chỉ còn 1 lần làm bài test
 
+  const handleClose = () => {
+    if (handleCancel) {
+      handleCancel();
+    }
+    setOpen(false);
+  };
   return (
     <SappModalV3
       open={open}
       isClosable={isClosable}
       onOk={() => {}}
-      handleClose={() => setOpen(false)}
+      handleClose={handleClose}
       icon={isTimeOut ? <TimeOutIcon /> : undefined}
       header={title}
       showFooter={false}
