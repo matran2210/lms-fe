@@ -26,7 +26,7 @@ import { v4 as uuidv4 } from 'uuid'
 import MenuItemsList from './MenuItemsList'
 
 const SappNotificationComponent = dynamic(
-  () => import('@sapp-fe/sapp-notification'),
+  () => import('@sonhero/sapp-notification'),
   { ssr: false },
 )
 import { PageLink } from 'src/constants/routes'

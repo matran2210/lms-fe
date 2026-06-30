@@ -6,8 +6,8 @@ const { publicRuntimeConfig } = getConfig()
 // eslint-disable-next-line import/no-unused-modules
 export default {
   title: '',
-  titleTemplate: '%s - SAPP',
-  description: 'SAPP description',
+  titleTemplate: '%s - Upbase',
+  description: 'Upbase description',
   canonical: publicRuntimeConfig.hostURL,
   defaultOpenGraphImageHeight: 1200,
   defaultOpenGraphImageWidth: 630,
@@ -17,18 +17,18 @@ export default {
     type: 'website',
     locale: 'en_US',
     url: publicRuntimeConfig.hostURL,
-    title: 'SAPP',
-    description: 'SAPP descrtiption',
+    title: 'Upbase',
+    description: 'Upbase descrtiption',
 
     images: [
       {
         url: 'https://d3s1adm34w18qs.cloudfront.net/assets/home.webp',
         width: 1200,
         height: 630,
-        alt: 'SAPP',
+        alt: 'Upbase',
       },
     ],
-    site_name: 'SAPP',
+    site_name: 'Upbase',
   },
   twitter: {
     handle: '@sapp',

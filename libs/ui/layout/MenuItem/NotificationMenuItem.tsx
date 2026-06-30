@@ -40,7 +40,7 @@ function LazyMenuHoverAnimation(props: MenuHoverAnimationProps) {
 }
 
 const SappNotificationComponent = dynamic(
-  () => import("@sapp-fe/sapp-notification"),
+  () => import("@sonhero/sapp-notification"),
   { ssr: false },
 );
 

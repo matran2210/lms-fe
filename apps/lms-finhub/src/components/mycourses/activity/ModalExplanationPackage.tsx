@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 
 import { PDFViewer, SappModal } from '@lms/ui'
 import dynamic from 'next/dynamic'
-// import '@sapp-fe/explanation-package/dist/index.css'
+// import '@sonhero/explanation-package/dist/index.css'
 import SappLoading from '@components/common/SappLoading'
 
 const ExplanationPackageV2 = dynamic(
   () =>
-    import('@sapp-fe/explanation-package').then((m) => ({
+    import('@sonhero/explanation-package').then((m) => ({
       default: m.ExplanationPackageV2,
     })),
   { ssr: false },

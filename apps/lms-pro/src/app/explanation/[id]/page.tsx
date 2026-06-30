@@ -14,7 +14,7 @@ import { Tooltip } from 'antd'
 import dynamic from 'next/dynamic'
 
 const ExplanationPackageV2 = dynamic(
-  () => import('@sapp-fe/explanation-package').then((m) => ({ default: m.ExplanationPackageV2 })),
+  () => import('@sonhero/explanation-package').then((m) => ({ default: m.ExplanationPackageV2 })),
   { ssr: false }
 )
 import { useParams, useRouter, useSearchParams } from 'next/navigation'

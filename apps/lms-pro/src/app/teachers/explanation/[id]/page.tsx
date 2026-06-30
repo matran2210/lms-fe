@@ -15,7 +15,7 @@ import dynamic from 'next/dynamic'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 const ExplanationPackage = dynamic(
-  () => import('@sapp-fe/explanation-package').then((m) => ({ default: m.ExplanationPackage })),
+  () => import('@sonhero/explanation-package').then((m) => ({ default: m.ExplanationPackage })),
   { ssr: false }
 )
 import { useEffect, useState } from 'react'

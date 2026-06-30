@@ -78,7 +78,7 @@ export const VALID_UPLOAD_EDITOR = [
 ];
 
 export const UserGuide = {
-  TITLE_WELCOME: "Welcome to SAPP LMS",
+  TITLE_WELCOME: "Welcome to Upbase LMS",
   CONTENT_WELCOME: "Let’s start with a quick product tour!",
   CONTENT_BUTTON: "Start Tour",
   CONTENT_STEP_1:
