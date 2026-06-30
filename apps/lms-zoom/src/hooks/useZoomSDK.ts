@@ -51,6 +51,7 @@ export const useZoomSDK = () => {
           leaveOnPageUnload: ZOOM_CONFIG.SDK_CONFIG.LEAVE_ON_PAGE_UNLOAD,
           meetingInfo: [],
           disableInvite: true,
+          inviteUrlFormat: '',
           success: () => {
             ZoomMtg.join({
               signature: config.signature,
@@ -61,6 +62,8 @@ export const useZoomSDK = () => {
               userEmail: config.userEmail,
               tk: config.tkToken,
               success: () => {
+                ZoomMtg.showInviteFunction({ show: false })
+
                 setIsJoining(false)
                 setIsJoined(true)
               },

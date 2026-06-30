@@ -66,7 +66,7 @@ const OverProgress = () => {
             {
               value: 0,
               name: "",
-              itemStyle: { color: "#FFB700" },
+              itemStyle: { color: "#EF5941" },
             },
             {
               value: values.uncompleted,
@@ -94,7 +94,7 @@ const OverProgress = () => {
               value: values.completed,
               name: "",
               itemStyle: {
-                color: "#FFB700",
+                color: "#EF5941",
                 borderRadius: isMobile ? [20, 20, 20, 20] : [25, 25, 25, 25],
               },
             },

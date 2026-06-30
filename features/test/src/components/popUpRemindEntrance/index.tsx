@@ -38,7 +38,7 @@ const PopUpRemindEntrance = ({
       //   showCancelButton={true}
       fullWidthBtn={true}
       icon={
-        <AccessIcon className="h-12 w-12 md:h-auto md:w-auto" fill="#FFB700" />
+        <AccessIcon className="h-12 w-12 md:h-auto md:w-auto" fill="#EF5941" />
       }
       header="Take Your Test"
       buttonSize="medium"

@@ -400,9 +400,9 @@ function Providers({ children }: { children: ReactNode }) {
                         <PinnedNotifications />
                         <AntdApp>{children}</AntdApp>
                         {showBackToTop && <BackToTop />}
-                        <MKTInApp showMKTInApp={showMKTInApp} />
-                        {showHelp && <div id="floating-btn-divider" />}
-                        <Help showHelp={showHelp} />
+                        {/* <MKTInApp showMKTInApp={showMKTInApp} /> */}
+                        {/* {showHelp && <div id="floating-btn-divider" />} */}
+                        {/* <Help showHelp={showHelp} /> */}
                         <LearningNotesList appType={AppType.LMS_PRO} />
                         <PopupCompletedCourse />
                         <PopupActivated />

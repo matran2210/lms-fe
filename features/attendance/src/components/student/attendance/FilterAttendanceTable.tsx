@@ -59,8 +59,8 @@ const FilterAttendanceTable = ({ classId, queryParams, setQueryParams, totalReco
         setQueryParams((prev) => ({
             ...prev,
             page_index: DEFAULT_PAGE_NUMBER,
-            fromDate: mobileRangeDate[0]?.toISOString(),
-            toDate: mobileRangeDate[1]?.toISOString(),
+            fromDate: mobileRangeDate[0]?.format("YYYY-MM-DD"),
+            toDate: mobileRangeDate[1]?.format("YYYY-MM-DD"),
         }))
         onCloseRangePickerFilter()
     }
@@ -99,8 +99,8 @@ const FilterAttendanceTable = ({ classId, queryParams, setQueryParams, totalReco
     const handleDateChange = (dates: [dayjs.Dayjs | null, dayjs.Dayjs | null] | null) => {
         setQueryParams((prev) => ({
             ...prev,
-            fromDate: dates?.[0]?.toISOString(),
-            toDate: dates?.[1]?.toISOString(),
+            fromDate: dates?.[0]?.format("YYYY-MM-DD"),
+            toDate: dates?.[1]?.format("YYYY-MM-DD"),
         }))
     }
     const handleMobileCalendarSelect = (selectedDate: Dayjs) => {

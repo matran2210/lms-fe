@@ -94,7 +94,7 @@ export enum Color {
   TextDefault = "#000000",
   Success = "#078A4D",
   Error = "#F80903",
-  ArrowDefault = "#FFB700",
+  ArrowDefault = "#EF5941",
 }
 
 const MatchQuiz = forwardRef(

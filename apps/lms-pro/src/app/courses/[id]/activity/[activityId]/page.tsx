@@ -92,6 +92,7 @@ const ActivityPage = () => {
   const searchParams = useSearchParams()
   const params = useParams()
   const query = Object.fromEntries(searchParams.entries())
+  const targetReplyId = searchParams.get('comment_id')
   const { previousSection } = usePreviousSectionRoute()
   const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
 
@@ -281,6 +282,13 @@ const ActivityPage = () => {
       settingDoneProcessActivity(activity)
     }
   }, [activity])
+
+  useEffect(() => {
+    if (isMobileView && targetReplyId) {
+      setFocusOnlyDiscussion(true)
+    }
+  }, [isMobileView, targetReplyId])
+
   // TODO: next14
   useEffect(() => {
     // router.events.on('routeChangeComplete', () => {
@@ -690,7 +698,10 @@ const ActivityPage = () => {
                   })}
                   data-aos={isMobileView ? undefined : ANIMATION.DATA_AOS}
                 >
-                  <Discussion class_id={(params?.id as string) || ''} />
+                  <Discussion
+                    class_id={(params?.id as string) || ''}
+                    enableReplyScroll={!focusOnlyDiscussion && !isMobileView}
+                  />
                 </div>
               </div>
               <AssistiveTouch

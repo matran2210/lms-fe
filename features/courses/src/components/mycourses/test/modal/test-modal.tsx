@@ -1,6 +1,8 @@
 import { ArrowDownIcon } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
 import {
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
   EAttemptStatus,
   GRADE_STATUS,
   GRADING_METHOD,
@@ -38,17 +40,26 @@ interface IProps {
   activeCourse?: any;
   is_passed_course: boolean;
   selectedResultCourse?:
-    | {
-        label: string;
-        value: string;
-        ratio_score?: string | undefined;
-        status: string;
-        score: number;
-        total_attempt_time: number;
-      }
-    | undefined;
+  | {
+    label: string;
+    value: string;
+    ratio_score?: string | undefined;
+    status: string;
+    score: number;
+    total_attempt_time: number;
+  }
+  | undefined;
 }
 
+const defaultResultList: IQuizResultList = {
+  metadata: {
+    page_index: DEFAULT_PAGE_NUMBER,
+    page_size: DEFAULT_PAGE_SIZE,
+    total_pages: 0,
+    total_records: 0,
+  },
+  data: [],
+};
 const TestModal = ({
   open,
   setOpen,
@@ -68,15 +79,7 @@ const TestModal = ({
     // !data?.quiz?.attempt ||
     data?.quiz?.attempt && data?.quiz?.attempt?.status === "IN_PROGRESS";
 
-  const [resultList, setResultList] = useState<IQuizResultList>({
-    metadata: {
-      page_index: 1,
-      page_size: 10,
-      total_pages: 0,
-      total_records: 0,
-    },
-    data: [],
-  });
+  const [resultList, setResultList] = useState<IQuizResultList>(defaultResultList);
   const [selectedResult, setSelectedResult] = useState<{
     label: string;
     value: string;
@@ -107,20 +110,21 @@ const TestModal = ({
 
   const displayTime =
     !!data?.quiz?.quiz_timed &&
-    remainingTimeLastAttempt.current !== null &&
-    remainingTime !== undefined &&
-    remainingTime >= 0
+      remainingTimeLastAttempt.current !== null &&
+      remainingTime !== undefined &&
+      remainingTime >= 0
       ? dayjs()
-          .startOf("day")
-          .add(
-            remainingTimeLastAttempt.current >= 0
-              ? remainingTimeLastAttempt.current
-              : 0,
-            "second",
-          )
+        .startOf("day")
+        .add(
+          remainingTimeLastAttempt.current >= 0
+            ? remainingTimeLastAttempt.current
+            : 0,
+          "second",
+        )
       : "";
 
   const onCancel = () => {
+    setSelectedResult(undefined);
     setTimeout(() => {
       setOpen(false);
     });
@@ -186,6 +190,8 @@ const TestModal = ({
           localStorage.removeItem("quizAttempt");
         }
       } else {
+        setSelectedResult(undefined);
+        setResultList(defaultResultList);
         localStorage.removeItem("quizAttempt");
       }
     }
@@ -318,24 +324,26 @@ const TestModal = ({
       return handleCheckStatus(data?.quiz?.attempt, data?.quiz);
     }
   }, [selectedResult?.value, data?.quiz?.attempt]);
-  
+
   const handleStartANewAttempt = async () => {
     const quizAttempt = JSON.parse(localStorage.getItem("quizAttempt") || "{}");
     const SUB_DOMAIN_TEST = process.env.NEXT_PUBLIC_SUB_DOMAIN_TEST;
     //to do: start test
     try {
       activeCourse && (await activeCourse());
-      
+
       status
         ? trackGAEvent("Click Button Retake Modal Test")
         : trackGAEvent("Click Button Start Modal Test");
-      
+
       if (!quizAttempt || !quizAttempt?.id) {
         router.push(`${SUB_DOMAIN_TEST}/test/${data.quiz.id}?class_user_id=${class_user_id}`);
       } else {
         router.push(`${SUB_DOMAIN_TEST}/test/${data.quiz.id}?class_user_id=${class_user_id}&quizAttemptId=${quizAttempt?.id}`);
       }
-    } catch (err) {}
+    } catch (err) { 
+      // handle error if needed
+    }
   };
 
   const handleFinishTest = async () => {
@@ -363,6 +371,7 @@ const TestModal = ({
         open={open}
         handleCancel={() => {
           setOpen(false);
+          setSelectedResult(undefined);
           trackGAEvent("Click Button Cancel Modal Test");
         }}
         type={data?.quiz?.quiz_setting?.reason_for_reject}
@@ -439,7 +448,6 @@ const TestModal = ({
             (currentAttemptNum === limitCount && !isSubmitted))));
 
     // Trường hợp: chưa từng làm hoặc đã làm đủ số lượt cho phép
-
     if (isNoAttemptOrLimitReached) {
       if (!isLimited) {
         // Quiz KHÔNG giới hạn số lượt làm
@@ -695,6 +703,7 @@ const TestModal = ({
       <TestPopup
         open={open}
         setOpen={setOpen}
+        handleCancel={() => setSelectedResult(undefined)}
         title={
           <div className="flex items-center justify-center">
             {
@@ -737,11 +746,10 @@ const TestModal = ({
                 />
                 <TestInfoItem
                   label="No of Attempts:"
-                  value={`${data?.quiz?.attempt?.number_of_attempts || 0}/${
-                    data?.quiz?.is_limited
-                      ? data?.quiz?.limit_count
-                      : "Unlimited"
-                  }`}
+                  value={`${data?.quiz?.attempt?.number_of_attempts || 0}/${data?.quiz?.is_limited
+                    ? data?.quiz?.limit_count
+                    : "Unlimited"
+                    }`}
                 />
 
                 {data?.quiz && (
@@ -846,8 +854,8 @@ const TestModal = ({
         )}
         isClosable={
           isNoAttemptOrLimitReached &&
-          (!isLimited ||
-            (isLimited && (isNoAttempt || isSubmitted || isUnsubmitted)))
+            (!isLimited ||
+              (isLimited && (isNoAttempt || isSubmitted || isUnsubmitted)))
             ? false
             : true
         }

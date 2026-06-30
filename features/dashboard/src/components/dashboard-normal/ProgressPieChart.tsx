@@ -47,7 +47,7 @@ const ProgressPieChart: React.FC<ProgressPieChartProps> = ({
             {
               value: completed,
               name: '',
-              itemStyle: { color: '#FFB700', borderRadius: [20, 20, 20, 20] },
+              itemStyle: { color: '#EF5941', borderRadius: [20, 20, 20, 20] },
             },
             {
               value: uncompleted,

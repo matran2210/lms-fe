@@ -1,7 +1,7 @@
 "use client"
 import dynamic from 'next/dynamic'
 import { isEmpty, isNull, isUndefined } from 'lodash'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { generateSheetId } from '@lms/core'
 
 // @fortune-sheet/react ~2MB — lazy load, chỉ dùng trong form editor
@@ -35,6 +35,8 @@ const HookFormExcel: React.FC<WorkbookFieldProps> = ({
   onOp,
   question_data,
 }) => {
+  const workbookWrapperRef = useRef<HTMLDivElement>(null)
+
   // init data
   const [initialData, setInitialData] = useState(() => {
     try {
@@ -201,14 +203,156 @@ const HookFormExcel: React.FC<WorkbookFieldProps> = ({
       : 'workbook-default'
   }, [normalizedData])
 
+  const getScrollableParent = useCallback(
+    (element: HTMLElement | null, deltaY: number) => {
+      let parent = element?.parentElement ?? null
+
+      while (parent) {
+        const { overflowY } = window.getComputedStyle(parent)
+        const canScroll =
+          /(auto|scroll|overlay)/.test(overflowY) &&
+          parent.scrollHeight > parent.clientHeight
+        const canScrollUp = deltaY < 0 && parent.scrollTop > 0
+        const canScrollDown =
+          deltaY > 0 &&
+          parent.scrollTop + parent.clientHeight < parent.scrollHeight
+
+        if (canScroll && (canScrollUp || canScrollDown)) return parent
+
+        parent = parent.parentElement
+      }
+
+      const documentElement = document.scrollingElement as HTMLElement | null
+      if (!documentElement) return null
+
+      const canScrollDocumentUp = deltaY < 0 && documentElement.scrollTop > 0
+      const canScrollDocumentDown =
+        deltaY > 0 &&
+        documentElement.scrollTop + window.innerHeight <
+          documentElement.scrollHeight
+
+      return canScrollDocumentUp || canScrollDocumentDown
+        ? documentElement
+        : null
+    },
+    [],
+  )
+
+  useEffect(() => {
+    const wrapper = workbookWrapperRef.current
+    if (!wrapper) return
+
+    const isElementClippedInScrollDirection = (
+      element: HTMLElement,
+      parent: HTMLElement,
+      deltaY: number,
+    ) => {
+      const elementRect = element.getBoundingClientRect()
+      const parentRect =
+        parent === document.scrollingElement
+          ? { top: 0, bottom: window.innerHeight }
+          : parent.getBoundingClientRect()
+
+      if (deltaY < 0) return elementRect.top < parentRect.top - 1
+      if (deltaY > 0) return elementRect.bottom > parentRect.bottom + 1
+
+      return false
+    }
+
+    const handleNativeWheel = (event: WheelEvent) => {
+      const target = event.target
+      if (!(target instanceof Node) || !wrapper.contains(target)) {
+        return
+      }
+
+      if (event.ctrlKey || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) {
+        return
+      }
+
+      const scrollbarY = wrapper.querySelector<HTMLElement>(
+        '.luckysheet-scrollbar-y',
+      )
+      if (event.deltaY < 0 && scrollbarY && scrollbarY.scrollTop > 0) {
+        event.preventDefault()
+        event.stopPropagation()
+        event.stopImmediatePropagation()
+
+        const nextScrollTop = Math.max(
+          0,
+          scrollbarY.scrollTop + event.deltaY,
+        )
+
+        if (refSheet.current?.scroll) {
+          refSheet.current.scroll({ scrollTop: nextScrollTop })
+        } else {
+          scrollbarY.scrollTop = nextScrollTop
+          scrollbarY.dispatchEvent(new Event('scroll', { bubbles: true }))
+        }
+        return
+      }
+
+      const parent = getScrollableParent(wrapper, event.deltaY)
+      if (!parent) return
+
+      const maxScrollTop = scrollbarY
+        ? scrollbarY.scrollHeight - scrollbarY.clientHeight
+        : 0
+      const isAtTop = !scrollbarY || scrollbarY.scrollTop <= 1
+      const isAtBottom =
+        !scrollbarY || scrollbarY.scrollTop >= maxScrollTop - 1
+      const shouldBubbleToParent =
+        (event.deltaY < 0 && isAtTop) || (event.deltaY > 0 && isAtBottom)
+      const shouldPrioritizeParent = isElementClippedInScrollDirection(
+        wrapper,
+        parent,
+        event.deltaY,
+      )
+      const shouldScrollParentFirst = event.deltaY < 0
+
+      if (
+        !shouldBubbleToParent &&
+        !shouldPrioritizeParent &&
+        !shouldScrollParentFirst
+      )
+        return
+
+      event.preventDefault()
+      event.stopPropagation()
+      event.stopImmediatePropagation()
+
+      if (parent === document.scrollingElement) {
+        window.scrollBy({ top: event.deltaY, behavior: 'auto' })
+        return
+      }
+
+      parent.scrollBy({ top: event.deltaY, behavior: 'auto' })
+    }
+
+    document.addEventListener('wheel', handleNativeWheel, {
+      capture: true,
+      passive: false,
+    })
+
+    return () => {
+      document.removeEventListener('wheel', handleNativeWheel, {
+        capture: true,
+      })
+    }
+  }, [getScrollableParent])
+
   return (
-    <Workbook
-      key={workbookKey}
-      data={normalizedData}
-      ref={refSheet}
-      onChange={handleWorkbookChange}
-      onOp={onOp}
-    />
+    <div
+      ref={workbookWrapperRef}
+      className="h-full w-full"
+    >
+      <Workbook
+        key={workbookKey}
+        data={normalizedData}
+        ref={refSheet}
+        onChange={handleWorkbookChange}
+        onOp={onOp}
+      />
+    </div>
   )
 }
 

@@ -82,7 +82,7 @@ const OverallProgress = ({
             {
               value: 0,
               name: "",
-              itemStyle: { color: "#FFB700" },
+              itemStyle: { color: "#EF5941" },
             },
             {
               value: values.uncompleted,
@@ -108,7 +108,7 @@ const OverallProgress = ({
               value: values.completed,
               name: "",
               itemStyle: {
-                color: "#FFB700",
+                color: "#EF5941",
                 borderRadius: [25, 25, 25, 25],
               },
             },

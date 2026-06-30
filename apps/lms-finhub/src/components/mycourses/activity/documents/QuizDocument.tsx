@@ -624,7 +624,7 @@ const QuizDocument = ({
         )
       case GRADE_STATUS.AWAITING_GRADING:
         return (
-          <div className="bg-blur-yellow  rounded px-2 font-medium text-amber-400">
+          <div className="bg-blur-yellow rounded px-2 font-medium text-amber-400">
             Awaiting Grading
           </div>
         )
@@ -720,7 +720,7 @@ const QuizDocument = ({
           <div
             className={`${
               is_graded || 'invisible'
-            } whitespace-nowrap   rounded bg-state-info bg-opacity-10 px-2 text-center  font-medium text-state-info`}
+            } whitespace-nowrap rounded bg-state-info bg-opacity-10 px-2 text-center font-medium text-state-info`}
           >
             Graded Activity
           </div>
@@ -825,7 +825,7 @@ const QuizDocument = ({
       >
         <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
           <div
-            className="absolute right-6 top-5  ml-auto cursor-pointer"
+            className="absolute right-6 top-5 ml-auto cursor-pointer"
             onClick={() => {
               refreshTab()
               setModalResult(undefined)

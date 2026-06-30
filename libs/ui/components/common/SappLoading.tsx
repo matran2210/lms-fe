@@ -1,27 +1,50 @@
-import { AnimationImage } from "@lms/assets/images";
-import dynamic from "next/dynamic";
-
-const Player = dynamic(
-  () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
-  {
-    ssr: false,
-  },
-);
+import { LogoDefault } from '@lms/assets'
 
 const SappLoading = ({ className }: { className?: string }) => {
   return (
-    <div
-      className={`fixed z-[9999] block h-full w-full bg-white backdrop-blur-[2000px] ${className ?? ""}`}
-    >
-      <Player
-        src={AnimationImage}
-        autoplay
-        loop
-        className="left-0 top-0 z-[9999] max-h-[90px] max-w-[90px] !bg-white backdrop-blur-[2000px]"
-        speed={3}
-      />
-    </div>
-  );
-};
+    <>
+      <div
+        className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white ${className ?? ''}`}
+      >
+        <LogoDefault />
 
-export default SappLoading;
+        <div className="mt-8 flex items-center gap-2">
+          <div
+            className="h-3 w-3 rounded-full bg-[#EF5941] animate-loading-dot"
+            style={{ animationDelay: '0s' }}
+          />
+          <div
+            className="h-3 w-3 rounded-full bg-[#EF5941] animate-loading-dot"
+            style={{ animationDelay: '0.3s' }}
+          />
+          <div
+            className="h-3 w-3 rounded-full bg-[#EF5941] animate-loading-dot"
+            style={{ animationDelay: '0.6s' }}
+          />
+        </div>
+      </div>
+
+      <style jsx global>{`
+        @keyframes loading-dot {
+          0%,
+          100% {
+            opacity: 0.25;
+            transform: scale(0.8);
+          }
+
+          50% {
+            opacity: 1;
+            transform: scale(1.2);
+          }
+        }
+
+        .animate-loading-dot {
+          animation: loading-dot 0.9s infinite ease-in-out;
+          will-change: transform, opacity;
+        }
+      `}</style>
+    </>
+  )
+}
+
+export default SappLoading

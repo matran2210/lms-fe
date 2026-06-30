@@ -59,34 +59,44 @@ const ExamDate = ({
   data: Data;
   setIsEdit: (isEdit: boolean) => void;
   setDirection: React.Dispatch<React.SetStateAction<1 | -1>>;
-}) => (
-  <>
-    <div>{data?.exam?.examination?.name ?? "-"}</div>
-    {data?.is_final_examination_subject ? (
-      <Tooltip
-        showTooltip={true}
-        title={"This is your official exam date and can not be changed"}
-      >
-        <CheckCircleTwoTone twoToneColor={"#52c41a"} />
-      </Tooltip>
-    ) : (
-      data?.remaining_changes > 0 &&
-      data?.course.course_type === COURSE_TYPE.NORMAL_COURSE && (
-        <Tooltip showTooltip={false} title={"Change Exam Date"}>
-          <div
-            className="cursor-pointer text-primary"
-            onClick={() => {
-              setIsEdit(true);
-              setDirection(1);
-            }}
-          >
-            <PencilIcon />
-          </div>
+}) => {
+  const classType = data?.classType || data?.class_type;
+  const courseType = data?.course?.course_type;
+  const canSelectExam =
+    courseType === COURSE_TYPE.NORMAL_COURSE ||
+    courseType === COURSE_TYPE.PRACTICE_COURSE ||
+    classType === "REVISION" ||
+    !!data?.revision_class?.id;
+
+  return (
+    <>
+      <div>{data?.exam?.examination?.name ?? "-"}</div>
+      {data?.is_final_examination_subject ? (
+        <Tooltip
+          showTooltip={true}
+          title={"This is your official exam date and can not be changed"}
+        >
+          <CheckCircleTwoTone twoToneColor={"#52c41a"} />
         </Tooltip>
-      )
-    )}
-  </>
-);
+      ) : (
+        data?.remaining_changes > 0 &&
+        canSelectExam && (
+          <Tooltip showTooltip={false} title={"Change Exam Date"}>
+            <div
+              className="cursor-pointer text-primary"
+              onClick={() => {
+                setIsEdit(true);
+                setDirection(1);
+              }}
+            >
+              <PencilIcon />
+            </div>
+          </Tooltip>
+        )
+      )}
+    </>
+  );
+};
 
 const ExaminationInfo = ({
   open,
@@ -258,7 +268,11 @@ const ExaminationInfo = ({
           />
           <InfoItem
             label="Revision Class Duration"
-            value={getDuration(data?.exam?.start_date, data?.exam?.end_date)}
+            value={
+              data?.exam
+                ? getDuration(data.exam.start_date, data.exam.end_date)
+                : "-"
+            }
           />
         </div>
       );

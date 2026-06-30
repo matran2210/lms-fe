@@ -1,7 +1,7 @@
 'use client'
 import { AlarmClockIcon, BookInClassIcon, CalendarIconOutline, ClockInClassIcon, CloseModalIcon, DeviceTeacherIcon } from '@lms/assets'
 import { useFeature } from '@lms/contexts'
-import { ITeacherTeachingAttendanceItem } from '@lms/core'
+import { DATE_FORMAT, ITeacherTeachingAttendanceItem } from '@lms/core'
 import { buildLocalLessonDateTime, formatDateFromUTC } from '@lms/utils'
 import { Divider } from 'antd'
 import clsx from 'clsx'
@@ -61,6 +61,7 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
     record?.end_time
   )
 
+
   return (
     <div
       ref={attendanceHistoryRef}
@@ -98,12 +99,12 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
         <AttendanceInfoRow icon={<ClockInClassIcon className="h-5 w-5 text-gray-400" />} label="Actual Workload" valueClassName='text-[#025EFF]' value={record?.workload || '0'} />
 
         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto pr-2">
-          {teacherTeachingAttendanceHistoryData?.map((historyRecord, index) => (
+          {(teacherTeachingAttendanceHistoryData?.data || []).map((historyRecord, index) => (
             <div key={index} className="flex flex-col gap-3 border-t border-gray-[#F1F1F4] py-3">
               <AttendanceInfoRow
               icon={<AlarmClockIcon className='h-5 w-5 text-gray-400' />}
                 label="Check In - Check Out"
-                value={`${historyRecord?.checkin_time ? formatDateFromUTC(historyRecord.checkin_time) : '-'} - ${historyRecord?.checkout_time ? formatDateFromUTC(historyRecord.checkout_time) : '-'}`}
+                value={`${historyRecord?.checkin_time ? formatDateFromUTC(historyRecord.checkin_time, DATE_FORMAT.DATE_TIME_DATE_FIRST) : '-'} - ${historyRecord?.checkout_time ? formatDateFromUTC(historyRecord.checkout_time, DATE_FORMAT.DATE_TIME_DATE_FIRST) : '-'}`}
               />
               <AttendanceInfoRow icon={<DeviceTeacherIcon />} label="Device" value={historyRecord?.device || '-'} />
             </div>

@@ -227,6 +227,14 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
     setValue('section', '')
     setTreeDataNotConvert([])
 
+    const selectedLesson = lesson.find((item) => item.schedule.id === value)
+    if (selectedLesson?.schedule) {
+      setValue('time', [
+        selectedLesson.schedule.start_time,
+        selectedLesson.schedule.end_time,
+      ])
+    }
+
     const fetchDataSection = async () => {
       if (progressParam?.id && value) {
         try {
