@@ -35,7 +35,7 @@ const Metadata = () => {
       />
       <meta
         property="og:image"
-        content="https://sapp-lms-fe-prod.vercel.app/thumbnail.png"
+        content="https://sapp-lms-fe-prod.vercel.app/thumbnail.webp"
         key="image"
       />
       <meta name="og:url" content={'https://lms-pro.sapp.edu.vn'} />
@@ -54,7 +54,7 @@ const Metadata = () => {
       />
       <meta
         name="twitter:image"
-        content="https://sapp-lms-fe-prod.vercel.app/thumbnail.png"
+        content="https://sapp-lms-fe-prod.vercel.app/thumbnail.webp"
       />
     </>
   )

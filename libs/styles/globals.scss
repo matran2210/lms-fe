@@ -586,7 +586,7 @@ img.Wirisformula {
   }
 
   .logo {
-    fill: #EF5941;
+    fill: #ffb800;
   }
 }
 
@@ -653,7 +653,7 @@ textarea.is-invalid:focus {
 .hover-transition-font-weight {
   transition: all color 0.2s ease-in-out;
   &:hover {
-    text-shadow: 0px 0px 0.05em #EF5941;
+    text-shadow: 0px 0px 0.05em #ffb800;
   }
 }
 
@@ -671,7 +671,7 @@ textarea.is-invalid:focus {
 }
 
 .ant-dropdown-menu-item:hover .ant-dropdown-menu-title-content li span {
-  color: #EF5941;
+  color: #ffb800;
 }
 
 .learningOutcome-description {
@@ -764,7 +764,7 @@ textarea.is-invalid:focus {
   .ant-radio-wrapper {
     &:hover {
       .ant-radio-inner {
-        border-color: #EF5941;
+        border-color: #ffb800;
       }
     }
   }
@@ -792,16 +792,16 @@ textarea.is-invalid:focus {
 
 $colors: (
   secondary: white,
-  primary: #EF5941,
+  primary: #ffd81b,
 );
 
 $hover: (
-  secondary: #EF5941,
-  primary: #F26E56,
+  secondary: #ffb800,
+  primary: #ffc83a,
 );
 
 $focus: (
-  primary: #EF5941,
+  primary: #ffb800,
 );
 
 // Sass variables compile to a static string; CSS variables are dynamic and inherited
@@ -897,7 +897,7 @@ textarea {
   transition: 0.25s;
 
   &:hover {
-    @apply bg-[#F26E56];
+    @apply bg-[#FFC83A];
   }
 }
 
@@ -1204,7 +1204,7 @@ fieldset.form-columns-1 .hs-input {
 [type="tel"]:focus,
 [type="number"]:focus,
 select:focus {
-  --tw-ring-color: #EF5941;
+  --tw-ring-color: #ffb800;
 }
 
 .ant-tabs-nav {
@@ -1234,7 +1234,7 @@ select:focus {
 }
 
 .ant-spin .ant-spin-dot-item {
-  background-color: #EF5941 !important;
+  background-color: #ffb800 !important;
 }
 
 [type="search"]:focus {

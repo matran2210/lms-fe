@@ -58,7 +58,7 @@ export const metadata: Metadata = {
       'Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA, CMA',
     images: [
       {
-        url: 'https://sapp-lms-fe-prod.vercel.app/thumbnail.png',
+        url: 'https://sapp-lms-fe-prod.vercel.app/thumbnail.webp',
         width: 1200,
         height: 630,
         alt: 'SAPP LMS Thumbnail',
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     title: 'Hệ thống Quản lý học và thi ACCA, CFA, CMA trực tuyến SAPP Academy',
     description:
       'Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA, CMA',
-    images: ['https://sapp-lms-fe-prod.vercel.app/thumbnail.png'],
+    images: ['https://sapp-lms-fe-prod.vercel.app/thumbnail.webp'],
   },
 
   viewport: {

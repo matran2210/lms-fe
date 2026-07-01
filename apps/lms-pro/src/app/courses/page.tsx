@@ -243,7 +243,7 @@ const MyCourse = () => {
           >
             <Heading
               greeting="Welcome to"
-              title={'UpL'}
+              title={'My Course'}
               showShadow={false}
               showWavingHand
               des={

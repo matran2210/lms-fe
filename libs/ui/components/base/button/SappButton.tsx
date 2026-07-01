@@ -22,7 +22,7 @@ const COLORS = {
   light: "bg-light hover:bg-light-2 disabled:bg-light-2 text-white",
   dark: "bg-dark hover:bg-dark-2 disabled:bg-dark-2 text-white",
   white:
-    "bg-white hover:bg-[#F26E56] disabled:bg-white text-gray-400 hover:text-white",
+    "bg-white hover:bg-[#FFC83A] disabled:bg-white text-gray-400 hover:text-white",
   outline:
     "bg-white border-gray-800 hover:border-gray-400 hover:text-gray-400 text-gray-800",
   text: "bg-none text-gray-800 hover:text-gray-400 disabled:text-divider underline-offset-2 font-medium",

@@ -16,8 +16,8 @@ const Select: React.FC<CustomSelectProps> = ({
       theme={{
         components: {
           Select: {
-            hoverBorderColor: '#EF5941',
-            activeBorderColor: '#EF5941',
+            hoverBorderColor: '#FFB800',
+            activeBorderColor: '#FFB800',
           },
         },
       }}

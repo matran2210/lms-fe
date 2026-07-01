@@ -273,7 +273,7 @@ export const ENTRANCE_TEST_TABLE_RESULT = "/entrance-test/table-result/[id]";
 
 export const SEARCH_EVENT_PLACEHOLDER = "Event name";
 
-export const PRIMARY_COLOR = "#EF5941";
+export const PRIMARY_COLOR = "#FFB800";
 
 export const ANT_THEME_CONFIG = {
   token: {

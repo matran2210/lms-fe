@@ -12,7 +12,7 @@ const sizeStyles: Record<IButtonSize, string> = {
 }
 
 const variantStyles: Record<IButtonVariant, string> = {
-  primary: 'bg-primary text-white hover:bg-[#F26E56]',
+  primary: 'bg-primary text-white hover:bg-[#FFC83A]',
   secondary: 'hover:border-primary bg-white hover:bg-primary hover:text-white',
   custom: '',
 }

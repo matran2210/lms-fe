@@ -35,7 +35,7 @@ const SAPPButtonCustom = ({
   let colorClass = ''
   switch (color) {
     case 'primary':
-      colorClass = 'bg-primary text-white hover:!bg-[#F26E56] hover:!text-white'
+      colorClass = 'bg-primary text-white hover:!bg-[#FFC83A] hover:!text-white'
       break
     case 'secondary':
       colorClass =
