@@ -1,0 +1,56 @@
+name: Build apps
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: 21101999/lms
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: Development # tên khai báo trên github
+    strategy:
+      fail-fast: false # app này fail không kéo app kia fail theo
+      matrix:
+        include:
+          - app: lms-pro
+            env_secret: ENV_PROD_LMS
+          - app: lms-test
+            env_secret: ENV_PROD_LMS_TEST
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # NEXT_PUBLIC_* được nhúng vào bundle lúc build nên phải có .env TRƯỚC khi docker build.
+      # Mỗi app lấy nội dung .env từ secret riêng (xem cột env_secret ở matrix).
+      - name: Create .env
+        run: |
+          cat > apps/${{ matrix.app }}/.env <<'EOF'
+          ${{ secrets[matrix.env_secret] }}
+          EOF
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: prod.Dockerfile
+          build-args: |
+            APP_NAME=${{ matrix.app }}
+          push: true
+          tags: |
+            ${{ env.IMAGE_NAME }}:${{ matrix.app }}-latest
+            ${{ env.IMAGE_NAME }}:${{ matrix.app }}-${{ github.run_number }}
+          cache-from: type=gha,scope=${{ matrix.app }}
+          cache-to: type=gha,scope=${{ matrix.app }},mode=max
