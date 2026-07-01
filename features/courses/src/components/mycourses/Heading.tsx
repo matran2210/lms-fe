@@ -28,11 +28,11 @@ const Heading = ({
         "shadow-medium": showShadow === true,
       })}
     >
-      <div className="mb-1 text-xl font-medium md:text-[28px] lg:text-3xl">
+      <div className="mb-1 text-xl font-bold md:text-[28px] lg:text-3xl">
         <div className="flex items-center gap-2">
           <h1 className="text-center text-gray-800 md:text-left">
             {greeting}
-            <span className="ml-1.5 text-primary">
+            <span className="ml-1.5 font-bold text-primary">
               {truncateString(title, 80)}
             </span>
           </h1>

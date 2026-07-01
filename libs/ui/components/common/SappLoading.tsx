@@ -6,7 +6,7 @@ const SappLoading = ({ className }: { className?: string }) => {
       <div
         className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white ${className ?? ''}`}
       >
-        <LogoDefault />
+        <LogoDefault className="!h-[65px] !w-[55px]" />
 
         <div className="mt-8 flex items-center gap-2">
           <div

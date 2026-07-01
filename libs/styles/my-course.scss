@@ -69,7 +69,7 @@
 
 /* Hover styling */
 .download:hover path {
-  stroke: #ffb800; /* Red color on hover */
+  stroke: #EF5941; /* Red color on hover */
 }
 
 .delete:hover path {
@@ -86,7 +86,7 @@
 }
 
 .group-resource:hover {
-  fill: #ffb800; /* Change to the desired hover fill color */
+  fill: #EF5941; /* Change to the desired hover fill color */
   cursor: pointer; /* Optional: Change cursor to pointer on hover */
 }
 
@@ -156,8 +156,8 @@
         transform: scale(0.75);
       }
 
-      border-color: #ffb800;
-      background-color: #ffb800;
+      border-color: #EF5941;
+      background-color: #EF5941;
     }
   }
 }

@@ -205,7 +205,7 @@ export default function MenuItem({
                 type={Icon}
                 className={clsx(
                   `before-icon min-h-6 min-w-6 shrink-0 ${
-                    selected ? 'bg-primary text-white' : 'text-gray-800'
+                    selected ? 'text-primary' : 'text-gray-800'
                   }`,
                   {
                     'group-hover:text-gray-800': !selected,
@@ -270,7 +270,7 @@ export default function MenuItem({
               <span
                 className={clsx(
                   `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
-                    selected ? 'bg-primary text-white' : 'text-gray-800'
+                    selected ? 'text-primary' : 'text-gray-800'
                   }`,
                   {
                     'group-hover:text-gray-800': !selected,
@@ -306,7 +306,7 @@ export default function MenuItem({
               Icon !== 'avatar' &&
               Icon !== 'profile-detail') ||
               (type === 'level-2' && Icon === 'result'))
-              ? 'bg-primary text-white'
+              ? 'bg-[#FFB4A136] text-primary'
               : ''
           } sidebar-list-items relative px-4 py-2 last:mb-0 ${
             !isActivity &&
@@ -341,7 +341,7 @@ export default function MenuItem({
         }
        `,
           {
-            'hover:bg-gray-100': !selected,
+            'hover:bg-[#FFB4A136]': !selected,
           },
         )}
         onClick={async () => {
@@ -377,7 +377,7 @@ export default function MenuItem({
               isExpanded={isExpanded}
               handleClick={onClick}
               type={'ontoggle'}
-              className={clsx(`${selected ? 'bg-primary text-white' : ''}`, {
+              className={clsx(`${selected ? 'text-primary' : ''}`, {
                 'group-hover:text-gray-800': !selected,
               })}
             />

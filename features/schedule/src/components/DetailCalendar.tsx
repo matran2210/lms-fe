@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
-import { IEvent } from "@sapp-fe/sapp-common-package";
+import { IEvent } from "@sonhero/sapp-common-package";
 import { ICalendarDetail } from "@lms/core";
 import CourseTree from "./CourseTree";
 import dayjs, { Dayjs } from "dayjs";

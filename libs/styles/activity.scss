@@ -154,7 +154,7 @@
         }
 
         &::-webkit-scrollbar-thumb:hover {
-          background-color: #ffb800; // giữ nguyên khi hover
+          background-color: #EF5941; // giữ nguyên khi hover
         }
 
         &::-webkit-scrollbar-track {
@@ -162,7 +162,7 @@
         }
 
         /* Firefox hỗ trợ */
-        scrollbar-color: #ffb800 white;
+        scrollbar-color: #EF5941 white;
         scrollbar-width: thin;
         &::-webkit-scrollbar-button:single-button {
           display: none;

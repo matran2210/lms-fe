@@ -46,14 +46,14 @@
     }
 
     .ant-select-item-option-active {
-      @apply bg-[#fefce8] text-primary; // Màu nền vàng nhạt và màu chữ chính khi chọn item
+      @apply bg-primary-50 text-primary; // Màu nền cam nhạt và màu chữ chính khi chọn item
     }
 
     .ant-select-item-option-selected {
       @apply bg-white text-primary !important; // Màu nền trắng và màu chữ chính khi item được chọn
 
       &:hover {
-        @apply bg-[#fefce8]; // Màu nền vàng nhạt khi hover lên item đã chọn
+        @apply bg-primary-50; // Màu nền cam nhạt khi hover lên item đã chọn
       }
     }
 
@@ -66,7 +66,7 @@
   }
   .ant-select-focused .ant-select-selector,
   .ant-select-selection-search-input:focus {
-    border-color: #ffb800 !important; // Màu viền vàng khi focus
+    border-color: #EF5941 !important; // Màu viền cam khi focus
     box-shadow: none !important; // Loại bỏ shadow khi focus
   }
   // Định dạng cho phần options trong phân trang

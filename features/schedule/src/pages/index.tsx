@@ -10,12 +10,12 @@ import {
 } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { HeaderMobile, Layout } from '@lms/ui'
-import { IEvent, IFilter } from '@sapp-fe/sapp-common-package'
+import { IEvent, IFilter } from '@sonhero/sapp-common-package'
 import dynamic from 'next/dynamic'
 import clsx from 'clsx'
 
 const SAPPCalendarV2 = dynamic(
-  () => import('@sapp-fe/sapp-common-package').then((m) => ({ default: m.SAPPCalendarV2 })),
+  () => import('@sonhero/sapp-common-package').then((m) => ({ default: m.SAPPCalendarV2 })),
   {
     ssr: false
   }

@@ -48,7 +48,7 @@
     "@lms/utils": "workspace:*",
     "@lottiefiles/react-lottie-player": "^3.5.3",
     "@react-hook/resize-observer": "^2.0.2",
-    "@sapp-fe/sapp-common-package": "^1.9.0",
+    "@sonhero/sapp-common-package": "^1.9.2",
     "@sonhero/sapp-notification": "^1.3.1",
     "@wojtekmaj/react-hooks": "^2.0.4",
     "@xyflow/react": "^12.8.6",

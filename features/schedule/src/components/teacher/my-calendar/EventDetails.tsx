@@ -1,6 +1,6 @@
 import { IPopupDetails } from '@lms/core'
 import { SappIcon, SappModalV3 } from '@lms/ui'
-import { IEvent } from '@sapp-fe/sapp-common-package'
+import { IEvent } from '@sonhero/sapp-common-package'
 import { memo } from 'react'
 import EventRowDetails from './EventRowDetails'
 

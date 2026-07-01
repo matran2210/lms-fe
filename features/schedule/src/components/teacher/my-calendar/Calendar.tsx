@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { useCallback, useState } from 'react'
 import { useQuery } from 'react-query'
-import { IEvent } from '@sapp-fe/sapp-common-package'
+import { IEvent } from '@sonhero/sapp-common-package'
 import dynamic from 'next/dynamic'
 import {
   EVENT_REPEAT_LABEL,
@@ -16,7 +16,7 @@ import { formatDateTimeWithTimeZone, formatRecurringSchedule } from '@lms/utils'
 import { IResponseSchedule, useFeature } from '@lms/contexts'
 
 const SAPPCalendar = dynamic(
-  () => import('@sapp-fe/sapp-common-package').then((m) => ({ default: m.SAPPCalendar })),
+  () => import('@sonhero/sapp-common-package').then((m) => ({ default: m.SAPPCalendar })),
   {
     ssr: false
   }

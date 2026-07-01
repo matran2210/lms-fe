@@ -255,9 +255,8 @@ const MyCourse = () => {
           >
             <Heading
               greeting="Welcome to"
-              title={'My Course'}
+              title={'UpL'}
               showShadow={false}
-              showWavingHand
               des={
                 <span>
                   Here you can find all your courses, each packed with{' '}

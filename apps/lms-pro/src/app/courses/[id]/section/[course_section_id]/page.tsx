@@ -41,7 +41,7 @@ import {
 import dynamic from 'next/dynamic'
 
 const PreviewPartDetail = dynamic(
-  () => import('@sapp-fe/preview-part'),
+  () => import('@sonhero/preview-part'),
   {
     ssr: false
   }

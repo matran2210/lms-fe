@@ -10,7 +10,7 @@
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@sapp-fe/sapp-common-package": "^1.8.0",
+    "@sonhero/sapp-common-package": "^1.8.0",
     "antd": "^5.25.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.12",

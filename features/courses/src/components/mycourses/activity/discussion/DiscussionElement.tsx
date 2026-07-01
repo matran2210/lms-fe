@@ -382,7 +382,7 @@ function DiscussionElement({
                         <VerifiedIcon className="h-3 w-3" />
                       </div>
                       <div className="w-fit content-center px-2 text-xs">
-                        SAPP Supporter
+                        UpBase Supporter
                       </div>
                     </div>
                   </div>

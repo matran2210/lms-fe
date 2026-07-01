@@ -181,7 +181,7 @@ export default function NotificationMenuItem({
     <>
       <div
         className={clsx(
-          "group/menuItem sidebar-list-items relative transform cursor-pointer rounded px-4 py-2 transition-all duration-200 ease-in-out hover:bg-gray-100 last:mb-0",
+          "group/menuItem sidebar-list-items relative transform cursor-pointer rounded px-4 py-2 transition-all duration-200 ease-in-out hover:bg-[#FFB4A136] last:mb-0",
           {
             hidden: isInCourse && name === TitleSidebar.NOTIFICATION,
           },

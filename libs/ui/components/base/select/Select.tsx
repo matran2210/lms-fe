@@ -18,6 +18,10 @@ const Select: React.FC<CustomSelectProps> = ({
           Select: {
             hoverBorderColor: '#EF5941',
             activeBorderColor: '#EF5941',
+            optionSelectedBg: '#EF594112',
+            optionSelectedColor: '#EF5941',
+            optionActiveBg: '#EF594112',
+            controlItemBgHover: '#EF594112',
           },
         },
       }}

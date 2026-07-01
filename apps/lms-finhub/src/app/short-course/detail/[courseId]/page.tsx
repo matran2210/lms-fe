@@ -28,7 +28,7 @@ import { BottomMenu, LearningResource, PromotionalBanner } from '@lms/ui'
 import { buildQueryString, formatDate } from '@lms/utils'
 import dynamic from 'next/dynamic'
 
-const PreviewPartDetail = dynamic(() => import('@sapp-fe/preview-part'), {
+const PreviewPartDetail = dynamic(() => import('@sonhero/preview-part'), {
   ssr: false,
 })
 import { Alert, Divider, Skeleton } from 'antd'

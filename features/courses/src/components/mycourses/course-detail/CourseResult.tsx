@@ -216,7 +216,7 @@ const ResultCourse = ({
                         },
                       );
                     }}
-                    suffixIcon={<ArrowDownIcon />}
+                    // suffixIcon={<ArrowDownIcon />}
                   />
                 )}
               </>

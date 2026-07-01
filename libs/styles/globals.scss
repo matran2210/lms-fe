@@ -556,8 +556,8 @@ img.Wirisformula {
   content: "\2605";
   /* Set the font size to 12px */
   font-size: 12px;
-  /* Set the color to yellow */
-  color: yellow;
+  /* Set the color to orange */
+  color: #EF5941;
   /* Set the right position to 20% of the progress bar width */
   right: 20%;
   /* Set the top position to 50% of the progress bar height */
@@ -583,7 +583,7 @@ img.Wirisformula {
   }
 
   .logo {
-    fill: #ffb800;
+    fill: #EF5941;
   }
 }
 
@@ -650,7 +650,7 @@ textarea.is-invalid:focus {
 .hover-transition-font-weight {
   transition: all color 0.2s ease-in-out;
   &:hover {
-    text-shadow: 0px 0px 0.05em #ffb800;
+    text-shadow: 0px 0px 0.05em #EF5941;
   }
 }
 
@@ -659,7 +659,7 @@ textarea.is-invalid:focus {
 }
 
 .ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item:hover {
-  background-color: #fffaf0 !important;
+  background-color: #FEF3F1 !important;
 }
 
 .ant-dropdown .ant-dropdown-menu {
@@ -668,7 +668,7 @@ textarea.is-invalid:focus {
 }
 
 .ant-dropdown-menu-item:hover .ant-dropdown-menu-title-content li span {
-  color: #ffb800;
+  color: #EF5941;
 }
 
 .learningOutcome-description {
@@ -761,7 +761,7 @@ textarea.is-invalid:focus {
   .ant-radio-wrapper {
     &:hover {
       .ant-radio-inner {
-        border-color: #ffb800;
+        border-color: #EF5941;
       }
     }
   }
@@ -789,16 +789,16 @@ textarea.is-invalid:focus {
 
 $colors: (
   secondary: white,
-  primary: #ffd81b,
+  primary: #EF5941,
 );
 
 $hover: (
-  secondary: #ffb800,
-  primary: #ffc83a,
+  secondary: #EF5941,
+  primary: #F38372,
 );
 
 $focus: (
-  primary: #ffb800,
+  primary: #EF5941,
 );
 
 // Sass variables compile to a static string; CSS variables are dynamic and inherited
@@ -894,7 +894,7 @@ textarea {
   transition: 0.25s;
 
   &:hover {
-    @apply bg-[#FFC83A];
+    @apply bg-primary-300;
   }
 }
 
@@ -1201,7 +1201,7 @@ fieldset.form-columns-1 .hs-input {
 [type="tel"]:focus,
 [type="number"]:focus,
 select:focus {
-  --tw-ring-color: #ffb800;
+  --tw-ring-color: #EF5941;
 }
 
 .ant-tabs-nav {
@@ -1231,7 +1231,7 @@ select:focus {
 }
 
 .ant-spin .ant-spin-dot-item {
-  background-color: #ffb800 !important;
+  background-color: #EF5941 !important;
 }
 
 [type="search"]:focus {
