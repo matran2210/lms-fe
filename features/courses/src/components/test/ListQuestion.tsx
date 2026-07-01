@@ -1,6 +1,6 @@
 import { MultipleQuestionsData } from "@lms/core";
 import QuestionGrid from "./QuestionGrid";
-import { isEmpty } from "lodash";
+import  isEmpty from "lodash/isEmpty";
 
 const ListQuestion = ({
   questions,

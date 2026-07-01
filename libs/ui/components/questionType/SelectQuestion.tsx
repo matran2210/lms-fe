@@ -2,7 +2,7 @@
 import { IExhibitData, MY_COURSES } from "@lms/core";
 import { useTooltipModal } from "@lms/hooks";
 import { replaceWhiteSpacePreWrapToNormal, runHighlight } from "@lms/utils";
-import { uniqueId } from "lodash";
+import uniqueId from "lodash/uniqueId";
 import React, {
   ForwardedRef,
   forwardRef,

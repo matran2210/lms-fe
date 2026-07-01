@@ -1,7 +1,7 @@
-import { LoadingButtonAnimation } from "@lms/assets";
 import { IButtonProps } from "@lms/core";
 import Link from "next/link";
 import { Tooltip } from "../../common";
+import LoadingButtonAnimation from "./LoadingButtonAnimation";
 
 const SIZES = {
   small: "text-[0.875rem] leading-4",

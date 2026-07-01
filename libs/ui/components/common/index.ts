@@ -12,6 +12,7 @@ export { default as SappDisplayText } from "./SappDisplayText";
 export { default as SappIcon } from "./SappIcon";
 export { default as SappLoading } from "./SappLoading";
 export { default as SappLoadingGlobal } from "./SappLoadingGlobal";
+export { default as DeferredLottie } from "./DeferredLottie";
 export * from "./SappTitleSolution";
 export { default as Tooltip } from "./Tooltip";
 export { default as TooltipParagraph } from "./TooltipParagraph";

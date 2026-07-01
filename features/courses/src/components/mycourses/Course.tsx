@@ -1,16 +1,17 @@
-import { CourseTimeIcon, GraduationCapIcon, Icon } from "@lms/assets";
+import { CourseTimeIcon, GraduationCapIcon, Icon } from "@lms/assets/icons";
 import { useCourseContext, useFeature } from "@lms/contexts";
 import { ButtonSecondary, Tooltip } from "@lms/ui";
+import { clearStylesHtml, truncateString } from "@lms/utils/common";
+import { trackGAEvent } from "@lms/utils/google-analytics";
 import {
-  clearStylesHtml,
   convertHourToDayLeft,
   convertLocalTimeToUTC,
   getUserPrefix,
-  trackGAEvent,
-  truncateString,
-} from "@lms/utils";
+} from "@lms/utils/helpers";
 import { differenceInDays, parseISO, startOfDay } from "date-fns";
-import { isNull, round } from "lodash";
+import isNull from "lodash/isNull";
+import round from "lodash/round";
+import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 // import {Tooltip} from '@lms/ui' lỗi monorepo
@@ -28,12 +29,18 @@ import {
 import { useTailwindBreakpoint } from "@lms/hooks";
 import clsx from "clsx";
 import dayjs from "dayjs";
-import ModalFoundationCompleted from "./ModalFoundationCompleted";
-import PopupActive from "./PopupActive";
-import PopupExtend from "./PopupExtend";
-import PopupLesson from "./PopupLesson";
-import PopupOpenClass from "./PopupOpenClass";
 import { CardCourse } from "../course/card-course";
+
+const ModalFoundationCompleted = dynamic(
+  () => import("./ModalFoundationCompleted"),
+  { ssr: false },
+);
+const PopupActive = dynamic(() => import("./PopupActive"), { ssr: false });
+const PopupExtend = dynamic(() => import("./PopupExtend"), { ssr: false });
+const PopupLesson = dynamic(() => import("./PopupLesson"), { ssr: false });
+const PopupOpenClass = dynamic(() => import("./PopupOpenClass"), {
+  ssr: false,
+});
 
 const Course = ({
   course,
@@ -56,28 +63,25 @@ const Course = ({
   const [openClass, setOpenClass] = useState<boolean>(false);
   const student = course?.classes?.[0]?.class_user_instances?.[0];
   const classInstance = course?.classes[0];
-  const [daysDifference, setDaysDifference] = useState(0);
   const currentDate = useMemo(() => new Date(), []);
   const userPrefix = getUserPrefix(isTeacher, pageLink);
-  useEffect(() => {
-    if (student?.finished_at) {
-      const currentLocalDate = new Date();
-      const currentUTCDate = convertLocalTimeToUTC(currentLocalDate);
-      const finishDate = new Date(student?.finished_at);
-      const finishUTCDate = convertLocalTimeToUTC(finishDate);
+  const daysDifference = useMemo(() => {
+    if (!student?.finished_at) return 0;
 
-      const currentTime = currentUTCDate.getTime();
-      const finishTime = finishUTCDate.getTime();
+    const currentUTCDate = convertLocalTimeToUTC(new Date());
+    const finishUTCDate = convertLocalTimeToUTC(new Date(student.finished_at));
+    const theRestHours =
+      (finishUTCDate.getTime() - currentUTCDate.getTime()) / 3600000;
 
-      const theRestHours = (finishTime - currentTime) / 3600000;
-      const dayLefts = convertHourToDayLeft(theRestHours);
-
-      // Update state with the difference
-      setDaysDifference(dayLefts);
-    }
-  }, [course, student?.finished_at]);
+    return convertHourToDayLeft(theRestHours);
+  }, [student?.finished_at]);
 
   const { isMobileView, isDesktopView, isTabletView } = useTailwindBreakpoint();
+
+  const sanitizedDescription = useMemo(
+    () => clearStylesHtml(course?.description || ""),
+    [course?.description],
+  );
 
   const percentProgress =
     round(
@@ -558,7 +562,7 @@ const Course = ({
                     title={
                       <p
                         dangerouslySetInnerHTML={{
-                          __html: clearStylesHtml(course?.description),
+                          __html: sanitizedDescription,
                         }}
                       />
                     }
@@ -566,7 +570,7 @@ const Course = ({
                   >
                     <p
                       dangerouslySetInnerHTML={{
-                        __html: clearStylesHtml(course?.description),
+                        __html: sanitizedDescription,
                       }}
                       className={classNameDes}
                     />
@@ -574,7 +578,7 @@ const Course = ({
                 ) : (
                   <p
                     dangerouslySetInnerHTML={{
-                      __html: clearStylesHtml(course?.description),
+                      __html: sanitizedDescription,
                     }}
                     className={classNameDes}
                   />

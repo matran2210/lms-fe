@@ -1,19 +1,17 @@
 'use client'
-import SappLoadingGlobal from '@components/common/SappLoadingGlobal'
 import {
   active,
   clearGuideState,
   useCourseContext,
   UserType,
 } from '@lms/contexts'
-import { ANIMATION, defaultStatusCourse } from '@lms/core'
-import { CoursesList, FilterCourse, Heading } from '@lms/feature-courses'
+import { defaultStatusCourse } from '@lms/core'
 import { withAuthorization } from '@lms/hoc'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { Layout, ModalMarketingInApp, PopupWelcome, SearchWithMenuToggle } from '@lms/ui'
-import Aos from 'aos'
+import { Layout, SearchWithMenuToggle } from '@lms/ui/layout'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
+import dynamic from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
@@ -21,6 +19,25 @@ import { CoursesAPI } from 'src/api/courses'
 import { PageLink } from 'src/constants/routers'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { hidePopupActivatedCourse } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
+import CoursesList from '@lms/feature-courses/src/components/mycourses/CoursesList'
+import FilterCourse from '@lms/feature-courses/src/components/mycourses/FilterCourse'
+import Heading from '@lms/feature-courses/src/components/mycourses/Heading'
+
+// Lazy load — chỉ render khi user click, không cần trong initial bundle
+const ModalMarketingInApp = dynamic(
+  () =>
+    import('@lms/ui/marketing-in-app').then((m) => ({
+      default: m.ModalMarketingInApp,
+    })),
+  { ssr: false },
+)
+const PopupWelcome = dynamic(
+  () =>
+    import('@lms/ui/user-guide').then((m) => ({
+      default: m.PopupWelcome,
+    })),
+  { ssr: false },
+)
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -108,12 +125,15 @@ const MyCourse = () => {
   /**
    * @description config params khi filter
    */
-  const params = {
-    name: query?.name || undefined,
-    status: query?.status || undefined,
-    type: query?.type || undefined,
-    template: '4',
-  }
+  const params = useMemo(
+    () => ({
+      name: query?.name || undefined,
+      status: query?.status || undefined,
+      type: query?.type || undefined,
+      template: '4',
+    }),
+    [query?.name, query?.status, query?.type],
+  )
 
   /**
    * @description sử dụng react-query để lấy data sau khi call API
@@ -127,7 +147,13 @@ const MyCourse = () => {
     refetch,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ['myCourse'],
+    queryKey: [
+      'myCourse',
+      params.name,
+      params.status,
+      params.type,
+      params.template,
+    ],
     queryFn: ({ pageParam }) => fetchMyCourse({ pageParam, params }),
     getNextPageParam: (lastPage, allPages) => {
       return lastPage?.data.length ? allPages.length + 1 : undefined
@@ -164,18 +190,6 @@ const MyCourse = () => {
     }, [])
   }, [data])
 
-  // Use useEffect to refetch data when params change
-  useEffect(() => {
-    refetch()
-  }, [params?.name, params?.status, params?.type, refetch])
-
-  /**
-   * @description gọi lại animation khi reload lại component
-   */
-  useEffect(() => {
-    Aos.init({ duration: ANIMATION.DURATION, once: true })
-  })
-
   /**
    * @description lưu tổng số course vào session mỗi khi course thay đổi
    */
@@ -210,8 +224,7 @@ const MyCourse = () => {
   }, [])
 
   return (
-    <SappLoadingGlobal loading={isLoading}>
-      <Layout
+    <Layout
         title="My Course"
         showSidebar={
           showSidebar ||
@@ -235,7 +248,6 @@ const MyCourse = () => {
 
         <div
           className="mt-2 flex justify-center rounded-md bg-white shadow-medium md:mt-4 md:justify-between lg:rounded-xl"
-          data-aos={!guideStatus ? ANIMATION.DATA_AOS : ''}
         >
           <div
             data-guide-id="welcome-to"
@@ -265,7 +277,6 @@ const MyCourse = () => {
               'relative z-50': guideStatus && guideStep === 6,
             },
           )}
-          data-aos={ANIMATION.DATA_AOS}
         >
           <h1 className="text-lg font-semibold text-gray-800 md:text-xl lg:text-2xl">
             Course List
@@ -303,8 +314,7 @@ const MyCourse = () => {
           open={openModalMarketingInApp}
           setOpen={setOpenModalMarketingInApp}
         />
-      </Layout>
-    </SappLoadingGlobal>
+    </Layout>
   )
 }
 

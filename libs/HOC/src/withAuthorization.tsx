@@ -1,6 +1,7 @@
 'use client'
 import { useFeature, userReducer, UserType } from '@lms/contexts'
 import { useEffect, useState } from 'react'
+import { SappLoadingGlobal } from '../../ui'
 
 const withAuthorization =
   <P extends object>(allowedRoles: string[]) =>
@@ -30,11 +31,14 @@ const withAuthorization =
           }
         }, [pathname, userType, isLoading])
 
-        // Chỉ loading khi đang loading
-        if (isLoading) return null
-
-        // Nếu chưa có userType, có thể show loading hoặc null
-        if (!userType) return null
+        // Đang init hoặc chờ userType → show spinner thay vì màn trắng
+        if (isLoading || !userType) {
+          return (
+            <SappLoadingGlobal loading>
+              <></>
+            </SappLoadingGlobal>
+          )
+        }
 
         // Nếu userType không hợp lệ, không render component
         if (!allowedRoles.includes(userType)) return null

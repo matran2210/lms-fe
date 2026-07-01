@@ -2,6 +2,13 @@
   "name": "@lms/assets",
   "version": "1.0.0",
   "private": true,
+  "exports": {
+    ".": "./index.ts",
+    "./icons": "./icons/index.ts",
+    "./images": "./images/index.ts",
+    "./animations": "./animations/index.ts",
+    "./animations/*": "./animations/*"
+  },
   "main": "./index.ts",
   "type": "module",
   "types": "./index.ts",

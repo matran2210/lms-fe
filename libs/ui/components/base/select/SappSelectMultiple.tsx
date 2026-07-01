@@ -1,11 +1,11 @@
-import { ArrowDownIcon, CloseCircleIcon, CloseIcon } from "@lms/assets";
+import { ArrowDownIcon } from "@lms/assets/icons";
 import { Select } from "antd";
 import { ButtonSize } from "antd/es/button";
 import { DefaultOptionType } from "antd/es/select";
 import clsx from "clsx";
-import { FocusEventHandler, useEffect, useMemo, useRef, useState } from "react";
+import { FocusEventHandler } from "react";
 import { Control, Controller } from "react-hook-form";
-import { ErrorMessage, Tooltip } from "../../common";
+import { ErrorMessage } from "../../common";
 
 interface SAPPSelectMultipleProps {
   control: Control<any>;

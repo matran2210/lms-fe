@@ -41,6 +41,8 @@ request.interceptors.request.use(async (config: any) => {
     /^\/entrance-test\/table-result\/[^/]+$/.test(pathname) ||
     /^\/certificates\/[^/]+$/.test(pathname);
 
+  await authenticationManager.waitUntilReady();
+
   if (authenticationManager.getToken() || checkRouteCertificate) {
     config.headers = {
       Authorization: "Bearer " + authenticationManager.getToken(),
@@ -48,20 +50,6 @@ request.interceptors.request.use(async (config: any) => {
     };
     return config;
   }
-
-  await new Promise((resolve) => {
-    let interval = null as any;
-    interval = setInterval(() => {
-      if (authenticationManager.getToken() || checkRouteCertificate) {
-        config.headers = {
-          Authorization: "Bearer " + authenticationManager.getToken(),
-          ...config.headers,
-        };
-        clearInterval(interval);
-        resolve(config);
-      }
-    }, 100);
-  });
 
   return config;
 });

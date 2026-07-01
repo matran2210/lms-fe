@@ -7,5 +7,5 @@
   "endOfLine": "lf",
   "plugins": ["prettier-plugin-tailwindcss"],
   "tailwindConfig": "./tailwind.config.js",
-  "tailwindFunction": ["clsx"]
+  "tailwindFunctions": ["clsx"]
 }

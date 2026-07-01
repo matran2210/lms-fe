@@ -2,7 +2,7 @@
 import { SappButton } from '@lms/ui'
 import { LAYOUT } from '@lms/core'
 import Image from 'next/image'
-import { OopsImage } from '@lms/assets'
+import { OopsImage } from '@lms/assets/images'
 
 const ErrorRedirectPage = () => {
   return (

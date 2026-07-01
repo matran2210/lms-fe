@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { MenuItem as MenuItemType } from "@lms/core";
 import MenuItem from "../MenuItem";
+import NotificationMenuItem from "../MenuItem/NotificationMenuItem";
 
 type MenuItemsListProps = {
   options: MenuItemType[];
@@ -19,15 +20,25 @@ export default function MenuItemsList({
 
   return (
     <div className="menu-items-list flex flex-col short:gap-1 gap-4 px-3">
-      {options?.map((option, index) => (
-        <MenuItem
-          menuItem={option}
-          key={option.id + index}
-          setOpenResource={setOpenResource}
-          closeSideBar={closeSideBar}
-          setOpenExaminationInfo={setOpenExaminationInfo}
-        />
-      ))}
+      {options?.map((option, index) =>
+        !option.url ? (
+          <NotificationMenuItem
+            menuItem={option}
+            key={option.id + index}
+            setOpenResource={setOpenResource}
+            closeSideBar={closeSideBar}
+            setOpenExaminationInfo={setOpenExaminationInfo}
+          />
+        ) : (
+          <MenuItem
+            menuItem={option}
+            key={option.id + index}
+            setOpenResource={setOpenResource}
+            closeSideBar={closeSideBar}
+            setOpenExaminationInfo={setOpenExaminationInfo}
+          />
+        ),
+      )}
     </div>
   );
 }

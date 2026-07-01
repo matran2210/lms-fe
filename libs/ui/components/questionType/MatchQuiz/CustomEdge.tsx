@@ -57,7 +57,7 @@ const CustomEdge: React.FC<EdgeProps> = ({
   })
 
   const markerId = `arrowhead-${id}`
-  const strokeColor = style?.stroke || '#FFB700'
+  const strokeColor = style?.stroke || '#EF5941'
 
   return (
     <>
@@ -84,9 +84,9 @@ const CustomEdge: React.FC<EdgeProps> = ({
         path={edgePath}
         markerEnd={`url(#${markerId})`}
         style={{
-          stroke: style?.stroke || '#FFB700',
+          stroke: style?.stroke || '#EF5941',
           strokeWidth: 2,
-          color: style?.stroke || '#FFB700',
+          color: style?.stroke || '#EF5941',
         }}
       />
     </>

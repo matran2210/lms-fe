@@ -12,7 +12,7 @@ import {
 } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import { cleanParamsAPI, formatBytes } from "@lms/utils";
-import { isEmpty } from "lodash";
+import  isEmpty from "lodash/isEmpty";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { SappDrawerV3 } from "../base";

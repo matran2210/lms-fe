@@ -1,9 +1,17 @@
 import { useEffect, useState } from 'react'
 
 import { PDFViewer, SappModal } from '@lms/ui'
-import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
-// import '@sapp-fe/explanation-package/dist/index.css'
+import dynamic from 'next/dynamic'
+// import '@sonhero/explanation-package/dist/index.css'
 import SappLoading from '@components/common/SappLoading'
+
+const ExplanationPackageV2 = dynamic(
+  () =>
+    import('@sonhero/explanation-package').then((m) => ({
+      default: m.ExplanationPackageV2,
+    })),
+  { ssr: false },
+)
 import { CloseIcon } from '@lms/assets'
 import { ActivityAPI } from 'src/api/activity'
 import { TestServiceAPI } from 'src/api/test-api'

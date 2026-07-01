@@ -1,7 +1,7 @@
 "use client";
 import { IExhibitData, MY_COURSES } from "@lms/core";
 import { runHighlight } from "@lms/utils";
-import { uniqueId } from "lodash";
+import uniqueId from "lodash/uniqueId";
 import {
   ForwardedRef,
   forwardRef,

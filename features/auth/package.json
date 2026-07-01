@@ -9,9 +9,6 @@
     "lint": "eslint . --ext .ts,.tsx",
     "type-check": "tsc --noEmit"
   },
-  "peerDependencies": {
-    "lottie-react": "^2.4.1"
-  },
   "dependencies": {
     "@lms/assets": "workspace:*",
     "@lms/contexts": "workspace:*",

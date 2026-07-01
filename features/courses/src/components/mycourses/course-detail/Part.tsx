@@ -3,7 +3,7 @@ import { useCourseContext, useFeature } from "@lms/contexts";
 import { CLASS_USER_STATUS, IMyCourseDetail } from "@lms/core";
 import { ButtonSecondary, Tooltip } from "@lms/ui";
 import { buildQueryString, formatTimeMinToHhMm, getUserPrefix, handleReplaceText, trackGAEvent } from "@lms/utils";
-import { round } from "lodash";
+import round from "lodash/round";
 import { CardCourse } from "../../course";
 
 const Part = ({

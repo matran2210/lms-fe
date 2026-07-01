@@ -26,7 +26,24 @@ const nextConfig = {
     styledComponents: true,
     removeConsole: isProd,
   },
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.ignoreWarnings = [
+        ...(config.ignoreWarnings || []),
+        // require-in-the-middle dùng dynamic require — không ảnh hưởng runtime
+        { module: /require-in-the-middle/ },
+        { module: /@opentelemetry\/instrumentation/ },
+        { module: /@fastify\/otel/ },
+      ];
+    }
 
+    config.module.rules.push({
+      test: /\.(webm)$/i,
+      type: "asset/resource",
+    });
+
+    return config;
+  },
   experimental: {
     optimizeCss: isProd,
     instrumentationHook: false,

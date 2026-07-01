@@ -17,20 +17,20 @@ const Metadata = () => {
         content="width=device-width, initial-scale=1, shrink-to-fit=no"
       />
       <meta property="og:type" content="website" />
-      <meta name="author" content="SAPP Academy" />
+      <meta name="author" content="Upbase" />
       <meta
         property="og:title"
-        content="Hệ thống Quản lý học và thi ACCA, CFA, CMA trực tuyến SAPP Academy"
+        content="Hệ thống Quản lý học và thi trực tuyến"
         key="title"
       />
       <meta
         name="description"
-        content="Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA, CMA"
+        content="Hệ thống Nền tảng Học và Thi trực tuyến nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập"
         key="desc"
       />
       <meta
         name="og:description"
-        content="Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA, CMA"
+        content="Hệ thống Nền tảng Học và Thi trực tuyến nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập"
         key="description"
       />
       <meta
@@ -41,16 +41,16 @@ const Metadata = () => {
       <meta name="og:url" content={'https://lms-pro.sapp.edu.vn'} />
       <meta
         name="keywords"
-        content="sapp, lms, acca, ACCA, CFA, CMA, Big4, 3P, SAPP Academy"
+        content="upbase, lms"
       />
       <meta name="twitter:card" content="summary_large_image" />
       <meta
         name="twitter:title"
-        content="Hệ thống Quản lý học và thi ACCA, CFA, CMA trực tuyến SAPP Academy"
+        content="Hệ thống Quản lý học và thi trực tuyến"
       />
       <meta
         name="twitter:description"
-        content="Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA, CMA"
+        content="Hệ thống Nền tảng Học và Thi trực tuyến nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập"
       />
       <meta
         name="twitter:image"

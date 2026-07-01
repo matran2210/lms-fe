@@ -205,7 +205,7 @@ const Dashboard = () => {
               </div>
               <div className="mb-6 mt-2 grid md:mb-7 xl:mb-8">
                 <HeaderMobile
-                  title="Student Dashboard"
+                  title="Student Dashboard "
                   onBack={() => router.back()}
                 />
               </div>

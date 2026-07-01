@@ -1,10 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 const { slate, gray, red, blue, green, yellow, white, black } = require("tailwindcss/colors"); //Default color tailwind config: https://v3.tailwindcss.com/docs/customizing-colors
 module.exports = {
-  content: [
-    "../../libs/**/*.{js,ts,jsx,tsx}",
-    "../../features/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: [],
+  // Content được define ở từng app config — presets không merge content tự động
 
   theme: {
     screens: {
@@ -36,7 +34,6 @@ module.exports = {
     },
     fontFamily: {
       sans: ["Roboto", "sans-serif"],
-      tech: "techNology",
       inter: ["Inter", "sans-serif"],
       fira: ["Fira Sans", "sans-serif"],
     },
@@ -60,15 +57,15 @@ module.exports = {
         white,
         black,
         primary: {
-          50: "#FFFBF2",
-          100: "#FFF1CC",
-          200: "#FFE399",
-          300: "#FFD466",
-          400: "#FFC633",
-          DEFAULT: "#FFB700",
-          600: "#CC9300",
-          700: "#996E00",
-          800: "#664A00",
+          50: "#FEF3F1",
+          100: "#FBD6D0",
+          200: "#F7ADA1",
+          300: "#F38372",
+          400: "#F1735F",
+          DEFAULT: "#EF5941",
+          600: "#E12F14",
+          700: "#A9230F",
+          800: "#71180A",
         },
         secondary: {
           50: "#FFFAF0",
@@ -243,7 +240,7 @@ module.exports = {
         100: "100px",
       },
       backgroundImage: {
-        "radio-primary-checked": `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23FFB700' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='6'%3E%3C/circle%3E%3C/svg%3E")`,
+        "radio-primary-checked": `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23EF5941' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='6'%3E%3C/circle%3E%3C/svg%3E")`,
         "radio-normal": `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23A1A1A1' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3C/svg%3E")`,
         "radio-default-checked": `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23141414' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='6'%3E%3C/circle%3E%3C/svg%3E")`,
         "radio-success-checked": `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23008000' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='6'%3E%3C/circle%3E%3C/svg%3E")`,

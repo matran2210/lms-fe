@@ -1,9 +1,6 @@
 import { getMe, useFeature, userReducer } from "@lms/contexts";
-import {
-  CERTIFICATE_DETAIL, COOKIE_INFO,
-  ENTRANCE_TEST_RESULT,
-  ENTRANCE_TEST_TABLE_RESULT
-} from "@lms/core";
+import { COOKIE_INFO } from "@lms/core";
+import { SappLoadingGlobal } from "@lms/ui";
 import { setCookie } from "@lms/utils";
 import { useEffect, useMemo, useState } from "react";
 
@@ -16,38 +13,84 @@ export const RouteGuard = ({ children }: IProps) => {
 
   const [authorized, setAuthorized] = useState(false);
   const userSlice = useAppSelector?.(userReducer);
-  // First useEffect for getMe
-  useEffect(() => {
-    callGetMe();
-  }, [pathname, userSlice?.user.keycloak_user_id]);
 
   const checkRouteCertificate = useMemo(() => {
-    const path = pathname as string
+    const path = pathname as string;
 
     return (
       /^\/entrance-test\/test-result\/[^/]+$/.test(path) ||
       /^\/entrance-test\/table-result\/[^/]+$/.test(path) ||
       /^\/certificates\/[^/]+$/.test(path)
-    )
-  }, [pathname])
-  const callGetMe = async () => {
-    if (
-      userSlice?.user.id ||
-      userSlice?.user.keycloak_user_id ||
-      checkRouteCertificate
-    ) {
-      setAuthorized(true);
-      setCookie(
-        COOKIE_INFO.KEYCLOAK_USER_ID,
-        userSlice?.user.keycloak_user_id ?? "",
-      );
-      return;
-    }
+    );
+  }, [pathname]);
 
-    await dispatch?.(getMe(userContextApi)).unwrap();
-    setAuthorized(true);
+  useEffect(() => {
+    let cancelled = false;
 
-  };
+    const authorize = async () => {
+      const hasUser = userSlice?.user.id || userSlice?.user.keycloak_user_id;
 
-  return authorized ? children : <></>;
+      if (checkRouteCertificate) {
+        if (!cancelled) {
+          setAuthorized(true);
+        }
+        return;
+      }
+
+      if (hasUser) {
+        if (!cancelled) {
+          setCookie(
+            COOKIE_INFO.KEYCLOAK_USER_ID,
+            userSlice?.user.keycloak_user_id ?? "",
+          );
+          setAuthorized(true);
+        }
+        return;
+      }
+
+      if (!dispatch || !userContextApi) {
+        if (!cancelled) {
+          setAuthorized(false);
+        }
+        return;
+      }
+
+      if (!cancelled) {
+        setAuthorized(false);
+      }
+
+      try {
+        await dispatch(getMe(userContextApi)).unwrap();
+
+        if (!cancelled) {
+          setAuthorized(true);
+        }
+      } catch {
+        if (!cancelled) {
+          setAuthorized(false);
+        }
+      }
+    };
+
+    authorize();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    pathname,
+    dispatch,
+    userContextApi,
+    userSlice?.user.id,
+    userSlice?.user.keycloak_user_id,
+    checkRouteCertificate,
+  ]);
+
+  return authorized ? (
+    children
+  ) : (
+    <SappLoadingGlobal loading>
+      <></>
+    </SappLoadingGlobal>
+  );
 };

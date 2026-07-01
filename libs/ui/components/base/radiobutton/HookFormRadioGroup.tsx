@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { uniqueId } from "lodash";
+import uniqueId from "lodash/uniqueId";
 import { Control, Controller } from "react-hook-form";
 import SAPPRadio from "./SAPPRadio";
 import { ErrorMessage } from "../../common";

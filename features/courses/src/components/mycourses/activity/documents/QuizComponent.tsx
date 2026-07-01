@@ -43,7 +43,8 @@ import {
 import { checkSheetAnswered, isEmptyParagraph } from "@lms/utils";
 import { Collapse, CollapseProps, Divider, Modal, Tabs } from "antd";
 import clsx from "clsx";
-import { isEmpty, isUndefined } from "lodash";
+import isEmpty from "lodash/isEmpty";
+import isUndefined from "lodash/isUndefined"
 import React, {
   forwardRef,
   memo,

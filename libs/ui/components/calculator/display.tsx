@@ -3,7 +3,7 @@ import displayLogic, {
   formatExpression,
   formatResult,
 } from "./logic/displayLogic";
-import { isEmpty } from "lodash";
+import  isEmpty from "lodash/isEmpty";
 
 interface IProps {
   total?: string;

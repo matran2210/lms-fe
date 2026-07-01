@@ -10,13 +10,30 @@ import {
 } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { HeaderMobile, Layout } from '@lms/ui'
-import { IEvent, IFilter, SAPPCalendarV2 } from '@sapp-fe/sapp-common-package'
+import { IEvent, IFilter } from '@sapp-fe/sapp-common-package'
+import dynamic from 'next/dynamic'
 import clsx from 'clsx'
+
+const SAPPCalendarV2 = dynamic(
+  () => import('@sapp-fe/sapp-common-package').then((m) => ({ default: m.SAPPCalendarV2 })),
+  {
+    ssr: false
+  }
+)
 import dayjs from 'dayjs'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { useFeature } from '@lms/contexts'
-import { DetailCalendar, DetailCalendarMobile, DetailCalendarTablet } from '../components'
+import { DetailCalendar } from '../components'
+
+const DetailCalendarMobile = dynamic(
+  () => import('../components/DetailCalendarMobile'),
+  { ssr: false },
+)
+const DetailCalendarTablet = dynamic(
+  () => import('../components/DetailCalendarTablet'),
+  { ssr: false },
+)
 
 const CalendarPage = () => {
   const { pageLink, calendarApi } = useFeature()

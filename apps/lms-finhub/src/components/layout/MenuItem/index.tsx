@@ -15,9 +15,14 @@ import { isEmpty } from 'lodash'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
-import SappNotificationComponent from '@sapp-fe/sapp-notification'
+import dynamic from 'next/dynamic'
 import { PageLink } from 'src/constants/routes'
 import { v4 as uuidv4 } from 'uuid'
+
+const SappNotificationComponent = dynamic(
+  () => import('@sonhero/sapp-notification'),
+  { ssr: false },
+)
 import MenuItemsList from '../MenuItemsList'
 import { BlankAvatarImage, ExpandIcon } from '@lms/assets'
 import {
@@ -262,6 +267,7 @@ export default function MenuItem({
                 className="h-10 w-10 rounded-full object-cover"
                 width={40}
                 height={40}
+                priority={true}
               />
             ) : (
               <Image

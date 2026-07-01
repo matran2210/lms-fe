@@ -4,7 +4,7 @@ import ButtonPrimary from './button/ButtonPrimary'
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import ButtonSecondary from './button/ButtonSecondary'
-import { CloseIcon } from '@lms/assets'
+import { CloseIcon } from '@lms/assets/icons'
 import { Spin } from 'antd'
 
 interface IProps {

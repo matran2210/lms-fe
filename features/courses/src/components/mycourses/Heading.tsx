@@ -1,8 +1,10 @@
-import { truncateString } from "@lms/utils";
+import { truncateString } from "@lms/utils/common";
+import DeferredLottie from "@lms/ui/deferred-lottie";
 import clsx from "clsx";
 import React from "react";
-import Lottie from "lottie-react";
-import { WavingHandAnimation } from "@lms/assets";
+
+const loadWavingHandAnimation = () =>
+  fetch("/api/lottie/WavingHand").then((response) => response.json());
 interface IProps {
   greeting: string;
   title: string;
@@ -35,8 +37,8 @@ const Heading = ({
             </span>
           </h1>
           {showWavingHand && (
-            <Lottie
-              animationData={WavingHandAnimation}
+            <DeferredLottie
+              loadAnimationData={loadWavingHandAnimation}
               loop={2}
               autoplay
               className={"before-icon inline-block h-10 w-10"}

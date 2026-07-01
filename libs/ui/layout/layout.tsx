@@ -1,23 +1,23 @@
 "use client";
 import {
+  TourGuideCoursesImage,
+  TourGuideFilterImage,
+  TourGuideNotiImage,
+  TourGuideSidebarImage,
+  TourGuideStartImage
+} from "@lms/assets/images";
+import {
   useCourseContext,
   useFeature,
   usePinnedNotifyContext,
 } from "@lms/contexts";
+import { GuidePlacement, UserGuide } from "@lms/core";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import clsx from "clsx";
 import Head from "next/head";
 import { ReactElement, ReactNode, useEffect, useState } from "react";
-import Sidebar from "./Sidebar";
 import { PopupStep } from "../components";
-import { GuidePlacement, UserGuide } from "@lms/core";
-import {
-  TourGuideCoursesAnimation,
-  TourGuideFilterAnimation,
-  TourGuideNotiAnimation,
-  TourGuideSidebarAnimation,
-  TourGuideStartAnimation,
-} from "@lms/assets";
+import Sidebar from "./Sidebar";
 interface LayoutProps {
   children: ReactNode;
   title: string;
@@ -88,7 +88,8 @@ export default function Layout(props: LayoutProps): ReactElement {
         return {
           title: "Search box",
           content: UserGuide.CONTENT_STEP_1,
-          imgSrc: TourGuideStartAnimation,
+          imgSrc: TourGuideStartImage,
+          imgType: "video",
           targetId: "search-box",
           placement: "bottom-left",
         };
@@ -97,7 +98,8 @@ export default function Layout(props: LayoutProps): ReactElement {
         return {
           title: "Sidebar",
           content: UserGuide.CONTENT_STEP_2,
-          imgSrc: TourGuideSidebarAnimation,
+          imgSrc: TourGuideSidebarImage,
+          imgType: "video",
           targetId: "sidebar",
           placement: "right-top",
         };
@@ -105,7 +107,8 @@ export default function Layout(props: LayoutProps): ReactElement {
         return {
           title: "Notification & Profile",
           content: UserGuide.CONTENT_STEP_3,
-          imgSrc: TourGuideNotiAnimation,
+          imgSrc: TourGuideNotiImage,
+          imgType: "video",
           targetId: "notification-profile",
           placement: "right-top",
         };
@@ -122,7 +125,8 @@ export default function Layout(props: LayoutProps): ReactElement {
         return {
           title: "Courses",
           content: UserGuide.CONTENT_STEP_5,
-          imgSrc: TourGuideCoursesAnimation,
+          imgSrc: TourGuideCoursesImage,
+          imgType: "video",
           targetId: "courses-card",
           placement: "right-top",
         };
@@ -132,7 +136,8 @@ export default function Layout(props: LayoutProps): ReactElement {
           title: "Filter",
           content: UserGuide.CONTENT_STEP_6,
           handleCancel: closeUserGuide,
-          imgSrc: TourGuideFilterAnimation,
+          imgSrc: TourGuideFilterImage,
+          imgType: "video",
           titleButtonNext: "Finish",
           targetId: "filter-courses",
           placement: "bottom-left",
@@ -213,6 +218,7 @@ export default function Layout(props: LayoutProps): ReactElement {
           placement={
             isMobileView ? "center" : (stepConfig.placement as GuidePlacement)
           }
+          imgType={stepConfig.imgType as "static" | "animation" | "video"}
           imgSrc={stepConfig.imgSrc}
           isEnd={stepConfig.isEnd}
           handleCancel={stepConfig.handleCancel}

@@ -10,13 +10,11 @@ import { excludedPathsHelp } from "@lms/core";
 const Help = ({ showHelp }: { showHelp: boolean }) => {
   // All hooks need to be at the top level, before any conditional returns
   const [visible, setVisible] = useState(false);
-  const {router, pathname, query} = useFeature()
+  const {pathname} = useFeature()
   const scriptRef = useRef<HTMLScriptElement | null>(null);
   const { openPinned } = usePinnedNotifyContext();
   const { isMobileView } = useTailwindBreakpoint();
   const isChangePosition = openPinned && isMobileView;
-  const asPath =
-  pathname + (query.toString() ? `?${query}` : '')
   const [isTeacherPage, isTestPage, isCaseStudyPage, isActivityPage] = [
     "/teachers",
     "/test",

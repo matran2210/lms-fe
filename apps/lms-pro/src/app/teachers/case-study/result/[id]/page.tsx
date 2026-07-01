@@ -24,22 +24,23 @@ import {
   QUESTION_TYPES,
   ScratchPadValue,
 } from '@lms/core'
-import { CalculatorModal, ScratchPatch } from '@lms/ui'
+import CalculatorModal from '@lms/ui/calculator-modal'
+import { ScratchPatch } from '@lms/ui/scratchpad'
 import { useMousePosition, useSmartModalSize } from '@lms/hooks'
 import {
   AddWordPreview,
   DragNDropPreivew,
-  EditorReader,
   EssayQuestionPreview,
-  FileViewer,
-  FullScreenLayout,
   MatchingQuestion,
-  ModalResizeable,
   MultiChoiceQuestion,
   OneChoiceQuestion,
-  SappButton,
   SelectWord
-} from '@lms/ui'
+} from '@lms/ui/question-type'
+import { FullScreenLayout } from '@lms/ui/layout'
+import { EditorReader } from '@lms/ui/editor'
+import FileViewer from '@lms/ui/file-viewer'
+import { ModalResizeable } from '@lms/ui/modal'
+import { SappButton } from '@lms/ui/button'
 import { runHighlight } from '@lms/utils'
 import { IFile } from '@sapp-fe/preview-activity/dist/shared/interfaces'
 import clsx from 'clsx'

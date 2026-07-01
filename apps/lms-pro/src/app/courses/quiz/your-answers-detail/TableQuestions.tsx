@@ -1,5 +1,5 @@
 'use client'
-import { SappBaseTable } from '@lms/ui'
+import { SappBaseTable } from '@lms/ui/base'
 import { CloseIcon } from '@lms/assets'
 import {
   ANIMATION,
@@ -9,8 +9,7 @@ import {
   IQuizAttemptChartType,
   QUESTION_TYPES,
 } from '@lms/core'
-import { Tooltip } from '@lms/ui'
-import 'aos/dist/aos.css'
+import { Tooltip } from '@lms/ui/common'
 import clsx from 'clsx'
 import DOMPurify from 'dompurify'
 import { isEmpty } from 'lodash'
@@ -201,10 +200,9 @@ const TableQuestions = ({
               <Image
                 src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
                 alt="Correct"
-                className="mr-1 text-success-600"
+                className="mr-1 shrink-0"
                 width={16}
                 height={16}
-                layout="fixed"
               />
               {roundNumber(answer?.question?.question_report?.ratio || 0)}%
             </div>
@@ -229,7 +227,7 @@ const TableQuestions = ({
               'ml-5 rounded-sm px-1 py-1.5 text-sm md:text-base',
               gradingStatus === GRADE_STATUS.FINISHED_GRADING
                 ? 'text-acent-info bg-[#176CDD0D]'
-                : 'bg-[#FFB8001A] text-primary',
+                : 'bg-[#EF59411A] text-primary',
             )}
           >
             {getGradingStatusLabel(gradingStatus || '')}

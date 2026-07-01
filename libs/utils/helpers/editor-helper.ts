@@ -1,5 +1,10 @@
 'use client'
-import { renderAsync } from 'docx-preview'
+
+// docx-preview ~500KB — lazy load, chỉ dùng khi user upload/view file Word
+async function getRenderAsync() {
+  const { renderAsync } = await import('docx-preview')
+  return renderAsync
+}
 
 export const cleanWordHtml = (html: string) => {
   let cleaned = html
@@ -35,6 +40,7 @@ export const cleanWordHtmlExceptBackground = (html: string) => {
 
 export const handleDocUploadFromBlob = async (blob: Blob) => {
   const arrayBuffer = await blob.arrayBuffer()
+  const renderAsync = await getRenderAsync()
 
   const container = document.createElement('div')
   await renderAsync(arrayBuffer, container, undefined, {

@@ -10,7 +10,17 @@ import {
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
 import { FullScreenLayout, PDFViewer, Tooltip } from '@lms/ui'
-import { ExplanationPackageV2 } from '@sapp-fe/explanation-package'
+import dynamic from 'next/dynamic'
+
+const ExplanationPackageV2 = dynamic(
+  () =>
+    import('@sonhero/explanation-package').then((m) => ({
+      default: m.ExplanationPackageV2,
+    })),
+  {
+    ssr: false,
+  },
+)
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants/routes'
 import withAuthorization from 'src/HOC/withAuthorization'

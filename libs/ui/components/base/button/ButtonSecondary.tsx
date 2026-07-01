@@ -2,7 +2,7 @@ import React from "react";
 import BaseButton from "./BaseButton";
 import { IButtonBaseProps } from "@lms/core";
 import clsx from "clsx";
-import { LoadingButtonAnimation } from "@lms/assets";
+import LoadingButtonAnimation from "./LoadingButtonAnimation";
 
 const ButtonSecondary = ({
   title,

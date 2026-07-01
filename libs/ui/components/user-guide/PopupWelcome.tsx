@@ -1,6 +1,6 @@
 "use client"
 import { RefObject } from 'react'
-import { HandShake } from '@lms/assets'
+import { HandShake } from '@lms/assets/icons'
 import { UserGuide } from '@lms/core'
 import { clearGuideState, increment, useFeature } from '@lms/contexts'
 import { ButtonPrimary, ButtonText, SappModal } from '../base'

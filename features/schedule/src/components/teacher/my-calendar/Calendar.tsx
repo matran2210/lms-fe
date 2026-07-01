@@ -1,8 +1,8 @@
 import dayjs from 'dayjs'
 import { useCallback, useState } from 'react'
 import { useQuery } from 'react-query'
-import { SAPPCalendar } from '@sapp-fe/sapp-common-package'
 import { IEvent } from '@sapp-fe/sapp-common-package'
+import dynamic from 'next/dynamic'
 import {
   EVENT_REPEAT_LABEL,
   EVENT_REPEAT_TYPES,
@@ -14,6 +14,13 @@ import CalendarHead from './CalendarHead'
 import { pick } from 'lodash'
 import { formatDateTimeWithTimeZone, formatRecurringSchedule } from '@lms/utils'
 import { IResponseSchedule, useFeature } from '@lms/contexts'
+
+const SAPPCalendar = dynamic(
+  () => import('@sapp-fe/sapp-common-package').then((m) => ({ default: m.SAPPCalendar })),
+  {
+    ssr: false
+  }
+)
 
 interface IProps {
   onOpenDetail: (date: Date, events: IEvent[]) => void

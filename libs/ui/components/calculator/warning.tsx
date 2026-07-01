@@ -11,7 +11,6 @@ const Warning = ({ warning = false }: IProps) => {
 
   return (
     <div className={classList}>
-      <i className="fas fa-radiation" />
       <p>{warningValue}</p>
     </div>
   );

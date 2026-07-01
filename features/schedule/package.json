@@ -9,8 +9,17 @@
     "lint": "eslint . --ext .ts,.tsx",
     "type-check": "tsc --noEmit"
   },
-  "peerDependencies": {
+  "dependencies": {
     "@hookform/resolvers": "^3.10.0",
+    "@lms/assets": "workspace:*",
+    "@lms/contexts": "workspace:*",
+    "@lms/core": "workspace:*",
+    "@lms/feature-class": "workspace:*",
+    "@lms/hoc": "workspace:*",
+    "@lms/hooks": "workspace:*",
+    "@lms/ui": "workspace:*",
+    "@lms/utils": "workspace:*",
+    "@sapp-fe/sapp-common-package": "^1.8.7",
     "antd": "^5.25.0",
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",

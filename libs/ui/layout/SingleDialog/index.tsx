@@ -1,7 +1,7 @@
 import { ReactElement, ReactNode } from 'react'
 import Image from 'next/image'
 import Head from 'next/head'
-import { SappLogoImage } from '@lms/assets'
+import { SappLogoImage } from '@lms/assets/images'
 
 interface LayoutProps {
   children: ReactNode
@@ -23,7 +23,7 @@ export default function SingleDialogLayout(props: LayoutProps): ReactElement {
               src={SappLogoImage}
               alt="SAPP Logo"
               priority={true}
-              layout="responsive"
+              style={{ width: '100%', height: 'auto' }}
             />
           </div>
           <div className="content">{children}</div>

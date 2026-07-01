@@ -1,7 +1,6 @@
 'use client'
-import SappLoading from '@components/common/SappLoading'
 import { ITabs, TEST_TYPE_LABELS } from '@lms/core'
-import { FullScreenLayout, SappBreadCrumbs } from '@lms/ui'
+import { FullScreenLayout, SappBreadCrumbs, SappLoading } from '@lms/ui'
 import { useGetDataQuery } from '@lms/utils'
 import { useParams, useRouter } from 'next/navigation'
 import { PageLink } from 'src/constants/routers'

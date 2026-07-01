@@ -7,7 +7,7 @@ import '@sapp-fe/preview-part/dist/index.css'
 import '@sapp-fe/quiz-result-package/dist/index.css'
 import '@sapp-fe/sapp-common-package/dist/index.css'
 import '@sapp-fe/sapp-common-package/dist/sapp-editor.css'
-import '@sapp-fe/sapp-notification/dist/index.css'
+import '@sonhero/sapp-notification/dist/index.css'
 import '@xyflow/react/dist/style.css'
 import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
@@ -24,26 +24,16 @@ export const metadata: Metadata = {
 
   title: {
     default:
-      'Hệ thống Quản lý học và thi ACCA, CFA, CMA trực tuyến SAPP Academy',
-    template: '%s | SAPP Academy',
+      'Hệ thống Quản lý học và thi trực tuyến',
+    template: '%s | Upbase',
   },
 
   description:
-    'Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA, CMA',
+    'Hệ thống Nền tảng Học và Thi trực tuyến nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập',
 
-  keywords: [
-    'sapp',
-    'lms',
-    'acca',
-    'ACCA',
-    'CFA',
-    'CMA',
-    'Big4',
-    '3P',
-    'SAPP Academy',
-  ],
+  keywords: ['upbase', 'lms'],
 
-  authors: [{ name: 'SAPP Academy' }],
+  authors: [{ name: 'Upbase' }],
 
   robots: {
     index: true,
@@ -53,24 +43,24 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     url: 'https://lms-finhub.sapp.edu.vn',
-    title: 'Hệ thống Quản lý học và thi ACCA, CFA, CMA trực tuyến SAPP Academy',
+    title: 'Hệ thống Quản lý học và thi trực tuyến',
     description:
-      'Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA, CMA',
+      'Hệ thống Nền tảng Học và Thi trực tuyến nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập',
     images: [
       {
         url: 'https://sapp-lms-fe-prod.vercel.app/thumbnail.webp',
         width: 1200,
         height: 630,
-        alt: 'SAPP LMS Thumbnail',
+        alt: 'Upbase LMS Thumbnail',
       },
     ],
   },
 
   twitter: {
     card: 'summary_large_image',
-    title: 'Hệ thống Quản lý học và thi ACCA, CFA, CMA trực tuyến SAPP Academy',
+    title: 'Hệ thống Quản lý học và thi trực tuyến',
     description:
-      'Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA, CMA',
+      'Hệ thống Nền tảng Học và Thi trực tuyến nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập',
     images: ['https://sapp-lms-fe-prod.vercel.app/thumbnail.webp'],
   },
 
@@ -89,6 +79,8 @@ export const metadata: Metadata = {
 const roboto = Roboto({
   subsets: ['latin'],
   weight: ['300', '400', '500', '700'],
+  display: 'swap',
+  preload: true,
 })
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -98,10 +90,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Script
           src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"
           strategy="afterInteractive"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-          rel="stylesheet"
         />
       </head>
       <body className={roboto.className}>

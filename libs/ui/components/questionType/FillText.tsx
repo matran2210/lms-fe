@@ -1,6 +1,6 @@
 "use client";
 import { runHighlight } from "@lms/utils";
-import { uniqueId } from "lodash";
+import uniqueId from "lodash/uniqueId";
 import {
   ForwardedRef,
   forwardRef,

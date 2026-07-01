@@ -4,7 +4,7 @@ import {
   activeCourseThunk,
   selectPopupActivateCourse,
 } from "@lms/contexts/redux/slice/Popup/ActivatedCourse";
-import { SappModalV3 } from "@lms/ui";
+import { SappModalV3 } from "@lms/ui/base";
 
 const PopupActivated = () => {
   const { dispatch, useAppSelector, courseApi, router, pageLink } =

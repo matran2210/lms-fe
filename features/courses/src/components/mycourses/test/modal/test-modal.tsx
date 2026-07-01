@@ -18,7 +18,7 @@ import {
 } from "@lms/utils";
 import { Select } from "antd";
 import dayjs from "dayjs";
-import { isNull } from "lodash";
+import isNull from "lodash/isNull";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { TestAnnouncementModal } from "../../course-detail";
 import PopupCanNotRetakeTest from "../../PogupCannotRetakeTest";

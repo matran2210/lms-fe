@@ -11,8 +11,13 @@ import {
   TEST_ATTEMPT_TYPE,
 } from '@lms/core'
 import { FullScreenLayout, PDFViewer } from '@lms/ui'
-import { ExplanationPackage } from '@sapp-fe/explanation-package'
+import dynamic from 'next/dynamic'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
+
+const ExplanationPackage = dynamic(
+  () => import('@sonhero/explanation-package').then((m) => ({ default: m.ExplanationPackage })),
+  { ssr: false }
+)
 import { useEffect, useState } from 'react'
 import { CoursesAPI } from 'src/api/courses'
 import { TestServiceAPI } from 'src/api/test-api'

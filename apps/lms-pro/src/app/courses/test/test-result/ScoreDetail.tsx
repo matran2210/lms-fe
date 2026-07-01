@@ -1,5 +1,5 @@
 'use client'
-import { SappBaseTable } from '@lms/ui'
+import { SappBaseTable } from '@lms/ui/base'
 import {
   convertSecondsToMinutesSeconds,
   roundNumber,
@@ -17,10 +17,9 @@ import {
   QUESTION_TYPES,
 } from '@lms/core'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import { Tooltip } from '@lms/ui'
+import { Tooltip } from '@lms/ui/common'
 import { htmlToRaw } from '@lms/utils'
 import { Collapse } from 'antd'
-import 'aos/dist/aos.css'
 import clsx from 'clsx'
 import DOMPurify from 'dompurify'
 import { groupBy } from 'lodash'
@@ -356,10 +355,9 @@ const ScoreDetail = ({
                                           <Image
                                             src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
                                             alt="Correct"
-                                            className="mr-1 text-success-600"
+                                            className="mr-1 shrink-0"
                                             width={16}
                                             height={16}
-                                            layout="fixed"
                                           />
                                           {roundNumber(
                                             answer?.question?.question_report

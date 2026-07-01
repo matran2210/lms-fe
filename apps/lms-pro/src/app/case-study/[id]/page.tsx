@@ -42,22 +42,22 @@ import { QuitTestModal, UnSubmitAnswerModal } from '@lms/feature-courses'
 import { useSmartModalSize, useTailwindBreakpoint } from '@lms/hooks'
 import {
   AddWordPreview,
-  ButtonText,
-  CaseStudyWrapper,
-  EditorReader,
   EssayQuestionPreview,
-  FileViewer,
-  CalculatorModal,
   MatchQuizComponent,
-  ModalResizeable,
-  ModalUploadFile,
   MultiChoiceQuestion,
   NewDragNDropQuestion,
   OneChoiceQuestion,
-  Popover,
   SelectWord,
   SlotValue,
-} from '@lms/ui'
+} from '@lms/ui/question-type'
+import { ButtonText } from '@lms/ui/button'
+import { CaseStudyWrapper } from '@lms/ui/layout'
+import { EditorReader } from '@lms/ui/editor'
+import FileViewer from '@lms/ui/file-viewer'
+import CalculatorModal from '@lms/ui/calculator-modal'
+import { ModalResizeable } from '@lms/ui/modal'
+import { ModalUploadFile } from '@lms/ui/upload-file-modal'
+import { Popover } from '@lms/ui/base'
 import {
   extractNotActivatedData,
   runHighlight,
@@ -76,7 +76,7 @@ import {
   selectPopupActivateCourse,
   showPopupActivatedCourse,
 } from '@lms/contexts/redux/slice/Popup/ActivatedCourse'
-import { ScratchPatch } from '@lms/ui'
+import { ScratchPatch } from '@lms/ui/scratchpad'
 
 const CaseStudyDetail = () => {
   const editorRefs = useRef<any[]>([])

@@ -1,11 +1,13 @@
 "use client"
-import Lottie from 'lottie-react'
 import Image, { StaticImageData } from 'next/image'
+import dynamic from 'next/dynamic'
 import { ButtonPrimary, ButtonText } from '../base';
 import { useEffect, useRef, useState } from "react";
 import { decrement, increment, useFeature } from "@lms/contexts";
 import { motion } from "framer-motion";
 import { GuideOffset, GuidePlacement } from "@lms/core";
+
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false })
 
 type Props = {
   content: string;
@@ -19,8 +21,8 @@ type Props = {
   titleButtonNext?: string;
   title?: string;
   handleCancel?: () => void;
-  imgSrc?: StaticImageData | object;
-  imgType?: "static" | "animation";
+  imgSrc?: string | StaticImageData | object;
+  imgType?: "static" | "animation" | "video";
   isEnd?: boolean;
 };
 
@@ -177,7 +179,7 @@ const PopupStep = ({
     };
   };
 
-  const {dispatch} = useFeature();
+  const { dispatch } = useFeature();
   const confirmDialogRef = useRef<HTMLDivElement>(null);
   const [style, setStyle] = useState<React.CSSProperties | null>(null);
 
@@ -223,9 +225,9 @@ const PopupStep = ({
       <div>
         <div className={imgSrc ? "mb-4" : undefined}>
           {imgType === "static" &&
-          imgSrc &&
-          typeof imgSrc === "object" &&
-          "src" in imgSrc ? (
+            imgSrc &&
+            typeof imgSrc === "object" &&
+            "src" in imgSrc ? (
             <Image
               src={imgSrc as StaticImageData}
               alt={`Tour guide step ${index} - ${title}`}
@@ -237,14 +239,20 @@ const PopupStep = ({
           {imgType === "animation" && imgSrc && (
             <Lottie animationData={imgSrc} loop />
           )}
+          {imgType === "video" && imgSrc && (
+            <video
+              src={typeof imgSrc === "string" ? imgSrc : undefined}
+              className="rounded-lg"
+              autoPlay muted loop playsInline controls={false}
+            />
+          )}
         </div>
 
         <h6 className="mb-3 text-lg font-bold">{title}</h6>
         <span className="text-base font-normal">{content}</span>
         <div
-          className={`mt-3 flex items-center ${
-            index === 1 ? "justify-end" : "justify-between"
-          }`}
+          className={`mt-3 flex items-center ${index === 1 ? "justify-end" : "justify-between"
+            }`}
         >
           {isEnd ? (
             <ButtonPrimary
@@ -275,9 +283,8 @@ const PopupStep = ({
           {Array.from({ length: total }, (_, i) => (
             <div
               key={i}
-              className={`h-[6px] w-[6px] rounded-full ${
-                i + 1 === index ? "bg-primary" : "bg-gray-300"
-              }`}
+              className={`h-[6px] w-[6px] rounded-full ${i + 1 === index ? "bg-primary" : "bg-gray-300"
+                }`}
             />
           ))}
         </div>

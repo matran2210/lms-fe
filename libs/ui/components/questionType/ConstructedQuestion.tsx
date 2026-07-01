@@ -11,7 +11,10 @@ import {
 } from "@lms/core";
 import { convertMathHtmlToImage, runHighlight } from "@lms/utils";
 import clsx from "clsx";
-import { cloneDeep, isNull, isUndefined, uniqueId } from "lodash";
+import cloneDeep from "lodash/cloneDeep";
+import uniqueId from "lodash/uniqueId"
+import isNull from "lodash/isNull";
+import isUndefined from "lodash/isUndefined";
 import React, {
   memo,
   useCallback,
@@ -23,7 +26,7 @@ import React, {
 import { Controller } from "react-hook-form";
 import toast from "react-hot-toast";
 import { SappDivider } from "../../components/base/divider";
-import { EditorReader, HookFormEditor, HookFormExcel } from "../base";
+import { EditorReader, HookFormEditor, HookFormExcelDynamic as HookFormExcel } from "../base";
 import { SappTitleSolution } from "../common";
 import { HighlightableHTML } from "../highlights";
 

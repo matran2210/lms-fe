@@ -22,8 +22,18 @@ import {
 } from '@lms/core'
 import { SappButton, SappIcon, SappModal, SappModalV3 } from '@lms/ui'
 import { isValidatedAnswer, trackGAEvent } from '@lms/utils'
-import { QuizResultComponent } from '@sapp-fe/quiz-result-package'
+import dynamic from 'next/dynamic'
 import { IQuestionResult } from '@sapp-fe/quiz-result-package/dist/type'
+
+const QuizResultComponent = dynamic(
+  () =>
+    import('@sapp-fe/quiz-result-package').then((m) => ({
+      default: m.QuizResultComponent,
+    })),
+  {
+    ssr: false,
+  },
+)
 import dayjs from 'dayjs'
 import { isNull } from 'lodash'
 import toast from 'react-hot-toast'

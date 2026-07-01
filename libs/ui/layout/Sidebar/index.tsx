@@ -1,7 +1,7 @@
 "use client";
 import { ExpandIcon } from "@lms/assets";
 import { useFeature } from "@lms/contexts";
-import { trackGAEvent } from "@lms/utils";
+import { trackGAEvent } from "@lms/utils/google-analytics";
 import { Divider } from "antd";
 import clsx from "clsx";
 import { Dispatch, SetStateAction } from "react";
@@ -81,7 +81,6 @@ export default function Sidebar({
               <ExpandIcon
                 type="logo-default"
                 className={clsx(
-                  "transition-transform duration-300 ease-out lg:translate-x-[70%]",
                   // Active on hover
                   "lg:group-hover:left-0 lg:group-hover:translate-x-0",
                   // Active when guideStep is 2 or 3
@@ -89,7 +88,6 @@ export default function Sidebar({
                   "lg:!left-0 lg:!translate-x-0",
                 )}
               />
-              <ExpandIcon type="logo-full" />
             </div>
           </div>
           {/* Divider */}

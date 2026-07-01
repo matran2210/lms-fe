@@ -1,10 +1,16 @@
 "use client";
 
-import { Workbook } from "@fortune-sheet/react";
-import * as ExcelJS from "exceljs";
+import dynamic from "next/dynamic";
+import type * as ExcelJS from "exceljs";
 import { useEffect, useMemo, useState } from "react";
 import { generateSheetId } from "@lms/core";
 import { LoadingIcon } from "@lms/assets";
+
+// @fortune-sheet/react ~2MB gzipped — lazy load, chỉ dùng khi xem file Excel
+const Workbook = dynamic(
+  () => import("@fortune-sheet/react").then((m) => m.Workbook),
+  { ssr: false },
+)
 
 type IProps = {
   fileUrl: string;
@@ -101,7 +107,8 @@ const SheetViewer = ({ fileUrl, fileName, resizeVersion }: IProps) => {
         if (!res.ok) throw new Error("Fetch failed");
 
         const buffer = await res.arrayBuffer();
-        const workbook = new ExcelJS.Workbook();
+        const ExcelJSlib = await import("exceljs");
+        const workbook = new ExcelJSlib.Workbook();
         await workbook.xlsx.load(buffer);
 
         const sheets = workbook.worksheets.map((ws) => {

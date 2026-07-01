@@ -1,14 +1,14 @@
 import { ButtonSecondary } from "@lms/ui";
-import { clearStylesHtml } from "@lms/utils";
+import { clearStylesHtml } from "@lms/utils/common";
 import clsx from "clsx";
-import { isEmpty } from "lodash";
+import isEmpty from "lodash/isEmpty";
 import React from "react";
 import { ICourse } from "@lms/core";
 import Course from "./Course";
 import { NoCoursesAvailable, Tooltip } from "@lms/ui";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import { useFeature } from "@lms/contexts";
-import { CourseTimeIcon, GraduationCapIcon, Icon } from "@lms/assets";
+import { CourseTimeIcon, GraduationCapIcon, Icon } from "@lms/assets/icons";
 import { CardCourse } from "../course/card-course";
 
 interface CoursesProps {

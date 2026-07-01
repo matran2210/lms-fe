@@ -78,7 +78,7 @@ export const VALID_UPLOAD_EDITOR = [
 ];
 
 export const UserGuide = {
-  TITLE_WELCOME: "Welcome to SAPP LMS",
+  TITLE_WELCOME: "Welcome to Upbase LMS",
   CONTENT_WELCOME: "Let’s start with a quick product tour!",
   CONTENT_BUTTON: "Start Tour",
   CONTENT_STEP_1:
@@ -273,7 +273,7 @@ export const ENTRANCE_TEST_TABLE_RESULT = "/entrance-test/table-result/[id]";
 
 export const SEARCH_EVENT_PLACEHOLDER = "Event name";
 
-export const PRIMARY_COLOR = "#FFB800";
+export const PRIMARY_COLOR = "#EF5941";
 
 export const ANT_THEME_CONFIG = {
   token: {
@@ -318,6 +318,7 @@ export const EVENT_TYPES_RESPONSE = {
   OTHER: "OTHER",
   LIVE_ONLINE: "LIVE_ONLINE",
   INACTIVE: "INACTIVE",
+  RESCHEDULING: "RESCHEDULING",
 } as const;
 
 export const EVENT_TYPES_ARRAY = Object.values(EVENT_TYPES);

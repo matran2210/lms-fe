@@ -58,8 +58,6 @@
   "include": [
     "src",
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
     "../../features/schedule/src/components/teacher/StudentCell.tsx",
     "../../features/schedule/src/components/teacher/StudentFilter.tsx",
     "../../features/schedule/src/components/teacher/ItemClassesByStatus.tsx",

@@ -26,7 +26,11 @@ import { CardMenuItem, PopupLockContent } from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
 import { BottomMenu, LearningResource, PromotionalBanner } from '@lms/ui'
 import { buildQueryString, formatDate } from '@lms/utils'
-import PreviewPartDetail from '@sapp-fe/preview-part'
+import dynamic from 'next/dynamic'
+
+const PreviewPartDetail = dynamic(() => import('@sapp-fe/preview-part'), {
+  ssr: false,
+})
 import { Alert, Divider, Skeleton } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'

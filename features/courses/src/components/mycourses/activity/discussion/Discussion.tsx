@@ -581,8 +581,8 @@ const Discussion = ({ class_id, enableReplyScroll = false }: Props) => {
                                     height={100}
                                     src={URL.createObjectURL(file)}
                                     loading="eager"
-                                    objectFit="contain"
-                                    alt="Discussion file"
+                                    className="object-contain"
+                                    alt="Discussion file preview"
                                     onClick={() => {
                                       setImageSrc(URL.createObjectURL(file))
                                     }}
@@ -722,12 +722,12 @@ const Discussion = ({ class_id, enableReplyScroll = false }: Props) => {
                       height={100}
                       src={URL.createObjectURL(file)}
                       loading="eager"
-                      objectFit="contain"
+                      className="object-contain"
                       onClick={() => {
                         setImageSrc(URL.createObjectURL(file))
                       }}
                       priority={true}
-                      alt=""
+                      alt="Attached image preview"
                     ></Image>
                   </li>
                 ))}

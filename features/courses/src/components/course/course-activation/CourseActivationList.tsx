@@ -1,7 +1,7 @@
 import { useFeature } from "@lms/contexts";
 import { ISubjectWaitingActivation } from "@lms/core";
 import { NoCoursesAvailable } from "@lms/ui";
-import { isEmpty } from "lodash";
+import isEmpty from "lodash/isEmpty";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import CourseActivation from "./CourseActivation";

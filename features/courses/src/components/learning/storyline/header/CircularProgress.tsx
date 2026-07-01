@@ -43,7 +43,7 @@ const CircularProgress = ({
         initial={false}
         animate={{
           strokeDashoffset: offset,
-          stroke: isDone ? '#22c55e' : '#FFB700', // xanh khi 100%
+          stroke: isDone ? '#22c55e' : '#EF5941', // xanh khi 100%
         }}
         transition={{
           strokeDashoffset: { duration: 0.5, ease: 'easeOut' },

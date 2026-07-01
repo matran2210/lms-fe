@@ -1,8 +1,7 @@
 // app/providers.tsx
 'use client'
 
-import MKTInApp from '@components/MKTInApp'
-import '@fortune-sheet/react/dist/index.css'
+import dynamic from 'next/dynamic'
 import {
   CourseNoteProvider,
   CourseProvider,
@@ -18,22 +17,14 @@ import {
   SOCKET_EVENTS,
 } from '@lms/core'
 import { RouteGuard } from '@lms/feature-auth'
-import {
-  LearningNotesList,
-  PopupActivated,
-  PopupCompletedCourse,
-} from '@lms/feature-courses'
 import { useTailwindBreakpoint } from '@lms/hooks'
-import {
-  AntConfigProvider,
-  BackToTop,
-  Help,
-  PinnedNotifications,
-  SappConfirmDialogContainer,
-} from '@lms/ui'
-import { initializeGA, pageview } from '@lms/utils'
+import BackToTop from '@lms/ui/back-to-top'
+import { SappConfirmDialogContainer } from '@lms/ui/confirm-dialog'
+import { Help } from '@lms/ui/help'
+import { PinnedNotifications } from '@lms/ui/pinned-notifications'
+import AntConfigProvider from '@lms/ui/provider'
 import { fetcher } from '@services/request'
-import { App as AntdApp, ConfigProvider } from 'antd'
+import { App as AntdApp } from 'antd'
 import Aos from 'aos'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -44,13 +35,10 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation'
-import { ReactNode, useEffect, useRef, useState } from 'react'
-import TagManager, { TagManagerArgs } from 'react-gtm-module'
+import { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { Provider } from 'react-redux'
-import { io } from 'socket.io-client'
-import { ActivityAPI } from 'src/api/activity'
 import CalendarApi from 'src/api/calendar'
 import { uploadImageToLinkedIn } from 'src/api/certificate'
 import { ClassAPI } from 'src/api/class'
@@ -84,6 +72,28 @@ import { ProgressAPI } from 'src/api/progress'
 import { TeacherAPI } from 'src/api/teacher'
 import { MyRequestAPI } from 'src/api/my-request'
 import { RequestAPI } from 'src/api/request'
+import { ActivityAPI } from 'src/api/activity'
+import DeferredThirdPartyScripts from './deferred-third-party-scripts'
+import { SappLoadingGlobal } from '@lms/ui'
+
+// Lazy load MKTInApp — kéo framer-motion + react-slick + ModalMarketingInApp
+// Không cần SSR, chỉ hiện ở một số route → không nên vào initial bundle
+const MKTInApp = dynamic(() => import('@components/MKTInApp'), { ssr: false })
+const LearningNotesList = dynamic(
+  () =>
+    import('@lms/feature-courses/src/components/mycourses/LearningNotesList'),
+  { ssr: false },
+)
+const PopupCompletedCourse = dynamic(
+  () =>
+    import('@lms/feature-courses/src/components/mycourses/PopupCompletedCourse'),
+  { ssr: false },
+)
+const PopupActivated = dynamic(
+  () => import('@lms/feature-courses/src/components/mycourses/PopupActivated'),
+  { ssr: false },
+)
+
 dayjs.extend(utc)
 dayjs.extend(weekday)
 const showSupportWidget = [
@@ -95,28 +105,94 @@ const showSupportWidget = [
 ]
 
 const activityPath = ['/courses/[id]/activity/[activityId]']
+// Stable QueryClient — khởi tạo 1 lần duy nhất, không re-create mỗi render
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 3000000,
+      refetchOnWindowFocus: false,
+    },
+  },
+})
+
+const AuthBootstrapFallback = () => (
+  <SappLoadingGlobal loading>
+    <></>
+  </SappLoadingGlobal>
+)
+
 function Providers({ children }: { children: ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
   const params = useParams()
   const query = useSearchParams()
   const dispatch = useAppDispatch()
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: 3000000,
-        refetchOnWindowFocus: false,
-        // Đặt thời gian stale tại đây, ví dụ: 30 giây (30000 miligiây)
-      },
-    },
-  })
   const [socket, setSocket] = useState<any>(null)
-  const authenticationManager = new AuthenticationManager()
+  const [authReady, setAuthReady] = useState(false)
+  // Stable authenticationManager — dùng useRef để không tạo instance mới mỗi render
+  const authManagerRef = useRef<AuthenticationManager | null>(null)
+  if (!authManagerRef.current) {
+    authManagerRef.current = new AuthenticationManager()
+  }
+  const authenticationManager = authManagerRef.current
 
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID || ''
-  const tagManagerArgs: TagManagerArgs = { gtmId }
-
+  const gaId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ''
   const { isMobileView } = useTailwindBreakpoint()
+
+  // Stable query object — tránh tạo object mới mỗi render
+  const queryObj = useMemo(() => Object.fromEntries(query.entries()), [query])
+
+  // Stable featureProviderValue — tránh re-render toàn bộ consumer khi Providers re-render
+  const featureProviderValue = useMemo(
+    () => ({
+      courseApi: CoursesAPI,
+      questionApi: QuestionAPI,
+      uploadApi: UploadAPI,
+      userApi: UserApi,
+      userContextApi: UserContextApi,
+      notificationApi: NotificationAPI,
+      authApi: AuthAPI,
+      classApi: ClassAPI,
+      activityApi: ActivityAPI,
+      courseActivityApi: CourseActivityApi,
+      entranceTestApi: EntranceTestAPI,
+      eventTestApi: EventTestAPI,
+      calendarApi: CalendarApi,
+      myProfileApi: MyProfileAPI,
+      myRequestApi: MyRequestAPI,
+      requestApi: RequestAPI,
+      submitQuizTest: TestServiceAPI.submitQuizTest,
+      dashboardApi: DashboardAPI,
+      storylineApi: StorylineAPI,
+      schedulesApi: SchedulesAPI,
+      progressApi: ProgressAPI,
+      teacherApi: TeacherAPI,
+      authManager: authManagerRef.current!,
+      pageLink: PageLink,
+      menuItems: MENU_ITEMS,
+      menuItemsEvent: MENU_ITEMS_EVENT,
+      menuBottom: MENU_BOTTOM,
+      router: router,
+      pathname,
+      params,
+      query: queryObj,
+      fetcher: fetcher,
+      videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
+      testServiceApi: TestServiceAPI,
+      certificateApi: {
+        uploadImageToLinkedIn,
+      },
+      uploadImageToLinkedIn: uploadImageToLinkedIn,
+      courseActivationAPI: CoursesActivationAPI,
+      dispatch: dispatch,
+      useAppSelector: useAppSelector,
+      appModules: modules,
+      domainTest: process.env.NEXT_PUBLIC_DOMAIN_TEST as string,
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [router, pathname, params, queryObj, dispatch],
+  )
 
   // Check if URL contains '/teachers'
   const isTeacherPage = pathname?.includes('/teachers')
@@ -124,26 +200,44 @@ function Providers({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     Aos.init({ duration: ANIMATION.DURATION, once: true })
-  })
+  }, []) // chỉ chạy 1 lần khi mount
   useEffect(() => {
+    let mounted = true
+
+    authenticationManager.waitUntilReady().then(() => {
+      if (mounted) {
+        setAuthReady(true)
+      }
+    })
+
+    return () => {
+      mounted = false
+    }
+  }, [authenticationManager])
+
+  useEffect(() => {
+    if (!authReady) return
+
     const token = authenticationManager.getToken()
     if (token !== '') {
-      const newSocket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
-        extraHeaders: {
-          authorization: token,
-        },
+      let cleanup: (() => void) | undefined
+      import('socket.io-client').then(({ io }) => {
+        const newSocket = io(`${process.env.NEXT_PUBLIC_SOCKET}`, {
+          extraHeaders: {
+            authorization: token,
+          },
+        })
+        setSocket(newSocket)
+        cleanup = () => newSocket.disconnect()
       })
-      setSocket(newSocket)
-      return () => {
-        newSocket.disconnect()
-      }
+      return () => cleanup?.()
     }
-  }, [authenticationManager]) // reconnect khi authToken thay đổi
+  }, [authReady, authenticationManager])
 
   useEffect(() => {
     if (socket) {
-      socket.on('connect', () => { })
-      socket.on('disconnect', () => { })
+      socket.on('connect', () => {})
+      socket.on('disconnect', () => {})
       socket?.on(SOCKET_EVENTS.NOTIFICATION_UNREAD, (data: any) => {
         localStorage.setItem(
           LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
@@ -156,31 +250,15 @@ function Providers({ children }: { children: ReactNode }) {
       }
     }
   }, [socket])
-  useEffect(() => {
-    TagManager.initialize(tagManagerArgs)
-  }, [])
-
-  useEffect(() => {
-    if (!window.GA_INITIALIZED) {
-      initializeGA()
-      window.GA_INITIALIZED = true
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!pathname) return
-    pageview(pathname as any)
-  }, [pathname])
-
   const isActivityPage = !activityPath.some((path) => pathname?.includes(path))
   const showBackToTop = isMobileView ? isActivityPage : true
 
   const showHelp = showSupportWidget.includes(pathname || '') && !isTeacherPage // Add condition to hide help on teacher pages
   const showMKTInApp = showHelp && !isMobileView
   const hiddenChatbot = !showHelp
-  // Handle HubSpot widget visibility based on URL
+  // // Handle HubSpot widget visibility based on URL
 
-  //TODO: Next14
+  // //TODO: Next14
   useEffect(() => {
     const hideHubspotWidget = () => {
       // Target specific elements from the DOM structure we observed
@@ -271,7 +349,7 @@ function Providers({ children }: { children: ReactNode }) {
     // }
 
     return () => observer.disconnect()
-  }, [router, showHelp, hiddenChatbot])
+  }, [showHelp, hiddenChatbot]) // bỏ router — không cần re-subscribe khi navigate
 
   useEffect(() => {
     if (prevPathRef.current) {
@@ -288,75 +366,15 @@ function Providers({ children }: { children: ReactNode }) {
     prevPathRef.current = pathname
   }, [pathname])
 
-  const searchParams = useSearchParams()
-
-  useEffect(() => {
-    if (!window.gtag) return
-
-    const url =
-      pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '')
-
-    window.gtag('config', process.env.NEXT_PUBLIC_GA_ID!, {
-      page_path: url,
-    })
-  }, [pathname, searchParams])
-
   return (
     <AntConfigProvider>
-      {/* <Provider store={store}> */}
       <PinnedNotifyProvider
         router={router}
         api={{
           getPinnedNotifications: UserContextApi.getPinnedNotifications,
         }}
       >
-        <FeatureProvider
-          value={{
-            courseApi: CoursesAPI,
-            questionApi: QuestionAPI,
-            uploadApi: UploadAPI,
-            userApi: UserApi,
-            userContextApi: UserContextApi,
-            notificationApi: NotificationAPI,
-            authApi: AuthAPI,
-            classApi: ClassAPI,
-            activityApi: ActivityAPI,
-            courseActivityApi: CourseActivityApi,
-            entranceTestApi: EntranceTestAPI,
-            eventTestApi: EventTestAPI,
-            calendarApi: CalendarApi,
-            myProfileApi: MyProfileAPI,
-            myRequestApi: MyRequestAPI,
-            requestApi: RequestAPI,
-            submitQuizTest: TestServiceAPI.submitQuizTest,
-            dashboardApi: DashboardAPI,
-            storylineApi: StorylineAPI,
-            schedulesApi: SchedulesAPI,
-            progressApi: ProgressAPI,
-            teacherApi: TeacherAPI,
-            authManager: new AuthenticationManager(),
-            pageLink: PageLink,
-            menuItems: MENU_ITEMS,
-            menuItemsEvent: MENU_ITEMS_EVENT,
-            menuBottom: MENU_BOTTOM,
-            router: router,
-            pathname,
-            params,
-            query: Object.fromEntries(query.entries()),
-            fetcher: fetcher,
-            videoUrl: process.env.NEXT_PUBLIC_VIDEO_URL as string,
-            testServiceApi: TestServiceAPI,
-            certificateApi: {
-              uploadImageToLinkedIn,
-            },
-            uploadImageToLinkedIn: uploadImageToLinkedIn,
-            courseActivationAPI: CoursesActivationAPI,
-            dispatch: dispatch,
-            useAppSelector: useAppSelector,
-            appModules: modules,
-            domainTest: process.env.NEXT_PUBLIC_SUB_DOMAIN_TEST as string,
-          }}
-        >
+        <FeatureProvider value={featureProviderValue}>
           <CourseProvider
             router={router}
             api={{
@@ -366,38 +384,38 @@ function Providers({ children }: { children: ReactNode }) {
             <CourseNoteProvider router={router} api={CoursesAPI}>
               <QueryClientProvider client={queryClient}>
                 <SocketContext.Provider value={socket}>
-                  <PreviousSectionRouteProvider pathname={pathname}>
-                    <Toaster
-                      toastOptions={{
-                        style: {
-                          maxWidth: '400px', // Tăng chiều rộng của toast
-                        },
-                      }}
-                    />
-                    <SappConfirmDialogContainer />
+                  {!authReady ? (
+                    <AuthBootstrapFallback />
+                  ) : (
                     <RouteGuard>
-                      <ConfigProvider>
+                      <PreviousSectionRouteProvider pathname={pathname}>
+                        <Toaster
+                          toastOptions={{
+                            style: {
+                              maxWidth: '400px', // Tăng chiều rộng của toast
+                            },
+                          }}
+                        />
+                        <SappConfirmDialogContainer />
                         <PinnedNotifications />
                         <AntdApp>{children}</AntdApp>
-                        <>
-                          {showBackToTop && <BackToTop />}
-                          <MKTInApp showMKTInApp={showMKTInApp} />
-                          {showHelp && <div id="floating-btn-divider" />}
-                          <Help showHelp={showHelp} />
-                          <LearningNotesList appType={AppType.LMS_PRO} />
-                          <PopupCompletedCourse />
-                          <PopupActivated />
-                        </>
-                      </ConfigProvider>
+                        {showBackToTop && <BackToTop />}
+                        {/* <MKTInApp showMKTInApp={showMKTInApp} /> */}
+                        {/* {showHelp && <div id="floating-btn-divider" />} */}
+                        {/* <Help showHelp={showHelp} /> */}
+                        <LearningNotesList appType={AppType.LMS_PRO} />
+                        <PopupCompletedCourse />
+                        <PopupActivated />
+                        <DeferredThirdPartyScripts gaId={gaId} gtmId={gtmId} />
+                      </PreviousSectionRouteProvider>
                     </RouteGuard>
-                  </PreviousSectionRouteProvider>
+                  )}
                 </SocketContext.Provider>
               </QueryClientProvider>
             </CourseNoteProvider>
           </CourseProvider>
         </FeatureProvider>
       </PinnedNotifyProvider>
-      {/* </Provider> */}
     </AntConfigProvider>
   )
 }

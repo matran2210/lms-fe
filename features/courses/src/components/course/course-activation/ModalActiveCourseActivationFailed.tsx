@@ -1,4 +1,4 @@
-import { SadFaceIcon } from "@lms/assets/icons/course/CourseContent";
+import { SadFaceIcon } from "@lms/assets/icons";
 import { SappModalV3 } from "@lms/ui";
 
 const REDIRECT_URL = "https://sapp.edu.vn/dich-vu-cham-soc-hoc-vien-sapp-academy/"

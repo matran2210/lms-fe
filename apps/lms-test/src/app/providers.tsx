@@ -1,13 +1,11 @@
 // app/providers.tsx
 "use client";
 
-import "@fortune-sheet/react/dist/index.css";
 import {
   CourseNoteProvider,
   FeatureProvider,
   PreviousSectionRouteProvider,
   SocketContext,
-  useFeature,
 } from "@lms/contexts";
 import {
   ANIMATION,
@@ -21,11 +19,11 @@ import { useTailwindBreakpoint } from "@lms/hooks";
 import {
   AntConfigProvider,
   BackToTop,
-  Help,
   PinnedNotifications,
   SappConfirmDialogContainer,
+  SappLoadingGlobal,
 } from "@lms/ui";
-import { initializeGA, pageview } from "@lms/utils";
+import { pageview } from "@lms/utils";
 import { fetcher } from "@services/requestV2";
 import { App as AntdApp, ConfigProvider } from "antd";
 import Aos from "aos";
@@ -38,7 +36,7 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import TagManager, { TagManagerArgs } from "react-gtm-module";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -60,52 +58,58 @@ import {
   MENU_ITEMS_EVENT,
 } from "src/constants/menu-items";
 import { PageLink } from "src/constants/routers";
+import { useAppDispatch, useAppSelector } from "src/redux/hook";
 import CourseActivityApi from "src/redux/services/Course/MyCourse/Activity";
 import UserContextApi from "src/redux/services/User/user";
 import { store } from "src/redux/store";
 import { AuthenticationManager } from "src/utils/helpers/keycloak";
+import DeferredThirdPartyScripts from "./deferred-third-party-scripts";
 
 dayjs.extend(utc);
 dayjs.extend(weekday);
-const showSupportWidget = [
-  "/courses",
-  "/entrance-test",
-  "/calendar",
-  "/exam_list",
-  "/overview",
-];
 
 const activityPath = ["/courses/[id]/activity/[activityId]"];
+// Stable QueryClient — khởi tạo 1 lần duy nhất, không re-create mỗi render
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 3000000,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
+const AuthBootstrapFallback = () => (
+  <SappLoadingGlobal loading>
+    <></>
+  </SappLoadingGlobal>
+);
+
 function Providers({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams();
   const query = useSearchParams();
-
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: 3000000,
-        refetchOnWindowFocus: false,
-        // Đặt thời gian stale tại đây, ví dụ: 30 giây (30000 miligiây)
-      },
-    },
-  });
+  const dispatch = useAppDispatch();
   const [socket, setSocket] = useState<any>(null);
-  const authenticationManager = new AuthenticationManager();
+  const authManagerRef = useRef<AuthenticationManager | null>(null);
+  if (!authManagerRef.current) {
+    authManagerRef.current = new AuthenticationManager();
+  }
+  const authenticationManager = authManagerRef.current;
 
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID || "";
-  const tagManagerArgs: TagManagerArgs = { gtmId };
-
+  const gaId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || "";
   const { isMobileView } = useTailwindBreakpoint();
 
   // Check if URL contains '/teachers'
-  const isTeacherPage = pathname?.includes("/teachers");
   const prevPathRef = useRef<string | null>(null);
-
+  // Stable query object — tránh tạo object mới mỗi render
+  const queryObj = useMemo(() => Object.fromEntries(query.entries()), [query]);
   useEffect(() => {
     Aos.init({ duration: ANIMATION.DURATION, once: true });
-  });
+  }, []);
+
   useEffect(() => {
     const token = authenticationManager.getToken();
     if (token !== "") {
@@ -137,122 +141,9 @@ function Providers({ children }: { children: ReactNode }) {
       };
     }
   }, [socket]);
-  useEffect(() => {
-    TagManager.initialize(tagManagerArgs);
-  }, []);
-
-  useEffect(() => {
-    if (!window.GA_INITIALIZED) {
-      initializeGA();
-      window.GA_INITIALIZED = true;
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!pathname) return;
-    pageview(pathname as any);
-  }, [pathname]);
 
   const isActivityPage = !activityPath.some((path) => pathname?.includes(path));
   const showBackToTop = isMobileView ? isActivityPage : true;
-
-  const showHelp = showSupportWidget.includes(pathname || "") && !isTeacherPage; // Add condition to hide help on teacher pages
-  const showMKTInApp = showHelp && !isMobileView;
-  const hiddenChatbot = !showHelp;
-  // Handle HubSpot widget visibility based on URL
-
-  //TODO: Next14
-  useEffect(() => {
-    const hideHubspotWidget = () => {
-      // Target specific elements from the DOM structure we observed
-      const container = document.getElementById(
-        "hubspot-messages-iframe-container",
-      );
-      const chatFrame = document.getElementById("hubspot-messages-iframe");
-      const widgetContainer = document.querySelector(".hs-shadow-container");
-
-      if (hiddenChatbot) {
-        // Hide HubSpot chat widget on teacher pages and other excluded paths
-        if (container) {
-          container.classList.add("visible-icon");
-          // Add additional inline styles for redundancy
-          container.style.display = "none";
-        }
-
-        if (chatFrame) {
-          chatFrame.style.display = "none";
-        }
-
-        if (widgetContainer) {
-          widgetContainer.classList.add("visible-icon");
-        }
-
-        // Add CSS rule to ensure it stays hidden
-        const style = document.createElement("style");
-        style.id = "hubspot-hide-style";
-        style.innerHTML = `
-          #hubspot-messages-iframe-container, 
-          #hubspot-messages-iframe,
-          .hs-shadow-container { 
-            display: none !important; 
-            visibility: hidden !important; 
-          }
-        `;
-        // Only add if it doesn't exist already
-        if (!document.getElementById("hubspot-hide-style")) {
-          document.head.appendChild(style);
-        }
-      } else {
-        // Remove the style tag if path doesn't contain '/teachers'
-        const styleTag = document.getElementById("hubspot-hide-style");
-        if (styleTag) {
-          document.head.removeChild(styleTag);
-        }
-
-        // Only show if not in excluded paths
-        if (showHelp) {
-          if (container) {
-            container.classList.remove("visible-icon");
-            container.style.display = "";
-          }
-
-          if (chatFrame) {
-            chatFrame.style.display = "";
-          }
-
-          if (widgetContainer) {
-            widgetContainer.classList.remove("visible-icon");
-          }
-        }
-      }
-    };
-
-    // Initial run
-    hideHubspotWidget();
-
-    // Set up an observer to handle dynamically loaded HubSpot elements
-    const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        if (mutation.addedNodes.length > 0) {
-          // If HubSpot elements are dynamically added, hide them if needed
-          hideHubspotWidget();
-        }
-      }
-    });
-
-    // Start observing the document body for changes
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
-
-    // Also listen for route changes
-    // const handleRouteChange = () => {
-    //     setTimeout(hideHubspotWidget, 300) // Short delay to ensure DOM is updated
-    // }
-
-    return () => observer.disconnect();
-  }, [router, showHelp, hiddenChatbot]);
 
   useEffect(() => {
     if (prevPathRef.current) {
@@ -268,19 +159,6 @@ function Providers({ children }: { children: ReactNode }) {
 
     prevPathRef.current = pathname;
   }, [pathname]);
-
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    if (!window.gtag) return;
-
-    const url =
-      pathname + (searchParams.toString() ? `?${searchParams.toString()}` : "");
-
-    window.gtag("config", process.env.NEXT_PUBLIC_GA_ID!, {
-      page_path: url,
-    });
-  }, [pathname, searchParams]);
 
   return (
     <AntConfigProvider>
@@ -299,7 +177,7 @@ function Providers({ children }: { children: ReactNode }) {
           courseActivityApi: CourseActivityApi,
           myProfileApi: MyProfileAPI,
           submitQuizTest: TestServiceAPI.submitQuizTest,
-          authManager: new AuthenticationManager(),
+          authManager: authManagerRef.current!,
           pageLink: PageLink,
           menuItems: MENU_ITEMS,
           menuItemsEvent: MENU_ITEMS_EVENT,
@@ -313,37 +191,36 @@ function Providers({ children }: { children: ReactNode }) {
           },
           pathname: pathname,
           params,
-          query: Object.fromEntries(query.entries()),
+          query: queryObj,
           uploadImageToLinkedIn: uploadImageToLinkedIn,
           domainTest: process.env.NEXT_PUBLIC_SUB_DOMAIN_TEST as string,
+          dispatch,
+          useAppSelector,
         }}
       >
         <CourseNoteProvider router={router} api={CoursesAPI}>
           <QueryClientProvider client={queryClient}>
             <SocketContext.Provider value={socket}>
-              <PreviousSectionRouteProvider pathname={pathname}>
-                <Toaster
-                  toastOptions={{
-                    style: {
-                      maxWidth: "400px", // Tăng chiều rộng của toast
-                    },
-                  }}
-                />
-                <SappConfirmDialogContainer />
-                <RouteGuard>
-                  <ConfigProvider>
-                    <PinnedNotifications />
-                    <AntdApp>{children}</AntdApp>
-                    <>
-                      {showBackToTop && <BackToTop />}
-                      {showHelp && <div id="floating-btn-divider" />}
-                      <Help showHelp={showHelp} />
-                      <LearningNotesList appType={AppType.LMS_PRO} />
-                      <PopupCompletedCourse />
-                    </>
-                  </ConfigProvider>
-                </RouteGuard>
-              </PreviousSectionRouteProvider>
+              <RouteGuard>
+                <PreviousSectionRouteProvider pathname={pathname}>
+                  <Toaster
+                    toastOptions={{
+                      style: {
+                        maxWidth: "400px", // Tăng chiều rộng của toast
+                      },
+                    }}
+                  />
+                  <SappConfirmDialogContainer />
+                  <PinnedNotifications />
+                  <AntdApp>{children}</AntdApp>
+                  <>
+                    {showBackToTop && <BackToTop />}
+                    <LearningNotesList appType={AppType.LMS_PRO} />
+                    <PopupCompletedCourse />
+                    <DeferredThirdPartyScripts gaId={gaId} gtmId={gtmId} />
+                  </>
+                </PreviousSectionRouteProvider>
+              </RouteGuard>
             </SocketContext.Provider>
           </QueryClientProvider>
         </CourseNoteProvider>

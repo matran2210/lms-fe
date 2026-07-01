@@ -1,8 +1,8 @@
-import { CheckedIcon, FilterCourseIcon } from "@lms/assets";
+import { CheckedIcon, FilterCourseIcon } from "@lms/assets/icons";
 import { useFeature } from "@lms/contexts";
 import { useTailwindBreakpoint } from "@lms/hooks";
 import { SappDrawerV3, SAPPSelectTooltip } from "@lms/ui";
-import { buildQueryString } from "@lms/utils";
+import { buildQueryString } from "@lms/utils/common";
 import { Divider } from "antd";
 import { DefaultOptionType } from "antd/es/select";
 import clsx from "clsx";

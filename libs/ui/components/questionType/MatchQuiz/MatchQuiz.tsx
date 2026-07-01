@@ -1,11 +1,11 @@
 "use client";
 import {
-  ReactFlowProvider,
   addEdge,
   type Connection,
   type Edge,
   type Node,
 } from "@xyflow/react";
+import dynamic from "next/dynamic";
 import React, {
   ForwardedRef,
   forwardRef,
@@ -20,7 +20,6 @@ import { AnswerItem, IAnswerMultipleChoice, MY_COURSES } from "@lms/core";
 import { IExhibitData } from "@lms/core";
 import CustomEdge from "./CustomEdge";
 import { CustomNode } from "./CustomNode";
-import CustomFlow from "./CustomFlow";
 import { runHighlight } from "@lms/utils";
 import clsx from "clsx";
 import { Grid } from "antd";
@@ -29,6 +28,16 @@ import { HighlightableHTML } from "../../highlights";
 import { SappTitleSolution } from "../../common";
 import { EditorReader } from "../../base";
 import { useFeature } from "@lms/contexts";
+
+// Lazy load ReactFlowProvider + CustomFlow — @xyflow/react ~200KB
+const CustomFlow = dynamic(() => import("./CustomFlow"), {
+  ssr: false
+})
+
+const ReactFlowProviderDynamic = dynamic(
+  () => import("@xyflow/react").then((m) => ({ default: m.ReactFlowProvider })),
+  { ssr: false },
+)
 
 interface IProps {
   data: any;
@@ -85,7 +94,7 @@ export enum Color {
   TextDefault = "#000000",
   Success = "#078A4D",
   Error = "#F80903",
-  ArrowDefault = "#FFB700",
+  ArrowDefault = "#EF5941",
 }
 
 const MatchQuiz = forwardRef(
@@ -661,7 +670,7 @@ const MatchQuiz = forwardRef(
               height: `${(nodes?.length / 2 || 1) * 100}px`,
             }}
           >
-            <ReactFlowProvider>
+            <ReactFlowProviderDynamic>
               <CustomFlow
                 key={key}
                 nodes={nodes}
@@ -670,7 +679,7 @@ const MatchQuiz = forwardRef(
                 nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
               />
-            </ReactFlowProvider>
+            </ReactFlowProviderDynamic>
           </div>
           {!!corrects && !!correctNodes?.length && (
             <div data-aos={isAnimationCorrectAnswer ? "fade-down" : ""} data-aos-duration="800">
@@ -685,7 +694,7 @@ const MatchQuiz = forwardRef(
                     width: CONTAINER_WIDTH + "px",
                   }}
                 >
-                  <ReactFlowProvider>
+                  <ReactFlowProviderDynamic>
                     <CustomFlow
                       key={`correct-${key}`}
                       nodes={correctNodes}
@@ -694,7 +703,7 @@ const MatchQuiz = forwardRef(
                       edgeTypes={edgeTypes}
                       onConnect={onConnect}
                     />
-                  </ReactFlowProvider>
+                  </ReactFlowProviderDynamic>
                 </div>
               </div>
             </div>

@@ -8,12 +8,13 @@ const ErrorPage = () => {
   return (
     <div className="flex h-screen flex-col flex-nowrap items-center justify-center overflow-y-auto p-4 text-center">
       <Image
-        className="h-max"
+        className="h-auto w-80"
         src="/assets/images/image_404.jpg"
-        loading="lazy"
-        alt="Image_404"
-        width="320"
-        height="260"
+        alt="Page not found"
+        width={320}
+        height={260}
+        priority
+        sizes="320px"
       />
       <h1 className="mt-10 text-2xl font-bold text-[#050505] md:text-4xl">
         PAGE NOT FOUND

@@ -49,6 +49,7 @@ const CourseDetail = () => {
   const { dispatch, useAppSelector } = useFeature()
   const selector = useAppSelector?.(selectPopupActivateCourse)
   const param = useParams()
+  const { courseId } = param
   const query = Object.fromEntries(searchParams.entries())
   const observer = useRef<IntersectionObserver>()
   const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
@@ -91,7 +92,7 @@ const CourseDetail = () => {
     params: Object
   }) => {
     const { data } = await CoursesAPI.getCourseDetail(
-      param.courseId,
+      courseId,
       pageParam || 1,
       DEFAULT_PAGESIZE,
       params,
@@ -118,7 +119,7 @@ const CourseDetail = () => {
     refetch,
     isSuccess,
   } = useInfiniteQuery({
-    queryKey: ['courseDetail'],
+    queryKey: ['courseDetail', courseId],
     queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
     onError: (error: ApiError) => {
       const data = extractNotActivatedData(error)
@@ -134,17 +135,17 @@ const CourseDetail = () => {
       const currentPage = allPages.length
       return currentPage < totalPages ? currentPage + 1 : undefined
     },
-    enabled: param.courseId !== undefined,
+    enabled: courseId !== undefined,
     retry: false,
   })
 
   const programCourse = data?.pages?.[0]?.courseDetail?.data?.program
 
   const { data: listSurvey, refetch: refetchSurvey } = useQuery({
-    queryKey: ['surveyCustom', param?.courseId],
-    queryFn: () => CoursesAPI.getSurveyCustom(param?.courseId as string),
+    queryKey: ['surveyCustom', courseId],
+    queryFn: () => CoursesAPI.getSurveyCustom(courseId as string),
     enabled:
-      param.courseId !== undefined &&
+      courseId !== undefined &&
       programCourse &&
       programCourse === ECourseProgram.LD,
     select: (data) => data?.data || [],
@@ -155,7 +156,7 @@ const CourseDetail = () => {
    * @description gọi lại API khi courseID khác undefined
    */
   useEffect(() => {
-    if (param.courseId !== undefined) {
+    if (courseId !== undefined) {
       refetch()
     }
   }, [params.user_section_learning_status, refetch])

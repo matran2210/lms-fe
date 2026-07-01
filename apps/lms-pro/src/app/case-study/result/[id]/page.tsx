@@ -28,7 +28,7 @@ import {
   RESPONSE_OPTION,
   ScratchPadValue,
 } from '@lms/core'
-import { CalculatorModal } from '@lms/ui'
+import CalculatorModal from '@lms/ui/calculator-modal'
 import {
   useMousePosition,
   useSmartModalSize,
@@ -36,21 +36,20 @@ import {
 } from '@lms/hooks'
 import {
   AddWordPreview,
-  CaseStudyWrapper,
-  EditorReader,
   EssayQuestionPreview,
-  FileViewer,
-  HookFormTextArea,
   MatchQuizComponent,
-  ModalResizeable,
-  MovableWindow,
   MultiChoiceQuestion,
   NewDragNDropQuestion,
   OneChoiceQuestion,
-  Popover,
   SelectWord,
   SlotValue,
-} from '@lms/ui'
+} from '@lms/ui/question-type'
+import { CaseStudyWrapper } from '@lms/ui/layout'
+import { EditorReader } from '@lms/ui/editor'
+import FileViewer from '@lms/ui/file-viewer'
+import { HookFormTextArea } from '@lms/ui/textfield'
+import { ModalResizeable } from '@lms/ui/modal'
+import { MovableWindow, Popover } from '@lms/ui/base'
 import { handleMultipleCorrectAnswer, runHighlight } from '@lms/utils'
 import { Divider } from 'antd'
 import clsx from 'clsx'
@@ -61,7 +60,7 @@ import { useForm } from 'react-hook-form'
 import { useAppDispatch } from 'src/redux/hook'
 import { CoursesAPI } from 'src/api/courses'
 import { TestServiceAPI } from 'src/api/test-api'
-import { ScratchPatch } from '@lms/ui'
+import { ScratchPatch } from '@lms/ui/scratchpad'
 
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])

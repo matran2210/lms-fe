@@ -1,4 +1,3 @@
-import 'aos/dist/aos.css'
 import clsx from 'clsx'
 import React, { useRef, useState } from 'react'
 import Recommendation from '@components/test-result/Recommendation'

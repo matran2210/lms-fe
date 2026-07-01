@@ -38,7 +38,14 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation'
-import PreviewPartDetail from '@sapp-fe/preview-part'
+import dynamic from 'next/dynamic'
+
+const PreviewPartDetail = dynamic(
+  () => import('@sapp-fe/preview-part'),
+  {
+    ssr: false
+  }
+)
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { PageLink } from 'src/constants/routers'

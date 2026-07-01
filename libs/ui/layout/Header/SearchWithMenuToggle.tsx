@@ -1,12 +1,12 @@
 
 "use client";
-import { ArrowActionSearchIcon, HamburgerMenuLargeIcon, CloseIcon, TourGuideStartAnimation } from "@lms/assets";
+import { ArrowActionSearchIcon, CloseIcon, HamburgerMenuLargeIcon } from "@lms/assets/icons";
 import { useFeature } from "@lms/contexts";
-import { AppType, MY_COURSES } from "@lms/core";
-import { buildQueryString } from "@lms/utils";
+import { MY_COURSES } from "@lms/core";
+import { buildQueryString } from "@lms/utils/common";
 import clsx from "clsx";
 import React, { useEffect, useRef, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import SearchForm from "./SearchForm";
 interface IProps {
   handleOpenSidebar: () => void;
@@ -40,6 +40,10 @@ const SearchWithMenuToggle = ({
       name: "",
     },
   });
+  const searchName = useWatch({
+  control: methods.control,
+  name: "name",
+});
   const [isFocused, setIsFocused] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -54,8 +58,8 @@ const SearchWithMenuToggle = ({
     // Redirect to the search results page with the query as a query parameter
     router.push(
       `${appCourseLink}${
-        methods.watch("name")?.trim()?.length
-          ? `?name=${methods.watch("name")}`
+        searchName?.trim()?.length
+          ? `?name=${searchName}`
           : ""
       }${queryString}`,
     );
@@ -105,7 +109,7 @@ const SearchWithMenuToggle = ({
   const ActionIcon = () => {
     return (
       <>
-        {methods.watch("name")
+        {searchName
           ? renderIcon({
               listIcon: [
                 {

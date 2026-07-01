@@ -1,46 +1,35 @@
 "use client";
-import {
-  AddNoteAnimation,
-  BlankAvatarImage,
-  CalculatorAnimation,
-  CalendarAnimation,
-  CourseContentAnimation,
-  DashboardAnimation,
-  EntranceTestAnimation,
-  EventTestAnimation,
-  ExamInfoAnimation,
-  ExamListAnimation,
-  ExpandIcon,
-  MyCourseAnimation,
-  NoteListAnimation,
-  NotificationAnimation,
-  OpenBookAnimation,
-  ResourceAnimation,
-  TestQuizListAnimation,
-  CourseActivationAnimation,
-  AttendanceAnimation
-} from "@lms/assets";
+import { ExpandIcon } from "@lms/assets/icons";
+import { BlankAvatarImage } from "@lms/assets/images";
 import {
   activeNotesList,
-  clearNotifications,
   openCalculator,
   pushNotes,
   useFeature,
   userReducer,
 } from "@lms/contexts";
 import { LANG_SIGNIN, MenuItem as MenuItemType, RouteContext, TitleSidebar } from "@lms/core";
-import { useNotification } from "@lms/hooks";
-import { getCourseContentSubContext, getLearningSubContext, getRouteContext, trackGAEvent } from "@lms/utils";
-import SappNotificationComponent from "@sapp-fe/sapp-notification";
+import { trackGAEvent } from "@lms/utils/google-analytics";
+import {
+  getCourseContentSubContext,
+  getLearningSubContext,
+  getRouteContext,
+} from "@lms/utils/helpers";
 import { Divider } from "antd";
 import clsx from "clsx";
-import { isEmpty } from "lodash";
-import Lottie from "lottie-react";
+import isEmpty from "lodash/isEmpty";
 import Image from "next/image";
 import Link from "next/link";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState
+} from "react";
 import { v4 as uuidv4 } from "uuid";
 import MenuItemsList from "../MenuItemsList";
+import MenuHoverAnimation, { preloadAnimation } from "./MenuHoverAnimation";
+
 
 type MenuItemProps = {
   menuItem: MenuItemType;
@@ -55,50 +44,11 @@ export default function MenuItem({
   closeSideBar,
   setOpenExaminationInfo,
 }: MenuItemProps) {
-  const { notificationApi, pageLink, dispatch, useAppSelector, router, pathname, query, params } = useFeature();
+  const { pageLink, dispatch, useAppSelector, router, pathname, query, params } = useFeature();
   const id = params?.id || query.id
   const courseId = params?.courseId || query.courseId
   const activityId = params?.activityId || query.activityId
   const course_section_id = params?.course_section_id || query.course_section_id
-  const {
-    isViewDetail,
-    openNotification,
-    setOpenNotification,
-    selectedTab,
-    setSelectedTab,
-    notifyDetail,
-    notifyLists,
-    scrollRef,
-    handleMarkAll,
-    handleMarkById,
-    handleUnMarkById,
-    handleViewDetail,
-    handleBack,
-    refreshNotification,
-    isDesktopView,
-    notificationUnread,
-  } = useNotification(notificationApi);
-
-  const isLoading = useAppSelector?.(
-    (state) => state.notificationReducer.loading,
-  );
-  const tabs = [
-    {
-      id: 1,
-      title: "All Notifications",
-    },
-    {
-      id: 2,
-      title: `Unread ${notificationUnread ? `(${notificationUnread})` : ""}`,
-    },
-  ];
-
-  useEffect(() => {
-    if (selectedTab) {
-      dispatch?.(clearNotifications());
-    }
-  }, [selectedTab]);
-
   const [isExpanded, toggleExpanded] = useState(false);
   const { user } = useAppSelector?.(userReducer) || {};
   const isNested = subItems && subItems?.length > 0;
@@ -136,15 +86,7 @@ export default function MenuItem({
     }
 
   })();
-  const [badgeClass, setBadgeClass] = useState("w-4 h-4 -top-[5px] -right-1.5"); // Default width
-
-  useEffect(() => {
-    if (notificationUnread > 9) {
-      setBadgeClass("w-6 h-6 -top-3.5 -right-3.5");
-    } else {
-      setBadgeClass("w-4 h-4 -top-[5px] -right-1.5"); // Default width for single digits
-    }
-  }, [notificationUnread]);
+  const badgeClass = "w-4 h-4 -top-[5px] -right-1.5";
   const onClick = () => {
     toggleExpanded((prev) => !prev);
   };
@@ -180,10 +122,6 @@ export default function MenuItem({
     router.push(`/courses/my-course/${courseId || id}/results`);
   };
 
-  const handleViewNotification = (link: string) => {
-    router.push(link);
-  };
-
   const handleOpenExaminationInfoPage = () => {
     setOpenExaminationInfo && setOpenExaminationInfo(true);
   };
@@ -193,10 +131,6 @@ export default function MenuItem({
 
     // Nếu url trống => là menu Notification
     if (isEmpty(url)) {
-      setOpenNotification(true);
-      if (isEmpty(notifyLists)) {
-        refreshNotification(false);
-      }
       closeSideBar();
       return;
     }
@@ -268,201 +202,29 @@ export default function MenuItem({
 
   const isInMyProfile = pathname === pageLink.MYPROFILE;
 
+  // Preload animation JSON sau khi trang đã hoàn toàn ổn định
+  // Dùng timeout dài để không ảnh hưởng Lighthouse / FCP / LCP
+  useEffect(() => {
+    if (!Icon || Icon === "avatar" || Icon === "profile-detail") return;
+
+    const iconStr = Icon as string;
+
+    // Chờ 5s sau mount mới preload — trang đã interactive, Lighthouse đã đo xong
+    const t = setTimeout(() => {
+      if ("requestIdleCallback" in window) {
+        requestIdleCallback(() => preloadAnimation(iconStr));
+      } else {
+        preloadAnimation(iconStr);
+      }
+    }, 5000);
+
+    return () => clearTimeout(t);
+  }, [Icon]);
+
   const checkIsHiddenDashboard = (info: any) => {
     return name == TitleSidebar.DASHBOARD && !info;
   };
-
-  const animationClass = clsx(
-    `before-icon w-6 h-6 hidden group-hover/menuItem:block`,
-  );
-  const renderIcon = () => {
-    switch (Icon) {
-      case "course":
-      case "course-content":
-      case "activity":
-        return (
-          <Lottie
-            animationData={MyCourseAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "notes-list":
-        return (
-          <Lottie
-            animationData={NoteListAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "create-note":
-        return (
-          <Lottie
-            animationData={AddNoteAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "learning-resource":
-        return (
-          <Lottie
-            animationData={ResourceAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "calculator":
-        return (
-          <Lottie
-            animationData={CalculatorAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "calendar":
-        return (
-          <Lottie
-            animationData={CalendarAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "grid":
-        return (
-          <Lottie
-            animationData={DashboardAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "entrance-test":
-        return (
-          <Lottie
-            animationData={EntranceTestAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "exam_list":
-        return (
-          <Lottie
-            animationData={ExamListAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "result":
-        return (
-          <Lottie
-            animationData={TestQuizListAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "bookmark":
-        return (
-          <Lottie
-            animationData={CourseContentAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "event-test":
-        return (
-          <Lottie
-            animationData={EventTestAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "exam-information":
-        return (
-          <Lottie
-            animationData={ExamInfoAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "notification":
-        return (
-          <div className="relative">
-            <Lottie
-              animationData={NotificationAnimation}
-              loop
-              autoplay
-              className={animationClass}
-            />
-            {notificationUnread > 0 && (
-              <span
-                className={clsx(
-                  "absolute aspect-1 items-center justify-center rounded-full bg-[#D35563] text-xs text-white",
-                  "hidden group-hover/menuItem:flex",
-                  badgeClass,
-                )}
-              >
-                {notificationUnread > 99 ? "99+" : notificationUnread}
-              </span>
-            )}
-          </div>
-        );
-      case "class-resource":
-        return (
-          <Lottie
-            animationData={OpenBookAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "course-activation":
-        return (
-          <Lottie
-            animationData={CourseActivationAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-      case "attendance":
-        return (
-          <Lottie
-            animationData={AttendanceAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-
-      default:
-        return (
-          <Lottie
-            animationData={MyCourseAnimation}
-            loop
-            autoplay
-            className={animationClass}
-          />
-        );
-        break;
-    }
-  };
-
-  const isShowHoverIcon = () => {
-    return true;
-    // return !['notification'].includes(Icon)
-  };
+  const animationClass = "before-icon h-6 w-6 shrink-0 hidden group-hover/menuItem:block";
 
   const renderMenuContent = () => {
     return (
@@ -515,7 +277,14 @@ export default function MenuItem({
               </div>
             ) : (
               <>
-                {!selected && isShowHoverIcon() && renderIcon()}
+                {!selected ? (
+                  <MenuHoverAnimation
+                    badgeClass={badgeClass}
+                    className={animationClass}
+                    icon={Icon}
+                    notificationUnread={0}
+                  />
+                ) : null}
                 <ExpandIcon
                   type={Icon}
                   className={clsx(
@@ -523,27 +292,14 @@ export default function MenuItem({
                     }`,
                     {
                       "group-hover:text-gray-800": !selected,
-                      "group-hover/menuItem:hidden":
-                        !selected && isShowHoverIcon(),
+                      "group-hover/menuItem:hidden": !selected,
                     },
                   )}
                   extraClassName={clsx({
-                    "group-hover/menuItem:hidden":
-                      !selected && isShowHoverIcon(),
+                    "group-hover/menuItem:hidden": !selected,
                   })}
                 />
               </>
-              // <ExpandIcon
-              //   type={Icon}
-              //   className={clsx(
-              //     `before-icon min-h-6 min-w-6 shrink-0 ${
-              //       selected ? 'bg-primary text-white' : 'text-gray-800'
-              //     }`,
-              //     {
-              //       'group-hover:text-gray-800': !selected,
-              //     },
-              //   )}
-              // />
             )}
           </>
         )}
@@ -729,28 +485,6 @@ export default function MenuItem({
           </div>
         ) : null}
       </div>
-      <SappNotificationComponent
-        notifyDetail={{
-          ...notifyDetail,
-          send_time: notifyDetail?.send_time || "", // Ensure send_time is always a string
-        }}
-        tabs={tabs}
-        selectedTab={selectedTab}
-        setSelectedTab={setSelectedTab}
-        handleMarkAll={() => handleMarkAll(selectedTab)}
-        handleMarkById={(ids: string[]) => handleMarkById(ids, selectedTab)}
-        handleUnMarkById={(ids: string[]) => handleUnMarkById(ids, selectedTab)}
-        handleBack={handleBack}
-        isViewDetail={isViewDetail}
-        setOpenNotification={setOpenNotification}
-        openNotification={openNotification}
-        handleViewDetail={handleViewDetail}
-        notifyLists={notifyLists}
-        notificationUnread={notificationUnread}
-        scrollRef={scrollRef}
-        handleViewNotification={(link) => handleViewNotification(link)}
-        isDesktopView={isDesktopView}
-      />
     </>
   );
 }

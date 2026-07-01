@@ -4,7 +4,7 @@ import { useFeature } from "@lms/contexts";
 import { useSelectExams } from "@lms/hooks";
 import { NoData } from "@lms/ui";
 import clsx from "clsx";
-import { isEmpty } from "lodash";
+import  isEmpty from "lodash/isEmpty";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 

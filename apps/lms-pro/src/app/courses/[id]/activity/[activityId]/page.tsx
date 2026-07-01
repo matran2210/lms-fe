@@ -17,15 +17,13 @@ import {
   Discussion,
   PopupLockContent,
 } from '@lms/feature-courses'
-import {
-  ActivitySkeleton,
-  EditorReader,
-  FileViewer,
-  Layout,
-  LearningResource,
-  CalculatorModal,
-  ModalResizeable,
-} from '@lms/ui'
+import { EditorReader } from '@lms/ui/editor'
+import FileViewer from '@lms/ui/file-viewer'
+import { Layout, AssistiveTouch, BottomMenu, CtaTrial, HeaderMobile } from '@lms/ui/layout'
+import CalculatorModal from '@lms/ui/calculator-modal'
+import { ModalResizeable } from '@lms/ui/modal'
+import { ActivitySkeleton } from '@lms/ui/skeleton'
+import { LearningResource } from '@lms/ui'
 import { convertMinutesToHourFormat, extractNotActivatedData } from '@lms/utils'
 
 import { Triangle } from '@lms/assets'
@@ -64,13 +62,7 @@ import {
   VideoTimelineMobile,
 } from '@lms/feature-courses'
 import { useSmartModalSize, useTailwindBreakpoint } from '@lms/hooks'
-import {
-  AssistiveTouch,
-  BottomMenu,
-  CtaTrial,
-  HeaderMobile,
-  SappBreadCrumbs,
-} from '@lms/ui'
+import { SappBreadCrumbs } from '@lms/ui/breadcrumb'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'

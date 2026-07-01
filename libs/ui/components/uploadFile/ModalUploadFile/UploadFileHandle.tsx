@@ -6,7 +6,7 @@ import React, { ReactElement } from "react";
 import toast from "react-hot-toast";
 import { ButtonSecondary } from "../../base";
 import { validateFile } from "@lms/utils";
-import { isArray } from "lodash";
+import isArray from "lodash/isArray";
 import { DocumentIconImage, ImageIconImage, VideoIconImage } from "@lms/assets";
 import { UPLOAD_TYPE } from "@lms/core";
 
@@ -73,13 +73,13 @@ const UploadFileHandle = ({
     let strokeColor;
     if (_file.status === "done") {
       percent = 100;
-      strokeColor = "#FFB800";
+      strokeColor = "#EF5941";
     } else if (_file.status === "error") {
       strokeColor = "#D35563";
       percent = 100;
     } else {
       percent = progress[_file.uid];
-      strokeColor = "#FFB800";
+      strokeColor = "#EF5941";
     }
     return (
       <>
