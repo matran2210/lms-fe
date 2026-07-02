@@ -25,17 +25,21 @@ const ModalFoundationCompleted = ({
       header="Foundation Not Completed"
       okButtonCaption="Continue with Foundation Course"
       cancelButtonCaption="Skip and start this course"
-      isMaskClosable={true}
-      fullWidthBtn={true}
-      buttonSize="extra"
-      isClosable
+      showFooter
+      fullWidthBtn
+      buttonSize="medium"
+      isUnderLine
     >
-      <div className="mt-4 text-center text-sm text-[#A1A1A1]">
-        It looks like you haven&apos;t finished the Foundation Course.
+      <div className="justify-center self-stretch text-center">
+        <span className="text-base font-normal leading-normal text-gray-800">
+          It looks like you haven&apos;t finished the Foundation Course.
+        </span>
       </div>
-      <div className="mt-1 text-center text-sm text-[#A1A1A1]">
-        Would you like to complete it first, or skip and start this course right
-        away?
+      <div className="justify-center self-stretch text-center">
+        <span className="text-base font-normal leading-normal text-gray-800">
+          Would you like to complete it first, or skip and start this course right
+          away?
+        </span>
       </div>
     </SappModalV3>
   );

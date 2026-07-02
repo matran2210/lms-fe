@@ -1125,8 +1125,6 @@ const CaseStudyDetail = () => {
                             {
                               'min-w-[350px] bg-white px-0 py-8':
                                 question?.qType === QUESTION_TYPES.ESSAY,
-                              '!w-fit':
-                                question?.qType === QUESTION_TYPES.MATCHING,
                             },
                           )}
                         >

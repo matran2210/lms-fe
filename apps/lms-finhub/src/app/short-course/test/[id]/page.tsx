@@ -2229,11 +2229,6 @@ const TestDetail = () => {
                       <div
                         className={clsx(
                           'flex w-full flex-col gap-8 rounded-xl bg-gray-100 p-8',
-                          {
-                            '!w-fit':
-                              currentTabContent?.data?.qType ===
-                              QUESTION_TYPES.MATCHING,
-                          },
                         )}
                       >
                         {checkType(

@@ -2654,9 +2654,6 @@ const TestDetail = () => {
                               "min-w-[350px] bg-white px-0 py-8":
                                 currentTabContent?.data?.qType ===
                                 QUESTION_TYPES.ESSAY,
-                              "!w-fit":
-                                currentTabContent?.data?.qType ===
-                                QUESTION_TYPES.MATCHING,
                             },
                           )}
                         >

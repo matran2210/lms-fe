@@ -14,7 +14,8 @@ export const CustomNode: React.FC<NodeProps> = ({ data }) => {
   };
   const { useBreakpoint } = Grid;
   const { lg } = useBreakpoint();
-  const NODE_WIDTH = lg ? 328 : 290;
+  // Ưu tiên bề rộng được truyền từ MatchQuiz (đã co giãn theo container), fallback theo breakpoint
+  const NODE_WIDTH = (data?.nodeWidth as number) || (lg ? 328 : 290);
 
   // Thêm màu border vàng khi được chọn
   const borderColor = data?.isSelected ? "#EF5941" : "none";

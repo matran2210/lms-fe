@@ -131,8 +131,38 @@ const MatchQuiz = forwardRef(
     const [key, setKey] = useState(1);
     const { useBreakpoint } = Grid;
     const { lg } = useBreakpoint();
-    const NODE_WIDTH = lg ? 328 : 290;
-    const CONTAINER_WIDTH = lg ? 852 : 640;
+    // Đo bề rộng thực của container để co giãn matching theo panel (vd: chế độ chia đôi màn của case study)
+    const resizeObserverRef = useRef<ResizeObserver | null>(null);
+    const [availableWidth, setAvailableWidth] = useState(0);
+
+    // Callback ref: tự observe lại khi node được gắn (kể cả khi subtree remount do đổi key)
+    const measureRef = useCallback((node: HTMLDivElement | null) => {
+      resizeObserverRef.current?.disconnect();
+      if (node && typeof ResizeObserver !== "undefined") {
+        const observer = new ResizeObserver((entries) => {
+          const width = entries[0]?.contentRect?.width ?? 0;
+          setAvailableWidth((prev) =>
+            Math.abs(prev - width) > 1 ? width : prev,
+          );
+        });
+        observer.observe(node);
+        resizeObserverRef.current = observer;
+      }
+    }, []);
+
+    useEffect(() => {
+      return () => resizeObserverRef.current?.disconnect();
+    }, []);
+
+    const BASE_NODE_WIDTH = lg ? 328 : 290;
+    const BASE_CONTAINER_WIDTH = lg ? 852 : 640;
+    // Chỉ thu nhỏ khi container hẹp hơn kích thước gốc, giữ nguyên khi đủ rộng
+    const scale =
+      availableWidth > 0
+        ? Math.min(1, availableWidth / BASE_CONTAINER_WIDTH)
+        : 1;
+    const NODE_WIDTH = Math.floor(BASE_NODE_WIDTH * scale);
+    const CONTAINER_WIDTH = Math.floor(BASE_CONTAINER_WIDTH * scale);
 
     // State để lưu tối đa 2 node đang được chọn
     const [selectedNodes, setSelectedNodes] = useState<string[]>([]);
@@ -275,7 +305,7 @@ const MatchQuiz = forwardRef(
       const transformed = transformDataToNodes({
         questions,
         answers,
-        containerWidth: flowRef.current?.clientWidth || CONTAINER_WIDTH,
+        containerWidth: CONTAINER_WIDTH,
         nodeWidth: NODE_WIDTH,
       });
       setNodes(transformed);
@@ -297,6 +327,7 @@ const MatchQuiz = forwardRef(
                 ...props.data,
                 isSelected,
                 isConnected,
+                nodeWidth: NODE_WIDTH,
                 onClick: (e: React.MouseEvent<HTMLDivElement>) => {
                   e.stopPropagation();
                   if (!corrects && !disabled) handleNodeClick(id);
@@ -306,7 +337,7 @@ const MatchQuiz = forwardRef(
           );
         },
       }),
-      [selectedNodes, handleNodeClick, corrects, edges, disabled],
+      [selectedNodes, handleNodeClick, corrects, edges, disabled, NODE_WIDTH],
     );
 
     const edgeTypes = {
@@ -447,7 +478,8 @@ const MatchQuiz = forwardRef(
           return node;
         }),
       );
-    }, [corrects, edges, isNodeReady]);
+      // NODE_WIDTH: tô lại màu sau khi node bị reposition do co giãn theo container
+    }, [corrects, edges, isNodeReady, NODE_WIDTH]);
 
     // Tạo flow cho các câu trả lời đúng
     const generateCorrectFlow = (corrects: any[], allNodes: Node[]) => {
@@ -558,12 +590,13 @@ const MatchQuiz = forwardRef(
               data={{
                 ...props.data,
                 isConnected,
+                nodeWidth: NODE_WIDTH,
               }}
             />
           );
         },
       }),
-      [correctEdges],
+      [correctEdges, NODE_WIDTH],
     );
 
     return (
@@ -659,7 +692,7 @@ const MatchQuiz = forwardRef(
             highlighted={highlighted}
           /> */}
         </div>
-        <div className="flex h-full w-full flex-col" data-aos={isAnimationCorrectAnswer ? "fade-left" : ""}
+        <div ref={measureRef} className="flex h-full w-full flex-col" data-aos={isAnimationCorrectAnswer ? "fade-left" : ""}
           data-aos-delay={200}
           data-aos-once="true">
           <div
